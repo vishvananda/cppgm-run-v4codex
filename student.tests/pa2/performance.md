@@ -1,13 +1,14 @@
 # PA2 compiler performance evidence
 
-Two completed campaigns retain 168 timed observations: seven fixed inputs,
+Three completed campaigns retain 252 timed observations: seven fixed inputs,
 two A/A calibration pairs and two ABBA blocks per input per campaign.
 A is ordinary PA2 execution; B is the identical frozen binary with `--stats`.
 The initial campaign preceded the invalid-character counter correction. The
-final campaign uses the corrected implementation and pins CPU 0; it reuses all
-seven initial input files byte-for-byte, including the frozen self-source text.
-Both campaigns verify complete A/B stdout hashes before timing. No speedup or
-generated-code optimization benefit is claimed. The incomplete PA2 starter is
+checkpoint campaign uses the corrected implementation and pins CPU 0; it reuses
+all seven initial input files byte-for-byte, including the frozen self-source text.
+All campaigns verify complete A/B stdout hashes before timing. The independent
+final audit campaign below repeats the same frozen binary and inputs on CPU 0.
+No speedup or generated-code optimization benefit is claimed. The incomplete PA2 starter is
 not a performance baseline. Generated-program runtime and text size are **N/A**:
 PA2 emits tokens. Host-tool text is reported separately below.
 
@@ -21,7 +22,7 @@ tokenization only. These early-stage workloads do not measure template
 instantiation or executable behavior. Every invocation has a 60-second timeout.
 
 Explicit resource limits and their storage derivation are in [README](README.md).
-Both campaigns pass every latency, work, capacity and measured RSS envelope.
+All campaigns pass every latency, work, capacity and measured RSS envelope.
 No code transform, work-budget escalation or generated text growth is involved.
 Telemetry overhead is noisy: signs differ across paired blocks/workloads and
 A/A noise reaches double-digit percentages. Negative deltas are not evidence
@@ -146,3 +147,57 @@ identifier storage and 30 bytes of post-token scratch, independent of total
 token count. A single long string legitimately retains its decoded sequence
 and output until the next cursor pull. That workload stays within the declared
 linear scratch/RSS limits; this report makes no reduction claim for that storage.
+
+## Independent final audit, CPU 0
+
+Artifacts: `obj/student-pa2/performance-final-audit`.
+Binary SHA-256: `4c50a636dd26988e09134222743ec39f8062949479befb1ef298afefb7ee99fb`.
+Manifest SHA-256: `c2969659873da21fffb63dd832c3099e82d7543a7b8b94732498297363d4dfa9`.
+Observations SHA-256: `701704d2ed096c14c6421d1fa043af5bde503aef0abee37634a46bf08244fbe5`.
+Frozen harness SHA-256: `268e22c9d9e84f722e28cc747e51df5d9b343570e1b0e81435ff5887bcbaa7e2`.
+Host-tool text/data/bss/total: `83290 4616 1272 89178`. Affinity: `0`.
+
+The independent audit verified the original 168 observations against their
+manifests, recomputed every paired median/spread and work/memory/scaling gate,
+and verified that the checkpoint binary and all build-source hashes match the
+working tree. This fresh campaign uses that identical compiler, flags, frozen
+harness and all seven original inputs, including self-source text. Input and
+complete output hashes are identical to the checkpoint table above. There was
+no concurrent compiler/test build. All 84 fresh samples and every fixed resource
+gate were independently checked after the harness finished; none was discarded.
+
+| Workload | A median s [min, max] | B median s [min, max] | Peak RSS A/B KiB | A/A changes % | Paired B/A changes % |
+| --- | --- | --- | --- | --- | --- |
+| repeated-4 | 0.758290 [0.753291, 0.760377] | 0.764220 [0.757512, 0.767212] | 8024/8016 | 2.807, 0.411 | 1.162, 0.352 |
+| repeated-16 | 3.025535 [3.008878, 3.037440] | 3.017263 [3.004690, 3.036304] | 20312/20308 | 0.139, -0.209 | -0.321, -0.041 |
+| floating-4 | 0.607201 [0.592291, 0.610758] | 0.605746 [0.600351, 0.615078] | 8024/8024 | 2.908, 7.717 | 0.702, 0.085 |
+| self-source-4 | 0.522164 [0.521632, 0.530697] | 0.532278 [0.526178, 0.533033] | 8020/8020 | 1.203, -0.613 | 0.503, 2.089 |
+| unique-suffixes-200000 | 0.278977 [0.273574, 0.284959] | 0.283021 [0.274621, 0.284890] | 20844/20840 | 2.574, -1.742 | 2.288, -0.649 |
+| raw-near-4 | 0.403513 [0.400868, 0.409436] | 0.408325 [0.406783, 0.408989] | 78176/78172 | -0.014, 1.211 | 1.514, 0.361 |
+| concat-late-4 | 0.278575 [0.277354, 0.280095] | 0.280437 [0.280230, 0.281067] | 21916/21988 | -2.521, -1.115 | 0.697, 0.662 |
+
+Fourfold repeated-input latency ratio A/B: 3.989943/3.948158 (limit 6x).
+
+Fresh paired telemetry changes range from -0.649% to +2.288%; A/A changes
+reach 7.717%. This establishes no repeatable latency benefit. Positive costs
+remain visible and are small relative to the declared scaling ceiling; no
+compiler transform or increased work/growth budget is justified. Ordinary
+latency is not compared across campaign dates as a speedup claim. Generated
+runtime and text size remain N/A; host-tool text and the measured retained
+capacity/work counts are unchanged from the checkpoint tables. In particular,
+the long raw string still consumes up to 78,176 KiB (76.3 MiB) peak RSS, within the
+declared linear ownership budget, not hidden by the repeated-token case.
+
+All observations follow `AAAA ABBA ABBA`; the first four are A/A calibration.
+Times are seconds; RSS values are KiB in the same order. Raw per-sample
+telemetry remains in the archived `observations.json`.
+
+| Workload | 12 wall times | 12 peak RSS values |
+| --- | --- | --- |
+| repeated-4 | 0.760361694, 0.781702526, 0.754361243, 0.757463674, 0.753290595, 0.764443951, 0.763996875, 0.757586598, 0.760376658, 0.757512284, 0.767211716, 0.758993576 | 8024, 8020, 8020, 7972, 8020, 7832, 7968, 8016, 8020, 7984, 8016, 7844 |
+| repeated-16 | 3.027870702, 3.032092601, 3.011479198, 3.005182670, 3.037439975, 3.004690352, 3.022248794, 3.008878414, 3.017570123, 3.012277635, 3.036303893, 3.033499018 | 20312, 20264, 20308, 20304, 20308, 20304, 20288, 20128, 20296, 20308, 20304, 20284 |
+| floating-4 | 0.590021915, 0.607178467, 0.596892159, 0.642956150, 0.610758346, 0.602149889, 0.609342805, 0.592290658, 0.603861451, 0.615078417, 0.600350931, 0.610540200 | 7988, 7980, 8020, 7980, 8024, 7840, 8016, 7984, 8020, 8020, 8024, 8004 |
+| self-source-4 | 0.520824539, 0.527087760, 0.529830494, 0.526581803, 0.530696657, 0.531598557, 0.526178103, 0.521782901, 0.521631529, 0.533032811, 0.532958115, 0.522546084 | 8008, 8020, 8020, 8000, 7984, 7840, 8016, 7980, 7996, 8020, 8020, 7992 |
+| unique-suffixes-200000 | 0.274832712, 0.281905824, 0.281464347, 0.276561992, 0.273573666, 0.283330435, 0.284889772, 0.281937041, 0.276016068, 0.274621409, 0.282711370, 0.284959074 | 20844, 20828, 20824, 20656, 20840, 20840, 20668, 20836, 20840, 20840, 20660, 20840 |
+| raw-near-4 | 0.405921864, 0.405866606, 0.401468453, 0.406329461, 0.400867724, 0.406783230, 0.407965384, 0.401729429, 0.409435529, 0.408988555, 0.408685363, 0.405296444 | 78140, 78172, 78172, 78172, 78172, 78168, 78140, 78176, 78128, 78172, 78172, 78172 |
+| concat-late-4 | 0.285338227, 0.278145265, 0.279637666, 0.276520338, 0.280095469, 0.281067065, 0.280265276, 0.277353731, 0.279602941, 0.280229502, 0.280608522, 0.277547228 | 21916, 21740, 21916, 21896, 21876, 21912, 21884, 21908, 21916, 21912, 21988, 21884 |
