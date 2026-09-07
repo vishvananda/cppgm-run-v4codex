@@ -1,10 +1,14 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
+#include <chrono>
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::consume(NodeId n)
 {
+    typedef std::chrono::steady_clock Clock;
+    Clock::time_point start;
+    if (ast.telemetry) start = Clock::now();
     facts.resize(ast.nodes.size());
     declaration(n, global);
     // All pending bodies belong to the completed region. No grammar replay.
@@ -13,6 +17,7 @@ void Analyzer::consume(NodeId n)
         function_body(b);
     }
     bodies.clear(); body_cursor = 0;
+    if (ast.telemetry) analysis_ms += std::chrono::duration<double, std::milli>(Clock::now() - start).count();
 }
 void Analyzer::finish() {}
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
@@ -179,7 +184,7 @@ void Analyzer::statements(NodeId n, ScopeId s)
                 if (types[t].kind == TypeKind::Named && entities[types[t].entity].key != KW_ENUM) {
                     EntityId cls = types[t].entity;
                     ScopeId cs = entities[cls].scope;
-                    EntityId ctor = local(cs, entities[cls].name);
+                    EntityId ctor = entities[cls].constructor;
                     if (!ctor && !entities[cls].default_constructor)
                         entities[cls].default_constructor = make_scope(ScopeKind::Function, cs, entities[cls].name);
                 }

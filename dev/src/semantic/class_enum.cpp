@@ -27,6 +27,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         entities[e].type = types.named(e);
         entities[e].scope = make_scope(ScopeKind::Class, owner, id, e, false);
         bind(owner, id, e);
+        bind(entities[e].scope, id, e); // Injected-class-name, without a second source declaration.
         emit = !anonymous_union;
     } else if (entities[e].kind != EntityKind::Type || entities[e].key == KW_ENUM ||
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
@@ -62,7 +63,8 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     bool definition = ast[n].flags & 1;
     NodeId underlying_node = child(n, Kind::TypeId);
     ScopeId owner = name_owner(name, s);
-    EntityId e = lookup(owner, id, Lookup::Tag, owner != s);
+    bool declares = emit || definition || scoped || underlying_node;
+    EntityId e = declares ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!definition && !scoped && !underlying_node && !e)
         throw std::runtime_error("undeclared elaborated or opaque unscoped enum");
     TypeId underlying = underlying_node ? type_id(underlying_node, s) : types.fundamental(FT_INT);
@@ -84,7 +86,6 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         // both declarations still identify the same canonical enum entity.
         es = make_scope(ScopeKind::Enum, s, id, e);
         scopes[es].display_name = name;
-        add_edge(entities[e].scope, es);
         output_owner = s;
     }
     if (emit || definition || scoped || underlying_node) {
@@ -96,17 +97,19 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         std::uint64_t next = 0;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind != Kind::Enumerator) continue;
-            Constant value = ast[c].first ? evaluate(ast[c].first, es) : Constant(underlying, next);
+            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : Constant(underlying, next);
             if (!value.valid || !integral(value.type)) throw std::runtime_error("invalid enumerator initializer");
             value = convert(value, underlying, true);
-            EntityId v = make_entity(EntityKind::Enumerator, es, ast[c].text, c);
-            entities[v].type = t; entities[v].constant = Constant(t, value.bits);
-            bind(es, ast[c].text, v);
+            EntityId v = make_entity(EntityKind::Enumerator, entities[e].scope, ast[c].text, c);
+            entities[v].type = t; entities[v].constant = Constant(underlying, value.bits);
+            bind(entities[e].scope, ast[c].text, v);
             if (!scoped) bind(owner, ast[c].text, v);
             std::uint32_t d = record(scoped ? es : owner, v, c, t, EntityKind::Enumerator);
             if (qualified_definition) declarations[d].display_name = name;
             next = value.bits + 1;
         }
+        for (NodeId c = ast[n].first; c; c = ast[c].next)
+            if (ast[c].kind == Kind::Enumerator) entities[facts[c].entity].constant.type = t;
         entities[e].complete = true;
     }
     return t;

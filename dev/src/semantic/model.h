@@ -33,12 +33,13 @@ struct Type {
 class Types {
     std::vector<TypeId> slots;
     std::vector<std::uint64_t> hashes;
+    std::vector<TypeId> signatures, adjustments;
     TypeId intern(Type type, const std::vector<TypeId>& params);
 public:
     Types();
     std::vector<Type> records;
     std::vector<TypeId> parameters;
-    std::size_t probes = 0;
+    std::size_t probes = 0, signature_work = 0;
     TypeId fundamental(EFundamentalType f);
     TypeId named(EntityId e);
     TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
@@ -64,6 +65,10 @@ struct Entity {
     EntityKind kind = EntityKind::Variable;
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0, default_constructor = 0;
+    EntityId constructor = 0;
+    std::uint64_t size = 0, alignment = 0;
+    unsigned char layout_state = 0;
+    bool is_static = false;
     NodeId source = 0;
     TypeId type = 0, underlying = 0;
     ETokenType key = TOK_INVALID;
@@ -72,6 +77,8 @@ struct Entity {
 };
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;
+    ScopeId jump = 0;
+    std::uint32_t depth = 0;
     ScopeId parent = 0, first_child = 0, last_child = 0, next = 0;
     EntityId entity = 0;
     IdentifierId name = 0;
@@ -87,6 +94,6 @@ struct Declaration {
     std::uint32_t next = 0;
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0; bool inline_namespace = false; };
-struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; };
+struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }

@@ -6,6 +6,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <sys/resource.h>
 
@@ -28,12 +29,13 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
         Ast ast(stats);
         Cursor cursor(post, pp.identifiers(), ast);
         Parser parser(cursor, ast, pp.identifiers());
-        semantic::Analyzer semantics(ast, pp.identifiers());
-        NodeId root = parser.translation_unit(types ? &semantics : 0);
-        if (types) semantics.finish();
+        std::unique_ptr<semantic::Analyzer> semantics;
+        if (types) semantics.reset(new semantic::Analyzer(ast, pp.identifiers()));
+        NodeId root = parser.translation_unit(semantics.get());
+        if (types) semantics->finish();
         Clock::time_point parsed = Clock::now();
         out << "start translation unit " << i + 1 << '\n';
-        if (types) semantics.write(out);
+        if (types) semantics->write(out);
         else write_ast(out, ast, root, pp.identifiers());
         out << "end translation unit\n";
         out.flush();
@@ -61,7 +63,7 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
                 << ",\"name_probes\":" << parser.name_categories().probes
                 << ",\"lookup_scopes\":" << parser.name_categories().lookup_scopes
                 << ",\"syntax_decisions\":" << parser.decisions;
-            if (types) semantics.telemetry(std::cerr);
+            if (types) semantics->telemetry(std::cerr);
             std::cerr << "}\n";
         }
     }

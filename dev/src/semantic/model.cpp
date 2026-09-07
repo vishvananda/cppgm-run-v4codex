@@ -108,22 +108,32 @@ TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool va
 }
 TypeId Types::adjusted(TypeId id)
 {
+    if (adjustments.size() <= id) adjustments.resize(id + 1);
+    if (adjustments[id]) return adjustments[id];
     Type t = records[id];
-    if (t.kind == TypeKind::Array) return compound(TypeKind::Pointer, t.child);
-    if (t.kind == TypeKind::Function) return compound(TypeKind::Pointer, signature(id));
-    return unqualified(signature(id));
+    TypeId result = t.kind == TypeKind::Array ? compound(TypeKind::Pointer, signature(t.child)) :
+        t.kind == TypeKind::Function ? compound(TypeKind::Pointer, signature(id)) : unqualified(signature(id));
+    adjustments[id] = result;
+    return result;
 }
 TypeId Types::signature(TypeId id)
 {
+    if (signatures.size() <= id) signatures.resize(id + 1);
+    if (signatures[id]) return signatures[id];
+    ++signature_work;
     Type t = records[id];
     if (t.kind == TypeKind::Function) {
         std::vector<TypeId> source(parameters.begin() + t.offset, parameters.begin() + t.offset + t.count);
         for (TypeId& p : source) p = adjusted(p);
-        return function(signature(t.child), source, t.variadic);
+        TypeId result = function(signature(t.child), source, t.variadic);
+        signatures[id] = result;
+        return result;
     }
+    TypeId result = id;
     if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array)
-        return qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
-    return id;
+        result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
+    signatures[id] = result;
+    return result;
 }
 TypeId Types::composite(TypeId a, TypeId b)
 {

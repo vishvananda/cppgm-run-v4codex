@@ -31,7 +31,7 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
     if (!v.valid) return v;
     if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) to = types[to].child;
     if (!integral(to)) return Constant();
-    if (!explicit_cast && scoped_enum(v.type) && types.unqualified(to) != types.unqualified(v.type))
+    if (!explicit_cast && (scoped_enum(v.type) || scoped_enum(to)) && types.unqualified(to) != types.unqualified(v.type))
         throw std::runtime_error("implicit scoped enum conversion");
     unsigned bits = width(to);
     if (types[to].kind == TypeKind::Fundamental && types[to].fundamental == FT_BOOL) v.bits = !!v.bits;
@@ -49,14 +49,43 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
     if (t.kind == TypeKind::Pointer) return 8;
     if (t.kind == TypeKind::Array) {
         if (!t.bound) throw std::runtime_error("sizeof incomplete array");
-        return alignment ? size(t.child, true) : t.bound * size(t.child);
+        if (alignment) return size(t.child, true);
+        std::uint64_t element = size(t.child);
+        if (t.bound > std::numeric_limits<std::uint64_t>::max() / element)
+            throw std::runtime_error("array size overflow");
+        return t.bound * element;
     }
     if (t.kind == TypeKind::Fundamental && t.fundamental != FT_VOID) return fundamental_width(t.fundamental);
     if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment);
+    if (t.kind == TypeKind::Named && entities[t.entity].complete) {
+        EntityId e = t.entity;
+        if (entities[e].layout_state == 1) throw std::runtime_error("recursive class layout");
+        if (entities[e].layout_state != 2) {
+            entities[e].layout_state = 1;
+            std::uint64_t bytes = 0, align = 1;
+            for (std::uint32_t d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
+                const Entity member = entities[declarations[d].entity];
+                if (member.kind != EntityKind::Variable || member.is_static) continue;
+                Type field = types[member.type];
+                bool reference = field.kind == TypeKind::LRef || field.kind == TypeKind::RRef;
+                std::uint64_t field_align = reference ? 8 : size(member.type, true);
+                std::uint64_t field_size = reference ? 8 : size(member.type);
+                align = std::max(align, field_align);
+                if (entities[e].key == KW_UNION) bytes = std::max(bytes, field_size);
+                else bytes = (bytes + field_align - 1) / field_align * field_align + field_size;
+            }
+            entities[e].alignment = align;
+            entities[e].size = bytes ? (bytes + align - 1) / align * align : 1;
+            entities[e].layout_state = 2;
+        }
+        return alignment ? entities[e].alignment : entities[e].size;
+    }
     throw std::runtime_error("sizeof unsupported or incomplete type");
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
+    if (ast[n].kind == Kind::Literal) return types.fundamental(ast.literals[ast[n].literal].type);
+    if (ast[n].kind == Kind::KeywordLiteral && ast[n].op == KW_NULLPTR) return types.fundamental(FT_NULLPTR_T);
     if (ast[n].kind == Kind::Parenthesized) {
         TypeId t = expression_type(ast[n].first, s);
         NodeId inner = ast[n].first;
@@ -80,6 +109,18 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 Constant Analyzer::evaluate(NodeId n, ScopeId s)
 {
     if (!n) return Constant();
+    if (facts[n].value) return constants[facts[n].value];
+    Constant result = evaluate_value(n, s);
+    facts[n].scope = s;
+    if (result.valid) {
+        facts[n].value = constants.size();
+        facts[n].type = result.type;
+        constants.push_back(result);
+    } else facts[n].value = 1; // Expected non-constant, owned by this parsed region.
+    return result;
+}
+Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
+{
     ++constant_work;
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
@@ -141,7 +182,7 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b)
     if (!a.valid || !b.valid || !integral(a.type) || !integral(b.type)) return Constant();
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     if (scoped_enum(a.type) || scoped_enum(b.type)) {
-        if (!compare || a.type != b.type) throw std::runtime_error("invalid scoped enum operation");
+        if (!compare || types.unqualified(a.type) != types.unqualified(b.type)) throw std::runtime_error("invalid scoped enum operation");
     }
     TypeId at = types[a.type].kind == TypeKind::Named ? entities[types[a.type].entity].underlying : a.type;
     TypeId bt = types[b.type].kind == TypeKind::Named ? entities[types[b.type].entity].underlying : b.type;

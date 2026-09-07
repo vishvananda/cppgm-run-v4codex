@@ -6,17 +6,22 @@ using syntax::Kind;
 Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers) : ast(tree), ids(identifiers)
 {
     entities.push_back(Entity()); scopes.push_back(Scope()); declarations.push_back(Declaration());
-    edges.push_back(Edge()); visited.push_back(0);
+    edges.push_back(Edge()); visited.push_back(0); constants.resize(2);
     global = make_scope(ScopeKind::Namespace, 0);
 }
 std::uint64_t Analyzer::key(ScopeId s, IdentifierId n) const { return (std::uint64_t(s) << 32) | n; }
 EntityId Analyzer::local(ScopeId s, IdentifierId n, Lookup mode) const
 {
-    return (mode == Lookup::Tag ? tags : mode == Lookup::Namespace ? namespaces : ordinary).get(key(s, n));
+    return (mode == Lookup::Tag ? tags : mode == Lookup::Namespace ? namespaces : mode == Lookup::Qualifier ? qualifiers : ordinary).get(key(s, n));
 }
 ScopeId Analyzer::make_scope(ScopeKind k, ScopeId parent, IdentifierId name, EntityId e, bool visible)
 {
     Scope sc; sc.kind = k; sc.parent = parent; sc.name = name; sc.entity = e;
+    sc.depth = scopes[parent].depth + 1;
+    ScopeId pjump = scopes[parent].jump;
+    ScopeId grandjump = scopes[pjump].jump;
+    sc.jump = scopes[parent].depth - scopes[pjump].depth == scopes[pjump].depth - scopes[grandjump].depth ?
+        grandjump : parent;
     ScopeId id = scopes.size(); scopes.push_back(sc); visited.push_back(0);
     if (visible && parent) attach_scope(id, parent);
     return id;
@@ -41,6 +46,7 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
         (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias)))
         throw std::runtime_error("namespace and binding collision");
     ordinary.put(key(s, n), id);
+    if (target(id)) qualifiers.put(key(s, n), id);
     if (k == EntityKind::Type) tags.put(key(s, n), id);
     if (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias) namespaces.put(key(s, n), id);
 }
@@ -77,11 +83,52 @@ EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_
     }
     return result;
 }
+ScopeId Analyzer::common_ancestor(ScopeId a, ScopeId b) const
+{
+    // One geometric jump link per scope gives logarithmic ancestor walks.
+    while (scopes[a].depth > scopes[b].depth)
+        a = scopes[scopes[a].jump].depth >= scopes[b].depth ? scopes[a].jump : scopes[a].parent;
+    while (scopes[b].depth > scopes[a].depth)
+        b = scopes[scopes[b].jump].depth >= scopes[a].depth ? scopes[b].jump : scopes[b].parent;
+    while (a != b) {
+        bool jump = scopes[a].jump != scopes[b].jump;
+        a = jump ? scopes[a].jump : scopes[a].parent;
+        b = jump ? scopes[b].jump : scopes[b].parent;
+    }
+    return a;
+}
 EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified)
 {
-    for (; s; s = qualified ? 0 : scopes[s].parent) {
-        EntityId found = imported(s, n, mode, ++walk);
-        if (found) return found;
+    if (qualified) return imported(s, n, mode, ++walk);
+    // Nominated declarations participate at the nearest common ancestor of
+    // their namespace and the active directive, not at the directive's scope.
+    // Scratch state visits only active edges; no snapshot or semantic cache.
+    Index pending;
+    std::vector<ScopeId> work;
+    const EntityId ambiguous = ~EntityId(0);
+    std::uint64_t visit = ++walk;
+    for (; s; s = scopes[s].parent) {
+        ++lookup_work;
+        work.clear();
+        for (std::uint32_t edge = scopes[s].first_edge; edge; edge = edges[edge].next)
+            work.push_back(edges[edge].target);
+        for (std::size_t i = 0; i < work.size(); ++i) {
+            ScopeId ns = work[i];
+            if (visited[ns] == visit) continue;
+            visited[ns] = visit; ++lookup_work;
+            EntityId found = local(ns, n, mode);
+            if (found) {
+                ScopeId anchor = common_ancestor(s, ns);
+                EntityId previous = pending.get(anchor);
+                pending.put(anchor, previous && previous != found ? ambiguous : found);
+            }
+            for (std::uint32_t edge = scopes[ns].first_edge; edge; edge = edges[edge].next)
+                work.push_back(edges[edge].target);
+        }
+        EntityId direct = local(s, n, mode), nominated = pending.get(s);
+        if (nominated == ambiguous || (direct && nominated && direct != nominated))
+            throw std::runtime_error("ambiguous unqualified lookup");
+        if (direct || nominated) return direct ? direct : nominated;
     }
     return 0;
 }
@@ -122,7 +169,7 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s)
     bool qualified = ast[n].op == OP_COLON2;
     if (qualified) s = global;
     for (NodeId p = ast[n].first; p && p != ast[n].last; p = ast[p].next) {
-        EntityId e = lookup(s, ast[p].text, Lookup::Ordinary, qualified);
+        EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
         s = target(e);
         if (!s) throw std::runtime_error("name qualifier has no scope");
         qualified = true;

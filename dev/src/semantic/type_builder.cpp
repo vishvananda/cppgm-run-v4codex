@@ -149,18 +149,29 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
             throw std::runtime_error("uninitialized reference");
     }
     EntityKind kind = alias ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
-    EntityId e = local(owner, id);
-    if (e && entities[e].kind == kind && kind != EntityKind::Alias) {
+    bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
+        scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id;
+    EntityId cls = constructor ? scopes[owner].entity : 0;
+    EntityId e = constructor ? entities[cls].constructor : local(owner, id);
+    if (alias && e && entities[e].kind == EntityKind::Alias) {
+        if (entities[e].type != t) throw std::runtime_error("conflicting type alias");
+    } else if (e && entities[e].kind == kind && kind != EntityKind::Alias) {
         entities[e].type = types.composite(entities[e].type, function ? types.signature(t) : t);
     } else {
         e = make_entity(kind, owner, id, source);
         entities[e].type = function ? types.signature(t) : t;
-        bind(owner, id, e);
+        if (constructor) entities[cls].constructor = e;
+        else bind(owner, id, e);
     }
+    entities[e].is_static |= spec_has(specs, KW_STATIC);
     record(owner, e, d, t, kind);
-    if (init && !alias && !function && ((types[t].cv & 1) || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)) {
+    if (init && !alias && !function && integral(t)) {
         Constant v = evaluate(init, owner);
-        if (v.valid) entities[e].constant = convert(v, t);
+        if (v.valid) {
+            v = convert(v, t);
+            if ((types[t].cv & 1) || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
+                entities[e].constant = v;
+        }
     }
     return e;
 }

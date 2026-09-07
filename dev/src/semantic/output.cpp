@@ -109,12 +109,15 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
 void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; write_scope(out, global, 1); }
 void Analyzer::telemetry(std::ostream& out) const
 {
-    out << ",\"semantic_types\":" << types.records.size() - 1
+    out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_constants\":" << constants.size() - 2
+        << ",\"semantic_types\":" << types.records.size() - 1
         << ",\"semantic_entities\":" << entities.size() - 1
         << ",\"semantic_scopes\":" << scopes.size() - 1
         << ",\"semantic_declarations\":" << declarations.size() - 1
         << ",\"semantic_regions\":" << analyzed
         << ",\"semantic_lookup_work\":" << lookup_work
+        << ",\"semantic_signature_work\":" << types.signature_work
         << ",\"semantic_type_probes\":" << types.probes
         << ",\"semantic_constant_work\":" << constant_work;
 }

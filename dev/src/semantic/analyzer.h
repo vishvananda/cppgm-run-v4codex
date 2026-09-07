@@ -21,7 +21,9 @@ public:
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
-    Index ordinary, tags, namespaces;
+    Index ordinary, tags, namespaces, qualifiers;
+    std::vector<Constant> constants;
+    double analysis_ms = 0;
     std::vector<Edge> edges;
     std::vector<std::uint64_t> visited;
     std::uint64_t walk = 0;
@@ -29,13 +31,14 @@ private:
     struct Body { NodeId node, declarator; ScopeId owner; EntityId entity; };
     std::vector<Body> bodies;
     std::size_t body_cursor = 0;
-    enum class Lookup { Ordinary, Tag, Namespace };
+    enum class Lookup { Ordinary, Tag, Namespace, Qualifier };
     std::uint64_t key(ScopeId s, IdentifierId n) const;
     EntityId local(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary) const;
     EntityId lookup(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary, bool qualified = false);
     EntityId imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit);
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s);
+    ScopeId common_ancestor(ScopeId a, ScopeId b) const;
     ScopeId target(EntityId e) const;
     IdentifierId terminal(NodeId name) const;
     NodeId decl_name(NodeId d) const;
@@ -62,6 +65,7 @@ private:
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
     Constant evaluate(NodeId n, ScopeId s);
+    Constant evaluate_value(NodeId n, ScopeId s);
     Constant binary(ETokenType op, Constant a, Constant b);
     Constant convert(Constant value, TypeId to, bool explicit_cast = false);
     TypeId expression_type(NodeId n, ScopeId s, bool decltype_form = false);
