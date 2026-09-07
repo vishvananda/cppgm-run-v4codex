@@ -28,7 +28,9 @@ and two ABBA blocks per workload. Every wall time, peak RSS and telemetry sample
 is retained in `obj/student-pa3/performance-*`. Each invocation times out at
 60 seconds; hashing/warmup is outside measurement. `--baseline` and `--inputs`
 support equivalent-output comparisons to future frozen implementations.
-No speedup is claimed against the nonfunctional PA3 stub.
+No speedup is claimed against the nonfunctional PA3 stub. `report.py` accepts
+completed campaign directories, verifies frozen provenance, recomputes paired
+results and renders all measurements into [performance.md](performance.md).
 
 The 4/16 MiB repeated workload covers mixed signs/types, character literals,
 macro identities and lazy branches. Additional workloads cover a 4 MiB flat
