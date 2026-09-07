@@ -17,10 +17,10 @@ Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
 
 ## Remaining groups and validation
 
-1. Implement translation/source and identity owners, with explicit personal
-   tests for byte validity, ordering, raw reversion and lifetime boundaries.
-2. Implement token/literal/header groups together; run all 54 course fixtures
-   and personal boundary cases, then root through-PA1 and file audit.
+1. Translation/source, identity and all token/literal/header groups implemented;
+   all 54 course fixtures pass. Extend personal checks for byte validity,
+   ordering, raw reversion, EOF and identity/location lifetimes.
+2. Finish personal boundary cases, then root through-PA1 and file audit.
 3. Measure fixed compiler workloads (latency/RSS, work counters); record flags,
    hashes, observations and limits. PA1 produces no executable, so generated
    runtime/text size and optimization claims are inapplicable. No speedup claim
@@ -31,4 +31,8 @@ Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
 
 - Entry: clean baseline, 0/54 passing (54 failures), no earlier stages.
   Previous state provides failure evidence; no running process to await.
-- Current: implementation in progress. No incomplete handoff boundary claimed.
+- Core implementation: 54/54 course tests pass; file audit passes (24 files).
+  Source is immutable, characters use an 18-slot ring, spellings borrow ranges
+  unless translated, and identifiers/suffixes enter a TU-owned flat table.
+  Remaining work: explicit boundary tests, measured compiler evidence and final
+  through report. No incomplete handoff boundary claimed.
