@@ -45,9 +45,25 @@ void Validator::run()
     // once: switch arms and branches can share the same predecessor edge.
     using Edge = std::pair<std::uint32_t, std::uint32_t>;
     std::vector<Edge> edges;
+    // Handler membership is a CFG fact, independent of ordinary predecessors
+    // and source order. Recompute it for each validation so model edits cannot
+    // leave a stale permission to place a phi in a handler.
+    std::vector<bool> handlers(p_.blocks.size());
     for (std::uint32_t n = 0; n < p_.blocks.size(); ++n) {
         const Block& b = p_.blocks[n];
         require(b.instructions.count && b.instructions.end() <= p_.instructions.size(), "empty or invalid block");
+        for (unsigned k = b.instructions.begin; k < b.instructions.end(); ++k) {
+            const Instruction& i = p_.instructions[k];
+            if (i.opcode != Opcode::EhTry && i.opcode != Opcode::EhCleanup) continue;
+            validate_instruction_shape(i);
+            require(i.operands.end() <= p_.operands.size(), "invalid handler operand range");
+            if (!i.operands.count) continue; // cleanup clause without a target
+            const Operand& a = p_.operands[i.operands.begin];
+            require(a.kind == Operand::Label && a.ref && a.ref <= p_.blocks.size(), "invalid handler target");
+            const Block& target = p_.blocks[a.ref-1];
+            require(target.defined && target.owner == b.owner, "foreign handler target");
+            handlers[a.ref-1] = true;
+        }
         const Instruction& t = p_.instructions[b.instructions.end()-1];
         require(terminator(t.opcode), "missing terminator");
         if (t.opcode == Opcode::Jump || t.opcode == Opcode::Branch || t.opcode == Opcode::Switch) {
@@ -78,6 +94,7 @@ void Validator::run()
             ordinal_ = k+1;
             phi_ = i.opcode == Opcode::Phi;
             if (phi_) {
+                require(!handlers[n], "phi in exception handler block");
                 require(!ordinary, "phi after ordinary instruction");
                 require(i.operands.count / 2 == offsets[n+1]-offsets[n], "phi predecessor count mismatch");
                 ++stamp;

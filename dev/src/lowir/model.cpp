@@ -140,6 +140,8 @@ void FunctionBuilder::parameter(Parameter param)
 SlotId FunctionBuilder::add_slot(Name name, Type type)
 {
     require(!slots_.find(name) && type != Type(), "duplicate or void slot");
+    Function& f = p_.functions.at(function_.index - 1);
+    require(!f.slots.count || f.slots.end() == p_.slot_order.size(), "interleaved function slots");
     Slot s;
     s.name = name;
     s.type = type;
@@ -147,7 +149,6 @@ SlotId FunctionBuilder::add_slot(Name name, Type type)
     p_.slots.push_back(s);
     SlotId id(p_.slots.size());
     slots_.insert(name, id.index);
-    Function& f = p_.functions[function_.index - 1];
     if (!f.slots.count) f.slots.begin = p_.slot_order.size();
     ++f.slots.count;
     p_.slot_order.push_back(id);
@@ -155,16 +156,17 @@ SlotId FunctionBuilder::add_slot(Name name, Type type)
 }
 void FunctionBuilder::start_block(Name name)
 {
+    Function& f = p_.functions.at(function_.index - 1);
+    require(!f.blocks.count || f.blocks.end() == p_.block_order.size(), "interleaved function blocks");
     if (current_) {
         const Block& previous = p_.blocks[current_.index - 1];
-        require(previous.instructions.count && terminator(p_.instructions.back().opcode), "missing terminator");
+        require(previous.instructions.count && terminator(p_.instructions[previous.instructions.end()-1].opcode), "missing terminator");
     }
     BlockId id = block(name);
     Block& b = p_.blocks[id.index - 1];
     require(!b.defined, "duplicate block");
     b.defined = true;
     b.instructions.begin = p_.instructions.size();
-    Function& f = p_.functions[function_.index - 1];
     if (!f.blocks.count) f.blocks.begin = p_.block_order.size();
     ++f.blocks.count;
     p_.block_order.push_back(id);
@@ -185,6 +187,7 @@ void FunctionBuilder::append(Instruction inst)
     require(inst.operands.end() <= p_.operands.size(), "invalid operand slice");
     require(bool(current_), "instruction outside a block");
     Block& b = p_.blocks[current_.index - 1];
+    require(b.instructions.end() == p_.instructions.size(), "interleaved block instructions");
     require(!b.instructions.count || !terminator(p_.instructions.back().opcode), "instruction after terminator");
     Type result = inst.result_type();
     require(bool(inst.destination) == (result != Type()), "incorrect instruction destination");

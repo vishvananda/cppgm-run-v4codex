@@ -58,6 +58,43 @@ int main()
     try { builder.append(Instruction(Opcode::Return, Type::I64), {Operand::integer(1)}); }
     catch (const ParseError&) { rejected = true; }
     assert(rejected);
+    // The constructor and external validation share the phi type restriction.
+    Instruction phi(Opcode::Phi, Type::F80);
+    phi.operands.count = 2;
+    rejected = false;
+    try { validate_instruction_shape(phi); } catch (const ParseError&) { rejected = true; }
+    assert(rejected);
+    // Handler facts are recomputed after edits, including registrations after
+    // the target in source order. No cached block flag controls validity.
+    Program cfg = parse_lowir_program_text("function @f()->i64 {block ^a:jump ^b block ^b:%x=phi i64 [^a:1] return i64 %x block ^c:eh_cleanup return i64 0}");
+    Instruction& cleanup = cfg.instructions[3];
+    cleanup.operands.begin = cfg.operands.size();
+    cleanup.operands.count = 1;
+    cfg.operands.push_back(Operand::label(BlockId(2)));
+    rejected = false;
+    try { validate(cfg); } catch (const ParseError&) { rejected = true; }
+    assert(rejected);
+    cleanup.operands.count = 0;
+    validate(cfg);
+    // Two builders cannot silently put another function's instructions, slots
+    // or blocks into a contiguous slice owned by the first function.
+    Program mixed;
+    mixed.functions.push_back(Function()); mixed.functions.push_back(Function());
+    FunctionBuilder first(mixed, FunctionId(1)), second(mixed, FunctionId(2));
+    first.add_slot(mixed.intern("$a"), Type::I64);
+    second.add_slot(mixed.intern("$b"), Type::I64);
+    rejected = false;
+    try { first.add_slot(mixed.intern("$c"), Type::I64); } catch (const ParseError&) { rejected = true; }
+    assert(rejected && mixed.slots.size() == 2);
+    first.start_block(mixed.intern("^a"));
+    second.start_block(mixed.intern("^b"));
+    second.append(Instruction(Opcode::Return), {});
+    rejected = false;
+    try { first.append(Instruction(Opcode::Return), {}); } catch (const ParseError&) { rejected = true; }
+    assert(rejected && mixed.instructions.size() == 1);
+    rejected = false;
+    try { first.start_block(mixed.intern("^c")); } catch (const ParseError&) { rejected = true; }
+    assert(rejected && mixed.blocks.size() == 2);
     direct.instructions[0].is_volatile = true;
     rejected = false;
     try { validate(direct); } catch (const ParseError&) { rejected = true; }

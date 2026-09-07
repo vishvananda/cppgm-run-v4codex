@@ -219,6 +219,8 @@ struct Program {
     std::size_t pool_storage_bytes() const;
 };
 // A single function construction scope also owns its forward local references.
+// Finish its block/slot slices before starting another function: interleaving
+// pool appends is rejected rather than silently joining unrelated bodies.
 // append enforces local result/terminator structure; validate resolves external
 // input-wide type, signature and CFG requirements once after all files arrive.
 class FunctionBuilder {

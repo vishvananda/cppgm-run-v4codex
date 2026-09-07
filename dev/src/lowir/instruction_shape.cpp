@@ -14,6 +14,7 @@ void validate_instruction_shape(const Instruction& i)
     case Opcode::Exception: case Opcode::ExceptionSelector: scalar = true; break;
     case Opcode::Phi:
         variable = true; scalar = true;
+        require(i.type != Type::F80, "phi requires a directly representable scalar type");
         require(i.operands.count && !(i.operands.count % 2), "invalid phi arity"); break;
     case Opcode::Addr: case Opcode::VaStart: case Opcode::StackAlloc: case Opcode::Jump:
     case Opcode::EhTry: case Opcode::ZeroInit: case Opcode::AtomicThreadFence:
