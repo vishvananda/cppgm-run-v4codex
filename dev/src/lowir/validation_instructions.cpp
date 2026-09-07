@@ -2,6 +2,12 @@
 namespace lowir_model {
 void Validator::instruction(const Instruction& i) const
 {
+    validate_instruction_shape(i);
+    require(bool(i.destination) == (i.result_type() != Type()), "invalid instruction destination");
+    if (i.destination) {
+        const Value& v = p_.values.at(i.destination.index-1);
+        require(v.owner == function_ && v.defined && v.type == i.result_type(), "invalid result identity");
+    }
     require(i.operands.end() <= p_.operands.size(), "invalid operand range");
     auto count = [&](unsigned n) { require(i.operands.count == n, "invalid instruction arity"); };
     auto arg = [&](unsigned j) -> const Operand& { require(j < i.operands.count, "missing operand"); return p_.operands[i.operands.begin+j]; };

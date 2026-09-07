@@ -19,13 +19,20 @@ void Writer::operand(const Operand& v, Type context)
     case Operand::Slot: out_ << p_.name(p_.slots.at(v.ref-1).name); break;
     case Operand::Label: out_ << p_.name(p_.blocks.at(v.ref-1).name); break;
     case Operand::Symbol: symbol(SymbolId(v.ref)); break;
-    case Operand::Integer: out_ << static_cast<std::int64_t>(v.data.integer); break;
+    case Operand::Integer:
+        if (v.negative_integer) out_ << '-' << (std::uint64_t(0)-v.data.integer);
+        else out_ << v.data.integer;
+        break;
     case Operand::Null: out_ << "nullptr"; break;
     case Operand::Floating: {
         long double n = v.data.floating;
+        if (std::isnan(n)) {
+            if (std::signbit(n)) out_ << '-';
+            out_ << (v.signaling_nan ? "snan" : "nan");
+            break;
+        }
         if (context == Type::F32) n = static_cast<float>(n);
         if (context == Type::F64) n = static_cast<double>(n);
-        if (std::isnan(n)) { out_ << "nan"; break; }
         if (std::isinf(n)) { out_ << (std::signbit(n) ? "-inf" : "inf"); break; }
         // max_digits10 guarantees a value-preserving decimal roundtrip.
         std::ostringstream s;

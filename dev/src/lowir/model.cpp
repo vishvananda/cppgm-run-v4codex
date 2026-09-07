@@ -58,7 +58,14 @@ unsigned Type::width() const
     return kind() == I1 ? 1 : kind() == F80 ? 80 : bytes() * 8;
 }
 Operand Operand::integer(std::uint64_t n) { Operand o; o.data.integer = n; return o; }
-Operand Operand::floating(long double n) { Operand o; o.kind = Floating; o.data.floating = n; return o; }
+Operand Operand::floating(long double n, bool signaling)
+{
+    Operand o;
+    o.kind = Floating;
+    o.data.floating = n;
+    o.signaling_nan = signaling;
+    return o;
+}
 Operand Operand::null() { Operand o; o.kind = Null; return o; }
 Operand Operand::value(ValueId id) { Operand o; o.kind = Temporary; o.ref = id.index; return o; }
 Operand Operand::slot(SlotId id) { Operand o; o.kind = Slot; o.ref = id.index; return o; }
@@ -79,6 +86,20 @@ SymbolId Program::symbol(Name name)
     symbols.push_back(symbol);
     symbol_names.insert(name, symbols.size());
     return SymbolId(symbols.size());
+}
+std::size_t Program::pool_allocations() const
+{
+    return symbols.allocations + functions.allocations + signatures.allocations + parameters.allocations +
+        values.allocations + slots.allocations + blocks.allocations + slot_order.allocations +
+        block_order.allocations + instructions.allocations + operands.allocations + globals.allocations +
+        data.allocations + aliases.allocations;
+}
+std::size_t Program::pool_storage_bytes() const
+{
+    return symbols.storage_bytes() + functions.storage_bytes() + signatures.storage_bytes() + parameters.storage_bytes() +
+        values.storage_bytes() + slots.storage_bytes() + blocks.storage_bytes() + slot_order.storage_bytes() +
+        block_order.storage_bytes() + instructions.storage_bytes() + operands.storage_bytes() + globals.storage_bytes() +
+        data.storage_bytes() + aliases.storage_bytes();
 }
 ValueId FunctionBuilder::value(Name name)
 {
@@ -160,6 +181,8 @@ ValueId FunctionBuilder::append(Instruction inst, std::initializer_list<Operand>
 }
 void FunctionBuilder::append(Instruction inst)
 {
+    validate_instruction_shape(inst);
+    require(inst.operands.end() <= p_.operands.size(), "invalid operand slice");
     require(bool(current_), "instruction outside a block");
     Block& b = p_.blocks[current_.index - 1];
     require(!b.instructions.count || !terminator(p_.instructions.back().opcode), "instruction after terminator");
@@ -169,10 +192,11 @@ void FunctionBuilder::append(Instruction inst)
         Value& v = p_.values.at(inst.destination.index - 1);
         require(v.owner == function_, "foreign result");
         require(!v.defined || v.type == result, "temporary changes type");
+        bool truth = inst.opcode == Opcode::Compare || inst.opcode == Opcode::AtomicCompareExchange;
+        v.truth = v.defined ? v.truth && truth : truth;
         if (!v.defined) v.definition = p_.instructions.size() + 1;
         v.defined = true;
         v.type = result;
-        v.truth = inst.opcode == Opcode::Compare || inst.opcode == Opcode::AtomicCompareExchange;
     }
     p_.instructions.push_back(inst);
     ++b.instructions.count;

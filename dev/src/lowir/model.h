@@ -59,13 +59,15 @@ public:
 struct Operand {
     enum Kind { Integer, Floating, Null, Temporary, Slot, Symbol, Label } kind = Integer;
     std::uint32_t ref = 0;
+    bool signaling_nan = false;
+    bool negative_integer = false;
     union Payload {
         std::uint64_t integer;
         long double floating;
         Payload() : integer(0) {}
     } data;
     static Operand integer(std::uint64_t n);
-    static Operand floating(long double n);
+    static Operand floating(long double n, bool signaling = false);
     static Operand null();
     static Operand value(ValueId id);
     static Operand slot(SlotId id);
@@ -139,6 +141,7 @@ struct Instruction {
     explicit Instruction(Opcode op = Opcode::Const, Type t = Type()) : opcode(op), type(t) {}
     Type result_type() const;
 };
+void validate_instruction_shape(const Instruction& i);
 struct Function {
     SymbolId symbol;
     SignatureId signature;
@@ -170,30 +173,50 @@ struct ObjectAlias { Name name = 0; SymbolId target; };
 struct Statistics {
     std::uint64_t source_bytes = 0, tokens = 0, validated_instructions = 0, cfg_edges = 0;
 };
+// Pool growth is counted where it happens, without a global allocator hook.
+// Timing/peak RSS and capacity accounting are emitted only when requested.
+template<class T> class Pool : public std::vector<T> {
+    using Base = std::vector<T>;
+public:
+    std::uint64_t allocations = 0;
+    void push_back(const T& v) {
+        bool grows = this->size() == this->capacity();
+        Base::push_back(v);
+        allocations += grows;
+    }
+    void insert(typename Base::const_iterator at, std::initializer_list<T> items) {
+        bool grows = this->size() + items.size() > this->capacity();
+        Base::insert(at, items);
+        allocations += grows;
+    }
+    std::size_t storage_bytes() const { return this->capacity() * sizeof(T); }
+};
 // One unit owns all pools. IDs survive geometric growth. Instructions and
 // operands have no owning children; signatures and block bodies use slices.
 // Text input buffers die after each read; no textual IR survives in this model.
 struct Program {
     cppgm::IdentifierTable names;
     NameIndex symbol_names;
-    std::vector<Symbol> symbols;
-    std::vector<Function> functions;
-    std::vector<Signature> signatures;
-    std::vector<Parameter> parameters;
-    std::vector<Value> values;
-    std::vector<Slot> slots;
-    std::vector<Block> blocks;
-    std::vector<SlotId> slot_order;
-    std::vector<BlockId> block_order;
-    std::vector<Instruction> instructions;
-    std::vector<Operand> operands;
-    std::vector<Global> globals;
-    std::vector<DataItem> data;
-    std::vector<ObjectAlias> aliases;
+    Pool<Symbol> symbols;
+    Pool<Function> functions;
+    Pool<Signature> signatures;
+    Pool<Parameter> parameters;
+    Pool<Value> values;
+    Pool<Slot> slots;
+    Pool<Block> blocks;
+    Pool<SlotId> slot_order;
+    Pool<BlockId> block_order;
+    Pool<Instruction> instructions;
+    Pool<Operand> operands;
+    Pool<Global> globals;
+    Pool<DataItem> data;
+    Pool<ObjectAlias> aliases;
     Statistics stats;
     Name intern(const std::string& name);
     std::string name(Name id) const;
     SymbolId symbol(Name name);
+    std::size_t pool_allocations() const;
+    std::size_t pool_storage_bytes() const;
 };
 // A single function construction scope also owns its forward local references.
 // append enforces local result/terminator structure; validate resolves external

@@ -15,10 +15,13 @@ Entry: **0/109** confirmed by fresh unchanged course run. First implementation:
 | Validator | Indexed symbols, signatures, values and blocks -> operand/metadata checks and explicit predecessor edges. | O(IR + edges), no repeated whole-unit searches; all required rejection fixtures and personal probes. |
 | Exercises | Model constructors -> shared writer -> supplied harness native backend. | Sum, aliased swap, ordered indirect calls; behavioral suite and independent runtime inputs. |
 
-No optimizer is introduced. Record compiler wall/RSS and applicable executable
-runtime/text measurements with fixed binaries/flags/inputs, A/A calibration,
-ABBA observations and checked results before any performance claim. Later
-frontend/native requirements remain owned by their milestones.
+No optimizer is introduced. Evidence budgets fixed before measurement:
+compiler paired wall <=10% + A/A noise; RSS <=20% +1 MiB; host text growth
+<=25%; 4x input <6x wall / <5x RSS +1 MiB; observations >20x startup.
+Executable paired runtime <=5% + A/A noise, text growth 0% for unchanged
+programs. Freeze binaries/flags/inputs; retain AAAA + two ABBA blocks, output
+equivalence, separate telemetry, and checked volatile runtime workloads.
+Earlier frontend evidence remains in PA7; native emission stays with PA24.
 
 ## Handoff ledger
 
@@ -28,6 +31,11 @@ frontend/native requirements remain owned by their milestones.
 - First increment: all four groups implemented in shared typed pools and text
   adapters; all 109 original failures eliminated without fixture/harness changes.
   Frozen first working binary: `/tmp/pa8-evidence/lowir-initial`.
-- Remaining: independent semantic/API and sanitizer checks, compiler/runtime
-  evidence, cumulative report, final audit and clean commits.
+- Second increment: 76 independent semantic cases, typed API identities/local
+  invariants and ASan/UBSan checks; signalling NaN and wide integer literal
+  preservation fixed. Direct constructors reject malformed local shape. Native
+  checks cover the complete sum domain, aliasing, callbacks and floating memory.
+  Cumulative first run: 793/793; PA8 after changes: 109/109.
+- Remaining: final sanitizer rerun after pool telemetry changes, compiler/runtime
+  measurements, final cumulative and file audits, evidence and clean commits.
 - Handoff reason: work ongoing; no incomplete checkpoint proposed.

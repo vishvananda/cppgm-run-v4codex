@@ -117,20 +117,23 @@ Operand Reader::literal()
     if (fp) {
         if (!special && !s.empty() && std::strchr("fFlL", s.back())) s.pop_back();
         long double value;
-        if (s == "snan" || s == "SNAN") value = std::numeric_limits<long double>::signaling_NaN();
+        bool signaling = s == "snan" || s == "SNAN";
+        if (signaling) value = std::numeric_limits<long double>::quiet_NaN();
         else {
             char* end = 0;
             value = std::strtold(s.c_str(), &end);
             require(end != s.c_str() && end == s.c_str() + s.size(), "invalid floating literal");
         }
-        return Operand::floating(negative ? -value : value);
+        return Operand::floating(negative ? -value : value, signaling);
     }
     require(!s.empty() && s[0] >= '0' && s[0] <= '9', "expected scalar literal");
     char* end = 0;
     errno = 0;
     auto n = std::strtoull(s.c_str(), &end, 0);
     require(!errno && end == s.c_str() + s.size(), "invalid integer literal");
-    return Operand::integer(negative ? std::uint64_t(0)-n : n);
+    Operand result = Operand::integer(negative ? std::uint64_t(0)-n : n);
+    result.negative_integer = negative && n;
+    return result;
 }
 Operand Reader::operand(FunctionBuilder& b)
 {

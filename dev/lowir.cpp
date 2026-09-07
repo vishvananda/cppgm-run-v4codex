@@ -67,7 +67,8 @@ int main(int argc, char** argv)
                 << ",\"symbols\":" << p.symbols.size() << ",\"values\":" << p.values.size()
                 << ",\"instructions\":" << p.instructions.size() << ",\"operands\":" << p.operands.size()
                 << ",\"validated_instructions\":" << p.stats.validated_instructions << ",\"cfg_edges\":" << p.stats.cfg_edges
-                << ",\"interned_names\":" << p.names.size() << ",\"name_storage_bytes\":" << p.names.storage_bytes() << "}\n";
+                << ",\"interned_names\":" << p.names.size() << ",\"name_storage_bytes\":" << p.names.storage_bytes()
+                << ",\"ir_pool_allocations\":" << p.pool_allocations() << ",\"ir_pool_capacity_bytes\":" << p.pool_storage_bytes() << "}\n";
         }
         return 0;
     } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }
