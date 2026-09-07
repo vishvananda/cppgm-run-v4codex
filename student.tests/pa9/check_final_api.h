@@ -53,6 +53,8 @@ static void final_api_checks() {
     rejects([&]() { g.make(Kind::Pointer, g.size()); });
     rejects([&]() { g.make(Kind::Decltype, i); });
     rejects([&]() { g.make(Kind::Template, i, 0, 0, 0, {i}); });
+    Id completed = g.make(Kind::Template, g.path("Box"), 0, 0, 0, {g.make(Kind::TypeArgument, i)});
+    rejects([&]() { g.make(Kind::Template, completed); });
     rejects([&]() { g.make(Kind::FunctionEntity, host.name, 0, 0, 0, {0}); });
     rejects([&]() { g.make(Kind::Cv, i, 4); });
     rejects([&]() { g.make(Kind::FunctionType, i, 12); });

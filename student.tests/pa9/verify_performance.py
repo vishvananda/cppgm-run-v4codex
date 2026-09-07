@@ -10,18 +10,21 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 p = argparse.ArgumentParser()
 p.add_argument('--report', default=str(ROOT / 'student.tests/pa9/final-audit-performance.json'))
+p.add_argument('--historical', action='store_true', help='verify frozen historical artifacts without claiming they are the current implementation')
 a = p.parse_args()
 r = json.loads(Path(a.report).read_text())
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 assert r['generated_program_runtime'] is None and r['generated_program_text_size'] is None
-assert sha(ROOT / 'dev/abimangle') == r['binaries']['B']['sha256']
+if not a.historical:
+    assert sha(ROOT / 'dev/abimangle') == r['binaries']['B']['sha256']
 for binary in r['binaries'].values():
     assert sha(binary['path']) == binary['sha256']
     text = int(subprocess.check_output(['size', binary['path']], text=True).splitlines()[1].split()[0])
     assert text == binary['compiler_text_bytes']
 # Documentation/evidence commits may follow the frozen implementation commit.
-assert not subprocess.check_output(['git', 'diff', r['candidate_commit'], 'HEAD', '--', 'dev'], cwd=ROOT)
-assert not subprocess.check_output(['git', 'diff', 'HEAD', '--', 'dev'], cwd=ROOT)
+if not a.historical:
+    assert not subprocess.check_output(['git', 'diff', r['candidate_commit'], 'HEAD', '--', 'dev'], cwd=ROOT)
+    assert not subprocess.check_output(['git', 'diff', 'HEAD', '--', 'dev'], cwd=ROOT)
 for label, revision in [('A', r['baseline_commit']), ('B', r['candidate_commit'])]:
     assert subprocess.check_output(['git', 'rev-parse', revision + ':dev'], cwd=ROOT, text=True).strip() == r['source_trees'][label]
 assert len(r['observations']) == 96

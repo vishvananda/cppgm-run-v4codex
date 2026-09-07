@@ -34,7 +34,10 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Builtin: abi_builtin_type_code(static_cast<AbiBuiltinTypeKind>(a)); break;
     case Kind::Parameter: require(b <= 1); break;
     case Kind::Template:
-        require((*this)[a].kind <= Kind::Tagged || (*this)[a].kind == Kind::Parameter);
+        // A specialization is an owner of a member template, never itself a
+        // template prefix. This also bounds tag canonicalization to one layer.
+        require((*this)[a].kind == Kind::Name || (*this)[a].kind == Kind::Standard ||
+            (*this)[a].kind == Kind::Tagged || (*this)[a].kind == Kind::Parameter);
         sequence(Role::Argument); return;
     case Kind::Tagged:
         edge(a, Role::Type);

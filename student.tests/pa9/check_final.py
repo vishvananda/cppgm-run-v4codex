@@ -32,6 +32,7 @@ invalid = ['type ' + constructor * 1500 + tail + '\n' for constructor, tail in (
     ('ptr ', 'int'))]
 # Compact modifiers are deliberately iterative and remain supported at 20k.
 invalid += ['type tagged int tag\n', 'type function-type-qualified 12 false int\n']
+invalid.append('let-arg I type int\nlet-type T template Box I\ntype template-name T I\n')
 ctx = 'let-context c0 function host\n'
 for n in range(1, 1500):
     ctx += f'let-context c{n} function local c{n-1} L f 0\n'

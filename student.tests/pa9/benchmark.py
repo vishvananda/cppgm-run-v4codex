@@ -47,6 +47,8 @@ budgets = dict(wall_ratio=1.25, rss_ratio=1.20, rss_slack_kib=16384,
                scale_work_ratio=4.5, scale_rss_ratio=5.0)
 report = dict(protocol='AAAA, ABBA, ABBA; paired block means and min/max spread',
               cpu=cpu, platform=platform.platform(), flags='-std=gnu++11 -Wall -O3',
+              compile_configuration=(ROOT / 'obj/dev/.compile_config').read_text(),
+              test_runner_configuration=(ROOT / 'obj/dev/.test_runner_mode').read_text(),
               host_compiler=subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
               baseline_commit=a.baseline_commit, candidate_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
               source_trees={label: subprocess.check_output(['git', 'rev-parse', rev + ':dev'], cwd=ROOT, text=True).strip()
