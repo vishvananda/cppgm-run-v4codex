@@ -1,45 +1,71 @@
-# PA1 implementation plan
+# PA1 consolidated plan
 
-Stage base commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
-Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
+Stage base commit: `1b05951a54c7803f3ac1a1db87b7213ec2b426f1`
+Audit input: `dccd027f1b2e5312a0ed3c551635b89ac9b6d8b2`
+Last reviewed commit: `29e95571f4678984c8e8a2796443baf563ee51cb`
+Target: **PA1 full-stage final audit**; PA2 has not been started.
 
-## Design/spec alignment
+## Final Spec Alignment
 
-- `SourceBuffer` owns immutable bytes/file identity. `CharacterCursor` performs
-  UTF-8, UCNs, trigraphs, splices and final newline handling with an 18-slot ring;
-  literal scanning controls raw reversion and escaped-backslash recognition.
-- `PPTokenCursor` owns one reusable transformed-spelling buffer and emits typed
-  tokens with physical ranges/locations. Unchanged spellings borrow source bytes;
-  comments do not allocate spellings. All cursor temporaries die with the cursor.
-- `IdentifierTable` owns canonical name/suffix IDs and flat geometric byte/entry
-  storage for one TU; IDs survive growth. No process-global mutable cache, token
-  vectors or serialized interphase transport. The PA1 writer is an explicit view.
-- Work is linear in source/token bytes with bounded punctuation/raw-delimiter
-  lookahead and expected linear interning. Memory is source + unique names +
-  longest transformed token. Later semantic/lowering/backend work remains later PA scope.
+- Immutable `SourceBuffer` → 18-slot `CharacterCursor` → typed
+  `PPTokenCursor::next()` → explicit PA1 output view. UTF-8, UCNs, trigraphs,
+  splices, raw reversion and EOF rules preserve physical ranges/locations.
+- Tokens borrow contiguous source bytes or one reusable transformed-token buffer.
+  TU-owned flat identifier storage publishes stable IDs for names and suffixes.
+  Only new names can trigger geometric table growth; completed hits allocate
+  nothing. No token graphs, interphase serialization or mutable global cache.
+- Source, table and cursor have explicit release boundaries. Work is expected
+  linear in bytes/names; punctuation/raw lookahead is bounded. Capacity/probe
+  counters make growth visible. Resource envelopes include unique-name metadata.
+- The independent [audit](audit.md) maps every relevant spec section, traces a
+  declaration/template spelling, include context and raw/suffix transitions,
+  and reviews legality, profitability, invalidation and pipeline budgets.
+  Parsing, semantic demand, typed IR, native optimization and ELF are later PAs.
 
-## Remaining groups and performance
+## Findings and changes
 
-No PA1 groups remain. All translations, maximal-munch tokens, literals/suffixes,
-comments, Unicode boundaries, include context and required rejection cases pass.
-[Evidence](../student.tests/pa1/performance.md): frozen flags/binary/inputs, complete
-output equivalence, two A/A pairs and two ABBA blocks on five workloads; all 60
-observations retained. At 8/32 MiB, median compiler latency was 1.503/5.999 s,
-maximum RSS 12096/36668 KiB, and identifier storage stayed at 618 bytes. The 3.99x
-latency ratio passes the <=6x budget; decoded work <=2*bytes+64 and peak RSS
-<=4*bytes+32 MiB also pass. Timing noise is disclosed; no optimization speedup is
-claimed. Generated executable runtime/text size: N/A, because PA1 emits tokens.
+The audit reproduced unnecessary table doubling on an existing-name hit at half
+occupancy. Growth now follows the miss check; identity and new-name insertion
+remain valid. Rehash work and source/scratch capacities are exposed in telemetry.
+Personal validation now includes 64 cases, large resource boundaries and a
+completed-hit storage regression. Benchmarks add dense-name scaling, long tokens,
+raw near-matches and table-boundary hits, with frozen A/B inputs and timeouts.
+
+## Performance and validation
+
+Two completed A/B runs use identical frozen before/after binaries and ten fixed
+inputs, with A/A calibration and two ABBA blocks each; the second run pins CPU 0.
+All outputs agree. Table-boundary retained storage falls by 2 MiB and peak RSS
+by about 4 MiB in both runs. Timing noise precludes a speedup claim. Repeated
+8→32 MiB input takes 3.993–3.996x final-binary latency (limit 6x). The final
+telemetry comparison also passes; ordinary CLI latency is 1.514611/6.015027 s
+and peak RSS 12092/36672 KiB at those sizes. Dense-name fourfold latency grows
+4.187x/4.326x (limit 6x). [Performance evidence](../student.tests/pa1/performance.md)
+retains all 360 observations, calibration, spreads, output hashes and explicit
+regression/noise disclosures. Host-tool text grows 488 bytes (0.85%); no speed
+gain is claimed. Generated runtime/text size is N/A: PA1 produces tokens.
+No executable optimization or node-count benefit is claimed.
+
+Final validation: `make test-pa1` and `make test-report-through-pa1` pass 54/54
+(1/1 stages); there are no earlier assignments. The full course suite also passes
+54/54 using the standalone ASan/UBSan binary without the batch wrapper.
+`check.py` and `check.py --sanitize` pass all 64 personal cases and the
+identity/location/streaming/allocation checks. The required file audit passes
+24 files, the additional entry-point audit passes, and `git diff --check` passes.
+All benchmark artifacts/hashes, 360 observations and both variants' resource
+gates were independently verified. No PA1 behavior group or handoff remains.
+The implementation fix is committed below; the accompanying consolidation
+commit contains the reviewed audit, plan, benchmark controls and evidence.
 
 ## Handoff ledger
 
-- Entry (`fee23cc04` plan): clean baseline, 0/54 passing; previous failure evidence
-  established missing implementation, with no process to await.
-- Core (`a03163343`): all shared semantic groups implemented; 54/54 course pass.
-- Boundaries (`78a0872d6`): fixed trailing-splice newline, BOM-only input and escaped
-  UCN recognition; 59 personal cases plus identity/location/streaming checks pass,
-  also under ASan/UBSan. Self-tokenization succeeds for all implementation sources.
-- Exit: `make test-pa1` and `make test-report-through-pa1` pass 54/54; earlier PAs
-  pass 0/0; `perl scripts/cppgm_file_audit.pl --stage pa1 --paths dev/src` passes
-  24 files; whitespace audit passes. Course fixtures/coverage remain unchanged.
-- Handoff reason: full PA1 completion, including related boundary groups and
-  compiler evidence. No incomplete behavior group or deferred PA1 task remains.
+- `fee23cc04`: plan and 0/54 baseline; independently reread.
+- `a03163343`: shared PA1 implementation; all sources and tool registration reviewed.
+- `78a0872d6`: EOF/BOM/escaped-UCN closure; changes and properties revalidated.
+- `dccd027f1`: checkpoint/performance evidence; frozen binary/hash/protocol reviewed.
+- `29e95571f`: table ownership fix, telemetry and expanded resource checks; reviewed
+  with final course, sanitizer and frozen benchmark evidence.
+- Final consolidation: audited plan, benchmark controls and complete performance
+  evidence. No compiler changes follow the reviewed implementation commit.
+  [Detailed dispositions](audit.md#handoff-ledger)
+  cover every handoff since the original pre-implementation review marker.
