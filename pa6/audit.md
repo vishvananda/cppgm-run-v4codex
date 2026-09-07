@@ -92,19 +92,34 @@ changed to accommodate the corrections.
 | Constants/layout | Source-point constants and completed class facts; target integer and size overflow remain checked. | At most one constant evaluation/node and one completed layout/class; conservative nonconstant result or required rejection if facts are unavailable. |
 | Whole compiler | Required correctness changes may add bounded work; no executable transformation/optimization level is present. | Frozen stage budgets: wall <=10% + calibrated A/A noise, RSS <=15% +1 MiB, host text <=35% over PA5 and <=5% over first PA6; 4x input <6x wall and <5x RSS +1 MiB. New edge corpus uses the same budgets against the checkpoint. |
 
-The edge index has an explicit memory cost; the final performance report must
-show it alongside timing and disclose unaffected-workload regressions. Runtime,
+The edge index has an explicit memory cost; the final performance report
+shows it alongside timing and discloses unaffected-workload regressions. Runtime,
 spill, ABI and code-growth profitability are not measurable at this PA and are
 not inferred from graph size. `performance.md` retains historical observations;
-the independent campaign will identify its exact final binary separately.
+the independent campaigns identify their exact final binary separately.
 
 ## Validation and handoffs
 
 Current corrected semantic build: unchanged PA6 105/105 and through PA6
 498/498; 57 personal PA6 cases; semantic and inherited PA5 graph APIs;
 ASan/UBSan/leak checks on both APIs, all personal cases and all PA6 fixtures.
-The file audit checks 71 implementation files. The final telemetry-only addition
-and final performance/exit evidence are pending below until rerun.
+The final build includes the telemetry addition and passes both required gates:
+`make test-report-through-pa6` (498/498 across six stages) and
+`perl scripts/cppgm_file_audit.pl --stage pa6 --paths dev/src` (71 files).
+`make test-pa6` also passes 105/105. Ordinary and sanitizer runs exercise the
+same final implementation; the two baseline binaries reproduce their recorded
+hashes, and the benchmark B hash matches the tested current compiler.
+
+The two complete frozen campaigns retain 412 observations: 308 ordinary,
+32 startup, 44 phase/work and 28 telemetry. Both protocol/budget verifiers pass.
+Signature latency improves 19–23% over first PA6; the edge workloads improve
+75% / 92.4% over the checkpoint. Other semantic pairs range from 0.7% faster to
+3.9% slower. Template RSS (+12.4%) and compiler text (277,702 bytes; +3.04%
+over first PA6) stay within the fixed budgets. The largest edge case establishes
+24,000 unique edges with 48,000 qualified scope visits, 4.034x wall scaling and
+3.179x RSS scaling. [The report](performance.md) retains all ratios, spread,
+noise, limits and reproduction commands. No claim uses generated-program
+runtime or code size, which remain unavailable at PA6.
 
 Unaudited checkpoint handoffs are now reviewed: first semantic construction,
 anchored lookup/caches, declaration-point/body identities, class-state compaction,

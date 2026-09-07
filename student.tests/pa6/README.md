@@ -13,10 +13,10 @@ ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python
 ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 student.tests/pa6/check_course.py /tmp/pa6-sanitizer/compiler
 ```
 
-`check.py` covers 33 independent declaration-point, type, lookup, constant and
+`check.py` covers 57 independent declaration-point, type, lookup, constant and
 scope interactions. `check_api.cpp` checks canonical declaration/signature and
 array identities, source parameter distinctions, alias reference collapse,
-completed signature reuse, definition/body scope links, and source-graph lifetime
+completed signature reuse, alias and nested function-pointer identity, definition/body scope links, and source-graph lifetime
 under arena growth. `check_course.py` reruns the unchanged 105 PA6 fixtures
 against a standalone binary, including `.t2` primary translation units and
 required rejections. It does not write course sidecars.
@@ -30,14 +30,14 @@ pairs and two ABBA blocks. Separate observations measure telemetry overhead.
 
 Freeze three optimized compiler binaries before timing: the stage base
 `9249196518f45492822fb2e3da4eb5d82af0ed13`, first working PA6 `5749f43b4`, and
-the final implementation revision recorded in `performance.json`. Rebuild each
+the final implementation revision `85011bf5a` recorded in `final-audit-performance.json`. Rebuild each
 in its own temporary checkout with `make -C dev cppgm++` (g++ GNU++11, -O3,
 course test runner enabled). Do not run builds/tests during timing.
 
 ```sh
-python3 student.tests/pa6/measure.py measure /tmp/pa5-base /tmp/pa6-first /tmp/pa6-final student.tests/pa6/performance.json
-python3 student.tests/pa6/measure.py verify /tmp/pa5-base /tmp/pa6-first /tmp/pa6-final student.tests/pa6/performance.json
-python3 student.tests/pa6/measure.py report student.tests/pa6/performance.json
+python3 student.tests/pa6/measure.py measure /tmp/pa5-base /tmp/pa6-first /tmp/pa6-final student.tests/pa6/final-audit-performance.json
+python3 student.tests/pa6/measure.py verify /tmp/pa5-base /tmp/pa6-first /tmp/pa6-final student.tests/pa6/final-audit-performance.json
+python3 student.tests/pa6/measure.py report student.tests/pa6/final-audit-performance.json
 ```
 
 The record retains binary/input/output hashes, every observation, phase/work
@@ -50,3 +50,23 @@ an explicit stop, so those observations support no final-binary claim.
 failed the largest template RSS budget. Its binary is identified by source
 revision and hash; final claims use the new complete campaign.
 Generated executable runtime/text and self-hosting are N/A for PA6.
+
+The independent audit also exercises qualified class/enum owners across parser
+and semantics, constructor function-try bodies, control-statement block scope,
+inline namespace direct-hit rules, and layout overflow. Its separate edge
+corpus uses 6,000/24,000 namespaces with two qualified using directives per
+namespace. Inputs remain separate from the original twenty frozen workloads.
+The same startup, ABBA/A/A, latency, memory and scaling budgets apply:
+
+```sh
+python3 student.tests/pa6/audit_performance.py measure /tmp/pa6-checkpoint /tmp/pa6-final student.tests/pa6/final-edge-performance.json
+python3 student.tests/pa6/audit_performance.py verify /tmp/pa6-checkpoint /tmp/pa6-final student.tests/pa6/final-edge-performance.json
+python3 student.tests/pa6/audit_performance.py report student.tests/pa6/final-edge-performance.json
+```
+
+The edge A binary is `1edcbe5db`, B is `85011bf5a`. `semantic_edges` counts
+unique pair identities; final `semantic_lookup_work` must equal twice the
+namespace count, proving that duplicate insertion and qualified direct lookup
+do not scan the growing ordinary edge list. Latency, not work counts alone,
+establishes the performance result. `performance.json` remains the historical
+checkpoint campaign and is not used as evidence for the corrected final binary.
