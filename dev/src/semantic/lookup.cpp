@@ -3,11 +3,18 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers) : ast(tree), ids(identifiers)
+Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_calls) : ast(tree), ids(identifiers), calls(with_calls)
 {
     entities.push_back(Entity()); scopes.push_back(Scope()); declarations.push_back(Declaration());
     edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1);
+    constant_builtin = ids.intern(TextView("__builtin_constant_p", 20));
+    abort_builtin = ids.intern(TextView("__builtin_abort", 15));
     global = make_scope(ScopeKind::Namespace, 0);
+    if (calls) {
+        IdentifierId name = ids.intern(TextView("nullptr_t", 9));
+        EntityId e = make_entity(EntityKind::Alias, global, name, 0);
+        entities[e].type = types.fundamental(FT_NULLPTR_T); bind(global, name, e);
+    }
 }
 std::uint64_t Analyzer::key(ScopeId s, IdentifierId n) const { return (std::uint64_t(s) << 32) | n; }
 EntityId Analyzer::local(ScopeId s, IdentifierId n, Lookup mode) const
@@ -45,6 +52,10 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
     if (old && ((entities[old].kind == EntityKind::Namespace || entities[old].kind == EntityKind::NamespaceAlias) !=
         (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias)))
         throw std::runtime_error("namespace and binding collision");
+    if (old != id && function_binding(old) && function_binding(id)) id = merge_lookup(old, id);
+    else if (old && old != id && (function_binding(old) || function_binding(id)) &&
+             entities[old].kind != EntityKind::Type && k != EntityKind::Type)
+        throw std::runtime_error("function and ordinary binding conflict");
     ordinary.put(key(s, n), id);
     if (target(id)) qualifiers.put(key(s, n), id);
     if (k == EntityKind::Type) tags.put(key(s, n), id);
@@ -79,12 +90,17 @@ void Analyzer::add_edge(ScopeId s, ScopeId to, bool is_inline)
     edge_index.put(key(s, to), edges.size());
     scopes[s].first_edge = edges.size(); edges.push_back(e);
 }
-EntityId Analyzer::merge_lookup(EntityId a, EntityId b) const
+EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
 {
     const EntityId ambiguous = ~EntityId(0);
     if (!a || a == b) return b;
     if (!b) return a;
     if (a == ambiguous || b == ambiguous) return ambiguous;
+    if (function_binding(a) && function_binding(b)) {
+        EntityId e = make_entity(EntityKind::Overload, 0, entities[a].name, 0);
+        entities[e].first = a; entities[e].second = b;
+        return e;
+    }
     // The PA6 contract distinguishes independently declared aliases, including
     // aliases for the same type. Multiple paths to one entity remain unique.
     return ambiguous;

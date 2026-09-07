@@ -12,7 +12,7 @@
 
 namespace cppgm { namespace syntax {
 
-int emit_ast(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool types)
+int emit_ast(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool types, bool calls)
 {
     const std::time_t now = std::time(0);
     const std::string stamp = std::asctime(std::localtime(&now));
@@ -30,12 +30,13 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
         Cursor cursor(post, pp.identifiers(), ast);
         Parser parser(cursor, ast, pp.identifiers());
         std::unique_ptr<semantic::Analyzer> semantics;
-        if (types) semantics.reset(new semantic::Analyzer(ast, pp.identifiers()));
+        if (types) semantics.reset(new semantic::Analyzer(ast, pp.identifiers(), calls));
         NodeId root = parser.translation_unit(semantics.get());
         if (types) semantics->finish();
         Clock::time_point parsed = Clock::now();
         out << "start translation unit " << i + 1 << '\n';
-        if (types) semantics->write(out);
+        if (calls) semantics->write_semantics(out, root);
+        else if (types) semantics->write(out);
         else write_ast(out, ast, root, pp.identifiers());
         out << "end translation unit\n";
         out.flush();

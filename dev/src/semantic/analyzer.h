@@ -7,10 +7,11 @@ namespace cppgm { namespace semantic {
 // The parser calls this boundary before proceeding to the next source region.
 class Analyzer : public syntax::DeclarationConsumer {
 public:
-    Analyzer(syntax::Ast& ast, IdentifierTable& ids);
+    Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false);
     void consume(NodeId declaration) override;
     void finish();
     void write(std::ostream& out) const;
+    void write_semantics(std::ostream& out, NodeId root) const;
     void telemetry(std::ostream& out) const;
     Types types;
     std::vector<Entity> entities;
@@ -21,6 +22,14 @@ public:
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
+    bool calls;
+    std::vector<Expression> expressions;
+    std::vector<Conversion> conversions;
+    Index function_families, function_signatures;
+    std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0;
+    TypeId return_type = 0;
+    unsigned loop_depth = 0, switch_depth = 0;
+    IdentifierId constant_builtin = 0, abort_builtin = 0;
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
     std::vector<ClassFacts> class_facts;
@@ -38,7 +47,10 @@ private:
     EntityId local(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary) const;
     EntityId lookup(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary, bool qualified = false);
     EntityId imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit);
-    EntityId merge_lookup(EntityId a, EntityId b) const;
+    EntityId merge_lookup(EntityId a, EntityId b);
+    bool function_binding(EntityId e) const;
+    std::vector<EntityId> candidates(EntityId e);
+    EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
@@ -61,6 +73,34 @@ private:
     void function_body(const Body& body);
     void schedule_body(const Body& body);
     void statements(NodeId n, ScopeId s);
+    void resolve_statement(NodeId n, ScopeId s);
+    void resolve_condition(NodeId n, ScopeId s, bool is_switch);
+    Expression expression(NodeId n, ScopeId s);
+    Expression resolve_expression(NodeId n, ScopeId s);
+    Expression call_expression(NodeId n, ScopeId s);
+    Expression unary_expression(NodeId n, ScopeId s);
+    Expression binary_expression(NodeId n, ScopeId s);
+    Expression cast_expression(NodeId n, ScopeId s, TypeId target, NodeId operand);
+    TypeId value_type(TypeId t);
+    TypeId decay(TypeId t);
+    TypeId promote(TypeId t);
+    TypeId arithmetic_type(TypeId a, TypeId b);
+    bool arithmetic(TypeId t) const;
+    bool fundamental(TypeId t, EFundamentalType f) const;
+    bool pointer(TypeId t) const;
+    bool null_constant(NodeId n);
+    bool qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const = true);
+    Conversion conversion(NodeId n, TypeId target);
+    void apply_conversion(NodeId n, Conversion c);
+    void require_conversion(NodeId n, TypeId target);
+    void select_function(NodeId n, EntityId e);
+    void initialize(NodeId init, TypeId target, ScopeId s);
+    TypeId builtin_binary(ETokenType op, NodeId a, NodeId b);
+    void modifiable(NodeId n);
+    void write_resolved(std::ostream& out, NodeId n, unsigned depth) const;
+    void write_expression(std::ostream& out, NodeId n, unsigned depth, TypeId override_type = 0, ValueCategory override_category = ValueCategory::Prvalue) const;
+    void write_variable(std::ostream& out, NodeId d, NodeId init, unsigned depth) const;
+    void write_entity_name(std::ostream& out, EntityId e) const;
     void template_declaration(NodeId n, ScopeId s);
     void namespace_declaration(NodeId n, ScopeId s);
     TypeId class_type(NodeId n, ScopeId s, IdentifierId anonymous_name = 0, bool emit = true, bool static_union = false);

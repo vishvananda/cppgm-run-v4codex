@@ -4,7 +4,9 @@
 namespace cppgm { namespace syntax {
 
 Parser::Parser(Cursor& cursor, Ast& tree, IdentifierTable& identifiers)
-    : in(cursor), ast(tree), ids(identifiers), names(tree.telemetry) {}
+    : in(cursor), ast(tree), ids(identifiers), names(tree.telemetry) {
+    names.bind(0, ids.intern(TextView("nullptr_t", 9)), Category::Type);
+}
 
 NodeId Parser::make(Kind kind)
 {

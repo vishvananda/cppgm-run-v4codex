@@ -37,9 +37,10 @@ the final measurement and state its reason.
 
 | Increment | Evidence / remaining boundary |
 | --- | --- |
+| Procedural core | 170/186 unchanged fixtures; PA1–6 498/498; file audit 77 files; 23 personal cases + multifile isolation. Flat overload unions and signature index; per-node expression facts and recorded conversion sequences; linear candidate tournament plus verification. Compiler measurement pending; no performance claim. |
 | Initial inspection | Read AGENTS, testing guide, spec, PA7 handout and representative fixtures. Preserve both review markers above. All 186 failures remain; implementation in progress. |
 
-Handoff reason: none; active implementation. Required final checks are
+Handoff reason: none; continuing into member-pointer identity, anonymous object actions, member demand and the remaining template-address case. Required final checks are
 `make test-pa7`, `make test-report-through-pa7`, prior-through PA6 and
 `perl scripts/cppgm_file_audit.pl --stage pa7 --paths dev/src`. Commit intended
 changes and verify an empty worktree at handoff.

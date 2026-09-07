@@ -52,7 +52,7 @@ public:
     const Type& operator[](TypeId t) const { return records[t]; }
 };
 
-enum class EntityKind : unsigned char { Type, Alias, Namespace, NamespaceAlias, Variable, Function, Parameter, Enumerator };
+enum class EntityKind : unsigned char { Type, Alias, Namespace, NamespaceAlias, Variable, Function, Parameter, Enumerator, Overload };
 enum class ScopeKind : unsigned char { Namespace, Class, Enum, Template, Function, Block };
 struct Constant {
     std::uint64_t bits = 0;
@@ -78,6 +78,7 @@ struct Entity {
     NodeId source = 0, definition = 0;
     TypeId type = 0, underlying = 0;
     std::uint32_t class_info = 0;
+    EntityId first = 0, second = 0; // Immutable overload union edges.
     Constant constant;
 };
 struct Scope {
@@ -99,6 +100,24 @@ struct Declaration {
     std::uint32_t next = 0;
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
+enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort };
+struct Expression {
+    TypeId type = 0; // Reference-free language expression type.
+    EntityId entity = 0;
+    std::uint32_t conversions = 0, count = 0;
+    ValueCategory category = ValueCategory::Prvalue;
+    ExpressionForm form = ExpressionForm::Ordinary;
+    bool ready = false;
+};
+struct Conversion {
+    TypeId target = 0;
+    EntityId function = 0; // Target-selected overload, if any.
+    unsigned char rank = 255, qualification = 0;
+    bool reference = false, temporary = false;
+    unsigned char preference = 0;
+    bool valid() const { return rank != 255; }
+};
 struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }

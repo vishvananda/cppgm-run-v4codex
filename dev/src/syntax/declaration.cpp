@@ -145,7 +145,7 @@ NodeId Parser::using_declaration()
     NodeId n = name();
     NodeId result = wrap(directive ? Kind::UsingDirective : Kind::UsingDeclaration, named(Kind::Target, n));
     Binding binding = name_binding(n);
-    if (directive && binding.target) names.import(scope, binding.target);
+    if (directive && binding.target) names.import(scope, binding.target, true);
     else if (!directive) names.bind(scope, final_name(n), binding.category, binding.target);
     in.require(";");
     return result;

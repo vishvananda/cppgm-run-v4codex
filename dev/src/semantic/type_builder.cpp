@@ -5,7 +5,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 TypeId Analyzer::source_type(EntityId e) const
 {
-    return entities[e].kind == EntityKind::Alias ? facts[entities[e].source].type : entities[e].type;
+    return entities[e].kind == EntityKind::Alias && entities[e].source ? facts[entities[e].source].type : entities[e].type;
 }
 EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type)
 {
@@ -172,12 +172,21 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         record(owner, e, d, t, kind);
         return e;
     }
+    if (calls && types[t].kind == TypeKind::Array && !types[t].bound && init) {
+        NodeId list = ast[init].first;
+        if (ast[list].kind == Kind::BracedInit) {
+            std::uint64_t count = 0;
+            for (NodeId c = ast[list].first; c; c = ast[c].next) ++count;
+            t = types.compound(TypeKind::Array, types[t].child, count);
+        }
+    }
     TypeId canonical = types.signature(t);
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id;
     EntityId cls = constructor ? scopes[owner].entity : 0;
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
-    if (e && entities[e].kind == kind) {
+    if (function && !constructor) e = declare_function(owner, id, source, canonical);
+    else if (e && entities[e].kind == kind) {
         entities[e].type = types.composite(entities[e].type, canonical);
     } else {
         e = make_entity(kind, owner, id, source);
@@ -187,6 +196,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
     record(owner, e, d, t, kind);
+    if (calls && init && !function) initialize(init, canonical, owner);
     if (init && !alias && !function && integral(t)) {
         Constant v = evaluate(init, owner);
         if (v.valid) {
@@ -195,6 +205,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
                 entities[e].constant = v;
         }
     }
+    if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
+        facts[ast[init].first].type = t;
     return e;
 }
 } }

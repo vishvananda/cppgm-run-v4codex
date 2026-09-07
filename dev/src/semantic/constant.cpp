@@ -98,6 +98,13 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
+    if (calls) {
+        Expression e = expression(n, s);
+        if (decltype_form && ast[n].kind == Kind::IdExpression && e.entity) return entities[e.entity].type;
+        if (decltype_form && e.category != ValueCategory::Prvalue)
+            return types.compound(e.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, e.type);
+        return e.type;
+    }
     if (ast[n].kind == Kind::Literal) return types.fundamental(ast.literals[ast[n].literal].type);
     if (ast[n].kind == Kind::KeywordLiteral && ast[n].op == KW_NULLPTR) return types.fundamental(FT_NULLPTR_T);
     if (ast[n].kind == Kind::Parenthesized) {
@@ -128,7 +135,7 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
     facts[n].scope = s;
     if (result.valid) {
         facts[n].value = constants.size();
-        facts[n].type = result.type;
+        if (!calls || !expressions[n].ready) facts[n].type = result.type;
         constants.push_back(result);
     } else facts[n].value = 1; // Expected non-constant, owned by this parsed region.
     return result;

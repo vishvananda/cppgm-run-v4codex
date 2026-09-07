@@ -2,12 +2,13 @@
 
 namespace cppgm { namespace syntax {
 
-Names::Names(bool telemetry) : telemetry_(telemetry), scopes_(1, Scope{0, 0, 0}),
+Names::Names(bool telemetry) : telemetry_(telemetry), scopes_(1, Scope{0, 0, 0, 0}),
     imports_(1), entries_(1), slots_(32) {}
 
 ScopeId Names::enter(ScopeId parent)
 {
-    scopes_.push_back(Scope{parent, 0, 0});
+    Scope next{parent, 0, 0, 0}; next.depth = scopes_[parent].depth + 1;
+    scopes_.push_back(next);
     return scopes_.size() - 1;
 }
 
@@ -75,15 +76,47 @@ Binding Names::imported(ScopeId scope, IdentifierId name, bool scope_only) const
     return Binding();
 }
 
-Binding Names::lookup(ScopeId scope, IdentifierId name) const
+Binding Names::lexical(ScopeId scope, IdentifierId name, bool scope_only) const
 {
+    if (visited_.size() < scopes_.size()) visited_.resize(scopes_.size());
+    if (nominated_.size() < scopes_.size()) {
+        nominated_.resize(scopes_.size()); nomination_stamp_.resize(scopes_.size());
+    }
+    const std::uint64_t visit = ++traversal_;
+    struct Work { ScopeId target, anchor; };
+    std::vector<Work> work;
     for (;;) {
-        Binding found = imported(scope, name);
-        if (found.category != Category::Unknown) return found;
+        Binding direct = local(scope, name);
+        if (scope_only ? direct.target != 0 : direct.category != Category::Unknown) return direct;
+        work.clear();
+        for (std::uint32_t i = scopes_[scope].imports; i; i = imports_[i].next)
+            work.push_back({imports_[i].target, imports_[i].directive ? unknown_scope : scope});
+        for (std::size_t i = 0; i < work.size(); ++i) {
+            ScopeId target = work[i].target;
+            if (visited_[target] == visit) continue;
+            visited_[target] = visit;
+            if (telemetry_) ++lookup_scopes;
+            ScopeId anchor = work[i].anchor;
+            if (anchor == unknown_scope) {
+                ScopeId a = scope, b = target;
+                while (scopes_[a].depth > scopes_[b].depth) a = scopes_[a].parent;
+                while (scopes_[b].depth > scopes_[a].depth) b = scopes_[b].parent;
+                while (a != b) { a = scopes_[a].parent; b = scopes_[b].parent; }
+                anchor = a;
+            }
+            Binding found = local(target, name);
+            if (scope_only ? found.target != 0 : found.category != Category::Unknown) {
+                if (nomination_stamp_[anchor] != visit) { nominated_[anchor] = found; nomination_stamp_[anchor] = visit; }
+            }
+            for (std::uint32_t edge = scopes_[target].imports; edge; edge = imports_[edge].next)
+                work.push_back({imports_[edge].target, imports_[edge].directive ? unknown_scope : anchor});
+        }
+        if (nomination_stamp_[scope] == visit) return nominated_[scope];
         if (!scope) return Binding();
         scope = scopes_[scope].parent;
     }
 }
+Binding Names::lookup(ScopeId scope, IdentifierId name) const { return lexical(scope, name, false); }
 
 Binding Names::qualified(ScopeId scope, IdentifierId name) const
 {
@@ -96,11 +129,7 @@ Binding Names::qualifier(ScopeId scope, IdentifierId name, bool qualified) const
     // A nested-name-specifier ignores non-scope declarations (including values
     // hiding a namespace alias). Terminal lookup still observes those values.
     if (scope == unknown_scope) return Binding();
-    for (;;) {
-        Binding found = imported(scope, name, true);
-        if (found.target || qualified || !scope) return found;
-        scope = scopes_[scope].parent;
-    }
+    return qualified ? imported(scope, name, true) : lexical(scope, name, true);
 }
 
 void Names::bind(ScopeId scope, IdentifierId name, Category category, ScopeId target)
@@ -119,9 +148,9 @@ void Names::bind(ScopeId scope, IdentifierId name, Category category, ScopeId ta
     entry.target = target;
 }
 
-void Names::import(ScopeId scope, ScopeId target)
+void Names::import(ScopeId scope, ScopeId target, bool directive)
 {
-    imports_.push_back(Import{target, scopes_[scope].imports});
+    imports_.push_back(Import{target, scopes_[scope].imports, directive});
     scopes_[scope].imports = imports_.size() - 1;
 }
 

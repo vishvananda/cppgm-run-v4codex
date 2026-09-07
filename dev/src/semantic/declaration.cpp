@@ -10,6 +10,7 @@ void Analyzer::consume(NodeId n)
     Clock::time_point start;
     if (ast.telemetry) start = Clock::now();
     facts.resize(ast.nodes.size());
+    if (calls) expressions.resize(ast.nodes.size());
     declaration(n, global);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double, std::milli>(Clock::now() - start).count();
 }
@@ -25,6 +26,7 @@ void Analyzer::namespace_declaration(NodeId n, ScopeId s)
         bind(s, name, e);
     }
     ScopeId ns = entities[e].scope;
+    facts[n].entity = e; facts[n].scope = ns;
     if (!name || child(n, Kind::Inline)) add_edge(s, ns, true);
     for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, ns);
 }
@@ -167,11 +169,15 @@ void Analyzer::function_body(const Body& body)
             types[t].kind == TypeKind::Function ? types.compound(TypeKind::Pointer, types.signature(t)) : types.signature(t);
         bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
     }
+    TypeId saved_return = return_type;
+    return_type = types[entities[body.entity].type].child;
     statements(body.node, fs);
+    return_type = saved_return;
 }
 void Analyzer::statements(NodeId n, ScopeId s)
 {
     if (!n) return;
+    if (calls) { resolve_statement(n, s); return; }
     switch (ast[n].kind) {
     case Kind::If: case Kind::Switch: case Kind::For: case Kind::RangeFor:
     case Kind::While: case Kind::Do: {

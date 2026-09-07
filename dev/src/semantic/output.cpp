@@ -54,6 +54,7 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
         if (e.scoped) out << " class";
         out << ' ';
         if (display_name) write_name(out, display_name);
+        else if (calls && e.key != KW_ENUM) write_entity_name(out, t.entity);
         else spelling(out, e.name);
         break;
     }
@@ -111,6 +112,9 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_expression_work\":" << expression_work
+        << ",\"semantic_candidate_work\":" << candidate_work
+        << ",\"semantic_conversion_work\":" << conversion_work
         << ",\"semantic_entity_bytes\":" << sizeof(Entity)
         << ",\"semantic_class_facts\":" << class_facts.size() - 1
         << ",\"semantic_constants\":" << constants.size() - 2

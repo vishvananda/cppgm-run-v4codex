@@ -121,7 +121,14 @@ NodeId Parser::primary()
     if (in.eat("{")) return arguments(Kind::BracedInit, "}");
     if (in.is("[")) return lambda();
     if (in.eat("typename")) return named(Kind::IdExpression, name(true));
-    if (builtin()) return leaf(Kind::IdExpression);
+    if (builtin()) {
+        if (builtin(1)) {
+            NodeId result = make(Kind::IdExpression);
+            ast[result].detail = wrap(Kind::TypeId, specifiers(true));
+            return result;
+        }
+        return leaf(Kind::IdExpression);
+    }
     if (identifier() || in.is("::") || in.is("operator") || in.is("decltype"))
         return named(Kind::IdExpression, name());
     TextView text = ids.spelling(token.text);

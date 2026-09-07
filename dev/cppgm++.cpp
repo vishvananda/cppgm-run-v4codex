@@ -399,7 +399,7 @@ int run_emit_ast_mode(const vector<string> & args)
   return cppgm::syntax::emit_ast(output, inputs, stats);
 }
 
-int run_emit_types_mode(const vector<string> & args)
+int run_emit_types_mode(const vector<string> & args, bool calls = false)
 {
   vector<string> inputs;
   string output;
@@ -413,13 +413,12 @@ int run_emit_types_mode(const vector<string> & args)
     else inputs.push_back(args[i]);
   }
   if (output.empty() || inputs.empty()) throw logic_error("invalid types invocation");
-  return cppgm::syntax::emit_ast(output, inputs, stats, true);
+  return cppgm::syntax::emit_ast(output, inputs, stats, true, calls);
 }
 
 int run_emit_semantics_mode(const vector<string> & args)
 {
-  parse_source_output_invocation(args, false);
-  return run_unimplemented_mode("--emit-semantics", "PA7");
+  return run_emit_types_mode(args, true);
 }
 
 int run_emit_lowir_mode(const vector<string> & args)
