@@ -36,11 +36,11 @@ def fixed_inputs():
             for name, text in workloads(scale).items()}
 
 
-def measure(a, b, output):
+def measure(a, b, output, experiment='stage'):
     binaries = dict(A=a.resolve(), B=b.resolve())
     cpu = min(os.sched_getaffinity(0))
     os.sched_setaffinity(0, {cpu})
-    data = dict(protocol=ORDERS, budgets=BUDGETS, affinity_cpu=cpu,
+    data = dict(experiment=experiment, protocol=ORDERS, budgets=BUDGETS, affinity_cpu=cpu,
                 host_build='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',
                 host_cxx=subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
                 platform=platform.platform(),
@@ -73,6 +73,8 @@ def measure(a, b, output):
         for label in 'ABABABAB':
             data['startup'].append(observe(label, empty, 4))
         for name, text in sorted(fixed_inputs().items()):
+            if experiment == 'indentation' and name not in ('classes-4.cpp', 'expressions-4.cpp'):
+                continue
             source = root/name
             source.write_text(text)
             repeats = 8 if name.startswith('nested') else 4
@@ -93,7 +95,7 @@ def measure(a, b, output):
                 row.update(input=name)
                 data['work'].append(row)
             # Same final binary: A=ordinary, B=telemetry. All other inputs/flags fixed.
-            if name in ('declarations-4.cpp', 'templates-4.cpp'):
+            if experiment == 'stage' and name in ('declarations-4.cpp', 'templates-4.cpp'):
                 for block, order in ORDERS:
                     for ordinal, mode in enumerate(order):
                         row = observe('B', source, repeats, mode == 'B')
@@ -132,17 +134,27 @@ def verify(data, a, b):
         assert sha(path) == data['binaries'][label]['sha256']
         assert text_size(path) == data['binaries'][label]['text_bytes']
     assert data['binaries']['B']['text_bytes'] <= data['binaries']['A']['text_bytes']*1.15
-    assert set(data['inputs']) == set(fixed_inputs())
-    assert len(data['observations']) == 168 and len(data['startup']) == 8
-    assert len(data['work']) == 24 and len(data['telemetry']) == 28
+    experiment = data.get('experiment', 'stage')
+    assert experiment in ('stage', 'indentation')
+    expected = set(fixed_inputs()) if experiment == 'stage' else {'classes-4.cpp', 'expressions-4.cpp'}
+    assert set(data['inputs']) == expected
+    assert len(data['observations']) == 14*len(expected) and len(data['startup']) == 8
+    assert ''.join(r['variant'] for r in data['startup']) == 'ABABABAB'
+    assert len({r['output_sha256'] for r in data['startup']}) == 1
+    assert len(data['work']) == 2*len(expected)
+    assert len(data['telemetry']) == (28 if experiment == 'stage' else 0)
     summary = {}
     for name, text in fixed_inputs().items():
+        if name not in expected:
+            continue
         meta = data['inputs'][name]
         assert meta['sha256'] == hashlib.sha256(text.encode()).hexdigest()
         assert meta['bytes'] == len(text.encode())
         assert meta['repeats'] == (8 if name.startswith('nested') else 4)
         rows = [r for r in data['observations'] if r['input'] == name]
         work = [r for r in data['work'] if r['input'] == name]
+        assert [r['variant'] for r in work] == ['A', 'B']
+        assert all(r['stats_enabled'] for r in work)
         assert len({r['output_sha256'] for r in rows+work}) == 1
         assert all(not r['stats_enabled'] and not r['phases'] for r in rows)
         item = summary[name] = summarize(rows)
@@ -165,18 +177,23 @@ def verify(data, a, b):
                 item['work'] = {k: facts[k] for k in keys}
         startup = st.median(r['wall_s'] for r in data['startup'] if r['variant'] == 'B')
         assert item['B']['wall_s'] >= startup*25, (name, 'startup fraction')
-    for family in workloads():
+    for family in (workloads() if experiment == 'stage' else []):
         small, large = (summary[f'{family}-{scale}.cpp'] for scale in (1, 4))
         assert large['B']['wall_s'] < small['B']['wall_s']*6
         assert large['B']['rss_kib'] < small['B']['rss_kib']*5+1024
         for key in ('tokens', 'nodes', 'scopes', 'lookup_scopes', 'name_probes', 'angle_work'):
             # Class depth has output indentation growth; work still bounded.
             assert large['work'][key] < small['work'][key]*6+1024, (family, key, 'work scaling')
-    for name in ('declarations-4.cpp', 'templates-4.cpp'):
+    for name in (('declarations-4.cpp', 'templates-4.cpp') if experiment == 'stage' else []):
         rows = [r for r in data['telemetry'] if r['input'] == name]
-        assert len({r['output_sha256'] for r in rows}) == 1
+        primary = [r for r in data['observations'] if r['input'] == name]
+        assert len({r['output_sha256'] for r in rows+primary}) == 1
         assert all(r['variant'] == 'B' and r['stats_enabled'] == (r['mode'] == 'B') for r in rows)
         summarize(rows, 'mode')
+    if experiment == 'indentation':
+        profitable = [name for name, item in summary.items()
+                      if all(p['gain_percent'] > item['noise_percent'] for p in item['paired'])]
+        print('Profitability above A/A noise in both blocks:', profitable or 'not established')
     print('PASS: frozen identities, exact outputs, protocol, startup, budgets, TU isolation and work scaling')
 
 
@@ -184,6 +201,8 @@ if __name__ == '__main__':
     mode = sys.argv[1]
     if mode == 'measure':
         measure(*map(pathlib.Path, sys.argv[2:5]))
+    elif mode == 'measure-indent':
+        measure(*map(pathlib.Path, sys.argv[2:5]), experiment='indentation')
     elif mode == 'verify':
         verify(json.loads(pathlib.Path(sys.argv[2]).read_text()), *map(pathlib.Path, sys.argv[3:5]))
     elif mode == 'report':

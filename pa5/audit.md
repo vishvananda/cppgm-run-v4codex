@@ -1,111 +1,179 @@
-# PA5 architecture and completion audit
+# PA5 independent final architecture audit
 
-Scope: PA5 source-to-AST mode. The stage began at the recorded plan base with
-0/188 cases and an unimplemented driver. It now implements the syntax handout
-and keeps PA1–4's shared frontend. Review markers in `plan.md` remain unchanged;
-this is the implementation audit, not an independent Ralph review.
+Scope: **PA5 full-stage**, Linux x86-64 source-to-AST mode. Independently read
+`spec.md`, the handout, `parsing.md`, the shared grammar, testing policy, all
+PA5 stage commits, every syntax implementation owner, and the inherited
+source/preprocessor/post-token handoffs. Implementation checkpoints were leads,
+not proof. The previous goal turn supplied a completed implementation; this
+review made progress through source reconstruction, new failing probes, fixes
+and current validation.
 
-## Required surfaces and evidence
+Stage base: `a27ec8877`. Implementation handoffs independently reviewed:
+`e3953bf8f` (plan), `a0adc0d0b` (cursor/graph/parser/driver), `262b0b61f`
+(remaining syntax), `b19de66e0` (prediction indexes and retained facts), and
+`924ba7dc6` (completion ledger). Correctness implementation: `7c7fd4b13`; final source: `93f066513`
+(removes the optional indentation change after isolated profitability testing).
+The final source change and both profitability paths were reviewed; no unaudited
+PA5 implementation handoff remains.
 
-- `--emit-ast -o output source...` creates separate TUs in operand order, with
-  exact deterministic AST views and ordinary failure exits. The unchanged 188
-  contract cases cover declarations, templates, classes, expressions, statements,
-  ambiguity and rejection; the root through report also includes all 205 earlier
-  cases. No references, fixtures, comparators, discovery or coverage were changed.
-- Personal tests are explicitly run from `student.tests/pa5`: 10 core cases,
-  15 extended cases, and C++ API checks for stable graph links, decoded literals,
-  physical/presumed locations, user-literal payloads and bounded nested-angle work.
-- The isolated ASan/UBSan build uses every registered frontend source, C++11,
-  `-O1 -g -fno-omit-frame-pointer`, leak detection, and a separate object directory.
-  It runs the API checks, all 15 extended cases, and all 188 course fixtures with
-  exact success-output/status comparison. Sanitizer diagnostics fail the runner
-  even when a fixture expects a parsing failure.
-- `performance.md`, its raw datasets and the executable verifier document the
-  final compiler measurements. Generated executable runtime/text and actual
-  self-hosting are N/A at PA5. Syntax workloads include templates, loops, calls,
-  array memory access and floating-point expressions; they do not claim to
-  measure generated code.
+## Final Spec Alignment
 
-## Ownership and source-to-AST trace
+| Spec surface | Actual implementation and conclusion |
+| --- | --- |
+| Source and streaming (§1) | `Preprocessor` owns immutable `SourceBuffer`s, identifiers, macro facts and expansion storage. `PostTokenCursor` pulls phase-7 values; `syntax::Cursor` copies only retained literal facts and keeps unresolved lookahead in a geometric ring. Consumed tokens are discarded; no successive owning token streams. |
+| Canonical identity (§2) | Identifiers are 32-bit IDs in a TU-owned flat table. Syntax uses 32-bit node, location and scope IDs. Names/type-ids/template arguments have structured links; rendered text never keys lookup. Canonical semantic types/declarations are PA6+ surfaces. |
+| Lookup (§3) | `Names` indexes `(ScopeId, IdentifierId)` in flat open addressing. Terminal qualified lookup follows the named scope and import/base edges; unqualified lookup additionally visits lexical parents. Qualifiers filter scope-bearing categories. Cycles use reusable scratch visitation/worklists, not retries over unrelated declarations. |
+| Templates/demand (§4–5) | Template parameter categories have lexical owners and override immutable spelling hints. Each template body is built once and retained. The delimiter and angle annotations belong to deferred token ordinals; lexical hints are keyed only by immutable identifier identity. No cached semantic lookup answers need invalidation on insertion. Instantiation and demand states do not yet exist. |
+| Typed construction (§6) | Parser routines build one graph directly. `DeclaratorFacts` propagates the name, first derived operator and function parameter scope while parsing, avoiding reconstruction from the AST dump or repeated nested-declarator walks. There is no LowIR surface at PA5. |
+| Optimization (§7) | No executable transforms, optimization levels, MIR, allocation, ELF or ABI encoding exist yet. Audited retained compiler optimizations are prediction indexing and immutable lexical hints; their legality, owners and bounds are below. No runtime gain is inferred from node counts. |
+| Allocation (§8) | Nodes are 32-byte array values with non-owning child/sibling/detail IDs. Locations, literals, decoded bytes and flat name facts grow geometrically. No per-node owning pointer/allocation or recursive destruction. Transient cursor/lookup/rendering buffers have explicit TU or view lifetimes; no accumulated process-global state. |
+| Complexity/evidence (§9) | Work is charged to input bytes, tokens, required scope/import edges, nodes and output bytes. Optional fused frontend/emit times, process peak RSS, growth, delimiter/angle/hint work and name/scope counters observe existing work. The final ordinary/stats campaigns are separate. |
+| Self-containment (§10) | Driver uses the shared implementation directly. No reference/host compiler, answer cache, subprocess, textual token/AST roundtrip or fixture recognition implements any required result. Registered sources remain in `dev/frontend_source_sets.mk`. |
 
-The driver owns a `Preprocessor`, post-token cursor, `Ast`, syntax cursor and
-parser per TU, in that lifetime order. Immutable source buffers and interned
-identifiers live in the preprocessor. The post-token cursor borrows them and
-keeps only phase-7 lookahead and a string-literal decoder. The syntax cursor
-copies demanded decoded literal values into TU arrays and interns persistent
-spellings; it never retains borrowed post-token scratch pointers.
+PA5 deliberately ends at structured syntax. Full type checking, overload
+resolution, specialization demand, direct typed LowIR, MIR, native encoding,
+executable runtime/text and actual self-hosting are **not applicable yet**.
+These are explicit later-stage obligations, not deferred PA5 fixes. The shared
+graph must be refined/annotated by later semantics rather than copied into a
+second tree or reconstructed by parsing its text view. Attribute convenience
+syntax is outside the shared PA5 grammar; no future attribute semantics are
+claimed for the parser's current skip adapter.
 
-For `template<class T> struct packet { T items[3]; T at(int i) { return
-items[i]; } }; packet<int> object;`, the parser creates one template-parameter
-node and a parameter scope, publishes `T` as a type there, builds one class
-body and its function/subscript nodes, and publishes `packet` as a template
-type in the enclosing scope. The later `packet<int>` owns structured name
-components and a type-id argument. It does not instantiate or reparse the class
-body. Syntax-only name facts choose grammar; no type checking is claimed.
+## Representative end-to-end traces
 
-Nodes are 32-byte values in one geometrically grown array. Their 32-bit IDs
-survive reallocation; children/next/detail are non-owning IDs. A separate source
-location array retains physical file/offset ranges, presumed filename IDs and
-lines, so syntax wrappers can share location identity. Literal records retain
-scalar bits, array bytes, element counts, kind/type, suffix and numeric prefix.
-The API explicitly reads these values after the source cursor reaches EOF and
-checks a macro expansion following `#line`.
+**Template and declaration.** For `template<class T> struct packet { T items[3];
+T at(int i) { return items[i]; } }; packet<int> object;`, immutable source bytes
+flow through character/PP/macro cursors and phase-7 conversion. The syntax
+cursor records source locations and interned IDs. `template_parameters` enters
+a fresh lexical frame and records T's type category. `class_specifier` publishes
+a class scope; category lookahead indexes delimiters and skips nested bodies.
+`simple_declaration`, `declarator` and expression routines construct the array,
+function parameters, return and subscript exactly once. `template_decl` publishes
+packet's category/target scope in the enclosing scope. `packet<int>` stores a
+NamePart with TemplateArguments and a TypeId; it does not instantiate or replay
+the class grammar. `write_ast` traverses the same IDs and renders the requested
+view. The direct graph is the PA6 handoff; there is no ELF path to invent here.
 
-Names and template arguments are structured nodes; rendered qualified names and
-types are never lookup keys. The AST writer follows node IDs and renders inline
-name syntax only for the requested view. No parser consumes the dump. Node
-arrays have no owning shared pointers, per-node child vectors or recursive
-ownership/destruction. All TU arrays and sources are released before processing
-the next source operand; no mutable cache is process-global.
+**Declarator and scopes.** For `int (*f(int T))(int){return T<2;}`, the inner
+function declarator returns its parameter scope and first derived operator.
+The outer pointer/return-function suffix cannot overwrite those facts. The
+body sees T as a value, so `<` is relational. A callback's nested parameter
+scope never escapes into the enclosing function's parameters or body. For
+`int C::f(item p)`, the qualified class scope supplies suffix/parameter syntax
+categories before parsing, and the same parameter frame owns suffix/body use.
+Each branch and loop owns the required condition and controlled-body scopes;
+scoped enum values remain in their enum, and anonymous namespace reopenings
+reuse one identity per lexical owner.
 
-## Parsing, lookup and bounded work
+**Literal/source ownership.** A macro following `#line` carries its physical
+file/offset anchor and presumed filename/line through preprocessing to an AST
+literal. The graph retains scalar bits or decoded array bytes, element count,
+type, numeric prefix and user suffix by value/ID. Post-token scratch may be
+destroyed before those values are read. Adjacent strings crossing an include
+produce one decoded value, anchored in the first fragment's file; only offsets
+from that physical file can extend its range. The API validates the complete
+`leftright` value and its exact first-fragment range after this handoff.
 
-- Each grammar region constructs its syntax once. Declaration/function common
-  prefixes share the same specifier/declarator nodes; there is no token rewind,
-  alternative tree clone or grammar replay. Precedence climbing supplies
-  associativity, with explicit template-argument delimiter context. Logical
-  halves of `>>` preserve shift behavior inside parentheses.
-- A circular token buffer retains only unresolved prefixes and complete-class
-  lookahead required for later-declared nested types. Delimiter mates are indexed
-  once while pulling tokens. Class-category lookahead skips indexed nested
-  bodies; later body parsing constructs the only AST for that region.
-- Successful angle-pair observations are indexed on the retained opening token.
-  The key is the token's absolute cursor ordinal, with the same immutable token
-  spelling and delimiter context. These cache punctuation facts, not semantic
-  classifications. Failed outer scans still use the ordinary parser choice.
-  Split closing-angle pieces retain their original ordinal; consuming the
-  token discards its annotation. No global invalidation or persistent cache exists.
-- Lexical fallback flags are cached once per interned identifier. Their complete
-  key is immutable identifier identity; declarations and parameter categories
-  are checked first and can override the hint. No cached semantic answer can
-  survive a scope mutation incorrectly.
-- The name table is flat open addressing keyed by `(ScopeId, IdentifierId)`.
-  Namespace reopening and aliases share target scope IDs. Using/base edges are
-  explicit linked records; lookups visit lexical parents and required imported
-  scopes only. A reusable worklist and per-traversal visitation stamps break
-  import cycles. Those stamps are scratch visitation state, not semantic-cache
-  invalidation generations. There are no whole-program declaration scans.
-- Arena and ring growth are geometric. Grammar construction is proportional to
-  consumed tokens/nodes; indexed nested-angle probes now exhibit linear work.
-  Lookup additionally pays for the lexical/using/base edges required by syntax.
-  Rendering pays for actual output, including indentation. Deeply nested class
-  dumps can contain quadratically many indentation bytes; that is output size,
-  not repeated parsing. The performance campaign separates frontend and emit
-  times and describes its independent fourfold depth workload.
+**Release boundaries.** `emit_ast` owns PP, post cursor, Ast, syntax cursor and
+Parser in one operand-loop scope. The source/identifier owner outlives every
+borrower. The Ast survives parsing and supplies the requested output; then all
+TU graphs, name facts and source buffers are released before the next operand.
+The writer has an explicit traversal stack. Indentation is a temporary string
+for each requested view line, charged to output work, not ownership of a graph
+node. The isolated reuse experiment below did not justify retaining a change.
+Inline syntax rendering follows structured detail links. Repeated primary-file
+benchmark operands verify that work counters reset and outputs stay identical.
 
-## Optimization evidence and later boundaries
+## Findings and full ownership fixes
 
-The frozen full-behavior baseline exposed repeated nested-angle scans: fourfold
-input increased wall time far beyond the predeclared sixfold bound. The final
-indexing change removes those scans without changing the AST. Compiler budgets
-were fixed in the plan before the campaign; the final verifier checks both ABBA
-blocks, A/A noise, RSS, host text growth, scaling, binary/input hashes and exact
-output equivalence. Optional telemetry counts existing work/allocation growth
-and times the fused frontend and requested AST view; it triggers no extra
-semantic analysis. No generated-code optimization is claimed.
+1. Scoped enum enumerators, while/do conditions, unbraced branches and nested or
+   comma-separated function prototypes leaked name categories. Scope entry and
+   restoration now live at their grammar owners. For-loop conditions consume
+   the existing structured condition-declaration production.
+2. Prediction, parsing and using/alias resolution disagreed on qualified lookup.
+   Global scope ID 0 was also treated as unknown. A distinct unknown-scope
+   sentinel, common qualified/import lookup and scope-category qualifier filter
+   now govern every path. Known `::T` values override T's lexical hint; imported
+   `using m::item` resolves; namespace aliases still work when hidden by values,
+   as required by the unchanged namespace-shadowing fixture. All typedef
+   declarators retain the aliased target scope. Anonymous namespace reopening
+   no longer constructs a second category scope.
+3. A trailing declarator child was mistaken for a function test, so braced arrays
+   and function-pointer objects entered the function-body parser. First-derived-
+   operator facts now distinguish objects/functions while parsing, including
+   nested declarators and functions returning pointers to functions.
+4. Concatenating string fragments from different files combined unrelated byte
+   offsets, violating `begin <= end`. Fixed at `PostTokenCursor`, including the
+   first-fragment literal-operator split, rather than masking it in the AST.
+5. Relocating an unnamed non-type parameter pack left a stale last-child link.
+   `Ast::take_first` maintains both list ends and detaches the sibling link in
+   O(1). API traversal of the unnamed-pack graph now passes.
+6. Optional name/scope counters replace the previously unused name-probe field.
+   They charge occupied-slot iterations plus terminal slot access and visited
+   scopes; they do not trigger extra lookups. An indentation-buffer optimization
+   was independently measured and removed when it failed to establish repeatable
+   benefit beyond noise. All candidate/control observations are retained.
 
-PA6+ canonical types, overload facts, specialization-demand states, typed LowIR,
-MIR, ELF and optimization policies have no PA5 output surface. The stable graph,
-interned keys, structured template bodies and direct cursor are the extension
-points for those phases. No second syntax/semantic graph, serialized interphase
-transport, host compiler delegation or native-code substitute was introduced.
+Nineteen new personal regressions inspect syntax choices, including relational
+operators, declaration categories and exactly one function/two braced objects
+in the combined declarator case. The graph checker also runs every successful
+course translation unit (181 inputs including companions), all audit probes,
+and the independent template-depth/location/literal/lookup tests. No fixture,
+reference, harness, timeout, discovery rule or comparison was weakened.
+
+## Compiler transformations and pipeline budgets
+
+| Change | Legality and invalidation | Work, storage and profitability evidence |
+| --- | --- | --- |
+| Delimiter/angle indexes | Store punctuation matches for immutable deferred token ordinals, including logical halves of `>>`; do not memoize semantic categories. Annotations expire on consumption, and unsuccessful predictions retain ordinary parser decisions. | One delimiter visit per produced token; nested angle work <2x tokens in fixed/API workloads. Storage O(maximum deferred tokens + nesting depth). Historical frozen A/B measurements establish the repeated-scan benefit; final B must retain the bounds. |
+| Identifier lexical hints | Computed solely from immutable identifier spelling. Every current binding/parameter category takes priority, so insertion cannot stale a cached semantic answer. | Once per queried identifier spelling; 1,024 repetitions of a 1,024-byte identifier are checked directly. TU-owned flat byte cache. |
+| Declarator facts/scopes | Carry syntax-derived name/operator/scope during the sole grammar parse. Scope facts remain owned by the correct parameter/body; no speculative tree or global invalidation. | O(tokens/nodes) construction and O(depth) parser stack. Scope lookup additionally charges only relevant lexical/import edges. Removing unused per-object parameter scopes offsets necessary control/prototype scopes. |
+| Indentation reuse (rejected) | The isolated control changes only scratch ownership, with identical AST/output bytes. | Classes: paired +0.83%/-0.60% gains against 0.78% noise. Expressions: +0.30%/+0.14% against 0.28% noise; no RSS benefit. This does not prove repeatable profit, so final source restores the original renderer. |
+
+No fixed-point pass, global retry or optimization-driven code expansion is
+present. The whole source/graph pipeline has linear geometric storage plus
+language-required macro expansions/lookahead and scope edges; requested deeply
+nested indentation can itself be quadratic in nesting depth and is charged to
+output bytes. The measured fourfold input/depth envelopes are <6x wall and
+<5x RSS +1 MiB; paired regression allowances are 10% wall plus calibrated noise,
+15% RSS +1 MiB and 15% host compiler text. These budgets were fixed in the plan
+before the final campaign. No executable profitability, ABI/debug preservation
+or code growth claim is made at this stage.
+
+## Performance, validation and ledger
+
+The prior campaign's final binary hash was independently matched to frozen A
+and its 168 observations, input generator, output hashes, paired budgets and
+nested-work bounds reverified. It remains historical evidence. The final
+ordinary campaign at `93f066513` has 168 observations, eight startup probes,
+24 separate phase/work runs and 28 ordinary/stats calibration observations.
+All hashes, exact outputs, protocols, startup ratios, budgets and scaling gates
+pass. Host text grows 2.36%; expression latency grows 1.07–1.64% and its largest
+RSS grows 2.53%, within the predeclared correctness-work budgets. The smallest
+workload is 48.9x startup. Nested angle work remains <2x tokens, and fourfold
+nested depth takes 3.898x final wall time. Templates' small regressions and noisy
+groups are disclosed; no broad performance improvement or executable gain is
+claimed. [Performance evidence](performance.md) contains the full table, paired
+spread/noise, instrumentation comparisons and the rejected optimization ledger.
+
+Current-state completion checks:
+
+- `make test-pa5`: **188/188**; `make test-report-through-pa5`: **393/393**, all
+  five stages pass. The root report is the required exit gate, not a reused
+  checkpoint log.
+- `perl scripts/cppgm_file_audit.pl --stage pa5 --paths dev/src`: **62 files pass**.
+- Personal core **10**, extended **15**, and audit **19** cases pass. PA2's
+  **316** personal cases (7,062 integer combinations) and PA4's **168** pass
+  after the shared post-token source-anchor fix.
+- Final isolated ASan/UBSan build with leak detection: all **188** unchanged
+  PA5 contracts, all **19** audit regressions, and **181 + 19** direct graph
+  inputs pass. API tests also check decoded values after cursor destruction,
+  source ranges, qualified lookup mutation/cycles and bounded angle/hint work.
+- The legacy matching-binary verifier, final/candidate/isolation verifiers,
+  standalone isolated-control rebuild/hash comparison and whitespace checks
+  pass. No reference/fixture/harness/coverage/timeout changes are present.
+- Source fixes are committed as `7c7fd4b13`; the measured profitability rejection
+  is `93f066513`. This final evidence commit consolidates the plan/audit and
+  all three independent datasets. No unreviewed handoff, known PA5 correctness,
+  self-containment, timeout, file-audit, architecture or performance gate remains.
+  Final repository status is checked after committing the evidence.

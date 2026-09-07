@@ -1,81 +1,79 @@
-# PA5 final plan and handoff ledger
+# PA5 final plan and audit ledger
 
-Stage base commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
-Last reviewed commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
-Target: **PA5 full-stage**. Phase: **independent final audit in progress**.
-Implementation entry **0/188**; current course result **188/188**.
-Independent review reconstructed all syntax owners and shared source/post-token
-handoffs through `924ba7dc6`; checkpoint conclusions were not used as proof.
+Target: **PA5 full-stage**. Phase: **complete; independent final audit passed**.
+Stage base: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`.
+Last independently reviewed implementation: `93f066513`.
+Entry: **0/188**. Current course result: **188/188**, through report **393/393**.
 
-Final audit found and fixed category lifetime leaks (parameters, enum and control
-scopes), inconsistent qualified/import lookup, anonymous namespace identity,
-array/function declarator classification, for declaration conditions, an unnamed
-pack child-list invariant, and a cross-file concatenated literal source range. Personal regressions and stronger
-graph/lifetime checks cover those ownership paths. AST indentation now reuses
-one buffer; optional name/scope work counters observe existing work.
+## Final Spec Alignment
 
-Profitability review: the isolated indentation experiment did not beat A/A noise
-in both blocks and showed no RSS benefit. Remove that optional change before the
-final freeze; retain the candidate and isolation datasets. The final source must
-be remeasured, not assigned its predecessor's measurements.
-
-Remaining: sanitizer/API checks; frozen final A/B measurements; final audit and
-performance consolidation; cohesive commits; fresh exit gates and clean status.
-Frozen A is the ordinary `924ba7dc6` binary. Final campaign retains the existing
-10%+noise wall / 15%+1MiB RSS / 15% host-text / 6x wall / 5x RSS scaling budgets.
-Before timing, fix identical source repetitions: 8 for nested, 4 for other
-families, in one invocation. Use ordinary compilation, two A/A pairs, B/B and
-two ABBA blocks, CPU affinity, eight startup probes, separate phase/work runs,
-and calibrated ordinary/stats comparisons. Require workload wall >=25x startup;
-retain every observation and compare exact outputs. No other build/tests overlap.
-
-## Design/spec alignment
-
-| Owner | Data flow and ownership | Complexity / validation |
+| Owner | Final design and invariant | Evidence |
 | --- | --- | --- |
-| Source/cursor | PA4 streaming PP → PA2 post cursor → deferred-token ring; immutable TU sources and interned IDs; physical/presumed locations and decoded literal payloads retained | One delimiter-index visit per token; API lifetime/location/literal checks |
-| Syntax graph | One 32-byte node array with stable IDs, structured names/type-ids/template arguments and direct child links; dump is a separate view | Geometric TU arenas; no cloned token/AST streams or per-node ownership; all grammar regions parsed once |
-| Declarations/statements/expressions | Shared specifier/declarator prefixes, precedence, classes/enums/namespaces/templates, control flow and special members | All 188 unchanged course cases; 25 personal cases plus graph API checks |
-| Categories/prediction | Flat `(ScopeId, IdentifierId)` facts; explicit using/base edges; template parameter kinds override hints; class-wide category lookahead | Relevant scopes only; indexed angle/delimiter facts and once-per-ID lexical hints; no semantic-answer cache or global invalidation |
-| Driver/rendering | Separate TU ownership in operand order; deterministic syntax view and ordinary failure exits | Full stage/through reports; output-equivalent frozen benchmark binaries |
+| Sources/tokens | Shared PA1–4 immutable source and streaming PP/post/syntax cursors; compact deferred tokens, interned identifiers and valid physical/presumed anchors | Direct API lifetime, macro/#line, cross-file literal, TU-reset and through checks |
+| Syntax graph | One 32-byte node array; stable IDs, structured names/type-ids/templates and decoded literal values; child-list mutation preserves both ends | 181 successful course TUs plus 19 audit TUs checked directly; no dump reparsing |
+| Parser | Shared prefixes and one grammar construction per region; declarator facts carry name/operator/function scope; explicit statement, parameter and enum ownership | All 188 unchanged contracts, 10 core and 15 extended cases, 19 new regressions |
+| Categories/prediction | Flat scope/name facts; separate qualified terminal and scope-category lookup; import/base edges; anonymous namespace identity; bounded delimiter/angle caches and immutable spelling hints | Scope/import-cycle API, binding updates, nested-angle/hint work counters and frozen scaling pairs |
+| Driver/view | Per-operand TU ownership and deterministic AST view; ordinary failures; future driver scaffolding remains outside PA5 | Multi-file course cases, exact-output benchmark checks and independent sanitizer compiler |
 
-[Architecture audit](audit.md) traces a template declaration, source locations,
-allocation/release, lookup, parsing and view separation. Later semantic demand,
-LowIR/MIR, ELF, executable optimization and self-hosting have no PA5 surface;
-none is claimed here. **Remaining behavior groups: none.**
+[Independent audit](audit.md) reconstructs all owners and traces templates,
+qualified/nested declarations, literal payloads and release boundaries. PA6+
+canonical types, overloads, specialization demand, LowIR/MIR, ELF and executable
+optimization/self-hosting have no PA5 surface. They remain later-stage obligations.
+No PA5 behavior group or unaudited handoff remains.
 
-## Performance evidence and budgets
+## Findings and changes
 
-[Final evidence](performance.md): A `262b0b61f` vs B `b19de66e0`; frozen binaries,
-flags and inputs; two A/A pairs, B/B and two ABBA blocks per input. Final campaign
-retains **168 observations +8 startup probes**; the first indexed campaign retains
-another 140 +8. Every compared output is identical. The verifier recomputes
-protocol, actual final binary/input hashes, paired gains/spread, budgets and work.
+- `7c7fd4b13`: correct parameter/enum/control category lifetimes; consistent
+  qualified/import lookup and namespace identities; target scopes for every
+  typedef declarator; structured for declaration conditions; function/object
+  declarator classification; cross-file string source anchors; unnamed-pack
+  child-list integrity; working optional name/scope counters.
+- `93f066513`: remove optional indentation reuse after an isolated frozen
+  comparison failed to beat A/A noise in both blocks or improve peak RSS.
+  Candidate and control datasets remain committed evidence; their timings are
+  not assigned to final source.
 
-Budgets fixed before optimization: ≤10% wall regression plus A/A noise,
-≤15% RSS growth +1 MiB, ≤15% host text growth; 4x input/depth <6x wall / <5x RSS
-+1 MiB. All pass. Nested input: 5.612879 → 0.135206 s at the larger size;
-paired gains 97.59% in both blocks; RSS 14814 → 15174 KiB. Smaller nested input
-improves 90.04–90.09%. Fourfold depth has 3.501x B wall growth; angle work
-25520 → 102320 tracks tokens 25851 → 102651. Declaration/expression regressions
-are disclosed (about 1–3%); procedural results are inconclusive. Host compiler
-text 200070 → 203718 bytes (+1.82%). Generated runtime/text: **N/A**.
+## Performance policy and evidence
 
-## Validation and ledger
+The budget recorded before the final campaign remains: paired wall regression
+<=10% plus A/A noise; RSS <=15% +1 MiB; host compiler text <=15%; fourfold
+input/depth <6x wall and <5x RSS +1 MiB. Delimiters get one visit/token, nested
+angle work <2x tokens, and relevant name/scope/AST work must scale within the
+fixed envelope. No optimization-driven AST or output growth is permitted.
 
-- `e3953bf8f`: baseline and review markers recorded before implementation.
-- `a0adc0d0b`: streaming graph/parser/driver foundation, **131/188**, core 10/10.
-- `262b0b61f`: all scoped syntax behavior groups, **188/188**; frozen A baseline.
-- `b19de66e0`: linear prediction indexes, shared source records, user-literal
-  payloads and lexical-hint cache; final source, tests, audit and raw evidence.
-- Final `make test-pa5`: **188/188**. Earlier PA1–4: **205/205**.
-  Fresh `make test-report-through-pa5`: **393/393**, all five stages pass.
-- File audit: **62 files pass**. Core 10/10, extended 15/15, and C++ API checks
-  pass. ASan/UBSan with leak detection passes API, extended and all 188 unchanged
-  course fixtures. The performance/hash verifier and whitespace checks pass.
-- No fixture, reference, harness, timeout, discovery, comparator or coverage
-  changes. New implementation sources are registered. Generated binaries,
-  objects, AST outputs and logs stay outside committed changes.
-- Handoff reason: **full-stage completion**; no incomplete behavior group,
-  deferred related fix or pending required check. Intended changes are committed;
-  final status is clean. Independent review markers intentionally remain intact.
+Frozen A: `924ba7dc6` (same implementation binary as `b19de66e0`). Final B:
+`93f066513`. Fixed inputs cover declarations, templates, nested depth, classes,
+loops, calls, arrays and floating expressions. Use four primary-file repetitions
+per process, eight for nested, to dominate startup. Measure ordinary compilation
+with CPU affinity, two A/A pairs, B/B and two ABBA blocks; retain eight startup
+probes, independent work/phase runs and calibrated ordinary/stats comparisons.
+No builds/tests overlapped timing. Every output was checked before accepting a
+run. The exact final campaign passes every hash, protocol, startup and budget
+gate: 168 ordinary observations +8 startup +24 work/phase +28 telemetry. Host
+text +2.36%; expression latency +1.07–1.64%, largest expression RSS +2.53%;
+fourfold nested wall 3.898x with <2x token angle work. No broad speedup is claimed.
+
+[Performance record](performance.md) preserves the earlier indexed campaigns,
+the rejected reuse candidate/control, and exact-final-binary observations.
+Generated-program runtime/text and actual self-hosting are **N/A at PA5**.
+
+## Validation and handoff ledger
+
+| Commit/check | Result / disposition |
+| --- | --- |
+| `e3953bf8f` | Stage baseline and initial plan reviewed |
+| `a0adc0d0b` | Cursor, graph, parser and driver foundation reviewed |
+| `262b0b61f` | Remaining scoped syntax groups and frozen pre-index A reviewed |
+| `b19de66e0`, `924ba7dc6` | Prediction/fact handoffs and completion ledger independently reconstructed; old performance hashes/protocol reverified |
+| `7c7fd4b13`, `93f066513` | Full ownership fixes and profitability decision reviewed |
+| Course/through | Fresh PA5 188/188 and root 393/393, five stages pass |
+| File audit | 62 files pass |
+| Personal | PA5 core 10, extended 15, audit 19; PA2 316 (including 7,062 integer cases), PA4 168 pass |
+| Graph/sanitizers | ASan/UBSan/leak checks pass API, graph identities/lifetimes/locations, all 188 contracts and audit probes |
+
+Final performance verifiers and required gates pass. The isolated control
+rebuild matches its frozen hash. The final evidence commit closes this ledger;
+repository status is verified clean after that commit. Remaining work: **none**.
+No fixture/reference/harness/discovery/comparator/timeout changes. All new
+implementation sources remain registered. Binaries, objects, AST outputs and
+execution logs stay outside committed changes.
