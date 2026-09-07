@@ -24,11 +24,18 @@ void Cursor::fill()
     token.kind = post.kind;
     token.op = post.simple;
     token.text = post.identifier ? post.identifier : ids_.intern(post.source.spelling);
-    token.location.file = post.source.file_id;
-    token.location.begin = post.source.begin;
-    token.location.end = post.source.end;
+    Location location;
+    location.file = post.source.file_id;
+    location.begin = post.source.begin;
+    location.end = post.source.end;
+    location.presumed_file = post.source.presumed_file;
+    location.line = post.source.line;
+    token.location = ast_.locations.size();
+    if (ast_.telemetry && ast_.locations.size() == ast_.locations.capacity()) ++ast_.location_growths;
+    ast_.locations.push_back(location);
     if (post.kind == PostTokenKind::literal || post.kind == PostTokenKind::user_literal)
-        token.literal = ast_.save_literal(post);
+        token.literal = ast_.save_literal(post, post.prefix.size ? ids_.intern(post.prefix) : 0);
+    index_delimiter(token);
     pending_[(head_ + count_) % pending_.size()] = token;
     ++count_;
     ++produced;
@@ -67,19 +74,48 @@ Token Cursor::require(const char* spelling)
     if (!is(spelling)) {
         TextView found = ids_.spelling(peek().text);
         throw std::runtime_error(std::string("expected '") + spelling + "', found '" +
-                                 std::string(found.data, found.size) + "' at byte " + std::to_string(peek().location.begin));
+                                 std::string(found.data, found.size) + "' at byte " + std::to_string(ast_.locations[peek().location].begin));
     }
     return take();
 }
 
+void Cursor::index_delimiter(Token& token)
+{
+    if (ast_.telemetry) ++delimiter_work;
+    ETokenType close = TOK_INVALID;
+    if (token.op == OP_LPAREN) close = OP_RPAREN;
+    else if (token.op == OP_LSQUARE) close = OP_RSQUARE;
+    else if (token.op == OP_LBRACE) close = OP_RBRACE;
+    if (close != TOK_INVALID) {
+        delimiters_.push_back(Delimiter{produced, close});
+    } else if (!delimiters_.empty() && token.op == delimiters_.back().close) {
+        std::size_t open = delimiters_.back().ordinal;
+        delimiters_.pop_back();
+        if (open >= consumed)
+            pending_[(head_ + open - consumed) % pending_.size()].delimiter_end = produced + 1;
+    }
+}
+
 std::size_t Cursor::matching(std::size_t ahead)
 {
-    const char* close = is("(", ahead) ? ")" : is("[", ahead) ? "]" : "}";
-    for (std::size_t i = ahead + 1;; ++i) {
-        if (peek(i).kind == PostTokenKind::eof) throw std::runtime_error("unclosed delimiter");
-        if (is(close, i)) return i;
-        if (is("(", i) || is("[", i) || is("{", i)) i = matching(i);
+    for (;;) {
+        Token token = peek(ahead);
+        if (token.delimiter_end) return token.delimiter_end - consumed - 1;
+        if (count_ && pending_[(head_ + count_ - 1) % pending_.size()].kind == PostTokenKind::eof)
+            throw std::runtime_error("unclosed delimiter");
+        fill();
     }
+}
+
+std::size_t Cursor::angle_end(std::size_t ahead)
+{
+    Token token = peek(ahead);
+    return token.angle_end ? token.angle_end - consumed : ahead;
+}
+
+void Cursor::remember_angle(std::size_t open, std::size_t end)
+{
+    pending_[(head_ + open) % pending_.size()].angle_end = consumed + end;
 }
 
 void Cursor::close_angle()
@@ -88,7 +124,11 @@ void Cursor::close_angle()
         Token& token = pending_[head_];
         token.op = OP_GT;
         token.text = ids_.intern(TextView(">", 1));
-        ++token.location.begin;
+        Location second = ast_.locations[token.location];
+        ++second.begin;
+        token.location = ast_.locations.size();
+        if (ast_.telemetry && ast_.locations.size() == ast_.locations.capacity()) ++ast_.location_growths;
+        ast_.locations.push_back(second);
         return;
     }
     require(">");

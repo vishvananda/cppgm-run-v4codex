@@ -24,7 +24,7 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
         Clock::time_point start = Clock::now();
         Preprocessor pp(inputs[i], date, time, stats);
         PostTokenCursor post(pp, pp.identifiers(), true);
-        Ast ast;
+        Ast ast(stats);
         Cursor cursor(post, pp.identifiers(), ast);
         Parser parser(cursor, ast, pp.identifiers());
         NodeId root = parser.translation_unit();
@@ -44,7 +44,15 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
                 << ",\"tokens\":" << cursor.produced << ",\"max_pending\":" << cursor.max_pending
                 << ",\"nodes\":" << ast.nodes.size() - 1
                 << ",\"node_capacity\":" << ast.nodes.capacity()
+                << ",\"node_growths\":" << ast.node_growths
+                << ",\"location_growths\":" << ast.location_growths
+                << ",\"literal_growths\":" << ast.literal_growths
                 << ",\"node_bytes\":" << sizeof(Node)
+                << ",\"locations\":" << ast.locations.size() - 1
+                << ",\"location_capacity\":" << ast.locations.capacity()
+                << ",\"delimiter_work\":" << cursor.delimiter_work
+                << ",\"angle_work\":" << parser.angle_work << ",\"angle_hits\":" << parser.angle_hits
+                << ",\"hint_bytes\":" << parser.hint_bytes
                 << ",\"syntax_decisions\":" << parser.decisions << "}\n";
         }
     }

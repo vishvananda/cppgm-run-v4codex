@@ -144,12 +144,16 @@ enum class Kind : unsigned char {
 
 struct Location {
     std::uint32_t file = 0, begin = 0, end = 0;
+    IdentifierId presumed_file = 0;
+    std::uint32_t line = 0;
 };
 
 struct Token {
     IdentifierId text = 0;
-    Location location;
+    std::uint32_t location = 0;
     std::uint32_t literal = 0;
+    // Absolute cursor ordinals, valid only while this deferred token is live.
+    std::size_t delimiter_end = 0, angle_end = 0;
     ETokenType op = TOK_INVALID;
     PostTokenKind kind = PostTokenKind::eof;
 };
@@ -162,7 +166,7 @@ struct Node {
     unsigned char flags = 0;
     ETokenType op = TOK_INVALID;
     IdentifierId text = 0;
-    Location location;
+    std::uint32_t location = 0;
     NodeId first = 0, last = 0, next = 0, detail = 0;
     std::uint32_t literal = 0;
 };
@@ -170,20 +174,23 @@ struct Node {
 struct LiteralValue {
     LiteralKind kind;
     EFundamentalType type;
-    IdentifierId suffix;
+    IdentifierId suffix, prefix;
     std::array<char, 16> scalar;
     std::uint32_t offset, bytes, elements;
 };
 
 class Ast {
 public:
-    Ast();
+    explicit Ast(bool telemetry = false);
     NodeId make(Kind kind, Token token = Token());
     void append(NodeId parent, NodeId child);
     Node& operator[](NodeId id) { return nodes[id]; }
     const Node& operator[](NodeId id) const { return nodes[id]; }
-    std::uint32_t save_literal(const PostToken& token);
+    std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);
+    bool telemetry;
+    std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
     std::vector<Node> nodes;
+    std::vector<Location> locations;
     std::vector<LiteralValue> literals;
     std::vector<char> literal_bytes;
 };

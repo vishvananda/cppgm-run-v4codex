@@ -94,7 +94,7 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
         angle_expression = saved;
         in.require(")");
     } else {
-        if (!identifier()) throw std::runtime_error("expected identifier at byte " + std::to_string(in.peek().location.begin));
+        if (!identifier()) throw std::runtime_error("expected identifier at byte " + std::to_string(ast.locations[in.peek().location].begin));
         part = leaf(Kind::NamePart);
     }
     ast[part].flags |= explicit_template ? 1 : 0;
@@ -102,10 +102,9 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
     Binding binding = (member_name && !qualified) || (qualified && !owner) ? Binding() : names.lookup(owner, ast[part].text);
     bool potential = template_category(binding.category) || force_template || ast[part].op == KW_OPERATOR;
     if (binding.category == Category::Unknown && ast[part].text) {
-        TextView spelling = ids.spelling(ast[part].text);
-        for (std::size_t i = 0; i < spelling.size; ++i) potential |= spelling.data[i] == 'T';
+        potential |= lexical_hint(ast[part].text) & 2;
         // An unresolved name with an explicit builtin type argument is unambiguous.
-        potential |= identifier(1) && type_start(1);
+        if (!potential && in.is("<") && identifier(1)) potential = type_start(1);
         potential |= builtin(1) || in.is("typename", 1) || in.is("const", 1) || in.is("volatile", 1);
     }
     if (in.is("<") && potential) ast.append(part, template_arguments());

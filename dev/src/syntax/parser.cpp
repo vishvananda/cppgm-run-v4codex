@@ -58,11 +58,24 @@ bool Parser::type_start(std::size_t ahead)
     NameProbe probe = probe_name(ahead);
     if (!probe.valid || !probe.terminal || probe.special) return false;
     if (probe.binding.category != Category::Unknown) return type_category(probe.binding.category);
-    TextView text = ids.spelling(probe.terminal);
-    for (std::size_t i = 0; i < text.size; ++i)
-        if (text.data[i] == 'C' || text.data[i] == 'Y' || text.data[i] == 'E' || text.data[i] == 'T')
-            return true;
-    return false;
+    return lexical_hint(probe.terminal) & 1;
+}
+
+unsigned char Parser::lexical_hint(IdentifierId id)
+{
+    if (!id) return 0;
+    if (lexical_hints.size() <= id) lexical_hints.resize(id + 1);
+    if (lexical_hints[id] & 4) return lexical_hints[id];
+    unsigned char hint = 4;
+    TextView spelling = ids.spelling(id);
+    if (ast.telemetry) hint_bytes += spelling.size;
+    for (std::size_t i = 0; i < spelling.size; ++i) {
+        char ch = spelling.data[i];
+        if (ch == 'T') hint |= 3;
+        else if (ch == 'C' || ch == 'Y' || ch == 'E') hint |= 1;
+    }
+    lexical_hints[id] = hint;
+    return hint;
 }
 
 bool Parser::declaration_start()

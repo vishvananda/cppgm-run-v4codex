@@ -4,15 +4,25 @@ namespace cppgm { namespace syntax {
 
 std::size_t Parser::probe_angles(std::size_t ahead)
 {
-    unsigned depth = 1;
+    std::size_t cached = in.angle_end(ahead);
+    if (cached != ahead) {
+        if (ast.telemetry) ++angle_hits;
+        return cached;
+    }
+    angle_stack.clear();
+    angle_stack.push_back(ahead);
     for (std::size_t i = ahead + 1;; ++i) {
+        if (ast.telemetry) ++angle_work;
         if (in.peek(i).kind == PostTokenKind::eof || in.is(";", i) || in.is("}", i)) return ahead;
         if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
-        else if (in.is("<", i)) ++depth;
-        else if (in.is(">", i) && !--depth) return i + 1;
-        else if (in.is(">>", i)) {
-            if (depth <= 2) return i + 1;
-            depth -= 2;
+        else if (in.is("<", i)) angle_stack.push_back(i);
+        else if (in.is(">", i) || in.is(">>", i)) {
+            unsigned pieces = in.is(">>", i) ? 2 : 1;
+            while (pieces-- && !angle_stack.empty()) {
+                in.remember_angle(angle_stack.back(), i + 1);
+                angle_stack.pop_back();
+            }
+            if (angle_stack.empty()) return i + 1;
         }
     }
 }
@@ -45,9 +55,8 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
         result.binding = binding;
         bool potential = explicit_template || template_category(binding.category);
         if (binding.category == Category::Unknown) {
-            TextView spelling = ids.spelling(token.text);
-            for (std::size_t j = 0; j < spelling.size; ++j) potential |= spelling.data[j] == 'T';
-            potential |= identifier(ahead + 1) && type_start(ahead + 1);
+            potential |= lexical_hint(token.text) & 2;
+            if (!potential && in.is("<", ahead) && identifier(ahead + 1)) potential = type_start(ahead + 1);
             potential |= builtin(ahead + 1) || in.is("typename", ahead + 1) ||
                          in.is("const", ahead + 1) || in.is("volatile", ahead + 1);
         }

@@ -55,3 +55,10 @@ paired frontend+dump wall time <=10% regression plus measured A/A noise; peak RS
 scale linearly in tokens; 4x source <6x wall / <5x RSS +1 MiB. Measure frozen
 full-behavior A against final B with A/A calibration, two ABBA blocks, all raw
 observations and output hashes. No executable runtime/text exists at PA5.
+- Final architecture/performance increment: bounded delimiter/angle indexes;
+  once-per-identifier lexical hints; 32-byte AST nodes with shared physical and
+  presumed location records; retained user-literal suffix/prefix payloads.
+  PA5 188/188, fresh through PA5 393/393, file audit 62 files, personal 25 cases
+  plus API checks, ASan/UBSan/leak checks on API/extended/all 188 fixtures pass.
+  Final frozen A/B campaign: 168 observations +8 startup; all budgets pass.
+  Full scope is complete; no remaining behavior group or incomplete handoff.

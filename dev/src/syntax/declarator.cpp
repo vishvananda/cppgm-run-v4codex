@@ -59,7 +59,7 @@ bool Parser::nested_declarator_ahead()
 
 bool Parser::parameter_clause_ahead()
 {
-    ++decisions;
+    if (ast.telemetry) ++decisions;
     if (!in.is("(")) return false;
     std::size_t end = in.matching(0);
     for (std::size_t i = 1; i < end; ++i) {

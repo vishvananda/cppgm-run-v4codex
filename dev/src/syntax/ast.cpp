@@ -4,7 +4,7 @@
 
 namespace cppgm { namespace syntax {
 
-Ast::Ast() : nodes(1), literals(1) {}
+Ast::Ast(bool stats) : telemetry(stats), nodes(1), locations(1), literals(1) {}
 
 NodeId Ast::make(Kind kind, Token token)
 {
@@ -16,6 +16,7 @@ NodeId Ast::make(Kind kind, Token token)
     node.text = token.text;
     node.location = token.location;
     node.literal = token.literal;
+    if (telemetry && nodes.size() == nodes.capacity()) ++node_growths;
     nodes.push_back(node);
     return static_cast<NodeId>(nodes.size() - 1);
 }
@@ -28,17 +29,19 @@ void Ast::append(NodeId parent, NodeId child)
     nodes[parent].last = child;
 }
 
-std::uint32_t Ast::save_literal(const PostToken& token)
+std::uint32_t Ast::save_literal(const PostToken& token, IdentifierId prefix)
 {
     LiteralValue value;
     value.kind = token.literal;
     value.type = token.type;
     value.suffix = token.suffix;
+    value.prefix = prefix;
     value.scalar = token.scalar;
     value.offset = literal_bytes.size();
     value.bytes = token.data.size;
     value.elements = token.elements;
     literal_bytes.insert(literal_bytes.end(), token.data.data, token.data.data + token.data.size);
+    if (telemetry && literals.size() == literals.capacity()) ++literal_growths;
     literals.push_back(value);
     return literals.size() - 1;
 }

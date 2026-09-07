@@ -8,7 +8,7 @@ class Parser {
 public:
     Parser(Cursor& cursor, Ast& ast, IdentifierTable& ids);
     NodeId translation_unit();
-    std::size_t decisions = 0;
+    std::size_t decisions = 0, angle_work = 0, angle_hits = 0, hint_bytes = 0;
 private:
     Cursor& in;
     Ast& ast;
@@ -19,6 +19,9 @@ private:
     bool template_declaration = false;
     bool member_name = false;
     unsigned angle_expression = 0;
+    std::vector<std::size_t> angle_stack;
+    std::vector<unsigned char> lexical_hints;
+    unsigned char lexical_hint(IdentifierId id);
 
     NodeId make(Kind kind);
     NodeId leaf(Kind kind);

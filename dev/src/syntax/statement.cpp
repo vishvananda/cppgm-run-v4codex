@@ -177,7 +177,7 @@ NodeId Parser::statement()
 
 bool Parser::declaration_ahead()
 {
-    ++decisions;
+    if (ast.telemetry) ++decisions;
     if (in.is("typename")) return false;
     std::size_t prefix = probe_type(0);
     if (in.is("{", prefix)) return false;
