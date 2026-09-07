@@ -2,7 +2,7 @@
 
 Stage base commit: `be4bff26fcc81762196d29d4f0b0c59a20110c9d`
 Last reviewed commit: `be4bff26fcc81762196d29d4f0b0c59a20110c9d`
-Target: **PA2 full-stage**. Baseline: 0/26 passing, 26 failures; PA1 passes.
+Target: **PA2 full-stage**. Baseline: 0/26; current: 26/26, through-PA2: 80/80.
 
 ## Design and validation groups
 
@@ -27,13 +27,18 @@ Budgets and all observations belong in `student.tests/pa2/`.
 
 ## Handoff ledger
 
-- Entry: read instructions/spec/handout and PA1 ownership; verified clean HEAD
+- `85d89e23e`: read instructions/spec/handout and PA1 ownership; verified clean HEAD
   and authoritative log (26 unimplemented failures). No previous implementation
   goal turn is available to classify; this entry establishes the baseline.
-- Implementation: all three language groups now complete; first required run
+- `e08732384`: all three language groups complete; first required run
   passes 26/26 and through-PA2 passes 80/80. File audit passes 35 files. The
   empty-character recovery policy is PA2-only; literal-operator splitting uses
   grammatical context and records physical suffix locations. Numeric escapes
   retain code-unit identity until final encoding. No course fixtures changed.
-- Remaining: independent boundary/resource/API checks, sanitizer validation,
-  frozen performance evidence and final completion audit. No handoff boundary.
+- Validation increment: 316 personal cases, including 7,062 independent integer
+  values/types, encoding triples, long literals, physical locations and zero
+  allocation calls in the warmed integer/character/string path. PA1's 64 personal
+  cases, both API checks and all 80 course cases pass ASan/UBSan. Fixed counting
+  of the second decoded element in invalid characters; token output unchanged.
+- Remaining: finish final frozen benchmark and evidence, refresh final required
+  checks and audit committed clean state. No language group remains incomplete.

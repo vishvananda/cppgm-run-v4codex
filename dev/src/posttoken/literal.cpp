@@ -96,7 +96,11 @@ void decode_character(PostToken& token, const IdentifierTable& identifiers, Post
     LiteralElement element, extra;
     if (!reader.next(element)) return;
     if (stats) ++stats->decoded_elements;
-    if (reader.next(extra) || !element.valid || element.value > 0x10ffff ||
+    if (reader.next(extra)) {
+        if (stats) ++stats->decoded_elements;
+        return;
+    }
+    if (!element.valid || element.value > 0x10ffff ||
         (element.value >= 0xd800 && element.value <= 0xdfff)) return;
     token.type = encoding_type(reader.encoding());
     if (token.type == FT_CHAR && element.value > 127) token.type = FT_INT;
