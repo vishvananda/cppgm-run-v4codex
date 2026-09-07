@@ -260,6 +260,7 @@ PPToken Preprocessor::next()
         ExpansionToken token = expander_.next();
         if (token.token.kind == PPTokenKind::eof) {
             if (advance()) continue;
+            if (telemetry_) stats_.arena_bytes = persistent_.bytes + transient_.bytes;
             return token.token;
         }
         if (token.is("_Pragma")) {

@@ -139,6 +139,15 @@ void MacroExpander::collect(const ExpansionToken& open, const MacroDefinition& m
 {
     Task& task = tasks_.back();
     Invocation& invocation = task.invocation;
+    if (macro.parameters.empty()) {
+        // No argument can be deferred or prescanned. Consume the required close
+        // directly, keeping the same context boundary without allocating an index.
+        ExpansionToken close = take();
+        if (!close.is(")")) throw std::runtime_error("arguments to parameterless macro");
+        invocation.arguments.clear();
+        invocation.replacement_context = owner_.intersect(invocation.head.context, close.context);
+        return;
+    }
     const ArgumentStorage* storage;
     std::size_t start;
     if (task.last_from_slice) {

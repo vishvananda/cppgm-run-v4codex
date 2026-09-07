@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('baseline', type=Path)
 parser.add_argument('candidate', type=Path)
 parser.add_argument('report', type=Path)
+parser.add_argument('--candidate-commit', default='c90cf1e62')
 args = parser.parse_args()
 a, b = args.baseline.resolve(), args.candidate.resolve()
 sha = lambda data: hashlib.sha256(data).hexdigest()
@@ -92,7 +93,7 @@ with tempfile.TemporaryDirectory(prefix='pa4-performance-') as temporary:
              for binary in (a,b)]
     assert frozen == {'A':sha(a.read_bytes()), 'B':sha(b.read_bytes())}
     lines = ['# PA4 frozen compiler performance evidence', '',
-        'A: first complete implementation (`28279a9d0`); B: indexed argument slices, explicit prescan tasks and reusable spelling/scratch storage.', '',
+        'A: first complete implementation (`28279a9d0`); B: `' + args.candidate_commit + '` (indexed argument slices, explicit prescan tasks and reusable spelling/scratch storage).', '',
         'Both use the ordinary `g++ -std=gnu++11 -Wall -O3` build with the same course runner. '
         'Fresh processes, serial measurements, output to a temporary file, wall time including process startup and peak RSS from GNU time. '
         'Each workload has two A/A pairs, one B/B pair, two ABBA blocks and a separate B telemetry sample. All observations are below. '

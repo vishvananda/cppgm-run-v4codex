@@ -50,3 +50,8 @@ structured consumers, with no premature syntax or backend representation.
   identifier identity, 20,000 nested prescans and 100,000 counters with <=128 KiB
   spelling storage. All 105 course cases also pass under ASan/UBSan. The final
   frozen campaign and completion audit remain; no related work is handed off.
+- `c90cf1e62` campaign retained 105 observations: nested prescans improve 98.2%,
+  RSS 137118→4568 KiB; ordinary paired regressions 2–9%. Long parameterless
+  chains regress 12.1–12.3% (within 10% + 2.43% noise but avoidable). Removed
+  unnecessary capture/index creation for empty parameter lists; the final
+  campaign will compare the resulting binary against the same functional A.
