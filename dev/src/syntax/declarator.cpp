@@ -23,7 +23,9 @@ NodeId Parser::specifiers(bool type_only)
             in.require("(");
             unsigned saved = angle_expression;
             angle_expression = 0;
-            ast.append(result, wrap(Kind::Decltype, expression()));
+            NodeId decltype_node = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier, expression());
+            ast[decltype_node].op = KW_DECLTYPE;
+            ast.append(result, decltype_node);
             angle_expression = saved;
             in.require(")");
             have_type = true;
@@ -33,10 +35,11 @@ NodeId Parser::specifiers(bool type_only)
         } else if (!have_type && in.is("enum")) {
             ast.append(result, enum_specifier());
             have_type = true;
-        } else if (!have_type && (type_start() || in.is("typename"))) {
+        } else if (!have_type && (type_start() || in.is("typename") || (type_only && identifier()) || in.is("::", 1))) {
             bool dependent = in.eat("typename");
             NodeId n = name(dependent);
             NodeId spec = named(type_only ? Kind::TypeName : kind, n);
+            ast[spec].flags = dependent ? 1 : 0;
             if (!type_only && !dependent && ast[n].first == ast[n].last && !ast[ast[n].first].first)
                 ast[spec].text = final_name(n);
             ast.append(result, spec);
@@ -58,15 +61,26 @@ bool Parser::parameter_clause_ahead()
 {
     ++decisions;
     if (!in.is("(")) return false;
-    if (in.is(")", 1) || in.is("...", 1)) return true;
-    return type_start(1);
+    std::size_t end = in.matching(0);
+    for (std::size_t i = 1; i < end; ++i) {
+        if (in.is("...", i)) return true;
+        if (!type_start(i)) return false;
+        i = probe_type(i);
+        // Inspect each parameter prefix; nested suffixes and default arguments
+        // cannot introduce a parameter at this delimiter level.
+        while (i < end && !in.is(",", i)) {
+            if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
+            ++i;
+        }
+    }
+    return true;
 }
 
 NodeId Parser::declarator(bool abstract, bool new_type)
 {
     NodeId result = make(abstract ? Kind::AbstractDeclarator : Kind::Declarator);
     while (in.is("*") || in.is("&") || in.is("&&") ||
-           (identifier() && in.is("::", 1) && in.is("*", 2))) {
+           (identifier() && in.is("::", probe_name().end) && in.is("*", probe_name().end + 1))) {
         NodeId pointer;
         if (identifier()) {
             NodeId n = name();
@@ -123,6 +137,9 @@ NodeId Parser::parameter(Kind kind)
     }
     ast.append(result, specifiers());
     NodeId decl = declarator();
+    if (decl && !declarator_name(decl) && ast[ast[decl].first].kind == Kind::Parameters &&
+        (!ast[ast[decl].first].first || ast[ast[ast[decl].first].first].kind == Kind::ParameterPack))
+        ast[decl].kind = Kind::AbstractDeclarator;
     ast.append(result, decl);
     bind_declarator(decl, Category::Value, scope);
     if (in.is("=")) ast.append(result, wrap(Kind::DefaultArgument, initializer()));
@@ -156,12 +173,20 @@ void Parser::function_suffix(NodeId owner)
         if (in.is("const") || in.is("volatile")) ast.append(owner, leaf(Kind::CvQualifier));
         else if (in.is("&") || in.is("&&")) ast.append(owner, leaf(Kind::FunctionQualifier));
         else if (in.is("override") || in.is("final")) ast.append(owner, leaf(Kind::VirtSpecifier));
-        else if (in.is("noexcept")) {
+        else if (in.is("throw")) {
+            NodeId node = leaf(Kind::FunctionQualifier);
+            in.require("(");
+            NodeId types = make(Kind::Parameters);
+            if (!in.is(")")) {
+                do { ast.append(types, type_id()); } while (in.eat(","));
+            }
+            in.require(")");
+            ast[node].detail = types;
+            ast.append(owner, node);
+        } else if (in.is("noexcept")) {
             NodeId node = leaf(Kind::FunctionQualifier);
             if (in.eat("(")) {
-                ast[node].kind = Kind::Noexcept;
-                ast[node].text = 0;
-                ast[node].op = TOK_INVALID;
+                if (ast[owner].kind == Kind::LambdaDeclarator) ast[node].kind = Kind::Noexcept;
                 ast.append(node, expression());
                 in.require(")");
             }
@@ -201,7 +226,8 @@ void Parser::bind_declarator(NodeId decl, Category category, ScopeId owner)
 {
     if (!decl) return;
     NodeId n = declarator_name(decl);
-    if (n) names.bind(owner, final_name(n), category);
+    if (n) names.bind(ast[n].first != ast[n].last || ast[n].op == OP_COLON2 ? qualified_owner(n) : owner,
+                      final_name(n), category);
 }
 
 } }

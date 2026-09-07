@@ -17,6 +17,7 @@ private:
     ScopeId scope = 0;
     IdentifierId current_class = 0;
     bool template_declaration = false;
+    bool member_name = false;
     unsigned angle_expression = 0;
 
     NodeId make(Kind kind);
@@ -26,6 +27,18 @@ private:
     bool identifier(std::size_t ahead = 0);
     bool builtin(std::size_t ahead = 0);
     bool type_start(std::size_t ahead = 0);
+    struct NameProbe {
+        std::size_t end = 0;
+        Binding binding;
+        IdentifierId terminal = 0, previous = 0;
+        bool valid = false, qualified = false, templated = false, special = false;
+    };
+    NameProbe probe_name(std::size_t ahead = 0);
+    std::size_t probe_angles(std::size_t ahead);
+    std::size_t probe_type(std::size_t ahead);
+    bool type_operand();
+    bool special_ahead();
+    void predeclare_class();
     bool declaration_start();
     Binding name_binding(NodeId name);
     IdentifierId final_name(NodeId name) const;
@@ -44,7 +57,7 @@ private:
     NodeId class_specifier();
     NodeId enum_specifier();
     NodeId static_assertion();
-    NodeId simple_declaration(bool require_semicolon = true);
+    NodeId simple_declaration(bool require_semicolon = true, NodeId specs = 0);
     NodeId special_member(NodeId specs = 0);
     NodeId ctor_initializer();
     NodeId specifiers(bool type_only = false);
@@ -54,6 +67,8 @@ private:
     NodeId parameter(Kind kind = Kind::Parameter);
     void function_suffix(NodeId owner);
     bool parameter_clause_ahead();
+    ScopeId qualified_owner(NodeId name);
+    ScopeId type_scope(NodeId specifiers);
     bool nested_declarator_ahead();
     bool declaration_ahead();
     NodeId initializer();

@@ -15,6 +15,7 @@ public:
     bool eat(const char* spelling);
     Token require(const char* spelling);
     void close_angle();
+    std::size_t matching(std::size_t ahead);
     std::size_t consumed = 0, produced = 0, max_pending = 0;
 private:
     PostTokenCursor& input_;

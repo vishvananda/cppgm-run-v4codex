@@ -27,6 +27,24 @@ Binding Parser::name_binding(NodeId name)
     return result;
 }
 
+ScopeId Parser::qualified_owner(NodeId name)
+{
+    ScopeId owner = ast[name].op == OP_COLON2 ? 0 : scope;
+    for (NodeId p = ast[name].first; p && p != ast[name].last; p = ast[p].next) {
+        Binding binding = names.qualifier(owner, ast[p].text);
+        if (binding.target) owner = binding.target;
+    }
+    return owner;
+}
+
+ScopeId Parser::type_scope(NodeId specifiers)
+{
+    for (NodeId spec = ast[specifiers].first; spec; spec = ast[spec].next) {
+        if (ast[spec].detail) return name_binding(ast[spec].detail).target;
+    }
+    return 0;
+}
+
 NodeId Parser::operator_name()
 {
     Token token = in.require("operator");
@@ -57,7 +75,8 @@ NodeId Parser::operator_name()
 
 NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
 {
-    force_template = in.eat("template") || force_template;
+    bool explicit_template = in.eat("template");
+    force_template = explicit_template || force_template;
     NodeId part;
     if (in.is("operator")) part = operator_name();
     else if (in.eat("~")) {
@@ -75,16 +94,19 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
         angle_expression = saved;
         in.require(")");
     } else {
-        if (!identifier()) throw std::runtime_error("expected identifier");
+        if (!identifier()) throw std::runtime_error("expected identifier at byte " + std::to_string(in.peek().location.begin));
         part = leaf(Kind::NamePart);
     }
-    Binding binding = qualified ? names.local(owner, ast[part].text) : names.lookup(owner, ast[part].text);
+    ast[part].flags |= explicit_template ? 1 : 0;
+    ast[part].flags |= qualified && ast[part].op == KW_OPERATOR ? 2 : 0;
+    Binding binding = (member_name && !qualified) || (qualified && !owner) ? Binding() : names.lookup(owner, ast[part].text);
     bool potential = template_category(binding.category) || force_template || ast[part].op == KW_OPERATOR;
-    if (binding.category == Category::Unknown) {
+    if (binding.category == Category::Unknown && ast[part].text) {
         TextView spelling = ids.spelling(ast[part].text);
         for (std::size_t i = 0; i < spelling.size; ++i) potential |= spelling.data[i] == 'T';
         // An unresolved name with an explicit builtin type argument is unambiguous.
-        potential |= builtin(1) || in.is("typename", 1);
+        potential |= identifier(1) && type_start(1);
+        potential |= builtin(1) || in.is("typename", 1) || in.is("const", 1) || in.is("volatile", 1);
     }
     if (in.is("<") && potential) ast.append(part, template_arguments());
     return part;
@@ -104,10 +126,10 @@ NodeId Parser::name(bool force_template)
         ast.append(result, part);
         if (!in.is("::") || in.is("*", 1)) break;
         in.take();
-        Binding b = qualified ? names.local(owner, ast[part].text) : names.lookup(owner, ast[part].text);
+        Binding b = names.qualifier(owner, ast[part].text);
         owner = b.target;
         qualified = true;
-        force_template = force_template || template_category(b.category);
+        force_template = false;
     }
     return result;
 }

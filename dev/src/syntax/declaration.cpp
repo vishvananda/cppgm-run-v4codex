@@ -27,22 +27,23 @@ NodeId Parser::declaration()
     if (in.is("static_assert")) return static_assertion();
     if (in.is("class") || in.is("struct") || in.is("union")) {
         NodeId node = class_specifier();
-        in.require(";");
+        if (!in.eat(";")) return simple_declaration(true, wrap(Kind::DeclSpecifiers, node));
         return node;
     }
     if (in.is("enum")) {
         NodeId node = enum_specifier();
-        in.require(";");
+        if (!in.eat(";")) return simple_declaration(true, wrap(Kind::DeclSpecifiers, node));
         return node;
     }
+    if (special_ahead()) return special_member();
     if (in.is("~") || in.is("operator") ||
         (current_class && in.peek().text == current_class && in.is("(", 1))) return special_member();
     return simple_declaration();
 }
 
-NodeId Parser::simple_declaration(bool require_semicolon)
+NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
 {
-    NodeId specs = specifiers();
+    if (!specs) specs = specifiers();
     ScopeId owner = scope;
     ScopeId parameters_scope = names.enter(scope);
     scope = parameters_scope;
@@ -50,18 +51,26 @@ NodeId Parser::simple_declaration(bool require_semicolon)
     bool alias = false;
     for (NodeId s = ast[specs].first; s; s = ast[s].next) alias |= ast[s].op == KW_TYPEDEF;
     Category category = alias ? Category::Type : Category::Value;
-    if (template_declaration && !alias) category = Category::TemplateValue;
+    bool is_function = false;
+    for (NodeId c = ast[decl].first; c; c = ast[c].next) is_function |= ast[c].kind == Kind::Parameters;
+    if (template_declaration && !alias && is_function) category = Category::TemplateValue;
     bind_declarator(decl, category, owner);
+    if (alias && declarator_name(decl)) names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
     if (decl && (in.is("{") || in.is("try")) && ast[ast[decl].last].kind != Kind::Identifier) {
         NodeId result = wrap(Kind::Function, specs);
         ast.append(result, decl);
+        NodeId n = declarator_name(decl);
+        if (n && ast[n].first != ast[n].last) names.import(scope, qualified_owner(n));
+        bool saved_template = template_declaration;
+        template_declaration = false;
         ast.append(result, in.is("try") ? try_block(true) : compound());
+        template_declaration = saved_template;
         scope = owner;
         return result;
     }
     scope = owner;
     NodeId result = wrap(Kind::SimpleDeclaration, specs);
-    if (in.is(":")) {
+    if (require_semicolon && in.is(":")) {
         ast[result].kind = Kind::BitField;
         do {
             NodeId field = wrap(Kind::BitFieldDeclarator, decl);
@@ -124,8 +133,10 @@ NodeId Parser::using_declaration()
     if (identifier() && in.is("=", 1)) {
         NodeId result = leaf(Kind::Alias);
         in.require("=");
-        ast.append(result, type_id());
-        names.bind(scope, ast[result].text, template_declaration ? Category::TemplateType : Category::Type);
+        NodeId type = type_id();
+        ast.append(result, type);
+        names.bind(scope, ast[result].text, template_declaration ? Category::TemplateType : Category::Type,
+                   type_scope(ast[type].first));
         in.require(";");
         return result;
     }

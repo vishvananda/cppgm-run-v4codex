@@ -21,7 +21,8 @@ NodeId Parser::compound()
 NodeId Parser::condition()
 {
     NodeId result = make(Kind::Condition);
-    if (declaration_start() && !in.is("(", 1)) {
+    if (declaration_start() && !in.is("(", probe_type(0)) &&
+        (identifier(probe_type(0)) || in.is("*", probe_type(0)) || in.is("&", probe_type(0)))) {
         NodeId decl = make(Kind::ConditionDeclaration);
         ast.append(decl, specifiers());
         NodeId d = declarator();
@@ -79,6 +80,13 @@ NodeId Parser::for_statement()
     if (in.eat(":")) {
         ast[result].kind = Kind::RangeFor;
         ast[init].kind = Kind::RangeDeclaration;
+        NodeId decl = ast[init].first;
+        NodeId specs = ast[decl].first;
+        NodeId list = ast[specs].next;
+        NodeId declarator = ast[ast[list].first].first;
+        ast[init].first = specs;
+        ast[specs].next = declarator;
+        ast[init].last = declarator;
         ast.append(result, init);
         ast.append(result, wrap(Kind::RangeInitializer, expression()));
     } else {
@@ -170,17 +178,21 @@ NodeId Parser::statement()
 bool Parser::declaration_ahead()
 {
     ++decisions;
-    if (!in.is("(", 1)) return true;
+    if (in.is("typename")) return false;
+    std::size_t prefix = probe_type(0);
+    if (in.is("{", prefix)) return false;
+    if (!in.is("(", prefix)) return true;
     // Only this shared type/parenthesis prefix requires declaration preference.
     // Scan its balanced suffix without constructing or abandoning any AST.
     unsigned depth = 0;
-    std::size_t i = 1;
+    std::size_t i = prefix;
     for (;; ++i) {
         if (in.peek(i).kind == PostTokenKind::eof) return false;
         if (in.is("(", i)) ++depth;
         if (in.is(")", i) && !--depth) break;
     }
-    return in.is(";", i + 1) || in.is("[", i + 1) || in.is("(", i + 1);
+    return in.is(";", i + 1) || in.is("[", i + 1) || in.is("(", i + 1) ||
+           in.is("=", i + 1) || in.is(",", i + 1);
 }
 
 } }

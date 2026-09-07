@@ -47,7 +47,7 @@ NodeId Parser::template_parameters()
             ast.append(param, template_parameters());
             scope = saved;
         }
-        if (in.is("class") || in.is("typename")) {
+        if (in.is("class") || (in.is("typename") && !in.is("<", 2) && !in.is("::", 2))) {
             ast.append(param, leaf(Kind::ParameterKey));
             if (in.eat("...")) ast.append(param, make(Kind::ParameterPack));
             if (identifier()) {
@@ -60,12 +60,21 @@ NodeId Parser::template_parameters()
             ast[param].kind = Kind::NonTypeParameter;
             ast.append(param, specifiers());
             NodeId decl = declarator();
+            if (decl && ast[ast[decl].first].kind == Kind::ParameterPack) {
+                NodeId pack = ast[decl].first;
+                ast[decl].first = ast[pack].next;
+                ast[pack].next = 0;
+                ast.append(param, pack);
+            }
             ast.append(param, decl);
             bind_declarator(decl, Category::Value, scope);
             if (in.eat("=")) {
                 unsigned saved = angle_expression;
                 angle_expression = 1;
-                ast.append(param, wrap(Kind::DefaultTemplateArgument, expression(2)));
+                NodeId value = expression(2);
+                NodeId specs = ast[param].first;
+                if (!decl && ast[ast[specs].first].op != TOK_INVALID) ast[value].flags |= 2;
+                ast.append(param, wrap(Kind::DefaultTemplateArgument, value));
                 angle_expression = saved;
             }
         }

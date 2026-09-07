@@ -21,6 +21,7 @@ public:
     ScopeId parent(ScopeId scope) const;
     Binding local(ScopeId scope, IdentifierId name) const;
     Binding lookup(ScopeId scope, IdentifierId name) const;
+    Binding qualifier(ScopeId scope, IdentifierId name) const;
     void bind(ScopeId scope, IdentifierId name, Category category, ScopeId target = 0);
     void import(ScopeId scope, ScopeId target);
     std::size_t probes = 0;
@@ -31,6 +32,10 @@ private:
     std::vector<Import> imports_;
     std::vector<Binding> entries_;
     std::vector<std::uint32_t> slots_;
+    mutable std::vector<ScopeId> lookup_work_;
+    mutable std::vector<std::uint64_t> visited_;
+    mutable std::uint64_t traversal_ = 0;
+    Binding imported(ScopeId scope, IdentifierId name) const;
     std::size_t slot(ScopeId scope, IdentifierId name) const;
     void grow();
 };

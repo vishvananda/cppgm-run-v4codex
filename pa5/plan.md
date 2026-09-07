@@ -42,3 +42,16 @@ and <5x RSS (plus 1 MiB startup); syntax work linear in consumed/produced nodes.
   Remaining shared owners: qualified-name/context prediction; special members;
   dependent template argument expressions; class-wide category availability;
   exception/declarator suffixes and presentation details. Continuing work.
+- Full behavior increment: scoped qualified-name/category prediction, aliases
+  and using edges, complete-class nested-name lookahead, special members,
+  parameter/direct-initializer preference, dependent arguments, exception and
+  member-pointer syntax. PA5 **188/188**; prior PA1–4 **205/205**; personal core
+  10/10; file audit 62 files. No fixture or harness changes. Final architecture,
+  sanitizer and performance audits remain before completion.
+
+Final performance campaign budgets (fixed before measurement/optimization):
+paired frontend+dump wall time <=10% regression plus measured A/A noise; peak RSS
+<=15% +1 MiB; host compiler text growth <=15%. Nested/deferred syntax work must
+scale linearly in tokens; 4x source <6x wall / <5x RSS +1 MiB. Measure frozen
+full-behavior A against final B with A/A calibration, two ABBA blocks, all raw
+observations and output hashes. No executable runtime/text exists at PA5.

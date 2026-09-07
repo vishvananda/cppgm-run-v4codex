@@ -67,9 +67,19 @@ Token Cursor::require(const char* spelling)
     if (!is(spelling)) {
         TextView found = ids_.spelling(peek().text);
         throw std::runtime_error(std::string("expected '") + spelling + "', found '" +
-                                 std::string(found.data, found.size) + "'");
+                                 std::string(found.data, found.size) + "' at byte " + std::to_string(peek().location.begin));
     }
     return take();
+}
+
+std::size_t Cursor::matching(std::size_t ahead)
+{
+    const char* close = is("(", ahead) ? ")" : is("[", ahead) ? "]" : "}";
+    for (std::size_t i = ahead + 1;; ++i) {
+        if (peek(i).kind == PostTokenKind::eof) throw std::runtime_error("unclosed delimiter");
+        if (is(close, i)) return i;
+        if (is("(", i) || is("[", i) || is("{", i)) i = matching(i);
+    }
 }
 
 void Cursor::close_angle()

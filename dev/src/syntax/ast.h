@@ -159,6 +159,7 @@ struct Token {
 // to a string serialization. Later semantic facts attach to NodeId directly.
 struct Node {
     Kind kind = Kind::TranslationUnit;
+    unsigned char flags = 0;
     ETokenType op = TOK_INVALID;
     IdentifierId text = 0;
     Location location;

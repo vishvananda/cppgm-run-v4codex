@@ -76,6 +76,9 @@ NodeId Parser::postfix(NodeId base)
             result = wrap(Kind::Call, base);
             ast.append(result, arguments(ast[base].kind == Kind::IdExpression && ast[base].op != TOK_INVALID ?
                                           Kind::ParenArguments : Kind::Arguments, ")"));
+        } else if (in.is("{") && ast[base].kind == Kind::IdExpression) {
+            result = wrap(Kind::Call, base);
+            ast.append(result, primary());
         } else if (in.eat("[")) {
             result = wrap(Kind::Subscript, base);
             unsigned saved = angle_expression;
@@ -86,7 +89,11 @@ NodeId Parser::postfix(NodeId base)
         } else if (in.is(".") || in.is("->")) {
             result = leaf(Kind::Member);
             ast.append(result, base);
-            ast.append(result, named(Kind::Identifier, name()));
+            bool saved_member = member_name;
+            member_name = true;
+            NodeId member = name();
+            member_name = saved_member;
+            ast.append(result, named(Kind::Identifier, member));
         } else if (in.is("++") || in.is("--")) {
             result = leaf(Kind::Postfix);
             ast.append(result, base);
@@ -113,6 +120,7 @@ NodeId Parser::primary()
     }
     if (in.eat("{")) return arguments(Kind::BracedInit, "}");
     if (in.is("[")) return lambda();
+    if (in.eat("typename")) return named(Kind::IdExpression, name(true));
     if (builtin()) return leaf(Kind::IdExpression);
     if (identifier() || in.is("::") || in.is("operator") || in.is("decltype"))
         return named(Kind::IdExpression, name());
@@ -145,7 +153,7 @@ NodeId Parser::unary()
     }
     if (in.is("new") || in.is("delete") || (in.is("::") && (in.is("new", 1) || in.is("delete", 1))))
         return new_expression();
-    if (in.is("(") && type_start(1)) {
+    if (in.is("(") && type_start(1) && !in.is("(", probe_type(1))) {
         in.take();
         NodeId node = make(Kind::Cast);
         ast[node].op = OP_LPAREN;
@@ -170,7 +178,7 @@ NodeId Parser::type_trait()
     } else if (in.eat("(")) {
         unsigned saved = angle_expression;
         angle_expression = 0;
-        ast.append(result, keyword.op != KW_NOEXCEPT && type_start() ? type_id() : expression());
+        ast.append(result, keyword.op != KW_NOEXCEPT && type_operand() ? type_id() : expression());
         in.require(")");
         angle_expression = saved;
     } else {
@@ -197,7 +205,7 @@ NodeId Parser::new_expression()
     }
     if (in.is("(") && !type_start(1)) {
         in.take();
-        ast.append(result, arguments(Kind::Placement, ")"));
+        ast.append(result, wrap(Kind::Placement, arguments(Kind::ParenArguments, ")")));
     }
     bool paren = in.eat("(");
     ast.append(result, type_id(!paren));

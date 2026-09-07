@@ -27,7 +27,7 @@ NodeId Parser::class_specifier()
             ast.append(base, named(Kind::BaseName, base_name));
             Binding binding = name_binding(base_name);
             if (binding.target) names.import(child, binding.target);
-            if (in.eat("...")) ast.append(base, make(Kind::PackExpansion));
+            if (in.is("...")) ast.append(base, leaf(Kind::PackExpansion));
             ast.append(bases, base);
         } while (in.eat(","));
         ast.append(result, bases);
@@ -41,6 +41,7 @@ NodeId Parser::class_specifier()
     template_declaration = false;
     current_class = final_name(n);
     scope = child;
+    predeclare_class();
     while (!in.is("}")) {
         if (in.peek().kind == PostTokenKind::eof) throw std::runtime_error("unterminated class");
         if ((in.is("public") || in.is("private") || in.is("protected")) && in.is(":", 1)) {
@@ -80,7 +81,16 @@ NodeId Parser::enum_specifier()
 
 NodeId Parser::special_member(NodeId specs)
 {
+    while (in.is("inline") || in.is("virtual") || in.is("explicit") || in.is("constexpr") ||
+           in.is("friend") || in.is("static")) {
+        if (!specs) specs = make(Kind::MemberSpecifiers);
+        ast.append(specs, leaf(Kind::Specifier));
+        attributes();
+    }
     NodeId n = name();
+    NodeId last = ast[n].last;
+    if (ast[last].op == KW_OPERATOR && !ast[last].detail)
+        throw std::runtime_error("non-conversion operator needs return type");
     NodeId result = named(Kind::SpecialMember, n);
     ast.append(result, specs);
     NodeId decl = wrap(Kind::Declarator, named(Kind::Identifier, n));
@@ -108,7 +118,7 @@ NodeId Parser::ctor_initializer()
         if (in.eat("(")) ast.append(item, arguments(Kind::ParenArguments, ")"));
         else if (in.is("{")) ast.append(item, primary());
         else throw std::runtime_error("expected constructor initializer arguments");
-        if (in.eat("...")) ast.append(item, make(Kind::PackExpansion));
+        if (in.is("...")) ast.append(item, leaf(Kind::PackExpansion));
         ast.append(result, item);
     } while (in.eat(","));
     return result;

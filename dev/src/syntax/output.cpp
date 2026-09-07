@@ -31,7 +31,7 @@ bool token_label(Kind kind)
     case Kind::TypeTrait: case Kind::ClassKey: case Kind::EnumKey:
     case Kind::Access: case Kind::CvQualifier: case Kind::ParameterKey:
     case Kind::Specifier: case Kind::LambdaSpecifier: case Kind::Virtual:
-    case Kind::VirtSpecifier: return true;
+    case Kind::VirtSpecifier: case Kind::PackExpansion: return true;
     default: return false;
     }
 }
@@ -39,7 +39,24 @@ bool token_label(Kind kind)
 void payload(std::ostream& out, const Ast& ast, NodeId id, const IdentifierTable& ids)
 {
     const Node& node = ast[id];
-    if (node.kind == Kind::LambdaIntroducer) {
+    if (node.op == KW_DECLTYPE) {
+        out << ' ';
+        write_inline(out, ast, id, ids);
+    } else if (node.kind == Kind::FunctionQualifier && (node.op == KW_NOEXCEPT || node.op == KW_THROW)) {
+        out << ' ';
+        spelling(out, ids, node.text);
+        if (node.detail) write_inline(out, ast, node.detail, ids);
+        else if (node.first) {
+            out << '(';
+            children_inline(out, ast, id, ids);
+            out << ')';
+        }
+    } else if (node.kind == Kind::Noexcept) {
+        // Lambda noexcept owns the operand directly.
+    } else if (node.kind == Kind::Placement) {
+        out << ' ';
+        children_inline(out, ast, id, ids);
+    } else if (node.kind == Kind::LambdaIntroducer) {
         out << ' ';
         write_inline(out, ast, id, ids);
     } else if (node.kind == Kind::ParameterPack || node.kind == Kind::Ellipsis) out << " ...";
@@ -50,7 +67,8 @@ void payload(std::ostream& out, const Ast& ast, NodeId id, const IdentifierTable
         if (node.kind == Kind::Pointer) out << "::*";
     } else if (node.text || node.op != TOK_INVALID) {
         out << ' ';
-        if (token_label(node.kind)) out << (node.op == TOK_INVALID ? "TT_IDENTIFIER" : simple_name(node.op)) << ':';
+        if (node.kind == Kind::Literal && (node.flags & 2)) out << "TT_LITERAL:";
+        if (token_label(node.kind) && !(node.kind == Kind::Specifier && node.op == KW_EXPLICIT)) out << (node.op == TOK_INVALID ? "TT_IDENTIFIER" : simple_name(node.op)) << ':';
         if (node.kind == Kind::Linkage) {
             TextView text = ids.spelling(node.text);
             out.write(text.data + 1, text.size - 2);
@@ -63,12 +81,23 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
 {
     if (!id) return;
     const Node& n = ast[id];
-    if (n.kind == Kind::Name) {
+    if (n.op == KW_DECLTYPE && n.kind != Kind::NamePart) {
+        out << "decltype(";
+        children_inline(out, ast, id, ids);
+        out << ')';
+    } else if (n.kind == Kind::Capture) {
+        spelling(out, ids, n.text);
+        write_inline(out, ast, n.detail, ids);
+        children_inline(out, ast, id, ids);
+    } else if (n.kind == Kind::ParameterPack || n.kind == Kind::Ellipsis) out << "...";
+    else if (n.kind == Kind::Name) {
         if (n.op == OP_COLON2) out << "::";
         children_inline(out, ast, id, ids, "::");
     } else if (n.kind == Kind::NamePart) {
+        if (n.flags & 1) out << "template ";
         if (n.op == OP_COMPL) out << '~';
         spelling(out, ids, n.text);
+        if (n.flags & 2) out << ' ';
         write_inline(out, ast, n.detail, ids);
         children_inline(out, ast, id, ids);
     } else if (n.kind == Kind::TemplateArguments) {
@@ -92,7 +121,7 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         children_inline(out, ast, id, ids);
         spelling(out, ids, n.text);
     } else if (n.kind == Kind::Parenthesized || n.kind == Kind::Parameters ||
-               n.kind == Kind::Arguments || n.kind == Kind::NestedDeclarator) {
+               n.kind == Kind::Arguments || n.kind == Kind::ParenArguments || n.kind == Kind::ParenInitializer || n.kind == Kind::NestedDeclarator) {
         out << '(';
         children_inline(out, ast, id, ids, n.kind == Kind::NestedDeclarator ? "" : ",");
         out << ')';
@@ -110,6 +139,22 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         else out << '[';
         write_inline(out, ast, n.last, ids);
         if (n.kind == Kind::Subscript) out << ']';
+    } else if (n.kind == Kind::Cast) {
+        if (n.op != OP_LPAREN) spelling(out, ids, n.text);
+        out << (n.op == OP_LPAREN ? '(' : '<');
+        write_inline(out, ast, n.first, ids);
+        out << (n.op == OP_LPAREN ? ')' : '>');
+        if (n.op != OP_LPAREN) out << '(';
+        write_inline(out, ast, n.last, ids);
+        if (n.op != OP_LPAREN) out << ')';
+    } else if (n.kind == Kind::New) {
+        NodeId child = n.first;
+        if (child && ast[child].kind == Kind::Global) {
+            out << "::";
+            child = ast[child].next;
+        }
+        out << "new";
+        for (; child; child = ast[child].next) write_inline(out, ast, child, ids);
     } else if (n.kind == Kind::TypeSpecifiers || n.kind == Kind::DeclSpecifiers)
         children_inline(out, ast, id, ids, " ");
     else if (n.kind == Kind::PackExpression) {
@@ -123,6 +168,7 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         children_inline(out, ast, id, ids);
         out << ')';
     } else {
+        if (n.flags & 1) out << "typename ";
         if (n.detail) write_inline(out, ast, n.detail, ids);
         else spelling(out, ids, n.text);
         if (n.kind == Kind::Pointer && n.detail) out << "::*";

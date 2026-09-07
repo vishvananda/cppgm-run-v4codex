@@ -55,13 +55,10 @@ bool Parser::type_start(std::size_t ahead)
     case KW_STRUCT: case KW_CLASS: case KW_UNION: case KW_ENUM: return true;
     default: break;
     }
-    if (in.is("::", ahead)) ++ahead;
-    if (!identifier(ahead)) return false;
-    Token token = in.peek(ahead);
-    Binding binding = names.lookup(scope, token.text);
-    if (in.is("::", ahead + 1)) return true;
-    if (binding.category != Category::Unknown) return type_category(binding.category);
-    TextView text = ids.spelling(token.text);
+    NameProbe probe = probe_name(ahead);
+    if (!probe.valid || !probe.terminal || probe.special) return false;
+    if (probe.binding.category != Category::Unknown) return type_category(probe.binding.category);
+    TextView text = ids.spelling(probe.terminal);
     for (std::size_t i = 0; i < text.size; ++i)
         if (text.data[i] == 'C' || text.data[i] == 'Y' || text.data[i] == 'E' || text.data[i] == 'T')
             return true;

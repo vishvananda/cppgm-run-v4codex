@@ -39,15 +39,43 @@ Binding Names::local(ScopeId scope, IdentifierId name) const
     return entries_[slots_[slot(scope, name)]];
 }
 
+Binding Names::imported(ScopeId scope, IdentifierId name) const
+{
+    // Traversal stamps are scratch visitation state, not semantic cache keys.
+    if (visited_.size() < scopes_.size()) visited_.resize(scopes_.size());
+    ++traversal_;
+    lookup_work_.clear();
+    lookup_work_.push_back(scope);
+    visited_[scope] = traversal_;
+    for (std::size_t next = 0; next < lookup_work_.size(); ++next) {
+        ScopeId owner = lookup_work_[next];
+        Binding found = local(owner, name);
+        if (found.category != Category::Unknown) return found;
+        for (std::uint32_t i = scopes_[owner].imports; i; i = imports_[i].next) {
+            ScopeId target = imports_[i].target;
+            if (visited_[target] == traversal_) continue;
+            visited_[target] = traversal_;
+            lookup_work_.push_back(target);
+        }
+    }
+    return Binding();
+}
+
 Binding Names::lookup(ScopeId scope, IdentifierId name) const
 {
     for (;;) {
-        Binding found = local(scope, name);
+        Binding found = imported(scope, name);
         if (found.category != Category::Unknown) return found;
-        for (std::uint32_t i = scopes_[scope].imports; i; i = imports_[i].next) {
-            found = local(imports_[i].target, name);
-            if (found.category != Category::Unknown) return found;
-        }
+        if (!scope) return Binding();
+        scope = scopes_[scope].parent;
+    }
+}
+
+Binding Names::qualifier(ScopeId scope, IdentifierId name) const
+{
+    for (;;) {
+        Binding found = imported(scope, name);
+        if (found.target) return found;
         if (!scope) return Binding();
         scope = scopes_[scope].parent;
     }
