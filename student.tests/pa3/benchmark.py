@@ -90,7 +90,10 @@ def main():
                              'dense_unique_peak_rss': '2 * retained source/name/spelling capacities + 32 MiB',
                              'identifier_storage': '64 * unique identifiers + 2 * bytes + 64',
                              'rehash_probes': '8 * unique identifiers + 64',
-                             'fourfold_input_latency_ratio': 6})
+                             'fourfold_input_latency_ratio': 6,
+                             'unaffected_latency_percent_above_aa_noise': 5,
+                             'host_text_growth_percent': 1,
+                             'peak_rss_growth_kib_above_baseline_variation': 1024})
     pattern = (b"defined alpha ? -7 : u'a'\n(1u<<63)/-1\n0 && (7/0) || 1\n"
                b"0 ? 0 : 1 ? 5 : 6u\n'\\u03d0' + L'a'\n")
     workloads, expected = [], {}
@@ -114,6 +117,12 @@ def main():
     invalid = b'0 ? 1.0 : 2\n7\ndefined(a+b)\n9\n'
     count = 4 * 1024 * 1024 // len(invalid)
     add('recovery-4', invalid * count, b'error\n7\nerror\n9\n' * count)
+    invalid_float = b'1.23456789e123L\n7\n'
+    count = 4 * 1024 * 1024 // len(invalid_float)
+    add('floating-rejection-4', invalid_float * count, b'error\n7\n' * count)
+    add('suffix-rejection-200000',
+        b''.join(('1_suffix_' + str(i) + '\n7\n').encode() for i in range(200000)),
+        b'error\n7\n' * 200000)
     if args.inputs:
         for path in workloads:
             path.unlink()
@@ -127,6 +136,8 @@ def main():
     manifest['workloads'] = {p.stem: {'bytes': p.stat().st_size, 'sha256': digest(p)} for p in workloads}
     (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     manifest['host_size'] = subprocess.check_output(['size', str(binary)], text=True)
+    manifest['baseline_host_size'] = subprocess.check_output(['size', str(baseline)], text=True)
+    assert int(manifest['host_size'].splitlines()[1].split()[0]) <= 1.01 * int(manifest['baseline_host_size'].splitlines()[1].split()[0])
     (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     observations = []
     summaries = {}
@@ -135,7 +146,8 @@ def main():
         ha, _ = output_hash(baseline, source, [])
         hb, _ = output_hash(binary, source, [])
         hs, counters = output_hash(binary, source, ['--stats'])
-        assert ha == hb == hs == expected[source.stem], source
+        has, baseline_counters = output_hash(baseline, source, ['--stats'])
+        assert ha == hb == hs == has == expected[source.stem], source
         size = source.stat().st_size
         assert counters['decoded_units'] <= 2 * size + 64, counters
         assert counters['identifier_storage_bytes'] <= 64 * counters['identifiers'] + 2 * size + 64
@@ -191,7 +203,7 @@ def main():
             paired.append((b / a - 1) * 100)
         timings = {mode: [r['seconds'] for r in local if r['mode'] == mode and r['block'] == 'ABBA']
                    for mode in ('A', 'B')}
-        summary = dict(output_sha256=ha, counters=counters, aa_percent=calibration,
+        summary = dict(output_sha256=ha, counters=counters, baseline_counters=baseline_counters, aa_percent=calibration,
                        paired_change_percent=paired,
                        seconds={mode: {'median': statistics.median(values), 'min': min(values), 'max': max(values)}
                                 for mode, values in timings.items()},
