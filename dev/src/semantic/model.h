@@ -69,7 +69,7 @@ struct Entity {
     std::uint64_t size = 0, alignment = 0;
     unsigned char layout_state = 0;
     bool is_static = false;
-    NodeId source = 0;
+    NodeId source = 0, definition = 0;
     TypeId type = 0, underlying = 0;
     ETokenType key = TOK_INVALID;
     Constant constant;

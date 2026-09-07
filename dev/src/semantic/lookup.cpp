@@ -135,6 +135,9 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
 ScopeId Analyzer::target(EntityId e) const
 {
     if (!e) return 0;
+    EntityKind kind = entities[e].kind;
+    if (kind != EntityKind::Type && kind != EntityKind::Alias && kind != EntityKind::Namespace && kind != EntityKind::NamespaceAlias)
+        return 0;
     if (entities[e].scope) return entities[e].scope;
     TypeId t = entities[e].type;
     return t && types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;

@@ -8,6 +8,11 @@ import tempfile
 root = pathlib.Path(__file__).resolve().parents[2]
 compiler = pathlib.Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root/'dev/cppgm++'
 cases = [
+ ('anonymous-object-not-qualifier', 'static struct{using T=int;}object;object::T x;', None),
+ ('function-point', 'using T=int;namespace N{void f(){T x;}using T=char;}', ['variable x int']),
+ ('class-point', 'using T=int;namespace N{struct C{void f(){T x;}};using T=char;}', ['variable x int']),
+ ('local-class-point', 'using T=int;void f(){struct C{void f(){T x;}};using T=char;}', ['variable x int']),
+ ('nested-complete-class', 'struct O{struct I{void f(){T x;}};using T=int;};', ['variable x int']),
  ('layout', 'struct S{char x;int y;static int z;};union U{char x;long y;};int a[sizeof(S)];int b[alignof(S)];int c[sizeof(U)];', ['variable a array of 8 int','variable b array of 4 int','variable c array of 8 int']),
  ('qualifier-shadow', 'namespace N{using T=int;}namespace M{int N;N::T x;}', ['variable x int']),
  ('injected-name', 'struct C{C(){} C* next;};int C(int);', ['variable next pointer to struct C']),

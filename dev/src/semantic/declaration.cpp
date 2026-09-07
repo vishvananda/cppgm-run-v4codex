@@ -11,12 +11,6 @@ void Analyzer::consume(NodeId n)
     if (ast.telemetry) start = Clock::now();
     facts.resize(ast.nodes.size());
     declaration(n, global);
-    // All pending bodies belong to the completed region. No grammar replay.
-    while (body_cursor < bodies.size()) {
-        Body b = bodies[body_cursor++];
-        function_body(b);
-    }
-    bodies.clear(); body_cursor = 0;
     if (ast.telemetry) analysis_ms += std::chrono::duration<double, std::milli>(Clock::now() - start).count();
 }
 void Analyzer::finish() {}
@@ -67,7 +61,7 @@ void Analyzer::simple(NodeId n, ScopeId s)
         NodeId d = ast[specs].next;
         TypeId t = declarator(d, base, s);
         EntityId e = declare_object(d, 0, t, specs, s, n);
-        bodies.push_back({ast[d].next, d, entities[e].owner, e});
+        schedule_body({ast[d].next, d, entities[e].owner, e, n});
         return;
     }
     for (NodeId item = ast[list].first; item; item = ast[item].next) {
@@ -129,7 +123,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (ast[n].kind == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
-            bodies.push_back({b, d, entities[e].owner, e});
+            schedule_body({b, d, entities[e].owner, e, n});
         }
         break;
     }
@@ -139,9 +133,20 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     default: break;
     }
 }
+void Analyzer::schedule_body(const Body& body)
+{
+    if (class_depth) bodies.push_back(body);
+    else function_body(body);
+}
 void Analyzer::function_body(const Body& body)
 {
+    if (entities[body.entity].definition) throw std::runtime_error("function redefinition");
     ScopeId fs = make_scope(ScopeKind::Function, body.owner, entities[body.entity].name, body.entity);
+    entities[body.entity].definition = body.source;
+    entities[body.entity].scope = fs;
+    facts[body.source].entity = body.entity;
+    facts[body.source].type = entities[body.entity].type;
+    facts[body.source].scope = fs;
     NodeId d = body.declarator;
     // The function suffix closest to the declarator name supplies parameters.
     NodeId params = 0;
@@ -169,6 +174,7 @@ void Analyzer::statements(NodeId n, ScopeId s)
     switch (ast[n].kind) {
     case Kind::Compound: {
         ScopeId bs = make_scope(ScopeKind::Block, s);
+        facts[n].scope = bs;
         for (NodeId c = ast[n].first; c; c = ast[c].next) statements(c, bs);
         break;
     }

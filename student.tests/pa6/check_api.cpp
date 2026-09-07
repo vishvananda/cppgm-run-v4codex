@@ -47,6 +47,11 @@ int main()
         if(n=="U") assert(sem.types[e.type].bound==0);
         if(n=="R") r=d.entity;
         if(n=="RR") assert(sem.entities[r].type==e.type);
+        if(n=="method") {
+            assert(e.definition && e.scope);
+            assert(sem.facts[e.definition].entity == d.entity);
+            assert(sem.facts[e.definition].scope == e.scope);
+        }
         if(n=="member") assert(sem.types[e.type].kind==TypeKind::Named);
     }
     assert(fdecls==2 && gdecls==2 && array);

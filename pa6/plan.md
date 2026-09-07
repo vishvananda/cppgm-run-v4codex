@@ -47,5 +47,15 @@ No optimization benefit is claimed without the complete evidence protocol.
   scoped conversions, aliases, plain class layout, signature/constant fact
   reuse. Personal behavior 28/28; identity/lifetime API and inherited PA5 API
   pass sanitizers before the last fact-owner changes. Fresh through 498/498.
-- Remaining: final sanitizer rerun, frozen performance and architecture evidence.
+- Declaration-point audit found that only class bodies may be deferred.
+  Free functions now analyze immediately; local classes own queue intervals.
+  Five added probes cover free, class, local-class and nested-class contexts
+  and keep anonymous object presentation names out of qualifier lookup.
+  The first timing campaign was deliberately stopped on this correctness
+  finding; its partial observations are retained and make no final claim.
+- Corrected implementation: PA6 105/105, through 498/498, 33 personal cases,
+  both identity/lifetime APIs and all 105 course cases pass the final isolated
+  ASan/UBSan/leak build. Definition and body-scope identities are retained.
+  File audit passes 71 files.
+- Remaining: final frozen performance evidence.
 - Handoff reason: work ongoing; initial plan is not a stopping boundary.

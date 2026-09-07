@@ -20,14 +20,16 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
     ScopeId owner = name_owner(name, s);
-    EntityId e = emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
+    EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].key = key_op;
         entities[e].type = types.named(e);
         entities[e].scope = make_scope(ScopeKind::Class, owner, id, e, false);
-        bind(owner, id, e);
-        bind(entities[e].scope, id, e); // Injected-class-name, without a second source declaration.
+        if (name) {
+            bind(owner, id, e);
+            bind(entities[e].scope, id, e); // Injected-class-name, without a second source declaration.
+        }
         emit = !anonymous_union;
     } else if (entities[e].kind != EntityKind::Type || entities[e].key == KW_ENUM ||
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
@@ -40,10 +42,24 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     }
     if (definition) {
         if (entities[e].complete) throw std::runtime_error("class redefinition");
+        std::size_t deferred_begin = bodies.size();
+        ++class_depth;
         ScopeId cs = entities[e].scope;
         attach_scope(cs, owner);
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
         entities[e].complete = true;
+        entities[e].definition = n;
+        if (!--class_depth) {
+            // Only complete-class contexts defer bodies. Each outermost class
+            // owns its queue interval; a local class can drain its own interval
+            // without delaying lookup past declarations following that class.
+            std::size_t end = bodies.size();
+            for (std::size_t i = deferred_begin; i < end; ++i) {
+                Body body = bodies[i];
+                function_body(body);
+            }
+            bodies.resize(deferred_begin);
+        }
         if (anonymous_union) {
             for (std::uint32_t d = scopes[cs].first_decl; d; d = declarations[d].next) {
                 EntityId member = declarations[d].entity;
@@ -111,6 +127,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         for (NodeId c = ast[n].first; c; c = ast[c].next)
             if (ast[c].kind == Kind::Enumerator) entities[facts[c].entity].constant.type = t;
         entities[e].complete = true;
+        entities[e].definition = n;
     }
     return t;
 }

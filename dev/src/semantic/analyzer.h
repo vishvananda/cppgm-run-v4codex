@@ -28,9 +28,9 @@ private:
     std::vector<std::uint64_t> visited;
     std::uint64_t walk = 0;
     std::size_t lookup_work = 0, analyzed = 0, constant_work = 0;
-    struct Body { NodeId node, declarator; ScopeId owner; EntityId entity; };
+    struct Body { NodeId node, declarator; ScopeId owner; EntityId entity; NodeId source; };
     std::vector<Body> bodies;
-    std::size_t body_cursor = 0;
+    unsigned class_depth = 0;
     enum class Lookup { Ordinary, Tag, Namespace, Qualifier };
     std::uint64_t key(ScopeId s, IdentifierId n) const;
     EntityId local(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary) const;
@@ -54,6 +54,7 @@ private:
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
     void function_body(const Body& body);
+    void schedule_body(const Body& body);
     void statements(NodeId n, ScopeId s);
     void template_declaration(NodeId n, ScopeId s);
     void namespace_declaration(NodeId n, ScopeId s);
