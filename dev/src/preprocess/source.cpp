@@ -91,6 +91,7 @@ CharacterCursor::CharacterCursor(const SourceBuffer& source, LexStats* stats)
 {
     if (source.bytes.compare(0, 3, "\xef\xbb\xbf") == 0)
         consumed_.offset = 3;
+    content_begin_ = consumed_.offset;
     scanned_ = consumed_;
 }
 
@@ -145,7 +146,7 @@ SourceCharacter CharacterCursor::phase_one(Position& p)
     }
     // Trigraphs may introduce the backslash of a UCN. Malformed UCN-like
     // text remains ordinary characters (in particular in comments).
-    if (c.value == '\\' && p.offset < bytes.size() &&
+    if (ucn_ && c.value == '\\' && p.offset < bytes.size() &&
         (bytes[p.offset] == 'u' || bytes[p.offset] == 'U')) {
         const std::size_t digits = bytes[p.offset] == 'u' ? 4 : 8;
         if (bytes.size() - p.offset >= digits + 1) {
@@ -172,17 +173,21 @@ SourceCharacter CharacterCursor::translate(Position& p)
     SourceCharacter c;
     for (;;) {
         c = raw_ ? decode(p) : phase_one(p);
-        if (!raw_ && c.value == '\\') {
-            Position after = p;
-            SourceCharacter next = phase_one(after);
-            if (next.value == '\n') { p = after; continue; }
+        // Only a physical LF can splice a source line. Do not speculatively
+        // interpret the following escape before the literal scanner sees it.
+        if (!raw_ && c.value == '\\' && p.offset < source_.bytes.size() &&
+            source_.bytes[p.offset] == '\n') {
+            decode(p);
+            p.spliced_tail = true;
+            continue;
         }
         break;
     }
-    if (!raw_ && c.value == -1 && !source_.bytes.empty() && p.last != '\n') {
+    if (!raw_ && c.value == -1 && source_.bytes.size() != content_begin_ &&
+        (p.last != '\n' || p.spliced_tail)) {
         c.value = '\n'; c.unchanged = false;
     }
-    if (c.value != -1) p.last = c.value;
+    if (c.value != -1) { p.last = c.value; p.spliced_tail = false; }
     if (stats_) ++stats_->translated_units;
     return c;
 }
@@ -211,6 +216,13 @@ SourceCharacter CharacterCursor::take()
 void CharacterCursor::raw_mode(bool enabled)
 {
     raw_ = enabled;
+    scanned_ = consumed_;
+    head_ = count_ = 0;
+}
+
+void CharacterCursor::ucn_mode(bool enabled)
+{
+    ucn_ = enabled;
     scanned_ = consumed_;
     head_ = count_ = 0;
 }

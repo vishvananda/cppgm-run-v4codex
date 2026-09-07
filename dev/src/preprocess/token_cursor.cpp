@@ -118,14 +118,17 @@ void PPTokenCursor::number()
 void PPTokenCursor::escape()
 {
     take(); // backslash; spelling remains encoded for PA2's literal conversion
+    characters_.ucn_mode(false);
     int c = peek();
-    if (c > 0 && c < 128 && std::strchr("'\"?\\abfnrtv", c)) { take(); return; }
+    if (c == -1 || c == '\n') throw std::runtime_error("unterminated literal escape");
+    take();
+    characters_.ucn_mode(true);
+    if (c > 0 && c < 128 && std::strchr("'\"?\\abfnrtv", c)) return;
     if (c >= '0' && c <= '7') {
-        for (int i = 0; i < 3 && peek() >= '0' && peek() <= '7'; ++i) take();
+        for (int i = 1; i < 3 && peek() >= '0' && peek() <= '7'; ++i) take();
         return;
     }
     if (c == 'x') {
-        take();
         if (hex_value(peek()) < 0) throw std::runtime_error("hex escape needs a digit");
         do { take(); } while (hex_value(peek()) >= 0);
         return;

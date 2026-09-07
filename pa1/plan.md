@@ -19,8 +19,9 @@ Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
 
 1. Translation/source, identity and all token/literal/header groups implemented;
    all 54 course fixtures pass. Extend personal checks for byte validity,
-   ordering, raw reversion, EOF and identity/location lifetimes.
-2. Finish personal boundary cases, then root through-PA1 and file audit.
+   ordering, raw reversion, EOF and identity/location lifetimes. Personal suite
+   now passes 59 boundary/property cases plus typed cursor and telemetry checks.
+2. Finish sanitizer validation, then root through-PA1 and file audit.
 3. Measure fixed compiler workloads (latency/RSS, work counters); record flags,
    hashes, observations and limits. PA1 produces no executable, so generated
    runtime/text size and optimization claims are inapplicable. No speedup claim
@@ -36,3 +37,10 @@ Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
   unless translated, and identifiers/suffixes enter a TU-owned flat table.
   Remaining work: explicit boundary tests, measured compiler evidence and final
   through report. No incomplete handoff boundary claimed.
+- Boundary closure: preserved the final logical newline after a trailing splice,
+  treated BOM-only input as empty, and protected escaped backslashes from UCN
+  recognition. Course remains 54/54; personal tests and file audit pass.
+  Performance validation envelopes (not optimization claims): repeated-name
+  workloads must keep identifier storage constant; scanner decoding work must
+  stay <= 2 * source bytes + 64; 4x source should use <= 6x latency after noise,
+  and peak RSS <= 4 * source bytes + 32 MiB. No emitted-program budgets apply.

@@ -53,11 +53,14 @@ public:
     const SourceCharacter& peek(std::size_t ahead = 0);
     SourceCharacter take();
     void raw_mode(bool enabled);
+    // An escaped backslash is literal syntax, not the start of a UCN.
+    void ucn_mode(bool enabled);
 
 private:
     struct Position {
         std::size_t offset = 0, line = 1, column = 1;
         int last = -1;
+        bool spliced_tail = false;
     };
     struct Pending { SourceCharacter character; Position after; };
     const SourceBuffer& source_;
@@ -65,7 +68,9 @@ private:
     Position consumed_, scanned_;
     Pending pending_[18];
     std::size_t head_ = 0, count_ = 0;
+    std::size_t content_begin_ = 0;
     bool raw_ = false;
+    bool ucn_ = true;
 
     SourceCharacter decode(Position& position);
     SourceCharacter phase_one(Position& position);
