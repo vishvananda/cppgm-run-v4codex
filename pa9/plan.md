@@ -1,53 +1,59 @@
-# PA9 implementation plan
+# PA9 plan and ledger
 
-Target: **PA9 full-stage**; phase: **implement**.
+Target: **PA9 full-stage**; phase: **complete**.
 Stage base commit: `affdafd23213da497d2946cae83df02d7a41ba7a`.
 Last reviewed commit: `affdafd23213da497d2946cae83df02d7a41ba7a`.
-Entry: reported 2/117; primary log contains 2/111 ABI fixtures. Preserve all
-111 ABI and six additional root fixtures; establish fresh root counts.
-Previous goal turn: no implementation progress visible; next action is the
-missing encoder, not another status check.
+These review markers remain unchanged for Ralph's independent review.
+Entry: **2/117** reported; the default harness discovers **111** ABI fixtures.
+Final: **111/111 default**, **117/117 explicit**, **904/904 through PA9**.
+All six additional root fixtures were checked explicitly; coverage is unchanged.
 
-## Design and remaining groups
+## Design/spec alignment and completed groups
 
-| Owner | Data flow / work bound | Validation |
+| Owner | Data flow and complexity | Validation |
 | --- | --- | --- |
-| Typed graph, fact adapter | File-local binders -> canonical compact IDs in flat pools; no rendered semantic keys. Parse each fact once; O(bytes + edges) expected work. Adapter is explicit input only. | Builtins, cv, arrays, paths, duplicate IDs, negative indices, direct API |
-| Name/type encoder | Typed IDs -> one append-only output and name-local indexed substitutions. Prefixes and qualifiers use canonical identity; O(consumed facts + output) expected. | 100/200 groups, standard and structural substitutions |
-| Functions and special names | Typed owner/terminal/qualifiers/context/thunk facts -> shared encoder; local contexts share the enclosing substitution sequence. | Operators, tags, local/lambda contexts, special names, six root probes |
-| Arguments and expressions | Canonical DAGs -> ordered grammar traversal; external entity encodings isolate substitutions where required. | 300–600 groups, equivalent/distinct expressions and template owners |
+| Graph / fact reader | Case-local binders -> canonical compact facts; flat pools/maps, IDs and child slices. O(bytes + edges) expected, iterative compact modifiers. No owning record/tree copy. | Builtins, cv, arrays, duplicate IDs, 64-bit indices, 20k modifiers |
+| Type/name encoder | Typed IDs -> append-only symbol and sparse name-local substitutions. Work tracks consumed facts/output; canonical tags and qualified/template prefixes. | 100/200 fixtures, equivalent/distinct values/types, tagged template probes |
+| Function / special names | Explicit semantic terminals, qualifiers, local contexts, template prefixes and fixed/virtual thunk fields. Production supplies member/nonmember shape. | Operators, conversion ordering, lambdas, external entities, six root probes |
+| Arguments / expressions | Canonical DAGs retain ordered operands, literals, traits and dependent owner facts. No mangled-text keys or phase transport. | 300–600 fixtures, expression equivalence/distinction, direct API |
+| Serialization / observability | Optional fact view memoizes definitions and iterates modifier chains. CLI streams per case; phase timing is optional, counters observe existing work. | All successful fixture roundtrips, deep roundtrip, batch order, sanitizers |
 
-Production callers construct the same compact facts directly. No C++ parser,
-LowIR, native emission or optimizer is introduced in PA9. Existing optional
-scaffold vocabulary can evolve without duplicating a production naming path.
+[Completion audit](audit.md) records ownership, representative traces and the
+stage boundary. No remaining PA9 behavior groups. PA10 source-to-LowIR naming
+is a later milestone; it will call the same typed encoder directly.
 
-## Performance evidence
+## Performance and required checks
 
-Measure latency and peak RSS on fixed repeated and growing typed-fact workloads;
-record counters, flags, hashes, observations and explicit bounds. No speedup
-claim against the nonfunctional stub. PA9 emits names, so generated executable
-runtime/text is not applicable. Any later performance comparison requires frozen
-binaries/inputs, A/A calibration, ABBA and equivalent output per spec.
+[Performance report](performance.md): frozen correct A versus final B, AAAA
+calibration and two ABBA blocks per workload, all 96 final observations retained
+alongside the initial 96 (including its failed text-growth gate). Final compiler
+latency/RSS/scaling/text satisfy all **41 unchanged budgets**. Modifiers are
+40.7–41.1% faster; other workload regressions of 1.9–6.4% are disclosed. Text
++91.1 KiB; fourfold wall 3.93–4.41x. Generated executable runtime/text: N/A in PA9.
 
-## Ledger / handoff
+- `make test-pa9`: **111/111 pass**.
+- `make test-report-through-pa9`: **904/904 pass; nine stages pass**.
+- Exact prior-through command: **793/793 through PA8 pass**.
+- `perl scripts/cppgm_file_audit.pl --stage pa9 --paths dev/src`:
+  **pass, 112 files**.
+- Explicit personal suite: **117 fixture status/output checks**, successful
+  fixture roundtrips, **11 valid +15 invalid** probes, batch order and direct
+  API assertions pass. Final **ASan/UBSan with leak checks pass**.
+- Performance verifier confirms frozen/current binaries, input/output hashes,
+  raw observation ordering and all budget calculations.
 
-- `7442a3192`: immutable review markers recorded before implementation.
-- `df7dbb00a`: complete first encoder; 111/111 default and 117/117 explicit
-  contract checks, cumulative 904/904. Baseline binary independently rebuilt
-  from this commit with identical SHA-256 (`78784463b5cbd4e...`).
-- `f6552f8d1`: sparse name-local substitutions, linear modifier parsing
-  and emission, canonical tagged templates, 64-bit ABI indices, explicit
-  member/nonmember production shape, fact serialization and optional telemetry.
-  117 fixture roundtrips, 11 valid/15 invalid personal cases and file audit pass.
-  Sanitizers pass. First frozen benchmark retained as `initial-performance.json`:
-  latency/RSS/scaling pass, compiler text growth exceeds the original 100 KiB
-  budget. Serializer joining is now shared and its deep modifier traversal is
-  iterative; explicit deep roundtrips pass. Compiler text is 265664 bytes, below
-  the unchanged growth budget. Final timings use fourfold longer workloads.
-  No executable generation is part of this stage.
-- First implementation: all **111/111** root-suite fixtures and **117/117**
-  independent exact-output/status checks pass. No fixture changed. Remaining
-  work is API/serializer validation, scaling, telemetry and cumulative gates.
-- Required checks pending: `make test-pa9`, through-PA9 report, file audit,
-  explicit personal checks and committed clean status.
-- Remaining: all implementation groups above. No handoff boundary reached.
+## Handoff ledger
+
+- `7442a3192`: initial plan and review markers before stage edits.
+- `df7dbb00a`: complete first typed encoder; all required behavior fixtures pass.
+- `f6552f8d1`: sparse substitutions, linear modifiers, canonical tagged templates,
+  full-width indices, explicit operator shape, serializer, telemetry and probes.
+- `ea87f4ba7`: serializer growth correction and deep roundtrips; final frozen
+  implementation. First-run observations retained without altering budgets.
+- Final evidence commit: compact plan, audit, performance report, raw final data,
+  reproduction instructions and independent evidence verifier. Implementation
+  checks rerun against this source state; committed clean status checked last.
+
+Handoff reason: **PA9 is complete**, with no incomplete group or reduced test
+coverage. Course fixtures, references, harnesses and earlier implementations
+were not changed. Review markers are preserved for the next review.
