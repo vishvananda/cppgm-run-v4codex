@@ -36,6 +36,8 @@ with tempfile.TemporaryDirectory(prefix='pa4-performance-') as temporary:
         'nested-arguments': nested,
         'long-chain-reuse': chain,
         'counter-spellings': '__COUNTER__ '*300000,
+        'literal-locations': '#define SUFFIX ""_custom\n#line 80 "logical.cc"\n' +
+                             'operator SUFFIX; operator ""_direct;\n'*40000,
     }
     frozen = {'A': sha(a.read_bytes()), 'B': sha(b.read_bytes())}
     rows, manifests, summaries = [], [], []

@@ -177,6 +177,10 @@ ExpansionToken Preprocessor::generated(const std::string& text, const ExpansionT
     t.presumed_file = origin.filename;
     t.begin = origin.token.begin; t.end = origin.token.end;
     t.line = origin.token.line; t.column = origin.token.column;
+    if (t.suffix) {
+        t.suffix_begin = origin.token.begin;
+        t.suffix_line = origin.token.line; t.suffix_column = origin.token.column;
+    }
     result.token = t;
     result.unavailable = false;
     result.parameter = -1;
@@ -190,6 +194,7 @@ ExpansionToken Preprocessor::stabilize(PPToken token, FileFrame& file, bool pers
     ExpansionToken result;
     result.token = token;
     result.token.line += file.line_delta;
+    if (result.token.suffix) result.token.suffix_line += file.line_delta;
     result.token.presumed_file = file.filename;
     result.filename = file.filename;
     result.space = file.space;

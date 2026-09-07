@@ -2,7 +2,7 @@
 
 Stage scope is phases 1–6 and phase-7 tokenization. Read against `spec.md`, the
 PA4 macro/directive handouts, unchanged contract fixtures, and the actual
-implementation at `c90cf1e62`. Performance evidence is in the personal suite.
+implementation at `957b47c37`. Performance evidence is in the personal suite.
 Review markers in `plan.md` preserve the original baseline; this local completion
 check does not advance the independent Ralph review marker.
 
@@ -37,6 +37,8 @@ An explicit task deque holds pending work, so nesting does not grow the host
 call stack. Each argument is expanded at most once per invocation if ordinarily
 used; stringizing/pasting/unused arguments do not trigger unnecessary prescans.
 Replacement scratch stores only produced tokens and is reused between calls.
+Parameterless invocations consume their closing parenthesis directly: no raw
+argument buffer, delimiter index, or prescan is needed for that grammar form.
 
 Recursion suppression belongs to tokens. Persistent radix sets record ancestry;
 permanent unavailable paint survives parameter substitution. Function replacement

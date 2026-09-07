@@ -49,11 +49,15 @@ It checks equivalent output on every observation, records input/output/binary
 hashes, uses two A/A pairs, one B/B pair and two ABBA blocks, and measures one
 separate telemetry observation. All compiler wall-time and peak-RSS samples
 are preserved in [performance.md](performance.md). Host-tool text size is also
-recorded. PA4 produces tokens; generated-program runtime and text size do not
+recorded. `verify_performance.py REPORT.md [CANDIDATE]` recomputes all budgets
+from the saved observations and optionally checks the candidate binary hash.
+PA4 produces tokens; generated-program runtime and text size do not
 yet apply. These inputs exercise frontend work, not semantic template
 instantiation, native code, or self-hosting.
 
 The budgets were recorded in `pa4/plan.md` before the campaign. Reproduce using
-an isolated checkout of `28279a9d0` for A and `c90cf1e62` for B, with identical
+an isolated checkout of `28279a9d0` for A and `957b47c37` for final B, with identical
 ordinary flags and course-runner settings. Keep binaries outside the repository;
 no generated objects, diagnostic logs, or course `.my*` outputs are committed.
+The [initial campaign](performance-initial.md) preserves the earlier `c90cf1e62`
+candidate, including the helper-chain regression that motivated the final fix.

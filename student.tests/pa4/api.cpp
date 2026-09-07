@@ -24,6 +24,20 @@ int main(int argc, char** argv)
     assert(cursor.next().kind == cppgm::PostTokenKind::eof);
     {
         std::ofstream out(path.c_str());
+        out << "#define SUFFIX \"\"_custom\n#line 80 \"logical.cc\"\noperator SUFFIX\noperator \"\"_direct\n";
+    }
+    cppgm::Preprocessor suffixes(path, "Sep  7 2026", "12:00:00");
+    cppgm::PostTokenCursor suffix_cursor(suffixes, suffixes.identifiers());
+    for (std::size_t line = 80; line <= 81; ++line) {
+        assert(suffix_cursor.next().kind == cppgm::PostTokenKind::simple);
+        assert(suffix_cursor.next().kind == cppgm::PostTokenKind::literal);
+        cppgm::PostToken suffix = suffix_cursor.next();
+        assert(suffix.kind == cppgm::PostTokenKind::identifier);
+        assert(suffix.source.line == line);
+        assert(suffixes.identifiers().spelling(suffix.source.presumed_file).equals("logical.cc"));
+    }
+    {
+        std::ofstream out(path.c_str());
         out << "#define I(x) x\n";
         for (int i = 0; i < 20000; ++i) out << "I(";
         out << "42";

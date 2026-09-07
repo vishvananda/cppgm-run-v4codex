@@ -55,3 +55,9 @@ structured consumers, with no premature syntax or backend representation.
   chains regress 12.1–12.3% (within 10% + 2.43% noise but avoidable). Removed
   unnecessary capture/index creation for empty parameter lists; the final
   campaign will compare the resulting binary against the same functional A.
+- `957b47c37`: parameterless-chain fix passes all tests and all campaign budgets;
+  helper chains improve 6.4–6.7%, with nested gains preserved. The location audit
+  then found that post-token literal-operator suffix splitting used an unadjusted
+  line. A new API regression fails before the fix; suffix locations now follow
+  presumed lines and macro heads. Refreshing evidence for this final metadata
+  correction, including a literal-operator workload.

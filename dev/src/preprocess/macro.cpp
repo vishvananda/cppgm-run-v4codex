@@ -249,6 +249,10 @@ void MacroExpander::substitute(Invocation& invocation, const MacroDefinition& m)
                 e.token.presumed_file = head.filename;
                 e.token.begin = head.token.begin; e.token.end = head.token.end;
                 e.token.line = head.token.line; e.token.column = head.token.column;
+                if (e.token.suffix) {
+                    e.token.suffix_begin = head.token.begin;
+                    e.token.suffix_line = head.token.line; e.token.suffix_column = head.token.column;
+                }
                 e.filename = head.filename;
             }
             if (!p) e.space = t.space;
