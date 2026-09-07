@@ -9,6 +9,12 @@ ABBA blocks per workload, pinned to one allowed CPU without concurrent builds
 or tests. Retain every observation, report paired ratios and spread, external
 peak RSS and compiler text. Generated runtime/text is N/A: PA9 emits names.
 
+Also run a separate complete 96-observation comparison against the independently
+rebuilt first-correct `df7dbb00a` binary, using the same B and fixed inputs.
+This checks whole-stage latency/RSS budgets directly rather than combining
+ratios from separate historical runs. Retain the checkpoint comparison as the
+audit delta; do not pool the two experiments or select the more favorable one.
+
 Keep the existing wall (1.25x), RSS (1.20x + 16 MiB), fourfold wall (5.5x), work
 (4.5x), RSS (5x), and compiler text (+100 KiB) gates. Also retain the original
 100 KiB total text-growth budget relative to first-correct `df7dbb00a` (172418

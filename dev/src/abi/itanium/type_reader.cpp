@@ -1,4 +1,5 @@
 #include "abi/itanium/fact_reader.h"
+#include "abi/itanium/nesting.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -40,9 +41,9 @@ Id FactReader::compact(const std::string& word) {
             break;
         }
         if (split == rest.size()) throw std::runtime_error("missing member pointer operand");
-        if (++depth > 1024) throw std::runtime_error("ABI member pointer nesting limit exceeded");
+        Nesting nesting(depth);
         Id owner = compact(rest.substr(10, split - 10));
-        Id member = compact(rest.substr(split + 1)); --depth;
+        Id member = compact(rest.substr(split + 1));
         result = g.make(Kind::MemberPointer, owner, member);
     } else {
         for (std::size_t i = 0; i < rest.size(); ++i) {
@@ -66,6 +67,7 @@ Id FactReader::compact(const std::string& word) {
     return result;
 }
 Id FactReader::type(const Words& w, std::size_t& p) {
+    Nesting nesting(depth);
     std::string op = take(w, p);
     if (op == "name" || op == "named") return g.path(take(w, p));
     if (op == "template-param" || op == "template-param-subst" || op == "template-param-template") {
@@ -75,8 +77,7 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         return g.make(Kind::Template, param, 0, 0, 0, refs(w, p, BindingKind::Argument));
     }
     if (op == "ptr" || op == "ref" || op == "rref" || op == "const" || op == "volatile" || op == "pack") {
-        if (++depth > 1024) throw std::runtime_error("ABI type nesting limit exceeded");
-        Id child = type(w, p); --depth;
+        Id child = type(w, p);
         if (op == "const" || op == "volatile") return g.cv(child, op == "const" ? 1 : 2);
         Kind kind = op == "ptr" ? Kind::Pointer : op == "ref" ? Kind::Reference :
             op == "rref" ? Kind::RvalueReference : Kind::Pack;
@@ -89,8 +90,6 @@ Id FactReader::type(const Words& w, std::size_t& p) {
     if (op == "tagged") {
         Id child = type(w, p); std::vector<Id> tags;
         while (p < w.size()) tags.push_back(g.string(take(w, p)));
-        std::sort(tags.begin(), tags.end(), [this](Id a, Id b) { return g.spelling(a) < g.spelling(b); });
-        tags.erase(std::unique(tags.begin(), tags.end()), tags.end());
         return g.make(Kind::Tagged, child, 0, 0, 0, tags);
     }
     if (op == "template-name") {
@@ -120,10 +119,17 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         while (p < w.size()) types.push_back(type(w, p));
         return g.make(Kind::Transform, 0, name, 0, 0, types);
     }
-    if (op == "function-type" || op == "function-type-variadic") {
+    if (op == "function-type" || op == "function-type-variadic" || op == "function-type-qualified") {
+        unsigned qualifiers = 0;
+        bool variadic = op == "function-type-variadic";
+        if (op == "function-type-qualified") {
+            auto bits = index_value(take(w, p));
+            if (bits > 15) throw std::runtime_error("invalid function type qualifiers");
+            qualifiers = bits; variadic = boolean(take(w, p));
+        }
         Id result = type(w, p); std::vector<Id> params;
         while (p < w.size()) params.push_back(type(w, p));
-        return g.make(Kind::FunctionType, result, 0, op == "function-type-variadic", 0, params);
+        return g.make(Kind::FunctionType, result, qualifiers, variadic, 0, params);
     }
     if (op == "array-expression") {
         Id bound = reference(take(w, p), BindingKind::Expression); Id element = type(w, p);

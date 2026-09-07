@@ -6,11 +6,13 @@
 #include <stdexcept>
 
 using namespace abi_mangle;
+#include "check_final_api.h"
 static std::string read(const char* path) {
     std::ifstream in(path); if (!in) throw std::runtime_error("input open");
     std::ostringstream text; text << in.rdbuf(); return text.str();
 }
 static void api_checks() {
+    final_api_checks();
     Graph g;
     Id c = g.path("ns::C"), int_type = g.builtin(ABI_BUILTIN_TYPE_INT);
     assert(c == g.path("::ns::C"));

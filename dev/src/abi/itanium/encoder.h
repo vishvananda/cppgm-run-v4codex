@@ -1,16 +1,19 @@
 #pragma once
 #include "abi/itanium/graph.h"
+#include "abi/itanium/nesting.h"
 
 namespace abi_mangle {
 // One encoder owns the substitution sequence for one symbol. Flat sparse
 // slots are local to that symbol; external-name literals use a new encoder.
 class Encoder {
+    std::string owned_output;
 public:
     explicit Encoder(Graph& graph);
     std::string target(const Target& target);
     void function(const Function& function);
-    std::string output;
+    std::string& output;
 private:
+    Encoder(Graph& graph, std::string& destination, unsigned nesting);
     Graph& g;
     struct Substitution { Id key = 0, value = 0; };
     std::vector<Substitution> substitutions;

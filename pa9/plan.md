@@ -1,9 +1,14 @@
 # PA9 plan and ledger
 
-Target: **PA9 full-stage**; phase: **complete**.
+Target: **PA9 full-stage**; phase: **independent final audit**.
 Stage base commit: `affdafd23213da497d2946cae83df02d7a41ba7a`.
 Last reviewed commit: `affdafd23213da497d2946cae83df02d7a41ba7a`.
 These review markers remain unchanged for Ralph's independent review.
+Independent review has now reconstructed all PA9 sources and stage commits.
+Repairs cover graph publication, canonical literals/function facts, recursive
+grammar boundaries, external output ownership, local discriminators and full
+typed serialization. Expanded ordinary and sanitizer checks pass; final frozen
+benchmark runs and consolidation remain before the final exit audit.
 Entry: **2/117** reported; the default harness discovers **111** ABI fixtures.
 Final: **111/111 default**, **117/117 explicit**, **904/904 through PA9**.
 All six additional root fixtures were checked explicitly; coverage is unchanged.

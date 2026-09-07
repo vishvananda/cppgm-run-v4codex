@@ -8,6 +8,7 @@ p = argparse.ArgumentParser()
 p.add_argument('--sanitize', action='store_true')
 p.add_argument('--output', default='/tmp/pa9-evidence/check-api')
 a = p.parse_args()
+Path(a.output).parent.mkdir(parents=True, exist_ok=True)
 sources = sorted(str(x) for x in (ROOT / 'dev/src/abi/itanium').glob('*.cpp'))
 flags = ['-O1', '-g', '-fsanitize=address,undefined', '-fno-omit-frame-pointer', '-fno-pie', '-no-pie'] if a.sanitize else ['-O2']
 subprocess.run(['g++', '-std=c++11', '-Wall', *flags, '-I' + str(ROOT / 'dev/src'),

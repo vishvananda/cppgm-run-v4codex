@@ -73,7 +73,7 @@ std::string FactWriter::type(Id id) {
         if (prefix.kind == Kind::Name) {
             if (prefix.a) result = "member-template " + ref('t', prefix.a) + ' ' + g.spelling(prefix.b);
             else result = "template " + g.spelling(prefix.b);
-        } else if (prefix.kind == Kind::Parameter)
+        } else if (prefix.kind == Kind::Parameter && !prefix.b)
             result = "template-param-template " + std::to_string(prefix.value);
         else if (prefix.kind == Kind::Standard)
             result = std::string("std-template ") + abi_standard_substitution_code(
@@ -100,6 +100,8 @@ std::string FactWriter::type(Id id) {
     case Kind::Vector: return join_form({"vector ", std::to_string(n.value), " ", ref('t', n.a)});
     case Kind::Transform: return join_form({"builtin-transform ", g.spelling(n.b), list(n, 't')});
     case Kind::FunctionType:
+        if (n.b) return join_form({"function-type-qualified ", std::to_string(n.b),
+            (n.c ? " true " : " false "), ref('t', n.a), list(n, 't')});
         return join_form({std::string(n.c ? "function-type-variadic " : "function-type "), ref('t', n.a), list(n, 't')});
     case Kind::MemberPointer: return join_form({"member-pointer ", ref('t', n.a), " ", ref('t', n.b)});
     case Kind::Decltype: return join_form({"decltype ", ref('x', n.a)});
@@ -157,9 +159,7 @@ std::string FactWriter::qualifier_words(unsigned bits) {
 }
 std::string FactWriter::function(const Function& original) {
     Function f = original;
-    if (f.name && g[f.name].kind == Kind::Template) {
-        f.arguments = g.children(f.name); f.name = g[f.name].a; f.template_prefix = true;
-    }
+    f.name = function_shape(g, original, f.arguments, f.tags, f.template_prefix);
     std::string result;
     if (f.local_owner) {
         result = "local-owner " + ref('t', f.local_owner);
@@ -175,6 +175,7 @@ std::string FactWriter::function(const Function& original) {
     if (f.category != FunctionCategory::Inferred)
         result += f.category == FunctionCategory::Member ? " member-shape yes" : " member-shape no";
     if (f.template_prefix) result += " template-prefix";
+    if (f.context && !f.local_owner) result += " context " + ref('c', f.context);
     for (Id a : f.arguments) result += " argument " + ref('a', a);
     for (Id p : f.parameters) result += " param " + ref('t', p);
     if (f.result) result += " result " + ref('t', f.result);
@@ -211,7 +212,8 @@ std::string FactWriter::write(const Target& t) {
     case TargetKind::ConstructionVtable: result = "construction-vtable " + ref('t', t.type) + ' ' + std::to_string(t.this_adjust) + ' ' + ref('t', t.base); break;
     case TargetKind::TlsWrapper: result = "tls-wrapper-type " + ref('t', t.type); break;
     case TargetKind::VirtualThunk:
-        result = "virtual-base-thunk " + std::to_string(t.vcall_offset) + " function " + function(t.function); break;
+        result = "virtual-base-thunk " + std::to_string(t.vcall_offset) +
+            " this-adjust " + std::to_string(t.this_adjust) + " function " + function(t.function); break;
     case TargetKind::Thunk:
         result = "thunk " + std::to_string(t.this_adjust);
         if (t.has_result_adjust) {

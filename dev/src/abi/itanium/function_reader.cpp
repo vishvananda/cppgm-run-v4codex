@@ -48,6 +48,7 @@ Function FactReader::function(const Words& w, std::size_t& p) {
         else if (w[p] == "tag") { ++p; f.tags.push_back(g.string(take(w, p))); }
         else if (w[p] == "c-linkage") { ++p; f.c_linkage = true; }
         else if (w[p] == "result") { ++p; f.result = type(w, p); }
+        else if (w[p] == "context") { ++p; f.context = reference(take(w, p), BindingKind::Context); }
         else if (lookup(w[p]).kind == BindingKind::Argument) {
             f.arguments.push_back(reference(take(w, p), BindingKind::Argument)); f.template_prefix = true;
         } else f.parameters.push_back(type(w, p));
@@ -80,7 +81,11 @@ void FactReader::target_record(const Words& w) {
         auto adjust = static_cast<std::int64_t>(integral_value(take(w, p)));
         if (op == "virtual-base-thunk") target.vcall_offset = adjust;
         else target.this_adjust = adjust;
+        if (op == "virtual-base-thunk" && p < w.size() && w[p] == "this-adjust") {
+            ++p; target.this_adjust = integral_value(take(w, p));
+        }
         if (p < w.size() && w[p] != "function") {
+            if (op == "virtual-base-thunk") throw std::runtime_error("unexpected virtual thunk adjustment");
             target.has_result_adjust = true;
             if (w[p] == "virtual-result") { target.virtual_result = true; ++p; }
             target.result_adjust = integral_value(take(w, p));

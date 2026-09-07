@@ -10,15 +10,6 @@ Id FactReader::argument(const Words& w, std::size_t& p) {
         Id dependent = 0;
         if (op == "dependent-value") dependent = type(w, p);
         Id value_type = type(w, p); auto value = integral_value(take(w, p));
-        if (g[value_type].kind == Kind::Builtin) {
-            switch (static_cast<AbiBuiltinTypeKind>(g[value_type].a)) {
-            case ABI_BUILTIN_TYPE_BOOL: value = value != 0; break;
-            case ABI_BUILTIN_TYPE_UNSIGNED_CHAR: value &= 255; break;
-            case ABI_BUILTIN_TYPE_UNSIGNED_SHORT: value &= 65535; break;
-            case ABI_BUILTIN_TYPE_UNSIGNED_INT: value &= 0xffffffffull; break;
-            default: break;
-            }
-        }
         Id literal = g.make(Kind::Value, value_type, 0, 0, value);
         return dependent ? g.make(Kind::DependentValue, dependent, literal) : literal;
     }

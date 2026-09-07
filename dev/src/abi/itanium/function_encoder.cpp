@@ -3,15 +3,13 @@
 
 namespace abi_mangle {
 void Encoder::function(const Function& f) {
+    Nesting nesting(depth);
     if ((f.qualifiers & 12) == 12) throw std::runtime_error("conflicting ref qualifiers");
-    Id name = f.name;
-    std::vector<Id> arguments = f.arguments;
-    bool template_prefix = f.template_prefix;
-    if (name && g[name].kind == Kind::Template) {
-        if (!arguments.empty()) throw std::runtime_error("two function template argument lists");
-        arguments = g.children(name); name = g[name].a; template_prefix = true;
-    }
+    std::vector<Id> arguments, function_tags;
+    bool template_prefix;
+    Id name = function_shape(g, f, arguments, function_tags, template_prefix);
     if (!name && !f.local_owner) throw std::runtime_error("missing function name");
+    if (name && g[name].kind != Kind::Name) throw std::runtime_error("invalid function name");
     if (f.c_linkage) { output += g.spelling(g[name].b); return; }
     Id owner = name ? g[name].a : 0;
     if (f.context) context(f.context);
@@ -27,11 +25,11 @@ void Encoder::function(const Function& f) {
         if (f.terminal == ABI_TERMINAL_LITERAL) source(f.literal_suffix);
     } else if (name) source(g[name].b);
     else throw std::runtime_error("missing local function terminal");
-    tags(f.tags);
+    tags(function_tags);
     if (!arguments.empty()) {
         if (template_prefix) {
             Id key = name;
-            if (!f.tags.empty()) key = g.make(Kind::Tagged, name, 0, 0, 0, f.tags);
+            if (!function_tags.empty()) key = g.make(Kind::Tagged, name, 0, 0, 0, function_tags);
             enter(key);
         }
         output += 'I';
@@ -93,8 +91,8 @@ void Encoder::external(Id id) {
     // An external-name literal has its own substitution grammar state. Reusing
     // the outer sequence here would change both the symbol and later indices.
     if (n.kind == Kind::SymbolEntity) { output += g.spelling(n.a); return; }
-    Encoder isolated(g);
-    isolated.output = "_Z";
+    Encoder isolated(g, output, depth);
+    isolated.output += "_Z";
     if (n.kind == Kind::FunctionEntity) isolated.function(entity_function(g, id));
     else if (n.kind == Kind::VariableEntity) {
         const Node name = g[n.a];
@@ -105,6 +103,5 @@ void Encoder::external(Id id) {
         isolated.source(name.b);
         if (nest) isolated.output += 'E';
     } else throw std::runtime_error("invalid external ABI entity");
-    output += isolated.output;
 }
 } // namespace abi_mangle

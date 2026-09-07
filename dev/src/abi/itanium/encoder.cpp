@@ -3,10 +3,12 @@
 #include <stdexcept>
 
 namespace abi_mangle {
-Encoder::Encoder(Graph& graph) : g(graph), substitutions(16) {}
+Encoder::Encoder(Graph& graph) : output(owned_output), g(graph), substitutions(16) {}
+Encoder::Encoder(Graph& graph, std::string& destination, unsigned nesting)
+    : output(destination), g(graph), substitutions(16), depth(nesting) {}
 void Encoder::source(Id name) {
-    const std::string text = g.spelling(name);
-    output += std::to_string(text.size()); output += text;
+    const auto text = g.text(name);
+    output += std::to_string(text.size); output.append(text.data, text.size);
 }
 void Encoder::parameter(std::uint64_t index) {
     output += 'T';
@@ -22,10 +24,7 @@ void Encoder::qualifiers(unsigned bits) {
 }
 void Encoder::tags(const std::vector<Id>& input) {
     std::vector<Id> ordered(input);
-    std::sort(ordered.begin(), ordered.end(), [this](Id a, Id b) {
-        return g.spelling(a) < g.spelling(b);
-    });
-    ordered.erase(std::unique(ordered.begin(), ordered.end()), ordered.end());
+    g.canonical_tags(ordered);
     for (Id tag : ordered) { output += 'B'; source(tag); }
 }
 void Encoder::integer(std::uint64_t bits, bool negative) {
@@ -80,9 +79,11 @@ bool Encoder::candidate(Id id) const {
         !(n.kind == Kind::Parameter && !n.b) && !standard_namespace(id);
 }
 bool Encoder::nested(Id id) const {
+    // Prefix wrappers do not require recursive lookahead before the guarded
+    // encoder walk. Graph construction ensures all edges point backwards.
+    while (g[id].kind == Kind::Template || g[id].kind == Kind::Tagged) id = g[id].a;
     const Node& n = g[id];
     if (n.kind == Kind::Name) return n.a && !standard_namespace(n.a);
-    if (n.kind == Kind::Template || n.kind == Kind::Tagged) return nested(n.a);
     return false;
 }
 void Encoder::args(const Node& n) {
@@ -93,7 +94,7 @@ void Encoder::args(const Node& n) {
 void Encoder::prefix(Id id, bool register_self) {
     const Node n = g[id];
     if (candidate(id) && use(id)) return;
-    if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
+    Nesting nesting(depth);
     ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::Name:
@@ -117,7 +118,6 @@ void Encoder::prefix(Id id, bool register_self) {
     default: type(id); register_self = false; break;
     }
     if (register_self) enter(id);
-    --depth;
 }
 bool Encoder::modifier(const Node& n) {
     switch (n.kind) {
@@ -149,7 +149,7 @@ void Encoder::type(Id id) {
         wrappers.push_back(id); id = n.a;
     }
     const Node n = g[id];
-    if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
+    Nesting nesting(depth);
     switch (n.kind) {
     case Kind::Name: case Kind::Template: case Kind::Tagged: case Kind::Standard:
         if (nested(id)) output += 'N';
@@ -164,10 +164,11 @@ void Encoder::type(Id id) {
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
         output += 'E'; break;
     case Kind::FunctionType:
-        qualifiers(n.b); output += 'F'; type(n.a);
+        qualifiers(n.b & 3); output += 'F'; type(n.a);
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
         if (!n.count && !n.c) output += 'v';
         if (n.c) output += 'z';
+        qualifiers(n.b & 12);
         output += 'E'; break;
     case Kind::MemberPointer: output += 'M'; type(n.a); type(n.b); break;
     case Kind::Decltype: output += "DT"; expression(n.a); output += 'E'; break;
@@ -175,7 +176,7 @@ void Encoder::type(Id id) {
         context(n.a); local_component(id); break;
     default: throw std::runtime_error("fact is not an ABI type");
     }
-    enter(id); --depth;
+    enter(id);
     for (auto i = wrappers.rbegin(); i != wrappers.rend(); ++i) enter(*i);
 }
 void Encoder::context(Id id) {
@@ -186,7 +187,11 @@ void Encoder::local_component(Id id) {
     const Node n = g[id];
     if (n.kind == Kind::Local) {
         source(n.b);
-        if (n.value) output += '_' + std::to_string(n.value - 1);
+        if (n.value) {
+            output += n.value > 10 ? "__" : "_";
+            output += std::to_string(n.value - 1);
+            if (n.value > 10) output += '_';
+        }
     } else {
         output += "Ul";
         if (!n.count) output += 'v';

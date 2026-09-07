@@ -17,11 +17,16 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 p = argparse.ArgumentParser()
 p.add_argument('--baseline', required=True)
+p.add_argument('--baseline-commit', default='df7dbb00a')
 p.add_argument('--candidate', default=str(ROOT / 'dev/abimangle'))
 p.add_argument('--directory', default='/tmp/pa9-evidence/performance')
 p.add_argument('--report', default=str(ROOT / 'student.tests/pa9/performance.json'))
 a = p.parse_args()
 work = Path(a.directory); work.mkdir(parents=True, exist_ok=True)
+if (work / 'protocol.json').exists():
+    raise SystemExit('use a fresh directory to preserve frozen observations')
+run_state = subprocess.run(['git', 'diff', '--quiet', 'HEAD', '--', 'dev'], cwd=ROOT)
+assert run_state.returncode == 0, 'commit implementation before freezing B'
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def run(command, **kw): return subprocess.run(command, check=True, **kw)
 def text_size(path):
@@ -43,7 +48,9 @@ budgets = dict(wall_ratio=1.25, rss_ratio=1.20, rss_slack_kib=16384,
 report = dict(protocol='AAAA, ABBA, ABBA; paired block means and min/max spread',
               cpu=cpu, platform=platform.platform(), flags='-std=gnu++11 -Wall -O3',
               host_compiler=subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
-              baseline_commit='df7dbb00a', candidate_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+              baseline_commit=a.baseline_commit, candidate_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+              source_trees={label: subprocess.check_output(['git', 'rev-parse', rev + ':dev'], cwd=ROOT, text=True).strip()
+                            for label, rev in [('A', a.baseline_commit), ('B', 'HEAD')]},
               binaries=binaries, budgets=budgets, generated_program_runtime=None,
               generated_program_text_size=None, executable_boundary='PA9 emits ABI names only', workloads={}, observations=[])
 (work / 'protocol.json').write_text(json.dumps(report, indent=2) + '\n')
@@ -89,9 +96,11 @@ for kind, n in sizes.items():
                 result = run(['/usr/bin/time', '-f', '%M', '-o', str(rss), binaries[label]['path'],
                               '-o', str(output), str(path)], capture_output=True)
                 wall = (time.perf_counter_ns() - start) / 1e9
-                assert sha(output) == outputs[label]
+                output_digest = sha(output)
+                assert output_digest == outputs[label]
                 report['observations'].append(dict(workload=name, block=block, position=position,
-                    binary=label, wall_seconds=wall, peak_rss_kib=int(rss.read_text()), exit_code=result.returncode))
+                    binary=label, wall_seconds=wall, peak_rss_kib=int(rss.read_text()), exit_code=result.returncode,
+                    output_sha256=output_digest))
         print('measured', name, flush=True)
         Path(a.report).write_text(json.dumps(report, indent=2) + '\n')
 
@@ -123,6 +132,7 @@ for kind in sizes:
         c1, c4 = (report['workloads'][kind + '-' + str(scale)]['counters'][counter] for scale in (1, 4))
         report['budget_checks'][kind + '-' + counter + '-scale'] = c4 <= c1 * budgets['scale_work_ratio']
 report['budget_checks']['compiler-text-growth'] = binaries['B']['compiler_text_bytes'] - binaries['A']['compiler_text_bytes'] <= budgets['compiler_text_growth_bytes']
+report['budget_checks']['total-stage-text-growth'] = binaries['B']['compiler_text_bytes'] - 172418 <= budgets['compiler_text_growth_bytes']
 Path(a.report).write_text(json.dumps(report, indent=2) + '\n')
 failed = [k for k,v in report['budget_checks'].items() if not v]
 print('budget failures:', failed)

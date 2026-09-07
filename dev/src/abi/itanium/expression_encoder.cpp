@@ -40,7 +40,7 @@ void Encoder::literal(const Node& n) {
 }
 void Encoder::argument(Id id) {
     const Node n = g[id];
-    if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
+    Nesting nesting(depth);
     ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::TypeArgument: type(n.a); break;
@@ -70,11 +70,10 @@ void Encoder::argument(Id id) {
         break;
     default: throw std::runtime_error("fact is not an ABI argument");
     }
-    --depth;
 }
 void Encoder::expression(Id id) {
     const Node n = g[id];
-    if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
+    Nesting nesting(depth);
     ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::ExprParameter: parameter(n.value); break;
@@ -115,6 +114,5 @@ void Encoder::expression(Id id) {
         output += 'L'; external(n.a); output += 'E'; break;
     default: throw std::runtime_error("fact is not an ABI expression");
     }
-    --depth;
 }
 } // namespace abi_mangle

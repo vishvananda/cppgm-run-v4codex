@@ -36,7 +36,9 @@ class Graph {
 public:
     Graph();
     Id string(const std::string& text);
+    cppgm::TextView text(Id name) const;
     std::string spelling(Id name) const;
+    void canonical_tags(std::vector<Id>& tags) const;
     Id make(Kind kind, Id a = 0, Id b = 0, Id c = 0,
             std::uint64_t value = 0, const std::vector<Id>& children = {});
     Id name(Id parent, const std::string& source);
@@ -55,6 +57,7 @@ private:
     std::vector<Id> edges_, slots_;
     std::vector<std::uint64_t> hashes_;
     void grow();
+    void validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& children) const;
 };
 
 // These are per-symbol construction records, not a second semantic tree.
@@ -88,5 +91,7 @@ struct Target {
 // Store a complete function's immutable shape as one canonical graph node.
 Id function_entity(Graph& graph, const Function& function);
 Function entity_function(const Graph& graph, Id entity);
+Id function_shape(const Graph& graph, const Function& function,
+    std::vector<Id>& arguments, std::vector<Id>& tags, bool& template_prefix);
 std::string mangle(Graph& graph, const Target& target);
 } // namespace abi_mangle
