@@ -59,9 +59,10 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
     if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment);
     if (t.kind == TypeKind::Named && entities[t.entity].complete) {
         EntityId e = t.entity;
-        if (entities[e].layout_state == 1) throw std::runtime_error("recursive class layout");
-        if (entities[e].layout_state != 2) {
-            entities[e].layout_state = 1;
+        std::uint32_t layout = entities[e].class_info;
+        if (class_facts[layout].layout_state == 1) throw std::runtime_error("recursive class layout");
+        if (class_facts[layout].layout_state != 2) {
+            class_facts[layout].layout_state = 1;
             std::uint64_t bytes = 0, align = 1;
             for (std::uint32_t d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
                 const Entity member = entities[declarations[d].entity];
@@ -74,11 +75,11 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
                 if (entities[e].key == KW_UNION) bytes = std::max(bytes, field_size);
                 else bytes = (bytes + field_align - 1) / field_align * field_align + field_size;
             }
-            entities[e].alignment = align;
-            entities[e].size = bytes ? (bytes + align - 1) / align * align : 1;
-            entities[e].layout_state = 2;
+            class_facts[layout].alignment = align;
+            class_facts[layout].size = bytes ? (bytes + align - 1) / align * align : 1;
+            class_facts[layout].layout_state = 2;
         }
-        return alignment ? entities[e].alignment : entities[e].size;
+        return alignment ? class_facts[layout].alignment : class_facts[layout].size;
     }
     throw std::runtime_error("sizeof unsupported or incomplete type");
 }

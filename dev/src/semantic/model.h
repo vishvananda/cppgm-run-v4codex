@@ -55,25 +55,30 @@ public:
 enum class EntityKind : unsigned char { Type, Alias, Namespace, NamespaceAlias, Variable, Function, Parameter, Enumerator };
 enum class ScopeKind : unsigned char { Namespace, Class, Enum, Template, Function, Block };
 struct Constant {
-    TypeId type = 0;
     std::uint64_t bits = 0;
+    TypeId type = 0;
     bool valid = false;
     Constant() {}
-    Constant(TypeId t, std::uint64_t b) : type(t), bits(b), valid(true) {}
+    Constant(TypeId t, std::uint64_t b) : bits(b), type(t), valid(true) {}
+};
+// Rare class demand state has a separate arena; ordinary bindings do not pay
+// for constructors and layout. The stable index belongs to the class entity.
+struct ClassFacts {
+    std::uint64_t size = 0, alignment = 0;
+    EntityId constructor = 0;
+    ScopeId default_constructor = 0;
+    unsigned char layout_state = 0;
 };
 struct Entity {
     EntityKind kind = EntityKind::Variable;
+    ETokenType key = TOK_INVALID;
+    bool complete = false, scoped = false, template_parameter = false, is_static = false;
     IdentifierId name = 0;
-    ScopeId owner = 0, scope = 0, default_constructor = 0;
-    EntityId constructor = 0;
-    std::uint64_t size = 0, alignment = 0;
-    unsigned char layout_state = 0;
-    bool is_static = false;
+    ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0;
     TypeId type = 0, underlying = 0;
-    ETokenType key = TOK_INVALID;
+    std::uint32_t class_info = 0;
     Constant constant;
-    bool complete = false, scoped = false, template_parameter = false;
 };
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;

@@ -23,6 +23,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
+        entities[e].class_info = class_facts.size();
+        class_facts.push_back(ClassFacts());
         entities[e].key = key_op;
         entities[e].type = types.named(e);
         entities[e].scope = make_scope(ScopeKind::Class, owner, id, e, false);

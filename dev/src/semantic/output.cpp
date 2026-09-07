@@ -110,6 +110,8 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_entity_bytes\":" << sizeof(Entity)
+        << ",\"semantic_class_facts\":" << class_facts.size() - 1
         << ",\"semantic_constants\":" << constants.size() - 2
         << ",\"semantic_types\":" << types.records.size() - 1
         << ",\"semantic_entities\":" << entities.size() - 1

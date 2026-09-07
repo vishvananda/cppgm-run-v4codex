@@ -152,7 +152,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id;
     EntityId cls = constructor ? scopes[owner].entity : 0;
-    EntityId e = constructor ? entities[cls].constructor : local(owner, id);
+    EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
     if (alias && e && entities[e].kind == EntityKind::Alias) {
         if (entities[e].type != t) throw std::runtime_error("conflicting type alias");
     } else if (e && entities[e].kind == kind && kind != EntityKind::Alias) {
@@ -160,7 +160,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     } else {
         e = make_entity(kind, owner, id, source);
         entities[e].type = function ? types.signature(t) : t;
-        if (constructor) entities[cls].constructor = e;
+        if (constructor) class_facts[entities[cls].class_info].constructor = e;
         else bind(owner, id, e);
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);

@@ -57,5 +57,16 @@ No optimization benefit is claimed without the complete evidence protocol.
   both identity/lifetime APIs and all 105 course cases pass the final isolated
   ASan/UBSan/leak build. Definition and body-scope identities are retained.
   File audit passes 71 files.
-- Remaining: final frozen performance evidence.
+- Frozen `3f6de92f5` campaign: all output/protocol/latency/text checks hold,
+  but largest template RSS is ~20% above the first PA6 binary, exceeding the
+  unchanged 15% +1 MiB budget. Retain every observation in
+  `student.tests/pa6/pre-compact-performance.json`.
+- Class-only demand state now lives in a separate indexed arena; packed common
+  entity and constant records preserve all facts without making every binding
+  carry layout/constructor state. No budget was relaxed for this correction.
+- Compact records: Entity 96 ->56 bytes, Constant 24 ->16 bytes; class-only
+  state is one 32-byte record per class. Fresh 105/105, 498/498, 33 personal
+  checks, both APIs and all course fixtures pass ASan/UBSan/leak checks;
+  file audit remains green.
+- Remaining: final frozen timing rerun.
 - Handoff reason: work ongoing; initial plan is not a stopping boundary.

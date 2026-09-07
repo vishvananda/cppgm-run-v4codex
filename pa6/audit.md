@@ -65,6 +65,8 @@ Template parameter environments are parent-linked scopes. A template body is
 parsed once and retained; template-template inner parameters are not exported.
 No instantiation cache or invented specialization semantics is present.
 
+Class-only constructor/layout demand state lives in a separate indexed arena.
+The common entity record and inline constant payload are packed.
 Persistent records use geometrically growing flat vectors; variable function
 children use one parameter arena. Temporary suffix/parameter/lookup work vectors
 have lexical lifetimes. The graph, type/fact arenas, sources, lookup scratch,

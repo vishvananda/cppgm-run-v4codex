@@ -6,7 +6,7 @@ using syntax::Kind;
 Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers) : ast(tree), ids(identifiers)
 {
     entities.push_back(Entity()); scopes.push_back(Scope()); declarations.push_back(Declaration());
-    edges.push_back(Edge()); visited.push_back(0); constants.resize(2);
+    edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1);
     global = make_scope(ScopeKind::Namespace, 0);
 }
 std::uint64_t Analyzer::key(ScopeId s, IdentifierId n) const { return (std::uint64_t(s) << 32) | n; }

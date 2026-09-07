@@ -23,6 +23,7 @@ private:
     IdentifierTable& ids;
     Index ordinary, tags, namespaces, qualifiers;
     std::vector<Constant> constants;
+    std::vector<ClassFacts> class_facts;
     double analysis_ms = 0;
     std::vector<Edge> edges;
     std::vector<std::uint64_t> visited;

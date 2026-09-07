@@ -190,9 +190,9 @@ void Analyzer::statements(NodeId n, ScopeId s)
                 if (types[t].kind == TypeKind::Named && entities[types[t].entity].key != KW_ENUM) {
                     EntityId cls = types[t].entity;
                     ScopeId cs = entities[cls].scope;
-                    EntityId ctor = entities[cls].constructor;
-                    if (!ctor && !entities[cls].default_constructor)
-                        entities[cls].default_constructor = make_scope(ScopeKind::Function, cs, entities[cls].name);
+                    EntityId ctor = class_facts[entities[cls].class_info].constructor;
+                    if (!ctor && !class_facts[entities[cls].class_info].default_constructor)
+                        class_facts[entities[cls].class_info].default_constructor = make_scope(ScopeKind::Function, cs, entities[cls].name);
                 }
             }
         }

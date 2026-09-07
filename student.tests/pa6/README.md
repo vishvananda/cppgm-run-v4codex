@@ -46,4 +46,7 @@ checks protocol completeness, output equivalence, startup separation, paired
 latency/RSS limits and fourfold scaling. `superseded-performance.json` retains
 an interrupted earlier campaign: a declaration-point correctness finding caused
 an explicit stop, so those observations support no final-binary claim.
+`pre-compact-performance.json` retains the complete earlier campaign that
+failed the largest template RSS budget. Its binary is identified by source
+revision and hash; final claims use the new complete campaign.
 Generated executable runtime/text and self-hosting are N/A for PA6.
