@@ -1,7 +1,7 @@
 # PA5 compiler performance evidence
 
 Baseline A is full-behavior commit `262b0b61f`, already passing 188/188.
-Final B includes delimiter/angle indexes, cached lexical hints, compact shared
+Final B is source commit `b19de66e0`, including delimiter/angle indexes, cached lexical hints, compact shared
 physical/presumed locations and retained user-literal payloads. Both binaries
 were frozen before this campaign; flags, toolchain, kernel, hashes and every
 observation are in [performance.json](../student.tests/pa5/performance.json).

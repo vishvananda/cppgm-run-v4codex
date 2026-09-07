@@ -1,64 +1,57 @@
-# PA5 implementation plan
+# PA5 final plan and handoff ledger
 
 Stage base commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
 Last reviewed commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
-Target: **PA5 full-stage**. Phase: **implement**. Entry: **0/188**, 188 failures.
+Target: **PA5 full-stage**. Phase: **complete**. Entry **0/188**; final **188/188**.
+Review markers are preserved for the independent Ralph review.
 
-## Design and remaining groups
+## Design/spec alignment
 
-| Owner | Data flow and scope | Complexity / validation |
+| Owner | Data flow and ownership | Complexity / validation |
 | --- | --- | --- |
-| Syntax storage/cursor | PA4 streaming PP → PA2 post tokens → compact syntax cursor → TU arena nodes; source locations and interned IDs survive; dump is a view | Linear token/node work; bounded ambiguity checkpoints, no copied streams; API ownership and full AST fixtures |
-| Declarations/declarators | Type specifiers, pointer/array/function shapes, initializers and functions on the same graph | Parse common prefixes once; spec 100 and declaration general cases |
-| Expressions/statements | Precedence, calls/casts/new/lambda, control flow and exception syntax | Linear syntax construction; expression and statement fixtures plus personal precedence checks |
-| Syntactic names/templates | Scope-indexed type/value/template categories, namespaces/classes/enums, template syntax, angle and declaration ambiguity | Compact identities and lexical fallback only for unknown names; spec 200/300 and related general fixtures |
-| Driver/rendering | Separate TU owners in command-line order, deterministic AST view and real failure exits | Full `make test-pa5`, through report, file audit |
+| Source/cursor | PA4 streaming PP → PA2 post cursor → deferred-token ring; immutable TU sources and interned IDs; physical/presumed locations and decoded literal payloads retained | One delimiter-index visit per token; API lifetime/location/literal checks |
+| Syntax graph | One 32-byte node array with stable IDs, structured names/type-ids/template arguments and direct child links; dump is a separate view | Geometric TU arenas; no cloned token/AST streams or per-node ownership; all grammar regions parsed once |
+| Declarations/statements/expressions | Shared specifier/declarator prefixes, precedence, classes/enums/namespaces/templates, control flow and special members | All 188 unchanged course cases; 25 personal cases plus graph API checks |
+| Categories/prediction | Flat `(ScopeId, IdentifierId)` facts; explicit using/base edges; template parameter kinds override hints; class-wide category lookahead | Relevant scopes only; indexed angle/delimiter facts and once-per-ID lexical hints; no semantic-answer cache or global invalidation |
+| Driver/rendering | Separate TU ownership in operand order; deterministic syntax view and ordinary failure exits | Full stage/through reports; output-equivalent frozen benchmark binaries |
 
-No semantic graph copy, serialized interphase transport, host/reference delegation,
-or per-node owning pointers. Later canonical semantic facts attach to these IDs;
-template bodies remain parsed nodes. No later semantic/backend surface is claimed.
+[Architecture audit](audit.md) traces a template declaration, source locations,
+allocation/release, lookup, parsing and view separation. Later semantic demand,
+LowIR/MIR, ELF, executable optimization and self-hosting have no PA5 surface;
+none is claimed here. **Remaining behavior groups: none.**
 
-## Performance evidence
+## Performance evidence and budgets
 
-Record compiler latency/peak RSS, work counters and node/token growth on fixed
-personal declaration, expression and template workloads. Generated runtime/text
-are N/A at PA5. No optimization benefit claimed without frozen A/B, A/A and ABBA
-observations and equivalent output. Initial scaling budget: 4x source <6x latency
-and <5x RSS (plus 1 MiB startup); syntax work linear in consumed/produced nodes.
+[Final evidence](performance.md): A `262b0b61f` vs B `b19de66e0`; frozen binaries,
+flags and inputs; two A/A pairs, B/B and two ABBA blocks per input. Final campaign
+retains **168 observations +8 startup probes**; the first indexed campaign retains
+another 140 +8. Every compared output is identical. The verifier recomputes
+protocol, actual final binary/input hashes, paired gains/spread, budgets and work.
 
-## Validation and handoff ledger
+Budgets fixed before optimization: ≤10% wall regression plus A/A noise,
+≤15% RSS growth +1 MiB, ≤15% host text growth; 4x input/depth <6x wall / <5x RSS
++1 MiB. All pass. Nested input: 5.612879 → 0.135206 s at the larger size;
+paired gains 97.59% in both blocks; RSS 14814 → 15174 KiB. Smaller nested input
+improves 90.04–90.09%. Fourfold depth has 3.501x B wall growth; angle work
+25520 → 102320 tracks tokens 25851 → 102651. Declaration/expression regressions
+are disclosed (about 1–3%); procedural results are inconclusive. Host compiler
+text 200070 → 203718 bytes (+1.82%). Generated runtime/text: **N/A**.
 
-- Entry inspected: clean HEAD above; prior report 205/205; PA5 0/188 because
-  `--emit-ast` is unimplemented; prior file audit passes. No previous PA5 goal
-  turn with work is present; this is the first implementation entry.
-- Remaining: every implementation group above; no handoff boundary yet.
-- Required final checks: `make test-pa5`, `make test-report-through-pa5`,
-  `perl scripts/cppgm_file_audit.pl --stage pa5 --paths dev/src`, personal tests,
-  clean committed worktree. Preserve review markers during implementation.
-- Core increment: streaming ring cursor, flat AST/name storage, structured names
-  and template arguments, declarations/declarators, expressions/statements,
-  classes/enums/templates and AST driver. Full PA5 **131/188** (57 failures);
-  personal core 10/10; file audit 61 files; whitespace check passes.
-  Remaining shared owners: qualified-name/context prediction; special members;
-  dependent template argument expressions; class-wide category availability;
-  exception/declarator suffixes and presentation details. Continuing work.
-- Full behavior increment: scoped qualified-name/category prediction, aliases
-  and using edges, complete-class nested-name lookahead, special members,
-  parameter/direct-initializer preference, dependent arguments, exception and
-  member-pointer syntax. PA5 **188/188**; prior PA1–4 **205/205**; personal core
-  10/10; file audit 62 files. No fixture or harness changes. Final architecture,
-  sanitizer and performance audits remain before completion.
+## Validation and ledger
 
-Final performance campaign budgets (fixed before measurement/optimization):
-paired frontend+dump wall time <=10% regression plus measured A/A noise; peak RSS
-<=15% +1 MiB; host compiler text growth <=15%. Nested/deferred syntax work must
-scale linearly in tokens; 4x source <6x wall / <5x RSS +1 MiB. Measure frozen
-full-behavior A against final B with A/A calibration, two ABBA blocks, all raw
-observations and output hashes. No executable runtime/text exists at PA5.
-- Final architecture/performance increment: bounded delimiter/angle indexes;
-  once-per-identifier lexical hints; 32-byte AST nodes with shared physical and
-  presumed location records; retained user-literal suffix/prefix payloads.
-  PA5 188/188, fresh through PA5 393/393, file audit 62 files, personal 25 cases
-  plus API checks, ASan/UBSan/leak checks on API/extended/all 188 fixtures pass.
-  Final frozen A/B campaign: 168 observations +8 startup; all budgets pass.
-  Full scope is complete; no remaining behavior group or incomplete handoff.
+- `e3953bf8f`: baseline and review markers recorded before implementation.
+- `a0adc0d0b`: streaming graph/parser/driver foundation, **131/188**, core 10/10.
+- `262b0b61f`: all scoped syntax behavior groups, **188/188**; frozen A baseline.
+- `b19de66e0`: linear prediction indexes, shared source records, user-literal
+  payloads and lexical-hint cache; final source, tests, audit and raw evidence.
+- Final `make test-pa5`: **188/188**. Earlier PA1–4: **205/205**.
+  Fresh `make test-report-through-pa5`: **393/393**, all five stages pass.
+- File audit: **62 files pass**. Core 10/10, extended 15/15, and C++ API checks
+  pass. ASan/UBSan with leak detection passes API, extended and all 188 unchanged
+  course fixtures. The performance/hash verifier and whitespace checks pass.
+- No fixture, reference, harness, timeout, discovery, comparator or coverage
+  changes. New implementation sources are registered. Generated binaries,
+  objects, AST outputs and logs stay outside committed changes.
+- Handoff reason: **full-stage completion**; no incomplete behavior group,
+  deferred related fix or pending required check. Intended changes are committed;
+  final status is clean. Independent review markers intentionally remain intact.
