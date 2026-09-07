@@ -1,72 +1,59 @@
-# PA6 implementation plan
+# PA6 completion plan and ledger
 
-Target: **PA6 full-stage**. Phase: **implement**. Entry: **0/105**. Current: **105/105**, through **498/498**.
+Target: **PA6 full-stage**. Phase: **complete**.
+Entry: **0/105**. Final: **105/105**; PA1–6 through: **498/498**.
 Stage base commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
 Last reviewed commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
-Preserve both review markers during implementation.
+Both review markers are preserved for the external review process.
 
-## Design / remaining behavior groups
+## Design / spec alignment
 
-| Owner | Data flow and spec alignment | Complexity / validation |
+| Owner | Data flow and invariant | Complexity / evidence |
 | --- | --- | --- |
-| Semantic graph / driver | Streaming PA1–5 cursor -> single source-faithful graph; semantic facts attach to NodeId; TU-owned flat storage and canonical IDs; deterministic view only | One analysis per declaration; independent TU lifetime; PA5 + PA6 100 groups |
-| Types / declarators | Intern structural types by typed keys; preserve source parameter types separately from adjusted signatures; array completion and alias reference collapse | Expected constant-time interning, linear declarator traversal; PA6 composed/array/function groups + API probes |
-| Scopes / lookup | Interned-name indexes, explicit namespace/using edges, lexical parents and qualified scopes; entities separate from source declarations | Work proportional to relevant scope edges; no global invalidation; namespace/using/shadowing groups |
-| Class / enum / constants | Deferred member bodies consume completed class facts; small typed integral evaluator consumes parsed nodes and literal payloads | Demand only required constants; short circuit; class/template/enum/constant/rejection groups |
+| Graph / driver | Streaming PA1–5 cursor -> one source-faithful graph; semantic facts attach to NodeId; independent TU ownership; output is a view | Each declaration parsed/analyzed once; all course suites and lifetime APIs |
+| Types / declarations | Structural canonical IDs, source parameters separate from adjusted signatures; array completion preserves aliases; definitions retain source/scope identity | Flat interning, completed signature caches; composed/array/reference/function contracts and direct API |
+| Scopes / lookup | Interned-name indexes, explicit using edges, namespace reopening, qualified and anchored unqualified lookup; no snapshots/global invalidation | Relevant lexical scopes/edges and geometric ancestor links; namespace/shadowing/using contracts plus cycle/point probes |
+| Classes / constants | Only complete-class bodies defer, with owned queue intervals; sparse constant facts; class-only layout/constructor arena | Demand only required facts; constant and signature work bounds; enum/template/class/rejection contracts and sanitizers |
 
-## Performance policy
+The [architecture audit](audit.md) traces identity, declaration points, source
+views, caches, template parameter environments and release boundaries. PA7+
+expression resolution, instantiation, LowIR/MIR/ELF and executable optimization
+remain at their owning stages. No current-stage behavior group remains.
 
-No executable output exists at PA6: generated runtime/text and self-hosting
-are N/A. Record compiler latency, peak RSS, compiler text and phase/work
-counters on fixed declaration/template/namespace/constant inputs. Freeze
-binaries, flags and inputs; verify outputs; use A/A calibration and ABBA
-for any comparative performance claim. PA5 preservation budget: <=10% wall
-plus A/A noise, <=15% RSS +1 MiB, <=35% compiler text growth for the new semantic
-surface. The initial 25% forecast was exceeded by the required semantic
-implementation (32.23% before timing); this revised feature budget is frozen
-before the final campaign. It is not an optimization profitability claim.
-Incremental signature/fact work must stay within 10% + A/A wall noise,
-15% RSS +1 MiB and 5% text relative to the first complete PA6 implementation. Fourfold PA6 input scaling budget: <6x wall, <5x RSS +1 MiB.
-No optimization benefit is claimed without the complete evidence protocol.
+## Performance evidence
 
-## Validation / handoff ledger
+[Full report](performance.md) and raw frozen datasets retain every observation.
+Final binary: `1edcbe5db`. AST A: stage base; semantic A: `5749f43b4`.
+Budgets: wall <=10% + A/A noise, RSS <=15% +1 MiB, compiler text <=35% above
+stage base / <=5% above first PA6; fourfold input <6x wall / <5x RSS +1 MiB.
+The initial 25% feature-text forecast was revised before timing; no failed
+memory budget was relaxed. Generated executable runtime/text and self-hosting
+are N/A at PA6.
 
-- Entry inspection: clean worktree; PA6 dispatcher unimplemented, 105 existing
-  failures. Prior PA5 audited complete (393/393 through), current external
-  prior-through/file-audit checks pass. No earlier active implementation handle.
-  This entry gathers evidence determining the implementation owners.
-- Required final checks: `make test-pa6`, `make test-report-through-pa6`,
-  `make test-report-through-pa5`, file audit for `dev/src`, explicit personal
-  checks. Commit coherent increments; refresh this ledger and verify clean git.
-- First implementation: canonical type/scope/entity records, declaration-time
-  graph extension, namespace/import lookup, composed types, deferred class
-  bodies, enums/constants and dump. First run 101/105; four ownership fixes
-  reach 105/105; fresh PA1–6 through 498/498. File audit: 71 files pass.
-- Audit expansion: anchored/cyclic/transitive using lookup, qualified scope
-  names, injected-class identity, enum definition-time constant transitions,
-  scoped conversions, aliases, plain class layout, signature/constant fact
-  reuse. Personal behavior 28/28; identity/lifetime API and inherited PA5 API
-  pass sanitizers before the last fact-owner changes. Fresh through 498/498.
-- Declaration-point audit found that only class bodies may be deferred.
-  Free functions now analyze immediately; local classes own queue intervals.
-  Five added probes cover free, class, local-class and nested-class contexts
-  and keep anonymous object presentation names out of qualifier lookup.
-  The first timing campaign was deliberately stopped on this correctness
-  finding; its partial observations are retained and make no final claim.
-- Corrected implementation: PA6 105/105, through 498/498, 33 personal cases,
-  both identity/lifetime APIs and all 105 course cases pass the final isolated
-  ASan/UBSan/leak build. Definition and body-scope identities are retained.
-  File audit passes 71 files.
-- Frozen `3f6de92f5` campaign: all output/protocol/latency/text checks hold,
-  but largest template RSS is ~20% above the first PA6 binary, exceeding the
-  unchanged 15% +1 MiB budget. Retain every observation in
-  `student.tests/pa6/pre-compact-performance.json`.
-- Class-only demand state now lives in a separate indexed arena; packed common
-  entity and constant records preserve all facts without making every binding
-  carry layout/constructor state. No budget was relaxed for this correction.
-- Compact records: Entity 96 ->56 bytes, Constant 24 ->16 bytes; class-only
-  state is one 32-byte record per class. Fresh 105/105, 498/498, 33 personal
-  checks, both APIs and all course fixtures pass ASan/UBSan/leak checks;
-  file audit remains green.
-- Remaining: final frozen timing rerun.
-- Handoff reason: work ongoing; initial plan is not a stopping boundary.
+Final campaign: 280 ordinary +16 startup +40 phase/work +28 telemetry runs;
+all hashes, output-equivalence, startup-separation and budget checks pass.
+Repeated-signature compilation is about 22% faster; other semantic workloads
+cost about 1–4% more than first PA6. Largest template RSS grows about 11%.
+Host text is 275,974 bytes (+32.35% over PA5, +2.40% over first PA6).
+No broad frontend or generated-program speedup is claimed.
+
+## Handoff ledger
+
+| Increment / check | Result |
+| --- | --- |
+| `f6c4ddf33` | Recorded clean stage base/review markers; all 105 initial failures were dispatcher-stub failures |
+| `5749f43b4` | First complete semantic implementation; initial run 101/105, four owner fixes reach 105/105 |
+| `78df00b67` | Anchored lookup, enum transitions, scoped conversions, canonical fact reuse and class layout |
+| `3f6de92f5` | Free/local-class declaration points, qualifier eligibility and explicit definition/body identities; first timing campaign stopped on the correctness finding |
+| `1edcbe5db` | Fix measured template RSS failure by packing common records and separating class demand state; Entity 96 ->56 bytes, Constant 24 ->16 |
+| Required checks | PA6 105/105; prior PA1–5 393/393; root through PA6 498/498; file audit 71 files; whitespace check passes |
+| Personal / sanitizers | 33 PA6 cases, semantic identity/lifetime API, inherited PA5 API; ASan/UBSan/leak checks pass both APIs and all 105 unchanged PA6 fixtures |
+| Inherited personal | PA5 core 10, extended 15 and audit 19 pass |
+| Performance | Exact final frozen binary passes full verifier; interrupted and failed earlier observations retained |
+
+Handoff reason: **full-stage completion**, with zero existing failures and
+unchanged course coverage. No fixture/reference/harness/discovery/timeout
+changes. All implementation sources are registered. Intended code, tests,
+audit and measurement evidence are committed; generated objects, execution
+logs and `.my*` outputs remain uncommitted. The final evidence commit is
+followed by a clean-status check. Remaining work: **none**.
