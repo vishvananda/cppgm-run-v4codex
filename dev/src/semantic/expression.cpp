@@ -7,7 +7,11 @@ Expression Analyzer::value_fact(const Expression& source) const
 {
     Expression result;
     result.type = source.type; result.entity = source.entity;
-    result.category = source.category; result.form = source.form;
+    result.category = source.category;
+    // Overload sets need target context through parentheses. Cast/builtin forms
+    // describe only their original syntax node, never a surrounding comma or
+    // parenthesized value (which owns no cast operand or builtin result slot).
+    if (source.form == ExpressionForm::Overload) result.form = source.form;
     return result;
 }
 Expression Analyzer::expression(NodeId n, ScopeId s)
