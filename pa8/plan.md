@@ -1,51 +1,65 @@
 # PA8 final plan and ledger
 
-Target: **PA8 full-stage**. Phase: **complete**.
-Stage base commit: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
-Last reviewed commit: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
-Entry: **0/109**, confirmed by unchanged course run (incoming 0/127 was stale).
-Final: **109/109**; PA1–PA8 **793/793**, earlier PA1–PA7 **684/684**.
+Target: **PA8 full-stage**. Phase: **complete; independently audited**.
+Stage base: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
+Last reviewed implementation: `bc2cd043d`; benchmark/protocol: `2f21a26ac`.
+Incoming checkpoint: `7313af05a`; all intervening handoffs have been reviewed.
+Entry: **0/109**. Final: **109/109**, cumulative **793/793**, **8/8 stages**.
+The incoming 811/811 summary was stale: its own primary log and the fresh root
+report both say 793/793 (684 earlier +109 PA8); no coverage was changed.
 
-## Design/spec alignment and completed groups
+## Final Spec Alignment
 
-| Owner | Data flow | Complexity and validation |
-| --- | --- | --- |
-| Model / constructors | Inline canonical types, interned names, typed IDs and unit-owned flat pools; direct exercise/later lowering construction. | Expected linear construction/storage; API growth, isolation, shape and writer checks pass. |
-| Reader / writer | One lexical view over each immutable input -> typed records -> shared deterministic writer; no textual production transport. | Linear bytes + IR; all successful course roundtrips, multifile and helper-only cases pass. |
-| Validator | Symbol/signature/value/block IDs -> type, metadata, ownership and predecessor checks. | O(IR + E log E), one CFG edge sort, O(IR + E) scratch; all course rejections and personal probes pass. |
-| Exercises | Direct model construction -> writer -> supplied harness backend. | Sum domain proves bounded i64 arithmetic; swap preserves aliases; indirect calls preserve order. Course/native probes pass. |
+| Owner | Final architecture and outcome |
+| --- | --- |
+| Model / builders | Inline canonical types, interned names, typed IDs and 14 flat geometric pools. Direct construction shares the writer. Constant-time slice checks now reject interleaved function/block/slot ownership. |
+| Reader / writer | One borrowed token view per immutable input -> typed records -> deterministic output. Cross-file symbols resolve once; declarations, metadata, instruction/CFG order and literal values survive. Text is an explicit interface, never production phase transport. |
+| External validator | One handler discovery scan, one full instruction traversal, one ordinary-edge sort/deduplication and stamped predecessor checks: O(IR + E log E), O(IR + E) scratch. Phi rejects f80 and all handler blocks, including later cleanup/try registrations; facts are recomputed after model edits. |
+| Exercises / executable boundary | Sum domain proves i64 arithmetic; swap preserves aliases; both indirect calls retain order/effects. The external harness alone uses the supplied native backend. No optimizer, owned encoder or unsupported source-to-ELF path is introduced. |
+| Inherited frontend | Independently traced parser/semantic construction and canonical declaration-only template demand. Source and entry point are unchanged from PA7. Current template benchmark, work facts and prior-stage/API checks pass. |
 
-[Implementation audit](audit.md) records ownership, fact flow, lifetimes and the
-later design boundary. [Personal checks](../student.tests/pa8/README.md) include
-76 semantic cases, writer fixed points, typed API checks and final ASan/UBSan.
-No optimizer was introduced and no course fixture/reference/harness was changed.
+[Final audit](audit.md) records the full source review, representative traces,
+findings, fixes, validity, lifetimes and pipeline budgets. C++ lowering,
+template-body substitution, MIR/native optimization/encoding and self-hosting
+remain the explicit later-stage boundaries, not unfinished PA8 groups.
 
-## Performance evidence
+## Performance and validation
 
-[Measurements](performance.md): frozen first working A (`66167cf72`) versus
-final B (`01d39a2f6`), fixed flags/inputs, AAAA calibration + two ABBA blocks,
-168 primary and 14 small construction/adapter observations, all retained.
-Budgets fixed before measurement: paired compiler wall <=10% + A/A noise;
-RSS <=20% +1 MiB; host text <=25% growth; 4x input <6x wall / <5x RSS +1 MiB;
-samples >20x startup; native runtime <=5% + noise and text growth 0%.
+[Final performance report](performance.md) contains frozen incoming A versus
+final B, AAAA noise calibration and two ABBA blocks on a pinned CPU, equivalent
+outputs, compiler latency/RSS and executable runtime/text together. All 200
+primary and 14 construction/adapter observations are retained. The unchanged
+frontend has a separate 70-observation template-demand run. All budgets pass.
 
-All budgets pass. Additional correctness/shape checks cost 2.52–3.72% compiler
-wall; maximum median RSS growth 22 KiB; host text +3.73%. Fourfold input scales
-3.82–3.98x wall / 3.45–3.83x RSS. All four native pairs are byte-identical;
-text spans are 234/250/270/417 bytes. Runtime, paired spread, telemetry overhead
-and the callback A/A outlier are disclosed. No speedup claim is made.
+Mean paired compiler wall changes are −0.76% to +2.87%; largest median RSS growth
+is 18 KiB; compiler text +1.43%. Fourfold inputs scale 3.87–3.98x wall and
+3.69–3.87x RSS. The handler checking cost is mandatory and bounded; no runtime
+improvement is claimed. All four executable pairs are byte-identical at
+234/250/270/417 text bytes. Sum timing differences and all noise are disclosed.
+Template wall/RSS scale 4.00x/3.23x with unchanged specialization work.
 
-## Handoff ledger
+- `make test-pa8`: **109/109 pass**.
+- `make test-report-through-pa8`: **793/793 pass; all eight stages pass**.
+- `perl scripts/cppgm_file_audit.pl --stage pa8 --paths dev/src`:
+  **pass; 97 files, no warnings**.
+- Personal checks: **24 valid +56 invalid**, writer fixed points and CLI;
+  direct API, complete sum domain, alias/callback/floating native checks pass.
+- Final standalone **ASan/UBSan + leak checks pass**; inherited PA7's 63 audit
+  cases and source-graph/selected-fact/demand API pass.
+- Both fresh benchmark verifiers check current artifacts/protocol/work/budgets.
+  Historical JSON remains intact; absent old `/tmp` artifacts were not reused.
 
-- `da047b4a9`: initial plan/review markers committed before implementation.
-  Previous PA7 completion classified as progress; no live work required resuming.
-- `66167cf72`: all model, text, validation and exercise groups implemented;
-  original 109 failures eliminated without reduced coverage.
-- `01d39a2f6`: signalling NaNs and wide literal signs preserved, local shape
-  invariants enforced, independent semantic/API/native checks and pool telemetry.
-- Final evidence: final sanitizers pass; required PA8, prior-through and full
-  cumulative gates pass; file audit passes 97 files without warnings. Frozen
-  performance outputs/work/hashes verify. Review markers remain for Ralph audit.
-- Remaining PA8 groups: **none**. Handoff reason: full-stage completion; no
-  incomplete checkpoint or advance into PA9. Evidence is committed, and clean
-  status is checked after the final required commands.
+## Consolidated ledger
+
+- `da047b4a9`: initial plan; `66167cf72`: complete LowIR implementation;
+  `01d39a2f6`: literal/shape hardening and telemetry; `7313af05a`: checkpoint
+  ownership/performance record. This audit closes all four handoffs.
+- `bc2cd043d`: fix phi handler/type legality and builder slice ownership;
+  add semantic and API/edit probes. All implementation changes stay in `dev/`.
+- `2f21a26ac`: prospectively freeze final corpus/budgets and verify provenance;
+  add the unchanged frontend's template benchmark wrapper.
+- Final consolidation commit: this plan, independent audit, performance report,
+  reproduction instructions and all raw final observations; required gates
+  rerun against final state and clean committed status checked afterward.
+- Remaining PA8 groups / unaudited PA8 handoffs: **none**. No PA9 advance;
+  no course fixtures, references, harnesses or prior implementation changed.
