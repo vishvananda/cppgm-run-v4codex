@@ -4,54 +4,73 @@
 
 namespace abi_mangle {
 Id FactReader::compact(const std::string& word) {
-    // Single ':' delimits constructors; '::' belongs to a qualified name.
-    std::size_t colon = word.find(':');
-    if (colon == std::string::npos || (colon + 1 < word.size() && word[colon + 1] == ':')) {
-        Binding b = lookup(word);
-        if (b.kind == BindingKind::Type) return b.id;
-        if (b.kind != BindingKind::None) throw std::runtime_error("expected type binder");
-        AbiBuiltinTypeKind builtin = abi_builtin_type_kind(word, nullptr);
-        return builtin == ABI_BUILTIN_TYPE_NONE ? g.path(word) : g.builtin(builtin);
+    // Peel compact modifiers without copying each remaining suffix. A long
+    // pointer/cv/array chain takes linear bytes and flat temporary storage.
+    struct Modifier { Kind kind; std::uint64_t value; };
+    std::vector<Modifier> modifiers;
+    std::size_t pos = 0;
+    for (;;) {
+        std::size_t colon = word.find(':', pos);
+        if (colon == std::string::npos || (colon + 1 < word.size() && word[colon + 1] == ':')) break;
+        std::string op = word.substr(pos, colon - pos);
+        Kind kind;
+        std::uint64_t value = 0;
+        if (op == "ptr") kind = Kind::Pointer;
+        else if (op == "ref") kind = Kind::Reference;
+        else if (op == "rref") kind = Kind::RvalueReference;
+        else if (op == "pack") kind = Kind::Pack;
+        else if (op == "const" || op == "volatile") { kind = Kind::Cv; value = op == "const" ? 1 : 2; }
+        else if (op == "array" || op == "vector") {
+            kind = op == "array" ? Kind::Array : Kind::Vector;
+            std::size_t split = word.find(':', colon + 1);
+            if (split == std::string::npos) throw std::runtime_error("missing array element type");
+            value = index_value(word.substr(colon + 1, split - colon - 1)); colon = split;
+        } else break;
+        modifiers.push_back({kind, value}); pos = colon + 1;
     }
-    std::string op = word.substr(0, colon), rest = word.substr(colon + 1);
-    if (op == "named" || op == "name") return g.path(rest);
-    if (++depth > 1024) throw std::runtime_error("ABI type nesting limit exceeded");
-    Id result = 0;
-    if (op == "array" || op == "vector") {
-        std::size_t split = rest.find(':');
-        if (split == std::string::npos) throw std::runtime_error("missing array element type");
-        auto bound = index_value(rest.substr(0, split));
-        Id element = compact(rest.substr(split + 1));
-        result = g.make(op == "array" ? Kind::Array : Kind::Vector, element, 0, 0, bound);
-    } else if (op == "memberptr") {
-        std::size_t split = 0;
+    std::string rest = word.substr(pos);
+    Id result;
+    if (rest.compare(0, 6, "named:") == 0) result = g.path(rest.substr(6));
+    else if (rest.compare(0, 5, "name:") == 0) result = g.path(rest.substr(5));
+    else if (rest.compare(0, 10, "memberptr:") == 0) {
+        std::size_t split = 10;
         for (; split < rest.size(); ++split) {
             if (rest[split] != ':') continue;
             if (split + 1 < rest.size() && rest[split + 1] == ':') { ++split; continue; }
             break;
         }
         if (split == rest.size()) throw std::runtime_error("missing member pointer operand");
-        Id owner = compact(rest.substr(0, split));
-        Id member = compact(rest.substr(split + 1));
+        if (++depth > 1024) throw std::runtime_error("ABI member pointer nesting limit exceeded");
+        Id owner = compact(rest.substr(10, split - 10));
+        Id member = compact(rest.substr(split + 1)); --depth;
         result = g.make(Kind::MemberPointer, owner, member);
     } else {
-        Id child = compact(rest);
-        if (op == "ptr") result = g.make(Kind::Pointer, child);
-        else if (op == "ref") result = g.make(Kind::Reference, child);
-        else if (op == "rref") result = g.make(Kind::RvalueReference, child);
-        else if (op == "const" || op == "volatile") result = g.cv(child, op == "const" ? 1 : 2);
-        else if (op == "pack") result = g.make(Kind::Pack, child);
-        else throw std::runtime_error("unknown compact ABI type constructor: " + op);
+        for (std::size_t i = 0; i < rest.size(); ++i) {
+            if (rest[i] != ':') continue;
+            if (i + 1 == rest.size() || rest[i + 1] != ':')
+                throw std::runtime_error("unknown compact ABI type constructor");
+            ++i;
+        }
+        Binding b = lookup(rest);
+        if (b.kind == BindingKind::Type) result = b.id;
+        else if (b.kind != BindingKind::None) throw std::runtime_error("expected type binder");
+        else {
+            AbiBuiltinTypeKind builtin = abi_builtin_type_kind(rest, nullptr);
+            result = builtin == ABI_BUILTIN_TYPE_NONE ? g.path(rest) : g.builtin(builtin);
+        }
     }
-    --depth; return result;
+    for (auto i = modifiers.rbegin(); i != modifiers.rend(); ++i) {
+        if (i->kind == Kind::Cv) result = g.cv(result, i->value);
+        else result = g.make(i->kind, result, 0, 0, i->value);
+    }
+    return result;
 }
 Id FactReader::type(const Words& w, std::size_t& p) {
     std::string op = take(w, p);
     if (op == "name" || op == "named") return g.path(take(w, p));
     if (op == "template-param" || op == "template-param-subst" || op == "template-param-template") {
         auto index = index_value(take(w, p));
-        if (index > UINT32_MAX) throw std::runtime_error("ABI parameter index too large");
-        Id param = g.make(Kind::Parameter, index, op == "template-param-subst");
+        Id param = g.make(Kind::Parameter, 0, op == "template-param-subst", 0, index);
         if (op != "template-param-template") return param;
         return g.make(Kind::Template, param, 0, 0, 0, refs(w, p, BindingKind::Argument));
     }
@@ -73,6 +92,10 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         std::sort(tags.begin(), tags.end(), [this](Id a, Id b) { return g.spelling(a) < g.spelling(b); });
         tags.erase(std::unique(tags.begin(), tags.end()), tags.end());
         return g.make(Kind::Tagged, child, 0, 0, 0, tags);
+    }
+    if (op == "template-name") {
+        Id prefix = type(w, p);
+        return g.make(Kind::Template, prefix, 0, 0, 0, refs(w, p, BindingKind::Argument));
     }
     if (op == "template" || op == "std-template") {
         Id prefix;
@@ -101,6 +124,10 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         Id result = type(w, p); std::vector<Id> params;
         while (p < w.size()) params.push_back(type(w, p));
         return g.make(Kind::FunctionType, result, 0, op == "function-type-variadic", 0, params);
+    }
+    if (op == "array-expression") {
+        Id bound = reference(take(w, p), BindingKind::Expression); Id element = type(w, p);
+        return g.make(Kind::Array, element, bound);
     }
     if (op == "array" || op == "vector") {
         auto bound = index_value(take(w, p)); Id element = type(w, p);

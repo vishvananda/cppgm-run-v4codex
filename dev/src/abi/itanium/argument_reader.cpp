@@ -26,9 +26,9 @@ Id FactReader::argument(const Words& w, std::size_t& p) {
     if (op == "pack") return g.make(Kind::ArgumentPack, 0, 0, 0, 0, refs(w, p, BindingKind::Argument));
     if (op == "template-param-template") {
         auto index = index_value(take(w, p));
-        if (index > UINT32_MAX) throw std::runtime_error("ABI template index too large");
-        return g.make(Kind::TemplateEntity, g.make(Kind::Parameter, index));
+        return g.make(Kind::TemplateEntity, g.make(Kind::Parameter, 0, 0, 0, index));
     }
+    if (op == "template-entity-type") return g.make(Kind::TemplateEntity, type(w, p));
     if (op == "template-entity") return g.make(Kind::TemplateEntity, g.path(take(w, p)));
     if (op == "member-template-entity") {
         Id owner = type(w, p); Id name = g.string(take(w, p));
@@ -58,8 +58,7 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
     std::string op = take(w, p);
     if (op == "template-param" || op == "function-param") {
         auto index = index_value(take(w, p));
-        if (index > UINT32_MAX) throw std::runtime_error("ABI expression index too large");
-        return g.make(op == "template-param" ? Kind::ExprParameter : Kind::ExprFunctionParameter, index);
+        return g.make(op == "template-param" ? Kind::ExprParameter : Kind::ExprFunctionParameter, 0, 0, 0, index);
     }
     if (op == "literal" || op == "value") {
         Id t = op == "value" ? type(w, p) : g.builtin(ABI_BUILTIN_TYPE_INT);

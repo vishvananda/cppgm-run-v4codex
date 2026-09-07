@@ -74,6 +74,7 @@ enum AbiTerminalKind : std::uint8_t
 bool abi_find_terminal_kind(const std::string & word,
                             AbiTerminalKind * kind);
 AbiTerminalKind abi_terminal_kind(const std::string & word);
+const char * abi_terminal_word(AbiTerminalKind kind);
 const char * abi_terminal_code(AbiTerminalKind kind, bool member,
                                std::size_t parameter_count);
 

@@ -77,9 +77,9 @@ void Encoder::expression(Id id) {
     if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
     ++g.stats.emitted_nodes;
     switch (n.kind) {
-    case Kind::ExprParameter: parameter(n.a); break;
+    case Kind::ExprParameter: parameter(n.value); break;
     case Kind::ExprFunctionParameter:
-        output += "fp"; if (n.a) output += std::to_string(n.a - 1); output += '_'; break;
+        output += "fp"; if (n.value) output += std::to_string(n.value - 1); output += '_'; break;
     case Kind::Value: literal(n); break;
     case Kind::Unary: output += operation_code(n.b); expression(n.a); break;
     case Kind::Binary:

@@ -28,6 +28,25 @@ void Graph::grow() {
 }
 Id Graph::make(Kind kind, Id a, Id b, Id c, std::uint64_t value,
                const std::vector<Id>& children) {
+    // Tags are part of the unqualified template name, before its arguments.
+    // Canonicalize them here so direct producers and text adapters agree.
+    if (kind == Kind::Tagged) {
+        const Node base = (*this)[a];
+        if (base.kind == Kind::Template) {
+            std::vector<Id> arguments = this->children(a);
+            Id tagged_prefix = make(Kind::Tagged, base.a, 0, 0, 0, children);
+            return make(Kind::Template, tagged_prefix, base.b, base.c, base.value, arguments);
+        }
+        std::vector<Id> tags(children);
+        if (base.kind == Kind::Tagged) {
+            auto inherited = this->children(a);
+            tags.insert(tags.end(), inherited.begin(), inherited.end()); a = base.a;
+        }
+        std::sort(tags.begin(), tags.end(), [this](Id x, Id y) { return spelling(x) < spelling(y); });
+        tags.erase(std::unique(tags.begin(), tags.end()), tags.end());
+        if (tags != children || base.kind == Kind::Tagged)
+            return make(Kind::Tagged, a, b, c, value, tags);
+    }
     ++stats.requests;
     std::uint64_t h = 0xcbf29ce484222325ull;
     mix(h, static_cast<unsigned>(kind)); mix(h, a); mix(h, b); mix(h, c);
@@ -64,6 +83,8 @@ Id Graph::name(Id parent, const std::string& source) {
     return make(Kind::Name, parent, string(source));
 }
 Id Graph::path(const std::string& qualified) {
+    if (qualified.size() >= 2 && qualified.compare(qualified.size() - 2, 2, "::") == 0)
+        throw std::runtime_error("missing terminal ABI source name");
     Id parent = 0;
     std::size_t p = qualified.compare(0, 2, "::") == 0 ? 2 : 0;
     while (p < qualified.size()) {
@@ -111,7 +132,7 @@ Id function_entity(Graph& g, const Function& f) {
     data.insert(data.end(), f.parameters.begin(), f.parameters.end());
     data.insert(data.end(), f.tags.begin(), f.tags.end());
     return g.make(Kind::FunctionEntity, f.name, f.qualifiers,
-        f.variadic | (f.template_prefix << 1) | (f.c_linkage << 2), 0, data);
+        f.variadic | (f.template_prefix << 1) | (f.c_linkage << 2) | (static_cast<Id>(f.category) << 3), 0, data);
 }
 Function entity_function(const Graph& g, Id entity) {
     const Node& n = g[entity];
@@ -119,6 +140,7 @@ Function entity_function(const Graph& g, Id entity) {
         throw std::runtime_error("expected ABI function context");
     Function f; f.name = n.a; f.qualifiers = n.b;
     f.variadic = n.c & 1; f.template_prefix = n.c & 2; f.c_linkage = n.c & 4;
+    f.category = static_cast<FunctionCategory>(n.c >> 3);
     f.context = g.child(n, 0); f.local_owner = g.child(n, 1);
     f.terminal = static_cast<AbiTerminalKind>(g.child(n, 2));
     f.conversion = g.child(n, 3); f.literal_suffix = g.child(n, 4);

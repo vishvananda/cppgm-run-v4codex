@@ -74,6 +74,11 @@ AbiTerminalKind abi_terminal_kind(const std::string& word) {
         throw std::runtime_error("unknown ABI terminal: " + word);
     return kind;
 }
+const char* abi_terminal_word(AbiTerminalKind kind) {
+    if (kind <= ABI_TERMINAL_NONE || kind > ABI_TERMINAL_INDEX)
+        throw std::runtime_error("invalid ABI terminal");
+    return terminals[kind].word;
+}
 const char* abi_terminal_code(AbiTerminalKind kind, bool member, std::size_t params) {
     bool unary = params + (member ? 1 : 0) == 1;
     if (kind == ABI_TERMINAL_PLUS) return unary ? "ps" : "pl";

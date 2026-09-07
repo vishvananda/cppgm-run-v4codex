@@ -31,7 +31,16 @@ binaries/inputs, A/A calibration, ABBA and equivalent output per spec.
 
 ## Ledger / handoff
 
-- Initial plan: immutable review markers recorded before implementation.
+- `7442a3192`: immutable review markers recorded before implementation.
+- `df7dbb00a`: complete first encoder; 111/111 default and 117/117 explicit
+  contract checks, cumulative 904/904. Baseline binary independently rebuilt
+  from this commit with identical SHA-256 (`78784463b5cbd4e...`).
+- Second increment: sparse name-local substitutions, linear modifier parsing
+  and emission, canonical tagged templates, 64-bit ABI indices, explicit
+  member/nonmember production shape, fact serialization and optional telemetry.
+  117 fixture roundtrips, 11 valid/15 invalid personal cases and file audit pass.
+  Final sanitizer run pending; benchmark protocol/budgets fixed in the personal
+  harness before timing. No executable generation is part of this stage.
 - First implementation: all **111/111** root-suite fixtures and **117/117**
   independent exact-output/status checks pass. No fixture changed. Remaining
   work is API/serializer validation, scaling, telemetry and cumulative gates.

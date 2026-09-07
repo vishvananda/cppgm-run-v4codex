@@ -59,7 +59,11 @@ private:
 
 // These are per-symbol construction records, not a second semantic tree.
 // CV bits are const=1, volatile=2; ref bits lvalue=4, rvalue=8.
+enum class FunctionCategory : std::uint8_t { Inferred, Member, Nonmember };
 struct Function {
+    // Production supplies Member/Nonmember from the resolved declaration.
+    // Inferred preserves the compact fact adapter's owner-shape convention.
+    FunctionCategory category = FunctionCategory::Inferred;
     Id name = 0;
     Id context = 0, local_owner = 0;
     AbiTerminalKind terminal = ABI_TERMINAL_NONE;

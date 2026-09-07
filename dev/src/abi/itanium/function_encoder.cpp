@@ -21,7 +21,9 @@ void Encoder::function(const Function& f) {
     else if (owner) prefix(owner);
     if (f.conversion) { output += "cv"; type(f.conversion); }
     else if (f.terminal != ABI_TERMINAL_NONE) {
-        output += abi_terminal_code(f.terminal, owner || f.local_owner, f.parameters.size());
+        bool member = f.category == FunctionCategory::Inferred ? (owner || f.local_owner) :
+            f.category == FunctionCategory::Member;
+        output += abi_terminal_code(f.terminal, member, f.parameters.size());
         if (f.terminal == ABI_TERMINAL_LITERAL) source(f.literal_suffix);
     } else if (name) source(g[name].b);
     else throw std::runtime_error("missing local function terminal");
@@ -57,7 +59,7 @@ std::string Encoder::target(const Target& t) {
     case TargetKind::Type: break;
     case TargetKind::Function: function(t.function); break;
     case TargetKind::Variable:
-        if (t.internal) external(g.make(Kind::VariableEntity, t.type, 1));
+        if (t.internal) { output.clear(); external(g.make(Kind::VariableEntity, t.type, 1)); }
         else type(t.type);
         break;
     case TargetKind::Typeinfo: output += "TI"; type(t.type); break;

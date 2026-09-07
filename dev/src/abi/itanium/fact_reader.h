@@ -10,6 +10,7 @@ public:
     explicit FactReader(Graph& graph) : g(graph) {}
     void record(const Words& words);
     Target finish();
+    void reset();
     bool has_target() const { return target_seen; }
 private:
     Graph& g;

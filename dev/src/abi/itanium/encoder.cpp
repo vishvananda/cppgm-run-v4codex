@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 namespace abi_mangle {
-Encoder::Encoder(Graph& graph) : g(graph), substitutions(graph.size(), 0) {}
+Encoder::Encoder(Graph& graph) : g(graph), substitutions(16) {}
 void Encoder::source(Id name) {
     const std::string text = g.spelling(name);
     output += std::to_string(text.size()); output += text;
@@ -32,10 +32,22 @@ void Encoder::integer(std::uint64_t bits, bool negative) {
     if (negative) { output += 'n'; bits = 0 - bits; }
     output += std::to_string(bits);
 }
+void Encoder::grow_substitutions() {
+    std::vector<Substitution> old;
+    old.swap(substitutions); substitutions.resize(old.size() * 2);
+    for (const Substitution& entry : old) {
+        if (!entry.key) continue;
+        std::size_t p = (entry.key * 2654435761u) & (substitutions.size() - 1);
+        while (substitutions[p].key) p = (p + 1) & (substitutions.size() - 1);
+        substitutions[p] = entry;
+    }
+}
 bool Encoder::use(Id id) {
     ++g.stats.substitution_lookups;
-    if (id >= substitutions.size()) substitutions.resize(g.size(), 0);
-    Id slot = substitutions[id];
+    std::size_t p = (id * 2654435761u) & (substitutions.size() - 1);
+    while (substitutions[p].key && substitutions[p].key != id)
+        p = (p + 1) & (substitutions.size() - 1);
+    Id slot = substitutions[p].value;
     if (!slot) return false;
     ++g.stats.substitution_hits;
     output += 'S';
@@ -50,8 +62,14 @@ bool Encoder::use(Id id) {
 }
 void Encoder::enter(Id id) {
     if (!candidate(id)) return;
-    if (id >= substitutions.size()) substitutions.resize(g.size(), 0);
-    if (!substitutions[id]) { substitutions[id] = ++next; ++g.stats.substitutions; }
+    if ((next + 1) * 2 > substitutions.size()) grow_substitutions();
+    std::size_t p = (id * 2654435761u) & (substitutions.size() - 1);
+    while (substitutions[p].key && substitutions[p].key != id)
+        p = (p + 1) & (substitutions.size() - 1);
+    if (!substitutions[p].key) {
+        substitutions[p].key = id; substitutions[p].value = ++next;
+        ++g.stats.substitutions;
+    }
 }
 bool Encoder::standard_namespace(Id id) const {
     return id && g[id].kind == Kind::Name && !g[id].a && g.spelling(g[id].b) == "std";
@@ -88,7 +106,12 @@ void Encoder::prefix(Id id, bool register_self) {
     case Kind::Template: prefix(n.a); args(n); break;
     case Kind::Tagged:
         // A tag belongs to the final unqualified component, not its own scope.
-        prefix(n.a, false); tags(g.children(id)); break;
+        if (g[n.a].kind == Kind::Name) {
+            const Node base = g[n.a];
+            if (base.a) prefix(base.a);
+            source(base.b);
+        } else prefix(n.a, false);
+        tags(g.children(id)); break;
     case Kind::Local: case Kind::Lambda:
         context(n.a); local_component(id); break;
     default: type(id); register_self = false; break;
@@ -96,11 +119,37 @@ void Encoder::prefix(Id id, bool register_self) {
     if (register_self) enter(id);
     --depth;
 }
+bool Encoder::modifier(const Node& n) {
+    switch (n.kind) {
+    case Kind::Pointer: output += 'P'; break;
+    case Kind::Reference: output += 'R'; break;
+    case Kind::RvalueReference: output += 'O'; break;
+    case Kind::Cv: qualifiers(n.b); break;
+    case Kind::Pack: output += "Dp"; break;
+    case Kind::Vendor: output += 'U'; source(n.b); break;
+    case Kind::Array:
+        output += 'A';
+        if (n.b) expression(n.b); else output += std::to_string(n.value);
+        output += '_'; break;
+    case Kind::Vector: output += "Dv" + std::to_string(n.value) + '_'; break;
+    default: return false;
+    }
+    return true;
+}
 void Encoder::type(Id id) {
+    std::vector<Id> wrappers;
+    for (;;) {
+        if (candidate(id) && use(id)) {
+            for (auto i = wrappers.rbegin(); i != wrappers.rend(); ++i) enter(*i);
+            return;
+        }
+        const Node n = g[id];
+        ++g.stats.emitted_nodes;
+        if (!modifier(n)) break;
+        wrappers.push_back(id); id = n.a;
+    }
     const Node n = g[id];
-    if (candidate(id) && use(id)) return;
     if (++depth > 1024) throw std::runtime_error("ABI nesting limit exceeded");
-    ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::Name: case Kind::Template: case Kind::Tagged: case Kind::Standard:
         if (nested(id)) output += 'N';
@@ -109,18 +158,7 @@ void Encoder::type(Id id) {
         break;
     case Kind::Builtin:
         output += abi_builtin_type_code(static_cast<AbiBuiltinTypeKind>(n.a)); break;
-    case Kind::Parameter: parameter(n.a); break;
-    case Kind::Pointer: output += 'P'; type(n.a); break;
-    case Kind::Reference: output += 'R'; type(n.a); break;
-    case Kind::RvalueReference: output += 'O'; type(n.a); break;
-    case Kind::Cv: qualifiers(n.b); type(n.a); break;
-    case Kind::Pack: output += "Dp"; type(n.a); break;
-    case Kind::Vendor: output += 'U'; source(n.b); type(n.a); break;
-    case Kind::Array:
-        output += 'A';
-        if (n.b) expression(n.b); else output += std::to_string(n.value);
-        output += '_'; type(n.a); break;
-    case Kind::Vector: output += "Dv" + std::to_string(n.value) + '_'; type(n.a); break;
+    case Kind::Parameter: parameter(n.value); break;
     case Kind::Transform:
         output += 'u'; source(n.b); output += 'I';
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
@@ -138,6 +176,7 @@ void Encoder::type(Id id) {
     default: throw std::runtime_error("fact is not an ABI type");
     }
     enter(id); --depth;
+    for (auto i = wrappers.rbegin(); i != wrappers.rend(); ++i) enter(*i);
 }
 void Encoder::context(Id id) {
     if (g[id].kind == Kind::RawContext) output += g.spelling(g[id].a);

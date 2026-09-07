@@ -27,11 +27,26 @@ Function FactReader::function(const Words& w, std::size_t& p) {
         abi_find_terminal_kind(terminal, &f.terminal);
         return f;
     }
-    if (op == "member") {
+    if (op == "local-owner") {
+        f.local_owner = type(w, p); f.context = g[f.local_owner].a;
+    } else if (op == "member") {
         Id owner = type(w, p); f.name = g.name(owner, take(w, p));
     } else f.name = g.path(op == "path" ? take(w, p) : op);
     while (p < w.size()) {
         if (w[p] == "...") { f.variadic = true; ++p; }
+        else if (w[p] == "member-shape") {
+            ++p; f.category = boolean(take(w, p)) ? FunctionCategory::Member : FunctionCategory::Nonmember;
+        }
+        else if (w[p] == "param") { ++p; f.parameters.push_back(type(w, p)); }
+        else if (w[p] == "argument") { ++p; f.arguments.push_back(reference(take(w, p), BindingKind::Argument)); }
+        else if (w[p] == "template-prefix") { ++p; f.template_prefix = true; }
+        else if (w[p] == "qualifier") { ++p; f.qualifiers |= qualifier(take(w, p)); }
+        else if (w[p] == "terminal") { ++p; f.terminal = abi_terminal_kind(take(w, p)); }
+        else if (w[p] == "source") { ++p; f.name = g.name(0, take(w, p)); }
+        else if (w[p] == "literal-suffix") { ++p; f.literal_suffix = g.string(take(w, p)); }
+        else if (w[p] == "conversion") { ++p; f.conversion = type(w, p); }
+        else if (w[p] == "tag") { ++p; f.tags.push_back(g.string(take(w, p))); }
+        else if (w[p] == "c-linkage") { ++p; f.c_linkage = true; }
         else if (w[p] == "result") { ++p; f.result = type(w, p); }
         else if (lookup(w[p]).kind == BindingKind::Argument) {
             f.arguments.push_back(reference(take(w, p), BindingKind::Argument)); f.template_prefix = true;
@@ -49,6 +64,8 @@ Id FactReader::entity(const Words& w, std::size_t& p) {
     std::string op = take(w, p);
     if (op == "symbol") return g.make(Kind::SymbolEntity, g.string(take(w, p)));
     if (op == "function") return function_entity(g, function(w, p));
+    if (op == "variable-type" || op == "internal-variable-type")
+        return g.make(Kind::VariableEntity, type(w, p), op == "internal-variable-type");
     if (op == "variable" || op == "internal-variable")
         return g.make(Kind::VariableEntity, g.path(take(w, p)), op == "internal-variable");
     throw std::runtime_error("invalid ABI entity");
@@ -57,7 +74,7 @@ void FactReader::target_record(const Words& w) {
     std::size_t p = 1; const std::string& op = w[0];
     if (op == "function" || op == "c-function") {
         target.kind = TargetKind::Function; target.function = function(w, p);
-        target.function.c_linkage = op == "c-function";
+        target.function.c_linkage |= op == "c-function";
     } else if (op == "thunk" || op == "virtual-base-thunk") {
         target.kind = op == "thunk" ? TargetKind::Thunk : TargetKind::VirtualThunk;
         auto adjust = static_cast<std::int64_t>(integral_value(take(w, p)));
@@ -71,6 +88,9 @@ void FactReader::target_record(const Words& w) {
         }
         if (take(w, p) != "function") throw std::runtime_error("thunk requires function");
         target.function = function(w, p);
+    } else if (op == "variable-type" || op == "internal-variable-type" || op == "tls-wrapper-type") {
+        target.kind = op == "tls-wrapper-type" ? TargetKind::TlsWrapper : TargetKind::Variable;
+        target.internal = op == "internal-variable-type"; target.type = type(w, p);
     } else if (op == "variable" || op == "tls-wrapper") {
         target.kind = op == "variable" ? TargetKind::Variable : TargetKind::TlsWrapper;
         if (op == "tls-wrapper" && take(w, p) != "variable")

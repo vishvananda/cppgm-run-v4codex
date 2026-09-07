@@ -2,8 +2,8 @@
 #include "abi/itanium/graph.h"
 
 namespace abi_mangle {
-// One encoder owns the substitution sequence for one symbol. Direct-indexed
-// slots are reset only for that symbol; external-name literals use a new encoder.
+// One encoder owns the substitution sequence for one symbol. Flat sparse
+// slots are local to that symbol; external-name literals use a new encoder.
 class Encoder {
 public:
     explicit Encoder(Graph& graph);
@@ -12,7 +12,9 @@ public:
     std::string output;
 private:
     Graph& g;
-    std::vector<Id> substitutions;
+    struct Substitution { Id key = 0, value = 0; };
+    std::vector<Substitution> substitutions;
+    void grow_substitutions();
     Id next = 0;
     unsigned depth = 0;
     void source(Id name);
@@ -27,6 +29,7 @@ private:
     bool candidate(Id id) const;
     void prefix(Id id, bool register_self = true);
     void type(Id id);
+    bool modifier(const Node& node);
     void argument(Id id);
     void expression(Id id);
     void literal(const Node& node);
