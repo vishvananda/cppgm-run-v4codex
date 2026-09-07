@@ -1,75 +1,79 @@
-# PA4 completed plan and handoff ledger
-
-Independent final audit in progress (entry `60ef1b9df`). Source review found
-per-prescan task and child-buffer allocation/destruction in the explicit task
-stack. Replace it with stable slabs and reusable depth-local buffers; preserve
-the existing indexed slices and expansion semantics. Freeze entry binary A
-before edits. Compare all eight fixed workloads with the existing A/A, B/B and
-two-block ABBA protocol. Acceptance budgets remain <=10% plus calibrated noise
-for paired latency, <=15% plus 1 MiB RSS, <=15% host text growth, and <6x time /
-<5x RSS for 4x input. Require nested-work benefit beyond noise and counters
-proving task/buffer growth follows maximum simultaneous depth, not invocation
-count. Runtime/generated text remain N/A. Pool capacity releases with its
-expander; no translation-unit/global cache is introduced.
+# PA4 final plan and audit ledger
 
 Stage base commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
-Last reviewed commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
+Last reviewed commit: `54f4824ac0d3f5fabcdeb92a44a76125f643182a`
+Independent audit entry: `60ef1b9df`; target: **PA4 full-stage**; phase: **complete**.
+Independent architecture review, fixes, benchmarks and all exit checks pass.
+No PA5 work is started.
 
-Target: **PA4 full-stage**, phase: **complete**. Entry 0/105 → final 105/105
-(71 macro, 34 directive fixtures); prior PA1–PA3 100/100; through-PA4 205/205.
-No fixture, reference, harness, timeout or coverage was changed. Prior goal turn
-classified as progress from committed, verified PA3 work. Review markers remain
-at entry for the independent Ralph review.
+## Spec Alignment
 
-## Design/spec alignment
-
-| Owner | Data flow, complexity, lifetime and validation |
+| Owner | Final design and evidence |
 | --- | --- |
-| Source/directives | Immutable TU buffers → streaming PA1 cursor; one pending directive, per-file conditionals → shared PA3 evaluator. Indexed names and flat device/inode once table; includes/locations/primary reset pass all 34 directive fixtures. |
-| Macros | Dense definitions with prebound parameters → raw indexed argument slices → explicit prescan tasks → iterative rescan. Expand each ordinarily used argument once. Token-local ancestry/permanent paint; fixed-depth radix membership, shared intersections; all 71 macro fixtures pass. |
-| Storage/API | No owning token strings or full output vectors. Deferred arguments release after substitution; context/generated-spelling scratch rewinds when expansion drains; TU sources/definitions release at TU end. Shared post-token cursor exposes physical and presumed locations, including split suffixes, to later consumers. |
-| Observation | `preproc -o` writes PA2 records from structured tokens; invalid phase-7 tokens reject. Phase-3 lexing of generated replacement spellings implements paste/stringize/predefined tokens, never phase-to-phase text transport. Own implementation throughout. |
+| Source/directives (§1–2, §8) | Immutable TU sources, compact identities, streaming file/directive boundaries, per-file conditionals, live PA3 evaluation, presumed locations and flat device/inode once state. Primary sources reset the TU. |
+| Macro cursor (§1–2, §5, §8–9) | Dense definitions/prebound parameters → indexed raw argument slices → once-per-used-argument prescan → iterative rescan with token-local ancestry/paint. Stable task slabs and reusable depth-local buffers eliminate allocation churn while preserving course recursion. |
+| Post-token handoff (§1, §10) | Structured shared PA2 cursor decodes literals directly and keeps one lookahead. CLI rendering is only a view. Direct API trace checks a macro-generated template declaration, pasted canonical name, condition selection, literal value and physical/presumed locations. |
+| Later surfaces (§3–7, §9) | Semantic template demand, typed semantic graph/LowIR/MIR, ELF, optimization levels, generated runtime/text and actual self-hosting have no PA4 surface. No proxy is claimed to implement or benchmark them. |
 
-[Architecture audit](audit.md) traces ownership and semantics. Semantic template
-instantiation, LowIR/MIR, ELF and optimization levels remain later-stage surfaces;
-PA4 preserves their direct structured input and introduces no substitute graphs.
+[Independent audit](audit.md) records ownership/release, complete representative
+traces, legality, invalidation, complexity, applicable spec clauses and every
+handoff since PA3. No PA4 behavior group or related implementation is deferred.
 
-## Performance evidence and budgets
+## Findings and changes
 
-[Final evidence](../student.tests/pa4/performance.md): frozen functional A
-`28279a9d0` vs final B `1af70fc0d`, identical ordinary flags, eight fixed inputs,
-A/A and B/B calibration, two ABBA blocks, equivalent outputs, 120 observations
-plus eight startup probes. Two preceding campaigns retain another 210 samples.
+- `c558c57d2`: replace per-prescan task construction/destruction with an inline
+  root, stable 32-frame slabs and reusable argument/output buffers. Preserve
+  slice addresses and clear invocation-local readiness/results after use.
+- `54f4824ac`: actual allocation interception found the remaining temporary
+  delimiter-index stack; retain it with capture storage. The new assertion
+  failed before this fix and passes after it. Add the full declaration trace.
+- Add reuse tests for empty/variadic arguments, counters, raw/expanded uses,
+  changing definitions/arity and function-name lookahead. Pool capacities are
+  storage only, never an expansion cache; release all with the expander.
+
+## Performance and budgets
+
+Budgets were fixed before each campaign (initial stage: `c90cf1e62`; independent
+pooling audit: the plan in `c558c57d2`): paired latency <=10% plus measured noise,
+RSS <=15% plus 1 MiB, host text growth <=15%, fourfold input <6x time / <5x RSS.
+Require affected-workload benefit beyond noise in both blocks. Pipeline work
+retains <=3n captured tokens for n nested calls, once-per-used-argument prescan,
+O(maximum depth) frames, geometric buffers and <=128 KiB counter spelling.
+
+[Final evidence](../student.tests/pa4/final-audit-performance.md): frozen entry A
+`60ef1b9df` vs final B `54f4824ac`, eight fixed inputs, two A/A pairs, B/B,
+two ABBA blocks, equivalent outputs, 120 observations plus eight startup probes.
 The verifier recomputes every budget and checks the actual final binary hash.
+The [intermediate pooling campaign](../student.tests/pa4/performance-pooled.md)
+retains another 128 observations; all earlier stage campaigns remain intact.
 
-Nested arguments: 5.860740→0.109026 s median, 137092→4564 KiB RSS; both paired
-blocks improve 98.14%. Long chains improve 4.78–5.80%. Disclosed regressions:
-ordinary groups generally +3.54–9.76%; one flat block is +12.08% with 5.64% noise.
-Host-tool text grows 6.78%; 4x source growth takes 3.9643x time and 3.0431x RSS.
-Generated executable runtime/text: **N/A**. No generated-code benefit claimed.
+Nested latency: 0.108902 → 0.094080 s; paired gains 12.35–13.90% vs 3.94% noise;
+RSS 4568 → 4804 KiB. Repeated-argument use improves 5.74–5.78%. Disclosed
+long-chain regression: 1.42–1.84%, RSS +74 KiB; other inconclusive groups are not
+claimed as wins. Host text 171378 → 168528 bytes (-1.66%); 4x source growth
+3.9663x latency / 3.0752x RSS; fastest input 22.2x startup. All budgets pass.
+Generated-program runtime/text: **N/A**. No generated-code improvement claimed.
 
-Budgets fixed before campaigns: latency <=10% plus measured noise; RSS <=15%
-plus 1 MiB; host text growth <=15%; 4x input <6x time/<5x RSS. All pass. API checks
-prove 3n captured tokens for 20,000 nested calls, no host-stack recursion, and
-<=128 KiB generated spelling for 100,000 counters. Fastest workload is 25.7x
-measured startup. Benefits justify the recorded compiler work and growth.
+Three 20,000-deep API invocations capture 180,000 tokens using 625 slabs; after
+two warm-ups, the third invocation makes zero allocation calls. On the fixed
+600-deep, 128-repeat benchmark, 76,800 prescans require only 19 slabs, 600
+argument-buffer growths and 1,200 output-buffer growths. These prove bounded
+work/storage; measured wall time establishes the optimization's benefit.
 
 ## Validation and ledger
 
-- `babb8e9d2`: recorded baseline/design before stage edits.
-- `28279a9d0`: complete course behavior; 105 failures → zero, prior tests pass.
-- `c90cf1e62`: eliminated quadratic nested-argument copies; explicit task stack,
-  indexed slices, bounded spelling storage, personal/API checks and telemetry.
-- `957b47c37`: eliminated unnecessary indexing for parameterless helper macros;
-  kept both performance campaigns, including the initial regression.
-- `1af70fc0d`: fixed presumed suffix locations; the new API regression failed
-  before the fix and passes afterward. Final binary is the measured candidate.
-- Final consolidation: final ordinary PA4 105/105, required prior report 100/100,
-  through-PA4 205/205, file audit 43 files, and diff/fixture checks all pass.
-  Final ASan/UBSan: 105 course cases, 163 personal invocations and API checks.
-  Earlier personal suites also pass: PA1 64 cases/API, PA2 316 cases/API and
-  7,062 independent integers, PA3 72 invocations/15,045 results/API.
-
-Handoff reason: full stage complete; no remaining implementation or related
-behavior group is deferred. Final plan/evidence are committed with a clean tree;
-the preserved review marker remains available for Ralph's independent audit.
+- Course PA4: 105/105; fresh root through report: **205/205, four stages pass**.
+- Required file audit: **43 files pass**. No fixture, reference, harness,
+  comparator, coverage or timeout was changed; source registration is complete.
+- Personal/API: PA4 168 cases and the declaration/location/identity/depth/
+  actual-allocation checks; PA1 64 cases/API; PA2 316 cases/API plus 7,062
+  independent integer cases; PA3 72 invocations/15,045 results/API all pass.
+- Final ASan/UBSan with leak detection: 168 personal cases, the complete API
+  checks (including zero warmed allocations), and all 105 course cases pass.
+  Final ordinary through report, file audit, performance/hash verification and
+  whitespace/fixture checks pass; intended source and audit changes are committed.
+- `babb8e9d2`, `28279a9d0`, `c90cf1e62`, `957b47c37`, `1af70fc0d`, `60ef1b9df`:
+  all checkpoint handoffs independently reviewed, including directive ordering,
+  slice ownership, parameterless boundaries and suffix locations.
+- `c558c57d2`, `54f4824ac`: cohesive full-path allocation fixes committed;
+  final audit/evidence consolidation closes the ledger with a clean worktree.

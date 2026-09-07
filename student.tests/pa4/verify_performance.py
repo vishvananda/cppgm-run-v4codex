@@ -31,6 +31,8 @@ for manifest in manifests:
         paired.append((group[i+1]['seconds']+group[i+2]['seconds']) /
                       (group[i]['seconds']+group[i+3]['seconds'])-1)
     assert max(paired) <= 0.10 + noise, (name, paired, noise)
+    if name == 'nested-arguments' and 'task_slabs' in manifest['stats']:
+        assert max(paired) < -noise, (name, 'benefit must exceed calibration', paired, noise)
     m = {}
     for kind in ('A', 'B'):
         samples = [r for r in group if r['binary'] == kind and r['mode'] == 'ordinary']
@@ -48,6 +50,11 @@ assert nested['captured_tokens'] == 600*128*3
 assert nested['borrowed_arguments'] == 599*128
 assert nested['max_prescan_depth'] == 600
 assert nested['argument_prescans'] == 600*128
+if 'task_slabs' in nested:
+    assert nested['task_slabs'] == (600+31)//32
+    assert nested['argument_growths'] == 600
+    assert nested['prescan_output_growths'] <= 1200
+    assert medians['nested-arguments']['B']['seconds'] < medians['nested-arguments']['A']['seconds']
 assert by_name['counter-spellings']['stats']['arena_bytes'] <= 131072
 sizes = re.search(r'data\): (\d+) → (\d+) bytes', text)
 assert sizes and int(sizes[2]) <= int(sizes[1])*1.15

@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 import platform
 from pathlib import Path
 import statistics
@@ -15,6 +16,8 @@ parser.add_argument('baseline', type=Path)
 parser.add_argument('candidate', type=Path)
 parser.add_argument('report', type=Path)
 parser.add_argument('--candidate-commit', default='c90cf1e62')
+parser.add_argument('--baseline-commit', default='28279a9d0')
+parser.add_argument('--candidate-description', default='indexed argument slices, explicit prescan tasks and reusable spelling/scratch storage')
 args = parser.parse_args()
 a, b = args.baseline.resolve(), args.candidate.resolve()
 sha = lambda data: hashlib.sha256(data).hexdigest()
@@ -94,13 +97,25 @@ with tempfile.TemporaryDirectory(prefix='pa4-performance-') as temporary:
     texts = [int(subprocess.check_output(['size', str(binary)], text=True).splitlines()[1].split()[0])
              for binary in (a,b)]
     assert frozen == {'A':sha(a.read_bytes()), 'B':sha(b.read_bytes())}
+    startup_path = root / 'startup.cc'
+    startup_path.write_text('')
+    startup = []
+    for _ in range(8):
+        sample, _ = measure('startup', b, startup_path)
+        startup.append(sample)
+        rows.pop()  # Keep startup separate from the fixed workload observations.
+    assert len({r['output_sha256'] for r in startup}) == 1
+    startup_median = median(r['seconds'] for r in startup)
+    startup_ratio = min(s['b_seconds'] for s in summaries) / startup_median
+    assert startup_ratio >= 20, startup_ratio
     lines = ['# PA4 frozen compiler performance evidence', '',
-        'A: first complete implementation (`28279a9d0`); B: `' + args.candidate_commit + '` (indexed argument slices, explicit prescan tasks and reusable spelling/scratch storage).', '',
+        'A: `' + args.baseline_commit + '`; B: `' + args.candidate_commit + '` (' + args.candidate_description + ').', '',
         'Both use the ordinary `g++ -std=gnu++11 -Wall -O3` build with the same course runner. '
         'Fresh processes, serial measurements, output to a temporary file, wall time including process startup and peak RSS from GNU time. '
         'Each workload has two A/A pairs, one B/B pair, two ABBA blocks and a separate B telemetry sample. All observations are below. '
         'Every output agrees within its workload. Temporary source paths affect output hashes, but are identical across each A/B group.', '',
         'Platform: `' + platform.platform() + '`. Host: `' + subprocess.check_output(['g++','--version'],text=True).splitlines()[0] + '`.', '',
+        'Inherited CPU affinity: `' + ','.join(map(str, sorted(os.sched_getaffinity(0)))) + '`.', '',
         'Frozen SHA256 A: `' + frozen['A'] + '`; B: `' + frozen['B'] + '`.', '',
         'Generated executable runtime / generated text size: **N/A at PA4**. Host-tool text (GNU size, including read-only data): '
         + str(texts[0]) + ' → ' + str(texts[1]) + ' bytes (' + format((texts[1]/texts[0]-1)*100,'.2f') + '%).', '',
@@ -119,5 +134,7 @@ with tempfile.TemporaryDirectory(prefix='pa4-performance-') as temporary:
               '| --- | --- | --- | --- | ---: | ---: |']
     for r in rows:
         lines.append('| {workload} | {block} | {binary} | {mode} | {seconds:.6f} | {rss_kib} |'.format(**r))
-    lines += ['', 'Output SHA256 is recorded once per workload above; every sample was checked against it.', '']
+    lines += ['', 'Output SHA256 is recorded once per workload above; every sample was checked against it.', '',
+              '## Startup calibration', '', '```json', json.dumps(startup, indent=2), '```', '',
+              'Median startup: {:.6f} s; fastest workload: {:.1f}x startup.'.format(startup_median, startup_ratio), '']
     args.report.write_text('\n'.join(lines))

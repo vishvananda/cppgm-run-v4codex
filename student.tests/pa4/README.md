@@ -9,18 +9,24 @@ make test-report-through-pa4
 perl scripts/cppgm_file_audit.pl --stage pa4 --paths dev/src
 ```
 
-The 163 personal invocations check macro state, stringizing/pasting, variadics,
+The 168 personal invocations check macro state, stringizing/pasting, variadics,
 course recursion and rescan boundaries, inactive groups, lazy expression errors,
 line/include state, hard-link once identity, primary-source reset, random macro
 DAGs, a 16,000-macro chain with 64 shared argument uses, and 2,000 nested arguments.
+Reuse cases vary arity, empty/variadic arguments,
+raw/expanded uses, counters and function-name lookahead within one expander.
 Expected expansions are independently specified and converted by the already
 validated PA2 tool; raw trigraph stringizing has an explicit decoded-byte oracle.
 Course fixtures and references remain unchanged.
 
-`api.cpp` consumes the structured cursor directly. It asserts presumed filename
-and physical offset identity (including literal-operator suffix splitting), canonical identifiers, exactly 60,000 captured
-raw tokens for 20,000 nested invocations, 19,999 borrowed nested argument ranges,
-20,000 prescans, and <=128 KiB spelling storage for 100,000 counter expansions.
+`api.cpp` consumes the structured cursor directly. It traces all tokens of a
+macro-generated template declaration,
+including condition selection, a pasted name's canonical identity, presumed
+filename, physical location and decoded line value. It also checks literal
+operator suffix splitting, three 20,000-deep invocations capturing 180,000 raw
+tokens in 625 task slabs, and <=128 KiB spelling storage for 100,000 counters.
+Allocator interception proves the third deep invocation allocates nothing after
+two warm-ups; explicit counters additionally check depth-local buffer reuse.
 The following builds both standalone sanitizer executables without changing the
 ordinary compiler or its object directory:
 
@@ -48,8 +54,10 @@ repeated argument use, nested arguments, long helper chains, counters and
 literal-operator locations.
 It checks equivalent output on every observation, records input/output/binary
 hashes, uses two A/A pairs, one B/B pair and two ABBA blocks, and measures one
-separate telemetry observation. All compiler wall-time and peak-RSS samples
-are preserved in [performance.md](performance.md). Host-tool text size is also
+separate telemetry observation. Eight empty-input probes verify workload/startup
+separation. All final compiler
+wall-time and peak-RSS samples are preserved in
+[final-audit-performance.md](final-audit-performance.md). Host-tool text size is also
 recorded. `verify_performance.py REPORT.md [CANDIDATE]` recomputes all budgets
 from the saved observations and optionally checks the candidate binary hash.
 PA4 produces tokens; generated-program runtime and text size do not
@@ -64,3 +72,18 @@ The [initial campaign](performance-initial.md) preserves the earlier `c90cf1e62`
 candidate, including the helper-chain regression that motivated the final fix.
 The [parameterless campaign](performance-parameterless.md) records `957b47c37`
 before the final literal-operator location correction. Both remain as evidence.
+
+The independent final audit froze A at `60ef1b9df` and B at `54f4824ac`. Reproduce
+with isolated ordinary builds and frozen copies outside the repository:
+
+```sh
+python3 student.tests/pa4/benchmark.py /tmp/preproc-A /tmp/preproc-B /tmp/final-pa4.md --baseline-commit 60ef1b9df --candidate-commit 54f4824ac --candidate-description 'pooled prescan and capture storage'
+python3 student.tests/pa4/verify_performance.py student.tests/pa4/final-audit-performance.md dev/preproc
+```
+
+[performance-pooled.md](performance-pooled.md) preserves the intermediate
+`c558c57d2` comparison. Both final-audit campaigns keep every observation,
+including regressions and noisy groups. See [the audit](../../pa4/audit.md) for
+allocation ownership, validity and work/growth budgets. The older campaigns
+above remain historical evidence; their candidate hashes refer to their own
+commits rather than the latest binary.
