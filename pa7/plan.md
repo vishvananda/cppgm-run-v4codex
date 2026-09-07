@@ -37,6 +37,7 @@ the final measurement and state its reason.
 
 | Increment | Evidence / remaining boundary |
 | --- | --- |
+| Final type-dependence audit | First 26-workload campaign passes every budget/protocol gate (454 observations retained). Added TU-owned dependence facts so substitution skips closed types. Through PA7 remains 684/684; final frozen remeasurement pending. |
 | Member and template declaration closure | 186/186; through PA7 684/684. 29 personal cases + multifile; ASan/UBSan/leak checks pass all PA7 fixtures, PA7 fact API, PA5/6 APIs and inherited personal cases. Typed member pointers/actions, deduplicated body demand, canonical declaration specializations without token replay. Performance campaign prepared; frozen measurement pending. |
 | Procedural core | 170/186 unchanged fixtures; PA1–6 498/498; file audit 77 files; 23 personal cases + multifile isolation. Flat overload unions and signature index; per-node expression facts and recorded conversion sequences; linear candidate tournament plus verification. Compiler measurement pending; no performance claim. |
 | Initial inspection | Read AGENTS, testing guide, spec, PA7 handout and representative fixtures. Preserve both review markers above. All 186 failures remain; implementation in progress. |

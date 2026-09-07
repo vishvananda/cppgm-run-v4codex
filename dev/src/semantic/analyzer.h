@@ -28,7 +28,7 @@ private:
     std::vector<Expression> expressions;
     std::vector<Conversion> conversions;
     Index function_families, function_signatures;
-    std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0;
+    std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0, dependence_work = 0;
     TypeId return_type = 0;
     unsigned loop_depth = 0, switch_depth = 0;
     IdentifierId constant_builtin = 0, abort_builtin = 0;
@@ -45,6 +45,7 @@ private:
     std::vector<TypeId> argument_types;
     std::vector<std::uint32_t> argument_slots;
     std::vector<Specialization> specializations;
+    std::vector<unsigned char> type_dependence;
     std::vector<EntityId> specialization_demand;
     std::vector<EntityId> demand_queue;
     std::size_t demand_cursor = 0;
@@ -90,6 +91,7 @@ private:
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
+    bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
     EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args);

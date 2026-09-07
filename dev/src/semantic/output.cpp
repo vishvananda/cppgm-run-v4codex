@@ -117,6 +117,7 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_dependence_work\":" << dependence_work
         << ",\"semantic_specializations\":" << specializations.size() - 1
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_member_demands\":" << demand_queue.size()

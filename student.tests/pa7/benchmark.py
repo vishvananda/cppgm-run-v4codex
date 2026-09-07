@@ -92,6 +92,11 @@ def verify(paths,data):
     assert data['binaries'][1]['text_bytes']<=data['binaries'][0]['text_bytes']*1.5
     cases=workloads();assert set(data['inputs'])==set(cases)
     assert len(data['observations'])==14*len(cases) and len(data['startup'])==24 and len(data['work'])==2*len(cases) and len(data['telemetry'])==14
+    for mode in ['--emit-ast','--emit-types','--emit-semantics']:
+        startup=[r for r in data['startup'] if r['mode']==mode]
+        assert ''.join(r['variant'] for r in startup)=='ABABABAB'
+        assert all(not r['stats'] and not r['phases'] and r['binary']==(1 if r['variant']=='B' or mode=='--emit-semantics' else 0) for r in startup)
+        assert len({r['output_sha256'] for r in startup})==1
     summaries={};failures=[]
     for name,case in cases.items():
         assert hashlib.sha256(case['source'].encode()).hexdigest()==data['inputs'][name]['sha256']
@@ -111,13 +116,23 @@ def verify(paths,data):
         if case['mode']=='--emit-semantics':
             for phase in work[1]['phases']:
                 assert phase['semantic_expression_work']<=phase['nodes']
+                if 'semantic_dependence_work' in phase:
+                    assert phase['semantic_dependence_work']<=phase['semantic_types']
                 assert phase['semantic_constant_work']<=phase['nodes']
+                if case['group']=='template-demand':
+                    assert phase['semantic_specializations']==2 and phase['semantic_argument_packs']==2
+                assert phase['semantic_demand_processed']==phase['semantic_member_demands']
     for name,case in cases.items():
         if case['scale']!=4:continue
         small=summaries[name[:-1]+'1']['B'];large=summaries[name]['B']
         if large['wall_s']>=small['wall_s']*6:failures.append((name,'wall scaling'))
         if large['rss_kib']>=small['rss_kib']*5+1024:failures.append((name,'rss scaling'))
     prior.summarize(data['telemetry'])
+    reference=next(r for r in data['observations'] if r['input']=='semantics-template-demand-4')
+    for row in data['telemetry']:
+        assert row['input']=='semantics-template-demand-4' and row['binary']==1 and row['mode']=='--emit-semantics'
+        assert row['stats']==(row['variant']=='B') and len(row['phases'])==(4 if row['stats'] else 0)
+        assert row['output_sha256']==reference['output_sha256'] and row['output_bytes']==reference['output_bytes']
     assert data['generated_runtime'] is None and data['generated_text'] is None
     assert not failures,failures
     print('PA7 compiler evidence protocol, identities, outputs, work bounds and budgets passed')

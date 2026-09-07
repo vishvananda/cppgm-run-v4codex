@@ -37,8 +37,23 @@ std::uint32_t Analyzer::intern_arguments(const std::vector<TypeId>& args)
     argument_slots[p] = argument_packs.size(); argument_packs.push_back(a);
     return argument_slots[p];
 }
+bool Analyzer::dependent_type(TypeId id)
+{
+    if (type_dependence.size() <= id) type_dependence.resize(id + 1);
+    if (type_dependence[id]) return type_dependence[id] == 2;
+    ++dependence_work;
+    Type t = types[id];
+    bool dependent = t.kind == TypeKind::Named && entities[t.entity].template_parameter;
+    if (t.child) dependent |= dependent_type(t.child);
+    if (t.kind == TypeKind::Function) {
+        for (unsigned i = 0; i < t.count; ++i) dependent |= dependent_type(types.parameters[t.offset + i]);
+    }
+    type_dependence[id] = dependent ? 2 : 1;
+    return dependent;
+}
 TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& cache)
 {
+    if (!dependent_type(pattern)) return pattern;
     if (cache.get(pattern)) return cache.get(pattern);
     Type p = types[pattern];
     TypeId result = pattern;
