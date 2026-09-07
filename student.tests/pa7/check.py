@@ -43,8 +43,9 @@ with tempfile.TemporaryDirectory(prefix='pa7-personal-') as directory:
     for name, source, success, fragment in cases:
         src, out = root / 'input.cc', root / 'output.txt'
         src.write_text(source)
-        run = subprocess.run([compiler, '--emit-semantics', '-o', str(out), str(src)], capture_output=True, text=True)
-        assert (run.returncode == 0) == success, (name, run.returncode, run.stderr)
+        run = subprocess.run([compiler, '--emit-semantics', '-o', str(out), str(src)], capture_output=True, text=True, timeout=15)
+        assert run.returncode == (0 if success else 1), (name, run.returncode, run.stderr)
+        assert 'Sanitizer' not in run.stderr and 'runtime error:' not in run.stderr, (name, run.stderr)
         if success:
             assert fragment in out.read_text(), (name, out.read_text())
     one, two, out = root / 'one.cc', root / 'two.cc', root / 'multi.txt'

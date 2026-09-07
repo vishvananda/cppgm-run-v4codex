@@ -12,7 +12,7 @@ with tempfile.TemporaryDirectory(prefix='pa7-course-') as tmp:
     for case in cases:
         expected = 0 if case.with_suffix('.ref.exit_status').read_text().strip() == 'EXIT_SUCCESS' else 1
         inputs = [case, *sorted(case.parent.glob(case.name+'[2-9]*'))]
-        run = subprocess.run([compiler, '--emit-semantics', '-o', out, *inputs], capture_output=True, text=True)
+        run = subprocess.run([compiler, '--emit-semantics', '-o', out, *inputs], capture_output=True, text=True, timeout=30)
         assert run.returncode == expected, (case, run.returncode, run.stderr)
         assert 'runtime error:' not in run.stderr and 'Sanitizer' not in run.stderr, (case, run.stderr)
         if expected == 0:

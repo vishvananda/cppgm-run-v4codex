@@ -98,7 +98,8 @@ with tempfile.TemporaryDirectory(prefix='pa7-audit-') as directory:
     for name, source, success, fragment in cases:
         src.write_text(source)
         run = subprocess.run([compiler, '--emit-semantics', '-o', out, src], capture_output=True, text=True, timeout=15)
-        if (run.returncode == 0) != success or (success and fragment not in out.read_text()):
+        if (run.returncode != (0 if success else 1) or 'Sanitizer' in run.stderr or 'runtime error:' in run.stderr or
+                (success and fragment not in out.read_text())):
             failures.append((name, run.returncode, run.stderr.strip()))
 for failure in failures:
     print(failure)
