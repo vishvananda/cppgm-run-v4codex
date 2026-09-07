@@ -2,7 +2,7 @@
 
 Stage scope is phases 1–6 and phase-7 tokenization. Read against `spec.md`, the
 PA4 macro/directive handouts, unchanged contract fixtures, and the actual
-implementation at `957b47c37`. Performance evidence is in the personal suite.
+implementation at `1af70fc0d`. Performance evidence is in the personal suite.
 Review markers in `plan.md` preserve the original baseline; this local completion
 check does not advance the independent Ralph review marker.
 
@@ -15,6 +15,9 @@ table, and spelling slabs. No mutable compiler cache outlives a primary source.
 Physical file/offset identity survives macro expansion; `presumed_file` and line
 carry logical location through `#line` and replacement. The next primary creates
 a new owner, resetting macros, conditionals, counters and once state.
+The post-token cursor's literal-operator split also carries the presumed line:
+its suffix sublocation is adjusted along with the token, including generated
+and macro-body literals. A direct API regression failed before that correction.
 
 `Preprocessor::raw` recognizes a directive boundary without executing it ahead
 of preceding macro expansion. It streams ordinary tokens; it captures only one
@@ -62,7 +65,7 @@ TU definition/source storage releases at TU end. Invocation arguments and
 prescan results release after substitution; expansion-context and generated
 spelling storage rewind when pending expansion drains. Only translated deferred
 source spellings use persistent slabs. No hot token owns a string, shared pointer,
-or individually allocated AST node. The PP3 evaluator consumes expanded tokens
+or individually allocated AST node. The PA3 evaluator consumes expanded tokens
 incrementally and retains only typed value/operator stacks. Lazy arithmetic
 errors remain governed by conditional selection.
 

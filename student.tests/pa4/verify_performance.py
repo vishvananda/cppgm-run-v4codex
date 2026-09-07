@@ -55,4 +55,10 @@ if len(sys.argv) > 2:
     expected = re.search(r'; B: `([0-9a-f]{64})`', text)[1]
     assert hashlib.sha256(Path(sys.argv[2]).read_bytes()).hexdigest() == expected
 assert 'N/A at PA4' in text
+if '## Startup calibration' in text:
+    startup = json.loads(text.split('## Startup calibration')[1].split('```json\n')[1].split('\n```')[0])
+    assert len({r['output_sha256'] for r in startup}) == 1
+    median_startup = statistics.median(r['seconds'] for r in startup)
+    assert min(m['B']['seconds'] for m in medians.values()) >= median_startup*20
+    print('Workloads exceed median startup by at least 20x.')
 print('Verified all compiler work/growth budgets; generated runtime/text N/A.')

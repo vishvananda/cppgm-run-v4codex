@@ -18,7 +18,7 @@ validated PA2 tool; raw trigraph stringizing has an explicit decoded-byte oracle
 Course fixtures and references remain unchanged.
 
 `api.cpp` consumes the structured cursor directly. It asserts presumed filename
-and physical offset identity, canonical identifiers, exactly 60,000 captured
+and physical offset identity (including literal-operator suffix splitting), canonical identifiers, exactly 60,000 captured
 raw tokens for 20,000 nested invocations, 19,999 borrowed nested argument ranges,
 20,000 prescans, and <=128 KiB spelling storage for 100,000 counter expansions.
 The following builds both standalone sanitizer executables without changing the
@@ -42,9 +42,10 @@ ASAN_OPTIONS=detect_leaks=1 /tmp/pa4-api-sanitize /tmp/pa4-api-input.cc
 make -C pa4 test CPPGM_TEST_APP=/tmp/pa4-sanitize CPPGM_SKIP_DEV_REBUILD=1
 ```
 
-`benchmark.py BASELINE CANDIDATE REPORT.md` uses frozen binaries and seven fixed
+`benchmark.py BASELINE CANDIDATE REPORT.md --candidate-commit COMMIT` uses frozen binaries and eight fixed
 inputs: 4/16 MiB plain text, C++ template/loop/call/memory/floating spellings,
-repeated argument use, nested arguments, long helper chains and counters.
+repeated argument use, nested arguments, long helper chains, counters and
+literal-operator locations.
 It checks equivalent output on every observation, records input/output/binary
 hashes, uses two A/A pairs, one B/B pair and two ABBA blocks, and measures one
 separate telemetry observation. All compiler wall-time and peak-RSS samples
@@ -56,8 +57,10 @@ yet apply. These inputs exercise frontend work, not semantic template
 instantiation, native code, or self-hosting.
 
 The budgets were recorded in `pa4/plan.md` before the campaign. Reproduce using
-an isolated checkout of `28279a9d0` for A and `957b47c37` for final B, with identical
+an isolated checkout of `28279a9d0` for A and `1af70fc0d` for final B, with identical
 ordinary flags and course-runner settings. Keep binaries outside the repository;
 no generated objects, diagnostic logs, or course `.my*` outputs are committed.
 The [initial campaign](performance-initial.md) preserves the earlier `c90cf1e62`
 candidate, including the helper-chain regression that motivated the final fix.
+The [parameterless campaign](performance-parameterless.md) records `957b47c37`
+before the final literal-operator location correction. Both remain as evidence.

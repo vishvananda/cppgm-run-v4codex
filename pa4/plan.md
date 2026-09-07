@@ -1,63 +1,63 @@
-# PA4 implementation plan
+# PA4 completed plan and handoff ledger
 
 Stage base commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 Last reviewed commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 
-Target: PA4 full-stage. Entry: 0/105; implemented: 105/105, earlier stages 100/100. Previous goal
-turn: progress (PA3 committed and verified); PA4 starts from the scaffold.
+Target: **PA4 full-stage**, phase: **complete**. Entry 0/105 → final 105/105
+(71 macro, 34 directive fixtures); prior PA1–PA3 100/100; through-PA4 205/205.
+No fixture, reference, harness, timeout or coverage was changed. Prior goal turn
+classified as progress from committed, verified PA3 work. Review markers remain
+at entry for the independent Ralph review.
 
-## Design and remaining groups
+## Design/spec alignment
 
-| Owner | Data flow / work / validation |
+| Owner | Data flow, complexity, lifetime and validation |
 | --- | --- |
-| Macro cursor | Immutable sources → borrowed compact PP tokens → deferred definitions/arguments and iterative rescan → shared PA2 cursor. Dense identifier-indexed definitions; token-local ancestry and permanent unavailable paint. Validate all macro fixtures, prescan sharing, rescan boundaries and rejection. |
-| Directive cursor | Streaming file frames and one directive at a time; per-file conditional stacks feed PA3 directly. Includes share TU definitions; presumed locations and device/inode once state reset per primary. Validate directive fixtures and multi-source reset. |
-| Observation adapter | `preproc -o` writes PA2 records directly from the structured cursor; invalid posttokens reject. No text transport between phases. Prior PA1–PA3 and full through-PA4 validate integration. |
-| Evidence | Optional existing-work telemetry, fixed frontend scaling workloads and latency/RSS measurements. No executable generation at PA4; executable runtime/text N/A. No optimization benefit claimed against an unimplemented baseline. |
+| Source/directives | Immutable TU buffers → streaming PA1 cursor; one pending directive, per-file conditionals → shared PA3 evaluator. Indexed names and flat device/inode once table; includes/locations/primary reset pass all 34 directive fixtures. |
+| Macros | Dense definitions with prebound parameters → raw indexed argument slices → explicit prescan tasks → iterative rescan. Expand each ordinarily used argument once. Token-local ancestry/permanent paint; fixed-depth radix membership, shared intersections; all 71 macro fixtures pass. |
+| Storage/API | No owning token strings or full output vectors. Deferred arguments release after substitution; context/generated-spelling scratch rewinds when expansion drains; TU sources/definitions release at TU end. Shared post-token cursor exposes physical and presumed locations, including split suffixes, to later consumers. |
+| Observation | `preproc -o` writes PA2 records from structured tokens; invalid phase-7 tokens reject. Phase-3 lexing of generated replacement spellings implements paste/stringize/predefined tokens, never phase-to-phase text transport. Own implementation throughout. |
 
-Source buffers and names live through the TU; expansion scratch lives only for
-deferred work. Retokenization is restricted to language-required token pasting.
-Work should track source bytes and expansion output, with argument prescan once
-per used argument, not once per occurrence. Later semantic/IR phases remain
-structured consumers, with no premature syntax or backend representation.
+[Architecture audit](audit.md) traces ownership and semantics. Semantic template
+instantiation, LowIR/MIR, ELF and optimization levels remain later-stage surfaces;
+PA4 preserves their direct structured input and introduces no substitute graphs.
 
-## Handoff ledger
+## Performance evidence and budgets
 
-- Entry: read instructions/spec/handouts and unchanged fixtures; recorded review
-  markers before stage edits. Implement all related groups, then run personal
-  checks, performance evidence, `make test-pa4`, through-PA4 and file audit.
-- Handoff reason: implementation in progress; no stopping boundary reached.
-- First implementation: all 105 unchanged PA4 fixtures pass; prior report
-  100/100 and file audit 43 files pass. Shared pull-token interface, indexed
-  definitions/parameters, fixed-depth persistent ancestry, cached argument
-  prescan, directives and file identity are implemented. The run target also
-  confirms multiple-primary output. Remaining: personal depth/lifetime checks,
-  allocation/scaling evidence, and final cumulative validation.
-- Allocation review found repeated copying in nested argument prescans (1000
-  levels used 314 MiB). Replaced it with indexed borrowed slices and an explicit
-  task stack; ordinary substitution copies only produced tokens. Generated
-  spelling storage now rewinds when the expansion drains. Course 105/105 and
-  163 personal cases pass; sanitizer/API checks are running.
-- Performance campaign budgets, before A/B measurement: unchanged-workload
-  paired latency regression <=10% plus A/A noise, peak RSS <=15% plus 1 MiB;
-  host-tool text growth <=15%. Fourfold frontend input growth must take <6x
-  latency and <5x RSS. Indexed nesting captures <=3n tokens, uses O(n) scratch
-  with bounded host call depth; generated counter spelling stays <=128 KiB.
-  Frozen A is `28279a9d0`'s ordinary binary. No generated-executable surface
-  exists yet; runtime and generated text size remain N/A.
-- Depth/lifetime increment: 163 personal semantic cases pass normally and with
-  ASan/UBSan; direct API checks validate presumed/physical locations, stable
-  identifier identity, 20,000 nested prescans and 100,000 counters with <=128 KiB
-  spelling storage. All 105 course cases also pass under ASan/UBSan. The final
-  frozen campaign and completion audit remain; no related work is handed off.
-- `c90cf1e62` campaign retained 105 observations: nested prescans improve 98.2%,
-  RSS 137118→4568 KiB; ordinary paired regressions 2–9%. Long parameterless
-  chains regress 12.1–12.3% (within 10% + 2.43% noise but avoidable). Removed
-  unnecessary capture/index creation for empty parameter lists; the final
-  campaign will compare the resulting binary against the same functional A.
-- `957b47c37`: parameterless-chain fix passes all tests and all campaign budgets;
-  helper chains improve 6.4–6.7%, with nested gains preserved. The location audit
-  then found that post-token literal-operator suffix splitting used an unadjusted
-  line. A new API regression fails before the fix; suffix locations now follow
-  presumed lines and macro heads. Refreshing evidence for this final metadata
-  correction, including a literal-operator workload.
+[Final evidence](../student.tests/pa4/performance.md): frozen functional A
+`28279a9d0` vs final B `1af70fc0d`, identical ordinary flags, eight fixed inputs,
+A/A and B/B calibration, two ABBA blocks, equivalent outputs, 120 observations
+plus eight startup probes. Two preceding campaigns retain another 210 samples.
+The verifier recomputes every budget and checks the actual final binary hash.
+
+Nested arguments: 5.860740→0.109026 s median, 137092→4564 KiB RSS; both paired
+blocks improve 98.14%. Long chains improve 4.78–5.80%. Disclosed regressions:
+ordinary groups generally +3.54–9.76%; one flat block is +12.08% with 5.64% noise.
+Host-tool text grows 6.78%; 4x source growth takes 3.9643x time and 3.0431x RSS.
+Generated executable runtime/text: **N/A**. No generated-code benefit claimed.
+
+Budgets fixed before campaigns: latency <=10% plus measured noise; RSS <=15%
+plus 1 MiB; host text growth <=15%; 4x input <6x time/<5x RSS. All pass. API checks
+prove 3n captured tokens for 20,000 nested calls, no host-stack recursion, and
+<=128 KiB generated spelling for 100,000 counters. Fastest workload is 25.7x
+measured startup. Benefits justify the recorded compiler work and growth.
+
+## Validation and ledger
+
+- `babb8e9d2`: recorded baseline/design before stage edits.
+- `28279a9d0`: complete course behavior; 105 failures → zero, prior tests pass.
+- `c90cf1e62`: eliminated quadratic nested-argument copies; explicit task stack,
+  indexed slices, bounded spelling storage, personal/API checks and telemetry.
+- `957b47c37`: eliminated unnecessary indexing for parameterless helper macros;
+  kept both performance campaigns, including the initial regression.
+- `1af70fc0d`: fixed presumed suffix locations; the new API regression failed
+  before the fix and passes afterward. Final binary is the measured candidate.
+- Final consolidation: final ordinary PA4 105/105, required prior report 100/100,
+  through-PA4 205/205, file audit 43 files, and diff/fixture checks all pass.
+  Final ASan/UBSan: 105 course cases, 163 personal invocations and API checks.
+  Earlier personal suites also pass: PA1 64 cases/API, PA2 316 cases/API and
+  7,062 independent integers, PA3 72 invocations/15,045 results/API.
+
+Handoff reason: full stage complete; no remaining implementation or related
+behavior group is deferred. Final plan/evidence are committed with a clean tree;
+the preserved review marker remains available for Ralph's independent audit.
