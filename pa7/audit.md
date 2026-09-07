@@ -1,6 +1,6 @@
 # PA7 implementation audit
 
-Implementation reviewed locally at `6690406f2`; the independent-review marker
+Implementation reviewed locally through `e5e777a65`; the independent-review marker
 in plan.md remains the stage base. This records the current implementation,
 not a claim of an independent Ralph review.
 
@@ -90,6 +90,6 @@ cache is valid for the TU lifetime because types and template-parameter identiti
 are immutable. A work counter bounds first-time dependence analysis by distinct
 canonical types.
 
-Performance completion remains subject to the frozen campaign verifier; see
-performance.md for its final outcome rather than inferring speed from test
-counts or IR size.
+Both frozen campaigns pass their full verifiers. [performance.md](performance.md)
+records the final binary, all observations, compiler latency/RSS/text, unchanged
+budgets and the absence of executable output at this stage.

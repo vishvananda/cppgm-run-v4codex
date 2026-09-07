@@ -1,48 +1,55 @@
-# PA7 implementation plan
+# PA7 final plan and ledger
 
-Target: **PA7 full-stage**. Phase: **implement**.
+Target: **PA7 full-stage**. Phase: **complete**.
 Stage base commit: `14f1d402fe54e9d2fe5cc9a557b1bddde7ac10fe`.
 Last reviewed commit: `14f1d402fe54e9d2fe5cc9a557b1bddde7ac10fe`.
-Entry: **0/186**, all stop at the dispatcher stub. PA1–6: **498/498**.
-Previous goal turn: no implementation progress; current logs confirm the stub.
+Entry: **0/186**. Final: **186/186**; PA1–7 **684/684**.
+Both review markers are preserved for Ralph; [audit.md](audit.md) records the
+implementation's own source/fact traces, not an independent review.
 
-## Design and remaining groups
+## Design/spec alignment
 
-Extend the parser-consumer's single source graph with compact typed facts;
-retain canonical TypeId/EntityId/ScopeId keys and TU-owned flat indexes/arenas.
-No token replay, semantic tree copy, string identity, or external compilation.
+One streamed frontend and one source graph carry canonical TypeId/EntityId/
+ScopeId facts. No token replay, semantic tree copy, textual phase transport,
+reference delegation or host compilation implements source semantics.
 
-| Group / owner | Data flow and expected work | Validation |
-| --- | --- | --- |
-| Declaration/lookup | Canonical function signatures -> overload bindings; lexical/using edges -> candidate IDs. Indexed name/kind lookup; visit required edges/candidates only. | Redeclarations, namespaces, using, target function names |
-| Expression/conversion | Source nodes -> type/category/constant/selected declaration and conversion facts. One analysis per node; linear operand/type-depth work. | Operators, pointers/references, casts, calls, initializers/returns |
-| Statement scopes/control | Source-order declarations -> nested scopes and typed conditions; explicit loop/switch context. Linear statement work. | Local declarations, branches/loops/switches, required rejection |
-| Rendering/driver | Recorded facts -> deterministic PA7 view, preserving PA5/6 adapters. Linear graph/output work. | All 186 unchanged fixtures, multifile and personal graph checks |
+| Completed owner/group | Data flow, complexity and validation |
+| --- | --- |
+| Declaration/lookup | Flat scope/name and family/signature indexes -> immutable overload unions -> required candidates. Lexical/using edges only; redeclaration, scope and namespace fixtures pass. |
+| Expression/conversion | NodeId -> type/category/constant/selection and separate incoming/outgoing conversion facts. One analysis per node, type-depth qualification work, linear candidate tournament plus verification. Operators, initialization, returns and indirect calls pass. |
+| Statements | Source-order bindings and explicit condition/substatement scopes; linear control-flow traversal. Conditions, loops, switches and required rejections pass. |
+| Members/template intake | Typed member-pointer and object-action identities; deduplicated body demand. Retained declaration patterns, canonical argument packs and separate declaration/emission states. Closed types reuse TU-owned dependence facts. All required intake fixtures and the fact API pass. |
+| Output/driver | Deterministic view of recorded facts; PA5/6 adapters remain intact. Full unchanged PA7 corpus and multi-primary isolation pass. |
 
-Candidate failure is a compact conversion result; final invalid programs may
-diagnose once. Preserve source syntax for later class/template extension and
-record selected function/conversions for future direct lowering.
+General class/template semantics, LowIR, optimization, native emission and
+self-hosting remain later milestones. Remaining **PA7** behavior groups: **none**.
 
-## Performance evidence
+## Performance and validation
 
-No speedup or executable optimization claim. PA7 emits no executable; runtime
-and generated text size are N/A. Freeze baseline/final binaries and inputs for
-compiler wall/RSS/host-text measurements; preserve observations, A/A calibration
-and ABBA paired spread. Budget: inherited PA6 workloads <=10% wall + A/A noise,
-<=20% RSS +1 MiB; 4x PA7 input <6x wall and <5x RSS +1 MiB; host text <=50%
-growth for the new semantic feature. Any needed budget revision must precede
-the final measurement and state its reason.
+[performance.md](performance.md) identifies the final frozen binary and all
+908 observations across the checkpoint/final campaigns. Both complete verifiers
+pass unchanged budgets: wall <=10% + A/A noise; RSS <=20% +1 MiB; host `.text`
+<=50% growth; 4x input <6x wall / <5x RSS +1 MiB. Final inherited pairs range
+from 0.8% faster to 4.8% slower; maximum RSS growth is 5.3%. PA7 wall scaling is
+3.925–4.051x. Host `.text` is 349,894 bytes (+26.00%). No speedup is claimed;
+executable runtime/text are N/A. Repeated template inputs retain two
+specializations and compute five type-dependence facts at both sizes.
+
+Final serial checks pass: `make test-pa7` (186/186), prior-through PA6 (498/498),
+`make test-report-through-pa7` (684/684), and file audit (79 files). One overlapped
+report attempt produced harness-file races; its results were discarded and both
+reports rerun serially with the full counts above. No coverage was reduced.
+ASan/UBSan/leak checks pass the PA7 fixtures, 29 personal cases, multi-TU case,
+PA7 fact API, PA5/6 APIs and 105 PA6 fixtures. Inherited personal suites pass.
 
 ## Handoff ledger
 
-| Increment | Evidence / remaining boundary |
+| Commit | Outcome |
 | --- | --- |
-| Final type-dependence audit | First 26-workload campaign passes every budget/protocol gate (454 observations retained). Added TU-owned dependence facts so substitution skips closed types. Through PA7 remains 684/684; final frozen remeasurement pending. |
-| Member and template declaration closure | 186/186; through PA7 684/684. 29 personal cases + multifile; ASan/UBSan/leak checks pass all PA7 fixtures, PA7 fact API, PA5/6 APIs and inherited personal cases. Typed member pointers/actions, deduplicated body demand, canonical declaration specializations without token replay. Performance campaign prepared; frozen measurement pending. |
-| Procedural core | 170/186 unchanged fixtures; PA1–6 498/498; file audit 77 files; 23 personal cases + multifile isolation. Flat overload unions and signature index; per-node expression facts and recorded conversion sequences; linear candidate tournament plus verification. Compiler measurement pending; no performance claim. |
-| Initial inspection | Read AGENTS, testing guide, spec, PA7 handout and representative fixtures. Preserve both review markers above. All 186 failures remain; implementation in progress. |
+| `c559848bd` | Recorded stage base/review markers before implementation; 186 stub failures. |
+| `75e512523` | Procedural owners complete: 170/186; earlier PAs and file audit pass. Continued related work. |
+| `6690406f2` | Member identities, demand and template declaration selection: 186/186; first full frozen campaign passes. |
+| `e5e777a65` | Closed-type dependence cache and architecture audit; 684/684, sanitizer/API checks and final frozen campaign pass. |
+| Final evidence | Full serial exit gates and both performance verifiers pass; intended changes committed and clean worktree verified at handoff. |
 
-Handoff reason: none; behavior complete, proceeding with the frozen performance campaign and final spec audit. Required final checks are
-`make test-pa7`, `make test-report-through-pa7`, prior-through PA6 and
-`perl scripts/cppgm_file_audit.pl --stage pa7 --paths dev/src`. Commit intended
-changes and verify an empty worktree at handoff.
+Handoff reason: **PA7 complete**. No incomplete group or progress-minimum stop.
