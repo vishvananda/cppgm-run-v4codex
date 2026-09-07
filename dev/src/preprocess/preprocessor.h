@@ -49,6 +49,7 @@ private:
     struct ArgumentStorage {
         std::vector<ExpansionToken> tokens;
         std::vector<std::size_t> boundary;
+        std::vector<std::size_t> index_stack;
         void index();
     };
     struct Slice {

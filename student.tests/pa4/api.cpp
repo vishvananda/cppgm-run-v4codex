@@ -2,8 +2,22 @@
 #include "preprocess/preprocessor.h"
 #include "posttoken/cursor.h"
 #include <cassert>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <new>
+
+static std::size_t allocations;
+void* operator new(std::size_t size)
+{
+    ++allocations;
+    void* p = std::malloc(size ? size : 1);
+    if (!p) throw std::bad_alloc();
+    return p;
+}
+void operator delete(void* p) noexcept { std::free(p); }
+void* operator new[](std::size_t size) { return ::operator new(size); }
+void operator delete[](void* p) noexcept { ::operator delete(p); }
 
 int main(int argc, char** argv)
 {
@@ -22,6 +36,34 @@ int main(int argc, char** argv)
     cppgm::IdentifierId id = first.identifier;
     assert(cursor.next().identifier == id);
     assert(cursor.next().kind == cppgm::PostTokenKind::eof);
+    {
+        std::ofstream out(path.c_str());
+        out << "#define CAT(a,b) a##b\n"
+               "#define DECL(Name) template<class T> struct CAT(Name,Box) { T value; static int line() { return __LINE__; } };\n"
+               "#if defined(DECL) && (1 || 1/0)\n"
+               "#line 120 \"logical.cc\"\nDECL(Sample)\nSampleBox<int> value;\n#endif\n";
+    }
+    cppgm::Preprocessor declaration(path, "Sep  7 2026", "12:00:00");
+    cppgm::PostTokenCursor declaration_cursor(declaration, declaration.identifiers());
+    const char* expected[] = {
+        "template", "<", "class", "T", ">", "struct", "SampleBox", "{", "T", "value", ";",
+        "static", "int", "line", "(", ")", "{", "return", "120", ";", "}", "}", ";",
+        "SampleBox", "<", "int", ">", "value", ";"
+    };
+    cppgm::IdentifierId box = 0;
+    for (std::size_t i = 0; i < sizeof(expected) / sizeof(*expected); ++i) {
+        cppgm::PostToken token = declaration_cursor.next();
+        assert(token.kind != cppgm::PostTokenKind::invalid);
+        assert(token.source.spelling.equals(expected[i]));
+        assert(token.source.file_id == 1 && token.source.line == (i < 23 ? 120 : 121));
+        assert(declaration.identifiers().spelling(token.source.presumed_file).equals("logical.cc"));
+        if (token.source.spelling.equals("SampleBox")) {
+            if (box) assert(token.identifier == box);
+            box = token.identifier;
+        }
+        if (i == 18) assert(token.kind == cppgm::PostTokenKind::literal && token.scalar[0] == 120);
+    }
+    assert(box && declaration_cursor.next().kind == cppgm::PostTokenKind::eof);
     {
         std::ofstream out(path.c_str());
         out << "#define SUFFIX \"\"_custom\n#line 80 \"logical.cc\"\noperator SUFFIX\noperator \"\"_direct\n";
@@ -50,7 +92,9 @@ int main(int argc, char** argv)
     assert(nested.next().spelling.equals("42"));
     assert(nested.next().spelling.equals("42"));
     cppgm::PreprocessStats warm = nested.stats();
+    std::size_t warm_allocations = allocations;
     assert(nested.next().spelling.equals("42"));
+    assert(allocations == warm_allocations);
     assert(nested.next().kind == cppgm::PPTokenKind::eof);
     assert(nested.stats().captured_tokens == 180000);
     assert(nested.stats().borrowed_arguments == 59997);

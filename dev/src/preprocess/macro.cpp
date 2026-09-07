@@ -144,7 +144,8 @@ ExpansionToken MacroExpander::take()
 void MacroExpander::ArgumentStorage::index()
 {
     boundary.resize(tokens.size());
-    std::vector<std::size_t> stack;
+    std::vector<std::size_t>& stack = index_stack;
+    stack.clear();
     for (std::size_t i = 0; i < tokens.size(); ++i) {
         if (tokens[i].is("(")) stack.push_back(i);
         else if (tokens[i].is(",") || tokens[i].is(")")) {
