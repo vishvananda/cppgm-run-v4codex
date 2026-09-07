@@ -46,3 +46,11 @@ timings and retained observations per spec §9.
   all 20 existing fixtures (20 → 0 failures). No fixture/coverage changes.
   Shared PA1/PA2 source remains unchanged. Personal stress/API/sanitizer checks
   and frozen performance evidence remain; passing tests is not a handoff.
+
+- Personal validation: 67 invocations / 15,015 expression results pass both
+  ordinary and ASan/UBSan builds, including independent AST evaluation and
+  200,000-deep chains/nesting. API checks all integral promotions, TU identity,
+  mutable macro lookup and zero warmed allocation calls. Through-PA3: 100/100.
+  Full-course sanitizer rerun remains: its large triple fixture exceeded the
+  auxiliary harness default 10-second timeout; no sanitizer error was reported.
+  Frozen performance campaign and final completion audit are in progress.
