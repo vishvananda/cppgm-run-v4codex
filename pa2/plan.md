@@ -4,7 +4,7 @@ Stage base commit: `be4bff26fcc81762196d29d4f0b0c59a20110c9d`
 Last reviewed commit: `be4bff26fcc81762196d29d4f0b0c59a20110c9d`
 Target: **PA2 full-stage**. Baseline: 0/26 passing, 26 failures; PA1 passes.
 
-## Design and remaining groups
+## Design and validation groups
 
 Immutable source → inherited PA1 cursor/identifier table → typed post-token
 cursor → explicit PA2 output adapter. No textual phase transport or complete
@@ -30,5 +30,10 @@ Budgets and all observations belong in `student.tests/pa2/`.
 - Entry: read instructions/spec/handout and PA1 ownership; verified clean HEAD
   and authoritative log (26 unimplemented failures). No previous implementation
   goal turn is available to classify; this entry establishes the baseline.
-- Remaining: all groups above. Continue through full stage, related boundary
-  behavior, required checks and committed clean state; no handoff boundary yet.
+- Implementation: all three language groups now complete; first required run
+  passes 26/26 and through-PA2 passes 80/80. File audit passes 35 files. The
+  empty-character recovery policy is PA2-only; literal-operator splitting uses
+  grammatical context and records physical suffix locations. Numeric escapes
+  retain code-unit identity until final encoding. No course fixtures changed.
+- Remaining: independent boundary/resource/API checks, sanitizer validation,
+  frozen performance evidence and final completion audit. No handoff boundary.

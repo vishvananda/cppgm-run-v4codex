@@ -36,8 +36,9 @@ static bool word_operator(TextView text)
 }
 
 PPTokenCursor::PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
-                             LexStats* stats)
-    : source_(source), identifiers_(identifiers), stats_(stats), characters_(source, stats) {}
+                             LexStats* stats, bool recover_empty_character)
+    : source_(source), identifiers_(identifiers), stats_(stats), characters_(source, stats),
+      recover_empty_character_(recover_empty_character) {}
 
 int PPTokenCursor::take(bool capture)
 {
@@ -176,11 +177,15 @@ void PPTokenCursor::literal(bool raw, int quote)
             else take();
             nonempty = true;
         }
-        if (quote == '\'' && !nonempty) throw std::runtime_error("empty character literal");
+        if (quote == '\'' && !nonempty && !recover_empty_character_)
+            throw std::runtime_error("empty character literal");
         take();
     }
     bool suffix = identifier_start(peek());
     if (suffix) {
+        const SourceCharacter& start = characters_.peek();
+        token_.suffix_begin = start.begin;
+        token_.suffix_line = start.line; token_.suffix_column = start.column;
         std::size_t suffix_offset = spelling().size;
         do { take(); } while (identifier_continue(peek()));
         TextView full = spelling();

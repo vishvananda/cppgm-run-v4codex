@@ -15,6 +15,7 @@ struct PPToken {
     std::size_t begin, end, line, column;
     IdentifierId identifier = 0;
     IdentifierId suffix = 0;
+    std::size_t suffix_begin = 0, suffix_line = 0, suffix_column = 0;
     TextView spelling;
 };
 
@@ -26,7 +27,7 @@ const char* token_kind_name(PPTokenKind kind);
 class PPTokenCursor {
 public:
     PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
-                  LexStats* stats = 0);
+                  LexStats* stats = 0, bool recover_empty_character = false);
     PPToken next();
     std::size_t spelling_storage_bytes() const { return translated_.capacity(); }
 
@@ -40,6 +41,7 @@ private:
     PPToken token_;
     std::string translated_;
     bool copied_ = false;
+    bool recover_empty_character_;
 
     int peek(std::size_t ahead = 0) { return characters_.peek(ahead).value; }
     int take(bool spelling = true);
