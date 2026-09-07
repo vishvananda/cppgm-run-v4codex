@@ -30,6 +30,7 @@ struct LexStats {
     std::size_t tokens = 0;
     std::size_t spelling_bytes = 0;
     std::size_t intern_probes = 0;
+    std::size_t rehash_probes = 0;
     std::size_t storage_growths = 0;
 };
 

@@ -14,7 +14,11 @@ void IdentifierTable::grow()
     slots_.assign(slots_.size() * 2, 0);
     for (std::size_t i = 0; i < entries_.size(); ++i) {
         std::size_t slot = entries_[i].hash & (slots_.size() - 1);
-        while (slots_[slot]) slot = (slot + 1) & (slots_.size() - 1);
+        while (slots_[slot]) {
+            if (stats_) ++stats_->rehash_probes;
+            slot = (slot + 1) & (slots_.size() - 1);
+        }
+        if (stats_) ++stats_->rehash_probes;
         slots_[slot] = static_cast<IdentifierId>(i + 1);
     }
     if (stats_) ++stats_->storage_growths;
@@ -27,7 +31,6 @@ IdentifierId IdentifierTable::intern(TextView text)
         hash ^= static_cast<unsigned char>(text.data[i]);
         hash *= 1099511628211ull;
     }
-    if ((entries_.size() + 1) * 2 > slots_.size()) grow();
     std::size_t slot = hash & (slots_.size() - 1);
     while (slots_[slot]) {
         if (stats_) ++stats_->intern_probes;
@@ -39,6 +42,16 @@ IdentifierId IdentifierTable::intern(TextView text)
     }
     if (entries_.size() == std::numeric_limits<IdentifierId>::max())
         throw std::runtime_error("too many identifiers in translation unit");
+    // A completed-name hit must not allocate or rehash the table. Only a new
+    // identity can exceed the occupancy budget; IDs and byte offsets survive.
+    if ((entries_.size() + 1) * 2 > slots_.size()) {
+        grow();
+        slot = hash & (slots_.size() - 1);
+        while (slots_[slot]) {
+            if (stats_) ++stats_->intern_probes;
+            slot = (slot + 1) & (slots_.size() - 1);
+        }
+    }
     Entry entry = {hash, bytes_.size(), text.size};
     if (stats_) {
         stats_->storage_growths += entries_.size() == entries_.capacity();

@@ -103,6 +103,19 @@ def main():
     check('%:/**/inc??/\nlude /*x*/ <a//b> "c"', [punct('%:'), ws, ident('include'), ws,
           ('header-name', '<a//b>'), ws, string('"c"'), nl])
     check('x #include <a>', [ident('x'), ws, punct('#'), ident('include'), ws, punct('<'), ident('a'), punct('>'), nl])
+    check('template<class T> struct Box { T value; };\nBox<::Tag> bo\\\nx;',
+          [ident('template'), punct('<'), ident('class'), ws, ident('T'), punct('>'), ws,
+           ident('struct'), ws, ident('Box'), ws, punct('{'), ws, ident('T'), ws,
+           ident('value'), punct(';'), ws, punct('}'), punct(';'), nl,
+           ident('Box'), punct('<'), punct('::'), ident('Tag'), punct('>'), ws,
+           ident('box'), punct(';'), nl])
+    # Exercise the memory/work owners at sizes beyond the course fixtures.
+    long_name = 'a' * (2 * 1024 * 1024)
+    check(long_name + '\\\nx', [ident(long_name + 'x'), nl])
+    raw = 'R"abcdefghijklmnop(' + ')abcdefghijklmnoQ' * 131072 + ')abcdefghijklmnop"'
+    check(raw, [string(raw), nl])
+    check('/*' + '*' * (2 * 1024 * 1024) + '/x', [ws, ident('x'), nl])
+    check('a' + '\\\n' * 1048576 + 'b', [ident('ab'), nl])
     for bad in (b'\x80', b'\xc0\x80', b'\xc2', b'\xe2\x28\xa1', b'\xed\xa0\x80',
                 b'\xf0\x80\x80\x80', b'\xf4\x90\x80\x80', b'\xff', b'\xfe'):
         check(bad, failure=True)

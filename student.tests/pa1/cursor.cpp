@@ -83,10 +83,29 @@ static void streaming_and_modes()
     assert(nonspace(raw_cursor).spelling.equals("next"));
 }
 
+static void completed_name_lookup()
+{
+    LexStats stats;
+    IdentifierTable names(&stats);
+    for (int i = 0; i < 8; ++i) {
+        std::string name = "name_" + std::to_string(i);
+        names.intern(TextView(name.data(), name.size()));
+    }
+    const std::size_t storage = names.storage_bytes();
+    const std::size_t growths = stats.storage_growths;
+    for (int i = 0; i < 1000; ++i)
+        assert(names.intern(TextView("name_7", 6)) == 8);
+    assert(names.storage_bytes() == storage);
+    assert(stats.storage_growths == growths);
+    assert(names.intern(TextView("next", 4)) == 9);
+    assert(names.spelling(8).equals("name_7"));
+}
+
 int main()
 {
     static_assert(std::is_trivially_copyable<PPToken>::value, "tokens must not own storage");
     locations_and_identity();
     streaming_and_modes();
+    completed_name_lookup();
     std::cout << "cursor ownership, identity, locations and streaming: passed\n";
 }

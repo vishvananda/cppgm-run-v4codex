@@ -28,6 +28,7 @@ public:
     PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
                   LexStats* stats = 0);
     PPToken next();
+    std::size_t spelling_storage_bytes() const { return translated_.capacity(); }
 
 private:
     enum class Directive { line_start, after_hash, after_include, other };

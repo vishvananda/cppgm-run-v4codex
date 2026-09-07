@@ -39,6 +39,7 @@ int main(int argc, char** argv)
             struct rusage usage;
             getrusage(RUSAGE_SELF, &usage);
             std::cerr << "{\"source_bytes\":" << source.bytes.size()
+                << ",\"source_storage_bytes\":" << source.bytes.capacity()
                 << ",\"read_ms\":" << std::chrono::duration<double, std::milli>(read_end - start).count()
                 << ",\"scan_emit_ms\":" << std::chrono::duration<double, std::milli>(end - read_end).count()
                 << ",\"peak_rss_kib\":" << usage.ru_maxrss
@@ -46,9 +47,11 @@ int main(int argc, char** argv)
                 << ",\"translated_units\":" << stats.translated_units
                 << ",\"tokens\":" << stats.tokens
                 << ",\"spelling_bytes\":" << stats.spelling_bytes
+                << ",\"spelling_storage_bytes\":" << cursor.spelling_storage_bytes()
                 << ",\"identifiers\":" << identifiers.size()
                 << ",\"identifier_storage_bytes\":" << identifiers.storage_bytes()
                 << ",\"intern_probes\":" << stats.intern_probes
+                << ",\"rehash_probes\":" << stats.rehash_probes
                 << ",\"storage_growths\":" << stats.storage_growths << "}\n";
         }
         return EXIT_SUCCESS;
