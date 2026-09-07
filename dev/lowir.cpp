@@ -1,124 +1,74 @@
-// Student-facing scaffold for the PA8 `lowir` binary.
-
-#include "support/not_implemented.h"
+// PA8 command-line adapter; shared typed IR lives under src/lowir/.
+#include "lowir/model.h"
 #include "support/tool_help_text.h"
-
+#include <chrono>
 #include <fstream>
 #include <iostream>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-using namespace std;
+#include <sys/resource.h>
 
 namespace {
-
-vector<string> collect_args(int argc, char ** argv)
-{
-  vector<string> args;
-  for(int i = 1; i < argc; ++i) {
-    args.push_back(argv[i]);
-  }
-  return args;
-}
-
-bool has_help_arg(const vector<string> & args)
-{
-  for(size_t i = 0; i < args.size(); ++i) {
-    if(args[i] == "--help" || args[i] == "-h") {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool has_batch_stdin_arg(const vector<string> & args)
-{
-  for(size_t i = 0; i < args.size(); ++i) {
-    if(args[i] == "--batch-stdin") {
-      return true;
-    }
-  }
-  return false;
-}
-
-int run_not_implemented_batch_mode()
-{
-  string line;
-  while(getline(cin, line)) {
-    (void)line;
-    cout << "EXIT_NOT_IMPLEMENTED" << endl;
-  }
-  return EXIT_SUCCESS;
-}
-
-struct Invocation
-{
-  string outfile;
-  vector<string> inputs;
-  string exercise;
+struct Invocation {
+    std::string output, exercise;
+    std::vector<std::string> inputs;
+    bool stats = false;
 };
-
-Invocation parse_invocation(const vector<string> & args)
+Invocation invocation(int argc, char** argv)
 {
-  Invocation invocation;
-  for(size_t i = 0; i < args.size(); ++i) {
-    const string option = args[i];
-    if(option == "-o" || option == "--exercise") {
-      if(++i == args.size()) throw logic_error("missing option value");
-      string & value = option == "-o" ? invocation.outfile : invocation.exercise;
-      if(!value.empty()) throw logic_error("repeated option");
-      value = args[i];
-    } else if(!option.empty() && option[0] == '-') {
-      throw logic_error("unknown option");
-    } else {
-      invocation.inputs.push_back(option);
+    Invocation i;
+    for (int n = 1; n < argc; ++n) {
+        std::string a = argv[n];
+        if (a == "-o" || a == "--exercise") {
+            lowir_model::require(++n < argc, "missing option value");
+            std::string& value = a == "-o" ? i.output : i.exercise;
+            lowir_model::require(value.empty(), "repeated option");
+            value = argv[n];
+        } else if (a == "--stats") i.stats = true;
+        else if (!a.empty() && a[0] == '-') throw lowir_model::ParseError("unknown option " + a);
+        else i.inputs.push_back(a);
     }
-  }
-  if(invocation.outfile.empty() ||
-     (invocation.inputs.empty() == invocation.exercise.empty()))
-    throw logic_error("expected input files or one exercise");
-  if(!invocation.exercise.empty() && invocation.exercise != "sum" &&
-     invocation.exercise != "swap" && invocation.exercise != "call")
-    throw logic_error("unknown exercise");
-  return invocation;
+    lowir_model::require(!i.output.empty() && (i.inputs.empty() != i.exercise.empty()), "expected -o and inputs or one exercise");
+    return i;
 }
-
-int run_lowir_mode(const vector<string> & args)
-{
-  if(has_batch_stdin_arg(args)) {
-    return run_not_implemented_batch_mode();
-  }
-
-  if(has_help_arg(args)) {
-    cout << lowir_help_text();
-    return EXIT_SUCCESS;
-  }
-
-  const Invocation invocation = parse_invocation(args);
-  // TODO: read and validate invocation.inputs, or construct invocation.exercise.
-  // Both paths build your LowIR model and serialize it to invocation.outfile.
-  (void)invocation;
-
-  throw NotImplementedException();
+using Clock = std::chrono::steady_clock;
+double milliseconds(Clock::time_point a, Clock::time_point b) { return std::chrono::duration<double, std::milli>(b-a).count(); }
 }
-
-}  // namespace
-
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-  try
-  {
-    return run_lowir_mode(collect_args(argc, argv));
-  }
-  catch(const NotImplementedException & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return CPPGM_EXIT_NOT_IMPLEMENTED;
-  }
-  catch(const exception & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return EXIT_FAILURE;
-  }
+    try {
+        for (int n = 1; n < argc; ++n) if (std::string(argv[n]) == "--help" || std::string(argv[n]) == "-h") {
+            std::cout << lowir_help_text() << "  --stats  report phase times, peak RSS and IR work counts to stderr\n";
+            return 0;
+        }
+        Invocation i = invocation(argc, argv);
+        auto start = Clock::now();
+        lowir_model::Program p;
+        if (!i.exercise.empty()) p = lowir_model::construct_exercise(i.exercise);
+        else for (const auto& path : i.inputs) {
+            std::ifstream in(path, std::ios::binary);
+            lowir_model::require(bool(in), "cannot open input");
+            std::string source((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+            lowir_model::read_program(p, source, path);
+        }
+        auto read = Clock::now();
+        if (i.exercise.empty()) lowir_model::validate(p);
+        auto validated = Clock::now();
+        std::ofstream out(i.output, std::ios::binary);
+        lowir_model::require(bool(out), "cannot open output");
+        lowir_model::write_program(p, out);
+        out.close();
+        lowir_model::require(bool(out), "cannot write output");
+        auto written = Clock::now();
+        if (i.stats) {
+            rusage usage;
+            getrusage(RUSAGE_SELF, &usage);
+            std::cerr << "{\"read_ms\":" << milliseconds(start, read) << ",\"validate_ms\":" << milliseconds(read, validated)
+                << ",\"write_ms\":" << milliseconds(validated, written) << ",\"peak_rss_kib\":" << usage.ru_maxrss
+                << ",\"source_bytes\":" << p.stats.source_bytes << ",\"tokens\":" << p.stats.tokens
+                << ",\"symbols\":" << p.symbols.size() << ",\"values\":" << p.values.size()
+                << ",\"instructions\":" << p.instructions.size() << ",\"operands\":" << p.operands.size()
+                << ",\"validated_instructions\":" << p.stats.validated_instructions << ",\"cfg_edges\":" << p.stats.cfg_edges
+                << ",\"interned_names\":" << p.names.size() << ",\"name_storage_bytes\":" << p.names.storage_bytes() << "}\n";
+        }
+        return 0;
+    } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }
 }

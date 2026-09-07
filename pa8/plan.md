@@ -3,8 +3,8 @@
 Target: **PA8 full-stage**. Phase: **implement**.
 Stage base commit: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
 Last reviewed commit: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
-Entry: reported 0/127; existing primary log reports 0/109. Re-run the unchanged
-course suite to establish the authoritative denominator.
+Entry: **0/109** confirmed by fresh unchanged course run. First implementation:
+**109/109**, including all three native exercise checks; file audit 96 files passes.
 
 ## Design and remaining groups
 
@@ -25,6 +25,9 @@ frontend/native requirements remain owned by their milestones.
 - Entry inspection: clean worktree at stage base, previous PA7 completion is
   authoritative progress; PA8 implementation has not begun. Read AGENTS,
   testing/reference guidance, spec, handout and grammar. No live work to resume.
-- Remaining: implement all groups, explicit personal checks, compiler/runtime
-  evidence, root PA8 + cumulative report, file audit, final clean commits.
+- First increment: all four groups implemented in shared typed pools and text
+  adapters; all 109 original failures eliminated without fixture/harness changes.
+  Frozen first working binary: `/tmp/pa8-evidence/lowir-initial`.
+- Remaining: independent semantic/API and sanitizer checks, compiler/runtime
+  evidence, cumulative report, final audit and clean commits.
 - Handoff reason: work ongoing; no incomplete checkpoint proposed.
