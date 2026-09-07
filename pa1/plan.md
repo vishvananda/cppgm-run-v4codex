@@ -3,44 +3,43 @@
 Stage base commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
 Last reviewed commit: 1b05951a54c7803f3ac1a1db87b7213ec2b426f1
 
-## Design and ownership
+## Design/spec alignment
 
-- Source/translation cursor: immutable UTF-8 source, physical offsets, bounded
-  lookahead; Unicode, UCNs, trigraphs, splices, final newline and raw reversion.
-  Linear byte traversal; no full translated-source or token vectors.
-- Token cursor: maximal munch, Annex E identifiers, pp-numbers, punctuation,
-  comments, literals/suffixes and directive-local header context. Typed borrowed
-  spellings and compact identifier IDs; flat TU-owned interning. Linear source
-  work and expected linear interning; bounded delimiter/operator lookahead.
-- PA1 adapter: stream typed events to the supplied debug output contract.
-  Later preprocessing/parsing consume the same cursor, never serialized tokens.
+- `SourceBuffer` owns immutable bytes/file identity. `CharacterCursor` performs
+  UTF-8, UCNs, trigraphs, splices and final newline handling with an 18-slot ring;
+  literal scanning controls raw reversion and escaped-backslash recognition.
+- `PPTokenCursor` owns one reusable transformed-spelling buffer and emits typed
+  tokens with physical ranges/locations. Unchanged spellings borrow source bytes;
+  comments do not allocate spellings. All cursor temporaries die with the cursor.
+- `IdentifierTable` owns canonical name/suffix IDs and flat geometric byte/entry
+  storage for one TU; IDs survive growth. No process-global mutable cache, token
+  vectors or serialized interphase transport. The PA1 writer is an explicit view.
+- Work is linear in source/token bytes with bounded punctuation/raw-delimiter
+  lookahead and expected linear interning. Memory is source + unique names +
+  longest transformed token. Later semantic/lowering/backend work remains later PA scope.
 
-## Remaining groups and validation
+## Remaining groups and performance
 
-1. Translation/source, identity and all token/literal/header groups implemented;
-   all 54 course fixtures pass. Extend personal checks for byte validity,
-   ordering, raw reversion, EOF and identity/location lifetimes. Personal suite
-   now passes 59 boundary/property cases plus typed cursor and telemetry checks.
-2. Finish sanitizer validation, then root through-PA1 and file audit.
-3. Measure fixed compiler workloads (latency/RSS, work counters); record flags,
-   hashes, observations and limits. PA1 produces no executable, so generated
-   runtime/text size and optimization claims are inapplicable. No speedup claim
-   against the incorrect stub; any optimization comparison must use the spec's
-   frozen A/B, A/A and ABBA protocol with equivalent output.
+No PA1 groups remain. All translations, maximal-munch tokens, literals/suffixes,
+comments, Unicode boundaries, include context and required rejection cases pass.
+[Evidence](../student.tests/pa1/performance.md): frozen flags/binary/inputs, complete
+output equivalence, two A/A pairs and two ABBA blocks on five workloads; all 60
+observations retained. At 8/32 MiB, median compiler latency was 1.503/5.999 s,
+maximum RSS 12096/36668 KiB, and identifier storage stayed at 618 bytes. The 3.99x
+latency ratio passes the <=6x budget; decoded work <=2*bytes+64 and peak RSS
+<=4*bytes+32 MiB also pass. Timing noise is disclosed; no optimization speedup is
+claimed. Generated executable runtime/text size: N/A, because PA1 emits tokens.
 
 ## Handoff ledger
 
-- Entry: clean baseline, 0/54 passing (54 failures), no earlier stages.
-  Previous state provides failure evidence; no running process to await.
-- Core implementation: 54/54 course tests pass; file audit passes (24 files).
-  Source is immutable, characters use an 18-slot ring, spellings borrow ranges
-  unless translated, and identifiers/suffixes enter a TU-owned flat table.
-  Remaining work: explicit boundary tests, measured compiler evidence and final
-  through report. No incomplete handoff boundary claimed.
-- Boundary closure: preserved the final logical newline after a trailing splice,
-  treated BOM-only input as empty, and protected escaped backslashes from UCN
-  recognition. Course remains 54/54; personal tests and file audit pass.
-  Performance validation envelopes (not optimization claims): repeated-name
-  workloads must keep identifier storage constant; scanner decoding work must
-  stay <= 2 * source bytes + 64; 4x source should use <= 6x latency after noise,
-  and peak RSS <= 4 * source bytes + 32 MiB. No emitted-program budgets apply.
+- Entry (`fee23cc04` plan): clean baseline, 0/54 passing; previous failure evidence
+  established missing implementation, with no process to await.
+- Core (`a03163343`): all shared semantic groups implemented; 54/54 course pass.
+- Boundaries (`78a0872d6`): fixed trailing-splice newline, BOM-only input and escaped
+  UCN recognition; 59 personal cases plus identity/location/streaming checks pass,
+  also under ASan/UBSan. Self-tokenization succeeds for all implementation sources.
+- Exit: `make test-pa1` and `make test-report-through-pa1` pass 54/54; earlier PAs
+  pass 0/0; `perl scripts/cppgm_file_audit.pl --stage pa1 --paths dev/src` passes
+  24 files; whitespace audit passes. Course fixtures/coverage remain unchanged.
+- Handoff reason: full PA1 completion, including related boundary groups and
+  compiler evidence. No incomplete behavior group or deferred PA1 task remains.
