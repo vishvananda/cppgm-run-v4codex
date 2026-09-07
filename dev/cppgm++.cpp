@@ -2,6 +2,7 @@
 
 #include "support/not_implemented.h"
 #include "support/tool_help_text.h"
+#include "syntax/driver.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -381,8 +382,21 @@ int run_unimplemented_mode(const char * feature,
 
 int run_emit_ast_mode(const vector<string> & args)
 {
-  parse_source_output_invocation(args, false);
-  return run_unimplemented_mode("--emit-ast", "PA5");
+  vector<string> inputs;
+  string output;
+  bool stats = false;
+  for(size_t i = 0; i < args.size(); ++i) {
+    if(args[i] == "-o") {
+      consume_required_option_argument(args, i, "-o", "output file");
+      output = args[i];
+    } else if(args[i] == "--stats") {
+      stats = true;
+    } else if(starts_with(args[i], "-")) {
+      throw logic_error("unsupported AST option: " + args[i]);
+    } else inputs.push_back(args[i]);
+  }
+  if(output.empty() || inputs.empty()) throw logic_error("invalid AST invocation");
+  return cppgm::syntax::emit_ast(output, inputs, stats);
 }
 
 int run_emit_types_mode(const vector<string> & args)

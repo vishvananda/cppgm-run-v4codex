@@ -35,3 +35,10 @@ and <5x RSS (plus 1 MiB startup); syntax work linear in consumed/produced nodes.
 - Required final checks: `make test-pa5`, `make test-report-through-pa5`,
   `perl scripts/cppgm_file_audit.pl --stage pa5 --paths dev/src`, personal tests,
   clean committed worktree. Preserve review markers during implementation.
+- Core increment: streaming ring cursor, flat AST/name storage, structured names
+  and template arguments, declarations/declarators, expressions/statements,
+  classes/enums/templates and AST driver. Full PA5 **131/188** (57 failures);
+  personal core 10/10; file audit 61 files; whitespace check passes.
+  Remaining shared owners: qualified-name/context prediction; special members;
+  dependent template argument expressions; class-wide category availability;
+  exception/declarator suffixes and presentation details. Continuing work.
