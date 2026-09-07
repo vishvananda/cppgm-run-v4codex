@@ -20,25 +20,41 @@ storage, because their final encoding/suffix determines conversion.
 | CLI, telemetry and evidence / tool + personal harness | streaming adapter, observable work/capacity counters; no generated executable at PA2 | full stage + through report, explicit personal checks, latency/RSS workloads, file audit |
 
 Later semantic graphs, demand, IR and executable optimization remain later-stage
-work. No speedup claim against the nonfunctional baseline. Record absolute
-compiler latency/peak RSS and scaling with frozen flags/binary/inputs, A/A
-calibration and ABBA telemetry comparisons; generated runtime/text size N/A.
-Budgets and all observations belong in `student.tests/pa2/`.
+work. [Completion audit](audit.md) traces current ownership/spec requirements.
+All groups above are complete; no PA2 behavior or incomplete handoff remains.
+
+## Performance and final checks
+
+[Evidence](../student.tests/pa2/performance.md) retains 168 timed observations
+from two frozen seven-workload campaigns, A/A calibration and ABBA comparisons.
+The final CPU-0 run measures 0.797030/3.130805 s and 8024/20312 KiB peak RSS for
+4/16 MiB repeated source. Fourfold latency grows 3.928x (ordinary) and 4.031x
+(telemetry), below the 6x budget. All work, scratch, identifier and RSS bounds
+pass, including long raw strings, late-encoding concatenation and 200k suffixes.
+Timing noise precludes a speedup claim. Generated runtime/text size is N/A;
+PA2 emits tokens. Host-tool text and every measured sample are in the report.
+
+Final validation: `make test-pa2` 26/26; exact prior-through command 54/54;
+`make test-report-through-pa2` 80/80; required file audit 35 files and additional
+entry-point audit 36 files; `git diff --check` passes. Course fixture trees are
+unchanged from the stage base. Personal checks and complete course suites also
+pass with ASan/UBSan. Final binary/build-source/input hashes match the evidence.
 
 ## Handoff ledger
 
 - `85d89e23e`: read instructions/spec/handout and PA1 ownership; verified clean HEAD
-  and authoritative log (26 unimplemented failures). No previous implementation
-  goal turn is available to classify; this entry establishes the baseline.
+  and authoritative log. Entry checkpoint: no PA2 progress (stub, 26 failures);
+  revalidation established implementation as the next safe action.
 - `e08732384`: all three language groups complete; first required run
   passes 26/26 and through-PA2 passes 80/80. File audit passes 35 files. The
   empty-character recovery policy is PA2-only; literal-operator splitting uses
   grammatical context and records physical suffix locations. Numeric escapes
   retain code-unit identity until final encoding. No course fixtures changed.
-- Validation increment: 316 personal cases, including 7,062 independent integer
+- `ceaa2dd1b`: 316 personal cases, including 7,062 independent integer
   values/types, encoding triples, long literals, physical locations and zero
   allocation calls in the warmed integer/character/string path. PA1's 64 personal
   cases, both API checks and all 80 course cases pass ASan/UBSan. Fixed counting
   of the second decoded element in invalid characters; token output unchanged.
-- Remaining: finish final frozen benchmark and evidence, refresh final required
-  checks and audit committed clean state. No language group remains incomplete.
+- Final consolidation: completed benchmark evidence, current plan and completion
+  audit; all required checks pass. Handoff reason: PA2 full-stage is complete,
+  including related boundary/resource groups. Review markers remain unchanged.
