@@ -99,13 +99,13 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         EntityId e = resolve(name, s);
         if (!e) throw std::runtime_error("unknown using target");
         bind(s, terminal(name), e);
-        record(s, e, n, entities[e].type, entities[e].kind);
+        record(s, e, n, source_type(e), entities[e].kind);
         break;
     }
     case Kind::Alias: {
         TypeId t = type_id(ast[n].first, s);
-        EntityId e = make_entity(EntityKind::Alias, s, ast[n].text, n);
-        entities[e].type = t; bind(s, ast[n].text, e); record(s, e, n, t, EntityKind::Alias);
+        EntityId e = declare_alias(s, ast[n].text, n, t);
+        record(s, e, n, t, EntityKind::Alias);
         break;
     }
     case Kind::SimpleDeclaration: case Kind::Function: simple(n, s); break;
@@ -123,6 +123,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (ast[n].kind == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
+            if (!b) b = child(n, Kind::FunctionTry);
             schedule_body({b, d, entities[e].owner, e, n});
         }
         break;
@@ -162,8 +163,8 @@ void Analyzer::function_body(const Body& body)
         if (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID) continue;
         IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
-        entities[e].type = types[t].kind == TypeKind::Array ? types.compound(TypeKind::Pointer, types[t].child) :
-            types[t].kind == TypeKind::Function ? types.compound(TypeKind::Pointer, types.signature(t)) : t;
+        entities[e].type = types[t].kind == TypeKind::Array ? types.compound(TypeKind::Pointer, types.signature(types[t].child)) :
+            types[t].kind == TypeKind::Function ? types.compound(TypeKind::Pointer, types.signature(t)) : types.signature(t);
         bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
     }
     statements(body.node, fs);
@@ -172,6 +173,28 @@ void Analyzer::statements(NodeId n, ScopeId s)
 {
     if (!n) return;
     switch (ast[n].kind) {
+    case Kind::If: case Kind::Switch: case Kind::For: case Kind::RangeFor:
+    case Kind::While: case Kind::Do: {
+        ScopeId control = make_scope(ScopeKind::Block, s);
+        facts[n].scope = control;
+        NodeId body = ast[n].kind == Kind::Do ? ast[n].first : ast[n].last;
+        for (NodeId c = ast[n].first; c; c = ast[c].next) {
+            bool unbraced = ast[n].kind != Kind::If && c == body && ast[c].kind != Kind::Compound;
+            statements(c, unbraced ? make_scope(ScopeKind::Block, control) : control);
+        }
+        break;
+    }
+    case Kind::Then: case Kind::Else: {
+        NodeId body = ast[n].first;
+        statements(body, ast[body].kind == Kind::Compound ? s : make_scope(ScopeKind::Block, s));
+        break;
+    }
+    case Kind::ConditionDeclaration: {
+        NodeId specs = ast[n].first, d = ast[specs].next;
+        TypeId t = declarator(d, specifiers(specs, s), s);
+        declare_object(d, ast[d].next, t, specs, s, n);
+        break;
+    }
     case Kind::Compound: {
         ScopeId bs = make_scope(ScopeKind::Block, s);
         facts[n].scope = bs;
@@ -187,7 +210,7 @@ void Analyzer::statements(NodeId n, ScopeId s)
             EntityId e = resolve(ast[callee].detail, s);
             if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) {
                 TypeId t = entities[e].type;
-                if (types[t].kind == TypeKind::Named && entities[types[t].entity].key != KW_ENUM) {
+                if (types[t].kind == TypeKind::Named && entities[types[t].entity].class_info) {
                     EntityId cls = types[t].entity;
                     ScopeId cs = entities[cls].scope;
                     EntityId ctor = class_facts[entities[cls].class_info].constructor;

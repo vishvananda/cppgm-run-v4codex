@@ -41,7 +41,7 @@ void Analyzer::write_name(std::ostream& out, NodeId n) const
         spelling(out, ast[p].text);
     }
 }
-void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETokenType key_op) const
+void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETokenType key_op, TypeId completed) const
 {
     const Type& t = types[id];
     if (t.cv & 1) out << "const ";
@@ -60,7 +60,9 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     case TypeKind::Pointer: out << "pointer to "; write_type(out, t.child); break;
     case TypeKind::LRef: out << "lvalue-reference to "; write_type(out, t.child); break;
     case TypeKind::RRef: out << "rvalue-reference to "; write_type(out, t.child); break;
-    case TypeKind::Array: out << "array of " << t.bound << ' '; write_type(out, t.child); break;
+    case TypeKind::Array:
+        out << "array of " << (completed ? types[completed].bound : t.bound) << ' ';
+        write_type(out, t.child, 0, TOK_INVALID, completed ? types[completed].child : 0); break;
     case TypeKind::Function:
         out << "function of (";
         for (unsigned i = 0; i < t.count; ++i) {
@@ -95,8 +97,7 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
         if (decl.display_name && decl.kind == EntityKind::Type) write_name(out, decl.display_name);
         else spelling(out, e.name);
         out << ' ';
-        TypeId t = decl.kind == EntityKind::Variable ? e.type : decl.type;
-        write_type(out, t, decl.display_name, decl.key);
+        write_type(out, decl.type, decl.display_name, decl.key, decl.kind == EntityKind::Variable ? e.type : 0);
         if (decl.kind == EntityKind::Enumerator) {
             out << ' ';
             if (is_unsigned(e.constant.type)) out << e.constant.bits;
@@ -116,6 +117,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_types\":" << types.records.size() - 1
         << ",\"semantic_entities\":" << entities.size() - 1
         << ",\"semantic_scopes\":" << scopes.size() - 1
+        << ",\"semantic_edges\":" << edges.size() - 1
         << ",\"semantic_declarations\":" << declarations.size() - 1
         << ",\"semantic_regions\":" << analyzed
         << ",\"semantic_lookup_work\":" << lookup_work

@@ -1,10 +1,15 @@
 # PA6 completion plan and ledger
 
-Target: **PA6 full-stage**. Phase: **complete**.
+Target: **PA6 full-stage**. Phase: **independent final audit**.
 Entry: **0/105**. Final: **105/105**; PA1–6 through: **498/498**.
 Stage base commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
-Last reviewed commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
-Both review markers are preserved for the external review process.
+Checkpoint reviewed: `15c7f1fcd23fd3145b2ec0a611af28c78c64825a`.
+The independent review has reconstructed every PA6 owner and all stage commits.
+New work: unify alias/type identity, enforce qualified class/enum ownership,
+retain special function-try bodies, bound layout arithmetic and using-edge
+insertion, check statement block ownership, then freeze and measure the final
+binary and rerun both required gates. Historical checkpoint results below are
+not evidence for the edited binary until revalidated.
 
 ## Design / spec alignment
 
@@ -56,4 +61,4 @@ unchanged course coverage. No fixture/reference/harness/discovery/timeout
 changes. All implementation sources are registered. Intended code, tests,
 audit and measurement evidence are committed; generated objects, execution
 logs and `.my*` outputs remain uncommitted. The final evidence commit is
-followed by a clean-status check. Remaining work: **none**.
+followed by a clean-status check. Remaining work: **the independent audit above**.

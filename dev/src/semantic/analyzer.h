@@ -21,11 +21,12 @@ public:
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
-    Index ordinary, tags, namespaces, qualifiers;
+    Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
     std::vector<ClassFacts> class_facts;
     double analysis_ms = 0;
     std::vector<Edge> edges;
+    std::vector<ScopeId> qualified_work;
     std::vector<std::uint64_t> visited;
     std::uint64_t walk = 0;
     std::size_t lookup_work = 0, analyzed = 0, constant_work = 0;
@@ -37,6 +38,9 @@ private:
     EntityId local(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary) const;
     EntityId lookup(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary, bool qualified = false);
     EntityId imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit);
+    EntityId merge_lookup(EntityId a, EntityId b) const;
+    EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
+    TypeId source_type(EntityId e) const;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s);
     ScopeId common_ancestor(ScopeId a, ScopeId b) const;
@@ -77,7 +81,7 @@ private:
     bool scoped_enum(TypeId t) const;
     unsigned width(TypeId t) const;
     void write_scope(std::ostream& out, ScopeId s, unsigned depth) const;
-    void write_type(std::ostream& out, TypeId t, NodeId display_name = 0, ETokenType key = TOK_INVALID) const;
+    void write_type(std::ostream& out, TypeId t, NodeId display_name = 0, ETokenType key = TOK_INVALID, TypeId completed = 0) const;
     void write_name(std::ostream& out, NodeId n) const;
     void spelling(std::ostream& out, IdentifierId n) const;
 };

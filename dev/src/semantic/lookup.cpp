@@ -62,25 +62,63 @@ std::uint32_t Analyzer::record(ScopeId s, EntityId e, NodeId source, TypeId type
 }
 void Analyzer::add_edge(ScopeId s, ScopeId to, bool is_inline)
 {
-    for (std::uint32_t i = scopes[s].first_edge; i; i = edges[i].next)
-        if (edges[i].target == to) return;
+    std::uint32_t existing = edge_index.get(key(s, to));
+    if (existing) {
+        if (is_inline && !edges[existing].inline_namespace) {
+            edges[existing].inline_next = scopes[s].first_inline;
+            scopes[s].first_inline = existing;
+        }
+        edges[existing].inline_namespace |= is_inline;
+        return;
+    }
     Edge e; e.target = to; e.next = scopes[s].first_edge; e.inline_namespace = is_inline;
+    if (is_inline) {
+        e.inline_next = scopes[s].first_inline;
+        scopes[s].first_inline = edges.size();
+    }
+    edge_index.put(key(s, to), edges.size());
     scopes[s].first_edge = edges.size(); edges.push_back(e);
+}
+EntityId Analyzer::merge_lookup(EntityId a, EntityId b) const
+{
+    const EntityId ambiguous = ~EntityId(0);
+    if (!a || a == b) return b;
+    if (!b) return a;
+    if (a == ambiguous || b == ambiguous) return ambiguous;
+    // The PA6 contract distinguishes independently declared aliases, including
+    // aliases for the same type. Multiple paths to one entity remain unique.
+    return ambiguous;
 }
 EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit)
 {
     if (visited[s] == visit) return 0;
-    visited[s] = visit; ++lookup_work;
-    EntityId result = local(s, n, mode);
-    bool direct = result != 0;
-    // Qualified lookup suppresses ordinary using directives after a direct hit;
-    // inline namespace edges participate even alongside local declarations.
-    for (std::uint32_t i = scopes[s].first_edge; i; i = edges[i].next) {
-        if (direct && !edges[i].inline_namespace) continue;
-        EntityId found = imported(edges[i].target, n, mode, visit);
-        if (found && result && result != found) throw std::runtime_error("ambiguous lookup");
-        if (found) result = found;
+    // Search the entire inline namespace set before ordinary directives. A hit
+    // anywhere in that set suppresses directives everywhere in the set.
+    std::size_t begin = qualified_work.size();
+    qualified_work.push_back(s);
+    visited[s] = visit;
+    EntityId result = 0;
+    for (std::size_t p = begin; p < qualified_work.size(); ++p) {
+        ScopeId current = qualified_work[p];
+        ++lookup_work;
+        result = merge_lookup(result, local(current, n, mode));
+        for (std::uint32_t i = scopes[current].first_inline; i; i = edges[i].inline_next) {
+            ScopeId to = edges[i].target;
+            if (edges[i].inline_namespace && visited[to] != visit) {
+                visited[to] = visit;
+                qualified_work.push_back(to);
+            }
+        }
     }
+    if (!result) {
+        std::size_t end = qualified_work.size();
+        for (std::size_t p = begin; p < end; ++p)
+            for (std::uint32_t i = scopes[qualified_work[p]].first_edge; i; i = edges[i].next)
+                if (!edges[i].inline_namespace)
+                    result = merge_lookup(result, imported(edges[i].target, n, mode, visit));
+    }
+    qualified_work.resize(begin);
+    if (result == ~EntityId(0)) throw std::runtime_error("ambiguous lookup");
     return result;
 }
 ScopeId Analyzer::common_ancestor(ScopeId a, ScopeId b) const
@@ -120,15 +158,16 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
             if (found) {
                 ScopeId anchor = common_ancestor(s, ns);
                 EntityId previous = pending.get(anchor);
-                pending.put(anchor, previous && previous != found ? ambiguous : found);
+                pending.put(anchor, merge_lookup(previous, found));
             }
             for (std::uint32_t edge = scopes[ns].first_edge; edge; edge = edges[edge].next)
                 work.push_back(edges[edge].target);
         }
         EntityId direct = local(s, n, mode), nominated = pending.get(s);
-        if (nominated == ambiguous || (direct && nominated && direct != nominated))
+        EntityId result = merge_lookup(direct, nominated);
+        if (result == ambiguous)
             throw std::runtime_error("ambiguous unqualified lookup");
-        if (direct || nominated) return direct ? direct : nominated;
+        if (result) return result;
     }
     return 0;
 }

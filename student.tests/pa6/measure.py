@@ -19,14 +19,14 @@ ORDERS=[('AA1','AA'),('AA2','AA'),('BB','BB'),('ABBA1','ABBA'),('ABBA2','ABBA')]
 BUDGETS=dict(wall_percent=10,rss_percent=15,rss_allowance_kib=1024,stage_text_percent=35,incremental_text_percent=5,scaling_wall=6,scaling_rss=5,startup_multiple=20)
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def text_size(path):return sum(int(x.split()[1]) for x in subprocess.check_output(['size','-A',path],text=True).splitlines() if x.startswith('.text '))
-def measure(paths,output):
+def measure(paths,output,revisions=None):
     paths=[p.resolve() for p in paths]
     cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
     data=dict(budgets=BUDGETS,protocol=ORDERS,platform=platform.platform(),cpu=cpu,
               host_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',
               host_cxx=subprocess.check_output(['g++','--version'],text=True).splitlines()[0],
               binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in paths],
-              source_commits=['9249196518f45492822fb2e3da4eb5d82af0ed13','5749f43b4',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
+              source_commits=revisions or ['9249196518f45492822fb2e3da4eb5d82af0ed13','5749f43b4',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
               observations=[],startup=[],work=[],telemetry=[],inputs={},generated_runtime=None,generated_text=None)
     with tempfile.TemporaryDirectory(prefix='pa6-timing-') as tmp:
         tmp=pathlib.Path(tmp);out=tmp/'out';rss=tmp/'rss';empty=tmp/'empty.cpp';empty.write_text('')
@@ -95,11 +95,17 @@ def verify(paths,data):
     assert data['binaries'][2]['text_bytes']<=data['binaries'][0]['text_bytes']*1.35
     assert data['binaries'][2]['text_bytes']<=data['binaries'][1]['text_bytes']*1.05
     cases=workloads();assert set(data['inputs'])==set(cases)
-    assert len(data['observations'])==14*len(cases) and len(data['startup'])==16 and len(data['work'])==2*len(cases) and len(data['telemetry'])==28
+    telemetry_cases=set(cases)&{'types-constants-4','types-signatures-4'}
+    assert len(data['observations'])==14*len(cases) and len(data['startup'])==16 and len(data['work'])==2*len(cases) and len(data['telemetry'])==14*len(telemetry_cases)
     summaries={}
     for name,case in cases.items():
         assert hashlib.sha256(case['source'].encode()).hexdigest()==data['inputs'][name]['sha256']
+        assert all(data['inputs'][name][k]==v for k,v in case.items() if k!='source')
+        assert len(case['source'].encode())==data['inputs'][name]['bytes']
         rows=[r for r in data['observations'] if r['input']==name]
+        baseline=0 if case['mode']=='--emit-ast' else 1
+        assert all(r['mode']==case['mode'] and not r['stats'] and not r['phases'] and
+                   r['binary']==(baseline if r['variant']=='A' else 2) for r in rows)
         assert len({r['output_sha256'] for r in rows})==1
         metrics=summarize(rows);summaries[name]=metrics
         startup=max(r['wall_s'] for r in data['startup'] if r['mode']==case['mode'])
@@ -109,6 +115,7 @@ def verify(paths,data):
             assert pair['B_rss']<=pair['A_rss']*1.15+1024,(name,'rss',metrics)
         work=[r for r in data['work'] if r['input']==name]
         assert len(work)==2 and all(r['output_sha256']==rows[0]['output_sha256'] for r in work)
+        assert all(r['stats'] and len(r['phases'])==case['repeats'] for r in work)
         if case['mode']=='--emit-types':
             for phase in work[1]['phases']:
                 assert phase['semantic_signature_work']<=phase['semantic_types']
@@ -119,7 +126,7 @@ def verify(paths,data):
         assert large['wall_s']<base['wall_s']*6,(name,'wall scaling')
         assert large['rss_kib']<base['rss_kib']*5+1024,(name,'rss scaling')
     assert data['generated_runtime'] is None and data['generated_text'] is None
-    for name in ('types-constants-4','types-signatures-4'):
+    for name in telemetry_cases:
         rows=[r for r in data['telemetry'] if r['input']==name];summarize(rows)
         expected=next(r['output_sha256'] for r in data['observations'] if r['input']==name)
         assert all(r['output_sha256']==expected for r in rows)

@@ -3,6 +3,24 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::source_type(EntityId e) const
+{
+    return entities[e].kind == EntityKind::Alias ? facts[entities[e].source].type : entities[e].type;
+}
+EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type)
+{
+    TypeId canonical = types.signature(type);
+    EntityId e = local(s, name);
+    if (e) {
+        if ((entities[e].kind != EntityKind::Alias && entities[e].kind != EntityKind::Type) ||
+            entities[e].type != canonical) throw std::runtime_error("conflicting type alias");
+        return e;
+    }
+    e = make_entity(EntityKind::Alias, s, name, source);
+    entities[e].type = canonical;
+    bind(s, name, e);
+    return e;
+}
 TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
 {
     TypeId result = 0;
@@ -21,7 +39,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             EntityId e = resolve(node.detail, s);
             if (!e || (entities[e].kind != EntityKind::Type && entities[e].kind != EntityKind::Alias))
                 throw std::runtime_error("type name is not a visible type");
-            result = entities[e].type;
+            result = source_type(e);
             facts[c].entity = e;
             continue;
         }
@@ -149,17 +167,21 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
             throw std::runtime_error("uninitialized reference");
     }
     EntityKind kind = alias ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
+    if (alias) {
+        EntityId e = declare_alias(owner, id, d, t);
+        record(owner, e, d, t, kind);
+        return e;
+    }
+    TypeId canonical = types.signature(t);
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id;
     EntityId cls = constructor ? scopes[owner].entity : 0;
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
-    if (alias && e && entities[e].kind == EntityKind::Alias) {
-        if (entities[e].type != t) throw std::runtime_error("conflicting type alias");
-    } else if (e && entities[e].kind == kind && kind != EntityKind::Alias) {
-        entities[e].type = types.composite(entities[e].type, function ? types.signature(t) : t);
+    if (e && entities[e].kind == kind) {
+        entities[e].type = types.composite(entities[e].type, canonical);
     } else {
         e = make_entity(kind, owner, id, source);
-        entities[e].type = function ? types.signature(t) : t;
+        entities[e].type = canonical;
         if (constructor) class_facts[entities[cls].class_info].constructor = e;
         else bind(owner, id, e);
     }

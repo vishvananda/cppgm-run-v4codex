@@ -8,6 +8,30 @@ import tempfile
 root = pathlib.Path(__file__).resolve().parents[2]
 compiler = pathlib.Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root/'dev/cppgm++'
 cases = [
+ ('qualified-class-owner', 'namespace A{struct X;}namespace B{struct A::X{int y;};}', None),
+ ('qualified-enum-owner', 'namespace A{enum class E:int;}namespace B{enum class A::E:int{a};}', None),
+ ('qualified-class-enclosing', 'namespace A{struct X;using T=int;}struct A::X{T member;};', ['variable member int']),
+ ('qualified-class-parser-owner', 'namespace A{using word=int;struct X;}struct A::X{void f(){word x;}};', ['variable x int']),
+ ('qualified-nested-class-parser-owner', 'struct O{struct X;using word=int;};struct O::X{void f(){word x;}};', ['variable x int']),
+ ('qualified-enum-base-owner', 'namespace A{using word=int;enum class E:word;}enum class A::E:word{v};', ['enumerator v enum class A::E 0']),
+ ('using-alias-conflict', 'typedef int U;using U=char;', None),
+ ('using-alias-repeat', 'using U=int;using U=int;U x;', ['variable x int']),
+ ('function-pointer-redeclare', 'int(*p)(const int);int(*p)(int);', ['variable p pointer to function of (const int) returning int','variable p pointer to function of (int) returning int']),
+ ('function-alias-redeclare', 'using F=int(const int);typedef int F(int);F *p;', ['variable p pointer to function of (const int) returning int']),
+ ('alias-source-form', 'namespace N{using F=int(const int);}using N::F;F *p;', ['type-alias F function of (const int) returning int','variable p pointer to function of (const int) returning int']),
+ ('inline-root-hit', 'namespace A{using T=char;}namespace N{using T=int;inline namespace I{using namespace A;}}N::T x;', ['variable x int']),
+ ('inline-child-hit', 'namespace A{using T=char;}namespace N{using namespace A;inline namespace I{using T=int;}}N::T x;', ['variable x int']),
+ ('inline-directives', 'namespace A{using T=int;}namespace N{inline namespace I{using namespace A;}}N::T x;', ['variable x int']),
+ ('inline-conflict', 'namespace N{using T=int;inline namespace I{using T=char;}}N::T x;', None),
+ ('constructor-try-body', 'struct S{S()try {T body;}catch(...){T handler;}using T=int;};', ['variable body int','variable handler int']),
+ ('for-lifetime', 'void f(){for(const int n=3;;){int a[n];}int b[n];}', None),
+ ('for-body-lifetime', 'using T=int;void f(){for(;;)using T=char;T x;}', ['variable x int']),
+ ('branch-lifetime', 'using T=int;void f(){if(1)using T=char;else{T x;}T y;}', ['variable x int','variable y int']),
+ ('condition-lifetime', 'const int n=5;void f(){if(const int n=3){int a[n];}int b[n];}', ['variable a array of 3 int','variable b array of 5 int']),
+ ('do-body-lifetime', 'using T=int;void f(){do using T=char;while(false);T x;}', ['variable x int']),
+ ('layout-overflow', 'struct X{char a[18446744073709551615ULL];char b;};int n[sizeof(X)];', None),
+ ('layout-tail-overflow', 'struct X{long x;char a[18446744073709551615ULL-8];};int n[sizeof(X)];', None),
+ ('layout-max-array', 'struct X{char a[18446744073709551615ULL];};static_assert(sizeof(X)==18446744073709551615ULL,"size");', ['type X struct X']),
  ('anonymous-object-not-qualifier', 'static struct{using T=int;}object;object::T x;', None),
  ('function-point', 'using T=int;namespace N{void f(){T x;}using T=char;}', ['variable x int']),
  ('class-point', 'using T=int;namespace N{struct C{void f(){T x;}};using T=char;}', ['variable x int']),
@@ -47,7 +71,8 @@ with tempfile.TemporaryDirectory(prefix='pa6-personal-') as tmp:
     for name, source, expected in cases:
         src, out = tmp/(name+'.cpp'), tmp/'out'
         src.write_text(source)
-        result = subprocess.run([compiler,'--emit-types','-o',out,src],capture_output=True,text=True)
+        result = subprocess.run([compiler,'--emit-types','-o',out,src],capture_output=True,text=True,timeout=15)
+        assert 'Sanitizer' not in result.stderr and 'runtime error:' not in result.stderr, result.stderr
         assert result.returncode == (1 if expected is None else 0), (name,result.returncode,result.stderr)
         if expected is not None:
             text = out.read_text()

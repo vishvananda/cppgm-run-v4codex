@@ -1,6 +1,5 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
-#include <sstream>
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -20,6 +19,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
     ScopeId owner = name_owner(name, s);
+    if (definition && !encloses(s, owner)) throw std::runtime_error("class definition outside enclosing scope");
     EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
@@ -81,11 +81,12 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     bool definition = ast[n].flags & 1;
     NodeId underlying_node = child(n, Kind::TypeId);
     ScopeId owner = name_owner(name, s);
+    if (definition && !encloses(s, owner)) throw std::runtime_error("enum definition outside enclosing scope");
     bool declares = emit || definition || scoped || underlying_node;
     EntityId e = declares ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!definition && !scoped && !underlying_node && !e)
         throw std::runtime_error("undeclared elaborated or opaque unscoped enum");
-    TypeId underlying = underlying_node ? type_id(underlying_node, s) : types.fundamental(FT_INT);
+    TypeId underlying = underlying_node ? type_id(underlying_node, owner) : types.fundamental(FT_INT);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].key = KW_ENUM; entities[e].scoped = scoped;

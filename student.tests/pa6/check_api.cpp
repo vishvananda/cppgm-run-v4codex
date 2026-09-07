@@ -13,7 +13,9 @@ int main()
     SourceBuffer source(
         "void f(const int); void f(volatile int);"
         "void g(int[3]); void g(int*);"
+        "void with_parameter(int(*callback)(const int)){}"
         "using F=int(const int); F* fp;"
+        "using F=int(int);typedef int F(int);int(*fp)(int);"
         "extern int a[];int a[3]; using U=int[]; U* p;"
         "using R=int&;using RR=R&&;"
         "namespace A{using T=int;} namespace B{using T=int;}"
@@ -28,7 +30,7 @@ int main()
     }
     sem.finish();
     auto name = [&](IdentifierId id) { TextView t=ids.spelling(id);return std::string(t.data,t.size); };
-    EntityId f=0,g=0,r=0,array=0;
+    EntityId f=0,g=0,r=0,array=0,alias=0,pointer=0;
     unsigned fdecls=0,gdecls=0;
     for (std::size_t i=1;i<sem.declarations.size();++i) {
         const Declaration& d=sem.declarations[i];const Entity& e=sem.entities[d.entity];
@@ -43,6 +45,18 @@ int main()
             assert(sem.types[sem.types.parameters[sem.types[d.type].offset]].cv!=0);
         }
         if(n=="g") {if(g) assert(g==d.entity);g=d.entity;++gdecls;}
+        if(n=="F") {
+            if(alias) assert(alias==d.entity);
+            alias=d.entity;
+            assert(sem.types.signature(d.type)==e.type);
+        }
+        if(n=="fp") {
+            if(pointer) assert(pointer==d.entity);
+            pointer=d.entity;
+            assert(sem.types.signature(d.type)==e.type);
+            Type function=sem.types[sem.types[e.type].child];
+            assert(!sem.types[sem.types.parameters[function.offset]].cv);
+        }
         if(n=="a") {if(array) assert(array==d.entity);array=d.entity;assert(sem.types[e.type].bound==3);}
         if(n=="U") assert(sem.types[e.type].bound==0);
         if(n=="R") r=d.entity;
@@ -53,6 +67,7 @@ int main()
             assert(sem.facts[e.definition].scope == e.scope);
         }
         if(n=="member") assert(sem.types[e.type].kind==TypeKind::Named);
+        if(n=="callback") assert(sem.types.signature(d.type)==e.type);
     }
     assert(fdecls==2 && gdecls==2 && array);
     std::size_t transitions=sem.types.signature_work;

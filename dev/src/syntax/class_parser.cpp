@@ -11,7 +11,9 @@ NodeId Parser::class_specifier()
     NodeId n = identifier() ? name(true) : 0;
     NodeId result = named(Kind::Class, n);
     ast.append(result, key);
-    ScopeId owner = scope;
+    ScopeId saved_scope = scope;
+    ScopeId owner = n ? qualified_owner(n) : scope;
+    if (owner == unknown_scope) owner = scope;
     Binding previous = names.local(owner, final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);
     names.bind(owner, final_name(n), template_declaration ? Category::TemplateType : Category::Type, child);
@@ -51,7 +53,7 @@ NodeId Parser::class_specifier()
         } else ast.append(result, declaration());
     }
     in.take();
-    scope = owner;
+    scope = saved_scope;
     ast[result].literal = ast.class_regions.size();
     ast.class_regions.push_back(ClassRegion{region_begin, in.consumed});
     current_class = saved_class;
@@ -70,12 +72,16 @@ NodeId Parser::enum_specifier()
         ast[result].detail = n;
         ast[result].text = final_name(n);
     }
-    ScopeId child = names.enter(scope);
-    names.bind(scope, ast[result].text, Category::Type, child);
+    ScopeId saved_scope = scope;
+    ScopeId owner = ast[result].detail ? qualified_owner(ast[result].detail) : scope;
+    if (owner == unknown_scope) owner = scope;
+    Binding previous = names.local(owner, ast[result].text);
+    ScopeId child = previous.target ? previous.target : names.enter(owner);
+    names.bind(owner, ast[result].text, Category::Type, child);
+    scope = owner;
     if (in.eat(":")) ast.append(result, type_id());
-    if (!in.eat("{")) return result;
+    if (!in.eat("{")) { scope = saved_scope; return result; }
     ast[result].flags |= 1;
-    ScopeId owner = scope;
     scope = child;
     while (!in.is("}")) {
         if (!identifier()) throw std::runtime_error("expected enumerator");
@@ -87,7 +93,7 @@ NodeId Parser::enum_specifier()
         if (!in.eat(",")) break;
     }
     in.require("}");
-    scope = owner;
+    scope = saved_scope;
     return result;
 }
 

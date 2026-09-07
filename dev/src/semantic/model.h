@@ -88,7 +88,7 @@ struct Scope {
     EntityId entity = 0;
     IdentifierId name = 0;
     NodeId display_name = 0;
-    std::uint32_t first_decl = 0, last_decl = 0, first_edge = 0;
+    std::uint32_t first_decl = 0, last_decl = 0, first_edge = 0, first_inline = 0;
 };
 struct Declaration {
     EntityId entity = 0;
@@ -98,7 +98,7 @@ struct Declaration {
     ETokenType key = TOK_INVALID;
     std::uint32_t next = 0;
 };
-struct Edge { ScopeId target = 0; std::uint32_t next = 0; bool inline_namespace = false; };
+struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }

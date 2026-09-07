@@ -5,6 +5,19 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+namespace {
+std::uint64_t layout_add(std::uint64_t a, std::uint64_t b)
+{
+    if (b > std::numeric_limits<std::uint64_t>::max() - a)
+        throw std::runtime_error("class size overflow");
+    return a + b;
+}
+std::uint64_t layout_align(std::uint64_t bytes, std::uint64_t alignment)
+{
+    std::uint64_t remainder = bytes % alignment;
+    return remainder ? layout_add(bytes, alignment - remainder) : bytes;
+}
+}
 bool Analyzer::integral(TypeId id) const
 {
     const Type& t = types[id];
@@ -73,10 +86,10 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
                 std::uint64_t field_size = reference ? 8 : size(member.type);
                 align = std::max(align, field_align);
                 if (entities[e].key == KW_UNION) bytes = std::max(bytes, field_size);
-                else bytes = (bytes + field_align - 1) / field_align * field_align + field_size;
+                else bytes = layout_add(layout_align(bytes, field_align), field_size);
             }
             class_facts[layout].alignment = align;
-            class_facts[layout].size = bytes ? (bytes + align - 1) / align * align : 1;
+            class_facts[layout].size = bytes ? layout_align(bytes, align) : 1;
             class_facts[layout].layout_state = 2;
         }
         return alignment ? class_facts[layout].alignment : class_facts[layout].size;
