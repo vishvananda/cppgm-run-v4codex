@@ -22,18 +22,32 @@ std::string Preprocessor::spelling(IdentifierId id) const
     return std::string(text.data, text.size);
 }
 
-TextView Preprocessor::save(TextView text)
+TextView Preprocessor::SpellingArena::save(TextView text)
 {
     if (text.size == 0) return TextView();
-    if (arena_.empty() || arena_.back().capacity() - arena_.back().size() < text.size) {
-        arena_.emplace_back();
-        arena_.back().reserve(std::max<std::size_t>(65536, text.size));
-        if (telemetry_) stats_.arena_bytes += arena_.back().capacity();
+    if (current < slabs.size() && slabs[current].capacity() - slabs[current].size() < text.size)
+        ++current;
+    if (current == slabs.size()) {
+        slabs.emplace_back();
+        slabs.back().reserve(std::max<std::size_t>(65536, text.size));
+        bytes += slabs.back().capacity();
     }
-    std::vector<char>& slab = arena_.back();
+    std::vector<char>& slab = slabs[current];
+    if (slab.capacity() - slab.size() < text.size) {
+        // A rewound empty slab can grow; no live spelling points into it.
+        bytes -= slab.capacity();
+        slab.reserve(text.size);
+        bytes += slab.capacity();
+    }
     std::size_t start = slab.size();
     slab.insert(slab.end(), text.data, text.data + text.size);
     return TextView(slab.data() + start, text.size);
+}
+
+void Preprocessor::SpellingArena::rewind()
+{
+    for (std::size_t i = 0; i < slabs.size() && i <= current; ++i) slabs[i].clear();
+    current = 0;
 }
 
 std::string quote_pp_string(const std::string& text)
@@ -79,6 +93,7 @@ Preprocessor::Preprocessor(const std::string& path, const std::string& date,
     for (const auto& entry : fixed) {
         IdentifierId id = name(entry[0]);
         ExpansionToken value = generated(entry[1], ExpansionToken());
+        value.token.spelling = persistent_.save(value.token.spelling);
         if (id >= macros_.size()) macros_.resize(id + 1);
         macros_[id].defined = true;
         macros_[id].replacement.push_back(value);
@@ -129,6 +144,7 @@ std::uint32_t Preprocessor::paint(std::uint32_t root, IdentifierId id)
         contexts_.push_back(node);
     }
     if (telemetry_) stats_.context_nodes += 32;
+    if (telemetry_) stats_.max_context_nodes = std::max(stats_.max_context_nodes, contexts_.size());
     return child;
 }
 
@@ -153,11 +169,12 @@ ExpansionToken Preprocessor::generated(const std::string& text, const ExpansionT
     PPToken t = cursor.next();
     if (t.kind == PPTokenKind::whitespace || t.kind == PPTokenKind::newline || t.kind == PPTokenKind::eof)
         throw std::runtime_error("paste does not form a token");
-    t.spelling = save(t.spelling);
+    t.spelling = transient_.save(t.spelling);
     PPToken tail = cursor.next();
     if (tail.kind == PPTokenKind::newline) tail = cursor.next();
     if (tail.kind != PPTokenKind::eof) throw std::runtime_error("paste forms multiple tokens");
     t.file_id = origin.token.file_id;
+    t.presumed_file = origin.filename;
     t.begin = origin.token.begin; t.end = origin.token.end;
     t.line = origin.token.line; t.column = origin.token.column;
     result.token = t;
@@ -166,13 +183,14 @@ ExpansionToken Preprocessor::generated(const std::string& text, const ExpansionT
     return result;
 }
 
-ExpansionToken Preprocessor::stabilize(PPToken token, FileFrame& file)
+ExpansionToken Preprocessor::stabilize(PPToken token, FileFrame& file, bool persistent)
 {
     if (token.spelling.size && token.spelling.data != file.source.bytes.data() + token.begin)
-        token.spelling = save(token.spelling);
+        token.spelling = (persistent ? persistent_ : transient_).save(token.spelling);
     ExpansionToken result;
     result.token = token;
     result.token.line += file.line_delta;
+    result.token.presumed_file = file.filename;
     result.filename = file.filename;
     result.space = file.space;
     return result;
@@ -212,7 +230,7 @@ ExpansionToken Preprocessor::raw()
                 t = f.cursor.next();
                 if (t.kind == PPTokenKind::newline || t.kind == PPTokenKind::eof) break;
                 if (t.kind == PPTokenKind::whitespace) f.space = true;
-                else { directive_.push_back(stabilize(t, f)); f.space = false; }
+                else { directive_.push_back(stabilize(t, f, true)); f.space = false; }
             }
             next_line_ = t.line + 1;
             f.line_start = f.space = true;
@@ -238,7 +256,7 @@ bool Preprocessor::advance()
 PPToken Preprocessor::next()
 {
     for (;;) {
-        if (expander_.empty()) reset_contexts();
+        if (expander_.empty()) { reset_contexts(); transient_.rewind(); }
         ExpansionToken token = expander_.next();
         if (token.token.kind == PPTokenKind::eof) {
             if (advance()) continue;
@@ -253,7 +271,10 @@ PPToken Preprocessor::next()
             pragma(decode_pp_string(string), token.filename);
             continue;
         }
-        if (telemetry_) ++stats_.output_tokens;
+        if (telemetry_) {
+            ++stats_.output_tokens;
+            stats_.arena_bytes = persistent_.bytes + transient_.bytes;
+        }
         return token.token;
     }
 }

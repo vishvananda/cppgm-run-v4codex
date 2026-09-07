@@ -33,3 +33,20 @@ structured consumers, with no premature syntax or backend representation.
   prescan, directives and file identity are implemented. The run target also
   confirms multiple-primary output. Remaining: personal depth/lifetime checks,
   allocation/scaling evidence, and final cumulative validation.
+- Allocation review found repeated copying in nested argument prescans (1000
+  levels used 314 MiB). Replaced it with indexed borrowed slices and an explicit
+  task stack; ordinary substitution copies only produced tokens. Generated
+  spelling storage now rewinds when the expansion drains. Course 105/105 and
+  163 personal cases pass; sanitizer/API checks are running.
+- Performance campaign budgets, before A/B measurement: unchanged-workload
+  paired latency regression <=10% plus A/A noise, peak RSS <=15% plus 1 MiB;
+  host-tool text growth <=15%. Fourfold frontend input growth must take <6x
+  latency and <5x RSS. Indexed nesting captures <=3n tokens, uses O(n) scratch
+  with bounded host call depth; generated counter spelling stays <=128 KiB.
+  Frozen A is `28279a9d0`'s ordinary binary. No generated-executable surface
+  exists yet; runtime and generated text size remain N/A.
+- Depth/lifetime increment: 163 personal semantic cases pass normally and with
+  ASan/UBSan; direct API checks validate presumed/physical locations, stable
+  identifier identity, 20,000 nested prescans and 100,000 counters with <=128 KiB
+  spelling storage. All 105 course cases also pass under ASan/UBSan. The final
+  frozen campaign and completion audit remain; no related work is handed off.

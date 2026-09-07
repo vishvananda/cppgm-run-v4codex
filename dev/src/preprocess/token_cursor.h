@@ -14,6 +14,7 @@ struct PPToken {
     std::uint32_t file_id;
     std::size_t begin, end, line, column;
     IdentifierId identifier = 0;
+    IdentifierId presumed_file = 0; // PA4 logical filename; file_id/offset stay physical
     IdentifierId suffix = 0;
     std::size_t suffix_begin = 0, suffix_line = 0, suffix_column = 0;
     TextView spelling;

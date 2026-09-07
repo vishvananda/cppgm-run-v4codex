@@ -53,6 +53,11 @@ int main(int argc, char** argv)
                     << ",\"output_tokens\":" << s.output_tokens << ",\"paste_bytes\":" << s.paste_bytes
                     << ",\"arena_bytes\":" << s.arena_bytes << ",\"context_nodes\":" << s.context_nodes
                     << ",\"max_pending\":" << s.max_pending << ",\"lex_tokens\":" << pp.lex_stats().tokens
+                    << ",\"captured_tokens\":" << s.captured_tokens
+                    << ",\"borrowed_arguments\":" << s.borrowed_arguments
+                    << ",\"max_prescan_depth\":" << s.max_prescan_depth
+                    << ",\"max_context_nodes\":" << s.max_context_nodes
+                    << ",\"scratch_growths\":" << s.scratch_growths
                     << ",\"identifiers\":" << pp.identifiers().size()
                     << ",\"identifier_storage_bytes\":" << pp.identifiers().storage_bytes() << "}\n";
             }

@@ -12,6 +12,8 @@ struct PreprocessStats {
     std::size_t argument_prescans = 0, replacement_tokens = 0, output_tokens = 0;
     std::size_t paste_bytes = 0, arena_bytes = 0, context_nodes = 0;
     std::size_t max_pending = 0;
+    std::size_t captured_tokens = 0, borrowed_arguments = 0, max_prescan_depth = 0;
+    std::size_t max_context_nodes = 0, scratch_growths = 0;
 };
 
 // Deferred tokens borrow immutable TU storage. Ancestry is a persistent set
@@ -38,16 +40,48 @@ public:
     explicit MacroExpander(Preprocessor& owner, bool source = false, bool expression = false);
     void push(const std::vector<ExpansionToken>& tokens);
     ExpansionToken next();
-    bool empty() const { return pending_.empty(); }
+    bool empty() const;
 private:
     friend class Preprocessor;
+    // A captured invocation is indexed once. Nested prescans borrow slices and
+    // jump over balanced subexpressions instead of copying/scanning each tail.
+    struct ArgumentStorage {
+        std::vector<ExpansionToken> tokens;
+        std::vector<std::size_t> boundary;
+        void index();
+    };
+    struct Slice {
+        const ArgumentStorage* storage = 0;
+        std::size_t begin = 0, end = 0;
+    };
+    struct Argument {
+        Slice raw;
+        std::vector<ExpansionToken> expanded;
+        bool ready = false;
+    };
+    struct Invocation {
+        bool active = false;
+        ExpansionToken head;
+        std::uint32_t replacement_context = 0;
+        IdentifierId macro = 0;
+        std::size_t prescan = 0, waiting = 0;
+        ArgumentStorage captured;
+        std::vector<Argument> arguments;
+    };
+    struct Task {
+        Slice input;
+        std::size_t position = 0, last_index = 0;
+        bool last_from_slice = false;
+        std::vector<ExpansionToken> pending, output, replacement;
+        Invocation invocation;
+    };
     Preprocessor& owner_;
     bool source_, expression_;
-    std::vector<ExpansionToken> pending_;
+    std::deque<Task> tasks_;
     ExpansionToken take();
-    std::vector<ExpansionToken> substitute(const ExpansionToken& head,
-        const MacroDefinition& macro, std::vector<std::vector<ExpansionToken> >& args,
-        std::uint32_t replacement_context);
+    void collect(const ExpansionToken& open, const MacroDefinition& macro);
+    bool resume();
+    void substitute(Invocation& invocation, const MacroDefinition& macro);
 };
 
 // Pull cursor shared by the dump adapter and future parser. It retains sources,
@@ -77,13 +111,19 @@ private:
     };
     struct ContextNode { std::uint32_t child[2]; };
     struct FileIdentity { std::uint64_t device, inode; bool used = false; };
+    struct SpellingArena {
+        std::deque<std::vector<char> > slabs;
+        std::size_t current = 0, bytes = 0;
+        TextView save(TextView text);
+        void rewind();
+    };
     bool telemetry_;
     LexStats lex_stats_;
     PreprocessStats stats_;
     IdentifierTable identifiers_;
     std::deque<SourceBuffer> sources_;
     std::vector<std::unique_ptr<FileFrame> > files_;
-    std::deque<std::vector<char> > arena_;
+    SpellingArena persistent_, transient_;
     std::vector<MacroDefinition> macros_;
     std::vector<int> parameter_index_;
     std::vector<ContextNode> contexts_;
@@ -94,8 +134,7 @@ private:
     std::vector<ExpansionToken> directive_;
     std::size_t next_line_ = 1;
 
-    TextView save(TextView text);
-    ExpansionToken stabilize(PPToken token, FileFrame& file);
+    ExpansionToken stabilize(PPToken token, FileFrame& file, bool persistent = false);
     ExpansionToken raw();
     bool advance();
     void directive();
