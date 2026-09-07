@@ -1,7 +1,7 @@
 """Fixed LowIR compiler corpus and executable workloads (no fixture answers)."""
 
 def compiler_workloads(base=3000):
-    for group in ('calls-integers', 'memory-floating', 'cfg-phi'):
+    for group in ('calls-integers', 'memory-floating', 'cfg-phi', 'cfg-handlers'):
         for scale in (1,4):
             parts=[]
             for n in range(base*scale):
@@ -11,13 +11,21 @@ def compiler_workloads(base=3000):
                 elif group=='memory-floating':
                     body='\n'.join(f'%p{k}=index f64 %p,{k}\n%x{k}=load f64 %p{k}\n%v{k}=binary mul f64 %x{k},1.5\nstore f64 %v{k},%p{k}' for k in range(7))
                     parts.append(f'function @f{n}(%p:ptr)->f64 {{block ^entry:{body}\nreturn f64 %v6}}')
-                else:
+                elif group=='cfg-phi':
                     parts.append(f'''function @f{n}(%n:i64)->i64 {{
 block ^entry:jump ^loop
 block ^loop:%i=phi i64 [^entry:0,^latch:%next] %s=phi i64 [^entry:0,^latch:%sum]
 %c=cmp lt i64 %i,%n branch %c,^latch,^exit
 block ^latch:%next=binary add i64 %i,1 %sum=binary add i64 %s,%next jump ^loop
 block ^exit:return i64 %s }}''')
+                else:
+                    parts.append(f'''function @f{n}(%n:i64)->i64 {{
+block ^entry:eh_try ^handler eh_cleanup ^cleanup branch %n,^left,^right
+block ^left:jump ^join
+block ^right:jump ^join
+block ^join:%v=phi i64 [^left:1,^right:2] eh_end return i64 %v
+block ^cleanup:resume
+block ^handler:%e=exception i64 return i64 %e }}''')
             prefix='declare function @identity(%x:i64)->i64\n' if group=='calls-integers' else ''
             yield f'{group}-{scale}',dict(group=group,scale=scale,source=prefix+'\n'.join(parts)+'\n',functions=base*scale)
 
