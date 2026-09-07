@@ -14,6 +14,11 @@ pack child-list invariant, and a cross-file concatenated literal source range. P
 graph/lifetime checks cover those ownership paths. AST indentation now reuses
 one buffer; optional name/scope work counters observe existing work.
 
+Profitability review: the isolated indentation experiment did not beat A/A noise
+in both blocks and showed no RSS benefit. Remove that optional change before the
+final freeze; retain the candidate and isolation datasets. The final source must
+be remeasured, not assigned its predecessor's measurements.
+
 Remaining: sanitizer/API checks; frozen final A/B measurements; final audit and
 performance consolidation; cohesive commits; fresh exit gates and clean status.
 Frozen A is the ordinary `924ba7dc6` binary. Final campaign retains the existing
