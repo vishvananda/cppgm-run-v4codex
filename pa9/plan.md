@@ -35,12 +35,16 @@ binaries/inputs, A/A calibration, ABBA and equivalent output per spec.
 - `df7dbb00a`: complete first encoder; 111/111 default and 117/117 explicit
   contract checks, cumulative 904/904. Baseline binary independently rebuilt
   from this commit with identical SHA-256 (`78784463b5cbd4e...`).
-- Second increment: sparse name-local substitutions, linear modifier parsing
+- `f6552f8d1`: sparse name-local substitutions, linear modifier parsing
   and emission, canonical tagged templates, 64-bit ABI indices, explicit
   member/nonmember production shape, fact serialization and optional telemetry.
   117 fixture roundtrips, 11 valid/15 invalid personal cases and file audit pass.
-  Final sanitizer run pending; benchmark protocol/budgets fixed in the personal
-  harness before timing. No executable generation is part of this stage.
+  Sanitizers pass. First frozen benchmark retained as `initial-performance.json`:
+  latency/RSS/scaling pass, compiler text growth exceeds the original 100 KiB
+  budget. Serializer joining is now shared and its deep modifier traversal is
+  iterative; explicit deep roundtrips pass. Compiler text is 265664 bytes, below
+  the unchanged growth budget. Final timings use fourfold longer workloads.
+  No executable generation is part of this stage.
 - First implementation: all **111/111** root-suite fixtures and **117/117**
   independent exact-output/status checks pass. No fixture changed. Remaining
   work is API/serializer validation, scaling, telemetry and cumulative gates.

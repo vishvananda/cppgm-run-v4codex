@@ -66,7 +66,7 @@ def corpus(kind, n):
     return prefix + '\n'.join(lines) + '\nfunction bench::use\n' + ''.join(f'param t{i}\n' for i in range(n))
 
 # Enough work to make process startup a small fraction even at the small size.
-sizes = {'templates': 24000, 'expressions': 18000, 'modifiers': 2400, 'batch': 6000}
+sizes = {'templates': 96000, 'expressions': 72000, 'modifiers': 9600, 'batch': 24000}
 for kind, n in sizes.items():
     for scale in (1, 4):
         name = f'{kind}-{scale}'

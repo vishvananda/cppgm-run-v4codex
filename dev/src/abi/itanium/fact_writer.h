@@ -10,6 +10,9 @@ private:
     const Graph& g;
     std::string definitions;
     std::vector<unsigned> seen;
+    std::vector<Id> touched;
+    void definition(Id id, unsigned bit, const std::string& command,
+                    const std::string& name, const std::string& form);
     unsigned depth = 0;
     std::string ref(char family, Id id);
     std::string type(Id id);

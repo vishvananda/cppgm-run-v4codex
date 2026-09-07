@@ -50,9 +50,8 @@ with tempfile.TemporaryDirectory(prefix='pa9-personal-') as tmp:
         result = subprocess.run([a.tool, '--stats', '-o', str(output), str(p)], capture_output=True)
         assert result.returncode == 0, result.stderr.decode()
         assert output.read_text() == expected, (text, output.read_text(), expected)
-        if len(text) < 10000:
-            roundtrip = subprocess.run([a.api, str(p)], capture_output=True)
-            assert roundtrip.returncode == 0 and roundtrip.stdout.decode() == expected, roundtrip.stderr.decode()
+        roundtrip = subprocess.run([a.api, str(p)], capture_output=True)
+        assert roundtrip.returncode == 0 and roundtrip.stdout.decode() == expected, roundtrip.stderr.decode()
     for text in invalid:
         p.write_text(text)
         result = subprocess.run([a.tool, '-o', str(output), str(p)], capture_output=True)

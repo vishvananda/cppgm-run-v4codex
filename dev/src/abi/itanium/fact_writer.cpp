@@ -1,14 +1,49 @@
 #include "abi/itanium/fact_writer.h"
 #include "abi/itanium/operations.h"
 #include <stdexcept>
+#include <sstream>
 
 namespace abi_mangle {
+namespace {
+bool linear_type(Kind kind) {
+    switch (kind) {
+    case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
+    case Kind::Cv: case Kind::Pack: case Kind::Array: case Kind::Vector:
+    case Kind::Tagged: case Kind::Vendor: case Kind::Name: return true;
+    default: return false;
+    }
+}
+std::string join_form(std::initializer_list<std::string> pieces) {
+    std::ostringstream out;
+    for (const std::string& piece : pieces) out << piece;
+    return out.str();
+}
+}
+
 FactWriter::FactWriter(const Graph& graph) : g(graph), seen(graph.size(), 0) {}
+void FactWriter::definition(Id id, unsigned bit, const std::string& command,
+                            const std::string& name, const std::string& form) {
+    if (!seen[id]) touched.push_back(id);
+    seen[id] |= bit;
+    definitions += command; definitions += ' '; definitions += name;
+    definitions += ' '; definitions += form; definitions += '\n';
+}
 std::string FactWriter::ref(char family, Id id) {
     unsigned bit = family == 't' ? 1 : family == 'a' ? 2 : family == 'x' ? 4 : family == 'c' ? 8 : 16;
     if (!id || id >= seen.size()) throw std::runtime_error("invalid fact serialization ID");
     std::string name = std::string(1, family) + std::to_string(id);
     if (seen[id] & bit) return name;
+    if (family == 't' && g[id].a && linear_type(g[id].kind)) {
+        std::vector<Id> chain;
+        Id base = id;
+        while (!(seen[base] & 1) && g[base].a && linear_type(g[base].kind)) {
+            chain.push_back(base); base = g[base].a;
+        }
+        ref('t', base);
+        for (auto i = chain.rbegin(); i != chain.rend(); ++i)
+            definition(*i, 1, "let-type", "t" + std::to_string(*i), type(*i));
+        return name;
+    }
     if (++depth > 1024) throw std::runtime_error("ABI fact serialization nesting limit exceeded");
     std::string form, command;
     if (family == 't') { form = type(id); command = "let-type"; }
@@ -16,8 +51,7 @@ std::string FactWriter::ref(char family, Id id) {
     else if (family == 'x') { form = expression(id); command = "let-expr"; }
     else if (family == 'c') { form = context(id); command = "let-context"; }
     else { form = entity(id); command = "let-entity"; }
-    --depth; seen[id] |= bit;
-    definitions += command + ' ' + name + ' ' + form + '\n';
+    --depth; definition(id, bit, command, name, form);
     return name;
 }
 std::string FactWriter::list(const Node& n, char family) {
@@ -29,11 +63,11 @@ std::string FactWriter::type(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
     case Kind::Name:
-        if (!n.a) return "named:" + g.spelling(n.b);
-        return "member " + ref('t', n.a) + ' ' + g.spelling(n.b);
+        if (!n.a) return join_form({"named:", g.spelling(n.b)});
+        return join_form({"member ", ref('t', n.a), " ", g.spelling(n.b)});
     case Kind::Standard:
-        return std::string("std-template ") + abi_standard_substitution_code(
-            static_cast<AbiStandardSubstitutionKind>(n.a)) + " true standard";
+        return join_form({std::string("std-template "), abi_standard_substitution_code(
+            static_cast<AbiStandardSubstitutionKind>(n.a)), " true standard"});
     case Kind::Template: {
         const Node& prefix = g[n.a]; std::string result;
         if (prefix.kind == Kind::Name) {
@@ -45,7 +79,7 @@ std::string FactWriter::type(Id id) {
             result = std::string("std-template ") + abi_standard_substitution_code(
                 static_cast<AbiStandardSubstitutionKind>(prefix.a)) + " false standard";
         else result = "template-name " + ref('t', n.a);
-        return result + list(n, 'a');
+        return join_form({result, list(n, 'a')});
     }
     case Kind::Tagged: {
         std::string result = "tagged " + ref('t', n.a);
@@ -53,64 +87,63 @@ std::string FactWriter::type(Id id) {
         return result;
     }
     case Kind::Builtin: return abi_builtin_type_word(static_cast<AbiBuiltinTypeKind>(n.a));
-    case Kind::Parameter: return std::string(n.b ? "template-param-subst " : "template-param ") + std::to_string(n.value);
-    case Kind::Pointer: return "ptr " + ref('t', n.a);
-    case Kind::Reference: return "ref " + ref('t', n.a);
-    case Kind::RvalueReference: return "rref " + ref('t', n.a);
-    case Kind::Cv: return std::string(n.b & 1 ? "const " : "") + (n.b & 2 ? "volatile " : "") + ref('t', n.a);
-    case Kind::Pack: return "pack " + ref('t', n.a);
-    case Kind::Vendor: return "vendor " + g.spelling(n.b) + ' ' + ref('t', n.a);
+    case Kind::Parameter: return join_form({std::string(n.b ? "template-param-subst " : "template-param "), std::to_string(n.value)});
+    case Kind::Pointer: return join_form({"ptr ", ref('t', n.a)});
+    case Kind::Reference: return join_form({"ref ", ref('t', n.a)});
+    case Kind::RvalueReference: return join_form({"rref ", ref('t', n.a)});
+    case Kind::Cv: return join_form({std::string(n.b & 1 ? "const " : ""), (n.b & 2 ? "volatile " : ""), ref('t', n.a)});
+    case Kind::Pack: return join_form({"pack ", ref('t', n.a)});
+    case Kind::Vendor: return join_form({"vendor ", g.spelling(n.b), " ", ref('t', n.a)});
     case Kind::Array:
-        if (n.b) return "array-expression " + ref('x', n.b) + ' ' + ref('t', n.a);
-        return "array " + std::to_string(n.value) + ' ' + ref('t', n.a);
-    case Kind::Vector: return "vector " + std::to_string(n.value) + ' ' + ref('t', n.a);
-    case Kind::Transform: return "builtin-transform " + g.spelling(n.b) + list(n, 't');
+        if (n.b) return join_form({"array-expression ", ref('x', n.b), " ", ref('t', n.a)});
+        return join_form({"array ", std::to_string(n.value), " ", ref('t', n.a)});
+    case Kind::Vector: return join_form({"vector ", std::to_string(n.value), " ", ref('t', n.a)});
+    case Kind::Transform: return join_form({"builtin-transform ", g.spelling(n.b), list(n, 't')});
     case Kind::FunctionType:
-        return std::string(n.c ? "function-type-variadic " : "function-type ") + ref('t', n.a) + list(n, 't');
-    case Kind::MemberPointer: return "member-pointer " + ref('t', n.a) + ' ' + ref('t', n.b);
-    case Kind::Decltype: return "decltype " + ref('x', n.a);
-    case Kind::Local: return "local-type " + ref('c', n.a) + ' ' + g.spelling(n.b) + ' ' + std::to_string(n.value);
-    case Kind::Lambda: return "lambda-closure " + ref('c', n.a) + ' ' + std::to_string(n.value) + list(n, 't');
+        return join_form({std::string(n.c ? "function-type-variadic " : "function-type "), ref('t', n.a), list(n, 't')});
+    case Kind::MemberPointer: return join_form({"member-pointer ", ref('t', n.a), " ", ref('t', n.b)});
+    case Kind::Decltype: return join_form({"decltype ", ref('x', n.a)});
+    case Kind::Local: return join_form({"local-type ", ref('c', n.a), " ", g.spelling(n.b), " ", std::to_string(n.value)});
+    case Kind::Lambda: return join_form({"lambda-closure ", ref('c', n.a), " ", std::to_string(n.value), list(n, 't')});
     default: throw std::runtime_error("invalid type fact serialization");
     }
 }
 std::string FactWriter::argument(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
-    case Kind::TypeArgument: return "type " + ref('t', n.a);
-    case Kind::Value: return "value " + ref('t', n.a) + ' ' + std::to_string(static_cast<std::int64_t>(n.value));
+    case Kind::TypeArgument: return join_form({"type ", ref('t', n.a)});
+    case Kind::Value: return join_form({"value ", ref('t', n.a), " ", std::to_string(static_cast<std::int64_t>(n.value))});
     case Kind::DependentValue:
-        return "dependent-value " + ref('t', n.a) + ' ' + ref('t', g[n.b].a) + ' ' +
-            std::to_string(static_cast<std::int64_t>(g[n.b].value));
-    case Kind::ExpressionArgument: return "expression " + ref('x', n.a);
-    case Kind::ArgumentPack: return "pack" + list(n, 'a');
+        return join_form({"dependent-value ", ref('t', n.a), " ", ref('t', g[n.b].a), " ", std::to_string(static_cast<std::int64_t>(g[n.b].value))});
+    case Kind::ExpressionArgument: return join_form({"expression ", ref('x', n.a)});
+    case Kind::ArgumentPack: return join_form({"pack", list(n, 'a')});
     case Kind::TemplateEntity:
-        if (g[n.a].kind == Kind::Parameter) return "template-param-template " + std::to_string(g[n.a].value);
-        return "template-entity-type " + ref('t', n.a);
-    case Kind::MemberTemplateEntity: return "member-template-entity " + ref('t', n.a) + ' ' + g.spelling(n.b) + " -";
-    case Kind::EntityArgument: return std::string(n.b ? "entity-address " : "entity-reference ") + ref('e', n.a);
+        if (g[n.a].kind == Kind::Parameter) return join_form({"template-param-template ", std::to_string(g[n.a].value)});
+        return join_form({"template-entity-type ", ref('t', n.a)});
+    case Kind::MemberTemplateEntity: return join_form({"member-template-entity ", ref('t', n.a), " ", g.spelling(n.b), " -"});
+    case Kind::EntityArgument: return join_form({std::string(n.b ? "entity-address " : "entity-reference "), ref('e', n.a)});
     default: throw std::runtime_error("invalid argument fact serialization");
     }
 }
 std::string FactWriter::expression(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
-    case Kind::ExprParameter: return "template-param " + std::to_string(n.value);
-    case Kind::ExprFunctionParameter: return "function-param " + std::to_string(n.value);
-    case Kind::Value: return "value " + ref('t', n.a) + ' ' + std::to_string(static_cast<std::int64_t>(n.value));
-    case Kind::Unary: return std::string("unary ") + operation_code(n.b) + ' ' + ref('x', n.a);
-    case Kind::Binary: return std::string("binary ") + operation_code(n.c) + ' ' + ref('x', n.a) + ' ' + ref('x', n.b);
-    case Kind::Conditional: return "conditional " + ref('x', n.a) + ' ' + ref('x', n.b) + ' ' + ref('x', n.c);
-    case Kind::ExprPack: return "pack " + ref('x', n.a);
-    case Kind::Call: return "call " + ref('x', n.a) + list(n, 'x');
-    case Kind::Conversion: return "conversion " + ref('t', n.a) + list(n, 'x');
-    case Kind::Cast: return std::string("cast ") + operation_code(n.c) + ' ' + ref('t', n.a) + ' ' + ref('x', n.b);
-    case Kind::TemplateId: return "template-id " + g.spelling(n.a) + list(n, 'a');
-    case Kind::TypeTrait: return "type-trait " + g.spelling(n.a) + list(n, 't');
-    case Kind::SizeofType: return "sizeof-type " + ref('t', n.a);
-    case Kind::Member: return "member " + ref('t', n.a) + (n.c ? " yes " : " no ") + g.spelling(n.b) + list(n, 'a');
-    case Kind::ObjectMember: return std::string("object-member ") + operation_code(n.c) + ' ' + ref('x', n.a) + ' ' + g.spelling(n.b) + list(n, 'a');
-    case Kind::EntityExpression: return std::string(n.b ? "entity-address " : "entity-reference ") + ref('e', n.a);
+    case Kind::ExprParameter: return join_form({"template-param ", std::to_string(n.value)});
+    case Kind::ExprFunctionParameter: return join_form({"function-param ", std::to_string(n.value)});
+    case Kind::Value: return join_form({"value ", ref('t', n.a), " ", std::to_string(static_cast<std::int64_t>(n.value))});
+    case Kind::Unary: return join_form({std::string("unary "), operation_code(n.b), " ", ref('x', n.a)});
+    case Kind::Binary: return join_form({std::string("binary "), operation_code(n.c), " ", ref('x', n.a), " ", ref('x', n.b)});
+    case Kind::Conditional: return join_form({"conditional ", ref('x', n.a), " ", ref('x', n.b), " ", ref('x', n.c)});
+    case Kind::ExprPack: return join_form({"pack ", ref('x', n.a)});
+    case Kind::Call: return join_form({"call ", ref('x', n.a), list(n, 'x')});
+    case Kind::Conversion: return join_form({"conversion ", ref('t', n.a), list(n, 'x')});
+    case Kind::Cast: return join_form({std::string("cast "), operation_code(n.c), " ", ref('t', n.a), " ", ref('x', n.b)});
+    case Kind::TemplateId: return join_form({"template-id ", g.spelling(n.a), list(n, 'a')});
+    case Kind::TypeTrait: return join_form({"type-trait ", g.spelling(n.a), list(n, 't')});
+    case Kind::SizeofType: return join_form({"sizeof-type ", ref('t', n.a)});
+    case Kind::Member: return join_form({"member ", ref('t', n.a), (n.c ? " yes " : " no "), g.spelling(n.b), list(n, 'a')});
+    case Kind::ObjectMember: return join_form({std::string("object-member "), operation_code(n.c), " ", ref('x', n.a), " ", g.spelling(n.b), list(n, 'a')});
+    case Kind::EntityExpression: return join_form({std::string(n.b ? "entity-address " : "entity-reference "), ref('e', n.a)});
     default: throw std::runtime_error("invalid expression fact serialization");
     }
 }
@@ -188,12 +221,16 @@ std::string FactWriter::write(const Target& t) {
         }
         result += " function " + function(t.function); break;
     }
-    return definitions + result + '\n';
+    std::string output = std::move(definitions); output += result; output += '\n';
+    definitions.clear();
+    for (Id id : touched) seen[id] = 0;
+    touched.clear();
+    return output;
 }
 std::string serialize_fact_file(const AbiFactFile& file) {
     std::string result;
+    FactWriter writer(file.graph);
     for (std::size_t i = 0; i < file.cases.size(); ++i) {
-        FactWriter writer(file.graph);
         result += "case case" + std::to_string(i) + '\n' + writer.write(file.cases[i]);
     }
     return result;
