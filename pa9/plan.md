@@ -32,6 +32,9 @@ binaries/inputs, A/A calibration, ABBA and equivalent output per spec.
 ## Ledger / handoff
 
 - Initial plan: immutable review markers recorded before implementation.
+- First implementation: all **111/111** root-suite fixtures and **117/117**
+  independent exact-output/status checks pass. No fixture changed. Remaining
+  work is API/serializer validation, scaling, telemetry and cumulative gates.
 - Required checks pending: `make test-pa9`, through-PA9 report, file audit,
   explicit personal checks and committed clean status.
 - Remaining: all implementation groups above. No handoff boundary reached.
