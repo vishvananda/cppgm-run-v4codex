@@ -3,7 +3,7 @@
 Stage base commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 Last reviewed commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 
-Target: PA4 full-stage. Entry: 0/105, earlier stages 100/100. Previous goal
+Target: PA4 full-stage. Entry: 0/105; implemented: 105/105, earlier stages 100/100. Previous goal
 turn: progress (PA3 committed and verified); PA4 starts from the scaffold.
 
 ## Design and remaining groups
@@ -27,3 +27,9 @@ structured consumers, with no premature syntax or backend representation.
   markers before stage edits. Implement all related groups, then run personal
   checks, performance evidence, `make test-pa4`, through-PA4 and file audit.
 - Handoff reason: implementation in progress; no stopping boundary reached.
+- First implementation: all 105 unchanged PA4 fixtures pass; prior report
+  100/100 and file audit 43 files pass. Shared pull-token interface, indexed
+  definitions/parameters, fixed-depth persistent ancestry, cached argument
+  prescan, directives and file identity are implemented. The run target also
+  confirms multiple-primary output. Remaining: personal depth/lifetime checks,
+  allocation/scaling evidence, and final cumulative validation.

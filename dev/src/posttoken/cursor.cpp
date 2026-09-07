@@ -3,7 +3,7 @@
 
 namespace cppgm {
 
-PostTokenCursor::PostTokenCursor(PPTokenCursor& input, IdentifierTable& identifiers,
+PostTokenCursor::PostTokenCursor(PPTokenSource& input, IdentifierTable& identifiers,
                                bool retain_source, PostStats* stats)
     : input_(input), identifiers_(identifiers), retain_source_(retain_source), stats_(stats) {}
 

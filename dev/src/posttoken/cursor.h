@@ -10,12 +10,12 @@ namespace cppgm {
 // the joined spellings. All views expire on next(), identities remain TU-stable.
 class PostTokenCursor {
 public:
-    PostTokenCursor(PPTokenCursor& input, IdentifierTable& identifiers,
+    PostTokenCursor(PPTokenSource& input, IdentifierTable& identifiers,
                     bool retain_source = false, PostStats* stats = 0);
     PostToken next();
     std::size_t storage_bytes() const;
 private:
-    PPTokenCursor& input_;
+    PPTokenSource& input_;
     IdentifierTable& identifiers_;
     bool retain_source_;
     PostStats* stats_;

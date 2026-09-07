@@ -24,10 +24,17 @@ const char* token_kind_name(PPTokenKind kind);
 // Pull one token at a time. PPToken has no owning strings. A spelling borrows
 // immutable source bytes or this cursor's one reusable translated-token buffer,
 // and is valid until next(). Persistent semantic names use IdentifierId.
-class PPTokenCursor {
+class PPTokenSource {
+public:
+    virtual ~PPTokenSource() {}
+    virtual PPToken next() = 0;
+};
+
+class PPTokenCursor : public PPTokenSource {
 public:
     PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
-                  LexStats* stats = 0, bool recover_empty_character = false);
+                  LexStats* stats = 0, bool recover_empty_character = false,
+                  bool translated_input = false);
     PPToken next();
     std::size_t spelling_storage_bytes() const { return translated_.capacity(); }
 

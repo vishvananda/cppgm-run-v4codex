@@ -172,10 +172,10 @@ SourceCharacter CharacterCursor::translate(Position& p)
 {
     SourceCharacter c;
     for (;;) {
-        c = raw_ ? decode(p) : phase_one(p);
+        c = raw_ || translated_ ? decode(p) : phase_one(p);
         // Only a physical LF can splice a source line. Do not speculatively
         // interpret the following escape before the literal scanner sees it.
-        if (!raw_ && c.value == '\\' && p.offset < source_.bytes.size() &&
+        if (!raw_ && !translated_ && c.value == '\\' && p.offset < source_.bytes.size() &&
             source_.bytes[p.offset] == '\n') {
             decode(p);
             p.spliced_tail = true;

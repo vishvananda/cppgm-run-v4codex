@@ -36,9 +36,12 @@ static bool word_operator(TextView text)
 }
 
 PPTokenCursor::PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
-                             LexStats* stats, bool recover_empty_character)
+                             LexStats* stats, bool recover_empty_character, bool translated_input)
     : source_(source), identifiers_(identifiers), stats_(stats), characters_(source, stats),
-      recover_empty_character_(recover_empty_character) {}
+      recover_empty_character_(recover_empty_character)
+{
+    if (translated_input) characters_.translated_input();
+}
 
 int PPTokenCursor::take(bool capture)
 {

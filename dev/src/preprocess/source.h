@@ -56,6 +56,7 @@ public:
     void raw_mode(bool enabled);
     // An escaped backslash is literal syntax, not the start of a UCN.
     void ucn_mode(bool enabled);
+    void translated_input() { translated_ = true; }
 
 private:
     struct Position {
@@ -72,6 +73,7 @@ private:
     std::size_t content_begin_ = 0;
     bool raw_ = false;
     bool ucn_ = true;
+    bool translated_ = false;
 
     SourceCharacter decode(Position& position);
     SourceCharacter phase_one(Position& position);
