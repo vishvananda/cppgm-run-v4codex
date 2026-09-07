@@ -139,7 +139,7 @@ void PPExpressionEvaluator::push(const PPToken& token)
     converted.source = token;
     if (token.kind == PPTokenKind::number) {
         if (literal_stats_) literal_stats_->number_bytes += token.spelling.size;
-        decode_number(converted, identifiers_);
+        decode_number(converted, identifiers_, NumberDomain::integral);
     } else if (token.kind == PPTokenKind::character) {
         if (literal_stats_) literal_stats_->literal_bytes += token.spelling.size;
         decode_character(converted, identifiers_, literal_stats_);

@@ -95,11 +95,37 @@ static void steady_storage()
     assert(stats.lines == 5000 && stats.errors == 0 && stats.reductions == 20000);
 }
 
+static void rejected_numbers()
+{
+    // Rejected floating values and UD numeric suffix identities are not facts
+    // the expression consumer needs. Lexing must still visit the full input.
+    std::string text = "1.25e100L\n7\n";
+    for (int i = 0; i < 5000; ++i)
+        text += "1.25e100L\n1_suffix_" + std::to_string(i) + "\n7\n";
+    SourceBuffer source(std::move(text));
+    IdentifierTable names;
+    Macros macros = {0, false};
+    PPTokenCursor cursor(source, names);
+    PPExpressionEvaluator evaluator(names, lookup, &macros);
+    assert(!line(cursor, evaluator).valid);
+    assert(line(cursor, evaluator).value.bits == 7);
+    std::size_t before = allocations;
+    for (int i = 0; i < 5000; ++i) {
+        assert(!line(cursor, evaluator).valid);
+        assert(!line(cursor, evaluator).valid);
+        PPExpressionResult result = line(cursor, evaluator);
+        assert(result.valid && result.value.bits == 7);
+    }
+    assert(names.size() == 0);
+    assert(allocations == before);
+}
+
 int main()
 {
     static_assert(std::is_trivially_copyable<PPValue>::value, "no per-value ownership");
     macro_identity_and_lifetimes();
     literal_promotions();
     steady_storage();
-    std::cout << "PA3 API: stable names, live macro query, promotions, scratch reuse and zero warmed allocations passed\n";
+    rejected_numbers();
+    std::cout << "PA3 API: stable names, live macro query, promotions, scratch reuse and zero warmed allocations (including rejected numbers) passed\n";
 }

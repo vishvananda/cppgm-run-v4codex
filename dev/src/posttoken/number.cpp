@@ -110,7 +110,7 @@ static void integer_value(PostToken& token, TextView digits, TextView suffix, un
     }
 }
 
-void decode_number(PostToken& token, IdentifierTable& identifiers)
+void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain domain)
 {
     TextView s = token.source.spelling;
     std::size_t p = 0, digit_begin = 0;
@@ -142,6 +142,14 @@ void decode_number(PostToken& token, IdentifierTable& identifiers)
         }
     }
     TextView suffix(s.data + p, s.size - p);
+    if (domain == NumberDomain::integral) {
+        // All floating and user-defined numbers are invalid in a controlling
+        // expression, even in unselected arms. No float extraction or suffix
+        // interning is needed to prove rejection. PA1 already lexed the token.
+        if (!floating)
+            integer_value(token, TextView(s.data + digit_begin, p - digit_begin), suffix, base);
+        return;
+    }
     token.literal = floating ? LiteralKind::floating : LiteralKind::integer;
     token.prefix = TextView(s.data, p);
     if (valid_ud_suffix(suffix)) {
