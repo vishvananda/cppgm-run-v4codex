@@ -1,5 +1,17 @@
 # PA4 completed plan and handoff ledger
 
+Independent final audit in progress (entry `60ef1b9df`). Source review found
+per-prescan task and child-buffer allocation/destruction in the explicit task
+stack. Replace it with stable slabs and reusable depth-local buffers; preserve
+the existing indexed slices and expansion semantics. Freeze entry binary A
+before edits. Compare all eight fixed workloads with the existing A/A, B/B and
+two-block ABBA protocol. Acceptance budgets remain <=10% plus calibrated noise
+for paired latency, <=15% plus 1 MiB RSS, <=15% host text growth, and <6x time /
+<5x RSS for 4x input. Require nested-work benefit beyond noise and counters
+proving task/buffer growth follows maximum simultaneous depth, not invocation
+count. Runtime/generated text remain N/A. Pool capacity releases with its
+expander; no translation-unit/global cache is introduced.
+
 Stage base commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 Last reviewed commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
 

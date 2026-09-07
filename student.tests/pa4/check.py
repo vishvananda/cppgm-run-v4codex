@@ -56,6 +56,14 @@ with tempfile.TemporaryDirectory(prefix='pa4-personal-') as temporary:
         ('#define L __LINE__\nL\n#line 80 "virtual"\nL __FILE__', '2 80 "virtual"'),
         ('#define P _Pragma("cppgm_mock_unknown")\n"a" P "b"', '"a" "b"'),
         ('#define \u03b1 42\n\u03b1', '42'),
+        ('#define I(x) x\n#define D(x) x x\nI(D(__COUNTER__)) I() I(D(__COUNTER__))', '0 0 1 1'),
+        ('#define I(x) x\n#define V(a,...) a __VA_ARGS__\n'
+         'I(V(1,2,3,4)) I(V(5)) I(V(6,7)) I(V(8,9,10,11,12))', '1 2,3,4 5 6 7 8 9,10,11,12'),
+        ('#define I(x) x\n#define S(x) #x\n#define D(x) x x\n'
+         'I(D(12)) I(S(__COUNTER__)) I(D(13)) __COUNTER__', '12 12 "__COUNTER__" 13 13 0'),
+        ('#define F(a,b) a b\nF(1,2)\n#undef F\n#define F(a) a\nF(3)\n'
+         '#undef F\n#define F() 4\nF()\n#undef F\n#define F(a,b,c) c b a\nF(5,6,7)', '1 2 3 4 7 6 5'),
+        ('#define I(x) x\n#define F() 9\nI(F) I(F()) I(F) I(F())', 'F 9 F 9'),
     ]:
         check(text, expected)
 

@@ -58,6 +58,9 @@ int main(int argc, char** argv)
                     << ",\"max_prescan_depth\":" << s.max_prescan_depth
                     << ",\"max_context_nodes\":" << s.max_context_nodes
                     << ",\"scratch_growths\":" << s.scratch_growths
+                    << ",\"task_slabs\":" << s.task_slabs
+                    << ",\"argument_growths\":" << s.argument_growths
+                    << ",\"prescan_output_growths\":" << s.prescan_output_growths
                     << ",\"identifiers\":" << pp.identifiers().size()
                     << ",\"identifier_storage_bytes\":" << pp.identifiers().storage_bytes() << "}\n";
             }

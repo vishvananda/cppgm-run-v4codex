@@ -14,6 +14,7 @@ struct PreprocessStats {
     std::size_t max_pending = 0;
     std::size_t captured_tokens = 0, borrowed_arguments = 0, max_prescan_depth = 0;
     std::size_t max_context_nodes = 0, scratch_growths = 0;
+    std::size_t task_slabs = 0, argument_growths = 0, prescan_output_growths = 0;
 };
 
 // Deferred tokens borrow immutable TU storage. Ancestry is a persistent set
@@ -65,6 +66,7 @@ private:
         std::uint32_t replacement_context = 0;
         IdentifierId macro = 0;
         std::size_t prescan = 0, waiting = 0;
+        std::size_t argument_count = 0;
         ArgumentStorage captured;
         std::vector<Argument> arguments;
     };
@@ -77,7 +79,15 @@ private:
     };
     Preprocessor& owner_;
     bool source_, expression_;
-    std::deque<Task> tasks_;
+    // Stable slabs preserve borrowed ArgumentStorage addresses. Reuse each
+    // depth's buffers across invocations, releasing the pool with the expander.
+    // The root is inline so ordinary text/directives never allocate a slab.
+    Task root_;
+    enum { tasks_per_slab = 32 };
+    std::vector<std::unique_ptr<Task[]> > task_slabs_;
+    std::size_t depth_ = 0;
+    Task& task();
+    void descend(Slice input);
     ExpansionToken take();
     void collect(const ExpansionToken& open, const MacroDefinition& macro);
     bool resume();

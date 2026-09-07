@@ -88,16 +88,37 @@ void Preprocessor::define(const std::vector<ExpansionToken>& line)
 }
 
 MacroExpander::MacroExpander(Preprocessor& owner, bool source, bool expression)
-    : owner_(owner), source_(source), expression_(expression) { tasks_.emplace_back(); }
+    : owner_(owner), source_(source), expression_(expression) {}
+
+MacroExpander::Task& MacroExpander::task()
+{
+    return depth_ ? task_slabs_[(depth_ - 1) / tasks_per_slab][(depth_ - 1) % tasks_per_slab] : root_;
+}
+
+void MacroExpander::descend(Slice input)
+{
+    if (depth_ / tasks_per_slab == task_slabs_.size()) {
+        std::unique_ptr<Task[]> slab(new Task[tasks_per_slab]);
+        task_slabs_.push_back(std::move(slab));
+        if (owner_.telemetry_) ++owner_.stats_.task_slabs;
+    }
+    ++depth_;
+    Task& child = task();
+    child.input = input;
+    child.position = input.begin;
+    child.last_from_slice = false;
+    if (owner_.telemetry_)
+        owner_.stats_.max_prescan_depth = std::max(owner_.stats_.max_prescan_depth, depth_);
+}
 
 bool MacroExpander::empty() const
 {
-    return tasks_.size() == 1 && tasks_.front().pending.empty() && !tasks_.front().invocation.active;
+    return depth_ == 0 && root_.pending.empty() && !root_.invocation.active;
 }
 
 void MacroExpander::push(const std::vector<ExpansionToken>& tokens)
 {
-    std::vector<ExpansionToken>& pending = tasks_.back().pending;
+    std::vector<ExpansionToken>& pending = task().pending;
     if (owner_.telemetry_ && pending.size() + tokens.size() > pending.capacity()) ++owner_.stats_.scratch_growths;
     pending.insert(pending.end(), tokens.rbegin(), tokens.rend());
     if (owner_.telemetry_) owner_.stats_.max_pending = std::max(owner_.stats_.max_pending, pending.size());
@@ -105,7 +126,7 @@ void MacroExpander::push(const std::vector<ExpansionToken>& tokens)
 
 ExpansionToken MacroExpander::take()
 {
-    Task& task = tasks_.back();
+    Task& task = this->task();
     task.last_from_slice = false;
     if (!task.pending.empty()) {
         ExpansionToken t = task.pending.back();
@@ -117,7 +138,7 @@ ExpansionToken MacroExpander::take()
         task.last_index = task.position;
         return task.input.storage->tokens[task.position++];
     }
-    return source_ && tasks_.size() == 1 ? owner_.raw() : end_token();
+    return source_ && depth_ == 0 ? owner_.raw() : end_token();
 }
 
 void MacroExpander::ArgumentStorage::index()
@@ -137,14 +158,14 @@ void MacroExpander::ArgumentStorage::index()
 
 void MacroExpander::collect(const ExpansionToken& open, const MacroDefinition& macro)
 {
-    Task& task = tasks_.back();
+    Task& task = this->task();
     Invocation& invocation = task.invocation;
     if (macro.parameters.empty()) {
         // No argument can be deferred or prescanned. Consume the required close
         // directly, keeping the same context boundary without allocating an index.
         ExpansionToken close = take();
         if (!close.is(")")) throw std::runtime_error("arguments to parameterless macro");
-        invocation.arguments.clear();
+        invocation.argument_count = 0;
         invocation.replacement_context = owner_.intersect(invocation.head.context, close.context);
         return;
     }
@@ -171,31 +192,37 @@ void MacroExpander::collect(const ExpansionToken& open, const MacroDefinition& m
         if (owner_.telemetry_) owner_.stats_.captured_tokens += invocation.captured.tokens.size();
     }
     std::size_t position = start;
-    invocation.arguments.clear();
+    invocation.argument_count = 0;
     do {
         std::size_t end = storage->boundary[position];
-        Argument argument;
+        if (invocation.argument_count == invocation.arguments.size()) {
+            if (owner_.telemetry_ && invocation.arguments.size() == invocation.arguments.capacity())
+                ++owner_.stats_.argument_growths;
+            invocation.arguments.emplace_back();
+        }
+        Argument& argument = invocation.arguments[invocation.argument_count++];
         argument.raw.storage = storage;
         argument.raw.begin = position + 1;
         argument.raw.end = end;
-        invocation.arguments.push_back(std::move(argument));
         position = end;
     } while (storage->tokens[position].is(","));
     if (storage != &invocation.captured) task.position = position + 1;
     invocation.replacement_context = owner_.intersect(invocation.head.context, storage->tokens[position].context);
     std::vector<Argument>& args = invocation.arguments;
-    if (macro.parameters.empty() && args.size() == 1 && args[0].raw.begin == args[0].raw.end) args.clear();
-    if (macro.variadic && args.size() >= macro.parameters.size()) {
+    if (macro.variadic && invocation.argument_count >= macro.parameters.size()) {
         args[macro.parameters.size() - 1].raw.end = position;
-        args.resize(macro.parameters.size());
+        invocation.argument_count = macro.parameters.size();
     }
-    if (macro.variadic && args.size() + 1 == macro.parameters.size()) {
-        Argument empty;
+    if (macro.variadic && invocation.argument_count + 1 == macro.parameters.size()) {
+        if (invocation.argument_count == args.size()) {
+            if (owner_.telemetry_ && args.size() == args.capacity()) ++owner_.stats_.argument_growths;
+            args.emplace_back();
+        }
+        Argument& empty = args[invocation.argument_count++];
         empty.raw.storage = storage;
         empty.raw.begin = empty.raw.end = position;
-        args.push_back(std::move(empty));
     }
-    if (args.size() != macro.parameters.size()) throw std::runtime_error("wrong macro argument count");
+    if (invocation.argument_count != macro.parameters.size()) throw std::runtime_error("wrong macro argument count");
 }
 
 static void stringize_token(std::string& out, const ExpansionToken& t, bool first)
@@ -213,7 +240,7 @@ static void stringize_token(std::string& out, const ExpansionToken& t, bool firs
 void MacroExpander::substitute(Invocation& invocation, const MacroDefinition& m)
 {
     const ExpansionToken& head = invocation.head;
-    std::vector<ExpansionToken>& result = tasks_.back().replacement;
+    std::vector<ExpansionToken>& result = task().replacement;
     result.clear();
     bool pasting = false;
     for (std::size_t i = 0; i < m.replacement.size(); ++i) {
@@ -290,7 +317,7 @@ void MacroExpander::substitute(Invocation& invocation, const MacroDefinition& m)
 
 bool MacroExpander::resume()
 {
-    Invocation& invocation = tasks_.back().invocation;
+    Invocation& invocation = task().invocation;
     if (!invocation.active) return false;
     const MacroDefinition& m = owner_.macros_[invocation.macro];
     while (invocation.prescan < m.replacement.size()) {
@@ -302,16 +329,17 @@ bool MacroExpander::resume()
         invocation.waiting = parameter;
         Slice input = invocation.arguments[parameter].raw;
         if (owner_.telemetry_) ++owner_.stats_.argument_prescans;
-        tasks_.emplace_back();
-        if (owner_.telemetry_)
-            owner_.stats_.max_prescan_depth = std::max(owner_.stats_.max_prescan_depth, tasks_.size() - 1);
-        tasks_.back().input = input;
-        tasks_.back().position = input.begin;
+        descend(input);
         return true;
     }
     substitute(invocation, m);
     invocation.active = false;
-    invocation.arguments.clear();
+    for (std::size_t i = 0; i < invocation.argument_count; ++i) {
+        invocation.arguments[i].raw = Slice();
+        invocation.arguments[i].expanded.clear();
+        invocation.arguments[i].ready = false;
+    }
+    invocation.argument_count = 0;
     invocation.captured.tokens.clear();
     invocation.captured.boundary.clear();
     return true;
@@ -322,11 +350,13 @@ ExpansionToken MacroExpander::next()
     for (;;) {
         if (resume()) continue;
         ExpansionToken head = take();
-        if (head.token.kind == PPTokenKind::eof && tasks_.size() > 1) {
-            std::vector<ExpansionToken> result = std::move(tasks_.back().output);
-            tasks_.pop_back();
-            Invocation& parent = tasks_.back().invocation;
-            parent.arguments[parent.waiting].expanded = std::move(result);
+        if (head.token.kind == PPTokenKind::eof && depth_) {
+            Task& child = task();
+            child.input = Slice();
+            --depth_;
+            Invocation& parent = task().invocation;
+            parent.arguments[parent.waiting].expanded.swap(child.output);
+            child.output.clear();
             parent.arguments[parent.waiting].ready = true;
             continue;
         }
@@ -353,10 +383,10 @@ ExpansionToken MacroExpander::next()
             }
             if (call && owner_.painted(head.context, id)) { head.unavailable = true; call = false; }
             if (!call) {
-                if (m.function) tasks_.back().pending.push_back(open);
+                if (m.function) task().pending.push_back(open);
             } else if (m.builtin) head = owner_.builtin(head, m.builtin, *this);
             else {
-                Invocation& invocation = tasks_.back().invocation;
+                Invocation& invocation = task().invocation;
                 invocation.head = head;
                 invocation.replacement_context = head.context;
                 if (m.function) collect(open, m);
@@ -369,8 +399,10 @@ ExpansionToken MacroExpander::next()
                 continue;
             }
         }
-        if (tasks_.size() == 1) return head;
-        tasks_.back().output.push_back(head);
+        if (depth_ == 0) return head;
+        std::vector<ExpansionToken>& output = task().output;
+        if (owner_.telemetry_ && output.size() == output.capacity()) ++owner_.stats_.prescan_output_growths;
+        output.push_back(head);
     }
 }
 

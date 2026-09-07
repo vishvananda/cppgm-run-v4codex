@@ -39,17 +39,29 @@ int main(int argc, char** argv)
     {
         std::ofstream out(path.c_str());
         out << "#define I(x) x\n";
-        for (int i = 0; i < 20000; ++i) out << "I(";
-        out << "42";
-        for (int i = 0; i < 20000; ++i) out << ')';
+        for (int repeat = 0; repeat < 3; ++repeat) {
+            for (int i = 0; i < 20000; ++i) out << "I(";
+            out << "42";
+            for (int i = 0; i < 20000; ++i) out << ')';
+            out << '\n';
+        }
     }
     cppgm::Preprocessor nested(path, "Sep  7 2026", "12:00:00", true);
     assert(nested.next().spelling.equals("42"));
+    assert(nested.next().spelling.equals("42"));
+    cppgm::PreprocessStats warm = nested.stats();
+    assert(nested.next().spelling.equals("42"));
     assert(nested.next().kind == cppgm::PPTokenKind::eof);
-    assert(nested.stats().captured_tokens == 60000);
-    assert(nested.stats().borrowed_arguments == 19999);
-    assert(nested.stats().argument_prescans == 20000);
+    assert(nested.stats().captured_tokens == 180000);
+    assert(nested.stats().borrowed_arguments == 59997);
+    assert(nested.stats().argument_prescans == 60000);
     assert(nested.stats().max_prescan_depth == 20000);
+    assert(nested.stats().task_slabs == 625);
+    assert(nested.stats().argument_growths == 20000);
+    assert(nested.stats().prescan_output_growths <= 40000);
+    assert(nested.stats().task_slabs == warm.task_slabs);
+    assert(nested.stats().argument_growths == warm.argument_growths);
+    assert(nested.stats().prescan_output_growths == warm.prescan_output_growths);
     {
         std::ofstream out(path.c_str());
         for (int i = 0; i < 100000; ++i) out << "__COUNTER__ ";
@@ -61,5 +73,5 @@ int main(int argc, char** argv)
     }
     assert(counters.next().kind == cppgm::PPTokenKind::eof);
     assert(counters.stats().arena_bytes <= 131072);
-    std::cout << "PA4 API checks passed: locations, identities, 20000 nested prescans, bounded generated spelling\n";
+    std::cout << "PA4 API checks passed: locations, identities, 3x20000 pooled prescans, bounded generated spelling\n";
 }
