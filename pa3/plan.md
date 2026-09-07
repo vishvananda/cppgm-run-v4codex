@@ -2,7 +2,7 @@
 
 Stage base commit: `dddda5eec41799b1e45b39e896c3a6f3da1c5a3b`
 Last reviewed commit: `dddda5eec41799b1e45b39e896c3a6f3da1c5a3b`
-Target: **PA3 full-stage**. Entry baseline: 0/20 passing, 20 failures.
+Target: **PA3 full-stage**. Entry baseline: 0/20 passing, 20 failures. Current: 20/20 passing.
 
 ## Design and remaining groups
 
@@ -28,7 +28,9 @@ work. PA3 emits values, so generated executable runtime/text size is N/A.
 
 ## Performance evidence
 
-Pending fixed workloads and explicit work/memory/scaling budgets. No speedup
+Pending fixed workloads and explicit work/memory/scaling budgets. Language
+groups pass the full 20-case course suite, including 492,075 triple expressions;
+through-PA2 passes 80/80 and the source file audit passes 39 files. No speedup
 claim against the nonfunctional entry stub. Any comparative claim requires
 frozen binaries/flags/inputs, equivalent outputs, A/A calibration, ABBA wall
 timings and retained observations per spec §9.
@@ -38,3 +40,9 @@ timings and retained observations per spec §9.
 - Entry: clean HEAD and authoritative logs inspected; previous checkpoint is
   no progress (stub, 20 failures). Revalidation identifies implementation as
   the next safe action. All four groups remain; no handoff boundary reached.
+
+- Implementation: primary conversion, complete iterative grammar/arithmetic,
+  lazy error selection, conditional type propagation and line recovery pass
+  all 20 existing fixtures (20 → 0 failures). No fixture/coverage changes.
+  Shared PA1/PA2 source remains unchanged. Personal stress/API/sanitizer checks
+  and frozen performance evidence remain; passing tests is not a handoff.
