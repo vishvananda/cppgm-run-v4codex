@@ -28,6 +28,8 @@ bool Analyzer::arithmetic(TypeId t) const
 TypeId Analyzer::promote(TypeId t)
 {
     if (types[t].kind == TypeKind::Named && integral(t) && !scoped_enum(t)) t = entities[types[t].entity].underlying;
+    if (fundamental(t, FT_WCHAR_T)) return types.fundamental(FT_INT);
+    if (fundamental(t, FT_CHAR32_T)) return types.fundamental(FT_UNSIGNED_INT);
     return integral(t) && width(t) < 32 ? types.fundamental(FT_INT) : types.unqualified(t);
 }
 TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
@@ -39,9 +41,46 @@ TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
         if (fundamental(a, FT_DOUBLE) || fundamental(b, FT_DOUBLE)) return types.fundamental(FT_DOUBLE);
         return types.fundamental(FT_FLOAT);
     }
-    if (width(a) != width(b)) return width(a) > width(b) ? a : b;
-    if (is_unsigned(a) != is_unsigned(b)) return is_unsigned(a) ? a : b;
-    return types[a].fundamental > types[b].fundamental ? a : b;
+    // Rank is distinct from width: both long and long long are 64-bit on LP64.
+    unsigned ar = types[a].fundamental, br = types[b].fundamental;
+    if (is_unsigned(a)) ar -= FT_UNSIGNED_CHAR;
+    if (is_unsigned(b)) br -= FT_UNSIGNED_CHAR;
+    if (is_unsigned(a) == is_unsigned(b)) return ar >= br ? a : b;
+    TypeId u = is_unsigned(a) ? a : b, s = is_unsigned(a) ? b : a;
+    unsigned ur = is_unsigned(a) ? ar : br, sr = is_unsigned(a) ? br : ar;
+    if (ur >= sr) return u;
+    if (width(s) > width(u)) return s;
+    return types.fundamental(EFundamentalType(types[s].fundamental + FT_UNSIGNED_CHAR));
+}
+bool Analyzer::object_pointer(TypeId t)
+{
+    if (!pointer(t)) return false;
+    Type child = types[types[t].child];
+    if (fundamental(types[t].child, FT_VOID) || child.kind == TypeKind::Function) return false;
+    if (child.kind == TypeKind::Array && !child.bound) return false;
+    if (child.kind == TypeKind::Named && !entities[child.entity].complete) return false;
+    return true;
+}
+TypeId Analyzer::composite_pointer(TypeId a, TypeId b)
+{
+    if (!pointer(a) || !pointer(b)) return 0;
+    TypeId ac = types[a].child, bc = types[b].child, result = 0;
+    unsigned cv = types[ac].cv | types[bc].cv;
+    if (types.unqualified(ac) == types.unqualified(bc)) result = types.qualify(ac, cv);
+    else if (pointer(ac) && pointer(bc)) {
+        result = composite_pointer(ac, bc);
+        if (result) result = types.qualify(result, cv | 1);
+    } else if ((fundamental(ac, FT_VOID) && types[bc].kind != TypeKind::Function) ||
+               (fundamental(bc, FT_VOID) && types[ac].kind != TypeKind::Function))
+        result = types.qualify(types.fundamental(FT_VOID), cv);
+    else if (derived_from(ac, bc)) result = types.qualify(bc, cv);
+    else if (derived_from(bc, ac)) result = types.qualify(ac, cv);
+    if (!result) return 0;
+    // Recursive composition must not admit void/base conversions below the
+    // first pointer level. Only qualification may differ there.
+    unsigned added = 0;
+    if (pointer(ac) && (!qualification(ac, result, added) || !qualification(bc, result, added))) return 0;
+    return types.compound(TypeKind::Pointer, result);
 }
 bool Analyzer::null_constant(NodeId n)
 {
@@ -67,6 +106,12 @@ bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool inter
             intermediate_const && (a.kind == TypeKind::Array || (b.cv & 1)));
     }
     return types.unqualified(from) == types.unqualified(to);
+}
+bool Analyzer::similar_type(TypeId a, TypeId b)
+{
+    if (types[a].kind != types[b].kind) return false;
+    if (pointer(a)) return similar_type(types[a].child, types[b].child);
+    return types.unqualified(a) == types.unqualified(b);
 }
 Conversion Analyzer::conversion(NodeId n, TypeId to)
 {
@@ -166,6 +211,30 @@ void Analyzer::require_conversion(NodeId n, TypeId target)
     apply_conversion(n, c);
     expressions[n].incoming = conversions.size();
     conversions.push_back(c);
+}
+void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
+{
+    if (!c.valid()) throw std::runtime_error("invalid operand conversion");
+    if (!owner.count) owner.conversions = conversions.size();
+    ++owner.count;
+    if (n) {
+        // Operand facts preserve the source-faithful dump type. The legacy
+        // initializer/call adapter in apply_conversion has its own null view.
+        if (c.function) select_function(n, c.function);
+        if (expressions[n].entity) demand_specialization(expressions[n].entity);
+        expressions[n].incoming = conversions.size();
+    }
+    conversions.push_back(c);
+}
+Conversion Analyzer::boolean_conversion(NodeId n)
+{
+    Conversion c = conversion(n, types.fundamental(FT_BOOL));
+    // Contextual bool conversion uses direct-initialization, which admits
+    // nullptr_t; ordinary copy-initialization of bool still rejects it.
+    if (fundamental(expressions[n].type, FT_NULLPTR_T)) {
+        c.rank = 2; c.kind = Conversion::Kind::Contextual;
+    }
+    return c;
 }
 void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
 {

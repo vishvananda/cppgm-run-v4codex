@@ -19,6 +19,7 @@ void Analyzer::member_facts(EntityId e)
 }
 void Analyzer::demand_member(EntityId e)
 {
+    if (unevaluated_depth) return;
     std::uint32_t m = entities[e].member_info;
     if (!m || members[m].demand != DemandState::Dormant || (!members[m].body && !members[m].synthetic)) return;
     members[m].demand = DemandState::Queued;

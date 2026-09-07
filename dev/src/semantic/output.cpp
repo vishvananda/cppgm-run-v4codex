@@ -125,6 +125,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_expression_work\":" << expression_work
         << ",\"semantic_candidate_work\":" << candidate_work
         << ",\"semantic_conversion_work\":" << conversion_work
+        << ",\"semantic_conversions\":" << conversions.size() - 1
         << ",\"semantic_entity_bytes\":" << sizeof(Entity)
         << ",\"semantic_class_facts\":" << class_facts.size() - 1
         << ",\"semantic_constants\":" << constants.size() - 2

@@ -40,15 +40,27 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     bind(owner, name, e);
     return e;
 }
-namespace {
-bool better(const Conversion* a, const Conversion* b, std::size_t count)
+bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t count)
 {
     bool strict = false;
     for (std::size_t i = 0; i < count; ++i) {
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
-        if (a[i].qualification & ~b[i].qualification) return false;
-        if (b[i].qualification & ~a[i].qualification) { strict = true; continue; }
+        TypeId at = a[i].target, bt = b[i].target;
+        if (a[i].reference) at = types[at].child;
+        if (b[i].reference) bt = types[bt].child;
+        if (!a[i].reference && !b[i].reference && pointer(at) && pointer(bt)) {
+            at = types[at].child; bt = types[bt].child;
+        }
+        // Compare the complete qualification signatures, not an OR of cv bits
+        // that loses which indirection level acquired the qualifier.
+        unsigned added = 0;
+        if (at != bt && similar_type(at, bt)) {
+            bool ab = qualification(at, bt, added), ba = qualification(bt, at, added);
+            if (ba && !ab) return false;
+            if (ab && !ba) { strict = true; continue; }
+            if (!ab && !ba) return false;
+        }
         if (a[i].reference && b[i].reference) {
             if (a[i].preference > b[i].preference) return false;
             if (a[i].preference < b[i].preference) strict = true;
@@ -56,6 +68,13 @@ bool better(const Conversion* a, const Conversion* b, std::size_t count)
     }
     return strict;
 }
+Conversion Analyzer::ellipsis_conversion(NodeId n)
+{
+    Conversion c; c.rank = 4;
+    c.target = promote(decay(expressions[n].type));
+    if (fundamental(c.target, FT_FLOAT)) c.target = types.fundamental(FT_DOUBLE);
+    if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
+    return c;
 }
 Expression Analyzer::call_expression(NodeId n, ScopeId s)
 {
@@ -67,14 +86,15 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         IdentifierId name = terminal(ast[callee].detail);
         NodeId detail = ast[callee].detail;
         EntityId e = detail && ast[detail].kind == Kind::Name && !ast[ast[detail].first].detail ? resolve(detail, s) : 0;
-        if (!e && name == constant_builtin) {
+        bool builtin_name = ast[detail].kind == Kind::Name && ast[detail].first == ast[detail].last;
+        if (!e && builtin_name && name == constant_builtin) {
             if (args.size() != 1) throw std::runtime_error("constant query arity");
             result.type = types.fundamental(FT_INT); result.form = ExpressionForm::ConstantQuery;
             Constant v(result.type, evaluate(args[0], s).valid);
             facts[n].value = constants.size(); constants.push_back(v);
             return result;
         }
-        if (!e && name == abort_builtin) {
+        if (!e && builtin_name && name == abort_builtin) {
             if (!args.empty()) throw std::runtime_error("abort takes no arguments");
             result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::Abort;
             return result;
@@ -103,7 +123,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     }
     Expression fn = expression(callee, s);
     TypeId ft = 0;
-    if (fn.form == ExpressionForm::Overload || (fn.entity && entities[fn.entity].kind == EntityKind::Function)) {
+    NodeId designator = callee;
+    while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
+    bool direct_name = ast[designator].kind == Kind::IdExpression;
+    if (fn.form == ExpressionForm::Overload && !direct_name) throw std::runtime_error("unresolved indirect callee");
+    if (direct_name && (fn.form == ExpressionForm::Overload || (fn.entity && entities[fn.entity].kind == EntityKind::Function))) {
         struct Candidate { EntityId entity; std::size_t offset; };
         std::vector<Candidate> viable;
         std::vector<Conversion> sequences;
@@ -118,7 +142,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             for (std::size_t i = 0; valid && i < args.size(); ++i) {
                 Conversion c;
                 if (i < function.count) c = conversion(args[i], types.parameters[function.offset + i]);
-                else { c.rank = 4; c.target = decay(expressions[args[i]].type); }
+                else c = ellipsis_conversion(args[i]);
                 valid = c.valid(); sequences.push_back(c);
             }
             if (valid) viable.push_back({e, begin});
@@ -131,8 +155,9 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         for (std::size_t i = 0; i < viable.size(); ++i)
             if (i != best && !better(sequences.data() + viable[best].offset, sequences.data() + viable[i].offset, args.size()))
                 throw std::runtime_error("ambiguous overload");
-        result.entity = viable[best].entity;
-        ft = entities[result.entity].type;
+        EntityId selected = viable[best].entity;
+        facts[n].entity = selected;
+        ft = entities[selected].type;
         result.conversions = conversions.size(); result.count = args.size();
         for (std::size_t i = 0; i < args.size(); ++i) {
             Conversion c = sequences[viable[best].offset + i];
@@ -140,18 +165,19 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             conversions.push_back(c);
             apply_conversion(args[i], c);
         }
-        select_function(callee, result.entity);
+        select_function(callee, selected);
     } else {
         ft = fn.type;
         if (pointer(ft)) ft = types[ft].child;
         if (types[ft].kind != TypeKind::Function) throw std::runtime_error("called object is not a function");
         Type f = types[ft];
         if (args.size() < f.count || (!f.variadic && args.size() != f.count)) throw std::runtime_error("indirect call arity");
+        require_conversion(callee, decay(fn.type));
         result.conversions = conversions.size(); result.count = args.size();
         for (std::size_t i = 0; i < args.size(); ++i) {
             Conversion c;
             if (i < f.count) c = conversion(args[i], types.parameters[f.offset + i]);
-            else { c.rank = 4; c.target = decay(expressions[args[i]].type); }
+            else c = ellipsis_conversion(args[i]);
             if (!c.valid()) throw std::runtime_error("indirect argument conversion");
             expressions[args[i]].incoming = conversions.size();
             conversions.push_back(c);

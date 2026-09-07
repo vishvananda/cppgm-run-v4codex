@@ -83,10 +83,11 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     out << '\n';
     if (kind == Kind::Literal || kind == Kind::IdExpression || kind == Kind::Sizeof) return;
     if (kind == Kind::Call) {
-        if (e.entity || e.form == ExpressionForm::Abort) {
+        EntityId selected = facts[n].entity;
+        if (selected || e.form == ExpressionForm::Abort) {
             indent(out, depth + 1); out << "callee ";
             if (e.form == ExpressionForm::Abort) out << "__builtin_abort function of () returning void";
-            else { write_entity_name(out, e.entity); out << ' '; write_type(out, entities[e.entity].type); }
+            else { write_entity_name(out, selected); out << ' '; write_type(out, entities[selected].type); }
             out << '\n';
         } else write_expression(out, first, depth + 1);
         for (NodeId a = ast[ast[first].next].first; a; a = ast[a].next) write_expression(out, a, depth + 1);

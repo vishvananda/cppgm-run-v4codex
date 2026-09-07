@@ -51,6 +51,13 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
     if (!n && entities[id].kind != EntityKind::Namespace) return;
     EntityKind k = entities[id].kind;
     EntityId old = local(s, n);
+    if (calls && n && scopes[s].kind == ScopeKind::Block) {
+        ScopeId parent = scopes[s].parent;
+        if ((scopes[parent].kind == ScopeKind::Function || scopes[parent].kind == ScopeKind::Control) && local(parent, n))
+            throw std::runtime_error("redeclaration in outermost statement block");
+    }
+    if (calls && old && old != id && entities[old].kind == EntityKind::Parameter && k == EntityKind::Parameter)
+        throw std::runtime_error("duplicate parameter name");
     if (old && ((entities[old].kind == EntityKind::Namespace || entities[old].kind == EntityKind::NamespaceAlias) !=
         (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias)))
         throw std::runtime_error("namespace and binding collision");

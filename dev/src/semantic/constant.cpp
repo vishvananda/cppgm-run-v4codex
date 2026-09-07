@@ -100,7 +100,9 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
     if (calls) {
+        if (decltype_form) ++unevaluated_depth;
         Expression e = expression(n, s);
+        if (decltype_form) --unevaluated_depth;
         if (decltype_form && ast[n].kind == Kind::IdExpression && e.entity) return entities[e.entity].type;
         if (decltype_form && e.category != ValueCategory::Prvalue)
             return types.compound(e.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, e.type);
@@ -131,6 +133,14 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 Constant Analyzer::evaluate(NodeId n, ScopeId s)
 {
     if (!n) return Constant();
+    if (calls && !expressions[n].ready) {
+        switch (ast[n].kind) {
+        case Kind::Literal: case Kind::KeywordLiteral: case Kind::IdExpression: case Kind::Parenthesized:
+        case Kind::Call: case Kind::Unary: case Kind::Binary: case Kind::Conditional: case Kind::Cast: case Kind::Sizeof:
+            expression(n, s); break;
+        default: break;
+        }
+    }
     if (facts[n].value) return constants[facts[n].value];
     Constant result = evaluate_value(n, s);
     facts[n].scope = s;
@@ -161,9 +171,9 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
             return Constant(types.fundamental(FT_BOOL), ast[n].op == KW_TRUE);
         return Constant();
     case Kind::IdExpression: {
-        EntityId e = resolve(ast[n].detail, s);
+        EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
-        facts[n].entity = e; facts[n].type = entities[e].type;
+        if (!calls) { facts[n].entity = e; facts[n].type = entities[e].type; }
         return entities[e].constant;
     }
     case Kind::Sizeof: case Kind::TypeTrait: {
@@ -175,31 +185,41 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         Constant cond = evaluate(first, s);
         if (!cond.valid || scoped_enum(cond.type)) return Constant();
         NodeId yes = ast[first].next;
-        return evaluate(cond.bits ? yes : ast[yes].next, s);
+        Constant result = evaluate(cond.bits ? yes : ast[yes].next, s);
+        return calls ? convert(result, expressions[n].type) : result;
     }
     case Kind::Unary: {
         Constant v = evaluate(first, s);
         if (!v.valid || scoped_enum(v.type)) return Constant();
-        if (width(v.type) < 32) v = convert(v, types.fundamental(FT_INT));
         if (ast[n].op == OP_LNOT) return Constant(types.fundamental(FT_BOOL), !v.bits);
+        v = convert(v, calls ? expressions[n].type : promote(v.type));
         if (ast[n].op == OP_PLUS) return v;
         if (ast[n].op == OP_COMPL) return convert(Constant(v.type, ~v.bits), v.type);
-        if (ast[n].op == OP_MINUS) return binary(OP_MINUS, Constant(v.type, 0), v);
+        if (ast[n].op == OP_MINUS) return binary(OP_MINUS, Constant(v.type, 0), v, true);
         return Constant();
     }
     case Kind::Binary: {
         Constant a = evaluate(first, s);
         if (!a.valid) return Constant();
         ETokenType op = ast[n].op;
+        if (op == OP_COMMA) return evaluate(ast[first].next, s);
         if ((op == OP_LAND || op == OP_LOR) && scoped_enum(a.type)) return Constant();
         if (op == OP_LAND && !a.bits) return Constant(types.fundamental(FT_BOOL), 0);
         if (op == OP_LOR && a.bits) return Constant(types.fundamental(FT_BOOL), 1);
-        return binary(op, a, evaluate(ast[first].next, s));
+        Constant b = evaluate(ast[first].next, s);
+        if (calls) {
+            if (expressions[n].count != 2) throw std::logic_error("missing binary operand conversions");
+            std::uint32_t begin = expressions[n].conversions;
+            a = convert(a, conversions[begin].target, true);
+            b = convert(b, conversions[begin + 1].target, true);
+            return binary(op, a, b, true);
+        }
+        return binary(op, a, b);
     }
     default: return Constant();
     }
 }
-Constant Analyzer::binary(ETokenType op, Constant a, Constant b)
+Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
 {
     if (!a.valid || !b.valid || !integral(a.type) || !integral(b.type)) return Constant();
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
@@ -208,9 +228,8 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b)
     }
     TypeId at = types[a.type].kind == TypeKind::Named ? entities[types[a.type].entity].underlying : a.type;
     TypeId bt = types[b.type].kind == TypeKind::Named ? entities[types[b.type].entity].underlying : b.type;
-    if (width(at) < 32) at = types.fundamental(FT_INT);
-    if (width(bt) < 32) bt = types.fundamental(FT_INT);
-    TypeId common = width(at) > width(bt) ? at : width(bt) > width(at) ? bt : is_unsigned(bt) ? bt : at;
+    if (!converted) { at = promote(at); bt = promote(bt); }
+    TypeId common = converted ? at : arithmetic_type(at, bt);
     if (op == OP_LSHIFT || op == OP_RSHIFT) common = at;
     a = convert(a, common, true); b = convert(b, (op == OP_LSHIFT || op == OP_RSHIFT) ? bt : common, true);
     bool unsign = is_unsigned(common);

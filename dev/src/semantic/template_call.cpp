@@ -161,6 +161,7 @@ EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
 }
 void Analyzer::demand_specialization(EntityId e)
 {
+    if (unevaluated_depth) return;
     std::uint32_t i = entities[e].specialization;
     if (!i || specializations[i].emission_demanded) return;
     specializations[i].emission_demanded = true;

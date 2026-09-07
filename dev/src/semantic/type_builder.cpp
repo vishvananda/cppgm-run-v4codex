@@ -196,6 +196,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
     if (function && !constructor) e = declare_function(owner, id, source, canonical);
     else if (e && entities[e].kind == kind) {
+        if (calls && kind == EntityKind::Variable && (scopes[owner].kind == ScopeKind::Block || scopes[owner].kind == ScopeKind::Control) &&
+            !spec_has(specs, KW_EXTERN)) throw std::runtime_error("duplicate local variable");
         entities[e].type = types.composite(entities[e].type, canonical);
     } else {
         e = make_entity(kind, owner, id, source);
@@ -210,12 +212,15 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && !init && !function && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
     if (init && !alias && !function && integral(t)) {
         Constant v = evaluate(init, owner);
+        if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {
             v = convert(v, t);
-            if ((types[t].cv & 1) || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
+            if (types[t].cv == 1 || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
                 entities[e].constant = v;
         }
     }
+    if (calls && !init && !function && integral(t) && spec_has(specs, KW_CONSTEXPR))
+        throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts[ast[init].first].type = t;
     return e;

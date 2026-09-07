@@ -54,7 +54,7 @@ public:
 };
 
 enum class EntityKind : unsigned char { Type, Alias, Namespace, NamespaceAlias, Variable, Function, Parameter, Enumerator, Overload };
-enum class ScopeKind : unsigned char { Namespace, Class, Enum, Template, Function, Block };
+enum class ScopeKind : unsigned char { Namespace, Class, Enum, Template, Function, Block, Control };
 struct Constant {
     std::uint64_t bits = 0;
     TypeId type = 0;
@@ -128,7 +128,9 @@ enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort };
 struct Expression {
     TypeId type = 0; // Reference-free language expression type.
-    EntityId entity = 0;
+    EntityId entity = 0; // Known identity of this value, never a producing call.
+    // Calls record their selected declaration in Fact::entity. Conversion ranges
+    // belong only to this node (including operators), not to transparent wrappers.
     std::uint32_t conversions = 0, count = 0, incoming = 0;
     ValueCategory category = ValueCategory::Prvalue;
     ExpressionForm form = ExpressionForm::Ordinary;
@@ -140,6 +142,8 @@ struct Conversion {
     unsigned char rank = 255, qualification = 0;
     bool reference = false, temporary = false, derived = false;
     unsigned char preference = 0;
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded };
+    Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
 struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
