@@ -17,8 +17,9 @@ Binding Parser::name_binding(NodeId name)
     if (qualified) owner = 0;
     Binding result;
     for (NodeId p = ast[name].first; p; p = ast[p].next) {
-        result = qualified ? names.local(owner, ast[p].text) : names.lookup(owner, ast[p].text);
+        result = qualified ? names.qualified(owner, ast[p].text) : names.lookup(owner, ast[p].text);
         if (ast[p].next) {
+            result = names.qualifier(owner, ast[p].text, qualified);
             if (!result.target) return Binding();
             owner = result.target;
             qualified = true;
@@ -30,9 +31,11 @@ Binding Parser::name_binding(NodeId name)
 ScopeId Parser::qualified_owner(NodeId name)
 {
     ScopeId owner = ast[name].op == OP_COLON2 ? 0 : scope;
+    bool qualified = ast[name].op == OP_COLON2;
     for (NodeId p = ast[name].first; p && p != ast[name].last; p = ast[p].next) {
-        Binding binding = names.qualifier(owner, ast[p].text);
-        if (binding.target) owner = binding.target;
+        Binding binding = names.qualifier(owner, ast[p].text, qualified);
+        owner = binding.target ? binding.target : unknown_scope;
+        qualified = true;
     }
     return owner;
 }
@@ -99,7 +102,8 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
     }
     ast[part].flags |= explicit_template ? 1 : 0;
     ast[part].flags |= qualified && ast[part].op == KW_OPERATOR ? 2 : 0;
-    Binding binding = (member_name && !qualified) || (qualified && !owner) ? Binding() : names.lookup(owner, ast[part].text);
+    Binding binding = member_name && !qualified ? Binding() :
+        qualified ? names.qualified(owner, ast[part].text) : names.lookup(owner, ast[part].text);
     bool potential = template_category(binding.category) || force_template || ast[part].op == KW_OPERATOR;
     if (binding.category == Category::Unknown && ast[part].text) {
         potential |= lexical_hint(ast[part].text) & 2;
@@ -125,8 +129,8 @@ NodeId Parser::name(bool force_template)
         ast.append(result, part);
         if (!in.is("::") || in.is("*", 1)) break;
         in.take();
-        Binding b = names.qualifier(owner, ast[part].text);
-        owner = b.target;
+        Binding b = names.qualifier(owner, ast[part].text, qualified);
+        owner = b.target ? b.target : unknown_scope;
         qualified = true;
         force_template = false;
     }

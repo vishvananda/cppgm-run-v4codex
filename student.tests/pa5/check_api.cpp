@@ -40,12 +40,16 @@ static void ownership()
 {
     SourceBuffer source("int answer=42; const char* text=\"a\" \"b\"; double x=1.25;", 17);
     IdentifierTable ids;
-    PPTokenCursor pp(source, ids);
-    PostTokenCursor post(pp, ids, true);
     Ast ast(true);
-    Cursor cursor(post, ids, ast);
-    Parser parser(cursor, ast, ids);
-    NodeId root = parser.translation_unit();
+    NodeId root;
+    {
+        PPTokenCursor pp(source, ids);
+        PostTokenCursor post(pp, ids, true);
+        Cursor cursor(post, ids, ast);
+        Parser parser(cursor, ast, ids);
+        root = parser.translation_unit();
+        assert(cursor.max_pending < 32);
+    } // Borrowed post-token decoding storage is now destroyed.
     check_graph(ast, root);
     bool number = false, string = false, floating = false;
     for (const Node& node : ast.nodes) {
@@ -71,7 +75,59 @@ static void ownership()
         }
     }
     assert(number && string && floating);
-    assert(cursor.max_pending < 32);
+}
+
+static void categories()
+{
+    Names names(true);
+    ScopeId a = names.enter(0), b = names.enter(0), c = names.enter(0);
+    names.import(a, b);
+    names.import(b, a);
+    names.bind(0, 1, Category::Type);
+    assert(names.qualified(a, 1).category == Category::Unknown);
+    assert(names.lookup(a, 1).category == Category::Type);
+    names.bind(b, 1, Category::Value);
+    assert(names.qualified(a, 1).category == Category::Value);
+    names.bind(0, 2, Category::Namespace, c);
+    names.bind(a, 2, Category::Value);
+    assert(names.lookup(a, 2).category == Category::Value);
+    assert(names.qualifier(a, 2).target == c);
+    assert(names.qualifier(a, 2, true).category == Category::Unknown);
+    assert(names.qualified(unknown_scope, 1).category == Category::Unknown);
+    ScopeId anonymous = names.unnamed_namespace(a);
+    assert(names.unnamed_namespace(a) == anonymous);
+    assert(names.unnamed_namespace(b) != anonymous);
+    assert(names.lookup_scopes && names.probes);
+}
+
+static void cross_file_string()
+{
+    const char* source = "/tmp/pa5-api-cross-file.cpp";
+    const char* header = "/tmp/pa5-api-cross-file.hpp";
+    {
+        std::ofstream src(source), hdr(header);
+        src << "const char* text=\"left\"\n#include \"" << header << "\"\n;\n";
+        hdr << "\"right\"\n";
+    }
+    Preprocessor pp(source, "Sep  7 2026", "12:00:00");
+    PostTokenCursor post(pp, pp.identifiers(), true);
+    Ast ast;
+    Cursor cursor(post, pp.identifiers(), ast);
+    Parser parser(cursor, ast, pp.identifiers());
+    check_graph(ast, parser.translation_unit());
+    bool found = false;
+    for (const Node& node : ast.nodes) {
+        if (node.kind != Kind::Literal) continue;
+        const LiteralValue& value = ast.literals[node.literal];
+        assert(value.bytes == 10 && value.elements == 10);
+        assert(std::memcmp(ast.literal_bytes.data()+value.offset, "leftright", 10) == 0);
+        const Location& location = ast.locations[node.location];
+        assert(location.file == 1 && location.begin == 17 && location.end == 23);
+        found = true;
+    }
+    assert(found);
+    std::remove(source);
+    std::remove(header);
 }
 
 static std::size_t nested(unsigned depth)
@@ -141,12 +197,22 @@ static void lexical_hint_work()
     assert(parser.hint_bytes <= name.size() + 16);
 }
 
-int main()
+int main(int argc, char** argv)
 {
     ownership();
+    categories();
+    cross_file_string();
     presumed_and_user_literal();
     lexical_hint_work();
     std::size_t small = nested(64), large = nested(256);
     assert(large < small * 5);
+    for (int i = 1; i < argc; ++i) {
+        Preprocessor pp(argv[i], "Sep  7 2026", "12:00:00");
+        PostTokenCursor post(pp, pp.identifiers(), true);
+        Ast ast;
+        Cursor cursor(post, pp.identifiers(), ast);
+        Parser parser(cursor, ast, pp.identifiers());
+        check_graph(ast, parser.translation_unit());
+    }
     std::cout << "PA5 API: decoded literal lifetime, graph identities/locations and linear nested-angle work pass\n";
 }

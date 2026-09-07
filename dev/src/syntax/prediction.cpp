@@ -48,7 +48,7 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
         }
         if (!identifier(ahead)) break;
         Token token = in.peek(ahead++);
-        Binding binding = qualified ? names.lookup(owner, token.text) : names.lookup(scope, token.text);
+        Binding binding = qualified ? names.qualified(owner, token.text) : names.lookup(scope, token.text);
         result.previous = result.terminal;
         result.terminal = token.text;
         result.valid = true;
@@ -69,7 +69,8 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
         }
         result.end = ahead;
         if (!in.is("::", ahead) || in.is("*", ahead + 1)) return result;
-        owner = names.qualifier(owner, token.text).target;
+        Binding qualifier = names.qualifier(owner, token.text, qualified);
+        owner = qualifier.target ? qualifier.target : unknown_scope;
         qualified = true;
         result.qualified = true;
         ++ahead;

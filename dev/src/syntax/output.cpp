@@ -181,11 +181,13 @@ void write_ast(std::ostream& out, const Ast& ast, NodeId root, const IdentifierT
     // An explicit traversal stack avoids recursive tree destruction/rendering.
     struct Work { NodeId node; unsigned depth; };
     std::vector<Work> stack(1, Work{root, 0});
+    std::string indentation;
     while (!stack.empty()) {
         Work work = stack.back();
         stack.pop_back();
         const Node& node = ast[work.node];
-        out << std::string(work.depth * 2, ' ') << kind_name(node.kind);
+        indentation.resize(work.depth * 2, ' ');
+        out << indentation << kind_name(node.kind);
         payload(out, ast, work.node, ids);
         out << '\n';
         if (node.next) stack.push_back(Work{node.next, work.depth});

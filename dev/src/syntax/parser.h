@@ -8,6 +8,7 @@ class Parser {
 public:
     Parser(Cursor& cursor, Ast& ast, IdentifierTable& ids);
     NodeId translation_unit();
+    const Names& name_categories() const { return names; }
     std::size_t decisions = 0, angle_work = 0, angle_hits = 0, hint_bytes = 0;
 private:
     Cursor& in;
@@ -65,8 +66,13 @@ private:
     NodeId ctor_initializer();
     NodeId specifiers(bool type_only = false);
     NodeId type_id(bool new_type = false);
-    NodeId declarator(bool abstract = false, bool new_type = false);
-    NodeId parameters();
+    struct DeclaratorFacts {
+        NodeId name = 0;
+        ETokenType first_operator = TOK_INVALID;
+        ScopeId function_scope = 0;
+    };
+    NodeId declarator(bool abstract = false, bool new_type = false, DeclaratorFacts* facts = 0);
+    NodeId parameters(ScopeId& parameter_scope);
     NodeId parameter(Kind kind = Kind::Parameter);
     void function_suffix(NodeId owner);
     bool parameter_clause_ahead();
@@ -88,6 +94,7 @@ private:
     NodeId lambda();
     NodeId compound();
     NodeId statement();
+    NodeId substatement();
     NodeId condition();
     NodeId selection();
     NodeId iteration();

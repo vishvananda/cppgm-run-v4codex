@@ -234,7 +234,9 @@ NodeId Parser::lambda()
     ScopeId saved = scope;
     scope = names.enter(scope);
     if (in.is("(")) {
-        NodeId decl = wrap(Kind::LambdaDeclarator, parameters());
+        ScopeId parameter_scope;
+        NodeId decl = wrap(Kind::LambdaDeclarator, parameters(parameter_scope));
+        scope = parameter_scope;
         if (in.is("mutable")) ast.append(decl, leaf(Kind::LambdaSpecifier));
         function_suffix(decl);
         ast.append(result, decl);

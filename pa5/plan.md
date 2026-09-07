@@ -2,8 +2,27 @@
 
 Stage base commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
 Last reviewed commit: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`
-Target: **PA5 full-stage**. Phase: **complete**. Entry **0/188**; final **188/188**.
-Review markers are preserved for the independent Ralph review.
+Target: **PA5 full-stage**. Phase: **independent final audit in progress**.
+Implementation entry **0/188**; current course result **188/188**.
+Independent review reconstructed all syntax owners and shared source/post-token
+handoffs through `924ba7dc6`; checkpoint conclusions were not used as proof.
+
+Final audit found and fixed category lifetime leaks (parameters, enum and control
+scopes), inconsistent qualified/import lookup, anonymous namespace identity,
+array/function declarator classification, for declaration conditions, an unnamed
+pack child-list invariant, and a cross-file concatenated literal source range. Personal regressions and stronger
+graph/lifetime checks cover those ownership paths. AST indentation now reuses
+one buffer; optional name/scope work counters observe existing work.
+
+Remaining: sanitizer/API checks; frozen final A/B measurements; final audit and
+performance consolidation; cohesive commits; fresh exit gates and clean status.
+Frozen A is the ordinary `924ba7dc6` binary. Final campaign retains the existing
+10%+noise wall / 15%+1MiB RSS / 15% host-text / 6x wall / 5x RSS scaling budgets.
+Before timing, fix identical source repetitions: 8 for nested, 4 for other
+families, in one invocation. Use ordinary compilation, two A/A pairs, B/B and
+two ABBA blocks, CPU affinity, eight startup probes, separate phase/work runs,
+and calibrated ordinary/stats comparisons. Require workload wall >=25x startup;
+retain every observation and compare exact outputs. No other build/tests overlap.
 
 ## Design/spec alignment
 

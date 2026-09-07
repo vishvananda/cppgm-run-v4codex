@@ -29,6 +29,7 @@ PostToken PostTokenCursor::string_sequence(PPToken part)
     token.literal = LiteralKind::string;
     Encoding encoding = Encoding::ordinary;
     bool valid = true;
+    bool first_part = true;
     elements_.clear(); joined_source_.clear(); bytes_.clear();
     for (;;) {
         TextView suffix = part.suffix ? identifiers_.spelling(part.suffix) : TextView();
@@ -51,7 +52,12 @@ PostToken PostTokenCursor::string_sequence(PPToken part)
             part.end = part.suffix_begin;
             part.suffix = 0; suffix = TextView();
         }
-        token.source.end = part.end;
+        // The source anchor belongs to the first fragment's physical file.
+        // Concatenation may cross an include; offsets from another file cannot
+        // form its end. Keep split literal-operator spans exact on the first part.
+        if (first_part || (part.file_id == token.source.file_id && part.end > token.source.end))
+            token.source.end = part.end;
+        first_part = false;
         if (retain_source_) {
             std::size_t size = joined_source_.size() + part.spelling.size + !joined_source_.empty();
             if (stats_ && size > joined_source_.capacity()) ++stats_->storage_growths;

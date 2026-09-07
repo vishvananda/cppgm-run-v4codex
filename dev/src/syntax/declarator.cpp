@@ -76,9 +76,11 @@ bool Parser::parameter_clause_ahead()
     return true;
 }
 
-NodeId Parser::declarator(bool abstract, bool new_type)
+NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts)
 {
     NodeId result = make(abstract ? Kind::AbstractDeclarator : Kind::Declarator);
+    DeclaratorFacts parsed;
+    bool has_pointer = false;
     while (in.is("*") || in.is("&") || in.is("&&") ||
            (identifier() && in.is("::", probe_name().end) && in.is("*", probe_name().end + 1))) {
         NodeId pointer;
@@ -89,17 +91,25 @@ NodeId Parser::declarator(bool abstract, bool new_type)
             pointer = named(Kind::Pointer, n);
         } else pointer = leaf(Kind::Pointer);
         ast.append(result, pointer);
+        has_pointer = true;
         while (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
     }
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
     if (nested_declarator_ahead()) {
         in.require("(");
-        ast.append(result, wrap(Kind::NestedDeclarator, declarator(abstract)));
+        ast.append(result, wrap(Kind::NestedDeclarator, declarator(abstract, false, &parsed)));
         in.require(")");
     } else if (identifier() || in.is("::") || in.is("operator") || in.is("~")) {
-        ast.append(result, named(Kind::Identifier, name()));
+        parsed.name = name();
+        ast.append(result, named(Kind::Identifier, parsed.name));
     }
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
+    ScopeId saved_scope = scope;
+    NodeId declared_name = parsed.name;
+    if (declared_name && ast[declared_name].first != ast[declared_name].last) {
+        ScopeId qualified = qualified_owner(declared_name);
+        if (qualified != unknown_scope) scope = qualified;
+    }
     for (;;) {
         attributes();
         if (in.eat("[")) {
@@ -110,11 +120,25 @@ NodeId Parser::declarator(bool abstract, bool new_type)
             in.require("]");
             angle_expression = saved;
             ast.append(result, array);
+            if (parsed.first_operator == TOK_INVALID) parsed.first_operator = OP_LSQUARE;
         } else if (!new_type && parameter_clause_ahead()) {
-            ast.append(result, parameters());
+            ScopeId parameter_scope;
+            ast.append(result, parameters(parameter_scope));
+            ScopeId saved = scope;
+            scope = parameter_scope;
             function_suffix(result);
+            scope = saved;
+            if (parsed.first_operator == TOK_INVALID) {
+                parsed.first_operator = OP_LPAREN;
+                parsed.function_scope = parameter_scope;
+            }
         } else break;
     }
+    scope = saved_scope;
+    // The operator nearest the name decides function versus object. Nested
+    // facts propagate once; prefix pointers apply after this level's suffixes.
+    if (parsed.first_operator == TOK_INVALID && has_pointer) parsed.first_operator = OP_STAR;
+    if (facts) *facts = parsed;
     return ast[result].first ? result : 0;
 }
 
@@ -146,9 +170,11 @@ NodeId Parser::parameter(Kind kind)
     return result;
 }
 
-NodeId Parser::parameters()
+NodeId Parser::parameters(ScopeId& parameter_scope)
 {
     in.require("(");
+    ScopeId saved_scope = scope;
+    scope = parameter_scope = names.enter(scope);
     unsigned saved = angle_expression;
     angle_expression = 0;
     NodeId result = make(Kind::Parameters);
@@ -163,6 +189,7 @@ NodeId Parser::parameters()
     }
     in.require(")");
     angle_expression = saved;
+    scope = saved_scope;
     return result;
 }
 

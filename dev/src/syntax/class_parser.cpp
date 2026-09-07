@@ -60,22 +60,26 @@ NodeId Parser::enum_specifier()
 {
     in.require("enum");
     NodeId result = make(Kind::Enum);
-    if (in.is("class") || in.is("struct")) ast.append(result, leaf(Kind::EnumKey));
+    bool scoped = in.is("class") || in.is("struct");
+    if (scoped) ast.append(result, leaf(Kind::EnumKey));
     if (identifier()) ast[result].text = in.take().text;
     ScopeId child = names.enter(scope);
     names.bind(scope, ast[result].text, Category::Type, child);
     if (in.eat(":")) ast.append(result, type_id());
     if (!in.eat("{")) return result;
+    ScopeId owner = scope;
+    scope = child;
     while (!in.is("}")) {
         if (!identifier()) throw std::runtime_error("expected enumerator");
         NodeId value = leaf(Kind::Enumerator);
-        names.bind(scope, ast[value].text, Category::Value);
+        if (!scoped) names.bind(owner, ast[value].text, Category::Value);
         names.bind(child, ast[value].text, Category::Value);
         if (in.eat("=")) ast.append(value, expression(2));
         ast.append(result, value);
         if (!in.eat(",")) break;
     }
     in.require("}");
+    scope = owner;
     return result;
 }
 
@@ -95,8 +99,11 @@ NodeId Parser::special_member(NodeId specs)
     ast.append(result, specs);
     NodeId decl = wrap(Kind::Declarator, named(Kind::Identifier, n));
     ScopeId saved = scope;
-    scope = names.enter(scope);
-    ast.append(decl, parameters());
+    ScopeId parameter_scope;
+    ScopeId qualified = ast[n].first != ast[n].last ? qualified_owner(n) : unknown_scope;
+    if (qualified != unknown_scope) scope = qualified;
+    ast.append(decl, parameters(parameter_scope));
+    scope = parameter_scope;
     function_suffix(decl);
     ast.append(result, decl);
     if (in.is("=")) ast.append(result, initializer());

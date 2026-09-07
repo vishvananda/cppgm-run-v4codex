@@ -45,22 +45,19 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
 {
     if (!specs) specs = specifiers();
     ScopeId owner = scope;
-    ScopeId parameters_scope = names.enter(scope);
-    scope = parameters_scope;
-    NodeId decl = declarator();
+    DeclaratorFacts facts;
+    NodeId decl = declarator(false, false, &facts);
     bool alias = false;
     for (NodeId s = ast[specs].first; s; s = ast[s].next) alias |= ast[s].op == KW_TYPEDEF;
     Category category = alias ? Category::Type : Category::Value;
-    bool is_function = false;
-    for (NodeId c = ast[decl].first; c; c = ast[c].next) is_function |= ast[c].kind == Kind::Parameters;
+    bool is_function = facts.first_operator == OP_LPAREN;
     if (template_declaration && !alias && is_function) category = Category::TemplateValue;
     bind_declarator(decl, category, owner);
     if (alias && declarator_name(decl)) names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
-    if (decl && (in.is("{") || in.is("try")) && ast[ast[decl].last].kind != Kind::Identifier) {
+    if (is_function && (in.is("{") || in.is("try"))) {
+        scope = facts.function_scope;
         NodeId result = wrap(Kind::Function, specs);
         ast.append(result, decl);
-        NodeId n = declarator_name(decl);
-        if (n && ast[n].first != ast[n].last) names.import(scope, qualified_owner(n));
         bool saved_template = template_declaration;
         template_declaration = false;
         ast.append(result, in.is("try") ? try_block(true) : compound());
@@ -90,6 +87,8 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
             decl = declarator();
             if (!decl) throw std::runtime_error("expected declarator after comma");
             bind_declarator(decl, category, owner);
+            if (alias && declarator_name(decl))
+                names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
         } while (true);
         ast.append(result, list);
     }
@@ -115,7 +114,8 @@ NodeId Parser::namespace_declaration()
     }
     if (is_inline) ast.append(result, make(Kind::Inline));
     Binding previous = names.local(scope, token.text);
-    ScopeId child = previous.target ? previous.target : names.enter(scope);
+    ScopeId child = !token.text ? names.unnamed_namespace(scope) :
+        previous.target ? previous.target : names.enter(scope);
     names.bind(scope, token.text, Category::Namespace, child);
     ScopeId saved = scope;
     scope = child;
@@ -123,7 +123,7 @@ NodeId Parser::namespace_declaration()
     while (!in.is("}")) ast.append(result, declaration());
     in.take();
     scope = saved;
-    if (is_inline || !token.text) names.import(scope, child);
+    if (is_inline && token.text) names.import(scope, child);
     return result;
 }
 

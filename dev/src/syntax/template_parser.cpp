@@ -61,10 +61,7 @@ NodeId Parser::template_parameters()
             ast.append(param, specifiers());
             NodeId decl = declarator();
             if (decl && ast[ast[decl].first].kind == Kind::ParameterPack) {
-                NodeId pack = ast[decl].first;
-                ast[decl].first = ast[pack].next;
-                ast[pack].next = 0;
-                ast.append(param, pack);
+                ast.append(param, ast.take_first(decl));
             }
             ast.append(param, decl);
             bind_declarator(decl, Category::Value, scope);

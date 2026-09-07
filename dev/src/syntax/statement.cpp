@@ -46,8 +46,8 @@ NodeId Parser::selection()
     in.require("(");
     ast.append(result, condition());
     in.require(")");
-    ast.append(result, is_if ? wrap(Kind::Then, statement()) : statement());
-    if (is_if && in.eat("else")) ast.append(result, wrap(Kind::Else, statement()));
+    ast.append(result, is_if ? wrap(Kind::Then, substatement()) : substatement());
+    if (is_if && in.eat("else")) ast.append(result, wrap(Kind::Else, substatement()));
     scope = saved;
     return result;
 }
@@ -55,15 +55,18 @@ NodeId Parser::selection()
 NodeId Parser::iteration()
 {
     if (in.is("for")) return for_statement();
+    ScopeId saved = scope;
+    scope = names.enter(scope);
     bool is_do = in.eat("do");
     NodeId result = make(is_do ? Kind::Do : Kind::While);
-    if (is_do) ast.append(result, statement());
+    if (is_do) ast.append(result, substatement());
     in.require("while");
     in.require("(");
     ast.append(result, condition());
     in.require(")");
     if (is_do) in.require(";");
-    else ast.append(result, statement());
+    else ast.append(result, substatement());
+    scope = saved;
     return result;
 }
 
@@ -92,8 +95,7 @@ NodeId Parser::for_statement()
     } else {
         in.require(";");
         ast.append(result, init);
-        NodeId test = make(Kind::Condition);
-        if (!in.is(";")) ast.append(test, expression());
+        NodeId test = in.is(";") ? make(Kind::Condition) : condition();
         in.require(";");
         ast.append(result, test);
         NodeId step = make(Kind::Iteration);
@@ -101,7 +103,7 @@ NodeId Parser::for_statement()
         ast.append(result, step);
     }
     in.require(")");
-    ast.append(result, statement());
+    ast.append(result, substatement());
     scope = saved;
     return result;
 }
@@ -173,6 +175,17 @@ NodeId Parser::statement()
         ast.append(node, expression(jump == Kind::Throw ? 2 : 1));
     in.require(";");
     return node;
+}
+
+NodeId Parser::substatement()
+{
+    // Even an unbraced controlled statement has its own block scope.
+    if (in.is("{")) return compound();
+    ScopeId saved = scope;
+    scope = names.enter(scope);
+    NodeId result = statement();
+    scope = saved;
+    return result;
 }
 
 bool Parser::declaration_ahead()

@@ -184,6 +184,7 @@ public:
     explicit Ast(bool telemetry = false);
     NodeId make(Kind kind, Token token = Token());
     void append(NodeId parent, NodeId child);
+    NodeId take_first(NodeId parent);
     Node& operator[](NodeId id) { return nodes[id]; }
     const Node& operator[](NodeId id) const { return nodes[id]; }
     std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);

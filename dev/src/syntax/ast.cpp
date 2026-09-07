@@ -29,6 +29,16 @@ void Ast::append(NodeId parent, NodeId child)
     nodes[parent].last = child;
 }
 
+NodeId Ast::take_first(NodeId parent)
+{
+    NodeId child = nodes[parent].first;
+    if (!child) return 0;
+    nodes[parent].first = nodes[child].next;
+    if (!nodes[parent].first) nodes[parent].last = 0;
+    nodes[child].next = 0;
+    return child;
+}
+
 std::uint32_t Ast::save_literal(const PostToken& token, IdentifierId prefix)
 {
     LiteralValue value;

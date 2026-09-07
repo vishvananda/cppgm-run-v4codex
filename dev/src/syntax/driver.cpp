@@ -53,6 +53,9 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
                 << ",\"delimiter_work\":" << cursor.delimiter_work
                 << ",\"angle_work\":" << parser.angle_work << ",\"angle_hits\":" << parser.angle_hits
                 << ",\"hint_bytes\":" << parser.hint_bytes
+                << ",\"scopes\":" << parser.name_categories().scope_count()
+                << ",\"name_probes\":" << parser.name_categories().probes
+                << ",\"lookup_scopes\":" << parser.name_categories().lookup_scopes
                 << ",\"syntax_decisions\":" << parser.decisions << "}\n";
         }
     }
