@@ -171,6 +171,8 @@ struct Node {
     std::uint32_t literal = 0;
 };
 
+struct ClassRegion { std::size_t begin, end; };
+
 struct LiteralValue {
     LiteralKind kind;
     EFundamentalType type;
@@ -193,6 +195,8 @@ public:
     std::vector<Node> nodes;
     std::vector<Location> locations;
     std::vector<LiteralValue> literals;
+    // Class nodes use their kind-discriminated auxiliary index for token ranges.
+    std::vector<ClassRegion> class_regions;
     std::vector<char> literal_bytes;
 };
 

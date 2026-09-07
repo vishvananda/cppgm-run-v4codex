@@ -139,6 +139,23 @@ void Parser::predeclare_class()
         }
         if ((in.is("class", i) || in.is("struct", i) || in.is("union", i) || in.is("enum", i)) && identifier(i + 1))
             names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
+        if (in.is("using", i) && identifier(i + 1) && in.is("=", i + 2))
+            names.bind(scope, in.peek(i + 1).text, Category::Type);
+        if (in.is("typedef", i)) {
+            // Find declaration names without constructing grammar. Delimiter
+            // indexing skips initializers/array bounds/parameter lists; the
+            // first identifier after the type prefix starts each declarator.
+            std::size_t p = probe_type(i + 1);
+            bool need_name = true;
+            for (; !in.is(";", p) && in.peek(p).kind != PostTokenKind::eof; ++p) {
+                if (in.is(",", p)) { need_name = true; continue; }
+                if (need_name && identifier(p)) {
+                    names.bind(scope, in.peek(p).text, Category::Type);
+                    need_name = false;
+                }
+                if (in.is("[", p) || in.is("{", p) || (in.is("(", p) && !need_name)) p = in.matching(p);
+            }
+        }
         if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class)
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
         if (in.is(";", i) || in.is("{", i)) templated = false;

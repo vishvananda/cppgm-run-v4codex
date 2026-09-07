@@ -401,8 +401,19 @@ int run_emit_ast_mode(const vector<string> & args)
 
 int run_emit_types_mode(const vector<string> & args)
 {
-  parse_source_output_invocation(args, false);
-  return run_unimplemented_mode("--emit-types", "PA6");
+  vector<string> inputs;
+  string output;
+  bool stats = false;
+  for (size_t i = 0; i < args.size(); ++i) {
+    if (args[i] == "--stats") stats = true;
+    else if (args[i] == "-o") {
+      consume_required_option_argument(args, i, "-o", "output file");
+      output = args[i];
+    } else if (starts_with(args[i], "-")) throw logic_error("invalid types option");
+    else inputs.push_back(args[i]);
+  }
+  if (output.empty() || inputs.empty()) throw logic_error("invalid types invocation");
+  return cppgm::syntax::emit_ast(output, inputs, stats, true);
 }
 
 int run_emit_semantics_mode(const vector<string> & args)

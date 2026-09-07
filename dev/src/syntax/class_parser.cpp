@@ -5,6 +5,7 @@ namespace cppgm { namespace syntax {
 
 NodeId Parser::class_specifier()
 {
+    std::size_t region_begin = in.consumed;
     NodeId key = leaf(Kind::ClassKey);
     attributes();
     NodeId n = identifier() ? name(true) : 0;
@@ -51,6 +52,8 @@ NodeId Parser::class_specifier()
     }
     in.take();
     scope = owner;
+    ast[result].literal = ast.class_regions.size();
+    ast.class_regions.push_back(ClassRegion{region_begin, in.consumed});
     current_class = saved_class;
     template_declaration = saved_template;
     return result;
@@ -62,11 +65,16 @@ NodeId Parser::enum_specifier()
     NodeId result = make(Kind::Enum);
     bool scoped = in.is("class") || in.is("struct");
     if (scoped) ast.append(result, leaf(Kind::EnumKey));
-    if (identifier()) ast[result].text = in.take().text;
+    if (identifier()) {
+        NodeId n = name();
+        ast[result].detail = n;
+        ast[result].text = final_name(n);
+    }
     ScopeId child = names.enter(scope);
     names.bind(scope, ast[result].text, Category::Type, child);
     if (in.eat(":")) ast.append(result, type_id());
     if (!in.eat("{")) return result;
+    ast[result].flags |= 1;
     ScopeId owner = scope;
     scope = child;
     while (!in.is("}")) {

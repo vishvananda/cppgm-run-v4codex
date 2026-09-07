@@ -1,6 +1,6 @@
 # PA6 implementation plan
 
-Target: **PA6 full-stage**. Phase: **implement**. Entry: **0/105**.
+Target: **PA6 full-stage**. Phase: **implement**. Entry: **0/105**. Current: **105/105**, through **498/498**.
 Stage base commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
 Last reviewed commit: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
 Preserve both review markers during implementation.
@@ -34,5 +34,10 @@ No optimization benefit is claimed without the complete evidence protocol.
 - Required final checks: `make test-pa6`, `make test-report-through-pa6`,
   `make test-report-through-pa5`, file audit for `dev/src`, explicit personal
   checks. Commit coherent increments; refresh this ledger and verify clean git.
-- Remaining: all four groups and performance/architecture evidence.
+- First implementation: canonical type/scope/entity records, declaration-time
+  graph extension, namespace/import lookup, composed types, deferred class
+  bodies, enums/constants and dump. First run 101/105; four ownership fixes
+  reach 105/105; fresh PA1–6 through 498/498. File audit: 71 files pass.
+- Remaining: direct semantic API/regression and sanitizer audits; strengthen
+  lookup anchoring and completed-type caching; performance/architecture evidence.
 - Handoff reason: work ongoing; initial plan is not a stopping boundary.

@@ -53,7 +53,7 @@ NodeId Parser::specifiers(bool type_only)
 bool Parser::nested_declarator_ahead()
 {
     if (!in.is("(")) return false;
-    return in.is("*", 1) || in.is("&", 1) || in.is("&&", 1) || in.is("(", 1) ||
+    return in.is("*", 1) || in.is("&", 1) || in.is("&&", 1) || in.is("[", 1) || in.is("(", 1) ||
            (identifier(1) && (!type_start(1) || in.is("::", 2)));
 }
 

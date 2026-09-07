@@ -1,5 +1,6 @@
 #include "syntax/driver.h"
 #include "syntax/parser.h"
+#include "semantic/analyzer.h"
 #include "preprocess/preprocessor.h"
 #include <chrono>
 #include <ctime>
@@ -10,7 +11,7 @@
 
 namespace cppgm { namespace syntax {
 
-int emit_ast(const std::string& output, const std::vector<std::string>& inputs, bool stats)
+int emit_ast(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool types)
 {
     const std::time_t now = std::time(0);
     const std::string stamp = std::asctime(std::localtime(&now));
@@ -27,10 +28,13 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
         Ast ast(stats);
         Cursor cursor(post, pp.identifiers(), ast);
         Parser parser(cursor, ast, pp.identifiers());
-        NodeId root = parser.translation_unit();
+        semantic::Analyzer semantics(ast, pp.identifiers());
+        NodeId root = parser.translation_unit(types ? &semantics : 0);
+        if (types) semantics.finish();
         Clock::time_point parsed = Clock::now();
         out << "start translation unit " << i + 1 << '\n';
-        write_ast(out, ast, root, pp.identifiers());
+        if (types) semantics.write(out);
+        else write_ast(out, ast, root, pp.identifiers());
         out << "end translation unit\n";
         out.flush();
         if (!out) throw std::runtime_error("cannot write AST output");
@@ -56,7 +60,9 @@ int emit_ast(const std::string& output, const std::vector<std::string>& inputs, 
                 << ",\"scopes\":" << parser.name_categories().scope_count()
                 << ",\"name_probes\":" << parser.name_categories().probes
                 << ",\"lookup_scopes\":" << parser.name_categories().lookup_scopes
-                << ",\"syntax_decisions\":" << parser.decisions << "}\n";
+                << ",\"syntax_decisions\":" << parser.decisions;
+            if (types) semantics.telemetry(std::cerr);
+            std::cerr << "}\n";
         }
     }
     return 0;

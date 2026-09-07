@@ -89,12 +89,14 @@ bool Parser::declaration_start()
     }
 }
 
-NodeId Parser::translation_unit()
+NodeId Parser::translation_unit(DeclarationConsumer* consumer)
 {
     NodeId root = make(Kind::TranslationUnit);
     while (in.peek().kind != PostTokenKind::eof) {
         std::size_t before = in.consumed;
-        ast.append(root, declaration());
+        NodeId region = declaration();
+        ast.append(root, region);
+        if (consumer) consumer->consume(region);
         if (before == in.consumed) throw std::logic_error("declaration made no progress");
     }
     return root;

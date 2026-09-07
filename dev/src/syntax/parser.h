@@ -4,10 +4,16 @@
 
 namespace cppgm { namespace syntax {
 
+class DeclarationConsumer {
+public:
+    virtual ~DeclarationConsumer() {}
+    virtual void consume(NodeId declaration) = 0;
+};
+
 class Parser {
 public:
     Parser(Cursor& cursor, Ast& ast, IdentifierTable& ids);
-    NodeId translation_unit();
+    NodeId translation_unit(DeclarationConsumer* consumer = 0);
     const Names& name_categories() const { return names; }
     std::size_t decisions = 0, angle_work = 0, angle_hits = 0, hint_bytes = 0;
 private:
