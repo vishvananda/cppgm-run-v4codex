@@ -19,7 +19,7 @@ public:
     void put(std::uint64_t key, std::uint32_t value);
 };
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
     unsigned char cv = 0;
@@ -45,7 +45,8 @@ public:
     TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
     TypeId qualify(TypeId t, unsigned cv);
     TypeId unqualified(TypeId t);
-    TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic);
+    TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0);
+    TypeId member_pointer(EntityId owner, TypeId child);
     TypeId adjusted(TypeId t);
     TypeId signature(TypeId t);
     TypeId composite(TypeId a, TypeId b);
@@ -65,7 +66,8 @@ struct Constant {
 // for constructors and layout. The stable index belongs to the class entity.
 struct ClassFacts {
     std::uint64_t size = 0, alignment = 0;
-    EntityId constructor = 0;
+    EntityId constructor = 0, implicit_constructor = 0, storage = 0;
+    std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
 };
@@ -77,10 +79,32 @@ struct Entity {
     ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0;
     TypeId type = 0, underlying = 0;
-    std::uint32_t class_info = 0;
+    std::uint32_t class_info = 0, member_info = 0, template_info = 0, specialization = 0;
     EntityId first = 0, second = 0; // Immutable overload union edges.
     Constant constant;
 };
+enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
+struct MemberFacts {
+    TypeId call_type = 0;
+    NodeId body = 0, declarator = 0, source = 0;
+    DemandState demand = DemandState::Dormant;
+    bool synthetic = false;
+};
+struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
+struct TemplateFunction {
+    ScopeId environment = 0;
+    std::uint32_t offset = 0, count = 0;
+    NodeId body = 0, declarator = 0, source = 0;
+};
+enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
+struct Specialization {
+    EntityId pattern = 0, entity = 0;
+    std::uint32_t arguments = 0;
+    FactState declaration = FactState::NotStarted;
+    bool emission_demanded = false;
+};
+struct BaseRelation { EntityId base; std::uint32_t next; };
+struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;
     ScopeId jump = 0;
@@ -105,7 +129,7 @@ enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQu
 struct Expression {
     TypeId type = 0; // Reference-free language expression type.
     EntityId entity = 0;
-    std::uint32_t conversions = 0, count = 0;
+    std::uint32_t conversions = 0, count = 0, incoming = 0;
     ValueCategory category = ValueCategory::Prvalue;
     ExpressionForm form = ExpressionForm::Ordinary;
     bool ready = false;
@@ -114,7 +138,7 @@ struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.
     unsigned char rank = 255, qualification = 0;
-    bool reference = false, temporary = false;
+    bool reference = false, temporary = false, derived = false;
     unsigned char preference = 0;
     bool valid() const { return rank != 255; }
 };

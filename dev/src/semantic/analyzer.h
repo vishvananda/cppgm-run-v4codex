@@ -18,6 +18,8 @@ public:
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
     std::vector<Fact> facts;
+    const Expression& expression_fact(NodeId n) const { return expressions[n]; }
+    const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     ScopeId global = 0;
 private:
     syntax::Ast& ast;
@@ -33,6 +35,20 @@ private:
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
     std::vector<ClassFacts> class_facts;
+    std::vector<MemberFacts> members;
+    std::vector<BaseRelation> bases;
+    std::vector<ObjectAction> actions;
+    Index object_actions, specialization_index;
+    std::vector<TemplateFunction> templates;
+    std::vector<EntityId> template_parameters;
+    std::vector<TypeArguments> argument_packs;
+    std::vector<TypeId> argument_types;
+    std::vector<std::uint32_t> argument_slots;
+    std::vector<Specialization> specializations;
+    std::vector<EntityId> specialization_demand;
+    std::vector<EntityId> demand_queue;
+    std::size_t demand_cursor = 0;
+    unsigned anonymous_classes = 0, anonymous_enums = 0;
     double analysis_ms = 0;
     std::vector<Edge> edges;
     std::vector<ScopeId> qualified_work;
@@ -70,6 +86,21 @@ private:
     void add_edge(ScopeId s, ScopeId to, bool is_inline = false);
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
+    void member_facts(EntityId e);
+    void template_facts(EntityId e);
+    std::uint32_t intern_arguments(const std::vector<TypeId>& args);
+    EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
+    TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache);
+    bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
+    EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args);
+    EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
+    void demand_specialization(EntityId e);
+    void demand_member(EntityId e);
+    void default_initialize(EntityId object);
+    bool derived_from(TypeId from, TypeId to);
+    void write_function(std::ostream& out, EntityId e, NodeId body, ScopeId scope, unsigned depth, bool definition = true) const;
+    void write_object(std::ostream& out, EntityId e, NodeId init, unsigned depth) const;
+    void write_action(std::ostream& out, const ObjectAction& action, unsigned depth) const;
     void function_body(const Body& body);
     void schedule_body(const Body& body);
     void statements(NodeId n, ScopeId s);

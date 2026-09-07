@@ -33,12 +33,14 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::IdExpression: {
         EntityId e = resolve(ast[n].detail, s);
         if (!e) throw std::runtime_error("unknown expression name");
+        if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
         r.entity = e; facts[n].entity = e;
         if (entities[e].kind == EntityKind::Overload) { r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue; return r; }
         if (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter &&
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
         r.type = value_type(entities[e].type);
+        if (entities[e].member_info) facts[n].type = members[entities[e].member_info].call_type;
         if (entities[e].kind != EntityKind::Enumerator) r.category = ValueCategory::Lvalue;
         return r;
     }
@@ -49,6 +51,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast[first].next);
     case Kind::Sizeof: {
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression(first, s).type;
+        if (!t) throw std::runtime_error("sizeof unresolved overload");
         r.type = types.fundamental(FT_UNSIGNED_LONG_INT);
         facts[n].value = constants.size(); constants.push_back(Constant(r.type, size(t)));
         return r;
@@ -71,7 +74,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) throw std::runtime_error("member of non-class");
         NodeId name = ast[ast[first].next].detail;
-        EntityId e = resolve(name, entities[types[t].entity].scope);
+        EntityId e = lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
         r.type = types.qualify(value_type(entities[e].type), types[t].cv);

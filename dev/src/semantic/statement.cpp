@@ -13,6 +13,7 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
         t = declarator(d, specifiers(specs, s), s);
         declare_object(d, ast[d].next, t, specs, s, c);
     } else t = expression(c, s).type;
+    if (!t) throw std::runtime_error("unresolved condition");
     if (is_switch) {
         if (!integral(t)) throw std::runtime_error("switch requires integral or enum condition");
     } else if (scoped_enum(t) || (!arithmetic(t) && !pointer(decay(t)))) throw std::runtime_error("invalid boolean condition");
@@ -78,7 +79,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::ExpressionStatement: case Kind::ForInit: case Kind::Iteration:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) declaration(c, s);
-            else expression(c, s);
+            else if (expression(c, s).form == ExpressionForm::Overload) throw std::runtime_error("unresolved discarded overload");
         }
         return;
     default: throw std::runtime_error("unsupported statement");

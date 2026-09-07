@@ -14,6 +14,7 @@ TypeId Analyzer::value_type(TypeId t)
 }
 TypeId Analyzer::decay(TypeId t)
 {
+    if (!t) throw std::runtime_error("unresolved overload in value context");
     t = value_type(t);
     if (types[t].kind == TypeKind::Array) return types.compound(TypeKind::Pointer, types[t].child);
     if (types[t].kind == TypeKind::Function) return types.compound(TypeKind::Pointer, t);
@@ -75,10 +76,11 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
     Type target = types[to];
     bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
     if (x.form == ExpressionForm::Overload) {
-        TypeId ft = ref || pointer(to) ? target.child : to;
+        TypeId ft = ref || pointer(to) || target.kind == TypeKind::MemberPointer ? target.child : to;
         if (types[ft].kind != TypeKind::Function) return c;
         for (EntityId e : candidates(x.entity)) {
             if (entities[e].type != ft) continue;
+            if (target.kind == TypeKind::MemberPointer && scopes[entities[e].owner].entity != target.entity) continue;
             if (c.function) return Conversion();
             c.function = e;
         }
@@ -91,6 +93,9 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
         unsigned added = 0;
         bool function_lvalue = types[from].kind == TypeKind::Function;
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
+        if (category && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
+            c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv; return c;
+        }
         if ((category || function_lvalue) && qualification(from, target.child, added)) {
             c.rank = 0; c.reference = true; c.qualification = added; c.preference = function_lvalue && target.kind == TypeKind::RRef; return c;
         }
@@ -115,6 +120,9 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
             c.rank = 0; c.qualification = added; return c;
         }
         Type a = types[types[from].child], b = types[types[to].child];
+        if (derived_from(types[from].child, types[to].child) && !(a.cv & ~b.cv)) {
+            c.rank = 2; c.derived = true; c.qualification = b.cv & ~a.cv; return c;
+        }
         if (fundamental(types[to].child, FT_VOID) && a.kind != TypeKind::Function && !(a.cv & ~b.cv)) {
             c.rank = 2; c.qualification = b.cv & ~a.cv; return c;
         }
@@ -130,11 +138,16 @@ void Analyzer::select_function(NodeId n, EntityId e)
     expressions[n].entity = e;
     expressions[n].form = ExpressionForm::Ordinary;
     expressions[n].type = entities[e].type;
-    facts[n].type = entities[e].type; facts[n].entity = e;
+    facts[n].type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
+    facts[n].entity = e;
+    demand_member(e);
+    demand_specialization(e);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
         select_function(ast[n].first, e);
         if (ast[n].kind == Kind::Unary) {
-            expressions[n].type = types.compound(TypeKind::Pointer, entities[e].type);
+            expressions[n].type = entities[e].member_info && !entities[e].is_static ?
+                types.member_pointer(scopes[entities[e].owner].entity, entities[e].type) : types.compound(TypeKind::Pointer, entities[e].type);
+            expressions[n].category = ValueCategory::Prvalue;
             facts[n].type = expressions[n].type;
         }
     }
@@ -142,6 +155,7 @@ void Analyzer::select_function(NodeId n, EntityId e)
 void Analyzer::apply_conversion(NodeId n, Conversion c)
 {
     if (c.function) select_function(n, c.function);
+    if (expressions[n].entity) demand_specialization(expressions[n].entity);
     TypeId target = types.unqualified(c.target);
     if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts[n].type = target;
 }
@@ -150,7 +164,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target)
     Conversion c = conversion(n, target);
     if (!c.valid()) throw std::runtime_error("invalid implicit conversion");
     apply_conversion(n, c);
-    expressions[n].conversions = conversions.size(); expressions[n].count = 1;
+    expressions[n].incoming = conversions.size();
     conversions.push_back(c);
 }
 void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)

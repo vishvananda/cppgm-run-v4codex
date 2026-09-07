@@ -44,8 +44,8 @@ void Analyzer::write_name(std::ostream& out, NodeId n) const
 void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETokenType key_op, TypeId completed) const
 {
     const Type& t = types[id];
-    if (t.cv & 1) out << "const ";
-    if (t.cv & 2) out << "volatile ";
+    if (t.kind != TypeKind::Function && (t.cv & 1)) out << "const ";
+    if (t.kind != TypeKind::Function && (t.cv & 2)) out << "volatile ";
     switch (t.kind) {
     case TypeKind::Fundamental: out << fundamental_name(t.fundamental); break;
     case TypeKind::Named: {
@@ -58,6 +58,8 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
         else spelling(out, e.name);
         break;
     }
+    case TypeKind::MemberPointer:
+        out << "member-pointer of "; write_type(out, entities[t.entity].type); out << " to "; write_type(out, t.child); break;
     case TypeKind::Pointer: out << "pointer to "; write_type(out, t.child); break;
     case TypeKind::LRef: out << "lvalue-reference to "; write_type(out, t.child); break;
     case TypeKind::RRef: out << "rvalue-reference to "; write_type(out, t.child); break;
@@ -71,7 +73,10 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
             write_type(out, types.parameters[t.offset + i]);
         }
         if (t.variadic) out << (t.count ? ", ..." : "...");
-        out << ") returning "; write_type(out, t.child); break;
+        out << ")";
+        if (t.cv & 1) out << " const";
+        if (t.cv & 2) out << " volatile";
+        out << " returning "; write_type(out, t.child); break;
     }
 }
 void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
@@ -112,6 +117,10 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_specializations\":" << specializations.size() - 1
+        << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
+        << ",\"semantic_member_demands\":" << demand_queue.size()
+        << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work
         << ",\"semantic_candidate_work\":" << candidate_work
         << ",\"semantic_conversion_work\":" << conversion_work

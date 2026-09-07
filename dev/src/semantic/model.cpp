@@ -99,12 +99,17 @@ TypeId Types::unqualified(TypeId id)
     t.cv = 0;
     return intern(t, {});
 }
-TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic)
+TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv)
 {
     if (records[result].kind == TypeKind::Array || records[result].kind == TypeKind::Function)
         throw std::runtime_error("invalid function return type");
-    Type t; t.kind = TypeKind::Function; t.child = result; t.variadic = variadic;
+    Type t; t.kind = TypeKind::Function; t.child = result; t.variadic = variadic; t.cv = cv;
     return intern(t, params);
+}
+TypeId Types::member_pointer(EntityId owner, TypeId child)
+{
+    Type t; t.kind = TypeKind::MemberPointer; t.entity = owner; t.child = child;
+    return intern(t, {});
 }
 TypeId Types::adjusted(TypeId id)
 {
@@ -125,13 +130,14 @@ TypeId Types::signature(TypeId id)
     if (t.kind == TypeKind::Function) {
         std::vector<TypeId> source(parameters.begin() + t.offset, parameters.begin() + t.offset + t.count);
         for (TypeId& p : source) p = adjusted(p);
-        TypeId result = function(signature(t.child), source, t.variadic);
+        TypeId result = function(signature(t.child), source, t.variadic, t.cv);
         signatures[id] = result;
         return result;
     }
     TypeId result = id;
     if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array)
         result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
+    if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer(t.entity, signature(t.child)), t.cv);
     signatures[id] = result;
     return result;
 }

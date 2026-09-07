@@ -28,6 +28,7 @@ NodeId Parser::declaration()
     if (in.is("class") || in.is("struct") || in.is("union")) {
         NodeId node = class_specifier();
         if (!in.eat(";")) return simple_declaration(true, wrap(Kind::DeclSpecifiers, node));
+        ast[node].flags |= 2; // Standalone declaration owns the trailing semicolon.
         return node;
     }
     if (in.is("enum")) {

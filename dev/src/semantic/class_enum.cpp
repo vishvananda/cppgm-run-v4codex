@@ -11,11 +11,15 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     ETokenType key_op = ast[ast[n].first].op;
     bool definition = ast[n].kind == Kind::Class;
     bool anonymous_union = !id && key_op == KW_UNION;
+    if (calls && !name && !anonymous_union) {
+        std::string generated = "__local_type" + std::to_string(++anonymous_classes);
+        id = ids.intern(TextView(generated.data(), generated.size()));
+    }
     if (anonymous_union && scopes[s].kind == ScopeKind::Namespace && !static_union)
         throw std::runtime_error("namespace anonymous union requires static");
     if (!id) {
         const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
-        std::string generated = "__anonymous_union_type__" + std::to_string(region.begin) + "_" + std::to_string(region.end);
+        std::string generated = "__anonymous_union_type__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
     ScopeId owner = name_owner(name, s);
@@ -37,7 +41,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
         throw std::runtime_error("incompatible class declaration");
     TypeId t = entities[e].type;
-    facts[n].type = t; facts[n].entity = e;
+    facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
     if (emit && !anonymous_union) {
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);
         declarations[d].key = key_op;
@@ -48,6 +52,17 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         ++class_depth;
         ScopeId cs = entities[e].scope;
         attach_scope(cs, owner);
+        if (calls) {
+            NodeId list = child(n, Kind::Bases);
+            for (NodeId b = ast[list].first; b; b = ast[b].next) {
+                EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, owner, Lookup::Qualifier);
+                if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
+                std::uint32_t info = entities[e].class_info;
+                bases.push_back({base, class_facts[info].first_base});
+                class_facts[info].first_base = bases.size() - 1;
+                add_edge(cs, entities[base].scope);
+            }
+        }
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
         entities[e].complete = true;
         entities[e].definition = n;
@@ -63,6 +78,14 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             bodies.resize(deferred_begin);
         }
         if (anonymous_union) {
+            if (calls) {
+                const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
+                std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
+                EntityId storage = make_entity(EntityKind::Variable, s, ids.intern(TextView(label.data(), label.size())), n);
+                entities[storage].type = t;
+                class_facts[entities[e].class_info].storage = storage;
+                default_initialize(storage);
+            }
             for (std::uint32_t d = scopes[cs].first_decl; d; d = declarations[d].next) {
                 EntityId member = declarations[d].entity;
                 bind(s, entities[member].name, member);
@@ -78,6 +101,10 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     NodeId name = ast[n].detail;
     IdentifierId id = name ? terminal(name) : ast[n].text ? ast[n].text : anonymous_name;
     bool scoped = child(n, Kind::EnumKey);
+    if (calls && !name && !ast[n].text) {
+        std::string label = "__anonymous_enum" + std::to_string(++anonymous_enums);
+        id = ids.intern(TextView(label.data(), label.size()));
+    }
     bool definition = ast[n].flags & 1;
     NodeId underlying_node = child(n, Kind::TypeId);
     ScopeId owner = name_owner(name, s);
@@ -92,11 +119,12 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         entities[e].key = KW_ENUM; entities[e].scoped = scoped;
         entities[e].type = types.named(e); entities[e].underlying = underlying;
         entities[e].scope = make_scope(ScopeKind::Enum, owner, id, e, scoped);
-        bind(owner, id, e); emit = true;
+        if (name || ast[n].text) bind(owner, id, e);
+        emit = true;
     } else if (entities[e].key != KW_ENUM || (underlying_node && entities[e].underlying != underlying))
         throw std::runtime_error("incompatible enum declaration");
     TypeId t = entities[e].type;
-    facts[n].type = t; facts[n].entity = e;
+    facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
     ScopeId es = entities[e].scope;
     ScopeId output_owner = owner;
     bool qualified_definition = definition && name && ast[name].first != ast[name].last;

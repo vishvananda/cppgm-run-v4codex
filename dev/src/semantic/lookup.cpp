@@ -6,9 +6,11 @@ using syntax::Kind;
 Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_calls) : ast(tree), ids(identifiers), calls(with_calls)
 {
     entities.push_back(Entity()); scopes.push_back(Scope()); declarations.push_back(Declaration());
-    edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1);
+    edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1); members.resize(1); bases.push_back({0,0}); actions.push_back({0,0,0});
     constant_builtin = ids.intern(TextView("__builtin_constant_p", 20));
     abort_builtin = ids.intern(TextView("__builtin_abort", 15));
+    templates.resize(1); argument_packs.resize(1); specializations.resize(1);
+    conversions.push_back(Conversion());
     global = make_scope(ScopeKind::Namespace, 0);
     if (calls) {
         IdentifierId name = ids.intern(TextView("nullptr_t", 9));

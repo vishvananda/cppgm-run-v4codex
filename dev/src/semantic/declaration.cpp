@@ -14,7 +14,18 @@ void Analyzer::consume(NodeId n)
     declaration(n, global);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double, std::milli>(Clock::now() - start).count();
 }
-void Analyzer::finish() {}
+void Analyzer::finish()
+{
+    while (demand_cursor < demand_queue.size()) {
+        EntityId e = demand_queue[demand_cursor++];
+        std::uint32_t m = entities[e].member_info;
+        MemberFacts f = members[m];
+        members[m].demand = DemandState::Active;
+        if (f.body && !entities[e].definition)
+            function_body({f.body, f.declarator, entities[e].owner, e, f.source});
+        members[m].demand = DemandState::Complete;
+    }
+}
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 {
     IdentifierId name = ast[n].text;
@@ -123,6 +134,10 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         NodeId d = child(n, Kind::Declarator);
         TypeId t = declarator(d, types.fundamental(FT_VOID), s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
+        if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
+            members[entities[e].member_info].synthetic = true;
+            facts[n].entity = e; facts[n].type = entities[e].type;
+        }
         if (ast[n].kind == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
             if (!b) b = child(n, Kind::FunctionTry);
@@ -138,6 +153,17 @@ void Analyzer::declaration(NodeId n, ScopeId s)
 }
 void Analyzer::schedule_body(const Body& body)
 {
+    if (calls && entities[body.entity].template_info) {
+        TemplateFunction& t = templates[entities[body.entity].template_info];
+        t.body = body.node; t.declarator = body.declarator; t.source = body.source;
+        return;
+    }
+    if (calls && entities[body.entity].member_info) {
+        std::uint32_t m = entities[body.entity].member_info;
+        if (members[m].source) throw std::runtime_error("duplicate member definition");
+        members[m].body = body.node; members[m].declarator = body.declarator; members[m].source = body.source;
+        if (class_depth) return;
+    }
     if (class_depth) bodies.push_back(body);
     else function_body(body);
 }

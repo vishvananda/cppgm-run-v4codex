@@ -105,6 +105,12 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
     for (NodeId c = ast[n].first; c; c = ast[c].next) {
         switch (ast[c].kind) {
         case Kind::Pointer:
+            if (ast[c].detail) {
+                EntityId owner = resolve(ast[c].detail, s, Lookup::Qualifier);
+                if (!owner || !entities[owner].class_info) throw std::runtime_error("invalid member pointer owner");
+                base = types.member_pointer(owner, base);
+                break;
+            }
             base = types.compound(ast[c].op == OP_AMP ? TypeKind::LRef :
                 ast[c].op == OP_LAND ? TypeKind::RRef : TypeKind::Pointer, base);
             break;
@@ -142,7 +148,10 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
                 types[params[0]].fundamental == FT_VOID && !variadic) params.clear();
             NodeId trailing = child(n, Kind::TrailingReturn);
             if (trailing) base = type_id(ast[trailing].first, s);
-            base = types.function(base, params, variadic);
+            unsigned member_cv = 0;
+            for (NodeId q = ast[c].next; q; q = ast[q].next)
+                if (ast[q].kind == Kind::CvQualifier) member_cv |= ast[q].op == KW_CONST ? 1 : 2;
+            base = types.function(base, params, variadic, member_cv);
             facts[c].type = base;
         }
     }
@@ -195,8 +204,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         else bind(owner, id, e);
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
+    if (calls && function && scopes[owner].kind == ScopeKind::Class) member_facts(e);
     record(owner, e, d, t, kind);
     if (calls && init && !function) initialize(init, canonical, owner);
+    if (calls && !init && !function && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
     if (init && !alias && !function && integral(t)) {
         Constant v = evaluate(init, owner);
         if (v.valid) {

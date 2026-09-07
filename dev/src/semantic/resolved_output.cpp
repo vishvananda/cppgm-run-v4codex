@@ -12,7 +12,7 @@ void Analyzer::write_entity_name(std::ostream& out, EntityId e) const
 {
     std::vector<ScopeId> owners;
     for (ScopeId s = entities[e].owner; s && s != global; s = scopes[s].parent) {
-        if (scopes[s].kind != ScopeKind::Namespace && scopes[s].kind != ScopeKind::Class) { owners.clear(); break; }
+        if (scopes[s].kind != ScopeKind::Namespace && scopes[s].kind != ScopeKind::Class) { break; }
         if (scopes[s].name) owners.push_back(s);
     }
     for (auto i = owners.rbegin(); i != owners.rend(); ++i) { spelling(out, scopes[*i].name); out << "::"; }
@@ -24,10 +24,30 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     const syntax::Node& node = ast[n];
     const Expression& e = expressions[n];
     NodeId first = node.first;
+    if (e.incoming && !override_type) {
+        const Conversion& c = conversions[e.incoming];
+        if (c.derived || c.temporary) {
+            indent(out, depth++); out << "cast-expression " << category(c.derived ? e.category : ValueCategory::Prvalue) << ' ';
+            write_type(out, c.reference ? types[c.target].child : c.target); out << '\n';
+        }
+    }
     if (node.kind == Kind::Parenthesized || node.kind == Kind::Initializer || node.kind == Kind::ParenInitializer) {
         write_expression(out, first, depth); return;
     }
     TypeId display = override_type ? override_type : facts[n].type;
+    if (e.form == ExpressionForm::Cast && types[display].kind == TypeKind::MemberPointer) {
+        write_expression(out, ast[first].next, depth); return;
+    }
+    if (node.kind == Kind::IdExpression && e.entity && scopes[entities[e.entity].owner].kind == ScopeKind::Class) {
+        EntityId cls = scopes[entities[e.entity].owner].entity;
+        EntityId storage = class_facts[entities[cls].class_info].storage;
+        if (storage) {
+            indent(out, depth); out << "member-expression " << category(e.category) << ' '; write_type(out, display);
+            out << ' '; spelling(out, entities[e.entity].name); out << '\n';
+            indent(out, depth + 1); out << "id-expression lvalue "; write_type(out, entities[storage].type);
+            out << ' '; spelling(out, entities[storage].name); out << '\n'; return;
+        }
+    }
     if (e.form == ExpressionForm::Cast && (types[display].kind == TypeKind::LRef || types[display].kind == TypeKind::RRef)) {
         write_expression(out, ast[first].next, depth, display, e.category); return;
     }
@@ -69,14 +89,7 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
             else { write_entity_name(out, e.entity); out << ' '; write_type(out, entities[e.entity].type); }
             out << '\n';
         } else write_expression(out, first, depth + 1);
-        unsigned index = 0;
-        for (NodeId a = ast[ast[first].next].first; a; a = ast[a].next, ++index) {
-            const Conversion& c = conversions[e.conversions + index];
-            if (c.temporary) {
-                indent(out, depth + 1); out << "cast-expression prvalue "; write_type(out, types[c.target].child); out << '\n';
-            }
-            write_expression(out, a, depth + 1 + c.temporary);
-        }
+        for (NodeId a = ast[ast[first].next].first; a; a = ast[a].next) write_expression(out, a, depth + 1);
         return;
     }
     if (kind == Kind::Cast) {
@@ -93,11 +106,7 @@ void Analyzer::write_variable(std::ostream& out, NodeId d, NodeId init, unsigned
 {
     EntityId e = facts[d].entity;
     if (!e) return;
-    indent(out, depth);
-    out << (entities[e].kind == EntityKind::Alias ? "type-alias " : entities[e].kind == EntityKind::Function ? "function-declaration " : "variable ");
-    if (entities[e].kind == EntityKind::Function) write_entity_name(out, e); else spelling(out, entities[e].name);
-    out << ' '; write_type(out, entities[e].type); out << '\n';
-    if (init) write_expression(out, init, depth + 1);
+    write_object(out, e, init, depth);
 }
 void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
 {
@@ -121,19 +130,7 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
         indent(out, depth); out << "type-alias "; spelling(out, node.text); out << ' ';
         write_type(out, facts[n].type); out << '\n'; return;
     case Kind::Function: {
-        EntityId e = facts[n].entity;
-        indent(out, depth); out << "function-definition "; write_entity_name(out, e); out << ' ';
-        write_type(out, entities[e].type); out << '\n';
-        ScopeId fs = facts[n].scope;
-        Type function = types[entities[e].type];
-        unsigned parameter = 0;
-        for (std::uint32_t d = scopes[fs].first_decl; d; d = declarations[d].next) {
-            EntityId p = declarations[d].entity;
-            if (entities[p].kind != EntityKind::Parameter) continue;
-            indent(out, depth + 1); out << "parameter "; spelling(out, entities[p].name); out << ' ';
-            write_type(out, types.parameters[function.offset + parameter++]); out << '\n';
-        }
-        write_resolved(out, ast[ast[node.first].next].next, depth + 1);
+        write_function(out, facts[n].entity, ast[ast[node.first].next].next, facts[n].scope, depth);
         return;
     }
     case Kind::SimpleDeclaration: {
@@ -141,6 +138,13 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
             scopes[facts[node.first].scope].kind != ScopeKind::Class;
         if (local) { indent(out, depth); out << "simple-declaration\n"; ++depth; }
         NodeId list = child(n, Kind::InitDeclarators);
+        if (!list) {
+            for (NodeId c = ast[node.first].first; c; c = ast[c].next) {
+                if (ast[c].kind != Kind::Class) continue;
+                EntityId cls = facts[c].entity, storage = class_facts[entities[cls].class_info].storage;
+                if (storage) write_object(out, storage, 0, depth);
+            }
+        }
         for (NodeId c = ast[list].first; c; c = ast[c].next) {
             NodeId d = ast[c].first; write_variable(out, d, ast[d].next, depth);
         }
@@ -151,7 +155,24 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
         NodeId d = ast[node.first].next;
         write_variable(out, d, ast[d].next, depth + 1); return;
     }
-    case Kind::Class: case Kind::ClassForward: case Kind::Enum: case Kind::UsingDirective: case Kind::UsingDeclaration:
+    case Kind::SpecialMember: case Kind::SpecialDefinition:
+        if (child(child(n, Kind::Initializer), Kind::SpecialInitializer) || node.kind == Kind::SpecialDefinition)
+            write_function(out, facts[n].entity, child(n, Kind::Compound), facts[n].scope, depth);
+        return;
+    case Kind::Class: {
+        EntityId cls = facts[n].entity;
+        EntityId storage = class_facts[entities[cls].class_info].storage;
+        if (storage) {
+            bool local = scopes[entities[storage].owner].kind != ScopeKind::Namespace;
+            if (local) { indent(out, depth++); out << "simple-declaration\n"; }
+            write_object(out, storage, 0, depth);
+        }
+        return;
+    }
+    case Kind::Enum:
+        if (scopes[facts[n].scope].kind == ScopeKind::Block) { indent(out, depth); out << "simple-declaration\n"; }
+        return;
+    case Kind::ClassForward: case Kind::UsingDirective: case Kind::UsingDeclaration:
     case Kind::NamespaceAlias: case Kind::EmptyDeclaration: case Kind::Inline: case Kind::StaticAssert: case Kind::Template:
         return;
     case Kind::Compound: case Kind::Return: case Kind::ExpressionStatement: case Kind::If: case Kind::Then: case Kind::Else:
@@ -163,5 +184,15 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
     default: write_expression(out, n, depth); return;
     }
 }
-void Analyzer::write_semantics(std::ostream& out, NodeId root) const { write_resolved(out, root, 0); }
+void Analyzer::write_semantics(std::ostream& out, NodeId root) const
+{
+    write_resolved(out, root, 0);
+    for (EntityId e : specialization_demand) {
+        write_function(out, e, 0, 0, 1, false);
+    }
+    for (EntityId e : demand_queue) {
+        const MemberFacts& m = members[entities[e].member_info];
+        write_function(out, e, m.body, entities[e].scope, 1);
+    }
+}
 } }

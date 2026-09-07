@@ -16,8 +16,13 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
     ETokenType op = ast[n].op;
     if (op == OP_AMP) {
         if (a.form == ExpressionForm::Overload) return a;
+        if (a.entity) demand_specialization(a.entity);
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
-        r.type = types.compound(TypeKind::Pointer, a.type); return r;
+        if (a.entity && entities[a.entity].member_info && !entities[a.entity].is_static) {
+            r.type = types.member_pointer(scopes[entities[a.entity].owner].entity, entities[a.entity].type);
+            demand_member(a.entity);
+        } else r.type = types.compound(TypeKind::Pointer, a.type);
+        return r;
     }
     TypeId t = decay(a.type);
     if (op == OP_STAR) {

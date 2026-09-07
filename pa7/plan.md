@@ -37,10 +37,11 @@ the final measurement and state its reason.
 
 | Increment | Evidence / remaining boundary |
 | --- | --- |
+| Member and template declaration closure | 186/186; through PA7 684/684. 29 personal cases + multifile; ASan/UBSan/leak checks pass all PA7 fixtures, PA7 fact API, PA5/6 APIs and inherited personal cases. Typed member pointers/actions, deduplicated body demand, canonical declaration specializations without token replay. Performance campaign prepared; frozen measurement pending. |
 | Procedural core | 170/186 unchanged fixtures; PA1–6 498/498; file audit 77 files; 23 personal cases + multifile isolation. Flat overload unions and signature index; per-node expression facts and recorded conversion sequences; linear candidate tournament plus verification. Compiler measurement pending; no performance claim. |
 | Initial inspection | Read AGENTS, testing guide, spec, PA7 handout and representative fixtures. Preserve both review markers above. All 186 failures remain; implementation in progress. |
 
-Handoff reason: none; continuing into member-pointer identity, anonymous object actions, member demand and the remaining template-address case. Required final checks are
+Handoff reason: none; behavior complete, proceeding with the frozen performance campaign and final spec audit. Required final checks are
 `make test-pa7`, `make test-report-through-pa7`, prior-through PA6 and
 `perl scripts/cppgm_file_audit.pl --stage pa7 --paths dev/src`. Commit intended
 changes and verify an empty worktree at handoff.

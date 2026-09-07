@@ -7,6 +7,13 @@ import tempfile
 
 compiler = str(pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else 'dev/cppgm++').resolve())
 cases = [
+    ('unresolved arithmetic', 'int f(int); int f(long); int g(){return f+1;}', False, ''),
+    ('unresolved sizeof', 'int f(int); int f(long); int g(){return sizeof(f);}', False, ''),
+    ('unresolved discarded function', 'int f(int); int f(long); void g(){f;}', False, ''),
+    ('member cv pointer identity', 'struct C{void f();void f()const;};using P=void(C::*)()const;P p=&C::f;', True, 'id-expression lvalue function of (pointer to const struct C) returning void C::f'),
+    ('deferred unused body', 'struct C{void unused(){missing();} void used(){}};using P=void(C::*)();P p=&C::used;', True, 'function-definition C::used'),
+    ('template type substitution', 'template<class T>void f(T*);void(*p)(int*)=&f<int>;', True, 'function-declaration f function of (pointer to int) returning void'),
+
     ('recursive call', 'int count(int n) { if(n) return count(n-1); return 0; }', True, 'callee count'),
     ('source-order lookup', 'int f(){ return later(); } int later(){return 0;}', False, ''),
     ('overload arity', 'int f(int); long f(int,int); long g(){return f(1,2);}', True, 'callee f function of (int, int) returning long int'),

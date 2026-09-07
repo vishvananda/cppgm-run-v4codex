@@ -25,7 +25,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
 {
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
-    TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic);
+    TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv);
     EntityId family = function_families.get(key(owner, name));
     EntityId e = family ? function_signatures.get(key(family, shape)) : 0;
     if (e) {
@@ -34,6 +34,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     }
     e = make_entity(EntityKind::Function, owner, name, source);
     entities[e].type = type;
+    if (calls && scopes[owner].kind == ScopeKind::Template) template_facts(e);
     if (!family) { family = e; function_families.put(key(owner, name), family); }
     function_signatures.put(key(family, shape), e);
     bind(owner, name, e);
@@ -108,6 +109,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         std::vector<Conversion> sequences;
         for (EntityId e : candidates(fn.entity)) {
             ++candidate_work;
+            if (entities[e].template_info) e = deduce_function(e, args);
+            if (!e) continue;
             Type function = types[entities[e].type];
             if (args.size() < function.count || (!function.variadic && args.size() != function.count)) continue;
             std::size_t begin = sequences.size();
@@ -133,6 +136,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         result.conversions = conversions.size(); result.count = args.size();
         for (std::size_t i = 0; i < args.size(); ++i) {
             Conversion c = sequences[viable[best].offset + i];
+            expressions[args[i]].incoming = conversions.size();
             conversions.push_back(c);
             apply_conversion(args[i], c);
         }
@@ -149,6 +153,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (i < f.count) c = conversion(args[i], types.parameters[f.offset + i]);
             else { c.rank = 4; c.target = decay(expressions[args[i]].type); }
             if (!c.valid()) throw std::runtime_error("indirect argument conversion");
+            expressions[args[i]].incoming = conversions.size();
             conversions.push_back(c);
             apply_conversion(args[i], c);
         }
