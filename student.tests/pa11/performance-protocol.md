@@ -115,3 +115,11 @@ all b74a80fa observations under `selection-initial-*-performance.json` (their
 embedded original filenames are historical); repeat the full common and new
 behavior campaigns with the corrected frozen compiler. Initial binaries and
 scratch outputs remain separate and unchanged.
+
+Final B is c7206513, SHA256
+14fe0b2503b191016f0c2a3bdbbd70c6d518f86432dbf3c615b5381fe4bacbc1.
+The corrected common campaign again has isolated wall spikes (on both A and B)
+in calls-1, memory-float-1 and calls-4, plus noisy references-4 calibration.
+Repeat exactly those four groups via explicit `selection_repeat.py` arguments;
+retain both full campaigns and both follow-ups. The optional argument support
+preserves the earlier default group sequence. No observation is discarded.

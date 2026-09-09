@@ -15,7 +15,7 @@ data=dict(protocol='performance-protocol.md#selection-continuation-campaign',ori
     original_sha256=prior.sha(source),harness_sha256=prior.sha(__file__),binaries=original['binaries'],
     cpu=original['cpu'],order=prior.ORDER,inputs={},observations=[])
 for binary in data['binaries']:assert prior.sha(binary['path'])==binary['sha256']
-for group in ('memory-float-1','calls-4','references-8000'):
+for group in (sys.argv[3:] or ('memory-float-1','calls-4','references-8000')):
     entry=original['inputs'][group];src=Path(entry['path'])
     assert prior.sha(src)==entry['sha256']
     assert [prior.sha(src.with_suffix(s)) for s in ('.ref','.my')]==entry['output_hashes']
