@@ -2,27 +2,48 @@
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
-void Procedural::discard(NodeId n)
+bool Procedural::discarded_access(NodeId n)
+{
+    // Immutable parsed forms: memoize once per NodeId, including negative
+    // results, so nested discarded conditionals do not rescan their subtrees.
+    if (discard_accesses.empty()) discard_accesses.resize(ast.nodes.size());
+    if (discard_accesses[n]) return discard_accesses[n] == 2;
+    ++discard_work;
+    Kind k = ast[n].kind;
+    bool access;
+    if (k == Kind::Conditional) {
+        NodeId b = ast[ast[n].first].next;
+        access = discarded_access(b) && discarded_access(ast[b].next);
+    } else if (k == Kind::Parenthesized) access = discarded_access(ast[n].first);
+    else if (k == Kind::Binary && ast[n].op == OP_COMMA) access = discarded_access(ast[ast[n].first].next);
+    else access = k == Kind::IdExpression || k == Kind::Member || k == Kind::Subscript ||
+        (k == Kind::Unary && ast[n].op == OP_STAR);
+    discard_accesses[n] = access ? 2 : 1;
+    return access;
+}
+void Procedural::discard(NodeId n, bool access)
 {
     if (!n) return;
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
     if (ast[n].kind == Kind::Conditional) {
+        // Prvalue arms undergo their normal conversions even if discarded.
+        // A discarded volatile glvalue is read only for the forms in
+        // [expr]/11; a conditional requires both arms to qualify.
+        if (sem.expression_fact(n).category == ValueCategory::Prvalue) { expression(n); return; }
+        access = access && discarded_access(n);
         NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
         Value test = load(expression(a));
         if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
         BlockId yes = block(), no = block(), end = block();
         emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
-        start(yes); discard(b); jump(end);
-        start(no); discard(c); jump(end); start(end); return;
+        start(yes); discard(b, access); jump(end);
+        start(no); discard(c, access); jump(end); start(end); return;
     }
     if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA) {
-        discard(ast[n].first); discard(ast[ast[n].first].next); return;
+        discard(ast[n].first); discard(ast[ast[n].first].next, access); return;
     }
     Value value = expression(n);
-    Kind k = ast[n].kind;
-    bool access = k == Kind::IdExpression || k == Kind::Member || k == Kind::Subscript ||
-        (k == Kind::Unary && ast[n].op == OP_STAR);
-    if (access && value.address && (sem.types[value.type].cv & 2)) load(value);
+    if (access && value.address && (sem.types[value.type].cv & 2) && discarded_access(n)) load(value);
 }
 void Procedural::condition(NodeId n, BlockId yes, BlockId no)
 {
@@ -102,6 +123,23 @@ void Procedural::collect_cases(NodeId n, std::vector<NodeId>& cases, NodeId& fal
     if (ast[n].kind == Kind::Default) { labels[n] = block(); fallback = n; }
     for (NodeId c = ast[n].first; c; c = ast[c].next) collect_cases(c, cases, fallback);
 }
+bool Procedural::mark_control_entries(NodeId n)
+{
+    if (!n) return false;
+    ++control_work;
+    Kind k = ast[n].kind;
+    bool entry = k == Kind::Label || k == Kind::Case || k == Kind::Default;
+    switch (k) {
+    case Kind::Compound: case Kind::Then: case Kind::Else: case Kind::Label:
+    case Kind::Case: case Kind::Default: case Kind::If: case Kind::Switch:
+    case Kind::While: case Kind::Do: case Kind::For:
+        for (NodeId c = ast[n].first; c; c = ast[c].next)
+            entry |= mark_control_entries(c);
+        break;
+    default: break;
+    }
+    return control_entries[n] = entry;
+}
 void Procedural::switch_statement(NodeId n)
 {
     NodeId cond = child(n, Kind::Condition), body = ast[cond].next;
@@ -138,7 +176,13 @@ void Procedural::statement(NodeId n)
         jump(labels[n]); start(labels[n]);
         statement(k == Kind::Case ? ast[ast[n].first].next : ast[n].first); return;
     }
-    if (ended) return;
+    if (ended) {
+        if (!control_entries[n]) return;
+        // A terminator kills fallthrough, not explicit entries nested in a
+        // control statement. Its header starts in an unreachable block;
+        // labels inside it still receive their normal goto/switch edges.
+        start(block());
+    }
     switch (k) {
     case Kind::SimpleDeclaration: {
         NodeId list = child(n, Kind::InitDeclarators);

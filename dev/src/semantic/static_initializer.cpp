@@ -15,6 +15,24 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
     static_index.put(key, index);
     StaticFact fact; fact.state = FactState::Active; static_facts.push_back(fact);
     StaticValue result = static_value_impl(n, target);
+    // Apply the requested conversion on every path, including wrappers,
+    // conditionals and addresses. A floating-to-bool conversion tests zero
+    // directly; truncating to an integer first changes fractional values.
+    TypeId scalar = target;
+    if (types[scalar].kind == TypeKind::LRef || types[scalar].kind == TypeKind::RRef) scalar = types[scalar].child;
+    if (fundamental(scalar, FT_BOOL) &&
+        (result.kind == StaticValue::Floating || (scalar == target &&
+        (result.kind == StaticValue::Address || result.kind == StaticValue::String)))) {
+        result.bits = result.kind == StaticValue::Floating ? result.floating != 0 : 1;
+        result.kind = StaticValue::Integer;
+    } else if (result.kind == StaticValue::Floating && integral(scalar)) {
+        result.bits = is_unsigned(scalar) ? std::uint64_t(result.floating) : std::uint64_t(std::int64_t(result.floating));
+        result.kind = StaticValue::Integer;
+    }
+    if (result.kind == StaticValue::Integer && integral(scalar)) {
+        Constant c = convert(Constant(types.fundamental(FT_UNSIGNED_LONG_LONG_INT), result.bits), scalar, true);
+        result.bits = c.bits;
+    }
     static_facts[index-1].value = result;
     static_facts[index-1].state = result.kind == StaticValue::Invalid ? FactState::Failure : FactState::Success;
     return result;
@@ -44,18 +62,29 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         }
     }
     if (kind == Kind::Unary && ast[n].op == OP_AMP) return static_value(first, types.compound(TypeKind::LRef, expressions[first].type));
+    if (kind == Kind::Unary && ast[n].op == OP_STAR)
+        return static_value(first, expressions[first].type);
+    if (kind == Kind::Unary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS) &&
+        types[x.type].kind == TypeKind::Fundamental && types[x.type].fundamental >= FT_FLOAT && types[x.type].fundamental <= FT_LONG_DOUBLE) {
+        r = static_value(first, x.type);
+        if (r.kind == StaticValue::Floating && ast[n].op == OP_MINUS) r.floating = -r.floating;
+        return r;
+    }
     if (kind == Kind::Subscript) {
+        NodeId base = first;
         NodeId index = ast[first].next;
-        r = static_value(first, types.compound(TypeKind::Pointer, x.type));
+        if (!pointer(decay(expressions[base].type))) std::swap(base, index);
+        r = static_value(base, types.compound(TypeKind::Pointer, x.type));
         Constant c = evaluate(index, facts[index].scope);
         if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
         r.addend += static_cast<std::int64_t>(c.bits) * size(x.type); return r;
     }
     if (kind == Kind::Binary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS)) {
+        NodeId right = ast[first].next;
+        if (ast[n].op == OP_PLUS && pointer(decay(expressions[right].type))) std::swap(first, right);
         TypeId left = decay(expressions[first].type);
         if (pointer(left)) {
             r = static_value(first, left);
-            NodeId right = ast[first].next;
             Constant c = evaluate(right, facts[right].scope);
             if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
             std::int64_t delta = static_cast<std::int64_t>(c.bits) * size(types[left].child);
@@ -80,12 +109,6 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     } else {
         Constant c = evaluate(n, facts[n].scope);
         if (c.valid) { r.kind = StaticValue::Integer; r.bits = c.bits; }
-    }
-    if (r.kind == StaticValue::Floating && integral(target)) {
-        r.bits = is_unsigned(target) ? std::uint64_t(r.floating) : std::uint64_t(std::int64_t(r.floating)); r.kind = StaticValue::Integer;
-    }
-    if (r.kind == StaticValue::Integer && integral(target)) {
-        Constant c = convert(Constant(types.fundamental(FT_UNSIGNED_LONG_LONG_INT), r.bits), target, true); r.bits = c.bits;
     }
     return r;
 }

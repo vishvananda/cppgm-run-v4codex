@@ -8,7 +8,7 @@ void Procedural::string_literal(NodeId n)
 {
     const auto lit = ast.literals[ast[n].literal];
     Global g; g.structured = true;
-    g.symbol = p.symbol(p.intern("@__string_" + std::to_string(p.globals.size()+1)));
+    g.symbol = fresh_symbol("@__string_" + std::to_string(p.symbols.size()+1));
     strings[n] = g.symbol;
     g.data.begin = p.data.size(); g.data.count = lit.elements;
     TypeId element = sem.types.fundamental(lit.type);
@@ -70,6 +70,11 @@ void Procedural::global(EntityId e)
 {
     auto entity = sem.entities[e]; TypeId t = entity.type;
     Global g; g.symbol = symbols[e]; g.declaration = !entity.definition;
+    auto prior = p.symbols[g.symbol.index-1];
+    if (prior.kind == Symbol::GlobalSymbol) {
+        if (g.declaration) return;
+        if (!p.globals[prior.entity-1].declaration) throw std::runtime_error("multiple global definitions");
+    }
     g.structured = sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
@@ -77,7 +82,7 @@ void Procedural::global(EntityId e)
             auto value = sem.static_value(entity.initializer, t);
             if (value.kind != semantic::StaticValue::Address) {
                 Global temp;
-                temp.symbol = p.symbol(p.intern("@__reference_" + std::to_string(e)));
+                temp.symbol = fresh_symbol("@__reference_" + std::to_string(p.symbols.size()+1));
                 temp.type = type(sem.types[t].child); temp.data.begin = p.data.size(); temp.data.count = 1;
                 p.data.push_back(constant_data(entity.initializer, sem.types[t].child)); p.globals.push_back(temp);
                 auto& sym = p.symbols[temp.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size(); sym.metadata.binding = ir_model::SBM_INTERNAL;
@@ -91,6 +96,7 @@ void Procedural::global(EntityId e)
             g.data.count = p.data.size() - g.data.begin;
         }
     }
+    if (prior.kind == Symbol::GlobalSymbol) { p.globals[prior.entity-1] = g; return; }
     p.globals.push_back(g);
     auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
 }

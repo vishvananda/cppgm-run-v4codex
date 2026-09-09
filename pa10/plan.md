@@ -1,7 +1,8 @@
 # PA10 implementation
 
 Stage base commit: c2a4786ebe60f52a7384c8c6e1ce12bd7e0b173a
-Last reviewed commit: c2a4786ebe60f52a7384c8c6e1ce12bd7e0b173a
+Independent full-stage review: starts at a5e10cfd; final validation in progress.
+See [audit](audit.md) for reconstructed architecture, new defects and fixes.
 
 ## Design/spec alignment and ownership
 
@@ -19,8 +20,8 @@ semantic resolution, host compilation, or reference delegation implements output
 
 ## Remaining groups
 
-None for PA10: implementation, correctness, performance and exit audits are
-complete. Handoff is full-stage completion, with no deferred PA10 group. Object-model
+Independent audit corrections are implemented; refreshed performance, sanitizer
+and final root exit validation remain before closing the stage. Object-model
 helpers, template lowering, MIR/native optimization, ELF and self-hosting belong
 to later stages; current procedural behavior preserves those typed boundaries.
 

@@ -206,6 +206,8 @@ Value Procedural::call(NodeId n)
     auto fact = sem.expression_fact(n);
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());
+    // The course's indirect-call fixtures evaluate arguments before fetching
+    // the callee; C++11 leaves their relative evaluation order unspecified.
     for (unsigned j = 0; j < fact.argument_count; ++j)
         call_work.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
     NodeId callee = ast[n].first;

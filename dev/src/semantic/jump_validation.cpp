@@ -25,6 +25,7 @@ void Analyzer::check_jumps(NodeId body)
     std::function<void(NodeId)> visit = [&](NodeId n) {
         if (!n) return;
         Kind k = ast[n].kind;
+        if (k == Kind::Condition) { add_object(facts[n].entity); return; }
         if (k == Kind::SimpleDeclaration) {
             NodeId list = child(n, Kind::InitDeclarators);
             for (NodeId c = ast[list].first; c; c = ast[c].next) add_object(facts[ast[c].first].entity);
@@ -40,7 +41,10 @@ void Analyzer::check_jumps(NodeId body)
         bool scope = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::If ||
             k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do;
         if (k == Kind::Switch) switch_entry = active;
-        for (NodeId c = ast[n].first; c; c = ast[c].next) visit(c);
+        for (NodeId c = ast[n].first; c; c = ast[c].next) {
+            visit(c);
+            if (k == Kind::Switch && ast[c].kind == Kind::Condition) switch_entry = active;
+        }
         if (scope) active = saved;
         switch_entry = saved_switch;
     };

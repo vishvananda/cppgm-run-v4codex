@@ -7,6 +7,44 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 COMPILER = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 CASES = {
+'c-linkage-namespaces': r'''
+namespace A {extern "C" int f();}
+namespace B {extern "C" int f(){return 7;}}
+int main(){return A::f()==7?0:1;}
+''',
+'generated-global-identities': r'''
+int x=1; int __global_x(){return 2;}
+int __reference_5(){return 3;} const int&r=4;
+int main(){return x+__global_x()+__reference_5()+r==10?0:1;}
+''',
+'volatile-value-contexts': r'''
+volatile int x=1, y=2;
+int readback(){int a=(x=3);int b=++x;return a+b;}
+void mixed(){true?x:(x=5);}
+void both(){true?x:y;}
+void prvalue(){true?(x=6):2;}
+int main(){if(readback()!=7)return 1;mixed();both();prvalue();return x==6?0:1;}
+''',
+'nested-control-entries': r'''
+int jump(){goto L;if(false){L:return 7;}return 0;}
+int loop(){int x=0;goto L;while(false){L:++x;continue;}return x;}
+int dispatch(){int x=0;switch(2){while(false){case 2:x=3;break;}}return x;}
+int storage(){goto L;int x;L:x=9;return x;}
+int main(){return jump()==7 && loop()==1 && dispatch()==3 && storage()==9 ? 0:1;}
+''',
+'static-conversions-addresses': r'''
+int a[3]={2,4,6}; int *p=1+a; int *q=&2[a]; int &r=*(a+1);
+bool fraction=0.5, negative=-0.5, zero=0.0, address=&a[1];
+bool chosen=true?0.5:0.0; unsigned char narrowed=(unsigned char)256;
+int main(){return p==a+1 && *q==6 && r==4 && fraction && negative
+ && !zero && address && chosen && narrowed==0 ? 0:1;}
+''',
+'callee-order': r'''
+int order=0; int f(int n){return n;}
+int (*pick())(int){order=order*10+1;return f;}
+int arg(){order=order*10+2;return 0;}
+int main(){pick()(arg());return order==21?0:1;}
+''',
 # The course fixes RHS-before-LHS-address for assignment, including compound.
 'assignment-order': r'''
 int order=0, value=0;
@@ -37,7 +75,8 @@ int main(){ signed char c=126; bool b=true; bool old=b++;
   if(++c != 127) return 2;
   unsigned char u=255; if(u++ != 255 || u != 0) return 3;
   int a[4]={1,2}; int* p=a; int*& r=p;
-  r+=3; --r; if(*r || r-a!=2 || a[3]) return 4;
+  r+=3; --r; if(*r || r-a!=2 || a-r!=-2 || a[3]) return 4;
+  char rows[4][3]; if(&rows[1]-&rows[3]!=-2) return 5;
   return 0;
 }
 ''',
@@ -72,6 +111,8 @@ int main(){int a=3,b=7; int &r=pick(false,a,b); r=9;
 '''
 }
 BAD = {
+'jump-condition-initializer': 'int main(){goto L;if(int x=1){L:return x;}return 0;}',
+'jump-loop-condition': 'int main(){goto L;while(int x=1){L:return x;}return 0;}',
 'jump-initializer': 'int main(){goto end; int x=1; end:return 0;}',
 'switch-initializer': 'int main(){switch(1){case 0:int x=0;case 1:return 0;}}',
 'array-excess': 'int main(){int a[1]={1,2};return 0;}',
@@ -89,6 +130,10 @@ with tempfile.TemporaryDirectory(prefix='pa10-personal-') as work:
         assert r.returncode==0,(name,r.stderr)
         if name=='volatile-discard':
             assert ir.read_text().count('load volatile')==5,ir.read_text()
+        if name=='volatile-value-contexts':
+            # Three readback loads, zero mixed-arm loads, two possible both-arm
+            # loads, one prvalue-arm readback, and one final check.
+            assert ir.read_text().count('load volatile')==7,ir.read_text()
         native=subprocess.run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir],capture_output=True,text=True)
         assert native.returncode==0,(name,native.stderr,ir.read_text())
         r=subprocess.run([exe],capture_output=True,timeout=10)

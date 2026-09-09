@@ -46,7 +46,7 @@ Value Procedural::load(Value v)
 {
     if (!v.address) return v;
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
-    if (v.cached) return Value(v.stored, type(v.type), v.type);
+    if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
     Value r = emit(i, {v.operand}); r.type = v.type; return r;
 }
@@ -131,6 +131,11 @@ Value Procedural::binding(EntityId e)
     if (!e) throw std::logic_error("missing resolved declaration");
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
+    // An uninitialized automatic declaration may legally be bypassed by goto.
+    // Storage identity is independent of whether its declaration falls through.
+    if (!objects[e] && entity.kind == semantic::EntityKind::Variable &&
+        sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace)
+        objects[e] = builder->add_slot(0, type(t));
     bool local = objects[e].index != 0;
     Operand location = local ? Operand::slot(objects[e]) : Operand::symbol(symbol(e));
     if (reference(t)) {

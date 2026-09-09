@@ -82,3 +82,17 @@ new complete record is `final-performance.json`. Record the native backend's
 binary hash as well as its pinned bundle revision. Run no builds/tests during
 timing. The new sequencing behavior is covered by an independent native test;
 the performance inputs remain in the semantically equivalent common subset.
+
+## Independent final audit refresh
+
+After the independent full-stage review beginning at `a5e10cfd`, freeze the
+corrected compiler at `/tmp/pa10-independent-final` and retain all older binaries
+and JSON observations. Use unchanged A `/tmp/pa10-first-correct`, unchanged nine
+compiler inputs and the three long runtime inputs. Run `benchmark.py final` into
+`independent-performance.json` with fresh `/tmp/pa10-independent-performance`
+artifacts, AAAA followed by two ABBA blocks, the same build/IR/backend flags,
+CPU affinity, equivalence checks and text metric. Run no builds/tests during
+measurement. Capture expanded work telemetry separately. This evaluates the
+correct common subset; the new control, volatile, static-conversion and
+multi-file reducers establish correctness and are not speed comparisons against
+incorrect A output. Numeric diagnostic thresholds retain their existing scope.

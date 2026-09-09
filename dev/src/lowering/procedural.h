@@ -28,6 +28,16 @@ struct Value {
     Value() {}
     Value(Operand o, IRType i, TypeId t = 0, bool a = false) : operand(o), ir(i), type(t), address(a) {}
 };
+// Program-owned linkage identities survive individual semantic TUs. Keys use
+// canonical typed ABI entities, never their rendered manglings.
+struct Linkage {
+    abi_mangle::Graph abi;
+    semantic::Index external;
+    std::size_t requests = 0, hits = 0;
+    std::uint64_t disambiguator = 0;
+    bool merge;
+    explicit Linkage(bool merge) : merge(merge) {}
+};
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.
 // Function-local construction state is discarded when its body is complete.
 class Procedural {
@@ -35,13 +45,17 @@ class Procedural {
     semantic::Analyzer& sem;
     IdentifierTable& identifiers;
     lowir_model::Program& p;
-    abi_mangle::Graph abi;
+    Linkage& linkage;
+    abi_mangle::Graph& abi;
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
     std::vector<SymbolId> symbols, strings;
     std::vector<SlotId> objects;
     std::vector<BlockId> labels;
+    std::vector<unsigned char> control_entries;
+    std::vector<unsigned char> discard_accesses;
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
+    std::vector<EntityId> definitions;
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
@@ -52,6 +66,7 @@ class Procedural {
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e);
+    SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
     void function_body(EntityId e);
     void global(EntityId e);
@@ -71,7 +86,8 @@ class Procedural {
     Value converted(NodeId n, const semantic::Conversion& c);
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
-    void discard(NodeId n);
+    bool discarded_access(NodeId n);
+    void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
     Value conditional(NodeId n, bool location);
@@ -83,6 +99,7 @@ class Procedural {
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);
     void statement(NodeId n);
+    bool mark_control_entries(NodeId n);
     void condition(NodeId n, BlockId yes, BlockId no);
     void switch_statement(NodeId n);
     void collect_cases(NodeId n, std::vector<NodeId>& cases, NodeId& fallback);
@@ -90,7 +107,8 @@ class Procedural {
     void start(BlockId b);
     void jump(BlockId b);
 public:
-    Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out);
+    std::size_t control_work = 0, discard_work = 0;
+    Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };
 int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit = false);
