@@ -42,3 +42,18 @@ new volatile-discard, bool-storage and padding fixes are validated separately.
 Later template lowering, MIR allocation, ELF writing, and self-hosting remain
 owned by their assignments. Earlier template semantics are measured here to
 check that extending the procedural frontend has not hidden a regression.
+
+## Measurement continuation (same frozen binaries)
+
+The first campaign completed all 96 compiler observations, then encountered
+sectionless ELF at executable text-size measurement. Preserve `performance.json`
+unchanged and carry those observations into `final-performance.json`. The
+corrected metric counts bytes from ELF entry to the executable PT_LOAD end;
+these three native inputs have no static data. Compiler .text remains the
+ordinary section size. This matches PA8's established sectionless-ELF metric.
+
+Both 800/3200-reference B timings were below 20x startup. Add one frozen
+8000-reference input under the same AAAA/ABBA/ABBA protocol to obtain useful
+long-workload evidence; retain all smaller observations and outliers. Other
+compiler groups need no repeat. Finish the three originally planned native
+workloads with the corrected size adapter. No compiler or flags changed.

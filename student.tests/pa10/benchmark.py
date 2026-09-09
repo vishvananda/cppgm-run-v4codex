@@ -7,6 +7,7 @@ import os
 import platform
 import statistics
 import subprocess
+import struct
 import sys
 import time
 ROOT=Path(__file__).resolve().parents[2]
@@ -14,7 +15,16 @@ ORDER=[0,0,0,0,0,1,1,0,0,1,1,0]
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def text_size(path):
     rows=subprocess.check_output(['size','-A',path],text=True).splitlines()
-    return next(int(r.split()[1]) for r in rows if r.startswith('.text '))
+    section=[int(r.split()[1]) for r in rows if r.startswith('.text ')]
+    if section:return section[0]
+    # The supplied freestanding backend writes a sectionless ELF. These runtime
+    # inputs have no static data: count executable payload after its ELF entry.
+    data=Path(path).read_bytes()
+    entry,phoff=struct.unpack_from('<QQ',data,24)
+    kind,flags,offset,address,_,size,memsize,align=struct.unpack_from('<IIQQQQQQ',data,phoff)
+    assert data[:5]==b'\x7fELF\x02' and kind==1 and flags&1 and offset==0
+    assert address <= entry < address+size
+    return size-(entry-address)
 def workloads():
     for scale in (1,4):
         n=3500*scale
@@ -44,7 +54,7 @@ def run(cmd,**kw):
     assert r.returncode==0,(cmd,r.returncode,r.stderr,r.stdout)
     return r
 
-def measure(a,b,dest,work):
+def measure(a,b,dest,work,prior=None):
     work.mkdir(parents=True,exist_ok=True)
     binaries=[a.resolve(),b.resolve()]
     cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
@@ -55,6 +65,12 @@ def measure(a,b,dest,work):
         binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in binaries],
         inputs={},observations=[],runtime=[],startup=[],budgets=dict(wall_ratio=1.10,rss_ratio=1.20,rss_add_kib=16384,text_add_bytes=131072,scale_wall=5.5,scale_rss=5.0),
         source_hashes={str(p.relative_to(ROOT)):sha(p) for p in Path(__file__).parent.glob('*.py')})
+    if prior:
+        result=json.loads(prior.read_text())
+        assert [sha(p) for p in binaries]==[b['sha256'] for b in result['binaries']]
+        result['continued_from']=str(prior)
+        result['continuation_source_hashes']={str(p.relative_to(ROOT)):sha(p) for p in Path(__file__).parent.glob('*.py')}
+        result['text_metric']='compiler .text; sectionless native executable payload after ELF entry (no static data)'
     def save():dest.write_text(json.dumps(result,indent=2)+'\n')
     def observe(cmd):
         usage=work/'usage.txt'
@@ -65,10 +81,14 @@ def measure(a,b,dest,work):
         return dict(wall_s=wall,rss_kib=int(rss),user_s=float(user),system_s=float(system),
                     involuntary=int(involuntary),voluntary=int(voluntary),stderr=r.stderr)
     empty=work/'empty.cpp';empty.write_text('int main(){return 0;}')
-    for label in (0,1):
+    for label in (() if prior else (0,1)):
         for _ in range(4):
             r=observe([binaries[label],'--emit-lowir','-O0','-o',work/'empty.lowir',empty]);r['binary']=label;result['startup'].append(r)
-    for name,source,mode,scale in workloads():
+    corpus=list(workloads()) if not prior else []
+    if prior:
+        source='namespace N{const int value=7;const int&r0=value;\n'+''.join(f'const int&r{i}=r{i-1};\n' for i in range(1,8000))+'}\nint main(){return N::r0-7;}\n'
+        corpus.append(('references-8000',source,'--emit-lowir',10))
+    for name,source,mode,scale in corpus:
         src=work/f'{name}.t';src.write_text(source)
         outputs=[work/f'{name}.ref',work/f'{name}.my']
         flags=['-O0'] if mode=='--emit-lowir' else []
@@ -129,5 +149,6 @@ def verify(data):
     report(data)
 if __name__=='__main__':
     if sys.argv[1]=='measure': measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve())
+    elif sys.argv[1]=='continue':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),Path(sys.argv[6]))
     elif sys.argv[1]=='verify':verify(json.loads(Path(sys.argv[2]).read_text()))
     else:report(json.loads(Path(sys.argv[2]).read_text()))
