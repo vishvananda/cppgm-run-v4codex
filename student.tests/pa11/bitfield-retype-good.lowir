@@ -1,0 +1,8 @@
+function @main() -> i32 {
+  block ^entry:
+    %bits = const i32 0
+    %declared = copy u32 %bits
+    %result = binary sub u32 %declared, 1
+    %exit = copy i32 %result
+    return i32 %exit
+}

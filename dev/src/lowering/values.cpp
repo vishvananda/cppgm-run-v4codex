@@ -45,6 +45,7 @@ Value Procedural::emit(Opcode op, IRType t, std::initializer_list<Operand> args,
 Value Procedural::load(Value v)
 {
     if (!v.address) return v;
+    if (v.bit_field) return load_bit_field(v);
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
@@ -57,10 +58,12 @@ Value Procedural::address(Value v)
         v = emit(Opcode::Addr, IRType(), {v.operand});
     v.address = false; v.ir = IRType::Ptr; return v;
 }
-void Procedural::store(Value v, Value location)
+Value Procedural::store(Value v, Value location)
 {
+    if (location.bit_field) return store_bit_field(v, location);
     Instruction i(Opcode::Store, type(location.type)); i.is_volatile = sem.types[location.type].cv & 2;
     emit(i, {v.operand, location.operand});
+    return v;
 }
 Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool fold_widen)
 {
@@ -91,7 +94,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
 {
     if (reference(to)) {
         TypeId referred = sem.types[to].child;
-        if (!v.address || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
+        if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
             v = convert(v, referred);
             SlotId slot = builder->add_slot(0, type(referred));
             Value location(Operand::slot(slot), type(referred), referred, true);
@@ -145,6 +148,7 @@ Value Procedural::field(Value base, EntityId e, unsigned steps)
     Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
     Value v = emit(i, {base.operand, Operand::integer(sem.entities[e].member_offset)});
     v.type = sem.entities[e].type;
+    if (sem.field_fact(e).bit_field) v.bit_field = e;
     if (reference(v.type)) { v = load(Value(v.operand, IRType::Ptr, v.type, true)); v.type = sem.types[sem.entities[e].type].child; }
     v.address = true; return v;
 }

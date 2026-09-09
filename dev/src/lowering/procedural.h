@@ -23,7 +23,10 @@ struct Value {
     Operand operand;
     IRType ir;
     TypeId type = 0;
+    EntityId bit_field = 0;
+    std::uint64_t init_offset = 0;
     bool address = false, cached = false;
+    bool initializing = false;
     Operand stored;
     Value() {}
     Value(Operand o, IRType i, TypeId t = 0, bool a = false) : operand(o), ir(i), type(t), address(a) {}
@@ -101,7 +104,9 @@ class Procedural {
     void destroy_subobjects(EntityId e);
     void finish_constructor_handlers();
     void constructor_cleanup(semantic::SubobjectAction action);
-    struct InitProjection { std::uint64_t offset; bool field; };
+    semantic::Index initialized_units;
+    struct InitProjection { std::uint64_t offset; bool field; EntityId entity;
+        InitProjection(std::uint64_t o, bool f, EntityId e = 0) : offset(o), field(f), entity(e) {} };
     Value array_element(Value root, bool indirect, const std::vector<InitProjection>& path, Operand index, std::uint64_t stride);
     void array_construct(EntityId ctor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path);
     void array_destroy(EntityId dtor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path, bool subobject = false);
@@ -123,6 +128,9 @@ class Procedural {
     Value emit(Instruction i, std::initializer_list<Operand> args);
     Value emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action = Operation::None);
     Value load(Value v);
+    Value load_bit_field(Value v);
+    Value store_bit_field(Value v, Value location);
+    Value initialization_value(NodeId n, TypeId t);
     Value address(Value v);
     Value convert(Value v, TypeId target, bool fold_widen = false);
     Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false);
@@ -140,7 +148,7 @@ class Procedural {
     Value binding(EntityId e);
     Value field(Value base, EntityId e, unsigned steps = 0);
     Value base_projection(Value base, unsigned steps);
-    void store(Value v, Value location);
+    Value store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);
     void statement(NodeId n);

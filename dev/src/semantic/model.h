@@ -76,6 +76,14 @@ struct ClassFacts {
     EntityId value_constructor = 0;
     unsigned char value_state = 0;
 };
+// Sparse member storage facts. Ordinary fields keep their existing offset;
+// bit-fields and explicit alignment use this descriptor by canonical EntityId.
+struct FieldFacts {
+    std::uint64_t alignment = 0, declared_width = 0;
+    TypeId storage_type = 0;
+    unsigned char shift = 0, width = 0;
+    bool bit_field = false, may_clear_unit = true;
+};
 struct Entity {
     Access access = Access::Public;
     EntityKind kind = EntityKind::Variable;

@@ -138,7 +138,8 @@ EntityId Analyzer::object_constructor(EntityId e) const
 bool Analyzer::synthetic_member(EntityId e) const
 { return entities[e].member_info && members[entities[e].member_info].synthetic; }
 bool Analyzer::nonstatic_field(EntityId e) const
-{ return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class; }
+{ return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class &&
+    (entities[e].name || !field_fact(e).bit_field); }
 void Analyzer::record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment)
 {
     ObjectUse use; use.node = node; use.type = type; use.adjustment = adjustment;

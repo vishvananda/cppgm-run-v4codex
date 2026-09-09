@@ -132,7 +132,18 @@ Value Procedural::unary(NodeId n)
             value = Value(Operand::integer(1), IRType::U8, dest.type);
         else value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, convert(old, promoted),
             Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), promoted);
-        value = convert(value, dest.type); store(value, dest);
+        if (dest.bit_field && ast[n].kind != Kind::Postfix && ast[a].kind == Kind::Member && ast[a].op == OP_DOT) {
+            NodeId object = ast[a].first;
+            EntityId root = sem.expression_fact(object).entity;
+            // Reacquire a prefix result's stable named storage using recorded
+            // identities. Calls, pointers and reference objects are never replayed.
+            if (ast[object].kind == Kind::IdExpression && root && !sem.nonstatic_field(root) && !reference(sem.entities[root].type)) {
+                dest = field(address(binding(root)), dest.bit_field, sem.object_fact(a).adjustment);
+                dest.type = sem.expression_fact(a).type;
+            }
+        }
+        if (!dest.bit_field) value = convert(value, dest.type);
+        value = store(value, dest);
         if (ast[n].kind == Kind::Postfix) return old;
         dest.cached = true; dest.stored = value.operand; return dest;
     }
@@ -150,7 +161,9 @@ Value Procedural::binary(NodeId n, bool location)
     if (op == OP_LAND || op == OP_LOR) return logical(n);
     if (ast[n].kind == Kind::Assignment) {
         Value rhs, dest, lhs;
-        if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
+        if (op == OP_ASS && sem.field_fact(sem.expression_fact(a).entity).bit_field) {
+            rhs = load(expression(b)); dest = expression(a, true);
+        } else if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
         else {
             NodeId target = a;
             while (ast[target].kind == Kind::Parenthesized) target = ast[target].first;
@@ -183,7 +196,7 @@ Value Procedural::binary(NodeId n, bool location)
             rhs = operation(binary, lhs, rhs, common);
             rhs = convert(rhs, fact.type);
         }
-        store(rhs, dest); dest.cached = true; dest.stored = rhs.operand; return dest;
+        rhs = store(rhs, dest); dest.cached = true; dest.stored = rhs.operand; return dest;
     }
     Value lhs = load(expression(a));
     Value rhs = load(expression(b));

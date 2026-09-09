@@ -50,7 +50,13 @@ public:
     std::vector<SubobjectAction> subobject_actions;
     bool synthetic_member(EntityId e) const;
     bool nonstatic_field(EntityId e) const;
+    const FieldFacts& field_fact(EntityId e) const { return field_facts[field_index.get(e)]; }
 private:
+    Index field_index;
+    std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
+    FieldFacts& field_metadata(EntityId e);
+    void bit_field_declaration(NodeId n, ScopeId s);
+    void class_layout(EntityId e);
     syntax::Ast& ast;
     IdentifierTable& ids;
     bool calls;
@@ -186,6 +192,7 @@ private:
     Expression cast_expression(NodeId n, ScopeId s, TypeId target, NodeId operand);
     TypeId value_type(TypeId t);
     TypeId decay(TypeId t);
+    TypeId promote_expression(NodeId n);
     TypeId promote(TypeId t);
     TypeId arithmetic_type(TypeId a, TypeId b);
     TypeId composite_pointer(TypeId a, TypeId b);

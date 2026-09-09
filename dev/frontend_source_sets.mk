@@ -26,3 +26,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/global_initialization
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/destruction semantic/access semantic/friends lowering/destruction lowering/arrays lowering/cleanup
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/operator_names semantic/operator_call lowering/operator_abi
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/layout semantic/fields
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/bit_fields

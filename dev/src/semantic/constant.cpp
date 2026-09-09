@@ -5,19 +5,6 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-namespace {
-std::uint64_t layout_add(std::uint64_t a, std::uint64_t b)
-{
-    if (b > std::numeric_limits<std::uint64_t>::max() - a)
-        throw std::runtime_error("class size overflow");
-    return a + b;
-}
-std::uint64_t layout_align(std::uint64_t bytes, std::uint64_t alignment)
-{
-    std::uint64_t remainder = bytes % alignment;
-    return remainder ? layout_add(bytes, alignment - remainder) : bytes;
-}
-}
 bool Analyzer::integral(TypeId id) const
 {
     const Type& t = types[id];
@@ -54,59 +41,6 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
         if (!is_unsigned(to) && (v.bits & (std::uint64_t(1) << (bits - 1)))) v.bits |= ~mask;
     }
     v.type = to; return v;
-}
-std::uint64_t Analyzer::size(TypeId id, bool alignment)
-{
-    Type t = types[id];
-    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment);
-    if (t.kind == TypeKind::Pointer) return 8;
-    if (t.kind == TypeKind::MemberPointer) return types[t.child].kind == TypeKind::Function ? 16 : 8;
-    if (t.kind == TypeKind::Array) {
-        if (!t.bound) throw std::runtime_error("sizeof incomplete array");
-        if (alignment) return size(t.child, true);
-        std::uint64_t element = size(t.child);
-        if (t.bound > std::numeric_limits<std::uint64_t>::max() / element)
-            throw std::runtime_error("array size overflow");
-        return t.bound * element;
-    }
-    if (t.kind == TypeKind::Fundamental && t.fundamental != FT_VOID) return fundamental_width(t.fundamental);
-    if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment);
-    if (t.kind == TypeKind::Named && entities[t.entity].complete) {
-        EntityId e = t.entity;
-        std::uint32_t layout = entities[e].class_info;
-        if (class_facts[layout].layout_state == 1) throw std::runtime_error("recursive class layout");
-        if (class_facts[layout].layout_state != 2) {
-            class_facts[layout].layout_state = 1;
-            std::uint64_t bytes = 0, align = 1;
-            for (auto b = class_facts[layout].first_base; b; b = bases[b].next) {
-                TypeId base = entities[bases[b].base].type;
-                auto base_size = size(base);
-                if (!class_facts[entities[types[base].entity].class_info].empty) { bytes = layout_add(bytes, base_size); class_facts[layout].empty = false; }
-                align = std::max(align, size(base, true));
-            }
-            for (std::uint32_t d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
-                const Entity member = entities[declarations[d].entity];
-                if (member.kind != EntityKind::Variable || member.is_static || member.owner != entities[e].scope) continue;
-                class_facts[layout].empty = false;
-                Type field = types[member.type];
-                bool reference = field.kind == TypeKind::LRef || field.kind == TypeKind::RRef;
-                std::uint64_t field_align = reference ? 8 : size(member.type, true);
-                std::uint64_t field_size = reference ? 8 : size(member.type);
-                align = std::max(align, field_align);
-                if (entities[e].key == KW_UNION) bytes = std::max(bytes, field_size);
-                else {
-                    bytes = layout_align(bytes, field_align);
-                    entities[declarations[d].entity].member_offset = bytes;
-                    bytes = layout_add(bytes, field_size);
-                }
-            }
-            class_facts[layout].alignment = align;
-            class_facts[layout].size = bytes ? layout_align(bytes, align) : 1;
-            class_facts[layout].layout_state = 2;
-        }
-        return alignment ? class_facts[layout].alignment : class_facts[layout].size;
-    }
-    throw std::runtime_error("sizeof unsupported or incomplete type");
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {

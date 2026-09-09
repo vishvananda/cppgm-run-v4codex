@@ -6,14 +6,14 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 with tempfile.TemporaryDirectory(prefix='pa11-personal-') as directory:
     scratch = Path(directory)
-    for name in ('member-addresses', 'construction-order', 'lexical-lifetime', 'array-lifetime', 'temporary-lifetime', 'access-adl', 'operator-calls'):
+    for name in ('member-addresses', 'construction-order', 'lexical-lifetime', 'array-lifetime', 'temporary-lifetime', 'access-adl', 'operator-calls', 'bitfield-storage'):
         source = Path(__file__).parent / (name + '.cpp')
         ir, exe = scratch / (name + '.lowir'), scratch / name
         for command in ([ROOT/'dev/cppgm++', '--emit-lowir', '-O0', '--validate-lowir', '-o', ir, source],
                         [ROOT/'dev/lowir2native-ref', '-O0', '-o', exe, ir], [exe]):
             subprocess.run([str(x) for x in command], check=True, timeout=60)
         print(name + ': validated LowIR, native exit 0')
-    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad'):
+    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad', 'bitfield-address-bad', 'bitfield-reference-bad'):
         source = Path(__file__).parent / (name + '.cpp')
         result = subprocess.run([str(ROOT/'dev/cppgm++'), '--emit-lowir', '-O0', '-o', str(scratch/'bad.lowir'), str(source)],
                                 capture_output=True, timeout=60)

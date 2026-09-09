@@ -42,7 +42,7 @@ void Procedural::global_data(NodeId n, TypeId t)
         std::uint64_t bytes = 0, total = sem.object_size(t);
         for (auto d = sem.scopes[sem.entities[array.entity].scope].first_decl; d; d = sem.declarations[d].next) {
             auto member = sem.entities[sem.declarations[d].entity];
-            if (member.kind != semantic::EntityKind::Variable || member.is_static) continue;
+            if (!sem.nonstatic_field(sem.declarations[d].entity)) continue;
             if (member.member_offset > bytes) { DataItem padding; padding.zero_bytes = member.member_offset-bytes; p.data.push_back(padding); }
             global_data(c, member.type); bytes = member.member_offset + sem.object_size(member.type);
             if (c) c = ast[c].next;
@@ -111,6 +111,7 @@ void Procedural::global(EntityId e)
 }
 void Procedural::object(EntityId e)
 {
+    initialized_units = semantic::Index();
     TypeId t = sem.entities[e].type;
     auto lifetime = sem.object_lifetime(e);
     if (lifetime) live = sem.lifetimes[lifetime].tail;
@@ -143,10 +144,12 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         Value base = address(location); NodeId c = ast[n].first;
         for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
             auto member = sem.entities[sem.declarations[d].entity];
-            if (member.kind != semantic::EntityKind::Variable || member.is_static) continue;
+            if (!sem.nonstatic_field(sem.declarations[d].entity)) continue;
             Instruction projection(Opcode::Index, IRType::I8); projection.projection = ir_model::IPK_FIELD;
             Value at = emit(projection, {base.operand, Operand::integer(member.member_offset)});
             at.type = member.type; at.address = true;
+            at.init_offset = location.init_offset + member.member_offset;
+            if (sem.field_fact(sem.declarations[d].entity).bit_field) { at.bit_field = sem.declarations[d].entity; at.initializing = true; }
             initialize(c, member.type, at); if (c) c = ast[c].next;
         }
         return;
@@ -157,6 +160,7 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         auto element = [&](NodeId c) {
             Value at = count ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(count*sem.object_size(target.child))}) : base;
             at.type = target.child; at.address = true;
+            at.init_offset = location.init_offset + count*sem.object_size(target.child);
             initialize(c, target.child, at); ++count;
         };
         for (NodeId c = ast[n].first; c; c = ast[c].next) element(c);
@@ -165,7 +169,7 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         return;
     }
     if (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
-    Value value = n ? (sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+    Value value = n ? (location.bit_field ? load(expression(n)) : sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     store(value, location);
 }
 } }

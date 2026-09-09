@@ -23,6 +23,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t17 = binary and i32 %t16, 4294967289
     %t18 = binary or i32 %t17, %t15
     store i32 %t18, %t13
-    %t19 = copy i32 %t14
+    %declared = copy u32 %t14
+    %t19 = copy i32 %declared
     return i32 %t19
 }

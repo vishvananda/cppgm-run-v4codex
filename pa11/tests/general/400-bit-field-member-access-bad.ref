@@ -7,6 +7,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t3 = index i8 [projection=field] %t2, 0
     %t4 = load i32 %t3
     %t5 = binary and i32 %t4, 1
-    %t6 = copy i32 %t5
+    %declared = copy u32 %t5
+    %t6 = copy i32 %declared
     return i32 %t6
 }

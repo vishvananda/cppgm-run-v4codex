@@ -67,3 +67,21 @@ evidence is retained unchanged.
   existing Analyzer-header advisory. Seven personal programs validate LowIR and
   execute with exit 0; three access/hidden-name rejection checks pass.
   No later assignment is advanced. Evidence is committed with a clean handoff.
+
+- Continuation at 88e4ebe1: clean state and baseline 234/302 verified. Extend
+  layout ownership first: retained alignment/packing facts, bit-field storage
+  units and value widths, empty-base identity collisions, and aggregate cursors.
+  Semantic declarations publish descriptors; access/constructor/initializer
+  lowering consumes them. Work is proportional to fields, relevant layout
+  edges, initialization actions and emitted IR. Validate layout constants,
+  bit-field read/write/sign/range behavior, initializer boundaries and all PAs.
+- Layout/bit-field increment: **248/302**, 14 baseline failures fixed and no
+  regressions. Sparse field descriptors own widths, storage and preservation;
+  layout handles nested EBO collisions. Lowering reads/masks/sign-extends and
+  writes only the field bits, retaining neighboring ordinary fields and distinct
+  repeated subobjects. Promotions use field ranges; const references snapshot
+  bit-fields and nonconst references/addresses reject. Eight personal native
+  programs and five rejection checks pass; prior PAs 1025/1025; file audit passes.
+  Four narrowly edited references are proved against LowIR/C++11 in
+  [reference corrections](reference-corrections.md), with reduced inputs and
+  the pinned bundle revision. No coverage or comparison changes.

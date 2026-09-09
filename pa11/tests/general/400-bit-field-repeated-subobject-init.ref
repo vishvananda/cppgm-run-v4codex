@@ -36,13 +36,16 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t28 = index i8 [projection=field] %t27, 0
     %t29 = load i32 %t28
     %t30 = binary and i32 %t29, 1
+    %declared30 = copy u32 %t30
     %t31 = addr $pair
     %t32 = index i8 [projection=field] %t31, 4
     %t33 = index i8 [projection=field] %t32, 0
     %t34 = load i32 %t33
     %t35 = binary shr i32 %t34, 1
     %t36 = binary and i32 %t35, 3
-    %t37 = binary add u32 %t30, %t36
-    %t38 = copy i32 %t37
-    return i32 %t38
+    %declared36 = copy u32 %t36
+    %promoted30 = copy i32 %declared30
+    %promoted36 = copy i32 %declared36
+    %t37 = binary add i32 %promoted30, %promoted36
+    return i32 %t37
 }

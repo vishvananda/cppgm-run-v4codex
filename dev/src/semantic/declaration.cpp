@@ -144,6 +144,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::SimpleDeclaration: case Kind::Function: simple(n, s); break;
     case Kind::Class: case Kind::ClassForward: class_type(n, s); break;
     case Kind::Enum: enum_type(n, s); break;
+    case Kind::BitField: if (calls) bit_field_declaration(n, s); break;
     case Kind::Template: template_declaration(n, s); break;
     case Kind::StaticAssert: {
         Constant v = evaluate(ast[n].first, s);

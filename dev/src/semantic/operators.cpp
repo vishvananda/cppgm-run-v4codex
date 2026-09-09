@@ -20,6 +20,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (operator_expression(n, s, op, args, r)) return r;
     }
     if (op == OP_AMP) {
+        if (field_fact(a.entity).bit_field) throw std::runtime_error("address of bit-field");
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity) demand_specialization(a.entity);
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
@@ -41,7 +42,9 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
             (op == OP_DEC && fundamental(a.type, FT_BOOL))) throw std::runtime_error("invalid increment operand");
         r.type = ast[n].kind == Kind::Postfix ? types.unqualified(a.type) : a.type;
         r.category = ast[n].kind == Kind::Postfix ? ValueCategory::Prvalue : ValueCategory::Lvalue;
-        record_conversion(r, operand, conversion(operand, pointer(t) ? t : promote(t)));
+        TypeId promoted = pointer(t) ? t : promote_expression(operand);
+        if (ast[n].kind != Kind::Postfix) r.entity = a.entity;
+        record_conversion(r, operand, conversion(operand, promoted));
         Conversion store; store.target = a.type; store.rank = 0;
         record_conversion(r, 0, store);
         return r;
@@ -49,7 +52,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
     if (op == OP_LNOT) { record_conversion(r, operand, boolean_conversion(operand)); r.type = types.fundamental(FT_BOOL); return r; }
     if (!(op == OP_PLUS && pointer(t)) && (!arithmetic(t) || (op == OP_COMPL && !integral(t))))
         throw std::runtime_error("invalid unary arithmetic");
-    r.type = promote(t);
+    r.type = promote_expression(operand);
     record_conversion(r, operand, conversion(operand, r.type));
     return r;
 }
@@ -77,8 +80,8 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
     }
     if (op == OP_PLUS || op == OP_MINUS) {
         TypeId left = 0, right = 0, result = 0;
-        if (object_pointer(a) && integral(b) && !scoped_enum(b)) { left = a; right = promote(b); result = a; }
-        if (op == OP_PLUS && object_pointer(b) && integral(a) && !scoped_enum(a)) { left = promote(a); right = b; result = b; }
+        if (object_pointer(a) && integral(b) && !scoped_enum(b)) { left = a; right = promote_expression(bn); result = a; }
+        if (op == OP_PLUS && object_pointer(b) && integral(a) && !scoped_enum(a)) { left = promote_expression(an); right = b; result = b; }
         if (op == OP_MINUS && object_pointer(a) && object_pointer(b) &&
             types.unqualified(types[a].child) == types.unqualified(types[b].child)) {
             left = right = composite_pointer(a, b); result = types.fundamental(FT_LONG_INT);
@@ -88,14 +91,15 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
             return result;
         }
     }
-    TypeId result = arithmetic_type(a, b);
+    TypeId ap = promote_expression(an), bp = promote_expression(bn);
+    TypeId result = arithmetic_type(ap, bp);
     if (op == OP_MOD || op == OP_AMP || op == OP_BOR || op == OP_XOR || op == OP_LSHIFT || op == OP_RSHIFT) {
         if (!integral(a) || !integral(b)) throw std::runtime_error("integral operands required");
     }
     bool shift = op == OP_LSHIFT || op == OP_RSHIFT;
-    record_conversion(r, an, conversion(an, shift ? promote(a) : result));
-    record_conversion(r, bn, conversion(bn, shift ? promote(b) : result));
-    if (shift) return promote(a);
+    record_conversion(r, an, conversion(an, shift ? ap : result));
+    record_conversion(r, bn, conversion(bn, shift ? bp : result));
+    if (shift) return ap;
     return compare ? types.fundamental(FT_BOOL) : result;
 }
 Expression Analyzer::binary_expression(NodeId n, ScopeId s)
@@ -137,7 +141,8 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Assignment) {
         modifiable(an);
         if (op == OP_ASS) {
-            record_conversion(r, an, conversion(an, types.compound(TypeKind::LRef, a.type)));
+            Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0;
+            record_conversion(r, an, left);
             record_conversion(r, bn, conversion(bn, a.type));
             apply_conversion(bn, conversions[expressions[bn].incoming]);
         }
@@ -162,7 +167,7 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
             Conversion store; store.target = a.type; store.rank = types.unqualified(a.type) == result ? 0 : 2;
             record_conversion(r, 0, store);
         }
-        r.type = a.type; r.category = ValueCategory::Lvalue;
+        r.type = a.type; r.category = ValueCategory::Lvalue; r.entity = a.entity;
         return r;
     }
     r.type = builtin_binary(op, an, bn, r); return r;

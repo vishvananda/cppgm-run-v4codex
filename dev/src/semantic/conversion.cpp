@@ -32,6 +32,17 @@ TypeId Analyzer::promote(TypeId t)
     if (fundamental(t, FT_CHAR32_T)) return types.fundamental(FT_UNSIGNED_INT);
     return integral(t) && width(t) < 32 ? types.fundamental(FT_INT) : types.unqualified(t);
 }
+TypeId Analyzer::promote_expression(NodeId n)
+{
+    auto expression = expressions[n];
+    auto field = field_fact(expression.entity);
+    TypeId t = decay(expression.type);
+    if (field.bit_field && types[t].kind != TypeKind::Named) {
+        if (field.width < 32 || (field.width == 32 && !is_unsigned(t))) return types.fundamental(FT_INT);
+        if (field.width == 32) return types.fundamental(FT_UNSIGNED_INT);
+    }
+    return promote(t);
+}
 TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
 {
     if (!arithmetic(a) || !arithmetic(b)) throw std::runtime_error("arithmetic operands required");
@@ -135,6 +146,11 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
     TypeId from = x.type;
     if (!from) return c;
     if (ref) {
+        if (field_fact(x.entity).bit_field) {
+            if (target.kind != TypeKind::LRef || types[target.child].cv != 1) return c;
+            c = conversion(n, types.unqualified(target.child));
+            c.target = to; c.reference = true; c.temporary = true; return c;
+        }
         unsigned added = 0;
         bool function_lvalue = types[from].kind == TypeKind::Function;
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
@@ -174,7 +190,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
         }
     }
     if (arithmetic(from) && arithmetic(to) && types[to].kind != TypeKind::Named) {
-        c.rank = promote(from) == to ? 1 : 2;
+        c.rank = promote_expression(n) == to ? 1 : 2;
         return c;
     }
     return c;
@@ -266,7 +282,7 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
             NodeId c = ast[n].first;
             for (auto d = scopes[entities[types[target].entity].scope].first_decl; d; d = declarations[d].next) {
                 EntityId e = declarations[d].entity;
-                if (entities[e].kind != EntityKind::Variable || entities[e].is_static) continue;
+                if (!nonstatic_field(e)) continue;
                 if (c) { initialize(c, entities[e].type, s); c = ast[c].next; }
                 else prepare_value_initialization(entities[e].type, s);
             }

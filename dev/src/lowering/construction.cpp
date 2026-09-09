@@ -20,6 +20,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object)
 }
 void Procedural::constructor_body(EntityId e)
 {
+    initialized_units = semantic::Index();
     auto m = sem.member_fact(e);
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
@@ -32,7 +33,7 @@ void Procedural::constructor_body(EntityId e)
         }
         if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
-            std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : 0, action.field != 0});
+            std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : 0, action.field != 0, action.field});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);
             clean_inline(live, 0); constructor_cleanup(action); continue;
         }
@@ -41,12 +42,15 @@ void Procedural::constructor_body(EntityId e)
         if (scalar && action.initializer) {
             NodeId n = action.initializer;
             while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) n = ast[n].first;
-            value = n ? incoming(n) : Value(type(action.type).floating() ? Operand::floating(0) : Operand::integer(0), type(action.type), action.type);
+            value = initialization_value(n, action.type);
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
         at.type = action.type; at.address = true;
+        if (sem.field_fact(action.field).bit_field) {
+            at.bit_field = action.field; at.initializing = true; at.init_offset = sem.entities[action.field].member_offset;
+        }
         if (scalar) store(value, at);
         else if (action.initializer) initialize(action.initializer, action.type, at);
         else { at.address = false; construct(action.constructor, 0, at); }
@@ -59,10 +63,14 @@ namespace cppgm { namespace lowering {
 Value Procedural::initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path)
 {
     Value at = indirect ? emit(Opcode::Load, IRType::Ptr, {root.operand}) : root.address ? address(root) : root;
+    std::uint64_t offset = 0;
     for (auto step : path) {
         Instruction i(Opcode::Index, IRType::I8); i.projection = step.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         at = emit(i, {at.operand, Operand::integer(step.offset)});
+        offset += step.offset;
+        if (sem.field_fact(step.entity).bit_field) at.bit_field = step.entity;
     }
+    at.init_offset = offset; at.initializing = true;
     at.address = true; return at;
 }
 void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path)
@@ -81,7 +89,7 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
             EntityId field = sem.declarations[d].entity;
             if (!sem.nonstatic_field(field)) continue;
             auto member = sem.entities[field];
-            path.push_back({member.member_offset, true});
+            path.push_back({member.member_offset, true, field});
             aggregate_initialize(c, member.type, root, indirect, path); path.pop_back();
             if (c) c = ast[c].next;
         }
@@ -96,7 +104,8 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
         return;
     }
     while (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) n = ast[n].first;
-    Value value = n ? incoming(n) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+    Value value = path.empty() || path.back().field ? initialization_value(n, t) :
+        n ? incoming(n) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     Value at = initialization_address(root, indirect, path); at.type = t;
     store(value, at);
 }
