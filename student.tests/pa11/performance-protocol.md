@@ -163,3 +163,15 @@ A separate instrumented A/B invocation on memory-float-4 is retained in
 `layout-memory-diagnostic.json`: it records the initial RSS increase alongside
 identical semantic work, instruction/operand counts and IR pool capacities.
 It is a diagnostic, not an ABBA performance claim or a proven allocation cause.
+
+Final B: 3b8fc5a3, SHA256
+5ad6bb599da4cadcb0490547195043481054b97c139578dbea77486f39af3cab.
+Final data is `layout-common-performance.json` and
+`layout-behavior-performance.json`. The final common campaign had noisy A-side
+observations in calls-1, memory-float-1, calls-4, memory-float-4 and
+template-semantics-4. Repeat those five groups through `selection_repeat.py`
+with explicit group arguments and unchanged AAAA/ABBA/ABBA order. Preserve all
+60 observations in `layout-repeat-performance.json`; its inherited protocol
+label names the earlier campaign using the same procedure. Template calibration
+remains noisy in the follow-up, with paired differences near unity. No speedup
+is inferred and no observations are removed.
