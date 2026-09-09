@@ -241,7 +241,7 @@ IdentifierId Analyzer::terminal(NodeId n)
     if (calls && ast[part].op == KW_OPERATOR && ast[ast[part].first].kind == Kind::Literal)
         return literal_name(ast[ast[part].last].text);
     ETokenType op = operator_token(n);
-    return calls && op != TOK_INVALID ? operator_name(op) : n ? ast[ast[n].last].text : 0;
+    return calls && op != TOK_INVALID ? operator_name(op,array_operator(n)) : n ? ast[ast[n].last].text : 0;
 }
 NodeId Analyzer::decl_name(NodeId d) const
 {

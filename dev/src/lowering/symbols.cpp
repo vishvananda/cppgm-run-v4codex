@@ -128,10 +128,24 @@ SymbolId Procedural::symbol(EntityId id, bool base)
         metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove");
         metadata.linkage = LLM_C;
     }
+    SymbolId allocation_runtime; unsigned allocation_role = 2;
+    if (e.allocation_runtime && !e.definition) {
+        const char* runtime[] = {"", "cppgm_builtin_operator_new", "cppgm_builtin_operator_new_array", "cppgm_builtin_operator_delete", "cppgm_builtin_operator_delete_array"};
+        metadata.object = p.intern(runtime[e.allocation_runtime]);
+        allocation_role = e.key == KW_NEW ? 0 : 1;
+        allocation_runtime = linkage.allocation_roles[allocation_role];
+        if (!allocation_runtime) {
+            metadata.role = e.key == KW_NEW ? SR_ALLOCATE_MEMORY : SR_FREE_MEMORY;
+        }
+    }
     std::string display = e.kind == semantic::EntityKind::Variable ? "@__global_" + name : "@" + name;
     for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
     if (metadata.object && p.name(metadata.object) != display.substr(1)) linkage.native_names.put(metadata.object, 1);
     SymbolId sid = fresh_symbol(display); (base ? base_symbols[id] : symbols[id]) = sid;
+    if (allocation_role < 2) {
+        if (allocation_runtime) allocation_adapters.push_back({sid,allocation_runtime});
+        else linkage.allocation_roles[allocation_role] = sid;
+    }
     // The ordinary LowIR spelling already supplies this object name. Avoid
     // asking a native adapter to publish the same label twice.
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
@@ -203,6 +217,10 @@ void Procedural::run()
         auto entity = sem.entities[e];
         if (sem.static_temporary(e).object) { reference_global(e); continue; }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
+        if (sem.constructor_member(e)) {
+            auto m = sem.member_fact(e);
+            if (m.array_entry && !m.complete_entry && !m.base_entry && !m.retained_root) continue;
+        }
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
         if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
@@ -269,6 +287,7 @@ void Procedural::run()
         function_body(e);
         if (base_symbols[e]) function_body(e, true);
     }
+    emit_allocation_adapters();
     if (!global_initializers.empty()) global_initialization();
     emit_tls_initializers();
     emit_aggregate_helpers();

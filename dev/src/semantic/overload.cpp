@@ -115,6 +115,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     if (ast[callee].kind == Kind::IdExpression) {
         IdentifierId name = terminal(ast[callee].detail);
         NodeId detail = ast[callee].detail;
+        if (operator_token(detail) == KW_NEW || operator_token(detail) == KW_DELETE)
+            global_allocation(operator_token(detail),array_operator(detail));
         EntityId e = detail && ast[detail].kind == Kind::Name && !ast[ast[detail].first].detail ? resolve(detail, s) : 0;
         bool builtin_name = ast[detail].kind == Kind::Name && ast[detail].first == ast[detail].last;
         if (!e && builtin_name && name == constant_builtin) {

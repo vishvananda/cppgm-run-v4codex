@@ -171,6 +171,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
         }
     }
     auto old = entities[e].exception_spec;
+    if (!spec && entities[e].key == KW_DELETE) spec = 1;
     unsigned previous = old & 3;
     bool destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
     bool prior_throwing = previous == 0 || previous == 2;
@@ -182,7 +183,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
 bool Analyzer::function_nonthrowing(EntityId e)
 {
     auto spec = entities[e].exception_spec & 3;
-    if (spec) return spec == 1;
+    if (spec) return spec == 1 || spec == 3;
     if (transfer_member(e) && members[entities[e].member_info].synthetic) {
         prepare_transfer(e); return members[entities[e].member_info].transfer_noexcept;
     }

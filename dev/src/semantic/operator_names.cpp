@@ -11,13 +11,20 @@ ETokenType Analyzer::operator_token(NodeId name) const
     if (ast[child].kind == Kind::Array) return OP_LSQUARE;
     return ast[child].op;
 }
-IdentifierId Analyzer::operator_name(ETokenType op)
+bool Analyzer::array_operator(NodeId name) const
 {
-    if (auto id = operator_names.get(op)) return id;
+    NodeId part = ast[name].last;
+    ETokenType op = operator_token(name);
+    return (op == KW_NEW || op == KW_DELETE) && ast[ast[part].last].kind == Kind::Array;
+}
+IdentifierId Analyzer::operator_name(ETokenType op, bool array)
+{
+    auto key = (std::uint64_t(op) << 1) | array;
+    if (auto id = operator_names.get(key)) return id;
     const char* spelling = 0;
     switch (op) {
-    case KW_NEW: spelling = "operator new"; break;
-    case KW_DELETE: spelling = "operator delete"; break;
+    case KW_NEW: spelling = array ? "operator new[]" : "operator new"; break;
+    case KW_DELETE: spelling = array ? "operator delete[]" : "operator delete"; break;
     case OP_PLUS: spelling = "operator+"; break;
     case OP_MINUS: spelling = "operator-"; break;
     case OP_STAR: spelling = "operator*"; break;
@@ -59,7 +66,7 @@ IdentifierId Analyzer::operator_name(ETokenType op)
     default: throw std::runtime_error("unsupported operator name");
     }
     IdentifierId id = ids.intern(TextView(spelling, std::strlen(spelling)));
-    operator_names.put(op, id); return id;
+    operator_names.put(key, id); return id;
 }
 void Analyzer::declare_operator(EntityId e, NodeId name)
 {
@@ -72,7 +79,14 @@ void Analyzer::declare_operator(EntityId e, NodeId name)
     entities[e].key = op;
     Type function = types[entities[e].type];
     bool member = scopes[entities[e].owner].kind == ScopeKind::Class;
-    if (op == KW_NEW || op == KW_DELETE) { entities[e].is_static |= member; return; }
+    if (op == KW_NEW || op == KW_DELETE) {
+        entities[e].is_static |= member; entities[e].array_allocation = array_operator(name);
+        if (op == KW_NEW && (!pointer(function.child) || !fundamental(types[function.child].child,FT_VOID) || !function.count ||
+            !fundamental(types.parameters[function.offset],FT_UNSIGNED_LONG_INT))) throw std::runtime_error("invalid allocation signature");
+        if (op == KW_DELETE && (!fundamental(function.child,FT_VOID) || !function.count ||
+            types.parameters[function.offset] != types.compound(TypeKind::Pointer,types.fundamental(FT_VOID)))) throw std::runtime_error("invalid deallocation signature");
+        return;
+    }
     bool class_operand = member;
     for (unsigned i = 0; i < function.count; ++i)
         class_operand |= types[value_type(types.parameters[function.offset+i])].kind == TypeKind::Named;

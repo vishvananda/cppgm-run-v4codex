@@ -57,7 +57,7 @@ void Analyzer::finish()
         for (EntityId seen : chain) delegation_states.put(seen, 2);
         chain.clear();
     }
-    if (calls) prepare_function_boundaries();
+    if (calls) { finish_allocations(); prepare_function_boundaries(); }
     for (NodeId body : jump_bodies) check_jumps(body);
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)

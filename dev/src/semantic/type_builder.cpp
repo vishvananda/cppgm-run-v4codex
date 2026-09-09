@@ -94,7 +94,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     facts[n].type = t; facts[n].scope = s;
     return t;
 }
-TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
+TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array)
 {
     if (!n) return base;
     NodeId name = decl_name(n);
@@ -129,10 +129,14 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
             std::uint64_t bound = 0;
             if (ast[c].first) {
                 Constant v = evaluate(ast[c].first, s);
-                if (!v.valid || !integral(v.type) || scoped_enum(v.type) || !v.bits ||
+                if (c == dynamic_array) {
+                    auto x = expression(ast[c].first,s);
+                    if (!integral(x.type) || scoped_enum(x.type)) throw std::runtime_error("array allocation bound must be integral");
+                    if (v.valid && !is_unsigned(v.type) && static_cast<std::int64_t>(v.bits) < 0) throw std::runtime_error("negative array allocation bound");
+                } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || !v.bits ||
                     (!is_unsigned(v.type) && static_cast<std::int64_t>(v.bits) < 0))
                     throw std::runtime_error("array bound must be a positive integral constant");
-                bound = v.bits;
+                bound = v.valid ? v.bits : 0;
             }
             base = types.compound(TypeKind::Array, base, bound);
         } else {
@@ -161,7 +165,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
             facts[c].type = base;
         }
     }
-    if (nested) base = declarator(nested, base, s);
+    if (nested) base = declarator(nested, base, s,dynamic_array);
     facts[n].type = base; facts[n].scope = s;
     return base;
 }

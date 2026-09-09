@@ -46,6 +46,8 @@ DataItem Procedural::constant_data(NodeId n, TypeId t)
 }
 void Procedural::global_data(NodeId n, TypeId t)
 {
+    // The constant classifier admitted a no-effect empty construction.
+    if (sem.class_initialization(n,t).source && sem.empty_value(t)) n = 0;
     if (auto plan = sem.initializer_plan(n, t)) { global_plan(plan); return; }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto array = sem.types[t];

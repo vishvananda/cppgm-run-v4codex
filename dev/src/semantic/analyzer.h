@@ -77,9 +77,17 @@ public:
     std::vector<UserConversion> user_conversions = std::vector<UserConversion>(1);
     IdentifierId literal_suffix(EntityId e) const { return literal_functions.get(e); }
     const PlacementNew& placement_fact(NodeId n) const { return placements[placement_index.get(n)]; }
+    const DeleteExpression& delete_fact(NodeId n) const { return deletions[delete_index.get(n)]; }
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    EntityId global_allocation(ETokenType op, bool array);
+    bool array_operator(NodeId name) const;
+    Expression delete_expression(NodeId n, ScopeId s);
+    void finish_allocations();
+    EntityId select_deallocation(TypeId t, bool array, bool global, ScopeId s);
+    Index delete_index;
+    std::vector<DeleteExpression> deletions = std::vector<DeleteExpression>(1);
     void prepare_value_boundary(TypeId t);
     void prepare_function_boundaries();
     void class_result(NodeId n, Expression& result, ScopeId s);
@@ -213,7 +221,7 @@ private:
     ScopeId target(EntityId e) const;
     Index operator_names;
     IdentifierId terminal(NodeId name);
-    IdentifierId operator_name(ETokenType op);
+    IdentifierId operator_name(ETokenType op, bool array = false);
     ETokenType operator_token(NodeId name) const;
     void declare_operator(EntityId e, NodeId name);
     bool operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result);
@@ -316,7 +324,7 @@ private:
     TypeId enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name = 0, bool emit = true);
     TypeId specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name = 0);
     TypeId type_id(NodeId n, ScopeId s);
-    TypeId declarator(NodeId n, TypeId base, ScopeId s);
+    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0);
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
     Constant evaluate(NodeId n, ScopeId s);

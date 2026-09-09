@@ -6,8 +6,8 @@ abi_mangle::AbiTerminalKind Procedural::operator_terminal(EntityId id) const
     const auto& e = sem.entities[id];
     unsigned arity = sem.types[e.type].count + (e.member_info && !e.is_static);
     switch (e.key) {
-    case KW_NEW: return ABI_TERMINAL_NEW;
-    case KW_DELETE: return ABI_TERMINAL_DELETE;
+    case KW_NEW: return e.array_allocation ? ABI_TERMINAL_NEW_ARRAY : ABI_TERMINAL_NEW;
+    case KW_DELETE: return e.array_allocation ? ABI_TERMINAL_DELETE_ARRAY : ABI_TERMINAL_DELETE;
     case OP_PLUS: return ABI_TERMINAL_PLUS;
     case OP_MINUS: return ABI_TERMINAL_MINUS;
     case OP_STAR: return arity == 1 ? ABI_TERMINAL_DEREFERENCE : ABI_TERMINAL_MULTIPLY;

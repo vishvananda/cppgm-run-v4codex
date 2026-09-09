@@ -75,6 +75,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     switch (ast[n].kind) {
     case Kind::New: return placement_new(n);
+    case Kind::Delete: return delete_expression(n);
     case Kind::Literal: {
         auto lit = ast.literals[ast[n].literal];
         if (lit.kind == LiteralKind::string) return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true);
@@ -248,6 +249,8 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
                 v = emit(Opcode::Binary, IRType::I64, {v.operand, Operand::integer(power ? shift : scale)}, power ? Operation::Shr : Operation::Div);
             }
         } else {
+            if (b.ir == IRType::I64 && b.type && sem.unsigned_type(b.type) && !b.operand.literal())
+                b = emit(Opcode::Copy,IRType::I64,{b.operand});
             b = coerce(b, IRType::I64, sem.unsigned_type(b.type), false, true);
             if (scale > 1) b = emit(Opcode::Binary, IRType::I64, {b.operand, Operand::integer(scale)}, Operation::Mul);
             if (op == OP_MINUS) b = emit(Opcode::Binary, IRType::I64, {Operand::integer(0), b.operand}, Operation::Sub);

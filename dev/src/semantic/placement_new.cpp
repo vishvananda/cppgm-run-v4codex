@@ -1,4 +1,6 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
+#include <limits>
 #include <stdexcept>
 
 namespace cppgm { namespace semantic {
@@ -6,16 +8,33 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
 {
     using syntax::Kind;
     NodeId placement = child(n, Kind::Placement);
-    if (!placement) throw std::runtime_error("allocation without placement is outside the current object subset");
-    PlacementNew use; use.type = type_id(child(n, Kind::TypeId), s); size(use.type);
+    PlacementNew use;
+    NodeId type_node = child(n,Kind::TypeId), specs = ast[type_node].first, d = ast[specs].next;
+    NodeId suffix = child(d,Kind::Array);
+    use.type = declarator(d,specifiers(specs,s),s,suffix);
+    facts[type_node].type = use.type; facts[type_node].scope = s;
+    if (types[use.type].kind == TypeKind::Array) {
+        use.array = true; use.bound = suffix ? ast[suffix].first : 0;
+        use.fixed_count = types[use.type].bound; use.type = types[use.type].child;
+        if (suffix && !use.bound) throw std::runtime_error("missing array allocation extent");
+    }
+    use.leaf = use.type;
+    while (types[use.leaf].kind == TypeKind::Array) use.leaf = types[use.leaf].child;
+    size(use.type); use.stride = size(use.type);
+    if (use.array && class_value(use.leaf)) use.cookie = std::max<std::uint64_t>(8,size(use.type,true));
+    if (use.array && use.fixed_count > (std::numeric_limits<std::uint64_t>::max()-use.cookie)/use.stride)
+        throw std::runtime_error("array allocation size exceeds size_t");
     use.initializer = child(n, Kind::Initializer);
     std::vector<NodeId> args;
     for (NodeId a = ast[ast[placement].first].first; a; a = ast[a].next) { expression(a, s); args.push_back(a); }
     EntityId family = 0;
-    IdentifierId name = operator_name(KW_NEW);
-    if (!child(n, Kind::Global) && types[use.type].kind == TypeKind::Named)
-        family = lookup(entities[types[use.type].entity].scope, name, Lookup::Ordinary, true);
-    if (!family) family = lookup(global, name);
+    IdentifierId name = operator_name(KW_NEW,use.array);
+    if (!child(n, Kind::Global) && class_value(use.leaf))
+        family = lookup(entities[types[use.leaf].entity].scope, name, Lookup::Ordinary, true);
+    if (!family) {
+        if (!placement) global_allocation(KW_NEW,use.array);
+        family = lookup(global, name);
+    }
     struct Candidate { EntityId entity; std::size_t begin; };
     std::vector<Candidate> viable;
     std::vector<Conversion> conversions_work;
@@ -40,7 +59,19 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     check_access(use.allocation, s, entities[use.allocation].owner); demand_member(use.allocation);
     std::vector<Conversion> selected(conversions_work.begin()+viable[best].begin, conversions_work.begin()+viable[best].begin+args.size());
     record_call(use.call, args, selected);
-    if (use.initializer) initialize(use.initializer, use.type, s);
+    if (use.array) {
+        NodeId list = use.initializer ? ast[use.initializer].first : 0;
+        if (list && ast[list].first) throw std::runtime_error("array allocation initializer list is not yet represented");
+        use.zero = use.initializer != 0;
+        use.constructor = default_constructor(use.leaf,s);
+        use.destructor = default_destructor(use.leaf,s);
+        if (use.constructor) {
+            auto m = members[entities[use.constructor].member_info];
+            use.zero &= m.synthetic && !m.defaulted_late;
+        }
+        if (use.constructor) members[entities[use.constructor].member_info].array_entry = true;
+        if (use.constructor) use.deallocation = select_deallocation(use.leaf,true,child(n,Kind::Global),s);
+    } else if (use.initializer) initialize(use.initializer, use.type, s);
     else {
         use.constructor = default_constructor(use.type, s);
         if (use.constructor) members[entities[use.constructor].member_info].complete_entry = true;

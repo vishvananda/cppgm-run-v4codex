@@ -210,7 +210,15 @@ NodeId Parser::new_expression()
         ast.append(result, unary());
         return result;
     }
-    if (in.is("(") && !type_start(1)) {
+    bool placement = in.is("(") && !type_start(1);
+    if (in.is("(") && !placement) {
+        auto type_end = probe_type(1);
+        if (in.is("(",type_end) || in.is("{",type_end)) {
+            auto after = in.matching(0)+1;
+            placement = type_start(after) || (in.is("(",after) && type_start(after+1));
+        }
+    }
+    if (placement) {
         in.take();
         ast.append(result, wrap(Kind::Placement, arguments(Kind::ParenArguments, ")")));
     }

@@ -40,6 +40,7 @@ struct Linkage {
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge;
+    SymbolId allocation_roles[2];
     explicit Linkage(bool merge) : merge(merge) {}
 };
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.
@@ -64,6 +65,9 @@ class Procedural {
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
     std::vector<EntityId> definitions, global_initializers;
+    struct AllocationAdapter { SymbolId symbol, runtime; };
+    std::vector<AllocationAdapter> allocation_adapters;
+    void emit_allocation_adapters();
     struct TlsInitializer { EntityId object; SymbolId guard, initializer, wrapper; };
     std::vector<TlsInitializer> tls_initializers;
     semantic::Index tls_wrappers;
@@ -195,6 +199,9 @@ class Procedural {
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
     Value placement_new(NodeId n);
+    Value delete_expression(NodeId n);
+    Value array_new(NodeId n, const semantic::PlacementNew& use);
+    void heap_array_destroy(EntityId destructor, TypeId leaf, Value data, Operand count);
     Value operation(ETokenType op, Value a, Value b, TypeId result);
     Value binding(EntityId e);
     Value field(Value base, EntityId e, unsigned steps = 0);

@@ -32,6 +32,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     Expression r;
     switch (ast[n].kind) {
     case Kind::New: return placement_new(n, s);
+    case Kind::Delete: return delete_expression(n,s);
     case Kind::Literal: {
         const syntax::LiteralValue& lit = ast.literals[ast[n].literal];
         if (lit.suffix) return literal_call(n, s);

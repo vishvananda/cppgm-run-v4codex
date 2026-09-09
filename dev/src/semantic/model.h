@@ -107,6 +107,8 @@ struct Entity {
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
+    unsigned char allocation_runtime = 0;
+    bool array_allocation = false;
     bool mutable_field = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
@@ -127,7 +129,7 @@ struct MemberFacts {
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
-    bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
+    bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false, array_entry = false;
     bool complete_entry = false, retained_root = false;
     std::uint32_t action_begin = 0, action_count = 0;
     std::uint32_t default_conversions = 0;
@@ -224,7 +226,18 @@ struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
 struct ReferenceStorage { EntityId object = 0, reference = 0; bool scalar = false, conditional = false; };
 struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };
 struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; };
-struct PlacementNew { EntityId allocation = 0, constructor = 0; TypeId type = 0; NodeId initializer = 0; Expression call; };
+struct PlacementNew {
+    EntityId allocation = 0, constructor = 0, deallocation = 0, destructor = 0;
+    TypeId type = 0, leaf = 0; NodeId initializer = 0, bound = 0;
+    std::uint64_t fixed_count = 0, stride = 0, cookie = 0;
+    Expression call; bool array = false, zero = false, construct = false, narrow_extent = false;
+};
+struct DeleteExpression {
+    EntityId deallocation = 0, destructor = 0;
+    TypeId type = 0, leaf = 0; NodeId operand = 0;
+    std::uint64_t cookie = 0;
+    Conversion conversion; bool array = false, sized = false;
+};
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;
     std::uint64_t bits = 0;
