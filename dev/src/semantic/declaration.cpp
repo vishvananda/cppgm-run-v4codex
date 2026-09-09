@@ -145,7 +145,14 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         }
         break;
     }
-    case Kind::Linkage: case Kind::ExplicitInstantiation:
+    case Kind::Linkage: {
+        bool saved = c_linkage;
+        TextView text = ids.spelling(ast[n].text);
+        c_linkage = text.size == 3 && text.data[1] == 'C';
+        for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
+        c_linkage = saved; break;
+    }
+    case Kind::ExplicitInstantiation:
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
         break;
     default: break;
@@ -172,6 +179,7 @@ void Analyzer::function_body(const Body& body)
     if (entities[body.entity].definition) throw std::runtime_error("function redefinition");
     ScopeId fs = make_scope(ScopeKind::Function, body.owner, entities[body.entity].name, body.entity);
     entities[body.entity].definition = body.source;
+    entities[body.entity].body = body.node;
     entities[body.entity].scope = fs;
     facts[body.source].entity = body.entity;
     facts[body.source].type = entities[body.entity].type;
@@ -198,6 +206,7 @@ void Analyzer::function_body(const Body& body)
     TypeId saved_return = return_type;
     return_type = types[entities[body.entity].type].child;
     statements(body.node, fs);
+    if (calls) check_jumps(body.node);
     return_type = saved_return;
 }
 void Analyzer::statements(NodeId n, ScopeId s)

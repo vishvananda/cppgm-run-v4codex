@@ -142,10 +142,20 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     if (definition) {
         if (entities[e].complete) throw std::runtime_error("enum redefinition");
         std::uint64_t next = 0;
+        bool negative = false;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind != Kind::Enumerator) continue;
             Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : Constant(underlying, next);
             if (!value.valid || !integral(value.type)) throw std::runtime_error("invalid enumerator initializer");
+            if (!scoped && !underlying_node) {
+                bool sign = !is_unsigned(value.type) && static_cast<std::int64_t>(value.bits) < 0;
+                negative |= sign;
+                if (!sign && value.bits > 2147483647u) {
+                    if (value.bits <= 4294967295u && !negative && width(underlying) <= 32) underlying = types.fundamental(FT_UNSIGNED_INT);
+                    else underlying = types.fundamental(value.bits <= 9223372036854775807ull ? FT_LONG_INT : FT_UNSIGNED_LONG_INT);
+                } else if (negative && is_unsigned(underlying)) underlying = types.fundamental(FT_LONG_INT);
+                entities[e].underlying = underlying;
+            }
             value = convert(value, underlying, true);
             EntityId v = make_entity(EntityKind::Enumerator, entities[e].scope, ast[c].text, c);
             entities[v].type = t; entities[v].constant = Constant(underlying, value.bits);

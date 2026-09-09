@@ -2,7 +2,7 @@
 namespace lowir_model {
 void Writer::instruction(const Instruction& i)
 {
-    if (i.destination) out_ << p_.name(p_.values[i.destination.index-1].name) << " = ";
+    if (i.destination) { operand(Operand::value(i.destination)); out_ << " = "; }
     out_ << spelling(i.opcode);
     auto arg = [&](unsigned j, Type t = Type()) { operand(p_.operands.at(i.operands.begin+j), t); };
     auto all = [&](unsigned first, Type t) {

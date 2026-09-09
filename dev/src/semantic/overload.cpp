@@ -99,6 +99,17 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::Abort;
             return result;
         }
+        if (!e && builtin_name && name) {
+            TextView spelling = ids.spelling(name);
+            bool copy = spelling.equals("__builtin_memcpy");
+            bool move = spelling.equals("__builtin_memmove");
+            if (copy || move) {
+                TypeId v = types.fundamental(FT_VOID), ptr = types.compound(TypeKind::Pointer, v);
+                TypeId ft = types.function(ptr, {ptr, types.compound(TypeKind::Pointer, types.qualify(v, 1)), types.fundamental(FT_UNSIGNED_LONG_INT)}, false);
+                e = declare_function(global, name, 0, ft);
+                entities[e].builtin = copy ? Entity::Memcpy : Entity::Memmove;
+            }
+        }
         TypeId cast_type = 0;
         if (ast[detail].kind == Kind::TypeId) cast_type = type_id(detail, s);
         else if (detail && ast[ast[detail].first].detail && ast[ast[ast[detail].first].detail].kind == Kind::Decltype)
@@ -136,7 +147,9 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (entities[e].template_info) e = deduce_function(e, args);
             if (!e) continue;
             Type function = types[entities[e].type];
-            if (args.size() < function.count || (!function.variadic && args.size() != function.count)) continue;
+            if ((!function.variadic && args.size() > function.count) ||
+                (args.size() < function.count && (!entities[e].defaults ||
+                 !default_arguments[entities[e].defaults + args.size()]))) continue;
             std::size_t begin = sequences.size();
             bool valid = true;
             for (std::size_t i = 0; valid && i < args.size(); ++i) {
@@ -158,9 +171,17 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         EntityId selected = viable[best].entity;
         facts[n].entity = selected;
         ft = entities[selected].type;
+        Type selected_type = types[ft];
+        std::vector<Conversion> chosen(sequences.begin() + viable[best].offset,
+            sequences.begin() + viable[best].offset + args.size());
+        for (std::size_t i = args.size(); i < selected_type.count; ++i) {
+            NodeId a = default_arguments[entities[selected].defaults + i];
+            args.push_back(a);
+            chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
+        }
         result.conversions = conversions.size(); result.count = args.size();
         for (std::size_t i = 0; i < args.size(); ++i) {
-            Conversion c = sequences[viable[best].offset + i];
+            Conversion c = chosen[i];
             expressions[args[i]].incoming = conversions.size();
             conversions.push_back(c);
             apply_conversion(args[i], c);
@@ -184,6 +205,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             apply_conversion(args[i], c);
         }
     }
+    result.arguments = call_arguments.size(); result.argument_count = args.size();
+    call_arguments.insert(call_arguments.end(), args.begin(), args.end());
     TypeId returned = types[ft].child;
     facts[n].type = returned;
     result.type = value_type(returned);

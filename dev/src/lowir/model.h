@@ -236,6 +236,7 @@ public:
     void parameter(Parameter parameter);
     SlotId add_slot(Name name, Type type);
     void start_block(Name name);
+    void start_block(BlockId id);
     ValueId append(Instruction inst, std::initializer_list<Operand> operands, Name dest = 0);
     void append(Instruction inst);
 };

@@ -3,6 +3,7 @@
 #include "support/not_implemented.h"
 #include "support/tool_help_text.h"
 #include "syntax/driver.h"
+#include "lowering/procedural.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -423,8 +424,19 @@ int run_emit_semantics_mode(const vector<string> & args)
 
 int run_emit_lowir_mode(const vector<string> & args)
 {
-  parse_source_output_invocation(args, true);
-  return run_unimplemented_mode("--emit-lowir", "PA9");
+  vector<string> inputs;
+  string output;
+  bool stats = false;
+  for (size_t i = 0; i < args.size(); ++i) {
+    if (args[i] == "--stats") stats = true;
+    else if (args[i] == "-o") {
+      consume_required_option_argument(args, i, "-o", "output file"); output = args[i];
+    } else if (args[i] == "-O0") continue;
+    else if (starts_with(args[i], "-")) throw logic_error("unsupported LowIR option");
+    else inputs.push_back(args[i]);
+  }
+  if (output.empty() || inputs.empty()) throw logic_error("invalid LowIR invocation");
+  return cppgm::lowering::emit_lowir(output, inputs, stats);
 }
 
 int run_driver_mode(const vector<string> & args)

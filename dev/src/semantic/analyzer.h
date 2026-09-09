@@ -21,10 +21,18 @@ public:
     const Expression& expression_fact(NodeId n) const { return expressions[n]; }
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     ScopeId global = 0;
+    std::vector<NodeId> call_arguments, default_arguments;
+    StaticValue static_value(NodeId n, TypeId target);
+    Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
+    std::uint64_t object_size(TypeId t) { return size(t); }
+    std::uint64_t object_alignment(TypeId t) { return size(t, true); }
+    bool unsigned_type(TypeId t) const { return is_unsigned(t); }
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
     bool calls;
+    bool c_linkage = false;
+    void function_defaults(EntityId e, NodeId d, ScopeId s);
     std::vector<Expression> expressions;
     std::vector<Conversion> conversions;
     Index function_families, function_signatures;
@@ -107,6 +115,7 @@ private:
     void write_object(std::ostream& out, EntityId e, NodeId init, unsigned depth) const;
     void write_action(std::ostream& out, const ObjectAction& action, unsigned depth) const;
     void function_body(const Body& body);
+    void check_jumps(NodeId body);
     void schedule_body(const Body& body);
     void statements(NodeId n, ScopeId s);
     void resolve_statement(NodeId n, ScopeId s);

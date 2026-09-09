@@ -15,9 +15,9 @@ void Writer::symbol(SymbolId id) { out_ << p_.name(p_.symbols.at(id.index-1).nam
 void Writer::operand(const Operand& v, Type context)
 {
     switch (v.kind) {
-    case Operand::Temporary: out_ << p_.name(p_.values.at(v.ref-1).name); break;
-    case Operand::Slot: out_ << p_.name(p_.slots.at(v.ref-1).name); break;
-    case Operand::Label: out_ << p_.name(p_.blocks.at(v.ref-1).name); break;
+    case Operand::Temporary: if (p_.values.at(v.ref-1).name) out_ << p_.name(p_.values[v.ref-1].name); else out_ << "%v" << v.ref; break;
+    case Operand::Slot: if (p_.slots.at(v.ref-1).name) out_ << p_.name(p_.slots[v.ref-1].name); else out_ << "$s" << v.ref; break;
+    case Operand::Label: if (p_.blocks.at(v.ref-1).name) out_ << p_.name(p_.blocks[v.ref-1].name); else out_ << "^b" << v.ref; break;
     case Operand::Symbol: symbol(SymbolId(v.ref)); break;
     case Operand::Integer:
         if (v.negative_integer) out_ << '-' << (std::uint64_t(0)-v.data.integer);
@@ -57,6 +57,7 @@ void Writer::metadata(const SymbolMetadata* m, const FunctionBoundaryMetadata* b
         out_ << (any ? ", " : " [") << key << '=' << value;
         any = true;
     };
+    if (b && b->unwind != CUM_DEFAULT) field("unwind", "no");
     if (m) {
         if (m->role != SR_NONE) field("role", role_name(m->role));
         if (m->linkage != LLM_DEFAULT) field("linkage", "c");
@@ -75,7 +76,6 @@ void Writer::metadata(const SymbolMetadata* m, const FunctionBoundaryMetadata* b
     if (b) {
         if (b->arity != CAM_FIXED) field("arity", "variadic");
         if (b->effects != CFXM_DEFAULT) field("effects", b->effects == CFXM_READNONE ? "readnone" : "readonly");
-        if (b->unwind != CUM_DEFAULT) field("unwind", "no");
         if (b->returns != CRM_DEFAULT) field("return", "noreturn");
         if (b->query != CQM_DEFAULT) field("query", "stable_prefix");
     }
@@ -87,7 +87,7 @@ void Writer::signature(const Signature& s)
     for (unsigned j = 0; j < s.parameters.count; ++j) {
         if (j) out_ << ", ";
         const Parameter& a = p_.parameters[s.parameters.begin+j];
-        out_ << p_.name(p_.values.at(a.value.index-1).name) << " : ";
+        operand(Operand::value(a.value)); out_ << " : ";
         type(a.type);
         bool any = false;
         auto field = [&](const char* key, const std::string& value) {
@@ -141,11 +141,11 @@ void Writer::function(const Function& f)
     out_ << " {\n";
     for (unsigned j = f.slots.begin; j < f.slots.end(); ++j) {
         const Slot& slot = p_.slots[p_.slot_order[j].index-1];
-        out_ << "  slot " << p_.name(slot.name) << " : "; type(slot.type); out_ << '\n';
+        out_ << "  slot "; operand(Operand::slot(p_.slot_order[j])); out_ << " : "; type(slot.type); out_ << '\n';
     }
     for (unsigned j = f.blocks.begin; j < f.blocks.end(); ++j) {
         const Block& block = p_.blocks[p_.block_order[j].index-1];
-        out_ << "  block " << p_.name(block.name) << ":\n";
+        out_ << "  block "; operand(Operand::label(p_.block_order[j])); out_ << ":\n";
         for (unsigned k = block.instructions.begin; k < block.instructions.end(); ++k) {
             out_ << "    "; instruction(p_.instructions[k]); out_ << '\n';
         }

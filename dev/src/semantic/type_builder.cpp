@@ -206,6 +206,13 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         else bind(owner, id, e);
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
+    entities[e].c_linkage |= c_linkage;
+    entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
+    entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
+    entities[e].external_decl |= spec_has(specs, KW_EXTERN);
+    if (!function && !spec_has(specs, KW_EXTERN)) entities[e].definition = source;
+    if (init && !function) { entities[e].initializer = init; entities[e].definition = source; }
+    if (calls && function) function_defaults(e, d, owner);
     if (calls && function && scopes[owner].kind == ScopeKind::Class) member_facts(e);
     record(owner, e, d, t, kind);
     if (calls && init && !function) initialize(init, canonical, owner);

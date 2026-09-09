@@ -1,0 +1,206 @@
+#include "lowering/procedural.h"
+#include <cstring>
+#include <stdexcept>
+namespace cppgm { namespace lowering {
+using syntax::Kind;
+Value Procedural::expression(NodeId n, bool location)
+{
+    if (!n) throw std::logic_error("missing expression node");
+    auto fact = sem.expression_fact(n);
+    NodeId a = ast[n].first;
+    if (fact.form == semantic::ExpressionForm::Cast) {
+        NodeId operand = ast[n].kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
+        if (!operand) return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
+        TypeId target = sem.facts[n].type;
+        if (reference(target)) {
+            Value v = expression(operand, true);
+            if (!v.address) {
+                SlotId slot = builder->add_slot(0, v.ir);
+                emit(Opcode::Store, v.ir, {v.operand, Operand::slot(slot)});
+                v.operand = Operand::slot(slot); v.address = true;
+            }
+            v.type = fact.type; return v;
+        }
+        Value v = converted(operand, sem.conversion_fact(fact.conversions));
+        v.type = fact.type; return v;
+    }
+    if (fact.form == semantic::ExpressionForm::ConstantQuery || ast[n].kind == Kind::Sizeof) {
+        auto c = sem.constant_fact(n);
+        if (!c.valid) throw std::logic_error("missing semantic constant");
+        Value v = emit(Opcode::Const, type(c.type), {Operand::integer(c.bits)}); v.type = c.type; return v;
+    }
+    switch (ast[n].kind) {
+    case Kind::Literal: {
+        auto lit = ast.literals[ast[n].literal];
+        if (lit.kind == LiteralKind::string) return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true);
+        Operand o;
+        if (lit.type == FT_FLOAT) { float v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        else if (lit.type == FT_DOUBLE) { double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        else if (lit.type == FT_LONG_DOUBLE) { long double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        else { std::uint64_t v = 0; std::memcpy(&v, lit.scalar.data(), fundamental_width(lit.type)); o = Operand::integer(v); }
+        return Value(o, type(fact.type), fact.type);
+    }
+    case Kind::KeywordLiteral: return Value(ast[n].op == KW_NULLPTR ? Operand::null() : Operand::integer(ast[n].op == KW_TRUE),
+        ast[n].op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
+    case Kind::IdExpression:
+        if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
+            auto c = sem.entities[fact.entity].constant;
+            return Value(Operand::integer(c.bits), type(fact.type), fact.type);
+        }
+        return binding(fact.entity);
+    case Kind::Parenthesized: return expression(a, location);
+    case Kind::Unary: case Kind::Postfix: return unary(n);
+    case Kind::Binary: case Kind::Assignment: return binary(n, location);
+    case Kind::Conditional: return conditional(n, location);
+    case Kind::Call: return call(n);
+    case Kind::Subscript: {
+        Value left = converted(a, sem.conversion_fact(fact.conversions));
+        Value right = converted(ast[a].next, sem.conversion_fact(fact.conversions+1));
+        if (left.ir != IRType::Ptr) std::swap(left, right);
+        Instruction i(Opcode::Index, type(fact.type)); i.projection = ir_model::IPK_ARRAY_ELEMENT;
+        Value v = emit(i, {left.operand, right.operand});
+        v.type = fact.type; v.address = true; return v;
+    }
+    case Kind::Member: {
+        Value base = ast[n].op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
+        auto offset = sem.entities[fact.entity].member_offset;
+        Value v = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(offset)});
+        v.type = fact.type; v.address = true; return v;
+    }
+    case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
+        if (a) return expression(a, location);
+        return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
+    default: throw std::runtime_error(std::string("unsupported lowering expression: ") + syntax::kind_name(ast[n].kind));
+    }
+}
+Value Procedural::unary(NodeId n)
+{
+    NodeId a = ast[n].first;
+    auto fact = sem.expression_fact(n);
+    ETokenType op = ast[n].op;
+    if (op == OP_AMP) { Value v = address(expression(a, true)); v.type = fact.type; return v; }
+    if (op == OP_STAR) {
+        Value v = converted(a, sem.conversion_fact(fact.conversions));
+        v.type = fact.type; v.address = true; return v;
+    }
+    if (op == OP_INC || op == OP_DEC) {
+        Value dest = expression(a, true), old = load(dest);
+        Value value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, old,
+            Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), fact.type);
+        value = convert(value, dest.type); store(value, dest);
+        if (ast[n].kind == Kind::Postfix) return old;
+        dest.cached = true; dest.stored = value.operand; return dest;
+    }
+    Value v = op == OP_LNOT ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
+    if (op == OP_LNOT) v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Eq);
+    else if (op != OP_PLUS) v = emit(Opcode::Unary, v.ir, {v.operand}, op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
+    v.type = fact.type; return v;
+}
+Value Procedural::binary(NodeId n, bool location)
+{
+    NodeId a = ast[n].first, b = ast[a].next;
+    auto fact = sem.expression_fact(n);
+    ETokenType op = ast[n].op;
+    if (op == OP_COMMA) { expression(a); return expression(b, location); }
+    if (op == OP_LAND || op == OP_LOR) return logical(n);
+    if (ast[n].kind == Kind::Assignment) {
+        Value rhs, dest, lhs;
+        if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
+        else { dest = expression(a, true); lhs = load(dest); rhs = converted(b, sem.conversion_fact(fact.conversions+1)); }
+        if (op != OP_ASS) {
+            ETokenType binary = OP_PLUS;
+            switch (op) {
+            case OP_PLUSASS: binary = OP_PLUS; break;
+            case OP_MINUSASS: binary = OP_MINUS; break;
+            case OP_STARASS: binary = OP_STAR; break;
+            case OP_DIVASS: binary = OP_DIV; break;
+            case OP_MODASS: binary = OP_MOD; break;
+            case OP_BANDASS: binary = OP_AMP; break;
+            case OP_BORASS: binary = OP_BOR; break;
+            case OP_XORASS: binary = OP_XOR; break;
+            case OP_LSHIFTASS: binary = OP_LSHIFT; break;
+            case OP_RSHIFTASS: binary = OP_RSHIFT; break;
+            default: break;
+            }
+            TypeId common = sem.conversion_fact(fact.conversions).target;
+            lhs = convert(lhs, common);
+            rhs = operation(binary, lhs, rhs, common);
+            rhs = convert(rhs, fact.type);
+        }
+        store(rhs, dest); dest.cached = true; dest.stored = rhs.operand; return dest;
+    }
+    Value lhs = load(expression(a));
+    Value rhs = load(expression(b));
+    lhs = convert(lhs, sem.conversion_fact(fact.conversions).target);
+    rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target);
+    return operation(op, lhs, rhs, fact.type);
+}
+Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
+{
+    Value v;
+    if ((op == OP_PLUS || op == OP_MINUS) && (a.ir == IRType::Ptr || b.ir == IRType::Ptr)) {
+        if (a.ir != IRType::Ptr) std::swap(a, b);
+        TypeId pointer_type = a.type;
+        auto pt = sem.types[pointer_type];
+        std::uint64_t scale = sem.object_size(pt.child);
+        if (b.ir == IRType::Ptr) {
+            v = emit(Opcode::Binary, IRType::Ptr, {a.operand, b.operand}, Operation::Sub);
+            if (scale > 1) {
+                unsigned shift = 0; while ((std::uint64_t(1) << shift) < scale) ++shift;
+                bool power = (scale & (scale-1)) == 0;
+                v = emit(Opcode::Binary, IRType::I64, {v.operand, Operand::integer(power ? shift : scale)}, power ? Operation::Shr : Operation::Div);
+            }
+        } else {
+            b = coerce(b, IRType::I64, sem.unsigned_type(b.type), false, true);
+            if (scale > 1) b = emit(Opcode::Binary, IRType::I64, {b.operand, Operand::integer(scale)}, Operation::Mul);
+            if (op == OP_MINUS) b = emit(Opcode::Binary, IRType::I64, {Operand::integer(0), b.operand}, Operation::Sub);
+            v = emit(Opcode::Index, IRType::I8, {a.operand, b.operand});
+        }
+        v.type = result; return v;
+    }
+    bool unsign = a.type && sem.unsigned_type(a.type);
+    Operation action = Operation::None;
+    bool compare = false;
+    switch (op) {
+    case OP_PLUS: action = Operation::Add; break;
+    case OP_MINUS: action = Operation::Sub; break;
+    case OP_STAR: action = Operation::Mul; break;
+    case OP_DIV: action = unsign ? Operation::Udiv : Operation::Div; break;
+    case OP_MOD: action = unsign ? Operation::Umod : Operation::Mod; break;
+    case OP_AMP: action = Operation::And; break;
+    case OP_BOR: action = Operation::Or; break;
+    case OP_XOR: action = Operation::Xor; break;
+    case OP_LSHIFT: action = Operation::Shl; break;
+    case OP_RSHIFT: action = unsign ? Operation::Ushr : Operation::Shr; break;
+    case OP_EQ: action = Operation::Eq; compare = true; break;
+    case OP_NE: action = Operation::Ne; compare = true; break;
+    case OP_LT: action = unsign ? Operation::Ult : Operation::Lt; compare = true; break;
+    case OP_LE: action = unsign ? Operation::Ule : Operation::Le; compare = true; break;
+    case OP_GT: action = unsign ? Operation::Ugt : Operation::Gt; compare = true; break;
+    case OP_GE: action = unsign ? Operation::Uge : Operation::Ge; compare = true; break;
+    default: throw std::logic_error("missing binary lowering operation");
+    }
+    v = emit(compare ? Opcode::Compare : Opcode::Binary, a.ir, {a.operand, b.operand}, action);
+    v.type = result; return v;
+}
+Value Procedural::call(NodeId n)
+{
+    auto fact = sem.expression_fact(n);
+    std::vector<Operand> args(1);
+    for (unsigned j = 0; j < fact.argument_count; ++j)
+        args.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
+    NodeId callee = ast[n].first;
+    EntityId selected = sem.facts[n].entity;
+    Instruction i(Opcode::Call, type(sem.facts[n].type));
+    if (selected) args[0] = Operand::symbol(symbol(selected));
+    else {
+        Value fn = load(expression(callee)); args[0] = fn.operand;
+        TypeId ft = sem.expression_fact(callee).type;
+        if (sem.types[ft].kind == TypeKind::Pointer) ft = sem.types[ft].child;
+        i.signature = signature(ft);
+    }
+    Value v = emit(i, args); v.type = fact.type;
+    if (reference(sem.facts[n].type)) v.address = true;
+    return v;
+}
+} }

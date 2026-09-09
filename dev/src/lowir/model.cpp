@@ -108,7 +108,7 @@ ValueId FunctionBuilder::value(Name name)
     v.name = name;
     v.owner = function_;
     p_.values.push_back(v);
-    values_.insert(name, p_.values.size());
+    if (name) values_.insert(name, p_.values.size());
     return ValueId(p_.values.size());
 }
 BlockId FunctionBuilder::block(Name name)
@@ -118,7 +118,7 @@ BlockId FunctionBuilder::block(Name name)
     b.name = name;
     b.owner = function_;
     p_.blocks.push_back(b);
-    blocks_.insert(name, p_.blocks.size());
+    if (name) blocks_.insert(name, p_.blocks.size());
     return BlockId(p_.blocks.size());
 }
 SlotId FunctionBuilder::slot(Name name) const
@@ -148,13 +148,14 @@ SlotId FunctionBuilder::add_slot(Name name, Type type)
     s.owner = function_;
     p_.slots.push_back(s);
     SlotId id(p_.slots.size());
-    slots_.insert(name, id.index);
+    if (name) slots_.insert(name, id.index);
     if (!f.slots.count) f.slots.begin = p_.slot_order.size();
     ++f.slots.count;
     p_.slot_order.push_back(id);
     return id;
 }
-void FunctionBuilder::start_block(Name name)
+void FunctionBuilder::start_block(Name name) { start_block(block(name)); }
+void FunctionBuilder::start_block(BlockId id)
 {
     Function& f = p_.functions.at(function_.index - 1);
     require(!f.blocks.count || f.blocks.end() == p_.block_order.size(), "interleaved function blocks");
@@ -162,7 +163,6 @@ void FunctionBuilder::start_block(Name name)
         const Block& previous = p_.blocks[current_.index - 1];
         require(previous.instructions.count && terminator(p_.instructions[previous.instructions.end()-1].opcode), "missing terminator");
     }
-    BlockId id = block(name);
     Block& b = p_.blocks[id.index - 1];
     require(!b.defined, "duplicate block");
     b.defined = true;

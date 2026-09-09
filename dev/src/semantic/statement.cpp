@@ -69,11 +69,18 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         declaration(n, s); return;
     case Kind::Return:
         if (ast[n].first) {
+            NodeId value_node = ast[n].first;
+            if (ast[value_node].kind == Kind::BracedInit && !ast[value_node].first) {
+                initialize(value_node, return_type, s); return;
+            }
             Expression value = expression(ast[n].first, s);
             if (fundamental(return_type, FT_VOID) && !fundamental(value.type, FT_VOID)) throw std::runtime_error("value returned from void");
             require_conversion(ast[n].first, return_type);
         } else if (!fundamental(return_type, FT_VOID)) throw std::runtime_error("missing return value");
         return;
+    case Kind::Label:
+        facts[n].scope = s; resolve_statement(ast[n].first, s); return;
+    case Kind::Goto: facts[n].scope = s; return;
     case Kind::Break:
         if (!loop_depth && !switch_depth) throw std::runtime_error("break outside loop/switch");
         return;

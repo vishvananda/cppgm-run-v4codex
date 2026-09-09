@@ -1,0 +1,146 @@
+#include "lowering/procedural.h"
+#include <stdexcept>
+namespace cppgm { namespace lowering {
+using syntax::Kind;
+IRType Procedural::type(TypeId id)
+{
+    const semantic::Type t = sem.types[id];
+    switch (t.kind) {
+    case TypeKind::Pointer: case TypeKind::LRef: case TypeKind::RRef: case TypeKind::Function: return IRType::Ptr;
+    case TypeKind::Array: return IRType::object(sem.object_size(id), sem.object_alignment(id));
+    case TypeKind::Named:
+        if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
+        return IRType::object(sem.object_size(id), sem.object_alignment(id));
+    case TypeKind::Fundamental: {
+        static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
+            IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
+            IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::Ptr};
+        return kinds[t.fundamental];
+    }
+    default: throw std::runtime_error("unsupported lowering type");
+    }
+}
+bool Procedural::reference(TypeId t) const { return sem.types[t].kind == TypeKind::LRef || sem.types[t].kind == TypeKind::RRef; }
+NodeId Procedural::child(NodeId n, Kind k) const
+{
+    for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
+    return 0;
+}
+Value Procedural::emit(Instruction i, const std::vector<Operand>& args)
+{
+    i.operands.begin = p.operands.size(); i.operands.count = args.size();
+    for (const Operand& a : args) p.operands.push_back(a);
+    if (i.result_type() != IRType()) i.destination = builder->value(0);
+    builder->append(i);
+    if (lowir_model::terminator(i.opcode)) ended = true;
+    return Value(Operand::value(i.destination), i.result_type());
+}
+Value Procedural::emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action)
+{
+    Instruction i(op, t); i.operation = action;
+    return emit(i, std::vector<Operand>(args));
+}
+Value Procedural::load(Value v)
+{
+    if (!v.address) return v;
+    if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
+    if (v.cached) return Value(v.stored, type(v.type), v.type);
+    Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
+    Value r = emit(i, {v.operand}); r.type = v.type; return r;
+}
+Value Procedural::address(Value v)
+{
+    if (!v.address) throw std::logic_error("missing addressable semantic value");
+    if (v.operand.kind == Operand::Slot || v.operand.kind == Operand::Symbol)
+        v = emit(Opcode::Addr, IRType(), {v.operand});
+    v.address = false; v.ir = IRType::Ptr; return v;
+}
+void Procedural::store(Value v, Value location)
+{
+    Instruction i(Opcode::Store, type(location.type)); i.is_volatile = sem.types[location.type].cv & 2;
+    emit(i, {v.operand, location.operand});
+}
+Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool fold_widen)
+{
+    if (v.ir == to) return v;
+    Instruction i(Opcode::Convert, to); i.source_type = v.ir;
+    if (to.floating() && v.ir.floating()) i.operation = to.bytes() > v.ir.bytes() ? Operation::Fpext : Operation::Fptrunc;
+    else if (to.floating()) i.operation = unsign ? Operation::Uitofp : Operation::Sitofp;
+    else if (v.ir.floating()) i.operation = to_unsigned ? Operation::Fptoui : Operation::Fptosi;
+    else if (to.bytes() == v.ir.bytes()) {
+        if (v.operand.literal()) return Value(v.operand, to);
+        return emit(Opcode::Copy, to, {v.operand});
+    }
+    else i.operation = to.bytes() < v.ir.bytes() ? Operation::Trunc : unsign ? Operation::Zext : Operation::Sext;
+    // Required immediate widening may be represented by the final literal.
+    if (v.operand.kind == Operand::Integer && to.integer() && v.ir.integer() && (to.width() <= 32 || to.width() < v.ir.width() || fold_widen || !to_unsigned)) {
+        std::uint64_t bits = v.operand.data.integer;
+        if (v.ir.width() < 64) {
+            auto mask = (std::uint64_t(1) << v.ir.width()) - 1;
+            bits &= mask;
+            if (!unsign && (bits & (std::uint64_t(1) << (v.ir.width()-1)))) bits |= ~mask;
+        }
+        if (to.width() < 64) bits &= (std::uint64_t(1) << to.width()) - 1;
+        return Value(Operand::integer(bits), to);
+    }
+    return emit(i, {v.operand});
+}
+Value Procedural::convert(Value v, TypeId to, bool fold_widen)
+{
+    if (reference(to)) {
+        TypeId referred = sem.types[to].child;
+        if (!v.address || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
+            v = convert(v, referred);
+            SlotId slot = builder->add_slot(0, type(referred));
+            Value location(Operand::slot(slot), type(referred), referred, true);
+            store(v, location); v = location;
+        }
+        return address(v);
+    }
+    TypeId from = v.type;
+    v = load(v);
+    IRType target = type(to);
+    if (target == IRType::Void) { v.type = to; v.ir = target; return v; }
+    bool from_bool = from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_BOOL;
+    if (sem.types[to].kind == TypeKind::Fundamental && sem.types[to].fundamental == FT_BOOL && !from_bool) {
+        v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
+    }
+    bool unsign = from && sem.unsigned_type(from);
+    if (target == IRType::Ptr && v.operand.literal()) {
+        if (v.operand.kind == Operand::Null || (from && sem.types[from].kind == TypeKind::Named))
+            v = emit(Opcode::Copy, target, {v.operand});
+        else v.ir = target;
+    } else v = coerce(v, target, unsign, sem.unsigned_type(to), fold_widen);
+    v.type = to; return v;
+}
+Value Procedural::converted(NodeId n, const semantic::Conversion& c)
+{
+    Value v = expression(n, c.reference);
+    if (c.reference && !c.temporary && v.address) return address(v);
+    return convert(v, c.target);
+}
+Value Procedural::incoming(NodeId n)
+{
+    auto x = sem.expression_fact(n);
+    return x.incoming ? converted(n, sem.conversion_fact(x.incoming)) : load(expression(n));
+}
+Value Procedural::binding(EntityId e)
+{
+    if (!e) throw std::logic_error("missing resolved declaration");
+    const auto& entity = sem.entities[e];
+    TypeId t = entity.type;
+    bool local = objects[e].index != 0;
+    Operand location = local ? Operand::slot(objects[e]) : Operand::symbol(symbol(e));
+    if (reference(t)) {
+        Value pointer = emit(Opcode::Load, IRType::Ptr, {location});
+        t = sem.types[t].child;
+        return Value(pointer.operand, IRType::Ptr, t, true);
+    }
+    // Incomplete arrays are addressable without demanding a layout.
+    IRType ir = sem.types[t].kind == TypeKind::Array ? IRType(IRType::Ptr) : type(t);
+    return Value(location, ir, t, true);
+}
+BlockId Procedural::block() { return builder->block(0); }
+void Procedural::start(BlockId b) { builder->start_block(b); ended = false; }
+void Procedural::jump(BlockId b) { if (!ended) emit(Opcode::Jump, IRType(), {Operand::label(b)}); }
+} }

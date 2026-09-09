@@ -16,11 +16,11 @@ Expression Analyzer::value_fact(const Expression& source) const
 }
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
-    if (expressions[n].ready) return expressions[n];
+    if (expressions[n].ready) { expressions[n].evaluated |= !unevaluated_depth; return expressions[n]; }
     ++expression_work;
     facts[n].scope = s;
     Expression result = resolve_expression(n, s);
-    result.ready = true;
+    result.ready = true; result.evaluated = !unevaluated_depth;
     expressions[n] = result;
     if (!facts[n].type) facts[n].type = result.type;
     return result;
@@ -51,10 +51,16 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
         r.type = value_type(entities[e].type);
+        if (entities[e].kind == EntityKind::Enumerator && !entities[types[r.type].entity].complete)
+            r.type = entities[e].constant.type;
         if (entities[e].member_info) facts[n].type = members[entities[e].member_info].call_type;
         if (entities[e].kind != EntityKind::Enumerator) r.category = ValueCategory::Lvalue;
         return r;
     }
+    case Kind::BracedInit:
+        if (!first) { r.type = types.fundamental(FT_INT); return r; }
+        if (first != ast[n].last) throw std::runtime_error("excess scalar braces");
+        return value_fact(expression(first, s));
     case Kind::Parenthesized: return value_fact(expression(first, s));
     case Kind::Call: return call_expression(n, s);
     case Kind::Unary: case Kind::Postfix: return unary_expression(n, s);
@@ -88,6 +94,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             t = types[t].child;
         }
         if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) throw std::runtime_error("member of non-class");
+        size(t); // Establish layout once at the semantic owner before recording field use.
         NodeId name = ast[ast[first].next].detail;
         EntityId e = lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
@@ -111,13 +118,15 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     Expression x = expression(operand, s);
     Type target = types[to];
     ETokenType op = ast[n].op;
-    bool cstyle = op == OP_LPAREN;
+    bool cstyle = op == OP_LPAREN || ast[n].kind == Kind::Call;
     bool reinterpret = op == KW_REINTERPET_CAST || cstyle;
     bool cv_cast = op == KW_CONST_CAST;
     Conversion c; c.target = to; c.rank = 2; c.kind = Conversion::Kind::Explicit;
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
         unsigned added = 0;
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);
+        if (op == KW_REINTERPET_CAST && x.category != ValueCategory::Prvalue &&
+            !(types[x.type].cv & ~types[target.child].cv)) compatible = true;
         if (!compatible) throw std::runtime_error("invalid reference cast");
         if (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue && !(types[target.child].cv & 1))
             throw std::runtime_error("invalid lvalue cast");

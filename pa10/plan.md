@@ -37,4 +37,10 @@ to their owning stages; all mandated current-stage constraints remain.
 - Entry: clean base above; prior turn supplied evidence of the unimplemented
   driver (progress evidence, not a live wait). Baseline 0/121, 121 failures.
   Earlier stages and file audit reported passing; rerun at exit.
-- Active implementation; no handoff boundary reached. No reference revisions.
+- Procedural implementation checkpoint: 119/121; all five controls pass.
+  PA1–PA9 904/904 and file audit (125 files) pass. Scalar/CFG/call/array/
+  reference groups now work together. Two remaining reference facts defer
+  mandatory constant initialization; reduced reference executions both exit 1
+  where C++11 requires 0. Proof review and corrected sidecars are next.
+- Still active: complete reference proof, personal native/API verification,
+  architectural cleanup and frozen performance evidence. No handoff yet.

@@ -3,12 +3,6 @@
 #include <cstdlib>
 #include <cerrno>
 namespace lowir_model {
-static const char* const roles[] = {
-    "", "entry", "init", "fini", "eh_allocate_exception", "eh_begin_catch", "eh_end_catch",
-    "eh_rethrow", "eh_throw", "eh_personality", "eh_resume", "allocate_memory", "free_memory",
-    "terminate", "pure_virtual", "dynamic_cast", "bad_cast", "bad_typeid", "rtti_class", "rtti_si", "rtti_vmi", "rtti_data"
-};
-const char* role_name(SymbolRole role) { return roles[role]; }
 void Reader::boundary_field(FunctionBoundaryMetadata& m, const std::string& k, const std::string& v)
 {
     if (k == "arity" && v == "variadic") m.arity = CAM_VARIADIC;
@@ -41,8 +35,8 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
                 boundary_field(*boundary, k, v);
             } else if (k == "role") {
                 unsigned r = 1;
-                for (; r < sizeof(roles)/sizeof(*roles); ++r) if (v == roles[r]) break;
-                require(r < sizeof(roles)/sizeof(*roles) && (function == (r < SR_RTTI_CLASS)), "invalid symbol role");
+                for (; r < unsigned(SR_RTTI_DATA)+1; ++r) if (v == role_name(SymbolRole(r))) break;
+                require(r < unsigned(SR_RTTI_DATA)+1 && (function == (r < SR_RTTI_CLASS)), "invalid symbol role");
                 m.role = SymbolRole(r);
             } else if (k == "linkage") { require(v == "c", "invalid linkage"); m.linkage = LLM_C; }
             else if (k == "binding") {

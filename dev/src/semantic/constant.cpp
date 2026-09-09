@@ -87,7 +87,11 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
                 std::uint64_t field_size = reference ? 8 : size(member.type);
                 align = std::max(align, field_align);
                 if (entities[e].key == KW_UNION) bytes = std::max(bytes, field_size);
-                else bytes = layout_add(layout_align(bytes, field_align), field_size);
+                else {
+                    bytes = layout_align(bytes, field_align);
+                    entities[declarations[d].entity].member_offset = bytes;
+                    bytes = layout_add(bytes, field_size);
+                }
             }
             class_facts[layout].alignment = align;
             class_facts[layout].size = bytes ? layout_align(bytes, align) : 1;

@@ -77,7 +77,11 @@ struct Entity {
     bool complete = false, scoped = false, template_parameter = false, is_static = false;
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;
-    NodeId source = 0, definition = 0;
+    NodeId source = 0, definition = 0, initializer = 0, body = 0;
+    enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove } builtin = NoBuiltin;
+    bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
+    std::uint32_t defaults = 0;
+    std::uint64_t member_offset = 0;
     TypeId type = 0, underlying = 0;
     std::uint32_t class_info = 0, member_info = 0, template_info = 0, specialization = 0;
     EntityId first = 0, second = 0; // Immutable overload union edges.
@@ -132,9 +136,10 @@ struct Expression {
     // Calls record their selected declaration in Fact::entity. Conversion ranges
     // belong only to this node (including operators), not to transparent wrappers.
     std::uint32_t conversions = 0, count = 0, incoming = 0;
+    std::uint32_t arguments = 0, argument_count = 0;
     ValueCategory category = ValueCategory::Prvalue;
     ExpressionForm form = ExpressionForm::Ordinary;
-    bool ready = false;
+    bool ready = false, evaluated = false;
 };
 struct Conversion {
     TypeId target = 0;
@@ -146,6 +151,14 @@ struct Conversion {
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
-struct Fact { TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
+struct StaticValue {
+    enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;
+    std::uint64_t bits = 0;
+    long double floating = 0;
+    EntityId entity = 0;
+    NodeId string = 0;
+    std::int64_t addend = 0;
+};
+struct Fact { NodeId target = 0; TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }
