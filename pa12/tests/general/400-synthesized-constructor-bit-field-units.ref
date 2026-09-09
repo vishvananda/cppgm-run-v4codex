@@ -50,7 +50,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t34 = index i8 [projection=field] %t33, 4
     %t35 = load i32 %t34
     %t36 = binary and i32 %t35, 7
-    %t37 = cmp ne u32 %t36, 5
+    %first_declared = copy u32 %t36
+    %first_promoted = copy i32 %first_declared
+    %t37 = cmp ne i32 %first_promoted, 5
     branch %t37, ^lor_short_11, ^lor_rhs_10
 
   block ^lor_rhs_10:
@@ -59,7 +61,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t40 = load i32 %t39
     %t41 = binary shr i32 %t40, 3
     %t42 = binary and i32 %t41, 31
-    %t43 = cmp ne u32 %t42, 17
+    %second_declared = copy u32 %t42
+    %second_promoted = copy i32 %second_declared
+    %t43 = cmp ne i32 %second_promoted, 17
     %t44 = cmp ne i64 %t43, 0
     store i64 %t44, $lor__4
     jump ^lor_end_12
@@ -77,7 +81,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t47 = index i8 [projection=field] %t46, 8
     %t48 = load i32 %t47
     %t49 = binary and i32 %t48, 15
-    %t50 = cmp ne u32 %t49, 9
+    %third_declared = copy u32 %t49
+    %third_promoted = copy i32 %third_declared
+    %t50 = cmp ne i32 %third_promoted, 9
     %t51 = cmp ne i64 %t50, 0
     store i64 %t51, $lor__3
     jump ^lor_end_9
@@ -96,7 +102,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t55 = load i32 %t54
     %t56 = binary shr i32 %t55, 4
     %t57 = binary and i32 %t56, 15
-    %t58 = cmp ne u32 %t57, 12
+    %fourth_declared = copy u32 %t57
+    %fourth_promoted = copy i32 %fourth_declared
+    %t58 = cmp ne i32 %fourth_promoted, 12
     %t59 = cmp ne i64 %t58, 0
     store i64 %t59, $lor__2
     jump ^lor_end_6

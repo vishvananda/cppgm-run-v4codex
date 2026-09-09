@@ -1,0 +1,8 @@
+function @check(%raw : i32) -> i64 {
+  block ^entry:
+    %bits = binary and i32 %raw, 7
+    %declared = copy u32 %bits
+    %promoted = copy i32 %declared
+    %result = cmp ne i32 %promoted, 5
+    return i64 %result
+}
