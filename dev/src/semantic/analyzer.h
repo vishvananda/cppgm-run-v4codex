@@ -71,6 +71,7 @@ public:
     bool empty_value(TypeId t);
     bool initializer_work(std::uint32_t plan);
     std::vector<ConversionObject> conversion_objects = std::vector<ConversionObject>(1);
+    std::vector<UserConversion> user_conversions = std::vector<UserConversion>(1);
     IdentifierId literal_suffix(EntityId e) const { return literal_functions.get(e); }
     const PlacementNew& placement_fact(NodeId n) const { return placements[placement_index.get(n)]; }
     const ConstantObject& constant_construction(NodeId n, TypeId t);
@@ -197,7 +198,7 @@ private:
     EntityId merge_lookup(EntityId a, EntityId b);
     bool function_binding(EntityId e) const;
     std::vector<EntityId> candidates(EntityId e);
-    EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
+    EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, TypeId conversion = 0);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
@@ -238,7 +239,9 @@ private:
     void demand_member(EntityId e);
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0);
-    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0);
+    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true);
+    bool converting_transfer(EntityId constructor, const Expression& call) const;
+    Conversion elided_conversion(const Expression& call, TypeId target);
     void constructor_actions(EntityId e);
     bool inherit_using(NodeId name, ScopeId scope);
     void inherited_constructors(EntityId cls);
@@ -275,6 +278,14 @@ private:
     bool qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const = true);
     bool similar_type(TypeId a, TypeId b);
     Conversion conversion(NodeId n, TypeId target, bool user = true);
+    Conversion standard_conversion(Expression source, TypeId target, NodeId node = 0);
+    Conversion conversion_function(NodeId n, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
+    void prepare_user_conversion(NodeId n, Conversion& conversion);
+    std::vector<EntityId> conversion_candidates(TypeId source);
+    EntityId conversion_lookup(ScopeId owner, TypeId target);
+    Index conversion_families, conversion_bindings;
+    void builtin_operators(ETokenType op, const std::vector<NodeId>& arguments, std::vector<BuiltinOperator>& results);
+    std::vector<TypeId> builtin_operand_types(NodeId n);
     Conversion converting_constructor(NodeId n, TypeId target);
     void materialize_conversion(NodeId n, Conversion& c, bool defer = false);
     void record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected);
@@ -284,7 +295,7 @@ private:
     void record_conversion(Expression& owner, NodeId n, Conversion c);
     Conversion boolean_conversion(NodeId n);
     Expression value_fact(const Expression& source) const;
-    void require_conversion(NodeId n, TypeId target);
+    void require_conversion(NodeId n, TypeId target, bool direct = false);
     void select_function(NodeId n, EntityId e);
     void initialize(NodeId init, TypeId target, ScopeId s);
     TypeId builtin_binary(ETokenType op, NodeId a, NodeId b, Expression& result);

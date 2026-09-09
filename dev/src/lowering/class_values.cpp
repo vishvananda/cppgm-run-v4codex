@@ -19,6 +19,7 @@ Value Procedural::class_address(EntityId object, TypeId t)
 }
 void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination)
 {
+    if (c.kind == semantic::Conversion::Kind::User) { user_conversion(n,c,destination); return; }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
     auto fact = sem.expression_fact(n);
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
@@ -28,6 +29,11 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination); return; }
     if (elided && fact.form == semantic::ExpressionForm::Construction) {
         construct(sem.facts[n].entity,n,destination); return;
+    }
+    if (elided && fact.form == semantic::ExpressionForm::Cast) {
+        NodeId first = ast[n].first;
+        NodeId operand = ast[n].kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
+        construct_value(operand,sem.conversion_fact(fact.conversions),destination); return;
     }
     if (elided && (ast[n].kind == Kind::Call || fact.form == semantic::ExpressionForm::OperatorCall)) {
         call(n,destination); return;

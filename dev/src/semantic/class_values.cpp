@@ -43,9 +43,15 @@ void Analyzer::prepare_function_boundaries()
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {
     if (result.category != ValueCategory::Prvalue || !class_value(result.type)) return;
-    if (ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall) return;
+    if (ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall && result.form != ExpressionForm::Cast) return;
     if (!result.object_use) record_object(result,0,0,0);
     if (object_uses[result.object_use].temporary) return;
+    if (result.form == ExpressionForm::Cast && result.count) {
+        auto c = conversions[result.conversions];
+        if (c.kind == Conversion::Kind::User && user_conversions[c.materialization].temporary) {
+            object_uses[result.object_use].temporary = user_conversions[c.materialization].temporary; return;
+        }
+    }
     EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block,s),0,n);
     entities[temporary].type = types.unqualified(result.type);
     register_destruction(temporary);

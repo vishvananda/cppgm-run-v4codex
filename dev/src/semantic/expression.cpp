@@ -152,6 +152,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         size(t); // Establish layout once at the semantic owner before recording field use.
         if (operator_token(name) == OP_ASS) ensure_transfers(t, true);
         EntityId e = destructor ? default_destructor(t, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
+        if (ast[part].op == KW_OPERATOR && ast[part].detail)
+            e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);
@@ -187,6 +189,32 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     bool reinterpret = op == KW_REINTERPET_CAST || cstyle;
     bool cv_cast = op == KW_CONST_CAST;
     Conversion c; c.target = to; c.rank = 2; c.kind = Conversion::Kind::Explicit;
+    if (!cv_cast && op != KW_REINTERPET_CAST && class_value(to)) {
+        EntityId ctor = choose_constructor(to,{operand},&r,s);
+        if (converting_transfer(ctor,r)) {
+            auto conversion = elided_conversion(r,to);
+            r = Expression(); r.type = to; r.form = ExpressionForm::Cast;
+            record_conversion(r,operand,conversion); return r;
+        }
+        r.type = to; r.form = ExpressionForm::Construction;
+        facts[n].entity = ctor; members[entities[ctor].member_info].complete_entry = true;
+        EntityId temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
+        entities[temporary].type = to; register_destruction(temporary);
+        record_object(r,0,0,0); object_uses[r.object_use].temporary = temporary;
+        return r;
+    }
+    if (!cv_cast && op != KW_REINTERPET_CAST && !fundamental(to,FT_VOID)) {
+        Conversion selected = standard_conversion(x,to,operand);
+        if (!selected.valid() && class_value(x.type)) selected = conversion_function(operand,to,true);
+        bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
+        bool related = ref && (types.unqualified(x.type) == types.unqualified(target.child) || derived_from(x.type,target.child) || derived_from(target.child,x.type));
+        if (ref && !related && !selected.valid()) selected = conversion(operand,to);
+        if (selected.valid() && (selected.kind == Conversion::Kind::User || (ref && !related))) {
+            record_conversion(r,operand,selected);
+            if (ref) r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
+            return r;
+        }
+    }
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
         unsigned added = 0;
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);

@@ -21,12 +21,12 @@ std::vector<EntityId> Analyzer::candidates(EntityId e)
     }
     return result;
 }
-EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor)
+EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor, TypeId conversion)
 {
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);
-    EntityId family = function_families.get(key(owner, name));
+    EntityId family = conversion ? conversion_families.get(key(owner,conversion)) : function_families.get(key(owner, name));
     TypeId ref_shape = 0;
     unsigned ref_mode = t.ref == RefQualifier::None ? 1 : 2;
     if (calls && scopes[owner].kind == ScopeKind::Class) {
@@ -37,16 +37,16 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     EntityId e = family ? function_signatures.get(key(family, shape)) : 0;
     if (e) {
         if (entities[e].type != type) throw std::runtime_error("conflicting function return type");
-        if (!constructor) bind(owner, name, e);
+        if (!constructor && !conversion) bind(owner, name, e);
         return e;
     }
     e = make_entity(EntityKind::Function, owner, name, source);
     entities[e].type = type;
     if (calls && scopes[owner].kind == ScopeKind::Template) template_facts(e);
-    if (!family) { family = e; function_families.put(key(owner, name), family); }
+    if (!family) { family = e; (conversion ? conversion_families : function_families).put(key(owner, conversion ? conversion : name), family); }
     if (ref_shape) function_ref_modes.put(key(family, ref_shape), ref_mode);
     function_signatures.put(key(family, shape), e);
-    if (!constructor) bind(owner, name, e);
+    if (!constructor && !conversion) bind(owner, name, e);
     return e;
 }
 bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t count)
@@ -55,6 +55,19 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
     for (std::size_t i = 0; i < count; ++i) {
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
+        if (a[i].rank == 5) {
+            if (a[i].kind == Conversion::Kind::Construction && b[i].kind == Conversion::Kind::Construction &&
+                a[i].function == b[i].function && a[i].reference && b[i].reference) {
+                if (a[i].preference > b[i].preference) return false;
+                strict |= a[i].preference < b[i].preference;
+            }
+            if (a[i].kind == Conversion::Kind::User && b[i].kind == Conversion::Kind::User && a[i].function == b[i].function) {
+                auto x = user_conversions[a[i].materialization].result, y = user_conversions[b[i].materialization].result;
+                if (better(&y,&x,1)) return false;
+                strict |= better(&x,&y,1);
+            }
+            continue;
+        }
         if (a[i].reference && b[i].reference && a[i].preference != b[i].preference) {
             if (a[i].preference > b[i].preference) return false;
             strict = true; continue;
@@ -175,6 +188,12 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (cast_type) {
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type, args, &result, s);
+                if (converting_transfer(ctor,result)) {
+                    auto c = elided_conversion(result,cast_type);
+                    result = Expression(); result.type = cast_type; result.form = ExpressionForm::Cast;
+                    record_conversion(result,args[0],c); facts[n].type = cast_type;
+                    return result;
+                }
                 members[entities[ctor].member_info].complete_entry = true;
                 facts[n].entity = ctor; facts[n].type = cast_type;
                 result.type = cast_type; result.form = ExpressionForm::Construction;

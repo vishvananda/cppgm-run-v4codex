@@ -58,6 +58,16 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
 }
 TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression& r)
 {
+    if (class_value(expressions[an].type) || class_value(expressions[bn].type)) {
+        std::vector<BuiltinOperator> candidates; builtin_operators(op,{an,bn},candidates);
+        if (candidates.empty()) throw std::runtime_error("no viable builtin operator");
+        unsigned best = 0;
+        for (unsigned i = 1; i < candidates.size(); ++i) if (better(candidates[i].arguments,candidates[best].arguments,2)) best = i;
+        for (unsigned i = 0; i < candidates.size(); ++i) if (i != best && !better(candidates[best].arguments,candidates[i].arguments,2))
+            throw std::runtime_error("ambiguous builtin operator");
+        record_conversion(r,an,candidates[best].arguments[0]); record_conversion(r,bn,candidates[best].arguments[1]);
+        return candidates[best].type;
+    }
     TypeId a = decay(expressions[an].type), b = decay(expressions[bn].type);
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     if (op == OP_LAND || op == OP_LOR) {

@@ -52,7 +52,8 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         if (!ast[n].first) { jump(yes); return; }
         if (sem.facts[n].entity) {
             object(sem.facts[n].entity);
-            Value v = load(binding(sem.facts[n].entity));
+            auto c = sem.conversion_fact(sem.expression_fact(n).conversions);
+            Value v = c.kind == semantic::Conversion::Kind::User ? user_conversion(n,c) : load(binding(sem.facts[n].entity));
             if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
             emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)}); return;
         }
@@ -65,7 +66,8 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         start(rhs); condition(ast[ast[n].first].next, yes, no); return;
     }
     auto initial = live;
-    Value v = load(expression(n));
+    auto incoming = sem.expression_fact(n).incoming;
+    Value v = incoming && sem.conversion_fact(incoming).kind == semantic::Conversion::Kind::User ? converted(n,sem.conversion_fact(incoming)) : load(expression(n));
     if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
     clean_inline(live,initial);
     emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)});
@@ -83,7 +85,8 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     if (object && !supplied) destination = class_address(sem.object_fact(n).temporary,target);
     BlockId yes = block(), no = block(), end = block();
     NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
-    Value test = load(expression(a));
+    auto test_conversion = sem.conversion_fact(fact.conversions);
+    Value test = test_conversion.kind == semantic::Conversion::Kind::User ? converted(a,test_conversion) : load(expression(a));
     if (test.ir.floating()) test = emit(Opcode::Compare,test.ir,{test.operand,Operand::floating(0)},Operation::Ne);
     SlotId selector = cleanup_selector(test,cleanup_expression(b) || cleanup_expression(c));
     auto common = live;
@@ -116,7 +119,9 @@ Value Procedural::logical(NodeId n)
     NodeId a = ast[n].first, b = ast[a].next;
     // Value context materializes a canonical truth slot. Condition context is
     // handled independently by condition(), without introducing that storage.
-    Value lhs = load(expression(a));
+    auto fact = sem.expression_fact(n);
+    auto first_conversion = sem.conversion_fact(fact.conversions), second_conversion = sem.conversion_fact(fact.conversions+1);
+    Value lhs = first_conversion.kind == semantic::Conversion::Kind::User ? converted(a,first_conversion) : load(expression(a));
     if (lhs.operand.kind == Operand::Integer && (land ? !lhs.operand.data.integer : bool(lhs.operand.data.integer)))
         return Value(Operand::integer(!land), IRType::I64, sem.expression_fact(n).type);
     SlotId slot = builder->add_slot(0, IRType::I64);
@@ -126,7 +131,7 @@ Value Procedural::logical(NodeId n)
     auto common = live;
     emit(Opcode::Branch, IRType(), {lhs.operand, Operand::label(land ? rhs : short_path), Operand::label(land ? short_path : rhs)});
     start(rhs);
-    Value value = load(expression(b));
+    Value value = second_conversion.kind == semantic::Conversion::Kind::User ? converted(b,second_conversion) : load(expression(b));
     IRType comparison = value.ir.floating() || value.ir == IRType::Ptr ? value.ir : IRType(IRType::I64);
     value = emit(Opcode::Compare, comparison, {value.operand, value.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
     emit(Opcode::Store, IRType::I64, {value.operand, Operand::slot(slot)});
@@ -166,7 +171,11 @@ void Procedural::switch_statement(NodeId n)
 {
     NodeId cond = child(n, Kind::Condition), body = ast[cond].next;
     Value value;
-    if (sem.facts[cond].entity) { object(sem.facts[cond].entity); value = convert(binding(sem.facts[cond].entity), sem.facts[cond].type); }
+    if (sem.facts[cond].entity) {
+        object(sem.facts[cond].entity);
+        auto c = sem.conversion_fact(sem.expression_fact(cond).conversions);
+        value = c.kind == semantic::Conversion::Kind::User ? user_conversion(cond,c) : convert(binding(sem.facts[cond].entity), sem.facts[cond].type);
+    }
     else value = incoming(ast[cond].first);
     BlockId dispatch = block(), end = block(), saved = break_target;
     break_target = end;

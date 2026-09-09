@@ -29,6 +29,10 @@ Value Procedural::expression(NodeId n, bool location)
         if (!operand) return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
         TypeId target = sem.facts[n].type;
         if (reference(target)) {
+            auto c = sem.conversion_fact(fact.conversions);
+            if (c.kind == semantic::Conversion::Kind::User || c.kind == semantic::Conversion::Kind::Construction || c.temporary) {
+                Value v = converted(operand,c); v.address = true; v.type = fact.type; return v;
+            }
             Value v = expression(operand, true);
             if (!v.address) {
                 SlotId slot = builder->add_slot(0, v.ir);
@@ -54,7 +58,14 @@ Value Procedural::expression(NodeId n, bool location)
             }
             discard(operand); return Value(Operand(), IRType(), fact.type);
         }
-        Value v = converted(operand, sem.conversion_fact(fact.conversions));
+        auto c = sem.conversion_fact(fact.conversions);
+        if (sem.class_value(fact.type) && c.kind == semantic::Conversion::Kind::User) {
+            EntityId object = sem.user_conversions[c.materialization].temporary;
+            Value destination = class_address(object,fact.type);
+            user_conversion(operand,c,destination); activate_temporary(object);
+            destination.type = fact.type; destination.address = true; return destination;
+        }
+        Value v = converted(operand, c);
         v.type = fact.type; return v;
     }
     if (fact.form == semantic::ExpressionForm::ConstantQuery || ast[n].kind == Kind::Sizeof || ast[n].kind == Kind::TypeTrait) {
@@ -162,7 +173,7 @@ Value Procedural::unary(NodeId n)
         if (ast[n].kind == Kind::Postfix) return old;
         dest.cached = true; dest.stored = value.operand; return dest;
     }
-    Value v = op == OP_LNOT ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
+    Value v = op == OP_LNOT && sem.conversion_fact(fact.conversions).kind != semantic::Conversion::Kind::User ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
     if (op == OP_LNOT) v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Eq);
     else if (op != OP_PLUS) v = emit(Opcode::Unary, v.ir, {v.operand}, op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
     v.type = fact.type; return v;
@@ -181,9 +192,9 @@ Value Procedural::binary(NodeId n, bool location)
         } else if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
         else {
             NodeId target = a;
-            while (ast[target].kind == Kind::Parenthesized) target = ast[target].first;
+            while (ast[target].kind == Kind::Parenthesized || ast[target].kind == Kind::Member) target = ast[target].first;
             EntityId object = sem.expression_fact(target).entity;
-            bool direct = ast[target].kind == Kind::IdExpression && object && !reference(sem.entities[object].type);
+            bool direct = ast[target].op == KW_THIS || (ast[target].kind == Kind::IdExpression && object && !(sem.types[sem.entities[object].type].cv & 2));
             // A direct object needs no address evaluation; its read follows
             // the binary-operand convention. Indirection/calls must evaluate
             // the RHS before computing the LHS address, exactly once.
@@ -213,8 +224,8 @@ Value Procedural::binary(NodeId n, bool location)
         }
         rhs = store(rhs, dest); dest.cached = true; dest.stored = rhs.operand; return dest;
     }
-    Value lhs = load(expression(a));
-    Value rhs = load(expression(b));
+    Value lhs = sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::User ? converted(a,sem.conversion_fact(fact.conversions)) : load(expression(a));
+    Value rhs = sem.conversion_fact(fact.conversions+1).kind == semantic::Conversion::Kind::User ? converted(b,sem.conversion_fact(fact.conversions+1)) : load(expression(b));
     lhs = convert(lhs, sem.conversion_fact(fact.conversions).target, sem.conversion_fact(fact.conversions).fold_widen);
     rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target, sem.conversion_fact(fact.conversions+1).fold_widen);
     if (sem.conversion_fact(fact.conversions).derived) lhs = base_projection(lhs, 1);
@@ -310,8 +321,9 @@ Value Procedural::call(NodeId n, Value destination)
     Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
     if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
-        Value fn = load(expression(callee)); call_work[begin] = fn.operand;
-        TypeId ft = sem.expression_fact(callee).type;
+        auto c = sem.conversion_fact(object_use.callee_conversion);
+        Value fn = object_use.callee_conversion ? converted(callee,c) : load(expression(callee)); call_work[begin] = fn.operand;
+        TypeId ft = object_use.callee_conversion ? c.target : sem.expression_fact(callee).type;
         if (sem.types[ft].kind == TypeKind::Pointer) ft = sem.types[ft].child;
         i.signature = signature(ft);
     }

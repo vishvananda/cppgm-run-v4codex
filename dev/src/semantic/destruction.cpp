@@ -38,11 +38,12 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
 void Analyzer::register_destruction(EntityId e)
 {
     auto kind = types[entities[e].type].kind;
-    if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Block) {
+    if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && !entities[e].is_static &&
+        (scopes[entities[e].owner].kind == ScopeKind::Block || scopes[entities[e].owner].kind == ScopeKind::Control)) {
         NodeId n = entities[e].initializer;
         while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
         auto c = conversions[expressions[n].incoming];
-        EntityId temporary = c.reference && c.materialization ? conversion_objects[c.materialization].temporary : object_fact(n).temporary;
+        EntityId temporary = c.reference && c.materialization ? (c.kind == Conversion::Kind::User ? user_conversions[c.materialization].temporary : conversion_objects[c.materialization].temporary) : object_fact(n).temporary;
         if (temporary) {
             reference_temporaries.put(e,temporary);
             object_destructors.put(e,object_destructor(temporary));

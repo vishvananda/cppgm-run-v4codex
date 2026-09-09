@@ -82,3 +82,19 @@ Initial noisy campaigns and the final repeats are both preserved.
   PA12 remains incomplete; **108 stage-base failures removed overall**.
 - Final file audit and `git diff --check` pass. Implementation and evidence are
   committed; no tests or benchmarks remain running. Working tree is clean at handoff.
+
+- Conversion entry: clean `1a7867fd`; previous goal turn is verified progress.
+  Fresh baseline **169/257** in `/tmp/pa12-conversion-start.log`; no live prior work.
+  Active owner: canonical conversion-function targets and inherited candidate
+  edges -> object/second-standard sequence selection -> existing calls and
+  destinations. Bound work by required candidates and base edges; preserve
+  local source facts. Validate casts, references, overload ranking, builtins and
+  conditions together, then measure common and affected workloads.
+- Conversion implementation checkpoint: **201/257**, 32 entry failures removed,
+  no new failures; prior **1327/1327**, 27 personal sources pass. Canonical
+  target bindings, two standard sequences, selected result transfers, builtin
+  candidates, condition declarations, casts and surrogate calls now share the
+  conversion owner. Inherited ranking follows [over.match.funcs]/4 while the
+  call retains its separate base adjustment. Logs: `/tmp/pa12-conversion-complete-stage.log`,
+  `/tmp/pa12-conversion-prior.log`, `/tmp/pa12-conversion-personal2.log`.
+  Performance campaign remains pending; no optimization benefit is claimed.

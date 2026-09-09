@@ -10,7 +10,10 @@ bool Procedural::cleanup_expression(NodeId n)
     auto incoming = sem.expression_fact(n).incoming;
     if (incoming) {
         auto c = sem.conversion_fact(incoming);
-        if (c.reference && c.materialization) needed |= sem.destructor_needed(sem.object_destructor(sem.conversion_objects[c.materialization].temporary));
+        if (c.reference && c.materialization) {
+            auto object = c.kind == semantic::Conversion::Kind::User ? sem.user_conversions[c.materialization].temporary : sem.conversion_objects[c.materialization].temporary;
+            needed |= sem.destructor_needed(sem.object_destructor(object));
+        }
     }
     for (NodeId child = ast[n].first; child; child = ast[child].next) needed |= cleanup_expression(child);
     cleanup_expressions[n] = needed ? 2 : 1;

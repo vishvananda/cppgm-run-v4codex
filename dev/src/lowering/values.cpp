@@ -125,6 +125,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
+    if (c.kind == semantic::Conversion::Kind::User) return user_conversion(n,c);
     if (c.kind == semantic::Conversion::Kind::Construction) {
         auto materialized = sem.conversion_objects[c.materialization];
         EntityId object = materialized.temporary;
@@ -141,7 +142,10 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         construct_value(n,c,pointer);
         return Value(Operand::slot(slot), type(c.target), c.target);
     }
-    Value v = expression(n, c.reference);
+    return converted_value(expression(n,c.reference),c);
+}
+Value Procedural::converted_value(Value v, const semantic::Conversion& c)
+{
     if (c.derived) {
         v = base_projection(c.reference && !c.temporary ? address(v) : load(v), 1);
         if (c.temporary) { v.type = sem.types[c.target].child; return convert(v, c.target); }

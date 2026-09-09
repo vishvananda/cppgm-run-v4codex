@@ -3,11 +3,11 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope)
+EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope, bool direct)
 {
     EntityId cls = types[t].entity;
     if (args.size() == 1 && types[expressions[args[0]].type].kind == TypeKind::Named &&
-        (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t)))
+        (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t) || class_value(expressions[args[0]].type)))
         ensure_transfers(t, false);
     if (args.empty() && !class_facts[entities[cls].class_info].user_constructor && !class_facts[entities[cls].class_info].inherited_base)
         return default_constructor(t, scope);
@@ -29,7 +29,11 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         std::size_t begin = sequences.size();
         bool valid = true;
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
-            Conversion c = i < f.count ? conversion(args[i], types.parameters[f.offset+i]) : ellipsis_conversion(args[i]);
+            Conversion c;
+            if (direct && !i && transfer_member(e) && class_value(expressions[args[i]].type) &&
+                types.unqualified(expressions[args[i]].type) != types.unqualified(t))
+                c = conversion_function(args[i],types.parameters[f.offset+i],true);
+            if (!c.valid()) c = i < f.count ? conversion(args[i], types.parameters[f.offset+i]) : ellipsis_conversion(args[i]);
             valid = c.valid(); sequences.push_back(c);
         }
         if (valid) viable.push_back({e, begin}); else sequences.resize(begin);
@@ -64,7 +68,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         record_call(defaults, arguments, selected_arguments);
         members[member].default_conversions = defaults.conversions;
     }
-    demand_member(selected);
+    if (!result || !converting_transfer(selected,*result)) demand_member(selected);
     return selected;
 }
 EntityId Analyzer::default_constructor(TypeId t, ScopeId s)
@@ -90,9 +94,10 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s)
 bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
 {
     NodeId list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
+    bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
     auto info = entities[types[target].entity].class_info;
     if (ast[list].kind == Kind::BracedInit && class_facts[info].aggregate) return false;
-    if (ast[list].kind == Kind::Call) {
+    if (!copy && ast[list].kind == Kind::Call) {
         NodeId callee = ast[list].first;
         EntityId named = ast[callee].kind == Kind::IdExpression ? resolve(ast[callee].detail, s) : 0;
         if (named && (entities[named].kind == EntityKind::Type || entities[named].kind == EntityKind::Alias) &&
@@ -107,7 +112,13 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         args.push_back(a);
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
-    EntityId ctor = choose_constructor(target, args, &result, s);
+    EntityId ctor = choose_constructor(target, args, &result, s, !copy);
+    if (converting_transfer(ctor,result)) {
+        auto c = elided_conversion(result,target);
+        ValueInitialization init; init.source = args[0]; init.conversion = conversions.size(); conversions.push_back(c);
+        class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
+        facts[n].type = target; return true;
+    }
     if (ast[list].kind == Kind::BracedInit) {
         Type f = types[entities[ctor].type];
         for (std::size_t j = 0; j < args.size() && j < f.count; ++j)
@@ -115,7 +126,6 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     }
     if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
     // The initializer wrapper retains its starting token, including '='.
-    bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
     if (copy && members[entities[ctor].member_info].explicit_constructor)
         throw std::runtime_error("explicit constructor in copy initialization");
     if (args.empty() && grouped && members[entities[ctor].member_info].synthetic) {

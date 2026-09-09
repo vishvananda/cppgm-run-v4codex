@@ -17,8 +17,10 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (function_binding(ordinary)) family = merge_lookup(family, ordinary);
         family = merge_lookup(family, associated_lookup(name, args));
     }
-    if (!function_binding(family)) return false;
-    struct Candidate { EntityId entity; std::size_t offset; bool member; };
+    bool class_operand = false;
+    for (NodeId a : args) if (a) class_operand |= class_value(expressions[a].type);
+    if (!function_binding(family) && !class_operand) return false;
+    struct Candidate { EntityId entity; std::size_t offset; bool member; unsigned builtin; TypeId surrogate; };
     std::vector<Candidate> viable;
     std::vector<Conversion> sequences;
     for (EntityId e : candidates(family)) {
@@ -42,7 +44,31 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
             }
             valid = c.valid(); sequences.push_back(c);
         }
-        if (valid) viable.push_back({e, begin, member}); else sequences.resize(begin);
+        if (valid) viable.push_back({e, begin, member, 0, 0}); else sequences.resize(begin);
+    }
+    if (op == OP_LPAREN) {
+        Index seen;
+        for (EntityId e : conversion_candidates(object)) {
+            TypeId target = decay(types[entities[e].type].child);
+            if (!pointer(target) || types[types[target].child].kind != TypeKind::Function || seen.get(target)) continue;
+            seen.put(target,1);
+            Type f = types[types[target].child];
+            if (args.size()-1 < f.count || (!f.variadic && args.size()-1 != f.count)) continue;
+            std::size_t begin = sequences.size();
+            Conversion callee = conversion_function(args[0],target);
+            bool valid = callee.valid(); sequences.push_back(callee);
+            for (unsigned j = 1; valid && j < args.size(); ++j) {
+                Conversion c = j <= f.count ? conversion(args[j],types.parameters[f.offset+j-1]) : ellipsis_conversion(args[j]);
+                valid = c.valid(); sequences.push_back(c);
+            }
+            if (valid) viable.push_back({callee.function,begin,false,0,types[target].child}); else sequences.resize(begin);
+        }
+    }
+    std::vector<BuiltinOperator> builtins;
+    if (class_operand) builtin_operators(op,args,builtins);
+    for (unsigned i = 0; i < builtins.size(); ++i) {
+        viable.push_back({0,sequences.size(),false,i+1,0});
+        for (unsigned j = 0; j < args.size(); ++j) sequences.push_back(builtins[i].arguments[j]);
     }
     // Built-in comma, address and enum operations remain candidates when no
     // user-defined candidate is viable. Expected rejection does not throw.
@@ -54,6 +80,25 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
             throw std::runtime_error("ambiguous operator overload");
     Candidate selected = viable[best];
+    if (selected.surrogate) {
+        Conversion callee = sequences[selected.offset]; apply_conversion(args[0],callee);
+        record_object(result,0,0,0);
+        object_uses[result.object_use].callee_conversion = conversions.size(); conversions.push_back(callee);
+        std::vector<NodeId> arguments(args.begin()+1,args.end());
+        std::vector<Conversion> chosen(sequences.begin()+selected.offset+1,sequences.begin()+selected.offset+args.size());
+        record_call(result,arguments,chosen);
+        TypeId returned = types[selected.surrogate].child;
+        facts[n].type = returned; result.type = value_type(returned);
+        result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+            types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+        return true;
+    }
+    if (selected.builtin) {
+        auto builtin = builtins[selected.builtin-1];
+        result.type = builtin.type; result.category = builtin.category;
+        for (unsigned j = 0; j < args.size(); ++j) record_conversion(result,args[j],sequences[selected.offset+j]);
+        return true;
+    }
     if (deleted_transfer(selected.entity))
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);

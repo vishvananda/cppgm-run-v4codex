@@ -66,6 +66,7 @@ struct ClassFacts {
     unsigned char packing = 0;
     EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
     EntityId inherited_base = 0;
+    EntityId first_conversion = 0;
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
@@ -118,6 +119,8 @@ struct Entity {
 enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
 struct MemberFacts {
     TypeId call_type = 0;
+    TypeId conversion_target = 0;
+    EntityId next_conversion = 0;
     EntityId inherited_constructor = 0;
     EntityId delegated_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
@@ -197,7 +200,8 @@ struct Expression {
     bool ready = false, evaluated = false;
 };
 struct ObjectUse {
-    ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; bool value_initialize = false; };
+    ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
+    unsigned adjustment = 0; std::uint32_t callee_conversion = 0; bool value_initialize = false; };
 struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.
@@ -205,11 +209,17 @@ struct Conversion {
     unsigned char rank = 255, qualification = 0;
     bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false, implicit_move = false;
     unsigned char preference = 0;
-    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction };
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
 struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false; };
+struct UserConversion {
+    Conversion object, result;
+    EntityId temporary = 0, source_temporary = 0, object_entity = 0;
+    unsigned adjustment = 0; bool prepared = false;
+};
+struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
 struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
 struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };
 struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; };

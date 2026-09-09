@@ -176,6 +176,8 @@ class Procedural {
     Value convert(Value v, TypeId target, bool fold_widen = false);
     Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false);
     Value converted(NodeId n, const semantic::Conversion& c);
+    Value converted_value(Value value, const semantic::Conversion& conversion);
+    Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value());
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
     bool discarded_access(NodeId n);

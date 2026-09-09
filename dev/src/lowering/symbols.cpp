@@ -91,6 +91,7 @@ SymbolId Procedural::symbol(EntityId id, bool base)
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;
         target.function.terminal = operator_terminal(id);
+        if (auto conversion = sem.member_fact(id).conversion_target) target.function.conversion = abi_type(conversion);
         if (auto suffix = sem.literal_suffix(id)) {
             target.function.terminal = abi_mangle::ABI_TERMINAL_LITERAL;
             target.function.literal_suffix = abi.string(spelling(suffix));

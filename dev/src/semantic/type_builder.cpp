@@ -206,6 +206,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     TypeId canonical = types.signature(t);
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast[ast[name].last].op != OP_COMPL;
+    TypeId conversion_target = calls && ast[ast[name].last].op == KW_OPERATOR && ast[ast[name].last].detail ? types[canonical].child : 0;
+    if (conversion_target && (scopes[owner].kind != ScopeKind::Class || spec_has(specs,KW_STATIC) ||
+        spec_has(child(source,Kind::MemberSpecifiers),KW_STATIC) || types[canonical].count || types[canonical].variadic))
+        throw std::runtime_error("conversion function must be a nonstatic nullary member");
     EntityId cls = constructor ? scopes[owner].entity : 0;
     if (calls && function && types[t].ref != RefQualifier::None &&
         (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
@@ -216,7 +220,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
         e = selected;
     }
-    else if (function) e = declare_function(owner, id, source, canonical);
+    else if (function) e = declare_function(owner, id, source, canonical, false, conversion_target);
     else if (e && entities[e].kind == kind) {
         if (calls && scopes[owner].kind == ScopeKind::Class && owner == s)
             throw std::runtime_error("duplicate class member");
@@ -247,10 +251,18 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
+        if (conversion_target && !members[m].conversion_target) {
+            auto info = entities[scopes[owner].entity].class_info;
+            members[m].conversion_target = conversion_target;
+            members[m].next_conversion = class_facts[info].first_conversion;
+            class_facts[info].first_conversion = e;
+            auto k = key(owner,conversion_target);
+            conversion_bindings.put(k,merge_lookup(conversion_bindings.get(k),e));
+        }
         members[m].constructor = constructor;
         members[m].destructor = destructor;
         if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
-        members[m].explicit_constructor = spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
+        members[m].explicit_constructor |= spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
         NodeId special = child(init, Kind::SpecialInitializer);
         if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;

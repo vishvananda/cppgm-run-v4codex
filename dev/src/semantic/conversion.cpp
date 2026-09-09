@@ -124,11 +124,10 @@ bool Analyzer::similar_type(TypeId a, TypeId b)
     if (pointer(a)) return similar_type(types[a].child, types[b].child);
     return types.unqualified(a) == types.unqualified(b);
 }
-Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
+Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
 {
     ++conversion_work;
     Conversion c; c.target = to;
-    Expression x = expressions[n];
     Type target = types[to];
     bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
     if (x.form == ExpressionForm::Overload) {
@@ -148,7 +147,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
     if (ref) {
         if (field_fact(x.entity).bit_field) {
             if (target.kind != TypeKind::LRef || types[target.child].cv != 1) return c;
-            c = conversion(n, types.unqualified(target.child), user);
+            c = standard_conversion(x, types.unqualified(target.child), n);
             c.target = to; c.reference = true; c.temporary = true; return c;
         }
         unsigned added = 0;
@@ -167,7 +166,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
         if ((target.kind == TypeKind::LRef && types[target.child].cv != 1) ||
             (types[from].cv & ~types[target.child].cv) ||
             (target.kind == TypeKind::RRef && types.unqualified(from) == types.unqualified(target.child))) return c;
-        c = conversion(n, types.unqualified(target.child), user);
+        c = standard_conversion(x, types.unqualified(target.child), n);
         c.target = to; c.reference = true; c.qualification = types[target.child].cv;
         c.temporary = types.unqualified(from) != types.unqualified(target.child);
         c.preference = target.kind == TypeKind::LRef;
@@ -181,7 +180,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
         return c;
     }
     if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
-    if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && null_constant(n)) { c.rank = 2; return c; }
+    if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || (n && null_constant(n)))) { c.rank = 2; return c; }
     if (fundamental(to, FT_BOOL) && pointer(from)) { c.rank = 3; return c; }
     if (pointer(from) && pointer(to)) {
         unsigned added = 0;
@@ -197,11 +196,9 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
         }
     }
     if (arithmetic(from) && arithmetic(to) && types[to].kind != TypeKind::Named) {
-        c.rank = promote_expression(n) == to ? 1 : 2;
+        c.rank = (n ? promote_expression(n) : promote(from)) == to ? 1 : 2;
         return c;
     }
-    if (user && types[to].kind == TypeKind::Named && entities[types[to].entity].class_info)
-        return converting_constructor(n, to);
     return c;
 }
 void Analyzer::select_function(NodeId n, EntityId e)
@@ -235,6 +232,7 @@ void Analyzer::select_function(NodeId n, EntityId e)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (c.kind == Conversion::Kind::User) { prepare_user_conversion(n,c); return; }
     if (c.kind == Conversion::Kind::Construction) { materialize_conversion(n, c); return; }
     if (c.derived && c.kind != Conversion::Kind::Explicit) {
         TypeId from = expressions[n].type, to = types[c.target].child;
@@ -247,9 +245,9 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
     TypeId target = types.unqualified(c.target);
     if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts[n].type = target;
 }
-void Analyzer::require_conversion(NodeId n, TypeId target)
+void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 {
-    Conversion c = conversion(n, target);
+    Conversion c = direct && class_value(expressions[n].type) ? conversion_function(n,target,true) : conversion(n, target);
     if (!c.valid()) throw std::runtime_error("invalid implicit conversion");
     apply_conversion(n, c);
     expressions[n].incoming = conversions.size();
@@ -259,6 +257,7 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
     if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
+    if (n && c.kind == Conversion::Kind::User) prepare_user_conversion(n,c);
     // Materializing an operand can append its own constructor conversions.
     // Keep the owning operator's (bounded) operand slice contiguous.
     if (owner.count && owner.conversions + owner.count != conversions.size()) {
@@ -279,7 +278,7 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
             if (pointer(to)) to = types[to].child;
             check_base_access(from, to, facts[n].scope);
         }
-        if (c.function && c.kind != Conversion::Kind::Construction) select_function(n, c.function);
+        if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);
         expressions[n].incoming = conversions.size();
     }
@@ -296,7 +295,7 @@ void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, s
 }
 Conversion Analyzer::boolean_conversion(NodeId n)
 {
-    Conversion c = conversion(n, types.fundamental(FT_BOOL));
+    Conversion c = class_value(expressions[n].type) ? conversion_function(n,types.fundamental(FT_BOOL),true) : conversion(n, types.fundamental(FT_BOOL));
     // Contextual bool conversion uses direct-initialization, which admits
     // nullptr_t; ordinary copy-initialization of bool still rejects it.
     if (fundamental(expressions[n].type, FT_NULLPTR_T)) {
@@ -315,7 +314,9 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
     if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
         if (!ast[n].first) { facts[n].type = target; expressions[n].type = target; expressions[n].ready = true; return; }
         if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
-        initialize(ast[n].first, target, s);
+        if (ast[n].kind != Kind::BracedInit && ast[ast[n].first].kind != Kind::BracedInit && class_value(expression(ast[n].first,s).type) && !class_value(value_type(target)))
+            require_conversion(ast[n].first,target,true);
+        else initialize(ast[n].first, target, s);
         if (ast[n].kind == Kind::BracedInit) list_conversion(ast[n].first, target);
         facts[n].type = target;
         return;

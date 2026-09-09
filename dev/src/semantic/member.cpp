@@ -16,6 +16,10 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
         auto edge = class_facts[entities[cls].class_info].first_base;
         cls = edge ? bases[edge].base : 0;
     }
+    // [over.match.funcs]/4: conversion functions rank as members of the
+    // implied object's class. The selected call records its base adjustment.
+    if (members[entities[e].member_info].conversion_target)
+        wanted = types.qualify(types.unqualified(object),f.cv);
     Conversion c;
     c.target = types.compound(f.ref == RefQualifier::Rvalue ? TypeKind::RRef : TypeKind::LRef, wanted);
     c.reference = true;
