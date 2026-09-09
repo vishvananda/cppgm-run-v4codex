@@ -96,3 +96,16 @@ measurement. Capture expanded work telemetry separately. This evaluates the
 correct common subset; the new control, volatile, static-conversion and
 multi-file reducers establish correctness and are not speed comparisons against
 incorrect A output. Numeric diagnostic thresholds retain their existing scope.
+
+The completed independent campaign identified repeated display-string creation
+when checking whether a C export needed explicit `object` metadata. Restrict
+that check to external C functions, using the already interned display identity.
+Preserve `independent-performance.json` and its binary `60f7088f` as A for a
+separate final delta. Freeze B at `/tmp/pa10-consolidated-final`; run all nine
+compiler and three long runtime inputs, the same AAAA/ABBA/ABBA protocol and
+flags, into `consolidated-performance.json` and fresh
+`/tmp/pa10-consolidated-performance` artifacts. `benchmark.py delta` records the
+explicit A commit. Exact byte-equal outputs establish equivalence directly;
+unequal LowIR still uses the unchanged course comparator. This adds no relaxed
+comparison rule and avoids expensive normalization of identical files. The
+course suites and both native/IR audits remain independent correctness checks.

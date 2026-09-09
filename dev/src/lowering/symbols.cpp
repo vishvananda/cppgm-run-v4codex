@@ -102,7 +102,8 @@ SymbolId Procedural::symbol(EntityId id)
     SymbolId sid = fresh_symbol(display); symbols[id] = sid;
     // The ordinary LowIR spelling already supplies this object name. Avoid
     // asking a native adapter to publish the same label twice.
-    if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
+    if (e.c_linkage && !internal && e.kind == semantic::EntityKind::Function &&
+        e.builtin == semantic::Entity::NoBuiltin && p.symbols[sid.index-1].name == p.intern(display)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
     return sid;

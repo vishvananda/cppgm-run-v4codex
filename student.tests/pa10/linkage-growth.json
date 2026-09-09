@@ -1,0 +1,83 @@
+{
+  "compiler_sha256": "4e6c7fb9680b23d818a887b7dbc5977dce15ba8a9b9ca584e5a86a7ca24e19f7",
+  "flags": [
+    "--emit-lowir",
+    "--validate-lowir",
+    "--stats",
+    "-O0"
+  ],
+  "records": [
+    {
+      "translation_units": 4,
+      "declarations_per_unit": 512,
+      "source_hashes": [
+        "70343fcb6b113d45335772853415cc71c86c9e4b634952a22bbd0f465eef8453",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6"
+      ],
+      "output_sha256": "b9da210fca48ae4f6ece67f731f00d2291d3b0ca2d0031f89e805a3ba7f426f0",
+      "totals": {
+        "frontend_ms": 15.2724,
+        "lowering_ms": 1.35693,
+        "write_ms": 0.368382,
+        "peak_rss_kib": 18448,
+        "nodes": 22547,
+        "static_requests": 0,
+        "static_hits": 0,
+        "control_work": 2,
+        "discard_work": 0,
+        "linkage_requests": 2049,
+        "linkage_hits": 1536,
+        "abi_nodes": 1026,
+        "abi_bytes": 154166,
+        "instructions": 1,
+        "operands": 1,
+        "ir_pool_growths": 37,
+        "ir_capacity_bytes": 131200
+      }
+    },
+    {
+      "translation_units": 16,
+      "declarations_per_unit": 512,
+      "source_hashes": [
+        "70343fcb6b113d45335772853415cc71c86c9e4b634952a22bbd0f465eef8453",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6",
+        "6bf9ef5ffafacec06b86810e06ef0b8780e5cb88b433adc94c9c83aa1d0c75d6"
+      ],
+      "output_sha256": "b9da210fca48ae4f6ece67f731f00d2291d3b0ca2d0031f89e805a3ba7f426f0",
+      "totals": {
+        "frontend_ms": 49.7481,
+        "lowering_ms": 2.63098,
+        "write_ms": 0.328471,
+        "peak_rss_kib": 19020,
+        "nodes": 90155,
+        "static_requests": 0,
+        "static_hits": 0,
+        "control_work": 2,
+        "discard_work": 0,
+        "linkage_requests": 8193,
+        "linkage_hits": 7680,
+        "abi_nodes": 1026,
+        "abi_bytes": 154166,
+        "instructions": 1,
+        "operands": 1,
+        "ir_pool_growths": 37,
+        "ir_capacity_bytes": 131200
+      }
+    }
+  ]
+}

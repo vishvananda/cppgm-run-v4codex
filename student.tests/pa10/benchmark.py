@@ -55,7 +55,7 @@ def run(cmd,**kw):
     assert r.returncode==0,(cmd,r.returncode,r.stderr,r.stdout)
     return r
 
-def measure(a,b,dest,work,prior=None,final=False):
+def measure(a,b,dest,work,prior=None,final=False,baseline_commit='17f3deb7'):
     work.mkdir(parents=True,exist_ok=True)
     binaries=[a.resolve(),b.resolve()]
     cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
@@ -66,7 +66,7 @@ def measure(a,b,dest,work,prior=None,final=False):
             sha256=sha(ROOT/'reference-binaries/lowir2native'),
             bundle='c2f713cd70d06170632bfde3e75dd6fe1aa44d98'),
         text_metric='compiler .text; sectionless native executable payload after ELF entry (no static data)',
-        implementation_commits=['17f3deb7',run(['git','rev-parse','HEAD'],cwd=ROOT).stdout.strip()],
+        implementation_commits=[baseline_commit,run(['git','rev-parse','HEAD'],cwd=ROOT).stdout.strip()],
         binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in binaries],
         inputs={},observations=[],runtime=[],startup=[],budgets=dict(wall_ratio=1.10,rss_ratio=1.20,rss_add_kib=16384,text_add_bytes=131072,scale_wall=5.5,scale_rss=5.0),
         source_hashes={str(p.relative_to(ROOT)):sha(p) for p in Path(__file__).parent.glob('*.py')})
@@ -100,10 +100,12 @@ def measure(a,b,dest,work,prior=None,final=False):
         for label in (0,1):
             run([binaries[label],mode,*flags,'-o',outputs[label],src])
             Path(str(outputs[label])+'.exit_status').write_text('EXIT_SUCCESS\n')
-        if mode=='--emit-semantics':assert outputs[0].read_bytes()==outputs[1].read_bytes()
-        else:run([ROOT/'pa10/scripts/compare_results.pl','ref','my',src],cwd=ROOT/'pa10')
+        exact=outputs[0].read_bytes()==outputs[1].read_bytes()
+        if mode=='--emit-semantics':assert exact
+        elif not exact:run([ROOT/'pa10/scripts/compare_results.pl','ref','my',src],cwd=ROOT/'pa10')
         result['inputs'][name]=dict(path=str(src),sha256=sha(src),scale=scale,mode=mode,
-            output_hashes=[sha(p) for p in outputs],output_bytes=[p.stat().st_size for p in outputs])
+            output_hashes=[sha(p) for p in outputs],output_bytes=[p.stat().st_size for p in outputs],
+            equivalence='byte-identical' if exact else 'course-comparator')
         for ordinal,label in enumerate(ORDER):
             r=observe([binaries[label],mode,*flags,'-o',outputs[label],src])
             assert not r['stderr'],r['stderr']
@@ -159,6 +161,7 @@ def verify(data):
 if __name__=='__main__':
     if sys.argv[1]=='measure': measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve())
     elif sys.argv[1]=='final':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),final=True)
+    elif sys.argv[1]=='delta':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),final=True,baseline_commit=sys.argv[6])
     elif sys.argv[1]=='continue':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),Path(sys.argv[6]))
     elif sys.argv[1]=='verify':verify(json.loads(Path(sys.argv[2]).read_text()))
     else:report(json.loads(Path(sys.argv[2]).read_text()))
