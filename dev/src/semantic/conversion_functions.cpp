@@ -90,6 +90,7 @@ Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allo
 }
 Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 {
+    if (ast[n].kind == syntax::Kind::BracedInit) return list_initialization(n,to);
     Conversion result = standard_conversion(expressions[n],to,n);
     if (result.valid() || !user) return result;
     bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;

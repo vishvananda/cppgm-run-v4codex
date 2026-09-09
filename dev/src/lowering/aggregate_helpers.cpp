@@ -15,7 +15,10 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     helper.function = FunctionId(p.functions.size()+1);
     lowir_model::Function f; f.symbol = fresh_symbol("@__aggregate_" + std::to_string(target));
     f.signature = signature(sem.types.function(sem.types.fundamental(FT_VOID), parameters, false), helper.function);
-    p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
+    bool throwing = false;
+    for (auto child = action.first; child; child = sem.initializers[child].next)
+        throwing |= sem.initializers[child].helper_transfer != 0;
+    if (!throwing) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     p.functions.push_back(f);
     auto& symbol = p.symbols[f.symbol.index-1]; symbol.kind = lowir_model::Symbol::FunctionSymbol;
     symbol.entity = helper.function.index; symbol.metadata.binding = ir_model::SBM_INTERNAL;
@@ -28,14 +31,14 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     if (action.kind != InitKind::Group || sem.types[action.type].kind != TypeKind::Named) return false;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (!item.field || !type(item.type).scalar() || item.kind != InitKind::Scalar) return false;
+        if (!item.field || (!type(item.type).scalar() && !item.helper_transfer) || (item.kind != InitKind::Scalar && item.kind != InitKind::Converted)) return false;
     }
     SymbolId callee = aggregate_helper(plan);
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(callee)); call_work.push_back(address(location).operand);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        call_work.push_back(initialization_value(item.source, item.type).operand);
+        call_work.push_back((item.kind == InitKind::Converted ? converted(item.source,sem.conversion_fact(item.conversion)) : initialization_value(item.source,item.type)).operand);
     }
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin); return true;
@@ -49,21 +52,48 @@ void Procedural::emit_aggregate_helpers()
         std::vector<SlotId> slots;
         for (unsigned j = 0; j < signature.parameters.count; ++j) {
             auto parameter = p.parameters[signature.parameters.begin+j];
-            auto slot = builder->add_slot(0, parameter.type); slots.push_back(slot);
-            emit(Opcode::Store, parameter.type, {Operand::value(parameter.value), Operand::slot(slot)});
+            auto action = j ? sem.initializers[aggregate_actions[helper.actions+j-1]] : semantic::InitAction();
+            auto slot = builder->add_slot(0, j ? type(action.type) : parameter.type); slots.push_back(slot);
+            if (action.helper_parameter) {
+                objects[action.helper_parameter] = slot;
+                object_addresses[action.helper_parameter] = lowir_model::ValueId();
+                if (sem.indirect_value(action.type)) object_addresses[action.helper_parameter] = parameter.value;
+                else if (!sem.empty_class(action.type)) {
+                    Value at = address(Value(Operand::slot(slot),type(action.type),action.type,true));
+                    Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(action.type); copy.alignment = sem.object_alignment(action.type);
+                    emit(copy,{Operand::value(parameter.value),at.operand});
+                }
+                activate_temporary(action.helper_parameter);
+            } else emit(Opcode::Store, parameter.type, {Operand::value(parameter.value), Operand::slot(slot)});
         }
         for (unsigned j = 0; j < helper.count; ++j) {
             auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
-            Value value = emit(Opcode::Load, type(t), {Operand::slot(slots[j+1])}); value.type = t;
+            Value value;
+            if (!action.helper_transfer) { value = emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}); value.type = t; }
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slots[0])});
             Instruction index(Opcode::Index, IRType::I8); index.projection = ir_model::IPK_FIELD;
             Value at = emit(index, {base.operand, Operand::integer(sem.entities[field].member_offset)});
             at.type = t; at.address = true; at.init_offset = sem.entities[field].member_offset; at.initializing = true;
             if (sem.field_fact(field).bit_field) at.bit_field = field;
-            store(value, at);
+            if (action.helper_transfer) {
+                Value source = address(binding(action.helper_parameter));
+                if (sem.direct_transfer(action.helper_transfer)) {
+                    if (!sem.empty_class(t)) {
+                        Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
+                        emit(copy,{source.operand,at.operand});
+                    }
+                } else {
+                    auto transfer = sem.conversion_objects[sem.conversion_fact(action.conversion).materialization].call;
+                    std::size_t begin = call_work.size();
+                    call_work.push_back(Operand::symbol(symbol(action.helper_transfer))); call_work.push_back(at.operand); call_work.push_back(source.operand);
+                    for (unsigned k = 1; k < transfer.argument_count; ++k)
+                        call_work.push_back(converted(sem.call_arguments[transfer.arguments+k],sem.conversion_fact(transfer.conversions+k)).operand);
+                    guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin); call_work.resize(begin);
+                }
+            } else store(value, at);
         }
-        emit(Opcode::Return, IRType(), {}); builder.reset();
+        clean_inline(live,0); emit(Opcode::Return, IRType(), {}); emit_cleanups(); builder.reset();
     }
 }
 } }

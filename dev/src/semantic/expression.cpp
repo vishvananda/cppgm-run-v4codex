@@ -95,9 +95,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         return r;
     }
     case Kind::BracedInit:
-        if (!first) { r.type = types.fundamental(FT_INT); return r; }
-        if (first != ast[n].last) throw std::runtime_error("excess scalar braces");
-        return value_fact(expression(first, s));
+        for (NodeId c = first; c; c = ast[c].next) expression(c,s);
+        r.form = ExpressionForm::InitializerList; return r;
     case Kind::Parenthesized: return value_fact(expression(first, s));
     case Kind::Call: return call_expression(n, s);
     case Kind::Unary: case Kind::Postfix: return unary_expression(n, s);

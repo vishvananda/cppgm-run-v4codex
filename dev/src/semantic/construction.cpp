@@ -3,18 +3,18 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope, bool direct)
+EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope, bool direct, bool probe)
 {
     EntityId cls = types[t].entity;
     if (args.size() == 1 && types[expressions[args[0]].type].kind == TypeKind::Named &&
         (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t) || class_value(expressions[args[0]].type)))
         ensure_transfers(t, false);
     if (args.empty() && !class_facts[entities[cls].class_info].user_constructor && !class_facts[entities[cls].class_info].inherited_base)
-        return default_constructor(t, scope);
+        return default_constructor(t, scope, !probe);
     EntityId binding = class_facts[entities[cls].class_info].constructor;
     if (!binding) {
-        if (!args.empty()) throw std::runtime_error("no matching constructor");
-        return default_constructor(t, scope);
+        if (!args.empty()) { if (probe) return 0; throw std::runtime_error("no matching constructor"); }
+        return default_constructor(t, scope, !probe);
     }
     struct Viable { EntityId entity; std::size_t offset; };
     std::vector<Viable> viable;
@@ -38,30 +38,33 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         }
         if (valid) viable.push_back({e, begin}); else sequences.resize(begin);
     }
-    if (viable.empty()) throw std::runtime_error("no viable constructor");
+    if (viable.empty()) { if (probe) return 0; throw std::runtime_error("no viable constructor"); }
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i)
         if (better(sequences.data()+viable[i].offset, sequences.data()+viable[best].offset, args.size())) best = i;
     for (std::size_t i = 0; i < viable.size(); ++i)
-        if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
+        if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size())) {
+            if (probe) { if (result) result->form = ExpressionForm::Overload; return 0; }
             throw std::runtime_error("ambiguous constructor");
+        }
     EntityId selected = viable[best].entity;
-    if (deleted_transfer(selected)) throw std::runtime_error("deleted constructor");
+    if (!probe && deleted_transfer(selected)) throw std::runtime_error("deleted constructor");
     EntityId access = selected;
     while (members[entities[access].member_info].inherited_constructor)
         access = members[entities[access].member_info].inherited_constructor;
-    check_access(access, scope, entities[access].owner);
+    if (!probe) check_access(access, scope, entities[access].owner);
     auto member = entities[selected].member_info;
-    if (!result && members[member].default_conversions) { demand_member(selected); return selected; }
+    if (!probe && !result && members[member].default_conversions) { demand_member(selected); return selected; }
     Type f = types[entities[selected].type];
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;
     for (std::size_t i = 0; i < std::max<std::size_t>(args.size(), f.count); ++i) {
         NodeId arg = i < args.size() ? args[i] : default_arguments[entities[selected].defaults+i];
         Conversion c = i < args.size() ? sequences[viable[best].offset+i] : conversion(arg, types.parameters[f.offset+i]);
-        if (!c.valid()) throw std::runtime_error("invalid constructor default argument");
+        if (!c.valid()) { if (probe) return 0; throw std::runtime_error("invalid constructor default argument"); }
         arguments.push_back(arg); selected_arguments.push_back(c);
     }
+    if (probe) { if (result) store_call(*result,arguments,selected_arguments); return selected; }
     if (result) record_call(*result, arguments, selected_arguments);
     else {
         Expression defaults;
@@ -71,13 +74,13 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     if (!result || !converting_transfer(selected,*result)) demand_member(selected);
     return selected;
 }
-EntityId Analyzer::default_constructor(TypeId t, ScopeId s)
+EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
-    if (class_facts[c].constructor && (class_facts[c].user_constructor || class_facts[c].inherited_base)) return choose_constructor(t, {}, 0, s);
+    if (class_facts[c].constructor && (class_facts[c].user_constructor || class_facts[c].inherited_base)) return choose_constructor(t, {}, 0, s, true, !demand);
     EntityId ctor = class_facts[c].implicit_constructor;
     if (!ctor) {
         ctor = make_entity(EntityKind::Function, entities[cls].scope, entities[cls].name, 0);
@@ -88,7 +91,7 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s)
         members[m].synthetic = members[m].constructor = true;
         class_facts[c].implicit_constructor = ctor;
     }
-    demand_member(ctor);
+    if (demand) demand_member(ctor);
     return ctor;
 }
 bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)

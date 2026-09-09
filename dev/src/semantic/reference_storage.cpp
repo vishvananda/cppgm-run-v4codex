@@ -16,6 +16,7 @@ void Analyzer::static_reference(EntityId e)
         scalar = !class_value(types[entities[e].type].child) && (user_conversions[c.materialization].result.temporary ||
             (types[returned].kind != TypeKind::LRef && types[returned].kind != TypeKind::RRef && !class_value(returned)));
     }
+    if (c.kind == Conversion::Kind::List) scalar = false;
     if (scalar) {
         EntityId object = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,entities[e].owner),0,n);
         entities[object].type = types[entities[e].type].child;
@@ -30,8 +31,7 @@ void Analyzer::retain_reference_object(NodeId n, EntityId reference, bool condit
     if (!n) return;
     EntityId temporary = object_fact(n).temporary;
     Conversion c = conversions[expressions[n].incoming];
-    if (c.reference && c.kind == Conversion::Kind::Construction) temporary = conversion_objects[c.materialization].temporary;
-    if (c.reference && c.kind == Conversion::Kind::User) temporary = user_conversions[c.materialization].temporary;
+    if (c.reference) temporary = bound_temporary(n);
     if (temporary) {
         if (static_temporaries.get(temporary)) return;
         entities[temporary].definition = n; entities[temporary].is_static = true;

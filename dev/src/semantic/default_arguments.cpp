@@ -26,9 +26,11 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
         if (a) {
             if (default_arguments[index]) throw std::runtime_error("duplicate default argument");
             NodeId value = ast[a].first;
-            initialize(value, types.parameters[f.offset+i], s);
-            while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer || ast[value].kind == Kind::BracedInit)
+            while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
                 value = ast[value].first;
+            if (ast[value].kind == Kind::BracedInit) {
+                expression(value,s); require_conversion(value,types.parameters[f.offset+i]);
+            } else initialize(ast[a].first,types.parameters[f.offset+i],s);
             default_arguments[index] = value;
         }
         if (default_arguments[index]) seen = true;

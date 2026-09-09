@@ -3,6 +3,24 @@
 #include <algorithm>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+EntityId Analyzer::converted_temporary(const Conversion& c) const
+{
+    if (c.kind == Conversion::Kind::Construction) return conversion_objects[c.materialization].temporary;
+    if (c.kind == Conversion::Kind::User) return user_conversions[c.materialization].temporary;
+    if (c.kind == Conversion::Kind::List) return list_objects[c.materialization].temporary;
+    return 0;
+}
+EntityId Analyzer::bound_temporary(NodeId n) const
+{
+    auto c = conversions[expressions[n].incoming];
+    if (c.reference) if (auto temporary = converted_temporary(c)) return temporary;
+    if (auto temporary = object_fact(n).temporary) return temporary;
+    if (c.kind == Conversion::Kind::List && list_plans[list_objects[c.materialization].plan].direct_binding)
+        return bound_temporary(call_arguments[list_objects[c.materialization].call.arguments]);
+    if (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments)
+        return bound_temporary(ast[n].first);
+    return 0;
+}
 EntityId Analyzer::type_destructor(TypeId t) const
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
@@ -44,8 +62,7 @@ void Analyzer::register_destruction(EntityId e)
         (scopes[entities[e].owner].kind == ScopeKind::Block || scopes[entities[e].owner].kind == ScopeKind::Control)) {
         NodeId n = entities[e].initializer;
         while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
-        auto c = conversions[expressions[n].incoming];
-        EntityId temporary = c.reference && c.materialization ? (c.kind == Conversion::Kind::User ? user_conversions[c.materialization].temporary : conversion_objects[c.materialization].temporary) : object_fact(n).temporary;
+        EntityId temporary = bound_temporary(n);
         if (temporary) {
             reference_temporaries.put(e,temporary);
             object_destructors.put(e,object_destructor(temporary));

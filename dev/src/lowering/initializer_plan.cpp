@@ -17,6 +17,7 @@ Value Procedural::string_element(NodeId n, TypeId t, std::uint64_t index)
 bool Procedural::constant_plan(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
+    if (action.kind == InitKind::Converted) return false;
     if (action.kind == InitKind::Constructor) return !sem.class_initialization(action.source,action.type).source && sem.constant_construction(action.source, action.type).valid;
     if (action.kind == InitKind::Value) return !sem.value_constructor(action.type);
     if (action.kind == InitKind::String) return true;
@@ -70,6 +71,13 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
 {
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
+    if (action.kind == InitKind::Converted) {
+        auto c = sem.conversion_fact(action.conversion);
+        if (sem.class_value(action.type)) construct_value(action.source,c,address(location));
+        else if (target.kind == TypeKind::Array) list_conversion(c,address(location));
+        else store(converted(action.source,c),location);
+        return;
+    }
     if (action.kind == InitKind::Scalar) {
         Value value = action.source ? incoming(action.source) : Value(Operand::integer(0), type(action.type), action.type);
         store(value, location); return;
@@ -128,7 +136,7 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
 {
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
-    if (action.kind == InitKind::Value) {
+    if (action.kind == InitKind::Value || action.kind == InitKind::Converted) {
         Value at = initialization_address(root, indirect, path); at.type = action.type;
         initialize_plan(plan, at); return;
     }

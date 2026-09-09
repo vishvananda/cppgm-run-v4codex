@@ -80,6 +80,7 @@ class Procedural {
     Value return_destination;
     IRType result_type() const;
     void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination);
+    Value list_conversion(const semantic::Conversion& conversion, Value destination = Value());
     Value class_temporary(EntityId object, TypeId type);
     Value class_address(EntityId object, TypeId type);
     SlotId this_slot;

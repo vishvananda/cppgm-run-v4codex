@@ -56,6 +56,13 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
         if (a[i].rank == 5) {
+            bool al = a[i].kind == Conversion::Kind::ListPlan || a[i].kind == Conversion::Kind::List;
+            bool bl = b[i].kind == Conversion::Kind::ListPlan || b[i].kind == Conversion::Kind::List;
+            if (al && bl && types.unqualified(value_type(a[i].target)) == types.unqualified(value_type(b[i].target)) &&
+                a[i].reference && b[i].reference) {
+                if (a[i].preference > b[i].preference) return false;
+                strict |= a[i].preference < b[i].preference;
+            }
             if (a[i].kind == Conversion::Kind::Construction && b[i].kind == Conversion::Kind::Construction &&
                 a[i].function == b[i].function && a[i].reference && b[i].reference) {
                 if (a[i].preference > b[i].preference) return false;
@@ -188,6 +195,14 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             }
         }
         if (cast_type) {
+            if (ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) {
+                auto c = list_initialization(args_node,cast_type,s,true);
+                result.type = cast_type; result.form = ExpressionForm::ListValue;
+                record_conversion(result,args_node,c); facts[n].type = cast_type;
+                record_object(result,0,0,0);
+                object_uses[result.object_use].temporary = list_objects[conversions[result.conversions].materialization].temporary;
+                return result;
+            }
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type, args, &result, s);
                 if (converting_transfer(ctor,result)) {

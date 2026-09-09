@@ -87,8 +87,10 @@ struct FieldFacts {
     unsigned char shift = 0, width = 0;
     bool bit_field = false, may_clear_unit = true;
 };
-enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value };
+enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted };
 struct InitAction {
+    std::uint32_t conversion = 0;
+    EntityId helper_transfer = 0, helper_parameter = 0;
     TypeId type = 0;
     NodeId source = 0;
     EntityId field = 0;
@@ -188,7 +190,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -211,11 +213,20 @@ struct Conversion {
     unsigned char rank = 255, qualification = 0;
     bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false, implicit_move = false;
     unsigned char preference = 0;
-    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User };
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
 struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false; };
+struct ListPlan {
+    NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
+    EntityId constructor = 0; Expression call;
+    std::uint32_t fields = 0, explicit_count = 0;
+    bool aggregate = false, direct_binding = false, direct = false, zero = false;
+    unsigned char state = 0, rank = 255;
+};
+struct ListField { EntityId field = 0; TypeId type = 0; std::uint64_t index = 0, count = 1; };
+struct ListObject { EntityId temporary = 0; std::uint32_t plan = 0, initializer = 0; Expression call; };
 struct UserConversion {
     Conversion object, result;
     EntityId temporary = 0, source_temporary = 0, object_entity = 0;

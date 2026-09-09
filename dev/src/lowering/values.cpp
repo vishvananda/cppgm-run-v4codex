@@ -126,6 +126,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
+    if (c.kind == semantic::Conversion::Kind::List) return list_conversion(c);
     if (c.kind == semantic::Conversion::Kind::User) return user_conversion(n,c);
     if (c.kind == semantic::Conversion::Kind::Construction) {
         auto materialized = sem.conversion_objects[c.materialization];

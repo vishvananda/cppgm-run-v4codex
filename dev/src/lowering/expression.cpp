@@ -8,6 +8,13 @@ Value Procedural::expression(NodeId n, bool location)
     if (!n) throw std::logic_error("missing expression node");
     auto fact = sem.expression_fact(n);
     NodeId a = ast[n].first;
+    if (fact.form == semantic::ExpressionForm::ListValue) {
+        auto c = sem.conversion_fact(fact.conversions);
+        EntityId e = sem.list_objects[c.materialization].temporary;
+        Value pointer = class_address(e,fact.type);
+        list_conversion(c,pointer); activate_temporary(e);
+        pointer.type = fact.type; pointer.address = true; return pointer;
+    }
     if (fact.form == semantic::ExpressionForm::OperatorCall) return call(n);
     if (fact.form >= semantic::ExpressionForm::FloatFinite && fact.form <= semantic::ExpressionForm::FloatClassify) return floating_builtin(n);
     if (fact.form == semantic::ExpressionForm::LiteralCall) {

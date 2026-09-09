@@ -36,6 +36,8 @@ public:
     bool constructor_needed(EntityId e);
     bool destructor_needed(EntityId e);
     EntityId type_destructor(TypeId t) const;
+    EntityId converted_temporary(const Conversion& c) const;
+    EntityId bound_temporary(NodeId n) const;
     bool destructor_member(EntityId e) const;
     bool function_nonthrowing(EntityId e);
     EntityId object_destructor(EntityId e) const { return object_destructors.get(e); }
@@ -69,6 +71,8 @@ public:
     EntityId anonymous_object(NodeId declaration) const { return anonymous_objects.get(declaration); }
     const FieldFacts& field_fact(EntityId e) const { return field_facts[field_index.get(e)]; }
     std::vector<InitAction> initializers = std::vector<InitAction>(1);
+    std::vector<ListPlan> list_plans = std::vector<ListPlan>(1);
+    std::vector<ListObject> list_objects = std::vector<ListObject>(1);
     std::uint32_t initializer_plan(NodeId n, TypeId t) const;
     bool zero_value(TypeId t);
     bool empty_value(TypeId t);
@@ -81,6 +85,13 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    Index list_index, direct_list_index, empty_list_index;
+    std::vector<ListField> list_fields;
+    Conversion list_initialization(NodeId n, TypeId to, ScopeId s = 0, bool direct = false);
+    Conversion list_element(NodeId& cursor, TypeId to, ScopeId s);
+    std::uint32_t list_aggregate(NodeId& cursor, TypeId to, ScopeId s);
+    void prepare_list(NodeId n, Conversion& c);
+    void store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected);
     EntityId global_allocation(ETokenType op, bool array);
     bool array_operator(NodeId name) const;
     Expression delete_expression(NodeId n, ScopeId s);
@@ -252,8 +263,8 @@ private:
     void demand_specialization(EntityId e);
     void demand_member(EntityId e);
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
-    EntityId default_constructor(TypeId t, ScopeId s = 0);
-    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true);
+    EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
+    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true, bool probe = false);
     bool converting_transfer(EntityId constructor, const Expression& call) const;
     Conversion elided_conversion(const Expression& call, TypeId target);
     void constructor_actions(EntityId e);

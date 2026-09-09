@@ -3,6 +3,7 @@ namespace cppgm { namespace semantic {
 std::vector<TypeId> Analyzer::builtin_operand_types(NodeId n)
 {
     TypeId source = expressions[n].type;
+    if (!source) return {};
     if (!class_value(source)) return {decay(source)};
     std::vector<TypeId> result;
     Index seen;

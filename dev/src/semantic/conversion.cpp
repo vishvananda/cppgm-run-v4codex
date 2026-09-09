@@ -232,6 +232,8 @@ void Analyzer::select_function(NodeId n, EntityId e)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (c.kind == Conversion::Kind::ListPlan) { prepare_list(n,c); return; }
+    if (c.kind == Conversion::Kind::List) return;
     if (c.kind == Conversion::Kind::User) { prepare_user_conversion(n,c); return; }
     if (c.kind == Conversion::Kind::Construction) { materialize_conversion(n, c); return; }
     if (c.derived && c.kind != Conversion::Kind::Explicit) {
@@ -256,6 +258,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
+    if (c.kind == Conversion::Kind::ListPlan) prepare_list(n,c);
     if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
     if (n && c.kind == Conversion::Kind::User) prepare_user_conversion(n,c);
     // Materializing an operand can append its own constructor conversions.
@@ -278,7 +281,7 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
             if (pointer(to)) to = types[to].child;
             check_base_access(from, to, facts[n].scope);
         }
-        if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User) select_function(n, c.function);
+        if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User && c.kind != Conversion::Kind::List) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);
         expressions[n].incoming = conversions.size();
     }
@@ -286,10 +289,14 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 }
 void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected)
 {
-    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) apply_conversion(args[j], selected[j]);
+    for (std::size_t j = 0; j < args.size(); ++j) if (args[j] || selected[j].kind == Conversion::Kind::ListPlan) apply_conversion(args[j], selected[j]);
+    store_call(owner,args,selected);
+    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions[args[j]].incoming = owner.conversions+j;
+}
+void Analyzer::store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected)
+{
     owner.arguments = call_arguments.size(); owner.argument_count = args.size();
     owner.conversions = conversions.size(); owner.count = args.size();
-    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions[args[j]].incoming = conversions.size()+j;
     conversions.insert(conversions.end(), selected.begin(), selected.end());
     call_arguments.insert(call_arguments.end(), args.begin(), args.end());
 }
@@ -307,6 +314,9 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
 {
     if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s)) return;
     if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s); return; }
+    if (ast[n].kind == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
+        expression(n,s); require_conversion(n,target); return;
+    }
     if (aggregate_type(target) && (types[target].kind == TypeKind::Array || ast[n].kind == Kind::BracedInit ||
         ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::ParenInitializer)) {
         aggregate_initialization(n, target, s); return;

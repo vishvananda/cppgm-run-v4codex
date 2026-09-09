@@ -18,10 +18,10 @@ fake AST, reference delegation or later native-backend performance gate.
 | Call boundary facts | Attribute -> validated EntityId -> LowIR metadata | Stable-prefix and abort controls pass. Survivor control 536 requires member-pointer representation and an indirect signature |
 | Allocation | Canonical scalar/array names -> selected functions, extent/cookie and actions -> bounded loops | All required new/delete comparisons pass. Personal checks cover sized delete, null, wide/zero/multidimensional bounds, alias destruction and distinct runtime function addresses |
 
-Six remaining compile rejections need target-typed lists. Braces currently get
-a scalar placeholder before overload selection; the next group must retain an
-untyped list, select its target, and record its initializer/temporary once.
-Twenty-five LowIR differences concern transfers, helper/ABI shapes and cleanup.
+Target-typed lists now preserve their untyped source through overload selection,
+then materialize selected defaults, references and aggregate prvalues. All six
+entry compile rejections compile. Twenty-seven remaining LowIR differences
+concern transfers, helper/ABI shapes and cleanup.
 Two inherited contract questions remain: PA11 bit-field constructor order versus
 PA12 copy-semantics order, and direct-object base-copy parameter passing. Preserve
 all fixtures/comparison rules unless the authorized reference-proof protocol applies.
@@ -30,7 +30,7 @@ all fixtures/comparison rules unless the authorized reference-proof protocol app
 
 [Member](performance.md), [transfer](transfer-performance.md),
 [value](value-performance.md), [conversion/reference](conversion-performance.md)
-and [allocation/aggregate/alias](allocation-performance.md) evidence retain frozen binaries, flags, inputs,
+and [allocation/aggregate/alias](allocation-performance.md) and [list](list-performance.md) evidence retain frozen binaries, flags, inputs,
 A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
 No runtime optimization gain is claimed for the new semantic paths.
 
@@ -77,3 +77,18 @@ No speculative pass, global retry or new positive-runtime exit gate is added.
   argument ownership require coordinated overload/materialization changes;
   member pointers require a distinct ABI value and call signature. Existing
   whole-object copy or allocation records cannot stand in for those facts.
+
+- List-group entry: clean `aee24d98`, fresh **226/257**, 31 fixture failures.
+  Untyped list -> target-keyed candidate -> per-use conversion/storage -> typed
+  constructor or aggregate helper. Aggregate member parameters own the selected
+  move and destruction. Reference storage uses conversion-kind-specific facts.
+  Current **230/257**, four old failures removed and no new failures, all six
+  old compile rejections compile; 49 personal checks pass. Earlier serial report
+  is **1327/1327**; file audit passes (three header advisories).
+  List performance evidence records .29%/.45% common latency cost, .21% largest
+  common RSS cost and linear new-path counters; no speed gain is claimed.
+  Logs: `/tmp/pa12-lists-stage5.log`, `/tmp/pa12-lists-final-prior.log`,
+  `/tmp/pa12-lists-final-personal.log`. An accidental overlapping pair of root
+  reports was discarded and rerun serially; its tallies are not evidence.
+  Next: parameter/result ABI classification and selected trivial transfer facts,
+  then full-expression cleanup regions and survivor member-pointer calls.
