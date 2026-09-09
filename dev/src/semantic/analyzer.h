@@ -54,6 +54,7 @@ public:
 private:
     Index field_index;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
+    std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);

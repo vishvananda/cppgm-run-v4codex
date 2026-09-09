@@ -85,3 +85,11 @@ evidence is retained unchanged.
   Four narrowly edited references are proved against LowIR/C++11 in
   [reference corrections](reference-corrections.md), with reduced inputs and
   the pinned bundle revision. No coverage or comparison changes.
+- Alignment/packing increment: **256/302**, eight additional existing failures
+  fixed. Attribute operands remain typed syntax; sparse ownership indexes share
+  the existing flat ID index. Preprocessor output snapshots pack state without
+  enlarging hot token structs; class layout consumes alignment and packing once.
+  Nine personal programs validate and execute, including nested named pack
+  stacks, `_Pragma`, GNU packed records and actual unaligned member stores.
+  Earlier PAs remain **1025/1025**. Next owner: one semantic aggregate cursor
+  must retain brace-elision/string/zero actions for local and global lowering.

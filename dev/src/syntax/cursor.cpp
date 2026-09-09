@@ -22,6 +22,7 @@ void Cursor::fill()
         throw std::runtime_error("source exceeds compact location capacity");
     Token token;
     token.kind = post.kind;
+    token.packing = post.source.packing;
     token.op = post.simple;
     token.text = post.identifier ? post.identifier : ids_.intern(post.source.spelling);
     Location location;

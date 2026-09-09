@@ -43,9 +43,55 @@ void Preprocessor::pragma(const std::string& text, IdentifierId filename)
 {
     SourceBuffer source(text);
     PPTokenCursor cursor(source, identifiers_, 0, false, true);
-    PPToken token = cursor.next();
-    while (token.kind == PPTokenKind::whitespace) token = cursor.next();
-    if (token.spelling.equals("once")) once(spelling(filename), true);
+    std::vector<ExpansionToken> tokens;
+    for (;;) {
+        PPToken token = cursor.next();
+        if (token.kind == PPTokenKind::eof) break;
+        if (token.kind == PPTokenKind::whitespace || token.kind == PPTokenKind::newline) continue;
+        ExpansionToken value; value.token = token;
+        value.token.spelling = persistent_.save(token.spelling);
+        tokens.push_back(value);
+    }
+    pragma(tokens, filename);
+}
+void Preprocessor::pragma(const std::vector<ExpansionToken>& tokens, IdentifierId filename)
+{
+    if (tokens.empty()) return;
+    if (tokens[0].is("once")) { once(spelling(filename), true); return; }
+    if (!tokens[0].is("pack")) return;
+    if (tokens.size() < 3 || !tokens[1].is("(") || !tokens.back().is(")")) throw std::runtime_error("invalid pack pragma");
+    std::size_t end = tokens.size()-1, i = 2;
+    if (i == end) { packing_ = 0; return; }
+    bool push = tokens[i].is("push"), pop = tokens[i].is("pop");
+    if (push || pop) ++i;
+    IdentifierId name = 0;
+    if ((push || pop) && i < end) {
+        if (!tokens[i++].is(",")) throw std::runtime_error("invalid pack stack operand");
+        if (i < end && tokens[i].token.kind == PPTokenKind::identifier) {
+            name = tokens[i++].token.identifier;
+            if (i < end && !tokens[i++].is(",")) throw std::runtime_error("invalid pack alignment separator");
+        }
+    }
+    bool has_value = i < end;
+    unsigned value = 0;
+    if (has_value) {
+        auto spelling = tokens[i++].token.spelling;
+        if (spelling.equals("1")) value = 1;
+        else if (spelling.equals("2")) value = 2;
+        else if (spelling.equals("4")) value = 4;
+        else if (spelling.equals("8")) value = 8;
+        else if (spelling.equals("16")) value = 16;
+        else if (!spelling.equals("0")) throw std::runtime_error("unsupported pack alignment");
+    }
+    if (i != end) throw std::runtime_error("excess pack pragma operands");
+    if (push) pack_stack_.push_back(PackFrame{name, packing_});
+    if (pop) {
+        std::size_t selected = pack_stack_.size();
+        if (name) while (selected && pack_stack_[selected-1].name != name) --selected;
+        if (!selected) throw std::runtime_error("pack stack entry not found");
+        packing_ = pack_stack_[selected-1].value; pack_stack_.resize(selected-1);
+    }
+    if (has_value) packing_ = value;
 }
 
 ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, MacroExpander& expansion)
@@ -136,7 +182,7 @@ void Preprocessor::directive()
     }
     if (command.is("error")) throw std::runtime_error("active error directive");
     if (command.is("pragma")) {
-        if (!rest.empty() && rest[0].is("once")) once(spelling(f.filename), true);
+        pragma(rest, f.filename);
         return;
     }
     if (!command.is("include") && !command.is("line")) throw std::runtime_error("unknown directive");

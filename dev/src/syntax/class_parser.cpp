@@ -6,10 +6,15 @@ namespace cppgm { namespace syntax {
 NodeId Parser::class_specifier()
 {
     std::size_t region_begin = in.consumed;
+    unsigned packing = in.peek().packing;
     NodeId key = leaf(Kind::ClassKey);
-    attributes();
+    std::uint32_t alignment = 0;
+    unsigned attributes_flags = attributes(&alignment);
     NodeId n = identifier() ? name(true) : 0;
     NodeId result = named(Kind::Class, n);
+    if (alignment) ast.alignment_owners.put(result, alignment);
+    if (packing) ast.class_packing.put(result, packing);
+    ast[result].flags |= attributes_flags;
     ast.append(result, key);
     ScopeId saved_scope = scope;
     ScopeId owner = n ? qualified_owner(n) : scope;

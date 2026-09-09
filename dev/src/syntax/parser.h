@@ -56,7 +56,7 @@ private:
     NodeId name_part(bool force_template, ScopeId owner, bool qualified);
     NodeId template_arguments();
     NodeId operator_name();
-    unsigned attributes();
+    unsigned attributes(std::uint32_t* alignment = 0);
     unsigned balanced(const char* open, const char* close);
 
     NodeId declaration();

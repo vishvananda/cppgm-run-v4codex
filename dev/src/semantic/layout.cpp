@@ -73,6 +73,7 @@ void Analyzer::class_layout(EntityId e)
         auto field_align = reference ? 8 : size(member.type, true);
         auto field_size = reference ? 8 : size(member.type);
         if (f.alignment && f.alignment < field_align) throw std::runtime_error("weakened field alignment");
+        if (class_facts[info].packing) field_align = std::min<std::uint64_t>(field_align, class_facts[info].packing);
         field_align = std::max(field_align, f.alignment);
         if (!f.bit_field || member.name) align = std::max(align, field_align);
         std::uint64_t at = is_union ? 0 : cursor;
@@ -118,6 +119,9 @@ void Analyzer::class_layout(EntityId e)
         }
         class_facts[info].empty = false;
     }
+    auto requested = class_facts[info].requested_alignment;
+    if (requested && requested < align) throw std::runtime_error("weakened class alignment");
+    align = std::max(align, requested);
     class_facts[info].alignment = align;
     class_facts[info].size = layout_align(std::max<std::uint64_t>(1, layout_add(cursor, 7)/8), align);
     class_facts[info].layout_state = 2;

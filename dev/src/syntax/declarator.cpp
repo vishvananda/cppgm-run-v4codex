@@ -7,8 +7,9 @@ NodeId Parser::specifiers(bool type_only)
 {
     NodeId result = make(type_only ? Kind::TypeSpecifiers : Kind::DeclSpecifiers);
     bool have_type = false;
+    std::uint32_t alignment = 0;
     for (;;) {
-        attributes();
+        attributes(&alignment);
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
         if (builtin()) {
             ast.append(result, leaf(kind));
@@ -46,6 +47,7 @@ NodeId Parser::specifiers(bool type_only)
             have_type = true;
         } else break;
     }
+    if (alignment) ast.alignment_owners.put(result, alignment);
     if (!have_type) throw std::runtime_error("expected type specifier");
     return result;
 }

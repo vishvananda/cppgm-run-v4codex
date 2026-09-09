@@ -87,7 +87,12 @@ void Analyzer::simple(NodeId n, ScopeId s)
     for (NodeId item = ast[list].first; item; item = ast[item].next) {
         NodeId d = ast[item].first;
         TypeId t = declarator(d, base, s);
-        declare_object(d, ast[d].next, t, specs, s, n);
+        EntityId e = declare_object(d, ast[d].next, t, specs, s, n);
+        if (calls && scopes[s].kind == ScopeKind::Class && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs))) {
+            auto alignment = std::max(alignment_attributes(n, s), alignment_attributes(specs, s));
+            if (alignment && alignment < size(t, true)) throw std::runtime_error("weakened field alignment");
+            field_metadata(e).alignment = alignment;
+        }
     }
     access_override = saved_access;
 }

@@ -9,15 +9,7 @@ typedef std::uint32_t TypeId;
 typedef std::uint32_t EntityId;
 typedef std::uint32_t ScopeId;
 
-// Translation-unit owned, open-addressed indexes; no allocation per binding.
-class Index {
-    struct Slot { std::uint64_t key = 0; std::uint32_t value = 0; };
-    std::vector<Slot> slots;
-    std::size_t used = 0;
-public:
-    std::uint32_t get(std::uint64_t key) const;
-    void put(std::uint64_t key, std::uint32_t value);
-};
+using Index = IdIndex;
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer };
 struct Type {
@@ -67,7 +59,8 @@ struct Constant {
 enum class Access : unsigned char { Public, Protected, Private };
 struct ClassFacts {
     Access current_access = Access::Public;
-    std::uint64_t size = 0, alignment = 0;
+    std::uint64_t size = 0, alignment = 0, requested_alignment = 0;
+    unsigned char packing = 0;
     EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;

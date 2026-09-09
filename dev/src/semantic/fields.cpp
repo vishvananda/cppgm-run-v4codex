@@ -3,6 +3,24 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s)
+{
+    std::uint64_t result = 0;
+    for (auto a = ast.alignment_owners.get(n); a; a = ast.alignments[a].next) {
+        auto attribute = ast.alignments[a];
+        std::uint64_t value;
+        if (attribute.type) value = size(type_id(attribute.operand, s), true);
+        else {
+            auto c = evaluate(attribute.operand, s);
+            if (!c.valid || !integral(c.type) || (!is_unsigned(c.type) && std::int64_t(c.bits) < 0))
+                throw std::runtime_error("invalid alignment constant");
+            value = c.bits;
+        }
+        if (value && (value & (value-1))) throw std::runtime_error("alignment is not a power of two");
+        result = std::max(result, value);
+    }
+    return result;
+}
 FieldFacts& Analyzer::field_metadata(EntityId e)
 {
     auto index = field_index.get(e);
@@ -13,6 +31,7 @@ void Analyzer::bit_field_declaration(NodeId n, ScopeId s)
 {
     if (scopes[s].kind != ScopeKind::Class) throw std::runtime_error("bit-field outside class");
     NodeId specs = ast[n].first;
+    if (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs)) throw std::runtime_error("aligned bit-field");
     TypeId base = specifiers(specs, s);
     if (spec_has(specs, KW_STATIC)) throw std::runtime_error("static bit-field");
     for (NodeId field = ast[specs].next; field; field = ast[field].next) {

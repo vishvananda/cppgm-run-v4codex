@@ -40,6 +40,15 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     } else if (entities[e].kind != EntityKind::Type || entities[e].key == KW_ENUM ||
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
         throw std::runtime_error("incompatible class declaration");
+    if (calls) {
+        auto alignment = alignment_attributes(n, s);
+        auto& f = class_facts[entities[e].class_info];
+        if (alignment) {
+            if (f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
+            f.requested_alignment = alignment;
+        }
+        if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
+    }
     TypeId t = entities[e].type;
     facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
     if (emit && !anonymous_union) {
@@ -71,6 +80,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
         entities[e].complete = true;
         entities[e].definition = n;
+        if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);
         if (!--class_depth) {
             // Only complete-class contexts defer bodies. Each outermost class
             // owns its queue interval; a local class can drain its own interval

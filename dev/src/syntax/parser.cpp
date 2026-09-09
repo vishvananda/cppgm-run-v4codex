@@ -114,6 +114,7 @@ unsigned Parser::balanced(const char* open, const char* close)
         else if (in.is("[")) result |= balanced("[", "]");
         else if (in.is("{")) result |= balanced("{", "}");
         else {
+            if (in.is("packed") || in.is("__packed__")) result |= 32;
             if (in.is("noinline")) result |= 64;
             if (in.is("always_inline")) result |= 128;
             in.take();
@@ -122,12 +123,21 @@ unsigned Parser::balanced(const char* open, const char* close)
     in.take(); return result;
 }
 
-unsigned Parser::attributes()
+unsigned Parser::attributes(std::uint32_t* alignment)
 {
     unsigned result = 0;
     for (;;) {
         if (in.is("[") && in.is("[", 1)) result |= balanced("[", "]");
-        else if (in.is("alignas") || in.is("__attribute__") || in.is("__attribute")) {
+        else if (in.eat("alignas")) {
+            in.require("(");
+            bool is_type = type_operand();
+            NodeId operand = is_type ? type_id() : expression(2);
+            in.require(")");
+            if (alignment) {
+                ast.alignments.push_back(AlignmentAttribute{operand, *alignment, is_type});
+                *alignment = ast.alignments.size()-1;
+            }
+        } else if (in.is("__attribute__") || in.is("__attribute")) {
             in.take();
             result |= balanced("(", ")");
         } else break;

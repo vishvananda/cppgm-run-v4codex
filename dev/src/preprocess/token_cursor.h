@@ -11,6 +11,7 @@ enum class PPTokenKind : unsigned char {
 
 struct PPToken {
     PPTokenKind kind;
+    unsigned char packing = 0; // Snapshot at preprocessing output, before parser lookahead.
     std::uint32_t file_id;
     std::size_t begin, end, line, column;
     IdentifierId identifier = 0;

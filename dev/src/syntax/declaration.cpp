@@ -5,8 +5,10 @@ namespace cppgm { namespace syntax {
 
 NodeId Parser::declaration()
 {
-    unsigned flags = attributes();
+    std::uint32_t alignment = 0;
+    unsigned flags = attributes(&alignment);
     NodeId result = unadorned_declaration();
+    if (alignment) ast.alignment_owners.put(result, alignment);
     ast[result].flags |= flags; return result;
 }
 NodeId Parser::unadorned_declaration()

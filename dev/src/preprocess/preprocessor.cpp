@@ -281,6 +281,7 @@ PPToken Preprocessor::next()
             ++stats_.output_tokens;
             stats_.arena_bytes = persistent_.bytes + transient_.bytes;
         }
+        token.token.packing = packing_;
         return token.token;
     }
 }

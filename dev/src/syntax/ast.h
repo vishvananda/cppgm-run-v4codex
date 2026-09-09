@@ -1,5 +1,6 @@
 #pragma once
 #include "posttoken/token.h"
+#include "support/id_index.h"
 #include <iosfwd>
 #include <vector>
 
@@ -156,6 +157,7 @@ struct Token {
     std::size_t delimiter_end = 0, angle_end = 0;
     ETokenType op = TOK_INVALID;
     PostTokenKind kind = PostTokenKind::eof;
+    unsigned char packing = 0;
 };
 
 // One compact node array belongs to the TU. Indices remain stable on growth.
@@ -170,6 +172,8 @@ struct Node {
     NodeId first = 0, last = 0, next = 0, detail = 0;
     std::uint32_t literal = 0;
 };
+
+struct AlignmentAttribute { NodeId operand; std::uint32_t next; bool type; };
 
 struct ClassRegion { std::size_t begin, end; };
 
@@ -192,6 +196,8 @@ public:
     std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);
     bool telemetry;
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
+    IdIndex alignment_owners, class_packing;
+    std::vector<AlignmentAttribute> alignments = std::vector<AlignmentAttribute>(1);
     std::vector<Node> nodes;
     std::vector<Location> locations;
     std::vector<LiteralValue> literals;

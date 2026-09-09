@@ -144,6 +144,9 @@ private:
     bool boundary_ = false, end_file_ = false;
     std::vector<ExpansionToken> directive_;
     std::size_t next_line_ = 1;
+    struct PackFrame { IdentifierId name; unsigned char value; };
+    std::vector<PackFrame> pack_stack_;
+    unsigned char packing_ = 0;
 
     ExpansionToken stabilize(PPToken token, FileFrame& file, bool persistent = false);
     ExpansionToken raw();
@@ -153,6 +156,7 @@ private:
     bool condition(const std::vector<ExpansionToken>& tokens);
     void include(const std::string& path);
     void pragma(const std::string& text, IdentifierId filename);
+    void pragma(const std::vector<ExpansionToken>& tokens, IdentifierId filename);
     bool once(const std::string& path, bool insert);
     IdentifierId name(const std::string& text);
     std::string spelling(IdentifierId id) const;
