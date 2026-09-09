@@ -55,13 +55,17 @@ def run(cmd,**kw):
     assert r.returncode==0,(cmd,r.returncode,r.stderr,r.stdout)
     return r
 
-def measure(a,b,dest,work,prior=None):
+def measure(a,b,dest,work,prior=None,final=False):
     work.mkdir(parents=True,exist_ok=True)
     binaries=[a.resolve(),b.resolve()]
     cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
     result=dict(protocol='performance-protocol.md',order=ORDER,cpu=cpu,platform=platform.platform(),
         compiler_flags='g++ -std=gnu++11 -Wall -O3; course TEST_RUNNER_ENABLE',
         host=run(['g++','--version']).stdout.splitlines()[0],
+        backend=dict(wrapper_sha256=sha(ROOT/'dev/lowir2native-ref'),flags='-O0',
+            sha256=sha(ROOT/'reference-binaries/lowir2native'),
+            bundle='c2f713cd70d06170632bfde3e75dd6fe1aa44d98'),
+        text_metric='compiler .text; sectionless native executable payload after ELF entry (no static data)',
         implementation_commits=['17f3deb7',run(['git','rev-parse','HEAD'],cwd=ROOT).stdout.strip()],
         binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in binaries],
         inputs={},observations=[],runtime=[],startup=[],budgets=dict(wall_ratio=1.10,rss_ratio=1.20,rss_add_kib=16384,text_add_bytes=131072,scale_wall=5.5,scale_rss=5.0),
@@ -86,7 +90,7 @@ def measure(a,b,dest,work,prior=None):
         for _ in range(4):
             r=observe([binaries[label],'--emit-lowir','-O0','-o',work/'empty.lowir',empty]);r['binary']=label;result['startup'].append(r)
     corpus=list(workloads()) if not prior else []
-    if prior and not result['runtime']:
+    if final or (prior and not result['runtime']):
         source='namespace N{const int value=7;const int&r0=value;\n'+''.join(f'const int&r{i}=r{i-1};\n' for i in range(1,8000))+'}\nint main(){return N::r0-7;}\n'
         corpus.append(('references-8000',source,'--emit-lowir',10))
     for name,source,mode,scale in corpus:
@@ -108,7 +112,7 @@ def measure(a,b,dest,work,prior=None):
         stats['phases']=[json.loads(line) for line in stats.pop('stderr').splitlines()]
         result['inputs'][name]['telemetry']=stats
         save();print('measured compiler',name,flush=True)
-    factor=16 if prior and result['runtime'] else 1
+    factor=16 if final or (prior and result['runtime']) else 1
     for name,source in runtimes(factor):
         if factor!=1:name+='-long'
         src=work/f'runtime-{name}.cpp';src.write_text(source)
@@ -142,6 +146,8 @@ def verify(data):
     for b in data['binaries']:assert sha(b['path'])==b['sha256']
     for name,entry in data['inputs'].items():
         assert sha(entry['path'])==entry['sha256']
+        source=Path(entry['path'])
+        assert [sha(source.with_suffix(s)) for s in ('.ref','.my')]==entry['output_hashes']
         rows=[r for r in data['observations'] if r['group']==name]
         assert [r['binary'] for r in rows]==ORDER and all(r['wall_s']>0 and r['rss_kib']>0 for r in rows)
     for e in data['runtime']:
@@ -152,6 +158,7 @@ def verify(data):
     report(data)
 if __name__=='__main__':
     if sys.argv[1]=='measure': measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve())
+    elif sys.argv[1]=='final':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),final=True)
     elif sys.argv[1]=='continue':measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),Path(sys.argv[5]).resolve(),Path(sys.argv[6]))
     elif sys.argv[1]=='verify':verify(json.loads(Path(sys.argv[2]).read_text()))
     else:report(json.loads(Path(sys.argv[2]).read_text()))

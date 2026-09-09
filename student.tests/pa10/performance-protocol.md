@@ -64,5 +64,21 @@ startup. Without changing either compiler, add a second set using 16x volatile
 trip counts (96M calls, 64M memory updates, 32M floating calls) and recomputed
 checked results. Keep original executable artifacts and all observations;
 use distinct `*-long` input/executable names. Carry the complete record into
-`final-performance.json`. This follow-up resolves timing granularity, not a
+`audited-performance.json`. This follow-up resolves timing granularity, not a
 correctness or profitability failure. No executable speedup is claimed.
+
+## Final compiler refresh
+
+Implementation `63592ef0` adds the course's required RHS-before-computed-LHS
+compound-assignment sequencing. The earlier A/B binaries and all observations
+remain intact in `audited-performance.json` (formerly the in-progress final
+record). Freeze the final compiler separately at `/tmp/pa10-final`, using the
+same build flags. Run `benchmark.py final` with A unchanged, new B, and fresh
+`/tmp/pa10-final-performance` artifacts. Use all eight original compiler inputs,
+the already frozen 8000-reference input, and the three 16x runtime inputs; do
+not repeat the superseded short runtime calibration. Keep the same AAAA plus
+two ABBA sequence, affinity, equivalence checks, telemetry, and budgets. The
+new complete record is `final-performance.json`. Record the native backend's
+binary hash as well as its pinned bundle revision. Run no builds/tests during
+timing. The new sequencing behavior is covered by an independent native test;
+the performance inputs remain in the semantically equivalent common subset.
