@@ -57,3 +57,12 @@ Both 800/3200-reference B timings were below 20x startup. Add one frozen
 long-workload evidence; retain all smaller observations and outliers. Other
 compiler groups need no repeat. Finish the three originally planned native
 workloads with the corrected size adapter. No compiler or flags changed.
+
+The completed short executable measurements are retained in
+`short-runtime-performance.json`: 21–34 ms is too short against ~5 ms process
+startup. Without changing either compiler, add a second set using 16x volatile
+trip counts (96M calls, 64M memory updates, 32M floating calls) and recomputed
+checked results. Keep original executable artifacts and all observations;
+use distinct `*-long` input/executable names. Carry the complete record into
+`final-performance.json`. This follow-up resolves timing granularity, not a
+correctness or profitability failure. No executable speedup is claimed.

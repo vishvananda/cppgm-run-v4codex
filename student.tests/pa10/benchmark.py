@@ -38,16 +38,17 @@ def workloads():
         source='template<class T>void consume(T);\n'+''.join(f'void run{i}(){{consume(1);}}\n' for i in range(n))
         yield f'template-semantics-{scale}',source,'--emit-semantics',scale
 
-def runtimes():
-    n=6000000
+def runtimes(factor=1):
+    n=6000000*factor
     # The sequence repeats every 1024; summation is checked modulo 65536.
     cycle=sum((i*17+3)&1023 for i in range(1024))
     expected=((n//1024)*cycle+sum((i*17+3)&1023 for i in range(n%1024)))&65535
     yield 'calls',f'int step(int x){{return (x*17+3)&1023;}} int main(){{volatile int n={n};int s=0;for(int i=0;i<n;++i)s=(s+step(i))&65535;return s=={expected}?0:1;}}'
-    n=4000000
+    n=4000000*factor
     expected=sum((i+n//64+(i<n%64))&4095 for i in range(64))
     yield 'memory',f'int main(){{int a[64];for(int i=0;i<64;++i)a[i]=i;volatile int n={n};for(int i=0;i<n;++i){{int j=i&63;a[j]=(a[j]+1)&4095;}}int sum=0;for(int i=0;i<64;++i)sum+=a[i];return sum=={expected}?0:1;}}'
-    yield 'floating','double step(double x){return x+0.125;} int main(){volatile int n=2000000;double sum=0.;for(int i=0;i<n;++i)sum=step(sum);return sum==250000.0?0:1;}'
+    n=2000000*factor
+    yield 'floating',f'double step(double x){{return x+0.125;}} int main(){{volatile int n={n};double sum=0.;for(int i=0;i<n;++i)sum=step(sum);return sum=={n//8}.0?0:1;}}'
 
 def run(cmd,**kw):
     r=subprocess.run([str(x) for x in cmd],capture_output=True,text=True,timeout=300,**kw)
@@ -85,7 +86,7 @@ def measure(a,b,dest,work,prior=None):
         for _ in range(4):
             r=observe([binaries[label],'--emit-lowir','-O0','-o',work/'empty.lowir',empty]);r['binary']=label;result['startup'].append(r)
     corpus=list(workloads()) if not prior else []
-    if prior:
+    if prior and not result['runtime']:
         source='namespace N{const int value=7;const int&r0=value;\n'+''.join(f'const int&r{i}=r{i-1};\n' for i in range(1,8000))+'}\nint main(){return N::r0-7;}\n'
         corpus.append(('references-8000',source,'--emit-lowir',10))
     for name,source,mode,scale in corpus:
@@ -107,7 +108,9 @@ def measure(a,b,dest,work,prior=None):
         stats['phases']=[json.loads(line) for line in stats.pop('stderr').splitlines()]
         result['inputs'][name]['telemetry']=stats
         save();print('measured compiler',name,flush=True)
-    for name,source in runtimes():
+    factor=16 if prior and result['runtime'] else 1
+    for name,source in runtimes(factor):
+        if factor!=1:name+='-long'
         src=work/f'runtime-{name}.cpp';src.write_text(source)
         executables=[]
         for label in (0,1):
