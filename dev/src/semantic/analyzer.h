@@ -50,6 +50,8 @@ public:
     std::vector<SubobjectAction> subobject_actions;
     bool synthetic_member(EntityId e) const;
     bool nonstatic_field(EntityId e) const;
+    EntityId injected_storage(EntityId field) const;
+    EntityId anonymous_object(NodeId declaration) const { return anonymous_objects.get(declaration); }
     const FieldFacts& field_fact(EntityId e) const { return field_facts[field_index.get(e)]; }
     std::vector<InitAction> initializers = std::vector<InitAction>(1);
     std::uint32_t initializer_plan(NodeId n, TypeId t) const;
@@ -62,6 +64,7 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    Index anonymous_objects;
     Index constant_constructors, constant_objects;
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
     std::vector<ConstructorConstantAction> constructor_constant_actions;
@@ -102,6 +105,8 @@ private:
     std::vector<NodeId> jump_bodies;
     EntityId default_destructor(TypeId t, ScopeId s = 0);
     void destructor_actions(EntityId e);
+    bool variant_destruction_effects(TypeId t);
+    Index variant_destruction_index;
     void register_destruction(EntityId e);
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     Index friendships, using_access, using_functions, hidden_friends;
@@ -116,7 +121,7 @@ private:
     ScopeId naming_class(ScopeId s) const;
     void record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment);
     std::vector<Conversion> conversions;
-    Index function_families, function_signatures;
+    Index function_families, function_signatures, function_ref_modes;
     std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0, dependence_work = 0;
     TypeId return_type = 0;
     unsigned loop_depth = 0, switch_depth = 0;
@@ -187,6 +192,7 @@ private:
     unsigned base_steps(TypeId from, EntityId to) const;
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
+    Conversion object_conversion(EntityId e, TypeId object, ValueCategory category);
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);

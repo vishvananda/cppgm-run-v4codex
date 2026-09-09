@@ -29,6 +29,13 @@ void Procedural::constructor_body(EntityId e)
 {
     initialized_units = semantic::Index();
     auto m = sem.member_fact(e);
+    if (m.delegated_constructor) {
+        auto action = sem.subobject_actions[m.action_begin];
+        Value object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+        construct(m.delegated_constructor, action.initializer, object);
+        clean_inline(live, 0); constructor_cleanup(action);
+        return;
+    }
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
         if (!action.initializer && !sem.constructor_needed(action.constructor)) { constructor_cleanup(action); continue; }

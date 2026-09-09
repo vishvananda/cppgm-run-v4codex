@@ -25,8 +25,15 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
 {
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
-    TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv);
+    TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);
     EntityId family = function_families.get(key(owner, name));
+    TypeId ref_shape = 0;
+    unsigned ref_mode = t.ref == RefQualifier::None ? 1 : 2;
+    if (calls && scopes[owner].kind == ScopeKind::Class) {
+        ref_shape = types.function(types.fundamental(FT_VOID), params, t.variadic);
+        unsigned prior = family ? function_ref_modes.get(key(family, ref_shape)) : 0;
+        if (prior && prior != ref_mode) throw std::runtime_error("mixed qualified and unqualified member overloads");
+    }
     EntityId e = family ? function_signatures.get(key(family, shape)) : 0;
     if (e) {
         if (entities[e].type != type) throw std::runtime_error("conflicting function return type");
@@ -37,6 +44,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     entities[e].type = type;
     if (calls && scopes[owner].kind == ScopeKind::Template) template_facts(e);
     if (!family) { family = e; function_families.put(key(owner, name), family); }
+    if (ref_shape) function_ref_modes.put(key(family, ref_shape), ref_mode);
     function_signatures.put(key(family, shape), e);
     if (!constructor) bind(owner, name, e);
     return e;
@@ -47,6 +55,10 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
     for (std::size_t i = 0; i < count; ++i) {
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
+        if (a[i].reference && b[i].reference && a[i].preference != b[i].preference) {
+            if (a[i].preference > b[i].preference) return false;
+            strict = true; continue;
+        }
         TypeId at = a[i].target, bt = b[i].target;
         if (a[i].reference) at = types[at].child;
         if (b[i].reference) bt = types[bt].child;
@@ -209,9 +221,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     bool direct_name = ast[designator].kind == Kind::IdExpression || ast[designator].kind == Kind::Member;
     TypeId object_type = 0;
     NodeId object_node = 0;
+    ValueCategory object_category = ValueCategory::Lvalue;
     if (ast[designator].kind == Kind::Member) {
         object_node = ast[designator].first;
         object_type = expressions[object_node].type;
+        if (ast[designator].op != OP_ARROW) object_category = expressions[object_node].category;
         if (ast[designator].op == OP_ARROW) object_type = types[object_type].child;
     } else {
         TypeId implicit = implicit_object_type(s);
@@ -236,10 +250,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (object_ranking) {
                 Conversion c; c.rank = 0; c.target = object_type;
                 if (entities[e].member_info && !entities[e].is_static) {
-                    TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
-                    c.target = types.compound(TypeKind::LRef, wanted); c.reference = true;
-                    valid = (destructor_member(e) || !(types[object_type].cv & ~types[wanted].cv)) &&
-                        (types.unqualified(object_type) == types.unqualified(wanted) || derived_from(object_type, wanted));
+                    c = object_conversion(e, object_type, object_category);
+                    valid = c.valid();
                 }
                 sequences.push_back(c);
             } else if (entities[e].member_info && !entities[e].is_static) valid = false;

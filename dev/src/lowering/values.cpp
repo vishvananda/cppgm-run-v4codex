@@ -167,8 +167,11 @@ Value Procedural::base_projection(Value base, unsigned steps)
 Value Procedural::field(Value base, EntityId e, unsigned steps)
 {
     base = base_projection(base, steps);
+    std::uint64_t offset = sem.entities[e].member_offset;
+    for (EntityId storage = sem.injected_storage(e); storage && sem.nonstatic_field(storage); storage = sem.injected_storage(storage))
+        offset += sem.entities[storage].member_offset;
     Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
-    Value v = emit(i, {base.operand, Operand::integer(sem.entities[e].member_offset)});
+    Value v = emit(i, {base.operand, Operand::integer(offset)});
     v.type = sem.entities[e].type;
     if (sem.field_fact(e).bit_field) v.bit_field = e;
     if (reference(v.type)) { v = load(Value(v.operand, IRType::Ptr, v.type, true)); v.type = sem.types[sem.entities[e].type].child; }
@@ -180,6 +183,9 @@ Value Procedural::binding(EntityId e)
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
     if (sem.nonstatic_field(e)) {
+        if (auto storage = sem.injected_storage(e)) {
+            if (!sem.nonstatic_field(storage)) return field(address(binding(storage)), e);
+        }
         if (!this_slot) throw std::logic_error("missing implicit object");
         return field(emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}), e);
     }

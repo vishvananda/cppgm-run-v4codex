@@ -187,7 +187,11 @@ void Procedural::statement(NodeId n)
         start(block());
     }
     switch (k) {
+    case Kind::Class:
+        if (auto e = sem.anonymous_object(n)) object(e);
+        return;
     case Kind::SimpleDeclaration: {
+        if (auto e = sem.anonymous_object(n)) object(e);
         NodeId list = child(n, Kind::InitDeclarators);
         for (NodeId item = ast[list].first; item; item = ast[item].next) {
             EntityId e = sem.facts[ast[item].first].entity;

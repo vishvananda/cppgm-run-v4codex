@@ -31,12 +31,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
             Conversion c;
             if (member && !i) {
-                TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
-                c.target = types.compound(TypeKind::LRef, wanted); c.reference = true;
-                if (!(types[object].cv & ~types[wanted].cv) &&
-                    (types.unqualified(object) == types.unqualified(wanted) || derived_from(object, wanted))) {
-                    c.rank = derived_from(object, wanted) ? 2 : 0; c.qualification = types[wanted].cv & ~types[object].cv;
-                }
+                c = object_conversion(e, object, expressions[args[0]].category);
             } else {
                 TypeId wanted = types.parameters[f.offset+i-member];
                 if (args[i]) c = conversion(args[i], wanted);
@@ -56,6 +51,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
             throw std::runtime_error("ambiguous operator overload");
     Candidate selected = viable[best];
+    if (entities[selected.entity].member_info && members[entities[selected.entity].member_info].deleted)
+        throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
     demand_member(selected.entity);
     if (selected.member) record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],

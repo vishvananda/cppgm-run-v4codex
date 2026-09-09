@@ -97,6 +97,8 @@ SymbolId Procedural::symbol(EntityId id, bool base)
         }
         target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
         target.function.qualifiers = sem.types[e.type].cv;
+        if (sem.types[e.type].ref != semantic::RefQualifier::None)
+            target.function.qualifiers |= sem.types[e.type].ref == semantic::RefQualifier::Lvalue ? 4 : 8;
         if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;
         if (sem.destructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
         if (base || base_only) target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;

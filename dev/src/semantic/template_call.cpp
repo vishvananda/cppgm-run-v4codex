@@ -70,7 +70,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             if (!t || fundamental(t, FT_VOID)) return 0;
             params.push_back(t);
         }
-        result = types.signature(types.function(returned, params, p.variadic, p.cv));
+        result = types.signature(types.function(returned, params, p.variadic, p.cv, p.ref));
     } else if (p.child) {
         TypeId child = substitute_type(p.child, bindings, cache);
         if (!child) return 0;

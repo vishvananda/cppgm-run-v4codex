@@ -13,7 +13,7 @@ Types::Types() { records.push_back(Type()); hashes.push_back(0); }
 TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 {
     std::uint64_t hash = mix(unsigned(t.kind) | (t.cv << 8) | (unsigned(t.fundamental) << 16) |
-                             (unsigned(t.variadic) << 24));
+                             (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25));
     hash ^= mix(t.child) ^ mix(std::uint64_t(t.entity) << 32) ^ mix(t.bound);
     for (TypeId p : params) hash = mix(hash ^ p);
     if (slots.empty() || records.size() * 2 >= slots.size()) {
@@ -30,7 +30,7 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
         const Type& a = records[slots[p]];
         bool same = hashes[slots[p]] == hash && a.kind == t.kind && a.cv == t.cv &&
             a.fundamental == t.fundamental && a.child == t.child && a.entity == t.entity &&
-            a.bound == t.bound && a.variadic == t.variadic && a.count == params.size();
+            a.bound == t.bound && a.variadic == t.variadic && a.ref == t.ref && a.count == params.size();
         for (std::size_t i = 0; same && i < params.size(); ++i) same = parameters[a.offset + i] == params[i];
         if (same) return slots[p];
         p = (p + 1) & (slots.size() - 1);
@@ -74,11 +74,11 @@ TypeId Types::unqualified(TypeId id)
     t.cv = 0;
     return intern(t, {});
 }
-TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv)
+TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv, RefQualifier ref)
 {
     if (records[result].kind == TypeKind::Array || records[result].kind == TypeKind::Function)
         throw std::runtime_error("invalid function return type");
-    Type t; t.kind = TypeKind::Function; t.child = result; t.variadic = variadic; t.cv = cv;
+    Type t; t.kind = TypeKind::Function; t.child = result; t.variadic = variadic; t.cv = cv; t.ref = ref;
     return intern(t, params);
 }
 TypeId Types::member_pointer(EntityId owner, TypeId child)
@@ -105,7 +105,7 @@ TypeId Types::signature(TypeId id)
     if (t.kind == TypeKind::Function) {
         std::vector<TypeId> source(parameters.begin() + t.offset, parameters.begin() + t.offset + t.count);
         for (TypeId& p : source) p = adjusted(p);
-        TypeId result = function(signature(t.child), source, t.variadic, t.cv);
+        TypeId result = function(signature(t.child), source, t.variadic, t.cv, t.ref);
         signatures[id] = result;
         return result;
     }

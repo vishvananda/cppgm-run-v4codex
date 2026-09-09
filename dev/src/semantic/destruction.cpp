@@ -71,15 +71,47 @@ bool Analyzer::destructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
-    if (!members[m].synthetic) return true;
+    if (!members[m].synthetic && ((entities[e].exception_spec & 3) || !members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;
     if (members[m].destruction_state == 2) return members[m].destruction_needed;
     if (members[m].destruction_state == 1) throw std::logic_error("cyclic destruction actions");
     members[m].destruction_state = 1;
     bool needed = false;
+    EntityId cls = scopes[entities[e].owner].entity;
+    // O0 keeps an explicit union boundary when an inactive variant has an
+    // effectful destructor. This is a conservative emission policy: it does
+    // not add variant destruction to the union's action list.
+    if (!members[m].synthetic && entities[cls].key == KW_UNION)
+        needed = variant_destruction_effects(entities[cls].type);
     for (unsigned j = 0; j < members[m].destruction_count; ++j)
         needed |= destructor_needed(destruction_actions[members[m].destruction_begin+j].destructor);
     members[m].destruction_state = 2; members[m].destruction_needed = needed;
+    // A defined empty body with effect-free subobjects needs no call, but its
+    // externally visible ABI entry remains available to other translation units.
+    if (!needed && !members[m].synthetic) members[m].retained_root = true;
     return needed;
+}
+bool Analyzer::variant_destruction_effects(TypeId t)
+{
+    while (types[t].kind == TypeKind::Array) t = types[t].child;
+    if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return false;
+    EntityId cls = types[t].entity;
+    if (auto state = variant_destruction_index.get(cls)) return state != 2;
+    variant_destruction_index.put(cls, 1);
+    EntityId dtor = type_destructor(t);
+    bool effects = false;
+    if (dtor && !members[entities[dtor].member_info].synthetic) {
+        auto body = members[entities[dtor].member_info].body;
+        effects = (entities[dtor].exception_spec & 3) || !body || ast[body].kind != Kind::Compound || ast[body].first;
+    }
+    for (auto d = scopes[entities[cls].scope].first_decl; d && !effects; d = declarations[d].next) {
+        EntityId field = declarations[d].entity;
+        if (nonstatic_field(field) && entities[field].owner == entities[cls].scope)
+            effects = variant_destruction_effects(entities[field].type);
+    }
+    for (auto b = class_facts[entities[cls].class_info].first_base; b && !effects; b = bases[b].next)
+        effects = variant_destruction_effects(entities[bases[b].base].type);
+    variant_destruction_index.put(cls, effects ? 3 : 2);
+    return effects;
 }
 void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
 {

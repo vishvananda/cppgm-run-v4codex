@@ -156,10 +156,12 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
         bool const_binding = target.kind == TypeKind::LRef && types[target.child].cv == 1;
         if ((category || const_binding) && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
-            c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv; return c;
+            c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv;
+            c.preference = x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
-        if ((category || function_lvalue) && qualification(from, target.child, added)) {
-            c.rank = 0; c.reference = true; c.qualification = added; c.preference = function_lvalue && target.kind == TypeKind::RRef; return c;
+        if ((category || const_binding || function_lvalue) && qualification(from, target.child, added)) {
+            c.rank = 0; c.reference = true; c.qualification = added;
+            c.preference = function_lvalue ? target.kind == TypeKind::RRef : x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
         // A const, nonvolatile lvalue reference may bind a converted temporary.
         if ((target.kind == TypeKind::LRef && types[target.child].cv != 1) ||

@@ -3,6 +3,24 @@
 #include <ostream>
 
 namespace cppgm { namespace semantic {
+Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory category)
+{
+    Type f = types[entities[e].type];
+    TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
+    Conversion c;
+    c.target = types.compound(f.ref == RefQualifier::Rvalue ? TypeKind::RRef : TypeKind::LRef, wanted);
+    c.reference = true;
+    bool rvalue = category != ValueCategory::Lvalue;
+    if (f.ref == RefQualifier::Rvalue && !rvalue) return c;
+    if (f.ref == RefQualifier::Lvalue && rvalue && types[wanted].cv != 1) return c;
+    if (!destructor_member(e) && (types[object].cv & ~types[wanted].cv)) return c;
+    bool derived = derived_from(object, wanted);
+    if (types.unqualified(object) != types.unqualified(wanted) && !derived) return c;
+    c.rank = derived ? 2 : 0; c.derived = derived;
+    c.qualification = types[wanted].cv & ~types[object].cv;
+    c.preference = rvalue && f.ref == RefQualifier::Lvalue;
+    return c;
+}
 unsigned Analyzer::base_steps(TypeId from, EntityId to) const
 {
     EntityId e = types[from].entity;
@@ -146,6 +164,12 @@ bool Analyzer::synthetic_member(EntityId e) const
 bool Analyzer::nonstatic_field(EntityId e) const
 { return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class &&
     (entities[e].name || !field_fact(e).bit_field); }
+EntityId Analyzer::injected_storage(EntityId e) const
+{
+    if (!nonstatic_field(e)) return 0;
+    auto cls = scopes[entities[e].owner].entity;
+    return class_facts[entities[cls].class_info].storage;
+}
 bool Analyzer::empty_value(TypeId t)
 {
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return false;

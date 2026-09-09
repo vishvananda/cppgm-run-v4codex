@@ -12,9 +12,11 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer };
+enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
     unsigned char cv = 0;
+    RefQualifier ref = RefQualifier::None;
     EFundamentalType fundamental = FT_INT;
     bool variadic = false;
     TypeId child = 0;
@@ -37,7 +39,7 @@ public:
     TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
     TypeId qualify(TypeId t, unsigned cv);
     TypeId unqualified(TypeId t);
-    TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0);
+    TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
     TypeId adjusted(TypeId t);
     TypeId signature(TypeId t);
@@ -68,6 +70,7 @@ struct ClassFacts {
     unsigned char layout_state = 0;
     bool aggregate = true, empty = true;
     EntityId value_constructor = 0;
+    EntityId variant_initializer = 0;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
 // bit-fields and explicit alignment use this descriptor by canonical EntityId.
@@ -110,6 +113,7 @@ enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
 struct MemberFacts {
     TypeId call_type = 0;
     EntityId inherited_constructor = 0;
+    EntityId delegated_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false;

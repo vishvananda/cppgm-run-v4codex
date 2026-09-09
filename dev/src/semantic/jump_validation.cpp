@@ -36,7 +36,7 @@ void Analyzer::check_jumps(NodeId body)
         Kind k = ast[n].kind;
         bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::Iteration ||
             k == Kind::If || k == Kind::For || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
-            k == Kind::SimpleDeclaration || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
+            k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default;
         if (!recorded) return;
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
@@ -45,7 +45,8 @@ void Analyzer::check_jumps(NodeId body)
             lifetime_index.put(n, lifetime_uses.size()); lifetime_uses.push_back(use);
         };
         if (k == Kind::Condition) { add_object(facts[n].entity); use.exit = live; record_use(); return; }
-        if (k == Kind::SimpleDeclaration) {
+        if (k == Kind::SimpleDeclaration || k == Kind::Class) {
+            add_object(anonymous_object(n));
             NodeId list = child(n, Kind::InitDeclarators);
             for (NodeId c = ast[list].first; c; c = ast[c].next) add_object(facts[ast[c].first].entity);
             use.exit = live; record_use(); return;

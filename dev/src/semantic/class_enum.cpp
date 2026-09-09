@@ -99,13 +99,20 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                 std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
                 EntityId storage = make_entity(EntityKind::Variable, s, ids.intern(TextView(label.data(), label.size())), n);
                 entities[storage].type = t;
+                entities[storage].definition = n;
+                entities[storage].is_static = static_union;
                 class_facts[entities[e].class_info].storage = storage;
-                default_initialize(storage);
+                anonymous_objects.put(n, storage);
+                record(s, storage, 0, t, EntityKind::Variable);
+                if (scopes[s].kind != ScopeKind::Class) {
+                    default_initialize(storage);
+                    register_destruction(storage);
+                }
             }
             for (std::uint32_t d = scopes[cs].first_decl; d; d = declarations[d].next) {
                 EntityId member = declarations[d].entity;
                 bind(s, entities[member].name, member);
-                record(s, member, 0, entities[member].type, entities[member].kind);
+                if (!calls) record(s, member, 0, entities[member].type, entities[member].kind);
             }
         }
     }

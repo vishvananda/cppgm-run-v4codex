@@ -145,6 +145,18 @@ void Analyzer::constructor_actions(EntityId e)
         EntityId field = resolve(ast[id].detail, entities[e].owner);
         if (!field) throw std::runtime_error("unknown constructor initializer");
         if (entities[field].kind == EntityKind::Alias) field = types[entities[field].type].entity;
+        if (field == cls) {
+            if (ast[list].first != ast[list].last) throw std::runtime_error("delegation must be the only initializer");
+            NodeId init = ast[id].next;
+            initialize(init, entities[cls].type, scope);
+            EntityId selected = facts[init].entity;
+            if (!constructor_member(selected)) throw std::logic_error("missing delegation target");
+            members[m].delegated_constructor = selected;
+            members[m].action_begin = subobject_actions.size(); members[m].action_count = 1;
+            subobject_actions.push_back({0, entities[cls].type, init, selected});
+            members[m].nontrivial = true;
+            return;
+        }
         if (explicit_initializers.get(field)) throw std::runtime_error("duplicate constructor initializer");
         bool direct_member = nonstatic_field(field) && entities[field].owner == entities[cls].scope;
         bool direct_base = false;
@@ -155,6 +167,15 @@ void Analyzer::constructor_actions(EntityId e)
         explicit_initializers.put(field, ast[id].next);
     }
     std::vector<SubobjectAction> work;
+    EntityId variant = 0;
+    if (entities[cls].key == KW_UNION) {
+        for (NodeId n = ast[list].first; n; n = ast[n].next) {
+            EntityId field = resolve(ast[child(n, Kind::MemInitializerId)].detail, entities[e].owner);
+            if (variant) throw std::runtime_error("multiple initialized union variants");
+            variant = field;
+        }
+        if (!variant) variant = class_facts[entities[cls].class_info].variant_initializer;
+    }
     auto add = [&](EntityId field, TypeId type, NodeId initial) {
         EntityId ctor = 0;
         default_destructor(type, scope);
@@ -183,6 +204,7 @@ void Analyzer::constructor_actions(EntityId e)
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         EntityId field = declarations[d].entity;
         if (!nonstatic_field(field) || entities[field].owner != entities[cls].scope) continue;
+        if (entities[cls].key == KW_UNION && field != variant) continue;
         NodeId init = explicit_initializers.get(field);
         if (!init) init = entities[field].initializer;
         add(field, entities[field].type, init);

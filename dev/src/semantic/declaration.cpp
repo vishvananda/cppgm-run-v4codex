@@ -27,6 +27,20 @@ void Analyzer::finish()
         if (members[m].destructor) destructor_actions(e);
         members[m].demand = DemandState::Complete;
     }
+    // The delegation graph has at most one edge per constructor. Each demanded
+    // vertex is colored once; converging chains do not repeat completed work.
+    Index delegation_states;
+    std::vector<EntityId> chain;
+    for (EntityId root : demand_queue) {
+        EntityId e = root;
+        while (e && !delegation_states.get(e)) {
+            delegation_states.put(e, 1); chain.push_back(e);
+            e = members[entities[e].member_info].delegated_constructor;
+        }
+        if (e && delegation_states.get(e) == 1) throw std::runtime_error("cyclic constructor delegation");
+        for (EntityId seen : chain) delegation_states.put(seen, 2);
+        chain.clear();
+    }
     for (NodeId body : jump_bodies) check_jumps(body);
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
@@ -77,6 +91,8 @@ void Analyzer::simple(NodeId n, ScopeId s)
     ScopeId owner = name_owner(decl_name(named), s, true);
     if (calls && scopes[owner].kind == ScopeKind::Class) access_override = owner;
     TypeId base = specifiers(specs, s, anonymous_name);
+    if (calls) for (NodeId c = ast[specs].first; c; c = ast[c].next)
+        if (auto object = anonymous_object(c)) anonymous_objects.put(n, object);
     if (ast[n].kind == Kind::Function) {
         NodeId d = ast[specs].next;
         TypeId t = declarator(d, base, s);

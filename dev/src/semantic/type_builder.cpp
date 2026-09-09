@@ -149,9 +149,15 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
             NodeId trailing = child(n, Kind::TrailingReturn);
             if (trailing) base = type_id(ast[trailing].first, s);
             unsigned member_cv = 0;
-            for (NodeId q = ast[c].next; q; q = ast[q].next)
+            RefQualifier ref = RefQualifier::None;
+            for (NodeId q = ast[c].next; q; q = ast[q].next) {
                 if (ast[q].kind == Kind::CvQualifier) member_cv |= ast[q].op == KW_CONST ? 1 : 2;
-            base = types.function(base, params, variadic, member_cv);
+                if (ast[q].kind == Kind::FunctionQualifier && (ast[q].op == OP_AMP || ast[q].op == OP_LAND)) {
+                    if (ref != RefQualifier::None) throw std::runtime_error("duplicate ref qualifier");
+                    ref = ast[q].op == OP_AMP ? RefQualifier::Lvalue : RefQualifier::Rvalue;
+                }
+            }
+            base = types.function(base, params, variadic, member_cv, ref);
             facts[c].type = base;
         }
     }
@@ -201,6 +207,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast[ast[name].last].op != OP_COMPL;
     EntityId cls = constructor ? scopes[owner].entity : 0;
+    if (calls && function && types[t].ref != RefQualifier::None &&
+        (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
+        throw std::runtime_error("ref qualifier requires ordinary nonstatic member");
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
     if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);
@@ -221,6 +230,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         else bind(owner, id, e);
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
+    if (calls && function && entities[e].is_static && types[t].ref != RefQualifier::None)
+        throw std::runtime_error("static member cannot be ref qualified");
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
     entities[e].c_linkage |= c_linkage;
@@ -251,7 +262,15 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("in-class static initializer requires const integral or constexpr member");
     if (calls && !function && !entities[e].is_static && scopes[owner].kind == ScopeKind::Class && entities[e].access != Access::Public)
         class_facts[entities[scopes[owner].entity].class_info].aggregate = false;
-    if (member_initializer) class_facts[entities[scopes[s].entity].class_info].aggregate = false;
+    if (member_initializer) {
+        auto cls = scopes[s].entity;
+        auto info = entities[cls].class_info;
+        class_facts[info].aggregate = false;
+        if (entities[cls].key == KW_UNION) {
+            if (class_facts[info].variant_initializer) throw std::runtime_error("multiple default union variant initializers");
+            class_facts[info].variant_initializer = e;
+        }
+    }
     if (calls && init && !function && !member_initializer) initialize(init, canonical, owner);
     if (calls && !init && !function && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
     if (init && !alias && !function && integral(t) && !member_initializer) {
