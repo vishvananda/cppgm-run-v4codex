@@ -107,6 +107,7 @@ void Procedural::object(EntityId e)
     Value location(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;
     if (init) initialize(init, t, location);
+    else if (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info) address(location);
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {
@@ -118,7 +119,8 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
             auto member = sem.entities[sem.declarations[d].entity];
             if (member.kind != semantic::EntityKind::Variable || member.is_static) continue;
-            Value at = member.member_offset ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(member.member_offset)}) : base;
+            Instruction projection(Opcode::Index, IRType::I8); projection.projection = ir_model::IPK_FIELD;
+            Value at = emit(projection, {base.operand, Operand::integer(member.member_offset)});
             at.type = member.type; at.address = true;
             initialize(c, member.type, at); if (c) c = ast[c].next;
         }
@@ -138,7 +140,7 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         return;
     }
     if (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer) n = ast[n].first;
-    Value value = n ? convert(expression(n, reference(t)), t) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+    Value value = n ? (sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     store(value, location);
 }
 } }

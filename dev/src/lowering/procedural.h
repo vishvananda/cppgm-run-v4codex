@@ -59,6 +59,7 @@ class Procedural {
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
+    SlotId this_slot;
     BlockId break_target, continue_target;
     bool ended = false;
     NodeId child(NodeId n, syntax::Kind k) const;
@@ -95,6 +96,7 @@ class Procedural {
     Value call(NodeId n);
     Value operation(ETokenType op, Value a, Value b, TypeId result);
     Value binding(EntityId e);
+    Value field(Value base, EntityId e);
     void store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);

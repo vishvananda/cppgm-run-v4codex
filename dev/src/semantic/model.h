@@ -92,7 +92,7 @@ struct MemberFacts {
     TypeId call_type = 0;
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
-    bool synthetic = false;
+    bool synthetic = false, referenced = false;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
 struct TemplateFunction {
@@ -129,8 +129,10 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable };
 struct Expression {
+    NodeId object = 0; // Explicit implicit-object operand of a selected member call.
+    TypeId object_type = 0; // Selected implicit-object pointer type, zero for static/free calls.
     TypeId type = 0; // Reference-free language expression type.
     EntityId entity = 0; // Known identity of this value, never a producing call.
     // Calls record their selected declaration in Fact::entity. Conversion ranges

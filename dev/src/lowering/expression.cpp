@@ -27,7 +27,7 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = converted(operand, sem.conversion_fact(fact.conversions));
         v.type = fact.type; return v;
     }
-    if (fact.form == semantic::ExpressionForm::ConstantQuery || ast[n].kind == Kind::Sizeof) {
+    if (fact.form == semantic::ExpressionForm::ConstantQuery || ast[n].kind == Kind::Sizeof || ast[n].kind == Kind::TypeTrait) {
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
         Value v = emit(Opcode::Const, type(c.type), {Operand::integer(c.bits)}); v.type = c.type; return v;
@@ -43,7 +43,11 @@ Value Procedural::expression(NodeId n, bool location)
         else { std::uint64_t v = 0; std::memcpy(&v, lit.scalar.data(), fundamental_width(lit.type)); o = Operand::integer(v); }
         return Value(o, type(fact.type), fact.type);
     }
-    case Kind::KeywordLiteral: return Value(ast[n].op == KW_NULLPTR ? Operand::null() : Operand::integer(ast[n].op == KW_TRUE),
+    case Kind::KeywordLiteral:
+        if (ast[n].op == KW_THIS) {
+            Value v = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}); v.type = fact.type; return v;
+        }
+        return Value(ast[n].op == KW_NULLPTR ? Operand::null() : Operand::integer(ast[n].op == KW_TRUE),
         ast[n].op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
         if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
@@ -60,15 +64,25 @@ Value Procedural::expression(NodeId n, bool location)
         Value left = converted(a, sem.conversion_fact(fact.conversions));
         Value right = converted(ast[a].next, sem.conversion_fact(fact.conversions+1));
         if (left.ir != IRType::Ptr) std::swap(left, right);
-        Instruction i(Opcode::Index, type(fact.type)); i.projection = ir_model::IPK_ARRAY_ELEMENT;
+        IRType element = type(fact.type);
+        if (element.kind() == IRType::Object) {
+            right = coerce(right, IRType::I64, sem.unsigned_type(right.type));
+            right = emit(Opcode::Binary, IRType::I64, {right.operand, Operand::integer(sem.object_size(fact.type))}, Operation::Mul);
+            element = IRType::I8;
+        }
+        Instruction i(Opcode::Index, element); i.projection = ir_model::IPK_ARRAY_ELEMENT;
         Value v = emit(i, {left.operand, right.operand});
         v.type = fact.type; v.address = true; return v;
     }
     case Kind::Member: {
+        auto member = sem.entities[fact.entity];
+        if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && member.constant.valid && !location)) {
+            discard(a, false);
+            return Value(Operand::integer(member.constant.bits), type(fact.type), fact.type);
+        }
+        if (member.is_static) { discard(a, false); return binding(fact.entity); }
         Value base = ast[n].op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
-        auto offset = sem.entities[fact.entity].member_offset;
-        Value v = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(offset)});
-        v.type = fact.type; v.address = true; return v;
+        Value v = field(base, fact.entity); v.type = fact.type; return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
         if (a) return expression(a, location);
@@ -204,8 +218,20 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 Value Procedural::call(NodeId n)
 {
     auto fact = sem.expression_fact(n);
+    if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());
+    if (fact.object_type) {
+        Value object;
+        if (fact.object) {
+            object = expression(fact.object, true);
+            object = sem.types[sem.expression_fact(fact.object).type].kind == TypeKind::Pointer ? load(object) : address(object);
+        } else object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+        call_work.push_back(object.operand);
+    } else if (fact.object) {
+        Value object = expression(fact.object);
+        if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
+    }
     // The course's indirect-call fixtures evaluate arguments before fetching
     // the callee; C++11 leaves their relative evaluation order unspecified.
     for (unsigned j = 0; j < fact.argument_count; ++j)

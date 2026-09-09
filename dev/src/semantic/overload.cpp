@@ -94,6 +94,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             facts[n].value = constants.size(); constants.push_back(v);
             return result;
         }
+        if (!e && builtin_name && name && ids.spelling(name).equals("__builtin_unreachable")) {
+            if (!args.empty()) throw std::runtime_error("unreachable takes no arguments");
+            result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::Unreachable;
+            return result;
+        }
         if (!e && builtin_name && name == abort_builtin) {
             if (!args.empty()) throw std::runtime_error("abort takes no arguments");
             result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::Abort;
@@ -136,11 +141,21 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     TypeId ft = 0;
     NodeId designator = callee;
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
-    bool direct_name = ast[designator].kind == Kind::IdExpression;
+    bool direct_name = ast[designator].kind == Kind::IdExpression || ast[designator].kind == Kind::Member;
+    TypeId object_type = 0;
+    if (ast[designator].kind == Kind::Member) {
+        result.object = ast[designator].first;
+        object_type = expressions[result.object].type;
+        if (ast[designator].op == OP_ARROW) object_type = types[object_type].child;
+    } else {
+        TypeId implicit = implicit_object_type(s);
+        if (implicit) object_type = types[implicit].child;
+    }
     if (fn.form == ExpressionForm::Overload && !direct_name) throw std::runtime_error("unresolved indirect callee");
     if (direct_name && (fn.form == ExpressionForm::Overload || (fn.entity && entities[fn.entity].kind == EntityKind::Function))) {
         struct Candidate { EntityId entity; std::size_t offset; };
         std::vector<Candidate> viable;
+        bool object_ranking = object_type != 0;
         std::vector<Conversion> sequences;
         for (EntityId e : candidates(fn.entity)) {
             ++candidate_work;
@@ -152,6 +167,16 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                  !default_arguments[entities[e].defaults + args.size()]))) continue;
             std::size_t begin = sequences.size();
             bool valid = true;
+            if (object_ranking) {
+                Conversion c; c.rank = 0; c.target = object_type;
+                if (entities[e].member_info && !entities[e].is_static) {
+                    TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
+                    c.target = types.compound(TypeKind::LRef, wanted); c.reference = true;
+                    valid = !(types[object_type].cv & ~types[wanted].cv) &&
+                        (types.unqualified(object_type) == types.unqualified(wanted) || derived_from(object_type, wanted));
+                }
+                sequences.push_back(c);
+            } else if (entities[e].member_info && !entities[e].is_static) valid = false;
             for (std::size_t i = 0; valid && i < args.size(); ++i) {
                 Conversion c;
                 if (i < function.count) c = conversion(args[i], types.parameters[function.offset + i]);
@@ -164,16 +189,18 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (viable.empty()) throw std::runtime_error("no viable function");
         std::size_t best = 0;
         for (std::size_t i = 1; i < viable.size(); ++i)
-            if (better(sequences.data() + viable[i].offset, sequences.data() + viable[best].offset, args.size())) best = i;
+            if (better(sequences.data() + viable[i].offset, sequences.data() + viable[best].offset, args.size() + object_ranking)) best = i;
         for (std::size_t i = 0; i < viable.size(); ++i)
-            if (i != best && !better(sequences.data() + viable[best].offset, sequences.data() + viable[i].offset, args.size()))
+            if (i != best && !better(sequences.data() + viable[best].offset, sequences.data() + viable[i].offset, args.size() + object_ranking))
                 throw std::runtime_error("ambiguous overload");
         EntityId selected = viable[best].entity;
         facts[n].entity = selected;
+        if (entities[selected].member_info && !entities[selected].is_static)
+            result.object_type = types.parameters[types[call_type(selected)].offset];
         ft = entities[selected].type;
         Type selected_type = types[ft];
-        std::vector<Conversion> chosen(sequences.begin() + viable[best].offset,
-            sequences.begin() + viable[best].offset + args.size());
+        std::vector<Conversion> chosen(sequences.begin() + viable[best].offset + object_ranking,
+            sequences.begin() + viable[best].offset + object_ranking + args.size());
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {
             NodeId a = default_arguments[entities[selected].defaults + i];
             args.push_back(a);

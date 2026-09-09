@@ -40,6 +40,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         return r;
     }
     case Kind::KeywordLiteral:
+        if (ast[n].op == KW_THIS) {
+            r.type = implicit_object_type(s);
+            if (!r.type) throw std::runtime_error("this outside nonstatic member");
+            return r;
+        }
         r.type = types.fundamental(ast[n].op == KW_NULLPTR ? FT_NULLPTR_T : FT_BOOL); return r;
     case Kind::IdExpression: {
         EntityId e = resolve(ast[n].detail, s);
@@ -51,6 +56,13 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
         r.type = value_type(entities[e].type);
+        if (nonstatic_field(e)) {
+            TypeId object = implicit_object_type(s);
+            if (object) {
+                size(types[object].child);
+                r.type = types.qualify(r.type, types[types[object].child].cv);
+            } else if (!unevaluated_depth && !class_facts[entities[scopes[entities[e].owner].entity].class_info].storage) throw std::runtime_error("field requires object");
+        }
         if (entities[e].kind == EntityKind::Enumerator && !entities[types[r.type].entity].complete)
             r.type = entities[e].constant.type;
         if (entities[e].member_info) facts[n].type = members[entities[e].member_info].call_type;
@@ -66,13 +78,13 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::Unary: case Kind::Postfix: return unary_expression(n, s);
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: return binary_expression(n, s);
     case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast[first].next);
-    case Kind::Sizeof: {
+    case Kind::TypeTrait: case Kind::Sizeof: {
         ++unevaluated_depth;
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression(first, s).type;
         --unevaluated_depth;
         if (!t) throw std::runtime_error("sizeof unresolved overload");
         r.type = types.fundamental(FT_UNSIGNED_LONG_INT);
-        facts[n].value = constants.size(); constants.push_back(Constant(r.type, size(t)));
+        facts[n].value = constants.size(); constants.push_back(Constant(r.type, size(t, ast[n].op == KW_ALIGNOF)));
         return r;
     }
     case Kind::Subscript: {
@@ -99,7 +111,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         EntityId e = lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
-        r.type = types.qualify(value_type(entities[e].type), types[t].cv);
+        if (entities[e].kind == EntityKind::Overload) r.form = ExpressionForm::Overload;
+        else r.type = types.qualify(value_type(entities[e].type), entities[e].is_static ? 0 : types[t].cv);
         r.category = ast[n].op == OP_ARROW || object.category == ValueCategory::Lvalue ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         return r;
     }

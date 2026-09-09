@@ -29,6 +29,10 @@ public:
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
+    TypeId call_type(EntityId e) const { return entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type; }
+    bool member_demanded(EntityId e) const { return entities[e].member_info && members[entities[e].member_info].referenced; }
+    bool synthetic_member(EntityId e) const { return entities[e].member_info && members[entities[e].member_info].synthetic; }
+    bool nonstatic_field(EntityId e) const { return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class; }
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
@@ -104,6 +108,7 @@ private:
     void add_edge(ScopeId s, ScopeId to, bool is_inline = false);
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
+    TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);

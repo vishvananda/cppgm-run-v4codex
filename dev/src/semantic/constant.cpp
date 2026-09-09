@@ -78,9 +78,14 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
         if (class_facts[layout].layout_state != 2) {
             class_facts[layout].layout_state = 1;
             std::uint64_t bytes = 0, align = 1;
+            for (auto b = class_facts[layout].first_base; b; b = bases[b].next) {
+                TypeId base = entities[bases[b].base].type;
+                bytes = layout_add(bytes, size(base));
+                align = std::max(align, size(base, true));
+            }
             for (std::uint32_t d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
                 const Entity member = entities[declarations[d].entity];
-                if (member.kind != EntityKind::Variable || member.is_static) continue;
+                if (member.kind != EntityKind::Variable || member.is_static || member.owner != entities[e].scope) continue;
                 Type field = types[member.type];
                 bool reference = field.kind == TypeKind::LRef || field.kind == TypeKind::RRef;
                 std::uint64_t field_align = reference ? 8 : size(member.type, true);

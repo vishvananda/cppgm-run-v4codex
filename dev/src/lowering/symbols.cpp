@@ -53,7 +53,7 @@ SymbolId Procedural::symbol(EntityId id)
 {
     if (symbols[id]) return symbols[id];
     auto e = sem.entities[id];
-    bool internal = e.is_static || (e.kind == semantic::EntityKind::Variable &&
+    bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
         sem.types[e.type].cv & 1 && !e.external_decl);
     for (auto s = e.owner; s && s != sem.global; s = sem.scopes[s].parent)
         if (sem.scopes[s].kind == semantic::ScopeKind::Namespace && !sem.scopes[s].name) internal = true;
@@ -66,13 +66,14 @@ SymbolId Procedural::symbol(EntityId id)
     metadata.inline_hint = e.inline_function;
     if (e.c_linkage) metadata.linkage = LLM_C;
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
-    else if ((sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
+    else if (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
     abi_mangle::Target target;
     auto aname = abi.name(abi_scope(e.owner), name);
     if (e.kind == semantic::EntityKind::Function) {
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;
-        target.function.category = abi_mangle::FunctionCategory::Nonmember;
+        target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
+        target.function.qualifiers = sem.types[e.type].cv;
         target.function.c_linkage = e.c_linkage && !internal;
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
@@ -156,7 +157,11 @@ void Procedural::run()
             string_literal(n);
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
-        if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace) continue;
+        bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
+        if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
+        if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || sem.synthetic_member(e))) continue;
+        if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function) continue;
         Function f; f.symbol = symbol(e); f.declaration = !entity.body;
@@ -169,12 +174,14 @@ void Procedural::run()
                 throw std::runtime_error("multiple function definitions");
             }
             prior.declaration = false;
-            prior.signature = signature(entity.type, FunctionId(existing.entity));
+            prior.signature = signature(sem.call_type(e), FunctionId(existing.entity));
             definitions.push_back(e);
             continue;
         }
         FunctionId id(p.functions.size()+1);
-        f.signature = signature(entity.type, id);
+        f.signature = signature(sem.call_type(e), id);
+        if (entity.member_info && !entity.is_static)
+            p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
         if (entity.builtin != semantic::Entity::NoBuiltin) {
             auto& sig = p.signatures[f.signature.index-1]; sig.boundary.unwind = CUM_NO;
             if (entity.builtin == semantic::Entity::Memcpy)
@@ -195,7 +202,12 @@ void Procedural::function_body(EntityId e)
     returned = sem.types[sem.entities[e].type].child;
     start(block());
     Signature sig = p.signatures[p.functions[function.index-1].signature.index-1];
-    unsigned j = 0;
+    unsigned j = 0; this_slot = SlotId();
+    if (sem.entities[e].member_info && !sem.entities[e].is_static) {
+        auto param = p.parameters[sig.parameters.begin+j++];
+        this_slot = builder->add_slot(0, IRType::Ptr);
+        emit(Opcode::Store, IRType::Ptr, {Operand::value(param.value), Operand::slot(this_slot)});
+    }
     for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
         EntityId id = sem.declarations[d].entity;
         if (sem.entities[id].kind != semantic::EntityKind::Parameter) continue;

@@ -3,6 +3,14 @@
 #include <ostream>
 
 namespace cppgm { namespace semantic {
+TypeId Analyzer::implicit_object_type(ScopeId s)
+{
+    while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
+    EntityId e = scopes[s].entity;
+    if (!e || !entities[e].member_info || entities[e].is_static) return 0;
+    Type f = types[members[entities[e].member_info].call_type];
+    return types.parameters[f.offset];
+}
 void Analyzer::member_facts(EntityId e)
 {
     if (!entities[e].member_info) {
@@ -21,6 +29,7 @@ void Analyzer::demand_member(EntityId e)
 {
     if (unevaluated_depth) return;
     std::uint32_t m = entities[e].member_info;
+    if (m) members[m].referenced = true;
     if (!m || members[m].demand != DemandState::Dormant || (!members[m].body && !members[m].synthetic)) return;
     members[m].demand = DemandState::Queued;
     demand_queue.push_back(e);

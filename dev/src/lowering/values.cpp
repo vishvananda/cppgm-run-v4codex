@@ -126,15 +126,27 @@ Value Procedural::incoming(NodeId n)
     auto x = sem.expression_fact(n);
     return x.incoming ? converted(n, sem.conversion_fact(x.incoming)) : load(expression(n));
 }
+Value Procedural::field(Value base, EntityId e)
+{
+    Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
+    Value v = emit(i, {base.operand, Operand::integer(sem.entities[e].member_offset)});
+    v.type = sem.entities[e].type;
+    if (reference(v.type)) { v = load(Value(v.operand, IRType::Ptr, v.type, true)); v.type = sem.types[sem.entities[e].type].child; }
+    v.address = true; return v;
+}
 Value Procedural::binding(EntityId e)
 {
     if (!e) throw std::logic_error("missing resolved declaration");
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
+    if (sem.nonstatic_field(e)) {
+        if (!this_slot) throw std::logic_error("missing implicit object");
+        return field(emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}), e);
+    }
     // An uninitialized automatic declaration may legally be bypassed by goto.
     // Storage identity is independent of whether its declaration falls through.
     if (!objects[e] && entity.kind == semantic::EntityKind::Variable &&
-        sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace)
+        sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !entity.is_static)
         objects[e] = builder->add_slot(0, type(t));
     bool local = objects[e].index != 0;
     Operand location = local ? Operand::slot(objects[e]) : Operand::symbol(symbol(e));

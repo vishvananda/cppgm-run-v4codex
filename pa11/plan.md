@@ -35,3 +35,11 @@ profit claim without repeatable evidence; required semantic work is documented.
   then extend into related initialization/lifetime and lookup groups.
 - All groups above remain open. Reference fixtures and comparison rules unchanged.
 - Handoff: implementation active; no completion claim.
+- Member-address foundation: selected calls record explicit/implicit object and cv
+  ranking; emitted member ABI/signatures carry this; field projections consume
+  cached layout, reference fields dereference storage, aggregate-array indexing
+  uses byte offsets. Static members and direct unreachable terminators are wired.
+  PA11 checkpoint 84/302 (218 failures); PA1–10 1025/1025, file audit pass.
+  `student.tests/pa11/member-addresses.cpp` explicitly compiled with
+  `--validate-lowir`, executed through supplied lowir2native-ref: exit 0.
+  No performance benefit claimed yet; frozen stage baseline remains available.
