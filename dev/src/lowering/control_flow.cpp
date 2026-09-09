@@ -2,6 +2,28 @@
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
+void Procedural::discard(NodeId n)
+{
+    if (!n) return;
+    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    if (ast[n].kind == Kind::Conditional) {
+        NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
+        Value test = load(expression(a));
+        if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
+        BlockId yes = block(), no = block(), end = block();
+        emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
+        start(yes); discard(b); jump(end);
+        start(no); discard(c); jump(end); start(end); return;
+    }
+    if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA) {
+        discard(ast[n].first); discard(ast[ast[n].first].next); return;
+    }
+    Value value = expression(n);
+    Kind k = ast[n].kind;
+    bool access = k == Kind::IdExpression || k == Kind::Member || k == Kind::Subscript ||
+        (k == Kind::Unary && ast[n].op == OP_STAR);
+    if (access && value.address && (sem.types[value.type].cv & 2)) load(value);
+}
 void Procedural::condition(NodeId n, BlockId yes, BlockId no)
 {
     if (ast[n].kind == Kind::Condition) {
@@ -129,7 +151,7 @@ void Procedural::statement(NodeId n)
     case Kind::ExpressionStatement: case Kind::Iteration: case Kind::ForInit:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) statement(c);
-            else expression(c);
+            else discard(c);
         }
         return;
     case Kind::Return:
@@ -149,11 +171,13 @@ void Procedural::statement(NodeId n)
     case Kind::Break: jump(break_target); return;
     case Kind::Continue: jump(continue_target); return;
     case Kind::If: {
-        BlockId yes = block(), no = block(), end = block();
+        BlockId yes = block(), no = block(), end;
         condition(child(n, Kind::Condition), yes, no);
-        start(yes); statement(child(n, Kind::Then)); bool yes_ends = ended; jump(end);
-        start(no); statement(child(n, Kind::Else)); bool no_ends = ended; jump(end);
-        if (!(yes_ends && no_ends)) start(end);
+        start(yes); statement(child(n, Kind::Then));
+        if (!ended) { end = block(); jump(end); }
+        start(no); statement(child(n, Kind::Else));
+        if (!ended) { if (!end) end = block(); jump(end); }
+        if (end) start(end);
         return;
     }
     case Kind::While: case Kind::For: case Kind::Do: {

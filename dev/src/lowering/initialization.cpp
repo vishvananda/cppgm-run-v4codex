@@ -39,11 +39,15 @@ void Procedural::global_data(NodeId n, TypeId t)
     auto array = sem.types[t];
     if (array.kind == TypeKind::Named && sem.entities[array.entity].class_info) {
         NodeId c = ast[n].first;
+        std::uint64_t bytes = 0, total = sem.object_size(t);
         for (auto d = sem.scopes[sem.entities[array.entity].scope].first_decl; d; d = sem.declarations[d].next) {
             auto member = sem.entities[sem.declarations[d].entity];
             if (member.kind != semantic::EntityKind::Variable || member.is_static) continue;
-            global_data(c, member.type); if (c) c = ast[c].next;
+            if (member.member_offset > bytes) { DataItem padding; padding.zero_bytes = member.member_offset-bytes; p.data.push_back(padding); }
+            global_data(c, member.type); bytes = member.member_offset + sem.object_size(member.type);
+            if (c) c = ast[c].next;
         }
+        if (total > bytes) { DataItem padding; padding.zero_bytes = total-bytes; p.data.push_back(padding); }
         return;
     }
     if (array.kind == TypeKind::Array) {

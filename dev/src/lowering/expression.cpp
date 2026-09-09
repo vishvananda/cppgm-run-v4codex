@@ -21,6 +21,9 @@ Value Procedural::expression(NodeId n, bool location)
             }
             v.type = fact.type; return v;
         }
+        if (sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::Discarded) {
+            discard(operand); return Value(Operand(), IRType(), fact.type);
+        }
         Value v = converted(operand, sem.conversion_fact(fact.conversions));
         v.type = fact.type; return v;
     }
@@ -85,8 +88,12 @@ Value Procedural::unary(NodeId n)
     }
     if (op == OP_INC || op == OP_DEC) {
         Value dest = expression(a, true), old = load(dest);
-        Value value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, old,
-            Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), fact.type);
+        TypeId promoted = sem.conversion_fact(fact.conversions).target;
+        Value value;
+        if (sem.types[dest.type].kind == TypeKind::Fundamental && sem.types[dest.type].fundamental == FT_BOOL)
+            value = Value(Operand::integer(1), IRType::U8, dest.type);
+        else value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, convert(old, promoted),
+            Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), promoted);
         value = convert(value, dest.type); store(value, dest);
         if (ast[n].kind == Kind::Postfix) return old;
         dest.cached = true; dest.stored = value.operand; return dest;
@@ -101,7 +108,7 @@ Value Procedural::binary(NodeId n, bool location)
     NodeId a = ast[n].first, b = ast[a].next;
     auto fact = sem.expression_fact(n);
     ETokenType op = ast[n].op;
-    if (op == OP_COMMA) { expression(a); return expression(b, location); }
+    if (op == OP_COMMA) { discard(a); return expression(b, location); }
     if (op == OP_LAND || op == OP_LOR) return logical(n);
     if (ast[n].kind == Kind::Assignment) {
         Value rhs, dest, lhs;
@@ -186,20 +193,21 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 Value Procedural::call(NodeId n)
 {
     auto fact = sem.expression_fact(n);
-    std::vector<Operand> args(1);
+    std::size_t begin = call_work.size();
+    call_work.push_back(Operand());
     for (unsigned j = 0; j < fact.argument_count; ++j)
-        args.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
+        call_work.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
     NodeId callee = ast[n].first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, type(sem.facts[n].type));
-    if (selected) args[0] = Operand::symbol(symbol(selected));
+    if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
-        Value fn = load(expression(callee)); args[0] = fn.operand;
+        Value fn = load(expression(callee)); call_work[begin] = fn.operand;
         TypeId ft = sem.expression_fact(callee).type;
         if (sem.types[ft].kind == TypeKind::Pointer) ft = sem.types[ft].child;
         i.signature = signature(ft);
     }
-    Value v = emit(i, args); v.type = fact.type;
+    Value v = emit(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
     if (reference(sem.facts[n].type)) v.address = true;
     return v;
 }

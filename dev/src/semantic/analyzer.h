@@ -22,7 +22,9 @@ public:
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
+    // Called after finish(): types/bindings/initializers are sealed for this TU.
     StaticValue static_value(NodeId n, TypeId target);
+    std::size_t static_requests = 0, static_hits = 0;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
@@ -32,6 +34,10 @@ private:
     IdentifierTable& ids;
     bool calls;
     bool c_linkage = false;
+    struct StaticFact { FactState state = FactState::NotStarted; StaticValue value; };
+    Index static_index;
+    std::vector<StaticFact> static_facts;
+    StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s);
     std::vector<Expression> expressions;
     std::vector<Conversion> conversions;

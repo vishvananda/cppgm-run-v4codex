@@ -26,19 +26,21 @@ NodeId Procedural::child(NodeId n, Kind k) const
     for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
     return 0;
 }
-Value Procedural::emit(Instruction i, const std::vector<Operand>& args)
+Value Procedural::emit(Instruction i, const Operand* args, std::size_t count)
 {
-    i.operands.begin = p.operands.size(); i.operands.count = args.size();
-    for (const Operand& a : args) p.operands.push_back(a);
+    i.operands.begin = p.operands.size(); i.operands.count = count;
+    for (std::size_t j = 0; j < count; ++j) p.operands.push_back(args[j]);
     if (i.result_type() != IRType()) i.destination = builder->value(0);
     builder->append(i);
     if (lowir_model::terminator(i.opcode)) ended = true;
     return Value(Operand::value(i.destination), i.result_type());
 }
+Value Procedural::emit(Instruction i, const std::vector<Operand>& args) { return emit(i, args.data(), args.size()); }
+Value Procedural::emit(Instruction i, std::initializer_list<Operand> args) { return emit(i, args.begin(), args.size()); }
 Value Procedural::emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action)
 {
     Instruction i(op, t); i.operation = action;
-    return emit(i, std::vector<Operand>(args));
+    return emit(i, args);
 }
 Value Procedural::load(Value v)
 {

@@ -40,6 +40,8 @@ class Procedural {
     std::vector<SymbolId> symbols, strings;
     std::vector<SlotId> objects;
     std::vector<BlockId> labels;
+    std::vector<SignatureId> indirect_signatures;
+    std::vector<Operand> call_work;
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
@@ -58,7 +60,9 @@ class Procedural {
     lowir_model::DataItem constant_data(NodeId n, TypeId t);
     IRType type(TypeId t);
     bool reference(TypeId t) const;
+    Value emit(Instruction i, const Operand* args, std::size_t count);
     Value emit(Instruction i, const std::vector<Operand>& args);
+    Value emit(Instruction i, std::initializer_list<Operand> args);
     Value emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action = Operation::None);
     Value load(Value v);
     Value address(Value v);
@@ -67,6 +71,7 @@ class Procedural {
     Value converted(NodeId n, const semantic::Conversion& c);
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
+    void discard(NodeId n);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
     Value conditional(NodeId n, bool location);
@@ -88,5 +93,5 @@ public:
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out);
     void run();
 };
-int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats);
+int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit = false);
 } }

@@ -37,7 +37,8 @@ Type Instruction::result_type() const
     case Opcode::Compare: case Opcode::AtomicCompareExchange: return Type::I64;
     case Opcode::Addr: case Opcode::Index: case Opcode::StackAlloc: return Type::Ptr;
     case Opcode::Const: case Opcode::Copy: case Opcode::Phi: case Opcode::Load:
-    case Opcode::Unary: case Opcode::Binary: case Opcode::Convert: case Opcode::AtomicLoad:
+    case Opcode::Binary: return type == Type::Ptr && operation == Operation::Sub ? Type(Type::I64) : type;
+    case Opcode::Unary: case Opcode::Convert: case Opcode::AtomicLoad:
     case Opcode::AtomicAddFetch: case Opcode::AtomicExchange: case Opcode::VaArg:
     case Opcode::Call: case Opcode::Exception: case Opcode::ExceptionSelector: return type;
     default: return Type();

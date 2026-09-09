@@ -58,7 +58,9 @@ SymbolId Procedural::symbol(EntityId id)
     for (auto s = e.owner; s && s != sem.global; s = sem.scopes[s].parent)
         if (sem.scopes[s].kind == semantic::ScopeKind::Namespace && !sem.scopes[s].name) internal = true;
     std::string name = spelling(e.name);
-    std::string display = "@" + name;
+    // Source ABI spelling and internal IR identity occupy separate namespaces.
+    // In particular a root C++ variable's ABI spelling is the bare source name.
+    std::string display = e.kind == semantic::EntityKind::Variable ? "@__global_" + name : "@" + name;
     if (p.symbol_names.find(p.intern(display))) display += "__" + std::to_string(id);
     SymbolId sid = p.symbol(p.intern(display)); symbols[id] = sid;
     SymbolMetadata metadata;
@@ -89,6 +91,10 @@ SymbolId Procedural::symbol(EntityId id)
 }
 SignatureId Procedural::signature(TypeId id, FunctionId owner)
 {
+    if (!owner) {
+        if (id >= indirect_signatures.size()) indirect_signatures.resize(sem.types.records.size());
+        if (indirect_signatures[id]) return indirect_signatures[id];
+    }
     auto t = sem.types[id];
     Signature sig; sig.result = type(t.child); sig.parameters.begin = p.parameters.size();
     sig.parameters.count = t.count;
@@ -107,7 +113,10 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         }
         p.parameters.push_back(param);
     }
-    p.signatures.push_back(sig); return SignatureId(p.signatures.size());
+    p.signatures.push_back(sig);
+    SignatureId result(p.signatures.size());
+    if (!owner) indirect_signatures[id] = result;
+    return result;
 }
 Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, Program& out)
     : ast(a), sem(s), identifiers(ids), p(out), abi_types(s.types.records.size()), abi_scopes(s.scopes.size()),

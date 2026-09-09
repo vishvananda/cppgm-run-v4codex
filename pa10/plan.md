@@ -13,14 +13,13 @@ Translation-unit vectors indexed by EntityId/NodeId own lowering mappings;
 function-local builders own value/slot/block IDs and release transient state
 after each body. Work is proportional to semantic nodes and produced IR.
 
-## Remaining groups
+## Remaining work
 
-- Driver, ABI adapter, typed value/slot construction; scalar expressions and
-  conversions. Validate arithmetic, boolean, casts and enum fixtures together.
-- Statement CFG, short circuit, loops, switch and condition declarations.
-- Resolved direct/indirect calls, defaults and reference storage boundaries.
-- Constant globals, array layout/initialization, scaled pointers, volatile
-  accesses and memory builtin metadata. Preserve facts for later object lowering.
+Course behavior is complete: 121/121 including 5/5 focused controls. The two
+constant-initialization corrections are proved in `reference-corrections.md`.
+Finish the frozen performance campaign and sanitizer audit, then rerun exit
+checks and record final evidence. No later object-model/template lowering is
+part of this procedural stage.
 
 ## Performance evidence
 
@@ -44,3 +43,10 @@ to their owning stages; all mandated current-stage constraints remain.
   where C++11 requires 0. Proof review and corrected sidecars are next.
 - Still active: complete reference proof, personal native/API verification,
   architectural cleanup and frozen performance evidence. No handoff yet.
+
+- Audit increment: full through report 1025/1025; seven independent native
+  programs and seven semantic rejections pass. Added explicit in-memory IR
+  validation, constant-fact memoization, shared indirect signatures, and
+  function-owned operand scratch. Fixed discarded volatile reads, bool
+  increment normalization, aggregate padding and ABI/IR global-name collisions.
+  The successful course corpus also passes `--validate-lowir`.

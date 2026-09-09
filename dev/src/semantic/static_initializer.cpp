@@ -4,6 +4,23 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 StaticValue Analyzer::static_value(NodeId n, TypeId target)
 {
+    ++static_requests;
+    std::uint64_t key = (std::uint64_t(n) << 32) | target;
+    unsigned index = static_index.get(key);
+    if (index) {
+        ++static_hits;
+        return static_facts[index-1].state == FactState::Success ? static_facts[index-1].value : StaticValue();
+    }
+    index = static_facts.size()+1;
+    static_index.put(key, index);
+    StaticFact fact; fact.state = FactState::Active; static_facts.push_back(fact);
+    StaticValue result = static_value_impl(n, target);
+    static_facts[index-1].value = result;
+    static_facts[index-1].state = result.kind == StaticValue::Invalid ? FactState::Failure : FactState::Success;
+    return result;
+}
+StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
+{
     StaticValue r;
     if (!n) { r.kind = StaticValue::Integer; return r; }
     NodeId first = ast[n].first;

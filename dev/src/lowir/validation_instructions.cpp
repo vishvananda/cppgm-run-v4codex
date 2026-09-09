@@ -49,13 +49,19 @@ void Validator::instruction(const Instruction& i) const
         if (i.operation == Operation::Bswap) require(i.type == Type::I16 || i.type == Type::I32 || i.type == Type::I64, "invalid bswap width");
         break;
     case Opcode::Binary:
-        count(2); require(i.type.integer() || i.type.floating(), "invalid binary type");
+        count(2); require(i.type.integer() || i.type.floating() || (i.type == Type::Ptr && i.operation == Operation::Sub), "invalid binary type");
         require(i.operation >= Operation::Add && i.operation <= Operation::Ushr, "invalid binary operator");
         if (i.type.floating()) require(i.operation <= Operation::Div, "invalid floating binary operator");
         value(arg(0), i.type); value(arg(1), i.type); break;
     case Opcode::Compare:
         count(2); scalar(); require(i.operation >= Operation::Eq && i.operation <= Operation::Uge, "invalid comparison predicate");
-        value(arg(0), i.type); value(arg(1), i.type); break;
+        // The procedural contract materializes scalar truth with cmp ne i64
+        // against zero, including a narrow integral input. No nonzero test
+        // depends on how that input is extended. Other comparisons stay strict.
+        if (i.type == Type::I64 && i.operation == Operation::Ne && arg(1).kind == Operand::Integer && !arg(1).data.integer)
+            integer(arg(0));
+        else { value(arg(0), i.type); value(arg(1), i.type); }
+        break;
     case Opcode::Convert: count(1); conversion(i, arg(0)); break;
     case Opcode::AtomicLoad: count(2); atomic(i); break;
     case Opcode::AtomicStore: case Opcode::AtomicAddFetch: case Opcode::AtomicExchange: count(3); atomic(i); break;
