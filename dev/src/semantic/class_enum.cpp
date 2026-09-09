@@ -56,8 +56,10 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             NodeId list = child(n, Kind::Bases);
             for (NodeId b = ast[list].first; b; b = ast[b].next) {
                 EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, owner, Lookup::Qualifier);
+                if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
                 if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
                 std::uint32_t info = entities[e].class_info;
+                class_facts[info].aggregate = false;
                 bases.push_back({base, class_facts[info].first_base});
                 class_facts[info].first_base = bases.size() - 1;
                 add_edge(cs, entities[base].scope);

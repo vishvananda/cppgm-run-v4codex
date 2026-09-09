@@ -50,9 +50,16 @@ Value Procedural::expression(NodeId n, bool location)
         return Value(ast[n].op == KW_NULLPTR ? Operand::null() : Operand::integer(ast[n].op == KW_TRUE),
         ast[n].op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
+        if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
+            auto c = sem.constant_fact(n); return Value(Operand::integer(c.bits), type(fact.type), fact.type);
+        }
         if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
             auto c = sem.entities[fact.entity].constant;
             return Value(Operand::integer(c.bits), type(fact.type), fact.type);
+        }
+        if (sem.nonstatic_field(fact.entity)) {
+            Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
         }
         return binding(fact.entity);
     case Kind::Parenthesized: return expression(a, location);
@@ -82,7 +89,7 @@ Value Procedural::expression(NodeId n, bool location)
         }
         if (member.is_static) { discard(a, false); return binding(fact.entity); }
         Value base = ast[n].op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
-        Value v = field(base, fact.entity); v.type = fact.type; return v;
+        Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
         if (a) return expression(a, location);
@@ -221,15 +228,16 @@ Value Procedural::call(NodeId n)
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());
-    if (fact.object_type) {
+    auto object_use = sem.object_fact(n);
+    if (object_use.type) {
         Value object;
-        if (fact.object) {
-            object = expression(fact.object, true);
-            object = sem.types[sem.expression_fact(fact.object).type].kind == TypeKind::Pointer ? load(object) : address(object);
+        if (object_use.node) {
+            object = expression(object_use.node, true);
+            object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
         } else object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
-        call_work.push_back(object.operand);
-    } else if (fact.object) {
-        Value object = expression(fact.object);
+        call_work.push_back(base_projection(object, sem.object_fact(n).adjustment).operand);
+    } else if (object_use.node) {
+        Value object = expression(object_use.node);
         if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
     }
     // The course's indirect-call fixtures evaluate arguments before fetching

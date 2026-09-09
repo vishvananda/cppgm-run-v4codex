@@ -21,7 +21,7 @@ std::vector<EntityId> Analyzer::candidates(EntityId e)
     }
     return result;
 }
-EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type)
+EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor)
 {
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
@@ -37,7 +37,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     if (calls && scopes[owner].kind == ScopeKind::Template) template_facts(e);
     if (!family) { family = e; function_families.put(key(owner, name), family); }
     function_signatures.put(key(family, shape), e);
-    bind(owner, name, e);
+    if (!constructor) bind(owner, name, e);
     return e;
 }
 bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t count)
@@ -143,9 +143,10 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
     bool direct_name = ast[designator].kind == Kind::IdExpression || ast[designator].kind == Kind::Member;
     TypeId object_type = 0;
+    NodeId object_node = 0;
     if (ast[designator].kind == Kind::Member) {
-        result.object = ast[designator].first;
-        object_type = expressions[result.object].type;
+        object_node = ast[designator].first;
+        object_type = expressions[object_node].type;
         if (ast[designator].op == OP_ARROW) object_type = types[object_type].child;
     } else {
         TypeId implicit = implicit_object_type(s);
@@ -196,8 +197,12 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         EntityId selected = viable[best].entity;
         facts[n].entity = selected;
         if (entities[selected].member_info && !entities[selected].is_static)
-            result.object_type = types.parameters[types[call_type(selected)].offset];
+        {
+            record_object(result, object_node, types.parameters[types[call_type(selected)].offset],
+                base_steps(object_type, scopes[entities[selected].owner].entity));
+        }
         ft = entities[selected].type;
+        if (object_node && !result.object_use) record_object(result, object_node, 0, 0);
         Type selected_type = types[ft];
         std::vector<Conversion> chosen(sequences.begin() + viable[best].offset + object_ranking,
             sequences.begin() + viable[best].offset + object_ranking + args.size());

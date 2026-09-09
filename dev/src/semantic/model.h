@@ -70,6 +70,9 @@ struct ClassFacts {
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
+    bool aggregate = true, empty = true;
+    EntityId value_constructor = 0;
+    unsigned char value_state = 0;
 };
 struct Entity {
     EntityKind kind = EntityKind::Variable;
@@ -93,6 +96,10 @@ struct MemberFacts {
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false;
+    bool constructor = false, explicit_constructor = false, deleted = false;
+    bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
+    std::uint32_t action_begin = 0, action_count = 0;
+    unsigned char trivial_state = 0;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
 struct TemplateFunction {
@@ -109,6 +116,7 @@ struct Specialization {
 };
 struct BaseRelation { EntityId base; std::uint32_t next; };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
+struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;
     ScopeId jump = 0;
@@ -131,8 +139,7 @@ struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool 
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable };
 struct Expression {
-    NodeId object = 0; // Explicit implicit-object operand of a selected member call.
-    TypeId object_type = 0; // Selected implicit-object pointer type, zero for static/free calls.
+    std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
     EntityId entity = 0; // Known identity of this value, never a producing call.
     // Calls record their selected declaration in Fact::entity. Conversion ranges
@@ -143,6 +150,7 @@ struct Expression {
     ExpressionForm form = ExpressionForm::Ordinary;
     bool ready = false, evaluated = false;
 };
+struct ObjectUse { NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; };
 struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.

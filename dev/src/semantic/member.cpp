@@ -3,6 +3,17 @@
 #include <ostream>
 
 namespace cppgm { namespace semantic {
+unsigned Analyzer::base_steps(TypeId from, EntityId to) const
+{
+    EntityId e = types[from].entity;
+    unsigned count = 0;
+    while (e && e != to) {
+        auto b = class_facts[entities[e].class_info].first_base;
+        if (!b) return 0;
+        e = bases[b].base; ++count;
+    }
+    return count;
+}
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {
     while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
@@ -38,17 +49,8 @@ void Analyzer::default_initialize(EntityId object)
 {
     TypeId t = entities[object].type;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return;
-    EntityId cls = types[t].entity;
-    std::uint32_t c = entities[cls].class_info;
-    EntityId ctor = class_facts[c].constructor;
-    if (!ctor) ctor = class_facts[c].implicit_constructor;
-    if (!ctor) {
-        ctor = make_entity(EntityKind::Function, entities[cls].scope, entities[cls].name, 0);
-        entities[ctor].type = types.function(types.fundamental(FT_VOID), {}, false);
-        member_facts(ctor);
-        members[entities[ctor].member_info].synthetic = true;
-        class_facts[c].implicit_constructor = ctor;
-    }
+    EntityId ctor = default_constructor(t);
+    members[entities[ctor].member_info].source_demand = true;
     object_actions.put(object, actions.size());
     actions.push_back({object, ctor, types.compound(TypeKind::Pointer, t)});
     demand_member(ctor);
@@ -118,5 +120,27 @@ void Analyzer::write_function(std::ostream& out, EntityId e, NodeId body, ScopeI
     }
     if (body) write_resolved(out, body, depth + 1);
     else if (definition) { indent(out, depth + 1); out << "compound-statement\n"; }
+}
+} }
+
+namespace cppgm { namespace semantic {
+TypeId Analyzer::call_type(EntityId e) const
+{ return entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type; }
+bool Analyzer::member_demanded(EntityId e) const
+{ return entities[e].member_info && members[entities[e].member_info].referenced; }
+bool Analyzer::constructor_member(EntityId e) const
+{ return entities[e].member_info && members[entities[e].member_info].constructor; }
+EntityId Analyzer::value_constructor(TypeId t) const
+{ return types[t].kind == TypeKind::Named && entities[types[t].entity].class_info ? class_facts[entities[types[t].entity].class_info].value_constructor : 0; }
+EntityId Analyzer::object_constructor(EntityId e) const
+{ auto a = object_actions.get(e); return a ? actions[a].constructor : 0; }
+bool Analyzer::synthetic_member(EntityId e) const
+{ return entities[e].member_info && members[entities[e].member_info].synthetic; }
+bool Analyzer::nonstatic_field(EntityId e) const
+{ return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class; }
+void Analyzer::record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment)
+{
+    ObjectUse use; use.node = node; use.type = type; use.adjustment = adjustment;
+    owner.object_use = object_uses.size(); object_uses.push_back(use);
 }
 } }

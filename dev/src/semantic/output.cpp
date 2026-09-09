@@ -120,6 +120,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_dependence_work\":" << dependence_work
         << ",\"semantic_specializations\":" << specializations.size() - 1
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
+        << ",\"semantic_object_uses\":" << object_uses.size() - 1
+        << ",\"semantic_constructor_actions\":" << subobject_actions.size()
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work

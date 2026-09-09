@@ -20,3 +20,6 @@ FRONTEND_OBJ_BASENAMES_lowir2native :=
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_arguments semantic/jump_validation semantic/static_initializer lowering/driver lowering/symbols lowering/values lowering/expression lowering/control_flow lowering/initialization lowir/model lowir/opcode lowir/instruction_shape lowir/writer lowir/instruction_writer lowir/metadata_vocabulary abi/itanium/graph abi/itanium/graph_validation abi/itanium/vocabulary abi/itanium/encoder abi/itanium/function_encoder abi/itanium/expression_encoder
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/signature_validation lowir/validator lowir/validation_values lowir/validation_instructions
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction lowering/construction
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/global_initialization

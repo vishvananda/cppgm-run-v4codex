@@ -56,10 +56,19 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
         r.type = value_type(entities[e].type);
+        if (entities[e].constant.valid && scopes[entities[e].owner].kind != ScopeKind::Namespace &&
+            scopes[entities[e].owner].kind != ScopeKind::Class) {
+            ScopeId use = s;
+            while (use && scopes[use].kind != ScopeKind::Function) use = scopes[use].parent;
+            if (use && !encloses(use, entities[e].owner)) {
+                facts[n].value = constants.size(); constants.push_back(entities[e].constant);
+            }
+        }
         if (nonstatic_field(e)) {
             TypeId object = implicit_object_type(s);
             if (object) {
                 size(types[object].child);
+                record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
                 r.type = types.qualify(r.type, types[types[object].child].cv);
             } else if (!unevaluated_depth && !class_facts[entities[scopes[entities[e].owner].entity].class_info].storage) throw std::runtime_error("field requires object");
         }
@@ -111,6 +120,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         EntityId e = lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
+        if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
         if (entities[e].kind == EntityKind::Overload) r.form = ExpressionForm::Overload;
         else r.type = types.qualify(value_type(entities[e].type), entities[e].is_static ? 0 : types[t].cv);
         r.category = ast[n].op == OP_ARROW || object.category == ValueCategory::Lvalue ? ValueCategory::Lvalue : ValueCategory::Xvalue;

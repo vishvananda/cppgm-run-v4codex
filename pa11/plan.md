@@ -43,3 +43,22 @@ profit claim without repeatable evidence; required semantic work is documented.
   `student.tests/pa11/member-addresses.cpp` explicitly compiled with
   `--validate-lowir`, executed through supplied lowir2native-ref: exit 0.
   No performance benefit claimed yet; frozen stage baseline remains available.
+- Construction increment: overload selection/default arguments; copy-list explicit
+  rejection; ordered base/member and default-member actions; elided same-type
+  construction; implicit-helper triviality memoization; reference/aggregate leaf
+  destinations; namespace initialization. C1/C2 ABI entries share one emitted
+  body. Field/member-call facts moved to a rare TU arena; scalar nodes keep one
+  compact index. Source semantic views retain source-demand identities.
+  Current PA11 156/302: 113 original fixture failures fixed, zero newly failing
+  original fixtures. Earlier 1025/1025; both explicit personal native checks pass.
+- Remaining: full access/ADL/operators; aggregate brace elision, class arrays and
+  union/volatile/zeroinit boundaries; destructor/lifetime cleanup and TLS;
+  alignment/bit-fields; inheriting constructors and remaining boundary metadata.
+  The current initializer actions are complete for the scalar/reference and
+  single-base constructor group; array/lifetime actions need a shared cleanup
+  owner before extending them across loops, goto, returns and global/TLS teardown.
+- Performance campaign: frozen protocol in
+  `student.tests/pa11/performance-protocol.md`; final measurement pending.
+  File audit passes with an advisory counting Analyzer declarations as body
+  lines (>180); new construction implementation is in separately registered .cpp
+  owners, and the header holds declarations plus trivial fact accessors.

@@ -55,7 +55,7 @@ class Procedural {
     std::vector<unsigned char> discard_accesses;
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
-    std::vector<EntityId> definitions;
+    std::vector<EntityId> definitions, global_initializers;
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
@@ -70,6 +70,13 @@ class Procedural {
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
     void function_body(EntityId e);
+    struct InitProjection { std::uint64_t offset; bool field; };
+    Value initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path);
+    void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
+    void constructor_body(EntityId e);
+    void construct(EntityId ctor, NodeId init, Value object);
+    bool constant_initializer(NodeId n, TypeId t);
+    void global_initialization();
     void global(EntityId e);
     void string_literal(NodeId n);
     void global_data(NodeId n, TypeId t);
@@ -96,7 +103,8 @@ class Procedural {
     Value call(NodeId n);
     Value operation(ETokenType op, Value a, Value b, TypeId result);
     Value binding(EntityId e);
-    Value field(Value base, EntityId e);
+    Value field(Value base, EntityId e, unsigned steps = 0);
+    Value base_projection(Value base, unsigned steps);
     void store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);

@@ -232,6 +232,7 @@ NodeId Parser::initializer()
 {
     NodeId result = make(Kind::Initializer);
     if (in.eat("=")) {
+        ast[result].flags |= 1;
         if (in.is("default") || in.is("delete")) ast.append(result, leaf(Kind::SpecialInitializer));
         else ast.append(result, in.is("{") ? primary() : expression(2));
     } else if (in.eat("(")) ast.append(result, arguments(Kind::ParenInitializer, ")"));

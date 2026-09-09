@@ -64,6 +64,7 @@ SymbolId Procedural::symbol(EntityId id)
     SymbolMetadata metadata;
     metadata.binding = internal ? SBM_INTERNAL : e.inline_function ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function;
+    if (e.member_info) metadata.object_root = sem.member_fact(id).base_entry;
     if (e.c_linkage) metadata.linkage = LLM_C;
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
     else if (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
@@ -74,6 +75,7 @@ SymbolId Procedural::symbol(EntityId id)
         target.function.name = aname;
         target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
         target.function.qualifiers = sem.types[e.type].cv;
+        if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;
         target.function.c_linkage = e.c_linkage && !internal;
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
@@ -106,6 +108,10 @@ SymbolId Procedural::symbol(EntityId id)
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
+    if (sem.constructor_member(id) && sem.constructor_needed(id) && (e.body || sem.synthetic_member(id))) {
+        target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
+        ObjectAlias alias; alias.name = p.intern(abi_mangle::mangle(abi, target)); alias.target = sid; p.aliases.push_back(alias);
+    }
     return sid;
 }
 SymbolId Procedural::fresh_symbol(const std::string& preferred)
@@ -160,11 +166,12 @@ void Procedural::run()
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
-        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || sem.synthetic_member(e))) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.constructor_needed(e)))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function) continue;
-        Function f; f.symbol = symbol(e); f.declaration = !entity.body;
+        bool defined = entity.body || (sem.constructor_member(e) && sem.synthetic_member(e));
+        Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];
         if (existing.kind == Symbol::FunctionSymbol) {
             if (!entity.body) continue;
@@ -189,11 +196,12 @@ void Procedural::run()
         }
         p.functions.push_back(f);
         auto& sym = p.symbols[f.symbol.index-1]; sym.kind = Symbol::FunctionSymbol; sym.entity = id.index;
-        if (entity.body) definitions.push_back(e);
+        if (defined) definitions.push_back(e);
     }
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable) global(e);
     for (EntityId e : definitions) function_body(e);
+    if (!global_initializers.empty()) global_initialization();
 }
 void Procedural::function_body(EntityId e)
 {
@@ -215,6 +223,7 @@ void Procedural::function_body(EntityId e)
         SlotId slot = builder->add_slot(0, param.type); objects[id] = slot;
         emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
+    if (sem.constructor_member(e)) constructor_body(e);
     mark_control_entries(sem.entities[e].body);
     statement(sem.entities[e].body);
     if (!ended) {

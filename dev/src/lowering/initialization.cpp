@@ -78,7 +78,16 @@ void Procedural::global(EntityId e)
     g.structured = sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
-        if (reference(t)) {
+        bool class_object = sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info;
+        bool dynamic = entity.initializer && !constant_initializer(entity.initializer, t);
+        if (class_object && !entity.initializer) dynamic = true;
+        if (dynamic) {
+            if (entity.thread_local_storage) throw std::runtime_error("dynamic thread-local initializer requires per-thread wrapper");
+            global_initializers.push_back(e);
+            g.data.begin = p.data.size(); g.data.count = 1;
+            DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
+        }
+        else if (reference(t)) {
             auto value = sem.static_value(entity.initializer, t);
             if (value.kind != semantic::StaticValue::Address) {
                 Global temp;
@@ -106,11 +115,21 @@ void Procedural::object(EntityId e)
     if (!objects[e]) objects[e] = builder->add_slot(0, type(t));
     Value location(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;
-    if (init) initialize(init, t, location);
-    else if (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info) address(location);
+    if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
+        address(location);
+        std::vector<InitProjection> path;
+        aggregate_initialize(init, t, location, false, path);
+    } else if (init) initialize(init, t, location);
+    else if (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info) {
+        Value base = address(location);
+        construct(sem.object_constructor(e), 0, base);
+    }
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {
+    if (n && sem.facts[n].entity && sem.constructor_member(sem.facts[n].entity)) {
+        construct(sem.facts[n].entity, n, address(location)); return;
+    }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = sem.types[t];
     if (target.kind == TypeKind::Named && sem.entities[target.entity].class_info) {
@@ -139,7 +158,7 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
         while (count < target.bound) element(0);
         return;
     }
-    if (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer) n = ast[n].first;
+    if (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
     Value value = n ? (sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     store(value, location);
 }

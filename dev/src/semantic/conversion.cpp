@@ -238,14 +238,16 @@ Conversion Analyzer::boolean_conversion(NodeId n)
 }
 void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
 {
+    if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s)) return;
     if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s); return; }
-    if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::BracedInit) {
+    if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
         if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info) {
             NodeId c = ast[n].first;
             for (auto d = scopes[entities[types[target].entity].scope].first_decl; d; d = declarations[d].next) {
                 EntityId e = declarations[d].entity;
                 if (entities[e].kind != EntityKind::Variable || entities[e].is_static) continue;
                 if (c) { initialize(c, entities[e].type, s); c = ast[c].next; }
+                else prepare_value_initialization(entities[e].type);
             }
             if (c) throw std::runtime_error("excess aggregate initializer");
             facts[n].type = target; return;

@@ -193,6 +193,7 @@ void Analyzer::write_semantics(std::ostream& out, NodeId root) const
     }
     for (EntityId e : demand_queue) {
         const MemberFacts& m = members[entities[e].member_info];
+        if (m.synthetic && m.constructor && !m.source_demand) continue;
         write_function(out, e, m.body, entities[e].scope, 1);
     }
 }

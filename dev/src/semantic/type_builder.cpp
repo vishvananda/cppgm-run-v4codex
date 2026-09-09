@@ -191,10 +191,15 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     TypeId canonical = types.signature(t);
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
-        scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id;
+        scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast[ast[name].last].op != OP_COMPL;
     EntityId cls = constructor ? scopes[owner].entity : 0;
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
-    if (function && !constructor) e = declare_function(owner, id, source, canonical);
+    if (constructor) {
+        EntityId selected = declare_function(owner, id, source, canonical, true);
+        class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
+        e = selected;
+    }
+    else if (function) e = declare_function(owner, id, source, canonical);
     else if (e && entities[e].kind == kind) {
         if (calls && kind == EntityKind::Variable && (scopes[owner].kind == ScopeKind::Block || scopes[owner].kind == ScopeKind::Control) &&
             !spec_has(specs, KW_EXTERN)) throw std::runtime_error("duplicate local variable");
@@ -213,11 +218,21 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) function_defaults(e, d, owner);
-    if (calls && function && scopes[owner].kind == ScopeKind::Class) member_facts(e);
+    if (calls && function && scopes[owner].kind == ScopeKind::Class) {
+        member_facts(e);
+        auto m = entities[e].member_info;
+        members[m].constructor = constructor;
+        members[m].explicit_constructor = spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
+        NodeId special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
+        members[m].deleted = special && ast[special].op == KW_DELETE;
+        if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
+    }
     record(owner, e, d, t, kind);
-    if (calls && init && !function) initialize(init, canonical, owner);
+    bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
+    if (member_initializer) class_facts[entities[scopes[s].entity].class_info].aggregate = false;
+    if (calls && init && !function && !member_initializer) initialize(init, canonical, owner);
     if (calls && !init && !function && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
-    if (init && !alias && !function && integral(t)) {
+    if (init && !alias && !function && integral(t) && !member_initializer) {
         Constant v = evaluate(init, owner);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {

@@ -19,6 +19,7 @@ public:
     std::vector<Declaration> declarations;
     std::vector<Fact> facts;
     const Expression& expression_fact(NodeId n) const { return expressions[n]; }
+    const ObjectUse& object_fact(NodeId n) const { return object_uses[expressions[n].object_use]; }
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
@@ -29,10 +30,16 @@ public:
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
-    TypeId call_type(EntityId e) const { return entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type; }
-    bool member_demanded(EntityId e) const { return entities[e].member_info && members[entities[e].member_info].referenced; }
-    bool synthetic_member(EntityId e) const { return entities[e].member_info && members[entities[e].member_info].synthetic; }
-    bool nonstatic_field(EntityId e) const { return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class; }
+    TypeId call_type(EntityId e) const;
+    bool member_demanded(EntityId e) const;
+    bool constructor_member(EntityId e) const;
+    bool constructor_needed(EntityId e);
+    EntityId value_constructor(TypeId t) const;
+    EntityId object_constructor(EntityId e) const;
+    const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
+    std::vector<SubobjectAction> subobject_actions;
+    bool synthetic_member(EntityId e) const;
+    bool nonstatic_field(EntityId e) const;
 private:
     syntax::Ast& ast;
     IdentifierTable& ids;
@@ -44,6 +51,8 @@ private:
     StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s);
     std::vector<Expression> expressions;
+    std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
+    void record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment);
     std::vector<Conversion> conversions;
     Index function_families, function_signatures;
     std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0, dependence_work = 0;
@@ -88,7 +97,7 @@ private:
     EntityId merge_lookup(EntityId a, EntityId b);
     bool function_binding(EntityId e) const;
     std::vector<EntityId> candidates(EntityId e);
-    EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
+    EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
@@ -108,6 +117,7 @@ private:
     void add_edge(ScopeId s, ScopeId to, bool is_inline = false);
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
+    unsigned base_steps(TypeId from, EntityId to) const;
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
     void template_facts(EntityId e);
@@ -120,6 +130,11 @@ private:
     EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
     void demand_specialization(EntityId e);
     void demand_member(EntityId e);
+    void prepare_value_initialization(TypeId t);
+    EntityId default_constructor(TypeId t);
+    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0);
+    void constructor_actions(EntityId e);
+    bool class_initialize(NodeId n, TypeId target, ScopeId s);
     void default_initialize(EntityId object);
     bool derived_from(TypeId from, TypeId to);
     void write_function(std::ostream& out, EntityId e, NodeId body, ScopeId scope, unsigned depth, bool definition = true) const;

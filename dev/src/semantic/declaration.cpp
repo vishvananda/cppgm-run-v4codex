@@ -23,6 +23,7 @@ void Analyzer::finish()
         members[m].demand = DemandState::Active;
         if (f.body && !entities[e].definition)
             function_body({f.body, f.declarator, entities[e].owner, e, f.source});
+        if (members[m].constructor) constructor_actions(e);
         members[m].demand = DemandState::Complete;
     }
 }
@@ -136,6 +137,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
             members[entities[e].member_info].synthetic = true;
+            entities[e].inline_function = true;
             facts[n].entity = e; facts[n].type = entities[e].type;
         }
         if (ast[n].kind == Kind::SpecialDefinition) {
@@ -205,6 +207,7 @@ void Analyzer::function_body(const Body& body)
     }
     TypeId saved_return = return_type;
     return_type = types[entities[body.entity].type].child;
+    if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
     if (calls) check_jumps(body.node);
     return_type = saved_return;

@@ -126,8 +126,14 @@ Value Procedural::incoming(NodeId n)
     auto x = sem.expression_fact(n);
     return x.incoming ? converted(n, sem.conversion_fact(x.incoming)) : load(expression(n));
 }
-Value Procedural::field(Value base, EntityId e)
+Value Procedural::base_projection(Value base, unsigned steps)
 {
+    while (steps--) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(0)});
+    return base;
+}
+Value Procedural::field(Value base, EntityId e, unsigned steps)
+{
+    base = base_projection(base, steps);
     Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
     Value v = emit(i, {base.operand, Operand::integer(sem.entities[e].member_offset)});
     v.type = sem.entities[e].type;
@@ -150,6 +156,9 @@ Value Procedural::binding(EntityId e)
         objects[e] = builder->add_slot(0, type(t));
     bool local = objects[e].index != 0;
     Operand location = local ? Operand::slot(objects[e]) : Operand::symbol(symbol(e));
+    if (entity.thread_local_storage) {
+        Value at = emit(Opcode::Addr, IRType(), {location}); location = at.operand;
+    }
     if (reference(t)) {
         Value pointer = emit(Opcode::Load, IRType::Ptr, {location});
         t = sem.types[t].child;
