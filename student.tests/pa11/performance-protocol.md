@@ -208,3 +208,20 @@ neither the original binary nor its observations are overwritten.
 Constant-array lowering in A is dynamically correct but lacks the required
 static IR facts. The B-only family measurements assess required construction
 work and scaling, not a speed benefit from early static initialization.
+
+Final B is 265440db, SHA256
+48ded3f8de96305e55004427cadb840a6128f7353de8dffaf8c8c2512a2fbfbc.
+The final common campaign has isolated wall spikes in calls-1, memory-float-1,
+calls-4 and memory-float-4, noisy template calibrations at both scales, and
+noisy references-4/references-8000 calibration. Repeat those eight groups through
+`selection_repeat.py` with explicit arguments, retaining all 96 observations in
+`construction-repeat-performance.json`. Its inherited protocol label refers to
+the earlier campaign using the same procedure. Some reference wall spikes and
+calibration noise remain; do not infer a speedup or discard them.
+
+The final calls-4 peak-RSS increase repeats. Record separate A/B `--stats`
+invocations for calls-4 and memory-float-4 in
+`construction-memory-diagnostic.json`, checking hashes and equivalent output.
+These observations compare existing work counters and capacities; they are not
+ABBA timing evidence or proof of an allocation cause. Preserve the initial
+campaign, final campaign, follow-up and diagnostic together.
