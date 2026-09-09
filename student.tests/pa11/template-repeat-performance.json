@@ -1,0 +1,366 @@
+{
+  "protocol": "performance-protocol.md",
+  "order": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0
+  ],
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "compiler_flags": "g++ -std=gnu++11 -Wall -O3; course TEST_RUNNER_ENABLE",
+  "host": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "backend": {
+    "wrapper_sha256": "0e1a0307bab95cf433727e90e0ae7de70c7293c7fc874de9e76f9cadfa1e7e6c",
+    "flags": "-O0",
+    "sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+    "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98"
+  },
+  "text_metric": "compiler .text; sectionless native executable payload after ELF entry (no static data)",
+  "implementation_commits": [
+    "a97e14d49c7edfc7acc115b974ab667cc90480db",
+    "1789701403c7b5e52eb29ce1f2f761dea9a36a63"
+  ],
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa11-performance/base-cppgm",
+      "sha256": "735577050dd7757fad4b71577ac153656bf87d7d986a0f9b30a326c40ea098f7",
+      "text_bytes": 564230
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa11-performance/constructor-cppgm",
+      "sha256": "6034633f6aa3cd042c02be240e6d9852382db0ffcfd0fbec8b71ae14ef69f24a",
+      "text_bytes": 597894
+    }
+  ],
+  "inputs": {
+    "template-semantics-4": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa11-performance/template-repeat/template-semantics-4.t",
+      "sha256": "a9ba53cf364202cb89329ba46b17630d3339882f2152cdb2965f930c8a859784",
+      "scale": 4,
+      "mode": "--emit-semantics",
+      "output_hashes": [
+        "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174",
+        "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174"
+      ],
+      "output_bytes": [
+        3321056,
+        3321056
+      ],
+      "equivalence": "byte-identical",
+      "telemetry": {
+        "wall_s": 0.257762074,
+        "rss_kib": 36200,
+        "user_s": 0.19,
+        "system_s": 0.05,
+        "involuntary": 14,
+        "voluntary": 1,
+        "phases": [
+          {
+            "frontend_ms": 224.302,
+            "emit_ms": 22.4434,
+            "peak_rss_kib": 36200,
+            "source_bytes": 394924,
+            "tokens": 154012,
+            "max_pending": 3,
+            "nodes": 224024,
+            "node_capacity": 262144,
+            "node_growths": 18,
+            "location_growths": 18,
+            "literal_growths": 14,
+            "node_bytes": 32,
+            "locations": 154012,
+            "location_capacity": 262144,
+            "delimiter_work": 154012,
+            "angle_work": 0,
+            "angle_hits": 0,
+            "hint_bytes": 100897,
+            "scopes": 28003,
+            "name_probes": 244537,
+            "lookup_scopes": 0,
+            "syntax_decisions": 28003,
+            "semantic_ms": 60.9979,
+            "semantic_dependence_work": 3,
+            "semantic_specializations": 1,
+            "semantic_argument_packs": 1,
+            "semantic_object_uses": 0,
+            "semantic_constructor_actions": 0,
+            "semantic_member_demands": 0,
+            "semantic_demand_processed": 0,
+            "semantic_expression_work": 42000,
+            "semantic_candidate_work": 14000,
+            "semantic_conversion_work": 14000,
+            "semantic_conversions": 14000,
+            "semantic_entity_bytes": 104,
+            "semantic_class_facts": 0,
+            "semantic_constants": 0,
+            "semantic_types": 7,
+            "semantic_entities": 14004,
+            "semantic_scopes": 28002,
+            "semantic_edges": 0,
+            "semantic_declarations": 14002,
+            "semantic_regions": 14002,
+            "semantic_lookup_work": 84001,
+            "semantic_signature_work": 6,
+            "semantic_type_probes": 70003,
+            "semantic_constant_work": 0
+          }
+        ]
+      }
+    }
+  },
+  "observations": [
+    {
+      "wall_s": 0.251587299,
+      "rss_kib": 35384,
+      "user_s": 0.2,
+      "system_s": 0.04,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 0,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.251841174,
+      "rss_kib": 35300,
+      "user_s": 0.19,
+      "system_s": 0.05,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 1,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.249232573,
+      "rss_kib": 35300,
+      "user_s": 0.19,
+      "system_s": 0.04,
+      "involuntary": 3,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 2,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.247475383,
+      "rss_kib": 35372,
+      "user_s": 0.2,
+      "system_s": 0.04,
+      "involuntary": 3,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 3,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.252429501,
+      "rss_kib": 35316,
+      "user_s": 0.2,
+      "system_s": 0.04,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 4,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.256560841,
+      "rss_kib": 36444,
+      "user_s": 0.19,
+      "system_s": 0.05,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 5,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.253107786,
+      "rss_kib": 36176,
+      "user_s": 0.19,
+      "system_s": 0.05,
+      "involuntary": 1,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 6,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.250034638,
+      "rss_kib": 35316,
+      "user_s": 0.18,
+      "system_s": 0.05,
+      "involuntary": 6,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 7,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.253132587,
+      "rss_kib": 35364,
+      "user_s": 0.2,
+      "system_s": 0.04,
+      "involuntary": 4,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 8,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.254491986,
+      "rss_kib": 36092,
+      "user_s": 0.19,
+      "system_s": 0.05,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 9,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.251306549,
+      "rss_kib": 36160,
+      "user_s": 0.2,
+      "system_s": 0.04,
+      "involuntary": 3,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 10,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.248163009,
+      "rss_kib": 35376,
+      "user_s": 0.19,
+      "system_s": 0.05,
+      "involuntary": 2,
+      "voluntary": 1,
+      "stderr": "",
+      "group": "template-semantics-4",
+      "ordinal": 11,
+      "binary": 0
+    }
+  ],
+  "runtime": [],
+  "startup": [
+    {
+      "wall_s": 0.005839379,
+      "rss_kib": 4464,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005500471,
+      "rss_kib": 4388,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005377572,
+      "rss_kib": 4472,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005359191,
+      "rss_kib": 4436,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005382022,
+      "rss_kib": 4448,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005575767,
+      "rss_kib": 4472,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005334897,
+      "rss_kib": 4600,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 0,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005331825,
+      "rss_kib": 4472,
+      "user_s": 0.0,
+      "system_s": 0.0,
+      "involuntary": 1,
+      "voluntary": 1,
+      "stderr": "",
+      "binary": 1
+    }
+  ],
+  "budgets": {
+    "wall_ratio": 1.1,
+    "rss_ratio": 1.2,
+    "rss_add_kib": 16384,
+    "text_add_bytes": 131072,
+    "scale_wall": 5.5,
+    "scale_rss": 5.0
+  },
+  "source_hashes": {
+    "student.tests/pa10/check.py": "9f37d1b3541c88d3d815f35c69cf026318a31dbb13e52d73ab9004e1585960e4",
+    "student.tests/pa10/linkage-growth.py": "4343adfba0d9c709a5935e05667bfa75dba965834492de2c8a96162c0945bea9",
+    "student.tests/pa10/check_ir.py": "85af3782382bf5ea03166c134842d95742ae145d20ebef2bf664edce04ef2ff1",
+    "student.tests/pa10/benchmark.py": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a",
+    "student.tests/pa10/check_reference_corrections.py": "2f25db4cd017dd904fc7adff80baa78c3c6d300394cec3f9cf9047c634ff6488",
+    "student.tests/pa10/check_multifile.py": "ea3b0b99c745dd696a8b662bd57de4ca7c862596cb5c7c2fa8ba49e6a7f50e77",
+    "student.tests/pa10/build_sanitizer.py": "6b401047ef4b35328d79b7fbeed288c7aaaa21ddd183705f17c84f344dd67086"
+  }
+}

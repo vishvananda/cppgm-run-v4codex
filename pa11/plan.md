@@ -3,62 +3,52 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-## Design and groups
+Target: PA11 full-stage. Phase: implement. Goal remains active.
 
-Extend the integrated syntax/semantic graph and typed PA10 LowIR adapter. Stable
-EntityId/TypeId own class layout, selected members and lifecycle demand; no text
-roundtrips or fixture-specific behavior. PA12 value transfer and PA13 polymorphism
-remain separate extensions.
+## Design and remaining groups
 
-| Group / owner | Data flow and complexity | Validation |
+Extend the integrated syntax/semantic graph and typed PA10 lowering. Stable
+EntityId/TypeId own layout, selected members, constructor actions and demand.
+Rare object-use facts have a TU arena; temporary initialization paths die after
+lowering. No text transport, fake AST calls, host compilation or fixture logic.
+PA12 value transfer and PA13 polymorphism remain separate extensions.
+
+| Owner / group | Data flow and complexity | Remaining validation |
 | --- | --- | --- |
-| Layout and member calls / semantic class facts, lowering | Complete layout once per class; field offsets and method call types flow by IDs into address/call emission. O(members + demanded bodies). | layout, field, static/nonstatic method, inheritance fixtures; PA1–10 |
-| Initialization and lifetime / semantic actions, lowering | Selected ctor and subobject actions; demand queue; intern lexical cleanup tails. O(actions + distinct cleanup states). | ctor/dtor, aggregates, arrays, global/TLS, goto and cleanup controls |
-| Lookup, access, operators / semantic scopes and conversions | Indexed lexical/base/ADL edges, candidate conversions recorded once. Work proportional to required candidates/edges. | spec/access/friend/operator/overload fixtures |
-| Bit-fields and alignment / layout and lvalue facts | Record storage, bit width/sign and align/union/volatile facts once; consume for loads/stores/initialization. | bit-field, alignas, packed and volatile fixtures |
+| Class facts / member lowering | Cached field/base layout, recorded object argument and cv overload choice; O(fields + selected bodies). | empty-base collisions, remaining conversion/member shapes |
+| Semantic construction / typed initialization | Selected constructor/defaults, ordered scalar/reference/base/member actions, memoized helper triviality; O(candidates + actions + output). | aggregate brace elision, arrays, union/volatile/zeroinit boundaries |
+| Lifetime and control flow | Next: typed destruction actions and interned lexical cleanup tails, including loop/goto/return context. O(actions + distinct cleanup states). | destructor, arrays, globals/TLS, shared cleanup and inline-policy controls |
+| Scope lookup / conversions | Indexed lexical/base/ADL edges, selected conversions recorded once. Work proportional to required candidates/edges. | access/friends/ADL/operators, inheriting constructors |
+| Layout / lvalue facts | Next: bit width/sign, storage, requested alignment and union/volatile boundaries. | bit-fields, alignas, packed and metadata cases |
 
 ## Performance evidence
 
-PA11 is O0 source-to-LowIR. Preserve earlier benchmark evidence; inherited
-self-selected diagnostic budgets are not stage gates (spec stage-scoped acceptance).
-Measure frozen baseline/candidate latency and RSS on equivalent correct workloads,
-A/A then ABBA with raw observations. Where LowIR can execute, measure runtime and
-text size separately with the supplied backend. No optional optimization or runtime
-profit claim without repeatable evidence; required semantic work is documented.
+[Checkpoint evidence](checkpoint.md) and the frozen
+[protocol](../student.tests/pa11/performance-protocol.md) retain all measurements.
+Nine common compiler output pairs and three native executable pairs are byte
+identical. Compiler text +33664 bytes; common peak RSS +5600 KiB maximum.
+The template timing spike is preserved; same-binary follow-up does not reproduce
+it. New constructor source growth 4x gives 4.03x latency, 3.68x RSS and exactly
+4x action/demand work. Checked 96M-iteration runtime: 0.64312 s, 235-byte text proxy.
+No optimization benefit is claimed. Inherited numeric targets are diagnostics,
+not extra PA11 gates; correctness, complexity and coverage remain mandatory.
 
-## Ledger / remaining work
+## Handoff ledger
 
-- Entry: clean a97e14d4; prior turn produced authoritative baseline evidence
-  (progress classification). PA11 43/302, 259 failures; PA1–10 and file audit pass.
-- Inspection: class semantic facts exist, but lowering enumerates only namespace
-  functions and has no field/member addressing. Implement foundational group first,
-  then extend into related initialization/lifetime and lookup groups.
-- All groups above remain open. Reference fixtures and comparison rules unchanged.
-- Handoff: implementation active; no completion claim.
-- Member-address foundation: selected calls record explicit/implicit object and cv
-  ranking; emitted member ABI/signatures carry this; field projections consume
-  cached layout, reference fields dereference storage, aggregate-array indexing
-  uses byte offsets. Static members and direct unreachable terminators are wired.
-  PA11 checkpoint 84/302 (218 failures); PA1–10 1025/1025, file audit pass.
-  `student.tests/pa11/member-addresses.cpp` explicitly compiled with
-  `--validate-lowir`, executed through supplied lowir2native-ref: exit 0.
-  No performance benefit claimed yet; frozen stage baseline remains available.
-- Construction increment: overload selection/default arguments; copy-list explicit
-  rejection; ordered base/member and default-member actions; elided same-type
-  construction; implicit-helper triviality memoization; reference/aggregate leaf
-  destinations; namespace initialization. C1/C2 ABI entries share one emitted
-  body. Field/member-call facts moved to a rare TU arena; scalar nodes keep one
-  compact index. Source semantic views retain source-demand identities.
-  Current PA11 156/302: 113 original fixture failures fixed, zero newly failing
-  original fixtures. Earlier 1025/1025; both explicit personal native checks pass.
-- Remaining: full access/ADL/operators; aggregate brace elision, class arrays and
-  union/volatile/zeroinit boundaries; destructor/lifetime cleanup and TLS;
-  alignment/bit-fields; inheriting constructors and remaining boundary metadata.
-  The current initializer actions are complete for the scalar/reference and
-  single-base constructor group; array/lifetime actions need a shared cleanup
-  owner before extending them across loops, goto, returns and global/TLS teardown.
-- Performance campaign: frozen protocol in
-  `student.tests/pa11/performance-protocol.md`; final measurement pending.
-  File audit passes with an advisory counting Analyzer declarations as body
-  lines (>180); new construction implementation is in separately registered .cpp
-  owners, and the header holds declarations plus trivial fact accessors.
+- Entry a97e14d4: authoritative baseline evidence (previous turn classified as
+  progress), 43/302; 259 failures. Earlier suites and file audit passed.
+- 4113c34d: member ABI/this, cv selection, reference fields, typed projections,
+  static members and unreachable; checkpoint 84/302.
+- 17897014: constructor selection/defaults, explicit copy-list rejection,
+  ordered member/base/DMI actions, nested initialization destinations, namespace
+  startup, compact object facts and measured demand closure: 156/302.
+- Final validation: 113 original fixture failures fixed, zero newly failing
+  original fixtures; unchanged coverage/comparator/references. PA1–10 1025/1025;
+  file audit exit 0 (advisory counts Analyzer declarations as body lines).
+  Both explicit personal programs validate LowIR and execute with exit 0.
+- Incomplete boundary: the scalar/reference and single-base constructor group
+  is finished. Further array construction needs a shared lifetime owner for
+  partial construction, reverse destruction and equal cleanup suffixes across
+  loop/goto/return/global/TLS paths. Adding constructor calls alone would leave
+  observable cleanup incorrect. That larger control-flow group is next; the
+  full-stage objective is unchanged and 146 current failures remain.
