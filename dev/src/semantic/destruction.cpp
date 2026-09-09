@@ -12,7 +12,7 @@ bool Analyzer::destructor_member(EntityId e) const
 {
     return e && entities[e].member_info && members[entities[e].member_info].destructor;
 }
-EntityId Analyzer::default_destructor(TypeId t)
+EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
@@ -31,12 +31,13 @@ EntityId Analyzer::default_destructor(TypeId t)
         class_facts[c].destructor = dtor;
     }
     if (members[entities[dtor].member_info].deleted) throw std::runtime_error("deleted destructor");
+    check_access(dtor, s, entities[dtor].owner);
     demand_member(dtor);
     return dtor;
 }
 void Analyzer::register_destruction(EntityId e)
 {
-    EntityId dtor = default_destructor(entities[e].type);
+    EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);
 }
 void Analyzer::destructor_actions(EntityId e)
@@ -52,13 +53,13 @@ void Analyzer::destructor_actions(EntityId e)
         for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field) || entities[field].owner != entities[cls].scope) continue;
-            EntityId dtor = default_destructor(entities[field].type);
+            EntityId dtor = default_destructor(entities[field].type, entities[e].scope);
             if (dtor) work.push_back({field, entities[field].type, dtor});
         }
         std::reverse(work.begin(), work.end());
         for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
             TypeId base = entities[bases[b].base].type;
-            EntityId dtor = default_destructor(base);
+            EntityId dtor = default_destructor(base, entities[e].scope);
             members[entities[dtor].member_info].base_entry = true;
             work.push_back({0, base, dtor});
         }

@@ -98,7 +98,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s)
 {
     if (!n) return base;
     NodeId name = decl_name(n);
-    if (name) s = name_owner(name, s);
+    if (name) s = name_owner(name, s, true);
     NodeId nested = 0;
     std::vector<NodeId> suffixes;
     bool after_direct = false;
@@ -164,7 +164,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     NodeId name = decl_name(d);
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
-    ScopeId owner = name_owner(name, s);
+    ScopeId owner = name_owner(name, s, true);
     if (!encloses(s, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
     if (destructor && scopes[owner].kind == ScopeKind::Class) {
         TextView text = ids.spelling(scopes[owner].name);
@@ -207,6 +207,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     else if (function) e = declare_function(owner, id, source, canonical);
     else if (e && entities[e].kind == kind) {
+        if (calls && scopes[owner].kind == ScopeKind::Class && owner == s)
+            throw std::runtime_error("duplicate class member");
         if (calls && kind == EntityKind::Variable && (scopes[owner].kind == ScopeKind::Block || scopes[owner].kind == ScopeKind::Control) &&
             !spec_has(specs, KW_EXTERN)) throw std::runtime_error("duplicate local variable");
         entities[e].type = types.composite(entities[e].type, canonical);
@@ -239,6 +241,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     record(owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
+    if (calls && !function && !entities[e].is_static && scopes[owner].kind == ScopeKind::Class && entities[e].access != Access::Public)
+        class_facts[entities[scopes[owner].entity].class_info].aggregate = false;
     if (member_initializer) class_facts[entities[scopes[s].entity].class_info].aggregate = false;
     if (calls && init && !function && !member_initializer) initialize(init, canonical, owner);
     if (calls && !init && !function && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);

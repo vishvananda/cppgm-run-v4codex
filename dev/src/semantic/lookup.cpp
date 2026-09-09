@@ -43,7 +43,7 @@ void Analyzer::attach_scope(ScopeId s, ScopeId parent)
 }
 EntityId Analyzer::make_entity(EntityKind k, ScopeId s, IdentifierId name, NodeId source)
 {
-    Entity e; e.kind = k; e.owner = s; e.name = name; e.source = source;
+    Entity e; if (calls && source) e.access = declaration_access(s); e.kind = k; e.owner = s; e.name = name; e.source = source;
     entities.push_back(e); return entities.size() - 1;
 }
 void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
@@ -61,7 +61,32 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
     if (old && ((entities[old].kind == EntityKind::Namespace || entities[old].kind == EntityKind::NamespaceAlias) !=
         (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias)))
         throw std::runtime_error("namespace and binding collision");
-    if (old != id && function_binding(old) && function_binding(id)) id = merge_lookup(old, id);
+    if (old != id && function_binding(old) && function_binding(id)) {
+        id = merge_lookup(old, id);
+        if (calls && using_functions.get(key(s, n)) &&
+            (scopes[s].kind == ScopeKind::Class || scopes[s].kind == ScopeKind::Namespace)) {
+            // A using-declaration retains canonical function identities. Local
+            // members hide imported base signatures regardless of declaration
+            // order; a namespace declaration of an imported signature conflicts.
+            auto shape = [&](EntityId e) {
+                Type t = types[entities[e].type];
+                std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
+                return types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv);
+            };
+            std::vector<EntityId> all = candidates(id);
+            Index owned;
+            for (EntityId e : all) if (entities[e].owner == s) owned.put(shape(e), e);
+            EntityId kept = 0;
+            for (EntityId e : all) {
+                if (entities[e].owner != s && owned.get(shape(e))) {
+                    if (scopes[s].kind == ScopeKind::Namespace) throw std::runtime_error("function conflicts with namespace using-declaration");
+                    continue;
+                }
+                kept = merge_lookup(kept, e);
+            }
+            id = kept;
+        }
+    }
     else if (old && old != id && (function_binding(old) || function_binding(id)) &&
              entities[old].kind != EntityKind::Type && k != EntityKind::Type)
         throw std::runtime_error("function and ordinary binding conflict");
@@ -172,6 +197,10 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
     std::uint64_t visit = ++walk;
     for (; s; s = scopes[s].parent) {
         ++lookup_work;
+        if (calls && scopes[s].kind == ScopeKind::Class) {
+            if (EntityId found = imported(s, n, mode, ++walk)) return found;
+            continue;
+        }
         work.clear();
         for (std::uint32_t edge = scopes[s].first_edge; edge; edge = edges[edge].next)
             work.push_back(edges[edge].target);
@@ -230,13 +259,15 @@ bool Analyzer::encloses(ScopeId outer, ScopeId inner) const
     for (; inner; inner = scopes[inner].parent) if (inner == outer) return true;
     return false;
 }
-ScopeId Analyzer::name_owner(NodeId n, ScopeId s)
+ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 {
     if (!n) return s;
+    ScopeId context = s;
     bool qualified = ast[n].op == OP_COLON2;
     if (qualified) s = global;
     for (NodeId p = ast[n].first; p && p != ast[n].last; p = ast[p].next) {
         EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
+        if (calls && e && !declaration) check_access(e, context, s);
         s = target(e);
         if (!s) throw std::runtime_error("name qualifier has no scope");
         qualified = true;
@@ -258,7 +289,9 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
             qualified = true;
         }
     }
-    return lookup(name_owner(n, s), terminal(n), mode,
-                  ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
+    ScopeId owner = name_owner(n, s);
+    EntityId result = lookup(owner, terminal(n), mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
+    if (calls && result && !function_binding(result)) check_access(result, s, owner);
+    return result;
 }
 } }

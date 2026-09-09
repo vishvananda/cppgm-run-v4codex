@@ -30,6 +30,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     EntityId e = family ? function_signatures.get(key(family, shape)) : 0;
     if (e) {
         if (entities[e].type != type) throw std::runtime_error("conflicting function return type");
+        if (!constructor) bind(owner, name, e);
         return e;
     }
     e = make_entity(EntityKind::Function, owner, name, source);
@@ -134,7 +135,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         }
         if (cast_type) {
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
-                EntityId ctor = choose_constructor(cast_type, args, &result);
+                EntityId ctor = choose_constructor(cast_type, args, &result, s);
                 facts[n].entity = ctor; facts[n].type = cast_type;
                 result.type = cast_type; result.form = ExpressionForm::Construction;
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
@@ -146,7 +147,25 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             return cast_expression(n, s, cast_type, args.empty() ? 0 : args[0]);
         }
     }
-    Expression fn = expression(callee, s);
+    Expression fn;
+    bool unqualified = ast[callee].kind == Kind::IdExpression && ast[ast[callee].detail].kind == Kind::Name &&
+        ast[ast[callee].detail].first == ast[ast[callee].detail].last && ast[ast[callee].detail].op != OP_COLON2;
+    bool adl = unqualified;
+    EntityId ordinary = unqualified ? resolve(ast[callee].detail, s) : 0;
+    if (ordinary) {
+        if (!function_binding(ordinary)) adl = false;
+        else for (EntityId candidate : candidates(ordinary)) {
+            ScopeKind owner = scopes[entities[candidate].owner].kind;
+            if (owner == ScopeKind::Class || owner == ScopeKind::Block || owner == ScopeKind::Function) adl = false;
+        }
+    }
+    EntityId associated = adl ? associated_lookup(terminal(ast[callee].detail), args) : 0;
+    if (associated) {
+        EntityId selected = merge_lookup(ordinary, associated);
+        fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
+        expressions[callee] = fn; expressions[callee].ready = true; expressions[callee].evaluated = !unevaluated_depth;
+        facts[callee].entity = selected; facts[callee].scope = s;
+    } else fn = expression(callee, s);
     if (fn.form == ExpressionForm::PseudoDestructor) {
         if (!args.empty()) throw std::runtime_error("pseudo-destructor takes no arguments");
         result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::PseudoDestructor; return result;

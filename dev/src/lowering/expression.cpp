@@ -12,7 +12,9 @@ Value Procedural::expression(NodeId n, bool location)
         EntityId e = sem.object_fact(n).temporary;
         if (!objects[e]) objects[e] = builder->add_slot(0, type(fact.type));
         Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
-        construct(sem.facts[n].entity, n, address(at)); activate_temporary(e); return at;
+        Value pointer = address(at);
+        construct(sem.facts[n].entity, n, pointer); activate_temporary(e);
+        pointer.type = fact.type; pointer.address = true; return pointer;
     }
     if (fact.form == semantic::ExpressionForm::Cast) {
         NodeId operand = ast[n].kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
@@ -24,6 +26,9 @@ Value Procedural::expression(NodeId n, bool location)
                 SlotId slot = builder->add_slot(0, v.ir);
                 emit(Opcode::Store, v.ir, {v.operand, Operand::slot(slot)});
                 v.operand = Operand::slot(slot); v.address = true;
+            }
+            if (sem.conversion_fact(fact.conversions).derived) {
+                v = base_projection(address(v), 1); v.address = true;
             }
             v.type = fact.type; return v;
         }

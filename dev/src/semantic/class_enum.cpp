@@ -51,6 +51,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         std::size_t deferred_begin = bodies.size();
         ++class_depth;
         ScopeId cs = entities[e].scope;
+        class_facts[entities[e].class_info].current_access = key_op == KW_CLASS ? Access::Private : Access::Public;
         attach_scope(cs, owner);
         if (calls) {
             NodeId list = child(n, Kind::Bases);
@@ -60,7 +61,9 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                 if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
                 std::uint32_t info = entities[e].class_info;
                 class_facts[info].aggregate = false;
-                bases.push_back({base, class_facts[info].first_base});
+                NodeId access = child(b, Kind::Access);
+                Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
+                bases.push_back({base, class_facts[info].first_base, level});
                 class_facts[info].first_base = bases.size() - 1;
                 add_edge(cs, entities[base].scope);
             }

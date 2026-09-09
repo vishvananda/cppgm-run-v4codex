@@ -72,24 +72,34 @@ void Analyzer::simple(NodeId n, ScopeId s)
     NodeId specs = ast[n].first;
     NodeId list = child(n, Kind::InitDeclarators);
     IdentifierId anonymous_name = list ? terminal(decl_name(ast[ast[list].first].first)) : 0;
+    ScopeId saved_access = access_override;
+    NodeId named = ast[n].kind == Kind::Function ? ast[specs].next : ast[ast[list].first].first;
+    ScopeId owner = name_owner(decl_name(named), s, true);
+    if (calls && scopes[owner].kind == ScopeKind::Class) access_override = owner;
     TypeId base = specifiers(specs, s, anonymous_name);
     if (ast[n].kind == Kind::Function) {
         NodeId d = ast[specs].next;
         TypeId t = declarator(d, base, s);
         EntityId e = declare_object(d, 0, t, specs, s, n);
         schedule_body({ast[d].next, d, entities[e].owner, e, n});
-        return;
+        access_override = saved_access; return;
     }
     for (NodeId item = ast[list].first; item; item = ast[item].next) {
         NodeId d = ast[item].first;
         TypeId t = declarator(d, base, s);
         declare_object(d, ast[d].next, t, specs, s, n);
     }
+    access_override = saved_access;
 }
 void Analyzer::declaration(NodeId n, ScopeId s)
 {
     ++analyzed;
+    if (calls && scopes[s].kind == ScopeKind::Class && friend_declaration(n, s)) return;
     switch (ast[n].kind) {
+    case Kind::Access:
+        if (calls && scopes[s].kind == ScopeKind::Class)
+            class_facts[entities[scopes[s].entity].class_info].current_access = ast[n].op == KW_PRIVATE ? Access::Private : ast[n].op == KW_PROTECTED ? Access::Protected : Access::Public;
+        break;
     case Kind::Namespace: namespace_declaration(n, s); break;
     case Kind::NamespaceAlias: {
         EntityId e = resolve(ast[ast[n].first].detail, s, Lookup::Namespace);
@@ -114,6 +124,13 @@ void Analyzer::declaration(NodeId n, ScopeId s)
             if (ast[p].first) throw std::runtime_error("using declaration names template-id");
         EntityId e = resolve(name, s);
         if (!e) throw std::runtime_error("unknown using target");
+        if (calls && scopes[s].kind == ScopeKind::Class) {
+            for (EntityId member : candidates(e)) {
+                check_access(member, s, name_owner(name, s));
+                using_access.put(key(s, member), unsigned(declaration_access(s)) + 1);
+            }
+        }
+        if (calls && function_binding(e)) using_functions.put(key(s, terminal(name)), 1);
         bind(s, terminal(name), e);
         record(s, e, n, source_type(e), entities[e].kind);
         break;

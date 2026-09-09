@@ -138,7 +138,8 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
         unsigned added = 0;
         bool function_lvalue = types[from].kind == TypeKind::Function;
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
-        if (category && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
+        bool const_binding = target.kind == TypeKind::LRef && types[target.child].cv == 1;
+        if ((category || const_binding) && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
             c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv; return c;
         }
         if ((category || function_lvalue) && qualification(from, target.child, added)) {
@@ -180,6 +181,13 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
 }
 void Analyzer::select_function(NodeId n, EntityId e)
 {
+    ScopeId naming = object_uses[expressions[n].object_use].naming_scope;
+    TypeId object = 0;
+    if (ast[n].kind == Kind::Member) {
+        object = expressions[ast[n].first].type;
+        if (ast[n].op == OP_ARROW) object = types[object].child;
+    } else if (TypeId implicit = implicit_object_type(facts[n].scope)) object = types[implicit].child;
+    check_access(e, facts[n].scope, naming, object);
     expressions[n].entity = e;
     expressions[n].form = ExpressionForm::Ordinary;
     expressions[n].type = entities[e].type;
@@ -199,6 +207,11 @@ void Analyzer::select_function(NodeId n, EntityId e)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion c)
 {
+    if (c.derived && c.kind != Conversion::Kind::Explicit) {
+        TypeId from = expressions[n].type, to = types[c.target].child;
+        if (pointer(from)) from = types[from].child;
+        check_base_access(from, to, facts[n].scope);
+    }
     if (c.function) select_function(n, c.function);
     if (expressions[n].entity) demand_specialization(expressions[n].entity);
     TypeId target = types.unqualified(c.target);
@@ -220,6 +233,11 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
     if (n) {
         // Operand facts preserve the source-faithful dump type. The legacy
         // initializer/call adapter in apply_conversion has its own null view.
+        if (c.derived && c.kind != Conversion::Kind::Explicit) {
+            TypeId from = expressions[n].type;
+            if (pointer(from)) from = types[from].child;
+            check_base_access(from, types[c.target].child, facts[n].scope);
+        }
         if (c.function) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);
         expressions[n].incoming = conversions.size();
@@ -247,7 +265,7 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
                 EntityId e = declarations[d].entity;
                 if (entities[e].kind != EntityKind::Variable || entities[e].is_static) continue;
                 if (c) { initialize(c, entities[e].type, s); c = ast[c].next; }
-                else prepare_value_initialization(entities[e].type);
+                else prepare_value_initialization(entities[e].type, s);
             }
             if (c) throw std::runtime_error("excess aggregate initializer");
             facts[n].type = target; return;

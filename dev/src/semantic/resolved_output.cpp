@@ -26,7 +26,7 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     NodeId first = node.first;
     if (e.incoming && !override_type) {
         const Conversion& c = conversions[e.incoming];
-        if (c.derived || c.temporary) {
+        if ((c.derived && c.kind != Conversion::Kind::Explicit) || c.temporary) {
             indent(out, depth++); out << "cast-expression " << category(c.derived ? e.category : ValueCategory::Prvalue) << ' ';
             write_type(out, c.reference ? types[c.target].child : c.target); out << '\n';
         }

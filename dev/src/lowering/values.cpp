@@ -118,6 +118,10 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
     Value v = expression(n, c.reference);
+    if (c.derived) {
+        v = base_projection(c.reference ? address(v) : load(v), 1);
+        v.type = c.target; return v;
+    }
     if (c.reference && !c.temporary && v.address) return address(v);
     return convert(v, c.target);
 }
@@ -128,7 +132,8 @@ Value Procedural::incoming(NodeId n)
 }
 Value Procedural::base_projection(Value base, unsigned steps)
 {
-    while (steps--) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(0)});
+    // Single inheritance puts the entire selected base path at offset zero.
+    if (steps) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(0)});
     return base;
 }
 Value Procedural::field(Value base, EntityId e, unsigned steps)

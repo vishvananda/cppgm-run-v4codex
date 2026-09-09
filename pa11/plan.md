@@ -3,7 +3,7 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. **Incomplete: 173/302; 129 failures.**
+Target: PA11 full-stage. Phase: implement. **Incomplete: 194/302; 108 failures.**
 
 ## Design and remaining groups
 
@@ -58,3 +58,18 @@ the linked lifetime checkpoint.
   count advisory on Analyzer header). Five explicit personal programs validate
   typed LowIR and execute with exit 0. `make test-pa11` still exits 2; no later
   assignment is advanced. Evidence and working tree are committed at handoff.
+- Continuation at 55a21dac: prior turn is verified progress; clean tree and
+  rerun baseline 173/302. Extend access ownership across fields/types/methods,
+  base paths, using exposure and constructor/destructor selection, then friend
+  namespace identity/hidden visibility and associated-scope lookup. One indexed
+  fact per declaration/relation, selected-candidate checks only; validate access
+  rejection/permission pairs, friend/ADL fixtures and all earlier PAs.
+- Access increment: 194/302, 21 original failures fixed and no regressions.
+  Declarations/base edges/using exposure own access; selected functions and
+  conversions check privileges. Canonical namespace friend entities feed
+  indexed associated scopes; signature hiding runs only for imported families.
+  Temporary addresses and zero-offset base paths are reused by typed lowering.
+  Six personal programs execute; three access/hidden-name rejections pass.
+  Prior checks exposed nested-definition access and explicit-cast view changes;
+  both are repaired before continuing. Performance campaign follows the next
+  coherent selection increment; no speed claim is made.

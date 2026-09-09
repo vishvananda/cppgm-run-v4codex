@@ -51,7 +51,12 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (!e) throw std::runtime_error("unknown expression name");
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
         r.entity = e; facts[n].entity = e;
-        if (entities[e].kind == EntityKind::Overload) { r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue; return r; }
+        if (entities[e].kind == EntityKind::Overload) {
+            r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
+            ScopeId naming = naming_class(name_owner(ast[n].detail, s));
+            if (naming) { record_object(r, 0, 0, 0); object_uses[r.object_use].naming_scope = naming; }
+            return r;
+        }
         if (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter &&
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
@@ -74,6 +79,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         if (entities[e].kind == EntityKind::Enumerator && !entities[types[r.type].entity].complete)
             r.type = entities[e].constant.type;
+        if (function_binding(e) && scopes[entities[e].owner].kind == ScopeKind::Class) {
+            if (!r.object_use) record_object(r, 0, 0, 0);
+            object_uses[r.object_use].naming_scope = naming_class(name_owner(ast[n].detail, s));
+        }
         if (entities[e].member_info) facts[n].type = members[entities[e].member_info].call_type;
         if (entities[e].kind != EntityKind::Enumerator) r.category = ValueCategory::Lvalue;
         return r;
@@ -135,10 +144,14 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         if (!class_type) throw std::runtime_error("member of non-class");
         size(t); // Establish layout once at the semantic owner before recording field use.
-        EntityId e = destructor ? default_destructor(t) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
+        EntityId e = destructor ? default_destructor(t, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
+        ScopeId naming = name_owner(name, entities[types[t].entity].scope);
+        if (!function_binding(e)) check_access(e, s, naming, t);
         if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
+        if (!r.object_use) record_object(r, 0, 0, 0);
+        object_uses[r.object_use].naming_scope = naming;
         if (entities[e].kind == EntityKind::Overload) r.form = ExpressionForm::Overload;
         else r.type = types.qualify(value_type(entities[e].type), entities[e].is_static ? 0 : types[t].cv);
         r.category = ast[n].op == OP_ARROW || object.category == ValueCategory::Lvalue ? ValueCategory::Lvalue : ValueCategory::Xvalue;
@@ -166,6 +179,15 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
         unsigned added = 0;
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);
+        if (!cv_cast && op != KW_REINTERPET_CAST && !(types[x.type].cv & ~types[target.child].cv)) {
+            if (derived_from(x.type, target.child)) {
+                compatible = true; c.derived = true;
+                if (!cstyle) check_base_access(x.type, target.child, s);
+            } else if (derived_from(target.child, x.type)) {
+                compatible = true; c.derived = true;
+                if (!cstyle) check_base_access(target.child, x.type, s);
+            }
+        }
         if (op == KW_REINTERPET_CAST && x.category != ValueCategory::Prvalue &&
             !(types[x.type].cv & ~types[target.child].cv)) compatible = true;
         if (!compatible) throw std::runtime_error("invalid reference cast");
@@ -183,7 +205,10 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     }
     if (!cv_cast && op != KW_REINTERPET_CAST) {
         Conversion standard = fundamental(to, FT_BOOL) ? boolean_conversion(operand) : conversion(operand, to);
-        if (standard.valid()) { record_conversion(r, operand, standard); return r; }
+        if (standard.valid()) {
+            if (cstyle && standard.derived) standard.kind = Conversion::Kind::Explicit;
+            record_conversion(r, operand, standard); return r;
+        }
     }
     TypeId from = decay(x.type);
     if (cv_cast) {
@@ -198,6 +223,10 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         bool preserves_cv = !(types[a].cv & ~types[b].cv);
         pointer_cast = (cstyle || preserves_cv) && (reinterpret ||
             (fundamental(a, FT_VOID) && types[b].kind != TypeKind::Function) || derived_from(b, a));
+        if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(b, a)) {
+            c.derived = true;
+            if (!cstyle) check_base_access(b, a, s);
+        }
     }
     bool integer_pointer = reinterpret && ((pointer(from) && integral(to) && width(to) >= 64) || (integral(from) && pointer(to)));
     if ((enum_cast && op != KW_REINTERPET_CAST) || pointer_cast || integer_pointer ||

@@ -64,7 +64,9 @@ struct Constant {
 };
 // Rare class demand state has a separate arena; ordinary bindings do not pay
 // for constructors and layout. The stable index belongs to the class entity.
+enum class Access : unsigned char { Public, Protected, Private };
 struct ClassFacts {
+    Access current_access = Access::Public;
     std::uint64_t size = 0, alignment = 0;
     EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
     std::uint32_t first_base = 0;
@@ -75,6 +77,7 @@ struct ClassFacts {
     unsigned char value_state = 0;
 };
 struct Entity {
+    Access access = Access::Public;
     EntityKind kind = EntityKind::Variable;
     ETokenType key = TOK_INVALID;
     bool complete = false, scoped = false, template_parameter = false, is_static = false;
@@ -118,7 +121,8 @@ struct Specialization {
     FactState declaration = FactState::NotStarted;
     bool emission_demanded = false;
 };
-struct BaseRelation { EntityId base; std::uint32_t next; };
+struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public;
+    BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public) : base(b), next(n), access(a) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
 struct DestructionAction { EntityId field; TypeId type; EntityId destructor; };
@@ -158,7 +162,7 @@ struct Expression {
     bool ready = false, evaluated = false;
 };
 struct ObjectUse {
-    EntityId temporary = 0; NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; };
+    ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; };
 struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.
