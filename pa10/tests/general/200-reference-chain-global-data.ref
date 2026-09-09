@@ -1,6 +1,6 @@
 global @v : i64 [storage=readonly, binding=internal, object=_Z1v] = 42
-global @x : ptr [binding=strong, object=_Z1x] = zero
-global @y : ptr [binding=strong, object=_Z1y] = zero
+global @x : ptr [binding=strong, object=_Z1x] = addr @v
+global @y : ptr [binding=strong, object=_Z1y] = addr @v
 global @arr [binding=strong, object=_Z3arr] = {
   zero 336
 }
@@ -8,12 +8,4 @@ global @arr [binding=strong, object=_Z3arr] = {
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
     return i32 0
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @v
-    store ptr %t1, @x
-    %t2 = load ptr @x
-    store ptr %t2, @y
-    return void
 }

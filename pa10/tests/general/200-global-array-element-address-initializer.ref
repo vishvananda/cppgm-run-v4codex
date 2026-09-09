@@ -1,7 +1,7 @@
 global @values [binding=strong, object=_Z6values] = {
   zero 12
 }
-global @middle : ptr [binding=strong, object=_Z6middle] = zero
+global @middle : ptr [binding=strong, object=_Z6middle] = addr @values + 4
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
@@ -12,11 +12,4 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t5 = binary sub i64 %t4, 1
     %t6 = convert trunc i32 i64 %t5
     return i32 %t6
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @values
-    %t2 = index i32 [projection=array_element] %t1, 1
-    store ptr %t2, @middle
-    return void
 }
