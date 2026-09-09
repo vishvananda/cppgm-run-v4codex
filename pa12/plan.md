@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete.
+Target: PA12 full-stage. Phase: implement; incomplete (**248/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -10,133 +10,89 @@ Keep the shared source graph, canonical identities, indexed demand and typed
 conversion/lifetime records. Lowering consumes selected facts; no source replay,
 fake AST, reference delegation or later native-backend performance gate.
 
-| Owner | Data flow / complexity | Validation and remaining work |
+| Owner | Data flow / complexity | Remaining validation |
 | --- | --- | --- |
-| Member/special-member semantics | Canonical member -> field/base/storage actions; once per required edge | Delegation, unions and copy/move selection pass. Bit-field ordering and helper/emission differences remain |
-| Class values/conversions | Indexed targets/base edges -> selected transfer and destination | List arguments/defaults, aggregate prvalues, helper parameters and empty-base conversion pass. Explicit conversion transfer shape remains |
-| Lifetime ownership | Complete objects/branch states -> retained storage and cleanup continuations; O(objects + edges) | Static references, conditional destinations and heap arrays pass. Local subobject references and remaining exception-region/continuation forms need work |
-| Call boundary facts | Attribute -> validated EntityId -> LowIR metadata | Stable-prefix and abort controls pass. Survivor control 536 requires member-pointer representation and an indirect signature |
-| Parameter/result ABI | Selected trivial copy or move -> independent argument/result convention -> matching caller/callee storage; once per class | Large trivial parameters, trivial moves with a user copy and shared direct return storage pass. Nontrivial base-copy parameter fixture requires a distinct representation proof |
-| Allocation | Canonical scalar/array names -> selected functions, extent/cookie and actions -> bounded loops | All required new/delete comparisons pass. Personal checks cover sized delete, null, wide/zero/multidimensional bounds, alias destruction and distinct runtime function addresses |
+| Full-expression consumption | Source/conversion -> final consumer -> branch destination/cleanup; memoized nodes and immutable object prefixes | Terminal conditional member/return branches, direct class-call branch destinations, and return cleanup across loop contexts |
+| Initialization and transfer | Selected typed action -> layout/storage operation; once per field/unit | Bit-field constructor instruction order, volatile/union zeroing, explicit conversion transfer, assignment literal widening |
+| ABI representation | Class facts -> independent argument/result convention; cached per class | Nontrivial base-copy parameter requires representation/identity proof beyond declaration triviality |
+| Member pointers | Formation/application -> object adjustment and function signature -> pair storage and indirect call; constant work per use | Survivor 536 requires nonvirtual member function application and object extent on its indirect signature |
 
-Target-typed lists now preserve their untyped source through overload selection,
-then materialize selected defaults, references and aggregate prvalues. All six
-entry compile rejections compile. Twenty-three remaining LowIR differences
-concern transfers, helper/ABI shapes and cleanup.
-Two inherited contract questions remain: PA11 bit-field constructor order versus
-PA12 copy-semantics order, and direct-object base-copy parameter passing. Preserve
-all fixtures/comparison rules unless the authorized reference-proof protocol applies.
+Completed owners include delegation/unions, target-typed list plans and defaults,
+class destinations and trivial moves, static/local reference lifetimes, scalar/
+array allocation, and full-expression region/destructor-boundary separation.
+Nine remaining LowIR fixtures are: `300-bit-field-copy-semantics`,
+`300-direct-object-parameter-passthrough-base-copy`,
+`300-zero-initialization-object-boundaries`,
+`400-conditional-prvalue-member-temporary-lifetime`,
+`400-conditional-return-branch-temporary-lifetime`,
+`400-direct-init-class-explicit-conversion`, `400-for-iteration-temporary-dtor`,
+`500-direct-class-call-temporary-destination`, and
+`500-move-constructor-noalias-boundary` (all in `tests/general/`).
+Preserve fixtures/comparison rules unless the authorized reference-proof
+protocol establishes an error; compiler agreement alone is insufficient.
 
 ## Performance evidence and budgets
 
 [Member](performance.md), [transfer](transfer-performance.md),
-[value](value-performance.md), [conversion/reference](conversion-performance.md)
-and [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md)
-and [boundary](boundary-performance.md), [cleanup](cleanup-performance.md) evidence retain frozen binaries, flags, inputs,
-A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
-No runtime optimization gain is claimed for the new semantic paths.
+[value](value-performance.md), [conversion/reference](conversion-performance.md),
+[allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md),
+[boundary](boundary-performance.md), [cleanup](cleanup-performance.md) and
+[destructor](destruction-performance.md) retain frozen hashes, inputs, flags,
+A/A+ABBA observations, compiler latency/RSS and executable runtime/text.
+Historical misses and outliers remain; required PA12 representation costs do
+not create a positive-runtime gate. Avoidable costs were removed and remeasured.
 
-Heap construction/destruction emits fixed-size loops, independent of the bound;
-existing local-array expansion remains capped at eight total elements. A bound
-runs once. Widening precedes multiplication unless a completed constant-return
-proof permits the required source-width form. Constant size overflow rejects.
-Each allocation retains one selected record; each singleton memory role needs
-at most one additional two-instruction runtime adapter. Empty-array-constructor
-proofs inspect an empty body/no actions and add no generated code. Aggregate
-appertainment retains one whole-object conversion per selected initializer.
-No speculative pass, global retry or new positive-runtime exit gate is added.
+- Local array expansion remains capped at eight total elements; heap lifetimes
+  use fixed-size loops. Bounds run once, widening precedes size multiplication
+  unless the existing constant-return proof allows source width; overflow rejects.
+- Full-expression classifiers cache at most three bytes per AST node. Regions
+  follow expression/control edges and successful construction. Each guarded scalar
+  call retains at most one value slot; cleanup suffixes are indexed by prefix and
+  terminal. Scope-bound reference objects do not add temporary guards.
+- Destructor suffixes inline at most eight actions (28 duplicated tail actions).
+  Larger classes share one block per suffix action. Constructor nonthrowing facts
+  remove redundant handlers without new body analysis or an optimization pass.
+- Final common compiler medians rise .24%/.80%, common native bytes are identical,
+  and total compiler text growth is 6720 bytes (.71%). Required branch runtime
+  costs about 20%; condition overhead falls from about 37% to 7.6% after removing
+  a redundant guard. Destructor workloads improve runtime about 20–30%, with
+  the eight-field case costing 9.4% compiler time and 176 native bytes. All bounds,
+  measurements and stage-scoped acceptance rationale are in the linked evidence.
 
 ## Handoff ledger
 
-- Stage entry: **61/257**, 196 failures; earlier **1327/1327**.
-- `4e209677`, `55d15ba8`, `8a83045c`: members/delegation/unions -> **92/257**.
-- `3da4de09`: four bit-field reference retypes corrected under the authorized
-  exception; [proof and bundle revision](reference-corrections.md).
-- `73664568`, `4ea8394f`: transfers and measured prefix policy -> **123/257**.
-- `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: values/storage -> **169/257**.
-- `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/references -> **202/257**.
-- `d2db8706`: allocation/deletion and bounded heap lifetimes -> **223/257**.
-- `ffbc7095`: whole-class aggregate copies preserve source type/callee and
-  reference-member storage; named global arrays keep O0 lifetimes -> **225/257**.
-- `eed7d552`: destructor aliases now search the object class, then expression context,
-  preserving canonical type checks. Implicit allocator declarations are also
-  available when taking function addresses. **226/257**: **24 allocation-entry
-  failures removed, no new failures**, unchanged coverage; **165 stage-base
-  failures removed**. Thirty-eight personal source checks pass.
-- Allocation-group earlier tests **1327/1327**, file audit and `git diff --check` pass.
-  All three frozen campaigns and nine final allocation output-equivalence
-  checks finished; measurements and outliers are retained in the linked evidence.
-  Common final compiler medians increase 0.4%/0.8%; native bytes are identical.
-  Compiler text grows 20800 bytes (2.32%); no runtime gain is claimed.
-- Logs: `/tmp/pa12-allocation-group-final-stage2.log` (226/257, exit 2),
-  `/tmp/pa12-allocation-group-final-prior2.log` (1327/1327, exit 0),
-  `/tmp/pa12-allocation-group-final-personal2.log` (38 checks, exit 0).
-  Root reports ran serially. The survivor still stops at member-pointer control
-  536. Stage progress is verified against the entry failure set, not new tests.
-  No fixtures/references/comparison rules changed in these groups.
-- `64ecedf7`: clean list-group entry `aee24d98`, **226/257**, 31 failures.
-  Untyped list -> target-keyed candidate -> per-use conversion/storage -> typed
-  constructor or aggregate helper. Aggregate member parameters own the selected
-  move and destruction. Reference storage uses conversion-kind-specific facts.
-  **230/257**, four old failures removed and no new failures, all six
-  old compile rejections compile; 49 personal checks pass. Earlier serial report
-  is **1327/1327**; file audit passes (three header advisories).
-  List performance evidence records .29%/.45% common latency cost, .21% largest
-  common RSS cost and linear new-path counters; no speed gain is claimed.
-  Logs: `/tmp/pa12-lists-final-stage.log`, `/tmp/pa12-lists-final-prior.log`,
-  `/tmp/pa12-lists-final-personal.log`. An accidental overlapping pair of root
-  reports was discarded and rerun serially; its tallies are not evidence.
-- Boundary group: separate argument/result ABI facts, selected trivial value
-  transfers, empty derived-to-base conversion and one direct return slot per
-  function -> **234/257**. Four further entry failures removed, none added.
-  Total from this goal-turn entry: **8 removed**, unchanged coverage; **173
-  stage-base failures removed**. Fifty personal checks pass, including large
-  values and a nontrivial parameter whose constructor/destructor observes `this`.
-  Earlier tests **1327/1327**, file audit (three header advisories), and diff
-  checks pass. `/tmp/pa12-boundary-final-stage.log`,
-  `/tmp/pa12-boundary-final-prior.log`, `/tmp/pa12-boundary-final-personal.log`.
-  Frozen evidence shows a 12% trivial-move runtime gain and a required large
-  parameter copy costing 44.5% runtime / 88 native bytes; both are retained.
-- Handoff boundary: list selection and declaration-based trivial ABI decisions
-  are complete. Remaining cleanup cases require full-expression regions and
-  separate destructor effect/boundary facts: changing per-call cleanup alone
-  would miss temporaries or regress PA11 array lifetimes. The nontrivial
-  base-copy ABI case needs a representation/identity proof beyond triviality;
-  survivor 536 needs member-pointer parsing, storage and an indirect signature.
-  These require separate coordinated owners, rather than further changes to
-  the completed list plans or trivial-transfer predicate. Stage remains incomplete.
+| Accepted implementation increments | PA12 passing |
+| --- | ---: |
+| Stage entry | 61/257 |
+| `4e209677`, `55d15ba8`, `8a83045c`: members/delegation/unions | 92/257 |
+| `73664568`, `4ea8394f`: transfers/prefix policy | 123/257 |
+| `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: values/storage | 169/257 |
+| `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/references | 202/257 |
+| `d2db8706`, `ffbc7095`, `eed7d552`: allocation/aggregates/aliases | 226/257 |
+| `64ecedf7`, `3ec8d0ce`: lists and independent value ABI | 234/257 |
+| `8bf45f86`: full-expression regions, condition edges, initializer/return ownership | 240/257 |
+| `951799ed`: destructor effects, retained boundaries, bounded subobject suffixes | 248/257 |
 
-Cleanup-group entry: clean `3ec8d0ce`, freshly verified **234/257**. The previous
-goal turn is verified progress. Owner: full expression -> immutable active
-object prefix -> guarded segments and shared unwind suffixes. Selected calls
-and destructor facts determine guards; work follows emitted objects/edges.
-Validate enclosing/branch temporaries, condition edges, return preservation and
-PA11 lexical/array lifetimes together, then measure frozen common/affected paths.
+`3da4de09` corrected four bit-field reference retypes under the authorized
+exception; [proof and bundle revision](reference-corrections.md) remain.
+`e98cc21e` records initial cleanup measurements, preserved alongside the final run.
+No fixtures, references or comparison rules changed in the latest two groups.
 
-- Cleanup regions: **240/257**, six entry failures removed and none added;
-  **1327/1327** earlier, 51 personal checks, file audit and diff checks pass.
-  One expression owns guarded segments; successful construction changes its
-  active prefix. Branches close segments without ending enclosing lifetimes.
-  Conditions, switch expressions, constructor/delegating initializers and
-  returns use that owner; throwing destruction first removes its own prefix.
-  Classification is memoized (at most three bytes per AST node); work/region
-  telemetry counts actual visits and emitted guards. Prefix cleanup caching is
-  unchanged. Frozen A=`3ec8d0ce`, B=`/tmp/pa12-cleanup-final-cppgm`; the
-  common/branch/condition/switch campaign completed. Initial branch/condition
-  runtime regressions and all observations are retained; an avoidable guard for
-  an already scope-owned reference temporary is being removed. No speed claim.
-  Logs: `/tmp/pa12-cleanup-final-stage.log`,
-  `/tmp/pa12-cleanup-final-prior.log`, `/tmp/pa12-cleanup-final-personal.log`.
+Latest entry was clean `3ec8d0ce`, freshly checked **234/257**. Final **248/257**:
+**14 existing failures removed, none added**, unchanged coverage; **187 stage-base
+failures removed**. Earlier **1327/1327**, all **52** personal source checks,
+file audit (three header advisories) and diff checks pass. Root reports ran
+serially. All three frozen cleanup/destructor campaigns completed successfully.
+Required logs: `/tmp/pa12-destruction-stage2.log` (exit 2),
+`/tmp/pa12-destruction-final-prior.log` (exit 0),
+`/tmp/pa12-destruction-personal2.log` (exit 0). Survivor 536 still fails at member
+pointer application. Required PA12 stage pass is not claimed.
 
-Destructor-boundary follow-up: cached effect-free bodies are separate from
-retained ABI roots and parameter/temporary/array cleanup boundaries. Constructor
-handlers preserve required empty user-destructor calls, but no-throw constructors
-need no handlers. Completed subobject epilogues use guarded suffixes; inline
-duplication is capped at eight actions, with shared blocks above that cap.
-**248/257**, eight further failures removed, none added; earlier **1327/1327**,
-52 personal checks, file audit and diff checks pass. Final frozen follow-up
-measurements are running. Logs: `/tmp/pa12-destruction-stage2.log`,
-`/tmp/pa12-destruction-personal2.log`, `/tmp/pa12-destruction-final-prior.log`.
-Nine LowIR differences and the member-pointer survivor remain. Survivor owner:
-typed member-pointer formation/application -> object adjustment and function
-signature -> pair storage and indirect call, with constant work per use.
+Handoff boundary: the region and destructor-effect owners are complete. The
+remaining conditional cases need a final-consumer fact to distinguish a branch
+whose selected value is already in its final destination from a branch nested
+inside a still-live enclosing call; unconditional branch cleanup would regress
+newly passing enclosing-temporary behavior. The remaining ABI case needs an
+identity/representation proof, and survivor 536 spans member-pointer formation,
+pair storage, object adjustment and an indirect signature. These require separate
+coordinated owners, beyond further changes to the completed region/effect flags.

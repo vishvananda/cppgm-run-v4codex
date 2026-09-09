@@ -76,3 +76,42 @@ and value-preservation shapes are PA12 representation costs, with native guard
 implementation owned by the supplied backend until PA24. Stage-scoped acceptance
 preserves correctness, coverage and bounded work while requiring avoidable costs
 to be removed; it does not impose a new positive-runtime gate on required shapes.
+
+## Final reference-ownership refinement
+
+[Final observations](../student.tests/pa12/cleanup-final-performance.json) repeat
+the same frozen A/A+ABBA harness and inputs with A unchanged and B=`951799ed`,
+`/tmp/pa12-destruction-final-cppgm`, SHA-256
+`dda7927f664ea60214320d6a2135d1edbab5c9000f4403ef811aa9bdd3b35f4e`.
+Scratch is `/tmp/pa12-cleanup-final-evidence`. B text is 950470 bytes: total
+6720 bytes / .71% above A, including the subsequent destructor boundary work.
+
+| Workload | Compiler median A/B seconds | Peak RSS A/B KiB | Paired compiler B/A | Native text A/B |
+| --- | ---: | ---: | --- | ---: |
+| Common 1000 | .25575/.25637 | 49576/49808 | .999/.912 | 168056/168056 |
+| Common 4000 | 1.01571/1.02387 | 183660/185088 | 1.016/1.008 | 672056/672056 |
+| Branch 1000 | .41992/.43711 | 79500/89808 | 1.042/1.032 | 1232592/1462592 |
+| Branch 4000 | 1.71704/1.77798 | 286144/303916 | 1.038/1.030 | 4928592/5848592 |
+| Condition 1000 | .27799/.27662 | 53104/50028 | .974/.994 | 454592/452592 |
+| Condition 4000 | 1.11883/1.13420 | 187432/191012 | 1.105/.932 | 1816592/1808592 |
+| Switch 1000 (B) | .27181 | 51932 | absolute | 514592 |
+| Switch 4000 (B) | 1.08559 | 178164 | absolute | 2056592 |
+
+Common median compiler cost is .24%/.80%; common native bytes remain identical.
+The condition path now emits 1000/4000 regions and 64004/256004 instructions.
+Its reference-bound object belongs to the lexical prefix before conversion to
+bool, so its constructor needs no full-expression guard. This removes an
+avoidable guard without changing source lifetime or weakening unwind facts.
+Classifier visits remain unchanged and linear. Branch counters and output size
+are unchanged from the initial campaign.
+
+Final common runtime is .30772/.30763 seconds (paired 1.009/.993), branch
+.48305/.57943 (1.197/1.212), and condition .19607/.21104 (1.136/1.079).
+Switch is .24871 seconds. Runtime peak RSS remains 256 KiB. Condition runtime
+text returns to 1144/1144 bytes, and its initial approximately 37% regression
+falls to 7.6%; no speed gain over A is claimed. Branch remains about 20% slower,
+with 1920/2152 text bytes. The required O0 guarded segments and scalar value
+preservation remain explicit costs. This policy adds no speculative analysis
+or optional runtime optimization; the bounded per-use work and stage-scoped
+acceptance above still apply. All original measurements and outliers remain,
+including the final branch A/A runtime range .48236-.56240 seconds.
