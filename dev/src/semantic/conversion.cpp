@@ -201,6 +201,8 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 }
 void Analyzer::select_function(NodeId n, EntityId e)
 {
+    if (entities[e].member_info && members[entities[e].member_info].deleted)
+        throw std::runtime_error("selected deleted member function");
     ScopeId naming = object_uses[expressions[n].object_use].naming_scope;
     TypeId object = 0;
     if (ast[n].kind == Kind::Member) {

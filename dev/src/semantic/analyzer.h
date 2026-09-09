@@ -192,7 +192,7 @@ private:
     unsigned base_steps(TypeId from, EntityId to) const;
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
-    Conversion object_conversion(EntityId e, TypeId object, ValueCategory category);
+    Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);

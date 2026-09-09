@@ -38,12 +38,21 @@ No performance benefit is claimed before measurements.
   selection/injected storage, and conservative empty-destructor emission.
   Owner/data flow follows the table; delegation and destructor summaries are
   bounded by the demanded constructor/subobject edges, with TU-local caches.
-- Current `make test-pa12`: **85/257** (172 remaining); 24 original fixture
-  failures removed and no newly failing fixture. PA1–PA11 **1327/1327** and
+- Current `make test-pa12`: **85/257** (172 remaining); 26 original fixture
+  failures removed, with two using-declaration ranking regressions subsequently
+  found by set comparison (corrected in the next increment). PA1–PA11 **1327/1327** and
   file audit pass (existing Analyzer-header advisory). Five personal native/
   rejection reducers pass. Required root reports run serially: concurrent
   reports share a tally and cannot provide authoritative totals.
-- Frozen member performance campaign is running; no benefit claim yet.
+- Corrected increment: using-declaration ranking uses its introducing class;
+  lowering keeps the selected base identity. Pointer-reference temporaries and
+  explicit null globals retain the required typed LowIR. Deleted assignment and
+  ref-qualified members are rejected when selected.
+- Corrected `make test-pa12`: **92/257**, 165 failures. Set comparison proves
+  **31 original failures removed, no new failures**. Earlier PAs **1327/1327**;
+  file audit and nine personal native/rejection reducers pass.
+- Both frozen member campaigns and new-feature absolute measurements completed;
+  performance evidence is being consolidated without discarding observations.
 - Next: finish pointer-reference materialization details, then introduce typed
   copy/move transfer actions and class-value ABI/lifetime facts. Combined
   ref-qualified/class-result tests and union copying depend on those owners.

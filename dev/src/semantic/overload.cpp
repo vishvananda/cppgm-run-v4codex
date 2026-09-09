@@ -250,7 +250,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (object_ranking) {
                 Conversion c; c.rank = 0; c.target = object_type;
                 if (entities[e].member_info && !entities[e].is_static) {
-                    c = object_conversion(e, object_type, object_category);
+                    c = object_conversion(e, object_type, object_category, object_uses[fn.object_use].naming_scope);
                     valid = c.valid();
                 }
                 sequences.push_back(c);

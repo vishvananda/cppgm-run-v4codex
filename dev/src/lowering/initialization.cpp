@@ -54,7 +54,7 @@ void Procedural::global_data(NodeId n, TypeId t)
         DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
     } else {
         DataItem d = constant_data(n, t);
-        if (d.type == IRType::Ptr && d.kind == DataItem::Scalar && !d.value.data.integer) {
+        if (!n && d.type == IRType::Ptr && d.kind == DataItem::Scalar && !d.value.data.integer) {
             d.kind = DataItem::Zero; d.zero_bytes = 8;
         }
         p.data.push_back(d);

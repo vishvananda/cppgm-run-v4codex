@@ -3,10 +3,19 @@
 #include <ostream>
 
 namespace cppgm { namespace semantic {
-Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory category)
+Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming)
 {
     Type f = types[entities[e].type];
     TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
+    // A using-declaration changes the class of the implicit object parameter
+    // for ranking. The actual declaration/base adjustment stays unchanged.
+    EntityId cls = naming && scopes[naming].kind == ScopeKind::Class ? scopes[naming].entity : types[object].entity;
+    while (cls && entities[cls].scope != entities[e].owner) {
+        ScopeId scope = entities[cls].scope;
+        if (using_access.get(key(scope, e))) { wanted = types.qualify(entities[cls].type, f.cv); break; }
+        auto edge = class_facts[entities[cls].class_info].first_base;
+        cls = edge ? bases[edge].base : 0;
+    }
     Conversion c;
     c.target = types.compound(f.ref == RefQualifier::Rvalue ? TypeKind::RRef : TypeKind::LRef, wanted);
     c.reference = true;

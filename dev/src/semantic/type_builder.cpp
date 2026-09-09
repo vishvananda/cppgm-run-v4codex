@@ -251,7 +251,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         members[m].destructor = destructor;
         if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
         members[m].explicit_constructor = spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
-        NodeId special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
+        NodeId special = child(init, Kind::SpecialInitializer);
+        if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;
         if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
     }

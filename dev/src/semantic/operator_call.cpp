@@ -31,7 +31,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
             Conversion c;
             if (member && !i) {
-                c = object_conversion(e, object, expressions[args[0]].category);
+                c = object_conversion(e, object, expressions[args[0]].category, naming);
             } else {
                 TypeId wanted = types.parameters[f.offset+i-member];
                 if (args[i]) c = conversion(args[i], wanted);

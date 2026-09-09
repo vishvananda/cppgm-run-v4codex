@@ -96,6 +96,8 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
         TypeId referred = sem.types[to].child;
         if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
             v = convert(v, referred);
+            if (sem.types[referred].kind == TypeKind::Pointer && v.operand.literal())
+                v = emit(Opcode::Copy, IRType::Ptr, {v.operand});
             SlotId slot = builder->add_slot(0, type(referred));
             Value location(Operand::slot(slot), type(referred), referred, true);
             store(v, location); v = location;
