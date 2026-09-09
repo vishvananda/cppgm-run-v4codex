@@ -30,7 +30,7 @@ all fixtures/comparison rules unless the authorized reference-proof protocol app
 
 [Member](performance.md), [transfer](transfer-performance.md),
 [value](value-performance.md), [conversion/reference](conversion-performance.md)
-and the allocation/aggregate evidence retain frozen binaries, flags, inputs,
+and [allocation/aggregate/alias](allocation-performance.md) evidence retain frozen binaries, flags, inputs,
 A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
 No runtime optimization gain is claimed for the new semantic paths.
 
@@ -57,14 +57,21 @@ No speculative pass, global retry or new positive-runtime exit gate is added.
 - `d2db8706`: allocation/deletion and bounded heap lifetimes -> **223/257**.
 - `ffbc7095`: whole-class aggregate copies preserve source type/callee and
   reference-member storage; named global arrays keep O0 lifetimes -> **225/257**.
-- Destructor aliases now search the object class, then expression context,
+- `eed7d552`: destructor aliases now search the object class, then expression context,
   preserving canonical type checks. Implicit allocator declarations are also
   available when taking function addresses. Current **226/257**: **24 entry
   failures removed, no new failures**, unchanged coverage; **165 stage-base
   failures removed**. Thirty-eight personal source checks pass.
-- Final root/prior/file audit and final frozen evidence are being refreshed.
-  Stage log: `/tmp/pa12-allocation-group-final-stage2.log` (226/257, exit 2).
-  Personal log: `/tmp/pa12-allocation-group-final-personal2.log` (exit 0).
+- Final earlier tests **1327/1327**, file audit and `git diff --check` pass.
+  All three frozen campaigns and nine final allocation output-equivalence
+  checks finished; measurements and outliers are retained in the linked evidence.
+  Common final compiler medians increase 0.4%/0.8%; native bytes are identical.
+  Compiler text grows 20800 bytes (2.32%); no runtime gain is claimed.
+- Logs: `/tmp/pa12-allocation-group-final-stage2.log` (226/257, exit 2),
+  `/tmp/pa12-allocation-group-final-prior2.log` (1327/1327, exit 0),
+  `/tmp/pa12-allocation-group-final-personal2.log` (38 checks, exit 0).
+  Root reports ran serially. The survivor still stops at member-pointer control
+  536. Stage progress is verified against the entry failure set, not new tests.
   No fixtures/references/comparison rules changed in these groups.
 - Concrete next boundary: target-keyed list conversions and aggregate helper
   argument ownership require coordinated overload/materialization changes;

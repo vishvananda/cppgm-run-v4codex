@@ -1,0 +1,69 @@
+{
+  "compiler": "/tmp/pa12-allocation-group-final-cppgm",
+  "compiler_sha256": "8912589fee00ca2192e1df62ed6e5e944abc8f24270e60ac4e6ed27252997784",
+  "campaign_sha256": "77cfc97a8a696b55971db94c82fece683d3729e03de3a91175647560a5eb08f6",
+  "compile_flags": [
+    "--emit-lowir",
+    "-O0",
+    "--validate-lowir"
+  ],
+  "native_flags": [
+    "-O0"
+  ],
+  "workloads": {
+    "common-1000": {
+      "source_sha256": "564e75b44e505b877f36ac3892932005618d66240379ce9adb9c0280fc784d1a",
+      "lowir_sha256": "ff7c6d256133cc6f357ab297f3dd9964adc7bab4edc1927981aa0a1b85e4afd3",
+      "executable_sha256": "c78cbf16e8669a85044e629d1d761ffd57d3422737c480c7531e460039038be2",
+      "equivalent": true
+    },
+    "common-4000": {
+      "source_sha256": "636b617d6461d1b2d921f3194b13c609e3751d5850cd3bca9e82f6683371fe20",
+      "lowir_sha256": "ed3f2b56bf005f96fc5d094a55bfeaf8d19e1a15e81ab46a81e6a3b09280f78d",
+      "executable_sha256": "4e76ee2a67423657544945d4a6aa6cce1b07a493a332156bd899342388a9f495",
+      "equivalent": true
+    },
+    "common-runtime": {
+      "source_sha256": "901fc9616abeade827609c1ceee96e09377489b4b0f635bac145be3ecb3d446e",
+      "lowir_sha256": "30f520680f5596bd1404e0721b3ad27174618f1f1d124ae1eb7c6b8e266b3e77",
+      "executable_sha256": "4f8a9076ee7abeab8b240029ad18242ae611994a1d49f337b0d94cdd40d4761f",
+      "equivalent": true
+    },
+    "scalar-1000": {
+      "source_sha256": "d30bea7cb1dc5d63039dcef14f21bfc6159f4e1eb2006d18a7038953a2ad6e4e",
+      "lowir_sha256": "a374d52037850ddac874a28202abe4d662200ce0641cf4637296a04b28c44d01",
+      "executable_sha256": "b50caca87dd8945ad55fbf199236c29e1d4bd8b1883134f5d2c3f225a62f628c",
+      "equivalent": true
+    },
+    "scalar-4000": {
+      "source_sha256": "dd524515c9b04b57b3b664ab3ce145ba24612f02609a9578670c7bda4db518be",
+      "lowir_sha256": "55659f1956b41480bf7ca3338eaa9c7a51b96adb63316848c250bd847ee03a66",
+      "executable_sha256": "75a3210bdef574f426ec1cb22316c09a1125db752ddc90b43ea536e8ae840af5",
+      "equivalent": true
+    },
+    "scalar-runtime": {
+      "source_sha256": "3adad5fb5ef8887bd91ba299cdde216befebdd129c0f28a6ceb55e68e3facd7c",
+      "lowir_sha256": "2a1d4f7a12710e904224f37ede599a19b0dcb00ecebdd1edb35c58f782ddfe3b",
+      "executable_sha256": "6bc5394534ccf45d5029c32e2c0e25cecb7b80d4d04caf1bee46d59c4a8966b3",
+      "equivalent": true
+    },
+    "arrays-1000": {
+      "source_sha256": "358752b926ff36d670939c6d8abe1d782f52ad17af5c3cd5660ad8d631d74528",
+      "lowir_sha256": "ce1cc29d19fa97b1ce1fba5a7d83f3afca723f5bf9df11a61db2b7f86c60708f",
+      "executable_sha256": "2a28b6f4461d9db3a6577e3043f645e5b4bc767ba5ecd37366e3a1906682bbad",
+      "equivalent": true
+    },
+    "arrays-4000": {
+      "source_sha256": "135364e73bfb58feae1407bc4513f567f4a49a66334c6ae151f6830970d84cce",
+      "lowir_sha256": "58d58e5da135c29885e67b6dd7912599fed356021cae76b88995c6c88c15e107",
+      "executable_sha256": "adc574c043f7666c3b44f0d218e84d411aa3648283b39d67e74bb701d7cc1603",
+      "equivalent": true
+    },
+    "arrays-runtime": {
+      "source_sha256": "5f747eb7d59933f23ed34ed2022589ac752f00bd9a9d1e9e217c590de62326c3",
+      "lowir_sha256": "2dd9c0e2a894c2de249a624a393bc970cd526e5411be578a47ab304543fe4f71",
+      "executable_sha256": "a36e03e642b5658ba63f99e24a9e2dcd63bf8b77b327fdd033556c37bc87339c",
+      "equivalent": true
+    }
+  }
+}
