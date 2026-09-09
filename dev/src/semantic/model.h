@@ -84,7 +84,7 @@ struct Entity {
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false;
-    unsigned char exception_spec = 0; // 0 absent, 1 direct noexcept, 2 throwing, 3 parenthesized nonthrowing.
+    unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
     TypeId type = 0, underlying = 0;

@@ -70,3 +70,7 @@ not extra PA11 gates; correctness, complexity and coverage remain mandatory.
   personal programs validate and execute. PA11 172/302, no prior fixture losses;
   all four PA11 controls pass. PA1–10 remain 1025/1025. Small-array expansion is
   capped at eight total elements; large dimensions use one counter loop.
+- Final review extends the same exception-specification owner: distinguish a
+  processed absent specification from an unseen declaration, so `void f();`
+  cannot later become `void f() noexcept`. Retain the initial frozen benchmark
+  observations and remeasure the corrected candidate; no observation is dropped.

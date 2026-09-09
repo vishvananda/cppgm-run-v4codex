@@ -93,12 +93,17 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
         }
     }
     auto old = entities[e].exception_spec;
-    if (old && spec && ((old == 2) != (spec == 2))) throw std::runtime_error("conflicting exception specifications");
-    if (spec) entities[e].exception_spec = spec;
+    unsigned previous = old & 3;
+    bool destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
+    bool prior_throwing = previous == 0 || previous == 2;
+    bool current_throwing = spec == 0 || spec == 2;
+    if ((old & 128) && (!destructor || (previous && spec)) && prior_throwing != current_throwing)
+        throw std::runtime_error("conflicting exception specifications");
+    entities[e].exception_spec = 128 | (spec ? spec : destructor ? previous : 0);
 }
 bool Analyzer::function_nonthrowing(EntityId e)
 {
-    auto spec = entities[e].exception_spec;
+    auto spec = entities[e].exception_spec & 3;
     if (spec) return spec == 1;
     if (!destructor_member(e)) return false;
     auto m = entities[e].member_info;
