@@ -28,24 +28,31 @@ Conversion Analyzer::converting_constructor(NodeId n, TypeId target)
     result.function = viable[best].entity;
     return result;
 }
-void Analyzer::materialize_conversion(NodeId n, Conversion& conversion)
+void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool defer)
 {
     if (conversion.materialization) return;
     EntityId ctor = conversion.function;
     auto m = entities[ctor].member_info;
-    if (members[m].deleted) throw std::runtime_error("deleted converting constructor");
+    if (deleted_transfer(ctor)) throw std::runtime_error("deleted converting constructor");
     check_access(ctor, facts[n].scope, entities[ctor].owner);
-    demand_member(ctor); members[m].complete_entry = true;
     TypeId t = value_type(conversion.target);
     EntityId object = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, facts[n].scope), 0, n);
     entities[object].type = types.unqualified(t); register_destruction(object);
     ConversionObject materialized; materialized.constructor = ctor; materialized.temporary = object;
+    NodeId source = n;
+    while (ast[source].kind == syntax::Kind::Parenthesized) source = ast[source].first;
+    auto value = expressions[source];
+    materialized.elided = !conversion.reference && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t) &&
+        (ast[source].kind == syntax::Kind::Call || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall);
+    if (!defer && !materialized.elided) demand_member(ctor);
+    members[m].complete_entry = true;
     Type f = types[entities[ctor].type];
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected;
     for (unsigned j = 0; j < f.count; ++j) {
         NodeId a = j ? default_arguments[entities[ctor].defaults+j] : n;
-        Conversion c = this->conversion(a, types.parameters[f.offset+j], false);
+        Conversion c = !j && conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
+            this->conversion(a, types.parameters[f.offset+j], false);
         if (!c.valid()) throw std::runtime_error("invalid converting constructor argument");
         apply_conversion(a, c); arguments.push_back(a); selected.push_back(c);
     }

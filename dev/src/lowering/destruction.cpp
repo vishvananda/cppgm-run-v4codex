@@ -13,6 +13,11 @@ void Procedural::destroy(EntityId dtor, TypeId t, Value object)
 void Procedural::destroy_object(EntityId object, EntityId dtor)
 {
     TypeId t = sem.entities[object].type;
+    if (sem.parameter_cleanup(object)) {
+        Value location = address(binding(object));
+        Operand arguments[] = {Operand::symbol(symbol(dtor)),location.operand};
+        guarded_call(Instruction(Opcode::Call,IRType::Void),arguments,2); return;
+    }
     if (sem.types[t].kind == TypeKind::Array) array_destroy(dtor, t, binding(object), false, {});
     else destroy(dtor, t, address(binding(object)));
 }

@@ -53,6 +53,7 @@ class Procedural {
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
     std::vector<SymbolId> symbols, strings, base_symbols;
     std::vector<SlotId> objects;
+    std::vector<lowir_model::ValueId> object_addresses;
     semantic::Index string_index;
     struct StringRecord { NodeId node; std::uint32_t next; };
     std::vector<StringRecord> string_records = std::vector<StringRecord>(1);
@@ -71,6 +72,10 @@ class Procedural {
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
+    Value return_destination;
+    IRType result_type() const;
+    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination);
+    Value class_temporary(EntityId object, TypeId type);
     SlotId this_slot;
     void transfer_body(EntityId e);
     void transfer_action(const semantic::TransferAction& action, Value source, Value target, bool assignment);
@@ -172,7 +177,7 @@ class Procedural {
     Value binary(NodeId n, bool location);
     Value conditional(NodeId n, bool location);
     Value logical(NodeId n);
-    Value call(NodeId n);
+    Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
     Value placement_new(NodeId n);
     Value operation(ETokenType op, Value a, Value b, TypeId result);

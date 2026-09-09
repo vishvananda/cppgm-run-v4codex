@@ -175,6 +175,11 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
     }
     to = types.unqualified(to);
     from = decay(from);
+    if (class_value(to) && class_value(from) && (to == from || derived_from(from,to)) && !empty_value(to)) {
+        EntityId ctor = select_transfer(to,x.type,x.category,false);
+        if (ctor) { c.function = ctor; c.kind = Conversion::Kind::Construction; c.rank = to == from ? 0 : 2; }
+        return c;
+    }
     if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
     if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && null_constant(n)) { c.rank = 2; return c; }
     if (fundamental(to, FT_BOOL) && pointer(from)) { c.rank = 3; return c; }

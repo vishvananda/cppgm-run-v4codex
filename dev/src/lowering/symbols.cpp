@@ -162,16 +162,24 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     auto t = sem.types[id];
     auto return_type = sem.types[t.child];
     bool incomplete_result = return_type.kind == TypeKind::Named && sem.entities[return_type.entity].class_info && !sem.entities[return_type.entity].complete;
-    Signature sig; sig.result = incomplete_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
-    sig.parameters.count = t.count;
+    bool indirect_result = sem.indirect_value(t.child);
+    Signature sig; sig.result = incomplete_result || indirect_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
+    sig.parameters.count = t.count + indirect_result;
     if (t.variadic) sig.boundary.arity = CAM_VARIADIC;
+    if (indirect_result) {
+        Parameter param; param.type = IRType::Ptr; param.passing = PPM_INDIRECT_RESULT; param.object_bytes = sem.object_size(t.child);
+        lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
+        if (!owner) v.name = p.intern("%ret");
+        p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
+    }
     for (unsigned j = 0; j < t.count; ++j) {
         TypeId pt = sem.types.parameters[t.offset+j];
-        Parameter param; param.type = type(pt);
+        Parameter param; param.type = sem.indirect_value(pt) ? IRType(IRType::Ptr) : type(pt);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
         if (!owner) v.name = p.intern("%arg" + std::to_string(j));
         p.values.push_back(v); param.value = ValueId(p.values.size());
-        if (reference(pt)) {
+        if (sem.indirect_value(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
+        else if (reference(pt)) {
             param.passing = PPM_BY_ADDRESS;
             auto referred = sem.types[pt].child;
             if (sem.types[referred].kind != TypeKind::Function &&
@@ -187,7 +195,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
 }
 Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, Program& out, Linkage& links)
     : ast(a), sem(s), identifiers(ids), p(out), linkage(links), abi(links.abi), abi_types(s.types.records.size()), abi_scopes(s.scopes.size()),
-      symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {}
+      symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {}
 void Procedural::run()
 {
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
@@ -218,7 +226,7 @@ void Procedural::run()
         f.signature = signature(sem.call_type(e), id);
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         if (entity.member_info && !entity.is_static)
-            p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
+            p.parameters[p.signatures[f.signature.index-1].parameters.begin + sem.indirect_value(sem.types[entity.type].child)].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
         if (sem.constructor_member(e) && sem.transfer_member(e))
             for (unsigned j = 0; j < 2; ++j) p.parameters[p.signatures[f.signature.index-1].parameters.begin+j].alias = PALM_NOALIAS;
         if (entity.builtin != semantic::Entity::NoBuiltin) {
@@ -272,6 +280,12 @@ void Procedural::function_body(EntityId e, bool base)
     start(block());
     Signature sig = p.signatures[p.functions[function.index-1].signature.index-1];
     unsigned j = 0; this_slot = SlotId();
+    return_destination = Value();
+    if (sem.indirect_value(returned)) {
+        auto param = p.parameters[sig.parameters.begin+j++];
+        return_destination = Value(Operand::value(param.value),IRType::Ptr,returned);
+        if (auto local = sem.return_object(e)) object_addresses[local] = param.value;
+    }
     if (sem.entities[e].member_info && !sem.entities[e].is_static) {
         auto param = p.parameters[sig.parameters.begin+j++];
         this_slot = builder->add_slot(0, IRType::Ptr);
@@ -281,8 +295,16 @@ void Procedural::function_body(EntityId e, bool base)
         EntityId id = sem.declarations[d].entity;
         if (sem.entities[id].kind != semantic::EntityKind::Parameter) continue;
         auto param = p.parameters[sig.parameters.begin+j++];
-        SlotId slot = builder->add_slot(0, param.type); objects[id] = slot;
-        if (!sem.empty_value(sem.entities[id].type)) emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
+        TypeId type_id = sem.entities[id].type;
+        SlotId slot = builder->add_slot(0, type(type_id)); objects[id] = slot;
+        if (sem.indirect_value(type_id)) object_addresses[id] = param.value;
+        else if (sem.class_value(type_id)) {
+            if (!sem.empty_class(type_id)) {
+                Value destination = address(Value(Operand::slot(slot),type(type_id),type_id,true));
+                Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(type_id); copy.alignment = sem.object_alignment(type_id);
+                emit(copy,{Operand::value(param.value),destination.operand});
+            }
+        } else emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
     else if (sem.constructor_member(e)) constructor_body(e);
@@ -291,9 +313,11 @@ void Procedural::function_body(EntityId e, bool base)
     statement(sem.entities[e].body);
     if (destructor_handler) destructor_finish(e);
     if (!ended) {
+        clean_inline(live,0);
         finish_constructor_handlers();
-        if (type(returned) == IRType::Void) emit(Opcode::Return, IRType(), {});
-        else emit(Opcode::Return, type(returned), {type(returned).floating() ? Operand::floating(0) : Operand::integer(0)});
+        if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
+        else if (sem.class_value(returned)) emit(Opcode::Unreachable,IRType(),{});
+        else emit(Opcode::Return, result_type(), {result_type().floating() ? Operand::floating(0) : Operand::integer(0)});
     }
     emit_cleanups();
     builder.reset();

@@ -79,3 +79,8 @@ edges, with no body cloning; array expansion stays capped at eight elements.
   is the concrete boundary for this incomplete handoff; the full-stage goal
   remains active. Course coverage stays **257**, with **62 stage-base failures
   removed** overall and no new failing fixtures.
+
+- ABI entry: clean `4ea8394f`, fresh **123/257** baseline in `/tmp/pa12-abi-start.log`.
+  Prior turn is verified progress. Active owner: class boundary facts and typed
+  destination/return records -> selected transfer -> direct/indirect call,
+  parameter materialization and cleanup; O(declarations + expressions + actions).

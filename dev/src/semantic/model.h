@@ -75,6 +75,7 @@ struct ClassFacts {
     unsigned char declared_transfers = 0, generated_transfers = 0;
     unsigned char copy_storage_state = 0;
     unsigned char trivial_destructor_state = 0;
+    unsigned char value_abi = 0;
     bool user_constructor = false, user_destructor = false;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
@@ -202,13 +203,16 @@ struct Conversion {
     EntityId function = 0; // Target-selected overload, if any.
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
-    bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false;
+    bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false, implicit_move = false;
     unsigned char preference = 0;
     enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
-struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; };
+struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; bool elided = false; };
+struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
+struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };
+struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; };
 struct PlacementNew { EntityId allocation = 0, constructor = 0; TypeId type = 0; NodeId initializer = 0; Expression call; };
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;

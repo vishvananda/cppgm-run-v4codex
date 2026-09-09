@@ -271,7 +271,7 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
     v = emit(compare ? Opcode::Compare : Opcode::Binary, a.ir, {a.operand, b.operand}, action);
     v.type = result; return v;
 }
-Value Procedural::call(NodeId n)
+Value Procedural::call(NodeId n, Value destination)
 {
     auto fact = sem.expression_fact(n);
     if (fact.form == semantic::ExpressionForm::PseudoDestructor) {
@@ -282,8 +282,13 @@ Value Procedural::call(NodeId n)
         return Value(Operand(), IRType::Void, fact.type);
     }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
+    bool class_result = sem.class_value(sem.facts[n].type);
+    bool indirect_result = sem.indirect_value(sem.facts[n].type);
+    bool own_result = class_result && destination.ir == IRType();
+    if (own_result) destination = address(class_temporary(sem.object_fact(n).temporary,fact.type));
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());
+    if (indirect_result) call_work.push_back(destination.operand);
     auto object_use = sem.object_fact(n);
     if (object_use.type) {
         Value object;
@@ -304,7 +309,7 @@ Value Procedural::call(NodeId n)
     }
     NodeId callee = ast[n].first;
     EntityId selected = sem.facts[n].entity;
-    Instruction i(Opcode::Call, type(sem.facts[n].type));
+    Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
     if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
         Value fn = load(expression(callee)); call_work[begin] = fn.operand;
@@ -313,6 +318,14 @@ Value Procedural::call(NodeId n)
         i.signature = signature(ft);
     }
     Value v = guarded_call(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
+    if (class_result) {
+        if (!indirect_result && !sem.empty_class(fact.type)) {
+            Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(fact.type); copy.alignment = sem.object_alignment(fact.type);
+            emit(copy,{v.operand,destination.operand});
+        }
+        if (own_result) activate_temporary(sem.object_fact(n).temporary);
+        destination.type = fact.type; destination.address = true; return destination;
+    }
     if (reference(sem.facts[n].type)) v.address = true;
     return v;
 }

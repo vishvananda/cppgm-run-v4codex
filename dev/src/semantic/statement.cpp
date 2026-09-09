@@ -68,6 +68,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::NamespaceAlias: case Kind::StaticAssert: case Kind::Class: case Kind::ClassForward: case Kind::Enum:
         declaration(n, s); return;
     case Kind::Return:
+        if (class_value(return_type)) { record_class_return(n,s); return; }
         if (ast[n].first) {
             NodeId value_node = ast[n].first;
             if (ast[value_node].kind == Kind::BracedInit && !ast[value_node].first) {

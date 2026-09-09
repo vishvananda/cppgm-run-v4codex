@@ -112,10 +112,11 @@ void Procedural::object(EntityId e)
     auto lifetime = sem.object_lifetime(e);
     if (lifetime) live = sem.lifetimes[lifetime].tail;
     auto initial_live = live;
-    if (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) objects[e] = source_slot(e);
-    Value location(Operand::slot(objects[e]), type(t), t, true);
+    if (!object_addresses[e] && (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index)) objects[e] = source_slot(e);
+    Value location = object_addresses[e] ? Value(Operand::value(object_addresses[e]),type(t),t,true) : Value(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;
-    if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
+    if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
+    else if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
         if (sem.initializer_work(sem.initializer_plan(init, t))) address(location);
         std::vector<InitProjection> path;
         aggregate_initialize(init, t, location, false, path);
@@ -130,6 +131,9 @@ void Procedural::object(EntityId e)
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {
+    if (auto source = sem.class_initialization(n,t).source) {
+        construct_value(source,sem.conversion_fact(sem.class_initialization(n,t).conversion),address(location)); return;
+    }
     if (auto plan = sem.initializer_plan(n, t)) { initialize_plan(plan, location); return; }
     if (n && sem.facts[n].entity && sem.constructor_member(sem.facts[n].entity)) {
         construct(sem.facts[n].entity, n, address(location)); return;

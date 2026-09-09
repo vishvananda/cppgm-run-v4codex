@@ -102,7 +102,8 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer || ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
     for (NodeId a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) {
         Expression value = expression(a, s);
-        if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target)) return false;
+        if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target))
+            return record_class_initialization(n,target,a);
         args.push_back(a);
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;

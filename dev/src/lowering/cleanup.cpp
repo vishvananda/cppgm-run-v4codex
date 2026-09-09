@@ -67,9 +67,19 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
 void Procedural::return_statement(NodeId n)
 {
     auto life = sem.lifetime_use(n);
-    bool has_value = type(returned) != IRType::Void;
+    bool has_value = result_type() != IRType::Void;
     Value value;
-    if (has_value) {
+    auto class_return = sem.class_return(n);
+    if (class_return.source) {
+        Value destination = return_destination;
+        if (has_value) {
+            SlotId slot = builder->add_slot(0,type(returned));
+            value = Value(Operand::slot(slot),type(returned),returned);
+            destination = address(Value(value.operand,value.ir,value.type,true));
+        }
+        if (!class_return.local || class_return.local != sem.return_object(active_function))
+            construct_value(class_return.source,sem.conversion_fact(class_return.conversion),destination);
+    } else if (has_value) {
         NodeId operand = ast[n].first;
         if (!operand) value = Value(Operand::integer(0), type(returned));
         else if (auto conversion = sem.expression_fact(operand).incoming)
@@ -86,15 +96,19 @@ void Procedural::return_statement(NodeId n)
     }
     if (life.entry && sem.return_count(life.entry, life.context) > 1) {
         if (has_value) {
-            if (!cleanup_return) cleanup_return = builder->add_slot(0, type(returned));
-            emit(Opcode::Store, type(returned), {value.operand, Operand::slot(cleanup_return)});
+            if (!cleanup_return) cleanup_return = builder->add_slot(0, result_type());
+            if (sem.class_value(returned)) {
+                Value target = address(Value(Operand::slot(cleanup_return),type(returned),returned,true));
+                Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(returned); copy.alignment = sem.object_alignment(returned);
+                emit(copy,{value.operand,target.operand});
+            } else emit(Opcode::Store, result_type(), {value.operand, Operand::slot(cleanup_return)});
         }
         auto terminal = BlockId(return_terminals.get(life.context));
         if (!terminal) { terminal = block(); return_terminals.put(life.context, terminal.index); cleanup_blocks.push_back({0, BlockId(), terminal}); }
         jump(cleanup_suffix(life.entry, terminal)); flush_cleanups(); return;
     }
     clean_inline(life.entry, 0); finish_constructor_handlers();
-    if (has_value) emit(Opcode::Return, type(returned), {value.operand});
+    if (has_value) emit(Opcode::Return, result_type(), {value.operand});
     else emit(Opcode::Return, IRType(), {});
 }
 void Procedural::flush_cleanups()
@@ -106,8 +120,8 @@ void Procedural::flush_cleanups()
         auto entry = cleanup_blocks[cleanup_cursor++];
         start(entry.block);
         if (!entry.state) {
-            if (type(returned) == IRType::Void) emit(Opcode::Return, IRType(), {});
-            else emit(Opcode::Return, type(returned), {Operand::slot(cleanup_return)});
+            if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
+            else emit(Opcode::Return, result_type(), {Operand::slot(cleanup_return)});
         } else {
             auto action = lifetime_state(entry.state);
             destroy_object(action.object, action.destructor); jump(entry.next);

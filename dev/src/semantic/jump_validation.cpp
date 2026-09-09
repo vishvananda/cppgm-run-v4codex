@@ -19,9 +19,9 @@ void Analyzer::check_jumps(NodeId body)
     std::uint32_t live = 0, break_live = 0, continue_live = 0;
     NodeId context = 0;
     auto add_object = [&](EntityId e) {
-        if (!e || entities[e].kind != EntityKind::Variable || entities[e].is_static || entities[e].external_decl) return;
+        if (!e || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) || entities[e].is_static || entities[e].external_decl) return;
         EntityId dtor = object_destructor(e);
-        bool destruction = destructor_needed(dtor);
+        bool destruction = destructor_needed(dtor) || parameter_cleanup(e);
         if (destruction) {
             LifetimeState state; state.object = e; state.destructor = dtor; state.tail = live; state.depth = lifetimes[live].depth + 1;
             live = lifetimes.size(); lifetimes.push_back(state); object_lifetimes.put(e, live);
@@ -81,6 +81,12 @@ void Analyzer::check_jumps(NodeId body)
         break_live = saved_break; continue_live = saved_continue; context = saved_context;
         switch_entry = saved_switch;
     };
+    ScopeId owner = scopes[facts[body].scope].parent;
+    if (scopes[owner].kind == ScopeKind::Function)
+        for (auto d = scopes[owner].first_decl; d; d = declarations[d].next) {
+            EntityId e = declarations[d].entity;
+            if (entities[e].kind == EntityKind::Parameter) add_object(e);
+        }
     visit(body);
     unsigned clock = 0;
     std::function<void(unsigned)> number = [&](unsigned i) {

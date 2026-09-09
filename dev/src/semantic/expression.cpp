@@ -20,6 +20,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     ++expression_work;
     facts[n].scope = s;
     Expression result = resolve_expression(n, s);
+    class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions[n] = result;
     if (!facts[n].type) facts[n].type = result.type;

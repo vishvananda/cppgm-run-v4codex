@@ -52,6 +52,13 @@ public:
     bool transfer_member(EntityId e) const;
     bool trivial_transfer(EntityId e) const;
     bool direct_transfer(EntityId e) const;
+    bool class_value(TypeId t) const;
+    bool indirect_value(TypeId t) const;
+    bool empty_class(TypeId t) const;
+    bool parameter_cleanup(EntityId e) const;
+    const ValueInitialization& class_initialization(NodeId n, TypeId t) const;
+    const ValueReturn& class_return(NodeId n) const;
+    EntityId return_object(EntityId e) const;
     std::vector<TransferAction> transfers;
     bool nonstatic_field(EntityId e) const;
     EntityId injected_storage(EntityId field) const;
@@ -68,6 +75,17 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    void prepare_value_boundary(TypeId t);
+    void prepare_function_boundaries();
+    void class_result(NodeId n, Expression& result, ScopeId s);
+    bool record_class_initialization(NodeId n, TypeId target, NodeId source);
+    void record_class_return(NodeId n, ScopeId s);
+    void finish_class_returns(EntityId e);
+    EntityId current_function = 0;
+    Index class_initializer_index, class_return_index, function_return_index;
+    std::vector<ValueInitialization> value_initializations = std::vector<ValueInitialization>(1);
+    std::vector<ValueReturn> value_returns = std::vector<ValueReturn>(1);
+    std::vector<FunctionReturn> function_returns = std::vector<FunctionReturn>(1);
     void classify_transfer(EntityId e, NodeId special, ScopeId context);
     void ensure_transfers(TypeId t, bool assignment);
     void prepare_transfer(EntityId e);
@@ -256,7 +274,7 @@ private:
     bool similar_type(TypeId a, TypeId b);
     Conversion conversion(NodeId n, TypeId target, bool user = true);
     Conversion converting_constructor(NodeId n, TypeId target);
-    void materialize_conversion(NodeId n, Conversion& c);
+    void materialize_conversion(NodeId n, Conversion& c, bool defer = false);
     void record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected);
     bool better(const Conversion* a, const Conversion* b, std::size_t count);
     Conversion ellipsis_conversion(NodeId n);

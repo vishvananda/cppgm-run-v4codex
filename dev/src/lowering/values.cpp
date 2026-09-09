@@ -46,6 +46,7 @@ Value Procedural::load(Value v)
 {
     if (!v.address) return v;
     if (v.bit_field) return load_bit_field(v);
+    if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
@@ -128,22 +129,16 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         auto materialized = sem.conversion_objects[c.materialization];
         EntityId object = materialized.temporary;
         TypeId t = sem.entities[object].type;
-        objects[object] = builder->add_slot(0, type(t));
-        Value destination(Operand::slot(objects[object]), type(t), t, true);
-        Value pointer = address(destination);
-        std::size_t begin = call_work.size();
-        call_work.push_back(Operand::symbol(symbol(materialized.constructor))); call_work.push_back(pointer.operand);
-        for (unsigned j = 0; j < materialized.call.argument_count; ++j)
-            call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j], sem.conversion_fact(materialized.call.conversions+j)).operand);
-        guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
-        call_work.resize(begin); activate_temporary(object);
-        return c.reference ? pointer : Value(destination.operand, type(t), t);
+        Value destination = class_temporary(object,t), pointer = address(destination);
+        construct_value(n,c,pointer);
+        if (c.reference) activate_temporary(object);
+        return c.reference || sem.indirect_value(t) ? pointer : Value(destination.operand,type(t),t);
     }
     if (c.empty_copy && !c.reference) {
         SlotId slot = builder->add_slot(0, type(c.target));
         Value destination(Operand::slot(slot), type(c.target), c.target, true);
-        address(destination);
-        address(expression(n, true));
+        Value pointer = address(destination);
+        construct_value(n,c,pointer);
         return Value(Operand::slot(slot), type(c.target), c.target);
     }
     Value v = expression(n, c.reference);
@@ -184,6 +179,7 @@ Value Procedural::binding(EntityId e)
     if (!e) throw std::logic_error("missing resolved declaration");
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
+    if (object_addresses[e]) return Value(Operand::value(object_addresses[e]),type(t),t,true);
     if (sem.nonstatic_field(e)) {
         if (auto storage = sem.injected_storage(e)) {
             if (!sem.nonstatic_field(storage)) return field(address(binding(storage)), e);

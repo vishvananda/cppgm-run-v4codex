@@ -57,6 +57,7 @@ void Analyzer::finish()
         for (EntityId seen : chain) delegation_states.put(seen, 2);
         chain.clear();
     }
+    if (calls) prepare_function_boundaries();
     for (NodeId body : jump_bodies) check_jumps(body);
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
@@ -262,13 +263,17 @@ void Analyzer::function_body(const Body& body)
         entities[e].type = types[t].kind == TypeKind::Array ? types.compound(TypeKind::Pointer, types.signature(types[t].child)) :
             types[t].kind == TypeKind::Function ? types.compound(TypeKind::Pointer, types.signature(t)) : types.signature(t);
         bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
+        if (calls && class_value(entities[e].type)) register_destruction(e);
     }
     TypeId saved_return = return_type;
+    EntityId saved_function = current_function; current_function = body.entity;
     return_type = types[entities[body.entity].type].child;
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
+    if (calls) finish_class_returns(body.entity);
     if (calls) jump_bodies.push_back(body.node);
     return_type = saved_return;
+    current_function = saved_function;
 }
 void Analyzer::statements(NodeId n, ScopeId s)
 {
