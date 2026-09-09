@@ -189,11 +189,11 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     }
     for (unsigned j = 0; j < t.count; ++j) {
         TypeId pt = sem.types.parameters[t.offset+j];
-        Parameter param; param.type = sem.indirect_value(pt) ? IRType(IRType::Ptr) : type(pt);
+        Parameter param; param.type = sem.indirect_parameter(pt) ? IRType(IRType::Ptr) : type(pt);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
         if (!owner) v.name = p.intern("%arg" + std::to_string(j));
         p.values.push_back(v); param.value = ValueId(p.values.size());
-        if (sem.indirect_value(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
+        if (sem.indirect_parameter(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
         else if (reference(pt)) {
             param.passing = PPM_BY_ADDRESS;
             auto referred = sem.types[pt].child;
@@ -319,7 +319,7 @@ void Procedural::function_body(EntityId e, bool base)
         auto param = p.parameters[sig.parameters.begin+j++];
         TypeId type_id = sem.entities[id].type;
         SlotId slot = builder->add_slot(0, type(type_id)); objects[id] = slot;
-        if (sem.indirect_value(type_id)) object_addresses[id] = param.value;
+        if (sem.indirect_parameter(type_id)) object_addresses[id] = param.value;
         else if (sem.class_value(type_id)) {
             if (!sem.empty_class(type_id)) {
                 Value destination = address(Value(Operand::slot(slot),type(type_id),type_id,true));

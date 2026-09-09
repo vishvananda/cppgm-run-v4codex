@@ -6,6 +6,8 @@ bool Analyzer::class_value(TypeId t) const
 { return types[t].kind == TypeKind::Named && entities[types[t].entity].class_info; }
 bool Analyzer::indirect_value(TypeId t) const
 { return class_value(t) && class_facts[entities[types[t].entity].class_info].value_abi == 2; }
+bool Analyzer::indirect_parameter(TypeId t) const
+{ return class_value(t) && class_facts[entities[types[t].entity].class_info].parameter_abi == 2; }
 bool Analyzer::empty_class(TypeId t) const
 { return class_value(t) && class_facts[entities[types[t].entity].class_info].empty; }
 bool Analyzer::parameter_cleanup(EntityId e) const
@@ -21,14 +23,16 @@ void Analyzer::prepare_value_boundary(TypeId t)
     if (!class_value(t) || !entities[types[t].entity].complete) return;
     auto info = entities[types[t].entity].class_info;
     if (class_facts[info].value_abi) return;
-    class_facts[info].value_abi = 2;
+    class_facts[info].value_abi = class_facts[info].parameter_abi = 2;
     bool simple_destruction = trivial_destructor(t);
-    bool direct = size(t) <= 16 && copy_storage_type(t) && simple_destruction;
-    if (direct) {
+    bool direct = false;
+    if (simple_destruction) {
+        direct = copy_storage_type(t);
         EntityId move = select_transfer(t, types.unqualified(t), ValueCategory::Xvalue, false);
-        direct = move && !deleted_transfer(move) && trivial_transfer(move);
+        direct |= move && !deleted_transfer(move) && trivial_transfer(move);
     }
-    class_facts[info].value_abi = direct ? 1 : 2;
+    class_facts[info].parameter_abi = direct ? 1 : 2;
+    class_facts[info].value_abi = direct && size(t) <= 16 ? 1 : 2;
 }
 void Analyzer::prepare_function_boundaries()
 {

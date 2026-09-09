@@ -135,7 +135,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         Value destination = class_temporary(object,t), pointer = class_address(object,t);
         construct_value(n,c,pointer);
         if (c.reference) activate_temporary(object);
-        return c.reference || sem.indirect_value(t) ? pointer : Value(destination.operand,type(t),t);
+        return c.reference || sem.indirect_parameter(t) ? pointer : Value(destination.operand,type(t),t);
     }
     if (c.empty_copy && !c.reference) {
         SlotId slot = builder->add_slot(0, type(c.target));

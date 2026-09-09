@@ -77,6 +77,7 @@ struct ClassFacts {
     unsigned char copy_storage_state = 0;
     unsigned char trivial_destructor_state = 0;
     unsigned char value_abi = 0;
+    unsigned char parameter_abi = 0;
     bool user_constructor = false, user_destructor = false;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;

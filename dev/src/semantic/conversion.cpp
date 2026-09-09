@@ -174,7 +174,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     to = types.unqualified(to);
     from = decay(from);
-    if (class_value(to) && class_value(from) && (to == from || derived_from(from,to)) && !empty_value(to)) {
+    if (class_value(to) && class_value(from) && (to == from || derived_from(from,to)) && (to != from || !empty_value(to))) {
         EntityId ctor = select_transfer(to,x.type,x.category,false);
         if (ctor) { c.function = ctor; c.kind = Conversion::Kind::Construction; c.rank = to == from ? 0 : 2; }
         return c;

@@ -40,7 +40,7 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
     if (supplied) return destination;
     if (c.reference) { activate_temporary(object.temporary); return destination; }
     if (object.temporary) {
-        if (sem.indirect_value(t)) return destination;
+        if (sem.indirect_parameter(t)) return destination;
         return Value(class_temporary(object.temporary,t).operand,type(t),t);
     }
     return value;

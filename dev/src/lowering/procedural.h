@@ -94,6 +94,7 @@ class Procedural {
     std::size_t cleanup_cursor = 0;
     semantic::Index slot_names;
     SlotId cleanup_return;
+    SlotId class_return_slot;
     BlockId resume_terminal, destructor_handler, destructor_end, destructor_epilogue;
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };

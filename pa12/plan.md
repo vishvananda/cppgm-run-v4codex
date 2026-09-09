@@ -13,14 +13,15 @@ fake AST, reference delegation or later native-backend performance gate.
 | Owner | Data flow / complexity | Validation and remaining work |
 | --- | --- | --- |
 | Member/special-member semantics | Canonical member -> field/base/storage actions; once per required edge | Delegation, unions and copy/move selection pass. Bit-field ordering and helper/emission differences remain |
-| Class values/conversions | Indexed targets/base edges -> object/standard sequence -> selected transfer and destination | Conversion, builtin/surrogate ranking and whole-class aggregate appertainment pass. Braced arguments/defaults, aggregate prvalues and class-valued helper parameters remain |
+| Class values/conversions | Indexed targets/base edges -> selected transfer and destination | List arguments/defaults, aggregate prvalues, helper parameters and empty-base conversion pass. Explicit conversion transfer shape remains |
 | Lifetime ownership | Complete objects/branch states -> retained storage and cleanup continuations; O(objects + edges) | Static references, conditional destinations and heap arrays pass. Local subobject references and remaining exception-region/continuation forms need work |
 | Call boundary facts | Attribute -> validated EntityId -> LowIR metadata | Stable-prefix and abort controls pass. Survivor control 536 requires member-pointer representation and an indirect signature |
+| Parameter/result ABI | Selected trivial copy or move -> independent argument/result convention -> matching caller/callee storage; once per class | Large trivial parameters, trivial moves with a user copy and shared direct return storage pass. Nontrivial base-copy parameter fixture requires a distinct representation proof |
 | Allocation | Canonical scalar/array names -> selected functions, extent/cookie and actions -> bounded loops | All required new/delete comparisons pass. Personal checks cover sized delete, null, wide/zero/multidimensional bounds, alias destruction and distinct runtime function addresses |
 
 Target-typed lists now preserve their untyped source through overload selection,
 then materialize selected defaults, references and aggregate prvalues. All six
-entry compile rejections compile. Twenty-seven remaining LowIR differences
+entry compile rejections compile. Twenty-three remaining LowIR differences
 concern transfers, helper/ABI shapes and cleanup.
 Two inherited contract questions remain: PA11 bit-field constructor order versus
 PA12 copy-semantics order, and direct-object base-copy parameter passing. Preserve
@@ -30,7 +31,8 @@ all fixtures/comparison rules unless the authorized reference-proof protocol app
 
 [Member](performance.md), [transfer](transfer-performance.md),
 [value](value-performance.md), [conversion/reference](conversion-performance.md)
-and [allocation/aggregate/alias](allocation-performance.md) and [list](list-performance.md) evidence retain frozen binaries, flags, inputs,
+and [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md)
+and [boundary](boundary-performance.md) evidence retain frozen binaries, flags, inputs,
 A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
 No runtime optimization gain is claimed for the new semantic paths.
 
@@ -53,16 +55,15 @@ No speculative pass, global retry or new positive-runtime exit gate is added.
 - `73664568`, `4ea8394f`: transfers and measured prefix policy -> **123/257**.
 - `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: values/storage -> **169/257**.
 - `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/references -> **202/257**.
-- Current entry: clean `70556b3d`, freshly verified **202/257**, 55 failures.
 - `d2db8706`: allocation/deletion and bounded heap lifetimes -> **223/257**.
 - `ffbc7095`: whole-class aggregate copies preserve source type/callee and
   reference-member storage; named global arrays keep O0 lifetimes -> **225/257**.
 - `eed7d552`: destructor aliases now search the object class, then expression context,
   preserving canonical type checks. Implicit allocator declarations are also
-  available when taking function addresses. Current **226/257**: **24 entry
+  available when taking function addresses. **226/257**: **24 allocation-entry
   failures removed, no new failures**, unchanged coverage; **165 stage-base
   failures removed**. Thirty-eight personal source checks pass.
-- Final earlier tests **1327/1327**, file audit and `git diff --check` pass.
+- Allocation-group earlier tests **1327/1327**, file audit and `git diff --check` pass.
   All three frozen campaigns and nine final allocation output-equivalence
   checks finished; measurements and outliers are retained in the linked evidence.
   Common final compiler medians increase 0.4%/0.8%; native bytes are identical.
@@ -73,22 +74,34 @@ No speculative pass, global retry or new positive-runtime exit gate is added.
   Root reports ran serially. The survivor still stops at member-pointer control
   536. Stage progress is verified against the entry failure set, not new tests.
   No fixtures/references/comparison rules changed in these groups.
-- Concrete next boundary: target-keyed list conversions and aggregate helper
-  argument ownership require coordinated overload/materialization changes;
-  member pointers require a distinct ABI value and call signature. Existing
-  whole-object copy or allocation records cannot stand in for those facts.
-
-- List-group entry: clean `aee24d98`, fresh **226/257**, 31 fixture failures.
+- `64ecedf7`: clean list-group entry `aee24d98`, **226/257**, 31 failures.
   Untyped list -> target-keyed candidate -> per-use conversion/storage -> typed
   constructor or aggregate helper. Aggregate member parameters own the selected
   move and destruction. Reference storage uses conversion-kind-specific facts.
-  Current **230/257**, four old failures removed and no new failures, all six
+  **230/257**, four old failures removed and no new failures, all six
   old compile rejections compile; 49 personal checks pass. Earlier serial report
   is **1327/1327**; file audit passes (three header advisories).
   List performance evidence records .29%/.45% common latency cost, .21% largest
   common RSS cost and linear new-path counters; no speed gain is claimed.
-  Logs: `/tmp/pa12-lists-stage5.log`, `/tmp/pa12-lists-final-prior.log`,
+  Logs: `/tmp/pa12-lists-final-stage.log`, `/tmp/pa12-lists-final-prior.log`,
   `/tmp/pa12-lists-final-personal.log`. An accidental overlapping pair of root
   reports was discarded and rerun serially; its tallies are not evidence.
-  Next: parameter/result ABI classification and selected trivial transfer facts,
-  then full-expression cleanup regions and survivor member-pointer calls.
+- Boundary group: separate argument/result ABI facts, selected trivial value
+  transfers, empty derived-to-base conversion and one direct return slot per
+  function -> **234/257**. Four further entry failures removed, none added.
+  Total from this goal-turn entry: **8 removed**, unchanged coverage; **173
+  stage-base failures removed**. Fifty personal checks pass, including large
+  values and a nontrivial parameter whose constructor/destructor observes `this`.
+  Earlier tests **1327/1327**, file audit (three header advisories), and diff
+  checks pass. `/tmp/pa12-boundary-final-stage.log`,
+  `/tmp/pa12-boundary-final-prior.log`, `/tmp/pa12-boundary-final-personal.log`.
+  Frozen evidence shows a 12% trivial-move runtime gain and a required large
+  parameter copy costing 44.5% runtime / 88 native bytes; both are retained.
+- Handoff boundary: list selection and declaration-based trivial ABI decisions
+  are complete. Remaining cleanup cases require full-expression regions and
+  separate destructor effect/boundary facts: changing per-call cleanup alone
+  would miss temporaries or regress PA11 array lifetimes. The nontrivial
+  base-copy ABI case needs a representation/identity proof beyond triviality;
+  survivor 536 needs member-pointer parsing, storage and an indirect signature.
+  These require separate coordinated owners, rather than further changes to
+  the completed list plans or trivial-transfer predicate. Stage remains incomplete.

@@ -57,7 +57,7 @@ void Procedural::emit_aggregate_helpers()
             if (action.helper_parameter) {
                 objects[action.helper_parameter] = slot;
                 object_addresses[action.helper_parameter] = lowir_model::ValueId();
-                if (sem.indirect_value(action.type)) object_addresses[action.helper_parameter] = parameter.value;
+                if (sem.indirect_parameter(action.type)) object_addresses[action.helper_parameter] = parameter.value;
                 else if (!sem.empty_class(action.type)) {
                     Value at = address(Value(Operand::slot(slot),type(action.type),action.type,true));
                     Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(action.type); copy.alignment = sem.object_alignment(action.type);

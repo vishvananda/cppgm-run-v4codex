@@ -56,7 +56,7 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     if (class_result || transfer) {
         if (supplied) return destination;
         if (c.reference) { activate_temporary(record.temporary); return converted_value(result,record.result); }
-        if (sem.indirect_value(target)) return destination;
+        if (sem.indirect_parameter(target)) return destination;
         return Value(class_temporary(record.temporary,target).operand,type(target),target);
     }
     return converted_value(result,record.result);

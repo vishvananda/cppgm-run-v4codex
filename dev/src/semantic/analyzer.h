@@ -56,6 +56,7 @@ public:
     bool direct_transfer(EntityId e) const;
     bool class_value(TypeId t) const;
     bool indirect_value(TypeId t) const;
+    bool indirect_parameter(TypeId t) const;
     bool empty_class(TypeId t) const;
     bool parameter_cleanup(EntityId e) const;
     EntityId reference_temporary(EntityId e) const { return reference_temporaries.get(e); }

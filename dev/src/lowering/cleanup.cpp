@@ -5,7 +5,7 @@ using namespace lowir_model;
 void Procedural::reset_lifetime(EntityId e)
 {
     active_function = e; live = 0; emitting_cleanup = false; resume_emitted = false; cleanup_cursor = 0; slot_names = semantic::Index();
-    cleanup_return = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
+    cleanup_return = class_return_slot = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
     temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
 }
@@ -79,7 +79,8 @@ void Procedural::return_statement(NodeId n)
     if (class_return.source) {
         Value destination = return_destination;
         if (has_value) {
-            SlotId slot = builder->add_slot(0,type(returned));
+            if (!class_return_slot) class_return_slot = builder->add_slot(0,type(returned));
+            SlotId slot = class_return_slot;
             value = Value(Operand::slot(slot),type(returned),returned);
             destination = address(Value(value.operand,value.ir,value.type,true));
         }
