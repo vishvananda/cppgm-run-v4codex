@@ -23,11 +23,6 @@ Value Procedural::expression(NodeId n, bool location)
         if (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) objects[e] = builder->add_slot(0, type(fact.type));
         Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
         Value pointer = address(at);
-        if (sem.object_fact(n).value_initialize) {
-            Instruction zero(Opcode::ZeroInit);
-            zero.bytes = sem.object_size(fact.type); zero.alignment = sem.object_alignment(fact.type);
-            emit(zero, {pointer.operand});
-        }
         construct(sem.facts[n].entity, n, pointer); activate_temporary(e);
         pointer.type = fact.type; pointer.address = true; return pointer;
     }

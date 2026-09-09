@@ -257,3 +257,13 @@ Inherited numeric latency/RSS/text targets remain diagnostics as specified
 above. No later-stage optimizer, allocator, native backend or self-hosting gate
 is introduced. Retain noisy observations and disclose them; only repeatable
 benefits above startup/noise support performance claims.
+
+The initial audit candidate is `b262971d`, SHA256
+`a68dcfc04f54128766a178a74dba986e3e2cb200e671239941ca3a5b86810062`.
+Its complete common campaign remains in `audit-initial-common-performance.json`
+with its frozen binary and outputs intact. Final source tracing found that
+both the temporary-expression adapter and `construct` emitted the same required
+preliminary zero. Remove the duplicate at the adapter, retain the sole owning
+construction path, and check one `zeroinit` plus execution in
+`audit-temporary-zero.cpp`. Repeat the common campaign with the corrected frozen
+binary before final conclusions; the affected-family campaign uses that binary.

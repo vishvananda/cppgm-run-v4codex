@@ -39,6 +39,8 @@ def main():
                     assert 'store f64' not in ir, ir
                 if source.stem == 'audit-nested-range':
                     assert stats[-1]['instructions'] < 30, stats
+                if source.stem == 'audit-temporary-zero':
+                    assert ir.count('zeroinit') == 1, ir
             print(source.name + ': PASS', flush=True)
 
         for volatile in ('', 'volatile '):
