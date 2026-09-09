@@ -51,6 +51,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         r.type = types.fundamental(ast[n].op == KW_NULLPTR ? FT_NULLPTR_T : FT_BOOL); return r;
     case Kind::IdExpression: {
+        auto op = operator_token(ast[n].detail);
+        if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
         EntityId e = resolve(ast[n].detail, s);
         if (!e) throw std::runtime_error("unknown expression name");
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
@@ -139,7 +141,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             TypeId named = 0;
             if (ast[id].kind == Kind::TypeId) named = type_id(id, s);
             else {
-                EntityId found = lookup(class_type ? entities[types[t].entity].scope : s, ast[id].text, Lookup::Ordinary);
+                EntityId found = class_type ? lookup(entities[types[t].entity].scope,ast[id].text,Lookup::Ordinary,true) : 0;
+                if (!found) found = lookup(s,ast[id].text,Lookup::Ordinary);
                 if (found && (entities[found].kind == EntityKind::Type || entities[found].kind == EntityKind::Alias)) named = entities[found].type;
             }
             if (!named || types.unqualified(named) != types.unqualified(t)) throw std::runtime_error("destructor name does not match object type");

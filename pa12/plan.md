@@ -6,90 +6,67 @@ Target: PA12 full-stage. Phase: implement; incomplete.
 
 ## Design/spec alignment and remaining groups
 
-Retain the shared source graph, canonical TypeId/EntityId keys, demand queue,
-recorded conversions/lifetimes and own typed LowIR. Lowering consumes selected
-facts; no source replay, reference delegation or later native-performance gate.
+Keep the shared source graph, canonical identities, indexed demand and typed
+conversion/lifetime records. Lowering consumes selected facts; no source replay,
+fake AST, reference delegation or later native-backend performance gate.
 
 | Owner | Data flow / complexity | Validation and remaining work |
 | --- | --- | --- |
-| Member and special-member semantics | Canonical declarations -> selected member -> field/base/storage actions; once per required edge | Qualification, delegation, unions, copy/move/deletion and bounded arrays pass. Bit-field ordering and rooted-helper/emission differences remain |
-| Class values and conversions | Indexed canonical conversion targets/base edges -> object and second-standard sequence -> selected call/result transfer/destination | Conversion, inherited/ref-qualified ranking, builtin, cast, condition, surrogate and reference checks pass. Candidate work follows required overloads; selected records are retained once. Aggregate/braced returns/default arguments, empty-class conversion-result transfers and other ABI/O0 output shapes remain |
-| Reference and cleanup ownership | Complete temporary identities -> namespace backing storage and conditional shutdown guards; O(retained objects + branch edges) | Static-reference control and mixed-type/subobject/conversion personal checks pass. Remaining arrays, cleanup-region/continuation shapes, and local subobject-reference generalization require lifetime-owner work |
-| Call boundary facts | Source GNU attribute -> validated function EntityId -> LowIR query boundary; no optimization | Stable-prefix probe, positive control and all four rejection controls pass. Survivor runner next fails the indirect member-pointer object-extent control; that needs its representation and call signature |
-| Allocation | Canonical scalar/array names -> selected overloads, typed bounds/cookies and lifetime actions -> bounded forward/reverse loops | All required allocation/deletion fixtures pass. Scalar/class/global/placement selection, sized delete, multidimensional arrays, null paths and wide extents have executable personal checks. Work is O(candidates + selected actions), independent of runtime element count |
+| Member/special-member semantics | Canonical member -> field/base/storage actions; once per required edge | Delegation, unions and copy/move selection pass. Bit-field ordering and helper/emission differences remain |
+| Class values/conversions | Indexed targets/base edges -> object/standard sequence -> selected transfer and destination | Conversion, builtin/surrogate ranking and whole-class aggregate appertainment pass. Braced arguments/defaults, aggregate prvalues and class-valued helper parameters remain |
+| Lifetime ownership | Complete objects/branch states -> retained storage and cleanup continuations; O(objects + edges) | Static references, conditional destinations and heap arrays pass. Local subobject references and remaining exception-region/continuation forms need work |
+| Call boundary facts | Attribute -> validated EntityId -> LowIR metadata | Stable-prefix and abort controls pass. Survivor control 536 requires member-pointer representation and an indirect signature |
+| Allocation | Canonical scalar/array names -> selected functions, extent/cookie and actions -> bounded loops | All required new/delete comparisons pass. Personal checks cover sized delete, null, wide/zero/multidimensional bounds, alias destruction and distinct runtime function addresses |
 
-Unchanged contract questions: PA11 `400-bit-field-constructor-member-init`
-and PA12 `300-bit-field-copy-semantics` prescribe different orders for the same
-`Bits` constructor; a general change previously regressed PA11 and was removed.
-`300-direct-object-parameter-passthrough-base-copy` also needs ABI-contract
-investigation. No fixture-dependent behavior or unproved reference revision.
+Six remaining compile rejections need target-typed lists. Braces currently get
+a scalar placeholder before overload selection; the next group must retain an
+untyped list, select its target, and record its initializer/temporary once.
+Twenty-five LowIR differences concern transfers, helper/ABI shapes and cleanup.
+Two inherited contract questions remain: PA11 bit-field constructor order versus
+PA12 copy-semantics order, and direct-object base-copy parameter passing. Preserve
+all fixtures/comparison rules unless the authorized reference-proof protocol applies.
 
-## Performance evidence
+## Performance evidence and budgets
 
 [Member](performance.md), [transfer](transfer-performance.md),
-[value](value-performance.md) and [conversion/reference](conversion-performance.md)
-preserve frozen binaries, flags, inputs, A/A/ABBA samples, compiler latency/RSS,
-executable runtime/text and work counters. Common LowIR/native outputs are
-byte-identical. Nested branch sharing removed quadratic preparation; conversion
-records grow 4000 -> 16000 at fourfold input size. No runtime gain is claimed
-for required semantic additions. All three conversion campaigns are preserved.
+[value](value-performance.md), [conversion/reference](conversion-performance.md)
+and the allocation/aggregate evidence retain frozen binaries, flags, inputs,
+A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
+No runtime optimization gain is claimed for the new semantic paths.
 
-Keep canonical class/member facts, shared conditional transfer records, memoized
-cleanup-presence queries and persistent suffixes. Array expansion stays capped
-at eight elements. The unprofitable scalar-only prefix fold remains removed;
-mandated storage-prefix/whole-object forms retain their documented supplied-
-backend cost without an extra positive-runtime gate. New storage and guards
-are bounded by selected objects; query annotations do not request O0 transforms.
+Heap construction/destruction emits fixed-size loops, independent of the bound;
+existing local-array expansion remains capped at eight total elements. A bound
+runs once. Widening precedes multiplication unless a completed constant-return
+proof permits the required source-width form. Constant size overflow rejects.
+Each allocation retains one selected record; each singleton memory role needs
+at most one additional two-instruction runtime adapter. Empty-array-constructor
+proofs inspect an empty body/no actions and add no generated code. Aggregate
+appertainment retains one whole-object conversion per selected initializer.
+No speculative pass, global retry or new positive-runtime exit gate is added.
 
 ## Handoff ledger
 
-- Stage entry: clean base; **61/257**, 196 failures; earlier **1327/1327**.
+- Stage entry: **61/257**, 196 failures; earlier **1327/1327**.
 - `4e209677`, `55d15ba8`, `8a83045c`: members/delegation/unions -> **92/257**.
-- `3da4de09`: four reference bit-field retypes corrected under the authorized
-  exception; [proof and reducers](reference-corrections.md).
-- `73664568`, `4ea8394f`: special transfers and measured prefix policy -> **123/257**.
-- `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: class boundaries/destinations,
-  conditional/local-reference ownership and bounded branch sharing -> **169/257**.
-- `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversion selection,
-  reference storage and query/abort boundaries -> **202/257**, prior **1327/1327**.
-  All three measurement campaigns remain in conversion-performance.md; final
-  logs are `/tmp/pa12-conversion-final-{stage2,prior2,personal}.log`.
-- Allocation entry: clean `70556b3d`, freshly verified **202/257**, 55 failures.
-  `d2db8706` allocation group: **223/257**, **21 entry failures removed, no new
-  failures**, unchanged coverage. All required new/delete comparisons pass.
-  Earlier **1327/1327**, file audit passes with the same two header advisories.
-  Thirty-four personal source checks pass, including six allocation reducers.
-- Allocation ownership: source placement/type disambiguation -> canonical
-  allocation family -> selected conversion/constructor/destructor/deallocator,
-  byte stride and leaf-count cookie -> typed O(1)-size heap loops and partial
-  cleanup. Only the first bound is dynamic; the bound runs once. An O(1)
-  constant-return proof permits required source-width extent arithmetic;
-  otherwise widening precedes multiplication. Constant size overflow rejects.
-  Mixed scalar/array runtime entries retain distinct addresses through a tiny
-  adapter around each singleton LowIR memory role.
-- Validation logs: `/tmp/pa12-allocation-final-stage2.log` (223/257, exit 2),
-  `/tmp/pa12-allocation-final-prior1.log` (1327/1327, exit 0),
-  `/tmp/pa12-allocation-personal4.log` (exit 0). Root reports run serially.
-  Frozen allocation A/A+ABBA and absolute/scaling campaign has finished;
-  raw observations are allocation-measurements.json. Final aggregate evidence
-  is running separately; no observations are discarded.
-- Remaining after the next group: seven compile rejections belong to aggregate/list/reference
-  initialization and destructor alias lookup. Twenty-five LowIR differences
-  belong to transfer/helper emission, lifetime continuations, and the two
-  inherited bit-field/base-copy contract questions above. The survivor runner
-  still reaches member-pointer boundary control 536, which needs its distinct
-  representation and indirect signature. No fixtures or references changed.
-
-Aggregate whole-copy group: initializer appertainment owns a selected class
-conversion before considering brace elision; the InitAction consumes that
-source/destination record without replacing the source call's type or callee.
-Work stays O(initializer elements + required overload candidates). Both affected
-fixtures and a combined reference/global-array personal reducer pass. Current
-**225/257**, **23 entry failures removed, no new failures**, earlier **1327/1327**,
-35 personal checks and file audit pass. Logs: `/tmp/pa12-aggregate-stage1.log`,
-`/tmp/pa12-aggregate-prior1.log`, `/tmp/pa12-aggregate-personal1.log`.
-Next initialization boundary: braced lists currently acquire a scalar placeholder
-before candidate selection. Correct list arguments/defaults and aggregate
-prvalues need a target-keyed list-conversion record, selected temporary ownership,
-and class-valued aggregate helper parameters; whole-object appertainment alone
-cannot supply that representation.
+- `3da4de09`: four bit-field reference retypes corrected under the authorized
+  exception; [proof and bundle revision](reference-corrections.md).
+- `73664568`, `4ea8394f`: transfers and measured prefix policy -> **123/257**.
+- `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: values/storage -> **169/257**.
+- `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/references -> **202/257**.
+- Current entry: clean `70556b3d`, freshly verified **202/257**, 55 failures.
+- `d2db8706`: allocation/deletion and bounded heap lifetimes -> **223/257**.
+- `ffbc7095`: whole-class aggregate copies preserve source type/callee and
+  reference-member storage; named global arrays keep O0 lifetimes -> **225/257**.
+- Destructor aliases now search the object class, then expression context,
+  preserving canonical type checks. Implicit allocator declarations are also
+  available when taking function addresses. Current **226/257**: **24 entry
+  failures removed, no new failures**, unchanged coverage; **165 stage-base
+  failures removed**. Thirty-eight personal source checks pass.
+- Final root/prior/file audit and final frozen evidence are being refreshed.
+  Stage log: `/tmp/pa12-allocation-group-final-stage2.log` (226/257, exit 2).
+  Personal log: `/tmp/pa12-allocation-group-final-personal2.log` (exit 0).
+  No fixtures/references/comparison rules changed in these groups.
+- Concrete next boundary: target-keyed list conversions and aggregate helper
+  argument ownership require coordinated overload/materialization changes;
+  member pointers require a distinct ABI value and call signature. Existing
+  whole-object copy or allocation records cannot stand in for those facts.
