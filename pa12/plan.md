@@ -32,7 +32,7 @@ all fixtures/comparison rules unless the authorized reference-proof protocol app
 [Member](performance.md), [transfer](transfer-performance.md),
 [value](value-performance.md), [conversion/reference](conversion-performance.md)
 and [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md)
-and [boundary](boundary-performance.md) evidence retain frozen binaries, flags, inputs,
+and [boundary](boundary-performance.md), [cleanup](cleanup-performance.md) evidence retain frozen binaries, flags, inputs,
 A/A/ABBA observations, compiler latency/RSS and executable runtime/text.
 No runtime optimization gain is claimed for the new semantic paths.
 
@@ -122,6 +122,16 @@ PA11 lexical/array lifetimes together, then measure frozen common/affected paths
   Classification is memoized (at most three bytes per AST node); work/region
   telemetry counts actual visits and emitted guards. Prefix cleanup caching is
   unchanged. Frozen A=`3ec8d0ce`, B=`/tmp/pa12-cleanup-final-cppgm`; the
-  common/branch/condition/switch campaign is running, with no speed claim yet.
+  common/branch/condition/switch campaign completed. Initial branch/condition
+  runtime regressions and all observations are retained; an avoidable guard for
+  an already scope-owned reference temporary is being removed. No speed claim.
   Logs: `/tmp/pa12-cleanup-final-stage.log`,
   `/tmp/pa12-cleanup-final-prior.log`, `/tmp/pa12-cleanup-final-personal.log`.
+
+Destructor-boundary follow-up: cached effect-free bodies are separate from
+retained ABI roots and parameter/temporary/array cleanup boundaries. Constructor
+handlers preserve required empty user-destructor calls, but no-throw constructors
+need no handlers. First check **247/257**, seven further failures removed, earlier
+**1327/1327**, 51 personal checks. Remaining subobject epilogues need guarded
+suffixes; inline duplication is capped at eight actions, with shared blocks above
+that cap. Final validation and frozen follow-up measurements are pending.
