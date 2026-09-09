@@ -118,7 +118,9 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
         TypeId common_class = 0;
-        if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type, c.type)) common_class = c.type;
+        if (class_value(b.type) && types.unqualified(b.type) == types.unqualified(c.type))
+            common_class = types.qualify(types.unqualified(b.type),types[b.type].cv | types[c.type].cv);
+        else if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type, c.type)) common_class = c.type;
         else if (!(types[c.type].cv & ~types[b.type].cv) && derived_from(c.type, b.type)) common_class = b.type;
         if ((b.type == c.type || common_class) && b.category == c.category && b.category != ValueCategory::Prvalue) {
             r.type = common_class ? common_class : b.type; r.category = b.category;

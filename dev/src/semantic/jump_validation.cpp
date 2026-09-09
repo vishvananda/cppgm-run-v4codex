@@ -23,8 +23,10 @@ void Analyzer::check_jumps(NodeId body)
         EntityId dtor = object_destructor(e);
         bool destruction = destructor_needed(dtor) || parameter_cleanup(e);
         if (destruction) {
-            LifetimeState state; state.object = e; state.destructor = dtor; state.tail = live; state.depth = lifetimes[live].depth + 1;
+            EntityId temporary = reference_temporary(e);
+            LifetimeState state; state.object = temporary ? temporary : e; state.destructor = dtor; state.tail = live; state.depth = lifetimes[live].depth + 1;
             live = lifetimes.size(); lifetimes.push_back(state); object_lifetimes.put(e, live);
+            if (temporary) object_lifetimes.put(temporary,live);
         }
         if (!entities[e].initializer && !destruction && !constructor_needed(object_constructor(e))) return;
         unsigned parent = active;

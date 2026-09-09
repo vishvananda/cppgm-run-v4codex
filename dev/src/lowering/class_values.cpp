@@ -11,6 +11,12 @@ Value Procedural::class_temporary(EntityId object, TypeId t)
         objects[object] = builder->add_slot(0,type(t));
     return Value(Operand::slot(objects[object]),type(t),t,true);
 }
+Value Procedural::class_address(EntityId object, TypeId t)
+{
+    Value pointer = address(class_temporary(object,t));
+    object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
+    return pointer;
+}
 void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination)
 {
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
@@ -18,6 +24,8 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
     auto materialized = construction ? sem.conversion_objects[c.materialization] : semantic::ConversionObject();
     bool elided = construction ? materialized.elided : c.empty_copy && fact.category == ValueCategory::Prvalue;
+    if (construction && materialized.branches) { conditional(n,false,destination,materialized.branches); return; }
+    if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination); return; }
     if (elided && fact.form == semantic::ExpressionForm::Construction) {
         construct(sem.facts[n].entity,n,destination); return;
     }
@@ -37,7 +45,8 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     call_work.push_back(Operand::symbol(symbol(materialized.constructor))); call_work.push_back(destination.operand);
     for (unsigned j = 0; j < materialized.call.argument_count; ++j)
         call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j],sem.conversion_fact(materialized.call.conversions+j)).operand);
-    guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin);
+    Instruction transfer(Opcode::Call,IRType::Void); transfer.copy_elision = materialized.elision_permission;
+    guarded_call(transfer,call_work.data()+begin,call_work.size()-begin);
     call_work.resize(begin);
 }
 } }

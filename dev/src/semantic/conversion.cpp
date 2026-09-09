@@ -259,6 +259,13 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
     if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
+    // Materializing an operand can append its own constructor conversions.
+    // Keep the owning operator's (bounded) operand slice contiguous.
+    if (owner.count && owner.conversions + owner.count != conversions.size()) {
+        std::vector<Conversion> prior(conversions.begin()+owner.conversions, conversions.begin()+owner.conversions+owner.count);
+        owner.conversions = conversions.size();
+        conversions.insert(conversions.end(),prior.begin(),prior.end());
+    }
     if (!owner.count) owner.conversions = conversions.size();
     ++owner.count;
     if (n) {

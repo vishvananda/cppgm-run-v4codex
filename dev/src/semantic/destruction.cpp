@@ -37,8 +37,22 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
 }
 void Analyzer::register_destruction(EntityId e)
 {
+    auto kind = types[entities[e].type].kind;
+    if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Block) {
+        NodeId n = entities[e].initializer;
+        while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+        auto c = conversions[expressions[n].incoming];
+        EntityId temporary = c.reference && c.materialization ? conversion_objects[c.materialization].temporary : object_fact(n).temporary;
+        if (temporary) {
+            reference_temporaries.put(e,temporary);
+            object_destructors.put(e,object_destructor(temporary));
+            return;
+        }
+    }
     EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);
+    if (dtor && entities[e].kind == EntityKind::Parameter && !trivial_destructor(entities[e].type))
+        members[entities[dtor].member_info].retained_root = true;
 }
 bool Analyzer::trivial_destructor(TypeId t)
 {

@@ -44,6 +44,17 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
     auto value = expressions[source];
     materialized.elided = !conversion.reference && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t) &&
         (ast[source].kind == syntax::Kind::Call || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall);
+    if (!conversion.reference && ast[source].kind == syntax::Kind::Conditional) {
+        materialized.elision_permission = value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t);
+        if (defer || (materialized.elision_permission && trivial_transfer(ctor) && copy_storage_type(t))) {
+            NodeId b = ast[ast[source].first].next, c = ast[b].next;
+            std::vector<NodeId> operands{b,c};
+            std::vector<Conversion> selected{this->conversion(b,t),this->conversion(c,t)};
+            for (auto& branch : selected) if (!branch.valid()) throw std::runtime_error("invalid conditional class transfer");
+            Expression branches; record_call(branches,operands,selected);
+            materialized.branches = branches.conversions; materialized.elided = true;
+        }
+    }
     if (!defer && !materialized.elided) demand_member(ctor);
     members[m].complete_entry = true;
     Type f = types[entities[ctor].type];

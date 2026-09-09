@@ -43,4 +43,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/static_bit_fields
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/initializer_plan
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/aggregate_helpers
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/special_members semantic/transfer_actions lowering/transfers
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_values lowering/class_values
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_values lowering/class_values lowering/branch_lifetimes

@@ -59,37 +59,54 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         n = ast[n].first;
     }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
-    if (sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
+    if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
         BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
         condition(ast[n].first, land ? rhs : yes, land ? no : rhs);
         start(rhs); condition(ast[ast[n].first].next, yes, no); return;
     }
+    auto initial = live;
     Value v = load(expression(n));
     if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
+    clean_inline(live,initial);
     emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)});
 }
-Value Procedural::conditional(NodeId n, bool location)
+Value Procedural::conditional(NodeId n, bool location, Value destination, std::uint32_t branches)
 {
     auto fact = sem.expression_fact(n);
     TypeId target = fact.type;
-    // An array/function glvalue necessarily transports its address.
+    bool supplied = destination.ir != IRType::Void;
+    bool object = supplied || (sem.class_value(target) && fact.category == ValueCategory::Prvalue);
     location |= sem.types[target].kind == TypeKind::Array || sem.types[target].kind == TypeKind::Function;
     IRType ir = location ? IRType(IRType::Ptr) : type(target);
     bool has_result = ir != IRType::Void;
-    SlotId slot = has_result ? builder->add_slot(0, ir) : SlotId();
+    SlotId slot = has_result && !object ? builder->add_slot(0, ir) : SlotId();
+    if (object && !supplied) destination = class_address(sem.object_fact(n).temporary,target);
     BlockId yes = block(), no = block(), end = block();
     NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
     Value test = load(expression(a));
-    if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
+    if (test.ir.floating()) test = emit(Opcode::Compare,test.ir,{test.operand,Operand::floating(0)},Operation::Ne);
+    SlotId selector = cleanup_selector(test,cleanup_expression(b) || cleanup_expression(c));
+    auto common = live;
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
-    Value y = location ? converted(b, sem.conversion_fact(fact.conversions+1)) : convert(expression(b), target);
-    if (has_result) emit(Opcode::Store, ir, {y.operand, Operand::slot(slot)});
-    jump(end);
-    start(no);
-    Value z = location ? converted(c, sem.conversion_fact(fact.conversions+2)) : convert(expression(c), target);
-    if (has_result) emit(Opcode::Store, ir, {z.operand, Operand::slot(slot)});
-    jump(end); start(end);
+    if (object) construct_value(b,sem.conversion_fact(branches ? branches : fact.conversions+1),destination);
+    else {
+        Value y = location ? converted(b,sem.conversion_fact(fact.conversions+1)) : convert(expression(b),target);
+        if (has_result) emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
+    }
+    auto yes_live = live; jump(end);
+    start(no); live = common;
+    if (object) construct_value(c,sem.conversion_fact(branches ? branches+1 : fact.conversions+2),destination);
+    else {
+        Value z = location ? converted(c,sem.conversion_fact(fact.conversions+2)) : convert(expression(c),target);
+        if (has_result) emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
+    }
+    auto no_live = live; jump(end); start(end);
+    merge_temporaries(common,yes_live,no_live,selector);
+    if (object) {
+        if (!supplied) activate_temporary(sem.object_fact(n).temporary);
+        destination.type = target; destination.address = true; return destination;
+    }
     Value v = has_result ? emit(Opcode::Load, ir, {Operand::slot(slot)}) : Value();
     v.type = target; v.address = location; return v;
 }
@@ -105,15 +122,19 @@ Value Procedural::logical(NodeId n)
     SlotId slot = builder->add_slot(0, IRType::I64);
     BlockId rhs = block(), short_path = block(), end = block();
     if (lhs.ir.floating()) lhs = emit(Opcode::Compare, lhs.ir, {lhs.operand, Operand::floating(0)}, Operation::Ne);
+    SlotId selector = cleanup_selector(lhs,cleanup_expression(b));
+    auto common = live;
     emit(Opcode::Branch, IRType(), {lhs.operand, Operand::label(land ? rhs : short_path), Operand::label(land ? short_path : rhs)});
     start(rhs);
     Value value = load(expression(b));
     IRType comparison = value.ir.floating() || value.ir == IRType::Ptr ? value.ir : IRType(IRType::I64);
     value = emit(Opcode::Compare, comparison, {value.operand, value.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
-    emit(Opcode::Store, IRType::I64, {value.operand, Operand::slot(slot)}); jump(end);
-    start(short_path);
+    emit(Opcode::Store, IRType::I64, {value.operand, Operand::slot(slot)});
+    auto rhs_live = live; jump(end);
+    start(short_path); live = common;
     emit(Opcode::Store, IRType::I64, {Operand::integer(!land), Operand::slot(slot)}); jump(end);
     start(end);
+    merge_temporaries(common,land ? rhs_live : common,land ? common : rhs_live,selector);
     value = emit(Opcode::Load, IRType::I64, {Operand::slot(slot)});
     value.type = sem.expression_fact(n).type; return value;
 }

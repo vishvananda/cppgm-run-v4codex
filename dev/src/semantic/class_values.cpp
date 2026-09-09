@@ -43,7 +43,7 @@ void Analyzer::prepare_function_boundaries()
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {
     if (result.category != ValueCategory::Prvalue || !class_value(result.type)) return;
-    if (ast[n].kind != Kind::Call && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall) return;
+    if (ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall) return;
     if (!result.object_use) record_object(result,0,0,0);
     if (object_uses[result.object_use].temporary) return;
     EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block,s),0,n);

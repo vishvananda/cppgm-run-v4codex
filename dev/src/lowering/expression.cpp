@@ -20,9 +20,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     if (fact.form == semantic::ExpressionForm::Construction) {
         EntityId e = sem.object_fact(n).temporary;
-        if (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) objects[e] = builder->add_slot(0, type(fact.type));
-        Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
-        Value pointer = address(at);
+        Value pointer = class_address(e,fact.type);
         construct(sem.facts[n].entity, n, pointer); activate_temporary(e);
         pointer.type = fact.type; pointer.address = true; return pointer;
     }
@@ -285,7 +283,7 @@ Value Procedural::call(NodeId n, Value destination)
     bool class_result = sem.class_value(sem.facts[n].type);
     bool indirect_result = sem.indirect_value(sem.facts[n].type);
     bool own_result = class_result && destination.ir == IRType();
-    if (own_result) destination = address(class_temporary(sem.object_fact(n).temporary,fact.type));
+    if (own_result) destination = class_address(sem.object_fact(n).temporary,fact.type);
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());
     if (indirect_result) call_work.push_back(destination.operand);

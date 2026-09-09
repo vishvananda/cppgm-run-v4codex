@@ -129,7 +129,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         auto materialized = sem.conversion_objects[c.materialization];
         EntityId object = materialized.temporary;
         TypeId t = sem.entities[object].type;
-        Value destination = class_temporary(object,t), pointer = address(destination);
+        Value destination = class_temporary(object,t), pointer = class_address(object,t);
         construct_value(n,c,pointer);
         if (c.reference) activate_temporary(object);
         return c.reference || sem.indirect_value(t) ? pointer : Value(destination.operand,type(t),t);

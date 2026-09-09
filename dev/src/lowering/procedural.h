@@ -76,6 +76,7 @@ class Procedural {
     IRType result_type() const;
     void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination);
     Value class_temporary(EntityId object, TypeId type);
+    Value class_address(EntityId object, TypeId type);
     SlotId this_slot;
     void transfer_body(EntityId e);
     void transfer_action(const semantic::TransferAction& action, Value source, Value target, bool assignment);
@@ -91,7 +92,13 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
-    std::vector<semantic::LifetimeState> temporary_states;
+    struct TemporaryState : semantic::LifetimeState { SlotId selector; std::uint32_t yes = 0, no = 0; };
+    std::vector<TemporaryState> temporary_states;
+    std::vector<unsigned char> cleanup_expressions;
+    bool cleanup_expression(NodeId n);
+    SlotId cleanup_selector(Value test, bool required);
+    void merge_temporaries(std::uint32_t common, std::uint32_t yes, std::uint32_t no, SlotId selector);
+    void destroy_lifetime(std::uint32_t state);
     semantic::LifetimeState lifetime_state(std::uint32_t state) const;
     void activate_temporary(EntityId e);
     struct Constructed { semantic::SubobjectAction action; BlockId handler; };
@@ -175,7 +182,7 @@ class Procedural {
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
-    Value conditional(NodeId n, bool location);
+    Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0);
     Value logical(NodeId n);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);

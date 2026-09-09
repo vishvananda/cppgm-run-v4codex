@@ -11,13 +11,15 @@ void Procedural::reset_lifetime(EntityId e)
 }
 semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
 {
-    return state & 0x80000000u ? temporary_states[(state & 0x7fffffffu)-1] : sem.lifetimes[state];
+    if (state & 0x80000000u) return temporary_states[(state & 0x7fffffffu)-1];
+    return sem.lifetimes[state];
 }
 void Procedural::activate_temporary(EntityId e)
 {
+    if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
     if (!sem.destructor_needed(dtor)) return;
-    semantic::LifetimeState state; state.object = e; state.destructor = dtor; state.tail = live;
+    TemporaryState state; state.object = e; state.destructor = dtor; state.tail = live;
     state.depth = lifetime_state(live).depth + 1;
     temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
 }
@@ -33,7 +35,7 @@ void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
     while (state != stop) {
         if (!state) throw std::logic_error("cleanup target is not a lexical ancestor");
         auto action = lifetime_state(state); live = action.tail;
-        destroy_object(action.object, action.destructor); state = action.tail;
+        destroy_lifetime(state); state = action.tail;
     }
     live = stop;
 }
@@ -124,7 +126,7 @@ void Procedural::flush_cleanups()
             else emit(Opcode::Return, result_type(), {Operand::slot(cleanup_return)});
         } else {
             auto action = lifetime_state(entry.state);
-            destroy_object(action.object, action.destructor); jump(entry.next);
+            destroy_lifetime(entry.state); jump(entry.next);
         }
     }
     emitting_cleanup = saved_cleanup; live = saved_live;

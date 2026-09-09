@@ -209,7 +209,7 @@ struct Conversion {
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
-struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; bool elided = false; };
+struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false; };
 struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
 struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };
 struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; };

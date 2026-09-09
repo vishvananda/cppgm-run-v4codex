@@ -119,6 +119,10 @@ Value Procedural::initialization_address(Value root, bool indirect, const std::v
 void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path)
 {
     using syntax::Kind;
+    if (auto source = sem.class_initialization(n,t).source) {
+        Value at = initialization_address(root,indirect,path); at.address = false;
+        construct_value(source,sem.conversion_fact(sem.class_initialization(n,t).conversion),at); return;
+    }
     if (auto plan = sem.initializer_plan(n, t)) { aggregate_plan(plan, root, indirect, path); return; }
     EntityId ctor = n && sem.constructor_member(sem.facts[n].entity) ? sem.facts[n].entity : !n ? sem.value_constructor(t) : 0;
     if (ctor) {
