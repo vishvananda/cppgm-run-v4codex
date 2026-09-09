@@ -16,6 +16,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
     double frontend_ms = 0, lowering_ms = 0;
     std::size_t nodes = 0, static_requests = 0, static_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
+    std::size_t full_expression_work = 0, full_expression_regions = 0;
     for (const std::string& input : inputs) {
         auto start = Clock::now();
         Preprocessor pp(input, stamp.substr(4, 7) + stamp.substr(20, 4), stamp.substr(11, 8), stats);
@@ -32,6 +33,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
         nodes += ast.nodes.size();
         static_requests += sem.static_requests; static_hits += sem.static_hits;
         control_work += lower.control_work; discard_work += lower.discard_work;
+        full_expression_work += lower.full_expression_work; full_expression_regions += lower.full_expression_regions;
         if (stats) {
             std::cerr << "{\"tokens\":" << cursor.produced << ",\"max_pending\":" << cursor.max_pending
                 << ",\"node_growths\":" << ast.node_growths << ",\"delimiter_work\":" << cursor.delimiter_work;
@@ -52,6 +54,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"nodes\":" << nodes
             << ",\"static_requests\":" << static_requests << ",\"static_hits\":" << static_hits
             << ",\"control_work\":" << control_work << ",\"discard_work\":" << discard_work
+            << ",\"full_expression_work\":" << full_expression_work << ",\"full_expression_regions\":" << full_expression_regions
             << ",\"linkage_requests\":" << linkage.requests << ",\"linkage_hits\":" << linkage.hits
             << ",\"abi_nodes\":" << linkage.abi.size() << ",\"abi_bytes\":" << linkage.abi.storage_bytes()
             << ",\"instructions\":" << program.instructions.size() << ",\"operands\":" << program.operands.size()

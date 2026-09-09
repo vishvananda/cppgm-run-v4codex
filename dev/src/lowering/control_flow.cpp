@@ -36,10 +36,13 @@ void Procedural::discard(NodeId n, bool access)
         auto conversion = sem.conversion_fact(sem.expression_fact(n).conversions);
         Value test = conversion.kind == semantic::Conversion::Kind::User ? converted(a,conversion) : load(expression(a));
         if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
+        auto selector = cleanup_selector(test,cleanup_expression(b) || cleanup_expression(c));
+        auto common = live;
         BlockId yes = block(), no = block(), end = block();
         emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
-        start(yes); discard(b, access); jump(end);
-        start(no); discard(c, access); jump(end); start(end); return;
+        start(yes); discard(b, access); auto yes_live = live; jump(end);
+        start(no); live = common; discard(c, access); auto no_live = live; jump(end);
+        start(end); merge_temporaries(common,yes_live,no_live,selector); return;
     }
     if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA) {
         discard(ast[n].first); discard(ast[ast[n].first].next, access); return;
@@ -54,8 +57,13 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         if (sem.facts[n].entity) {
             object(sem.facts[n].entity);
             auto c = sem.conversion_fact(sem.expression_fact(n).conversions);
+            auto initial = live;
+            if (c.kind == semantic::Conversion::Kind::User && live) {
+                full_expression.enabled = full_expression.lexical = true; guard_expression(n);
+            }
             Value v = c.kind == semantic::Conversion::Kind::User ? user_conversion(n,c) : load(binding(sem.facts[n].entity));
-            if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
+        if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
+            finish_full_expression(initial);
             emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)}); return;
         }
         n = ast[n].first;
@@ -68,10 +76,19 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         start(rhs); condition(ast[ast[n].first].next, yes, no); return;
     }
     auto initial = live;
+    begin_full_expression(n);
     auto incoming = sem.expression_fact(n).incoming;
     Value v = incoming && sem.conversion_fact(incoming).kind == semantic::Conversion::Kind::User ? converted(n,sem.conversion_fact(incoming)) : load(expression(n));
     if (v.ir.floating()) v = emit(Opcode::Compare, v.ir, {v.operand, Operand::floating(0)}, Operation::Ne);
-    clean_inline(live,initial);
+    if (live != initial) {
+        close_expression_region(); full_expression = FullExpression();
+        auto state = live;
+        auto yes_cleanup = block(), no_cleanup = block();
+        emit(Opcode::Branch,IRType(),{v.operand,Operand::label(yes_cleanup),Operand::label(no_cleanup)});
+        start(yes_cleanup); clean_inline(state,initial); jump(yes);
+        start(no_cleanup); clean_inline(state,initial); jump(no); return;
+    }
+    finish_full_expression(initial);
     emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)});
 }
 Value Procedural::conditional(NodeId n, bool location, Value destination, std::uint32_t branches)
@@ -90,7 +107,7 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     auto test_conversion = sem.conversion_fact(fact.conversions);
     Value test = test_conversion.kind == semantic::Conversion::Kind::User ? converted(a,test_conversion) : load(expression(a));
     if (test.ir.floating()) test = emit(Opcode::Compare,test.ir,{test.operand,Operand::floating(0)},Operation::Ne);
-    SlotId selector = cleanup_selector(test,cleanup_expression(b) || cleanup_expression(c));
+    SlotId selector = cleanup_selector(test,cleanup_expression(b,object) || cleanup_expression(c,object));
     auto common = live;
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
@@ -179,9 +196,17 @@ void Procedural::switch_statement(NodeId n)
     if (sem.facts[cond].entity) {
         object(sem.facts[cond].entity);
         auto c = sem.conversion_fact(sem.expression_fact(cond).conversions);
+        auto initial = live;
+        if (c.kind == semantic::Conversion::Kind::User && live) {
+            full_expression.enabled = full_expression.lexical = true; guard_expression(cond);
+        }
         value = c.kind == semantic::Conversion::Kind::User ? user_conversion(cond,c) : convert(binding(sem.facts[cond].entity), sem.facts[cond].type);
+        finish_full_expression(initial);
     }
-    else value = incoming(ast[cond].first);
+    else {
+        auto initial = live; begin_full_expression(ast[cond].first);
+        value = incoming(ast[cond].first); finish_full_expression(initial);
+    }
     BlockId dispatch = block(), end = block(), saved = break_target;
     break_target = end;
     std::vector<NodeId> cases; NodeId fallback = 0;
@@ -237,7 +262,7 @@ void Procedural::statement(NodeId n)
     case Kind::ExpressionStatement: case Kind::Iteration: case Kind::ForInit:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) statement(c);
-            else { discard(c); clean_inline(live, lifetime.entry); }
+            else { begin_full_expression(c); discard(c); finish_full_expression(lifetime.entry); }
         }
         return;
     case Kind::Return: return_statement(n); return;

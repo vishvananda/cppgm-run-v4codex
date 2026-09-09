@@ -102,7 +102,15 @@ class Procedural {
     struct TemporaryState : semantic::LifetimeState { SlotId selector; std::uint32_t yes = 0, no = 0; };
     std::vector<TemporaryState> temporary_states;
     std::vector<unsigned char> cleanup_expressions;
-    bool cleanup_expression(NodeId n);
+    bool cleanup_expression(NodeId n, bool omit_result = false);
+    std::vector<unsigned char> unwind_expressions;
+    bool unwind_expression(NodeId n);
+    struct FullExpression { bool enabled = false, open = false, lexical = false; } full_expression;
+    void begin_full_expression(NodeId n, bool omit_result = false);
+    void finish_full_expression(std::uint32_t stop);
+    void guard_expression(NodeId n);
+    void open_expression_region();
+    void close_expression_region();
     SlotId cleanup_selector(Value test, bool required);
     void merge_temporaries(std::uint32_t common, std::uint32_t yes, std::uint32_t no, SlotId selector);
     void destroy_lifetime(std::uint32_t state);
@@ -221,6 +229,7 @@ class Procedural {
     void jump(BlockId b);
 public:
     std::size_t control_work = 0, discard_work = 0;
+    std::size_t full_expression_work = 0, full_expression_regions = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };

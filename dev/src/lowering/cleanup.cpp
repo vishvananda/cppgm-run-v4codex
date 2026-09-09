@@ -8,6 +8,7 @@ void Procedural::reset_lifetime(EntityId e)
     cleanup_return = class_return_slot = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
     temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
+    full_expression = FullExpression();
 }
 semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
 {
@@ -23,9 +24,12 @@ void Procedural::activate_temporary(EntityId e)
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
     if (!sem.destructor_needed(dtor)) return;
+    bool reopen = full_expression.open;
+    close_expression_region();
     TemporaryState state; state.object = e; state.destructor = dtor; state.tail = live;
     state.depth = lifetime_state(live).depth + 1;
     temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
+    if (reopen) open_expression_region();
 }
 SlotId Procedural::source_slot(EntityId e)
 {
@@ -38,7 +42,12 @@ void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
 {
     while (state != stop) {
         if (!state) throw std::logic_error("cleanup target is not a lexical ancestor");
-        auto action = lifetime_state(state); live = action.tail;
+        auto action = lifetime_state(state);
+        // A destructor that can throw must unwind only objects still alive
+        // after its own lifetime ends, never re-enter its old cleanup prefix.
+        if (full_expression.open && action.object && !sem.function_nonthrowing(action.destructor))
+            close_expression_region();
+        live = action.tail;
         destroy_lifetime(state); state = action.tail;
     }
     live = stop;
@@ -62,6 +71,7 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
             no_throw = p.signatures[p.functions[s.entity-1].signature.index-1].boundary.unwind == ir_model::CUM_NO;
     }
     if (!live || emitting_cleanup || no_throw) return emit(i, args, count);
+    if (full_expression.enabled) { open_expression_region(); return emit(i,args,count); }
     if (!resume_terminal) resume_terminal = block();
     auto cleanup = cleanup_suffix(live, resume_terminal);
     emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)});
@@ -76,6 +86,9 @@ void Procedural::return_statement(NodeId n)
     bool has_value = result_type() != IRType::Void;
     Value value;
     auto class_return = sem.class_return(n);
+    auto conversion = sem.conversion_fact(class_return.conversion);
+    bool omit = class_return.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
+    begin_full_expression(ast[n].first,omit);
     if (class_return.source) {
         Value destination = return_destination;
         if (has_value) {
@@ -94,7 +107,7 @@ void Procedural::return_statement(NodeId n)
         else value = convert(expression(operand, reference(returned)), returned);
     }
     else if (ast[n].first) expression(ast[n].first);
-    clean_inline(live, life.entry);
+    finish_full_expression(life.entry);
     if (destructor_handler) {
         clean_inline(life.entry, 0);
         emit(Opcode::EhEnd, IRType(), {});
@@ -129,8 +142,9 @@ void Procedural::flush_cleanups()
         if (!entry.state) {
             if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
             else emit(Opcode::Return, result_type(), {Operand::slot(cleanup_return)});
+        } else if (!entry.next) {
+            clean_inline(entry.state,0); emit(Opcode::Resume,IRType(),{});
         } else {
-            auto action = lifetime_state(entry.state);
             destroy_lifetime(entry.state); jump(entry.next);
         }
     }

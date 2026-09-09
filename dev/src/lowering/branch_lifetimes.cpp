@@ -1,14 +1,16 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
-bool Procedural::cleanup_expression(NodeId n)
+bool Procedural::cleanup_expression(NodeId n, bool omit_result)
 {
     if (!n) return false;
-    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size());
-    if (cleanup_expressions[n]) return cleanup_expressions[n] == 2;
-    bool needed = sem.destructor_needed(sem.object_destructor(sem.object_fact(n).temporary));
+    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size()*2);
+    auto key = n*2+omit_result;
+    if (cleanup_expressions[key]) return cleanup_expressions[key] == 2;
+    ++full_expression_work;
+    bool needed = !omit_result && sem.destructor_needed(sem.object_destructor(sem.object_fact(n).temporary));
     auto incoming = sem.expression_fact(n).incoming;
-    if (incoming) {
+    if (incoming && !omit_result) {
         auto c = sem.conversion_fact(incoming);
         if (c.kind == semantic::Conversion::Kind::User)
             needed |= sem.destructor_needed(sem.object_destructor(sem.user_conversions[c.materialization].source_temporary));
@@ -17,8 +19,12 @@ bool Procedural::cleanup_expression(NodeId n)
             needed |= sem.destructor_needed(sem.object_destructor(object));
         }
     }
-    for (NodeId child = ast[n].first; child; child = ast[child].next) needed |= cleanup_expression(child);
-    cleanup_expressions[n] = needed ? 2 : 1;
+    for (NodeId child = ast[n].first; child; child = ast[child].next) {
+        bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
+            (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
+        needed |= cleanup_expression(child,omit);
+    }
+    cleanup_expressions[key] = needed ? 2 : 1;
     return needed;
 }
 SlotId Procedural::cleanup_selector(Value test, bool required)

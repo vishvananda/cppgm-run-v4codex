@@ -105,3 +105,23 @@ No speculative pass, global retry or new positive-runtime exit gate is added.
   survivor 536 needs member-pointer parsing, storage and an indirect signature.
   These require separate coordinated owners, rather than further changes to
   the completed list plans or trivial-transfer predicate. Stage remains incomplete.
+
+Cleanup-group entry: clean `3ec8d0ce`, freshly verified **234/257**. The previous
+goal turn is verified progress. Owner: full expression -> immutable active
+object prefix -> guarded segments and shared unwind suffixes. Selected calls
+and destructor facts determine guards; work follows emitted objects/edges.
+Validate enclosing/branch temporaries, condition edges, return preservation and
+PA11 lexical/array lifetimes together, then measure frozen common/affected paths.
+
+- Cleanup regions: **240/257**, six entry failures removed and none added;
+  **1327/1327** earlier, 51 personal checks, file audit and diff checks pass.
+  One expression owns guarded segments; successful construction changes its
+  active prefix. Branches close segments without ending enclosing lifetimes.
+  Conditions, switch expressions, constructor/delegating initializers and
+  returns use that owner; throwing destruction first removes its own prefix.
+  Classification is memoized (at most three bytes per AST node); work/region
+  telemetry counts actual visits and emitted guards. Prefix cleanup caching is
+  unchanged. Frozen A=`3ec8d0ce`, B=`/tmp/pa12-cleanup-final-cppgm`; the
+  common/branch/condition/switch campaign is running, with no speed claim yet.
+  Logs: `/tmp/pa12-cleanup-final-stage.log`,
+  `/tmp/pa12-cleanup-final-prior.log`, `/tmp/pa12-cleanup-final-personal.log`.

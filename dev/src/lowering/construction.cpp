@@ -4,6 +4,7 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
 {
+    guard_expression(init);
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
         Instruction zero(Opcode::ZeroInit); zero.bytes = sem.object_size(sem.entities[cls].type);
@@ -38,25 +39,28 @@ void Procedural::constructor_body(EntityId e)
     auto m = sem.member_fact(e);
     if (m.delegated_constructor) {
         auto action = sem.subobject_actions[m.action_begin];
+        begin_full_expression(action.initializer);
         Value object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         construct(m.delegated_constructor, action.initializer, object);
-        clean_inline(live, 0); constructor_cleanup(action);
+        finish_full_expression(0); constructor_cleanup(action);
         return;
     }
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
         if (!action.initializer && !sem.constructor_needed(action.constructor)) { constructor_cleanup(action); continue; }
+        begin_full_expression(action.initializer);
         auto t = sem.types[action.type];
         if (t.kind == TypeKind::Array && !action.initializer) {
             array_construct(action.constructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
                 {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}});
+            finish_full_expression(0);
             constructor_cleanup(action); continue;
         }
         if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
             std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : 0, action.field != 0, action.field});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);
-            clean_inline(live, 0); constructor_cleanup(action); continue;
+            finish_full_expression(0); constructor_cleanup(action); continue;
         }
         bool scalar = t.kind != TypeKind::Array && !(t.kind == TypeKind::Named && sem.entities[t.entity].class_info);
         Value value;
@@ -91,7 +95,7 @@ void Procedural::constructor_body(EntityId e)
             call_work.resize(begin);
         }
         else { at.address = false; construct(action.constructor, 0, at, !action.field); }
-        clean_inline(live, 0); constructor_cleanup(action);
+        finish_full_expression(0); constructor_cleanup(action);
     }
 }
 } }

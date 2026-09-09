@@ -7,6 +7,7 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     if (!record.prepared) throw std::logic_error("missing selected user conversion");
     TypeId returned = sem.types[sem.entities[c.function].type].child;
     bool class_result = sem.class_value(returned);
+    SlotId result_slot = !class_result && type(returned) != IRType::Void && full_expression.enabled && !sem.function_nonthrowing(c.function) ? builder->add_slot(0,type(returned)) : SlotId();
     bool supplied = destination.ir != IRType::Void;
     bool transfer = record.result.kind == semantic::Conversion::Kind::Construction;
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
@@ -19,6 +20,10 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     if (sem.indirect_value(returned)) arguments[count++] = call_destination.operand;
     arguments[count++] = object.operand;
     Value result = guarded_call(Instruction(Opcode::Call,sem.indirect_value(returned) ? IRType(IRType::Void) : type(returned)),arguments,count);
+    if (result_slot) {
+        emit(Opcode::Store,result.ir,{result.operand,Operand::slot(result_slot)});
+        result = emit(Opcode::Load,result.ir,{Operand::slot(result_slot)});
+    }
     if (class_result) {
         if (!sem.indirect_value(returned) && !sem.empty_class(returned)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(returned); copy.alignment = sem.object_alignment(returned);

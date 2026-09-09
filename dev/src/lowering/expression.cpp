@@ -6,6 +6,7 @@ using syntax::Kind;
 Value Procedural::expression(NodeId n, bool location)
 {
     if (!n) throw std::logic_error("missing expression node");
+    guard_expression(n);
     auto fact = sem.expression_fact(n);
     NodeId a = ast[n].first;
     if (fact.form == semantic::ExpressionForm::ListValue) {
@@ -303,6 +304,7 @@ Value Procedural::call(NodeId n, Value destination)
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     if (fact.form == semantic::ExpressionForm::Abort) return abort_call();
     bool class_result = sem.class_value(sem.facts[n].type);
+    SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && unwind_expression(n) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();
     bool indirect_result = sem.indirect_value(sem.facts[n].type);
     bool own_result = class_result && destination.ir == IRType();
     if (own_result) destination = class_address(sem.object_fact(n).temporary,fact.type);
@@ -339,6 +341,10 @@ Value Procedural::call(NodeId n, Value destination)
         i.signature = signature(ft);
     }
     Value v = guarded_call(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
+    if (result_slot) {
+        emit(Opcode::Store,v.ir,{v.operand,Operand::slot(result_slot)});
+        v = emit(Opcode::Load,v.ir,{Operand::slot(result_slot)}); v.type = fact.type;
+    }
     if (class_result) {
         if (!indirect_result && !sem.empty_class(fact.type)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(fact.type); copy.alignment = sem.object_alignment(fact.type);
