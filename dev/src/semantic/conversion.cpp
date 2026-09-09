@@ -210,6 +210,7 @@ void Analyzer::apply_conversion(NodeId n, Conversion c)
     if (c.derived && c.kind != Conversion::Kind::Explicit) {
         TypeId from = expressions[n].type, to = types[c.target].child;
         if (pointer(from)) from = types[from].child;
+        if (pointer(to)) to = types[to].child;
         check_base_access(from, to, facts[n].scope);
     }
     if (c.function) select_function(n, c.function);
@@ -236,7 +237,9 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
         if (c.derived && c.kind != Conversion::Kind::Explicit) {
             TypeId from = expressions[n].type;
             if (pointer(from)) from = types[from].child;
-            check_base_access(from, types[c.target].child, facts[n].scope);
+            TypeId to = types[c.target].child;
+            if (pointer(to)) to = types[to].child;
+            check_base_access(from, to, facts[n].scope);
         }
         if (c.function) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);

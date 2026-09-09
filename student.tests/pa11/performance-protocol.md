@@ -81,3 +81,23 @@ those four groups with the same AAAA/ABBA/ABBA order and binary/input/output has
 checks. `lifetime-repeat-performance.json` preserves all 48 follow-up observations;
 `lifetime_repeat.py` is the exact harness. No observations from either campaign
 are removed. The spikes did not recur; their cause is not established.
+
+## Selection continuation campaign
+
+Freeze A at 55a21dac (compiler SHA256
+95254072074ac0be229cc9b8aa3a163646fdc311a1b5df4e105d9280faf15387)
+and B at the committed access/operator implementation. Reuse the unchanged
+nine-input and three-runtime AAAA/ABBA/ABBA campaign from PA10. Compiler
+wall/RSS, .text and runtime/payload observations all remain required. The
+harness's historical numeric targets remain diagnostics, as classified above.
+No optional optimizer or speedup is proposed.
+
+`selection_benchmark.py` adds four B-only AAAA observations for 1000/4000
+independent class/friend/operator families, and 1000 fixed ADL queries through
+8/32 base edges. The latter scales relevant lookup edges, not source bytes.
+Each generated LowIR is validated and executed before timing; telemetry is a
+separate run. Its runtime checks 48 million volatile-bounded constructor,
+hidden-friend and operator iterations with no static data. Preserve all source,
+binary and output hashes, observations, work counts and the sectionless text
+proxy. A is incorrect on these new behaviors and cannot be a speed baseline.
+Do not run builds or tests concurrently with measurements.

@@ -235,7 +235,11 @@ ScopeId Analyzer::target(EntityId e) const
     TypeId t = entities[e].type;
     return t && types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;
 }
-IdentifierId Analyzer::terminal(NodeId n) const { return n ? ast[ast[n].last].text : 0; }
+IdentifierId Analyzer::terminal(NodeId n)
+{
+    ETokenType op = operator_token(n);
+    return calls && op != TOK_INVALID ? operator_name(op) : n ? ast[ast[n].last].text : 0;
+}
 NodeId Analyzer::decl_name(NodeId d) const
 {
     for (NodeId c = ast[d].first; c; c = ast[c].next) {

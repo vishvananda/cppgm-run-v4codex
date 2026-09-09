@@ -74,7 +74,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             if (object) {
                 size(types[object].child);
                 record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
-                r.type = types.qualify(r.type, types[types[object].child].cv);
+                if (types[entities[e].type].kind != TypeKind::LRef && types[entities[e].type].kind != TypeKind::RRef)
+                    r.type = types.qualify(r.type, types[types[object].child].cv & (entities[e].mutable_field ? 2 : 3));
             } else if (!unevaluated_depth && !class_facts[entities[scopes[entities[e].owner].entity].class_info].storage) throw std::runtime_error("field requires object");
         }
         if (entities[e].kind == EntityKind::Enumerator && !entities[types[r.type].entity].complete)
@@ -108,6 +109,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::Subscript: {
         NodeId second = ast[first].next;
         TypeId a = decay(expression(first, s).type), b = decay(expression(second, s).type);
+        if ((types[a].kind == TypeKind::Named || types[b].kind == TypeKind::Named) &&
+            operator_expression(n, s, OP_LSQUARE, {first, second}, r)) return r;
         TypeId left = a, right = b;
         if (!pointer(a)) std::swap(a, b);
         if (!object_pointer(a) || !integral(b) || scoped_enum(b)) throw std::runtime_error("invalid subscript");
@@ -153,7 +156,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (!r.object_use) record_object(r, 0, 0, 0);
         object_uses[r.object_use].naming_scope = naming;
         if (entities[e].kind == EntityKind::Overload) r.form = ExpressionForm::Overload;
-        else r.type = types.qualify(value_type(entities[e].type), entities[e].is_static ? 0 : types[t].cv);
+        else {
+            r.type = value_type(entities[e].type);
+            if (nonstatic_field(e) && types[entities[e].type].kind != TypeKind::LRef && types[entities[e].type].kind != TypeKind::RRef)
+                r.type = types.qualify(r.type, types[t].cv & (entities[e].mutable_field ? 2 : 3));
+        }
         r.category = ast[n].op == OP_ARROW || object.category == ValueCategory::Lvalue ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         return r;
     }

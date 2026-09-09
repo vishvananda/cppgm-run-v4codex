@@ -14,7 +14,7 @@ IRType Procedural::type(TypeId id)
     case TypeKind::Fundamental: {
         static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
             IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
-            IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::Ptr};
+            IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::I64};
         return kinds[t.fundamental];
     }
     default: throw std::runtime_error("unsupported lowering type");
@@ -102,6 +102,8 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
     TypeId from = v.type;
     v = load(v);
     IRType target = type(to);
+    if (from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_NULLPTR_T && target == IRType::I64)
+        return Value(Operand::integer(0), target, to);
     if (target == IRType::Void) { v.type = to; v.ir = target; return v; }
     bool from_bool = from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_BOOL;
     if (sem.types[to].kind == TypeKind::Fundamental && sem.types[to].fundamental == FT_BOOL && !from_bool) {
@@ -119,7 +121,8 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
     Value v = expression(n, c.reference);
     if (c.derived) {
-        v = base_projection(c.reference ? address(v) : load(v), 1);
+        v = base_projection(c.reference && !c.temporary ? address(v) : load(v), 1);
+        if (c.temporary) { v.type = sem.types[c.target].child; return convert(v, c.target); }
         v.type = c.target; return v;
     }
     if (c.reference && !c.temporary && v.address) return address(v);

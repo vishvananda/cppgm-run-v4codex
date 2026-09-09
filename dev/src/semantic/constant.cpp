@@ -153,6 +153,7 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
         }
     }
     if (facts[n].value) return constants[facts[n].value];
+    if (calls && expressions[n].form == ExpressionForm::OperatorCall) return Constant();
     Constant result = evaluate_value(n, s);
     facts[n].scope = s;
     if (result.valid) {

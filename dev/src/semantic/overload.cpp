@@ -56,6 +56,10 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
         // Compare the complete qualification signatures, not an OR of cv bits
         // that loses which indirection level acquired the qualifier.
         unsigned added = 0;
+        if (at != bt && (a[i].derived || b[i].derived)) {
+            if (derived_from(bt, at) || (fundamental(at, FT_VOID) && types[bt].kind == TypeKind::Named)) return false;
+            if (derived_from(at, bt) || (fundamental(bt, FT_VOID) && types[at].kind == TypeKind::Named)) { strict = true; continue; }
+        }
         if (at != bt && similar_type(at, bt)) {
             bool ab = qualification(at, bt, added), ba = qualification(bt, at, added);
             if (ba && !ab) return false;
@@ -141,6 +145,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
                 entities[temporary].type = cast_type; register_destruction(temporary);
                 record_object(result, 0, 0, 0); object_uses[result.object_use].temporary = temporary;
+                object_uses[result.object_use].value_initialize = args.empty() && members[entities[ctor].member_info].synthetic;
                 return result;
             }
             if (args.size() > 1) throw std::runtime_error("scalar cast arity");
@@ -166,6 +171,10 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         expressions[callee] = fn; expressions[callee].ready = true; expressions[callee].evaluated = !unevaluated_depth;
         facts[callee].entity = selected; facts[callee].scope = s;
     } else fn = expression(callee, s);
+    if (fn.type && types[fn.type].kind == TypeKind::Named && entities[types[fn.type].entity].class_info) {
+        std::vector<NodeId> operands(1, callee); operands.insert(operands.end(), args.begin(), args.end());
+        if (operator_expression(n, s, OP_LPAREN, operands, result)) return result;
+    }
     if (fn.form == ExpressionForm::PseudoDestructor) {
         if (!args.empty()) throw std::runtime_error("pseudo-destructor takes no arguments");
         result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::PseudoDestructor; return result;

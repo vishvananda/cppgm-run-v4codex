@@ -219,6 +219,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         else bind(owner, id, e);
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
+    entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
+    if (calls && function) declare_operator(e, name);
     entities[e].c_linkage |= c_linkage;
     entities[e].no_inline |= ast[source].flags & 64;
     entities[e].force_inline |= ast[source].flags & 128;

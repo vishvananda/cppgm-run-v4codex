@@ -36,6 +36,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
                 if (entities[candidate].type == type) function = candidate;
             if (!function) throw std::runtime_error("qualified friend must match a declared function");
         } else function = declare_function(owner, terminal(name), n, type, true);
+        declare_operator(function, name);
         friendships.put(key(cls, function), 1);
         if (!qualified) hidden_friends.put(key(cls, terminal(name)), merge_lookup(hidden_friends.get(key(cls, terminal(name))), function));
         function_defaults(function, d, s); exception_specification(function, d, s);

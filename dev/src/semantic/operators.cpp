@@ -14,6 +14,11 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
     NodeId operand = ast[n].first;
     Expression a = expression(operand, s), r;
     ETokenType op = ast[n].op;
+    if (types[a.type].kind == TypeKind::Named) {
+        std::vector<NodeId> args(1, operand);
+        if (ast[n].kind == Kind::Postfix) args.push_back(0);
+        if (operator_expression(n, s, op, args, r)) return r;
+    }
     if (op == OP_AMP) {
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity) demand_specialization(a.entity);
@@ -98,14 +103,19 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
     NodeId an = ast[n].first, bn = ast[an].next;
     Expression a = expression(an, s), b = expression(bn, s), r;
     ETokenType op = ast[n].op;
+    if (ast[n].kind != Kind::Conditional && (types[a.type].kind == TypeKind::Named || types[b.type].kind == TypeKind::Named) &&
+        operator_expression(n, s, op, {an, bn}, r)) return r;
     if (ast[n].kind == Kind::Conditional) {
         NodeId cn = ast[bn].next;
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
-        if (b.type == c.type && b.category == c.category && b.category != ValueCategory::Prvalue) {
-            r.type = b.type; r.category = b.category;
+        TypeId common_class = 0;
+        if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type, c.type)) common_class = c.type;
+        else if (!(types[c.type].cv & ~types[b.type].cv) && derived_from(c.type, b.type)) common_class = b.type;
+        if ((b.type == c.type || common_class) && b.category == c.category && b.category != ValueCategory::Prvalue) {
+            r.type = common_class ? common_class : b.type; r.category = b.category;
             r.entity = b.entity == c.entity ? b.entity : 0;
-            TypeId ref = types.compound(b.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, b.type);
+            TypeId ref = types.compound(b.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, r.type);
             record_conversion(r, bn, conversion(bn, ref)); record_conversion(r, cn, conversion(cn, ref));
             return r;
         }

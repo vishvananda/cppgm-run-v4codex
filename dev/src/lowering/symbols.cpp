@@ -73,6 +73,7 @@ SymbolId Procedural::symbol(EntityId id)
     if (e.kind == semantic::EntityKind::Function) {
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;
+        target.function.terminal = operator_terminal(id);
         target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
         target.function.qualifiers = sem.types[e.type].cv;
         if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;

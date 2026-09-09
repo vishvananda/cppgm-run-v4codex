@@ -82,6 +82,7 @@ class Procedural {
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e);
+    abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
     void function_body(EntityId e);

@@ -87,6 +87,7 @@ struct Entity {
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false;
+    bool mutable_field = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
@@ -148,7 +149,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -162,7 +163,7 @@ struct Expression {
     bool ready = false, evaluated = false;
 };
 struct ObjectUse {
-    ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; };
+    ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0; unsigned adjustment = 0; bool value_initialize = false; };
 struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.

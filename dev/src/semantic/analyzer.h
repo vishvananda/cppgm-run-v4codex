@@ -131,7 +131,12 @@ private:
     ScopeId name_owner(NodeId name, ScopeId s, bool declaration = false);
     ScopeId common_ancestor(ScopeId a, ScopeId b) const;
     ScopeId target(EntityId e) const;
-    IdentifierId terminal(NodeId name) const;
+    Index operator_names;
+    IdentifierId terminal(NodeId name);
+    IdentifierId operator_name(ETokenType op);
+    ETokenType operator_token(NodeId name) const;
+    void declare_operator(EntityId e, NodeId name);
+    bool operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result);
     NodeId decl_name(NodeId d) const;
     NodeId child(NodeId n, syntax::Kind k) const;
     bool spec_has(NodeId n, ETokenType op) const;

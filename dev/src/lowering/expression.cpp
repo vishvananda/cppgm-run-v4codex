@@ -8,11 +8,17 @@ Value Procedural::expression(NodeId n, bool location)
     if (!n) throw std::logic_error("missing expression node");
     auto fact = sem.expression_fact(n);
     NodeId a = ast[n].first;
+    if (fact.form == semantic::ExpressionForm::OperatorCall) return call(n);
     if (fact.form == semantic::ExpressionForm::Construction) {
         EntityId e = sem.object_fact(n).temporary;
         if (!objects[e]) objects[e] = builder->add_slot(0, type(fact.type));
         Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
         Value pointer = address(at);
+        if (sem.object_fact(n).value_initialize) {
+            Instruction zero(Opcode::ZeroInit);
+            zero.bytes = sem.object_size(fact.type); zero.alignment = sem.object_alignment(fact.type);
+            emit(zero, {pointer.operand});
+        }
         construct(sem.facts[n].entity, n, pointer); activate_temporary(e);
         pointer.type = fact.type; pointer.address = true; return pointer;
     }
@@ -183,6 +189,8 @@ Value Procedural::binary(NodeId n, bool location)
     Value rhs = load(expression(b));
     lhs = convert(lhs, sem.conversion_fact(fact.conversions).target);
     rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target);
+    if (sem.conversion_fact(fact.conversions).derived) lhs = base_projection(lhs, 1);
+    if (sem.conversion_fact(fact.conversions+1).derived) rhs = base_projection(rhs, 1);
     return operation(op, lhs, rhs, fact.type);
 }
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
@@ -260,8 +268,10 @@ Value Procedural::call(NodeId n)
     }
     // The course's indirect-call fixtures evaluate arguments before fetching
     // the callee; C++11 leaves their relative evaluation order unspecified.
-    for (unsigned j = 0; j < fact.argument_count; ++j)
-        call_work.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
+    for (unsigned j = 0; j < fact.argument_count; ++j) {
+        NodeId argument = sem.call_arguments[fact.arguments+j];
+        call_work.push_back(argument ? converted(argument, sem.conversion_fact(fact.conversions+j)).operand : Operand::integer(0));
+    }
     NodeId callee = ast[n].first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, type(sem.facts[n].type));

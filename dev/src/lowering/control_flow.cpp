@@ -25,6 +25,7 @@ void Procedural::discard(NodeId n, bool access)
 {
     if (!n) return;
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    if (sem.expression_fact(n).form == semantic::ExpressionForm::OperatorCall) { expression(n); return; }
     if (ast[n].kind == Kind::Conditional) {
         // Prvalue arms undergo their normal conversions even if discarded.
         // A discarded volatile glvalue is read only for the forms in
@@ -58,7 +59,7 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         n = ast[n].first;
     }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
-    if (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
+    if (sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
         BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
         condition(ast[n].first, land ? rhs : yes, land ? no : rhs);
         start(rhs); condition(ast[ast[n].first].next, yes, no); return;
@@ -82,11 +83,11 @@ Value Procedural::conditional(NodeId n, bool location)
     if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
-    Value y = location ? address(expression(b, true)) : convert(expression(b), target);
+    Value y = location ? converted(b, sem.conversion_fact(fact.conversions+1)) : convert(expression(b), target);
     if (has_result) emit(Opcode::Store, ir, {y.operand, Operand::slot(slot)});
     jump(end);
     start(no);
-    Value z = location ? address(expression(c, true)) : convert(expression(c), target);
+    Value z = location ? converted(c, sem.conversion_fact(fact.conversions+2)) : convert(expression(c), target);
     if (has_result) emit(Opcode::Store, ir, {z.operand, Operand::slot(slot)});
     jump(end); start(end);
     Value v = has_result ? emit(Opcode::Load, ir, {Operand::slot(slot)}) : Value();

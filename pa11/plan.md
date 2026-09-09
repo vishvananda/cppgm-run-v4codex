@@ -3,7 +3,7 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. **Incomplete: 194/302; 108 failures.**
+Target: PA11 full-stage. Phase: implement. **Incomplete: 233/302; 69 failures.**
 
 ## Design and remaining groups
 
@@ -73,3 +73,12 @@ the linked lifetime checkpoint.
   Prior checks exposed nested-definition access and explicit-cast view changes;
   both are repaired before continuing. Performance campaign follows the next
   coherent selection increment; no speed claim is made.
+- Selection increment: token-indexed operator names and typed ABI terminals;
+  relevant member/ordinary/ADL candidates feed recorded call arguments and
+  implicit objects. No synthetic syntax or lowering-time overload search.
+  Derived reference/pointer ranking, conditional projections, mutable member
+  qualification and value-initialized temporary storage are included.
+  233/302: 60 original failures fixed, zero regressions; all four controls pass.
+  Seven personal programs execute and three rejection checks pass. Earlier
+  PAs: 1025/1025; file audit passes with the unchanged header advisory.
+  Freeze this implementation for common and new-behavior performance evidence.
