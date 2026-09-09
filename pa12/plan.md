@@ -6,103 +6,72 @@ Target: PA12 full-stage. Phase: implement; incomplete.
 
 ## Design/spec alignment and remaining groups
 
-Keep the shared source graph, canonical TypeId/EntityId facts, demand queue and
-own typed LowIR. No source replay, reference delegation or later native gate.
-Completed owners: member/ref-qualified selection; delegation and union storage;
-implicit/defaulted copy/move actions; class boundaries, destinations and returns;
-conditional transfers and local-reference/temporary identities. Lowering consumes
-selected facts. Prvalue conditional destinations share existing branch records.
+Retain the shared source graph, canonical TypeId/EntityId keys, demand queue,
+recorded conversions/lifetimes and own typed LowIR. Lowering consumes selected
+facts; no source replay, reference delegation or later native-performance gate.
 
-| Owner | Data flow / work bound | Validation and remaining work |
+| Owner | Data flow / complexity | Validation and remaining work |
 | --- | --- | --- |
-| Member and special-member semantics | Canonical declarations -> selected candidates -> typed field/base/unit/storage actions; once per required edge | Qualification, delegation, unions, copy/move/deletion, noalias and bounded arrays pass; inherited bit-field ordering conflict remains |
-| Class ABI and destination lowering | Boundary classification + selected transfer + destination/return records -> direct/indirect parameters/calls/results; O(required declarations + expressions + actions) | Direct/indirect calls and returns, forwarding, cv-combined conditional copies, local-reference extension pass. Remaining: aggregate/braced returns/default arguments, explicit class casts and source-specific ABI/emission differences |
-| Conversion functions and overloads | Indexed conversion-function candidates -> recorded user/standard sequences -> builtin/member calls | Main remaining semantic owner: scalar/pointer/class conversions, inherited/ref-qualified candidates and class condition declarations |
-| Static/array lifetime and cleanup emission | Complete temporary/storage identities -> scope/shutdown/array actions -> shared cleanup suffixes | Static subobject-reference control still rejects; arrays and condition lifetimes remain. Nine full-LowIR lifetime fixtures execute correctly but their comparisons still fail |
-| Allocation | Selected allocation/deallocation + storage extent -> construction/destruction and null branches | Scalar/array new/delete, class-specific selection and nonthrowing-null paths remain |
+| Member and special-member semantics | Canonical declarations -> selected member -> field/base/storage actions; once per required edge | Qualification, delegation, unions, copy/move/deletion and bounded arrays pass. Bit-field ordering and rooted-helper/emission differences remain |
+| Class values and conversions | Indexed canonical conversion targets/base edges -> object and second-standard sequence -> selected call/result transfer/destination | Conversion, inherited/ref-qualified ranking, builtin, cast, condition, surrogate and reference checks pass. Candidate work follows required overloads; selected records are retained once. Aggregate/braced returns/default arguments, empty-class conversion-result transfers and other ABI/O0 output shapes remain |
+| Reference and cleanup ownership | Complete temporary identities -> namespace backing storage and conditional shutdown guards; O(retained objects + branch edges) | Static-reference control and mixed-type/subobject/conversion personal checks pass. Remaining arrays, cleanup-region/continuation shapes, and local subobject-reference generalization require lifetime-owner work |
+| Call boundary facts | Source GNU attribute -> validated function EntityId -> LowIR query boundary; no optimization | Stable-prefix probe, positive control and all four rejection controls pass. Survivor runner next fails the indirect member-pointer object-extent control; that needs its representation and call signature |
+| Allocation | Selected allocation/deallocation + extent -> construction/destruction and null branches | Scalar/array new/delete, class-specific selection and nonthrowing-null paths remain |
 
-The ordinary bit-field initializer conflict is unchanged: PA11
-`400-bit-field-constructor-member-init` and PA12 `300-bit-field-copy-semantics`
-prescribe different orders for the identical `Bits` constructor. A general
-change regressed earlier checks and was removed. No test-dependent compiler
-branch or unproved reference change was added. The direct-object base-copy
-fixture also needs ABI-contract investigation; normal nontrivial user copy
-constructors select indirect boundaries. Do not copy an isolated reference anomaly.
+Unchanged contract questions: PA11 `400-bit-field-constructor-member-init`
+and PA12 `300-bit-field-copy-semantics` prescribe different orders for the same
+`Bits` constructor; a general change previously regressed PA11 and was removed.
+`300-direct-object-parameter-passthrough-base-copy` also needs ABI-contract
+investigation. No fixture-dependent behavior or unproved reference revision.
 
 ## Performance evidence
 
-[Member](performance.md), [transfer](transfer-performance.md) and
-[value](value-performance.md) evidence preserve frozen binaries, flags, inputs,
-A/A/ABBA samples, latency/RSS, runtime/text and work counters. Common LowIR and
-native outputs remain byte-identical. Final value workloads have exactly 4x
-return/conversion records at 4x input size. Nested branch sharing cuts paired
-compiler time 76–78% at depth 64 and 93–94% at depth 256, with unchanged output;
-at depth 256 RSS falls 504500 -> 26608 KiB. This corrects repeated semantic work.
-No runtime gain is claimed. Compiler text grows 2.24% for the entire value group.
+[Member](performance.md), [transfer](transfer-performance.md),
+[value](value-performance.md) and [conversion/reference](conversion-performance.md)
+preserve frozen binaries, flags, inputs, A/A/ABBA samples, compiler latency/RSS,
+executable runtime/text and work counters. Common LowIR/native outputs are
+byte-identical. Nested branch sharing removed quadratic preparation; conversion
+records grow 4000 -> 16000 at fourfold input size. No runtime gain is claimed
+for required semantic additions. All three conversion campaigns are preserved.
 
-Keep cached class/member facts, two branch transfers per conditional, memoized
-cleanup-presence queries and persistent branch suffixes. Array expansion stays
-capped at eight elements. The previously unprofitable scalar-only prefix fold
-remains removed. Required storage-prefix/whole-object forms retain their measured
-supplied-backend cost; they do not create an additional positive-runtime gate.
-Initial noisy campaigns and the final repeats are both preserved.
+Keep canonical class/member facts, shared conditional transfer records, memoized
+cleanup-presence queries and persistent suffixes. Array expansion stays capped
+at eight elements. The unprofitable scalar-only prefix fold remains removed;
+mandated storage-prefix/whole-object forms retain their documented supplied-
+backend cost without an extra positive-runtime gate. New storage and guards
+are bounded by selected objects; query annotations do not request O0 transforms.
 
 ## Handoff ledger
 
 - Stage entry: clean base; **61/257**, 196 failures; earlier **1327/1327**.
-- `4e209677`, `55d15ba8`, `8a83045c`: member/delegation/union group, **92/257**;
-  31 original failures removed, no new failures. Concurrent root tallies were
-  discarded and replaced by serial reports; always run root reports serially.
-- `3da4de09`: four bit-field reference retypes corrected under the authorized
-  exception; [C++11/LowIR proof and reducers](reference-corrections.md).
-- `73664568`, `4ea8394f`: special transfers and measured prefix policy,
-  **123/257**; another 31 failures removed, no new failures.
-- Current entry verified clean `4ea8394f` and **123/257** in
-  `/tmp/pa12-abi-start.log`. `cc2198c9` adds class boundaries/destinations;
-  `e140daef` extends conditional and temporary ownership; `a3d40a62` shares
-  nested branch conversions instead of rebuilding them.
-- Final current checks: **169/257**, 88 failures; **46 entry failures removed,
-  no new failures**, unchanged coverage. Earlier report **1327/1327**. File audit
-  passes with its existing header advisory. Nineteen personal source checks,
-  two focused lifetime/elision controls and nine explicit lifetime-fixture native
-  executions pass. The latter nine still fail their required LowIR comparisons.
-  No fixtures, sidecars, comparison rules or reference outputs changed this turn.
-- Required logs: `/tmp/pa12-value-final-stage.log` (exit 2),
-  `/tmp/pa12-value-final-prior.log` (exit 0),
-  `/tmp/pa12-value-final-personal.log` (exit 0). Benchmarks and focused checks
-  are complete; final cleanup/file audit and commit status are recorded below.
-- Concrete boundary: the completed destination model accepts already selected
-  class transfers. Remaining conversion functions require their own candidate
-  and two-stage conversion records before a destination can consume them.
-  Static references additionally need a complete backing-object/shutdown owner
-  (including selected subobjects); local full-expression state cannot represent
-  that lifetime. Remaining cleanup comparison shapes need an emission-policy
-  review, not another scalar/class destination patch. These separate owners make
-  further fixes impractical as an extension of this now-tested behavior group.
-  PA12 remains incomplete; **108 stage-base failures removed overall**.
-- Final file audit and `git diff --check` pass. Implementation and evidence are
-  committed; no tests or benchmarks remain running. Working tree is clean at handoff.
-
-- Conversion entry: clean `1a7867fd`; previous goal turn is verified progress.
-  Fresh baseline **169/257** in `/tmp/pa12-conversion-start.log`; no live prior work.
-  Active owner: canonical conversion-function targets and inherited candidate
-  edges -> object/second-standard sequence selection -> existing calls and
-  destinations. Bound work by required candidates and base edges; preserve
-  local source facts. Validate casts, references, overload ranking, builtins and
-  conditions together, then measure common and affected workloads.
-- Conversion implementation checkpoint: **201/257**, 32 entry failures removed,
-  no new failures; prior **1327/1327**, 27 personal sources pass. Canonical
-  target bindings, two standard sequences, selected result transfers, builtin
-  candidates, condition declarations, casts and surrogate calls now share the
-  conversion owner. Inherited ranking follows [over.match.funcs]/4 while the
-  call retains its separate base adjustment. Logs: `/tmp/pa12-conversion-complete-stage.log`,
-  `/tmp/pa12-conversion-prior.log`, `/tmp/pa12-conversion-personal2.log`.
-  Performance campaign remains pending; no optimization benefit is claimed.
-- The same ownership model now retains namespace-reference backing storage,
-  complete selected subobjects and conditional shutdown guards. Scalar prvalue
-  references reuse their existing conditional result storage. The required
-  abort boundary, GNU stable-prefix attribute and attribute probe are present.
-  **202/257**, earlier **1327/1327**, 28 personal sources, explicit abort runtime,
-  static-reference control, query control and four query rejection controls pass.
-  Survivor processing now reaches the unsupported member-pointer call in the
-  object-extent control. Compiler binaries are frozen for the performance run.
+- `4e209677`, `55d15ba8`, `8a83045c`: members/delegation/unions -> **92/257**.
+- `3da4de09`: four reference bit-field retypes corrected under the authorized
+  exception; [proof and reducers](reference-corrections.md).
+- `73664568`, `4ea8394f`: special transfers and measured prefix policy -> **123/257**.
+- `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: class boundaries/destinations,
+  conditional/local-reference ownership and bounded branch sharing -> **169/257**.
+- Current entry verified clean `1a7867fd`, **169/257**, 88 failures in
+  `/tmp/pa12-conversion-start.log`. `02f2f154` adds conversion functions and shared
+  operator selection; `77145afa` retains static references and emits query/abort
+  boundaries; `f9c8e6c3` preserves dynamic conversions during static initialization.
+- Current final: **202/257**, 55 failures; **33 entry failures removed, no new
+  fixture failures**, unchanged coverage. Earlier **1327/1327**; file audit passes.
+  Twenty-eight personal source checks, explicit abort termination (134), static-
+  reference execution, stable-prefix control and four query rejections pass.
+  The survivor runner reaches `536-parameter-object-extent-boundary.cpp`, where
+  member-pointer calls remain unsupported. No fixtures/references/comparison
+  rules changed this turn. Stage-base progress: **141 original failures removed**.
+- Logs: `/tmp/pa12-conversion-final-stage2.log` (exit 2),
+  `/tmp/pa12-conversion-final-prior2.log` (exit 0),
+  `/tmp/pa12-conversion-final-personal.log` (exit 0). Root reports ran serially.
+- Concrete boundary: conversion selection and destination/storage ownership are
+  now exercised together. Remaining member-pointer calls need a distinct ABI
+  value representation and indirect signature; allocation needs allocation-
+  extent/deallocation records; remaining lifetime diffs need exception-region
+  and continuation emission, including arrays. These are separate semantic/ABI
+  owners, not further conversion-ranking or backing-storage fixes. They remain
+  required work for full PA12, including every still-failing output comparison.
+- Final file audit and `git diff --check` pass; two header-organization advisories
+  remain. All three performance campaigns finished. The final common output is
+  byte-identical to A; compiler text cost is 63616 bytes (7.63%). Measurements
+  and their noisy observations are preserved in the linked evidence.
