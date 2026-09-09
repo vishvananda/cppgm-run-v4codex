@@ -2,15 +2,18 @@
 """Explicit PA11 audit reducers, executable results and initialization budgets."""
 from pathlib import Path
 import json
+import os
 import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
+COMPILER = Path(os.environ.get('CPPGM_AUDIT_COMPILER', str(ROOT/'dev/cppgm++')))
 
 
 def run(command, success=True):
     result = subprocess.run([str(x) for x in command], capture_output=True, text=True, timeout=60)
+    assert 'Sanitizer' not in result.stderr and 'runtime error:' not in result.stderr, result.stderr
     assert (result.returncode == 0) == success, (command, result.returncode, result.stderr)
     return result
 
@@ -21,7 +24,7 @@ def main():
 
         def compile(source, execute=True):
             ir, exe = scratch/'out.lowir', scratch/'out'
-            result = run([ROOT/'dev/cppgm++', '--emit-lowir', '-O0', '--validate-lowir', '--stats', '-o', ir, source])
+            result = run([COMPILER, '--emit-lowir', '-O0', '--validate-lowir', '--stats', '-o', ir, source])
             text = ir.read_text()
             if execute:
                 run([ROOT/'dev/lowir2native-ref', '-O0', '-o', exe, ir])
@@ -30,7 +33,7 @@ def main():
 
         for source in sorted(HERE.glob('audit-*.cpp')):
             if source.stem.endswith('-bad') or source.stem == 'audit-bad-initializer':
-                run([ROOT/'dev/cppgm++', '--emit-lowir', '-O0', '-o', scratch/'bad.lowir', source], success=False)
+                run([COMPILER, '--emit-lowir', '-O0', '-o', scratch/'bad.lowir', source], success=False)
             else:
                 ir, stats = compile(source)
                 if source.stem == 'audit-volatile-object':

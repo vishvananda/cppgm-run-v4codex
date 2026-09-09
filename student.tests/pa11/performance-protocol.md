@@ -267,3 +267,16 @@ preliminary zero. Remove the duplicate at the adapter, retain the sole owning
 construction path, and check one `zeroinit` plus execution in
 `audit-temporary-zero.cpp`. Repeat the common campaign with the corrected frozen
 binary before final conclusions; the affected-family campaign uses that binary.
+
+Final compiler: `cd09b606`, SHA256
+`fe662c96e7ed834276169929d4b99e4076331e048867f0c3ceeefb9ea0367280`.
+The final common/affected campaigns are preserved in
+`audit-{common,affected}-performance.json`. Repeat exactly memory-float-1,
+calls-4, references-8000, nested-initializers-4000 and both joined-literal
+scales with the same frozen inputs/binaries/flags and AAAA/ABBA/ABBA order.
+`audit_followup.py` verifies each repeated output hash. It also retains four
+native startup observations and a longer fixed 2400000-iteration variant of
+the initializer runtime. The 120000-iteration campaign remains a diagnostic;
+its longer variant, with identical computation per iteration and a recomputed
+checked checksum, supplies runtime acceptance evidence. All original observations
+remain in place, including spikes; no numeric threshold is an added exit gate.

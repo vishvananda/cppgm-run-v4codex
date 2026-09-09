@@ -1,72 +1,61 @@
-# PA11 implementation
+# PA11 consolidated plan
 
-Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
-Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
+Stage base: `a97e14d49c7edfc7acc115b974ab667cc90480db`.
+Last independently reviewed implementation: `9c0a9c4e` (including `b262971d`
+and `cd09b606`; the final naming cleanup preserves the frozen compiler bytes).
+Target: **PA11 full-stage**. Phase: final audit; no PA12 work is advanced.
 
-Target: PA11 full-stage. **Complete: 302/302**, including all four controls.
-Cumulative PA1–PA11: **1327/1327** (earlier stages 1025/1025). File audit passes
-with the existing Analyzer-header advisory. Seventeen personal native programs
-validate and execute; ten invalid programs reject. Coverage is unchanged.
+## Spec Alignment
 
-## Design/spec alignment and ownership
+The shared streaming frontend and sole source graph produce canonical typed
+semantic facts and direct LowIR. The independent [audit](audit.md) reconstructs
+all stage ownership and representative source-to-executable test flows, rather
+than relying on the earlier checkpoint summaries.
 
-Extend the integrated typed graph and PA10 lowering. Semantic selection records
-canonical declarations, conversions, object paths, layout and lifetime actions;
-lowering consumes them directly. Rare descriptors and actions live in TU-owned
-flat ID indexes/arenas. Source regions are parsed once. Existing ABI and lifetime
-identities remain available to the later virtual-object and value-transfer stages.
+| Owner | Final design and evidence |
+| --- | --- |
+| Source/parser | Immutable buffers, interned names and bounded deferred class lookahead. Grammar is parsed once. LowIR mode omits joined literal display copies; language linkage consumes decoded literals. Earlier AST/type/semantic outputs remain passing. |
+| Selection | Indexed scope/base/friend/ADL edges select declarations, object adjustments and conversions. Constructor initializer ownership and contextual value-initialization access checks are explicit. |
+| Layout/initializers | Canonical layout and field descriptors feed source/type action plans. Shared omitted-value shapes retain volatile qualification and union boundaries. Static bit packing preserves neighboring scalar bytes and required startup ordering. |
+| Construction/lifetime | Required member/base ABI entries are demanded once. Default calls retain conversions and temporary identities; arrays destroy default-argument temporaries between elements. Namespace/TLS arrays use the ordinary bounded constructor path. Cleanup suffixes retain control context and saved returns. |
+| Lowering/resources | Typed plans replace aggregate semantic reconstruction. Repetition expansion is bounded across dimensions, with exact bulk zero or scalar loops as appropriate. Temporary preliminary zero has one owner. TU and function scratch have explicit release points. |
+| Static construction | A cached summary requires an effect-free body, supported field actions, preserved conversions and static values for every argument, including unused/default arguments. Failure retains dynamic evaluation. |
 
-| Owner | Data flow / complexity | Validation |
-| --- | --- | --- |
-| Access/selection | Scope, friend and associated lookup select declarations and object adjustments. O(relevant edges + candidates + selected arguments). | access/ADL/operator fixtures and native calls |
-| Layout/initializers | Field descriptors own bit widths, signed storage, EBO identities and alignment/packing. One cursor records brace elision, strings and omitted ranges; local/global/helper lowering consumes actions. O(fields + actions + required IR). | bit fields, aligned layouts, aggregate cursors, volatile stores and range bounds |
-| Constructors | Inherited signatures respect local declarations and base access; converting calls own argument ranges and temporary lifetimes. Braced arguments check narrowing after selection. O(candidates + arguments + subobject actions). | inherited/explicit/deleted/access cases, conversion/default/lifetime execution and narrowing rejects |
-| ABI/storage | Complete/base demand, rooted helpers, empty parameters and incomplete declarations remain distinct. TLS records guards/init/wrappers; emitted native names reserve collision-free labels separately from canonical ABI identity. O(required entries + objects + IR). | external/transitive entries, empty/incomplete boundaries, TLS collision and first use |
-| Construction lowering | Placement calls consume selected allocation conversions and initializer actions. Cached effect-free scalar-forwarding summaries support required static constructor-array data; unsupported effects/conversion chains keep dynamic calls. O(parameters + actions + initializer data). | placement, static/dynamic array execution and conversion-preserving fallback |
-| Parser/expressions | Injected names, complete-class categories, qualified decltype and UDL suffix IDs feed canonical types/ABI. Floating builtins and explicit discard emit typed operations. O(consumed syntax + selected operations). | stage fixtures, native float/UDL checks and earlier reports |
+## Findings, changes and acceptance
 
-No PA11 behavior group remains failing. Seven narrow reference corrections have
-reduced proofs, cited rules and the pinned bundle revision in
-[reference corrections](reference-corrections.md). The final correction restores
-mandatory static reference binding before dynamic initialization; fixture inputs,
-comparison rules and coverage remain intact.
+`b262971d` fixes the initialization ownership, access, qualifier, static bit-field,
+default-conversion/lifetime, global/TLS-array and argument-effect defects found
+independently. `cd09b606` removes duplicate preliminary zero for temporary objects.
+Eight executing reducers, two rejection cases and explicit range/dimension checks
+supplement the unchanged course suite and earlier personal tests.
 
-## Performance evidence
+[Final performance evidence](final-audit-performance.md) retains the initial
+candidate and corrected frozen A/B campaigns, A/A calibration, ABBA pairs,
+follow-ups, hashes and all observations. It reports latency, RSS, compiler text,
+executable runtime and native text together. The supported O0 work is bounded;
+no optional optimizer or later-stage native gate is introduced. Historical
+numeric targets remain diagnostics under spec.md's stage-scoped rule. Correctness,
+coverage, comparison rules and the eight-element expansion budget remain intact.
 
-[Construction completion](construction-checkpoint.md) records frozen compiler
-wall/RSS/text, checked native runtime/text, proportional work, all observations
-and noisy follow-ups. Final compiler text grows 58,432 bytes (8.08%). Common
-outputs and native binaries are byte-identical. Final common median latency
-changes span -1.48% to +4.38%; the follow-up retains noisy reference observations.
-The largest common-campaign/follow-up RSS increase is 19,948 KiB (7.08%); separate telemetry
-preserves equal semantic/IR work and pool capacities, without claiming an
-allocation cause. New 4x family inputs take 4.03–4.09x median compiler time.
+The earlier seven [reference corrections](reference-corrections.md) retain their
+reducers, C++11/LowIR proofs and pinned bundle revision. This audit changes no
+reference, fixture input, comparison rule or test discovery.
 
-These are required O0 semantics, with no optional optimizer or speedup claim.
-Historical numeric targets remain diagnostics under the spec's stage-scoped
-rule; all measurements and misses remain available. The mandatory eight-element
-expansion budget remains unchanged: [layout evidence](layout-checkpoint.md)
-records 10/27/31 instructions for omitted/string/volatile ranges at both 32 and
-one million elements. [Earlier selection evidence](selection-checkpoint.md) and
-all earlier campaigns remain preserved. Correctness, coverage and proportional
-work remain mandatory.
+## Validation and ledger
 
-## Handoff ledger
+- Required file audit: **pass**, with the existing Analyzer-header advisory.
+- `make test-report-through-pa11`: **1327/1327; 11/11 stages**, including
+  **302/302 PA11** cases and four controls. The fresh count agrees with the
+  retained primary log; the supplied 1351 count was not reproduced.
+- `student.tests/pa11/check.py`: 17 native successes and ten rejection cases.
+- `student.tests/pa11/audit_check.py`: all audit reducers and growth checks pass.
+- The same audit suite passes on the registered ASan/UBSan compiler build.
+- Frozen artifact/observation verification and native checks are recorded in
+  the final evidence and [audit ledger](audit.md#validation-and-handoff-ledger).
 
-- a97e14d4: initial 43/302; stage base/review markers remain unchanged.
-- 4113c34d: member ABI, cv/references/projections: 84/302.
-- 17897014 / cd054d80: construction, defaults/DMI and startup: 156/302.
-- 2f886c18 / ae8255d4 / 3f590f18 / 55a21dac: lifetime/cleanup/noexcept: 173/302.
-- 165af40e / b74a80fa / c7206513 / 88e4ebe1: access/ADL/operators and returned
-  conversions: 234/302, with frozen evidence.
-- 09480f23 / ff86af31: bit fields/EBO and aligned/packed layout: 248 then 256/302.
-- 9a394183 / 3b8fc5a3: initializer actions and bounded padding/scratch: 273/302;
-  six proved reference corrections and both performance campaigns retained.
-- 786ed29e: clean construction-continuation baseline, reproduced 273/302.
-- f5918ce9: inherited forwarding and complete/base entry demand: 276/302.
-- af72ea1d: construction, ABI/TLS, parser and expression boundaries: 302/302.
-- 265440db: final braced-constructor narrowing review; 302/302 and cumulative
-  1327/1327, file audit, 17 native programs and ten rejection cases pass.
-  All 29 continuation-baseline failures fixed, zero regressions. Initial and
-  corrected frozen evidence retained and verified. Handoff is stage completion;
-  no PA11 work is deferred and no later assignment is advanced.
+All 21 stage commits from the base through `0773e4d8` were reviewed: member ABI,
+construction/defaults, lifetime/noexcept, selection/access/operators, layout and
+initializers, inherited/converting construction, TLS/ABI/literals and narrowing.
+The audit closes the stale base review pointer and all intervening checkpoint
+handoffs. The audit fixes, action-identity naming cleanup and retained measurement
+continuations complete the ledger. No PA11 implementation work is deferred.
