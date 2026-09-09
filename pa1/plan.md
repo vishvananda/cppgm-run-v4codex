@@ -1,8 +1,8 @@
 # PA1 consolidated plan
 
-Stage base commit: `1b05951a54c7803f3ac1a1db87b7213ec2b426f1`
-Audit input: `dccd027f1b2e5312a0ed3c551635b89ac9b6d8b2`
-Last reviewed commit: `29e95571f4678984c8e8a2796443baf563ee51cb`
+Stage base commit: `f6a53056a0dac62ac05aa3b3684e362edb65c071`
+Audit input: `79b74e688d67720ab07f561836836c71926d7e32`
+Last reviewed commit: `762ae8f247a5e76879a03ccd6893c1a0a6e66c16`
 Target: **PA1 full-stage final audit**; PA2 has not been started.
 
 ## Final Spec Alignment
@@ -59,11 +59,11 @@ commit contains the reviewed audit, plan, benchmark controls and evidence.
 
 ## Handoff ledger
 
-- `fee23cc04`: plan and 0/54 baseline; independently reread.
-- `a03163343`: shared PA1 implementation; all sources and tool registration reviewed.
-- `78a0872d6`: EOF/BOM/escaped-UCN closure; changes and properties revalidated.
-- `dccd027f1`: checkpoint/performance evidence; frozen binary/hash/protocol reviewed.
-- `29e95571f`: table ownership fix, telemetry and expanded resource checks; reviewed
+- `5b69ae0d5`: plan and 0/54 baseline; independently reread.
+- `e5c65b70c`: shared PA1 implementation; all sources and tool registration reviewed.
+- `a3abcf619`: EOF/BOM/escaped-UCN closure; changes and properties revalidated.
+- `79b74e688`: checkpoint/performance evidence; frozen binary/hash/protocol reviewed.
+- `762ae8f24`: table ownership fix, telemetry and expanded resource checks; reviewed
   with final course, sanitizer and frozen benchmark evidence.
 - Final consolidation: audited plan, benchmark controls and complete performance
   evidence. No compiler changes follow the reviewed implementation commit.

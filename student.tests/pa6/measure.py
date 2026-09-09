@@ -26,7 +26,7 @@ def measure(paths,output,revisions=None):
               host_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',
               host_cxx=subprocess.check_output(['g++','--version'],text=True).splitlines()[0],
               binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in paths],
-              source_commits=revisions or ['9249196518f45492822fb2e3da4eb5d82af0ed13','5749f43b4',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
+              source_commits=revisions or ['0dc05603e6ba9f136d9f2d0ac470c169c43aaceb','00cb86a9f',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
               observations=[],startup=[],work=[],telemetry=[],inputs={},generated_runtime=None,generated_text=None)
     with tempfile.TemporaryDirectory(prefix='pa6-timing-') as tmp:
         tmp=pathlib.Path(tmp);out=tmp/'out';rss=tmp/'rss';empty=tmp/'empty.cpp';empty.write_text('')

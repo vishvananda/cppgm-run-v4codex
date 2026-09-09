@@ -36,7 +36,7 @@ def observe(cmd,rss,output=None):
     if output and Path(output).exists():row.update(output_sha256=sha(output),output_bytes=Path(output).stat().st_size)
     return row
 
-def measure(base,final,destination,base_count=6000,runtime_factor=20,base_commit='66167cf72'):
+def measure(base,final,destination,base_count=6000,runtime_factor=20,base_commit='ef37a2c9e'):
     cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
     binaries=[base.resolve(),final.resolve()]
     root=Path('/tmp/pa8-evidence')/destination.stem;root.mkdir(parents=True,exist_ok=True)
@@ -187,5 +187,5 @@ if __name__=='__main__':
         parser=argparse.ArgumentParser()
         parser.add_argument('--base-count',type=int,default=6000)
         parser.add_argument('--runtime-factor',type=int,default=20)
-        parser.add_argument('--base-commit',default='66167cf72')
+        parser.add_argument('--base-commit',default='ef37a2c9e')
         measure(Path(sys.argv[2]),Path(sys.argv[3]),Path(sys.argv[4]),**vars(parser.parse_args(sys.argv[5:])))

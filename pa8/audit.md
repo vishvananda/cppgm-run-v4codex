@@ -1,9 +1,9 @@
 # PA8 independent final full-stage audit
 
 Reviewed `spec.md`, PA8 README/format/grammar, testing/layout instructions, every
-PA8 implementation owner and stage commit through `2f21a26ac`. The prior
-checkpoint record in `7313af05a` was an input to inspect, not completion proof.
-This audit includes all handoffs since the PA7 final review `7e4297484`.
+PA8 implementation owner and stage commit through `1d69e0d35`. The prior
+checkpoint record in `7cb3f718e` was an input to inspect, not completion proof.
+This audit includes all handoffs since the PA7 final review `2f8c201f5`.
 
 ## Final Spec Alignment
 
@@ -121,13 +121,13 @@ numeric performance budgets were frozen before measurement in
 
 ## Validation and handoff ledger
 
-- `da047b4a9`: initial plan; `66167cf72`: model, adapters, validation, exercises;
-  `01d39a2f6`: shape/literal fidelity/telemetry; `7313af05a`: checkpoint evidence.
+- `69f031998`: initial plan; `ef37a2c9e`: model, adapters, validation, exercises;
+  `0152284b7`: shape/literal fidelity/telemetry; `7cb3f718e`: checkpoint evidence.
   All four handoffs have now been inspected against source and current behavior.
-- `bc2cd043d`: phi and builder ownership fixes, four additional semantic
+- `f3f9c4176`: phi and builder ownership fixes, four additional semantic
   rejection cases and direct API/edit checks. The incoming binary accepts the
   new handler/f80 errors; the audited binary rejects them.
-- `2f21a26ac`: frozen final measurement protocol and stronger provenance checks.
+- `1d69e0d35`: frozen final measurement protocol and stronger provenance checks.
 - Fresh `make test-pa8`: 109/109. Fresh `make test-report-through-pa8`: 793/793,
   with all eight stages passing (684 earlier cases +109 PA8).
 - Fresh file audit: 97 files, pass without warnings. Personal checks: 24 valid

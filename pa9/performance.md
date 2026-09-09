@@ -1,8 +1,8 @@
 # PA9 final performance evidence
 
 **All 42 unchanged checks pass in each final experiment (84/84).** Final B is
-`5aad60656`; whole-stage A is first-correct `df7dbb00a`, and audit-delta A is
-completed checkpoint `6ec119239` (implementation `ea87f4ba7`). Compiler latency,
+`0e2fcf0ff`; whole-stage A is first-correct `2b19ba07a`, and audit-delta A is
+completed checkpoint `8195487d1` (implementation `b43bc1ff7`). Compiler latency,
 peak RSS and compiler text are reported together. PA9 emits ABI names; generated
 executable runtime/text and executable optimization profitability are **N/A**.
 
@@ -109,11 +109,11 @@ All **576** observations across six reports remain separate:
 - `initial-performance.json` and `performance.json`: original checkpoint runs,
   including the first failed compiler-text budget and its correction.
 - `pre-prefix-audit-performance.json` and `pre-prefix-stage-performance.json`:
-  192 successful audit observations on `ad9c2c907`. A final completion probe
+  192 successful audit observations on `f2353211e`. A final completion probe
   then found the malformed specialization-prefix crash. These runs are retained
   as historical evidence and do not certify the final implementation.
 - `final-audit-performance.json` and `final-stage-performance.json`: 192 final
-  observations on `5aad60656`, all 84 gates pass.
+  observations on `0e2fcf0ff`, all 84 gates pass.
 
 No sample was discarded, no budgets were relaxed, and independent experiments
 are not pooled. The [personal README](../student.tests/pa9/README.md) provides

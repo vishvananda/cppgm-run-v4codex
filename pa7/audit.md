@@ -1,11 +1,11 @@
 # PA7 independent full-stage audit
 
-Reviewed the actual source through `04b97523a`, independently of the checkpoint
+Reviewed the actual source through `9cceb7913`, independently of the checkpoint
 conclusions. Scope: PA7 procedural semantics plus inherited PA1–6 and the
 class/member/template declaration intake exercised by the PA7 contract. Read
 `spec.md`, PA7/PA5 handouts, `TESTING_AND_REFERENCES.md`, the stage commits, and
 all semantic owners and frontend handoffs. The earlier implementation audit
-is preserved in `5418551e9`; it was an input to inspect, not completion evidence.
+is preserved in `682532c07`; it was an input to inspect, not completion evidence.
 
 ## Final Spec Alignment
 
@@ -72,7 +72,7 @@ and executable optimization profitability are not applicable.
 
 ## Findings and corrections
 
-`a6dc84a4a` and `04b97523a` fix the ownership paths, with 63 independent behavioral probes and
+`2fd1e8333` and `9cceb7913` fix the ownership paths, with 63 independent behavioral probes and
 extended fact-level assertions. The frozen pre-audit binary fails 49 of those
 63 probes; the audited binary passes all 63. These are personal tests, explicitly
 run, and do not change the course contract.
@@ -112,7 +112,7 @@ All 1,154 audit observations and the exact accepted/superseded scope are in
 
 ## Validation and handoff ledger
 
-Source validation at `04b97523a`:
+Source validation at `9cceb7913`:
 
 - `make test-pa7`: 186/186; `make test-report-through-pa7`: 684/684, 7/7 stages.
 - `perl scripts/cppgm_file_audit.pl --stage pa7 --paths dev/src`: 79 files pass.
@@ -127,11 +127,11 @@ Source validation at `04b97523a`:
 
 | Handoff since PA6 / prior checkpoint | Independent disposition |
 | --- | --- |
-| `c559848bd` | Stage baseline/plan inspected; no implementation to trust as evidence. |
-| `75e512523` | Procedural expression, conversion, call and statement ownership reconstructed; corrections above close discovered gaps. |
-| `6690406f2` | Member identities, demand and template declaration intake traced through actual source and tested independently. |
-| `e5e777a65` | Closed-type dependence cache checked for canonical key, immutability, dependent-only work and bounded counters. |
-| `5418551e9` | Saved final evidence reverified after reproducing the PA6 baseline and recovering the PA7 binary with exact recorded hashes. Historical checkpoint observations remain archival; current frozen campaigns supersede them for the final state. |
-| `a6dc84a4a` | Cohesive semantic corrections and personal/API tests committed. No earlier PA7 implementation handoff remains unreviewed. |
-| `04b97523a` | Final ownership review keeps cast/builtin forms on their originating nodes; three comma-form probes close the remaining rendering handoff. |
+| `c2837a0e6` | Stage baseline/plan inspected; no implementation to trust as evidence. |
+| `ec0c55093` | Procedural expression, conversion, call and statement ownership reconstructed; corrections above close discovered gaps. |
+| `ec6b78425` | Member identities, demand and template declaration intake traced through actual source and tested independently. |
+| `d5ab80eb4` | Closed-type dependence cache checked for canonical key, immutability, dependent-only work and bounded counters. |
+| `682532c07` | Saved final evidence reverified after reproducing the PA6 baseline and recovering the PA7 binary with exact recorded hashes. Historical checkpoint observations remain archival; current frozen campaigns supersede them for the final state. |
+| `2fd1e8333` | Cohesive semantic corrections and personal/API tests committed. No earlier PA7 implementation handoff remains unreviewed. |
+| `9cceb7913` | Final ownership review keeps cast/builtin forms on their originating nodes; three comma-form probes close the remaining rendering handoff. |
 | Final evidence commit | Complete fixed-corpus coverage and longer recheck/direct-PA7 verifiers pass with unchanged budgets; all 1,154 observations retained. Final required gates pass; intended changes committed and clean status checked at handoff. |

@@ -28,7 +28,7 @@ if __name__=='__main__':
     else:
         a,b=map(pathlib.Path,sys.argv[2:4]);output=pathlib.Path(sys.argv[4])
         if sys.argv[1]=='measure':
-            measure.measure([a,a,b],output,['1edcbe5dbbc7af3300ffd117cf05191571e4395d']*2+
+            measure.measure([a,a,b],output,['08e24f046619e792455c3634371ab32b3fe4a909']*2+
                             [subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()])
         else:
             data=json.loads(output.read_text());measure.verify([a,a,b],data)

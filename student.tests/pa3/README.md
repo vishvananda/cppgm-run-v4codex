@@ -32,9 +32,9 @@ support equivalent-output comparisons to future frozen implementations.
 No speedup is claimed against the nonfunctional PA3 stub. `report.py` accepts
 completed campaign directories, verifies frozen provenance, recomputes paired
 results and renders all measurements. [performance.md](performance.md) retains
-the original 168 observations at `c0bb94df8`; the final comparison is in
+the original 168 observations at `7759f9b5e`; the final comparison is in
 [final-audit-performance.md](final-audit-performance.md). For a comparison,
-`report.py --baseline-revision c0bb94df8 --output <report> <campaigns...>` also
+`report.py --baseline-revision 7759f9b5e --output <report> <campaigns...>` also
 verifies A's source hashes against git and enforces the acceptance budgets.
 
 The 4/16 MiB repeated workload covers mixed signs/types, character literals,

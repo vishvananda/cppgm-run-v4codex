@@ -1,8 +1,8 @@
 # PA7 final plan and ledger
 
 Target: **PA7 full-stage**. Phase: **complete**.
-Stage base commit: `14f1d402fe54e9d2fe5cc9a557b1bddde7ac10fe`.
-Last reviewed commit: `04b97523a`.
+Stage base commit: `c02f4ea09653422aa87156c33defbea28a08cb76`.
+Last reviewed commit: `9cceb7913`.
 Entry: **0/186**. Final: **186/186**; PA1–7 **684/684**, **7/7 stages**.
 
 ## Final Spec Alignment
@@ -18,7 +18,7 @@ encoding are N/A at PA7.
 | Completed work | Authoritative evidence |
 | --- | --- |
 | Spec/handout/history and whole-stage architecture | All implementation handoffs since the PA6 base reviewed independently; source/fact/ownership traces in the audit. |
-| Correctness and semantic handoff fixes | `a6dc84a4a`: value/target identity, conversions, arithmetic/cv ranking, constants, pointer/cast legality, control scopes and unevaluated demand. `04b97523a`: cast/builtin forms stay on their originating nodes. |
+| Correctness and semantic handoff fixes | `2fd1e8333`: value/target identity, conversions, arithmetic/cv ranking, constants, pointer/cast legality, control scopes and unevaluated demand. `9cceb7913`: cast/builtin forms stay on their originating nodes. |
 | Independent validation | 63 new probes (pre-audit binary fails 49), original 29 plus multi-TU isolation, expanded typed API, ASan/UBSan/leak checks and inherited personal/API checks pass. Rejections require exit 1; crashes or sanitizer reports do not count as valid rejection. |
 | Required exit gates | `make test-pa7` 186/186; `make test-report-through-pa7` 684/684; file audit 79 files passes on final source. |
 | Compiler cost and budgets | Complete fixed-corpus coverage plus a verified longer AST group and direct PA7 comparison. All 1,154 audit observations retained, including failed/superseded timing. |
@@ -45,8 +45,8 @@ optimization claim is made; all noise and telemetry overhead remain disclosed.
 
 ## Handoff ledger
 
-`c559848bd`, `75e512523`, `6690406f2`, `e5e777a65` and `5418551e9` were inspected,
+`c2837a0e6`, `ec0c55093`, `ec6b78425`, `d5ab80eb4` and `682532c07` were inspected,
 not accepted as independent proof. Their remaining ownership defects are fixed
-in `a6dc84a4a` and `04b97523a`. The final evidence commit records the architecture,
+in `2fd1e8333` and `9cceb7913`. The final evidence commit records the architecture,
 63 independent probes, full validation and all timing observations. No earlier
 PA7 handoff remains unaudited and no PA7 work remains. No advance to PA8 occurred.

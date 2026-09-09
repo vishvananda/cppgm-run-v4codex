@@ -17,7 +17,7 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 p = argparse.ArgumentParser()
 p.add_argument('--baseline', required=True)
-p.add_argument('--baseline-commit', default='df7dbb00a')
+p.add_argument('--baseline-commit', default='2b19ba07a')
 p.add_argument('--candidate', default=str(ROOT / 'dev/abimangle'))
 p.add_argument('--directory', default='/tmp/pa9-evidence/performance')
 p.add_argument('--report', default=str(ROOT / 'student.tests/pa9/performance.json'))

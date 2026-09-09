@@ -1,8 +1,8 @@
 # PA6 final plan and ledger
 
 Target: **PA6 full-stage**. Phase: **complete**.
-Stage base: `9249196518f45492822fb2e3da4eb5d82af0ed13`.
-Last reviewed implementation: `85011bf5a`.
+Stage base: `0dc05603e6ba9f136d9f2d0ac470c169c43aaceb`.
+Last reviewed implementation: `b3f468fdf`.
 Entry: 0/105. Final code: PA6 **105/105**, PA1–6 **498/498**.
 
 ## Final Spec Alignment
@@ -21,7 +21,7 @@ these typed facts and establish their own legality, work and code-growth bounds.
 
 ## Findings and changes
 
-`85011bf5a` closes the independent findings across their owners:
+`b3f468fdf` closes the independent findings across their owners:
 
 - One alias declaration path and canonical nested function types, retaining
   declaration source forms and object array-completion views.
@@ -61,13 +61,13 @@ Inherited PA5 personal checks pass: 10 core, 15 extended, 19 audit cases.
 
 | Commit / handoff | Independent review outcome |
 | --- | --- |
-| `f6c4ddf33` | Baseline marker and initial dispatcher-stub failures reviewed. |
-| `5749f43b4` | All seven semantic source owners, graph extension, type construction and driver reviewed. |
-| `78df00b67` | Anchored lookup, enum transitions, signature/constant caches and class layout traced. |
-| `3f6de92f5` | Body queue intervals, declaration points and definition identities rechecked; missing function-try and statement scope paths corrected. |
-| `1edcbe5db` | Class-only demand arena and packed records reviewed; no language fact removed. |
-| `15c7f1fcd` | Historical performance verifier rerun using rebuilt, hash-identical baseline binaries and the retained checkpoint binary. |
-| `85011bf5a` | Independent fixes and 24 added behavior cases, expanded identity API, edge benchmark and stronger performance verifier committed. |
+| `590054d3f` | Baseline marker and initial dispatcher-stub failures reviewed. |
+| `00cb86a9f` | All seven semantic source owners, graph extension, type construction and driver reviewed. |
+| `b4f294109` | Anchored lookup, enum transitions, signature/constant caches and class layout traced. |
+| `0ebaeb91c` | Body queue intervals, declaration points and definition identities rechecked; missing function-try and statement scope paths corrected. |
+| `08e24f046` | Class-only demand arena and packed records reviewed; no language fact removed. |
+| `604635650` | Historical performance verifier rerun using rebuilt, hash-identical baseline binaries and the retained checkpoint binary. |
+| `b3f468fdf` | Independent fixes and 24 added behavior cases, expanded identity API, edge benchmark and stronger performance verifier committed. |
 | Final evidence | Original 20-workload and added 2-workload frozen campaigns pass every verifier; both required exit gates pass; final audit/evidence committed and worktree checked clean. |
 
 No earlier handoff remains unaudited. Remaining PA6 work: **none**. Final

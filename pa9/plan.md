@@ -1,8 +1,8 @@
 # PA9 compact plan and audit ledger
 
 Target: **PA9 full-stage**; phase: **complete**.
-Stage base: `affdafd23213da497d2946cae83df02d7a41ba7a`.
-Independently reviewed through: `5aad60656`.
+Stage base: `2419a3dd943352a4e959d26bdf519d7441afe19d`.
+Independently reviewed through: `0e2fcf0ff`.
 Original implementation, checkpoint repairs, serializer, telemetry and evidence
 handoffs have all been reviewed from their source and commit changes.
 
@@ -37,7 +37,7 @@ instantiation, machine optimization or object emission.
   20k iterative modifiers remain. The full suite passes ASan/UBSan with leaks
   enabled; no signals/timeouts or sanitizer reports remain in these checks.
 
-Final source `5aad60656` passed:
+Final source `0e2fcf0ff` passed:
 
 - `make test-pa9`: **111/111**.
 - `make test-report-through-pa9`: **904/904, 9/9 stages**.
@@ -79,14 +79,14 @@ repairs do not claim executable-runtime improvement.
 
 | Commit | Reviewed result |
 | --- | --- |
-| `7442a3192` | Stage-base plan and original review markers. |
-| `df7dbb00a` | First correct typed encoder and all required behavior groups. |
-| `f6552f8d1` | Sparse substitutions, linear modifiers, canonical tagged templates, indices, shape, serializer and telemetry. |
-| `ea87f4ba7` | Serializer code-growth repair and deep roundtrips. |
-| `6ec119239` | Checkpoint audit/plan, all-stage validation and controlled performance evidence; independently reviewed here. |
-| `fc21b71f3` | Frozen independent audit protocol and unchanged budgets. |
-| `ad9c2c907` | Whole-owner canonicalization, validity, recursion, emission and serializer repairs with explicit tests. |
-| `5aad60656` | Final malformed-prefix guard and retained preliminary A/B evidence. |
+| `a65da9d25` | Stage-base plan and original review markers. |
+| `2b19ba07a` | First correct typed encoder and all required behavior groups. |
+| `06c5d9bf4` | Sparse substitutions, linear modifiers, canonical tagged templates, indices, shape, serializer and telemetry. |
+| `b43bc1ff7` | Serializer code-growth repair and deep roundtrips. |
+| `8195487d1` | Checkpoint audit/plan, all-stage validation and controlled performance evidence; independently reviewed here. |
+| `3dcf74a98` | Frozen independent audit protocol and unchanged budgets. |
+| `f2353211e` | Whole-owner canonicalization, validity, recursion, emission and serializer repairs with explicit tests. |
+| `0e2fcf0ff` | Final malformed-prefix guard and retained preliminary A/B evidence. |
 | Final evidence commit | Consolidated Spec Alignment, all findings, frozen final measurements, reproduction instructions and fresh exit verification. |
 
 No earlier implementation, contract fixture, reference, harness or attribution

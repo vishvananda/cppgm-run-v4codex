@@ -1,8 +1,8 @@
 # PA5 final plan and audit ledger
 
 Target: **PA5 full-stage**. Phase: **complete; independent final audit passed**.
-Stage base: `a27ec8877221e4d9acea5f2f63b97855cc0fd365`.
-Last independently reviewed implementation: `93f066513`.
+Stage base: `f8ec565f979dbd43556b17b4784ffed610304622`.
+Last independently reviewed implementation: `f0a0f614a`.
 Entry: **0/188**. Current course result: **188/188**, through report **393/393**.
 
 ## Final Spec Alignment
@@ -23,12 +23,12 @@ No PA5 behavior group or unaudited handoff remains.
 
 ## Findings and changes
 
-- `7c7fd4b13`: correct parameter/enum/control category lifetimes; consistent
+- `9cfce7949`: correct parameter/enum/control category lifetimes; consistent
   qualified/import lookup and namespace identities; target scopes for every
   typedef declarator; structured for declaration conditions; function/object
   declarator classification; cross-file string source anchors; unnamed-pack
   child-list integrity; working optional name/scope counters.
-- `93f066513`: remove optional indentation reuse after an isolated frozen
+- `f0a0f614a`: remove optional indentation reuse after an isolated frozen
   comparison failed to beat A/A noise in both blocks or improve peak RSS.
   Candidate and control datasets remain committed evidence; their timings are
   not assigned to final source.
@@ -41,8 +41,8 @@ input/depth <6x wall and <5x RSS +1 MiB. Delimiters get one visit/token, nested
 angle work <2x tokens, and relevant name/scope/AST work must scale within the
 fixed envelope. No optimization-driven AST or output growth is permitted.
 
-Frozen A: `924ba7dc6` (same implementation binary as `b19de66e0`). Final B:
-`93f066513`. Fixed inputs cover declarations, templates, nested depth, classes,
+Frozen A: `7e8d10bf2` (same implementation binary as `8365a1124`). Final B:
+`f0a0f614a`. Fixed inputs cover declarations, templates, nested depth, classes,
 loops, calls, arrays and floating expressions. Use four primary-file repetitions
 per process, eight for nested, to dominate startup. Measure ordinary compilation
 with CPU affinity, two A/A pairs, B/B and two ABBA blocks; retain eight startup
@@ -61,11 +61,11 @@ Generated-program runtime/text and actual self-hosting are **N/A at PA5**.
 
 | Commit/check | Result / disposition |
 | --- | --- |
-| `e3953bf8f` | Stage baseline and initial plan reviewed |
-| `a0adc0d0b` | Cursor, graph, parser and driver foundation reviewed |
-| `262b0b61f` | Remaining scoped syntax groups and frozen pre-index A reviewed |
-| `b19de66e0`, `924ba7dc6` | Prediction/fact handoffs and completion ledger independently reconstructed; old performance hashes/protocol reverified |
-| `7c7fd4b13`, `93f066513` | Full ownership fixes and profitability decision reviewed |
+| `56944a2bc` | Stage baseline and initial plan reviewed |
+| `d5e52d04d` | Cursor, graph, parser and driver foundation reviewed |
+| `6d67335c1` | Remaining scoped syntax groups and frozen pre-index A reviewed |
+| `8365a1124`, `7e8d10bf2` | Prediction/fact handoffs and completion ledger independently reconstructed; old performance hashes/protocol reverified |
+| `9cfce7949`, `f0a0f614a` | Full ownership fixes and profitability decision reviewed |
 | Course/through | Fresh PA5 188/188 and root 393/393, five stages pass |
 | File audit | 62 files pass |
 | Personal | PA5 core 10, extended 15, audit 19; PA2 316 (including 7,062 integer cases), PA4 168 pass |

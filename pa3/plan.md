@@ -1,7 +1,7 @@
 # PA3 consolidated plan and final audit ledger
 
-Stage base: `dddda5eec41799b1e45b39e896c3a6f3da1c5a3b`.
-Independent audit entry: `c0bb94df8` (clean); last implementation: `f0b92212e`.
+Stage base: `24b463aa11ad545f0edfd6b810fc2bb70d06a2bb`.
+Independent audit entry: `7759f9b5e` (clean); last implementation: `bbf55bd7a`.
 Target: **PA3 full-stage**, phase: **final audit**. All work groups complete.
 The stage began at 0/20; final PA3 is 20/20 and through-PA3 is 100/100.
 
@@ -28,7 +28,7 @@ requirements, with no claim of implementation or generated-code improvement.
 
 ## Findings and changes
 
-`f0b92212e` fixes the ownership defect found at the PA3 → PA2 decoder boundary:
+`bbf55bd7a` fixes the ownership defect found at the PA3 → PA2 decoder boundary:
 PA3 used to construct floating values and intern rejected numeric suffix names.
 The shared decoder now has an explicit numeric domain; PA2 keeps its complete
 behavior. The new allocation/name-retention regression failed on the original
@@ -41,7 +41,7 @@ harness, timeout or coverage was changed; no grammar/arithmetic defect remained.
 [Final evidence](../student.tests/pa3/final-audit-performance.md) retains **324**
 observations from three serial frozen A/B campaigns, each with nine fixed inputs,
 two A/A pairs and two ABBA blocks. A is the audited completion binary; B is
-`f0b92212e`, both at identical ordinary flags. All outputs and hashes agree.
+`bbf55bd7a`, both at identical ordinary flags. All outputs and hashes agree.
 Floating-rejection paired latency improves 37.3–40.4%; suffix rejection improves
 18.4–21.2%. The first suffix campaign is inconclusive against its 31.11% A/A
 excursion; the other two confirm gains beyond noise. Every sample is retained.
@@ -66,13 +66,13 @@ checks keep their original defaults. Diff/provenance checks pass.
 
 ## Handoff ledger
 
-- `bc1a3f303`: recorded stage baseline and streaming plan before implementation.
-- `e8cf198c7`: implemented all PA3 language groups; 20 → 0 failures, prior 80/80.
-- `4314a6eb3`: independent semantic, deep-stack, identity and allocation checks.
-- `c0bb94df8`: prior audit, report renderer and 168 frozen performance samples.
+- `4116d5f2e`: recorded stage baseline and streaming plan before implementation.
+- `c07b1e7db`: implemented all PA3 language groups; 20 → 0 failures, prior 80/80.
+- `35f2d561e`: independent semantic, deep-stack, identity and allocation checks.
+- `7759f9b5e`: prior audit, report renderer and 168 frozen performance samples.
   This handoff had not had an independent audit; all its sources, reports,
   manifests, observations and hashes were reviewed and recomputed at entry.
-- `f0b92212e`: independent architecture finding fixed across both decoder and
+- `bbf55bd7a`: independent architecture finding fixed across both decoder and
   consumer; regression and inherited behavior checked before committing.
 - Final consolidation: extended fixed benchmarks, verified A/B report, noise
   disclosure, spec ownership/profitability review and fresh exit checks. Prior

@@ -2,8 +2,8 @@
 
 Scope: `pa3/README.md`, `spec.md` as applicable to a controlling-expression
 frontend, and the requested full-stage gates. Independent entry HEAD:
-`c0bb94df8`, clean, on 2026-09-07. Read the full stage history (`bc1a3f303`,
-`e8cf198c7`, `4314a6eb3`, `c0bb94df8`), handout, spec, testing policy, plan,
+`7759f9b5e`, clean, on 2026-09-07. Read the full stage history (`4116d5f2e`,
+`c07b1e7db`, `35f2d561e`, `7759f9b5e`), handout, spec, testing policy, plan,
 and actual PA1 cursor/identity, PA2 scalar, PA3 evaluator/value/CLI sources.
 The prior goal turn was progress: committed implementation and retained
 validation existed. Reused green status was not accepted as final proof.
@@ -75,7 +75,7 @@ the suffix even though the entire number was invalid in this consumer. Those
 identities remained in the TU table until process exit. The new allocation and
 name-retention API check failed on the reviewed original implementation.
 
-`f0b92212e` repairs the full owning path: `NumberDomain::integral` is an explicit
+`bbf55bd7a` repairs the full owning path: `NumberDomain::integral` is an explicit
 request to the shared numeric decoder, selected by `PPExpressionEvaluator`.
 Integer grammar, target type selection and overflow checks remain shared.
 Unsupported numeric domains return the existing compact invalid result before
@@ -115,7 +115,7 @@ Ordinary 4/16 MiB final medians are 0.440050/1.743335 s, 8,028/20,320 KiB,
 3.961673x scaling. Generated executable runtime and text size are N/A.
 
 The report verifies both frozen binaries, all input/output and harness hashes,
-B's build-source hashes against the current tree, and A's against `c0bb94df8`.
+B's build-source hashes against the current tree, and A's against `7759f9b5e`.
 The original 168 telemetry observations were independently recomputed before
 the fix and remain archived in `performance.md`; they do not describe final B.
 Untimed hash-launch RSS can inherit the Python parent's high-water mark; only
@@ -152,6 +152,6 @@ the separately launched `/usr/bin/time` measurements establish peak RSS here.
   decoder's explicit domain is the only inherited implementation change.
 
 `plan.md` consolidates the reviewed handoffs, including the previously unaudited
-`c0bb94df8` evidence/renderer changes and `f0b92212e` ownership fix. Final
+`7759f9b5e` evidence/renderer changes and `bbf55bd7a` ownership fix. Final
 plan/evidence and clean-worktree checks close this audit. There is no incomplete
 language group, unaudited PA3 handoff or related work deferred to the next PA.

@@ -1,0 +1,347 @@
+{
+  "reason": "PA1–9 rebased onto the clean v4 assignments export; compiler dev trees are identical at every mapped commit. Raw historical measurements and Ralph trajectories retain their original IDs.",
+  "oldAssignmentsBase": "05cab5a6c54d3c07cc31cbdb16196d060ed32c5f",
+  "cleanAssignmentsBase": "8b25f727e4c6d7dca11b6acbd4a67965a62937cf",
+  "commits": [
+    {
+      "old": "1b05951a54c7803f3ac1a1db87b7213ec2b426f1",
+      "new": "f6a53056a0dac62ac05aa3b3684e362edb65c071",
+      "subject": "Add v4codex architecture specification and file audit"
+    },
+    {
+      "old": "fee23cc04586c51c526ea906eb822ed7d6949e4f",
+      "new": "5b69ae0d5fdd5a20db3cadc0f03520abf480a5a5",
+      "subject": "Record PA1 architecture, baseline and review markers"
+    },
+    {
+      "old": "a031633433f88063ac2e3e4a355b46b9e946b4b7",
+      "new": "e5c65b70cf8ea718f79a32d9a9370b8b3c8bb1d4",
+      "subject": "Implement streaming PA1 translation and preprocessing tokens"
+    },
+    {
+      "old": "78a0872d6abb41de807475b677b24e227512b15a",
+      "new": "a3abcf619e62edd3f9287b1aad27f7182d6c0280",
+      "subject": "Close PA1 EOF and escaped-UCN boundaries with cursor property checks"
+    },
+    {
+      "old": "dccd027f1b2e5312a0ed3c551635b89ac9b6d8b2",
+      "new": "79b74e688d67720ab07f561836836c71926d7e32",
+      "subject": "Record PA1 validation and frozen compiler performance evidence"
+    },
+    {
+      "old": "29e95571f4678984c8e8a2796443baf563ee51cb",
+      "new": "762ae8f247a5e76879a03ccd6893c1a0a6e66c16",
+      "subject": "Avoid PA1 identifier-table growth on completed name lookups"
+    },
+    {
+      "old": "be4bff26fcc81762196d29d4f0b0c59a20110c9d",
+      "new": "023522e7ca2fc58d633cf9912bbb624574a7943c",
+      "subject": "Consolidate PA1 final architecture audit and controlled performance evidence"
+    },
+    {
+      "old": "85d89e23edc3285dd0f3745d21b4104a7ec36472",
+      "new": "d9370734ff6483955d07879bc7e0e8bbaf3c8a2e",
+      "subject": "Plan PA2 streaming post-token implementation and evidence"
+    },
+    {
+      "old": "e08732384b2aa4fa41e99113a1dd248de816474c",
+      "new": "c097172bd6725f62615ee2e658c5e12208e0fa8f",
+      "subject": "Implement streaming PA2 classification and literal conversion"
+    },
+    {
+      "old": "ceaa2dd1b7eafbe5f5860e122f6bec6875c30c1f",
+      "new": "5aebf59cf15408a23767cc0a57cc61c20f3cfbfc",
+      "subject": "Validate PA2 boundaries and ownership; correct rejection telemetry"
+    },
+    {
+      "old": "93c5baabfdb4c2591b40188d2eba9e467a1a0b57",
+      "new": "b931a0ae781aadc6525190f1ec2dd3f69c19ae4b",
+      "subject": "Record PA2 full-stage completion and frozen performance evidence"
+    },
+    {
+      "old": "dddda5eec41799b1e45b39e896c3a6f3da1c5a3b",
+      "new": "24b463aa11ad545f0edfd6b810fc2bb70d06a2bb",
+      "subject": "Consolidate independent PA2 final audit and controlled performance evidence"
+    },
+    {
+      "old": "bc1a3f3035b58639d8db35f961f248f69838b6b3",
+      "new": "4116d5f2eec8db9a8fb577c6a7e2de31bee72341",
+      "subject": "Record PA3 stage baseline and streaming evaluator plan"
+    },
+    {
+      "old": "e8cf198c71ce8eb31f89a482d4d0857d11013a6d",
+      "new": "c07b1e7dbf1a8dd2fdd10151fe2ce5d8c0019738",
+      "subject": "Implement streaming PA3 controlling expressions and typed evaluation"
+    },
+    {
+      "old": "4314a6eb35f4671ac2ef3c7b77a79d8c221d2151",
+      "new": "35f2d561e9d01647e84c46c5e1c14490efdfe242",
+      "subject": "Add independent PA3 semantic, storage and performance validation"
+    },
+    {
+      "old": "c0bb94df8f6a37285995404101da0b66958c02c5",
+      "new": "7759f9b5e1587b7fe3d5e5f6124fa59635fe5cbc",
+      "subject": "Complete PA3 audit, performance evidence and handoff ledger"
+    },
+    {
+      "old": "f0b92212e97e545f7c1db39ad7cd43c28e59291f",
+      "new": "bbf55bd7aaf2ff639c84e624e70cfda9f540cf4e",
+      "subject": "Avoid unused numeric conversion facts in PA3 expressions"
+    },
+    {
+      "old": "a682ffe75533c8aed941f46f6131c9e8af22f93d",
+      "new": "468a935260306ffabdac9d9345c6578a529e835b",
+      "subject": "Consolidate independent PA3 audit and calibrated performance evidence"
+    },
+    {
+      "old": "babb8e9d2614b1a9fb3577541cd0e8120a727547",
+      "new": "7496be90363a09089d9188b62ff88945eff9cca5",
+      "subject": "Record PA4 streaming preprocessor plan and stage baseline"
+    },
+    {
+      "old": "28279a9d0f683de758d26a4327fa4bf8c83de753",
+      "new": "77bd7bc51adbcc2b042f7c382dcc8f847ee359f9",
+      "subject": "Implement PA4 streaming preprocessing, macros and directives"
+    },
+    {
+      "old": "c90cf1e62fe08d334f513aec16b6a5c0518dc9ab",
+      "new": "95dc4d4b678ba2e9c8d9bc4ad7aea2fba53dbbf0",
+      "subject": "Bound macro argument prescans with indexed slices and reusable storage"
+    },
+    {
+      "old": "957b47c37be6bcd81448cd78c5504c94151f2cdd",
+      "new": "965f7ba6e4232e363d2c393cc739eee799bc58c1",
+      "subject": "Avoid deferred argument work for parameterless macro invocations"
+    },
+    {
+      "old": "1af70fc0d0432165266fbc5faf99c4033edeb264",
+      "new": "5c200a4dfb8b2e6f17edfd2778d5f40d70889842",
+      "subject": "Preserve presumed locations when splitting literal operator suffixes"
+    },
+    {
+      "old": "60ef1b9dff2316213a26794c975b75a3749060c4",
+      "new": "695e607c3afb70dd00ca8b6806fa7312a7c2cb7d",
+      "subject": "Record PA4 completion audit and frozen performance evidence"
+    },
+    {
+      "old": "c558c57d2ad4d8b49fd43e38744027bacd2ee2ad",
+      "new": "6c1867c8b3e0bc69b88e10a78d127dffb3a9b200",
+      "subject": "Pool PA4 prescan frames and reuse depth-local argument buffers"
+    },
+    {
+      "old": "54f4824ac0d3f5fabcdeb92a44a76125f643182a",
+      "new": "e0b7bf8ab83125c301c43ab8160999186da79105",
+      "subject": "Reuse macro delimiter-index scratch and verify warmed allocations"
+    },
+    {
+      "old": "a27ec8877221e4d9acea5f2f63b97855cc0fd365",
+      "new": "f8ec565f979dbd43556b17b4784ffed610304622",
+      "subject": "Consolidate independent PA4 audit and calibrated final performance evidence"
+    },
+    {
+      "old": "e3953bf8f18a4e6b840d7ef07493f05abef41a71",
+      "new": "56944a2bc2cce0c597c0dfa3fa85ad80734b021b",
+      "subject": "Record PA5 baseline and structured parser implementation plan"
+    },
+    {
+      "old": "a0adc0d0bc72da60fe9aa3bfbdf5af7dc82c9154",
+      "new": "d5e52d04de2be48be99d9903e7f7134864e95f7f",
+      "subject": "Implement streaming PA5 syntax graph, parser and AST driver"
+    },
+    {
+      "old": "262b0b61f3548075a3ba68ccc29d8888c58b0c8e",
+      "new": "6d67335c17775320907589e6a5d4f0d1fb84a949",
+      "subject": "Complete PA5 scoped syntax disambiguation and all 188 course cases"
+    },
+    {
+      "old": "b19de66e072df52f998f0f06624a83eb815bc740",
+      "new": "8365a11248629d11361b699371977cf08359a2e8",
+      "subject": "Bound PA5 syntax prediction and retain verified source and literal facts"
+    },
+    {
+      "old": "924ba7dc651cdae781444cde65eec69df84e1046",
+      "new": "7e8d10bf235690e56074117e0afd6b330ea41b76",
+      "subject": "Close PA5 implementation ledger with full validation and performance evidence"
+    },
+    {
+      "old": "7c7fd4b13c0fe1e4cd306dfa55b7a9193280c652",
+      "new": "9cfce7949e35be3109069d1acdbe385d404551e0",
+      "subject": "Repair PA5 scope ownership and syntax graph handoffs found by final audit"
+    },
+    {
+      "old": "93f066513d3bda15f6fa4b39b5fd7f3ea5793161",
+      "new": "f0a0f614a09db048ea9b57c554591657f9705129",
+      "subject": "Drop PA5 indentation optimization without repeatable measured benefit"
+    },
+    {
+      "old": "9249196518f45492822fb2e3da4eb5d82af0ed13",
+      "new": "0dc05603e6ba9f136d9f2d0ac470c169c43aaceb",
+      "subject": "Consolidate independent PA5 audit and exact final performance evidence"
+    },
+    {
+      "old": "f6c4ddf33fd87209a03094baf6ff745ac2d9a604",
+      "new": "590054d3fe9fa3e49a89acddac4cb8b25d91e4f6",
+      "subject": "docs(pa6): record stage baseline and semantic implementation plan"
+    },
+    {
+      "old": "5749f43b47b6cac97e8e4f3b641e9a414c5c8e9d",
+      "new": "00cb86a9ff61b00600c56e6162f765f86d386366",
+      "subject": "feat(pa6): implement canonical scopes types and declaration analysis"
+    },
+    {
+      "old": "78df00b67e3f17ae233c47f2c99eec177be15661",
+      "new": "b4f2941091bc56b13cb05063ac60406014f4a388",
+      "subject": "fix(pa6): preserve lookup anchors and memoize completed semantic facts"
+    },
+    {
+      "old": "3f6de92f5a8cc5166ad342c75a9901cd08f747ca",
+      "new": "0ebaeb91c0adf7c7e04fefb12715cba06d8b64ea",
+      "subject": "fix(pa6): bind bodies at declaration points and retain definition identities"
+    },
+    {
+      "old": "1edcbe5dbbc7af3300ffd117cf05191571e4395d",
+      "new": "08e24f046619e792455c3634371ab32b3fe4a909",
+      "subject": "perf(pa6): move class demand state out of common entity records"
+    },
+    {
+      "old": "15c7f1fcd23fd3145b2ec0a611af28c78c64825a",
+      "new": "604635650c0a34cf2f0398c8ca1b5fd92b1126aa",
+      "subject": "docs(pa6): close full-stage validation and performance ledger"
+    },
+    {
+      "old": "85011bf5af5123ded09b87f3fa21110fb81a2e07",
+      "new": "b3f468fdf84152e1ed5cf52eedbb9b26bc5408c2",
+      "subject": "Fix PA6 identity and scope ownership gaps found by independent audit"
+    },
+    {
+      "old": "14f1d402fe54e9d2fe5cc9a557b1bddde7ac10fe",
+      "new": "c02f4ea09653422aa87156c33defbea28a08cb76",
+      "subject": "Consolidate final PA6 audit and frozen performance evidence"
+    },
+    {
+      "old": "c559848bd9dcbeffe6d77e452ca65ed9c066a69e",
+      "new": "c2837a0e65f4012a7ac9fef76d20911747dd5685",
+      "subject": "Record PA7 stage baseline and semantic implementation plan"
+    },
+    {
+      "old": "75e512523df61aebd1e8cd041c005e22f8a74ba4",
+      "new": "ec0c5509342ce417443bcf58b1e7c299eb5d5346",
+      "subject": "Implement PA7 procedural expressions conversions calls and statement semantics"
+    },
+    {
+      "old": "6690406f2ca4f476eab1ec5376fe3fa4b04837d1",
+      "new": "ec6b78425561a481d0685771e4056288fb8893c1",
+      "subject": "Complete PA7 member identities demand and template address selection"
+    },
+    {
+      "old": "e5e777a65077b93fb17fd1f839be2ca0b2a42b16",
+      "new": "d5ab80eb45bd79b0ca156eb24b168319459bfce5",
+      "subject": "Cache canonical type dependence and record PA7 architecture audit"
+    },
+    {
+      "old": "5418551e9dfb0506872c30a229232b6a7d47c972",
+      "new": "682532c0713a7616cc4a7732b911e2e1dde54f83",
+      "subject": "Record PA7 full-stage validation and final frozen performance evidence"
+    },
+    {
+      "old": "a6dc84a4af6763c2034b02d1086109bae69d7465",
+      "new": "2fd1e833356d6e953a415ab50676db6abbe0f8b0",
+      "subject": "Fix PA7 value identities conversions and control semantics from full-stage audit"
+    },
+    {
+      "old": "04b97523a6e392332c5862b53a7370fa631f7f7f",
+      "new": "9cceb791344b1d3990a821d5f01c3dc447d75c6b",
+      "subject": "Keep PA7 cast and builtin forms owned by their source expressions"
+    },
+    {
+      "old": "7e4297484f117980a3f1d55f43932d6bda3a8cc1",
+      "new": "2f8c201f5ac6a242e38119bd54b2c62da9a7e7b6",
+      "subject": "Consolidate independent PA7 audit and controlled performance evidence"
+    },
+    {
+      "old": "da047b4a9710e477e5fce908659c0d4079cd42a5",
+      "new": "69f031998fd52d0a436d401d2f43e2f08f1f831e",
+      "subject": "Plan PA8 typed LowIR implementation and validation"
+    },
+    {
+      "old": "66167cf72bb44a12d458f99aff51d187c5df62c1",
+      "new": "ef37a2c9e25a60ba413c99f49aaf61ebe132c8b8",
+      "subject": "Implement typed LowIR model, adapters, validation and PA8 exercises"
+    },
+    {
+      "old": "01d39a2f6f053702038a94b10e59527f0d20d576",
+      "new": "0152284b7186c3efd6deb49b27f6de76342a13a6",
+      "subject": "Harden LowIR construction and literal fidelity with independent checks"
+    },
+    {
+      "old": "7313af05a92ea6c106e5d3399750ea98ac860469",
+      "new": "7cb3f718e728da84188b18416382c7d3eed3604b",
+      "subject": "Record PA8 ownership audit and compiler/native performance evidence"
+    },
+    {
+      "old": "bc2cd043d395c2078fc2e5c1f8d7ba631697bbce",
+      "new": "f3f9c4176970a55808e2c748c9b1b06930e5a4be",
+      "subject": "Enforce LowIR phi handler rules and contiguous builder ownership"
+    },
+    {
+      "old": "2f21a26ac8ed3cba3c7b3a901822e508a1dd47db",
+      "new": "1d69e0d350ea36a4a33e4a3eba447e90385e2741",
+      "subject": "Freeze PA8 final audit benchmark protocol and provenance checks"
+    },
+    {
+      "old": "affdafd23213da497d2946cae83df02d7a41ba7a",
+      "new": "2419a3dd943352a4e959d26bdf519d7441afe19d",
+      "subject": "Consolidate independent PA8 final audit and controlled performance evidence"
+    },
+    {
+      "old": "7442a3192c32eecce7c0577abebcaca6c1fb0c97",
+      "new": "a65da9d25c570caab22b45d97e47f9041e3bf422",
+      "subject": "pa9: record stage base and grouped implementation plan"
+    },
+    {
+      "old": "df7dbb00a795b57c701b8f4dfb6cd2e46d600cc7",
+      "new": "2b19ba07ace6757cf1bcb2bbe844041ef3e30b63",
+      "subject": "pa9: implement canonical typed ABI facts and Itanium name encoding"
+    },
+    {
+      "old": "f6552f8d1fd8ed5f0c59a80d25e1c21c7ebc4909",
+      "new": "06c5d9bf416c4a65e71254d597c5e1237c5b9f15",
+      "subject": "pa9: bound graph work and complete typed fact roundtrips and telemetry"
+    },
+    {
+      "old": "ea87f4ba7aa4f0d8d73fc4fbb9546e1606aab2bf",
+      "new": "b43bc1ff739791fa8781ceed1fe36ae625dcbc9c",
+      "subject": "pa9: reduce serializer code growth and support deep fact roundtrips"
+    },
+    {
+      "old": "6ec1192397b56ae3d14542f2e68bb4fadd5795b0",
+      "new": "8195487d1bba605cdd4750fb8c6db3c945e4e8c2",
+      "subject": "pa9: record full-stage validation and frozen performance evidence"
+    },
+    {
+      "old": "fc21b71f3260c399cd93e6da59aa1d70f6459dac",
+      "new": "3dcf74a98646a11b2e8b0123d9eb53a9c74cec64",
+      "subject": "pa9: freeze independent final audit protocol and budgets"
+    },
+    {
+      "old": "ad9c2c90770cec6e9f07a0e6e35aa548d24e7ce7",
+      "new": "f2353211e9da3ada84df3c76d761cbbc01b393df",
+      "subject": "pa9: enforce canonical ABI facts and bounded complete encoding paths"
+    },
+    {
+      "old": "5aad606566f36c1a59bc19aab011f5b1cbeb6e93",
+      "new": "0e2fcf0ff8045476084030632df08d0266af9456",
+      "subject": "pa9: reject completed template prefixes before tag normalization"
+    },
+    {
+      "old": "1fac6c53ad204b482c8e9cd5354d646b26f50359",
+      "new": "f1a5c3cfd59355cf2cecdff9fed38747862d5457",
+      "subject": "pa9: consolidate independent final audit and controlled performance evidence"
+    },
+    {
+      "old": "bbbd8bf6a89456f0040d2755c8dac8bfd319063c",
+      "new": "c9bb9f0b7db5c082770c486c97b9b29c3d6d5b48",
+      "subject": "Clarify stage-scoped performance acceptance"
+    }
+  ]
+}

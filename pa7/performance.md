@@ -1,16 +1,16 @@
 # Final PA7 compiler performance evidence
 
-Final implementation: `04b97523a` (semantic corrections in `a6dc84a4a`, then the
+Final implementation: `9cceb7913` (semantic corrections in `2fd1e8333`, then the
 final comma-form ownership fix). All measurements use frozen binaries, flags,
 source inputs and output checks. No compiler speedup or generated-code runtime
 improvement is claimed.
 
 | Binary | Source | SHA-256 | Host .text bytes |
 | --- | --- | --- | --- |
-| PA6 baseline | `14f1d402f` | `70571a477bac3857ec5c3988fe8798fa2a15b7db3cb89419344ee5964a27c075` | 277702 |
-| Pre-audit PA7 | `5418551e9` / implementation `e5e777a65` | `45890eedc6558192b9c60ca5343d005185bf9ceafe78f343912f31c6868664d5` | 349894 |
-| Audited PA7 core | `a6dc84a4a` | `8cdf089eec0ea09769eec5e858661e665be8c17e41fb92157a32d3e946e6d82c` | 358790 |
-| Final PA7 | `04b97523a` | `4e6db3301eec4318c11776e2bac06bd6b70593e0b2f8bcf2c4cc950cd815c498` | 358790 |
+| PA6 baseline | `c02f4ea09` | `70571a477bac3857ec5c3988fe8798fa2a15b7db3cb89419344ee5964a27c075` | 277702 |
+| Pre-audit PA7 | `682532c07` / implementation `d5ab80eb4` | `45890eedc6558192b9c60ca5343d005185bf9ceafe78f343912f31c6868664d5` | 349894 |
+| Audited PA7 core | `2fd1e8333` | `8cdf089eec0ea09769eec5e858661e665be8c17e41fb92157a32d3e946e6d82c` | 358790 |
+| Final PA7 | `9cceb7913` | `4e6db3301eec4318c11776e2bac06bd6b70593e0b2f8bcf2c4cc950cd815c498` | 358790 |
 
 The PA6 baseline was rebuilt independently and matched its saved hash exactly;
 the pre-audit PA7 binary also matched the saved final record. The saved

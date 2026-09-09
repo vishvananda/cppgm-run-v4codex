@@ -1,10 +1,10 @@
 # PA1 final architecture audit
 
 Scope: PA1 full stage, translation phases 1–3 and the explicit `pptoken` view.
-Audited baseline: `dccd027f1` (implementation `78a0872d6`), independently read
-from the working tree and the changes since `1b05951a5`. The incoming clean
+Audited baseline: `79b74e688` (implementation `a3abcf619`), independently read
+from the working tree and the changes since `f6a53056a`. The incoming clean
 status and 54/54 checkpoint were revalidated; no running job needed continuation.
-The final implementation is the identifier-table fix in `29e95571f`; no compiler
+The final implementation is the identifier-table fix in `762ae8f24`; no compiler
 changes follow it in the accompanying record/benchmark consolidation.
 
 ## Final Spec Alignment
@@ -130,11 +130,11 @@ No course fixture, reference, harness contract or expected output was changed.
 
 | Handoff since the previous marker | Independent disposition |
 | --- | --- |
-| `fee23cc04`: initial architecture and 0/54 baseline | Read alongside the actual baseline and assignment contract; superseded by the final architecture map. |
-| `a03163343`: all shared PA1 implementation | Read every new source/header, entry-point replacement and source-list registration. Traced representative paths above. |
-| `78a0872d6`: EOF, BOM and escaped-UCN boundaries | Read the changes and reran the independent identity/location, syntax and sanitizer checks. |
-| `dccd027f1`: frozen performance evidence and checkpoint | Verified the archived binary equals the incoming binary by SHA-256; reviewed protocol, observations, outputs, flags and input hashes. Extended coverage and corrected the scope of the memory envelope. |
-| `29e95571f`: final implementation changes | Table-hit growth fix, telemetry and resource cases reviewed and validated. The following consolidation adds benchmark controls and audit records, with no compiler change. No unaudited PA1 handoff remains. |
+| `5b69ae0d5`: initial architecture and 0/54 baseline | Read alongside the actual baseline and assignment contract; superseded by the final architecture map. |
+| `e5c65b70c`: all shared PA1 implementation | Read every new source/header, entry-point replacement and source-list registration. Traced representative paths above. |
+| `a3abcf619`: EOF, BOM and escaped-UCN boundaries | Read the changes and reran the independent identity/location, syntax and sanitizer checks. |
+| `79b74e688`: frozen performance evidence and checkpoint | Verified the archived binary equals the incoming binary by SHA-256; reviewed protocol, observations, outputs, flags and input hashes. Extended coverage and corrected the scope of the memory envelope. |
+| `762ae8f24`: final implementation changes | Table-hit growth fix, telemetry and resource cases reviewed and validated. The following consolidation adds benchmark controls and audit records, with no compiler change. No unaudited PA1 handoff remains. |
 
 ## Performance and final validation
 

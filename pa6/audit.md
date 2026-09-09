@@ -1,9 +1,9 @@
 # PA6 independent final architecture audit
 
-Review boundary: stage base `9249196518f45492822fb2e3da4eb5d82af0ed13`
-through checkpoint `15c7f1fcd23fd3145b2ec0a611af28c78c64825a`, plus the final
+Review boundary: stage base `0dc05603e6ba9f136d9f2d0ac470c169c43aaceb`
+through checkpoint `604635650c0a34cf2f0398c8ca1b5fd92b1126aa`, plus the final
 corrections below. All stage implementation commits were inspected, including
-`5749f43b4`, `78df00b67`, `3f6de92f5`, and `1edcbe5db`; the checkpoint ledger did
+`00cb86a9f`, `b4f294109`, `0ebaeb91c`, and `08e24f046`; the checkpoint ledger did
 not substitute for tracing the current source. PA6 emits AST/types. Template
 instantiation, expression resolution, LowIR, native optimization, MIR/ELF,
 generated executable runtime/text and self-hosting have no production surface

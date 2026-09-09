@@ -8,10 +8,10 @@ not proof. The previous goal turn supplied a completed implementation; this
 review made progress through source reconstruction, new failing probes, fixes
 and current validation.
 
-Stage base: `a27ec8877`. Implementation handoffs independently reviewed:
-`e3953bf8f` (plan), `a0adc0d0b` (cursor/graph/parser/driver), `262b0b61f`
-(remaining syntax), `b19de66e0` (prediction indexes and retained facts), and
-`924ba7dc6` (completion ledger). Correctness implementation: `7c7fd4b13`; final source: `93f066513`
+Stage base: `f8ec565f9`. Implementation handoffs independently reviewed:
+`56944a2bc` (plan), `d5e52d04d` (cursor/graph/parser/driver), `6d67335c1`
+(remaining syntax), `8365a1124` (prediction indexes and retained facts), and
+`7e8d10bf2` (completion ledger). Correctness implementation: `9cfce7949`; final source: `f0a0f614a`
 (removes the optional indentation change after isolated profitability testing).
 The final source change and both profitability paths were reviewed; no unaudited
 PA5 implementation handoff remains.
@@ -145,7 +145,7 @@ or code growth claim is made at this stage.
 The prior campaign's final binary hash was independently matched to frozen A
 and its 168 observations, input generator, output hashes, paired budgets and
 nested-work bounds reverified. It remains historical evidence. The final
-ordinary campaign at `93f066513` has 168 observations, eight startup probes,
+ordinary campaign at `f0a0f614a` has 168 observations, eight startup probes,
 24 separate phase/work runs and 28 ordinary/stats calibration observations.
 All hashes, exact outputs, protocols, startup ratios, budgets and scaling gates
 pass. Host text grows 2.36%; expression latency grows 1.07–1.64% and its largest
@@ -172,8 +172,8 @@ Current-state completion checks:
 - The legacy matching-binary verifier, final/candidate/isolation verifiers,
   standalone isolated-control rebuild/hash comparison and whitespace checks
   pass. No reference/fixture/harness/coverage/timeout changes are present.
-- Source fixes are committed as `7c7fd4b13`; the measured profitability rejection
-  is `93f066513`. This final evidence commit consolidates the plan/audit and
+- Source fixes are committed as `9cfce7949`; the measured profitability rejection
+  is `f0a0f614a`. This final evidence commit consolidates the plan/audit and
   all three independent datasets. No unreviewed handoff, known PA5 correctness,
   self-containment, timeout, file-audit, architecture or performance gate remains.
   Final repository status is checked after committing the evidence.

@@ -1,8 +1,8 @@
 # PA2 implementation plan
 
-Stage base commit: `be4bff26fcc81762196d29d4f0b0c59a20110c9d`
-Last reviewed commit: `93c5baabfdb4c2591b40188d2eba9e467a1a0b57`
-Last implementation change: `ceaa2dd1b7eafbe5f5860e122f6bec6875c30c1f`
+Stage base commit: `023522e7ca2fc58d633cf9912bbb624574a7943c`
+Last reviewed commit: `b931a0ae781aadc6525190f1ec2dd3f69c19ae4b`
+Last implementation change: `5aebf59cf15408a23767cc0a57cc61c20f3cfbfc`
 Target: **PA2 full-stage**. Baseline: 0/26; current: 26/26, through-PA2: 80/80.
 
 ## Final Spec Alignment and validation groups
@@ -50,20 +50,20 @@ and replaces the stale review marker without changing compiler behavior.
 
 ## Handoff ledger
 
-- `85d89e23e`: read instructions/spec/handout and PA1 ownership; verified clean HEAD
+- `d9370734f`: read instructions/spec/handout and PA1 ownership; verified clean HEAD
   and authoritative log. Entry checkpoint: no PA2 progress (stub, 26 failures);
   revalidation established implementation as the next safe action.
-- `e08732384`: all three language groups complete; first required run
+- `c097172bd`: all three language groups complete; first required run
   passes 26/26 and through-PA2 passes 80/80. File audit passes 35 files. The
   empty-character recovery policy is PA2-only; literal-operator splitting uses
   grammatical context and records physical suffix locations. Numeric escapes
   retain code-unit identity until final encoding. No course fixtures changed.
-- `ceaa2dd1b`: 316 personal cases, including 7,062 independent integer
+- `5aebf59cf`: 316 personal cases, including 7,062 independent integer
   values/types, encoding triples, long literals, physical locations and zero
   allocation calls in the warmed integer/character/string path. PA1's 64 personal
   cases, both API checks and all 80 course cases pass ASan/UBSan. Fixed counting
   of the second decoded element in invalid characters; token output unchanged.
-- `93c5baabf`: completion record and two frozen performance campaigns. Final
+- `b931a0ae7`: completion record and two frozen performance campaigns. Final
   audit independently recomputed all 168 historical observations and reviewed
   every handoff from the initial marker; its source/build/input hashes agree.
 - Independent final audit: reconstructed whole-stage source ownership and data

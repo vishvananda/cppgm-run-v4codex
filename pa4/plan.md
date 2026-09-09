@@ -1,8 +1,8 @@
 # PA4 final plan and audit ledger
 
-Stage base commit: `a682ffe75533c8aed941f46f6131c9e8af22f93d`
-Last reviewed commit: `54f4824ac0d3f5fabcdeb92a44a76125f643182a`
-Independent audit entry: `60ef1b9df`; target: **PA4 full-stage**; phase: **complete**.
+Stage base commit: `468a935260306ffabdac9d9345c6578a529e835b`
+Last reviewed commit: `e0b7bf8ab83125c301c43ab8160999186da79105`
+Independent audit entry: `695e607c3`; target: **PA4 full-stage**; phase: **complete**.
 Independent architecture review, fixes, benchmarks and all exit checks pass.
 No PA5 work is started.
 
@@ -21,10 +21,10 @@ handoff since PA3. No PA4 behavior group or related implementation is deferred.
 
 ## Findings and changes
 
-- `c558c57d2`: replace per-prescan task construction/destruction with an inline
+- `6c1867c8b`: replace per-prescan task construction/destruction with an inline
   root, stable 32-frame slabs and reusable argument/output buffers. Preserve
   slice addresses and clear invocation-local readiness/results after use.
-- `54f4824ac`: actual allocation interception found the remaining temporary
+- `e0b7bf8ab`: actual allocation interception found the remaining temporary
   delimiter-index stack; retain it with capture storage. The new assertion
   failed before this fix and passes after it. Add the full declaration trace.
 - Add reuse tests for empty/variadic arguments, counters, raw/expanded uses,
@@ -33,15 +33,15 @@ handoff since PA3. No PA4 behavior group or related implementation is deferred.
 
 ## Performance and budgets
 
-Budgets were fixed before each campaign (initial stage: `c90cf1e62`; independent
-pooling audit: the plan in `c558c57d2`): paired latency <=10% plus measured noise,
+Budgets were fixed before each campaign (initial stage: `95dc4d4b6`; independent
+pooling audit: the plan in `6c1867c8b`): paired latency <=10% plus measured noise,
 RSS <=15% plus 1 MiB, host text growth <=15%, fourfold input <6x time / <5x RSS.
 Require affected-workload benefit beyond noise in both blocks. Pipeline work
 retains <=3n captured tokens for n nested calls, once-per-used-argument prescan,
 O(maximum depth) frames, geometric buffers and <=128 KiB counter spelling.
 
 [Final evidence](../student.tests/pa4/final-audit-performance.md): frozen entry A
-`60ef1b9df` vs final B `54f4824ac`, eight fixed inputs, two A/A pairs, B/B,
+`695e607c3` vs final B `e0b7bf8ab`, eight fixed inputs, two A/A pairs, B/B,
 two ABBA blocks, equivalent outputs, 120 observations plus eight startup probes.
 The verifier recomputes every budget and checks the actual final binary hash.
 The [intermediate pooling campaign](../student.tests/pa4/performance-pooled.md)
@@ -72,8 +72,8 @@ work/storage; measured wall time establishes the optimization's benefit.
   checks (including zero warmed allocations), and all 105 course cases pass.
   Final ordinary through report, file audit, performance/hash verification and
   whitespace/fixture checks pass; intended source and audit changes are committed.
-- `babb8e9d2`, `28279a9d0`, `c90cf1e62`, `957b47c37`, `1af70fc0d`, `60ef1b9df`:
+- `7496be903`, `77bd7bc51`, `95dc4d4b6`, `965f7ba6e`, `5c200a4df`, `695e607c3`:
   all checkpoint handoffs independently reviewed, including directive ordering,
   slice ownership, parameterless boundaries and suffix locations.
-- `c558c57d2`, `54f4824ac`: cohesive full-path allocation fixes committed;
+- `6c1867c8b`, `e0b7bf8ab`: cohesive full-path allocation fixes committed;
   final audit/evidence consolidation closes the ledger with a clean worktree.

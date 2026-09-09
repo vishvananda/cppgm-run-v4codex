@@ -2,8 +2,8 @@
 
 Scope: **PA9 full-stage**, reconstructed from `spec.md`, the complete handout,
 `TESTING_AND_REFERENCES.md`, the local Itanium grammar, every stage commit
-`7442a3192`–`6ec119239`, and the implementation (not checkpoint conclusions).
-Final implementation: `5aad60656` (ownership repairs `ad9c2c907`). The audit also covers the previously
+`a65da9d25`–`8195487d1`, and the implementation (not checkpoint conclusions).
+Final implementation: `0e2fcf0ff` (ownership repairs `f2353211e`). The audit also covers the previously
 unaudited serializer, telemetry, performance and documentation handoffs.
 
 ## Final Spec Alignment

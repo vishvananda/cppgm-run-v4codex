@@ -1,9 +1,9 @@
 # PA4 independent final architecture audit
 
-Reviewed stage base `a682ffe75` through final implementation `54f4824ac` against
+Reviewed stage base `468a93526` through final implementation `e0b7bf8ab` against
 `spec.md`, `pa4/README.md`, `macros.md`, `directives.md`, the root testing guide,
 source sets, implementation sources and every PA4 stage commit. Entry was clean
-at `60ef1b9df`; its passing checkpoint was evidence to recheck, not the basis of
+at `695e607c3`; its passing checkpoint was evidence to recheck, not the basis of
 this architecture reconstruction. The previous goal turn made progress through
 committed implementation and validation. This audit does not advance to PA5.
 
@@ -82,11 +82,11 @@ next cursor call; names retain TU-stable IDs.
 1. **Hot task allocation:** the checkpoint's `deque<Task>` constructed and
    destroyed a large task and its child buffers for every argument prescan.
    Indexed slices fixed copying complexity but did not eliminate this churn.
-   `c558c57d2` replaces this with an inline root and stable slabs of 32 tasks,
+   `6c1867c8b` replaces this with an inline root and stable slabs of 32 tasks,
    reuses formal-argument slots, and swaps reusable child output buffers.
 2. **Remaining capture allocation:** an allocator-counting API assertion still
    failed after pooling. `ArgumentStorage::index` rebuilt its temporary delimiter
-   stack for every capture. `54f4824ac` retains this stack with its argument
+   stack for every capture. `e0b7bf8ab` retains this stack with its argument
    storage. The same assertion now passes with zero allocation calls during the
    third 20,000-deep invocation, after two warm-ups.
 3. **Evidence and handoff:** the old plan left its review marker at PA3 and did
@@ -137,7 +137,7 @@ validation results are recorded in the plan and linked performance report.
 ## Performance and validation
 
 [Final frozen evidence](../student.tests/pa4/final-audit-performance.md) compares
-`60ef1b9df` with `54f4824ac`: 120 workload observations plus eight startup probes,
+`695e607c3` with `e0b7bf8ab`: 120 workload observations plus eight startup probes,
 identical input/output hashes within each A/B group, and verified final binary
 hash. Nested latency falls 0.108902 → 0.094080 s, improving 12.35–13.90% in paired
 blocks against 3.94% noise; median RSS rises 236 KiB. Long chains regress
@@ -168,14 +168,14 @@ blocker remains; final status is clean.
 
 | Commit | Previously unaudited handoff now checked |
 | --- | --- |
-| `babb8e9d2` | Baseline/design and relevant shared phase boundaries. |
-| `28279a9d0` | Full macro/directive implementation, source ownership, live PA3 integration, location propagation and output adapter. |
-| `c90cf1e62` | Indexed argument slices, prescan task stack, transient spelling reuse and existing-work telemetry; task allocation defect fixed above. |
-| `957b47c37` | Parameterless close consumption preserves context intersection and requires no deferred argument/index work. |
-| `1af70fc0d` | Presumed literal-operator suffix locations survive raw, generated and replacement ownership paths. |
-| `60ef1b9df` | Completion assertions independently reconstructed; historical binaries/manifests/observations checked, not treated as architecture proof. |
-| `c558c57d2` | Stable frame/buffer reuse, state invalidation and whole-stage frozen performance comparison. |
-| `54f4824ac` | Retained delimiter scratch, real warmed allocation assertion and complete declaration/template spelling trace. |
+| `7496be903` | Baseline/design and relevant shared phase boundaries. |
+| `77bd7bc51` | Full macro/directive implementation, source ownership, live PA3 integration, location propagation and output adapter. |
+| `95dc4d4b6` | Indexed argument slices, prescan task stack, transient spelling reuse and existing-work telemetry; task allocation defect fixed above. |
+| `965f7ba6e` | Parameterless close consumption preserves context intersection and requires no deferred argument/index work. |
+| `5c200a4df` | Presumed literal-operator suffix locations survive raw, generated and replacement ownership paths. |
+| `695e607c3` | Completion assertions independently reconstructed; historical binaries/manifests/observations checked, not treated as architecture proof. |
+| `6c1867c8b` | Stable frame/buffer reuse, state invalidation and whole-stage frozen performance comparison. |
+| `e0b7bf8ab` | Retained delimiter scratch, real warmed allocation assertion and complete declaration/template spelling trace. |
 
 There is no deferred PA4 behavior group or unaudited PA4 handoff. Parsing,
 semantic template demand, hosted-header compatibility and native/executable

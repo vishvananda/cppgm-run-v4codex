@@ -1,9 +1,9 @@
 # PA2 final architecture audit
 
 Scope: **PA2 full stage**, through tokenization in translation phase 7.
-Independently reviewed the working tree at `93c5baabf`, all stage commits since
-`be4bff26f`, the handout, unchanged fixtures, `spec.md`, and the local N3485
-literal rules. The last implementation change is `ceaa2dd1b`. This final audit
+Independently reviewed the working tree at `b931a0ae7`, all stage commits since
+`023522e7c`, the handout, unchanged fixtures, `spec.md`, and the local N3485
+literal rules. The last implementation change is `5aebf59cf`. This final audit
 changes records only; the measured compiler remains byte-identical.
 
 The incoming checkpoint represents progress: its implementation, commits and
@@ -177,12 +177,12 @@ are registered for `posttoken`. Course fixtures and references are unchanged.
 
 | Commit since the previous review marker | Independent disposition |
 | --- | --- |
-| `85d89e23e`: plan and 0/26 baseline | Read against the actual inherited implementation and stage requirements. Superseded its stale review boundary in the final compact plan. |
-| `e08732384`: streaming PA2 and PA1 adapter changes | Read all shared source paths and registration; traced classification, numbers, characters, strings, lookahead and output. Fresh full-stage and inherited tests pass. |
-| `ceaa2dd1b`: personal checks, initial audit and counter fix | Verified second-element counting on rejected characters; reviewed and reran numeric, encoding, resource, identity/location and sanitizer checks. |
-| `93c5baabf`: completion/performance consolidation | Independently checked binary/build-source/harness/input identities, ordered samples, paired calculations and all budgets; fresh campaign uses the same compiler and seven frozen inputs. |
+| `d9370734f`: plan and 0/26 baseline | Read against the actual inherited implementation and stage requirements. Superseded its stale review boundary in the final compact plan. |
+| `c097172bd`: streaming PA2 and PA1 adapter changes | Read all shared source paths and registration; traced classification, numbers, characters, strings, lookahead and output. Fresh full-stage and inherited tests pass. |
+| `5aebf59cf`: personal checks, initial audit and counter fix | Verified second-element counting on rejected characters; reviewed and reran numeric, encoding, resource, identity/location and sanitizer checks. |
+| `b931a0ae7`: completion/performance consolidation | Independently checked binary/build-source/harness/input identities, ordered samples, paired calculations and all budgets; fresh campaign uses the same compiler and seven frozen inputs. |
 
-No PA2 handoff through `93c5baabf` remains unaudited. This final record and the
+No PA2 handoff through `b931a0ae7` remains unaudited. This final record and the
 performance/plan consolidation introduce no further compiler change. Future
 semantic/template/native consumers remain later-stage work, not unverified
 capabilities claimed by this audit. This audit does not advance PA3.

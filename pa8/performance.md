@@ -1,7 +1,7 @@
 # PA8 final independent performance audit
 
-Final implementation: `bc2cd043d` (measurement/protocol revision `2f21a26ac`).
-Frozen A is incoming `7313af05a`; its binary hash exactly matches the preceding
+Final implementation: `f3f9c4176` (measurement/protocol revision `1d69e0d35`).
+Frozen A is incoming `7cb3f718e`; its binary hash exactly matches the preceding
 checkpoint B. Frozen B includes the phi and builder ownership corrections.
 GNU C++11/O3 flags and test-runner configuration are identical. No optimization
 or runtime improvement is claimed. This experiment bounds mandatory validation
@@ -133,8 +133,8 @@ compiler implementation for those future surfaces.
 
 # Historical checkpoint measurement
 
-The first working PA8 implementation (`66167cf72`) is A; the final implementation
-(`01d39a2f6`) is B. The stage-entry scaffold produces no LowIR and is not a valid
+The first working PA8 implementation (`ef37a2c9e`) is A; the final implementation
+(`0152284b7`) is B. The stage-entry scaffold produces no LowIR and is not a valid
 performance baseline. Both measured versions pass the 109 course cases, but A
 loses signalling NaNs in an added fidelity probe. B adds local shape checks,
 fixes literal preservation and counts IR pool growth. No optimizer or speedup

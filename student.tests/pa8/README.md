@@ -30,19 +30,19 @@ PA7 `check_audit.py` and `check_api.cpp` were also run in the final audit.
 
 ## Frozen final measurements
 
-The incoming LowIR A is `7313af05a` (same implementation and binary hash as
-checkpoint B, `01d39a2f6`); final B's implementation is `bc2cd043d`. Build each
+The incoming LowIR A is `7cb3f718e` (same implementation and binary hash as
+checkpoint B, `0152284b7`); final B's implementation is `f3f9c4176`. Build each
 checkout with `make -C dev lowir`, using the recorded GNU C++11/O3 flags and
 separate object roots/checkouts, and copy binaries to the frozen paths below.
 The unchanged frontend is built with `make -C dev cppgm++` and copied to
 `/tmp/pa8-final-audit/cppgm-frontend`. The measurement harness/protocol was
-frozen in `2f21a26ac`; current JSON records implementation and harness hashes.
+frozen in `1d69e0d35`; current JSON records implementation and harness hashes.
 
 ```sh
 python3 student.tests/pa8/benchmark.py measure \
   /tmp/pa8-final-audit/lowir-A /tmp/pa8-final-audit/lowir-B \
   student.tests/pa8/final-audit-performance.json \
-  --base-count=12000 --runtime-factor=40 --base-commit=7313af05a
+  --base-count=12000 --runtime-factor=40 --base-commit=7cb3f718e
 python3 student.tests/pa8/frontend_benchmark.py measure \
   /tmp/pa8-final-audit/cppgm-frontend \
   student.tests/pa8/final-frontend-performance.json
@@ -65,7 +65,7 @@ Generated inputs, outputs, objects, frozen binaries and logs live under `/tmp`
 and are not committed. Verification requires those artifacts. After cleanup,
 rebuild frozen checkouts and rerun measurements into new records; this produces
 new observations, not verification of measurements whose artifacts are gone.
-The historical `performance.json` (first working `66167cf72` versus `01d39a2f6`)
+The historical `performance.json` (first working `ef37a2c9e` versus `0152284b7`)
 is preserved, but its temporary artifacts were absent at final-audit entry and
 its results were not reused as a fresh verification gate. Its generator is
-available in `7313af05a`; the final generator additionally covers handlers.
+available in `7cb3f718e`; the final generator additionally covers handlers.

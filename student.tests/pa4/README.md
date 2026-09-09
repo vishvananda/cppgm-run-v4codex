@@ -65,24 +65,24 @@ yet apply. These inputs exercise frontend work, not semantic template
 instantiation, native code, or self-hosting.
 
 The budgets were recorded in `pa4/plan.md` before the campaign. Reproduce using
-an isolated checkout of `28279a9d0` for A and `1af70fc0d` for final B, with identical
+an isolated checkout of `77bd7bc51` for A and `5c200a4df` for final B, with identical
 ordinary flags and course-runner settings. Keep binaries outside the repository;
 no generated objects, diagnostic logs, or course `.my*` outputs are committed.
-The [initial campaign](performance-initial.md) preserves the earlier `c90cf1e62`
+The [initial campaign](performance-initial.md) preserves the earlier `95dc4d4b6`
 candidate, including the helper-chain regression that motivated the final fix.
-The [parameterless campaign](performance-parameterless.md) records `957b47c37`
+The [parameterless campaign](performance-parameterless.md) records `965f7ba6e`
 before the final literal-operator location correction. Both remain as evidence.
 
-The independent final audit froze A at `60ef1b9df` and B at `54f4824ac`. Reproduce
+The independent final audit froze A at `695e607c3` and B at `e0b7bf8ab`. Reproduce
 with isolated ordinary builds and frozen copies outside the repository:
 
 ```sh
-python3 student.tests/pa4/benchmark.py /tmp/preproc-A /tmp/preproc-B /tmp/final-pa4.md --baseline-commit 60ef1b9df --candidate-commit 54f4824ac --candidate-description 'pooled prescan and capture storage'
+python3 student.tests/pa4/benchmark.py /tmp/preproc-A /tmp/preproc-B /tmp/final-pa4.md --baseline-commit 695e607c3 --candidate-commit e0b7bf8ab --candidate-description 'pooled prescan and capture storage'
 python3 student.tests/pa4/verify_performance.py student.tests/pa4/final-audit-performance.md dev/preproc
 ```
 
 [performance-pooled.md](performance-pooled.md) preserves the intermediate
-`c558c57d2` comparison. Both final-audit campaigns keep every observation,
+`6c1867c8b` comparison. Both final-audit campaigns keep every observation,
 including regressions and noisy groups. See [the audit](../../pa4/audit.md) for
 allocation ownership, validity and work/growth budgets. The older campaigns
 above remain historical evidence; their candidate hashes refer to their own

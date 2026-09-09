@@ -2,9 +2,9 @@
 
 ## Independent final audit: exact final source
 
-Frozen A: **`924ba7dc6`**, binary SHA-256
+Frozen A: **`7e8d10bf2`**, binary SHA-256
 `a34773b8616e9f327db58bf6a82b8f85753ef30f9bec6bb48e6d7efab6f15c41`.
-Frozen final B: **`93f066513`**, SHA-256
+Frozen final B: **`f0a0f614a`**, SHA-256
 `66195a35202947571a0dba98dbe084ac7cf4bcf53c3df38f3c2524f4748346e3`.
 These are ordinary `g++ -std=gnu++11 -Wall -O3` dev builds with the course runner.
 The exact host compiler/platform, permitted CPU affinity, flags, input hashes,
@@ -84,7 +84,7 @@ used to claim an unmeasured optimization benefit.
 
 ## Profitability decision and retained intermediate evidence
 
-The full candidate at `7c7fd4b13` also reused one indentation string. Its
+The full candidate at `9cfce7949` also reused one indentation string. Its
 [168 ordinary observations and auxiliary runs](../student.tests/pa5/reuse-candidate-performance.json)
 remain intact. To isolate this optional change, freeze that candidate and a
 control whose only source change restores per-line indentation construction.
@@ -103,7 +103,7 @@ the reuse candidate is
 
 Neither workload establishes a latency benefit above noise in both blocks or a
 useful peak-memory improvement. Allocation-count reasoning alone does not prove
-compiler profit. The optional change was **removed in `93f066513`**, and the
+compiler profit. The optional change was **removed in `f0a0f614a`**, and the
 complete final campaign above was rerun on that exact binary. Intermediate
 measurements are not presented as final-source results. The inherited delimiter
 and lexical-hint optimizations remain: their ownership/legality/bounds are
@@ -121,7 +121,7 @@ python3 student.tests/pa5/audit_performance.py measure <frozen-A> <frozen-final-
 python3 student.tests/pa5/audit_performance.py verify student.tests/pa5/final-audit-performance.json <frozen-A> dev/cppgm++
 python3 student.tests/pa5/audit_performance.py report student.tests/pa5/final-audit-performance.json
 python3 student.tests/pa5/build_indentation_baseline.py /tmp/pa5-indentation-control
-python3 student.tests/pa5/audit_performance.py verify student.tests/pa5/indentation-performance.json /tmp/pa5-indentation-control/no-reuse <frozen-7c7fd4b13>
+python3 student.tests/pa5/audit_performance.py verify student.tests/pa5/indentation-performance.json /tmp/pa5-indentation-control/no-reuse <frozen-9cfce7949>
 ```
 
 The verifier recomputes the protocol, actual binaries/text sizes, regenerated
@@ -136,10 +136,10 @@ and execution logs remain outside version control.
 
 The following measurements retain their original scope and candidate hashes.
 They were independently verified against the frozen matching binary; their
-"final B" means the implementation checkpoint, not `93f066513`.
+"final B" means the implementation checkpoint, not `f0a0f614a`.
 
-Baseline A is full-behavior commit `262b0b61f`, already passing 188/188.
-Final B is source commit `b19de66e0`, including delimiter/angle indexes, cached lexical hints, compact shared
+Baseline A is full-behavior commit `6d67335c1`, already passing 188/188.
+Final B is source commit `8365a1124`, including delimiter/angle indexes, cached lexical hints, compact shared
 physical/presumed locations and retained user-literal payloads. Both binaries
 were frozen before this campaign; flags, toolchain, kernel, hashes and every
 observation are in [performance.json](../student.tests/pa5/performance.json).
@@ -201,7 +201,7 @@ Reproduce/check from the repository root:
 ```sh
 python3 student.tests/pa5/bench_inputs.py /tmp/pa5-inputs
 python3 student.tests/pa5/measure.py <frozen-A> <frozen-B> /tmp/pa5-inputs /tmp/observations.json
-python3 student.tests/pa5/verify_performance.py student.tests/pa5/performance.json <frozen-b19de66e0>
+python3 student.tests/pa5/verify_performance.py student.tests/pa5/performance.json <frozen-8365a1124>
 ```
 
 The historical verifier checks its matching frozen binary, input generator hashes, complete

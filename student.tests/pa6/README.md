@@ -29,8 +29,8 @@ Ordinary observations use fixed source repetitions, CPU affinity, A/A noise
 pairs and two ABBA blocks. Separate observations measure telemetry overhead.
 
 Freeze three optimized compiler binaries before timing: the stage base
-`9249196518f45492822fb2e3da4eb5d82af0ed13`, first working PA6 `5749f43b4`, and
-the final implementation revision `85011bf5a` recorded in `final-audit-performance.json`. Rebuild each
+`0dc05603e6ba9f136d9f2d0ac470c169c43aaceb`, first working PA6 `00cb86a9f`, and
+the final implementation revision `b3f468fdf` recorded in `final-audit-performance.json`. Rebuild each
 in its own temporary checkout with `make -C dev cppgm++` (g++ GNU++11, -O3,
 course test runner enabled). Do not run builds/tests during timing.
 
@@ -64,7 +64,7 @@ python3 student.tests/pa6/audit_performance.py verify /tmp/pa6-checkpoint /tmp/p
 python3 student.tests/pa6/audit_performance.py report student.tests/pa6/final-edge-performance.json
 ```
 
-The edge A binary is `1edcbe5db`, B is `85011bf5a`. `semantic_edges` counts
+The edge A binary is `08e24f046`, B is `b3f468fdf`. `semantic_edges` counts
 unique pair identities; final `semantic_lookup_work` must equal twice the
 namespace count, proving that duplicate insertion and qualified direct lookup
 do not scan the growing ordinary edge list. Latency, not work counts alone,

@@ -37,10 +37,10 @@ python3 student.tests/pa5/audit_performance.py verify /tmp/pa5-final.json <froze
 python3 student.tests/pa5/audit_performance.py report /tmp/pa5-final.json
 ```
 
-Final A is the ordinary build at `924ba7dc6`; final B is `93f066513`. Rebuild in
+Final A is the ordinary build at `7e8d10bf2`; final B is `f0a0f614a`. Rebuild in
 isolated checkouts with the recorded host toolchain and ordinary dev flags,
 then copy/freeze the executables before measuring. Final committed observations
-are `final-audit-performance.json`. The `7c7fd4b13` candidate used reusable
+are `final-audit-performance.json`. The `9cfce7949` candidate used reusable
 indentation; `reuse-candidate-performance.json` preserves its full campaign.
 `indentation-performance.json` compares that candidate with a control differing
 only in indentation storage, on fixed classes/expressions inputs. The control
@@ -48,7 +48,7 @@ can be rebuilt after an ordinary dev build:
 
 ```sh
 python3 student.tests/pa5/build_indentation_baseline.py /tmp/pa5-indentation-control
-python3 student.tests/pa5/audit_performance.py measure-indent /tmp/pa5-indentation-control/no-reuse <frozen-7c7fd4b13> /tmp/pa5-indentation.json
+python3 student.tests/pa5/audit_performance.py measure-indent /tmp/pa5-indentation-control/no-reuse <frozen-9cfce7949> /tmp/pa5-indentation.json
 ```
 
 This experiment did not establish repeatable profitability and the optional

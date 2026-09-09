@@ -43,7 +43,7 @@ def measure(paths, output, audit_delta=False, prefix='', repeat_factor=1):
     data = dict(budgets=BUDGETS, protocol=ORDERS, platform=platform.platform(), cpu=cpu,
                 host_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',
                 host_cxx=subprocess.check_output(['g++','--version'],text=True).splitlines()[0],
-                source_commits=[subprocess.check_output(['git','rev-parse','5418551e9' if audit_delta else '14f1d402f'],text=True).strip(),subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
+                source_commits=[subprocess.check_output(['git','rev-parse','682532c07' if audit_delta else 'c02f4ea09'],text=True).strip(),subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],
                 binaries=[dict(path=str(p),sha256=prior.sha(p),text_bytes=prior.text_size(p)) for p in paths],
                 inputs={}, observations=[], startup=[], work=[], telemetry=[],
                 audit_delta=audit_delta,

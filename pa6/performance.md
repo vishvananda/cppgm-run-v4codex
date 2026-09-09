@@ -1,6 +1,6 @@
 # PA6 final audit performance evidence
 
-Final implementation: `85011bf5a`. Frozen compiler SHA-256:
+Final implementation: `b3f468fdf`. Frozen compiler SHA-256:
 `70571a477bac3857ec5c3988fe8798fa2a15b7db3cb89419344ee5964a27c075`.
 The original twenty-workload campaign passes the complete protocol, hash,
 output-equivalence, startup, latency, peak RSS, text and scaling verifier.
@@ -8,10 +8,10 @@ The added namespace-edge campaign is reported separately below.
 
 ## Controls, protocol and budgets
 
-For AST mode, A is the completed PA5 stage base `9249196518...`. For types
-mode, A is first complete PA6 `5749f43b4`; PA5 has no semantic mode. B is the
+For AST mode, A is the completed PA5 stage base `0dc05603e6...`. For types
+mode, A is first complete PA6 `00cb86a9f`; PA5 has no semantic mode. B is the
 exact final implementation. The independent edge comparison uses checkpoint
-`1edcbe5db` as A, so its improvement is attributable to this audit's changes.
+`08e24f046` as A, so its improvement is attributable to this audit's changes.
 Rebuilt historical binaries match the original recorded hashes exactly.
 
 All binaries use `g++ -std=gnu++11 -Wall -O3`, with the course runner enabled.
@@ -134,12 +134,12 @@ The compiler `.text` above is a separate host-built artifact. Instantiation,
 LowIR/MIR/ELF and optimization legality/profitability/growth policies must be
 measured when those surfaces exist.
 
-- `performance.json`: complete checkpoint campaign for `1edcbe5db`, independently
+- `performance.json`: complete checkpoint campaign for `08e24f046`, independently
   reverified against hash-identical frozen binaries. It supports historical
   checkpoint claims, not final-code claims.
-- `superseded-performance.json`: partial campaign for `78df00b67`, stopped when
+- `superseded-performance.json`: partial campaign for `b4f294109`, stopped when
   review found incorrect free-function body deferral. No final claim uses it.
-- `pre-compact-performance.json`: campaign for `3f6de92f5`; template RSS exceeded
+- `pre-compact-performance.json`: campaign for `0ebaeb91c`; template RSS exceeded
   the 15% +1 MiB gate. The class-state compaction followed that failure. All
   observations remain retained, and the failed gate was not relaxed.
 

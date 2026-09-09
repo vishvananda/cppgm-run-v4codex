@@ -40,13 +40,13 @@ artifact directories: the harness refuses to overwrite existing observations.
 
 ```sh
 mkdir -p /tmp/pa9-repro/checkpoint /tmp/pa9-repro/first
-git archive 6ec119239 dev | tar -x -C /tmp/pa9-repro/checkpoint
-git archive df7dbb00a dev | tar -x -C /tmp/pa9-repro/first
+git archive 8195487d1 dev | tar -x -C /tmp/pa9-repro/checkpoint
+git archive 2b19ba07a dev | tar -x -C /tmp/pa9-repro/first
 make -C /tmp/pa9-repro/checkpoint/dev abimangle
 make -C /tmp/pa9-repro/first/dev abimangle
 make -C dev abimangle
-python3 student.tests/pa9/benchmark.py --baseline /tmp/pa9-repro/checkpoint/dev/abimangle --baseline-commit 6ec119239 --directory /tmp/pa9-repro/delta --report /tmp/pa9-repro/delta.json
-python3 student.tests/pa9/benchmark.py --baseline /tmp/pa9-repro/first/dev/abimangle --baseline-commit df7dbb00a --directory /tmp/pa9-repro/stage --report /tmp/pa9-repro/stage.json
+python3 student.tests/pa9/benchmark.py --baseline /tmp/pa9-repro/checkpoint/dev/abimangle --baseline-commit 8195487d1 --directory /tmp/pa9-repro/delta --report /tmp/pa9-repro/delta.json
+python3 student.tests/pa9/benchmark.py --baseline /tmp/pa9-repro/first/dev/abimangle --baseline-commit 2b19ba07a --directory /tmp/pa9-repro/stage --report /tmp/pa9-repro/stage.json
 python3 student.tests/pa9/verify_performance.py --report /tmp/pa9-repro/delta.json
 python3 student.tests/pa9/verify_performance.py --report /tmp/pa9-repro/stage.json
 ```
@@ -63,7 +63,7 @@ Current evidence is `final-audit-performance.json` and
 to the former and confirms current sources/binary, frozen artifacts, raw order,
 paired summaries, spread, output equivalence and all 42 budget checks.
 `pre-prefix-*-performance.json` retains both successful preliminary experiments
-on `ad9c2c907`, superseded after the final malformed-prefix fix. Verify those
+on `f2353211e`, superseded after the final malformed-prefix fix. Verify those
 with `--historical --report <path>`; that mode does not claim the older binary
 is current. Original checkpoint `performance.json` and
 `initial-performance.json` also remain, including the initial text-growth

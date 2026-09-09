@@ -1,9 +1,9 @@
 # PA8 final plan and ledger
 
 Target: **PA8 full-stage**. Phase: **complete; independently audited**.
-Stage base: `7e4297484f117980a3f1d55f43932d6bda3a8cc1`.
-Last reviewed implementation: `bc2cd043d`; benchmark/protocol: `2f21a26ac`.
-Incoming checkpoint: `7313af05a`; all intervening handoffs have been reviewed.
+Stage base: `2f8c201f5ac6a242e38119bd54b2c62da9a7e7b6`.
+Last reviewed implementation: `f3f9c4176`; benchmark/protocol: `1d69e0d35`.
+Incoming checkpoint: `7cb3f718e`; all intervening handoffs have been reviewed.
 Entry: **0/109**. Final: **109/109**, cumulative **793/793**, **8/8 stages**.
 The incoming 811/811 summary was stale: its own primary log and the fresh root
 report both say 793/793 (684 earlier +109 PA8); no coverage was changed.
@@ -51,12 +51,12 @@ Template wall/RSS scale 4.00x/3.23x with unchanged specialization work.
 
 ## Consolidated ledger
 
-- `da047b4a9`: initial plan; `66167cf72`: complete LowIR implementation;
-  `01d39a2f6`: literal/shape hardening and telemetry; `7313af05a`: checkpoint
+- `69f031998`: initial plan; `ef37a2c9e`: complete LowIR implementation;
+  `0152284b7`: literal/shape hardening and telemetry; `7cb3f718e`: checkpoint
   ownership/performance record. This audit closes all four handoffs.
-- `bc2cd043d`: fix phi handler/type legality and builder slice ownership;
+- `f3f9c4176`: fix phi handler/type legality and builder slice ownership;
   add semantic and API/edit probes. All implementation changes stay in `dev/`.
-- `2f21a26ac`: prospectively freeze final corpus/budgets and verify provenance;
+- `1d69e0d35`: prospectively freeze final corpus/budgets and verify provenance;
   add the unchanged frontend's template benchmark wrapper.
 - Final consolidation commit: this plan, independent audit, performance report,
   reproduction instructions and all raw final observations; required gates
