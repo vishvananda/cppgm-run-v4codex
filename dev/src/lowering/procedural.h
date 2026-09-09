@@ -35,7 +35,7 @@ struct Value {
 // canonical typed ABI entities, never their rendered manglings.
 struct Linkage {
     abi_mangle::Graph abi;
-    semantic::Index external;
+    semantic::Index external, native_names;
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge;
@@ -62,6 +62,12 @@ class Procedural {
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
     std::vector<EntityId> definitions, global_initializers;
+    struct TlsInitializer { EntityId object; SymbolId guard, initializer, wrapper; };
+    std::vector<TlsInitializer> tls_initializers;
+    semantic::Index tls_wrappers;
+    EntityId active_tls = 0;
+    void prepare_tls(EntityId object);
+    void emit_tls_initializers();
     std::unique_ptr<lowir_model::FunctionBuilder> builder;
     FunctionId function;
     TypeId returned = 0;
@@ -88,6 +94,7 @@ class Procedural {
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e, bool base = false);
+    bool separate_base(EntityId e) const;
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
@@ -125,6 +132,7 @@ class Procedural {
     void repeat_initializer(std::uint32_t plan, Value base, std::uint64_t count = 0, TypeId type = 0);
     void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path);
     void global_plan(std::uint32_t plan);
+    void global_construction(NodeId n, TypeId t);
     bool constant_plan(std::uint32_t plan);
     Value string_element(NodeId source, TypeId element, std::uint64_t index);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
@@ -160,6 +168,8 @@ class Procedural {
     Value conditional(NodeId n, bool location);
     Value logical(NodeId n);
     Value call(NodeId n);
+    Value floating_builtin(NodeId n);
+    Value placement_new(NodeId n);
     Value operation(ETokenType op, Value a, Value b, TypeId result);
     Value binding(EntityId e);
     Value field(Value base, EntityId e, unsigned steps = 0);

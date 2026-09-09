@@ -175,3 +175,25 @@ with explicit group arguments and unchanged AAAA/ABBA/ABBA order. Preserve all
 label names the earlier campaign using the same procedure. Template calibration
 remains noisy in the follow-up, with paired differences near unity. No speedup
 is inferred and no observations are removed.
+
+## Construction completion campaign
+
+Freeze A at 786ed29e, compiler SHA256
+5ad6bb599da4cadcb0490547195043481054b97c139578dbea77486f39af3cab,
+and B after full PA11 implementation and native boundary validation. Use the
+unchanged common nine-input compiler and three native-runtime AAAA/ABBA/ABBA
+campaign. Record wall time, peak RSS, compiler `.text`, runtime and executable
+payload together. These are correctness additions at O0, with no optional
+optimizer or speedup claim. Historical numeric targets remain diagnostics;
+the required eight-element expansion limit and coverage remain mandatory.
+
+`construction_benchmark.py` adds B-only AAAA observations for 1000/4000
+independently owned inherited constructors, converting temporaries, constant
+constructor arrays and TLS initializer families. A does not implement those
+behaviors and cannot be a valid speed baseline. Every input validates LowIR
+and executes before timing; telemetry is collected separately. The additional
+native program runs eight million volatile-bounded iterations through inherited
+and converting constructors, and checks a varying checksum. It has no static
+data; executable payload therefore measures its text. Preserve all hashes and
+observations. Run no other tests, builds or performance campaigns concurrently.
+Repeat noisy common groups with frozen binaries, keeping the original results.

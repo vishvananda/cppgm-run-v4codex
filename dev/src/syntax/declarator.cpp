@@ -26,9 +26,15 @@ NodeId Parser::specifiers(bool type_only)
             angle_expression = 0;
             NodeId decltype_node = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier, expression());
             ast[decltype_node].op = KW_DECLTYPE;
-            ast.append(result, decltype_node);
             angle_expression = saved;
             in.require(")");
+            if (in.eat("::")) {
+                ast[decltype_node].kind = Kind::Decltype;
+                NodeId qualified = make(Kind::Name);
+                ast.append(qualified, named(Kind::NamePart, decltype_node));
+                do { ast.append(qualified, name_part(false, unknown_scope, true)); } while (in.eat("::"));
+                ast.append(result, named(type_only ? Kind::TypeName : Kind::DeclSpecifier, qualified));
+            } else ast.append(result, decltype_node);
             have_type = true;
         } else if (!have_type && (in.is("class") || in.is("struct") || in.is("union"))) {
             ast.append(result, class_specifier());

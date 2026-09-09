@@ -49,13 +49,20 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     if (id >= abi_types.size()) abi_types.resize(sem.types.records.size());
     return abi_types[id] = result;
 }
+bool Procedural::separate_base(EntityId id) const
+{
+    auto e = sem.entities[id];
+    if (!e.member_info || !sem.member_fact(id).base_entry) return false;
+    bool external = !e.body && !sem.synthetic_member(id);
+    return ((sem.member_fact(id).inherited_constructor || external) && sem.member_fact(id).complete_entry) || (e.body && !e.inline_function);
+}
 SymbolId Procedural::symbol(EntityId id, bool base)
 {
     auto e = sem.entities[id];
     bool external = e.member_info && !e.body && !sem.synthetic_member(id);
-    bool separate = e.member_info && sem.member_fact(id).base_entry &&
-        (sem.member_fact(id).inherited_constructor || (external && sem.member_fact(id).complete_entry));
-    bool external_base = external && sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
+    bool separate = separate_base(id);
+    bool base_only = e.member_info && (external || sem.member_fact(id).inherited_constructor) &&
+        sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
     base = base && separate;
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
@@ -69,7 +76,12 @@ SymbolId Procedural::symbol(EntityId id, bool base)
     SymbolMetadata metadata;
     metadata.binding = internal ? SBM_INTERNAL : e.inline_function ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
-    if (e.member_info) metadata.object_root = base || (!separate && !external_base && sem.member_fact(id).base_entry);
+    if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
+    if (e.member_info) {
+        metadata.object_root |= sem.member_fact(id).retained_root;
+        for (auto s = e.owner; s && s != sem.global; s = sem.scopes[s].parent)
+            if (sem.scopes[s].kind == semantic::ScopeKind::Function) { metadata.object_root = true; metadata.binding = SBM_INTERNAL; }
+    }
     if (e.c_linkage) metadata.linkage = LLM_C;
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
     else if (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
@@ -79,11 +91,15 @@ SymbolId Procedural::symbol(EntityId id, bool base)
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;
         target.function.terminal = operator_terminal(id);
+        if (auto suffix = sem.literal_suffix(id)) {
+            target.function.terminal = abi_mangle::ABI_TERMINAL_LITERAL;
+            target.function.literal_suffix = abi.string(spelling(suffix));
+        }
         target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
         target.function.qualifiers = sem.types[e.type].cv;
         if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;
         if (sem.destructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
-        if (base || external_base) target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
+        if (base || base_only) target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         target.function.c_linkage = e.c_linkage && !internal;
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
@@ -106,18 +122,19 @@ SymbolId Procedural::symbol(EntityId id, bool base)
     if (internal && linkage.merge && metadata.object)
         metadata.object = p.intern(p.name(metadata.object) + "." + std::to_string(p.symbols.size()+1));
     if (e.builtin != semantic::Entity::NoBuiltin) {
-        metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : "cppgm_builtin_memmove");
+        metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove");
         metadata.linkage = LLM_C;
     }
     std::string display = e.kind == semantic::EntityKind::Variable ? "@__global_" + name : "@" + name;
     for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
+    if (metadata.object && p.name(metadata.object) != display.substr(1)) linkage.native_names.put(metadata.object, 1);
     SymbolId sid = fresh_symbol(display); (base ? base_symbols[id] : symbols[id]) = sid;
     // The ordinary LowIR spelling already supplies this object name. Avoid
     // asking a native adapter to publish the same label twice.
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
-    if (!separate && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
+    if (!separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
         target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         ObjectAlias alias; alias.name = p.intern(abi_mangle::mangle(abi, target)); alias.target = sid; p.aliases.push_back(alias);
     }
@@ -129,8 +146,9 @@ SymbolId Procedural::fresh_symbol(const std::string& preferred)
     // Check source and generated spellings alike. The program-wide monotonic
     // suffix makes rejected candidates unique, hence total collision work is
     // bounded by existing symbols rather than a fresh search for each entity.
-    while (p.symbol_names.find(name))
+    while (p.symbol_names.find(name) || linkage.native_names.get(p.intern(p.name(name).substr(1))))
         name = p.intern(preferred + "__" + std::to_string(++linkage.disambiguator));
+    linkage.native_names.put(p.intern(p.name(name).substr(1)), 1);
     return p.symbol(name);
 }
 SignatureId Procedural::signature(TypeId id, FunctionId owner)
@@ -140,7 +158,9 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         if (indirect_signatures[id]) return indirect_signatures[id];
     }
     auto t = sem.types[id];
-    Signature sig; sig.result = type(t.child); sig.parameters.begin = p.parameters.size();
+    auto return_type = sem.types[t.child];
+    bool incomplete_result = return_type.kind == TypeKind::Named && sem.entities[return_type.entity].class_info && !sem.entities[return_type.entity].complete;
+    Signature sig; sig.result = incomplete_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
     sig.parameters.count = t.count;
     if (t.variadic) sig.boundary.arity = CAM_VARIADIC;
     for (unsigned j = 0; j < t.count; ++j) {
@@ -153,6 +173,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
             param.passing = PPM_BY_ADDRESS;
             auto referred = sem.types[pt].child;
             if (sem.types[referred].kind != TypeKind::Function &&
+                !(sem.types[referred].kind == TypeKind::Named && !sem.entities[sem.types[referred].entity].complete) &&
                 !(sem.types[referred].kind == TypeKind::Array && !sem.types[referred].bound)) param.object_bytes = sem.object_size(referred);
         }
         p.parameters.push_back(param);
@@ -167,15 +188,12 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
       symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {}
 void Procedural::run()
 {
-    for (NodeId n = 1; n < ast.nodes.size(); ++n)
-        if (ast[n].kind == syntax::Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string && sem.expression_fact(n).evaluated)
-            string_literal(n);
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
-        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function) continue;
@@ -201,6 +219,7 @@ void Procedural::run()
             p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
         if (entity.builtin != semantic::Entity::NoBuiltin) {
             auto& sig = p.signatures[f.signature.index-1]; sig.boundary.unwind = CUM_NO;
+            if (entity.builtin == semantic::Entity::Strlen) sig.boundary.effects = CFXM_READONLY;
             if (entity.builtin == semantic::Entity::Memcpy)
                 for (unsigned j = 0; j < 2; ++j) p.parameters[sig.parameters.begin+j].alias = PALM_NOALIAS;
         }
@@ -211,9 +230,8 @@ void Procedural::run()
     // Inherited forwarding constructors retain a distinct rooted base entry.
     // Both entries consume the same semantic actions, with independent IR IDs.
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
-        if (!symbols[e] || !sem.entities[e].member_info || !sem.member_fact(e).base_entry) continue;
+        if (!symbols[e] || !separate_base(e)) continue;
         bool external = !sem.entities[e].body && !sem.synthetic_member(e);
-        if (!sem.member_fact(e).inherited_constructor && !(external && sem.member_fact(e).complete_entry)) continue;
         Function f; f.symbol = symbol(e, true);
         f.declaration = external;
         FunctionId id(p.functions.size()+1);
@@ -223,6 +241,11 @@ void Procedural::run()
         p.functions.push_back(f);
         auto& sym = p.symbols[f.symbol.index-1]; sym.kind = Symbol::FunctionSymbol; sym.entity = id.index;
     }
+    // Reserve source/native identities before allocating generated string or
+    // TLS names. Native adapters may also publish the ordinary LowIR spelling.
+    for (NodeId n = 1; n < ast.nodes.size(); ++n)
+        if (ast[n].kind == syntax::Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string && sem.expression_fact(n).evaluated)
+            string_literal(n);
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable) global(e);
     for (EntityId e : definitions) {
@@ -230,6 +253,7 @@ void Procedural::run()
         if (base_symbols[e]) function_body(e, true);
     }
     if (!global_initializers.empty()) global_initialization();
+    emit_tls_initializers();
     emit_aggregate_helpers();
     global_finalization();
 }
@@ -252,7 +276,7 @@ void Procedural::function_body(EntityId e, bool base)
         if (sem.entities[id].kind != semantic::EntityKind::Parameter) continue;
         auto param = p.parameters[sig.parameters.begin+j++];
         SlotId slot = builder->add_slot(0, param.type); objects[id] = slot;
-        emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
+        if (!sem.empty_value(sem.entities[id].type)) emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
     if (sem.constructor_member(e)) constructor_body(e);
     if (sem.destructor_member(e)) destructor_prologue(e);

@@ -198,6 +198,8 @@ void Analyzer::schedule_body(const Body& body)
         if (members[m].source) throw std::runtime_error("duplicate member definition");
         members[m].body = body.node; members[m].declarator = body.declarator; members[m].source = body.source;
         if (class_depth) { entities[body.entity].inline_function = true; return; }
+        if (!entities[body.entity].inline_function && (members[m].constructor || members[m].destructor))
+            members[m].base_entry = true;
     }
     if (class_depth) bodies.push_back(body);
     else function_body(body);

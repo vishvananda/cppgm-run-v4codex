@@ -3,7 +3,7 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. **Incomplete: 273/302; 29 failures.**
+Target: PA11 full-stage. Phase: implement. **302/302; final validation and performance review.**
 
 ## Design/spec alignment
 
@@ -13,8 +13,8 @@ Sparse field descriptors own bit widths, signed storage, preservation and
 alignment; class layout handles EBO identities, explicit alignment and token
 snapshots of pragma packing. One semantic initializer cursor records brace
 elision, strings, scalar conversions and compact omitted ranges. Local/global
-lowering and generated array aggregate helpers consume those actions. Eleven
-personal programs validate LowIR and execute; six invalid programs reject.
+lowering and generated array aggregate helpers consume those actions. Seventeen
+personal programs validate LowIR and execute; nine invalid programs reject.
 
 Work follows declarations, relevant lookup edges, layout fields, initializer
 actions and emitted IR. Ordinary nodes/tokens retain their compact sizes; rare
@@ -22,25 +22,21 @@ attributes/descriptors use flat ID indexes. Eight elements is the array expansio
 budget; larger omitted ranges use bulk zeroing or loops preserving volatile
 stores. Existing ABI/lifetime records remain the basis for PA12/PA13 extensions.
 
-## Remaining groups and boundary
+## Completed ownership groups
 
-| Owner | Required data flow / complexity | Validation |
+| Owner | Data flow / complexity | Validation |
 | --- | --- | --- |
-| Constructor selection and constant initialization | Record converting/inherited constructors, argument substitutions, temporary lifetimes and legal early static initialization; O(candidates + selected actions). | implicit class-reference conversion, inherited/external constructors, placement new, namespace arrays with constructors |
-| ABI entries and storage duration | Keep complete/base roots, empty-class arguments, incomplete declaration boundaries and TLS initialization families distinct; O(objects + required helpers + IR). | anonymous/local constructor roots, external destructors, incomplete return/reference types, TLS |
-| Parser/declaration context | Complete-class name facts and literal suffix identities must feed canonical types without syntax replay; O(relevant declarations + lookup edges). | late member subscript, injected names, nested definitions, UDLs, invalid static initializers |
-| Expression and boundary views | Recorded category/conversion facts select discarded accesses, function/reference views and builtin boundaries; O(expressions + output). | discarded parameters/objects, reference-indexed member access, floating intrinsics, boundary metadata |
+| Constructor selection | Inherited signatures hide behind local declarations; selected converting calls own argument ranges and temporary lifetimes. O(candidates + selected arguments + actions). | inherited/access/external paths; converting defaults, rejection of explicit/chained conversions; native lifetime checks |
+| ABI/storage | Complete/base demand, rooted helpers, empty object parameters and incomplete declaration storage remain distinct. TLS owns guard/init/wrapper identities and native-name reservations. O(required entries + objects + IR). | object roots, incomplete references/returns, empty arguments, native TLS collision and first-use checks |
+| Initialization | Placement allocation consumes selected conversions and existing initializer actions. Cached effect-free scalar-forwarding summaries permit early static constructor-array data; unsupported effects/conversion chains retain dynamic calls. O(parameters + actions + initializer data). | placement execution, static/dynamic array behavior, conversion-preserving fallback |
+| Parser/expressions | Injected names, complete-class value categories, qualified decltype and UDL suffixes flow to canonical types/ABI. Floating builtins and explicit discard boundaries emit typed operations. | exact stage fixtures, native float/UDL checks, earlier PA reports |
 
-The layout/aggregate group is implemented and validated, including its nested
-reference-binding and volatile-helper variants. Remaining constructor-array
-static output needs argument substitution and body-effect legality facts;
-inherited/placement/converting calls need new selection/ABI/lifetime records.
-Those cannot be obtained by extending the initializer cursor or changing class
-layout. Remaining declaration ambiguities need parser ownership, and remaining
-root/discard cases need separate ABI/value-category decisions. No later PA is
-advanced. Six narrowly corrected references have reduced proofs and the bundle
-revision in [reference corrections](reference-corrections.md); comparison rules,
-source tests and coverage are unchanged.
+No current behavior group remains failing. Final frozen performance review and
+cumulative validation are in progress; no later PA is advanced. The seventh
+narrow reference correction proves mandatory constant reference initialization
+with a reduced ordering program and cited C++11 rules. All corrections and the
+bundle revision remain in [reference corrections](reference-corrections.md).
+Source fixtures, comparison rules and coverage are unchanged.
 
 ## Performance evidence
 
@@ -87,3 +83,10 @@ correctness and coverage are unchanged. Initial measurements (including the
   Eleven personal native programs, six rejection checks, six corrected-reference
   validations, frozen artifacts and range IR bounds pass. Stage base/review
   markers, coverage and comparison rules are preserved. Clean committed handoff.
+
+- Construction/boundary completion: **302/302**, all four controls. Seventeen
+  native personal programs and nine rejection cases pass, including a native TLS
+  name collision missed by the course fixtures. Earlier cumulative validation
+  reached **1327/1327** after fixing a PA10 multiplicative conversion regression;
+  final freeze will repeat it. File audit passes with its existing advisory.
+  Performance protocol and B-only construction corpus are ready; evidence pending.

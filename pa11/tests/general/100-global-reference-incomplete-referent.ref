@@ -1,7 +1,7 @@
 global @forward_declared_object : ptr [binding=strong, object=_Z23forward_declared_object] = zero
 global @allocator_arg : ptr [binding=internal, object=_Z13allocator_arg] = zero
 global @value : i32 [binding=strong, object=_Z5value] = 7
-global @value_ref : ptr [binding=strong, object=_Z9value_ref] = zero
+global @value_ref : ptr [binding=strong, object=_Z9value_ref] = addr @value
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $cond__1 : i32
@@ -29,7 +29,5 @@ function @__cppgm_init() -> void [role=init, binding=internal] {
   block ^entry:
     %t1 = load ptr @forward_declared_object
     store ptr %t1, @allocator_arg
-    %t2 = addr @value
-    store ptr %t2, @value_ref
     return void
 }

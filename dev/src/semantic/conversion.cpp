@@ -124,7 +124,7 @@ bool Analyzer::similar_type(TypeId a, TypeId b)
     if (pointer(a)) return similar_type(types[a].child, types[b].child);
     return types.unqualified(a) == types.unqualified(b);
 }
-Conversion Analyzer::conversion(NodeId n, TypeId to)
+Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 {
     ++conversion_work;
     Conversion c; c.target = to;
@@ -148,7 +148,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
     if (ref) {
         if (field_fact(x.entity).bit_field) {
             if (target.kind != TypeKind::LRef || types[target.child].cv != 1) return c;
-            c = conversion(n, types.unqualified(target.child));
+            c = conversion(n, types.unqualified(target.child), user);
             c.target = to; c.reference = true; c.temporary = true; return c;
         }
         unsigned added = 0;
@@ -165,7 +165,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
         if ((target.kind == TypeKind::LRef && types[target.child].cv != 1) ||
             (types[from].cv & ~types[target.child].cv) ||
             (target.kind == TypeKind::RRef && types.unqualified(from) == types.unqualified(target.child))) return c;
-        c = conversion(n, types.unqualified(target.child));
+        c = conversion(n, types.unqualified(target.child), user);
         c.target = to; c.reference = true; c.qualification = types[target.child].cv;
         c.temporary = types.unqualified(from) != types.unqualified(target.child);
         c.preference = target.kind == TypeKind::LRef;
@@ -173,7 +173,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
     }
     to = types.unqualified(to);
     from = decay(from);
-    if (to == from) { c.rank = 0; return c; }
+    if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
     if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && null_constant(n)) { c.rank = 2; return c; }
     if (fundamental(to, FT_BOOL) && pointer(from)) { c.rank = 3; return c; }
     if (pointer(from) && pointer(to)) {
@@ -193,6 +193,8 @@ Conversion Analyzer::conversion(NodeId n, TypeId to)
         c.rank = promote_expression(n) == to ? 1 : 2;
         return c;
     }
+    if (user && types[to].kind == TypeKind::Named && entities[types[to].entity].class_info)
+        return converting_constructor(n, to);
     return c;
 }
 void Analyzer::select_function(NodeId n, EntityId e)
@@ -221,8 +223,9 @@ void Analyzer::select_function(NodeId n, EntityId e)
         }
     }
 }
-void Analyzer::apply_conversion(NodeId n, Conversion c)
+void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (c.kind == Conversion::Kind::Construction) { materialize_conversion(n, c); return; }
     if (c.derived && c.kind != Conversion::Kind::Explicit) {
         TypeId from = expressions[n].type, to = types[c.target].child;
         if (pointer(from)) from = types[from].child;
@@ -245,9 +248,11 @@ void Analyzer::require_conversion(NodeId n, TypeId target)
 void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
+    if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
     if (!owner.count) owner.conversions = conversions.size();
     ++owner.count;
     if (n) {
+        if (c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
         // Operand facts preserve the source-faithful dump type. The legacy
         // initializer/call adapter in apply_conversion has its own null view.
         if (c.derived && c.kind != Conversion::Kind::Explicit) {
@@ -257,11 +262,20 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
             if (pointer(to)) to = types[to].child;
             check_base_access(from, to, facts[n].scope);
         }
-        if (c.function) select_function(n, c.function);
+        if (c.function && c.kind != Conversion::Kind::Construction) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);
         expressions[n].incoming = conversions.size();
     }
     conversions.push_back(c);
+}
+void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected)
+{
+    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) apply_conversion(args[j], selected[j]);
+    owner.arguments = call_arguments.size(); owner.argument_count = args.size();
+    owner.conversions = conversions.size(); owner.count = args.size();
+    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions[args[j]].incoming = conversions.size()+j;
+    conversions.insert(conversions.end(), selected.begin(), selected.end());
+    call_arguments.insert(call_arguments.end(), args.begin(), args.end());
 }
 Conversion Analyzer::boolean_conversion(NodeId n)
 {

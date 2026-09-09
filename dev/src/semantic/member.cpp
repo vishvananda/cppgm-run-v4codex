@@ -53,6 +53,11 @@ void Analyzer::default_initialize(EntityId object)
     EntityId ctor = default_constructor(t, entities[object].owner);
     members[entities[ctor].member_info].source_demand = true;
     members[entities[ctor].member_info].complete_entry = true;
+    if (scopes[entities[object].owner].kind == ScopeKind::Namespace) {
+        for (ScopeId s = entities[object].owner; s && s != global; s = scopes[s].parent)
+            if (scopes[s].kind == ScopeKind::Namespace && !scopes[s].name)
+                members[entities[ctor].member_info].retained_root = true;
+    }
     object_actions.put(object, actions.size());
     actions.push_back({object, ctor, types.compound(TypeKind::Pointer, t)});
     demand_member(ctor);
@@ -141,6 +146,14 @@ bool Analyzer::synthetic_member(EntityId e) const
 bool Analyzer::nonstatic_field(EntityId e) const
 { return entities[e].kind == EntityKind::Variable && !entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class &&
     (entities[e].name || !field_fact(e).bit_field); }
+bool Analyzer::empty_value(TypeId t)
+{
+    if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return false;
+    auto c = entities[types[t].entity].class_info;
+    if (!entities[types[t].entity].complete || !class_facts[c].aggregate) return false;
+    size(t);
+    return class_facts[c].empty;
+}
 void Analyzer::record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment)
 {
     ObjectUse use; use.node = node; use.type = type; use.adjustment = adjustment;

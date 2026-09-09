@@ -122,6 +122,28 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
+    if (c.kind == semantic::Conversion::Kind::Construction) {
+        auto materialized = sem.conversion_objects[c.materialization];
+        EntityId object = materialized.temporary;
+        TypeId t = sem.entities[object].type;
+        objects[object] = builder->add_slot(0, type(t));
+        Value destination(Operand::slot(objects[object]), type(t), t, true);
+        Value pointer = address(destination);
+        std::size_t begin = call_work.size();
+        call_work.push_back(Operand::symbol(symbol(materialized.constructor))); call_work.push_back(pointer.operand);
+        for (unsigned j = 0; j < materialized.call.argument_count; ++j)
+            call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j], sem.conversion_fact(materialized.call.conversions+j)).operand);
+        guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
+        call_work.resize(begin); activate_temporary(object);
+        return c.reference ? pointer : Value(destination.operand, type(t), t);
+    }
+    if (c.empty_copy && !c.reference) {
+        SlotId slot = builder->add_slot(0, type(c.target));
+        Value destination(Operand::slot(slot), type(c.target), c.target, true);
+        address(destination);
+        address(expression(n, true));
+        return Value(Operand::slot(slot), type(c.target), c.target);
+    }
     Value v = expression(n, c.reference);
     if (c.derived) {
         v = base_projection(c.reference && !c.temporary ? address(v) : load(v), 1);
@@ -163,13 +185,17 @@ Value Procedural::binding(EntityId e)
     }
     // An uninitialized automatic declaration may legally be bypassed by goto.
     // Storage identity is independent of whether its declaration falls through.
-    if (!objects[e] && entity.kind == semantic::EntityKind::Variable &&
+    if ((!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) && entity.kind == semantic::EntityKind::Variable &&
         sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !entity.is_static)
         objects[e] = builder->add_slot(0, type(t));
     bool local = objects[e].index != 0;
     Operand location = local ? Operand::slot(objects[e]) : Operand::symbol(symbol(e));
     if (entity.thread_local_storage) {
-        Value at = emit(Opcode::Addr, IRType(), {location}); location = at.operand;
+        auto wrapper = tls_wrappers.get(e);
+        if (wrapper && active_tls != e) {
+            Operand argument = Operand::symbol(SymbolId(wrapper));
+            location = guarded_call(Instruction(Opcode::Call, IRType::Ptr), &argument, 1).operand;
+        } else location = emit(Opcode::Addr, IRType(), {location}).operand;
     }
     if (reference(t)) {
         Value pointer = emit(Opcode::Load, IRType::Ptr, {location});

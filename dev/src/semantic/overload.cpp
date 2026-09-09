@@ -75,7 +75,7 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
 }
 Conversion Analyzer::ellipsis_conversion(NodeId n)
 {
-    Conversion c; c.rank = 4;
+    Conversion c; c.rank = 6;
     c.target = promote(decay(expressions[n].type));
     if (fundamental(c.target, FT_FLOAT)) c.target = types.fundamental(FT_DOUBLE);
     if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
@@ -113,6 +113,29 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             TextView spelling = ids.spelling(name);
             bool copy = spelling.equals("__builtin_memcpy");
             bool move = spelling.equals("__builtin_memmove");
+            bool length = spelling.equals("__builtin_strlen");
+            if (length) {
+                TypeId cp = types.compound(TypeKind::Pointer, types.qualify(types.fundamental(FT_CHAR), 1));
+                e = declare_function(global, name, 0, types.function(types.fundamental(FT_UNSIGNED_LONG_INT), {cp}, false));
+                entities[e].builtin = Entity::Strlen;
+            }
+            auto form = spelling.equals("__builtin_isfinite") ? ExpressionForm::FloatFinite :
+                spelling.equals("__builtin_isinf") ? ExpressionForm::FloatInfinite :
+                spelling.equals("__builtin_isnormal") ? ExpressionForm::FloatNormal :
+                spelling.equals("__builtin_fpclassify") ? ExpressionForm::FloatClassify : ExpressionForm::Ordinary;
+            if (form != ExpressionForm::Ordinary) {
+                if (args.size() != (form == ExpressionForm::FloatClassify ? 6 : 1)) throw std::runtime_error("floating builtin arity");
+                TypeId t = expressions[args.back()].type;
+                if (!arithmetic(t) || integral(t)) throw std::runtime_error("floating builtin argument type");
+                std::vector<Conversion> selected;
+                for (std::size_t j = 0; j < args.size(); ++j) {
+                    Conversion c = conversion(args[j], j+1 == args.size() ? t : types.fundamental(FT_INT));
+                    if (!c.valid()) throw std::runtime_error("floating classification result type");
+                    selected.push_back(c);
+                }
+                record_call(result, args, selected);
+                result.type = types.fundamental(FT_INT); result.form = form; return result;
+            }
             if (copy || move) {
                 TypeId v = types.fundamental(FT_VOID), ptr = types.compound(TypeKind::Pointer, v);
                 TypeId ft = types.function(ptr, {ptr, types.compound(TypeKind::Pointer, types.qualify(v, 1)), types.fundamental(FT_UNSIGNED_LONG_INT)}, false);
@@ -253,13 +276,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             args.push_back(a);
             chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
         }
-        result.conversions = conversions.size(); result.count = args.size();
-        for (std::size_t i = 0; i < args.size(); ++i) {
-            Conversion c = chosen[i];
-            expressions[args[i]].incoming = conversions.size();
-            conversions.push_back(c);
-            apply_conversion(args[i], c);
-        }
+        record_call(result, args, chosen);
         select_function(callee, selected);
     } else {
         ft = fn.type;
@@ -268,19 +285,16 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         Type f = types[ft];
         if (args.size() < f.count || (!f.variadic && args.size() != f.count)) throw std::runtime_error("indirect call arity");
         require_conversion(callee, decay(fn.type));
-        result.conversions = conversions.size(); result.count = args.size();
+        std::vector<Conversion> chosen;
         for (std::size_t i = 0; i < args.size(); ++i) {
             Conversion c;
             if (i < f.count) c = conversion(args[i], types.parameters[f.offset + i]);
             else c = ellipsis_conversion(args[i]);
             if (!c.valid()) throw std::runtime_error("indirect argument conversion");
-            expressions[args[i]].incoming = conversions.size();
-            conversions.push_back(c);
-            apply_conversion(args[i], c);
+            chosen.push_back(c);
         }
+        record_call(result, args, chosen);
     }
-    result.arguments = call_arguments.size(); result.argument_count = args.size();
-    call_arguments.insert(call_arguments.end(), args.begin(), args.end());
     TypeId returned = types[ft].child;
     facts[n].type = returned;
     result.type = value_type(returned);

@@ -41,17 +41,16 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         access = members[entities[access].member_info].inherited_constructor;
     check_access(access, scope, entities[access].owner);
     Type f = types[entities[selected].type];
-    if (result) {
-        result->arguments = call_arguments.size(); result->conversions = conversions.size();
-        result->argument_count = result->count = std::max<std::size_t>(args.size(), f.count);
-    }
+    std::vector<NodeId> arguments;
+    std::vector<Conversion> selected_arguments;
     for (std::size_t i = 0; i < std::max<std::size_t>(args.size(), f.count); ++i) {
         NodeId arg = i < args.size() ? args[i] : default_arguments[entities[selected].defaults+i];
         Conversion c = i < args.size() ? sequences[viable[best].offset+i] : conversion(arg, types.parameters[f.offset+i]);
         if (!c.valid()) throw std::runtime_error("invalid constructor default argument");
-        apply_conversion(arg, c);
-        if (result) { call_arguments.push_back(arg); conversions.push_back(c); }
+        if (result) { arguments.push_back(arg); selected_arguments.push_back(c); }
+        else apply_conversion(arg, c);
     }
+    if (result) record_call(*result, arguments, selected_arguments);
     demand_member(selected);
     return selected;
 }

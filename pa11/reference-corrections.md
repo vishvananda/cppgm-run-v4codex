@@ -1,4 +1,4 @@
-# Bit-field reference corrections
+# PA11 reference corrections
 
 The affected bundle is `cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz`,
 source revision `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, SHA-256
@@ -63,3 +63,27 @@ is that volatile member, not preliminary zeroed storage. The correction adds
 `volatile` to exactly that store. All source tests, other instructions, sidecars
 and comparison rules remain unchanged. The personal check validates/executes
 this source and inspects the required volatile store marker.
+
+## Constant initialization of a reference
+
+The same pinned bundle's `100-global-reference-incomplete-referent.ref` puts
+`int& value_ref = value` into the dynamic initializer after another declaration.
+Its initializer is an lvalue naming a namespace-scope object; it performs no
+lvalue-to-rvalue conversion. It is therefore a reference constant expression
+under C++11 [5.19/2–3](https://timsong-cpp.github.io/cppwp/n3337/expr.const#3).
+[3.6.2/2](https://timsong-cpp.github.io/cppwp/n3337/basic.start.init#2) requires
+constant initialization of this reference before any dynamic initialization.
+
+The [reduced reproducer](../student.tests/pa11/reference-static-order.cpp)
+declares the reference, dynamically reads it through `observe()`, and then
+defines its binding. The required static binding lets `observe()` read 7.
+Delaying that binding until the definition's dynamic turn reads through the
+zero reference representation instead. This follows from initialization order,
+not compiler agreement. The fixture's separate incomplete-referent binding is
+preserved exactly; it does not change the constant-expression classification of
+`value_ref` or justify moving its initialization into a dynamic helper.
+
+Only `value_ref`'s global initializer changes to `addr @value`; the two redundant
+dynamic binding instructions are removed. Source coverage, other globals,
+instructions and comparison rules are unchanged. The reduced source is compiled,
+validated and executed explicitly by the personal harness.

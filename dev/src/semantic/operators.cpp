@@ -97,8 +97,12 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         if (!integral(a) || !integral(b)) throw std::runtime_error("integral operands required");
     }
     bool shift = op == OP_LSHIFT || op == OP_RSHIFT;
-    record_conversion(r, an, conversion(an, shift ? ap : result));
-    record_conversion(r, bn, conversion(bn, shift ? bp : result));
+    Conversion left = conversion(an, shift ? ap : result), right = conversion(bn, shift ? bp : result);
+    bool offset = op == OP_PLUS || op == OP_MINUS;
+    left.fold_widen = offset && facts[bn].value && (ast[bn].kind == Kind::Sizeof || expressions[bn].form == ExpressionForm::ConstantQuery);
+    right.fold_widen = offset && facts[an].value && (ast[an].kind == Kind::Sizeof || expressions[an].form == ExpressionForm::ConstantQuery);
+    record_conversion(r, an, left);
+    record_conversion(r, bn, right);
     if (shift) return ap;
     return compare ? types.fundamental(FT_BOOL) : result;
 }
@@ -144,7 +148,9 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
             Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0;
             record_conversion(r, an, left);
             record_conversion(r, bn, conversion(bn, a.type));
-            apply_conversion(bn, conversions[expressions[bn].incoming]);
+            auto index = expressions[bn].incoming;
+            Conversion applied = conversions[index];
+            apply_conversion(bn, applied); conversions[index] = applied;
         }
         else {
             ETokenType binary = OP_PLUS;

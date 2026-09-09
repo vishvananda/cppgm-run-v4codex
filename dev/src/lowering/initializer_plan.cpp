@@ -17,7 +17,7 @@ Value Procedural::string_element(NodeId n, TypeId t, std::uint64_t index)
 bool Procedural::constant_plan(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
-    if (action.kind == InitKind::Constructor) return false;
+    if (action.kind == InitKind::Constructor) return sem.constant_construction(action.source, action.type).valid;
     if (action.kind == InitKind::Value) return constant_initializer(0, action.type);
     if (action.kind == InitKind::String) return true;
     if (action.kind == InitKind::Scalar) return sem.static_value(action.source, action.type).kind != semantic::StaticValue::Invalid;
@@ -29,6 +29,7 @@ void Procedural::global_plan(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
+    if (action.kind == InitKind::Constructor) { global_construction(action.source, action.type); return; }
     if (action.kind == InitKind::Scalar) {
         auto item = constant_data(action.source, action.type);
         if (item.type == IRType::Ptr && item.kind == DataItem::Scalar && !item.value.data.integer) {

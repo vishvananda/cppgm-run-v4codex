@@ -95,7 +95,7 @@ struct Entity {
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
-    enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove } builtin = NoBuiltin;
+    enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false;
     bool mutable_field = false;
@@ -116,7 +116,7 @@ struct MemberFacts {
     bool synthetic = false, referenced = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
     bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
-    bool complete_entry = false;
+    bool complete_entry = false, retained_root = false;
     std::uint32_t action_begin = 0, action_count = 0;
     unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
     bool destruction_needed = false, nonthrowing = false;
@@ -162,7 +162,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -180,13 +180,16 @@ struct ObjectUse {
 struct Conversion {
     TypeId target = 0;
     EntityId function = 0; // Target-selected overload, if any.
+    std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
-    bool reference = false, temporary = false, derived = false;
+    bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false;
     unsigned char preference = 0;
-    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded };
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
+struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; };
+struct PlacementNew { EntityId allocation = 0, constructor = 0; TypeId type = 0; NodeId initializer = 0; Expression call; };
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;
     std::uint64_t bits = 0;
@@ -195,6 +198,9 @@ struct StaticValue {
     NodeId string = 0;
     std::int64_t addend = 0;
 };
+struct ConstantField { EntityId field; TypeId type; StaticValue value; };
+struct ConstantObject { std::uint32_t first = 0, count = 0; bool valid = false; };
+struct ConstructorConstantAction { EntityId field; TypeId type; NodeId source; std::uint32_t argument; };
 struct Fact { NodeId target = 0; TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }

@@ -63,6 +63,10 @@ IdentifierId Analyzer::operator_name(ETokenType op)
 }
 void Analyzer::declare_operator(EntityId e, NodeId name)
 {
+    NodeId part = ast[name].last;
+    if (ast[part].op == KW_OPERATOR && ast[ast[part].first].kind == Kind::Literal) {
+        literal_functions.put(e, ast[ast[part].last].text); return;
+    }
     ETokenType op = operator_token(name);
     if (op == TOK_INVALID) return;
     entities[e].key = op;

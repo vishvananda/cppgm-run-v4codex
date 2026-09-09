@@ -33,7 +33,11 @@ void Writer::operand(const Operand& v, Type context)
         }
         if (context == Type::F32) n = static_cast<float>(n);
         if (context == Type::F64) n = static_cast<double>(n);
-        if (std::isinf(n)) { out_ << (std::signbit(n) ? "-inf" : "inf"); break; }
+        if (std::isinf(n)) {
+            if (std::signbit(n)) out_ << '-';
+            out_ << (context == Type::F80 ? "INFINITYL" : context == Type::F32 ? "INFINITYf" : "INFINITY");
+            break;
+        }
         // max_digits10 guarantees a value-preserving decimal roundtrip.
         std::ostringstream s;
         s << std::setprecision(std::numeric_limits<long double>::max_digits10) << n;

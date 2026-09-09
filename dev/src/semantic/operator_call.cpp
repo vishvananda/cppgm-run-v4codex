@@ -61,14 +61,12 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     if (selected.member) record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
         base_steps(object, scopes[entities[selected.entity].owner].entity));
     result.form = ExpressionForm::OperatorCall;
-    result.arguments = call_arguments.size();
-    result.argument_count = args.size() - selected.member;
-    result.conversions = conversions.size(); result.count = result.argument_count;
+    std::vector<NodeId> arguments;
+    std::vector<Conversion> selected_arguments;
     for (std::size_t i = selected.member; i < args.size(); ++i) {
-        Conversion c = sequences[selected.offset+i];
-        if (args[i]) { apply_conversion(args[i], c); expressions[args[i]].incoming = conversions.size(); }
-        conversions.push_back(c); call_arguments.push_back(args[i]);
+        selected_arguments.push_back(sequences[selected.offset+i]); arguments.push_back(args[i]);
     }
+    record_call(result, arguments, selected_arguments);
     TypeId returned = types[entities[selected.entity].type].child;
     facts[n].entity = selected.entity; facts[n].type = returned;
     result.type = value_type(returned);

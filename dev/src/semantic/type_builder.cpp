@@ -227,6 +227,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].no_inline |= ast[source].flags & 64;
     entities[e].force_inline |= ast[source].flags & 128;
     entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
+    entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
@@ -245,6 +246,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     record(owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
+    if (calls && init && !function && scopes[s].kind == ScopeKind::Class && entities[e].is_static &&
+        !spec_has(specs, KW_CONSTEXPR) && (!(types[t].cv & 1) || !integral(t)))
+        throw std::runtime_error("in-class static initializer requires const integral or constexpr member");
     if (calls && !function && !entities[e].is_static && scopes[owner].kind == ScopeKind::Class && entities[e].access != Access::Public)
         class_facts[entities[scopes[owner].entity].class_info].aggregate = false;
     if (member_initializer) class_facts[entities[scopes[s].entity].class_info].aggregate = false;

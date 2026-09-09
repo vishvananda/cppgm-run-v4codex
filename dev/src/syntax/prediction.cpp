@@ -155,7 +155,12 @@ void Parser::predeclare_class()
                 }
                 if (in.is("[", p) || in.is("{", p) || (in.is("(", p) && !need_name)) p = in.matching(p);
             }
+            i = p;
         }
+        if (i && identifier(i) && !in.is("::", i - 1) &&
+            (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
+            (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1)))
+            names.bind(scope, in.peek(i).text, Category::Value);
         if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class)
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
         if (in.is(";", i) || in.is("{", i)) templated = false;

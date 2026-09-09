@@ -92,12 +92,12 @@ void Procedural::global(EntityId e)
     if (!g.declaration) {
         bool class_object = sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info;
         bool dynamic = entity.initializer && !constant_initializer(entity.initializer, t);
-        if (class_object && !entity.initializer) dynamic = true;
+        if (class_object && !entity.initializer) dynamic = !sem.empty_value(t) || sem.constructor_needed(sem.object_constructor(e));
         if (dynamic) {
-            if (entity.thread_local_storage) throw std::runtime_error("dynamic thread-local initializer requires per-thread wrapper");
-            global_initializers.push_back(e);
+            if (entity.thread_local_storage) prepare_tls(e);
+            else global_initializers.push_back(e);
             g.data.begin = p.data.size(); g.data.count = 1;
-            DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
+            DataItem zero; zero.zero_bytes = g.structured ? sem.object_size(t) : g.type.bytes(); p.data.push_back(zero);
         }
         else if (reference(t)) {
             auto value = sem.static_value(entity.initializer, t);
@@ -128,11 +128,11 @@ void Procedural::object(EntityId e)
     auto lifetime = sem.object_lifetime(e);
     if (lifetime) live = sem.lifetimes[lifetime].tail;
     auto initial_live = live;
-    if (!objects[e]) objects[e] = source_slot(e);
+    if (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) objects[e] = source_slot(e);
     Value location(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;
     if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
-        address(location);
+        if (sem.initializer_work(sem.initializer_plan(init, t))) address(location);
         std::vector<InitProjection> path;
         aggregate_initialize(init, t, location, false, path);
     } else if (init) initialize(init, t, location);

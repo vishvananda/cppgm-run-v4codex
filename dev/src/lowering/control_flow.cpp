@@ -108,7 +108,7 @@ Value Procedural::logical(NodeId n)
     emit(Opcode::Branch, IRType(), {lhs.operand, Operand::label(land ? rhs : short_path), Operand::label(land ? short_path : rhs)});
     start(rhs);
     Value value = load(expression(b));
-    IRType comparison = value.ir.floating() ? value.ir : IRType(IRType::I64);
+    IRType comparison = value.ir.floating() || value.ir == IRType::Ptr ? value.ir : IRType(IRType::I64);
     value = emit(Opcode::Compare, comparison, {value.operand, value.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
     emit(Opcode::Store, IRType::I64, {value.operand, Operand::slot(slot)}); jump(end);
     start(short_path);

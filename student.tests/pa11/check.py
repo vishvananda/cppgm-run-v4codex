@@ -6,7 +6,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 with tempfile.TemporaryDirectory(prefix='pa11-personal-') as directory:
     scratch = Path(directory)
-    for name in ('member-addresses', 'construction-order', 'lexical-lifetime', 'array-lifetime', 'temporary-lifetime', 'access-adl', 'operator-calls', 'bitfield-storage', 'layout-attributes', 'aggregate-cursors', 'volatile-init-reduced', 'inherited-construction'):
+    for name in ('member-addresses', 'construction-order', 'lexical-lifetime', 'array-lifetime', 'temporary-lifetime', 'access-adl', 'operator-calls', 'bitfield-storage', 'layout-attributes', 'aggregate-cursors', 'volatile-init-reduced', 'inherited-construction', 'converting-construction', 'reference-static-order', 'new-boundaries', 'tls-access', 'constant-construction'):
         source = Path(__file__).parent / (name + '.cpp')
         ir, exe = scratch / (name + '.lowir'), scratch / name
         for command in ([ROOT/'dev/cppgm++', '--emit-lowir', '-O0', '--validate-lowir', '-o', ir, source],
@@ -15,7 +15,7 @@ with tempfile.TemporaryDirectory(prefix='pa11-personal-') as directory:
         if name == 'volatile-init-reduced':
             assert 'store volatile i32' in ir.read_text(), 'aggregate initialization lost volatile access'
         print(name + ': validated LowIR, native exit 0')
-    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad', 'bitfield-address-bad', 'bitfield-reference-bad', 'aggregate-narrowing-bad', 'inherited-access-bad'):
+    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad', 'bitfield-address-bad', 'bitfield-reference-bad', 'aggregate-narrowing-bad', 'inherited-access-bad', 'converting-explicit-bad', 'converting-chain-bad'):
         source = Path(__file__).parent / (name + '.cpp')
         result = subprocess.run([str(ROOT/'dev/cppgm++'), '--emit-lowir', '-O0', '-o', str(scratch/'bad.lowir'), str(source)],
                                 capture_output=True, timeout=60)

@@ -9,9 +9,18 @@ Value Procedural::expression(NodeId n, bool location)
     auto fact = sem.expression_fact(n);
     NodeId a = ast[n].first;
     if (fact.form == semantic::ExpressionForm::OperatorCall) return call(n);
+    if (fact.form >= semantic::ExpressionForm::FloatFinite && fact.form <= semantic::ExpressionForm::FloatClassify) return floating_builtin(n);
+    if (fact.form == semantic::ExpressionForm::LiteralCall) {
+        Value string = emit(Opcode::Addr, IRType(), {Operand::symbol(strings[n])});
+        auto lit = ast.literals[ast[n].literal];
+        Instruction widen(Opcode::Convert, IRType::I64); widen.source_type = IRType::I32; widen.operation = Operation::Sext;
+        Value length = emit(widen, {Operand::integer(lit.elements-1)});
+        Operand arguments[] = {Operand::symbol(symbol(sem.facts[n].entity)), string.operand, length.operand};
+        Value v = guarded_call(Instruction(Opcode::Call, type(fact.type)), arguments, 3); v.type = fact.type; return v;
+    }
     if (fact.form == semantic::ExpressionForm::Construction) {
         EntityId e = sem.object_fact(n).temporary;
-        if (!objects[e]) objects[e] = builder->add_slot(0, type(fact.type));
+        if (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index) objects[e] = builder->add_slot(0, type(fact.type));
         Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
         Value pointer = address(at);
         if (sem.object_fact(n).value_initialize) {
@@ -39,6 +48,17 @@ Value Procedural::expression(NodeId n, bool location)
             v.type = fact.type; return v;
         }
         if (sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::Discarded) {
+            NodeId direct = operand;
+            while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
+            auto discarded = sem.expression_fact(direct);
+            if (ast[direct].kind == Kind::IdExpression && discarded.category != ValueCategory::Prvalue &&
+                !(sem.types[discarded.type].cv & 2) &&
+                (sem.entities[discarded.entity].kind == semantic::EntityKind::Parameter ||
+                 (sem.types[discarded.type].kind == TypeKind::Named && sem.entities[sem.types[discarded.type].entity].class_info))) {
+                Value v = expression(operand, true);
+                if (type(discarded.type).kind() == IRType::Object) address(v); else load(v);
+                return Value(Operand(), IRType(), fact.type);
+            }
             discard(operand); return Value(Operand(), IRType(), fact.type);
         }
         Value v = converted(operand, sem.conversion_fact(fact.conversions));
@@ -50,6 +70,7 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = emit(Opcode::Const, type(c.type), {Operand::integer(c.bits)}); v.type = c.type; return v;
     }
     switch (ast[n].kind) {
+    case Kind::New: return placement_new(n);
     case Kind::Literal: {
         auto lit = ast.literals[ast[n].literal];
         if (lit.kind == LiteralKind::string) return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true);
@@ -200,8 +221,8 @@ Value Procedural::binary(NodeId n, bool location)
     }
     Value lhs = load(expression(a));
     Value rhs = load(expression(b));
-    lhs = convert(lhs, sem.conversion_fact(fact.conversions).target);
-    rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target);
+    lhs = convert(lhs, sem.conversion_fact(fact.conversions).target, sem.conversion_fact(fact.conversions).fold_widen);
+    rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target, sem.conversion_fact(fact.conversions+1).fold_widen);
     if (sem.conversion_fact(fact.conversions).derived) lhs = base_projection(lhs, 1);
     if (sem.conversion_fact(fact.conversions+1).derived) rhs = base_projection(rhs, 1);
     return operation(op, lhs, rhs, fact.type);

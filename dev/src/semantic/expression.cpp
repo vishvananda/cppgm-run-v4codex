@@ -30,8 +30,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     NodeId first = ast[n].first;
     Expression r;
     switch (ast[n].kind) {
+    case Kind::New: return placement_new(n, s);
     case Kind::Literal: {
         const syntax::LiteralValue& lit = ast.literals[ast[n].literal];
+        if (lit.suffix) return literal_call(n, s);
         r.type = types.fundamental(lit.type);
         if (lit.kind == LiteralKind::string) {
             r.type = types.compound(TypeKind::Array, types.qualify(r.type, 1), lit.elements);

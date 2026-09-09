@@ -237,6 +237,9 @@ ScopeId Analyzer::target(EntityId e) const
 }
 IdentifierId Analyzer::terminal(NodeId n)
 {
+    NodeId part = ast[n].last;
+    if (calls && ast[part].op == KW_OPERATOR && ast[ast[part].first].kind == Kind::Literal)
+        return literal_name(ast[ast[part].last].text);
     ETokenType op = operator_token(n);
     return calls && op != TOK_INVALID ? operator_name(op) : n ? ast[ast[n].last].text : 0;
 }
@@ -270,6 +273,11 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
     bool qualified = ast[n].op == OP_COLON2;
     if (qualified) s = global;
     for (NodeId p = ast[n].first; p && p != ast[n].last; p = ast[p].next) {
+        if (ast[ast[p].detail].kind == Kind::Decltype) {
+            TypeId t = expression_type(ast[ast[p].detail].first, context, true);
+            if (types[t].kind != TypeKind::Named) throw std::runtime_error("decltype qualifier is not a class");
+            s = entities[types[t].entity].scope; qualified = true; continue;
+        }
         EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
         if (calls && e && !declaration) check_access(e, context, s);
         s = target(e);

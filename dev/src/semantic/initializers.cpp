@@ -153,6 +153,19 @@ bool Analyzer::zero_value(TypeId t)
     }
     zero_value_index.put(t, result ? 2 : 1); return result;
 }
+bool Analyzer::initializer_work(std::uint32_t plan)
+{
+    if (!plan) return true;
+    if (auto known = initializer_work_index.get(plan)) return known == 2;
+    auto action = initializers[plan];
+    bool work = true;
+    if (action.kind == InitKind::Group) {
+        work = false;
+        for (auto c = action.first; c; c = initializers[c].next) work |= initializer_work(c);
+    } else if (action.kind == InitKind::Value) work = !empty_value(action.type);
+    initializer_work_index.put(plan, work ? 2 : 1);
+    return work;
+}
 void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
 {
     if (initializer_plan(n, t)) return;

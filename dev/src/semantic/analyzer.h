@@ -54,7 +54,25 @@ public:
     std::vector<InitAction> initializers = std::vector<InitAction>(1);
     std::uint32_t initializer_plan(NodeId n, TypeId t) const;
     bool zero_value(TypeId t);
+    bool empty_value(TypeId t);
+    bool initializer_work(std::uint32_t plan);
+    std::vector<ConversionObject> conversion_objects = std::vector<ConversionObject>(1);
+    IdentifierId literal_suffix(EntityId e) const { return literal_functions.get(e); }
+    const PlacementNew& placement_fact(NodeId n) const { return placements[placement_index.get(n)]; }
+    const ConstantObject& constant_construction(NodeId n, TypeId t);
+    std::vector<ConstantField> constant_fields;
 private:
+    Index constant_constructors, constant_objects;
+    std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
+    std::vector<ConstructorConstantAction> constructor_constant_actions;
+    std::uint32_t constant_constructor(EntityId ctor);
+    std::vector<PlacementNew> placements = std::vector<PlacementNew>(1);
+    Index placement_index;
+    Expression placement_new(NodeId n, ScopeId s);
+    Index literal_functions, literal_names;
+    IdentifierId literal_name(IdentifierId suffix);
+    Expression literal_call(NodeId n, ScopeId s);
+    Index initializer_work_index;
     Index initializer_index, zero_value_index;
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
@@ -216,10 +234,13 @@ private:
     bool null_constant(NodeId n);
     bool qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const = true);
     bool similar_type(TypeId a, TypeId b);
-    Conversion conversion(NodeId n, TypeId target);
+    Conversion conversion(NodeId n, TypeId target, bool user = true);
+    Conversion converting_constructor(NodeId n, TypeId target);
+    void materialize_conversion(NodeId n, Conversion& c);
+    void record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected);
     bool better(const Conversion* a, const Conversion* b, std::size_t count);
     Conversion ellipsis_conversion(NodeId n);
-    void apply_conversion(NodeId n, Conversion c);
+    void apply_conversion(NodeId n, Conversion& c);
     void record_conversion(Expression& owner, NodeId n, Conversion c);
     Conversion boolean_conversion(NodeId n);
     Expression value_fact(const Expression& source) const;

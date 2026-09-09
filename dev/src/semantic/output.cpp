@@ -122,6 +122,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()
+        << ",\"semantic_conversion_objects\":" << conversion_objects.size()-1
+        << ",\"semantic_placement_objects\":" << placements.size()-1
+        << ",\"semantic_constant_constructor_actions\":" << constructor_constant_actions.size()
+        << ",\"semantic_constant_fields\":" << constant_fields.size()
         << ",\"semantic_initializer_actions\":" << initializers.size()-1
         << ",\"semantic_field_descriptors\":" << field_facts.size()-1
         << ",\"semantic_destruction_actions\":" << destruction_actions.size()
