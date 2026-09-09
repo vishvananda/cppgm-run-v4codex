@@ -23,7 +23,7 @@ public:
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
-    // Called after finish(): types/bindings/initializers are sealed for this TU.
+    // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
     std::size_t static_requests = 0, static_hits = 0;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }

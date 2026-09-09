@@ -18,8 +18,10 @@ const A& complete = Source();
 const int& member = select() ? A(2).n : B(3).n;
 const int& scalar = Number();
 const long& converted = Number();
+Number number;
+const int& from_lvalue = number;
 int main() {
   volatile int clobber[4]={6,7,8,9};
-  return complete.n != 7 || member != 3 || scalar != 41 || converted != 42 ||
-    calls != 2 || alive != 2 || destroyed || clobber[3] != 9;
+  return complete.n != 7 || member != 3 || scalar != 41 || converted != 42 || from_lvalue != 43 ||
+    calls != 3 || alive != 2 || destroyed || clobber[3] != 9;
 }

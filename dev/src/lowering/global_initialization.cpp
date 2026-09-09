@@ -5,6 +5,7 @@ using syntax::Kind;
 using namespace lowir_model;
 bool Procedural::constant_initializer(NodeId n, TypeId t)
 {
+    if (sem.class_initialization(n,t).source) return false;
     if (auto plan = sem.initializer_plan(n, t)) return constant_plan(plan);
     if (n && sem.constructor_member(sem.facts[n].entity)) return false;
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;

@@ -46,6 +46,8 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (kind == Kind::Initializer || kind == Kind::Parenthesized || kind == Kind::ParenInitializer || kind == Kind::BracedInit)
         return static_value(first, target);
     Expression x = expressions[n];
+    auto incoming = conversions[x.incoming];
+    if (incoming.kind == Conversion::Kind::User || incoming.kind == Conversion::Kind::Construction) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string) {
         r.kind = StaticValue::String; r.string = n; return r;
