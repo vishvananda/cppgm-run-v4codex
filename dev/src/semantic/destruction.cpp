@@ -133,7 +133,7 @@ bool Analyzer::destructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
-    if (!members[m].synthetic && ((entities[e].exception_spec & 3) || !members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;
+    if (!members[m].synthetic && (!members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;
     if (members[m].destruction_state == 2) return members[m].destruction_needed;
     if (members[m].destruction_state == 1) throw std::logic_error("cyclic destruction actions");
     members[m].destruction_state = 1;
@@ -149,8 +149,12 @@ bool Analyzer::destructor_needed(EntityId e)
     members[m].destruction_state = 2; members[m].destruction_needed = needed;
     // A defined empty body with effect-free subobjects needs no call, but its
     // externally visible ABI entry remains available to other translation units.
-    if (!needed && !members[m].synthetic) members[m].retained_root = true;
+    if (!needed && !trivial_destructor(entities[cls].type)) members[m].retained_root = true;
     return needed;
+}
+bool Analyzer::temporary_cleanup(EntityId object)
+{
+    return object && object_destructor(object) && !trivial_destructor(entities[object].type);
 }
 bool Analyzer::variant_destruction_effects(TypeId t)
 {

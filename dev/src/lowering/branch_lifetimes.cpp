@@ -8,15 +8,16 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     auto key = n*2+omit_result;
     if (cleanup_expressions[key]) return cleanup_expressions[key] == 2;
     ++full_expression_work;
-    bool needed = !omit_result && sem.destructor_needed(sem.object_destructor(sem.object_fact(n).temporary));
+    auto temporary = sem.object_fact(n).temporary;
+    bool needed = !omit_result && !sem.object_lifetime(temporary) && sem.temporary_cleanup(temporary);
     auto incoming = sem.expression_fact(n).incoming;
     if (incoming && !omit_result) {
         auto c = sem.conversion_fact(incoming);
         if (c.kind == semantic::Conversion::Kind::User)
-            needed |= sem.destructor_needed(sem.object_destructor(sem.user_conversions[c.materialization].source_temporary));
+            needed |= sem.temporary_cleanup(sem.user_conversions[c.materialization].source_temporary);
         if (c.reference && c.materialization) {
             auto object = sem.converted_temporary(c);
-            needed |= sem.destructor_needed(sem.object_destructor(object));
+            needed |= !sem.object_lifetime(object) && sem.temporary_cleanup(object);
         }
     }
     for (NodeId child = ast[n].first; child; child = ast[child].next) {

@@ -131,7 +131,12 @@ PA11 lexical/array lifetimes together, then measure frozen common/affected paths
 Destructor-boundary follow-up: cached effect-free bodies are separate from
 retained ABI roots and parameter/temporary/array cleanup boundaries. Constructor
 handlers preserve required empty user-destructor calls, but no-throw constructors
-need no handlers. First check **247/257**, seven further failures removed, earlier
-**1327/1327**, 51 personal checks. Remaining subobject epilogues need guarded
-suffixes; inline duplication is capped at eight actions, with shared blocks above
-that cap. Final validation and frozen follow-up measurements are pending.
+need no handlers. Completed subobject epilogues use guarded suffixes; inline
+duplication is capped at eight actions, with shared blocks above that cap.
+**248/257**, eight further failures removed, none added; earlier **1327/1327**,
+52 personal checks, file audit and diff checks pass. Final frozen follow-up
+measurements are running. Logs: `/tmp/pa12-destruction-stage2.log`,
+`/tmp/pa12-destruction-personal2.log`, `/tmp/pa12-destruction-final-prior.log`.
+Nine LowIR differences and the member-pointer survivor remain. Survivor owner:
+typed member-pointer formation/application -> object adjustment and function
+signature -> pair storage and indirect call, with constant work per use.

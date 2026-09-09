@@ -74,7 +74,7 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
 }
 void Procedural::array_destroy(EntityId dtor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path, bool subobject)
 {
-    if (!sem.destructor_needed(dtor)) return;
+    if (!dtor) return;
     auto target = sem.types[t];
     TypeId leaf = t; std::uint64_t elements = 1;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }

@@ -137,6 +137,7 @@ class Procedural {
     void reset_lifetime(EntityId e);
     void destroy(EntityId destructor, TypeId t, Value object);
     void destroy_object(EntityId object, EntityId destructor);
+    void destroy_subobject(const semantic::DestructionAction& action);
     void clean_inline(std::uint32_t state, std::uint32_t stop);
     BlockId cleanup_suffix(std::uint32_t state, BlockId terminal);
     void emit_cleanups();

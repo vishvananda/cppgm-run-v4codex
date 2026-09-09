@@ -3,7 +3,8 @@ namespace cppgm { namespace lowering {
 using namespace lowir_model;
 void Procedural::destroy(EntityId dtor, TypeId t, Value object)
 {
-    if (!sem.destructor_needed(dtor)) return;
+    // Callers select an effectful step or a required object/array boundary.
+    if (!dtor) return;
     if (sem.types[t].kind == TypeKind::Array) {
         array_destroy(dtor, t, object, false, {}); return;
     }
@@ -23,7 +24,7 @@ void Procedural::destroy_object(EntityId object, EntityId dtor)
 }
 void Procedural::constructor_cleanup(semantic::SubobjectAction action)
 {
-    if (!sem.destructor_needed(sem.type_destructor(action.type))) return;
+    if (sem.function_nonthrowing(active_function) || sem.trivial_destructor(action.type)) return;
     BlockId handler = block(); constructed_subobjects.push_back({action, handler});
     emit(Opcode::EhCleanup, IRType(), {Operand::label(handler)});
 }
@@ -44,19 +45,58 @@ void Procedural::destructor_prologue(EntityId e)
 void Procedural::destroy_subobjects(EntityId e)
 {
     auto m = sem.member_fact(e);
+    std::vector<semantic::DestructionAction> actions;
     for (unsigned j = 0; j < m.destruction_count; ++j) {
         auto action = sem.destruction_actions[m.destruction_begin+j];
-        if (!sem.destructor_needed(action.destructor)) continue;
-        if (sem.types[action.type].kind == TypeKind::Array) {
-            array_destroy(action.destructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-                {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}}, true);
-            continue;
-        }
-        Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
-        Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
-        destroy(action.destructor, action.type, at);
+        if (sem.destructor_needed(action.destructor)) actions.push_back(action);
     }
+    // Preserve the small O0 epilogue form, but bound duplicated cleanup work.
+    // Larger classes share one unwind block per remaining subobject.
+    const unsigned inline_limit = 8;
+    bool shared = !emitting_cleanup && actions.size() > inline_limit;
+    std::vector<BlockId> suffix;
+    if (shared) {
+        suffix.resize(actions.size());
+        for (unsigned j = 1; j < actions.size(); ++j) suffix[j] = block();
+    }
+    for (unsigned j = 0; j < actions.size(); ++j) {
+        BlockId cleanup, next;
+        if (!emitting_cleanup && j+1 < actions.size()) {
+            cleanup = shared ? suffix[j+1] : block(); next = block();
+            emit(Opcode::EhCleanup,IRType(),{Operand::label(cleanup)});
+        }
+        destroy_subobject(actions[j]);
+        if (cleanup) {
+            emit(Opcode::EhEnd,IRType(),{}); jump(next);
+            if (!shared) {
+                start(cleanup); emitting_cleanup = true;
+                for (unsigned k = j+1; k < actions.size(); ++k) destroy_subobject(actions[k]);
+                emit(Opcode::EhEnd,IRType(),{}); emit(Opcode::Resume,IRType(),{});
+                emitting_cleanup = false;
+            }
+            start(next);
+        }
+    }
+    if (!shared) return;
+    auto end = block(); jump(end); emitting_cleanup = true;
+    for (unsigned j = 1; j < actions.size(); ++j) {
+        start(suffix[j]); destroy_subobject(actions[j]);
+        if (j+1 < actions.size()) jump(suffix[j+1]);
+        else { emit(Opcode::EhEnd,IRType(),{}); emit(Opcode::Resume,IRType(),{}); }
+    }
+    emitting_cleanup = false; start(end);
+}
+void Procedural::destroy_subobject(const semantic::DestructionAction& action)
+{
+    if (sem.types[action.type].kind == TypeKind::Array) {
+        array_destroy(action.destructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
+            {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}}, true);
+        return;
+    }
+    Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+    Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
+    Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
+    destroy(action.destructor, action.type, at);
 }
 void Procedural::destructor_finish(EntityId e)
 {

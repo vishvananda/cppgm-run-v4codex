@@ -23,7 +23,7 @@ void Procedural::activate_temporary(EntityId e)
     }
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
-    if (!sem.destructor_needed(dtor)) return;
+    if (!sem.temporary_cleanup(e)) return;
     bool reopen = full_expression.open;
     close_expression_region();
     TemporaryState state; state.object = e; state.destructor = dtor; state.tail = live;

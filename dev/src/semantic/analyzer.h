@@ -35,6 +35,8 @@ public:
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
     bool destructor_needed(EntityId e);
+    bool temporary_cleanup(EntityId object);
+    bool trivial_destructor(TypeId t);
     EntityId type_destructor(TypeId t) const;
     EntityId converted_temporary(const Conversion& c) const;
     EntityId bound_temporary(NodeId n) const;
@@ -164,7 +166,6 @@ private:
     std::vector<NodeId> jump_bodies;
     EntityId default_destructor(TypeId t, ScopeId s = 0);
     void destructor_actions(EntityId e);
-    bool trivial_destructor(TypeId t);
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
     void register_destruction(EntityId e);
