@@ -3,74 +3,58 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. Goal remains active.
+Target: PA11 full-stage. Phase: implement. **Incomplete: 173/302; 129 failures.**
 
 ## Design and remaining groups
 
-Extend the integrated syntax/semantic graph and typed PA10 lowering. Stable
-EntityId/TypeId own layout, selected members, constructor actions and demand.
-Rare object-use facts have a TU arena; temporary initialization paths die after
-lowering. No text transport, fake AST calls, host compilation or fixture logic.
-PA12 value transfer and PA13 polymorphism remain separate extensions.
+Continue the integrated semantic graph and typed PA10 lowering. EntityId/TypeId
+own selection, layout, constructor/destructor actions and demand. Sparse lifetime
+uses and immutable lexical tails belong to the TU; materialized temporary states,
+projection paths and emitted cleanup interning belong to one lowering function.
+Return continuations preserve values and distinguish enclosing loop/switch
+context. Eight total array elements is the expansion budget; larger arrays use
+counter loops, including partial-construction cleanup. No source reparsing,
+fixture logic or host compilation. PA12 value transfer and PA13 dispatch stay separate.
 
-| Owner / group | Data flow and complexity | Remaining validation |
+| Owner / remaining group | Required data flow and complexity | Validation |
 | --- | --- | --- |
-| Class facts / member lowering | Cached field/base layout, recorded object argument and cv overload choice; O(fields + selected bodies). | empty-base collisions, remaining conversion/member shapes |
-| Semantic construction / typed initialization | Selected constructor/defaults, ordered scalar/reference/base/member actions, memoized helper triviality; O(candidates + actions + output). | aggregate brace elision, arrays, union/volatile/zeroinit boundaries |
-| Lifetime and control flow | Next: typed destruction actions and interned lexical cleanup tails, including loop/goto/return context. O(actions + distinct cleanup states). | destructor, arrays, globals/TLS, shared cleanup and inline-policy controls |
-| Scope lookup / conversions | Indexed lexical/base/ADL edges, selected conversions recorded once. Work proportional to required candidates/edges. | access/friends/ADL/operators, inheriting constructors |
-| Layout / lvalue facts | Next: bit width/sign, storage, requested alignment and union/volatile boundaries. | bit-fields, alignas, packed and metadata cases |
+| Scope access, friends and ADL | Preserve access paths, friendship and source-point visibility through canonical lookup/selection; O(relevant declarations + edges + candidates). | private/defaulted/base destructor rejection, positive/negative access and ADL pairs |
+| Operator/member bindings and conversions | Give each operator a canonical identity; record selected implicit object and conversion once; O(candidates + recorded conversions). | functors including temporaries, ordinary operators, derived reference/pointer ranking, local-class scope cases |
+| Layout and initialization | Typed bit-field/storage/alignment and union/volatile facts feed aggregate cursors and exact zero spans; O(fields + initializer actions + output). | brace elision, static aggregates, empty-base collisions, bit-fields, alignas and zeroinit boundaries |
+| Namespace/TLS lifetime and ABI | Separate storage duration, per-thread guards and complete/base entry identities from selected action sequence; O(objects + required helpers). | TLS wrappers, external D1/D2 roots, inheriting constructors and remaining metadata |
+
+The scalar/array lexical cleanup group and all four PA11 controls are complete
+for their checked fixtures. Related remaining destructor failures need access
+provenance and distinct external ABI entry facts that the current graph lacks.
+Adding cleanup calls cannot supply those facts. The next increment must extend
+those semantic owners before lowering; full-stage work remains active.
 
 ## Performance evidence
 
-[Checkpoint evidence](checkpoint.md) and the frozen
-[protocol](../student.tests/pa11/performance-protocol.md) retain all measurements.
-Nine common compiler output pairs and three native executable pairs are byte
-identical. Compiler text +33664 bytes; common peak RSS +5600 KiB maximum.
-The template timing spike is preserved; same-binary follow-up does not reproduce
-it. New constructor source growth 4x gives 4.03x latency, 3.68x RSS and exactly
-4x action/demand work. Checked 96M-iteration runtime: 0.64312 s, 235-byte text proxy.
-No optimization benefit is claimed. Inherited numeric targets are diagnostics,
-not extra PA11 gates; correctness, complexity and coverage remain mandatory.
+[Constructor checkpoint](checkpoint.md), [lifetime checkpoint](lifetime-checkpoint.md)
+and the [frozen protocol](../student.tests/pa11/performance-protocol.md) retain all
+measurements, including the initial lifetime campaign before the noexcept fix.
+Final common and new-behavior campaigns use the frozen 3f590f18 compiler.
+No optimization speedup is claimed. Historical numeric timing/RSS/text targets
+are diagnostics under the spec's stage-scoped rule; correctness, coverage and
+proportional work remain required. Detailed measured costs and spread are in
+the linked lifetime checkpoint.
 
 ## Handoff ledger
 
-- Entry a97e14d4: authoritative baseline evidence (previous turn classified as
-  progress), 43/302; 259 failures. Earlier suites and file audit passed.
-- 4113c34d: member ABI/this, cv selection, reference fields, typed projections,
-  static members and unreachable; checkpoint 84/302.
-- 17897014: constructor selection/defaults, explicit copy-list rejection,
-  ordered member/base/DMI actions, nested initialization destinations, namespace
-  startup, compact object facts and measured demand closure: 156/302.
-- Final validation: 113 original fixture failures fixed, zero newly failing
-  original fixtures; unchanged coverage/comparator/references. PA1–10 1025/1025;
-  file audit exit 0 (advisory counts Analyzer declarations as body lines).
-  Both explicit personal programs validate LowIR and execute with exit 0.
-- Incomplete boundary: the scalar/reference and single-base constructor group
-  is finished. Further array construction needs a shared lifetime owner for
-  partial construction, reverse destruction and equal cleanup suffixes across
-  loop/goto/return/global/TLS paths. Adding constructor calls alone would leave
-  observable cleanup incorrect. That larger control-flow group is next; the
-  full-stage objective is unchanged and 146 current failures remain.
-- Continuation at cd054d80: previous turn is progress; verified clean tree and
-  reran turn baseline (156/302). Extend lifetime owner to semantic lexical states,
-  destructor/subobject demand, normal and exceptional exits, and shared return/
-  unwind suffixes. Then consume those states for array construction/destruction.
-  Complexity: one lexical traversal, one helper action computation, and one
-  emitted continuation per complete (action, tail, terminal, control) key.
-- Scalar lifetime increment: destructor demand and reverse subobject actions,
-  explicit destructor calls, implicit exception specifications, namespace fini,
-  lexical exits and shared return/unwind continuations. PA11 165/302; PA1–10
-  1025/1025; file audit passes; three explicit personal executables pass. The
-  goto control passes. Performance delta remains to be measured after arrays.
-- Array/temporary increment: flat bounded construction loops with partial-prefix
-  unwind, reverse nested/loop destruction, member-array suffix cleanup, scalar/
-  enum pseudo-destructors, static member lifetime, temporary member-call storage
-  and full-expression cleanup, parsed noinline/always_inline policy. Five
-  personal programs validate and execute. PA11 172/302, no prior fixture losses;
-  all four PA11 controls pass. PA1–10 remain 1025/1025. Small-array expansion is
-  capped at eight total elements; large dimensions use one counter loop.
-- Final review extends the same exception-specification owner: distinguish a
-  processed absent specification from an unseen declaration, so `void f();`
-  cannot later become `void f() noexcept`. Retain the initial frozen benchmark
-  observations and remeasure the corrected candidate; no observation is dropped.
+- a97e14d4: initial 43/302; 259 failures. Stage markers preserved above.
+- 4113c34d: member ABI/this, cv selection, references, projections: 84/302.
+- 17897014 / cd054d80: ordered constructors/defaults/DMI/base initialization,
+  namespace startup and frozen evidence: 156/302; 113 original failures fixed.
+- 2f886c18: destructor demand, exception specifications, lexical exits,
+  namespace fini and shared return/unwind suffixes: 165/302.
+- ae8255d4: bounded class arrays, partial unwind, reverse member-array cleanup,
+  pseudo-destructors, static member lifetime, temporary member-call storage and
+  initializer/expression-statement/return cleanup, inline policy: 172/302.
+- 3f590f18: reject noexcept changes after an earlier absent specification:
+  **173/302**. This continuation fixes **17 existing failures**, introduces zero
+  fixture regressions, and preserves coverage/references/comparison rules.
+- `make test-report-through-pa10`: **1025/1025**. File audit passes (declaration
+  count advisory on Analyzer header). Five explicit personal programs validate
+  typed LowIR and execute with exit 0. `make test-pa11` still exits 2; no later
+  assignment is advanced. Evidence and working tree are committed at handoff.
