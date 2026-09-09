@@ -94,6 +94,11 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
     EntityId ctor = choose_constructor(target, args, &result, s);
+    if (ast[list].kind == Kind::BracedInit) {
+        Type f = types[entities[ctor].type];
+        for (std::size_t j = 0; j < args.size() && j < f.count; ++j)
+            list_conversion(args[j], value_type(types.parameters[f.offset+j]));
+    }
     if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
     // The initializer wrapper retains its starting token, including '='.
     bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);

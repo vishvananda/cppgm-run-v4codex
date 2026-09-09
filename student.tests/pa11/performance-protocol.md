@@ -197,3 +197,14 @@ and converting constructors, and checks a varying checksum. It has no static
 data; executable payload therefore measures its text. Preserve all hashes and
 observations. Run no other tests, builds or performance campaigns concurrently.
 Repeat noisy common groups with frozen binaries, keeping the original results.
+
+The initial B is af72ea1d, SHA256
+060a1c6596c93b56a809851d86d47afef0f658676dae6b52e87207911ff1e0f5.
+Retain its complete common and behavior measurements as
+`construction-initial-{common,behavior}-performance.json`. Final source review
+found that braced constructor arguments needed the existing narrowing check
+after overload selection. The corrected compiler repeats both campaigns;
+neither the original binary nor its observations are overwritten.
+Constant-array lowering in A is dynamically correct but lacks the required
+static IR facts. The B-only family measurements assess required construction
+work and scaling, not a speed benefit from early static initialization.

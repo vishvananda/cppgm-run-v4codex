@@ -15,7 +15,7 @@ with tempfile.TemporaryDirectory(prefix='pa11-personal-') as directory:
         if name == 'volatile-init-reduced':
             assert 'store volatile i32' in ir.read_text(), 'aggregate initialization lost volatile access'
         print(name + ': validated LowIR, native exit 0')
-    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad', 'bitfield-address-bad', 'bitfield-reference-bad', 'aggregate-narrowing-bad', 'inherited-access-bad', 'converting-explicit-bad', 'converting-chain-bad'):
+    for name in ('access-selected-bad', 'access-conversion-bad', 'hidden-qualified-bad', 'bitfield-address-bad', 'bitfield-reference-bad', 'aggregate-narrowing-bad', 'inherited-access-bad', 'converting-explicit-bad', 'converting-chain-bad', 'constructor-narrowing-bad'):
         source = Path(__file__).parent / (name + '.cpp')
         result = subprocess.run([str(ROOT/'dev/cppgm++'), '--emit-lowir', '-O0', '-o', str(scratch/'bad.lowir'), str(source)],
                                 capture_output=True, timeout=60)
