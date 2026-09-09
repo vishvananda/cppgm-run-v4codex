@@ -115,6 +115,7 @@ class Procedural {
     void finish_constructor_handlers();
     void constructor_cleanup(semantic::SubobjectAction action);
     semantic::Index initialized_units;
+    unsigned initialization_expansion = 1;
     struct InitProjection { std::uint64_t offset; bool field; EntityId entity; TypeId element = 0;
         InitProjection(std::uint64_t o, bool f, EntityId e = 0) : offset(o), field(f), entity(e) {} };
     Value array_element(Value root, bool indirect, const std::vector<InitProjection>& path, Operand index, std::uint64_t stride);
@@ -132,6 +133,7 @@ class Procedural {
     void repeat_initializer(std::uint32_t plan, Value base, std::uint64_t count = 0, TypeId type = 0);
     void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path);
     void global_plan(std::uint32_t plan);
+    void global_bit_field(std::uint32_t plan, std::uint64_t& bytes);
     void global_construction(NodeId n, TypeId t);
     bool constant_plan(std::uint32_t plan);
     Value string_element(NodeId source, TypeId element, std::uint64_t index);

@@ -225,3 +225,35 @@ invocations for calls-4 and memory-float-4 in
 These observations compare existing work counters and capacities; they are not
 ABBA timing evidence or proof of an allocation cause. Preserve the initial
 campaign, final campaign, follow-up and diagnostic together.
+
+## Independent final audit
+
+Freeze A at `0773e4d8` (the completed-stage compiler, SHA256
+`48ded3f8de96305e55004427cadb840a6128f7353de8dffaf8c8c2512a2fbfbc`) and
+B after the independent audit fixes and fresh correctness checks. Record the
+implementation commit and hashes in each result. Reuse the nine common compiler
+inputs and three long runtime inputs from PA10 `benchmark.py delta`, including
+four A/A samples and two wall-time ABBA blocks. Keep telemetry separate, record
+wall/RSS/compiler text/runtime/native text together, and retain all observations.
+No builds, tests or other campaigns run concurrently with timing.
+
+`audit_benchmark.py` fixes two new compiler families at 1x/4x source scale:
+1000/4000 independent nested omitted initializers and 500/2000 joined string
+literal globals. Both compilers are correct on these inputs; validate their
+LowIR and execute both outputs before timing. These personal comparisons use
+checked outcomes and the zero-initialization proof; course comparison rules
+remain unchanged. The separate executable workload performs 120000
+volatile-bounded iterations, initializing two 1024-element arrays, writing a
+varying element and checking a checksum plus an untouched zero element. It has
+no static data, so the established sectionless payload metric measures code.
+Compile before execution timing; use the same AAAA/ABBA/ABBA protocol.
+
+The audit's incorrect-baseline reducers (static bit-fields, default-argument
+conversions/lifetimes, effects, global/TLS constructor arrays and access) are
+correctness evidence, never speed baselines. Range and nested-dimension checks
+verify work/growth bounds separately. The eight-element repetition budget now
+applies across nested lowering, while static zero data uses bounded spans.
+Inherited numeric latency/RSS/text targets remain diagnostics as specified
+above. No later-stage optimizer, allocator, native backend or self-hosting gate
+is introduced. Retain noisy observations and disclose them; only repeatable
+benefits above startup/noise support performance claims.

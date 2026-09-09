@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
@@ -18,7 +19,8 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
     } else {
         auto e = sem.entities[ctor]; auto f = sem.types[e.type];
         for (unsigned j = 0; j < f.count; ++j)
-            call_work.push_back(convert(expression(sem.default_arguments[e.defaults+j]), sem.types.parameters[f.offset+j]).operand);
+            call_work.push_back(converted(sem.default_arguments[e.defaults+j],
+                sem.conversion_fact(sem.member_fact(ctor).default_conversions+j)).operand);
     }
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin);
@@ -111,28 +113,8 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
     }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = sem.types[t];
-    NodeId c = ast[n].first;
-    if (target.kind == TypeKind::Named && sem.entities[target.entity].class_info) {
-        for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
-            EntityId field = sem.declarations[d].entity;
-            if (!sem.nonstatic_field(field)) continue;
-            auto member = sem.entities[field];
-            path.push_back({member.member_offset, true, field});
-            aggregate_initialize(c, member.type, root, indirect, path); path.pop_back();
-            if (c) c = ast[c].next;
-        }
-        return;
-    }
-    if (target.kind == TypeKind::Array) {
-        for (std::uint64_t j = 0; j < target.bound; ++j) {
-            InitProjection step(j*sem.object_size(target.child), false);
-            if (type(target.child).scalar()) { step.offset = j; step.element = target.child; }
-            path.push_back(step);
-            aggregate_initialize(c, target.child, root, indirect, path); path.pop_back();
-            if (c) c = ast[c].next;
-        }
-        return;
-    }
+    if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array)
+        throw std::logic_error("missing aggregate initializer plan");
     while (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) n = ast[n].first;
     Value value = path.empty() || path.back().field ? initialization_value(n, t) :
         n ? incoming(n) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);

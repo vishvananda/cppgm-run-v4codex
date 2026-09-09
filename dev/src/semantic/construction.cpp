@@ -40,6 +40,8 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     while (members[entities[access].member_info].inherited_constructor)
         access = members[entities[access].member_info].inherited_constructor;
     check_access(access, scope, entities[access].owner);
+    auto member = entities[selected].member_info;
+    if (!result && members[member].default_conversions) { demand_member(selected); return selected; }
     Type f = types[entities[selected].type];
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;
@@ -47,10 +49,14 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         NodeId arg = i < args.size() ? args[i] : default_arguments[entities[selected].defaults+i];
         Conversion c = i < args.size() ? sequences[viable[best].offset+i] : conversion(arg, types.parameters[f.offset+i]);
         if (!c.valid()) throw std::runtime_error("invalid constructor default argument");
-        if (result) { arguments.push_back(arg); selected_arguments.push_back(c); }
-        else apply_conversion(arg, c);
+        arguments.push_back(arg); selected_arguments.push_back(c);
     }
     if (result) record_call(*result, arguments, selected_arguments);
+    else {
+        Expression defaults;
+        record_call(defaults, arguments, selected_arguments);
+        members[member].default_conversions = defaults.conversions;
+    }
     demand_member(selected);
     return selected;
 }
@@ -140,7 +146,11 @@ void Analyzer::constructor_actions(EntityId e)
         if (!field) throw std::runtime_error("unknown constructor initializer");
         if (entities[field].kind == EntityKind::Alias) field = types[entities[field].type].entity;
         if (explicit_initializers.get(field)) throw std::runtime_error("duplicate constructor initializer");
-        if (!nonstatic_field(field) && entities[field].kind != EntityKind::Type)
+        bool direct_member = nonstatic_field(field) && entities[field].owner == entities[cls].scope;
+        bool direct_base = false;
+        for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
+            direct_base |= bases[b].base == field;
+        if (!direct_member && !direct_base)
             throw std::runtime_error("initializer does not name a member or base");
         explicit_initializers.put(field, ast[id].next);
     }
@@ -204,26 +214,5 @@ bool Analyzer::constructor_needed(EntityId e)
     }
     members[m].nontrivial = needed; members[m].trivial_state = 2;
     return needed;
-}
-void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
-{
-    Type type = types[t];
-    if (type.kind == TypeKind::LRef || type.kind == TypeKind::RRef) throw std::runtime_error("value-initialized reference");
-    if (type.kind == TypeKind::Array) { prepare_value_initialization(type.child, s); return; }
-    if (type.kind != TypeKind::Named || !entities[type.entity].class_info) return;
-    auto c = entities[type.entity].class_info;
-    if (class_facts[c].value_state == 2) return;
-    if (class_facts[c].value_state == 1) throw std::runtime_error("recursive value initialization");
-    class_facts[c].value_state = 1;
-    if (!class_facts[c].aggregate) {
-        EntityId ctor = default_constructor(t, s);
-        class_facts[c].value_constructor = ctor;
-        if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
-    }
-    else for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
-        EntityId e = declarations[d].entity;
-        if (nonstatic_field(e)) prepare_value_initialization(entities[e].type, s);
-    }
-    class_facts[c].value_state = 2;
 }
 } }

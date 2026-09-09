@@ -49,27 +49,9 @@ void Procedural::global_data(NodeId n, TypeId t)
     if (auto plan = sem.initializer_plan(n, t)) { global_plan(plan); return; }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto array = sem.types[t];
-    if (array.kind == TypeKind::Named && sem.entities[array.entity].class_info) {
-        NodeId c = ast[n].first;
-        std::uint64_t bytes = 0, total = sem.object_size(t);
-        for (auto d = sem.scopes[sem.entities[array.entity].scope].first_decl; d; d = sem.declarations[d].next) {
-            auto member = sem.entities[sem.declarations[d].entity];
-            if (!sem.nonstatic_field(sem.declarations[d].entity)) continue;
-            if (member.member_offset > bytes) { DataItem padding; padding.zero_bytes = member.member_offset-bytes; p.data.push_back(padding); }
-            global_data(c, member.type); bytes = member.member_offset + sem.object_size(member.type);
-            if (c) c = ast[c].next;
-        }
-        if (total > bytes) { DataItem padding; padding.zero_bytes = total-bytes; p.data.push_back(padding); }
-        return;
-    }
-    if (array.kind == TypeKind::Array) {
-        if (!n) {
-            DataItem d; d.zero_bytes = sem.object_size(t); p.data.push_back(d); return;
-        }
-        unsigned count = 0;
-        for (NodeId c = ast[n].first; c; c = ast[c].next) { global_data(c, array.child); ++count; }
-        if (count > array.bound) throw std::runtime_error("excess array initializer");
-        if (count < array.bound) { DataItem d; d.zero_bytes = (array.bound-count)*sem.object_size(array.child); p.data.push_back(d); }
+    if ((array.kind == TypeKind::Named && sem.entities[array.entity].class_info) || array.kind == TypeKind::Array) {
+        if (n) throw std::logic_error("missing static aggregate initializer plan");
+        DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
     } else {
         DataItem d = constant_data(n, t);
         if (d.type == IRType::Ptr && d.kind == DataItem::Scalar && !d.value.data.integer) {
@@ -93,6 +75,8 @@ void Procedural::global(EntityId e)
         bool class_object = sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info;
         bool dynamic = entity.initializer && !constant_initializer(entity.initializer, t);
         if (class_object && !entity.initializer) dynamic = !sem.empty_value(t) || sem.constructor_needed(sem.object_constructor(e));
+        if (!entity.initializer && sem.types[t].kind == TypeKind::Array)
+            dynamic = sem.constructor_needed(sem.object_constructor(e));
         if (dynamic) {
             if (entity.thread_local_storage) prepare_tls(e);
             else global_initializers.push_back(e);
@@ -152,35 +136,8 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
     }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = sem.types[t];
-    if (target.kind == TypeKind::Named && sem.entities[target.entity].class_info) {
-        sem.object_size(t);
-        Value base = address(location); NodeId c = ast[n].first;
-        for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
-            auto member = sem.entities[sem.declarations[d].entity];
-            if (!sem.nonstatic_field(sem.declarations[d].entity)) continue;
-            Instruction projection(Opcode::Index, IRType::I8); projection.projection = ir_model::IPK_FIELD;
-            Value at = emit(projection, {base.operand, Operand::integer(member.member_offset)});
-            at.type = member.type; at.address = true;
-            at.init_offset = location.init_offset + member.member_offset;
-            if (sem.field_fact(sem.declarations[d].entity).bit_field) { at.bit_field = sem.declarations[d].entity; at.initializing = true; }
-            initialize(c, member.type, at); if (c) c = ast[c].next;
-        }
-        return;
-    }
-    if (target.kind == TypeKind::Array) {
-        Value base = address(location);
-        unsigned count = 0;
-        auto element = [&](NodeId c) {
-            Value at = count ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(count*sem.object_size(target.child))}) : base;
-            at.type = target.child; at.address = true;
-            at.init_offset = location.init_offset + count*sem.object_size(target.child);
-            initialize(c, target.child, at); ++count;
-        };
-        for (NodeId c = ast[n].first; c; c = ast[c].next) element(c);
-        if (count > target.bound) throw std::runtime_error("excess array initializer");
-        while (count < target.bound) element(0);
-        return;
-    }
+    if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array)
+        throw std::logic_error("missing aggregate initializer plan");
     if (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
     Value value = n ? (location.bit_field ? load(expression(n)) : sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     store(value, location);

@@ -3,6 +3,12 @@
 #include <limits>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::initialized_field_type(TypeId owner, EntityId field)
+{
+    unsigned cv = types[owner].cv;
+    if (entities[field].mutable_field) cv &= ~1u;
+    return types.qualify(entities[field].type, cv);
+}
 bool Analyzer::aggregate_type(TypeId t) const
 {
     auto type = types[t];
@@ -72,11 +78,8 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     std::uint32_t id = initializers.size(); initializers.push_back(InitAction());
     initializers[id].type = t; initializers[id].source = cursor;
     if (!cursor) {
-        if (types[t].kind == TypeKind::Array) {
-            auto child = initializer_item(cursor, types[t].child, s);
-            initializers[child].count = types[t].bound;
-            initializers[id].kind = InitKind::Group; initializers[id].first = child;
-        } else { initializers[id].kind = InitKind::Value; prepare_value_initialization(t, s); }
+        prepare_value_initialization(t, s);
+        initializers[id] = initializers[initializer_plan(0, t)];
         return id;
     }
     NodeId source = cursor;
@@ -127,7 +130,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         for (auto d = scopes[entities[target.entity].scope].first_decl; d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            auto item = initializer_item(inner, entities[field].type, s);
+            auto item = initializer_item(inner, initialized_field_type(t, field), s);
             initializers[item].field = field; append(item);
             if (entities[target.entity].key == KW_UNION) break;
         }
@@ -143,7 +146,7 @@ bool Analyzer::zero_value(TypeId t)
     bool result = !(type.cv & 2) && type.kind != TypeKind::LRef && type.kind != TypeKind::RRef;
     if (result && type.kind == TypeKind::Array) result = zero_value(type.child);
     if (result && type.kind == TypeKind::Named && entities[type.entity].class_info) {
-        result = !value_constructor(t);
+        result = !value_constructor(t) && entities[type.entity].key != KW_UNION;
         for (auto d = scopes[entities[type.entity].scope].first_decl; result && d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;

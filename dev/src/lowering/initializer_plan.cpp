@@ -18,7 +18,7 @@ bool Procedural::constant_plan(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
     if (action.kind == InitKind::Constructor) return sem.constant_construction(action.source, action.type).valid;
-    if (action.kind == InitKind::Value) return constant_initializer(0, action.type);
+    if (action.kind == InitKind::Value) return !sem.value_constructor(action.type);
     if (action.kind == InitKind::String) return true;
     if (action.kind == InitKind::Scalar) return sem.static_value(action.source, action.type).kind != semantic::StaticValue::Invalid;
     for (auto child = action.first; child; child = sem.initializers[child].next)
@@ -37,7 +37,11 @@ void Procedural::global_plan(std::uint32_t plan)
         }
         p.data.push_back(item); return;
     }
-    if (action.kind == InitKind::Value) { global_data(0, action.type); return; }
+    if (action.kind == InitKind::Value) {
+        auto item = constant_data(0, action.type);
+        if (item.type == IRType::Ptr) { item.kind = DataItem::Zero; item.zero_bytes = 8; }
+        p.data.push_back(item); return;
+    }
     if (action.kind == InitKind::String) {
         std::uint64_t length = ast.literals[ast[action.source].literal].elements;
         auto limit = target.bound-length > 8 ? length : target.bound;
@@ -52,8 +56,9 @@ void Procedural::global_plan(std::uint32_t plan)
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         auto at = item.field ? sem.entities[item.field].member_offset : item.index * sem.object_size(item.type);
-        if (at > bytes) { DataItem zero; zero.zero_bytes = at-bytes; p.data.push_back(zero); }
-        if (item.count > 8 && item.kind == InitKind::Value && sem.zero_value(item.type)) {
+        if (at > bytes) { DataItem zero; zero.zero_bytes = at-bytes; p.data.push_back(zero); bytes = at; }
+        if (sem.field_fact(item.field).bit_field) { global_bit_field(child, bytes); continue; }
+        if (item.count > 8 && !item.source && constant_plan(child)) {
             DataItem zero; zero.zero_bytes = item.count*sem.object_size(item.type); p.data.push_back(zero);
         } else for (std::uint64_t j = 0; j < item.count; ++j) global_plan(child);
         bytes = at + item.count*sem.object_size(item.type);
@@ -71,8 +76,13 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     if (action.kind == InitKind::Constructor) { construct(sem.facts[action.source].entity, action.source, address(location)); return; }
     if (action.kind == InitKind::Value) {
-        std::vector<InitProjection> path;
-        aggregate_initialize(0, action.type, location, false, path); return;
+        if (auto ctor = sem.value_constructor(action.type)) {
+            auto saved_live = live;
+            construct(ctor, 0, address(location));
+            clean_inline(live, saved_live);
+        }
+        else store(initialization_value(0, action.type), location);
+        return;
     }
     Value base = address(location);
     if (action.kind == InitKind::String) {
@@ -90,11 +100,13 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (item.count > 8) {
+        if (item.count > 8 / initialization_expansion) {
             auto offset = item.index*sem.object_size(item.type);
             Value at = offset ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(offset)}) : base;
             at.type = item.type; at.address = true; repeat_initializer(child, at); continue;
         }
+        auto saved_expansion = initialization_expansion;
+        initialization_expansion *= item.count;
         for (std::uint64_t j = 0; j < item.count; ++j) {
             auto offset = item.field ? sem.entities[item.field].member_offset : (item.index+j)*sem.object_size(item.type);
             Instruction index(Opcode::Index, IRType::I8); index.projection = item.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
@@ -104,14 +116,19 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
             if (target.kind == TypeKind::Array && call_aggregate_helper(child, at)) continue;
             initialize_plan(child, at);
         }
+        initialization_expansion = saved_expansion;
     }
 }
 void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path)
 {
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
-    if (action.kind == InitKind::Value || action.kind == InitKind::Constructor) {
-        aggregate_initialize(action.kind == InitKind::Value ? 0 : action.source, action.type, root, indirect, path); return;
+    if (action.kind == InitKind::Value) {
+        Value at = initialization_address(root, indirect, path); at.type = action.type;
+        initialize_plan(plan, at); return;
+    }
+    if (action.kind == InitKind::Constructor) {
+        aggregate_initialize(action.source, action.type, root, indirect, path); return;
     }
     if (action.kind == InitKind::Scalar) {
         // Nested constructor aggregate bindings establish the reference member's
@@ -141,16 +158,19 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
     }
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (item.count > 8) {
+        if (item.count > 8 / initialization_expansion) {
             path.push_back(InitProjection(item.index*sem.object_size(item.type), false));
             Value at = initialization_address(root, indirect, path); at.type = item.type;
             repeat_initializer(child, at); path.pop_back(); continue;
         }
+        auto saved_expansion = initialization_expansion;
+        initialization_expansion *= item.count;
         for (std::uint64_t j = 0; j < item.count; ++j) {
             InitProjection step(item.field ? sem.entities[item.field].member_offset : (item.index+j)*sem.object_size(item.type), item.field != 0, item.field);
             if (!item.field) { step.offset = item.index+j; step.element = item.type; }
             path.push_back(step); aggregate_plan(child, root, indirect, path); path.pop_back();
         }
+        initialization_expansion = saved_expansion;
     }
 }
 void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uint64_t count, TypeId type)
@@ -158,7 +178,7 @@ void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uin
     auto action = sem.initializers[plan];
     if (!plan) { action.type = type; action.count = count; action.kind = InitKind::Value; }
     Value base = address(location);
-    if (action.kind == InitKind::Value && sem.zero_value(action.type)) {
+    if (!action.source && sem.zero_value(action.type)) {
         Instruction zero(Opcode::ZeroInit); zero.bytes = action.count*sem.object_size(action.type);
         zero.alignment = sem.object_alignment(action.type); emit(zero, {base.operand}); return;
     }

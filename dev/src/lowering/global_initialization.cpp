@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
 using namespace lowir_model;
@@ -9,21 +10,9 @@ bool Procedural::constant_initializer(NodeId n, TypeId t)
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = sem.types[t];
     if (!n && sem.value_constructor(t)) return false;
-    if (target.kind == TypeKind::Named && sem.entities[target.entity].class_info) {
-        NodeId c = ast[n].first;
-        for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
-            EntityId field = sem.declarations[d].entity;
-            if (!sem.nonstatic_field(field)) continue;
-            if (!constant_initializer(c, sem.entities[field].type)) return false;
-            if (c) c = ast[c].next;
-        }
-        return true;
-    }
-    if (target.kind == TypeKind::Array) {
-        if (!n) return constant_initializer(0, target.child);
-        for (NodeId c = ast[n].first; c; c = ast[c].next)
-            if (!constant_initializer(c, target.child)) return false;
-        return true;
+    if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array) {
+        if (n) throw std::logic_error("missing static aggregate initializer plan");
+        return true; // Uninitialized static storage is zero-initialized.
     }
     return sem.static_value(n, t).kind != semantic::StaticValue::Invalid;
 }

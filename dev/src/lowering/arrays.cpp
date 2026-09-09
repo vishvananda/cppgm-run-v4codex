@@ -34,6 +34,7 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
             BlockId cleanup, next;
             if (j && partial) { cleanup = block(); next = block(); emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)}); }
             construct(ctor, 0, array_element(root, indirect, path, Operand::integer(j), stride));
+            clean_inline(live, 0);
             if (cleanup) {
                 emit(Opcode::EhEnd, IRType(), {}); jump(next); start(cleanup);
                 for (std::uint64_t k = j; k; --k) destroy(dtor, t, array_element(root, indirect, path, Operand::integer(k-1), stride));
@@ -52,6 +53,7 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
         start(body);
         if (partial) emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)});
         construct(ctor, 0, array_element(root, indirect, path, current.operand, stride));
+        clean_inline(live, 0);
         if (partial) emit(Opcode::EhEnd, IRType(), {});
         Value next = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(1)}, Operation::Add);
         emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(index)}); jump(cond);

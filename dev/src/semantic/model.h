@@ -68,7 +68,6 @@ struct ClassFacts {
     unsigned char layout_state = 0;
     bool aggregate = true, empty = true;
     EntityId value_constructor = 0;
-    unsigned char value_state = 0;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
 // bit-fields and explicit alignment use this descriptor by canonical EntityId.
@@ -118,6 +117,7 @@ struct MemberFacts {
     bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
     bool complete_entry = false, retained_root = false;
     std::uint32_t action_begin = 0, action_count = 0;
+    std::uint32_t default_conversions = 0;
     unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
     bool destruction_needed = false, nonthrowing = false;
     std::uint32_t destruction_begin = 0, destruction_count = 0;

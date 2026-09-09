@@ -175,8 +175,8 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     }
     case Kind::Linkage: {
         bool saved = c_linkage;
-        TextView text = ids.spelling(ast[n].text);
-        c_linkage = text.size == 3 && text.data[1] == 'C';
+        const auto literal = ast.literals[ast[n].literal];
+        c_linkage = literal.type == FT_CHAR && literal.bytes == 2 && ast.literal_bytes[literal.offset] == 'C';
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
         c_linkage = saved; break;
     }

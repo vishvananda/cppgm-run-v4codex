@@ -73,7 +73,8 @@ private:
     IdentifierId literal_name(IdentifierId suffix);
     Expression literal_call(NodeId n, ScopeId s);
     Index initializer_work_index;
-    Index initializer_index, zero_value_index;
+    Index initializer_index, zero_value_index, value_contexts;
+    TypeId initialized_field_type(TypeId owner, EntityId field);
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
     bool aggregate_type(TypeId t) const;
