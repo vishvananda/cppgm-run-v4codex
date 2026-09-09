@@ -7,6 +7,13 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 COMPILER = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 CASES = {
+# The course fixes RHS-before-LHS-address for assignment, including compound.
+'assignment-order': r'''
+int order=0, value=0;
+int& left(){order=order*10+1;return value;}
+int right(){order=order*10+2;return 3;}
+int main(){left()+=right();return order==21 && value==3 ? 0:1;}
+''',
 'control-defaults': r'''
 namespace N { int seed=3; int plus(int n=seed) { return n+2; } }
 int &alias(int &n) { return n; }

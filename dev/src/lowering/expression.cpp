@@ -113,7 +113,18 @@ Value Procedural::binary(NodeId n, bool location)
     if (ast[n].kind == Kind::Assignment) {
         Value rhs, dest, lhs;
         if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
-        else { dest = expression(a, true); lhs = load(dest); rhs = converted(b, sem.conversion_fact(fact.conversions+1)); }
+        else {
+            NodeId target = a;
+            while (ast[target].kind == Kind::Parenthesized) target = ast[target].first;
+            EntityId object = sem.expression_fact(target).entity;
+            bool direct = ast[target].kind == Kind::IdExpression && object && !reference(sem.entities[object].type);
+            // A direct object needs no address evaluation; its read follows
+            // the binary-operand convention. Indirection/calls must evaluate
+            // the RHS before computing the LHS address, exactly once.
+            if (direct) { dest = expression(a, true); lhs = load(dest); }
+            rhs = converted(b, sem.conversion_fact(fact.conversions+1));
+            if (!direct) { dest = expression(a, true); lhs = load(dest); }
+        }
         if (op != OP_ASS) {
             ETokenType binary = OP_PLUS;
             switch (op) {
