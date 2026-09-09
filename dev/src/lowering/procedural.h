@@ -122,10 +122,10 @@ class Procedural {
     void array_construct(EntityId ctor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path);
     void array_destroy(EntityId dtor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path, bool subobject = false);
     Value initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path);
-    struct AggregateHelper { TypeId type; FunctionId function; std::uint32_t fields, count; };
+    struct AggregateHelper { TypeId type; FunctionId function; std::uint32_t actions, count; };
     semantic::Index aggregate_helpers;
     std::vector<AggregateHelper> aggregate_definitions;
-    std::vector<EntityId> aggregate_fields;
+    std::vector<std::uint32_t> aggregate_actions;
     SymbolId aggregate_helper(std::uint32_t plan);
     bool call_aggregate_helper(std::uint32_t plan, Value location);
     void emit_aggregate_helpers();

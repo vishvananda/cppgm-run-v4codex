@@ -6,11 +6,11 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     auto action = sem.initializers[plan];
     TypeId target = action.type;
     if (auto known = aggregate_helpers.get(target)) return p.functions[known-1].symbol;
-    AggregateHelper helper; helper.type = target; helper.fields = aggregate_fields.size(); helper.count = 0;
+    AggregateHelper helper; helper.type = target; helper.actions = aggregate_actions.size(); helper.count = 0;
     std::vector<TypeId> parameters(1, sem.types.compound(TypeKind::Pointer, target));
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        aggregate_fields.push_back(child); ++helper.count; parameters.push_back(item.type);
+        aggregate_actions.push_back(child); ++helper.count; parameters.push_back(item.type);
     }
     helper.function = FunctionId(p.functions.size()+1);
     lowir_model::Function f; f.symbol = fresh_symbol("@__aggregate_" + std::to_string(target));
@@ -53,7 +53,7 @@ void Procedural::emit_aggregate_helpers()
             emit(Opcode::Store, parameter.type, {Operand::value(parameter.value), Operand::slot(slot)});
         }
         for (unsigned j = 0; j < helper.count; ++j) {
-            auto action = sem.initializers[aggregate_fields[helper.fields+j]];
+            auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
             Value value = emit(Opcode::Load, type(t), {Operand::slot(slots[j+1])}); value.type = t;
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slots[0])});
