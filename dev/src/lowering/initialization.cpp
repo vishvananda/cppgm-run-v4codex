@@ -7,6 +7,17 @@ using namespace lowir_model;
 void Procedural::string_literal(NodeId n)
 {
     const auto lit = ast.literals[ast[n].literal];
+    std::uint64_t hash = 1469598103934665603ULL ^ unsigned(lit.type);
+    for (std::uint32_t j = 0; j < lit.bytes; ++j) hash = (hash ^ static_cast<unsigned char>(ast.literal_bytes[lit.offset+j])) * 1099511628211ULL;
+    auto head = string_index.get(hash);
+    for (auto i = head; i; i = string_records[i].next) {
+        auto other = ast.literals[ast[string_records[i].node].literal];
+        if (other.type == lit.type && other.bytes == lit.bytes &&
+            !std::memcmp(ast.literal_bytes.data()+other.offset, ast.literal_bytes.data()+lit.offset, lit.bytes)) {
+            strings[n] = strings[string_records[i].node]; return;
+        }
+    }
+    string_records.push_back(StringRecord{n, head}); string_index.put(hash, string_records.size()-1);
     Global g; g.structured = true;
     g.symbol = fresh_symbol("@__string_" + std::to_string(p.symbols.size()+1));
     strings[n] = g.symbol;
@@ -35,6 +46,7 @@ DataItem Procedural::constant_data(NodeId n, TypeId t)
 }
 void Procedural::global_data(NodeId n, TypeId t)
 {
+    if (auto plan = sem.initializer_plan(n, t)) { global_plan(plan); return; }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto array = sem.types[t];
     if (array.kind == TypeKind::Named && sem.entities[array.entity].class_info) {
@@ -134,6 +146,7 @@ void Procedural::object(EntityId e)
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {
+    if (auto plan = sem.initializer_plan(n, t)) { initialize_plan(plan, location); return; }
     if (n && sem.facts[n].entity && sem.constructor_member(sem.facts[n].entity)) {
         construct(sem.facts[n].entity, n, address(location)); return;
     }

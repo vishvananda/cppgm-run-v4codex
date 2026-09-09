@@ -43,3 +43,23 @@ without relying on agreement among compilers.
 Edits preserve original source inputs, initialization/store sequences, all
 other instructions, sidecars, coverage and comparison rules. References were
 edited at the identified conversion sites, not replaced with compiler output.
+
+The initializer continuation applies the identical proof to
+`400-volatile-initialization-paths.ref`: the prefix read and four comparisons
+receive declared-type completion and integral promotion. Volatile loads/stores,
+all array projections, source inputs and control flow are retained. This is the
+fifth affected output from the same pinned bundle.
+
+## Aggregate helper volatile initialization
+
+The same bundle's `100-volatile-access-markers.ref` initializes the explicitly
+volatile `Device::status` member in its aggregate helper with ordinary `store`.
+[LowIR memory access rules](../pa8/lowir.md#memory-and-addressing) explicitly require
+volatile markers for scalar initialization of aggregate members and elements;
+only preliminary whole-class zero-initialization has the stated exception.
+The [reduced source](../student.tests/pa11/volatile-init-reduced.cpp) initializes
+one such member through a one-element aggregate array. Its helper's destination
+is that volatile member, not preliminary zeroed storage. The correction adds
+`volatile` to exactly that store. All source tests, other instructions, sidecars
+and comparison rules remain unchanged. The personal check validates/executes
+this source and inspects the required volatile store marker.

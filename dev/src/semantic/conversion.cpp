@@ -277,29 +277,15 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
 {
     if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s)) return;
     if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s); return; }
+    if (aggregate_type(target) && (types[target].kind == TypeKind::Array || ast[n].kind == Kind::BracedInit ||
+        ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::ParenInitializer)) {
+        aggregate_initialization(n, target, s); return;
+    }
     if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
-        if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info) {
-            NodeId c = ast[n].first;
-            for (auto d = scopes[entities[types[target].entity].scope].first_decl; d; d = declarations[d].next) {
-                EntityId e = declarations[d].entity;
-                if (!nonstatic_field(e)) continue;
-                if (c) { initialize(c, entities[e].type, s); c = ast[c].next; }
-                else prepare_value_initialization(entities[e].type, s);
-            }
-            if (c) throw std::runtime_error("excess aggregate initializer");
-            facts[n].type = target; return;
-        }
-        if (types[target].kind == TypeKind::Array) {
-            unsigned count = 0;
-            for (NodeId c = ast[n].first; c; c = ast[c].next) { initialize(c, types[target].child, s); ++count; }
-            if (types[target].bound && count > types[target].bound) throw std::runtime_error("excess array initializer");
-            facts[n].type = target; expressions[n].type = target;
-            expressions[n].category = ValueCategory::Lvalue; expressions[n].ready = true;
-            return;
-        }
         if (!ast[n].first) { facts[n].type = target; expressions[n].type = target; expressions[n].ready = true; return; }
         if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
         initialize(ast[n].first, target, s);
+        if (ast[n].kind == Kind::BracedInit) list_conversion(ast[n].first, target);
         facts[n].type = target;
         return;
     }

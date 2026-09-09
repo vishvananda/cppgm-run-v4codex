@@ -206,6 +206,7 @@ void Procedural::run()
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable) global(e);
     for (EntityId e : definitions) function_body(e);
     if (!global_initializers.empty()) global_initialization();
+    emit_aggregate_helpers();
     global_finalization();
 }
 void Procedural::function_body(EntityId e)

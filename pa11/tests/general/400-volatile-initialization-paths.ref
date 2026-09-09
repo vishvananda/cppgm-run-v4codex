@@ -27,7 +27,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t14 = index i8 [projection=field] %t13, 0
     %t15 = load volatile i32 %t14
     %t16 = binary and i32 %t15, 7
-    %t17 = binary add i32 %t16, 1
+    %declared16 = copy u32 %t16
+    %promoted16 = copy i32 %declared16
+    %t17 = binary add i32 %promoted16, 1
     %t18 = addr $aggregate
     %t19 = index i8 [projection=field] %t18, 0
     %t20 = binary and i32 %t17, 7
@@ -65,7 +67,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t37 = index i8 [projection=field] %t36, 8
     %t38 = load volatile i32 %t37
     %t39 = binary and i32 %t38, 7
-    %t40 = cmp ne u32 %t39, 3
+    %declared39 = copy u32 %t39
+    %promoted39 = copy i32 %declared39
+    %t40 = cmp ne i32 %promoted39, 3
     %t41 = cmp ne i64 %t40, 0
     store i64 %t41, $lor__4
     jump ^lor_end_12
@@ -84,7 +88,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t45 = load i32 %t44
     %t46 = binary shr i32 %t45, 3
     %t47 = binary and i32 %t46, 7
-    %t48 = cmp ne u32 %t47, 4
+    %declared47 = copy u32 %t47
+    %promoted47 = copy i32 %declared47
+    %t48 = cmp ne i32 %promoted47, 4
     %t49 = cmp ne i64 %t48, 0
     store i64 %t49, $lor__3
     jump ^lor_end_9
@@ -102,7 +108,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t52 = index i8 [projection=field] %t51, 0
     %t53 = load volatile i32 %t52
     %t54 = binary and i32 %t53, 7
-    %t55 = cmp ne u32 %t54, 3
+    %declared54 = copy u32 %t54
+    %promoted54 = copy i32 %declared54
+    %t55 = cmp ne i32 %promoted54, 3
     %t56 = cmp ne i64 %t55, 0
     store i64 %t56, $lor__2
     jump ^lor_end_6
@@ -121,7 +129,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
     %t60 = load i32 %t59
     %t61 = binary shr i32 %t60, 3
     %t62 = binary and i32 %t61, 7
-    %t63 = cmp ne u32 %t62, 5
+    %declared62 = copy u32 %t62
+    %promoted62 = copy i32 %declared62
+    %t63 = cmp ne i32 %promoted62, 5
     %t64 = cmp ne i64 %t63, 0
     store i64 %t64, $lor__1
     jump ^lor_end_3

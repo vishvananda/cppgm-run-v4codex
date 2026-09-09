@@ -77,6 +77,15 @@ struct FieldFacts {
     unsigned char shift = 0, width = 0;
     bool bit_field = false, may_clear_unit = true;
 };
+enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value };
+struct InitAction {
+    TypeId type = 0;
+    NodeId source = 0;
+    EntityId field = 0;
+    std::uint32_t first = 0, next = 0;
+    std::uint64_t index = 0, count = 1;
+    InitKind kind = InitKind::Scalar;
+};
 struct Entity {
     Access access = Access::Public;
     EntityKind kind = EntityKind::Variable;

@@ -189,7 +189,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     if (calls && types[t].kind == TypeKind::Array && !types[t].bound && init) {
         NodeId list = ast[init].first;
-        if (ast[list].kind == Kind::BracedInit) {
+        if (ast[list].kind == Kind::Literal && ast.literals[ast[list].literal].kind == LiteralKind::string)
+            t = types.compound(TypeKind::Array, types[t].child, ast.literals[ast[list].literal].elements);
+        else if (ast[list].kind == Kind::BracedInit) {
             std::uint64_t count = 0;
             for (NodeId c = ast[list].first; c; c = ast[c].next) ++count;
             t = types.compound(TypeKind::Array, types[t].child, count);

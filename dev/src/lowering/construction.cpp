@@ -3,6 +3,11 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object)
 {
+    if (init && sem.object_fact(init).value_initialize) {
+        auto cls = sem.scopes[sem.entities[ctor].owner].entity;
+        Instruction zero(Opcode::ZeroInit); zero.bytes = sem.object_size(sem.entities[cls].type);
+        zero.alignment = sem.object_alignment(sem.entities[cls].type); emit(zero, {object.operand});
+    }
     if (!sem.constructor_needed(ctor)) return;
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(ctor))); call_work.push_back(object.operand);
@@ -65,9 +70,15 @@ Value Procedural::initialization_address(Value root, bool indirect, const std::v
     Value at = indirect ? emit(Opcode::Load, IRType::Ptr, {root.operand}) : root.address ? address(root) : root;
     std::uint64_t offset = 0;
     for (auto step : path) {
-        Instruction i(Opcode::Index, IRType::I8); i.projection = step.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        at = emit(i, {at.operand, Operand::integer(step.offset)});
-        offset += step.offset;
+        IRType element = step.element ? type(step.element) : IRType::I8;
+        Instruction i(Opcode::Index, element); i.projection = step.element ? ir_model::IPK_ARRAY_ELEMENT : step.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
+        Operand index = Operand::integer(step.offset);
+        if (element.kind() == IRType::Object) {
+            index = emit(Opcode::Binary, IRType::I64, {index, Operand::integer(sem.object_size(step.element))}, Operation::Mul).operand;
+            i.type = IRType::I8;
+        }
+        at = emit(i, {at.operand, index});
+        offset += step.offset * (step.element ? sem.object_size(step.element) : 1);
         if (sem.field_fact(step.entity).bit_field) at.bit_field = step.entity;
     }
     at.init_offset = offset; at.initializing = true;
@@ -76,6 +87,7 @@ Value Procedural::initialization_address(Value root, bool indirect, const std::v
 void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path)
 {
     using syntax::Kind;
+    if (auto plan = sem.initializer_plan(n, t)) { aggregate_plan(plan, root, indirect, path); return; }
     EntityId ctor = n && sem.constructor_member(sem.facts[n].entity) ? sem.facts[n].entity : !n ? sem.value_constructor(t) : 0;
     if (ctor) {
         Value at = initialization_address(root, indirect, path); at.address = false;
@@ -97,7 +109,9 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
     }
     if (target.kind == TypeKind::Array) {
         for (std::uint64_t j = 0; j < target.bound; ++j) {
-            path.push_back({j*sem.object_size(target.child), false});
+            InitProjection step(j*sem.object_size(target.child), false);
+            if (type(target.child).scalar()) { step.offset = j; step.element = target.child; }
+            path.push_back(step);
             aggregate_initialize(c, target.child, root, indirect, path); path.pop_back();
             if (c) c = ast[c].next;
         }

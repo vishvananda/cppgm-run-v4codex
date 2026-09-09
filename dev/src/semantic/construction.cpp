@@ -96,6 +96,9 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
     if (copy && members[entities[ctor].member_info].explicit_constructor)
         throw std::runtime_error("explicit constructor in copy initialization");
+    if (args.empty() && grouped && members[entities[ctor].member_info].synthetic) {
+        record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
+    }
     facts[n].entity = ctor; facts[n].type = target; facts[n].scope = s;
     expressions[n] = result;
     return true;
@@ -180,6 +183,7 @@ bool Analyzer::constructor_needed(EntityId e)
 void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
 {
     Type type = types[t];
+    if (type.kind == TypeKind::LRef || type.kind == TypeKind::RRef) throw std::runtime_error("value-initialized reference");
     if (type.kind == TypeKind::Array) { prepare_value_initialization(type.child, s); return; }
     if (type.kind != TypeKind::Named || !entities[type.entity].class_info) return;
     auto c = entities[type.entity].class_info;

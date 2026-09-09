@@ -4,9 +4,11 @@ using syntax::Kind;
 using namespace lowir_model;
 bool Procedural::constant_initializer(NodeId n, TypeId t)
 {
+    if (auto plan = sem.initializer_plan(n, t)) return constant_plan(plan);
     if (n && sem.constructor_member(sem.facts[n].entity)) return false;
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = sem.types[t];
+    if (!n && sem.value_constructor(t)) return false;
     if (target.kind == TypeKind::Named && sem.entities[target.entity].class_info) {
         NodeId c = ast[n].first;
         for (auto d = sem.scopes[sem.entities[target.entity].scope].first_decl; d; d = sem.declarations[d].next) {
@@ -18,6 +20,7 @@ bool Procedural::constant_initializer(NodeId n, TypeId t)
         return true;
     }
     if (target.kind == TypeKind::Array) {
+        if (!n) return constant_initializer(0, target.child);
         for (NodeId c = ast[n].first; c; c = ast[c].next)
             if (!constant_initializer(c, target.child)) return false;
         return true;
@@ -41,7 +44,12 @@ void Procedural::global_initialization()
         initialized_units = semantic::Index();
         auto entity = sem.entities[e];
         Value location(Operand::symbol(symbols[e]), type(entity.type), entity.type, true);
-        if (entity.initializer) initialize(entity.initializer, entity.type, location);
+        TypeId leaf = entity.type;
+        while (sem.types[leaf].kind == TypeKind::Array) leaf = sem.types[leaf].child;
+        if (entity.initializer && sem.types[leaf].kind == TypeKind::Named && sem.entities[sem.types[leaf].entity].class_info && sem.initializer_plan(entity.initializer, entity.type)) {
+            std::vector<InitProjection> path;
+            aggregate_initialize(entity.initializer, entity.type, location, false, path);
+        } else if (entity.initializer) initialize(entity.initializer, entity.type, location);
         else if (sem.types[entity.type].kind == TypeKind::Array && sem.object_constructor(e)) array_construct(sem.object_constructor(e), entity.type, location, false, {});
         else if (sem.constructor_needed(sem.object_constructor(e))) construct(sem.object_constructor(e), 0, address(location));
         clean_inline(live, 0);

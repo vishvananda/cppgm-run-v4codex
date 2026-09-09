@@ -146,7 +146,7 @@ function @Device__Device__aggregate(%this : ptr, %status : i32, %data : i32) -> 
     %t1 = load i32 $status
     %t2 = load ptr $this
     %t3 = index i8 [projection=field] %t2, 0
-    store i32 %t1, %t3
+    store volatile i32 %t1, %t3
     %t4 = load i32 $data
     %t5 = load ptr $this
     %t6 = index i8 [projection=field] %t5, 4

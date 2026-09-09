@@ -51,7 +51,16 @@ public:
     bool synthetic_member(EntityId e) const;
     bool nonstatic_field(EntityId e) const;
     const FieldFacts& field_fact(EntityId e) const { return field_facts[field_index.get(e)]; }
+    std::vector<InitAction> initializers = std::vector<InitAction>(1);
+    std::uint32_t initializer_plan(NodeId n, TypeId t) const;
+    bool zero_value(TypeId t);
 private:
+    Index initializer_index, zero_value_index;
+    void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
+    std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
+    bool aggregate_type(TypeId t) const;
+    bool string_initialization(NodeId n, TypeId t) const;
+    void list_conversion(NodeId n, TypeId t);
     Index field_index;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);

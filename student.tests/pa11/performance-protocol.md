@@ -123,3 +123,29 @@ in calls-1, memory-float-1 and calls-4, plus noisy references-4 calibration.
 Repeat exactly those four groups via explicit `selection_repeat.py` arguments;
 retain both full campaigns and both follow-ups. The optional argument support
 preserves the earlier default group sequence. No observation is discarded.
+
+## Layout and initializer continuation campaign
+
+Freeze A at 88e4ebe1 (compiler SHA256
+14fe0b2503b191016f0c2a3bdbbd70c6d518f86432dbf3c615b5381fe4bacbc1)
+and B at the committed layout/initializer implementation. Reuse the unchanged
+nine-input compiler and three native-runtime AAAA/ABBA/ABBA campaign. Preserve
+compiler wall/RSS/.text and executable runtime/payload observations together.
+Historical numeric targets remain diagnostics under stage-scoped acceptance;
+no optional optimizer or speedup is proposed.
+
+`layout_benchmark.py` adds B-only AAAA runs for 1000/4000 independently owned
+aligned bit-field layouts and nested brace-elision/string initializer families.
+Range bounds of 32/1000000 exercise compact omitted initializers: ordinary
+storage uses a bulk zero, volatile scalar storage uses a bounded loop. The
+range timings are startup-scale diagnostics, not speedup evidence; semantic
+initializer counts and emitted IR establish the work/growth bounds. Each input
+validates and executes before timing. Telemetry is a separate invocation.
+
+Its native runtime uses 48 million volatile-bounded iterations of unsigned
+bit-field assignment, signed extraction, adjacent-field preservation and a
+checked checksum. It has no static data, so the existing sectionless executable
+payload proxy measures its text. A is incorrect on new behaviors and cannot
+serve as a speed baseline. Retain all hashes and observations. Run no builds or
+other test campaigns during timing. Repeat only noisy common groups with the
+same frozen binaries and AAAA/ABBA/ABBA sequence, preserving the first campaign.

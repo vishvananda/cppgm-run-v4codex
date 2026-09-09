@@ -3,41 +3,44 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. **Incomplete: 234/302; 68 failures.**
+Target: PA11 full-stage. Phase: implement. **Incomplete: 273/302; 29 failures.**
 
 ## Design/spec alignment
 
-Extend the integrated typed graph and PA10 lowering. Declarations/base edges own
-access; indexed friendship/using/ADL edges preserve canonical entities and hidden
-visibility. Selected functions, conversions and implicit objects are recorded
-before lowering. Token identities distinguish operators; typed ABI terminals
-encode them. Class/member/default/lifetime demand stays monotonic and local.
-Temporary addresses and base projections feed existing call/cleanup machinery;
-returns consume selected conversions. Seven personal programs execute, including
-logical/comma side effects and an overloaded dereference returning a base reference.
+Extend the integrated typed graph and PA10 lowering. Access/friend/ADL and
+operator selection record chosen declarations, conversions and object paths.
+Sparse field descriptors own bit widths, signed storage, preservation and
+alignment; class layout handles EBO identities, explicit alignment and token
+snapshots of pragma packing. One semantic initializer cursor records brace
+elision, strings, scalar conversions and compact omitted ranges. Local/global
+lowering and generated array aggregate helpers consume those actions. Eleven
+personal programs validate LowIR and execute; six invalid programs reject.
 
-Lookup visits relevant scopes/types/edges and candidates. Using-signature hiding
-runs only for imported families. Selection uses two dominance passes over viable
-candidates; lowering consumes selected records without searching names or
-fabricating syntax. Eight array elements remains the expansion budget, with
-counter loops beyond it. General PA12 value transfer and PA13 dispatch stay separate.
+Work follows declarations, relevant lookup edges, layout fields, initializer
+actions and emitted IR. Ordinary nodes/tokens retain their compact sizes; rare
+attributes/descriptors use flat ID indexes. Eight elements is the array expansion
+budget; larger omitted ranges use bulk zeroing or loops preserving volatile
+stores. Existing ABI/lifetime records remain the basis for PA12/PA13 extensions.
 
 ## Remaining groups and boundary
 
 | Owner | Required data flow / complexity | Validation |
 | --- | --- | --- |
-| Layout and aggregate initialization | Bit-field storage/alignment, packing, union/volatile containment and a typed initializer cursor feed exact zero/copy spans; O(fields + initializer actions + output). | brace elision, string arrays, alignas, bit-fields, empty-base collisions, scalar narrowing |
-| Construction and conversion records | Selected converting/inherited constructors need argument conversions, temporary lifetimes and explicit placement/ABI entry identities; O(candidates + selected actions). | implicit class-reference conversion, inherited/external constructors, placement new, empty-class argument contract |
-| Declaration and parser context | Complete-class name facts must resolve late member/type ambiguity and injected names without replaying syntax; O(relevant declarations + lookup edges). | late member subscript, local-class constants, nested definitions, incomplete function/reference types, literal suffix identity |
-| Storage/ABI and LowIR views | Storage duration and complete/base entry identity feed TLS/init roots; category/projection facts feed canonical accesses; O(objects + required helpers + IR). | TLS families, external D1/D2 roots, empty-class friend roots, boundary metadata, aggregate globals, discarded/address views |
+| Constructor selection and constant initialization | Record converting/inherited constructors, argument substitutions, temporary lifetimes and legal early static initialization; O(candidates + selected actions). | implicit class-reference conversion, inherited/external constructors, placement new, namespace arrays with constructors |
+| ABI entries and storage duration | Keep complete/base roots, empty-class arguments, incomplete declaration boundaries and TLS initialization families distinct; O(objects + required helpers + IR). | anonymous/local constructor roots, external destructors, incomplete return/reference types, TLS |
+| Parser/declaration context | Complete-class name facts and literal suffix identities must feed canonical types without syntax replay; O(relevant declarations + lookup edges). | late member subscript, injected names, nested definitions, UDLs, invalid static initializers |
+| Expression and boundary views | Recorded category/conversion facts select discarded accesses, function/reference views and builtin boundaries; O(expressions + output). | discarded parameters/objects, reference-indexed member access, floating intrinsics, boundary metadata |
 
-The access/friend/ordinary-operator group is coherent and validated. Remaining
-related cases cannot be closed by extending the candidate set: implicit class
-conversions require a constructor/conversion/lifetime record; the two empty-class
-ADL fixtures select functions but reach missing argument storage lowering; late
-member syntax needs a complete-class ambiguity fact; an anonymous hidden-friend
-fixture needs a distinct retained C2 root. Those are the concrete boundary for
-this handoff. No fixture, reference or comparison rule has changed.
+The layout/aggregate group is implemented and validated, including its nested
+reference-binding and volatile-helper variants. Remaining constructor-array
+static output needs argument substitution and body-effect legality facts;
+inherited/placement/converting calls need new selection/ABI/lifetime records.
+Those cannot be obtained by extending the initializer cursor or changing class
+layout. Remaining declaration ambiguities need parser ownership, and remaining
+root/discard cases need separate ABI/value-category decisions. No later PA is
+advanced. Six narrowly corrected references have reduced proofs and the bundle
+revision in [reference corrections](reference-corrections.md); comparison rules,
+source tests and coverage are unchanged.
 
 ## Performance evidence
 
@@ -93,3 +96,13 @@ evidence is retained unchanged.
   stacks, `_Pragma`, GNU packed records and actual unaligned member stores.
   Earlier PAs remain **1025/1025**. Next owner: one semantic aggregate cursor
   must retain brace-elision/string/zero actions for local and global lowering.
+
+- Initializer increment: **273/302**, 17 additional failures fixed since the
+  alignment commit; **39** baseline failures fixed in this continuation, no
+  regressions. Explicit initializer actions feed static data and procedural
+  lowering; narrow list conversions, zero-before-constructor facts, readonly
+  string pooling and scalar aggregate-array helpers share this owner. Large
+  omitted ranges are represented once and lower within the eight-element
+  expansion budget. `make test-pa11`: 273/302, all four controls pass; earlier
+  PAs: **1025/1025**; file audit passes with the existing header advisory.
+  Eleven personal programs validate/execute; six rejection checks pass.
