@@ -85,3 +85,6 @@ These are stage-scoped observations and structural budgets, not newly invented
 numeric exit gates. Existing PA10/PA11 benchmark inputs and measurements remain
 available for template, loop, call, memory and floating-point coverage. Correctness,
 coverage, normalized comparison rules and mandated limits are unchanged.
+
+The transfer continuation, including a removed unprofitable optional fold and
+all final measurements, is recorded in [transfer-performance.md](transfer-performance.md).

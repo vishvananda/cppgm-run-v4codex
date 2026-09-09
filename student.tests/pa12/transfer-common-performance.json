@@ -1,0 +1,638 @@
+{
+  "protocol": "A/A (four A observations), two ABBA blocks; O0; pinned CPU",
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "harness_sha256": "e103b6cc2e4e00bccd9a1644cc706fa4d899c97713de6953810faabf8e465831",
+  "binaries": [
+    {
+      "path": "/tmp/pa12-transfer-base-cppgm",
+      "sha256": "9959f526bcc714b21f5491dbedbe90465460d149a70ad9f42123881bf688654c",
+      "text_bytes": 795014
+    },
+    {
+      "path": "/tmp/pa12-transfer-evidence/bounded-prefix-cppgm",
+      "sha256": "ca9a6344d384b58ae2263c6ef24f16c92041cfdc4db987ade65c858d3ed58f02",
+      "text_bytes": 815302
+    }
+  ],
+  "backend_sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+  "compile_flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "native_flags": [
+    "-O0"
+  ],
+  "text_metric": "compiler .text; supplied sectionless ELF executable payload after entry",
+  "startup": [
+    {
+      "wall_s": 0.005857822,
+      "rss_kib": 4664,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005373003,
+      "rss_kib": 4784,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005356616,
+      "rss_kib": 4716,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005307599,
+      "rss_kib": 4796,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005325223,
+      "rss_kib": 4880,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005276986,
+      "rss_kib": 4844,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005263408,
+      "rss_kib": 4676,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005415258,
+      "rss_kib": 4704,
+      "binary": 1
+    }
+  ],
+  "workloads": {
+    "members-1000": {
+      "source_path": "/tmp/pa12-transfer-common-evidence/members-1000.cpp",
+      "source_sha256": "1adf7c7bbaf44a58f352d3a4eae38f712c396e1e003d9b6e5233b6e596a9c89a",
+      "outputs": [
+        {
+          "lowir_sha256": "471e7f22aeb2dbc8b3dc07e04e3a81d29dc851c3507919171a7a372ca16649b7",
+          "lowir_bytes": 1096516,
+          "executable_sha256": "a9ddceb52d495c7e016aad7b2488710bb20c2205e5a93945696278942e7507c5",
+          "text_bytes": 70053,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "471e7f22aeb2dbc8b3dc07e04e3a81d29dc851c3507919171a7a372ca16649b7",
+          "lowir_bytes": 1096516,
+          "executable_sha256": "a9ddceb52d495c7e016aad7b2488710bb20c2205e5a93945696278942e7507c5",
+          "text_bytes": 70053,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "identical LowIR and native exit 0",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.124649933,
+            "rss_kib": 27136,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.124605421,
+            "rss_kib": 27116,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.125725248,
+            "rss_kib": 27116,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.12348995,
+            "rss_kib": 27116,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.123030479,
+            "rss_kib": 27120,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.125287837,
+            "rss_kib": 27112,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.124908445,
+            "rss_kib": 27104,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.124948713,
+            "rss_kib": 27116,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.126437485,
+            "rss_kib": 27096,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.12825567,
+            "rss_kib": 27064,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.127319086,
+            "rss_kib": 27144,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.125413609,
+            "rss_kib": 27276,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.12348995,
+          0.125725248
+        ],
+        "paired_b_over_a": [
+          1.0089406291798868,
+          1.0147851730197368
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.003549948,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003226951,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003190237,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003337603,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003199636,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.0031561,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00318211,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003072318,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003010939,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003051029,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003100901,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003040754,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003190237,
+          0.003549948
+        ],
+        "paired_b_over_a": [
+          1.0105638529874423,
+          1.0165634641413568
+        ]
+      }
+    },
+    "members-4000": {
+      "source_path": "/tmp/pa12-transfer-common-evidence/members-4000.cpp",
+      "source_sha256": "a7ac94261c5496c527cfc4f76a45984da264dfd24c51846289323da274e13dd5",
+      "outputs": [
+        {
+          "lowir_sha256": "32c846c1bfecf5fb8bc505a4e4fef8624bcdfe4ec6d60b750b1f0ed837416753",
+          "lowir_bytes": 4513515,
+          "executable_sha256": "72821f66aaa571d89f638e1e9111b43a666ade23cae7beba59ffdd9f18a119f9",
+          "text_bytes": 280053,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "32c846c1bfecf5fb8bc505a4e4fef8624bcdfe4ec6d60b750b1f0ed837416753",
+          "lowir_bytes": 4513515,
+          "executable_sha256": "72821f66aaa571d89f638e1e9111b43a666ade23cae7beba59ffdd9f18a119f9",
+          "text_bytes": 280053,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "identical LowIR and native exit 0",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.502754536,
+            "rss_kib": 95564,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.504850371,
+            "rss_kib": 95740,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.496236113,
+            "rss_kib": 95712,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.498341131,
+            "rss_kib": 95564,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.509126423,
+            "rss_kib": 95564,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.508709485,
+            "rss_kib": 95384,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.502846855,
+            "rss_kib": 95408,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.501295272,
+            "rss_kib": 95376,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.496329225,
+            "rss_kib": 95544,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.501590318,
+            "rss_kib": 95444,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.507959361,
+            "rss_kib": 95596,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.63516484,
+            "rss_kib": 95552,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.496236113,
+          0.504850371
+        ],
+        "paired_b_over_a": [
+          1.0011229420405507,
+          0.8922271094722888
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.003629611,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003208261,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003165537,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003162459,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003130632,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003127718,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003193831,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003133383,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003039658,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003094057,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003087441,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003045151,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003162459,
+          0.003629611
+        ],
+        "paired_b_over_a": [
+          1.0091848439060251,
+          1.0158902276143753
+        ]
+      }
+    },
+    "empty-destructor-runtime": {
+      "source_path": "/tmp/pa12-transfer-common-evidence/empty-destructor-runtime.cpp",
+      "source_sha256": "4910e783efc7e418426ef7be85da55fd09465a10413a524a136fa91393a94b4e",
+      "outputs": [
+        {
+          "lowir_sha256": "39e71de541f66eda1d7d28680038cc10b3312218f5606f7af10a2f81cbd4c96f",
+          "lowir_bytes": 1852,
+          "executable_sha256": "bcf8eeea94b1e9d914464d6153f6efdc522efefc99e913dd0ca64febd6745f4d",
+          "text_bytes": 241,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "39e71de541f66eda1d7d28680038cc10b3312218f5606f7af10a2f81cbd4c96f",
+          "lowir_bytes": 1852,
+          "executable_sha256": "bcf8eeea94b1e9d914464d6153f6efdc522efefc99e913dd0ca64febd6745f4d",
+          "text_bytes": 241,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "same volatile loop and checked checksum; only empty destructor calls omitted",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.006023152,
+            "rss_kib": 4732,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005966737,
+            "rss_kib": 4756,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006406801,
+            "rss_kib": 4800,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006155576,
+            "rss_kib": 4792,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006030983,
+            "rss_kib": 4748,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005945906,
+            "rss_kib": 4716,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005843339,
+            "rss_kib": 4708,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005784567,
+            "rss_kib": 4788,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005750849,
+            "rss_kib": 4724,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005751759,
+            "rss_kib": 4700,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005742114,
+            "rss_kib": 4696,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005778146,
+            "rss_kib": 4616,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.005966737,
+          0.006406801
+        ],
+        "paired_b_over_a": [
+          0.9977736965270342,
+          0.9969535939602716
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.084257665,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.085237263,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.084612474,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.084372343,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.083954669,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.083241851,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.085622123,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.085291813,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.084082701,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.083260383,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.082344444,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.084129351,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.084257665,
+          0.085237263
+        ],
+        "paired_b_over_a": [
+          0.997739935297444,
+          0.984500367429083
+        ]
+      }
+    }
+  }
+}

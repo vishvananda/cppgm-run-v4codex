@@ -85,17 +85,22 @@ void Analyzer::prepare_transfer(EntityId e)
         actions.clear(); TransferAction storage; storage.kind = TransferAction::Storage;
         storage.bytes = size(target); storage.alignment = size(target, true); actions.push_back(storage);
     } else {
-        std::size_t prefix = 0; std::uint64_t bytes = 0;
+        std::size_t prefix = 0; std::uint64_t bytes = 0; bool storage_subobject = false;
         for (const auto& action : actions) {
             TypeId element = action.type;
             while (types[element].kind == TypeKind::Array) element = types[element].child;
             if (action.kind == TransferAction::Empty || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 2)) break;
             if (action.function && (!trivial_transfer(action.function) || !copy_storage_type(element))) break;
+            storage_subobject |= action.function || types[action.type].kind == TypeKind::Array;
             bool ref = types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef;
             std::uint64_t end = (action.field ? entities[action.field].member_offset : 0) + (ref ? 8 : size(action.type));
             bytes = std::max(bytes, end); ++prefix;
         }
-        if (prefix) {
+        // O0 keeps ordinary scalar prefixes field-wise: the supplied backend's
+        // small bulk operation costs more than those accesses. Whole-object
+        // representation transfers and prefixes containing storage subobjects
+        // retain their bounded bulk form (and can remove nested helper calls).
+        if (prefix && (prefix == actions.size() || storage_subobject)) {
             if (prefix == actions.size()) bytes = size(target);
             TransferAction storage; storage.kind = TransferAction::Storage; storage.bytes = bytes;
             storage.alignment = size(target, true);

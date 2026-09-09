@@ -27,14 +27,15 @@ destinations remain the next shared owner.
 
 ## Performance evidence
 
-[Evidence](performance.md) retains both frozen A/B campaigns, A/A noise, ABBA
-pairs, spread, latency/RSS, runtime/text, hashes and absolute new-feature costs.
-Corrected common compiler medians increase 1.12%/0.21%; native LowIR/text is
-identical. The empty-destructor loop runs about 52% faster, text 928 -> 241 bytes.
-New 4x member/delegation inputs use 4.04x time and 3.62x RSS; demanded work scales
-linearly. No unsupported numeric gate is inherited. O0 work is bounded by required
-candidate/subobject edges; empty-call removal has zero generated-code growth.
-Preserve the eight-element array expansion limit and all course coverage.
+[Member evidence](performance.md) and [transfer evidence](transfer-performance.md)
+retain frozen binaries, A/A and ABBA observations, latency/RSS, runtime/text and
+work counters. Final common LowIR/native outputs are unchanged; 4x transfer
+inputs use 4.124x time and 3.501x timed RSS, with exactly 4x transfer actions.
+An optional scalar-only prefix fold slowed native execution and was removed;
+final output matches the field-wise baseline. Required whole-object/storage
+prefix shapes retain a documented supplied-backend runtime cost, not an extra
+positive-runtime gate. O0 preparation is linear in required candidate/subobject
+edges, with no body cloning; array expansion stays capped at eight elements.
 
 ## Handoff ledger
 
@@ -47,19 +48,17 @@ Preserve the eight-element array expansion limit and all course coverage.
 - `55d15ba8`: correct using-owner ranking, pointer-reference output and deleted
   member/assignment selection. Final **92/257**, 165 failures: **31 original
   failures removed, no new failures**; comparison coverage is unchanged.
-- Required `make test-pa12`: fails at the remaining groups above. Fresh serial
-  `make test-report-through-pa11`: **1327/1327**. File audit passes with the
-  existing Analyzer-header advisory. Nine explicit personal checks pass (four
-  native successes, five required rejections). `git diff --check` passes.
 - Serial root reports are required for trustworthy counts: concurrent reports
   share a tally. The invalid concurrent totals were replaced by serial runs.
 - `3da4de09`: four bit-field reference comparison sites corrected under the
   authorized exception; [proof and reducers](reference-corrections.md). All
   transfers, other instructions, inputs, sidecars and comparison rules retained.
-- Transfer checkpoint: **123/257**, 134 failures, **31 prior failures removed,
+- `73664568` and the bounded-prefix followup: **123/257**, 134 failures, **31 prior failures removed,
   no new failures** versus 92/257. Serial earlier report **1327/1327**; file
   audit passes with its existing advisory. Seventeen personal source checks and
-  two LowIR retype checks pass. Performance campaign running before handoff.
+  two LowIR retype checks pass. Fresh required logs: `/tmp/pa12-transfer-budget-stage.log`
+  (exit 2), `/tmp/pa12-transfer-budget-prior.log` (exit 0). `git diff --check`
+  passes; benchmarks are complete, with no live test/benchmark processes.
 - Concrete remaining boundary: class prvalues still fall into aggregate/scalar
   paths. Passing/returning them requires an explicit destination/result ABI,
   selected transfer and lifetime identity together (direct/indirect calls,
@@ -72,3 +71,11 @@ Preserve the eight-element array expansion limit and all course coverage.
   and was removed. Preserve the earlier checks; no unproved reference edit or
   test-dependent compiler branch was introduced. Destructor cleanup boundaries
   and explicit widening in user bodies also remain separate from transfers.
+- Handoff: the normal special-member transfer group is committed. The next
+  ABI group needs class boundary facts plus destination/lifetime records; current
+  `converted`, `call`, parameter prologues and return lowering all assume scalar
+  results or aggregate slots. Changing only one of these consumers would emit
+  invalid object loads or omit required copies/destruction. That coupled owner
+  is the concrete boundary for this incomplete handoff; the full-stage goal
+  remains active. Course coverage stays **257**, with **62 stage-base failures
+  removed** overall and no new failing fixtures.
