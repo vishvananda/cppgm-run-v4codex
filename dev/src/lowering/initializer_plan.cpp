@@ -1,5 +1,6 @@
 #include "lowering/procedural.h"
 #include <cstring>
+#include <algorithm>
 namespace cppgm { namespace lowering {
 using semantic::InitKind;
 using lowir_model::DataItem;
@@ -37,10 +38,13 @@ void Procedural::global_plan(std::uint32_t plan)
     }
     if (action.kind == InitKind::Value) { global_data(0, action.type); return; }
     if (action.kind == InitKind::String) {
-        for (std::uint64_t j = 0; j < target.bound; ++j) {
+        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        auto limit = target.bound-length > 8 ? length : target.bound;
+        for (std::uint64_t j = 0; j < limit; ++j) {
             DataItem item; item.kind = DataItem::Scalar; item.type = type(target.child);
             item.value = string_element(action.source, target.child, j).operand; p.data.push_back(item);
         }
+        if (limit < target.bound) { DataItem zero; zero.zero_bytes = (target.bound-limit)*sem.object_size(target.child); p.data.push_back(zero); }
         return;
     }
     std::uint64_t bytes = 0;
@@ -71,9 +75,15 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     Value base = address(location);
     if (action.kind == InitKind::String) {
-        for (std::uint64_t j = 0; j < target.bound; ++j) {
+        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        auto limit = target.bound-length > 8 ? length : target.bound;
+        for (std::uint64_t j = 0; j < limit; ++j) {
             Value at = j ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(j*sem.object_size(target.child))}) : base;
             at.type = target.child; at.address = true; store(string_element(action.source, target.child, j), at);
+        }
+        if (limit < target.bound) {
+            Value at = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(limit*sem.object_size(target.child))});
+            at.address = true; at.type = target.child; repeat_initializer(0, at, target.bound-limit, target.child);
         }
         return;
     }
@@ -114,10 +124,17 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
         Value at = initialization_address(root, indirect, path); at.type = action.type; store(value, at); return;
     }
     if (action.kind == InitKind::String) {
-        for (std::uint64_t j = 0; j < target.bound; ++j) {
+        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        auto limit = target.bound-length > 8 ? length : target.bound;
+        for (std::uint64_t j = 0; j < limit; ++j) {
             InitProjection step(j, false); step.element = target.child; path.push_back(step);
             Value at = initialization_address(root, indirect, path); at.type = target.child;
             store(string_element(action.source, target.child, j), at); path.pop_back();
+        }
+        if (limit < target.bound) {
+            InitProjection step(limit, false); step.element = target.child; path.push_back(step);
+            Value at = initialization_address(root, indirect, path); at.type = target.child;
+            repeat_initializer(0, at, target.bound-limit, target.child); path.pop_back();
         }
         return;
     }
@@ -135,9 +152,10 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
         }
     }
 }
-void Procedural::repeat_initializer(std::uint32_t plan, Value location)
+void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uint64_t count, TypeId type)
 {
     auto action = sem.initializers[plan];
+    if (!plan) { action.type = type; action.count = count; action.kind = InitKind::Value; }
     Value base = address(location);
     if (action.kind == InitKind::Value && sem.zero_value(action.type)) {
         Instruction zero(Opcode::ZeroInit); zero.bytes = action.count*sem.object_size(action.type);
@@ -152,7 +170,8 @@ void Procedural::repeat_initializer(std::uint32_t plan, Value location)
     start(body);
     Value offset = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(sem.object_size(action.type))}, Operation::Mul);
     Value at = emit(Opcode::Index, IRType::I8, {base.operand, offset.operand}); at.type = action.type; at.address = true;
-    initialize_plan(plan, at);
+    if (plan) initialize_plan(plan, at);
+    else store(Value(Operand::integer(0), this->type(action.type), action.type), at);
     Value next = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(1)}, Operation::Add);
     emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(counter)}); jump(test); start(end);
 }

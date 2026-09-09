@@ -106,3 +106,8 @@ evidence is retained unchanged.
   expansion budget. `make test-pa11`: 273/302, all four controls pass; earlier
   PAs: **1025/1025**; file audit passes with the existing header advisory.
   Eleven personal programs validate/execute; six rejection checks pass.
+- Resource review keeps **273/302** and prior **1025/1025** unchanged. `_Pragma`
+  spelling scratch now ends with its directive; large string-array padding
+  uses the same bounded zero/volatile-loop machinery. Native padding checks
+  pass. The initial frozen common campaign and separate RSS diagnostic are
+  retained; final frozen measurements follow this correction.

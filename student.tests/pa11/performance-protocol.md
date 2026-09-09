@@ -149,3 +149,17 @@ payload proxy measures its text. A is incorrect on new behaviors and cannot
 serve as a speed baseline. Retain all hashes and observations. Run no builds or
 other test campaigns during timing. Repeat only noisy common groups with the
 same frozen binaries and AAAA/ABBA/ABBA sequence, preserving the first campaign.
+
+The first common campaign froze B at 9a394183, SHA256
+4bca074991021464f81e93e5f0eee59abe22fb587218fac28417aaa0baf96951.
+Final resource review found retained `_Pragma` spelling scratch and unbounded
+string-array padding expansion. Preserve that complete common campaign in
+`layout-initial-common-performance.json` and the unchanged B binary separately.
+After correcting those lifetimes/ranges, repeat the full common campaign and
+measure the new behaviors. The range corpus now also includes string padding
+at 32/1000000 elements. No initial observation is discarded.
+
+A separate instrumented A/B invocation on memory-float-4 is retained in
+`layout-memory-diagnostic.json`: it records the initial RSS increase alongside
+identical semantic work, instruction/operand counts and IR pool capacities.
+It is a diagnostic, not an ABBA performance claim or a proven allocation cause.

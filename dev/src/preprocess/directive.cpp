@@ -44,12 +44,13 @@ void Preprocessor::pragma(const std::string& text, IdentifierId filename)
     SourceBuffer source(text);
     PPTokenCursor cursor(source, identifiers_, 0, false, true);
     std::vector<ExpansionToken> tokens;
+    SpellingArena spellings;
     for (;;) {
         PPToken token = cursor.next();
         if (token.kind == PPTokenKind::eof) break;
         if (token.kind == PPTokenKind::whitespace || token.kind == PPTokenKind::newline) continue;
         ExpansionToken value; value.token = token;
-        value.token.spelling = persistent_.save(token.spelling);
+        value.token.spelling = spellings.save(token.spelling);
         tokens.push_back(value);
     }
     pragma(tokens, filename);

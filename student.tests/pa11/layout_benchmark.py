@@ -20,6 +20,8 @@ def workloads():
     for n in (32, 1000000):
         yield f'zero-range-{n}', f'struct Large{{int values[{n}];}};int main(){{Large object={{}};return object.values[{n-1}];}}'
     for n in (32, 1000000):
+        yield f'string-padding-{n}', f'int main(){{char text[{n}]="ok";return text[1]!=107||text[{n-1}]!=0;}}'
+    for n in (32, 1000000):
         yield f'volatile-range-{n}', f'int main(){{volatile int values[{n}]={{7}};return values[0]!=7||values[{n-1}]!=0;}}'
 
 

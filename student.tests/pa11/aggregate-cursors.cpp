@@ -13,5 +13,8 @@ int main() {
     if (big.values[0] != 0 || big.values[9999] != 0) return 4;
     volatile int volatile_values[100] = {7};
     if (volatile_values[0] != 7 || volatile_values[99] != 0) return 5;
+    char padded[10000] = "word";
+    volatile char volatile_text[100] = "io";
+    if (padded[3] != 'd' || padded[9999] != 0 || volatile_text[1] != 'o' || volatile_text[99] != 0) return 6;
     return text[4] != 'o' || bytes[1] != 'e';
 }

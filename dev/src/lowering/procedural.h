@@ -122,7 +122,7 @@ class Procedural {
     bool call_aggregate_helper(std::uint32_t plan, Value location);
     void emit_aggregate_helpers();
     void initialize_plan(std::uint32_t plan, Value location);
-    void repeat_initializer(std::uint32_t plan, Value base);
+    void repeat_initializer(std::uint32_t plan, Value base, std::uint64_t count = 0, TypeId type = 0);
     void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path);
     void global_plan(std::uint32_t plan);
     bool constant_plan(std::uint32_t plan);
