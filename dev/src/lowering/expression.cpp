@@ -154,7 +154,10 @@ Value Procedural::unary(NodeId n)
     NodeId a = ast[n].first;
     auto fact = sem.expression_fact(n);
     ETokenType op = ast[n].op;
-    if (op == OP_AMP) { Value v = address(expression(a, true)); v.type = fact.type; return v; }
+    if (op == OP_AMP) {
+        if (sem.types[fact.type].kind == TypeKind::MemberPointer) return member_pointer_value(sem.expression_fact(a).entity,fact.type);
+        Value v = address(expression(a, true)); v.type = fact.type; return v;
+    }
     if (op == OP_STAR) {
         Value v = converted(a, sem.conversion_fact(fact.conversions));
         v.type = fact.type; v.address = true; return v;
@@ -192,6 +195,10 @@ Value Procedural::binary(NodeId n, bool location)
     NodeId a = ast[n].first, b = ast[a].next;
     auto fact = sem.expression_fact(n);
     ETokenType op = ast[n].op;
+    if (op == OP_DOTSTAR || op == OP_ARROWSTAR) {
+        if (sem.types[fact.type].kind == TypeKind::Function) throw std::runtime_error("bound member function requires a call");
+        Value v = member_pointer_object(sem.object_fact(n)); v.type = fact.type; v.address = true; return v;
+    }
     if (op == OP_COMMA) { discard(a); return expression(b, location); }
     if (op == OP_LAND || op == OP_LOR) return logical(n);
     if (ast[n].kind == Kind::Assignment) {
@@ -312,7 +319,11 @@ Value Procedural::call(NodeId n, Value destination)
     call_work.push_back(Operand());
     if (indirect_result) call_work.push_back(destination.operand);
     auto object_use = sem.object_fact(n);
-    if (object_use.type) {
+    Value member_function;
+    if (object_use.member_pointer) {
+        auto object = member_pointer_object(object_use,&member_function);
+        call_work.push_back(object.operand);
+    } else if (object_use.type) {
         Value object;
         if (object_use.node) {
             object = expression(object_use.node, true);
@@ -332,7 +343,10 @@ Value Procedural::call(NodeId n, Value destination)
     NodeId callee = ast[n].first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
-    if (selected) call_work[begin] = Operand::symbol(symbol(selected));
+    if (object_use.member_pointer) {
+        call_work[begin] = member_function.operand;
+        i.signature = signature(sem.expression_fact(object_use.member_pointer).type);
+    } else if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
         auto c = sem.conversion_fact(object_use.callee_conversion);
         Value fn = object_use.callee_conversion ? converted(callee,c) : load(expression(callee)); call_work[begin] = fn.operand;

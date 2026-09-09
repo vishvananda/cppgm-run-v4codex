@@ -194,8 +194,8 @@ class Procedural {
     Value store_bit_field(Value v, Value location);
     Value initialization_value(NodeId n, TypeId t);
     Value address(Value v);
-    Value convert(Value v, TypeId target, bool fold_widen = false);
-    Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false);
+    Value convert(Value v, TypeId target, bool fold_widen = false, bool preserve_widen = false);
+    Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false, bool preserve_widen = false);
     Value converted(NodeId n, const semantic::Conversion& c);
     Value converted_value(Value value, const semantic::Conversion& conversion);
     Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value());
@@ -217,6 +217,9 @@ class Procedural {
     Value binding(EntityId e);
     Value field(Value base, EntityId e, unsigned steps = 0);
     Value base_projection(Value base, unsigned steps);
+    Value member_pointer_value(EntityId member, TypeId type);
+    Value member_pointer_address(Value value);
+    Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);
     Value store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);

@@ -332,7 +332,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (types[ft].kind != TypeKind::Function) throw std::runtime_error("called object is not a function");
         Type f = types[ft];
         if (args.size() < f.count || (!f.variadic && args.size() != f.count)) throw std::runtime_error("indirect call arity");
-        require_conversion(callee, decay(fn.type));
+        if (fn.form == ExpressionForm::BoundMember) {
+            auto bound = object_uses[fn.object_use];
+            record_object(result,bound.node,bound.type,bound.adjustment);
+            object_uses[result.object_use].member_pointer = bound.member_pointer;
+        } else require_conversion(callee, decay(fn.type));
         std::vector<Conversion> chosen;
         for (std::size_t i = 0; i < args.size(); ++i) {
             Conversion c;

@@ -8,6 +8,7 @@ IRType Procedural::type(TypeId id)
     switch (t.kind) {
     case TypeKind::Pointer: case TypeKind::LRef: case TypeKind::RRef: case TypeKind::Function: return IRType::Ptr;
     case TypeKind::Array: return IRType::object(sem.object_size(id), sem.object_alignment(id));
+    case TypeKind::MemberPointer: return sem.types[t.child].kind == TypeKind::Function ? IRType::object(16,8) : IRType(IRType::I64);
     case TypeKind::Named:
         if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
         return IRType::object(sem.object_size(id), sem.object_alignment(id));
@@ -47,7 +48,7 @@ Value Procedural::load(Value v)
 {
     if (!v.address) return v;
     if (v.bit_field) return load_bit_field(v);
-    if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
+    if (sem.class_value(v.type) || (sem.types[v.type].kind == TypeKind::MemberPointer && type(v.type).kind() == IRType::Object)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
@@ -63,11 +64,15 @@ Value Procedural::address(Value v)
 Value Procedural::store(Value v, Value location)
 {
     if (location.bit_field) return store_bit_field(v, location);
+    if (type(location.type).kind() == IRType::Object) {
+        Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(location.type); copy.alignment = sem.object_alignment(location.type);
+        emit(copy,{v.operand,address(location).operand}); return v;
+    }
     Instruction i(Opcode::Store, type(location.type)); i.is_volatile = sem.types[location.type].cv & 2;
     emit(i, {v.operand, location.operand});
     return v;
 }
-Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool fold_widen)
+Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool fold_widen, bool preserve_widen)
 {
     if (v.ir == to) return v;
     Instruction i(Opcode::Convert, to); i.source_type = v.ir;
@@ -80,7 +85,8 @@ Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool
     }
     else i.operation = to.bytes() < v.ir.bytes() ? Operation::Trunc : unsign ? Operation::Zext : Operation::Sext;
     // Required immediate widening may be represented by the final literal.
-    if (v.operand.kind == Operand::Integer && to.integer() && v.ir.integer() && (to.width() <= 32 || to.width() < v.ir.width() || fold_widen || !to_unsigned)) {
+    if (v.operand.kind == Operand::Integer && to.integer() && v.ir.integer() &&
+        (!preserve_widen || to.width() <= v.ir.width()) && (to.width() <= 32 || to.width() < v.ir.width() || fold_widen || !to_unsigned)) {
         std::uint64_t bits = v.operand.data.integer;
         if (v.ir.width() < 64) {
             auto mask = (std::uint64_t(1) << v.ir.width()) - 1;
@@ -92,7 +98,7 @@ Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool
     }
     return emit(i, {v.operand});
 }
-Value Procedural::convert(Value v, TypeId to, bool fold_widen)
+Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_widen)
 {
     if (reference(to)) {
         TypeId referred = sem.types[to].child;
@@ -122,7 +128,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
         if (v.operand.kind == Operand::Null || (from && sem.types[from].kind == TypeKind::Named))
             v = emit(Opcode::Copy, target, {v.operand});
         else v.ir = target;
-    } else v = coerce(v, target, unsign, sem.unsigned_type(to), fold_widen);
+    } else v = coerce(v, target, unsign, sem.unsigned_type(to), fold_widen, preserve_widen);
     v.type = to; return v;
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
@@ -155,7 +161,7 @@ Value Procedural::converted_value(Value v, const semantic::Conversion& c)
         v.type = c.target; return v;
     }
     if (c.reference && !c.temporary && v.address) return address(v);
-    return convert(v, c.target);
+    return convert(v, c.target,c.fold_widen,c.preserve_widen);
 }
 Value Procedural::incoming(NodeId n)
 {

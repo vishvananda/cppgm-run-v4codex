@@ -12,8 +12,12 @@ void Analyzer::modifiable(NodeId n)
 Expression Analyzer::unary_expression(NodeId n, ScopeId s)
 {
     NodeId operand = ast[n].first;
-    Expression a = expression(operand, s), r;
     ETokenType op = ast[n].op;
+    bool qualified_address = op == OP_AMP && ast[operand].kind == Kind::IdExpression &&
+        ast[ast[operand].detail].first != ast[ast[operand].detail].last;
+    if (qualified_address) ++unevaluated_depth;
+    Expression a = expression(operand, s), r;
+    if (qualified_address) --unevaluated_depth;
     if (types[a.type].kind == TypeKind::Named) {
         std::vector<NodeId> args(1, operand);
         if (ast[n].kind == Kind::Postfix) args.push_back(0);
@@ -24,8 +28,14 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity) demand_specialization(a.entity);
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
-        if (a.entity && entities[a.entity].member_info && !entities[a.entity].is_static) {
+        if (a.entity && !entities[a.entity].is_static && (entities[a.entity].member_info || (qualified_address && nonstatic_field(a.entity)))) {
+            if (!qualified_address) throw std::runtime_error("member pointer requires a qualified member name");
+            auto member_type = types[entities[a.entity].type];
+            if (member_type.kind == TypeKind::LRef || member_type.kind == TypeKind::RRef)
+                throw std::runtime_error("pointer to reference member");
             r.type = types.member_pointer(scopes[entities[a.entity].owner].entity, entities[a.entity].type);
+            check_access(a.entity,s,entities[a.entity].owner);
+            size(entities[scopes[entities[a.entity].owner].entity].type);
             demand_member(a.entity);
         } else r.type = types.compound(TypeKind::Pointer, a.type);
         return r;
@@ -121,8 +131,10 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
     NodeId an = ast[n].first, bn = ast[an].next;
     Expression a = expression(an, s), b = expression(bn, s), r;
     ETokenType op = ast[n].op;
+    if (op == OP_DOTSTAR) return member_pointer_expression(n,s);
     if (ast[n].kind != Kind::Conditional && (types[a.type].kind == TypeKind::Named || types[b.type].kind == TypeKind::Named) &&
         operator_expression(n, s, op, {an, bn}, r)) return r;
+    if (op == OP_ARROWSTAR) return member_pointer_expression(n,s);
     if (ast[n].kind == Kind::Conditional) {
         NodeId cn = ast[bn].next;
         Expression c = expression(cn, s);
@@ -159,7 +171,12 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         if (op == OP_ASS) {
             Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0;
             record_conversion(r, an, left);
-            record_conversion(r, bn, conversion(bn, a.type));
+            // Union-member assignment can begin the variant's lifetime and
+            // retains initializer-form immediates. Ordinary wide scalar stores
+            // keep their typed conversion boundary at O0.
+            bool variant = nonstatic_field(a.entity) && entities[scopes[entities[a.entity].owner].entity].key == KW_UNION;
+            Conversion right = conversion(bn,a.type); right.preserve_widen = integral(a.type) && size(a.type)>4 && !variant;
+            record_conversion(r, bn, right);
             auto index = expressions[bn].incoming;
             Conversion applied = conversions[index];
             apply_conversion(bn, applied); conversions[index] = applied;

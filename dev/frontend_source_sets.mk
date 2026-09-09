@@ -50,3 +50,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_operators
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/reference_storage lowering/reference_storage
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/allocation lowering/deallocation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/list_initialization lowering/list_initialization lowering/full_expression
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/member_pointers lowering/member_pointers

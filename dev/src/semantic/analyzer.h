@@ -36,6 +36,7 @@ public:
     bool constructor_needed(EntityId e);
     bool destructor_needed(EntityId e);
     bool temporary_cleanup(EntityId object);
+    Expression member_pointer_expression(NodeId n, ScopeId s);
     bool trivial_destructor(TypeId t);
     EntityId type_destructor(TypeId t) const;
     EntityId converted_temporary(const Conversion& c) const;

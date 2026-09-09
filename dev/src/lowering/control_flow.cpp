@@ -115,7 +115,10 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     else {
         auto conversion = sem.conversion_fact(fact.conversions+1);
         Value y = location || conversion.kind == semantic::Conversion::Kind::User ? converted(b,conversion) : convert(expression(b),target);
-        if (has_result) emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
+        if (has_result) {
+            if (ir.kind() == IRType::Object) store(y,Value(Operand::slot(slot),ir,target,true));
+            else emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
+        }
     }
     auto yes_live = live; jump(end);
     start(no); live = common;
@@ -123,7 +126,10 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     else {
         auto conversion = sem.conversion_fact(fact.conversions+2);
         Value z = location || conversion.kind == semantic::Conversion::Kind::User ? converted(c,conversion) : convert(expression(c),target);
-        if (has_result) emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
+        if (has_result) {
+            if (ir.kind() == IRType::Object) store(z,Value(Operand::slot(slot),ir,target,true));
+            else emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
+        }
     }
     auto no_live = live; jump(end); start(end);
     merge_temporaries(common,yes_live,no_live,selector);
@@ -131,7 +137,7 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
         if (!supplied) activate_temporary(sem.object_fact(n).temporary);
         destination.type = target; destination.address = true; return destination;
     }
-    Value v = has_result ? emit(Opcode::Load, ir, {Operand::slot(slot)}) : Value();
+    Value v = !has_result ? Value() : ir.kind() == IRType::Object ? Value(Operand::slot(slot),ir,target) : emit(Opcode::Load, ir, {Operand::slot(slot)});
     if (fact.category == ValueCategory::Prvalue && !location) v.materialized = slot;
     v.type = target; v.address = location; return v;
 }

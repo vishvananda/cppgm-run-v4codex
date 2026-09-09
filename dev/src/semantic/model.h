@@ -191,7 +191,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -206,6 +206,7 @@ struct Expression {
 };
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
+    NodeId member_pointer = 0;
     unsigned adjustment = 0; std::uint32_t callee_conversion = 0; bool value_initialize = false; };
 struct Conversion {
     TypeId target = 0;
@@ -213,6 +214,7 @@ struct Conversion {
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
     bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false, implicit_move = false;
+    bool preserve_widen = false;
     unsigned char preference = 0;
     enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List };
     Kind kind = Kind::Standard;

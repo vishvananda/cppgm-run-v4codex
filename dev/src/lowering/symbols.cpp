@@ -21,7 +21,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     if (abi_types[id]) return abi_types[id];
     auto t = sem.types[id];
     abi_mangle::Id result = 0;
-    if (t.cv) result = abi.cv(abi_type(sem.types.unqualified(id)), t.cv);
+    if (t.cv && t.kind != TypeKind::Function) result = abi.cv(abi_type(sem.types.unqualified(id)), t.cv);
     else switch (t.kind) {
     case TypeKind::Fundamental: {
         static const AbiBuiltinTypeKind kinds[] = {ABI_BUILTIN_TYPE_SIGNED_CHAR, ABI_BUILTIN_TYPE_SHORT,
@@ -39,10 +39,12 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::LRef: result = abi.make(abi_mangle::Kind::Reference, abi_type(t.child)); break;
     case TypeKind::RRef: result = abi.make(abi_mangle::Kind::RvalueReference, abi_type(t.child)); break;
     case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, 0, t.bound); break;
+    case TypeKind::MemberPointer: result = abi.make(abi_mangle::Kind::MemberPointer, abi_type(sem.entities[t.entity].type), abi_type(t.child)); break;
     case TypeKind::Function: {
         std::vector<abi_mangle::Id> params;
         for (unsigned j = 0; j < t.count; ++j) params.push_back(abi_type(sem.types.parameters[t.offset+j]));
-        result = abi.make(abi_mangle::Kind::FunctionType, abi_type(t.child), 0, t.variadic, 0, params); break;
+        unsigned qualifiers = t.cv | (t.ref == semantic::RefQualifier::Lvalue ? 4 : t.ref == semantic::RefQualifier::Rvalue ? 8 : 0);
+        result = abi.make(abi_mangle::Kind::FunctionType, abi_type(t.child), qualifiers, t.variadic, 0, params); break;
     }
     default: throw std::runtime_error("unsupported procedural ABI type");
     }
@@ -175,16 +177,23 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         if (indirect_signatures[id]) return indirect_signatures[id];
     }
     auto t = sem.types[id];
+    EntityId member_owner = t.kind == TypeKind::MemberPointer ? t.entity : 0;
+    if (member_owner) t = sem.types[t.child];
     auto return_type = sem.types[t.child];
     bool incomplete_result = return_type.kind == TypeKind::Named && sem.entities[return_type.entity].class_info && !sem.entities[return_type.entity].complete;
     bool indirect_result = sem.indirect_value(t.child);
     Signature sig; sig.result = incomplete_result || indirect_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
-    sig.parameters.count = t.count + indirect_result;
+    sig.parameters.count = t.count + indirect_result + bool(member_owner);
     if (t.variadic) sig.boundary.arity = CAM_VARIADIC;
     if (indirect_result) {
         Parameter param; param.type = IRType::Ptr; param.passing = PPM_INDIRECT_RESULT; param.object_bytes = sem.object_size(t.child);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
         if (!owner) v.name = p.intern("%ret");
+        p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
+    }
+    if (member_owner) {
+        Parameter param; param.type = IRType::Ptr; param.object_bytes = sem.object_size(sem.entities[member_owner].type);
+        lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true; v.name = p.intern("%this");
         p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
     }
     for (unsigned j = 0; j < t.count; ++j) {
@@ -320,7 +329,7 @@ void Procedural::function_body(EntityId e, bool base)
         TypeId type_id = sem.entities[id].type;
         SlotId slot = builder->add_slot(0, type(type_id)); objects[id] = slot;
         if (sem.indirect_parameter(type_id)) object_addresses[id] = param.value;
-        else if (sem.class_value(type_id)) {
+        else if (type(type_id).kind() == IRType::Object) {
             if (!sem.empty_class(type_id)) {
                 Value destination = address(Value(Operand::slot(slot),type(type_id),type_id,true));
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(type_id); copy.alignment = sem.object_alignment(type_id);

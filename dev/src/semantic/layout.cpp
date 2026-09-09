@@ -21,7 +21,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
     Type t = types[id];
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment);
     if (t.kind == TypeKind::Pointer) return 8;
-    if (t.kind == TypeKind::MemberPointer) return types[t.child].kind == TypeKind::Function ? 16 : 8;
+    if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
         if (!t.bound) throw std::runtime_error("sizeof incomplete array");
         if (alignment) return size(t.child, true);

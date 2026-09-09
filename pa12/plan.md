@@ -96,3 +96,24 @@ newly passing enclosing-temporary behavior. The remaining ABI case needs an
 identity/representation proof, and survivor 536 spans member-pointer formation,
 pair storage, object adjustment and an indirect signature. These require separate
 coordinated owners, beyond further changes to the completed region/effect flags.
+
+Member-pointer entry: clean `4cefbabe`; prior goal turn was verified progress.
+Keep nonvirtual member values in their ABI-sized pair and record object/callee
+operands at semantic application. Validate both object and pointer syntax,
+indirect signature extents, qualifiers, parameters and data members together.
+Then address remaining current-stage LowIR failures; unblocking a control alone
+does not satisfy the required existing-fixture progress criterion.
+
+Member-pointer implementation: all **13/13** survivor controls now pass.
+Nonvirtual function/adjustment pairs and data offsets use typed formation and
+application records; indirect signatures are keyed by canonical member-pointer
+type, preserving complete-object extent without annotating ordinary pointers.
+Parameters, returns, arrays, class member transfers and ref-qualified calls pass.
+Ordinary wide scalar assignments retain their conversion width; union-member
+activation retains initializer-form immediates. **249/257**, one entry failure
+removed and none added; earlier **1327/1327**, **59** personal checks, file audit
+and diff checks pass. Frozen common/assignment/member-pointer measurements run
+against entry `4cefbabe`; no runtime optimization gain is claimed.
+Logs: `/tmp/pa12-member-pointer-final-stage.log`,
+`/tmp/pa12-member-pointer-final-prior.log`,
+`/tmp/pa12-member-pointer-final-personal.log`.

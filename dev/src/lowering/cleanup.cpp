@@ -117,7 +117,7 @@ void Procedural::return_statement(NodeId n)
     if (life.entry && sem.return_count(life.entry, life.context) > 1) {
         if (has_value) {
             if (!cleanup_return) cleanup_return = builder->add_slot(0, result_type());
-            if (sem.class_value(returned)) {
+            if (type(returned).kind() == IRType::Object) {
                 Value target = address(Value(Operand::slot(cleanup_return),type(returned),returned,true));
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(returned); copy.alignment = sem.object_alignment(returned);
                 emit(copy,{value.operand,target.operand});

@@ -12,6 +12,7 @@ Expression Analyzer::value_fact(const Expression& source) const
     // describe only their original syntax node, never a surrounding comma or
     // parenthesized value (which owns no cast operand or builtin result slot).
     if (source.form == ExpressionForm::Overload) result.form = source.form;
+    if (source.form == ExpressionForm::BoundMember) { result.form = source.form; result.object_use = source.object_use; }
     return result;
 }
 Expression Analyzer::expression(NodeId n, ScopeId s)
