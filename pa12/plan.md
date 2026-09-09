@@ -55,7 +55,7 @@ are bounded by selected objects; query annotations do not request O0 transforms.
   All three measurement campaigns remain in conversion-performance.md; final
   logs are `/tmp/pa12-conversion-final-{stage2,prior2,personal}.log`.
 - Allocation entry: clean `70556b3d`, freshly verified **202/257**, 55 failures.
-  Current allocation group: **223/257**, **21 entry failures removed, no new
+  `d2db8706` allocation group: **223/257**, **21 entry failures removed, no new
   failures**, unchanged coverage. All required new/delete comparisons pass.
   Earlier **1327/1327**, file audit passes with the same two header advisories.
   Thirty-four personal source checks pass, including six allocation reducers.
@@ -70,10 +70,26 @@ are bounded by selected objects; query annotations do not request O0 transforms.
 - Validation logs: `/tmp/pa12-allocation-final-stage2.log` (223/257, exit 2),
   `/tmp/pa12-allocation-final-prior1.log` (1327/1327, exit 0),
   `/tmp/pa12-allocation-personal4.log` (exit 0). Root reports run serially.
-  Frozen allocation A/A+ABBA and absolute/scaling campaign is in progress.
-- Remaining: nine compile rejections belong to aggregate/list/reference
+  Frozen allocation A/A+ABBA and absolute/scaling campaign has finished;
+  raw observations are allocation-measurements.json. Final aggregate evidence
+  is running separately; no observations are discarded.
+- Remaining after the next group: seven compile rejections belong to aggregate/list/reference
   initialization and destructor alias lookup. Twenty-five LowIR differences
   belong to transfer/helper emission, lifetime continuations, and the two
   inherited bit-field/base-copy contract questions above. The survivor runner
   still reaches member-pointer boundary control 536, which needs its distinct
   representation and indirect signature. No fixtures or references changed.
+
+Aggregate whole-copy group: initializer appertainment owns a selected class
+conversion before considering brace elision; the InitAction consumes that
+source/destination record without replacing the source call's type or callee.
+Work stays O(initializer elements + required overload candidates). Both affected
+fixtures and a combined reference/global-array personal reducer pass. Current
+**225/257**, **23 entry failures removed, no new failures**, earlier **1327/1327**,
+35 personal checks and file audit pass. Logs: `/tmp/pa12-aggregate-stage1.log`,
+`/tmp/pa12-aggregate-prior1.log`, `/tmp/pa12-aggregate-personal1.log`.
+Next initialization boundary: braced lists currently acquire a scalar placeholder
+before candidate selection. Correct list arguments/defaults and aggregate
+prvalues need a target-keyed list-conversion record, selected temporary ownership,
+and class-valued aggregate helper parameters; whole-object appertainment alone
+cannot supply that representation.

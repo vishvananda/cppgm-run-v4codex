@@ -86,6 +86,15 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     bool aggregate = aggregate_type(t);
     bool braced = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::ParenInitializer;
     NodeId inner = braced ? ast[source].first : source;
+    if (aggregate && class_value(t) && !braced) {
+        expression(source,s);
+        Conversion c = conversion(source,t);
+        if (c.valid()) {
+            record_class_initialization(source,t,source,&c);
+            initializers[id].kind = InitKind::Constructor;
+            cursor = ast[source].next; return id;
+        }
+    }
     if (string_initialization(inner, t)) {
         if (braced && ast[inner].next) throw std::runtime_error("excess string initializer");
         auto lit = ast.literals[ast[inner].literal];

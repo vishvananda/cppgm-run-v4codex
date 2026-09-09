@@ -8,6 +8,10 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     constant_constructors.put(ctor, index);
     auto member = members[entities[ctor].member_info];
     NodeId body = entities[ctor].body;
+    // Keep source-declared copy/move value types on the ordinary O0 lifetime
+    // path. Their initialization is not part of the early scalar-field policy.
+    EntityId cls = scopes[entities[ctor].owner].entity;
+    if (class_facts[entities[cls].class_info].declared_transfers & 3) return index;
     // Early static initialization is permitted only when the demanded body
     // has no effects and every action initializes this object's scalar fields.
     // Other bodies retain their ordinary dynamic initialization path.

@@ -91,7 +91,7 @@ private:
     void prepare_value_boundary(TypeId t);
     void prepare_function_boundaries();
     void class_result(NodeId n, Expression& result, ScopeId s);
-    bool record_class_initialization(NodeId n, TypeId target, NodeId source);
+    bool record_class_initialization(NodeId n, TypeId target, NodeId source, const Conversion* selected = 0);
     void record_class_return(NodeId n, ScopeId s);
     void finish_class_returns(EntityId e);
     EntityId current_function = 0;

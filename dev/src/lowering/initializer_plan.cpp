@@ -17,7 +17,7 @@ Value Procedural::string_element(NodeId n, TypeId t, std::uint64_t index)
 bool Procedural::constant_plan(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
-    if (action.kind == InitKind::Constructor) return sem.constant_construction(action.source, action.type).valid;
+    if (action.kind == InitKind::Constructor) return !sem.class_initialization(action.source,action.type).source && sem.constant_construction(action.source, action.type).valid;
     if (action.kind == InitKind::Value) return !sem.value_constructor(action.type);
     if (action.kind == InitKind::String) return true;
     if (action.kind == InitKind::Scalar) return sem.static_value(action.source, action.type).kind != semantic::StaticValue::Invalid;
@@ -74,7 +74,12 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
         Value value = action.source ? incoming(action.source) : Value(Operand::integer(0), type(action.type), action.type);
         store(value, location); return;
     }
-    if (action.kind == InitKind::Constructor) { construct(sem.facts[action.source].entity, action.source, address(location)); return; }
+    if (action.kind == InitKind::Constructor) {
+        auto value = sem.class_initialization(action.source,action.type);
+        if (value.source) construct_value(value.source,sem.conversion_fact(value.conversion),address(location));
+        else construct(sem.facts[action.source].entity, action.source, address(location));
+        return;
+    }
     if (action.kind == InitKind::Value) {
         if (auto ctor = sem.value_constructor(action.type)) {
             auto saved_live = live;

@@ -57,14 +57,14 @@ void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
     register_destruction(temporary);
     object_uses[result.object_use].temporary = temporary;
 }
-bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId source)
+bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId source, const Conversion* selected)
 {
-    Conversion c = conversion(source,target);
+    Conversion c = selected ? *selected : conversion(source,target);
     if (!c.valid()) throw std::runtime_error("invalid class value initialization");
     apply_conversion(source,c);
     ValueInitialization init; init.source = source; init.conversion = conversions.size(); conversions.push_back(c);
     class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
-    facts[n].type = target;
+    if (n != source) facts[n].type = target;
     return true;
 }
 void Analyzer::record_class_return(NodeId n, ScopeId s)
