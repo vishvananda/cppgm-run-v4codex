@@ -1,0 +1,663 @@
+{
+  "protocol": "four A/A observations, two ABBA blocks; frozen equivalent outputs",
+  "cpu": 0,
+  "binaries": [
+    {
+      "path": "/tmp/pa12-value-evidence/final-cppgm",
+      "sha256": "0c28a616664f600ea1ff7348f0f94b18f177e23cd2162f8b247cbec7e7cf6211",
+      "text_bytes": 833478
+    },
+    {
+      "path": "/tmp/pa12-value-evidence/shared-branches-cppgm",
+      "sha256": "330d646fbccf18e0873f161a21d9bfb003b2dd1ce86f8bbf7eed8d27415b2911",
+      "text_bytes": 833542
+    }
+  ],
+  "harness_sha256": "954ccedecb620033025ddf73400f4fa66e57c10829f72c928c989b8646880599",
+  "backend_sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+  "compile_flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "native_flags": [
+    "-O0"
+  ],
+  "workloads": {
+    "nested-64": {
+      "source_path": "/tmp/pa12-value-evidence/nested/nested-64.cpp",
+      "source_sha256": "8950d32cf2ccb98d7a25d980a9a98b0e144a4be4e8779c5f0248817f6f2143c4",
+      "outputs": [
+        {
+          "lowir_sha256": "9074f984a38ee2452be25c1ed2dfbe1ae4a71b8611b41ae0e0c8e80ac02c8ff9",
+          "lowir_bytes": 255890,
+          "executable_sha256": "90b3e3492792db3bb421e8a9b755cb7c951fd839efe013103110aa4aedb8f261",
+          "text_bytes": 48128,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 11984,
+              "max_pending": 16,
+              "node_growths": 15,
+              "delimiter_work": 11984,
+              "semantic_ms": 320.984,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 2066,
+              "semantic_constructor_actions": 16,
+              "semantic_conversion_objects": 68624,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 16,
+              "semantic_function_returns": 16,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 32,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 32,
+              "semantic_demand_processed": 32,
+              "semantic_expression_work": 7246,
+              "semantic_candidate_work": 207009,
+              "semantic_conversion_work": 141399,
+              "semantic_conversions": 144473,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 16,
+              "semantic_constants": 6,
+              "semantic_types": 202,
+              "semantic_entities": 70934,
+              "semantic_scopes": 70838,
+              "semantic_edges": 0,
+              "semantic_declarations": 148,
+              "semantic_regions": 100,
+              "semantic_lookup_work": 7340,
+              "semantic_signature_work": 38,
+              "semantic_type_probes": 127306,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 342.052,
+              "lowering_ms": 8.72782,
+              "write_ms": 6.60354,
+              "peak_rss_kib": 39376,
+              "nodes": 16613,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 57,
+              "discard_work": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 68,
+              "abi_bytes": 7230,
+              "instructions": 7408,
+              "operands": 12659,
+              "ir_pool_growths": 117,
+              "ir_capacity_bytes": 1357440
+            }
+          ]
+        },
+        {
+          "lowir_sha256": "9074f984a38ee2452be25c1ed2dfbe1ae4a71b8611b41ae0e0c8e80ac02c8ff9",
+          "lowir_bytes": 255890,
+          "executable_sha256": "90b3e3492792db3bb421e8a9b755cb7c951fd839efe013103110aa4aedb8f261",
+          "text_bytes": 48128,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 11984,
+              "max_pending": 16,
+              "node_growths": 15,
+              "delimiter_work": 11984,
+              "semantic_ms": 19.219,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 2066,
+              "semantic_constructor_actions": 16,
+              "semantic_conversion_objects": 2064,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 16,
+              "semantic_function_returns": 16,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 32,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 32,
+              "semantic_demand_processed": 32,
+              "semantic_expression_work": 7246,
+              "semantic_candidate_work": 7329,
+              "semantic_conversion_work": 8279,
+              "semantic_conversions": 11353,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 16,
+              "semantic_constants": 6,
+              "semantic_types": 202,
+              "semantic_entities": 4374,
+              "semantic_scopes": 4278,
+              "semantic_edges": 0,
+              "semantic_declarations": 148,
+              "semantic_regions": 100,
+              "semantic_lookup_work": 7340,
+              "semantic_signature_work": 38,
+              "semantic_type_probes": 7080,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 49.8305,
+              "lowering_ms": 8.09764,
+              "write_ms": 6.87459,
+              "peak_rss_kib": 21208,
+              "nodes": 16613,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 57,
+              "discard_work": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 68,
+              "abi_bytes": 7230,
+              "instructions": 7408,
+              "operands": 12659,
+              "ir_pool_growths": 117,
+              "ir_capacity_bytes": 1357440
+            }
+          ]
+        }
+      ],
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.309004892,
+            "rss_kib": 38076,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.301487423,
+            "rss_kib": 38140,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.307292269,
+            "rss_kib": 38020,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.295685572,
+            "rss_kib": 38072,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.297049728,
+            "rss_kib": 38052,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.081625834,
+            "rss_kib": 10280,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.063448885,
+            "rss_kib": 10320,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.307541884,
+            "rss_kib": 38072,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.287633907,
+            "rss_kib": 38080,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.065117012,
+            "rss_kib": 10308,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.064888464,
+            "rss_kib": 10232,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.292339453,
+            "rss_kib": 38072,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.23995489867960654,
+          0.2241576682073811
+        ],
+        "aa_range_s": [
+          0.295685572,
+          0.309004892
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.010571262,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.010668138,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009819946,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009552765,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009518812,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009930365,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.010167055,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.009634174,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009341194,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.009486514,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.009546426,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.009597571,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "paired_b_over_a": [
+          1.0493100135926585,
+          1.004972605130271
+        ],
+        "aa_range_s": [
+          0.009552765,
+          0.010668138
+        ]
+      }
+    },
+    "nested-256": {
+      "source_path": "/tmp/pa12-value-evidence/nested/nested-256.cpp",
+      "source_sha256": "201b7f84ff0b42ee62faaba67453e53f76cac01314157739ed03993bef390633",
+      "outputs": [
+        {
+          "lowir_sha256": "f02e672515edd766a04fe1b0bffadd122f0abb50c31cd37101ec05858474126a",
+          "lowir_bytes": 1013087,
+          "executable_sha256": "b291595646b0bc2a6a736f84b9885e8cd82566b25e1f3641620016e75506cba4",
+          "text_bytes": 189440,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 45776,
+              "max_pending": 16,
+              "node_growths": 16,
+              "delimiter_work": 45776,
+              "semantic_ms": 5263.2,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 8210,
+              "semantic_constructor_actions": 16,
+              "semantic_conversion_objects": 1060880,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 16,
+              "semantic_function_returns": 16,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 32,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 32,
+              "semantic_demand_processed": 32,
+              "semantic_expression_work": 28750,
+              "semantic_candidate_work": 3186849,
+              "semantic_conversion_work": 2138199,
+              "semantic_conversions": 2150489,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 16,
+              "semantic_constants": 6,
+              "semantic_types": 202,
+              "semantic_entities": 1069334,
+              "semantic_scopes": 1069238,
+              "semantic_edges": 0,
+              "semantic_declarations": 148,
+              "semantic_regions": 100,
+              "semantic_lookup_work": 28844,
+              "semantic_signature_work": 38,
+              "semantic_type_probes": 1534045,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 5352.55,
+              "lowering_ms": 62.4584,
+              "write_ms": 43.0623,
+              "peak_rss_kib": 510988,
+              "nodes": 62693,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 57,
+              "discard_work": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 68,
+              "abi_bytes": 7230,
+              "instructions": 28912,
+              "operands": 49523,
+              "ir_pool_growths": 127,
+              "ir_capacity_bytes": 5387904
+            }
+          ]
+        },
+        {
+          "lowir_sha256": "f02e672515edd766a04fe1b0bffadd122f0abb50c31cd37101ec05858474126a",
+          "lowir_bytes": 1013087,
+          "executable_sha256": "b291595646b0bc2a6a736f84b9885e8cd82566b25e1f3641620016e75506cba4",
+          "text_bytes": 189440,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 45776,
+              "max_pending": 16,
+              "node_growths": 16,
+              "delimiter_work": 45776,
+              "semantic_ms": 74.7398,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 8210,
+              "semantic_constructor_actions": 16,
+              "semantic_conversion_objects": 8208,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 16,
+              "semantic_function_returns": 16,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 32,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 32,
+              "semantic_demand_processed": 32,
+              "semantic_expression_work": 28750,
+              "semantic_candidate_work": 28833,
+              "semantic_conversion_work": 32855,
+              "semantic_conversions": 45145,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 16,
+              "semantic_constants": 6,
+              "semantic_types": 202,
+              "semantic_entities": 16662,
+              "semantic_scopes": 16566,
+              "semantic_edges": 0,
+              "semantic_declarations": 148,
+              "semantic_regions": 100,
+              "semantic_lookup_work": 28844,
+              "semantic_signature_work": 38,
+              "semantic_type_probes": 20321,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 152.038,
+              "lowering_ms": 29.2794,
+              "write_ms": 22.5278,
+              "peak_rss_kib": 26656,
+              "nodes": 62693,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 57,
+              "discard_work": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 68,
+              "abi_bytes": 7230,
+              "instructions": 28912,
+              "operands": 49523,
+              "ir_pool_growths": 127,
+              "ir_capacity_bytes": 5387904
+            }
+          ]
+        }
+      ],
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 4.917623658,
+            "rss_kib": 504380,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 5.204447741,
+            "rss_kib": 504440,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 5.18343237,
+            "rss_kib": 504528,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 5.014456071,
+            "rss_kib": 504384,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 4.988771606,
+            "rss_kib": 504404,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.347936366,
+            "rss_kib": 26604,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.292692275,
+            "rss_kib": 26608,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 5.00326026,
+            "rss_kib": 504436,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 5.211935907,
+            "rss_kib": 504500,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.363698661,
+            "rss_kib": 26608,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.326066014,
+            "rss_kib": 26608,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 5.220887768,
+            "rss_kib": 504416,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.06411395095524806,
+          0.06611485983922756
+        ],
+        "aa_range_s": [
+          4.917623658,
+          5.204447741
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.036821243,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.037177142,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.039845306,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.038532249,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.042511624,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.038041257,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.038246617,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.041509549,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.041712039,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.038681035,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.04144884,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.038705878,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.9079601161959499,
+          0.9964181862606563
+        ],
+        "aa_range_s": [
+          0.036821243,
+          0.039845306
+        ]
+      }
+    }
+  }
+}
