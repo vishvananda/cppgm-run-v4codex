@@ -302,6 +302,10 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
         }
     }
     ScopeId owner = name_owner(n, s);
+    if (calls && mode == Lookup::Ordinary && operator_token(n) == OP_ASS) {
+        ScopeId cls = naming_class(owner);
+        if (cls) ensure_transfers(entities[scopes[cls].entity].type, true);
+    }
     EntityId result = lookup(owner, terminal(n), mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
     if (calls && result && !function_binding(result)) check_access(result, s, owner);
     return result;

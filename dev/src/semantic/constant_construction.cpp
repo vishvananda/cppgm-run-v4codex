@@ -11,7 +11,7 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     // Early static initialization is permitted only when the demanded body
     // has no effects and every action initializes this object's scalar fields.
     // Other bodies retain their ordinary dynamic initialization path.
-    if (member.inherited_constructor || ast[body].kind != syntax::Kind::Compound || ast[body].first) return index;
+    if (member.transfer != TransferKind::None || member.inherited_constructor || ast[body].kind != syntax::Kind::Compound || ast[body].first) return index;
     Index parameters;
     unsigned number = 0;
     for (auto d = scopes[entities[ctor].scope].first_decl; d; d = declarations[d].next) {

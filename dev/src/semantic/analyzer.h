@@ -49,6 +49,10 @@ public:
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
     std::vector<SubobjectAction> subobject_actions;
     bool synthetic_member(EntityId e) const;
+    bool transfer_member(EntityId e) const;
+    bool trivial_transfer(EntityId e) const;
+    bool direct_transfer(EntityId e) const;
+    std::vector<TransferAction> transfers;
     bool nonstatic_field(EntityId e) const;
     EntityId injected_storage(EntityId field) const;
     EntityId anonymous_object(NodeId declaration) const { return anonymous_objects.get(declaration); }
@@ -64,6 +68,14 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    void classify_transfer(EntityId e, NodeId special, ScopeId context);
+    void ensure_transfers(TypeId t, bool assignment);
+    void prepare_transfer(EntityId e);
+    bool copy_storage_type(TypeId t);
+    bool deleted_transfer(EntityId e);
+    EntityId select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment);
+    Conversion transfer_conversion(TypeId from, ValueCategory category, TypeId to);
+    bool transfer_accessible(EntityId e, ScopeId context) const;
     Index anonymous_objects;
     Index constant_constructors, constant_objects;
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
@@ -105,6 +117,7 @@ private:
     std::vector<NodeId> jump_bodies;
     EntityId default_destructor(TypeId t, ScopeId s = 0);
     void destructor_actions(EntityId e);
+    bool trivial_destructor(TypeId t);
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
     void register_destruction(EntityId e);

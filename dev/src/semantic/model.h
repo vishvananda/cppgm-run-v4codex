@@ -59,6 +59,7 @@ struct Constant {
 // Rare class demand state has a separate arena; ordinary bindings do not pay
 // for constructors and layout. The stable index belongs to the class entity.
 enum class Access : unsigned char { Public, Protected, Private };
+enum class TransferKind : unsigned char { None = 0, CopyConstructor = 1, MoveConstructor = 2, CopyAssignment = 4, MoveAssignment = 8 };
 struct ClassFacts {
     Access current_access = Access::Public;
     std::uint64_t size = 0, alignment = 0, requested_alignment = 0;
@@ -71,6 +72,10 @@ struct ClassFacts {
     bool aggregate = true, empty = true;
     EntityId value_constructor = 0;
     EntityId variant_initializer = 0;
+    unsigned char declared_transfers = 0, generated_transfers = 0;
+    unsigned char copy_storage_state = 0;
+    unsigned char trivial_destructor_state = 0;
+    bool user_constructor = false, user_destructor = false;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
 // bit-fields and explicit alignment use this descriptor by canonical EntityId.
@@ -125,6 +130,17 @@ struct MemberFacts {
     unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
     bool destruction_needed = false, nonthrowing = false;
     std::uint32_t destruction_begin = 0, destruction_count = 0;
+    TransferKind transfer = TransferKind::None;
+    unsigned char transfer_state = 0;
+    bool transfer_trivial = false, transfer_direct = false, transfer_noexcept = false, defaulted_late = false;
+    std::uint32_t transfer_begin = 0, transfer_count = 0;
+    EntityId transfer_parameter = 0;
+};
+struct TransferAction {
+    enum Kind : unsigned char { Scalar, Reference, Subobject, Unit, Storage, Empty } kind = Scalar;
+    EntityId field = 0, function = 0;
+    TypeId type = 0;
+    std::uint64_t bytes = 0, alignment = 1;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
 struct TemplateFunction {

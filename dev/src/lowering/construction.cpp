@@ -9,6 +9,13 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
         Instruction zero(Opcode::ZeroInit); zero.bytes = sem.object_size(sem.entities[cls].type);
         zero.alignment = sem.object_alignment(sem.entities[cls].type); emit(zero, {object.operand});
     }
+    if (sem.direct_transfer(ctor)) {
+        auto fact = sem.expression_fact(init);
+        Value source = converted(sem.call_arguments[fact.arguments], sem.conversion_fact(fact.conversions));
+        TypeId target = sem.entities[sem.scopes[sem.entities[ctor].owner].entity].type;
+        Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
+        emit(copy, {source.operand, object.operand}); return;
+    }
     if (!sem.constructor_needed(ctor)) return;
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(ctor, base))); call_work.push_back(object.operand);

@@ -23,7 +23,23 @@ void Analyzer::finish()
         members[m].demand = DemandState::Active;
         if (f.body && !entities[e].definition)
             function_body({f.body, f.declarator, entities[e].owner, e, f.source});
-        if (members[m].constructor) constructor_actions(e);
+        if (members[m].synthetic && transfer_member(e)) {
+            prepare_transfer(e);
+            if (members[m].deleted) throw std::runtime_error("deleted defaulted special member");
+            if (members[m].constructor) {
+                bool direct = members[m].transfer_trivial && copy_storage_type(entities[scopes[entities[e].owner].entity].type);
+                members[m].transfer_direct = direct;
+            }
+            for (unsigned j = 0; j < members[m].transfer_count; ++j) {
+                auto action = transfers[members[m].transfer_begin+j];
+                if (!action.function) continue;
+                if (constructor_member(action.function)) {
+                    if (action.field) members[entities[action.function].member_info].complete_entry = true;
+                    else members[entities[action.function].member_info].base_entry = true;
+                }
+                demand_member(action.function);
+            }
+        } else if (members[m].constructor) constructor_actions(e);
         if (members[m].destructor) destructor_actions(e);
         members[m].demand = DemandState::Complete;
     }
@@ -178,8 +194,6 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         TypeId t = declarator(d, types.fundamental(FT_VOID), s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
-            members[entities[e].member_info].synthetic = true;
-            entities[e].inline_function = true;
             facts[n].entity = e; facts[n].type = entities[e].type;
         }
         if (ast[n].kind == Kind::SpecialDefinition) {

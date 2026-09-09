@@ -10,6 +10,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     TypeId object = expressions[args[0]].type;
     ScopeId naming = types[object].kind == TypeKind::Named ? entities[types[object].entity].scope : 0;
     EntityId family = 0;
+    if (op == OP_ASS && naming && scopes[naming].kind == ScopeKind::Class) ensure_transfers(object, true);
     if (naming && scopes[naming].kind == ScopeKind::Class) family = lookup(naming, name, Lookup::Ordinary, true);
     if (op != OP_LPAREN && op != OP_LSQUARE && op != OP_ASS && op != OP_ARROW) {
         EntityId ordinary = lookup(s, name);
@@ -25,6 +26,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (entities[e].template_info) continue;
         bool member = entities[e].member_info && !entities[e].is_static;
         Type f = types[entities[e].type];
+        if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
+            members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
         if (args.size() != f.count + member) continue;
         std::size_t begin = sequences.size();
         bool valid = true;
@@ -51,7 +54,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
             throw std::runtime_error("ambiguous operator overload");
     Candidate selected = viable[best];
-    if (entities[selected.entity].member_info && members[entities[selected.entity].member_info].deleted)
+    if (deleted_transfer(selected.entity))
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
     demand_member(selected.entity);

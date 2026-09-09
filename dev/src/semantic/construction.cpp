@@ -6,6 +6,11 @@ using syntax::Kind;
 EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope)
 {
     EntityId cls = types[t].entity;
+    if (args.size() == 1 && types[expressions[args[0]].type].kind == TypeKind::Named &&
+        (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t)))
+        ensure_transfers(t, false);
+    if (args.empty() && !class_facts[entities[cls].class_info].user_constructor && !class_facts[entities[cls].class_info].inherited_base)
+        return default_constructor(t, scope);
     EntityId binding = class_facts[entities[cls].class_info].constructor;
     if (!binding) {
         if (!args.empty()) throw std::runtime_error("no matching constructor");
@@ -19,6 +24,8 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         Type f = types[entities[e].type];
         if ((!f.variadic && args.size() > f.count) || (args.size() < f.count &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults + args.size()]))) continue;
+        if (members[entities[e].member_info].transfer == TransferKind::MoveConstructor &&
+            members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
         std::size_t begin = sequences.size();
         bool valid = true;
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
@@ -35,7 +42,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
             throw std::runtime_error("ambiguous constructor");
     EntityId selected = viable[best].entity;
-    if (members[entities[selected].member_info].deleted) throw std::runtime_error("deleted constructor");
+    if (deleted_transfer(selected)) throw std::runtime_error("deleted constructor");
     EntityId access = selected;
     while (members[entities[access].member_info].inherited_constructor)
         access = members[entities[access].member_info].inherited_constructor;
@@ -66,7 +73,7 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s)
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
-    if (class_facts[c].constructor) return choose_constructor(t, {}, 0, s);
+    if (class_facts[c].constructor && (class_facts[c].user_constructor || class_facts[c].inherited_base)) return choose_constructor(t, {}, 0, s);
     EntityId ctor = class_facts[c].implicit_constructor;
     if (!ctor) {
         ctor = make_entity(EntityKind::Function, entities[cls].scope, entities[cls].name, 0);
@@ -95,7 +102,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer || ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
     for (NodeId a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) {
         Expression value = expression(a, s);
-        if (!grouped && types.unqualified(value.type) == types.unqualified(target)) return false;
+        if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target)) return false;
         args.push_back(a);
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
@@ -222,6 +229,7 @@ bool Analyzer::constructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
+    if (transfer_member(e) && members[m].synthetic) return !members[m].constructor || !members[m].transfer_direct;
     if (!members[m].synthetic || members[m].inherited_constructor) return true;
     if (members[m].trivial_state == 2) return members[m].nontrivial;
     if (members[m].trivial_state == 1) throw std::logic_error("cyclic constructor actions");

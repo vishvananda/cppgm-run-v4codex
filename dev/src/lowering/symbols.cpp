@@ -52,9 +52,9 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
 bool Procedural::separate_base(EntityId id) const
 {
     auto e = sem.entities[id];
+    if (e.member_info && sem.member_fact(id).defaulted_late && (sem.constructor_member(id) || sem.destructor_member(id))) return true;
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
-    bool external = !e.body && !sem.synthetic_member(id);
-    return ((sem.member_fact(id).inherited_constructor || external) && sem.member_fact(id).complete_entry) || (e.body && !e.inline_function);
+    return sem.member_fact(id).complete_entry || (e.body && !e.inline_function);
 }
 SymbolId Procedural::symbol(EntityId id, bool base)
 {
@@ -199,7 +199,7 @@ void Procedural::run()
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function) continue;
-        bool defined = entity.body || ((sem.constructor_member(e) || sem.destructor_member(e)) && sem.synthetic_member(e));
+        bool defined = entity.body || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
         Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];
         if (existing.kind == Symbol::FunctionSymbol) {
@@ -219,6 +219,8 @@ void Procedural::run()
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         if (entity.member_info && !entity.is_static)
             p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
+        if (sem.constructor_member(e) && sem.transfer_member(e))
+            for (unsigned j = 0; j < 2; ++j) p.parameters[p.signatures[f.signature.index-1].parameters.begin+j].alias = PALM_NOALIAS;
         if (entity.builtin != semantic::Entity::NoBuiltin) {
             auto& sig = p.signatures[f.signature.index-1]; sig.boundary.unwind = CUM_NO;
             if (entity.builtin == semantic::Entity::Strlen) sig.boundary.effects = CFXM_READONLY;
@@ -240,6 +242,8 @@ void Procedural::run()
         f.signature = signature(sem.call_type(e), id);
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[sem.entities[e].owner].entity].type);
+        if (sem.constructor_member(e) && sem.transfer_member(e))
+            for (unsigned j = 0; j < 2; ++j) p.parameters[p.signatures[f.signature.index-1].parameters.begin+j].alias = PALM_NOALIAS;
         p.functions.push_back(f);
         auto& sym = p.symbols[f.symbol.index-1]; sym.kind = Symbol::FunctionSymbol; sym.entity = id.index;
     }
@@ -280,7 +284,8 @@ void Procedural::function_body(EntityId e, bool base)
         SlotId slot = builder->add_slot(0, param.type); objects[id] = slot;
         if (!sem.empty_value(sem.entities[id].type)) emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
-    if (sem.constructor_member(e)) constructor_body(e);
+    if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
+    else if (sem.constructor_member(e)) constructor_body(e);
     if (sem.destructor_member(e)) destructor_prologue(e);
     mark_control_entries(sem.entities[e].body);
     statement(sem.entities[e].body);

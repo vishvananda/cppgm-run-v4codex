@@ -10,14 +10,16 @@ Extend the shared source graph, canonical TypeId/EntityId facts and typed LowIR.
 No source/IR replay, reference delegation, new optimizer or later native gate.
 The completed group owns canonical ref qualifiers, using-object ranking, deleted
 member selection, pointer-reference materialization, delegation edges and union
-variant/storage identities. Existing constructor actions and ABI adapters consume
-those facts; synthesized copy/move transfers will extend the same model.
+variant/storage identities. The transfer model now records
+implicit/defaulted declarations, deletion, triviality, exception facts and typed
+field/base actions. Lowering consumes these once; class-value ABI and lifetime
+destinations remain the next shared owner.
 
 | Group / owner | Data flow and complexity | Validation / status |
 | --- | --- | --- |
 | Member declaration/selection | Canonical qualifier -> indexed declaration -> object/reference conversion; O(parameters + required candidate/base edges) | Focused ref-qualification, using, deletion and pointer-reference fixtures pass |
 | Delegation/unions / construction | Selected constructor edges and variant/storage IDs -> existing actions; once per demanded edge/subobject | Delegation/cycles, variant initialization, injection and destructor-boundary fixtures pass |
-| Special members / semantics | Per-class demand/deletion state -> field/base copy/move actions -> typed lowering; O(subobjects) | Remaining: implicit/defaulted/user transfers, empty objects, bit-field units |
+| Special members / semantics | Per-class declaration/deletion/triviality state -> typed scalar/reference/subobject/unit/prefix actions -> demanded helpers; O(candidates + subobject edges) | Normal copy/move construction and assignment, fallback from deleted defaulted moves, union/deletion rules, base entries, noalias, bounded arrays pass. Remaining combined lifetime and class-value cases |
 | Class ABI / lowering | Selected transfer + explicit destination -> value arguments/results; O(expressions + actions) | Remaining: direct/indirect ABI, named return slots, conditional values |
 | Lifetime / actions and cleanup | Full-expression/scope identities -> shared cleanup suffixes; O(actions + CFG edges) | Remaining: local/static references, condition declarations, array/temporary controls |
 | Conversions / overload engine | Indexed conversion functions -> recorded user/standard sequences -> calls | Remaining: scalar/pointer/class conversions and their combined ref-qualifier cases |
@@ -51,10 +53,22 @@ Preserve the eight-element array expansion limit and all course coverage.
   native successes, five required rejections). `git diff --check` passes.
 - Serial root reports are required for trustworthy counts: concurrent reports
   share a tally. The invalid concurrent totals were replaced by serial runs.
-- Handoff boundary: declaration/object-selection and delegation/union-initialization
-  work is closed. The remaining combined cases require class transfer records,
-  helper demand/deletion rules and direct/indirect class ABI destinations together;
-  current same-class values still fall into aggregate/scalar lowering. Continuing
-  with isolated call-site patches would lack constructor and lifetime ownership.
-  Next implement that shared transfer model, then attach temporary/scope cleanup.
-  This is an incomplete behavior-group handoff; the full-stage goal stays active.
+- `3da4de09`: four bit-field reference comparison sites corrected under the
+  authorized exception; [proof and reducers](reference-corrections.md). All
+  transfers, other instructions, inputs, sidecars and comparison rules retained.
+- Transfer checkpoint: **123/257**, 134 failures, **31 prior failures removed,
+  no new failures** versus 92/257. Serial earlier report **1327/1327**; file
+  audit passes with its existing advisory. Seventeen personal source checks and
+  two LowIR retype checks pass. Performance campaign running before handoff.
+- Concrete remaining boundary: class prvalues still fall into aggregate/scalar
+  paths. Passing/returning them requires an explicit destination/result ABI,
+  selected transfer and lifetime identity together (direct/indirect calls,
+  conditional results, named return slots, references). Transfer helpers are
+  now available; those source values are not yet owned by that destination model.
+- Ordinary bit-field initializer ordering is an independent contract conflict:
+  PA11 `400-bit-field-constructor-member-init` and PA12
+  `300-bit-field-copy-semantics` prescribe different orders for the identical
+  `Bits` constructor. A general lowering change caused two earlier regressions
+  and was removed. Preserve the earlier checks; no unproved reference edit or
+  test-dependent compiler branch was introduced. Destructor cleanup boundaries
+  and explicit widening in user bodies also remain separate from transfers.

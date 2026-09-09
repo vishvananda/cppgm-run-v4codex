@@ -254,6 +254,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         NodeId special = child(init, Kind::SpecialInitializer);
         if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;
+        classify_transfer(e, special, s);
         if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
     }
     record(owner, e, d, t, kind);

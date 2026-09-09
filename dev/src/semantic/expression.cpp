@@ -149,6 +149,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         if (!class_type) throw std::runtime_error("member of non-class");
         size(t); // Establish layout once at the semantic owner before recording field use.
+        if (operator_token(name) == OP_ASS) ensure_transfers(t, true);
         EntityId e = destructor ? default_destructor(t, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;

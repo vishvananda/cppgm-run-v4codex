@@ -201,7 +201,7 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 }
 void Analyzer::select_function(NodeId n, EntityId e)
 {
-    if (entities[e].member_info && members[entities[e].member_info].deleted)
+    if (deleted_transfer(e))
         throw std::runtime_error("selected deleted member function");
     ScopeId naming = object_uses[expressions[n].object_use].naming_scope;
     TypeId object = 0;
@@ -215,6 +215,7 @@ void Analyzer::select_function(NodeId n, EntityId e)
     expressions[n].type = entities[e].type;
     facts[n].type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
     facts[n].entity = e;
+    if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
     demand_member(e);
     demand_specialization(e);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {

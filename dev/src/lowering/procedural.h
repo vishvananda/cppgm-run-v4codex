@@ -72,6 +72,9 @@ class Procedural {
     FunctionId function;
     TypeId returned = 0;
     SlotId this_slot;
+    void transfer_body(EntityId e);
+    void transfer_action(const semantic::TransferAction& action, Value source, Value target, bool assignment);
+    void transfer_array(const semantic::TransferAction& action, Value source, Value target, bool assignment, bool member_root = false);
     BlockId break_target, continue_target;
     bool ended = false;
     std::uint32_t live = 0;

@@ -129,6 +129,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_initializer_actions\":" << initializers.size()-1
         << ",\"semantic_field_descriptors\":" << field_facts.size()-1
         << ",\"semantic_destruction_actions\":" << destruction_actions.size()
+        << ",\"semantic_transfer_actions\":" << transfers.size()
         << ",\"semantic_lifetime_states\":" << lifetimes.size()-1
         << ",\"semantic_lifetime_uses\":" << lifetime_uses.size()-1
         << ",\"semantic_member_demands\":" << demand_queue.size()

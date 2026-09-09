@@ -40,6 +40,24 @@ void Analyzer::register_destruction(EntityId e)
     EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);
 }
+bool Analyzer::trivial_destructor(TypeId t)
+{
+    while (types[t].kind == TypeKind::Array) t = types[t].child;
+    if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return true;
+    EntityId cls = types[t].entity;
+    auto c = entities[cls].class_info;
+    if (class_facts[c].trivial_destructor_state) return class_facts[c].trivial_destructor_state == 3;
+    class_facts[c].trivial_destructor_state = 1;
+    EntityId dtor = class_facts[c].destructor;
+    bool trivial = !dtor || (members[entities[dtor].member_info].synthetic && !members[entities[dtor].member_info].defaulted_late);
+    for (auto d = scopes[entities[cls].scope].first_decl; trivial && d; d = declarations[d].next) {
+        EntityId field = declarations[d].entity;
+        if (nonstatic_field(field) && entities[field].owner == entities[cls].scope) trivial = trivial_destructor(entities[field].type);
+    }
+    for (auto b = class_facts[c].first_base; trivial && b; b = bases[b].next) trivial = trivial_destructor(entities[bases[b].base].type);
+    class_facts[c].trivial_destructor_state = trivial ? 3 : 2;
+    return trivial;
+}
 void Analyzer::destructor_actions(EntityId e)
 {
     auto m = entities[e].member_info;
@@ -49,6 +67,16 @@ void Analyzer::destructor_actions(EntityId e)
     if (!entities[e].scope) entities[e].scope = make_scope(ScopeKind::Function, entities[e].owner, entities[e].name, e);
     size(entities[cls].type);
     std::vector<DestructionAction> work;
+    // Anonymous union storage represents the enclosing class's variants; it
+    // is not an independently invoked union destructor in a user body.
+    if (entities[cls].key == KW_UNION && members[m].synthetic && !class_facts[entities[cls].class_info].storage)
+        for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
+            EntityId field = declarations[d].entity;
+            if (nonstatic_field(field) && entities[field].owner == entities[cls].scope && !trivial_destructor(entities[field].type)) {
+                members[m].deleted = true;
+                throw std::runtime_error("defaulted union destructor has a nontrivial variant");
+            }
+        }
     if (entities[cls].key != KW_UNION) {
         for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
@@ -138,6 +166,9 @@ bool Analyzer::function_nonthrowing(EntityId e)
 {
     auto spec = entities[e].exception_spec & 3;
     if (spec) return spec == 1;
+    if (transfer_member(e) && members[entities[e].member_info].synthetic) {
+        prepare_transfer(e); return members[entities[e].member_info].transfer_noexcept;
+    }
     if (!destructor_member(e)) return false;
     auto m = entities[e].member_info;
     if (members[m].exception_state == 2) return members[m].nonthrowing;
