@@ -117,7 +117,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) throw std::runtime_error("member of non-class");
         size(t); // Establish layout once at the semantic owner before recording field use.
         NodeId name = ast[ast[first].next].detail;
-        EntityId e = lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
+        bool destructor = ast[ast[name].last].op == OP_COMPL;
+        EntityId e = destructor ? default_destructor(t) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;
         if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));

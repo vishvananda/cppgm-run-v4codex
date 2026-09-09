@@ -34,6 +34,16 @@ public:
     bool member_demanded(EntityId e) const;
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
+    bool destructor_needed(EntityId e);
+    EntityId type_destructor(TypeId t) const;
+    bool destructor_member(EntityId e) const;
+    bool function_nonthrowing(EntityId e);
+    EntityId object_destructor(EntityId e) const { return object_destructors.get(e); }
+    const LifetimeUse& lifetime_use(NodeId n) const { return lifetime_uses[lifetime_index.get(n)]; }
+    std::uint32_t object_lifetime(EntityId e) const { return object_lifetimes.get(e); }
+    unsigned return_count(std::uint32_t state, NodeId context) const { return return_counts.get(key(state, context)); }
+    std::vector<LifetimeState> lifetimes = std::vector<LifetimeState>(1);
+    std::vector<DestructionAction> destruction_actions;
     EntityId value_constructor(TypeId t) const;
     EntityId object_constructor(EntityId e) const;
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
@@ -52,6 +62,13 @@ private:
     void function_defaults(EntityId e, NodeId d, ScopeId s);
     std::vector<Expression> expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
+    Index object_destructors, lifetime_index, object_lifetimes, return_counts;
+    std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
+    std::vector<NodeId> jump_bodies;
+    EntityId default_destructor(TypeId t);
+    void destructor_actions(EntityId e);
+    void register_destruction(EntityId e);
+    void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     void record_object(Expression& owner, NodeId node, TypeId type, unsigned adjustment);
     std::vector<Conversion> conversions;
     Index function_families, function_signatures;

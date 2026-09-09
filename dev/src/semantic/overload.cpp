@@ -173,7 +173,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 if (entities[e].member_info && !entities[e].is_static) {
                     TypeId wanted = types[types.parameters[types[call_type(e)].offset]].child;
                     c.target = types.compound(TypeKind::LRef, wanted); c.reference = true;
-                    valid = !(types[object_type].cv & ~types[wanted].cv) &&
+                    valid = (destructor_member(e) || !(types[object_type].cv & ~types[wanted].cv)) &&
                         (types.unqualified(object_type) == types.unqualified(wanted) || derived_from(object_type, wanted));
                 }
                 sequences.push_back(c);

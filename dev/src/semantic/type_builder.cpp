@@ -163,8 +163,14 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
 {
     NodeId name = decl_name(d);
     IdentifierId id = terminal(name);
+    bool destructor = ast[ast[name].last].op == OP_COMPL;
     ScopeId owner = name_owner(name, s);
     if (!encloses(s, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
+    if (destructor && scopes[owner].kind == ScopeKind::Class) {
+        TextView text = ids.spelling(scopes[owner].name);
+        std::string label = "~" + std::string(text.data, text.size);
+        id = ids.intern(TextView(label.data(), label.size()));
+    }
     bool alias = spec_has(specs, KW_TYPEDEF);
     bool function = types[t].kind == TypeKind::Function;
     if (!alias && !function && spec_has(specs, KW_CONSTEXPR)) t = types.qualify(t, 1);
@@ -217,11 +223,13 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
-    if (calls && function) function_defaults(e, d, owner);
+    if (calls && function) { function_defaults(e, d, owner); exception_specification(e, d, owner); }
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
         members[m].constructor = constructor;
+        members[m].destructor = destructor;
+        if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
         members[m].explicit_constructor = spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
         NodeId special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;
@@ -245,6 +253,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts[ast[init].first].type = t;
+    if (calls && !function && !alias && !member_initializer && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
     return e;
 }
 } }

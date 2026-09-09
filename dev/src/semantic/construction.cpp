@@ -125,6 +125,7 @@ void Analyzer::constructor_actions(EntityId e)
     std::vector<SubobjectAction> work;
     auto add = [&](EntityId field, TypeId type, NodeId initial) {
         EntityId ctor = 0;
+        default_destructor(type);
         if (initial) initialize(initial, type, scope);
         else if (types[type].kind == TypeKind::Named && entities[types[type].entity].class_info) ctor = default_constructor(type);
         else if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef || (types[type].cv & 1))

@@ -254,7 +254,7 @@ Value Procedural::call(NodeId n)
         if (sem.types[ft].kind == TypeKind::Pointer) ft = sem.types[ft].child;
         i.signature = signature(ft);
     }
-    Value v = emit(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
+    Value v = guarded_call(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
     if (reference(sem.facts[n].type)) v.address = true;
     return v;
 }

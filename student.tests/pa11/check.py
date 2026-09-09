@@ -6,7 +6,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 with tempfile.TemporaryDirectory(prefix='pa11-personal-') as directory:
     scratch = Path(directory)
-    for name in ('member-addresses', 'construction-order'):
+    for name in ('member-addresses', 'construction-order', 'lexical-lifetime'):
         source = Path(__file__).parent / (name + '.cpp')
         ir, exe = scratch / (name + '.lowir'), scratch / name
         for command in ([ROOT/'dev/cppgm++', '--emit-lowir', '-O0', '--validate-lowir', '-o', ir, source],

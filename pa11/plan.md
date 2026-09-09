@@ -52,3 +52,14 @@ not extra PA11 gates; correctness, complexity and coverage remain mandatory.
   loop/goto/return/global/TLS paths. Adding constructor calls alone would leave
   observable cleanup incorrect. That larger control-flow group is next; the
   full-stage objective is unchanged and 146 current failures remain.
+- Continuation at cd054d80: previous turn is progress; verified clean tree and
+  reran turn baseline (156/302). Extend lifetime owner to semantic lexical states,
+  destructor/subobject demand, normal and exceptional exits, and shared return/
+  unwind suffixes. Then consume those states for array construction/destruction.
+  Complexity: one lexical traversal, one helper action computation, and one
+  emitted continuation per complete (action, tail, terminal, control) key.
+- Scalar lifetime increment: destructor demand and reverse subobject actions,
+  explicit destructor calls, implicit exception specifications, namespace fini,
+  lexical exits and shared return/unwind continuations. PA11 165/302; PA1–10
+  1025/1025; file audit passes; three explicit personal executables pass. The
+  goto control passes. Performance delta remains to be measured after arrays.

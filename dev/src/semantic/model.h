@@ -66,7 +66,7 @@ struct Constant {
 // for constructors and layout. The stable index belongs to the class entity.
 struct ClassFacts {
     std::uint64_t size = 0, alignment = 0;
-    EntityId constructor = 0, implicit_constructor = 0, storage = 0;
+    EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
@@ -83,6 +83,7 @@ struct Entity {
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
+    unsigned char exception_spec = 0; // 0 absent, 1 direct noexcept, 2 throwing, 3 parenthesized nonthrowing.
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
     TypeId type = 0, underlying = 0;
@@ -96,10 +97,12 @@ struct MemberFacts {
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false;
-    bool constructor = false, explicit_constructor = false, deleted = false;
+    bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
     bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
     std::uint32_t action_begin = 0, action_count = 0;
-    unsigned char trivial_state = 0;
+    unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
+    bool destruction_needed = false, nonthrowing = false;
+    std::uint32_t destruction_begin = 0, destruction_count = 0;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
 struct TemplateFunction {
@@ -117,6 +120,9 @@ struct Specialization {
 struct BaseRelation { EntityId base; std::uint32_t next; };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
+struct DestructionAction { EntityId field; TypeId type; EntityId destructor; };
+struct LifetimeState { EntityId object = 0, destructor = 0; std::uint32_t tail = 0, depth = 0; };
+struct LifetimeUse { std::uint32_t entry = 0, exit = 0, target = 0; NodeId context = 0; };
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;
     ScopeId jump = 0;

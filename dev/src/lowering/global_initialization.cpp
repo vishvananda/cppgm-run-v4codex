@@ -26,6 +26,7 @@ bool Procedural::constant_initializer(NodeId n, TypeId t)
 }
 void Procedural::global_initialization()
 {
+    reset_lifetime(0);
     Function f; f.symbol = fresh_symbol("@__cppgm_init");
     function = FunctionId(p.functions.size()+1);
     auto void_type = sem.types.fundamental(FT_VOID);

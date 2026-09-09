@@ -41,7 +41,7 @@ void Analyzer::demand_member(EntityId e)
     if (unevaluated_depth) return;
     std::uint32_t m = entities[e].member_info;
     if (m) members[m].referenced = true;
-    if (!m || members[m].demand != DemandState::Dormant || (!members[m].body && !members[m].synthetic)) return;
+    if (!m || members[m].demand != DemandState::Dormant || (!members[m].body && !members[m].synthetic && !members[m].destructor)) return;
     members[m].demand = DemandState::Queued;
     demand_queue.push_back(e);
 }

@@ -164,9 +164,11 @@ void Procedural::statement(NodeId n)
 {
     if (!n) return;
     Kind k = ast[n].kind;
+    auto lifetime = sem.lifetime_use(n); live = lifetime.entry;
     if (k == Kind::Compound || k == Kind::Then || k == Kind::Else) {
         for (NodeId c = ast[n].first; c; c = ast[c].next) statement(c);
-        return;
+        if (!ended) clean_inline(lifetime.exit, lifetime.entry);
+        live = lifetime.entry; return;
     }
     if (k == Kind::Label) {
         if (!labels[n]) labels[n] = block();
@@ -198,22 +200,15 @@ void Procedural::statement(NodeId n)
             else discard(c);
         }
         return;
-    case Kind::Return:
-        if (type(returned) == IRType::Void) {
-            if (ast[n].first) expression(ast[n].first);
-            emit(Opcode::Return, IRType(), {});
-        } else {
-            Value value = ast[n].first ? convert(expression(ast[n].first, reference(returned)), returned) : Value(Operand::integer(0), type(returned));
-            emit(Opcode::Return, type(returned), {value.operand});
-        }
-        return;
+    case Kind::Return: return_statement(n); return;
     case Kind::Goto: {
         NodeId target = sem.facts[n].target;
         if (!labels[target]) labels[target] = block();
+        clean_inline(lifetime.entry, lifetime.target);
         jump(labels[target]); return;
     }
-    case Kind::Break: jump(break_target); return;
-    case Kind::Continue: jump(continue_target); return;
+    case Kind::Break: clean_inline(lifetime.entry, lifetime.target); jump(break_target); return;
+    case Kind::Continue: clean_inline(lifetime.entry, lifetime.target); jump(continue_target); return;
     case Kind::If: {
         BlockId yes = block(), no = block(), end;
         condition(child(n, Kind::Condition), yes, no);
@@ -221,21 +216,27 @@ void Procedural::statement(NodeId n)
         if (!ended) { end = block(); jump(end); }
         start(no); statement(child(n, Kind::Else));
         if (!ended) { if (!end) end = block(); jump(end); }
-        if (end) start(end);
+        if (end) { start(end); clean_inline(lifetime.exit, lifetime.entry); }
         return;
     }
     case Kind::While: case Kind::For: case Kind::Do: {
         BlockId cond = block(), body = block(), step = k == Kind::For ? block() : cond, end = block();
+        BlockId exit_cleanup = lifetime.exit != lifetime.entry ? block() : end;
         BlockId old_break = break_target, old_continue = continue_target;
         break_target = end; continue_target = step;
         if (k == Kind::For) statement(child(n, Kind::ForInit));
         if (k != Kind::Do) {
-            jump(cond); start(cond); condition(child(n, Kind::Condition), body, end);
+            jump(cond); start(cond); condition(child(n, Kind::Condition), body, exit_cleanup);
         } else jump(body);
-        start(body); statement(k == Kind::Do ? ast[n].first : ast[n].last); jump(step);
+        start(body);
+        NodeId body_node = k == Kind::Do ? ast[n].first : ast[n].last;
+        statement(body_node);
+        if (!ended) clean_inline(live, sem.lifetime_use(body_node).entry);
+        jump(step);
         if (k == Kind::For) { start(step); statement(child(n, Kind::Iteration)); jump(cond); }
-        if (k == Kind::Do) { start(cond); condition(child(n, Kind::Condition), body, end); }
-        start(end); break_target = old_break; continue_target = old_continue; return;
+        if (k == Kind::Do) { start(cond); condition(child(n, Kind::Condition), body, exit_cleanup); }
+        if (exit_cleanup.index != end.index) { start(exit_cleanup); clean_inline(lifetime.exit, lifetime.entry); jump(end); }
+        start(end); live = lifetime.entry; break_target = old_break; continue_target = old_continue; return;
     }
     case Kind::Switch: switch_statement(n); return;
     default: return;

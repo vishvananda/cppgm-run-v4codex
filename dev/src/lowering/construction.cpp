@@ -15,7 +15,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object)
         for (unsigned j = 0; j < f.count; ++j)
             call_work.push_back(convert(expression(sem.default_arguments[e.defaults+j]), sem.types.parameters[f.offset+j]).operand);
     }
-    emit(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
+    guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin);
 }
 void Procedural::constructor_body(EntityId e)
@@ -45,6 +45,7 @@ void Procedural::constructor_body(EntityId e)
         if (scalar) store(value, at);
         else if (action.initializer) initialize(action.initializer, action.type, at);
         else { at.address = false; construct(action.constructor, 0, at); }
+        constructor_cleanup(action);
     }
 }
 } }

@@ -76,6 +76,7 @@ SymbolId Procedural::symbol(EntityId id)
         target.function.category = e.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
         target.function.qualifiers = sem.types[e.type].cv;
         if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;
+        if (sem.destructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
         target.function.c_linkage = e.c_linkage && !internal;
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
@@ -102,14 +103,15 @@ SymbolId Procedural::symbol(EntityId id)
         metadata.linkage = LLM_C;
     }
     std::string display = e.kind == semantic::EntityKind::Variable ? "@__global_" + name : "@" + name;
+    for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
     SymbolId sid = fresh_symbol(display); symbols[id] = sid;
     // The ordinary LowIR spelling already supplies this object name. Avoid
     // asking a native adapter to publish the same label twice.
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
-    if (sem.constructor_member(id) && sem.constructor_needed(id) && (e.body || sem.synthetic_member(id))) {
-        target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
+    if ((sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
+        target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         ObjectAlias alias; alias.name = p.intern(abi_mangle::mangle(abi, target)); alias.target = sid; p.aliases.push_back(alias);
     }
     return sid;
@@ -166,11 +168,11 @@ void Procedural::run()
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
-        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.constructor_needed(e)))) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function) continue;
-        bool defined = entity.body || (sem.constructor_member(e) && sem.synthetic_member(e));
+        bool defined = entity.body || ((sem.constructor_member(e) || sem.destructor_member(e)) && sem.synthetic_member(e));
         Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];
         if (existing.kind == Symbol::FunctionSymbol) {
@@ -187,6 +189,7 @@ void Procedural::run()
         }
         FunctionId id(p.functions.size()+1);
         f.signature = signature(sem.call_type(e), id);
+        if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         if (entity.member_info && !entity.is_static)
             p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
         if (entity.builtin != semantic::Entity::NoBuiltin) {
@@ -202,11 +205,13 @@ void Procedural::run()
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable) global(e);
     for (EntityId e : definitions) function_body(e);
     if (!global_initializers.empty()) global_initialization();
+    global_finalization();
 }
 void Procedural::function_body(EntityId e)
 {
     function = FunctionId(p.symbols[symbols[e].index-1].entity);
     builder.reset(new FunctionBuilder(p, function));
+    reset_lifetime(e);
     returned = sem.types[sem.entities[e].type].child;
     start(block());
     Signature sig = p.signatures[p.functions[function.index-1].signature.index-1];
@@ -224,12 +229,16 @@ void Procedural::function_body(EntityId e)
         emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
     if (sem.constructor_member(e)) constructor_body(e);
+    if (sem.destructor_member(e)) destructor_prologue(e);
     mark_control_entries(sem.entities[e].body);
     statement(sem.entities[e].body);
+    if (destructor_handler) destructor_finish(e);
     if (!ended) {
+        finish_constructor_handlers();
         if (type(returned) == IRType::Void) emit(Opcode::Return, IRType(), {});
         else emit(Opcode::Return, type(returned), {type(returned).floating() ? Operand::floating(0) : Operand::integer(0)});
     }
+    emit_cleanups();
     builder.reset();
 }
 } }

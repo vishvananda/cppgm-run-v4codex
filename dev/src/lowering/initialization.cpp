@@ -112,7 +112,9 @@ void Procedural::global(EntityId e)
 void Procedural::object(EntityId e)
 {
     TypeId t = sem.entities[e].type;
-    if (!objects[e]) objects[e] = builder->add_slot(0, type(t));
+    auto lifetime = sem.object_lifetime(e);
+    if (lifetime) live = sem.lifetimes[lifetime].tail;
+    if (!objects[e]) objects[e] = source_slot(e);
     Value location(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;
     if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
@@ -124,6 +126,7 @@ void Procedural::object(EntityId e)
         Value base = address(location);
         construct(sem.object_constructor(e), 0, base);
     }
+    if (lifetime) live = lifetime;
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {

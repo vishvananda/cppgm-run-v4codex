@@ -24,8 +24,10 @@ void Analyzer::finish()
         if (f.body && !entities[e].definition)
             function_body({f.body, f.declarator, entities[e].owner, e, f.source});
         if (members[m].constructor) constructor_actions(e);
+        if (members[m].destructor) destructor_actions(e);
         members[m].demand = DemandState::Complete;
     }
+    for (NodeId body : jump_bodies) check_jumps(body);
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 {
@@ -209,7 +211,7 @@ void Analyzer::function_body(const Body& body)
     return_type = types[entities[body.entity].type].child;
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
-    if (calls) check_jumps(body.node);
+    if (calls) jump_bodies.push_back(body.node);
     return_type = saved_return;
 }
 void Analyzer::statements(NodeId n, ScopeId s)

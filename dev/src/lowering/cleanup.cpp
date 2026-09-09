@@ -1,0 +1,113 @@
+#include "lowering/procedural.h"
+#include <stdexcept>
+namespace cppgm { namespace lowering {
+using namespace lowir_model;
+void Procedural::reset_lifetime(EntityId e)
+{
+    active_function = e; live = 0; emitting_cleanup = false; resume_emitted = false; cleanup_cursor = 0; slot_names = semantic::Index();
+    cleanup_return = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
+    cleanup_index = semantic::Index(); return_terminals = semantic::Index();
+    cleanup_blocks.clear(); constructed_subobjects.clear();
+}
+SlotId Procedural::source_slot(EntityId e)
+{
+    auto name = p.intern("$" + spelling(sem.entities[e].name));
+    if (slot_names.get(name)) name = p.intern("$" + spelling(sem.entities[e].name) + "__" + std::to_string(e));
+    slot_names.put(name, 1);
+    return builder->add_slot(name, type(sem.entities[e].type));
+}
+void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
+{
+    while (state != stop) {
+        if (!state) throw std::logic_error("cleanup target is not a lexical ancestor");
+        auto action = sem.lifetimes[state]; live = action.tail;
+        destroy_object(action.object, action.destructor); state = action.tail;
+    }
+    live = stop;
+}
+BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal)
+{
+    if (!state) return terminal;
+    auto key = (std::uint64_t(state) << 32) | terminal.index;
+    if (auto existing = cleanup_index.get(key)) return BlockId(existing);
+    BlockId tail = cleanup_suffix(sem.lifetimes[state].tail, terminal);
+    BlockId head = block(); cleanup_index.put(key, head.index);
+    cleanup_blocks.push_back({state, tail, head});
+    return head;
+}
+Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t count)
+{
+    bool no_throw = false;
+    if (count && args[0].kind == Operand::Symbol) {
+        auto s = p.symbols[args[0].ref-1];
+        if (s.kind == Symbol::FunctionSymbol)
+            no_throw = p.signatures[p.functions[s.entity-1].signature.index-1].boundary.unwind == ir_model::CUM_NO;
+    }
+    if (!live || emitting_cleanup || no_throw) return emit(i, args, count);
+    if (!resume_terminal) resume_terminal = block();
+    auto cleanup = cleanup_suffix(live, resume_terminal);
+    emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)});
+    Value result = emit(i, args, count);
+    emit(Opcode::EhEnd, IRType(), {});
+    auto continuation = block(); jump(continuation); flush_cleanups(); start(continuation);
+    return result;
+}
+void Procedural::return_statement(NodeId n)
+{
+    auto life = sem.lifetime_use(n);
+    bool has_value = type(returned) != IRType::Void;
+    Value value;
+    if (has_value) value = ast[n].first ? convert(expression(ast[n].first, reference(returned)), returned) : Value(Operand::integer(0), type(returned));
+    else if (ast[n].first) expression(ast[n].first);
+    if (destructor_handler) {
+        clean_inline(life.entry, 0);
+        emit(Opcode::EhEnd, IRType(), {});
+        if (!destructor_epilogue) destructor_epilogue = block();
+        jump(destructor_epilogue); return;
+    }
+    if (life.entry && sem.return_count(life.entry, life.context) > 1) {
+        if (has_value) {
+            if (!cleanup_return) cleanup_return = builder->add_slot(0, type(returned));
+            emit(Opcode::Store, type(returned), {value.operand, Operand::slot(cleanup_return)});
+        }
+        auto terminal = BlockId(return_terminals.get(life.context));
+        if (!terminal) { terminal = block(); return_terminals.put(life.context, terminal.index); cleanup_blocks.push_back({0, BlockId(), terminal}); }
+        jump(cleanup_suffix(life.entry, terminal)); flush_cleanups(); return;
+    }
+    clean_inline(life.entry, 0); finish_constructor_handlers();
+    if (has_value) emit(Opcode::Return, type(returned), {value.operand});
+    else emit(Opcode::Return, IRType(), {});
+}
+void Procedural::flush_cleanups()
+{
+    bool saved_cleanup = emitting_cleanup; auto saved_live = live;
+    emitting_cleanup = true; live = 0;
+    if (resume_terminal && !resume_emitted) { resume_emitted = true; start(resume_terminal); emit(Opcode::Resume, IRType(), {}); }
+    while (cleanup_cursor < cleanup_blocks.size()) {
+        auto entry = cleanup_blocks[cleanup_cursor++];
+        start(entry.block);
+        if (!entry.state) {
+            if (type(returned) == IRType::Void) emit(Opcode::Return, IRType(), {});
+            else emit(Opcode::Return, type(returned), {Operand::slot(cleanup_return)});
+        } else {
+            auto action = sem.lifetimes[entry.state];
+            destroy_object(action.object, action.destructor); jump(entry.next);
+        }
+    }
+    emitting_cleanup = saved_cleanup; live = saved_live;
+}
+void Procedural::emit_cleanups()
+{
+    flush_cleanups(); emitting_cleanup = true; live = 0;
+    for (auto entry : constructed_subobjects) {
+        start(entry.handler);
+        auto action = entry.action;
+        Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+        Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
+        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
+        EntityId dtor = sem.type_destructor(action.type);
+        destroy(dtor, action.type, at);
+        emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {});
+    }
+}
+} }
