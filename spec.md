@@ -222,6 +222,19 @@ MUST NOT force the object compiler to construct unused representations.
   added compiler work, memory and code growth must stay within the level's
   documented budgets. Passing IR bounds alone does not establish runtime profit.
 
+### Stage-scoped performance acceptance
+
+- Apply requirements to the current stage and optimization level; distinguish
+  mandated limits from self-selected diagnostic targets.
+- Compare semantically equivalent correct implementations. Resolve avoidable
+  regressions and remove unprofitable optional transforms. Document necessary
+  semantic costs and constraints owned by later stages; neither creates an
+  additional exit gate. Correctness costs must not excuse avoidable regressions.
+- You may reclassify an unsupported self-imposed gate without approval, with
+  evidence and rationale. Preserve all measurements; historical misses do not
+  permanently fail a corrected current implementation. Inherited plans do not
+  override these rules. Never weaken mandated limits, correctness or coverage.
+
 ## 10. Self-contained implementation
 
 - Required output MUST come from this compiler. Do not invoke an external or
