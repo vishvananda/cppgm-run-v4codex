@@ -29,6 +29,9 @@ int main() {
   if (p[1]!=5 || *(p+2)!=7 || p-a!=0 || p==nullptr) return 3;
   Explicit x; bool b(x); bool d=static_cast<bool>(x);
   if (!x || !(x&&b) || !d) return 4;
+  if (((x))) { if (!(x ? 1 : 0)) return 7; } else return 8;
+  int left=1, right=2;
+  (x ? left : right);
   Ref r; r.value=10; int& v=r; v=11;
   if (r+1!=12 || r.value!=11) return 5;
   Derived derived; int exact=derived; short inherited=derived;

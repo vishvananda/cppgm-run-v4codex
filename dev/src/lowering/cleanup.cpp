@@ -16,6 +16,10 @@ semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
 }
 void Procedural::activate_temporary(EntityId e)
 {
+    if (sem.static_temporary(e).object) {
+        if (auto guard = reference_guards.get(e)) emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::symbol(SymbolId(guard))});
+        return;
+    }
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
     if (!sem.destructor_needed(dtor)) return;

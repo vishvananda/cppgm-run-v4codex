@@ -33,7 +33,8 @@ void Procedural::discard(NodeId n, bool access)
         if (sem.expression_fact(n).category == ValueCategory::Prvalue) { expression(n); return; }
         access = access && discarded_access(n);
         NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
-        Value test = load(expression(a));
+        auto conversion = sem.conversion_fact(sem.expression_fact(n).conversions);
+        Value test = conversion.kind == semantic::Conversion::Kind::User ? converted(a,conversion) : load(expression(a));
         if (test.ir.floating()) test = emit(Opcode::Compare, test.ir, {test.operand, Operand::floating(0)}, Operation::Ne);
         BlockId yes = block(), no = block(), end = block();
         emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
@@ -59,7 +60,8 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
         }
         n = ast[n].first;
     }
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    while (ast[n].kind == Kind::Parenthesized &&
+        sem.conversion_fact(sem.expression_fact(n).incoming).kind != semantic::Conversion::Kind::User) n = ast[n].first;
     if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
         BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
         condition(ast[n].first, land ? rhs : yes, land ? no : rhs);
@@ -94,14 +96,16 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     start(yes);
     if (object) construct_value(b,sem.conversion_fact(branches ? branches : fact.conversions+1),destination);
     else {
-        Value y = location ? converted(b,sem.conversion_fact(fact.conversions+1)) : convert(expression(b),target);
+        auto conversion = sem.conversion_fact(fact.conversions+1);
+        Value y = location || conversion.kind == semantic::Conversion::Kind::User ? converted(b,conversion) : convert(expression(b),target);
         if (has_result) emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
     }
     auto yes_live = live; jump(end);
     start(no); live = common;
     if (object) construct_value(c,sem.conversion_fact(branches ? branches+1 : fact.conversions+2),destination);
     else {
-        Value z = location ? converted(c,sem.conversion_fact(fact.conversions+2)) : convert(expression(c),target);
+        auto conversion = sem.conversion_fact(fact.conversions+2);
+        Value z = location || conversion.kind == semantic::Conversion::Kind::User ? converted(c,conversion) : convert(expression(c),target);
         if (has_result) emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
     }
     auto no_live = live; jump(end); start(end);
@@ -111,6 +115,7 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
         destination.type = target; destination.address = true; return destination;
     }
     Value v = has_result ? emit(Opcode::Load, ir, {Operand::slot(slot)}) : Value();
+    if (fact.category == ValueCategory::Prvalue && !location) v.materialized = slot;
     v.type = target; v.address = location; return v;
 }
 Value Procedural::logical(NodeId n)

@@ -115,8 +115,12 @@ unsigned Parser::balanced(const char* open, const char* close)
         else if (in.is("{")) result |= balanced("{", "}");
         else {
             if (in.is("packed") || in.is("__packed__")) result |= 32;
-            if (in.is("noinline")) result |= 64;
-            if (in.is("always_inline")) result |= 128;
+            if (in.is("noinline") || in.is("__noinline__")) result |= 64;
+            if (in.is("always_inline") || in.is("__always_inline__")) result |= 128;
+            if (in.is("cppgm_stable_prefix") || in.is("__cppgm_stable_prefix__")) {
+                if (in.is("(",1)) throw std::runtime_error("stable-prefix attribute takes no arguments");
+                result |= 16;
+            }
             in.take();
         }
     }

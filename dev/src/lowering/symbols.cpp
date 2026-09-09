@@ -201,6 +201,7 @@ void Procedural::run()
 {
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
+        if (sem.static_temporary(e).object) { reference_global(e); continue; }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
@@ -225,6 +226,7 @@ void Procedural::run()
         }
         FunctionId id(p.functions.size()+1);
         f.signature = signature(sem.call_type(e), id);
+        if (entity.stable_prefix) p.signatures[f.signature.index-1].boundary.query = CQM_STABLE_PREFIX;
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         if (entity.member_info && !entity.is_static)
             p.parameters[p.signatures[f.signature.index-1].parameters.begin + sem.indirect_value(sem.types[entity.type].child)].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
@@ -262,7 +264,7 @@ void Procedural::run()
         if (ast[n].kind == syntax::Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string && sem.expression_fact(n).evaluated)
             string_literal(n);
     for (EntityId e = 1; e < sem.entities.size(); ++e)
-        if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable) global(e);
+        if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     for (EntityId e : definitions) {
         function_body(e);
         if (base_symbols[e]) function_body(e, true);

@@ -38,6 +38,8 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
 void Analyzer::register_destruction(EntityId e)
 {
     auto kind = types[entities[e].type].kind;
+    if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && scopes[entities[e].owner].kind == ScopeKind::Namespace && !entities[e].thread_local_storage)
+        static_reference(e);
     if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && !entities[e].is_static &&
         (scopes[entities[e].owner].kind == ScopeKind::Block || scopes[entities[e].owner].kind == ScopeKind::Control)) {
         NodeId n = entities[e].initializer;

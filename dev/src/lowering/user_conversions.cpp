@@ -29,6 +29,11 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     }
     result.type = reference(returned) ? sem.types[returned].child : returned;
     result.address = reference(returned) || class_result;
+    if (supplied && !class_result && !transfer) {
+        auto second = record.result; second.reference = second.temporary = false; second.target = target;
+        destination.type = target; destination.address = true;
+        store(converted_value(result,second),destination); destination.address = false; return destination;
+    }
     if (transfer) {
         auto materialized = sem.conversion_objects[record.result.materialization];
         auto call = materialized.call;

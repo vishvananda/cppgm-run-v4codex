@@ -57,6 +57,9 @@ public:
     bool empty_class(TypeId t) const;
     bool parameter_cleanup(EntityId e) const;
     EntityId reference_temporary(EntityId e) const { return reference_temporaries.get(e); }
+    const ReferenceStorage& static_temporary(EntityId e) const { return reference_storage[static_temporaries.get(e)]; }
+    EntityId reference_scalar(EntityId e) const { return reference_scalars.get(e); }
+    std::vector<ReferenceStorage> reference_storage = std::vector<ReferenceStorage>(1);
     const ValueInitialization& class_initialization(NodeId n, TypeId t) const;
     const ValueReturn& class_return(NodeId n) const;
     EntityId return_object(EntityId e) const;
@@ -86,6 +89,9 @@ private:
     EntityId current_function = 0;
     Index class_initializer_index, class_return_index, function_return_index;
     Index reference_temporaries;
+    Index static_temporaries, reference_scalars;
+    void static_reference(EntityId e);
+    void retain_reference_object(NodeId n, EntityId reference, bool conditional);
     std::vector<ValueInitialization> value_initializations = std::vector<ValueInitialization>(1);
     std::vector<ValueReturn> value_returns = std::vector<ValueReturn>(1);
     std::vector<FunctionReturn> function_returns = std::vector<FunctionReturn>(1);

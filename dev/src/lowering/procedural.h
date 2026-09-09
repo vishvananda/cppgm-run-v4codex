@@ -28,6 +28,7 @@ struct Value {
     bool address = false, cached = false;
     bool initializing = false;
     Operand stored;
+    SlotId materialized;
     Value() {}
     Value(Operand o, IRType i, TypeId t = 0, bool a = false) : operand(o), ir(i), type(t), address(a) {}
 };
@@ -101,6 +102,11 @@ class Procedural {
     void destroy_lifetime(std::uint32_t state);
     semantic::LifetimeState lifetime_state(std::uint32_t state) const;
     void activate_temporary(EntityId e);
+    semantic::Index reference_guards;
+    void reference_global(EntityId e);
+    void initialize_reference(EntityId e, Value location);
+    SymbolId abort_symbol;
+    Value abort_call();
     struct Constructed { semantic::SubobjectAction action; BlockId handler; };
     std::vector<Constructed> constructed_subobjects;
     EntityId active_function = 0;

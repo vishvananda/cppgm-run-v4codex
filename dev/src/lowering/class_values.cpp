@@ -7,6 +7,7 @@ IRType Procedural::result_type() const
 Value Procedural::class_temporary(EntityId object, TypeId t)
 {
     if (!object) throw std::logic_error("missing class value storage identity");
+    if (sem.static_temporary(object).object) return binding(object);
     if (!objects[object] || p.slots[objects[object].index-1].owner.index != function.index)
         objects[object] = builder->add_slot(0,type(t));
     return Value(Operand::slot(objects[object]),type(t),t,true);
@@ -14,7 +15,7 @@ Value Procedural::class_temporary(EntityId object, TypeId t)
 Value Procedural::class_address(EntityId object, TypeId t)
 {
     Value pointer = address(class_temporary(object,t));
-    object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
+    if (!sem.static_temporary(object).object) object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
     return pointer;
 }
 void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination)

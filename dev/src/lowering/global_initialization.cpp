@@ -35,7 +35,8 @@ void Procedural::global_initialization()
         Value location(Operand::symbol(symbols[e]), type(entity.type), entity.type, true);
         TypeId leaf = entity.type;
         while (sem.types[leaf].kind == TypeKind::Array) leaf = sem.types[leaf].child;
-        if (entity.initializer && sem.types[leaf].kind == TypeKind::Named && sem.entities[sem.types[leaf].entity].class_info && sem.initializer_plan(entity.initializer, entity.type)) {
+        if (sem.reference_scalar(e)) initialize_reference(e,location);
+        else if (entity.initializer && sem.types[leaf].kind == TypeKind::Named && sem.entities[sem.types[leaf].entity].class_info && sem.initializer_plan(entity.initializer, entity.type)) {
             std::vector<InitProjection> path;
             aggregate_initialize(entity.initializer, entity.type, location, false, path);
         } else if (entity.initializer) initialize(entity.initializer, entity.type, location);

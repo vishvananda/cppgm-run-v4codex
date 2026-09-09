@@ -96,10 +96,11 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen)
     if (reference(to)) {
         TypeId referred = sem.types[to].child;
         if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
+            SlotId existing = sem.types.unqualified(v.type) == sem.types.unqualified(referred) ? v.materialized : SlotId();
             v = convert(v, referred);
             if (sem.types[referred].kind == TypeKind::Pointer && v.operand.literal())
                 v = emit(Opcode::Copy, IRType::Ptr, {v.operand});
-            SlotId slot = builder->add_slot(0, type(referred));
+            SlotId slot = existing ? existing : builder->add_slot(0, type(referred));
             Value location(Operand::slot(slot), type(referred), referred, true);
             store(v, location); v = location;
         }
@@ -142,7 +143,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         construct_value(n,c,pointer);
         return Value(Operand::slot(slot), type(c.target), c.target);
     }
-    return converted_value(expression(n,c.reference),c);
+    return converted_value(expression(n,c.reference && sem.expression_fact(n).category != ValueCategory::Prvalue),c);
 }
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)
 {
@@ -183,6 +184,7 @@ Value Procedural::binding(EntityId e)
     if (!e) throw std::logic_error("missing resolved declaration");
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
+    if (sem.static_temporary(e).object) return Value(Operand::symbol(symbols[e]),type(t),t,true);
     if (object_addresses[e]) return Value(Operand::value(object_addresses[e]),type(t),t,true);
     if (sem.nonstatic_field(e)) {
         if (auto storage = sem.injected_storage(e)) {

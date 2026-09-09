@@ -106,6 +106,9 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
     bool recognized = attribute.is("no_unique_address") || attribute.is("__no_unique_address__");
     unsigned value = recognized ? 201803 :
         (attribute.is("noreturn") || attribute.is("carries_dependency") ? 200809 : 0);
+    if (kind == 5) value = attribute.is("cppgm_stable_prefix") || attribute.is("__cppgm_stable_prefix__") ||
+        attribute.is("packed") || attribute.is("__packed__") || attribute.is("noinline") || attribute.is("__noinline__") ||
+        attribute.is("always_inline") || attribute.is("__always_inline__");
     ExpansionToken close = expansion.take();
     if (close.is("::")) {
         attribute = expansion.take();

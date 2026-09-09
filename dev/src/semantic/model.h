@@ -106,7 +106,7 @@ struct Entity {
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
-    bool no_inline = false, force_inline = false;
+    bool no_inline = false, force_inline = false, stable_prefix = false;
     bool mutable_field = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
@@ -221,6 +221,7 @@ struct UserConversion {
 };
 struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
 struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
+struct ReferenceStorage { EntityId object = 0, reference = 0; bool scalar = false, conditional = false; };
 struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };
 struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; };
 struct PlacementNew { EntityId allocation = 0, constructor = 0; TypeId type = 0; NodeId initializer = 0; Expression call; };

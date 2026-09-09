@@ -46,3 +46,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/special_members semantic/transfer_act
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_values lowering/class_values lowering/branch_lifetimes
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/conversion_functions lowering/user_conversions
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_operators
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/reference_storage lowering/reference_storage

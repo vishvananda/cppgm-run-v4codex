@@ -90,7 +90,16 @@ void Procedural::global_finalization()
     symbol.metadata.role = SR_FINI; symbol.metadata.binding = SBM_INTERNAL;
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
-    for (auto it = work.rbegin(); it != work.rend(); ++it) destroy_object(*it, sem.object_destructor(*it));
+    for (auto it = work.rbegin(); it != work.rend(); ++it) {
+        BlockId end;
+        if (auto guard = reference_guards.get(*it)) {
+            Value active = emit(Opcode::Load,IRType::I64,{Operand::symbol(SymbolId(guard))});
+            BlockId run = block(); end = block();
+            emit(Opcode::Branch,IRType(),{active.operand,Operand::label(run),Operand::label(end)}); start(run);
+        }
+        destroy_object(*it, sem.object_destructor(*it));
+        if (end) { jump(end); start(end); }
+    }
     emit(Opcode::Return, IRType(), {}); builder.reset();
 }
 } }

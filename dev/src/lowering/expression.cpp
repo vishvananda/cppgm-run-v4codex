@@ -291,6 +291,7 @@ Value Procedural::call(NodeId n, Value destination)
         return Value(Operand(), IRType::Void, fact.type);
     }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
+    if (fact.form == semantic::ExpressionForm::Abort) return abort_call();
     bool class_result = sem.class_value(sem.facts[n].type);
     bool indirect_result = sem.indirect_value(sem.facts[n].type);
     bool own_result = class_result && destination.ir == IRType();

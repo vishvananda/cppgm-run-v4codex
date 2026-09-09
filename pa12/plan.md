@@ -98,3 +98,11 @@ Initial noisy campaigns and the final repeats are both preserved.
   call retains its separate base adjustment. Logs: `/tmp/pa12-conversion-complete-stage.log`,
   `/tmp/pa12-conversion-prior.log`, `/tmp/pa12-conversion-personal2.log`.
   Performance campaign remains pending; no optimization benefit is claimed.
+- The same ownership model now retains namespace-reference backing storage,
+  complete selected subobjects and conditional shutdown guards. Scalar prvalue
+  references reuse their existing conditional result storage. The required
+  abort boundary, GNU stable-prefix attribute and attribute probe are present.
+  **202/257**, earlier **1327/1327**, 28 personal sources, explicit abort runtime,
+  static-reference control, query control and four query rejection controls pass.
+  Survivor processing now reaches the unsupported member-pointer call in the
+  object-extent control. Compiler binaries are frozen for the performance run.
