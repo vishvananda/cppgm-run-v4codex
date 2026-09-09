@@ -63,3 +63,10 @@ not extra PA11 gates; correctness, complexity and coverage remain mandatory.
   lexical exits and shared return/unwind continuations. PA11 165/302; PA1–10
   1025/1025; file audit passes; three explicit personal executables pass. The
   goto control passes. Performance delta remains to be measured after arrays.
+- Array/temporary increment: flat bounded construction loops with partial-prefix
+  unwind, reverse nested/loop destruction, member-array suffix cleanup, scalar/
+  enum pseudo-destructors, static member lifetime, temporary member-call storage
+  and full-expression cleanup, parsed noinline/always_inline policy. Five
+  personal programs validate and execute. PA11 172/302, no prior fixture losses;
+  all four PA11 controls pass. PA1–10 remain 1025/1025. Small-array expansion is
+  capped at eight total elements; large dimensions use one counter loop.

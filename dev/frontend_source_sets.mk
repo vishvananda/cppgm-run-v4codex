@@ -24,4 +24,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/signature_validation lowir/validator low
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction lowering/construction
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/global_initialization
 
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/destruction lowering/destruction lowering/cleanup
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/destruction lowering/destruction lowering/arrays lowering/cleanup

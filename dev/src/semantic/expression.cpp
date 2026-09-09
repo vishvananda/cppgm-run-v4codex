@@ -114,10 +114,27 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             if (!pointer(t)) throw std::runtime_error("arrow requires pointer");
             t = types[t].child;
         }
-        if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) throw std::runtime_error("member of non-class");
-        size(t); // Establish layout once at the semantic owner before recording field use.
         NodeId name = ast[ast[first].next].detail;
-        bool destructor = ast[ast[name].last].op == OP_COMPL;
+        NodeId part = ast[name].last;
+        bool destructor = ast[part].op == OP_COMPL;
+        bool class_type = types[t].kind == TypeKind::Named && entities[types[t].entity].class_info;
+        if (destructor) {
+            NodeId id = ast[part].first;
+            TypeId named = 0;
+            if (ast[id].kind == Kind::TypeId) named = type_id(id, s);
+            else {
+                EntityId found = lookup(class_type ? entities[types[t].entity].scope : s, ast[id].text, Lookup::Ordinary);
+                if (found && (entities[found].kind == EntityKind::Type || entities[found].kind == EntityKind::Alias)) named = entities[found].type;
+            }
+            if (!named || types.unqualified(named) != types.unqualified(t)) throw std::runtime_error("destructor name does not match object type");
+            if (!class_type) {
+                if (!(arithmetic(t) || pointer(t) || (types[t].kind == TypeKind::Named && entities[types[t].entity].underlying) || fundamental(t, FT_NULLPTR_T))) throw std::runtime_error("pseudo-destructor requires scalar");
+                r.type = types.function(types.fundamental(FT_VOID), {}, false);
+                r.form = ExpressionForm::PseudoDestructor; return r;
+            }
+        }
+        if (!class_type) throw std::runtime_error("member of non-class");
+        size(t); // Establish layout once at the semantic owner before recording field use.
         EntityId e = destructor ? default_destructor(t) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (!e) throw std::runtime_error("unknown member");
         r.entity = e; facts[n].entity = e;

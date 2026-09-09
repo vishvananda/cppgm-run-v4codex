@@ -8,6 +8,12 @@ Value Procedural::expression(NodeId n, bool location)
     if (!n) throw std::logic_error("missing expression node");
     auto fact = sem.expression_fact(n);
     NodeId a = ast[n].first;
+    if (fact.form == semantic::ExpressionForm::Construction) {
+        EntityId e = sem.object_fact(n).temporary;
+        if (!objects[e]) objects[e] = builder->add_slot(0, type(fact.type));
+        Value at(Operand::slot(objects[e]), type(fact.type), fact.type, true);
+        construct(sem.facts[n].entity, n, address(at)); activate_temporary(e); return at;
+    }
     if (fact.form == semantic::ExpressionForm::Cast) {
         NodeId operand = ast[n].kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
         if (!operand) return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
@@ -225,6 +231,13 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 Value Procedural::call(NodeId n)
 {
     auto fact = sem.expression_fact(n);
+    if (fact.form == semantic::ExpressionForm::PseudoDestructor) {
+        NodeId member = ast[n].first;
+        while (ast[member].kind == Kind::Parenthesized) member = ast[member].first;
+        Value object = expression(ast[member].first);
+        if (ast[member].op == OP_ARROW) load(object);
+        return Value(Operand(), IRType::Void, fact.type);
+    }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     std::size_t begin = call_work.size();
     call_work.push_back(Operand());

@@ -122,6 +122,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()
+        << ",\"semantic_destruction_actions\":" << destruction_actions.size()
+        << ",\"semantic_lifetime_states\":" << lifetimes.size()-1
+        << ",\"semantic_lifetime_uses\":" << lifetime_uses.size()-1
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work

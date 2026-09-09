@@ -218,6 +218,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     entities[e].is_static |= spec_has(specs, KW_STATIC);
     entities[e].c_linkage |= c_linkage;
+    entities[e].no_inline |= ast[source].flags & 64;
+    entities[e].force_inline |= ast[source].flags & 128;
     entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
@@ -239,7 +241,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
     if (member_initializer) class_facts[entities[scopes[s].entity].class_info].aggregate = false;
     if (calls && init && !function && !member_initializer) initialize(init, canonical, owner);
-    if (calls && !init && !function && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
+    if (calls && !init && !function && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
     if (init && !alias && !function && integral(t) && !member_initializer) {
         Constant v = evaluate(init, owner);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
@@ -253,7 +255,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts[ast[init].first].type = t;
-    if (calls && !function && !alias && !member_initializer && scopes[owner].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
+    if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
     return e;
 }
 } }

@@ -71,6 +71,9 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
+    std::vector<semantic::LifetimeState> temporary_states;
+    semantic::LifetimeState lifetime_state(std::uint32_t state) const;
+    void activate_temporary(EntityId e);
     struct Constructed { semantic::SubobjectAction action; BlockId handler; };
     std::vector<Constructed> constructed_subobjects;
     EntityId active_function = 0;
@@ -98,6 +101,9 @@ class Procedural {
     void finish_constructor_handlers();
     void constructor_cleanup(semantic::SubobjectAction action);
     struct InitProjection { std::uint64_t offset; bool field; };
+    Value array_element(Value root, bool indirect, const std::vector<InitProjection>& path, Operand index, std::uint64_t stride);
+    void array_construct(EntityId ctor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path);
+    void array_destroy(EntityId dtor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path, bool subobject = false);
     Value initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
     void constructor_body(EntityId e);

@@ -104,28 +104,35 @@ NodeId Parser::translation_unit(DeclarationConsumer* consumer)
     return root;
 }
 
-void Parser::balanced(const char* open, const char* close)
+unsigned Parser::balanced(const char* open, const char* close)
 {
+    unsigned result = 0;
     in.require(open);
     while (!in.is(close)) {
         if (in.peek().kind == PostTokenKind::eof) throw std::runtime_error("unterminated attribute");
-        if (in.is("(")) balanced("(", ")");
-        else if (in.is("[")) balanced("[", "]");
-        else if (in.is("{")) balanced("{", "}");
-        else in.take();
+        if (in.is("(")) result |= balanced("(", ")");
+        else if (in.is("[")) result |= balanced("[", "]");
+        else if (in.is("{")) result |= balanced("{", "}");
+        else {
+            if (in.is("noinline")) result |= 64;
+            if (in.is("always_inline")) result |= 128;
+            in.take();
+        }
     }
-    in.take();
+    in.take(); return result;
 }
 
-void Parser::attributes()
+unsigned Parser::attributes()
 {
+    unsigned result = 0;
     for (;;) {
-        if (in.is("[") && in.is("[", 1)) balanced("[", "]");
+        if (in.is("[") && in.is("[", 1)) result |= balanced("[", "]");
         else if (in.is("alignas") || in.is("__attribute__") || in.is("__attribute")) {
             in.take();
-            balanced("(", ")");
+            result |= balanced("(", ")");
         } else break;
     }
+    return result;
 }
 
 } }

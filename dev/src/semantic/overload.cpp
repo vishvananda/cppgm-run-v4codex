@@ -133,11 +133,24 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             }
         }
         if (cast_type) {
+            if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
+                EntityId ctor = choose_constructor(cast_type, args, &result);
+                facts[n].entity = ctor; facts[n].type = cast_type;
+                result.type = cast_type; result.form = ExpressionForm::Construction;
+                EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
+                entities[temporary].type = cast_type; register_destruction(temporary);
+                record_object(result, 0, 0, 0); object_uses[result.object_use].temporary = temporary;
+                return result;
+            }
             if (args.size() > 1) throw std::runtime_error("scalar cast arity");
             return cast_expression(n, s, cast_type, args.empty() ? 0 : args[0]);
         }
     }
     Expression fn = expression(callee, s);
+    if (fn.form == ExpressionForm::PseudoDestructor) {
+        if (!args.empty()) throw std::runtime_error("pseudo-destructor takes no arguments");
+        result.type = types.fundamental(FT_VOID); result.form = ExpressionForm::PseudoDestructor; return result;
+    }
     TypeId ft = 0;
     NodeId designator = callee;
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;

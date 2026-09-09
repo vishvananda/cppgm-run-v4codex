@@ -7,7 +7,19 @@ void Procedural::reset_lifetime(EntityId e)
     active_function = e; live = 0; emitting_cleanup = false; resume_emitted = false; cleanup_cursor = 0; slot_names = semantic::Index();
     cleanup_return = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
-    cleanup_blocks.clear(); constructed_subobjects.clear();
+    temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
+}
+semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
+{
+    return state & 0x80000000u ? temporary_states[(state & 0x7fffffffu)-1] : sem.lifetimes[state];
+}
+void Procedural::activate_temporary(EntityId e)
+{
+    EntityId dtor = sem.object_destructor(e);
+    if (!sem.destructor_needed(dtor)) return;
+    semantic::LifetimeState state; state.object = e; state.destructor = dtor; state.tail = live;
+    state.depth = lifetime_state(live).depth + 1;
+    temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
 }
 SlotId Procedural::source_slot(EntityId e)
 {
@@ -20,7 +32,7 @@ void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
 {
     while (state != stop) {
         if (!state) throw std::logic_error("cleanup target is not a lexical ancestor");
-        auto action = sem.lifetimes[state]; live = action.tail;
+        auto action = lifetime_state(state); live = action.tail;
         destroy_object(action.object, action.destructor); state = action.tail;
     }
     live = stop;
@@ -30,7 +42,7 @@ BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal)
     if (!state) return terminal;
     auto key = (std::uint64_t(state) << 32) | terminal.index;
     if (auto existing = cleanup_index.get(key)) return BlockId(existing);
-    BlockId tail = cleanup_suffix(sem.lifetimes[state].tail, terminal);
+    BlockId tail = cleanup_suffix(lifetime_state(state).tail, terminal);
     BlockId head = block(); cleanup_index.put(key, head.index);
     cleanup_blocks.push_back({state, tail, head});
     return head;
@@ -59,6 +71,7 @@ void Procedural::return_statement(NodeId n)
     Value value;
     if (has_value) value = ast[n].first ? convert(expression(ast[n].first, reference(returned)), returned) : Value(Operand::integer(0), type(returned));
     else if (ast[n].first) expression(ast[n].first);
+    clean_inline(live, life.entry);
     if (destructor_handler) {
         clean_inline(life.entry, 0);
         emit(Opcode::EhEnd, IRType(), {});
@@ -90,7 +103,7 @@ void Procedural::flush_cleanups()
             if (type(returned) == IRType::Void) emit(Opcode::Return, IRType(), {});
             else emit(Opcode::Return, type(returned), {Operand::slot(cleanup_return)});
         } else {
-            auto action = sem.lifetimes[entry.state];
+            auto action = lifetime_state(entry.state);
             destroy_object(action.object, action.destructor); jump(entry.next);
         }
     }
@@ -102,6 +115,11 @@ void Procedural::emit_cleanups()
     for (auto entry : constructed_subobjects) {
         start(entry.handler);
         auto action = entry.action;
+        if (sem.types[action.type].kind == TypeKind::Array) {
+            array_destroy(sem.type_destructor(action.type), action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
+                {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}});
+            emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); continue;
+        }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});

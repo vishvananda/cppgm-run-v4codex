@@ -4,20 +4,17 @@ using namespace lowir_model;
 void Procedural::destroy(EntityId dtor, TypeId t, Value object)
 {
     if (!sem.destructor_needed(dtor)) return;
-    auto target = sem.types[t];
-    if (target.kind == TypeKind::Array) {
-        for (std::uint64_t j = target.bound; j; --j) {
-            Value at = emit(Opcode::Index, IRType::I8, {object.operand, Operand::integer((j-1)*sem.object_size(target.child))});
-            destroy(dtor, target.child, at);
-        }
-        return;
+    if (sem.types[t].kind == TypeKind::Array) {
+        array_destroy(dtor, t, object, false, {}); return;
     }
     Operand args[] = {Operand::symbol(symbol(dtor)), object.operand};
     guarded_call(Instruction(Opcode::Call, IRType::Void), args, 2);
 }
 void Procedural::destroy_object(EntityId object, EntityId dtor)
 {
-    destroy(dtor, sem.entities[object].type, address(binding(object)));
+    TypeId t = sem.entities[object].type;
+    if (sem.types[t].kind == TypeKind::Array) array_destroy(dtor, t, binding(object), false, {});
+    else destroy(dtor, t, address(binding(object)));
 }
 void Procedural::constructor_cleanup(semantic::SubobjectAction action)
 {
@@ -45,6 +42,11 @@ void Procedural::destroy_subobjects(EntityId e)
     for (unsigned j = 0; j < m.destruction_count; ++j) {
         auto action = sem.destruction_actions[m.destruction_begin+j];
         if (!sem.destructor_needed(action.destructor)) continue;
+        if (sem.types[action.type].kind == TypeKind::Array) {
+            array_destroy(action.destructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
+                {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}}, true);
+            continue;
+        }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
@@ -70,7 +72,7 @@ void Procedural::global_finalization()
     std::vector<EntityId> work;
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable &&
-            !sem.entities[e].external_decl && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);
+            sem.entities[e].definition && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);
     if (work.empty()) return;
     reset_lifetime(0);
     Function f; f.symbol = fresh_symbol("@__cppgm_fini");

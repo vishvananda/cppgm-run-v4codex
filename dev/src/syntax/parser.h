@@ -56,10 +56,11 @@ private:
     NodeId name_part(bool force_template, ScopeId owner, bool qualified);
     NodeId template_arguments();
     NodeId operator_name();
-    void attributes();
-    void balanced(const char* open, const char* close);
+    unsigned attributes();
+    unsigned balanced(const char* open, const char* close);
 
     NodeId declaration();
+    NodeId unadorned_declaration();
     NodeId namespace_declaration();
     NodeId using_declaration();
     NodeId template_decl();

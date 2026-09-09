@@ -197,7 +197,7 @@ void Procedural::statement(NodeId n)
     case Kind::ExpressionStatement: case Kind::Iteration: case Kind::ForInit:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) statement(c);
-            else discard(c);
+            else { discard(c); clean_inline(live, lifetime.entry); }
         }
         return;
     case Kind::Return: return_statement(n); return;

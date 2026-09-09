@@ -5,7 +5,12 @@ namespace cppgm { namespace syntax {
 
 NodeId Parser::declaration()
 {
-    attributes();
+    unsigned flags = attributes();
+    NodeId result = unadorned_declaration();
+    ast[result].flags |= flags; return result;
+}
+NodeId Parser::unadorned_declaration()
+{
     if (in.eat(";")) return make(Kind::EmptyDeclaration);
     if (in.is("namespace") || (in.is("inline") && in.is("namespace", 1))) return namespace_declaration();
     if (in.is("using")) return using_declaration();

@@ -40,23 +40,26 @@ void Analyzer::check_jumps(NodeId body)
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default;
         if (!recorded) return;
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
-        std::uint32_t ui = lifetime_uses.size(); lifetime_uses.push_back(use); lifetime_index.put(n, ui);
-        if (k == Kind::Condition) { add_object(facts[n].entity); lifetime_uses[ui].exit = live; return; }
+        auto record_use = [&]() {
+            if (!(use.entry || use.exit || use.target)) return;
+            lifetime_index.put(n, lifetime_uses.size()); lifetime_uses.push_back(use);
+        };
+        if (k == Kind::Condition) { add_object(facts[n].entity); use.exit = live; record_use(); return; }
         if (k == Kind::SimpleDeclaration) {
             NodeId list = child(n, Kind::InitDeclarators);
             for (NodeId c = ast[list].first; c; c = ast[c].next) add_object(facts[ast[c].first].entity);
-            lifetime_uses[ui].exit = live; return;
+            use.exit = live; record_use(); return;
         }
         if (k == Kind::Label) {
             if (names.get(ast[n].text)) throw std::runtime_error("duplicate label");
             names.put(ast[n].text, labels.size()); labels.push_back({n, active, live});
         }
-        if (k == Kind::Goto) { jumps.push_back({n, active}); return; }
+        if (k == Kind::Goto) { jumps.push_back({n, active}); record_use(); return; }
         if (k == Kind::Return) {
-            auto key_id = key(live, context); return_counts.put(key_id, return_counts.get(key_id) + 1); return;
+            auto key_id = key(live, context); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
-        if (k == Kind::Break || k == Kind::Continue) { lifetime_uses[ui].target = k == Kind::Break ? break_live : continue_live; return; }
-        if (k == Kind::ExpressionStatement || k == Kind::Iteration) return;
+        if (k == Kind::Break || k == Kind::Continue) { use.target = k == Kind::Break ? break_live : continue_live; record_use(); return; }
+        if (k == Kind::ExpressionStatement || k == Kind::Iteration) { record_use(); return; }
         if (k == Kind::Case || k == Kind::Default) cases.push_back({active, switch_entry});
         unsigned saved = active, saved_switch = switch_entry;
         auto saved_live = live, saved_break = break_live, saved_continue = continue_live;
@@ -72,7 +75,7 @@ void Analyzer::check_jumps(NodeId body)
             if (k == Kind::Switch && ast[c].kind == Kind::Condition) switch_entry = active;
             if (k == Kind::For && ast[c].kind == Kind::ForInit) continue_live = live;
         }
-        lifetime_uses[ui].exit = live;
+        use.exit = live; record_use();
         if (scope) { active = saved; live = saved_live; }
         break_live = saved_break; continue_live = saved_continue; context = saved_context;
         switch_entry = saved_switch;
@@ -93,7 +96,7 @@ void Analyzer::check_jumps(NodeId body)
         if (!label) throw std::runtime_error("undefined goto label");
         if (!ancestor(labels[label].frame, j.frame)) throw std::runtime_error("goto bypasses initialization");
         facts[j.node].target = labels[label].node;
-        lifetime_uses[lifetime_index.get(j.node)].target = labels[label].live;
+        if (auto use = lifetime_index.get(j.node)) lifetime_uses[use].target = labels[label].live;
     }
     for (const Jump& j : cases)
         if (!ancestor(j.node, j.frame)) throw std::runtime_error("switch bypasses initialization");

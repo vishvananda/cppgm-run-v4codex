@@ -23,13 +23,18 @@ void Procedural::constructor_body(EntityId e)
     auto m = sem.member_fact(e);
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
-        if (!action.initializer && !sem.constructor_needed(action.constructor)) continue;
+        if (!action.initializer && !sem.constructor_needed(action.constructor)) { constructor_cleanup(action); continue; }
         auto t = sem.types[action.type];
+        if (t.kind == TypeKind::Array && !action.initializer) {
+            array_construct(action.constructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
+                {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}});
+            constructor_cleanup(action); continue;
+        }
         if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
             std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : 0, action.field != 0});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);
-            continue;
+            clean_inline(live, 0); constructor_cleanup(action); continue;
         }
         bool scalar = t.kind != TypeKind::Array && !(t.kind == TypeKind::Named && sem.entities[t.entity].class_info);
         Value value;
@@ -45,7 +50,7 @@ void Procedural::constructor_body(EntityId e)
         if (scalar) store(value, at);
         else if (action.initializer) initialize(action.initializer, action.type, at);
         else { at.address = false; construct(action.constructor, 0, at); }
-        constructor_cleanup(action);
+        clean_inline(live, 0); constructor_cleanup(action);
     }
 }
 } }
@@ -53,7 +58,7 @@ void Procedural::constructor_body(EntityId e)
 namespace cppgm { namespace lowering {
 Value Procedural::initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path)
 {
-    Value at = indirect ? emit(Opcode::Load, IRType::Ptr, {root.operand}) : address(root);
+    Value at = indirect ? emit(Opcode::Load, IRType::Ptr, {root.operand}) : root.address ? address(root) : root;
     for (auto step : path) {
         Instruction i(Opcode::Index, IRType::I8); i.projection = step.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         at = emit(i, {at.operand, Operand::integer(step.offset)});

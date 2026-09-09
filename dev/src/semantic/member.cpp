@@ -48,6 +48,7 @@ void Analyzer::demand_member(EntityId e)
 void Analyzer::default_initialize(EntityId object)
 {
     TypeId t = entities[object].type;
+    while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return;
     EntityId ctor = default_constructor(t);
     members[entities[ctor].member_info].source_demand = true;

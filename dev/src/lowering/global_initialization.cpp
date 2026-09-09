@@ -41,7 +41,9 @@ void Procedural::global_initialization()
         auto entity = sem.entities[e];
         Value location(Operand::symbol(symbols[e]), type(entity.type), entity.type, true);
         if (entity.initializer) initialize(entity.initializer, entity.type, location);
+        else if (sem.types[entity.type].kind == TypeKind::Array && sem.object_constructor(e)) array_construct(sem.object_constructor(e), entity.type, location, false, {});
         else if (sem.constructor_needed(sem.object_constructor(e))) construct(sem.object_constructor(e), 0, address(location));
+        clean_inline(live, 0);
     }
     emit(Opcode::Return, IRType(), {});
     builder.reset();

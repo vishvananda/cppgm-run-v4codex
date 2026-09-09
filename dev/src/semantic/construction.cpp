@@ -53,6 +53,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
 }
 EntityId Analyzer::default_constructor(TypeId t)
 {
+    while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
@@ -127,7 +128,7 @@ void Analyzer::constructor_actions(EntityId e)
         EntityId ctor = 0;
         default_destructor(type);
         if (initial) initialize(initial, type, scope);
-        else if (types[type].kind == TypeKind::Named && entities[types[type].entity].class_info) ctor = default_constructor(type);
+        else if (types[type].kind == TypeKind::Array || (types[type].kind == TypeKind::Named && entities[types[type].entity].class_info)) ctor = default_constructor(type);
         else if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef || (types[type].cv & 1))
             throw std::runtime_error("uninitialized reference or const member");
         if (!field) {
