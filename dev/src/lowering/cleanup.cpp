@@ -69,7 +69,13 @@ void Procedural::return_statement(NodeId n)
     auto life = sem.lifetime_use(n);
     bool has_value = type(returned) != IRType::Void;
     Value value;
-    if (has_value) value = ast[n].first ? convert(expression(ast[n].first, reference(returned)), returned) : Value(Operand::integer(0), type(returned));
+    if (has_value) {
+        NodeId operand = ast[n].first;
+        if (!operand) value = Value(Operand::integer(0), type(returned));
+        else if (auto conversion = sem.expression_fact(operand).incoming)
+            value = converted(operand, sem.conversion_fact(conversion));
+        else value = convert(expression(operand, reference(returned)), returned);
+    }
     else if (ast[n].first) expression(ast[n].first);
     clean_inline(live, life.entry);
     if (destructor_handler) {

@@ -13,6 +13,8 @@ struct Number {
 struct Root {};
 struct Base : Root {};
 struct Derived : Base {};
+struct Box { Derived value; Derived& operator*() { return value; } };
+Base& refer(Box& box) { return *box; }
 int select(Root&) { return 1; }
 int select(Base&) { return 2; }
 int main() {
@@ -23,5 +25,7 @@ int main() {
     a[0] = 8;
     if ((a++) != 8 || (++a)() != 10 || Number(11)() != 11) return 3;
     Derived d;
+    Box box;
+    if (&refer(box) != static_cast<Base*>(&box.value)) return 4;
     return select(d) != 2;
 }

@@ -101,3 +101,17 @@ hidden-friend and operator iterations with no static data. Preserve all source,
 binary and output hashes, observations, work counts and the sectionless text
 proxy. A is incorrect on these new behaviors and cannot be a speed baseline.
 Do not run builds or tests concurrently with measurements.
+
+Frozen B is b74a80fa, SHA256
+67581dca93076ffd57159846c9e1398e81c174b7799885431109bcae938ad685.
+The common campaign has isolated 1.1644x / 1.1115x ABBA blocks in memory-float-1
+and calls-4, and 62.9% A/A spread in references-8000. Preserve the original
+campaign; repeat those three groups with unchanged binaries, inputs and the
+AAAA/ABBA/ABBA order using `selection_repeat.py`. Retain every observation.
+
+Final review found that return lowering bypassed recorded derived-reference
+conversions. The correction belongs to the same selection data flow. Preserve
+all b74a80fa observations under `selection-initial-*-performance.json` (their
+embedded original filenames are historical); repeat the full common and new
+behavior campaigns with the corrected frozen compiler. Initial binaries and
+scratch outputs remain separate and unchanged.

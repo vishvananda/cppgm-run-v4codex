@@ -3,7 +3,7 @@
 Stage base commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 Last reviewed commit: a97e14d49c7edfc7acc115b974ab667cc90480db
 
-Target: PA11 full-stage. Phase: implement. **Incomplete: 233/302; 69 failures.**
+Target: PA11 full-stage. Phase: implement. **Incomplete: 234/302; 68 failures.**
 
 ## Design and remaining groups
 
@@ -82,3 +82,8 @@ the linked lifetime checkpoint.
   Seven personal programs execute and three rejection checks pass. Earlier
   PAs: 1025/1025; file audit passes with the unchanged header advisory.
   Freeze this implementation for common and new-behavior performance evidence.
+- Return-conversion review: reference returns now consume the selected
+  conversion, including an overloaded dereference yielding a derived lvalue.
+  234/302; 61 original failures fixed. Seven native personal checks pass.
+  Preserve the b74a80fa measurements as selection-initial-*; repeat with this
+  correction before final performance conclusions.
