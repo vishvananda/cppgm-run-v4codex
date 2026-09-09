@@ -14,8 +14,8 @@ int main(){return A::f()==7?0:1;}
 ''',
 'generated-global-identities': r'''
 int x=1; int __global_x(){return 2;}
-int __reference_5(){return 3;} const int&r=4;
-int main(){return x+__global_x()+__reference_5()+r==10?0:1;}
+int __reference_6(){return 3;} const int&r=4;
+int main(){return x+__global_x()+__reference_6()+r==10?0:1;}
 ''',
 'volatile-value-contexts': r'''
 volatile int x=1, y=2;

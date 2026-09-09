@@ -1,5 +1,9 @@
 # PA10 performance and architecture evidence
 
+This is the preserved checkpoint report through `63592ef0`. The independent
+full-stage audit and final retention decision are in
+[final-audit-performance.md](final-audit-performance.md).
+
 The completed O0 compiler passes PA10's complete output contract. The ownership
 audit removes repeated static-reference traversal; it adds no generated-code
 optimization pass. Its memory and compiler-code growth fit the predeclared

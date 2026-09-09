@@ -7,6 +7,10 @@ not exit evidence. The plan's old review pointer still named the stage base;
 this record closes the handoffs through implementation, reference corrections,
 ownership fixes, sequencing fix and all measurement continuations.
 
+Reviewed final compiler implementation: `60f7088f`. The optional candidate
+`4fc61de6` was measured and reverted; the final binary exactly matches the
+frozen `60f7088f` binary (SHA256 in the final performance report).
+
 ## Spec Alignment
 
 PA10 owns procedural C++ to typed LowIR at O0. Source template generation,
@@ -116,6 +120,13 @@ right shift after subtraction; other sizes retain signed division. Invalid
 pointer differences do not license inventing alias/range facts. Both negative
 power-of-two and size-three differences are tested. The native handoff consumes
 these actual LowIR operations; runtime gains are not inferred from node counts.
+The standalone [trace](../student.tests/pa10/lowering-trace.cpp) compiles with
+`--validate-lowir`, executes with exit 0, and was inspected through native
+disassembly. The four-byte case encodes subtract plus `sar 2`; the size-three
+case retains signed LowIR division and the supplied backend encodes a reciprocal
+multiply plus signed correction. The pointer routines use register operands
+and 16-byte frames; main uses a 96-byte frame. These backend choices are observed
+handoff facts, not implemented optimizations or new allocator exit gates.
 
 Immediate widening and nonvolatile cached assignment values require exact value
 preservation. Volatile accesses always retain their required effects. Branches
@@ -135,14 +146,36 @@ used to excuse an avoidable PA10 frontend regression.
 
 ## Validation and performance ledger
 
-Implementation validation is in progress for the final frozen compiler. The
-latest direct PA10 run passes 121/121 plus 5/5 controls; 123 in-memory IR inputs,
-14 personal native programs, nine semantic rejections and both multi-file input
-orders are the expanded final checks. Final sanitizer, root report, performance
-records and reviewed commit will be entered after completion.
+- `make test-pa10`: 121/121 and 5/5 focused controls, exit 0.
+- `make test-report-through-pa10`: all ten stages, 1025/1025 oracle tests,
+  plus the separately reported PA10 controls, exit 0.
+- `perl scripts/cppgm_file_audit.pl --stage pa10 --paths dev/src`: 126 files,
+  exit 0. `git diff --check`: clean.
+- `check.py`: 14 native programs and nine semantic rejections; `check_multifile.py`:
+  both source input orders; `check_ir.py`: 123 successful source/control inputs.
+  All pass normally and under the actual driver built with ASan/UBSan,
+  `detect_leaks=1` and `halt_on_error=1`.
+- `check_reference_corrections.py`: both pinned-reference order reducers still
+  return the documented incorrect 1 instead of required 0. No new sidecar edits.
+- [Linkage growth](../student.tests/pa10/linkage-growth.json): 4/16 TUs with 512
+  repeated external declarations each produce 512 declarations and one main.
+  Requests/hits are 2049/1536 and 8193/7680. ABI graph stays at 1026 nodes and
+  154166 bytes; IR capacity remains 131200 bytes. Work tracks input declarations,
+  retained linkage storage tracks unique entities. This is structural evidence;
+  its diagnostic phase times are not a performance comparison.
+- [Final performance](final-audit-performance.md): two complete frozen A/A/ABBA
+  campaigns, each with 108 compiler, eight startup and 36 native observations.
+  All generated executable pairs are byte-identical. The optional display-check
+  change saved 640 text bytes but slowed the large floating/memory workload
+  2.1–5.0% beyond its 1.74% A/A spread; it was reverted. All data is retained.
+  The final compiler matches the already measured binary byte for byte.
+- Completion: no remaining PA10 defect or unaudited handoff was found in the
+  reviewed contract/architecture paths. Required exit checks pass, the plan and
+  audit are consolidated, and final changes are committed with a clean tree.
 
 The supplied Ralph primary log and direct root output count 1025 oracle tests;
-the user-facing status counted 1049 checks including additional checks. Use the
-actual command output and separately named controls, without inventing a new
-test count or changing discovery. Historical performance observations and the
-original stage ledger remain preserved in [performance.md](performance.md).
+the user-facing status says 1049. That display was not used as evidence. Record
+the authoritative command output and separately named controls, without
+inferring the reason for the discrepancy or changing test discovery. Historical performance observations and the
+original stage ledger remain preserved in [performance.md](performance.md), with final acceptance
+and the rejected-candidate ledger in [final-audit-performance.md](final-audit-performance.md).

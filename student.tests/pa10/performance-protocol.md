@@ -109,3 +109,10 @@ explicit A commit. Exact byte-equal outputs establish equivalence directly;
 unequal LowIR still uses the unchanged course comparator. This adds no relaxed
 comparison rule and avoids expensive normalization of identical files. The
 course suites and both native/IR audits remain independent correctness checks.
+
+
+Final disposition: the delta's B (`4fc61de6`) reduced compiler text by 640 bytes
+but slowed memory-float-4 by 2.09%/5.00% against 1.74% A/A spread. It is rejected;
+restore A (`60f7088f`) and prove the rebuilt final compiler byte-identical to
+`/tmp/pa10-independent-final`. No additional timing campaign is needed for an
+identical binary. Both complete records and every frozen artifact remain intact.
