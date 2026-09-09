@@ -1,0 +1,638 @@
+{
+  "protocol": "A/A (four A observations), two ABBA blocks; O0; pinned CPU",
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "harness_sha256": "e103b6cc2e4e00bccd9a1644cc706fa4d899c97713de6953810faabf8e465831",
+  "binaries": [
+    {
+      "path": "/tmp/pa12-stage-base-cppgm",
+      "sha256": "fe662c96e7ed834276169929d4b99e4076331e048867f0c3ceeefb9ea0367280",
+      "text_bytes": 785798
+    },
+    {
+      "path": "/tmp/pa12-member-cppgm",
+      "sha256": "a713d6e52938ef95c21eb34c88bcda8093209108cdd644ecc40fc9cd8ea5dd05",
+      "text_bytes": 793990
+    }
+  ],
+  "backend_sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+  "compile_flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "native_flags": [
+    "-O0"
+  ],
+  "text_metric": "compiler .text; supplied sectionless ELF executable payload after entry",
+  "startup": [
+    {
+      "wall_s": 0.005863692,
+      "rss_kib": 4784,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005603883,
+      "rss_kib": 4772,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005448756,
+      "rss_kib": 4744,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005337399,
+      "rss_kib": 4772,
+      "binary": 0
+    },
+    {
+      "wall_s": 0.005267641,
+      "rss_kib": 4792,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.00526519,
+      "rss_kib": 4756,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005360342,
+      "rss_kib": 4780,
+      "binary": 1
+    },
+    {
+      "wall_s": 0.005365648,
+      "rss_kib": 4680,
+      "binary": 1
+    }
+  ],
+  "workloads": {
+    "members-1000": {
+      "source_path": "/tmp/pa12-member-evidence/members-1000.cpp",
+      "source_sha256": "1adf7c7bbaf44a58f352d3a4eae38f712c396e1e003d9b6e5233b6e596a9c89a",
+      "outputs": [
+        {
+          "lowir_sha256": "471e7f22aeb2dbc8b3dc07e04e3a81d29dc851c3507919171a7a372ca16649b7",
+          "lowir_bytes": 1096516,
+          "executable_sha256": "a9ddceb52d495c7e016aad7b2488710bb20c2205e5a93945696278942e7507c5",
+          "text_bytes": 70053,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "471e7f22aeb2dbc8b3dc07e04e3a81d29dc851c3507919171a7a372ca16649b7",
+          "lowir_bytes": 1096516,
+          "executable_sha256": "a9ddceb52d495c7e016aad7b2488710bb20c2205e5a93945696278942e7507c5",
+          "text_bytes": 70053,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "identical LowIR and native exit 0",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.123556657,
+            "rss_kib": 27656,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.122646097,
+            "rss_kib": 27472,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.135135715,
+            "rss_kib": 27464,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.121476708,
+            "rss_kib": 27524,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.12314751,
+            "rss_kib": 27528,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.124569635,
+            "rss_kib": 27428,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.124026986,
+            "rss_kib": 27192,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.122471161,
+            "rss_kib": 27464,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.123126639,
+            "rss_kib": 27560,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.122593506,
+            "rss_kib": 27380,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.12382559,
+            "rss_kib": 27416,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.124361405,
+            "rss_kib": 27500,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.121476708,
+          0.135135715
+        ],
+        "paired_b_over_a": [
+          1.0121242818710634,
+          0.995680809534379
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.003594085,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003216602,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003154187,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003110184,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003126931,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003304817,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003227929,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003115447,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003130403,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003141779,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003195826,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003069138,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003110184,
+          0.003594085
+        ],
+        "paired_b_over_a": [
+          1.0465156067126984,
+          1.0222700357978116
+        ]
+      }
+    },
+    "members-4000": {
+      "source_path": "/tmp/pa12-member-evidence/members-4000.cpp",
+      "source_sha256": "a7ac94261c5496c527cfc4f76a45984da264dfd24c51846289323da274e13dd5",
+      "outputs": [
+        {
+          "lowir_sha256": "32c846c1bfecf5fb8bc505a4e4fef8624bcdfe4ec6d60b750b1f0ed837416753",
+          "lowir_bytes": 4513515,
+          "executable_sha256": "72821f66aaa571d89f638e1e9111b43a666ade23cae7beba59ffdd9f18a119f9",
+          "text_bytes": 280053,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "32c846c1bfecf5fb8bc505a4e4fef8624bcdfe4ec6d60b750b1f0ed837416753",
+          "lowir_bytes": 4513515,
+          "executable_sha256": "72821f66aaa571d89f638e1e9111b43a666ade23cae7beba59ffdd9f18a119f9",
+          "text_bytes": 280053,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "identical LowIR and native exit 0",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.493977824,
+            "rss_kib": 93024,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.501039205,
+            "rss_kib": 93144,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.49495401,
+            "rss_kib": 93088,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.49345499,
+            "rss_kib": 93324,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.492940808,
+            "rss_kib": 93144,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.503605112,
+            "rss_kib": 95572,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.49603805,
+            "rss_kib": 95608,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.493892389,
+            "rss_kib": 93100,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.488793625,
+            "rss_kib": 93092,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.498559417,
+            "rss_kib": 95516,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.495951665,
+            "rss_kib": 95620,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.708392037,
+            "rss_kib": 93144,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.49345499,
+          0.501039205
+        ],
+        "paired_b_over_a": [
+          1.0129808817122719,
+          0.8307074780185599
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.003561322,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003193691,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003116043,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003122534,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003177498,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00316862,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003378478,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003212566,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003133174,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003100825,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003057124,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003128436,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003116043,
+          0.003561322
+        ],
+        "paired_b_over_a": [
+          1.024574714744641,
+          0.9834449925817801
+        ]
+      }
+    },
+    "empty-destructor-runtime": {
+      "source_path": "/tmp/pa12-member-evidence/empty-destructor-runtime.cpp",
+      "source_sha256": "4910e783efc7e418426ef7be85da55fd09465a10413a524a136fa91393a94b4e",
+      "outputs": [
+        {
+          "lowir_sha256": "f432cd5ad6d812230dd6db16971a5736fb6043de27bfd3a7cbd889d19b7be27b",
+          "lowir_bytes": 2027,
+          "executable_sha256": "771d997d1ffe662edaca4da45cd61bfd376d97f61852fa88e8a9080e9af24355",
+          "text_bytes": 928,
+          "checked_exit": 0
+        },
+        {
+          "lowir_sha256": "39e71de541f66eda1d7d28680038cc10b3312218f5606f7af10a2f81cbd4c96f",
+          "lowir_bytes": 1852,
+          "executable_sha256": "bcf8eeea94b1e9d914464d6153f6efdc522efefc99e913dd0ca64febd6745f4d",
+          "text_bytes": 241,
+          "checked_exit": 0
+        }
+      ],
+      "equivalence": "same volatile loop and checked checksum; only empty destructor calls omitted",
+      "compiler": {
+        "observations": [
+          {
+            "wall_s": 0.005956331,
+            "rss_kib": 4784,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005819794,
+            "rss_kib": 4732,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00551857,
+            "rss_kib": 4780,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005509642,
+            "rss_kib": 4768,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005584563,
+            "rss_kib": 4772,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005789837,
+            "rss_kib": 4752,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005708679,
+            "rss_kib": 4664,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005724066,
+            "rss_kib": 4752,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005782811,
+            "rss_kib": 4772,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005842022,
+            "rss_kib": 4744,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005796555,
+            "rss_kib": 4876,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00591547,
+            "rss_kib": 4724,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.005509642,
+          0.005956331
+        ],
+        "paired_b_over_a": [
+          1.0167913369516322,
+          0.9948963441722763
+        ]
+      },
+      "runtime": {
+        "observations": [
+          {
+            "wall_s": 0.175631516,
+            "rss_kib": 256,
+            "ordinal": 0,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.175404014,
+            "rss_kib": 256,
+            "ordinal": 1,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.175867549,
+            "rss_kib": 256,
+            "ordinal": 2,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.177087966,
+            "rss_kib": 256,
+            "ordinal": 3,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.178338268,
+            "rss_kib": 256,
+            "ordinal": 4,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.084256794,
+            "rss_kib": 256,
+            "ordinal": 5,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.085089131,
+            "rss_kib": 256,
+            "ordinal": 6,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.176574607,
+            "rss_kib": 256,
+            "ordinal": 7,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.178292429,
+            "rss_kib": 256,
+            "ordinal": 8,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.088361735,
+            "rss_kib": 256,
+            "ordinal": 9,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.086026642,
+            "rss_kib": 256,
+            "ordinal": 10,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.17894451,
+            "rss_kib": 256,
+            "ordinal": 11,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.175404014,
+          0.177087966
+        ],
+        "paired_b_over_a": [
+          0.4771478774896515,
+          0.4881588603019577
+        ]
+      }
+    }
+  }
+}
