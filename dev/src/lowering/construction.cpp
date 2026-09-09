@@ -1,7 +1,7 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
 using syntax::Kind;
-void Procedural::construct(EntityId ctor, NodeId init, Value object)
+void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
 {
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
@@ -10,7 +10,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object)
     }
     if (!sem.constructor_needed(ctor)) return;
     std::size_t begin = call_work.size();
-    call_work.push_back(Operand::symbol(symbol(ctor))); call_work.push_back(object.operand);
+    call_work.push_back(Operand::symbol(symbol(ctor, base))); call_work.push_back(object.operand);
     if (init) {
         auto fact = sem.expression_fact(init);
         for (unsigned j = 0; j < fact.argument_count; ++j)
@@ -57,8 +57,24 @@ void Procedural::constructor_body(EntityId e)
             at.bit_field = action.field; at.initializing = true; at.init_offset = sem.entities[action.field].member_offset;
         }
         if (scalar) store(value, at);
-        else if (action.initializer) initialize(action.initializer, action.type, at);
-        else { at.address = false; construct(action.constructor, 0, at); }
+        else if (action.initializer) {
+            if (!action.field && sem.constructor_member(sem.facts[action.initializer].entity)) {
+                at.address = false; construct(sem.facts[action.initializer].entity, action.initializer, at, true);
+            } else initialize(action.initializer, action.type, at);
+        }
+        else if (!action.field && m.inherited_constructor) {
+            std::size_t begin = call_work.size();
+            call_work.push_back(Operand::symbol(symbol(m.inherited_constructor, true)));
+            call_work.push_back(at.operand);
+            for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
+                EntityId param = sem.declarations[d].entity;
+                if (sem.entities[param].kind != semantic::EntityKind::Parameter) continue;
+                call_work.push_back(emit(Opcode::Load, type(sem.entities[param].type), {Operand::slot(objects[param])}).operand);
+            }
+            guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
+            call_work.resize(begin);
+        }
+        else { at.address = false; construct(action.constructor, 0, at, !action.field); }
         clean_inline(live, 0); constructor_cleanup(action);
     }
 }

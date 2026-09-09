@@ -125,6 +125,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     }
     case Kind::UsingDeclaration: {
         NodeId name = ast[ast[n].first].detail;
+        if (calls && scopes[s].kind == ScopeKind::Class && inherit_using(name, s)) break;
         for (NodeId p = ast[name].first; p; p = ast[p].next)
             if (ast[p].first) throw std::runtime_error("using declaration names template-id");
         EntityId e = resolve(name, s);

@@ -36,7 +36,10 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
             throw std::runtime_error("ambiguous constructor");
     EntityId selected = viable[best].entity;
     if (members[entities[selected].member_info].deleted) throw std::runtime_error("deleted constructor");
-    check_access(selected, scope, entities[selected].owner);
+    EntityId access = selected;
+    while (members[entities[access].member_info].inherited_constructor)
+        access = members[entities[access].member_info].inherited_constructor;
+    check_access(access, scope, entities[access].owner);
     Type f = types[entities[selected].type];
     if (result) {
         result->arguments = call_arguments.size(); result->conversions = conversions.size();
@@ -92,6 +95,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
     EntityId ctor = choose_constructor(target, args, &result, s);
+    if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
     // The initializer wrapper retains its starting token, including '='.
     bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
     if (copy && members[entities[ctor].member_info].explicit_constructor)
@@ -114,6 +118,15 @@ void Analyzer::constructor_actions(EntityId e)
         scope = make_scope(ScopeKind::Function, entities[e].owner, entities[e].name, e);
         entities[e].scope = scope;
     }
+    EntityId inherited = members[m].inherited_constructor;
+    if (inherited) {
+        Type f = types[entities[e].type];
+        for (unsigned j = 0; j < f.count; ++j) {
+            EntityId p = make_entity(EntityKind::Parameter, scope, 0, 0);
+            entities[p].type = types.parameters[f.offset+j];
+            record(scope, p, 0, entities[p].type, EntityKind::Parameter);
+        }
+    }
     size(entities[cls].type);
     Index explicit_initializers;
     NodeId list = child(members[m].source, Kind::CtorInitializer);
@@ -131,19 +144,27 @@ void Analyzer::constructor_actions(EntityId e)
     auto add = [&](EntityId field, TypeId type, NodeId initial) {
         EntityId ctor = 0;
         default_destructor(type, scope);
+        bool saved_base = base_initialization;
+        base_initialization = !field;
         if (initial) initialize(initial, type, scope);
         else if (types[type].kind == TypeKind::Array || (types[type].kind == TypeKind::Named && entities[types[type].entity].class_info)) ctor = default_constructor(type, scope);
         else if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef || (types[type].cv & 1))
             throw std::runtime_error("uninitialized reference or const member");
+        base_initialization = saved_base;
         if (!field) {
             EntityId selected = initial ? facts[initial].entity : ctor;
             if (selected && entities[selected].member_info) members[entities[selected].member_info].base_entry = true;
-        }
+        } else if (ctor) members[entities[ctor].member_info].complete_entry = true;
         if (initial || ctor) work.push_back({field, type, initial, ctor});
     };
     for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
         EntityId base = bases[b].base;
-        add(0, entities[base].type, explicit_initializers.get(base));
+        if (inherited) {
+            default_destructor(entities[base].type, scope);
+            members[entities[inherited].member_info].base_entry = true;
+            demand_member(inherited);
+            work.push_back({0, entities[base].type, 0, inherited});
+        } else add(0, entities[base].type, explicit_initializers.get(base));
     }
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         EntityId field = declarations[d].entity;
@@ -165,7 +186,7 @@ bool Analyzer::constructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
-    if (!members[m].synthetic) return true;
+    if (!members[m].synthetic || members[m].inherited_constructor) return true;
     if (members[m].trivial_state == 2) return members[m].nontrivial;
     if (members[m].trivial_state == 1) throw std::logic_error("cyclic constructor actions");
     members[m].trivial_state = 1;
@@ -190,7 +211,11 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
     if (class_facts[c].value_state == 2) return;
     if (class_facts[c].value_state == 1) throw std::runtime_error("recursive value initialization");
     class_facts[c].value_state = 1;
-    if (!class_facts[c].aggregate) class_facts[c].value_constructor = default_constructor(t, s);
+    if (!class_facts[c].aggregate) {
+        EntityId ctor = default_constructor(t, s);
+        class_facts[c].value_constructor = ctor;
+        if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
+    }
     else for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
         EntityId e = declarations[d].entity;
         if (nonstatic_field(e)) prepare_value_initialization(entities[e].type, s);

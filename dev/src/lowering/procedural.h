@@ -51,7 +51,7 @@ class Procedural {
     Linkage& linkage;
     abi_mangle::Graph& abi;
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
-    std::vector<SymbolId> symbols, strings;
+    std::vector<SymbolId> symbols, strings, base_symbols;
     std::vector<SlotId> objects;
     semantic::Index string_index;
     struct StringRecord { NodeId node; std::uint32_t next; };
@@ -87,11 +87,11 @@ class Procedural {
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
-    SymbolId symbol(EntityId e);
+    SymbolId symbol(EntityId e, bool base = false);
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
-    void function_body(EntityId e);
+    void function_body(EntityId e, bool base = false);
     void reset_lifetime(EntityId e);
     void destroy(EntityId destructor, TypeId t, Value object);
     void destroy_object(EntityId object, EntityId destructor);
@@ -129,7 +129,7 @@ class Procedural {
     Value string_element(NodeId source, TypeId element, std::uint64_t index);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
     void constructor_body(EntityId e);
-    void construct(EntityId ctor, NodeId init, Value object);
+    void construct(EntityId ctor, NodeId init, Value object, bool base = false);
     bool constant_initializer(NodeId n, TypeId t);
     void global_initialization();
     void global_finalization();

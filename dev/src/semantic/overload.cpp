@@ -140,6 +140,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (cast_type) {
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type, args, &result, s);
+                members[entities[ctor].member_info].complete_entry = true;
                 facts[n].entity = ctor; facts[n].type = cast_type;
                 result.type = cast_type; result.form = ExpressionForm::Construction;
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);

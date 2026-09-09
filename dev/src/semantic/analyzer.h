@@ -182,6 +182,9 @@ private:
     EntityId default_constructor(TypeId t, ScopeId s = 0);
     EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0);
     void constructor_actions(EntityId e);
+    bool inherit_using(NodeId name, ScopeId scope);
+    void inherited_constructors(EntityId cls);
+    bool base_initialization = false;
     bool class_initialize(NodeId n, TypeId target, ScopeId s);
     void default_initialize(EntityId object);
     bool derived_from(TypeId from, TypeId to);

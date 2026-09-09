@@ -62,6 +62,7 @@ struct ClassFacts {
     std::uint64_t size = 0, alignment = 0, requested_alignment = 0;
     unsigned char packing = 0;
     EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
+    EntityId inherited_base = 0;
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
@@ -109,11 +110,13 @@ struct Entity {
 enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
 struct MemberFacts {
     TypeId call_type = 0;
+    EntityId inherited_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
     bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false;
+    bool complete_entry = false;
     std::uint32_t action_begin = 0, action_count = 0;
     unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
     bool destruction_needed = false, nonthrowing = false;

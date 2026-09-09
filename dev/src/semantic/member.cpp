@@ -52,6 +52,7 @@ void Analyzer::default_initialize(EntityId object)
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return;
     EntityId ctor = default_constructor(t, entities[object].owner);
     members[entities[ctor].member_info].source_demand = true;
+    members[entities[ctor].member_info].complete_entry = true;
     object_actions.put(object, actions.size());
     actions.push_back({object, ctor, types.compound(TypeKind::Pointer, t)});
     demand_member(ctor);

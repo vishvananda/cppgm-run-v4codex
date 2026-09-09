@@ -56,6 +56,17 @@ correctness and coverage are unchanged. Initial measurements (including the
 
 ## Handoff ledger
 
+- 786ed29e continuation baseline: reproduced **273/302**, 29 existing failures.
+  Frozen compiler `/tmp/pa11-construction-base-cppgm`. Current group records
+  inherited constructor forwarding and ABI entry demand; selection owns base
+  access, semantic actions own arguments, lowering consumes identities. Work is
+  proportional to inherited signatures, selected arguments and subobject actions.
+  Validate inherited/access/external-transitive fixtures and native personal
+  construction cases, followed by full PA11 and earlier reports.
+- Inherited-constructor increment: **276/302**, all five inheritance fixtures;
+  twelve native personal programs and seven rejection checks pass. Earlier
+  PAs remain **1025/1025** and file audit passes. Complete/base forwarding
+  entries consume shared actions; external base calls use the C2 ABI entry.
 - a97e14d4: initial 43/302; stage markers remain unchanged.
 - 4113c34d: member ABI/this, cv, references/projections: 84/302.
 - 17897014 / cd054d80: constructors/defaults/DMI, startup: 156/302.
