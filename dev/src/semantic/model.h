@@ -150,6 +150,7 @@ struct MemberFacts {
     TransferKind transfer = TransferKind::None;
     unsigned char transfer_state = 0;
     bool transfer_trivial = false, transfer_direct = false, transfer_noexcept = false, defaulted_late = false;
+    bool scalar_transfer_body = false;
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
 };

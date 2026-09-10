@@ -43,6 +43,7 @@ public:
     EntityId bound_temporary(NodeId n) const;
     bool destructor_member(EntityId e) const;
     bool function_nonthrowing(EntityId e);
+    bool scalar_transfer_source(EntityId transfer, NodeId source) const;
     EntityId object_destructor(EntityId e) const { return object_destructors.get(e); }
     const LifetimeUse& lifetime_use(NodeId n) const { return lifetime_uses[lifetime_index.get(n)]; }
     std::uint32_t object_lifetime(EntityId e) const { return object_lifetimes.get(e); }
@@ -130,6 +131,10 @@ private:
     EntityId select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment);
     Conversion transfer_conversion(TypeId from, ValueCategory category, TypeId to);
     bool transfer_accessible(EntityId e, ScopeId context) const;
+    void prepare_scalar_transfer(EntityId e);
+    bool scalar_transfer_node(NodeId n);
+    std::vector<unsigned char> scalar_transfer_nodes;
+    std::uint64_t scalar_transfer_work = 0;
     Index anonymous_objects;
     Index constant_constructors, constant_objects;
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);

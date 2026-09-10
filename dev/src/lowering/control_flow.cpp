@@ -111,6 +111,8 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     auto common = live;
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
+    bool enclosing_branch = full_expression.terminal_branch;
+    full_expression.terminal_branch = terminal;
     if (object) construct_value(b,sem.conversion_fact(branches ? branches : fact.conversions+1),destination,terminal);
     else {
         auto conversion = sem.conversion_fact(fact.conversions+1);
@@ -134,6 +136,7 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     }
     if (terminal) clean_inline(live,common);
     auto no_live = live; jump(end); start(end);
+    full_expression.terminal_branch = enclosing_branch;
     merge_temporaries(common,yes_live,no_live,selector);
     if (object) {
         if (!supplied) activate_temporary(sem.object_fact(n).temporary);

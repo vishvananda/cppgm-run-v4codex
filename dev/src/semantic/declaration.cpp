@@ -48,6 +48,7 @@ void Analyzer::finish()
     Index delegation_states;
     std::vector<EntityId> chain;
     for (EntityId root : demand_queue) {
+        prepare_scalar_transfer(root);
         EntityId e = root;
         while (e && !delegation_states.get(e)) {
             delegation_states.put(e, 1); chain.push_back(e);

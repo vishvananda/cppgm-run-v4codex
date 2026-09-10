@@ -36,12 +36,14 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
     full_expression.enabled = cleanup_expression(n,omit_result);
     if (full_expression.enabled) guard_expression(n);
 }
-void Procedural::guard_expression(NodeId n)
+void Procedural::guard_expression(NodeId n, bool storage_ready)
 {
-    if (!full_expression.enabled || full_expression.open || emitting_cleanup) return;
+    if (!full_expression.enabled || full_expression.open || emitting_cleanup || full_expression.suppress_guard) return;
     while (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer)
         n = ast[n].first;
     if (ast[n].kind == Kind::Conditional || (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR))) return;
+    if (full_expression.terminal_branch && !storage_ready &&
+        (ast[n].kind == Kind::Member || sem.expression_fact(n).form == semantic::ExpressionForm::Construction)) return;
     if (unwind_expression(n)) open_expression_region();
 }
 void Procedural::open_expression_region()

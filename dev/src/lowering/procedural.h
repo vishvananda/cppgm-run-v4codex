@@ -105,10 +105,10 @@ class Procedural {
     bool cleanup_expression(NodeId n, bool omit_result = false);
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
-    struct FullExpression { bool enabled = false, open = false, lexical = false; } full_expression;
+    struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false; } full_expression;
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);
-    void guard_expression(NodeId n);
+    void guard_expression(NodeId n, bool storage_ready = false);
     void open_expression_region();
     void close_expression_region();
     SlotId cleanup_selector(Value test, bool required);

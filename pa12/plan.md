@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**252/257**).
+Target: PA12 full-stage. Phase: implement; incomplete (**253/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -16,9 +16,8 @@ replay, fake AST, reference delegation or a later native-backend exit gate.
 | Initialization and transfer | Selected typed action -> layout/storage operation; once per field/unit | Bit-field constructor instruction order and explicit conversion transfer |
 | ABI representation | Class facts -> independent argument/result convention; cached per class | Nontrivial base-copy parameter needs a representation/identity proof beyond declaration triviality |
 
-Five remaining LowIR fixtures, all `tests/general/`:
+Four remaining LowIR fixtures, all `tests/general/`:
 `300-bit-field-copy-semantics`, `300-direct-object-parameter-passthrough-base-copy`,
-`400-conditional-prvalue-member-temporary-lifetime`,
 `400-direct-init-class-explicit-conversion`,
 and `500-direct-class-call-temporary-destination`.
 
@@ -119,3 +118,18 @@ keys the enclosing function, independent of loops. Existing empty-object
 zeroing remains and is accepted by the course comparison; its supposed need for
 an extra padding-elision proof was an unsupported diagnostic assumption, not an
 exit requirement. No fixtures or comparison rules changed. Performance pending.
+
+Terminal-transfer extension: prove scalar-only user transfer bodies once after
+member demand completes. Unknown calls, declarations, class subobjects and
+unrecognized operations remain conservative. A terminal branch copying a known
+automatic glvalue may consume that no-unwind fact without a redundant handler;
+other callers retain their existing boundaries. Lowering also places storage
+materialization before the branch constructor's guard. Budget: one cached byte
+per examined node and constant per-transfer/source queries, no call-graph search.
+
+Scalar-transfer implementation: **253/257**, all 13 controls, earlier
+**1327/1327**, 63 personal sources and both explicit LowIR property scripts pass.
+Unknown calls remain guarded; nested conditionals retain their private selector.
+The no-unwind proof uses a lazy byte per AST node (only examined nodes do work),
+plus one member flag. It does not establish side-effect-free representation
+copying for the separate parameter-ABI case. Frozen measurement is next.

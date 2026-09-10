@@ -53,12 +53,18 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         }
         return;
     }
+    bool scalar = full_expression.terminal_branch && materialized.call.argument_count == 1 &&
+        sem.scalar_transfer_source(materialized.constructor,sem.call_arguments[materialized.call.arguments]);
+    bool saved_guard = full_expression.suppress_guard;
+    if (scalar) full_expression.suppress_guard = true;
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(materialized.constructor))); call_work.push_back(destination.operand);
     for (unsigned j = 0; j < materialized.call.argument_count; ++j)
         call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j],sem.conversion_fact(materialized.call.conversions+j)).operand);
+    full_expression.suppress_guard = saved_guard;
     Instruction transfer(Opcode::Call,IRType::Void); transfer.copy_elision = materialized.elision_permission;
-    guarded_call(transfer,call_work.data()+begin,call_work.size()-begin);
+    if (scalar) emit(transfer,call_work.data()+begin,call_work.size()-begin);
+    else guarded_call(transfer,call_work.data()+begin,call_work.size()-begin);
     call_work.resize(begin);
 }
 } }

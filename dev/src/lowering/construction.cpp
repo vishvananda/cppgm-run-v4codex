@@ -4,7 +4,7 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
 {
-    guard_expression(init);
+    guard_expression(init,true);
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
         zero_object(sem.entities[cls].type,object);
