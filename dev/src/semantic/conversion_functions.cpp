@@ -14,7 +14,11 @@ Conversion Analyzer::result_conversion(EntityId ctor, const Expression& call, Ty
     Conversion c = conversions[call.conversions];
     UserConversion record = user_conversions[c.materialization];
     record.result = Conversion(); record.result.target = target; record.result.rank = 0;
-    bool retained = members[entities[c.function].member_info].explicit_constructor;
+    // The nonempty trivial case can reuse the final result destination without
+    // observable transfer work. Empty results retain their O0 address boundary;
+    // nontrivial explicit transfers retain the selected constructor's effects.
+    bool retained = members[entities[c.function].member_info].explicit_constructor &&
+        (empty_class(target) || !trivial_transfer(ctor));
     if (retained) {
         // An explicit conversion admitted by direct initialization supplies
         // the selected transfer's source object. Retain that O0 boundary.

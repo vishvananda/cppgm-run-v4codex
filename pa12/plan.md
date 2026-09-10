@@ -140,3 +140,9 @@ that campaign in `storage-helper-performance.json`. The contract permits direct
 `copyobj` here; retain source/destination identity but use the existing trivial
 storage operation. Empty retained transfers still need their selected call.
 Validate and remeasure before accepting the representation cost.
+
+Direct-storage follow-up reduces bytes but still costs about 2.5x at runtime.
+Preserve `storage-direct-performance.json`. Nonempty trivial conversion results
+can legally initialize the final destination directly; use cached triviality
+for that constant-work elision. Empty/nontrivial explicit transfers remain.
+The final campaign also measures observable explicit moves as B-only behavior.
