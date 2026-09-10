@@ -133,3 +133,10 @@ Existing failure removed without regressions or coverage changes. Logs:
 `/tmp/pa12-explicit-stage1.log`, `/tmp/pa12-explicit-prior.log`,
 `/tmp/pa12-explicit-personal1.log`. Performance campaign covers this group and
 `c61ecc10` against the frozen storage-entry binary before handoff.
+
+Performance review: the initial complete campaign found a 2.5x explicit-result
+runtime cost from mandatory helper calls for nonempty trivial targets. Preserve
+that campaign in `storage-helper-performance.json`. The contract permits direct
+`copyobj` here; retain source/destination identity but use the existing trivial
+storage operation. Empty retained transfers still need their selected call.
+Validate and remeasure before accepting the representation cost.

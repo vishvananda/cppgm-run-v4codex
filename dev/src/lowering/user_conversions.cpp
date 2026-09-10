@@ -43,7 +43,9 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
         auto materialized = sem.conversion_objects[record.result.materialization];
         auto call = materialized.call;
         Value source = converted_value(result,sem.conversion_fact(call.conversions));
-        if (!materialized.retained && sem.direct_transfer(materialized.constructor)) {
+        // A nonempty trivial transfer has a direct storage operation. Empty
+        // retained transfers keep the selected address-based call boundary.
+        if (sem.direct_transfer(materialized.constructor) && (!materialized.retained || !sem.empty_class(target))) {
             if (!sem.empty_class(target)) {
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
                 emit(copy,{source.operand,destination.operand});

@@ -27,7 +27,8 @@ Conversion Analyzer::result_conversion(EntityId ctor, const Expression& call, Ty
         auto transfer = user_conversions[c.materialization].result.materialization;
         conversion_objects[transfer].retained = true;
         auto m = entities[ctor].member_info;
-        members[m].retained_root = members[m].complete_entry = true;
+        members[m].retained_root |= empty_class(target);
+        members[m].complete_entry = true;
     }
     return c;
 }
