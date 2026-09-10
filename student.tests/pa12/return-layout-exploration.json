@@ -1,0 +1,54 @@
+{
+  "classification": "exploratory one-off observations; not A/B claims; primary causal experiment preserves code positions",
+  "icache_line_bytes": 64,
+  "cpu_model": "Intel(R) Xeon(R) CPU @ 2.20GHz",
+  "hypervisor": "KVM",
+  "observations": [
+    {
+      "case": "aligned",
+      "source_path": "/tmp/pa12-loop-aligned.cpp",
+      "source_text": "alignas(64) int done;struct Marker{~Marker(){++done;}};\nint compute(int n){Marker a,b;for(int i=0;i<2;++i){if(n&1)return n*2+1;}return n*2+1;}\nint run(int n){done=0;int value=compute(n);if(done!=2)__builtin_abort();return value;}\nint main(){volatile int n=12000000;int sum=0;for(int i=0;i<n;++i)sum=(sum+run(i&1023))&65535;return sum!=0;}",
+      "source_sha256": "d7158dcb1c3dcfd64439d068eba7fe881fe04870ab21f1b016724b3bb5f16f17",
+      "compiler_sha256": "b3946580a85465de1e7ba4e012f6fff369a988c468f924c64c7c6323d5f373d3",
+      "compile_flags": [
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir"
+      ],
+      "native_flags": [
+        "-O0"
+      ],
+      "lowir_sha256": "8dedc5ea04fdc8171851a171367397dad44906b74116ea0cd84ffcd292b6798d",
+      "executable_sha256": "37a560cac2bd1b1956b16891afa4b9b1bc2c97ce610bbe5e959a63eb5727bc8d",
+      "cpu": 0,
+      "wall_s_rounded": 4.97,
+      "user_s_rounded": 4.97,
+      "system_s_rounded": 0,
+      "rss_kib": 256,
+      "checked_exit": 0
+    },
+    {
+      "case": "isolated",
+      "source_path": "/tmp/pa12-loop-isolated.cpp",
+      "source_text": "int counters[17];struct Marker{~Marker(){++counters[16];}};\nint compute(int n){Marker a,b;for(int i=0;i<2;++i){if(n&1)return n*2+1;}return n*2+1;}\nint run(int n){counters[16]=0;int value=compute(n);if(counters[16]!=2)__builtin_abort();return value;}\nint main(){volatile int n=12000000;int sum=0;for(int i=0;i<n;++i)sum=(sum+run(i&1023))&65535;return sum!=0;}",
+      "source_sha256": "d5209e676e0a9cd6556d90d4d060000027ae4b06f6bcdf210eb2b2f0d40926bc",
+      "compiler_sha256": "b3946580a85465de1e7ba4e012f6fff369a988c468f924c64c7c6323d5f373d3",
+      "compile_flags": [
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir"
+      ],
+      "native_flags": [
+        "-O0"
+      ],
+      "lowir_sha256": "36cbcbe6c425343a4cc2949fb5ab283c728dc60fc0f5a923eedd8fadb341119f",
+      "executable_sha256": "7f47c76dc887ed446be707cd8ffef0a505d8412958f11b5f3443c3d311ff46b8",
+      "cpu": 0,
+      "wall_s_rounded": 0.2,
+      "user_s_rounded": 0.2,
+      "system_s_rounded": 0,
+      "rss_kib": 256,
+      "checked_exit": 0
+    }
+  ]
+}

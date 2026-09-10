@@ -66,7 +66,11 @@ def observe(path):
     prior.run(['/usr/bin/time','-f','%M','-o',usage,path])
     return dict(wall_s=(time.perf_counter_ns()-start)/1e9,rss_kib=int(usage.read_text()),checked_exit=0)
 
-for label in (0,1):
+compare_only = len(sys.argv)>3 and sys.argv[3]=='--compare'
+if compare_only:
+    result=json.loads(output.read_text())
+    result['continuation_harness_sha256']=prior.sha(__file__)
+for label in (() if compare_only else (0,1)):
     original=work/f'loop-runtime-{label}'
     separated,record=relocate(original)
     record['compiler']=label;record['warmups']=[observe(original),observe(separated)];rows=[]
@@ -77,3 +81,15 @@ for label in (0,1):
         statistics.mean(x['wall_s'] for x in rows[k:k+4] if x['image']==0) for k in (4,8)]
     result['images'].append(record);output.write_text(json.dumps(result,indent=2)+'\n')
     print('compiler',label,'complete',flush=True)
+
+images=[work/f'loop-runtime-{label}-separated' for label in (0,1)]
+comparison=dict(hashes=[prior.sha(path) for path in images],warmups=[observe(path) for path in images])
+rows=[]
+for label in prior.ORDER:
+    row=observe(images[label]);row['compiler']=label;rows.append(row)
+comparison['observations']=rows
+comparison['paired_b_over_a']=[statistics.mean(x['wall_s'] for x in rows[k:k+4] if x['compiler']==1)/
+    statistics.mean(x['wall_s'] for x in rows[k:k+4] if x['compiler']==0) for k in (4,8)]
+result['separated_compiler_comparison']=comparison
+output.write_text(json.dumps(result,indent=2)+'\n')
+print('separated compiler comparison complete',flush=True)

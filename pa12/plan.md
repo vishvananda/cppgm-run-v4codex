@@ -12,23 +12,19 @@ replay, fake AST, reference delegation or a later native-backend exit gate.
 
 | Owner | Data flow / complexity | Remaining validation |
 | --- | --- | --- |
-| Full-expression consumption | Source/conversion -> final consumer -> branch destination/cleanup; memoized nodes and immutable object prefixes | Terminal conditional member/return branches, direct class-call branch destinations, return cleanup across loop contexts |
-| Initialization and transfer | Selected typed action -> layout/storage operation; once per field/unit | Bit-field constructor instruction order and explicit conversion transfer |
-| ABI representation | Class facts -> independent argument/result convention; cached per class | Nontrivial base-copy parameter needs a representation/identity proof beyond declaration triviality |
+| Storage-unit initialization | Existing transfer-unit facts -> constructor masks/stores; linear per field/unit | `300-bit-field-copy-semantics`; preserve the identical PA11 constructor's course form |
+| Parameter representation | Completed copy actions -> representation/identity proof -> independent argument/result ABI; cached per class | `300-direct-object-parameter-passthrough-base-copy`, including typed pointer constants; preserve observing constructors and nontrivial copy effects |
+| Conversion materialization | Selected explicit conversion and transfer -> destination, helper demand, lifetime; one record per use | `400-direct-init-class-explicit-conversion`; preserve passing conversion-result elision controls |
+| Scalar initialization consumption | Final scalar destination -> branch result store and cleanup; existing conversion/control edges | `500-direct-class-call-temporary-destination`; preserve both reachable branches and enclosing temporary lifetimes |
 
-Four remaining LowIR fixtures, all `tests/general/`:
-`300-bit-field-copy-semantics`, `300-direct-object-parameter-passthrough-base-copy`,
-`400-direct-init-class-explicit-conversion`,
-and `500-direct-class-call-temporary-destination`.
-
-Completed owners include target-typed lists/defaults, delegation/unions, class
-value boundaries, references, allocation/aggregates, region/destructor-boundary
-separation, and nonvirtual member-pointer formation/application with canonical
-indirect signatures. All **13/13** survivor controls pass.
-Zero-initialization now follows cached complete canonical type/layout edges:
-typed members, skipped references, padding, ABI null values and flattened array
-loops. Late-defaulted constructors retain their user-provided initialization
-rule. Semantics demands plans; lowering never reconstructs the decision.
+Completed owners include lists/defaults, delegation/unions, value boundaries,
+references, allocation/aggregates, region/destructor-boundary separation,
+member-pointer values/signatures, typed zero plans and terminal class returns.
+Return cleanup now belongs to its function even across loops. Terminal branches
+finish only their private suffix; nested conditionals feeding an enclosing
+transfer/call retain their selector. All **13/13** survivor controls pass.
+The scalar transfer proof rejects calls, class subobjects and unknown operations;
+it does not strengthen a language exception specification or public ABI.
 
 ## Performance evidence and budgets
 
@@ -36,32 +32,34 @@ rule. Semantics demands plans; lowering never reconstructs the decision.
 [value](value-performance.md), [conversion/reference](conversion-performance.md),
 [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md),
 [boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
-[destructor](destruction-performance.md) and
-[member-pointer](member-pointer-performance.md) and
-[zero-initialization](zero-performance.md) evidence retain frozen hashes,
-inputs, flags, A/A+ABBA observations, compiler latency/RSS and runtime/text.
-Historical misses/outliers remain. Required PA12 representation costs do not
-create a positive-runtime gate; avoidable costs were removed and remeasured.
+[destructor](destruction-performance.md), [member-pointer](member-pointer-performance.md),
+[zero](zero-performance.md) and [consumption](consumption-performance.md) retain
+frozen hashes, inputs, flags, A/A+ABBA data, compiler latency/RSS and runtime/text.
+Historical misses and outliers remain. Required representation costs and proven
+later-backend constraints do not create positive-runtime PA12 exit gates.
 
-- Local array expansion stays capped at eight total elements. Zero plans cache
-  each type once; flattening reuses child plans. Padding expands at most eight
-  stores, then uses one bulk operation. Nonzero null arrays use fixed-size loops.
-- Full-expression classifiers cache at most three bytes per AST node. Guarded
-  scalar calls retain at most one value slot; cleanup suffixes use prefix and
-  terminal identities. Scope-bound references do not add temporary guards.
-- Destructor suffix duplication is capped at eight actions (28 duplicated tail
-  actions); larger classes share one block per suffix. Final destructor runtime
-  improves about 20–30%; the eight-field form costs 9.4% compiler time and 176
-  native bytes. Required branch/condition costs and all outliers remain disclosed.
-- Member-pointer formation/application is constant work, with one 16-byte pair
-  slot/copy per materialized value/boundary and a signature per canonical type.
-  Common large compiler median rises 1.71%; assignment rises 1.37%, peak RSS 5.9%.
-  Compiler text grows 8960 bytes (.94%); common native bytes are identical.
-  New function/data-member paths scale linearly; no runtime gain is claimed.
-- Zero plans add .67% compiler text. Common native bytes are identical; required
-  typed stores cost 3.37% compiler median time, 3.84% peak RSS and 3.92% runtime
-  on the boundary workload. Null-array IR is identical in size at 9/1024 elements.
-  The frozen campaign completed; required representation costs create no new gate.
+- Local array expansion remains capped at eight total elements. Zero plans cache
+  each type once, reuse child extents, expand at most eight padding stores, and
+  use bulk operations or fixed-size loops beyond those bounds.
+- Full-expression classifiers use at most three bytes per AST node. Scalar
+  transfer proofs add a lazy byte per AST node, one member flag, and one visit
+  per examined node. No call-graph search, source replay or global retry is added.
+- Destructor suffixes inline at most eight actions (28 duplicated tail actions),
+  then share one block per suffix. Member-pointer pair storage/copy is bounded
+  at 16 bytes per value/boundary; signatures use canonical types.
+- Consumption adds 1728 compiler text bytes (.18%). Common native bytes remain
+  identical; large compiler median cost rises 1.69% within disclosed VM noise.
+  Terminal runtime pairs improve about 1%, with 152 fewer native payload bytes;
+  unknown-call runtime has no repeatable winning direction. Work scales linearly.
+- The original loop image regressed about 27x. Exact native data relocation,
+  preserving instruction positions/opcodes, isolates a writable counter from a
+  hot executable cache line and changes B from 4.85777 to .19147 seconds. Both
+  raw and relocated observations remain. This is a demonstrated supplied-backend
+  layout constraint owned by PA24; no compiler padding workaround was introduced.
+  The relocated A/B follow-up is noisy and establishes no loop speed benefit.
+- Empty-object zeroing remains and passes the course comparison. The earlier
+  assumed need to eliminate that padding was a diagnostic assumption, not a
+  mandated gate; no reference, comparison rule or coverage changed.
 
 ## Handoff ledger
 
@@ -78,58 +76,31 @@ create a positive-runtime gate; avoidable costs were removed and remeasured.
 | `951799ed`: destructor effects, retained boundaries, bounded subobject suffixes | 248/257 |
 | `ce2d8363`: member pointers and scalar assignment widths | 249/257 |
 | `b5645333`: zero-initialization actions and null representation | 250/257 |
+| `260e0b35`: terminal return branches and function-owned return cleanup | 252/257 |
+| `14dac876`: scalar transfer proof and materialization guards | 253/257 |
 
 `3da4de09` corrected four bit-field reference retypes under the authorized
 exception; [proof and bundle revision](reference-corrections.md) remain.
 No fixture, reference or comparison rule changed in the latest groups.
 
-Latest entry: clean `4cefbabe`, freshly checked **248/257**. Now **250/257**:
-**two existing failures removed, none added**, unchanged coverage; **189 stage-base
-failures removed**. **62** personal source checks and the explicit late-defaulted LowIR property pass. Earlier **1327/1327**
-passes after the final refinement.
-File audit passes with three existing header advisories. Required stage pass is
-not claimed. Root reports run serially.
-Logs: `/tmp/pa12-zero-stage3.log` (exit 2),
-`/tmp/pa12-zero-final-prior.log` (exit 0),
-`/tmp/pa12-zero-final-personal.log` (exit 0). The extra property runs via
-`python3 student.tests/pa12/check_zero_initialization.py`. Both frozen performance campaigns
-completed; `8cfcc3fe` records the member-pointer measurements.
+Latest entry: clean `b1e936e8`, freshly checked **250/257**; prior goal turn made
+verified progress. Final **253/257**: **three existing failures removed, none
+added**, unchanged coverage; **192 stage-base failures removed**. Earlier
+**1327/1327**, all **63** personal sources, both explicit LowIR property scripts,
+file audit (three existing header advisories) and diff checks pass. Root reports
+ran serially. Required stage pass is not claimed.
 
-Boundary: zero plans establish initialization values and representation, not
-whether later code can observe identity or padding. Omitting empty return
-storage or changing a nontrivial parameter ABI needs a separate body/transfer
-proof. Terminal conditional cleanup needs a final-consumer fact that separates
-completed branch destinations from temporaries still used by an enclosing call;
-unconditional branch cleanup would regress passing lifetime controls.
+Logs: `/tmp/pa12-consumption-final-stage.log` (exit 2),
+`/tmp/pa12-consumption-final-prior.log` (exit 0),
+`/tmp/pa12-consumption-final-personal.log` (exit 0). Explicit properties:
+`python3 student.tests/pa12/check_terminal_returns.py` and
+`python3 student.tests/pa12/check_zero_initialization.py`.
+Both frozen performance campaigns completed; `3789b6a3` preserves the initial
+native layout experiment, with the continuation recorded in its JSON.
 
-Consumption entry: clean `b1e936e8`, fresh **250/257** with all 13 controls.
-Prior goal turn made verified progress. Extend typed return ownership into a
-terminal-consumer flag for branch destinations; branch-local temporary suffixes
-can finish before merging, while enclosing-call arguments retain their prefixes.
-Owner/data flow: ValueReturn -> destination consumption -> conditional branch
-cleanup. Work follows existing conversion/control edges without another AST.
-Validate terminal members, nested argument conditionals, throwing constructors,
-scalar/object returns and shared return cleanup across loops together.
-
-Consumption implementation: **252/257**, two entry failures removed, none added;
-earlier **1327/1327**, all 13 controls and 63 personal checks pass. Terminal
-class branches destroy only their private suffix before merging. Return cleanup
-keys the enclosing function, independent of loops. Existing empty-object
-zeroing remains and is accepted by the course comparison; its supposed need for
-an extra padding-elision proof was an unsupported diagnostic assumption, not an
-exit requirement. No fixtures or comparison rules changed. Performance pending.
-
-Terminal-transfer extension: prove scalar-only user transfer bodies once after
-member demand completes. Unknown calls, declarations, class subobjects and
-unrecognized operations remain conservative. A terminal branch copying a known
-automatic glvalue may consume that no-unwind fact without a redundant handler;
-other callers retain their existing boundaries. Lowering also places storage
-materialization before the branch constructor's guard. Budget: one cached byte
-per examined node and constant per-transfer/source queries, no call-graph search.
-
-Scalar-transfer implementation: **253/257**, all 13 controls, earlier
-**1327/1327**, 63 personal sources and both explicit LowIR property scripts pass.
-Unknown calls remain guarded; nested conditionals retain their private selector.
-The no-unwind proof uses a lazy byte per AST node (only examined nodes do work),
-plus one member flag. It does not establish side-effect-free representation
-copying for the separate parameter-ABI case. Frozen measurement is next.
+Boundary: the return destination and no-unwind owners are complete. A scalar
+initializer needs its final store before temporary cleanup, so it cannot inherit
+the class-return flag blindly. Nonthrowing copy bodies can still have observable
+copy effects; the remaining ABI case needs a distinct representation proof.
+Storage-unit emission and explicit-conversion materialization likewise need
+separate typed actions rather than further changes to return cleanup flags.

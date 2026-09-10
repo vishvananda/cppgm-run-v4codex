@@ -260,5 +260,102 @@
       ]
     }
   ],
-  "pmu": "machine_clears.smc is unavailable; native address relocation supplies the causal control"
+  "pmu": "machine_clears.smc is unavailable; native address relocation supplies the causal control",
+  "continuation_harness_sha256": "eef1f9ea8017334d9a4c9c66abf9636c1b55b12047b32d2586a91ab06abb2e91",
+  "separated_compiler_comparison": {
+    "hashes": [
+      "efc4212a797e25d3f2b6219272b36b4afef851a8c6b48c611f93217af42715b3",
+      "938729a55f4a4d2afb35c84b0dd94422f59640908e29cc4be5b591ae55632809"
+    ],
+    "warmups": [
+      {
+        "wall_s": 0.345939559,
+        "rss_kib": 256,
+        "checked_exit": 0
+      },
+      {
+        "wall_s": 0.351767584,
+        "rss_kib": 256,
+        "checked_exit": 0
+      }
+    ],
+    "observations": [
+      {
+        "wall_s": 0.350937749,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.353424574,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.353351339,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.364446394,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.355998917,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.377799529,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 1
+      },
+      {
+        "wall_s": 0.400704658,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 1
+      },
+      {
+        "wall_s": 0.343445362,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.35329258,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      },
+      {
+        "wall_s": 0.353833662,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 1
+      },
+      {
+        "wall_s": 0.346753045,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 1
+      },
+      {
+        "wall_s": 0.382072095,
+        "rss_kib": 256,
+        "checked_exit": 0,
+        "compiler": 0
+      }
+    ],
+    "paired_b_over_a": [
+      1.1130324607315862,
+      0.952706501709509
+    ]
+  }
 }
