@@ -161,7 +161,12 @@ Value Procedural::converted_value(Value v, const semantic::Conversion& c)
         v.type = c.target; return v;
     }
     if (c.reference && !c.temporary && v.address) return address(v);
-    return convert(v, c.target,c.fold_widen,c.preserve_widen);
+    Value result = convert(v,c.target,c.fold_widen,c.preserve_widen);
+    if (c.kind == semantic::Conversion::Kind::Explicit && sem.types[c.target].kind == TypeKind::Pointer &&
+        result.operand.kind == Operand::Integer && result.operand.data.integer) {
+        result = emit(Opcode::Copy,IRType::Ptr,{result.operand}); result.type = c.target;
+    }
+    return result;
 }
 Value Procedural::incoming(NodeId n)
 {

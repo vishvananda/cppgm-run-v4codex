@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**255/257**).
+Target: PA12 full-stage. Phase: implement; incomplete (**256/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -114,3 +114,22 @@ Scalar initialization must perform its final store before temporary cleanup and
 cannot inherit class-return consumption blindly. Its reference's inactive arm
 also needs a reachability review; changing the condition is not proof that the
 original reference is wrong. Continue these two owners without weakening rules.
+
+Parameter entry: clean `eb0a4251`, fresh **255/257**; previous turn made
+verified progress. Own a cached representation query per completed class and
+separate semantic body demand from emission. Query only an in-class empty copy
+body whose sole full-storage base can transfer trivially; consume its checked
+actions and source identity. An incremental function cursor discovers queries
+without global retries. Validate declaration-only TUs, copy effects/identity,
+parameter slot transport and typed integer-to-pointer constants together.
+
+Parameter group validation: **256/257**, all 13 controls, **66** personal
+sources, all three explicit property scripts, earlier **1327/1327**, file audit
+and diff checks pass. One existing failure removed, none added. Proof rejects
+comma-expression escapes and nontrivial copy effects; declaration-only and
+linked multi-TU checks agree. Query-only bodies do not receive unrelated scalar
+transfer proofs. Frozen A is `/tmp/pa12-parameter-base-cppgm`; performance remains
+pending before handoff. Query budgets are one class state/copy ID, one member
+flag, incremental entity traversal and linear member/source inspection; 6 KiB
+compiler text and 5% common compiler median are diagnostic review budgets.
+Continue the scalar-initialization owner before choosing a handoff boundary.

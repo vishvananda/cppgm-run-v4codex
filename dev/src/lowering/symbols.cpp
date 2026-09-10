@@ -232,6 +232,7 @@ void Procedural::run()
         }
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && sem.member_fact(e).in_class_body && !sem.member_demanded(e)) continue;
         if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);

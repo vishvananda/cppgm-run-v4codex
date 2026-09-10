@@ -78,6 +78,8 @@ struct ClassFacts {
     unsigned char trivial_destructor_state = 0;
     unsigned char value_abi = 0;
     unsigned char parameter_abi = 0;
+    unsigned char parameter_state = 0; // Unqueried, rejected, body pending, proven.
+    EntityId parameter_transfer = 0;
     bool user_constructor = false, user_destructor = false;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
@@ -138,7 +140,7 @@ struct MemberFacts {
     EntityId delegated_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
     DemandState demand = DemandState::Dormant;
-    bool synthetic = false, referenced = false;
+    bool synthetic = false, referenced = false, in_class_body = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
     bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false, array_entry = false;
     bool complete_entry = false, retained_root = false;

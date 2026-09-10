@@ -16,7 +16,10 @@ void Analyzer::consume(NodeId n)
 }
 void Analyzer::finish()
 {
-    while (demand_cursor < demand_queue.size()) {
+    EntityId boundary_cursor = 1;
+    for (;;) {
+        if (calls) schedule_parameter_bodies(boundary_cursor);
+        if (demand_cursor == demand_queue.size()) break;
         EntityId e = demand_queue[demand_cursor++];
         std::uint32_t m = entities[e].member_info;
         MemberFacts f = members[m];
@@ -232,7 +235,10 @@ void Analyzer::schedule_body(const Body& body)
         std::uint32_t m = entities[body.entity].member_info;
         if (members[m].source) throw std::runtime_error("duplicate member definition");
         members[m].body = body.node; members[m].declarator = body.declarator; members[m].source = body.source;
-        if (class_depth) { entities[body.entity].inline_function = true; return; }
+        if (class_depth) {
+            members[m].in_class_body = true;
+            entities[body.entity].inline_function = true; return;
+        }
         if (!entities[body.entity].inline_function && (members[m].constructor || members[m].destructor))
             members[m].base_entry = true;
     }

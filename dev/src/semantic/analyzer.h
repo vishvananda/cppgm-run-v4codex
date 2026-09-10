@@ -110,6 +110,9 @@ private:
     std::vector<DeleteExpression> deletions = std::vector<DeleteExpression>(1);
     void prepare_value_boundary(TypeId t);
     void prepare_function_boundaries();
+    void schedule_parameter_bodies(EntityId& cursor);
+    void query_parameter_representation(TypeId type);
+    void finish_parameter_representation(TypeId type);
     void class_result(NodeId n, Expression& result, ScopeId s);
     bool record_class_initialization(NodeId n, TypeId target, NodeId source, const Conversion* selected = 0);
     void record_class_return(NodeId n, ScopeId s);
@@ -156,6 +159,7 @@ private:
     bool string_initialization(NodeId n, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
     std::uint64_t unit_transfer_fields = 0;
+    std::uint64_t parameter_queries = 0, parameter_query_work = 0;
     Index field_index;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
@@ -276,6 +280,7 @@ private:
     EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
     void demand_specialization(EntityId e);
     void demand_member(EntityId e);
+    void require_member_body(EntityId e);
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
     EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true, bool probe = false);

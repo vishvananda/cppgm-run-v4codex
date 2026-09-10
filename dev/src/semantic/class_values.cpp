@@ -41,7 +41,10 @@ void Analyzer::prepare_function_boundaries()
         if (entities[e].kind != EntityKind::Function || entities[e].template_info) continue;
         Type f = types[entities[e].type];
         prepare_value_boundary(f.child);
-        for (unsigned j = 0; j < f.count; ++j) prepare_value_boundary(types.parameters[f.offset+j]);
+        for (unsigned j = 0; j < f.count; ++j) {
+            TypeId parameter = types.parameters[f.offset+j];
+            prepare_value_boundary(parameter); finish_parameter_representation(parameter);
+        }
     }
 }
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)

@@ -33,7 +33,7 @@ bool Analyzer::scalar_transfer_node(NodeId n)
 }
 void Analyzer::prepare_scalar_transfer(EntityId e)
 {
-    if (!calls || !transfer_member(e) || !constructor_member(e)) return;
+    if (!calls || !member_demanded(e) || !transfer_member(e) || !constructor_member(e)) return;
     auto m = entities[e].member_info;
     if (members[m].synthetic || !entities[e].body || members[m].delegated_constructor) return;
     bool safe = scalar_transfer_node(entities[e].body);
