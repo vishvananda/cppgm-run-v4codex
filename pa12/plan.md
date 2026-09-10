@@ -12,14 +12,13 @@ replay, fake AST, reference delegation or a later native-backend exit gate.
 
 | Owner | Data flow / complexity | Remaining validation |
 | --- | --- | --- |
-| Storage-unit initialization | Existing transfer-unit facts -> constructor masks/stores; linear per field/unit | `300-bit-field-copy-semantics`; preserve the identical PA11 constructor's course form |
-| Parameter representation | Completed copy actions -> representation/identity proof -> independent argument/result ABI; cached per class | `300-direct-object-parameter-passthrough-base-copy`, including typed pointer constants; preserve observing constructors and nontrivial copy effects |
-| Conversion materialization | Selected explicit conversion and transfer -> destination, helper demand, lifetime; one record per use | `400-direct-init-class-explicit-conversion`; preserve passing conversion-result elision controls |
-| Scalar initialization consumption | Final scalar destination -> branch result store and cleanup; existing conversion/control edges | `500-direct-class-call-temporary-destination`; preserve both reachable branches and enclosing temporary lifetimes |
+| Parameter representation | Completed copy actions -> identity-preserving transport proof -> independent argument/result ABI; cache per class with a stable body-query dependency | `300-direct-object-parameter-passthrough-base-copy`; typed nonzero pointer constants; observing constructors and cross-TU declarations |
+| Scalar initialization consumption | Final scalar destination -> branch result store and cleanup; existing conversion/control edges | `500-direct-class-call-temporary-destination`; both reachable branches and enclosing temporary lifetimes |
 
 Completed owners include lists/defaults, delegation/unions, value boundaries,
 references, allocation/aggregates, region/destructor-boundary separation,
-member-pointer values/signatures, typed zero plans and terminal class returns.
+member-pointer values/signatures, typed zero plans, terminal class returns,
+constructor storage units and explicit conversion-result boundaries.
 Return cleanup now belongs to its function even across loops. Terminal branches
 finish only their private suffix; nested conditionals feeding an enclosing
 transfer/call retain their selector. All **13/13** survivor controls pass.
@@ -33,7 +32,8 @@ it does not strengthen a language exception specification or public ABI.
 [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md),
 [boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
 [destructor](destruction-performance.md), [member-pointer](member-pointer-performance.md),
-[zero](zero-performance.md) and [consumption](consumption-performance.md) retain
+[zero](zero-performance.md), [consumption](consumption-performance.md) and
+[storage/conversion](storage-performance.md) retain
 frozen hashes, inputs, flags, A/A+ABBA data, compiler latency/RSS and runtime/text.
 Historical misses and outliers remain. Required representation costs and proven
 later-backend constraints do not create positive-runtime PA12 exit gates.
@@ -47,19 +47,23 @@ later-backend constraints do not create positive-runtime PA12 exit gates.
 - Destructor suffixes inline at most eight actions (28 duplicated tail actions),
   then share one block per suffix. Member-pointer pair storage/copy is bounded
   at 16 bytes per value/boundary; signatures use canonical types.
-- Consumption adds 1728 compiler text bytes (.18%). Common native bytes remain
-  identical; large compiler median cost rises 1.69% within disclosed VM noise.
-  Terminal runtime pairs improve about 1%, with 152 fewer native payload bytes;
-  unknown-call runtime has no repeatable winning direction. Work scales linearly.
-- The original loop image regressed about 27x. Exact native data relocation,
-  preserving instruction positions/opcodes, isolates a writable counter from a
-  hot executable cache line and changes B from 4.85777 to .19147 seconds. Both
-  raw and relocated observations remain. This is a demonstrated supplied-backend
-  layout constraint owned by PA24; no compiler padding workaround was introduced.
-  The relocated A/B follow-up is noisy and establishes no loop speed benefit.
-- Empty-object zeroing remains and passes the course comparison. The earlier
-  assumed need to eliminate that padding was a diagnostic assumption, not a
-  mandated gate; no reference, comparison rule or coverage changed.
+- Consumption adds 1728 compiler text bytes (.18%). Its original loop runtime
+  regression is isolated to the supplied backend's code/data cache-line sharing:
+  native data relocation preserves instruction positions and removes that cost.
+  Both raw and relocated observations remain; placement belongs to PA24.
+- Storage/conversion budgets: constant queries per field/use, no extra layout
+  scan, two sparse flags, at most one added conversion-object record per retained
+  use. Below 4 KiB compiler text growth and 5% common median compile cost are
+  diagnostic review budgets, not added course gates. Preserve all observations.
+- Two intermediate conversion policies cost about 2.5x at runtime. Direct storage
+  reduced bytes but not runtime. Cached trivial-result elision removes that cost:
+  a paired helper/elision campaign measures .25780 -> .10575 seconds and
+  311 -> 277 native payload bytes. Empty/nontrivial explicit boundaries remain.
+- Final storage/conversion text growth is 1920 bytes (.20%); the large common
+  compiler median rises .12%, with unchanged common/trivial-explicit native bytes.
+  Unit runtime rises .57%; all observations and intermediate costs remain.
+- Empty-object zeroing passes the course comparison. The earlier assumed need
+  to remove its padding was a diagnostic assumption, not a mandated gate.
 
 ## Handoff ledger
 
@@ -78,78 +82,35 @@ later-backend constraints do not create positive-runtime PA12 exit gates.
 | `b5645333`: zero-initialization actions and null representation | 250/257 |
 | `260e0b35`: terminal return branches and function-owned return cleanup | 252/257 |
 | `14dac876`: scalar transfer proof and materialization guards | 253/257 |
+| `c61ecc10`: constructor storage-unit ordering | 254/257 |
+| `8a5a370d`: explicit conversion-result boundaries | 255/257 |
+| `b699f183`, `1eae0974`, `2d693f2b`: measured policy correction and shared field facts | 255/257 |
 
 `3da4de09` corrected four bit-field reference retypes under the authorized
 exception; [proof and bundle revision](reference-corrections.md) remain.
-No fixture, reference or comparison rule changed in the latest groups.
+No fixture, reference, comparison rule or coverage changed in the latest groups.
 
-Latest entry: clean `b1e936e8`, freshly checked **250/257**; prior goal turn made
-verified progress. Final **253/257**: **three existing failures removed, none
-added**, unchanged coverage; **192 stage-base failures removed**. Earlier
-**1327/1327**, all **63** personal sources, both explicit LowIR property scripts,
-file audit (three existing header advisories) and diff checks pass. Root reports
-ran serially. Required stage pass is not claimed.
+Latest entry: clean `9e442405`, freshly checked **253/257**; prior turn made
+verified progress. Final **255/257**: **two existing failures removed, none
+added**; **194 stage-base failures removed**. Earlier **1327/1327**, all **65**
+personal sources, both explicit LowIR property scripts, file audit (three existing
+header advisories) and diff checks pass. Root reports ran serially. Stage pass
+is not claimed.
 
-Logs: `/tmp/pa12-consumption-final-stage.log` (exit 2),
-`/tmp/pa12-consumption-final-prior.log` (exit 0),
-`/tmp/pa12-consumption-final-personal.log` (exit 0). Explicit properties:
+Logs: `/tmp/pa12-storage-facts-stage.log` (exit 2),
+`/tmp/pa12-storage-facts-prior.log` (exit 0),
+`/tmp/pa12-storage-facts-personal.log` (exit 0). Explicit properties:
 `python3 student.tests/pa12/check_terminal_returns.py` and
 `python3 student.tests/pa12/check_zero_initialization.py`.
-Both frozen performance campaigns completed; `3789b6a3` preserves the initial
-native layout experiment, with the continuation recorded in its JSON.
+Performance campaigns preserve partial calibration and every intermediate policy;
+final evidence and reproduction commands are in the linked storage report.
 
-Boundary: the return destination and no-unwind owners are complete. A scalar
-initializer needs its final store before temporary cleanup, so it cannot inherit
-the class-return flag blindly. Nonthrowing copy bodies can still have observable
-copy effects; the remaining ABI case needs a distinct representation proof.
-Storage-unit emission and explicit-conversion materialization likewise need
-separate typed actions rather than further changes to return cleanup flags.
-
-Storage entry: clean `9e442405`, fresh **253/257** and all 13 controls. Prior
-turn made verified progress. Reuse demanded allocation-unit transfer facts for
-constructor unit initialization: evaluate the initializer, read retained bits,
-pack the new value, then form the final store address. Owner/data flow is
-completed field/unit metadata -> typed constructor store action; constant work
-per field, no extra layout scan. Preserve the PA11 path without transfer demand.
-Validate shared/split units, volatile fallback, initializer side effects and
-copy/move/assignment together, then extend conversion materialization.
-
-Storage validation: **254/257**, all 13 controls, **64** personal sources and
-both explicit property scripts pass; earlier **1327/1327** and file audit pass.
-One existing failure removed, none added. Logs: `/tmp/pa12-storage-stage2.log`,
-`/tmp/pa12-storage-prior.log`, `/tmp/pa12-storage-personal2.log`. Frozen A is
-`/tmp/pa12-storage-base-cppgm`; performance measurement remains pending before
-handoff. Continue with explicit conversion-result materialization.
-
-Conversion continuation: selected explicit conversion -> retained second
-construction in `UserConversion`/`ConversionObject` -> source/destination
-identities, helper demand and ordinary cleanup. Constant records per use;
-no resolution in lowering. Validate explicit copy/move effects and lifetime,
-empty targets, implicit elision controls and rejection/access behavior.
-
-Explicit conversion validation: **255/257**, all 13 controls, **65** personal
-sources, both properties, earlier **1327/1327**, file audit and diff checks pass.
-Existing failure removed without regressions or coverage changes. Logs:
-`/tmp/pa12-explicit-stage1.log`, `/tmp/pa12-explicit-prior.log`,
-`/tmp/pa12-explicit-personal1.log`. Performance campaign covers this group and
-`c61ecc10` against the frozen storage-entry binary before handoff.
-
-Performance review: the initial complete campaign found a 2.5x explicit-result
-runtime cost from mandatory helper calls for nonempty trivial targets. Preserve
-that campaign in `storage-helper-performance.json`. The contract permits direct
-`copyobj` here; retain source/destination identity but use the existing trivial
-storage operation. Empty retained transfers still need their selected call.
-Validate and remeasure before accepting the representation cost.
-
-Direct-storage follow-up reduces bytes but still costs about 2.5x at runtime.
-Preserve `storage-direct-performance.json`. Nonempty trivial conversion results
-can legally initialize the final destination directly; use cached triviality
-for that constant-work elision. Empty/nontrivial explicit transfers remain.
-The final campaign also measures observable explicit moves as B-only behavior.
-
-Final review shares the constructor field descriptor between unit dispatch and
-ordinary bit-field dispatch, avoiding a duplicate metadata lookup per action.
-Budgets for these owners: at most one additional conversion-object record per
-retained use, two sparse flags, constant queries per use/field, no extra layout
-scan; compiler text growth below 4 KiB and common compiler median cost below 5%
-are diagnostic review budgets, not new course gates. Array expansion remains 8.
+Boundary: allocation-unit initialization and explicit result materialization are
+complete. The ABI survivor needs an identity-preserving representation proof;
+a nonthrowing body alone is insufficient. Inline copy-body facts must also be
+available consistently in a TU that merely declares a by-value function, so the
+next owner needs a body-query/emission-demand separation, not a lowering flag.
+Scalar initialization must perform its final store before temporary cleanup and
+cannot inherit class-return consumption blindly. Its reference's inactive arm
+also needs a reachability review; changing the condition is not proof that the
+original reference is wrong. Continue these two owners without weakening rules.
