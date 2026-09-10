@@ -31,5 +31,16 @@ int main() {
         if (live != 1 || object.member != 13) return 9;
     }
     if (live) return 10;
+    {
+        const int& member = 0[Value(1).array];
+        if (live != 1) return 11;
+    }
+    if (live) return 12;
+    {
+        int Value::*pointer = &Value::member;
+        const int& member = Value(17).*pointer;
+        if (live != 1 || member != 17) return 13;
+    }
+    if (live) return 14;
     return 0;
 }

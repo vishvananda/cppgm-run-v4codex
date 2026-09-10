@@ -23,7 +23,11 @@ NodeId Analyzer::reference_operand(NodeId n) const
         auto type = types[entities[x.entity].type].kind;
         if (type != TypeKind::LRef && type != TypeKind::RRef) return ast[n].first;
     }
-    if (kind == Kind::Subscript && types[expressions[ast[n].first].type].kind == TypeKind::Array) return ast[n].first;
+    if (kind == Kind::Subscript) {
+        for (NodeId operand = ast[n].first; operand; operand = ast[operand].next)
+            if (types[expressions[operand].type].kind == TypeKind::Array) return operand;
+    }
+    if (kind == Kind::Binary && ast[n].op == OP_DOTSTAR) return ast[n].first;
     if (kind == Kind::Binary && ast[n].op == OP_COMMA) return ast[ast[n].first].next;
     return 0;
 }

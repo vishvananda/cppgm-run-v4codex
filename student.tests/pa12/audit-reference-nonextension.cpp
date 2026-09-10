@@ -18,5 +18,7 @@ int main() {
     const int& converted = Value();
     if (live || converted != 23) return 4;
     const int& result = call(Value());
-    return live || result != 23;
+    if (live || result != 23) return 5;
+    const int& reversed = 0[Value().pointer];
+    return live || reversed != 23;
 }
