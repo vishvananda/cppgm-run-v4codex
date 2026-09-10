@@ -1,0 +1,264 @@
+{
+  "protocol": "per compiler: warmups, four A/A observations and two ABBA blocks; original vs data relocated by 64 bytes",
+  "cpu": 0,
+  "harness_sha256": "a0ee39fa4495d6ecb0b4965e87cd16b14ba1cb51089e6d01fc332ef04463c144",
+  "images": [
+    {
+      "original_sha256": "570762d536d92bfa0c7fe292cbabaa5763208ccdc6c44959f03f91d0cab67db9",
+      "relocated_sha256": "efc4212a797e25d3f2b6219272b36b4afef851a8c6b48c611f93217af42715b3",
+      "lowir_sha256": "3ff24d8243ec5328275084fbd09c32c5f9a19bac109f56028a30c4147f6bc6de",
+      "code_entry": "0x400078",
+      "code_bytes": 460,
+      "original_payload_bytes": 464,
+      "relocated_payload_bytes": 528,
+      "original_counter": "0x400244",
+      "relocated_counter": "0x400284",
+      "original_counter_line": "0x400240",
+      "relocated_counter_line": "0x400280",
+      "unchanged_instruction_positions": true,
+      "unchanged_instruction_bytes_except_data_addresses": true,
+      "fixups": [
+        {
+          "file_offset": 147,
+          "bytes": 4,
+          "kind": "rip-relative"
+        },
+        {
+          "file_offset": 164,
+          "bytes": 4,
+          "kind": "rip-relative"
+        },
+        {
+          "file_offset": 359,
+          "bytes": 8,
+          "kind": "absolute"
+        },
+        {
+          "file_offset": 391,
+          "bytes": 8,
+          "kind": "absolute"
+        }
+      ],
+      "compiler": 0,
+      "warmups": [
+        {
+          "wall_s": 0.18833244,
+          "rss_kib": 256,
+          "checked_exit": 0
+        },
+        {
+          "wall_s": 0.187892779,
+          "rss_kib": 256,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "wall_s": 0.189606947,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.188466416,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.189054529,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.190078435,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.188572681,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.189002457,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.186597068,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.187859323,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.187946961,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.18764835,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.18895042,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.188893565,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        }
+      ],
+      "paired_relocated_over_original": [
+        0.9977885010011,
+        0.9993584660265545
+      ]
+    },
+    {
+      "original_sha256": "37a560cac2bd1b1956b16891afa4b9b1bc2c97ce610bbe5e959a63eb5727bc8d",
+      "relocated_sha256": "938729a55f4a4d2afb35c84b0dd94422f59640908e29cc4be5b591ae55632809",
+      "lowir_sha256": "8dedc5ea04fdc8171851a171367397dad44906b74116ea0cd84ffcd292b6798d",
+      "code_entry": "0x400078",
+      "code_bytes": 452,
+      "original_payload_bytes": 456,
+      "relocated_payload_bytes": 520,
+      "original_counter": "0x40023c",
+      "relocated_counter": "0x40027c",
+      "original_counter_line": "0x400200",
+      "relocated_counter_line": "0x400240",
+      "unchanged_instruction_positions": true,
+      "unchanged_instruction_bytes_except_data_addresses": true,
+      "fixups": [
+        {
+          "file_offset": 147,
+          "bytes": 4,
+          "kind": "rip-relative"
+        },
+        {
+          "file_offset": 164,
+          "bytes": 4,
+          "kind": "rip-relative"
+        },
+        {
+          "file_offset": 351,
+          "bytes": 8,
+          "kind": "absolute"
+        },
+        {
+          "file_offset": 383,
+          "bytes": 8,
+          "kind": "absolute"
+        }
+      ],
+      "compiler": 1,
+      "warmups": [
+        {
+          "wall_s": 5.03427016,
+          "rss_kib": 256,
+          "checked_exit": 0
+        },
+        {
+          "wall_s": 0.192242949,
+          "rss_kib": 256,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "wall_s": 5.127010847,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 5.01172222,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 4.905184146,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 4.658134319,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 4.468477136,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.189922135,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.191513804,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 5.004784913,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 4.810351432,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        },
+        {
+          "wall_s": 0.191416949,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 0.191742205,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 1
+        },
+        {
+          "wall_s": 4.733705001,
+          "rss_kib": 256,
+          "checked_exit": 0,
+          "image": 0
+        }
+      ],
+      "paired_relocated_over_original": [
+        0.04026447669525457,
+        0.040146362994582685
+      ]
+    }
+  ],
+  "pmu": "machine_clears.smc is unavailable; native address relocation supplies the causal control"
+}
