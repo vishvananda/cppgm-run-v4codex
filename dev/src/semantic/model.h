@@ -229,7 +229,7 @@ struct Conversion {
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
-struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false; };
+struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false, retained = false; };
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     EntityId constructor = 0; Expression call;

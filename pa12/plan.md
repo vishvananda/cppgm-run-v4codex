@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**254/257**).
+Target: PA12 full-stage. Phase: implement; incomplete (**255/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -120,3 +120,16 @@ One existing failure removed, none added. Logs: `/tmp/pa12-storage-stage2.log`,
 `/tmp/pa12-storage-prior.log`, `/tmp/pa12-storage-personal2.log`. Frozen A is
 `/tmp/pa12-storage-base-cppgm`; performance measurement remains pending before
 handoff. Continue with explicit conversion-result materialization.
+
+Conversion continuation: selected explicit conversion -> retained second
+construction in `UserConversion`/`ConversionObject` -> source/destination
+identities, helper demand and ordinary cleanup. Constant records per use;
+no resolution in lowering. Validate explicit copy/move effects and lifetime,
+empty targets, implicit elision controls and rejection/access behavior.
+
+Explicit conversion validation: **255/257**, all 13 controls, **65** personal
+sources, both properties, earlier **1327/1327**, file audit and diff checks pass.
+Existing failure removed without regressions or coverage changes. Logs:
+`/tmp/pa12-explicit-stage1.log`, `/tmp/pa12-explicit-prior.log`,
+`/tmp/pa12-explicit-personal1.log`. Performance campaign covers this group and
+`c61ecc10` against the frozen storage-entry binary before handoff.

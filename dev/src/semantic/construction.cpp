@@ -117,7 +117,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
     EntityId ctor = choose_constructor(target, args, &result, s, !copy);
     if (converting_transfer(ctor,result)) {
-        auto c = elided_conversion(result,target);
+        auto c = result_conversion(ctor,result,target);
         ValueInitialization init; init.source = args[0]; init.conversion = conversions.size(); conversions.push_back(c);
         class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
         facts[n].type = target; return true;

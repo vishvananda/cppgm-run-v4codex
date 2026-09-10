@@ -9,12 +9,26 @@ bool Analyzer::converting_transfer(EntityId ctor, const Expression& call) const
     TypeId returned = types[entities[c.function].type].child;
     return class_value(returned) && types[returned].entity == scopes[entities[ctor].owner].entity;
 }
-Conversion Analyzer::elided_conversion(const Expression& call, TypeId target)
+Conversion Analyzer::result_conversion(EntityId ctor, const Expression& call, TypeId target)
 {
     Conversion c = conversions[call.conversions];
     UserConversion record = user_conversions[c.materialization];
     record.result = Conversion(); record.result.target = target; record.result.rank = 0;
+    bool retained = members[entities[c.function].member_info].explicit_constructor;
+    if (retained) {
+        // An explicit conversion admitted by direct initialization supplies
+        // the selected transfer's source object. Retain that O0 boundary.
+        record.result.kind = Conversion::Kind::Construction; record.result.function = ctor;
+        record.prepared = false; record.temporary = record.source_temporary = 0;
+    }
     c.target = target; c.reference = false; c.materialization = user_conversions.size(); user_conversions.push_back(record);
+    if (retained) {
+        prepare_user_conversion(call_arguments[call.arguments],c);
+        auto transfer = user_conversions[c.materialization].result.materialization;
+        conversion_objects[transfer].retained = true;
+        auto m = entities[ctor].member_info;
+        members[m].retained_root = members[m].complete_entry = true;
+    }
     return c;
 }
 std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)

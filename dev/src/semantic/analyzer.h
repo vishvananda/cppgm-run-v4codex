@@ -280,7 +280,7 @@ private:
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
     EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true, bool probe = false);
     bool converting_transfer(EntityId constructor, const Expression& call) const;
-    Conversion elided_conversion(const Expression& call, TypeId target);
+    Conversion result_conversion(EntityId constructor, const Expression& call, TypeId target);
     void constructor_actions(EntityId e);
     bool inherit_using(NodeId name, ScopeId scope);
     void inherited_constructors(EntityId cls);

@@ -206,7 +206,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type, args, &result, s);
                 if (converting_transfer(ctor,result)) {
-                    auto c = elided_conversion(result,cast_type);
+                    auto c = result_conversion(ctor,result,cast_type);
                     result = Expression(); result.type = cast_type; result.form = ExpressionForm::Cast;
                     record_conversion(result,args[0],c); facts[n].type = cast_type;
                     return result;

@@ -196,7 +196,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     if (!cv_cast && op != KW_REINTERPET_CAST && class_value(to)) {
         EntityId ctor = choose_constructor(to,{operand},&r,s);
         if (converting_transfer(ctor,r)) {
-            auto conversion = elided_conversion(r,to);
+            auto conversion = result_conversion(ctor,r,to);
             r = Expression(); r.type = to; r.form = ExpressionForm::Cast;
             record_conversion(r,operand,conversion); return r;
         }
