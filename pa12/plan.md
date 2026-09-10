@@ -1,143 +1,112 @@
-# PA12 implementation plan
+# PA12 implementation and final audit plan
 
-Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: complete; **257/257**, through-stage **1584/1584**.
+Stage base: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`.
+Audited entry: `18ef3757`; final implementation: `0768b868` (following `b7a15e3e`).
+Target: **pa12 full-stage**. Phase: **audit complete**.
+Result: **257/257 PA12**, **1584/1584 through-stage**, **12/12 stages**.
 
-## Design/spec alignment and remaining work
+## Final design/spec alignment
 
-Keep canonical identities, indexed demand, the shared source graph and typed
-conversion/lifetime records. Lowering consumes selected facts without source
-replay, fake AST, reference delegation or a later native-backend exit gate.
+The [whole-stage audit](audit.md) independently reconstructs source/cursor,
+shared parser/semantic graph, canonical identities, indexed lookup/demand,
+complete cache keys, typed lowering and ownership/release points. PA12 owns
+nonvirtual C++11 class semantics and O0 LowIR; the supplied PA8 backend is an
+external execution boundary. Native MIR/ELF and self-hosting remain later stages.
 
-| Owner | Data flow / complexity | Validation |
-| --- | --- | --- |
-| Parameter representation | Checked copy actions and source identity -> cached argument ABI; independent result ABI and body/emission demand; incremental entity cursor | Declaration-only and linked TUs, copy effects/identity/escapes, parameter slots, typed pointer constants pass |
-| Scalar initialization | Recorded writes/exposure -> integral truth proof -> typed final conversion and destination before branch cleanup; unknown conditions keep shared cleanup; one candidate-initializer walk | Dynamic/constant/volatile/modified conditions, aliases, narrowing and destructor-observed destinations pass |
+| Owner | Final design and validation |
+| --- | --- |
+| Class members and transfers | Selected member/default/delegation facts, prepared layout-unit actions, separate parameter/result ABI and constructor entries; no semantic replay in lowering. |
+| Values and lifetimes | Destination-based transfers, full-expression regions, function-owned return cleanup and bounded destructor suffix sharing; guards follow successful materialization. |
+| Lists and references | Complete qualified target type through list plans/helpers. Reference projections retain the complete temporary; conditional alternatives share a lexical lifetime with per-object guards. Non-extending expressions stop the projection walk. |
+| Allocation and zeroing | Prepared typed zero-plan IDs reach runtime array loops; member-pointer null values and volatile scalar initialization retain required representation/access semantics. |
+| Parameter and scalar facts | ABI/body queries are independent of emission. Sparse object observations invalidate private scalar truth proofs; final conversion/store precedes observable cleanup. Unknown conditions retain shared cleanup. |
 
-Implementation and validation groups are complete. Remaining PA12 work: none.
-The next milestone owns polymorphism; this stage retains the nonvirtual model.
+No unreviewed PA12 handoff remains. The audit repaired local subobject-reference
+lifetimes and conditional cleanup, static reference over-extension, qualified
+list temporary stores, and typed heap-array zeroing across their semantic and
+lowering owners. Five new execution reducers, work/IR properties and sanitizer
+runs cover these paths. No new reference/fixture/comparator edit was needed.
 
-Completed owners include lists/defaults, delegation/unions, value boundaries,
-references, allocation/aggregates, region/destructor-boundary separation,
-member-pointer values/signatures, typed zero plans, terminal class returns,
-constructor storage units and explicit conversion-result boundaries.
-Return cleanup now belongs to its function even across loops. Terminal branches
-finish only their private suffix; nested conditionals feeding an enclosing
-transfer/call retain their selector. All **13/13** survivor controls pass.
-The scalar transfer proof rejects calls, class subobjects and unknown operations;
-it does not strengthen a language exception specification or public ABI.
+## Performance acceptance and work limits
 
-## Performance evidence and budgets
+[Final evidence and inherited acceptance ledger](final-audit-performance.md)
+links all 15 checkpoint reports and 39 historical campaigns, plus two fresh
+frozen comparisons. It retains A/A calibration, two ABBA blocks, every outlier,
+compiler latency/peak RSS, executable runtime/payload and hashes. Common final
+A/B outputs are identical. Incorrect old paths have absolute B-only measurements.
 
-[Member](performance.md), [transfer](transfer-performance.md),
-[value](value-performance.md), [conversion/reference](conversion-performance.md),
-[allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md),
-[boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
-[destructor](destruction-performance.md), [member-pointer](member-pointer-performance.md),
-[zero](zero-performance.md), [consumption](consumption-performance.md) and
-[storage/conversion](storage-performance.md),
-[parameter](parameter-performance.md) and [scalar](scalar-performance.md) retain
-frozen hashes, inputs, flags, A/A+ABBA data, compiler latency/RSS and runtime/text.
-Historical misses and outliers remain. Required representation costs and proven
-later-backend constraints do not create positive-runtime PA12 exit gates.
-
-- Local array expansion remains capped at eight total elements. Zero plans cache
-  each type once, reuse child extents, expand at most eight padding stores, and
-  use bulk operations or fixed-size loops beyond those bounds.
-- Full-expression classifiers use at most three bytes per AST node. Scalar
-  transfer proofs add a lazy byte per AST node, one member flag, and one visit
-  per examined node. No call-graph search, source replay or global retry is added.
+- Local array expansion remains capped at eight total nested elements. Zero
+  plans share typed child actions, cap padding expansion at eight and use loops
+  beyond the bound. Heap extents 19 and 1,000,000 both produce 25 instructions.
 - Destructor suffixes inline at most eight actions (28 duplicated tail actions),
-  then share one block per suffix. Member-pointer pair storage/copy is bounded
-  at 16 bytes per value/boundary; signatures use canonical types.
-- Consumption adds 1728 compiler text bytes (.18%). Its original loop runtime
-  regression is isolated to the supplied backend's code/data cache-line sharing:
-  native data relocation preserves instruction positions and removes that cost.
-  Both raw and relocated observations remain; placement belongs to PA24.
-- Storage/conversion budgets: constant queries per field/use, no extra layout
-  scan, two sparse flags, at most one added conversion-object record per retained
-  use. Below 4 KiB compiler text growth and 5% common median compile cost are
-  diagnostic review budgets, not added course gates. Preserve all observations.
-- Two intermediate conversion policies cost about 2.5x at runtime. Direct storage
-  reduced bytes but not runtime. Cached trivial-result elision removes that cost:
-  a paired helper/elision campaign measures .25780 -> .10575 seconds and
-  311 -> 277 native payload bytes. Empty/nontrivial explicit boundaries remain.
-- Final storage/conversion text growth is 1920 bytes (.20%); the large common
-  compiler median rises .12%, with unchanged common/trivial-explicit native bytes.
-  Unit runtime rises .57%; all observations and intermediate costs remain.
-- Empty-object zeroing passes the course comparison. The earlier assumed need
-  to remove its padding was a diagnostic assumption, not a mandated gate.
+  then share blocks. Classifiers use at most three bytes per AST node; scalar
+  transfer proof adds one lazy byte per examined node. Member-pointer values
+  occupy at most 16 bytes per value/boundary.
+- Conditional reference alternatives, source visits and output grow linearly:
+  depth 32/128 gives 33/129 alternatives, 98/386 visits and 600/2328 instructions.
+  Facts have explicit class/type/source/context owners; no global retry or
+  whole-graph copy was added. Function scratch is released per function.
+- Final fixes add 576 compiler text bytes (.059%); large common compile pairs
+  are mixed, with stable memory and identical native images. A noisy template
+  wall-time loss is retained; a focused frozen repeat records a .496-second
+  row with .25 seconds child CPU, matching ordinary rows' CPU cost. Full-stage
+  text grows 194944 bytes (24.81%); the large calls corpus costs 2.17% latency and
+  0.81% peak RSS (initial campaign: 4.35% / 6.00%). These costs and noisy runtime
+  observations remain disclosed.
+- The inherited 128 KiB text-growth target and feature 4/6/8 KiB/5% targets are
+  diagnostic review signals, not mandated PA12 gates. The whole-stage text miss
+  is reclassified with evidence, preserving all observations and required work.
+- Unprofitable optional scalar-copy prefixes and dynamic scalar consumption were
+  removed. Required ABI, storage-prefix, object-boundary and constant-condition
+  ordering costs remain documented without speed claims. The proven native
+  code/data placement constraint belongs to PA24. Smaller IR never substitutes
+  for measured runtime profit, and no positive-runtime/self-hosting gate is added.
 
-## Handoff ledger
+## Audited handoff ledger
 
-| Accepted implementation increments | PA12 passing |
+| Implementation group (documentation/evidence commits also reviewed) | PA12 passing |
 | --- | ---: |
 | Stage entry | 61/257 |
-| `4e209677`, `55d15ba8`, `8a83045c`: members/delegation/unions | 92/257 |
-| `73664568`, `4ea8394f`: transfers/prefix policy | 123/257 |
-| `cc2198c9`, `e140daef`, `a3d40a62`, `1a7867fd`: values/storage | 169/257 |
-| `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/references | 202/257 |
-| `d2db8706`, `ffbc7095`, `eed7d552`: allocation/aggregates/aliases | 226/257 |
-| `64ecedf7`, `3ec8d0ce`: lists and independent value ABI | 234/257 |
-| `8bf45f86`: full-expression regions, condition edges, initializer/return ownership | 240/257 |
-| `951799ed`: destructor effects, retained boundaries, bounded subobject suffixes | 248/257 |
-| `ce2d8363`: member pointers and scalar assignment widths | 249/257 |
-| `b5645333`: zero-initialization actions and null representation | 250/257 |
-| `260e0b35`: terminal return branches and function-owned return cleanup | 252/257 |
-| `14dac876`: scalar transfer proof and materialization guards | 253/257 |
-| `c61ecc10`: constructor storage-unit ordering | 254/257 |
-| `8a5a370d`: explicit conversion-result boundaries | 255/257 |
-| `b699f183`, `1eae0974`, `2d693f2b`: measured policy correction and shared field facts | 255/257 |
-| `f3e7ce93`: parameter transport proof, typed pointer constants | 256/257 |
-| `7e88ba59`: scalar initialization consumption | 257/257 |
-| `67947601`: remove measured unprofitable dynamic extension | 257/257 |
+| `4e209677`, `55d15ba8`, `8a83045c`: members, delegation, unions | 92/257 |
+| `73664568`, `4ea8394f`: transfer actions and measured prefix correction | 123/257 |
+| `cc2198c9` through `1a7867fd`: values, conditional storage and shared records | 169/257 |
+| `02f2f154`, `77145afa`, `f9c8e6c3`, `70556b3d`: conversions/static references | 202/257 |
+| `d2db8706` through `aee24d98`: allocation, aggregate transfers, aliases | 226/257 |
+| `64ecedf7`, `3ec8d0ce`: lists and independent result ABI | 234/257 |
+| `8bf45f86`, `e98cc21e`: full-expression and condition cleanup | 240/257 |
+| `951799ed`, `4cefbabe`: effects, retained boundaries, bounded suffixes | 248/257 |
+| `ce2d8363`, `8cfcc3fe`: member pointers and assignment widths | 249/257 |
+| `b5645333`, `574bf3f0`, `b1e936e8`: typed zeroing and defined reducers | 250/257 |
+| `260e0b35`: terminal return ownership | 252/257 |
+| `14dac876`, `3789b6a3`, `9e442405`: transfer proof, guards, native layout control | 253/257 |
+| `c61ecc10`: constructor storage-unit order | 254/257 |
+| `8a5a370d`, `b699f183`, `1eae0974`, `2d693f2b`, `eb0a4251`: conversion boundaries and measured elision | 255/257 |
+| `f3e7ce93`, `51fbedef`: independent parameter/body query and transport cost | 256/257 |
+| `7e88ba59`, `67947601`, `18ef3757`: scalar consumption, removed optional regression | 257/257 |
+| `b7a15e3e`, `0768b868`: lifetime projections, cv-list and typed heap-zero ownership repairs | 257/257 |
 
-`3da4de09` corrected four bit-field reference retypes under the authorized
-exception; [proof and bundle revision](reference-corrections.md) remain.
-No fixture, reference, comparison rule or coverage changed in the latest groups.
+`3da4de09` is the sole reference correction: four bit-field retypes, with
+[reduced C++11/LowIR proof and bundle revision](reference-corrections.md).
+The audit reran the good/bad IR controls and reviewed the exact four-site diff.
+All earlier group handoffs, including the post-checkpoint parameter/scalar
+owners, are now covered by the independent final review.
 
-Current entry: clean `eb0a4251`, freshly checked **255/257**. Parameter
-`f3e7ce93` removed one existing failure; scalar consumption removed the last.
-Final **257/257**, all **13** controls; earlier **1327/1327** and full through
-**1584/1584** pass. **196 stage-base failures removed**, no coverage reduced.
-All **67** personal sources and three explicit property scripts pass. File audit
-passes with the same three existing header advisories; diff checks pass.
+## Exit validation and evidence integrity
 
-Logs: `/tmp/pa12-scalar-policy-stage.log`,
-`/tmp/pa12-scalar-policy-prior.log`, `/tmp/pa12-scalar-policy-personal.log`,
-`/tmp/pa12-complete-through.log` (all exit 0). Root reports ran serially.
-Explicit properties: `check_parameter_representation.py`,
-`check_terminal_returns.py`, `check_zero_initialization.py` under
-`student.tests/pa12/`, each run with `python3`.
+Required file audit and `make test-report-through-pa12` pass. PA12 includes
+13/13 behavioral/query controls; inherited stages pass 1327/1327. The supplied
+state's 1608 total is a reporting mismatch: entry, final and provided Ralph log
+all show 1584 tests. Coverage and comparison rules are unchanged; 196 stage-base
+failures were removed.
 
-Parameter evidence (`51fbedef`): +2752 compiler text bytes (.28%); large common
-compile median -.22% with mixed/noisy pairs. All non-parameter native bytes
-match A. Required object-parameter transport adds 24 native bytes and about 59%
-runtime in its focused workload: a documented PA12 ABI cost, not an optional
-optimization or positive-runtime gate. One class state/copy ID, one member flag,
-an incremental entity cursor and linear member/source inspection bound work.
-The 6 KiB text and 5% common median review targets were met.
+All 72 personal sources, four explicit property scripts (including
+`audit_check.py`) and strict good/bad bit-field IR controls pass. The actual final
+compiler passes all personal/audit checks under ASan/UBSan. Frozen hashes and
+native results verify; two historical A output pairs overwritten in scratch
+reproduce with their original hashes in separate storage. All 6488 historical
+wall observations and 934 historical output hashes remain verifiable.
 
-Scalar evidence: one consumer record per selected initializer, one sparse entry
-per modified/exposed object, one candidate-initializer walk and constant work per
-use. No new per-node graph/cache or global retry. Fourfold constant-source growth
-produces 100 -> 400 consumers and 700 -> 2800 inspection steps. Diagnostic budgets
-set before measurement were 8 KiB compiler text and 5% common median compile
-cost, not additional course gates. Final text grows 7872 bytes (.81%); common
-compile medians change -.11% / -.98%. Frozen A/B hashes and all 15-workload
-A/A+ABBA observations in each of two campaigns are preserved and verified.
-
-The initial optional dynamic/modified-condition policy cost 8–20% runtime and
-was removed. Final nonconstant benchmark LowIR/native bytes equal A. The required
-constant-condition O0 ordering retains a 12.1% native runtime cost, with smaller
-payload and lower compiler work/RSS; no runtime benefit is claimed. This required
-course-output cost is documented, without inventing a backend diagnosis or exit
-gate. Observed destinations still receive their final conversion/store before
-cleanup; volatile/modified/aliased conditions use the conservative shared path.
-
-Final completion audit: canonical IDs and selected facts flow through the existing
-semantic/lowering owners; implementation sources are registered; mandated array
-expansion remains capped at eight; no fixture/comparison changes in the final
-groups. The earlier authorized reference proof remains linked above. All required
-reports, explicit personal checks, performance campaigns and file audit complete.
+Logs/frozen artifacts: `$RALPH_ARTIFACT_DIR/pa12-final-audit/`. Reproduction
+commands and exact measurements are in the linked audit/performance documents.
+Implementation and evidence commits contain no generated objects/logs/outputs.
+Remaining PA12 work: **none**; later-stage surfaces are explicitly scoped above.
