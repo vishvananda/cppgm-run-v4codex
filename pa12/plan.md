@@ -39,7 +39,8 @@ rule. Semantics demands plans; lowering never reconstructs the decision.
 [allocation/aggregate/alias](allocation-performance.md), [list](list-performance.md),
 [boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
 [destructor](destruction-performance.md) and
-[member-pointer](member-pointer-performance.md) evidence retain frozen hashes,
+[member-pointer](member-pointer-performance.md) and
+[zero-initialization](zero-performance.md) evidence retain frozen hashes,
 inputs, flags, A/A+ABBA observations, compiler latency/RSS and runtime/text.
 Historical misses/outliers remain. Required PA12 representation costs do not
 create a positive-runtime gate; avoidable costs were removed and remeasured.
@@ -59,7 +60,10 @@ create a positive-runtime gate; avoidable costs were removed and remeasured.
   Common large compiler median rises 1.71%; assignment rises 1.37%, peak RSS 5.9%.
   Compiler text grows 8960 bytes (.94%); common native bytes are identical.
   New function/data-member paths scale linearly; no runtime gain is claimed.
-- Zero-initialization measurements are pending against frozen `ce2d8363`.
+- Zero plans add .67% compiler text. Common native bytes are identical; required
+  typed stores cost 3.37% compiler median time, 3.84% peak RSS and 3.92% runtime
+  on the boundary workload. Null-array IR is identical in size at 9/1024 elements.
+  The frozen campaign completed; required representation costs create no new gate.
 
 ## Handoff ledger
 
@@ -75,7 +79,7 @@ create a positive-runtime gate; avoidable costs were removed and remeasured.
 | `8bf45f86`: full-expression regions, condition edges, initializer/return ownership | 240/257 |
 | `951799ed`: destructor effects, retained boundaries, bounded subobject suffixes | 248/257 |
 | `ce2d8363`: member pointers and scalar assignment widths | 249/257 |
-| Zero-initialization actions and null representation | 250/257 |
+| `b5645333`: zero-initialization actions and null representation | 250/257 |
 
 `3da4de09` corrected four bit-field reference retypes under the authorized
 exception; [proof and bundle revision](reference-corrections.md) remain.
@@ -87,6 +91,10 @@ failures removed**. **62** personal source checks pass. Earlier **1327/1327**
 passes after the final refinement.
 File audit passes with three existing header advisories. Required stage pass is
 not claimed. Root reports run serially.
+Logs: `/tmp/pa12-zero-stage3.log` (exit 2),
+`/tmp/pa12-zero-final-prior.log` (exit 0),
+`/tmp/pa12-zero-personal3.log` (exit 0). Both frozen performance campaigns
+completed; `8cfcc3fe` records the member-pointer measurements.
 
 Boundary: zero plans establish initialization values and representation, not
 whether later code can observe identity or padding. Omitting empty return
