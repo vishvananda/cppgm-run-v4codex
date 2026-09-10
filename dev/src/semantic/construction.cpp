@@ -131,7 +131,8 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     // The initializer wrapper retains its starting token, including '='.
     if (copy && members[entities[ctor].member_info].explicit_constructor)
         throw std::runtime_error("explicit constructor in copy initialization");
-    if (args.empty() && grouped && members[entities[ctor].member_info].synthetic) {
+    if (args.empty() && grouped && members[entities[ctor].member_info].synthetic && !members[entities[ctor].member_info].defaulted_late) {
+        prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
     }
     facts[n].entity = ctor; facts[n].type = target; facts[n].scope = s;

@@ -89,6 +89,14 @@ struct FieldFacts {
     bool bit_field = false, may_clear_unit = true;
 };
 enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted };
+struct ZeroInitialization {
+    enum Kind : unsigned char { Scalar, Representation, Composite, Array, Reference, MemberPointer } kind = Scalar;
+    TypeId type = 0;
+    std::uint32_t first = 0, count = 0, child = 0;
+    std::uint64_t bytes = 0, alignment = 1, elements = 0;
+    bool bulk = true;
+};
+struct ZeroPart { std::uint32_t plan; std::uint64_t offset; };
 struct InitAction {
     std::uint32_t conversion = 0;
     EntityId helper_transfer = 0, helper_parameter = 0;

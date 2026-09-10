@@ -220,6 +220,9 @@ class Procedural {
     Value member_pointer_value(EntityId member, TypeId type);
     Value member_pointer_address(Value value);
     Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);
+    void zero_object(TypeId type, Value object);
+    void zero_plan(std::uint32_t plan, Value object);
+    void zero_padding(Value object, std::uint64_t offset, std::uint64_t bytes, std::uint64_t alignment);
     Value store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
     void object(EntityId e);

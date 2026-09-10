@@ -51,3 +51,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/reference_storage lowering/reference_
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/allocation lowering/deallocation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/list_initialization lowering/list_initialization lowering/full_expression
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/member_pointers lowering/member_pointers
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/zero_initialization lowering/zero_initialization

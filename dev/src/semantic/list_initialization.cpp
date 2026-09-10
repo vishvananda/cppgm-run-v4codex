@@ -122,6 +122,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     auto plan = list_plans[c.materialization];
     if (!c.valid()) throw std::runtime_error("invalid list initialization");
     TypeId t = types.unqualified(value_type(c.target));
+    if (plan.zero) prepare_zero_initialization(t);
     if (plan.constructor) {
         auto ctor = plan.constructor;
         if (deleted_transfer(ctor)) throw std::runtime_error("deleted list constructor");

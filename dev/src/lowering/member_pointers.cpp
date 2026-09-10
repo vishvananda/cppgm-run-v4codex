@@ -3,13 +3,12 @@
 namespace cppgm { namespace lowering {
 Value Procedural::member_pointer_value(EntityId member, TypeId target)
 {
-    if (!member) throw std::logic_error("missing member pointer target");
     if (sem.types[sem.types[target].child].kind != TypeKind::Function)
-        return Value(Operand::integer(sem.entities[member].member_offset),IRType::I64,target);
+        return Value(Operand::integer(member ? sem.entities[member].member_offset : ~std::uint64_t(0)),IRType::I64,target);
     SlotId slot = builder->add_slot(0,type(target));
     Value storage(Operand::slot(slot),type(target),target,true);
     Value pointer = address(storage);
-    Value function = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(member))});
+    Value function = member ? emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(member))}) : Value(Operand::integer(0),IRType::Ptr);
     emit(Opcode::Store,IRType::Ptr,{function.operand,pointer.operand});
     Value adjustment = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(8)});
     emit(Opcode::Store,IRType::I64,{Operand::integer(0),adjustment.operand});

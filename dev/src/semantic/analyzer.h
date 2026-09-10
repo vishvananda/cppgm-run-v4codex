@@ -79,6 +79,10 @@ public:
     std::vector<ListObject> list_objects = std::vector<ListObject>(1);
     std::uint32_t initializer_plan(NodeId n, TypeId t) const;
     bool zero_value(TypeId t);
+    std::uint32_t prepare_zero_initialization(TypeId t);
+    std::uint32_t zero_initialization(TypeId t) const { return zero_initialization_index.get(t); }
+    std::vector<ZeroInitialization> zero_initializations = std::vector<ZeroInitialization>(1);
+    std::vector<ZeroPart> zero_parts;
     bool empty_value(TypeId t);
     bool initializer_work(std::uint32_t plan);
     std::vector<ConversionObject> conversion_objects = std::vector<ConversionObject>(1);
@@ -139,6 +143,7 @@ private:
     Expression literal_call(NodeId n, ScopeId s);
     Index initializer_work_index;
     Index initializer_index, zero_value_index, value_contexts;
+    Index zero_initialization_index;
     TypeId initialized_field_type(TypeId owner, EntityId field);
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);

@@ -153,6 +153,7 @@ bool Analyzer::zero_value(TypeId t)
     if (auto known = zero_value_index.get(t)) return known == 2;
     auto type = types[t];
     bool result = !(type.cv & 2) && type.kind != TypeKind::LRef && type.kind != TypeKind::RRef;
+    if (type.kind == TypeKind::MemberPointer && types[type.child].kind != TypeKind::Function) result = false;
     if (result && type.kind == TypeKind::Array) result = zero_value(type.child);
     if (result && type.kind == TypeKind::Named && entities[type.entity].class_info) {
         result = !value_constructor(t) && entities[type.entity].key != KW_UNION;

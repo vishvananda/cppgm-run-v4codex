@@ -6,7 +6,10 @@ IRType access_type(IRType t) { return t == IRType::U32 ? IRType(IRType::I32) : t
 }
 Value Procedural::initialization_value(NodeId n, TypeId t)
 {
-    if (!n) return Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+    if (!n) {
+        if (sem.types[t].kind == TypeKind::MemberPointer) return member_pointer_value(0,t);
+        return Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+    }
     auto input = sem.expression_fact(n).incoming;
     if (reference(t) || (input && sem.conversion_fact(input).derived))
         return input ? converted(n, sem.conversion_fact(input)) : convert(expression(n, reference(t)), t);

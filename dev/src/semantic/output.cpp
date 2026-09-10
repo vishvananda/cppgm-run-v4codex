@@ -133,6 +133,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_constant_constructor_actions\":" << constructor_constant_actions.size()
         << ",\"semantic_constant_fields\":" << constant_fields.size()
         << ",\"semantic_initializer_actions\":" << initializers.size()-1
+        << ",\"semantic_zero_plans\":" << zero_initializations.size()-1
+        << ",\"semantic_zero_parts\":" << zero_parts.size()
         << ",\"semantic_field_descriptors\":" << field_facts.size()-1
         << ",\"semantic_destruction_actions\":" << destruction_actions.size()
         << ",\"semantic_transfer_actions\":" << transfers.size()

@@ -217,7 +217,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
                 entities[temporary].type = cast_type; register_destruction(temporary);
                 record_object(result, 0, 0, 0); object_uses[result.object_use].temporary = temporary;
-                object_uses[result.object_use].value_initialize = args.empty() && members[entities[ctor].member_info].synthetic;
+                object_uses[result.object_use].value_initialize = args.empty() && members[entities[ctor].member_info].synthetic && !members[entities[ctor].member_info].defaulted_late;
+                if (object_uses[result.object_use].value_initialize) prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
                 return result;
             }
             if (args.size() > 1) throw std::runtime_error("scalar cast arity");

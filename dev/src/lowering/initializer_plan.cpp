@@ -79,7 +79,7 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
         return;
     }
     if (action.kind == InitKind::Scalar) {
-        Value value = action.source ? incoming(action.source) : Value(Operand::integer(0), type(action.type), action.type);
+        Value value = action.source ? incoming(action.source) : initialization_value(0,action.type);
         store(value, location); return;
     }
     if (action.kind == InitKind::Constructor) {
@@ -151,7 +151,7 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
             store(initialization_value(action.source, action.type), at); return;
         }
         Value value = path.empty() || path.back().field ? initialization_value(action.source, action.type) :
-            action.source ? incoming(action.source) : Value(Operand::integer(0), type(action.type), action.type);
+            action.source ? incoming(action.source) : initialization_value(0,action.type);
         Value at = initialization_address(root, indirect, path); at.type = action.type; store(value, at); return;
     }
     if (action.kind == InitKind::String) {
@@ -205,7 +205,7 @@ void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uin
     Value offset = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(sem.object_size(action.type))}, Operation::Mul);
     Value at = emit(Opcode::Index, IRType::I8, {base.operand, offset.operand}); at.type = action.type; at.address = true;
     if (plan) initialize_plan(plan, at);
-    else store(Value(Operand::integer(0), this->type(action.type), action.type), at);
+    else store(initialization_value(0,action.type), at);
     Value next = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(1)}, Operation::Add);
     emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(counter)}); jump(test); start(end);
 }

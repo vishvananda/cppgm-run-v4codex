@@ -7,8 +7,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
     guard_expression(init);
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
-        Instruction zero(Opcode::ZeroInit); zero.bytes = sem.object_size(sem.entities[cls].type);
-        zero.alignment = sem.object_alignment(sem.entities[cls].type); emit(zero, {object.operand});
+        zero_object(sem.entities[cls].type,object);
     }
     if (sem.direct_transfer(ctor)) {
         auto fact = sem.expression_fact(init);
@@ -139,7 +138,7 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
         throw std::logic_error("missing aggregate initializer plan");
     while (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) n = ast[n].first;
     Value value = path.empty() || path.back().field ? initialization_value(n, t) :
-        n ? incoming(n) : Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
+        n ? incoming(n) : initialization_value(0,t);
     Value at = initialization_address(root, indirect, path); at.type = t;
     store(value, at);
 }

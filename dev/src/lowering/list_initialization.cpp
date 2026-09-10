@@ -15,8 +15,7 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
         if (!call_aggregate_helper(object.initializer,at)) initialize_plan(object.initializer,at);
     } else if (plan.constructor) {
         if (plan.zero) {
-            Instruction zero(Opcode::ZeroInit); zero.bytes = sem.object_size(t); zero.alignment = sem.object_alignment(t);
-            emit(zero,{destination.operand});
+            zero_object(t,destination);
         }
         if (sem.direct_transfer(plan.constructor)) {
             Value source = converted(sem.call_arguments[call.arguments],sem.conversion_fact(call.conversions));
@@ -34,7 +33,7 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
         }
     } else {
         value = call.argument_count ? converted(sem.call_arguments[call.arguments],sem.conversion_fact(call.conversions)) :
-            Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0),type(t),t);
+            initialization_value(0,t);
         if (supplied || object.temporary) { Value at = destination; at.address = true; at.type = t; store(value,at); }
     }
     if (supplied) return destination;
