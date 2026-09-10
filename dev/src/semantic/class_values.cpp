@@ -37,7 +37,9 @@ void Analyzer::prepare_value_boundary(TypeId t)
 void Analyzer::prepare_function_boundaries()
 {
     // One declaration traversal; references do not trigger class-value demand.
+    std::vector<EntityId> scalars;
     for (EntityId e = 1; e < entities.size(); ++e) {
+        if (entities[e].initializer && local_scalar(e)) scalars.push_back(e);
         if (entities[e].kind != EntityKind::Function || entities[e].template_info) continue;
         Type f = types[entities[e].type];
         prepare_value_boundary(f.child);
@@ -46,6 +48,7 @@ void Analyzer::prepare_function_boundaries()
             prepare_value_boundary(parameter); finish_parameter_representation(parameter);
         }
     }
+    for (EntityId object : scalars) prepare_scalar_consumption(object);
 }
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {

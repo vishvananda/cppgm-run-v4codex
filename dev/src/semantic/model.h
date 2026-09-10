@@ -247,6 +247,7 @@ struct UserConversion {
     unsigned adjustment = 0; bool prepared = false;
 };
 struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
+struct ScalarConsumption { NodeId expression = 0; TypeId target = 0; std::uint32_t conversion = 0; unsigned char truth = 0; bool private_destination = false; };
 struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
 struct ReferenceStorage { EntityId object = 0, reference = 0; bool scalar = false, conditional = false; };
 struct ValueReturn { NodeId source = 0; EntityId local = 0; std::uint32_t conversion = 0, next = 0; };

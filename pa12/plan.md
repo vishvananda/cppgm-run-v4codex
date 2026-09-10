@@ -2,18 +2,21 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**256/257**).
+Target: PA12 full-stage. Phase: validate; required stage checks pass (**257/257**).
 
-## Design/spec alignment and remaining groups
+## Design/spec alignment and remaining work
 
 Keep canonical identities, indexed demand, the shared source graph and typed
 conversion/lifetime records. Lowering consumes selected facts without source
 replay, fake AST, reference delegation or a later native-backend exit gate.
 
-| Owner | Data flow / complexity | Remaining validation |
+| Owner | Data flow / complexity | Validation |
 | --- | --- | --- |
-| Parameter representation | Completed copy actions -> identity-preserving transport proof -> independent argument/result ABI; cache per class with a stable body-query dependency | `300-direct-object-parameter-passthrough-base-copy`; typed nonzero pointer constants; observing constructors and cross-TU declarations |
-| Scalar initialization consumption | Final scalar destination -> branch result store and cleanup; existing conversion/control edges | `500-direct-class-call-temporary-destination`; both reachable branches and enclosing temporary lifetimes |
+| Parameter representation | Checked copy actions and source identity -> cached argument ABI; independent result ABI and body/emission demand; incremental entity cursor | Declaration-only and linked TUs, copy effects/identity/escapes, parameter slots, typed pointer constants pass |
+| Scalar initialization | Recorded writes/exposure -> typed final conversion, destination and integral truth proof -> branch store before cleanup; one candidate-initializer walk and constant work per use | Dynamic/constant/volatile/modified conditions, aliases, narrowing and destructor-observed destinations pass |
+
+Implementation groups are complete. Remaining work: final scalar performance
+campaign and the root through-PA12 completion report, then final clean audit.
 
 Completed owners include lists/defaults, delegation/unions, value boundaries,
 references, allocation/aggregates, region/destructor-boundary separation,
@@ -86,57 +89,38 @@ later-backend constraints do not create positive-runtime PA12 exit gates.
 | `c61ecc10`: constructor storage-unit ordering | 254/257 |
 | `8a5a370d`: explicit conversion-result boundaries | 255/257 |
 | `b699f183`, `1eae0974`, `2d693f2b`: measured policy correction and shared field facts | 255/257 |
+| `f3e7ce93`: parameter transport proof, typed pointer constants | 256/257 |
+| Scalar initialization consumption (this increment) | 257/257 |
 
 `3da4de09` corrected four bit-field reference retypes under the authorized
 exception; [proof and bundle revision](reference-corrections.md) remain.
 No fixture, reference, comparison rule or coverage changed in the latest groups.
 
-Latest entry: clean `9e442405`, freshly checked **253/257**; prior turn made
-verified progress. Final **255/257**: **two existing failures removed, none
-added**; **194 stage-base failures removed**. Earlier **1327/1327**, all **65**
-personal sources, both explicit LowIR property scripts, file audit (three existing
-header advisories) and diff checks pass. Root reports ran serially. Stage pass
-is not claimed.
+Current entry: clean `eb0a4251`, freshly checked **255/257**. Parameter
+`f3e7ce93` removed one existing failure; scalar consumption removes the last.
+Current **257/257**, all **13** controls, earlier **1327/1327**, all **67**
+personal sources and three explicit property scripts pass. No coverage reduced.
+File audit passes with the same three existing header advisories; diff checks pass.
 
-Logs: `/tmp/pa12-storage-facts-stage.log` (exit 2),
-`/tmp/pa12-storage-facts-prior.log` (exit 0),
-`/tmp/pa12-storage-facts-personal.log` (exit 0). Explicit properties:
-`python3 student.tests/pa12/check_terminal_returns.py` and
-`python3 student.tests/pa12/check_zero_initialization.py`.
-Performance campaigns preserve partial calibration and every intermediate policy;
-final evidence and reproduction commands are in the linked storage report.
+Logs: `/tmp/pa12-scalar-final-stage.log`,
+`/tmp/pa12-scalar-final-prior.log`, `/tmp/pa12-scalar-final-personal.log`
+(all exit 0). Explicit properties: `check_parameter_representation.py`,
+`check_terminal_returns.py`, `check_zero_initialization.py` under
+`student.tests/pa12/`, each run with `python3`.
 
-Boundary: allocation-unit initialization and explicit result materialization are
-complete. The ABI survivor needs an identity-preserving representation proof;
-a nonthrowing body alone is insufficient. Inline copy-body facts must also be
-available consistently in a TU that merely declares a by-value function, so the
-next owner needs a body-query/emission-demand separation, not a lowering flag.
-Scalar initialization must perform its final store before temporary cleanup and
-cannot inherit class-return consumption blindly. Its reference's inactive arm
-also needs a reachability review; changing the condition is not proof that the
-original reference is wrong. Continue these two owners without weakening rules.
+Parameter evidence (`51fbedef`): +2752 compiler text bytes (.28%); large common
+compile median -.22% with mixed/noisy pairs. All non-parameter native bytes
+match A. Required object-parameter transport adds 24 native bytes and about 59%
+runtime in its focused workload: a documented PA12 ABI cost, not an optional
+optimization or positive-runtime gate. One class state/copy ID, one member flag,
+an incremental entity cursor and linear member/source inspection bound work.
+The 6 KiB text and 5% common median review targets were met.
 
-Parameter entry: clean `eb0a4251`, fresh **255/257**; previous turn made
-verified progress. Own a cached representation query per completed class and
-separate semantic body demand from emission. Query only an in-class empty copy
-body whose sole full-storage base can transfer trivially; consume its checked
-actions and source identity. An incremental function cursor discovers queries
-without global retries. Validate declaration-only TUs, copy effects/identity,
-parameter slot transport and typed integer-to-pointer constants together.
-
-Parameter group validation: **256/257**, all 13 controls, **66** personal
-sources, all three explicit property scripts, earlier **1327/1327**, file audit
-and diff checks pass. One existing failure removed, none added. Proof rejects
-comma-expression escapes and nontrivial copy effects; declaration-only and
-linked multi-TU checks agree. Query-only bodies do not receive unrelated scalar
-transfer proofs. Frozen A is `/tmp/pa12-parameter-base-cppgm`; performance remains
-pending before handoff. Query budgets are one class state/copy ID, one member
-flag, incremental entity traversal and linear member/source inspection; 6 KiB
-compiler text and 5% common compiler median are diagnostic review budgets.
-Continue the scalar-initialization owner before choosing a handoff boundary.
-
-Parameter performance: frozen `f3e7ce93`, +2752 compiler text bytes (.28%);
-large common compile median -.22% with mixed/noisy pairs. All non-parameter
-native bytes match A. Required object-parameter transport adds 24 native bytes
-and about 59% runtime in its focused workload; this is a documented PA12 ABI
-cost, not a positive-runtime gate. All observations remain in the linked report.
+Scalar diagnostic budgets, set before measurement: at most one consumer record
+per automatic scalar initializer and one sparse observation entry per modified
+or exposed object; one walk of each candidate initializer; constant work per
+use and no new per-node graph. Review compiler text growth above 8 KiB or common
+compile median growth above 5%; these are diagnostic targets, not course gates.
+Frozen A is `/tmp/pa12-scalar-base-cppgm` (`f3e7ce93` code). Compare dynamic and
+known conditions, observed destinations, modified conditions and unaffected code
+with A/A+ABBA compiler/RSS and checked native runtime/payload measurements.

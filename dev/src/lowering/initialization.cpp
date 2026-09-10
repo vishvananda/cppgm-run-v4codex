@@ -120,8 +120,10 @@ void Procedural::object(EntityId e)
     auto selected = sem.class_initialization(init,t);
     auto conversion = sem.conversion_fact(selected.conversion);
     bool omit = selected.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
-    begin_full_expression(init,omit);
-    if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
+    const auto& scalar = sem.scalar_consumption(e);
+    begin_full_expression(scalar.expression ? scalar.expression : init,omit);
+    if (scalar.expression && full_expression.enabled) initialize_scalar(scalar,location);
+    else if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
     else if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
         if (sem.initializer_work(sem.initializer_plan(init, t))) address(location);
         std::vector<InitProjection> path;

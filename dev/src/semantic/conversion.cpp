@@ -232,6 +232,7 @@ void Analyzer::select_function(NodeId n, EntityId e)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (n && c.reference && !c.temporary) observe_scalar(n);
     if (c.kind == Conversion::Kind::ListPlan) { prepare_list(n,c); return; }
     if (c.kind == Conversion::Kind::List) return;
     if (c.kind == Conversion::Kind::User) { prepare_user_conversion(n,c); return; }
@@ -257,6 +258,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 }
 void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
+    if (n && c.reference && !c.temporary) observe_scalar(n);
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
     if (c.kind == Conversion::Kind::ListPlan) prepare_list(n,c);
     if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);

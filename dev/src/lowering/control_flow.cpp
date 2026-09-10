@@ -91,16 +91,19 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
     finish_full_expression(initial);
     emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)});
 }
-Value Procedural::conditional(NodeId n, bool location, Value destination, std::uint32_t branches, bool terminal)
+Value Procedural::conditional(NodeId n, bool location, Value destination, std::uint32_t branches, bool terminal, const semantic::ScalarConsumption* consumption)
 {
     auto fact = sem.expression_fact(n);
     TypeId target = fact.type;
     bool supplied = destination.ir != IRType::Void;
-    bool object = supplied || (sem.class_value(target) && fact.category == ValueCategory::Prvalue);
+    bool object = !consumption && (supplied || (sem.class_value(target) && fact.category == ValueCategory::Prvalue));
+    TypeId consumed_type = consumption ? consumption->target : target;
+    bool saved_scalar = full_expression.scalar_terminal, saved_unreachable = full_expression.scalar_unreachable;
+    if (consumption) full_expression.scalar_terminal = true;
     location |= sem.types[target].kind == TypeKind::Array || sem.types[target].kind == TypeKind::Function;
-    IRType ir = location ? IRType(IRType::Ptr) : type(target);
+    IRType ir = location ? IRType(IRType::Ptr) : type(consumed_type);
     bool has_result = ir != IRType::Void;
-    SlotId slot = has_result && !object ? builder->add_slot(0, ir) : SlotId();
+    SlotId slot = has_result && !object && !supplied ? builder->add_slot(0, ir) : SlotId();
     if (object && !supplied) destination = class_address(sem.object_fact(n).temporary,target);
     BlockId yes = block(), no = block(), end = block();
     NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
@@ -112,39 +115,47 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
     bool enclosing_branch = full_expression.terminal_branch;
-    full_expression.terminal_branch = terminal;
+    full_expression.terminal_branch = terminal && object;
+    full_expression.scalar_unreachable = saved_unreachable || (consumption && consumption->truth == 1);
     if (object) construct_value(b,sem.conversion_fact(branches ? branches : fact.conversions+1),destination,terminal);
     else {
         auto conversion = sem.conversion_fact(fact.conversions+1);
         Value y = location || conversion.kind == semantic::Conversion::Kind::User ? converted(b,conversion) : convert(expression(b),target);
+        if (consumption) y = converted_value(y,sem.conversion_fact(consumption->conversion));
         if (has_result) {
-            if (ir.kind() == IRType::Object) store(y,Value(Operand::slot(slot),ir,target,true));
+            if (consumption && supplied) store(y,destination);
+            else if (ir.kind() == IRType::Object) store(y,Value(Operand::slot(slot),ir,target,true));
             else emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
         }
     }
     if (terminal) clean_inline(live,common);
     auto yes_live = live; jump(end);
     start(no); live = common;
+    full_expression.scalar_unreachable = saved_unreachable || (consumption && consumption->truth == 2);
     if (object) construct_value(c,sem.conversion_fact(branches ? branches+1 : fact.conversions+2),destination,terminal);
     else {
         auto conversion = sem.conversion_fact(fact.conversions+2);
         Value z = location || conversion.kind == semantic::Conversion::Kind::User ? converted(c,conversion) : convert(expression(c),target);
+        if (consumption) z = converted_value(z,sem.conversion_fact(consumption->conversion));
         if (has_result) {
-            if (ir.kind() == IRType::Object) store(z,Value(Operand::slot(slot),ir,target,true));
+            if (consumption && supplied) store(z,destination);
+            else if (ir.kind() == IRType::Object) store(z,Value(Operand::slot(slot),ir,target,true));
             else emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
         }
     }
     if (terminal) clean_inline(live,common);
     auto no_live = live; jump(end); start(end);
     full_expression.terminal_branch = enclosing_branch;
+    full_expression.scalar_terminal = saved_scalar; full_expression.scalar_unreachable = saved_unreachable;
     merge_temporaries(common,yes_live,no_live,selector);
     if (object) {
         if (!supplied) activate_temporary(sem.object_fact(n).temporary);
         destination.type = target; destination.address = true; return destination;
     }
+    if (consumption && supplied) return destination;
     Value v = !has_result ? Value() : ir.kind() == IRType::Object ? Value(Operand::slot(slot),ir,target) : emit(Opcode::Load, ir, {Operand::slot(slot)});
     if (fact.category == ValueCategory::Prvalue && !location) v.materialized = slot;
-    v.type = target; v.address = location; return v;
+    v.type = consumed_type; v.address = location; return v;
 }
 Value Procedural::logical(NodeId n)
 {

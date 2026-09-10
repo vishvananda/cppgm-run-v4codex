@@ -105,7 +105,8 @@ class Procedural {
     bool cleanup_expression(NodeId n, bool omit_result = false);
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
-    struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false; } full_expression;
+    struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
+        bool scalar_terminal = false, scalar_unreachable = false; } full_expression;
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);
     void guard_expression(NodeId n, bool storage_ready = false);
@@ -205,7 +206,7 @@ class Procedural {
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
-    Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false);
+    Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false, const semantic::ScalarConsumption* consumption = nullptr);
     Value logical(NodeId n);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
@@ -225,6 +226,7 @@ class Procedural {
     void zero_padding(Value object, std::uint64_t offset, std::uint64_t bytes, std::uint64_t alignment);
     Value store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);
+    void initialize_scalar(const semantic::ScalarConsumption& consumption, Value location);
     void object(EntityId e);
     void statement(NodeId n);
     bool mark_control_entries(NodeId n);

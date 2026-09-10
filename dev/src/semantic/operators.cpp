@@ -6,6 +6,7 @@ using syntax::Kind;
 void Analyzer::modifiable(NodeId n)
 {
     Expression e = expressions[n];
+    observe_scalar(n);
     if (e.category != ValueCategory::Lvalue || (types[e.type].cv & 1) || types[e.type].kind == TypeKind::Array ||
         types[e.type].kind == TypeKind::Function) throw std::runtime_error("modifiable lvalue required");
 }
@@ -24,6 +25,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (operator_expression(n, s, op, args, r)) return r;
     }
     if (op == OP_AMP) {
+        observe_scalar(operand);
         if (field_fact(a.entity).bit_field) throw std::runtime_error("address of bit-field");
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity) demand_specialization(a.entity);

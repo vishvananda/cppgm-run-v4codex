@@ -61,6 +61,7 @@ public:
     bool class_value(TypeId t) const;
     bool indirect_value(TypeId t) const;
     bool indirect_parameter(TypeId t) const;
+    const ScalarConsumption& scalar_consumption(EntityId object) const;
     bool empty_class(TypeId t) const;
     bool parameter_cleanup(EntityId e) const;
     EntityId reference_temporary(EntityId e) const { return reference_temporaries.get(e); }
@@ -110,6 +111,12 @@ private:
     std::vector<DeleteExpression> deletions = std::vector<DeleteExpression>(1);
     void prepare_value_boundary(TypeId t);
     void prepare_function_boundaries();
+    bool local_scalar(EntityId object) const;
+    bool private_scalar(EntityId object) const;
+    void observe_scalar(NodeId expression);
+    bool direct_class_call(NodeId expression);
+    unsigned char scalar_truth(NodeId expression);
+    void prepare_scalar_consumption(EntityId object);
     void schedule_parameter_bodies(EntityId& cursor);
     void query_parameter_representation(TypeId type);
     void finish_parameter_representation(TypeId type);
@@ -158,6 +165,9 @@ private:
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
+    Index scalar_observations, scalar_consumption_index;
+    std::vector<ScalarConsumption> scalar_consumptions = std::vector<ScalarConsumption>(1);
+    std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;
     std::uint64_t parameter_queries = 0, parameter_query_work = 0;
     Index field_index;

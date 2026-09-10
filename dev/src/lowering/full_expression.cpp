@@ -44,6 +44,10 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
     if (ast[n].kind == Kind::Conditional || (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR))) return;
     if (full_expression.terminal_branch && !storage_ready &&
         (ast[n].kind == Kind::Member || sem.expression_fact(n).form == semantic::ExpressionForm::Construction)) return;
+    // Without a live prefix or published handler, scalar consumption waits
+    // for the first resource-owning expression to establish the region.
+    if (full_expression.scalar_terminal && !live && !resume_terminal &&
+        !sem.temporary_cleanup(sem.object_fact(n).temporary)) return;
     if (unwind_expression(n)) open_expression_region();
 }
 void Procedural::open_expression_region()

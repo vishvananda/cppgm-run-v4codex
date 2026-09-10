@@ -24,6 +24,7 @@ void Procedural::activate_temporary(EntityId e)
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
     if (!sem.temporary_cleanup(e)) return;
+    if (full_expression.scalar_unreachable) { close_expression_region(); return; }
     bool reopen = full_expression.open;
     close_expression_region();
     TemporaryState state; state.object = e; state.destructor = dtor; state.tail = live;
@@ -70,7 +71,7 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
         if (s.kind == Symbol::FunctionSymbol)
             no_throw = p.signatures[p.functions[s.entity-1].signature.index-1].boundary.unwind == ir_model::CUM_NO;
     }
-    if (!live || emitting_cleanup || no_throw) return emit(i, args, count);
+    if (!live || emitting_cleanup || no_throw || full_expression.scalar_unreachable) return emit(i, args, count);
     if (full_expression.enabled) { open_expression_region(); return emit(i,args,count); }
     if (!resume_terminal) resume_terminal = block();
     auto cleanup = cleanup_suffix(live, resume_terminal);
