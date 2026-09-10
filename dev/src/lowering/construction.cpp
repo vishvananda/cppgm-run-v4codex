@@ -68,6 +68,12 @@ void Procedural::constructor_body(EntityId e)
             while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) n = ast[n].first;
             value = initialization_value(n, action.type);
         }
+        if (scalar && sem.field_fact(action.field).unit_transfer) {
+            Value at; at.type = action.type; at.bit_field = action.field; at.initializing = true;
+            at.init_offset = sem.entities[action.field].member_offset;
+            store_bit_field(value,at,this_slot);
+            finish_full_expression(0); constructor_cleanup(action); continue;
+        }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});

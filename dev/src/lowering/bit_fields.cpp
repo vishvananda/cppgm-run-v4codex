@@ -42,7 +42,7 @@ Value Procedural::load_bit_field(Value location)
     value = coerce(value, type(location.type), sem.unsigned_type(field.storage_type));
     value.type = location.type; return value;
 }
-Value Procedural::store_bit_field(Value value, Value location)
+Value Procedural::store_bit_field(Value value, Value location, SlotId container)
 {
     auto field = sem.field_fact(location.bit_field);
     IRType storage = location.initializing ? type(field.storage_type) : access_type(type(field.storage_type));
@@ -57,21 +57,36 @@ Value Procedural::store_bit_field(Value value, Value location)
         value = coerce(value, storage, sem.unsigned_type(field.storage_type));
     }
     auto bits = mask(field.width);
+    bool first = location.initializing && field.may_clear_unit && !initialized_units.get(location.init_offset+1);
+    if (location.initializing) initialized_units.put(location.init_offset+1, 1);
+    auto project = [&]() {
+        if (!container) return location;
+        Value base = emit(Opcode::Load,IRType::Ptr,{Operand::slot(container)});
+        Instruction index(Opcode::Index,IRType::I8); index.projection = ir_model::IPK_FIELD;
+        return emit(index,{base.operand,Operand::integer(location.init_offset)});
+    };
+    auto retained = [&]() {
+        Value at = project();
+        Instruction read(Opcode::Load,storage); read.is_volatile = sem.types[location.type].cv & 2;
+        Value old = emit(read,{at.operand});
+        return emit(Opcode::Binary,storage,{old.operand,Operand::integer(mask(storage.width()) & ~(bits << field.shift))},Operation::And);
+    };
+    // A demanded unit transfer supplies a complete storage action. Its
+    // initializer has already been evaluated before reading retained bits.
+    Value old;
+    if (container && !first) old = retained();
     Value assigned = location.initializing ?
         emit(Opcode::Binary, storage, {Operand::integer(bits), value.operand}, Operation::And) :
         emit(Opcode::Binary, storage, {value.operand, Operand::integer(bits)}, Operation::And);
     Value packed = assigned;
     if (field.shift) packed = emit(Opcode::Binary, storage, {packed.operand, Operand::integer(field.shift)}, Operation::Shl);
-    bool first = location.initializing && field.may_clear_unit && !initialized_units.get(location.init_offset+1);
-    if (location.initializing) initialized_units.put(location.init_offset+1, 1);
     if (!first) {
-        Instruction read(Opcode::Load, storage); read.is_volatile = sem.types[location.type].cv & 2;
-        Value old = emit(read, {location.operand});
-        old = emit(Opcode::Binary, storage, {old.operand, Operand::integer(mask(storage.width()) & ~(bits << field.shift))}, Operation::And);
+        if (!container) old = retained();
         packed = emit(Opcode::Binary, storage, {old.operand, packed.operand}, Operation::Or);
     }
+    Value at = project();
     Instruction write(Opcode::Store, storage); write.is_volatile = sem.types[location.type].cv & 2;
-    emit(write, {packed.operand, location.operand});
+    emit(write, {packed.operand, at.operand});
     assigned.type = location.type; return assigned;
 }
 } }

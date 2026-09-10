@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**253/257**).
+Target: PA12 full-stage. Phase: implement; incomplete (**254/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -104,3 +104,19 @@ the class-return flag blindly. Nonthrowing copy bodies can still have observable
 copy effects; the remaining ABI case needs a distinct representation proof.
 Storage-unit emission and explicit-conversion materialization likewise need
 separate typed actions rather than further changes to return cleanup flags.
+
+Storage entry: clean `9e442405`, fresh **253/257** and all 13 controls. Prior
+turn made verified progress. Reuse demanded allocation-unit transfer facts for
+constructor unit initialization: evaluate the initializer, read retained bits,
+pack the new value, then form the final store address. Owner/data flow is
+completed field/unit metadata -> typed constructor store action; constant work
+per field, no extra layout scan. Preserve the PA11 path without transfer demand.
+Validate shared/split units, volatile fallback, initializer side effects and
+copy/move/assignment together, then extend conversion materialization.
+
+Storage validation: **254/257**, all 13 controls, **64** personal sources and
+both explicit property scripts pass; earlier **1327/1327** and file audit pass.
+One existing failure removed, none added. Logs: `/tmp/pa12-storage-stage2.log`,
+`/tmp/pa12-storage-prior.log`, `/tmp/pa12-storage-personal2.log`. Frozen A is
+`/tmp/pa12-storage-base-cppgm`; performance measurement remains pending before
+handoff. Continue with explicit conversion-result materialization.

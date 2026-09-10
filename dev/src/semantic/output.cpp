@@ -136,6 +136,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_zero_plans\":" << zero_initializations.size()-1
         << ",\"semantic_zero_parts\":" << zero_parts.size()
         << ",\"semantic_field_descriptors\":" << field_facts.size()-1
+        << ",\"semantic_transfer_unit_fields\":" << unit_transfer_fields
         << ",\"semantic_destruction_actions\":" << destruction_actions.size()
         << ",\"semantic_transfer_actions\":" << transfers.size()
         << ",\"semantic_scalar_transfer_work\":" << scalar_transfer_work

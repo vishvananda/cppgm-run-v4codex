@@ -60,6 +60,8 @@ void Analyzer::prepare_transfer(EntityId e)
             std::uint64_t bytes = size(layout.storage_type);
             bool safe = !(types[type].cv & 2) && layout.declared_width <= bytes*8 && (bytes == 1 || bytes == 2 || bytes == 4 || bytes == 8);
             if (safe) {
+                auto& prepared = field_metadata(field);
+                if (!prepared.unit_transfer) { prepared.unit_transfer = true; ++unit_transfer_fields; }
                 auto offset = entities[field].member_offset;
                 if (prior_unit && unit_offset == offset && unit_bytes == bytes) return;
                 action.kind = TransferAction::Unit; action.type = layout.storage_type;

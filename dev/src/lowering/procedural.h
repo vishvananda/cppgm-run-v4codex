@@ -191,7 +191,7 @@ class Procedural {
     Value emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action = Operation::None);
     Value load(Value v);
     Value load_bit_field(Value v);
-    Value store_bit_field(Value v, Value location);
+    Value store_bit_field(Value v, Value location, SlotId container = SlotId());
     Value initialization_value(NodeId n, TypeId t);
     Value address(Value v);
     Value convert(Value v, TypeId target, bool fold_widen = false, bool preserve_widen = false);

@@ -86,7 +86,7 @@ struct FieldFacts {
     std::uint64_t alignment = 0, declared_width = 0;
     TypeId storage_type = 0;
     unsigned char shift = 0, width = 0;
-    bool bit_field = false, may_clear_unit = true;
+    bool bit_field = false, may_clear_unit = true, unit_transfer = false;
 };
 enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted };
 struct ZeroInitialization {

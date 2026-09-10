@@ -155,6 +155,7 @@ private:
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
+    std::uint64_t unit_transfer_fields = 0;
     Index field_index;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
