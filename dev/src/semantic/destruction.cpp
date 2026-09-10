@@ -13,12 +13,12 @@ EntityId Analyzer::converted_temporary(const Conversion& c) const
 EntityId Analyzer::bound_temporary(NodeId n) const
 {
     auto c = conversions[expressions[n].incoming];
-    if (c.reference) if (auto temporary = converted_temporary(c)) return temporary;
+    if (c.reference) {
+        if (auto temporary = converted_temporary(c)) return temporary;
+        if (c.temporary || c.kind == Conversion::Kind::User) return 0;
+    }
     if (auto temporary = object_fact(n).temporary) return temporary;
-    if (c.kind == Conversion::Kind::List && list_plans[list_objects[c.materialization].plan].direct_binding)
-        return bound_temporary(call_arguments[list_objects[c.materialization].call.arguments]);
-    if (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments)
-        return bound_temporary(ast[n].first);
+    if (auto operand = reference_operand(n)) return bound_temporary(operand);
     return 0;
 }
 EntityId Analyzer::type_destructor(TypeId t) const
@@ -62,12 +62,8 @@ void Analyzer::register_destruction(EntityId e)
         (scopes[entities[e].owner].kind == ScopeKind::Block || scopes[entities[e].owner].kind == ScopeKind::Control)) {
         NodeId n = entities[e].initializer;
         while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
-        EntityId temporary = bound_temporary(n);
-        if (temporary) {
-            reference_temporaries.put(e,temporary);
-            object_destructors.put(e,object_destructor(temporary));
-            return;
-        }
+        local_reference(n,e);
+        if (reference_temporary(e) || reference_choices(e)) return;
     }
     EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);

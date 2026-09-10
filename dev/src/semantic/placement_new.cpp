@@ -69,6 +69,7 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
             auto m = members[entities[use.constructor].member_info];
             use.zero &= m.synthetic && !m.defaulted_late;
         }
+        if (use.zero) use.zero_plan = prepare_zero_initialization(use.leaf);
         if (use.constructor) members[entities[use.constructor].member_info].array_entry = true;
         if (use.constructor) use.deallocation = select_deallocation(use.leaf,true,child(n,Kind::Global),s);
     } else if (use.initializer) initialize(use.initializer, use.type, s);

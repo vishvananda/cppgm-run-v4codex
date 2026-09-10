@@ -13,6 +13,7 @@ void Procedural::destroy(EntityId dtor, TypeId t, Value object)
 }
 void Procedural::destroy_object(EntityId object, EntityId dtor)
 {
+    if (sem.reference_choices(object)) { destroy_reference_choices(object); return; }
     TypeId t = sem.entities[object].type;
     if (sem.parameter_cleanup(object)) {
         Value location = address(binding(object));

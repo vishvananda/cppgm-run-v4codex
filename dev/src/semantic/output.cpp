@@ -147,6 +147,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_scalar_transfer_work\":" << scalar_transfer_work
         << ",\"semantic_scalar_transfer_cache_bytes\":" << scalar_transfer_nodes.size()
         << ",\"semantic_lifetime_states\":" << lifetimes.size()-1
+        << ",\"semantic_reference_binding_work\":" << reference_binding_work
+        << ",\"semantic_reference_alternatives\":" << reference_alternatives.size()-1
         << ",\"semantic_lifetime_uses\":" << lifetime_uses.size()-1
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor

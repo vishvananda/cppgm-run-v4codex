@@ -114,6 +114,7 @@ void Procedural::object(EntityId e)
     auto lifetime = sem.object_lifetime(e);
     if (lifetime) live = sem.lifetimes[lifetime].tail;
     auto initial_live = live;
+    prepare_reference_guards(e);
     if (!object_addresses[e] && (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index)) objects[e] = source_slot(e);
     Value location = object_addresses[e] ? Value(Operand::value(object_addresses[e]),type(t),t,true) : Value(Operand::slot(objects[e]), type(t), t, true);
     NodeId init = sem.entities[e].initializer;

@@ -2,6 +2,30 @@
 namespace cppgm { namespace lowering {
 using syntax::Kind;
 using namespace lowir_model;
+void Procedural::prepare_reference_guards(EntityId e)
+{
+    for (auto choice = sem.reference_choices(e); choice; choice = sem.reference_alternatives[choice].next) {
+        EntityId object = sem.reference_alternatives[choice].object;
+        if (!sem.temporary_cleanup(object)) continue;
+        auto guard = builder->add_slot(0,IRType::I64);
+        local_reference_guards.put(object,guard.index);
+        emit(Opcode::Store,IRType::I64,{Operand::integer(0),Operand::slot(guard)});
+    }
+}
+void Procedural::destroy_reference_choices(EntityId e)
+{
+    for (auto choice = sem.reference_choices(e); choice; choice = sem.reference_alternatives[choice].next) {
+        EntityId object = sem.reference_alternatives[choice].object;
+        auto guard = local_reference_guards.get(object);
+        if (!guard) continue;
+        auto test = emit(Opcode::Load,IRType::I64,{Operand::slot(SlotId(guard))});
+        auto run = block(), end = block();
+        emit(Opcode::Branch,IRType(),{test.operand,Operand::label(run),Operand::label(end)});
+        start(run);
+        destroy(sem.object_destructor(object),sem.entities[object].type,address(class_temporary(object,sem.entities[object].type)));
+        jump(end); start(end);
+    }
+}
 void Procedural::reference_global(EntityId e)
 {
     auto storage = sem.static_temporary(e);

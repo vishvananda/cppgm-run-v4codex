@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include <stdexcept>
 namespace cppgm { namespace lowering {
 void Procedural::heap_array_destroy(EntityId destructor, TypeId leaf, Value data, Operand count)
 {
@@ -69,6 +70,9 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
         emit(Opcode::Store,IRType::I64,{count(),allocation.operand});
     }
     if (use.zero) {
+        if (!use.zero_plan) throw std::logic_error("missing heap zero-initialization plan");
+        auto plan = sem.zero_initializations[use.zero_plan];
+        auto stride = plan.bulk ? 1 : plan.bytes;
         Operand length = bytes;
         if (use.cookie) length = emit(Opcode::Binary,IRType::I64,{length,Operand::integer(use.cookie)},Operation::Sub).operand;
         SlotId offset = builder->add_slot(0,IRType::I64);
@@ -78,8 +82,9 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
         Value test = emit(Opcode::Compare,IRType::I64,{current.operand,length},Operation::Ult);
         emit(Opcode::Branch,IRType(),{test.operand,Operand::label(body),Operand::label(end)}); start(body);
         Value at = emit(Opcode::Index,IRType::I8,{data.operand,current.operand});
-        emit(Opcode::Store,IRType::I8,{Operand::integer(0),at.operand});
-        Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
+        if (plan.bulk) emit(Opcode::Store,IRType::I8,{Operand::integer(0),at.operand});
+        else zero_plan(use.zero_plan,at,!sem.class_value(use.leaf));
+        Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(stride)},Operation::Add);
         emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(offset)}); jump(cond); start(end);
     }
     if (use.construct) {

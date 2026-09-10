@@ -7,6 +7,7 @@ void Procedural::reset_lifetime(EntityId e)
     active_function = e; live = 0; emitting_cleanup = false; resume_emitted = false; cleanup_cursor = 0; slot_names = semantic::Index();
     cleanup_return = class_return_slot = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
+    local_reference_guards = semantic::Index();
     temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
     full_expression = FullExpression();
 }
@@ -21,6 +22,8 @@ void Procedural::activate_temporary(EntityId e)
         if (auto guard = reference_guards.get(e)) emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::symbol(SymbolId(guard))});
         return;
     }
+    if (auto guard = local_reference_guards.get(e))
+        emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::slot(SlotId(guard))});
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
     if (!sem.temporary_cleanup(e)) return;

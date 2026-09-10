@@ -65,6 +65,9 @@ public:
     bool empty_class(TypeId t) const;
     bool parameter_cleanup(EntityId e) const;
     EntityId reference_temporary(EntityId e) const { return reference_temporaries.get(e); }
+    struct ReferenceAlternative { EntityId object; std::uint32_t next; };
+    std::vector<ReferenceAlternative> reference_alternatives = std::vector<ReferenceAlternative>(1);
+    std::uint32_t reference_choices(EntityId e) const { return conditional_references.get(e); }
     const ReferenceStorage& static_temporary(EntityId e) const { return reference_storage[static_temporaries.get(e)]; }
     EntityId reference_scalar(EntityId e) const { return reference_scalars.get(e); }
     std::vector<ReferenceStorage> reference_storage = std::vector<ReferenceStorage>(1);
@@ -127,6 +130,10 @@ private:
     EntityId current_function = 0;
     Index class_initializer_index, class_return_index, function_return_index;
     Index reference_temporaries;
+    Index conditional_references;
+    std::uint64_t reference_binding_work = 0;
+    NodeId reference_operand(NodeId n) const;
+    void local_reference(NodeId n, EntityId reference, bool conditional = false);
     Index static_temporaries, reference_scalars;
     void static_reference(EntityId e);
     void retain_reference_object(NodeId n, EntityId reference, bool conditional);

@@ -118,6 +118,9 @@ class Procedural {
     semantic::LifetimeState lifetime_state(std::uint32_t state) const;
     void activate_temporary(EntityId e);
     semantic::Index reference_guards;
+    semantic::Index local_reference_guards;
+    void prepare_reference_guards(EntityId e);
+    void destroy_reference_choices(EntityId e);
     void reference_global(EntityId e);
     void initialize_reference(EntityId e, Value location);
     SymbolId abort_symbol;
@@ -222,7 +225,7 @@ class Procedural {
     Value member_pointer_address(Value value);
     Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);
     void zero_object(TypeId type, Value object);
-    void zero_plan(std::uint32_t plan, Value object);
+    void zero_plan(std::uint32_t plan, Value object, bool scalar_access = false);
     void zero_padding(Value object, std::uint64_t offset, std::uint64_t bytes, std::uint64_t alignment);
     Value store(Value v, Value location);
     void initialize(NodeId n, TypeId t, Value location);

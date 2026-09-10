@@ -22,12 +22,14 @@ void Analyzer::check_jumps(NodeId body)
         if (!e || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) || entities[e].is_static || entities[e].external_decl) return;
         EntityId dtor = object_destructor(e);
         EntityId temporary = reference_temporary(e);
-        bool destruction = destructor_needed(dtor) || parameter_cleanup(e) || temporary_cleanup(temporary) ||
+        bool destruction = reference_choices(e) || destructor_needed(dtor) || parameter_cleanup(e) || temporary_cleanup(temporary) ||
             (types[entities[e].type].kind == TypeKind::Array && !trivial_destructor(entities[e].type));
         if (destruction) {
             LifetimeState state; state.object = temporary ? temporary : e; state.destructor = dtor; state.tail = live; state.depth = lifetimes[live].depth + 1;
             live = lifetimes.size(); lifetimes.push_back(state); object_lifetimes.put(e, live);
             if (temporary) object_lifetimes.put(temporary,live);
+            for (auto choice = reference_choices(e); choice; choice = reference_alternatives[choice].next)
+                object_lifetimes.put(reference_alternatives[choice].object,live);
         }
         if (!entities[e].initializer && !destruction && !constructor_needed(object_constructor(e))) return;
         unsigned parent = active;

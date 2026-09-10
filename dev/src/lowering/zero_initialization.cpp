@@ -33,7 +33,7 @@ void Procedural::zero_padding(Value object, std::uint64_t offset, std::uint64_t 
         emit(Opcode::Store,t,{Operand::integer(0),at.operand}); offset += width; bytes -= width;
     }
 }
-void Procedural::zero_plan(std::uint32_t id, Value object)
+void Procedural::zero_plan(std::uint32_t id, Value object, bool scalar_access)
 {
     using semantic::ZeroInitialization;
     auto plan = sem.zero_initializations[id];
@@ -45,12 +45,22 @@ void Procedural::zero_plan(std::uint32_t id, Value object)
     }
     case ZeroInitialization::Scalar: {
         auto t = type(plan.type);
-        emit(Opcode::Store,t,{t.floating() ? Operand::floating(0) : Operand::integer(0),object.operand}); return;
+        Instruction store(Opcode::Store,t); store.is_volatile = scalar_access && (sem.types[plan.type].cv & 2);
+        emit(store,{t.floating() ? Operand::floating(0) : Operand::integer(0),object.operand}); return;
     }
-    case ZeroInitialization::MemberPointer:
-        if (plan.bytes == 8) emit(Opcode::Store,IRType::I64,{Operand::integer(~std::uint64_t(0)),object.operand});
-        else zero_padding(object,0,plan.bytes,plan.alignment);
+    case ZeroInitialization::MemberPointer: {
+        bool observed = scalar_access && (sem.types[plan.type].cv & 2);
+        if (plan.bytes == 8) {
+            Instruction store(Opcode::Store,IRType::I64); store.is_volatile = observed;
+            emit(store,{Operand::integer(~std::uint64_t(0)),object.operand});
+        } else if (observed) {
+            Instruction store(Opcode::Store,IRType::Ptr); store.is_volatile = true;
+            emit(store,{Operand::integer(0),object.operand});
+            auto at = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(8)});
+            store.type = IRType::I64; emit(store,{Operand::integer(0),at.operand});
+        } else zero_padding(object,0,plan.bytes,plan.alignment);
         return;
+    }
     case ZeroInitialization::Composite: {
         std::uint64_t end = 0;
         for (unsigned j = 0; j < plan.count; ++j) {

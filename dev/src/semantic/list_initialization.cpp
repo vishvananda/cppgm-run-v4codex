@@ -80,7 +80,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
         if (!plan.direct_binding && can_bind) {
             if (aggregate_type(t)) {
                 NodeId cursor = first;
-                auto group = list_aggregate(cursor,types.unqualified(t),s);
+                auto group = list_aggregate(cursor,t,s);
                 plan = list_plans[group]; plan.source = n; plan.target = to; plan.direct = direct;
                 if (cursor) plan.rank = 255;
             } else if (class_value(t)) {
@@ -121,7 +121,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
 {
     auto plan = list_plans[c.materialization];
     if (!c.valid()) throw std::runtime_error("invalid list initialization");
-    TypeId t = types.unqualified(value_type(c.target));
+    TypeId t = value_type(c.target);
     if (plan.zero) prepare_zero_initialization(t);
     if (plan.constructor) {
         auto ctor = plan.constructor;
