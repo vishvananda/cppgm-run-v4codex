@@ -146,3 +146,10 @@ Preserve `storage-direct-performance.json`. Nonempty trivial conversion results
 can legally initialize the final destination directly; use cached triviality
 for that constant-work elision. Empty/nontrivial explicit transfers remain.
 The final campaign also measures observable explicit moves as B-only behavior.
+
+Final review shares the constructor field descriptor between unit dispatch and
+ordinary bit-field dispatch, avoiding a duplicate metadata lookup per action.
+Budgets for these owners: at most one additional conversion-object record per
+retained use, two sparse flags, constant queries per use/field, no extra layout
+scan; compiler text growth below 4 KiB and common compiler median cost below 5%
+are diagnostic review budgets, not new course gates. Array expansion remains 8.
