@@ -33,7 +33,8 @@ it does not strengthen a language exception specification or public ABI.
 [boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
 [destructor](destruction-performance.md), [member-pointer](member-pointer-performance.md),
 [zero](zero-performance.md), [consumption](consumption-performance.md) and
-[storage/conversion](storage-performance.md) retain
+[storage/conversion](storage-performance.md) and
+[parameter](parameter-performance.md) retain
 frozen hashes, inputs, flags, A/A+ABBA data, compiler latency/RSS and runtime/text.
 Historical misses and outliers remain. Required representation costs and proven
 later-backend constraints do not create positive-runtime PA12 exit gates.
@@ -133,3 +134,9 @@ pending before handoff. Query budgets are one class state/copy ID, one member
 flag, incremental entity traversal and linear member/source inspection; 6 KiB
 compiler text and 5% common compiler median are diagnostic review budgets.
 Continue the scalar-initialization owner before choosing a handoff boundary.
+
+Parameter performance: frozen `f3e7ce93`, +2752 compiler text bytes (.28%);
+large common compile median -.22% with mixed/noisy pairs. All non-parameter
+native bytes match A. Required object-parameter transport adds 24 native bytes
+and about 59% runtime in its focused workload; this is a documented PA12 ABI
+cost, not a positive-runtime gate. All observations remain in the linked report.
