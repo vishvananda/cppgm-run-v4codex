@@ -1,0 +1,5194 @@
+{
+  "protocol": "all workloads: warmups, four A/A observations and two ABBA blocks",
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "harness_sha256": "873b7a4df6524aebdb94f9d2e881253add46c524c18adb165c72ef37a78d45e3",
+  "shared_harness_sha256": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a",
+  "binaries": [
+    {
+      "path": "/tmp/pa12-scalar-base-cppgm",
+      "sha256": "7c16e8acd813fdb09104ef01da69187fcbac0067ceefebe7dae33b54902abce7",
+      "text_bytes": 972294
+    },
+    {
+      "path": "/tmp/pa12-scalar-policy-cppgm",
+      "sha256": "7f19ddb9099151715f3a967c6fae5cb9139d9bfbca9d7a6308e9fd08fcc34ed8",
+      "text_bytes": 980166
+    }
+  ],
+  "backend_sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+  "compile_flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "native_flags": [
+    "-O0"
+  ],
+  "diagnostic_budgets": {
+    "compiler_text_growth_bytes": 8192,
+    "common_compile_median_ratio": 1.05
+  },
+  "text_metric": "compiler .text; supplied sectionless ELF executable payload after entry",
+  "workloads": {
+    "common-1000": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/common-1000.cpp",
+      "source_sha256": "564e75b44e505b877f36ac3892932005618d66240379ce9adb9c0280fc784d1a",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "ff7c6d256133cc6f357ab297f3dd9964adc7bab4edc1927981aa0a1b85e4afd3",
+          "lowir_bytes": 2162653,
+          "executable_sha256": "c78cbf16e8669a85044e629d1d761ffd57d3422737c480c7531e460039038be2",
+          "text_bytes": 168056,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 96017,
+              "max_pending": 37,
+              "node_growths": 18,
+              "delimiter_work": 96017,
+              "semantic_ms": 57.6206,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 6000,
+              "semantic_constructor_actions": 2000,
+              "semantic_conversion_objects": 3000,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 1000,
+              "semantic_value_returns": 1000,
+              "semantic_function_returns": 1000,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 1000,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2000,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4000,
+              "semantic_demand_processed": 4000,
+              "semantic_expression_work": 17005,
+              "semantic_candidate_work": 19001,
+              "semantic_conversion_work": 17004,
+              "semantic_conversions": 17004,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 1000,
+              "semantic_constants": 0,
+              "semantic_types": 16011,
+              "semantic_entities": 26002,
+              "semantic_scopes": 20003,
+              "semantic_edges": 0,
+              "semantic_declarations": 15001,
+              "semantic_regions": 10001,
+              "semantic_lookup_work": 45008,
+              "semantic_signature_work": 3006,
+              "semantic_type_probes": 91747,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 178.612,
+              "lowering_ms": 41.1161,
+              "write_ms": 24.9399,
+              "peak_rss_kib": 49476,
+              "nodes": 172021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 10002,
+              "discard_work": 0,
+              "full_expression_work": 27006,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 7003,
+              "abi_bytes": 430594,
+              "instructions": 41004,
+              "operands": 61006,
+              "ir_pool_growths": 175,
+              "ir_capacity_bytes": 9838592
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "ff7c6d256133cc6f357ab297f3dd9964adc7bab4edc1927981aa0a1b85e4afd3",
+          "lowir_bytes": 2162653,
+          "executable_sha256": "c78cbf16e8669a85044e629d1d761ffd57d3422737c480c7531e460039038be2",
+          "text_bytes": 168056,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 96017,
+              "max_pending": 37,
+              "node_growths": 18,
+              "delimiter_work": 96017,
+              "semantic_ms": 57.3588,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 6000,
+              "semantic_constructor_actions": 2000,
+              "semantic_conversion_objects": 3000,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 1000,
+              "semantic_value_returns": 1000,
+              "semantic_function_returns": 1000,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 1000,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2000,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4000,
+              "semantic_demand_processed": 4000,
+              "semantic_expression_work": 17005,
+              "semantic_candidate_work": 19001,
+              "semantic_conversion_work": 17004,
+              "semantic_conversions": 17004,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 1000,
+              "semantic_constants": 0,
+              "semantic_types": 16011,
+              "semantic_entities": 26002,
+              "semantic_scopes": 20003,
+              "semantic_edges": 0,
+              "semantic_declarations": 15001,
+              "semantic_regions": 10001,
+              "semantic_lookup_work": 45008,
+              "semantic_signature_work": 3006,
+              "semantic_type_probes": 91747,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 178,
+              "lowering_ms": 41.1026,
+              "write_ms": 23.3691,
+              "peak_rss_kib": 49368,
+              "nodes": 172021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 10002,
+              "discard_work": 0,
+              "full_expression_work": 27006,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 7003,
+              "abi_bytes": 430594,
+              "instructions": 41004,
+              "operands": 61006,
+              "ir_pool_growths": 175,
+              "ir_capacity_bytes": 9838592
+            }
+          ]
+        }
+      ],
+      "equivalence": "byte-identical LowIR/native and checked exit 0",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.253315269,
+            "rss_kib": 49904
+          },
+          {
+            "wall_s": 0.25280517,
+            "rss_kib": 49456
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.254472375,
+            "rss_kib": 49944,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.260626589,
+            "rss_kib": 49900,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.25044025,
+            "rss_kib": 49844,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.253937197,
+            "rss_kib": 49904,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.251096649,
+            "rss_kib": 49748,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.249633953,
+            "rss_kib": 49380,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.250590586,
+            "rss_kib": 49356,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.249667851,
+            "rss_kib": 49884,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.249698394,
+            "rss_kib": 49964,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.248516422,
+            "rss_kib": 49360,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.253589622,
+            "rss_kib": 49236,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.258054683,
+            "rss_kib": 49888,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.25044025,
+          0.260626589
+        ],
+        "paired_b_over_a": [
+          0.9989217266799062,
+          0.9888783874371282
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.180069569,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.017700786,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003288796,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003162254,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003124622,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003222444,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003179541,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003267436,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003149687,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003252058,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003127126,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003173994,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003154017,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003089845,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003124622,
+          0.003288796
+        ],
+        "paired_b_over_a": [
+          0.9977492377867464,
+          1.0178607878338182
+        ]
+      }
+    },
+    "common-4000": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/common-4000.cpp",
+      "source_sha256": "636b617d6461d1b2d921f3194b13c609e3751d5850cd3bca9e82f6683371fe20",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "ed3f2b56bf005f96fc5d094a55bfeaf8d19e1a15e81ab46a81e6a3b09280f78d",
+          "lowir_bytes": 8912658,
+          "executable_sha256": "4e76ee2a67423657544945d4a6aa6cce1b07a493a332156bd899342388a9f495",
+          "text_bytes": 672056,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 384017,
+              "max_pending": 37,
+              "node_growths": 20,
+              "delimiter_work": 384017,
+              "semantic_ms": 243.023,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 24000,
+              "semantic_constructor_actions": 8000,
+              "semantic_conversion_objects": 12000,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 4000,
+              "semantic_value_returns": 4000,
+              "semantic_function_returns": 4000,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 4000,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 8000,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 16000,
+              "semantic_demand_processed": 16000,
+              "semantic_expression_work": 68005,
+              "semantic_candidate_work": 76001,
+              "semantic_conversion_work": 68004,
+              "semantic_conversions": 68004,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 4000,
+              "semantic_constants": 0,
+              "semantic_types": 64011,
+              "semantic_entities": 104002,
+              "semantic_scopes": 80003,
+              "semantic_edges": 0,
+              "semantic_declarations": 60001,
+              "semantic_regions": 40001,
+              "semantic_lookup_work": 180008,
+              "semantic_signature_work": 12006,
+              "semantic_type_probes": 366656,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 738.429,
+              "lowering_ms": 183.529,
+              "write_ms": 92.6279,
+              "peak_rss_kib": 184580,
+              "nodes": 688021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 40002,
+              "discard_work": 0,
+              "full_expression_work": 108006,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 28003,
+              "abi_bytes": 1740816,
+              "instructions": 164004,
+              "operands": 244006,
+              "ir_pool_growths": 199,
+              "ir_capacity_bytes": 39354368
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "ed3f2b56bf005f96fc5d094a55bfeaf8d19e1a15e81ab46a81e6a3b09280f78d",
+          "lowir_bytes": 8912658,
+          "executable_sha256": "4e76ee2a67423657544945d4a6aa6cce1b07a493a332156bd899342388a9f495",
+          "text_bytes": 672056,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 384017,
+              "max_pending": 37,
+              "node_growths": 20,
+              "delimiter_work": 384017,
+              "semantic_ms": 237.235,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 24000,
+              "semantic_constructor_actions": 8000,
+              "semantic_conversion_objects": 12000,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 4000,
+              "semantic_value_returns": 4000,
+              "semantic_function_returns": 4000,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 4000,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 8000,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 16000,
+              "semantic_demand_processed": 16000,
+              "semantic_expression_work": 68005,
+              "semantic_candidate_work": 76001,
+              "semantic_conversion_work": 68004,
+              "semantic_conversions": 68004,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 4000,
+              "semantic_constants": 0,
+              "semantic_types": 64011,
+              "semantic_entities": 104002,
+              "semantic_scopes": 80003,
+              "semantic_edges": 0,
+              "semantic_declarations": 60001,
+              "semantic_regions": 40001,
+              "semantic_lookup_work": 180008,
+              "semantic_signature_work": 12006,
+              "semantic_type_probes": 366656,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 724.502,
+              "lowering_ms": 170.741,
+              "write_ms": 93.0502,
+              "peak_rss_kib": 184616,
+              "nodes": 688021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 40002,
+              "discard_work": 0,
+              "full_expression_work": 108006,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 28003,
+              "abi_bytes": 1740816,
+              "instructions": 164004,
+              "operands": 244006,
+              "ir_pool_growths": 199,
+              "ir_capacity_bytes": 39354368
+            }
+          ]
+        }
+      ],
+      "equivalence": "byte-identical LowIR/native and checked exit 0",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 1.027590747,
+            "rss_kib": 184944
+          },
+          {
+            "wall_s": 1.033785734,
+            "rss_kib": 184892
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 1.033664849,
+            "rss_kib": 185072,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.016370874,
+            "rss_kib": 185000,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.017999123,
+            "rss_kib": 185060,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.138253962,
+            "rss_kib": 184976,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.081251038,
+            "rss_kib": 185008,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.035155359,
+            "rss_kib": 184628,
+            "binary": 1
+          },
+          {
+            "wall_s": 1.029688849,
+            "rss_kib": 184704,
+            "binary": 1
+          },
+          {
+            "wall_s": 1.036154255,
+            "rss_kib": 184856,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.059277224,
+            "rss_kib": 184976,
+            "binary": 0
+          },
+          {
+            "wall_s": 1.047836781,
+            "rss_kib": 184892,
+            "binary": 1
+          },
+          {
+            "wall_s": 1.04537712,
+            "rss_kib": 184884,
+            "binary": 1
+          },
+          {
+            "wall_s": 1.041757743,
+            "rss_kib": 184956,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          1.016370874,
+          1.138253962
+        ],
+        "paired_b_over_a": [
+          0.9751766536270768,
+          0.9962775174507602
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003541652,
+            "rss_kib": 512
+          },
+          {
+            "wall_s": 0.003229334,
+            "rss_kib": 512
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003069041,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003111059,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003044048,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003078652,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003152296,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003415457,
+            "rss_kib": 512,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003832341,
+            "rss_kib": 512,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003465793,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003328794,
+            "rss_kib": 512,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003413042,
+            "rss_kib": 512,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00326284,
+            "rss_kib": 512,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003191084,
+            "rss_kib": 512,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003044048,
+          0.003111059
+        ],
+        "paired_b_over_a": [
+          1.0951496723601026,
+          1.0239274415870971
+        ]
+      }
+    },
+    "common-runtime": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/common-runtime.cpp",
+      "source_sha256": "901fc9616abeade827609c1ceee96e09377489b4b0f635bac145be3ecb3d446e",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "30f520680f5596bd1404e0721b3ad27174618f1f1d124ae1eb7c6b8e266b3e77",
+          "lowir_bytes": 2622,
+          "executable_sha256": "4f8a9076ee7abeab8b240029ad18242ae611994a1d49f337b0d94cdd40d4761f",
+          "text_bytes": 323,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 144,
+              "max_pending": 37,
+              "node_growths": 9,
+              "delimiter_work": 144,
+              "semantic_ms": 0.135667,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 6,
+              "semantic_constructor_actions": 2,
+              "semantic_conversion_objects": 3,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 1,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 1,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 40,
+              "semantic_candidate_work": 20,
+              "semantic_conversion_work": 35,
+              "semantic_conversions": 37,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 1,
+              "semantic_constants": 6,
+              "semantic_types": 29,
+              "semantic_entities": 30,
+              "semantic_scopes": 24,
+              "semantic_edges": 0,
+              "semantic_declarations": 19,
+              "semantic_regions": 13,
+              "semantic_lookup_work": 73,
+              "semantic_signature_work": 10,
+              "semantic_type_probes": 101,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 0.478793,
+              "lowering_ms": 0.105692,
+              "write_ms": 0.080212,
+              "peak_rss_kib": 39668,
+              "nodes": 259,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 19,
+              "discard_work": 0,
+              "full_expression_work": 54,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 9,
+              "abi_bytes": 990,
+              "instructions": 65,
+              "operands": 99,
+              "ir_pool_growths": 60,
+              "ir_capacity_bytes": 17480
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "30f520680f5596bd1404e0721b3ad27174618f1f1d124ae1eb7c6b8e266b3e77",
+          "lowir_bytes": 2622,
+          "executable_sha256": "4f8a9076ee7abeab8b240029ad18242ae611994a1d49f337b0d94cdd40d4761f",
+          "text_bytes": 323,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 144,
+              "max_pending": 37,
+              "node_growths": 9,
+              "delimiter_work": 144,
+              "semantic_ms": 0.146201,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 6,
+              "semantic_constructor_actions": 2,
+              "semantic_conversion_objects": 3,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 1,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 2,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 1,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 40,
+              "semantic_candidate_work": 20,
+              "semantic_conversion_work": 35,
+              "semantic_conversions": 37,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 1,
+              "semantic_constants": 6,
+              "semantic_types": 29,
+              "semantic_entities": 30,
+              "semantic_scopes": 24,
+              "semantic_edges": 0,
+              "semantic_declarations": 19,
+              "semantic_regions": 13,
+              "semantic_lookup_work": 73,
+              "semantic_signature_work": 10,
+              "semantic_type_probes": 101,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 0.51287,
+              "lowering_ms": 0.102207,
+              "write_ms": 0.098546,
+              "peak_rss_kib": 39668,
+              "nodes": 259,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 19,
+              "discard_work": 0,
+              "full_expression_work": 54,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 9,
+              "abi_bytes": 990,
+              "instructions": 65,
+              "operands": 99,
+              "ir_pool_growths": 60,
+              "ir_capacity_bytes": 17480
+            }
+          ]
+        }
+      ],
+      "equivalence": "byte-identical LowIR/native and checked exit 0",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.006511733,
+            "rss_kib": 4976
+          },
+          {
+            "wall_s": 0.006259748,
+            "rss_kib": 4756
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.006310955,
+            "rss_kib": 4824,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006223464,
+            "rss_kib": 5060,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006101511,
+            "rss_kib": 5020,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006187042,
+            "rss_kib": 4972,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00621633,
+            "rss_kib": 4992,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006552696,
+            "rss_kib": 4980,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00645391,
+            "rss_kib": 4992,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006275817,
+            "rss_kib": 5016,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00618271,
+            "rss_kib": 5012,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006250661,
+            "rss_kib": 5064,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006229284,
+            "rss_kib": 4992,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006130779,
+            "rss_kib": 5052,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.006101511,
+          0.006310955
+        ],
+        "paired_b_over_a": [
+          1.041182592551945,
+          1.0135181831891837
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.307304369,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.311016824,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.310407515,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.446189838,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.308451775,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.30354502,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.299895437,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.298376985,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.307319511,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.308555078,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.308273968,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.306086333,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.309918061,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.309475142,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.30354502,
+          0.446189838
+        ],
+        "paired_b_over_a": [
+          0.9954737173654953,
+          0.9971756883631933
+        ]
+      }
+    },
+    "dynamic-100": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/dynamic-100.cpp",
+      "source_sha256": "2e9376fbda65b5ef5c683c71ec88e6d9c725bcba56f4bbe431827b136aca8833",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "5c52592699cd59bcd310b5ac5ca63427db15d60e75e45e795d0b3583f8822985",
+          "lowir_bytes": 514727,
+          "executable_sha256": "bf87ca818f6c85c826c2f9d19facc163a3cec39489dce0cb379ece6715fc619a",
+          "text_bytes": 94992,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 17417,
+              "max_pending": 32,
+              "node_growths": 15,
+              "delimiter_work": 17417,
+              "semantic_ms": 8.02791,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 4505,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 3704,
+              "semantic_conversions": 3904,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 200,
+              "semantic_types": 2012,
+              "semantic_entities": 3402,
+              "semantic_scopes": 2603,
+              "semantic_edges": 0,
+              "semantic_declarations": 2201,
+              "semantic_regions": 1601,
+              "semantic_lookup_work": 8508,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 13421,
+              "semantic_constant_work": 800
+            },
+            {
+              "frontend_ms": 28.1821,
+              "lowering_ms": 7.81453,
+              "write_ms": 5.82232,
+              "peak_rss_kib": 39668,
+              "nodes": 30421,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 1802,
+              "discard_work": 0,
+              "full_expression_work": 9406,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 11904,
+              "operands": 17206,
+              "ir_pool_growths": 151,
+              "ir_capacity_bytes": 2871296
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "5c52592699cd59bcd310b5ac5ca63427db15d60e75e45e795d0b3583f8822985",
+          "lowir_bytes": 514727,
+          "executable_sha256": "bf87ca818f6c85c826c2f9d19facc163a3cec39489dce0cb379ece6715fc619a",
+          "text_bytes": 94992,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 17417,
+              "max_pending": 32,
+              "node_growths": 15,
+              "delimiter_work": 17417,
+              "semantic_ms": 8.36205,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 100,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 100,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 4505,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 3704,
+              "semantic_conversions": 3904,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 200,
+              "semantic_types": 2012,
+              "semantic_entities": 3402,
+              "semantic_scopes": 2603,
+              "semantic_edges": 0,
+              "semantic_declarations": 2201,
+              "semantic_regions": 1601,
+              "semantic_lookup_work": 8508,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 13421,
+              "semantic_constant_work": 800
+            },
+            {
+              "frontend_ms": 28.7481,
+              "lowering_ms": 7.96205,
+              "write_ms": 5.84344,
+              "peak_rss_kib": 39668,
+              "nodes": 30421,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 1802,
+              "discard_work": 0,
+              "full_expression_work": 9406,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 11904,
+              "operands": 17206,
+              "ir_pool_growths": 151,
+              "ir_capacity_bytes": 2871296
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.04968459,
+            "rss_kib": 13248
+          },
+          {
+            "wall_s": 0.050129435,
+            "rss_kib": 13480
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.051250778,
+            "rss_kib": 13248,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049722991,
+            "rss_kib": 13212,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049801426,
+            "rss_kib": 13280,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049794699,
+            "rss_kib": 13276,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049735172,
+            "rss_kib": 13200,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049519639,
+            "rss_kib": 13388,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.050334341,
+            "rss_kib": 13532,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.049639542,
+            "rss_kib": 13244,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049419523,
+            "rss_kib": 13220,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049442301,
+            "rss_kib": 13432,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.049560388,
+            "rss_kib": 13456,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.049659574,
+            "rss_kib": 13216,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.049722991,
+          0.051250778
+        ],
+        "paired_b_over_a": [
+          1.004822816395728,
+          0.9992288181633306
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003641957,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003212265,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003145309,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003154152,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003076004,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003153848,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00313746,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003167517,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003168666,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003049157,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003068757,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00307378,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003148656,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00321877,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003076004,
+          0.003154152
+        ],
+        "paired_b_over_a": [
+          1.024175732876304,
+          0.989647599127606
+        ]
+      }
+    },
+    "dynamic-400": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/dynamic-400.cpp",
+      "source_sha256": "4a8a6d51549677ae83ff961eef1fd92eec7bba0b34d2686716425547888065d9",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "9e7fb549d5bee14e50ea833259a3cd65d209c50a0f8472dc39ba141947cf786f",
+          "lowir_bytes": 2125793,
+          "executable_sha256": "2c6da0960814efa01e4946535c1276318319c97d6bacfe07ea7ca508248a21e0",
+          "text_bytes": 378192,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 69617,
+              "max_pending": 32,
+              "node_growths": 17,
+              "delimiter_work": 69617,
+              "semantic_ms": 35.0168,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 18005,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 14804,
+              "semantic_conversions": 15604,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 800,
+              "semantic_types": 8012,
+              "semantic_entities": 13602,
+              "semantic_scopes": 10403,
+              "semantic_edges": 0,
+              "semantic_declarations": 8801,
+              "semantic_regions": 6401,
+              "semantic_lookup_work": 34008,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 52725,
+              "semantic_constant_work": 3200
+            },
+            {
+              "frontend_ms": 117.225,
+              "lowering_ms": 34.4781,
+              "write_ms": 23.0358,
+              "peak_rss_kib": 39668,
+              "nodes": 121621,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 7202,
+              "discard_work": 0,
+              "full_expression_work": 37606,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 47604,
+              "operands": 68806,
+              "ir_pool_growths": 175,
+              "ir_capacity_bytes": 11485184
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "9e7fb549d5bee14e50ea833259a3cd65d209c50a0f8472dc39ba141947cf786f",
+          "lowir_bytes": 2125793,
+          "executable_sha256": "2c6da0960814efa01e4946535c1276318319c97d6bacfe07ea7ca508248a21e0",
+          "text_bytes": 378192,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 69617,
+              "max_pending": 32,
+              "node_growths": 17,
+              "delimiter_work": 69617,
+              "semantic_ms": 35.1724,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 400,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 400,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 18005,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 14804,
+              "semantic_conversions": 15604,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 800,
+              "semantic_types": 8012,
+              "semantic_entities": 13602,
+              "semantic_scopes": 10403,
+              "semantic_edges": 0,
+              "semantic_declarations": 8801,
+              "semantic_regions": 6401,
+              "semantic_lookup_work": 34008,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 52725,
+              "semantic_constant_work": 3200
+            },
+            {
+              "frontend_ms": 118.193,
+              "lowering_ms": 34.1752,
+              "write_ms": 22.8359,
+              "peak_rss_kib": 39668,
+              "nodes": 121621,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 7202,
+              "discard_work": 0,
+              "full_expression_work": 37606,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 47604,
+              "operands": 68806,
+              "ir_pool_growths": 175,
+              "ir_capacity_bytes": 11485184
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.183156635,
+            "rss_kib": 39276
+          },
+          {
+            "wall_s": 0.184847616,
+            "rss_kib": 38564
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.18601026,
+            "rss_kib": 39472,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.187450554,
+            "rss_kib": 39252,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.185874245,
+            "rss_kib": 39312,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.185658527,
+            "rss_kib": 39252,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.187138904,
+            "rss_kib": 39380,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.184437808,
+            "rss_kib": 38676,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.184922854,
+            "rss_kib": 38708,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.185869426,
+            "rss_kib": 39308,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.183206483,
+            "rss_kib": 39408,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.182741587,
+            "rss_kib": 38604,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.18414064,
+            "rss_kib": 38676,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.1862192,
+            "rss_kib": 39108,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.185658527,
+          0.187450554
+        ],
+        "paired_b_over_a": [
+          0.9902209476126177,
+          0.9931151078091125
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003728614,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003448722,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003288132,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003483049,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003310676,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.0031867,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003142055,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00314131,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003185889,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003092808,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003105161,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003163639,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003107309,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00307618,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.0031867,
+          0.003483049
+        ],
+        "paired_b_over_a": [
+          1.0148096277336005,
+          1.014496368991777
+        ]
+      }
+    },
+    "dynamic-runtime": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/dynamic-runtime.cpp",
+      "source_sha256": "ad55526ba944ab639f86984b260474e2a3f1ac0a74c2ccb93f51aba3c784f163",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "a380d6b54d95c2115933e2319297d42cdc7f5b46a0895b1115953d1d4cc8f967",
+          "lowir_bytes": 5472,
+          "executable_sha256": "e1668ebc8f64c76f19c12ed4df95c506eb02b9683d9bb2b4cf334542322a88a1",
+          "text_bytes": 1640,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 222,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 222,
+              "semantic_ms": 0.196925,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 68,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 55,
+              "semantic_conversions": 59,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 8,
+              "semantic_types": 34,
+              "semantic_entities": 38,
+              "semantic_scopes": 30,
+              "semantic_edges": 0,
+              "semantic_declarations": 26,
+              "semantic_regions": 19,
+              "semantic_lookup_work": 112,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 136,
+              "semantic_constant_work": 14
+            },
+            {
+              "frontend_ms": 0.663806,
+              "lowering_ms": 0.164125,
+              "write_ms": 0.134022,
+              "peak_rss_kib": 39668,
+              "nodes": 391,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 27,
+              "discard_work": 0,
+              "full_expression_work": 121,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 143,
+              "operands": 210,
+              "ir_pool_growths": 70,
+              "ir_capacity_bytes": 33952
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "a380d6b54d95c2115933e2319297d42cdc7f5b46a0895b1115953d1d4cc8f967",
+          "lowir_bytes": 5472,
+          "executable_sha256": "e1668ebc8f64c76f19c12ed4df95c506eb02b9683d9bb2b4cf334542322a88a1",
+          "text_bytes": 1640,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 222,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 222,
+              "semantic_ms": 0.19334,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 3,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 1,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 68,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 55,
+              "semantic_conversions": 59,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 8,
+              "semantic_types": 34,
+              "semantic_entities": 38,
+              "semantic_scopes": 30,
+              "semantic_edges": 0,
+              "semantic_declarations": 26,
+              "semantic_regions": 19,
+              "semantic_lookup_work": 112,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 136,
+              "semantic_constant_work": 14
+            },
+            {
+              "frontend_ms": 0.633971,
+              "lowering_ms": 0.174029,
+              "write_ms": 0.126254,
+              "peak_rss_kib": 39668,
+              "nodes": 391,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 27,
+              "discard_work": 0,
+              "full_expression_work": 121,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 143,
+              "operands": 210,
+              "ir_pool_growths": 70,
+              "ir_capacity_bytes": 33952
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.006806906,
+            "rss_kib": 5024
+          },
+          {
+            "wall_s": 0.006516238,
+            "rss_kib": 4988
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.006308873,
+            "rss_kib": 4956,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00644153,
+            "rss_kib": 4920,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006415137,
+            "rss_kib": 5028,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006489515,
+            "rss_kib": 5008,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006595682,
+            "rss_kib": 5040,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006441602,
+            "rss_kib": 4928,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00652925,
+            "rss_kib": 5036,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00680744,
+            "rss_kib": 4896,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006618228,
+            "rss_kib": 5020,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006498585,
+            "rss_kib": 5052,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00637394,
+            "rss_kib": 5036,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006302537,
+            "rss_kib": 5016,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.006308873,
+          0.006489515
+        ],
+        "paired_b_over_a": [
+          0.9677485588805356,
+          0.9962664749339532
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.322808484,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.325735353,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.323333604,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.335493717,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.322548275,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.34019266,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.322517234,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.323346834,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.324606421,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.324145673,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.321135112,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.323969839,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.322458324,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.321526178,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.322548275,
+          0.34019266
+        ],
+        "paired_b_over_a": [
+          1.001995395106217,
+          1.0058613659459714
+        ]
+      }
+    },
+    "constant-100": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/constant-100.cpp",
+      "source_sha256": "2206f47a240e6736bef34d6686addcbb2c5f1f930dcc56ef110c9b0ff606e387",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "0f419854097972bf4df2350b62b777b0f021b0fc76111bbb8e2d6b00f235cb8b",
+          "lowir_bytes": 500076,
+          "executable_sha256": "90cf4586db408ff3086a65a5d2b06eafcd72452e5c4638836e2de8195d888865",
+          "text_bytes": 91992,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 17217,
+              "max_pending": 32,
+              "node_growths": 15,
+              "delimiter_work": 17217,
+              "semantic_ms": 8.38785,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 4305,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 3504,
+              "semantic_conversions": 3704,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 400,
+              "semantic_types": 2012,
+              "semantic_entities": 3402,
+              "semantic_scopes": 2603,
+              "semantic_edges": 0,
+              "semantic_declarations": 2201,
+              "semantic_regions": 1601,
+              "semantic_lookup_work": 8308,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 13525,
+              "semantic_constant_work": 700
+            },
+            {
+              "frontend_ms": 28.5996,
+              "lowering_ms": 8.07686,
+              "write_ms": 5.87952,
+              "peak_rss_kib": 39668,
+              "nodes": 30021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 1802,
+              "discard_work": 0,
+              "full_expression_work": 9206,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 11504,
+              "operands": 16606,
+              "ir_pool_growths": 151,
+              "ir_capacity_bytes": 2871296
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "e521a9ee2fdf724827bec967a9a6c95cecdfbe94a202558486da049ea57b4eb0",
+          "lowir_bytes": 461508,
+          "executable_sha256": "cd20bb3cf05fe4580ae427659ff0a6446aad67836409e7a88c0f14aaf81982cd",
+          "text_bytes": 74392,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 17217,
+              "max_pending": 32,
+              "node_growths": 15,
+              "delimiter_work": 17217,
+              "semantic_ms": 8.36165,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 100,
+              "semantic_scalar_consumptions": 100,
+              "semantic_scalar_consumption_work": 700,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 4305,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 3504,
+              "semantic_conversions": 3704,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 400,
+              "semantic_types": 2012,
+              "semantic_entities": 3402,
+              "semantic_scopes": 2603,
+              "semantic_edges": 0,
+              "semantic_declarations": 2201,
+              "semantic_regions": 1601,
+              "semantic_lookup_work": 8308,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 13525,
+              "semantic_constant_work": 700
+            },
+            {
+              "frontend_ms": 28.1818,
+              "lowering_ms": 7.05568,
+              "write_ms": 5.7534,
+              "peak_rss_kib": 39668,
+              "nodes": 30021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 1802,
+              "discard_work": 0,
+              "full_expression_work": 9006,
+              "full_expression_regions": 300,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 10304,
+              "operands": 14906,
+              "ir_pool_growths": 146,
+              "ir_capacity_bytes": 2240512
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.049319427,
+            "rss_kib": 13100
+          },
+          {
+            "wall_s": 0.048230289,
+            "rss_kib": 12596
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.048879915,
+            "rss_kib": 13172,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.048778836,
+            "rss_kib": 13168,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.048863021,
+            "rss_kib": 13204,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.049153552,
+            "rss_kib": 13072,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.048567097,
+            "rss_kib": 13168,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.047699666,
+            "rss_kib": 12620,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.047647042,
+            "rss_kib": 12568,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.04978564,
+            "rss_kib": 13148,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.0492829,
+            "rss_kib": 13128,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.048483445,
+            "rss_kib": 12652,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.047793876,
+            "rss_kib": 12648,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.048652103,
+            "rss_kib": 13124,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.048778836,
+          0.049153552
+        ],
+        "paired_b_over_a": [
+          0.969436244565314,
+          0.9830736514093945
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.00364697,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.00324894,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.00310998,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003054289,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003093762,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003050387,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003150765,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003136599,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003033582,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003086713,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003023477,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003028289,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003081912,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003061241,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003050387,
+          0.00310998
+        ],
+        "paired_b_over_a": [
+          0.98921086374974,
+          1.0041880330362063
+        ]
+      }
+    },
+    "constant-400": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/constant-400.cpp",
+      "source_sha256": "92c0b7675848668e597c375f994a457619a8b2322a5d2234143454ecdff72fe5",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "2cca7fdd1d5bb796bd864749a6ac08297d542773fe303d80190eb183ec8437c6",
+          "lowir_bytes": 2063757,
+          "executable_sha256": "ae4ea2bb9b4d043ac2f6d0727524485cc8ca1bd638af9579296dd348d9845875",
+          "text_bytes": 366192,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 68817,
+              "max_pending": 32,
+              "node_growths": 17,
+              "delimiter_work": 68817,
+              "semantic_ms": 33.7776,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 17205,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 14004,
+              "semantic_conversions": 14804,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 1600,
+              "semantic_types": 8012,
+              "semantic_entities": 13602,
+              "semantic_scopes": 10403,
+              "semantic_edges": 0,
+              "semantic_declarations": 8801,
+              "semantic_regions": 6401,
+              "semantic_lookup_work": 33208,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 53129,
+              "semantic_constant_work": 2800
+            },
+            {
+              "frontend_ms": 114.637,
+              "lowering_ms": 35.4995,
+              "write_ms": 22.4657,
+              "peak_rss_kib": 40112,
+              "nodes": 120021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 7202,
+              "discard_work": 0,
+              "full_expression_work": 36806,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 46004,
+              "operands": 66406,
+              "ir_pool_growths": 175,
+              "ir_capacity_bytes": 11485184
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "6e34badd302bfff0799c64f977d85db4c3e48cc45ee1e8caed0b8091baf2f655",
+          "lowir_bytes": 1905833,
+          "executable_sha256": "8d49a1fe630acf0771f2bc32b4aa3ca8840840789ceb28656c68abafde9cde27",
+          "text_bytes": 295792,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 68817,
+              "max_pending": 32,
+              "node_growths": 17,
+              "delimiter_work": 68817,
+              "semantic_ms": 34.5703,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 400,
+              "semantic_scalar_consumptions": 400,
+              "semantic_scalar_consumption_work": 2800,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 17205,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 14004,
+              "semantic_conversions": 14804,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 1600,
+              "semantic_types": 8012,
+              "semantic_entities": 13602,
+              "semantic_scopes": 10403,
+              "semantic_edges": 0,
+              "semantic_declarations": 8801,
+              "semantic_regions": 6401,
+              "semantic_lookup_work": 33208,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 53129,
+              "semantic_constant_work": 2800
+            },
+            {
+              "frontend_ms": 116.979,
+              "lowering_ms": 29.9062,
+              "write_ms": 20.5542,
+              "peak_rss_kib": 39668,
+              "nodes": 120021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 7202,
+              "discard_work": 0,
+              "full_expression_work": 36006,
+              "full_expression_regions": 1200,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 41204,
+              "operands": 59606,
+              "ir_pool_growths": 170,
+              "ir_capacity_bytes": 8962048
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.178069536,
+            "rss_kib": 38176
+          },
+          {
+            "wall_s": 0.176156873,
+            "rss_kib": 35908
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.181286809,
+            "rss_kib": 38388,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.182054975,
+            "rss_kib": 38320,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.179505743,
+            "rss_kib": 38292,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.184293391,
+            "rss_kib": 38280,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.183656828,
+            "rss_kib": 38332,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.177426743,
+            "rss_kib": 36064,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.176483025,
+            "rss_kib": 35804,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.183526367,
+            "rss_kib": 38252,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.18236602,
+            "rss_kib": 38128,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.176500874,
+            "rss_kib": 36012,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.177703303,
+            "rss_kib": 36024,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.182224541,
+            "rss_kib": 38184,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.179505743,
+          0.184293391
+        ],
+        "paired_b_over_a": [
+          0.963850668601541,
+          0.9715121972123684
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003565931,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003152612,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003110217,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003052625,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003096613,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003050462,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003128657,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003105915,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00312388,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003062024,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003081802,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003063529,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003111271,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003059699,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003050462,
+          0.003110217
+        ],
+        "paired_b_over_a": [
+          1.0063182063491884,
+          1.0054219644350788
+        ]
+      }
+    },
+    "constant-runtime": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/constant-runtime.cpp",
+      "source_sha256": "919b3416150182d2a387125108d054c47a86fc9819acf4dce7392d2f8c0a1be5",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "fe58b687f9f3153fcb8b43b285bd8bfb0f065b7695612596a7a06658dea70130",
+          "lowir_bytes": 5340,
+          "executable_sha256": "c593e740109be1a4bad27d0e7f970ae8912edc236e0e85efcbdeacd387ce9963",
+          "text_bytes": 1600,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 220,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 220,
+              "semantic_ms": 0.18422,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 66,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 53,
+              "semantic_conversions": 57,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 10,
+              "semantic_types": 34,
+              "semantic_entities": 38,
+              "semantic_scopes": 30,
+              "semantic_edges": 0,
+              "semantic_declarations": 26,
+              "semantic_regions": 19,
+              "semantic_lookup_work": 110,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 139,
+              "semantic_constant_work": 13
+            },
+            {
+              "frontend_ms": 0.655308,
+              "lowering_ms": 0.157215,
+              "write_ms": 0.114718,
+              "peak_rss_kib": 39668,
+              "nodes": 387,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 27,
+              "discard_work": 0,
+              "full_expression_work": 119,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 139,
+              "operands": 204,
+              "ir_pool_growths": 70,
+              "ir_capacity_bytes": 33952
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "803bbd44c2702ac58ee2281ebd1707953c0ca5463b2a17139f456c9a29005307",
+          "lowir_bytes": 5006,
+          "executable_sha256": "e41b6d5eaca73b0a9584d4d27d9376db6607e4046f09f08f4a689010f71992f0",
+          "text_bytes": 1424,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 220,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 220,
+              "semantic_ms": 0.182015,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 3,
+              "semantic_scalar_consumptions": 1,
+              "semantic_scalar_consumption_work": 7,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 66,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 53,
+              "semantic_conversions": 57,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 10,
+              "semantic_types": 34,
+              "semantic_entities": 38,
+              "semantic_scopes": 30,
+              "semantic_edges": 0,
+              "semantic_declarations": 26,
+              "semantic_regions": 19,
+              "semantic_lookup_work": 110,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 139,
+              "semantic_constant_work": 13
+            },
+            {
+              "frontend_ms": 0.637655,
+              "lowering_ms": 0.200085,
+              "write_ms": 0.120335,
+              "peak_rss_kib": 39668,
+              "nodes": 387,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 27,
+              "discard_work": 0,
+              "full_expression_work": 117,
+              "full_expression_regions": 3,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 127,
+              "operands": 187,
+              "ir_pool_growths": 69,
+              "ir_capacity_bytes": 24736
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.006561361,
+            "rss_kib": 4976
+          },
+          {
+            "wall_s": 0.006328714,
+            "rss_kib": 4988
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.006399039,
+            "rss_kib": 5044,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006193319,
+            "rss_kib": 5020,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006237934,
+            "rss_kib": 4980,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006095102,
+            "rss_kib": 5016,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006084043,
+            "rss_kib": 4996,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006031845,
+            "rss_kib": 5084,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006051741,
+            "rss_kib": 4920,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00605737,
+            "rss_kib": 4920,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.005977237,
+            "rss_kib": 5032,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00604159,
+            "rss_kib": 4992,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.005942919,
+            "rss_kib": 4988,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.00598672,
+            "rss_kib": 4760,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.006095102,
+          0.006399039
+        ],
+        "paired_b_over_a": [
+          0.9952372100347793,
+          1.0017178263011142
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.320870288,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.351316164,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.415083884,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.319986496,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.317217734,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.306955203,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.306285584,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.344785343,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.346980988,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.309244469,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.309328326,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.346648851,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.34695551,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.311258731,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.306955203,
+          0.415083884
+        ],
+        "paired_b_over_a": [
+          1.1238546804147675,
+          1.1176584383712016
+        ]
+      }
+    },
+    "mutated-100": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/mutated-100.cpp",
+      "source_sha256": "2e68e297d1fca150196a3c35fea1b554be7bdbeff5c953d73a8f4973b8ccde7f",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "a18403ebfbb832687111ae3d38deba9817b0a826a9adf6f4b53d3455556f2d4f",
+          "lowir_bytes": 555863,
+          "executable_sha256": "d256fabbf886d317959a7a9749fc0dcc45d203c44fcff06946b9db926d568488",
+          "text_bytes": 98392,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 19717,
+              "max_pending": 32,
+              "node_growths": 16,
+              "delimiter_work": 19717,
+              "semantic_ms": 9.33153,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 5205,
+              "semantic_candidate_work": 1701,
+              "semantic_conversion_work": 4004,
+              "semantic_conversions": 4304,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 400,
+              "semantic_types": 2014,
+              "semantic_entities": 3702,
+              "semantic_scopes": 2803,
+              "semantic_edges": 0,
+              "semantic_declarations": 2501,
+              "semantic_regions": 1701,
+              "semantic_lookup_work": 9908,
+              "semantic_signature_work": 712,
+              "semantic_type_probes": 14253,
+              "semantic_constant_work": 700
+            },
+            {
+              "frontend_ms": 33.4922,
+              "lowering_ms": 8.30049,
+              "write_ms": 6.47811,
+              "peak_rss_kib": 39668,
+              "nodes": 34621,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 2102,
+              "discard_work": 0,
+              "full_expression_work": 10206,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1407,
+              "abi_bytes": 102834,
+              "instructions": 12704,
+              "operands": 18406,
+              "ir_pool_growths": 152,
+              "ir_capacity_bytes": 2904064
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "a18403ebfbb832687111ae3d38deba9817b0a826a9adf6f4b53d3455556f2d4f",
+          "lowir_bytes": 555863,
+          "executable_sha256": "d256fabbf886d317959a7a9749fc0dcc45d203c44fcff06946b9db926d568488",
+          "text_bytes": 98392,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 19717,
+              "max_pending": 32,
+              "node_growths": 16,
+              "delimiter_work": 19717,
+              "semantic_ms": 9.42664,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 900,
+              "semantic_constructor_actions": 300,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 200,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 5205,
+              "semantic_candidate_work": 1701,
+              "semantic_conversion_work": 4004,
+              "semantic_conversions": 4304,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 400,
+              "semantic_types": 2014,
+              "semantic_entities": 3702,
+              "semantic_scopes": 2803,
+              "semantic_edges": 0,
+              "semantic_declarations": 2501,
+              "semantic_regions": 1701,
+              "semantic_lookup_work": 9908,
+              "semantic_signature_work": 712,
+              "semantic_type_probes": 14253,
+              "semantic_constant_work": 700
+            },
+            {
+              "frontend_ms": 33.4954,
+              "lowering_ms": 8.60898,
+              "write_ms": 6.46199,
+              "peak_rss_kib": 39668,
+              "nodes": 34621,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 2102,
+              "discard_work": 0,
+              "full_expression_work": 10206,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1407,
+              "abi_bytes": 102834,
+              "instructions": 12704,
+              "operands": 18406,
+              "ir_pool_growths": 152,
+              "ir_capacity_bytes": 2904064
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.054490714,
+            "rss_kib": 13352
+          },
+          {
+            "wall_s": 0.05515256,
+            "rss_kib": 13864
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.054297169,
+            "rss_kib": 13388,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.054524449,
+            "rss_kib": 13416,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.054883915,
+            "rss_kib": 13388,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.054398548,
+            "rss_kib": 13368,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.055000726,
+            "rss_kib": 13364,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.056355785,
+            "rss_kib": 13948,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.055672129,
+            "rss_kib": 13844,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.055019222,
+            "rss_kib": 13364,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.070560761,
+            "rss_kib": 13380,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.054637923,
+            "rss_kib": 13872,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.055175887,
+            "rss_kib": 13876,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.05485736,
+            "rss_kib": 13208,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.054297169,
+          0.054883915
+        ],
+        "paired_b_over_a": [
+          1.0182509266410487,
+          0.8755816872746802
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003595586,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003191353,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003148866,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00313248,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003078974,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003121326,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003107031,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003115893,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003081439,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003093218,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003131968,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003070642,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003093564,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003031001,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003078974,
+          0.003148866
+        ],
+        "paired_b_over_a": [
+          0.9995295350235128,
+          1.0002007149476169
+        ]
+      }
+    },
+    "mutated-400": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/mutated-400.cpp",
+      "source_sha256": "a51068c589bbc84e78c57837cb884b5ca351ba41d2712206fefede9a95a7b548",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "c89d6666bd8eaf46233556124fa248583d4382880877c01f108bfcafc9e5dd3a",
+          "lowir_bytes": 2295698,
+          "executable_sha256": "8c1a463a1069c381a6c32e4967a7fefeeb6e0c43adf10a71adb821080968508a",
+          "text_bytes": 391792,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 78817,
+              "max_pending": 32,
+              "node_growths": 18,
+              "delimiter_work": 78817,
+              "semantic_ms": 39.3837,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 20805,
+              "semantic_candidate_work": 6801,
+              "semantic_conversion_work": 16004,
+              "semantic_conversions": 17204,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 1600,
+              "semantic_types": 8014,
+              "semantic_entities": 14802,
+              "semantic_scopes": 11203,
+              "semantic_edges": 0,
+              "semantic_declarations": 10001,
+              "semantic_regions": 6801,
+              "semantic_lookup_work": 39608,
+              "semantic_signature_work": 2812,
+              "semantic_type_probes": 57286,
+              "semantic_constant_work": 2800
+            },
+            {
+              "frontend_ms": 136.635,
+              "lowering_ms": 36.6589,
+              "write_ms": 24.8689,
+              "peak_rss_kib": 41408,
+              "nodes": 138421,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8402,
+              "discard_work": 0,
+              "full_expression_work": 40806,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5607,
+              "abi_bytes": 411318,
+              "instructions": 50804,
+              "operands": 73606,
+              "ir_pool_growths": 176,
+              "ir_capacity_bytes": 11616256
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "c89d6666bd8eaf46233556124fa248583d4382880877c01f108bfcafc9e5dd3a",
+          "lowir_bytes": 2295698,
+          "executable_sha256": "8c1a463a1069c381a6c32e4967a7fefeeb6e0c43adf10a71adb821080968508a",
+          "text_bytes": 391792,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 78817,
+              "max_pending": 32,
+              "node_growths": 18,
+              "delimiter_work": 78817,
+              "semantic_ms": 39.3106,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 3600,
+              "semantic_constructor_actions": 1200,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 800,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 20805,
+              "semantic_candidate_work": 6801,
+              "semantic_conversion_work": 16004,
+              "semantic_conversions": 17204,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 1600,
+              "semantic_types": 8014,
+              "semantic_entities": 14802,
+              "semantic_scopes": 11203,
+              "semantic_edges": 0,
+              "semantic_declarations": 10001,
+              "semantic_regions": 6801,
+              "semantic_lookup_work": 39608,
+              "semantic_signature_work": 2812,
+              "semantic_type_probes": 57286,
+              "semantic_constant_work": 2800
+            },
+            {
+              "frontend_ms": 135.998,
+              "lowering_ms": 34.4492,
+              "write_ms": 24.666,
+              "peak_rss_kib": 39668,
+              "nodes": 138421,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8402,
+              "discard_work": 0,
+              "full_expression_work": 40806,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5607,
+              "abi_bytes": 411318,
+              "instructions": 50804,
+              "operands": 73606,
+              "ir_pool_growths": 176,
+              "ir_capacity_bytes": 11616256
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.211561616,
+            "rss_kib": 41332
+          },
+          {
+            "wall_s": 0.212642955,
+            "rss_kib": 39332
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.21022385,
+            "rss_kib": 41372,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.208596162,
+            "rss_kib": 41336,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.214469802,
+            "rss_kib": 41256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.208953473,
+            "rss_kib": 41328,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.207579027,
+            "rss_kib": 41380,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.205498816,
+            "rss_kib": 39416,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.204889281,
+            "rss_kib": 39380,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.210619068,
+            "rss_kib": 41356,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.212081343,
+            "rss_kib": 41364,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.213551203,
+            "rss_kib": 39260,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.21085308,
+            "rss_kib": 39368,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.213646727,
+            "rss_kib": 41380,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.208596162,
+          0.214469802
+        ],
+        "paired_b_over_a": [
+          0.9813246447236925,
+          0.9968905339034844
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003338551,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003143395,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003126887,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003142551,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003072999,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003094827,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003078008,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003126709,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003084249,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003137739,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003129281,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003091913,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003130452,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003070861,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003072999,
+          0.003142551
+        ],
+        "paired_b_over_a": [
+          0.999229537495654,
+          1.0035842727473017
+        ]
+      }
+    },
+    "mutated-runtime": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/mutated-runtime.cpp",
+      "source_sha256": "8d80f36fefe27a6ae519e7fee1e0ebf2c1a470e2fa8d6dee2259814a0e0802b0",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "84f0f0dc5130fb339b5421013689df08ae21a4e1b3cbb55284325968d764a799",
+          "lowir_bytes": 5835,
+          "executable_sha256": "eddc6c315a9335370e422ade3c3aa7a1e81514262382c2ab36006ed35e398cc7",
+          "text_bytes": 1672,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 245,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 245,
+              "semantic_ms": 0.251193,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 75,
+              "semantic_candidate_work": 18,
+              "semantic_conversion_work": 58,
+              "semantic_conversions": 63,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 10,
+              "semantic_types": 36,
+              "semantic_entities": 41,
+              "semantic_scopes": 32,
+              "semantic_edges": 0,
+              "semantic_declarations": 29,
+              "semantic_regions": 20,
+              "semantic_lookup_work": 126,
+              "semantic_signature_work": 20,
+              "semantic_type_probes": 148,
+              "semantic_constant_work": 13
+            },
+            {
+              "frontend_ms": 0.932369,
+              "lowering_ms": 0.205663,
+              "write_ms": 0.131062,
+              "peak_rss_kib": 39668,
+              "nodes": 433,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 30,
+              "discard_work": 0,
+              "full_expression_work": 129,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 20,
+              "abi_bytes": 1844,
+              "instructions": 151,
+              "operands": 222,
+              "ir_pool_growths": 73,
+              "ir_capacity_bytes": 34976
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "84f0f0dc5130fb339b5421013689df08ae21a4e1b3cbb55284325968d764a799",
+          "lowir_bytes": 5835,
+          "executable_sha256": "eddc6c315a9335370e422ade3c3aa7a1e81514262382c2ab36006ed35e398cc7",
+          "text_bytes": 1672,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 245,
+              "max_pending": 32,
+              "node_growths": 9,
+              "delimiter_work": 245,
+              "semantic_ms": 0.178858,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 9,
+              "semantic_constructor_actions": 3,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 4,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 75,
+              "semantic_candidate_work": 18,
+              "semantic_conversion_work": 58,
+              "semantic_conversions": 63,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 10,
+              "semantic_types": 36,
+              "semantic_entities": 41,
+              "semantic_scopes": 32,
+              "semantic_edges": 0,
+              "semantic_declarations": 29,
+              "semantic_regions": 20,
+              "semantic_lookup_work": 126,
+              "semantic_signature_work": 20,
+              "semantic_type_probes": 148,
+              "semantic_constant_work": 13
+            },
+            {
+              "frontend_ms": 0.689001,
+              "lowering_ms": 0.210351,
+              "write_ms": 0.130317,
+              "peak_rss_kib": 39668,
+              "nodes": 433,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 30,
+              "discard_work": 0,
+              "full_expression_work": 129,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 20,
+              "abi_bytes": 1844,
+              "instructions": 151,
+              "operands": 222,
+              "ir_pool_growths": 73,
+              "ir_capacity_bytes": 34976
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.00650296,
+            "rss_kib": 5020
+          },
+          {
+            "wall_s": 0.006270014,
+            "rss_kib": 4964
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.006188035,
+            "rss_kib": 4904,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006082401,
+            "rss_kib": 4868,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006128876,
+            "rss_kib": 5044,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006098006,
+            "rss_kib": 4956,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006158067,
+            "rss_kib": 4980,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006237781,
+            "rss_kib": 4996,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006263353,
+            "rss_kib": 5020,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006261469,
+            "rss_kib": 5024,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006133975,
+            "rss_kib": 4824,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006232673,
+            "rss_kib": 5028,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006299627,
+            "rss_kib": 4928,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006257031,
+            "rss_kib": 5000,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.006082401,
+          0.006188035
+        ],
+        "paired_b_over_a": [
+          1.0065701327328171,
+          1.0114029482351958
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.346846859,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.341578652,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.340748632,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.343346272,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.341749267,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.342608119,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.344370451,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.345070569,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.344977145,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.345635652,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.352397105,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.346748241,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.3445115,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.343050091,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.340748632,
+          0.343346272
+        ],
+        "paired_b_over_a": [
+          1.0000603052637058,
+          0.9939787592442895
+        ]
+      }
+    },
+    "observed-100": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/observed-100.cpp",
+      "source_sha256": "dbad9523630e3774f5c2817d61464bef060d3de80458ce5ec6f5d96786e9b509",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "a5cb30b11b28035d7755933a7db84cf1fb3080dc7e6c2b9231ea9588c55384ad",
+          "lowir_bytes": 637010,
+          "executable_sha256": "ade4c9c9131446125b542b1c7ef4951e1511af1b0aa4ba6b5043e75dcb5b573c",
+          "text_bytes": 106192,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 22717,
+              "max_pending": 67,
+              "node_growths": 16,
+              "delimiter_work": 22717,
+              "semantic_ms": 10.1213,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 1100,
+              "semantic_constructor_actions": 500,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 6605,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 5504,
+              "semantic_conversions": 5704,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 200,
+              "semantic_types": 2012,
+              "semantic_entities": 3802,
+              "semantic_scopes": 2803,
+              "semantic_edges": 0,
+              "semantic_declarations": 2601,
+              "semantic_regions": 1801,
+              "semantic_lookup_work": 11508,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 14604,
+              "semantic_constant_work": 800
+            },
+            {
+              "frontend_ms": 37.5138,
+              "lowering_ms": 9.74501,
+              "write_ms": 7.60024,
+              "peak_rss_kib": 39668,
+              "nodes": 39521,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 2202,
+              "discard_work": 0,
+              "full_expression_work": 13306,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 15104,
+              "operands": 22206,
+              "ir_pool_growths": 153,
+              "ir_capacity_bytes": 3166208
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "a5cb30b11b28035d7755933a7db84cf1fb3080dc7e6c2b9231ea9588c55384ad",
+          "lowir_bytes": 637010,
+          "executable_sha256": "ade4c9c9131446125b542b1c7ef4951e1511af1b0aa4ba6b5043e75dcb5b573c",
+          "text_bytes": 106192,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 22717,
+              "max_pending": 67,
+              "node_growths": 16,
+              "delimiter_work": 22717,
+              "semantic_ms": 9.9476,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 1100,
+              "semantic_constructor_actions": 500,
+              "semantic_conversion_objects": 100,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 100,
+              "semantic_function_returns": 100,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 200,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 100,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 200,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 400,
+              "semantic_demand_processed": 400,
+              "semantic_expression_work": 6605,
+              "semantic_candidate_work": 1601,
+              "semantic_conversion_work": 5504,
+              "semantic_conversions": 5704,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 200,
+              "semantic_constants": 200,
+              "semantic_types": 2012,
+              "semantic_entities": 3802,
+              "semantic_scopes": 2803,
+              "semantic_edges": 0,
+              "semantic_declarations": 2601,
+              "semantic_regions": 1801,
+              "semantic_lookup_work": 11508,
+              "semantic_signature_work": 710,
+              "semantic_type_probes": 14604,
+              "semantic_constant_work": 800
+            },
+            {
+              "frontend_ms": 37.0547,
+              "lowering_ms": 9.15421,
+              "write_ms": 7.48461,
+              "peak_rss_kib": 39668,
+              "nodes": 39521,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 2202,
+              "discard_work": 0,
+              "full_expression_work": 13306,
+              "full_expression_regions": 400,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 1305,
+              "abi_bytes": 102858,
+              "instructions": 15104,
+              "operands": 22206,
+              "ir_pool_growths": 153,
+              "ir_capacity_bytes": 3166208
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.063055478,
+            "rss_kib": 15508
+          },
+          {
+            "wall_s": 0.061480102,
+            "rss_kib": 14660
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.061568509,
+            "rss_kib": 15448,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.062342381,
+            "rss_kib": 15472,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.061877539,
+            "rss_kib": 15368,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.062792252,
+            "rss_kib": 15456,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.062184599,
+            "rss_kib": 15452,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.061252543,
+            "rss_kib": 14720,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.060954423,
+            "rss_kib": 14524,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.061745372,
+            "rss_kib": 15480,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.060953285,
+            "rss_kib": 15372,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.060042895,
+            "rss_kib": 14716,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.060374057,
+            "rss_kib": 14660,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.061259984,
+            "rss_kib": 15472,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.061568509,
+          0.062792252
+        ],
+        "paired_b_over_a": [
+          0.9860969466377104,
+          0.9853017842113362
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003547129,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003145139,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003102857,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003065137,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003018312,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003047147,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003092566,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.002992341,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003302611,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003171806,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003379974,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003189371,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003083984,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003047613,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003018312,
+          0.003102857
+        ],
+        "paired_b_over_a": [
+          1.0048815747212967,
+          0.9760046810723837
+        ]
+      }
+    },
+    "observed-400": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/observed-400.cpp",
+      "source_sha256": "66525b278c3a0f592896d1f0a7e6fc6331a3cd08ab934d14d0d569ac25c70a20",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "33c428978627a786b98a48acc495ee9d1c1d19aa6245a8c05724ad8d7844adf0",
+          "lowir_bytes": 2637120,
+          "executable_sha256": "7287fa55631a452d42f5f8695c0fa6a83cd4ee7dd046fae6d9bc04c8dcfecb33",
+          "text_bytes": 422992,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 90817,
+              "max_pending": 67,
+              "node_growths": 18,
+              "delimiter_work": 90817,
+              "semantic_ms": 42.3178,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 4400,
+              "semantic_constructor_actions": 2000,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 26405,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 22004,
+              "semantic_conversions": 22804,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 800,
+              "semantic_types": 8012,
+              "semantic_entities": 15202,
+              "semantic_scopes": 11203,
+              "semantic_edges": 0,
+              "semantic_declarations": 10401,
+              "semantic_regions": 7201,
+              "semantic_lookup_work": 46008,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 58580,
+              "semantic_constant_work": 3200
+            },
+            {
+              "frontend_ms": 151.56,
+              "lowering_ms": 42.2143,
+              "write_ms": 28.9567,
+              "peak_rss_kib": 47616,
+              "nodes": 158021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8802,
+              "discard_work": 0,
+              "full_expression_work": 53206,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 60404,
+              "operands": 88806,
+              "ir_pool_growths": 177,
+              "ir_capacity_bytes": 12664832
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "33c428978627a786b98a48acc495ee9d1c1d19aa6245a8c05724ad8d7844adf0",
+          "lowir_bytes": 2637120,
+          "executable_sha256": "7287fa55631a452d42f5f8695c0fa6a83cd4ee7dd046fae6d9bc04c8dcfecb33",
+          "text_bytes": 422992,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 90817,
+              "max_pending": 67,
+              "node_growths": 18,
+              "delimiter_work": 90817,
+              "semantic_ms": 42.2689,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 4400,
+              "semantic_constructor_actions": 2000,
+              "semantic_conversion_objects": 400,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 400,
+              "semantic_function_returns": 400,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 800,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 400,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 800,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 1600,
+              "semantic_demand_processed": 1600,
+              "semantic_expression_work": 26405,
+              "semantic_candidate_work": 6401,
+              "semantic_conversion_work": 22004,
+              "semantic_conversions": 22804,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 800,
+              "semantic_constants": 800,
+              "semantic_types": 8012,
+              "semantic_entities": 15202,
+              "semantic_scopes": 11203,
+              "semantic_edges": 0,
+              "semantic_declarations": 10401,
+              "semantic_regions": 7201,
+              "semantic_lookup_work": 46008,
+              "semantic_signature_work": 2810,
+              "semantic_type_probes": 58580,
+              "semantic_constant_work": 3200
+            },
+            {
+              "frontend_ms": 152.855,
+              "lowering_ms": 42.2185,
+              "write_ms": 29.8802,
+              "peak_rss_kib": 47624,
+              "nodes": 158021,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8802,
+              "discard_work": 0,
+              "full_expression_work": 53206,
+              "full_expression_regions": 1600,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 5205,
+              "abi_bytes": 411424,
+              "instructions": 60404,
+              "operands": 88806,
+              "ir_pool_growths": 177,
+              "ir_capacity_bytes": 12664832
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.234321768,
+            "rss_kib": 47344
+          },
+          {
+            "wall_s": 0.232075369,
+            "rss_kib": 47524
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.234756941,
+            "rss_kib": 47352,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.233368751,
+            "rss_kib": 47440,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.231960618,
+            "rss_kib": 47328,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.23343266,
+            "rss_kib": 47324,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.230837206,
+            "rss_kib": 47328,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.234213348,
+            "rss_kib": 47536,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.23417216,
+            "rss_kib": 47568,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.317164435,
+            "rss_kib": 47364,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.232110189,
+            "rss_kib": 47324,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.231244689,
+            "rss_kib": 47524,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.230142731,
+            "rss_kib": 47500,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.231526343,
+            "rss_kib": 47376,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.231960618,
+          0.234756941
+        ],
+        "paired_b_over_a": [
+          0.8547155208245079,
+          0.9951489758792347
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.003658642,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.003398187,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.003203771,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003139488,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003121508,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003200997,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003111656,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.00303386,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003087635,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003050517,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003164086,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.003087326,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003099199,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.003089516,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.003121508,
+          0.003203771
+        ],
+        "paired_b_over_a": [
+          0.9933987572241156,
+          0.9892738616880319
+        ]
+      }
+    },
+    "observed-runtime": {
+      "source_path": "/tmp/pa12-scalar-policy-performance/observed-runtime.cpp",
+      "source_sha256": "ee4fb4832b1c97f5e337d782644b6fedb99e51152d449c2b6b52ab81bd2ba156",
+      "outputs": [
+        {
+          "binary": 0,
+          "lowir_sha256": "f006ee79f08569f6b3802fe8d07c69341ddac602ebfd00b0697781001b807ce5",
+          "lowir_bytes": 6571,
+          "executable_sha256": "324de82830b9e4a7890bc2bb8eb19cb7951fdd29915f5540100bcd4ed944b637",
+          "text_bytes": 1752,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 275,
+              "max_pending": 67,
+              "node_growths": 9,
+              "delimiter_work": 275,
+              "semantic_ms": 0.203651,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 11,
+              "semantic_constructor_actions": 5,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 89,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 73,
+              "semantic_conversions": 77,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 8,
+              "semantic_types": 34,
+              "semantic_entities": 42,
+              "semantic_scopes": 32,
+              "semantic_edges": 0,
+              "semantic_declarations": 30,
+              "semantic_regions": 21,
+              "semantic_lookup_work": 141,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 142,
+              "semantic_constant_work": 14
+            },
+            {
+              "frontend_ms": 0.765564,
+              "lowering_ms": 0.172125,
+              "write_ms": 0.130391,
+              "peak_rss_kib": 39668,
+              "nodes": 482,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 31,
+              "discard_work": 0,
+              "full_expression_work": 160,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 175,
+              "operands": 260,
+              "ir_pool_growths": 71,
+              "ir_capacity_bytes": 42144
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "lowir_sha256": "f006ee79f08569f6b3802fe8d07c69341ddac602ebfd00b0697781001b807ce5",
+          "lowir_bytes": 6571,
+          "executable_sha256": "324de82830b9e4a7890bc2bb8eb19cb7951fdd29915f5540100bcd4ed944b637",
+          "text_bytes": 1752,
+          "checked_exit": 0,
+          "telemetry": [
+            {
+              "tokens": 275,
+              "max_pending": 67,
+              "node_growths": 9,
+              "delimiter_work": 275,
+              "semantic_ms": 0.207634,
+              "semantic_dependence_work": 0,
+              "semantic_specializations": 0,
+              "semantic_argument_packs": 0,
+              "semantic_object_uses": 11,
+              "semantic_constructor_actions": 5,
+              "semantic_conversion_objects": 1,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 1,
+              "semantic_function_returns": 1,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 4,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 1,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_member_demands": 4,
+              "semantic_demand_processed": 4,
+              "semantic_expression_work": 89,
+              "semantic_candidate_work": 17,
+              "semantic_conversion_work": 73,
+              "semantic_conversions": 77,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 2,
+              "semantic_constants": 8,
+              "semantic_types": 34,
+              "semantic_entities": 42,
+              "semantic_scopes": 32,
+              "semantic_edges": 0,
+              "semantic_declarations": 30,
+              "semantic_regions": 21,
+              "semantic_lookup_work": 141,
+              "semantic_signature_work": 18,
+              "semantic_type_probes": 142,
+              "semantic_constant_work": 14
+            },
+            {
+              "frontend_ms": 0.718788,
+              "lowering_ms": 0.210987,
+              "write_ms": 0.149753,
+              "peak_rss_kib": 39668,
+              "nodes": 482,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 31,
+              "discard_work": 0,
+              "full_expression_work": 160,
+              "full_expression_regions": 4,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1716,
+              "instructions": 175,
+              "operands": 260,
+              "ir_pool_growths": 71,
+              "ir_capacity_bytes": 42144
+            }
+          ]
+        }
+      ],
+      "equivalence": "both validate and return checked exit 0; same branch values, destructor effects and observed destinations",
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.006898945,
+            "rss_kib": 5020
+          },
+          {
+            "wall_s": 0.006763685,
+            "rss_kib": 5032
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.006561364,
+            "rss_kib": 4920,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006445106,
+            "rss_kib": 5008,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006520186,
+            "rss_kib": 4992,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006491968,
+            "rss_kib": 5028,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006422299,
+            "rss_kib": 5064,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006361449,
+            "rss_kib": 5056,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006409076,
+            "rss_kib": 4924,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006320282,
+            "rss_kib": 5040,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006353889,
+            "rss_kib": 5024,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.006304941,
+            "rss_kib": 4892,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006210927,
+            "rss_kib": 5032,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.006308352,
+            "rss_kib": 4844,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.006445106,
+          0.006561364
+        ],
+        "paired_b_over_a": [
+          1.0021929623205847,
+          0.9884401979080955
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.357068702,
+            "rss_kib": 256
+          },
+          {
+            "wall_s": 0.356187521,
+            "rss_kib": 256
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.35575273,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.355513673,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.356056248,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.354995868,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.357480634,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.355884372,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.39084748,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.362075414,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.367170302,
+            "rss_kib": 256,
+            "binary": 0
+          },
+          {
+            "wall_s": 0.3581081,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.355355062,
+            "rss_kib": 256,
+            "binary": 1
+          },
+          {
+            "wall_s": 0.357648936,
+            "rss_kib": 256,
+            "binary": 0
+          }
+        ],
+        "aa_range_s": [
+          0.354995868,
+          0.356056248
+        ],
+        "paired_b_over_a": [
+          1.0377674596378348,
+          0.9843325405775171
+        ]
+      }
+    }
+  }
+}

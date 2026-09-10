@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: validate; required stage checks pass (**257/257**).
+Target: PA12 full-stage. Phase: complete; **257/257**, through-stage **1584/1584**.
 
 ## Design/spec alignment and remaining work
 
@@ -13,10 +13,10 @@ replay, fake AST, reference delegation or a later native-backend exit gate.
 | Owner | Data flow / complexity | Validation |
 | --- | --- | --- |
 | Parameter representation | Checked copy actions and source identity -> cached argument ABI; independent result ABI and body/emission demand; incremental entity cursor | Declaration-only and linked TUs, copy effects/identity/escapes, parameter slots, typed pointer constants pass |
-| Scalar initialization | Recorded writes/exposure -> typed final conversion, destination and integral truth proof -> branch store before cleanup; one candidate-initializer walk and constant work per use | Dynamic/constant/volatile/modified conditions, aliases, narrowing and destructor-observed destinations pass |
+| Scalar initialization | Recorded writes/exposure -> integral truth proof -> typed final conversion and destination before branch cleanup; unknown conditions keep shared cleanup; one candidate-initializer walk | Dynamic/constant/volatile/modified conditions, aliases, narrowing and destructor-observed destinations pass |
 
-Implementation groups are complete. Remaining work: final scalar performance
-campaign and the root through-PA12 completion report, then final clean audit.
+Implementation and validation groups are complete. Remaining PA12 work: none.
+The next milestone owns polymorphism; this stage retains the nonvirtual model.
 
 Completed owners include lists/defaults, delegation/unions, value boundaries,
 references, allocation/aggregates, region/destructor-boundary separation,
@@ -36,8 +36,8 @@ it does not strengthen a language exception specification or public ABI.
 [boundary](boundary-performance.md), [cleanup](cleanup-performance.md),
 [destructor](destruction-performance.md), [member-pointer](member-pointer-performance.md),
 [zero](zero-performance.md), [consumption](consumption-performance.md) and
-[storage/conversion](storage-performance.md) and
-[parameter](parameter-performance.md) retain
+[storage/conversion](storage-performance.md),
+[parameter](parameter-performance.md) and [scalar](scalar-performance.md) retain
 frozen hashes, inputs, flags, A/A+ABBA data, compiler latency/RSS and runtime/text.
 Historical misses and outliers remain. Required representation costs and proven
 later-backend constraints do not create positive-runtime PA12 exit gates.
@@ -90,21 +90,24 @@ later-backend constraints do not create positive-runtime PA12 exit gates.
 | `8a5a370d`: explicit conversion-result boundaries | 255/257 |
 | `b699f183`, `1eae0974`, `2d693f2b`: measured policy correction and shared field facts | 255/257 |
 | `f3e7ce93`: parameter transport proof, typed pointer constants | 256/257 |
-| Scalar initialization consumption (this increment) | 257/257 |
+| `7e88ba59`: scalar initialization consumption | 257/257 |
+| `67947601`: remove measured unprofitable dynamic extension | 257/257 |
 
 `3da4de09` corrected four bit-field reference retypes under the authorized
 exception; [proof and bundle revision](reference-corrections.md) remain.
 No fixture, reference, comparison rule or coverage changed in the latest groups.
 
 Current entry: clean `eb0a4251`, freshly checked **255/257**. Parameter
-`f3e7ce93` removed one existing failure; scalar consumption removes the last.
-Current **257/257**, all **13** controls, earlier **1327/1327**, all **67**
-personal sources and three explicit property scripts pass. No coverage reduced.
-File audit passes with the same three existing header advisories; diff checks pass.
+`f3e7ce93` removed one existing failure; scalar consumption removed the last.
+Final **257/257**, all **13** controls; earlier **1327/1327** and full through
+**1584/1584** pass. **196 stage-base failures removed**, no coverage reduced.
+All **67** personal sources and three explicit property scripts pass. File audit
+passes with the same three existing header advisories; diff checks pass.
 
-Logs: `/tmp/pa12-scalar-final-stage.log`,
-`/tmp/pa12-scalar-final-prior.log`, `/tmp/pa12-scalar-final-personal.log`
-(all exit 0). Explicit properties: `check_parameter_representation.py`,
+Logs: `/tmp/pa12-scalar-policy-stage.log`,
+`/tmp/pa12-scalar-policy-prior.log`, `/tmp/pa12-scalar-policy-personal.log`,
+`/tmp/pa12-complete-through.log` (all exit 0). Root reports ran serially.
+Explicit properties: `check_parameter_representation.py`,
 `check_terminal_returns.py`, `check_zero_initialization.py` under
 `student.tests/pa12/`, each run with `python3`.
 
@@ -116,18 +119,25 @@ optimization or positive-runtime gate. One class state/copy ID, one member flag,
 an incremental entity cursor and linear member/source inspection bound work.
 The 6 KiB text and 5% common median review targets were met.
 
-Scalar diagnostic budgets, set before measurement: at most one consumer record
-per automatic scalar initializer and one sparse observation entry per modified
-or exposed object; one walk of each candidate initializer; constant work per
-use and no new per-node graph. Review compiler text growth above 8 KiB or common
-compile median growth above 5%; these are diagnostic targets, not course gates.
-Frozen A is `/tmp/pa12-scalar-base-cppgm` (`f3e7ce93` code). Compare dynamic and
-known conditions, observed destinations, modified conditions and unaffected code
-with A/A+ABBA compiler/RSS and checked native runtime/payload measurements.
+Scalar evidence: one consumer record per selected initializer, one sparse entry
+per modified/exposed object, one candidate-initializer walk and constant work per
+use. No new per-node graph/cache or global retry. Fourfold constant-source growth
+produces 100 -> 400 consumers and 700 -> 2800 inspection steps. Diagnostic budgets
+set before measurement were 8 KiB compiler text and 5% common median compile
+cost, not additional course gates. Final text grows 7872 bytes (.81%); common
+compile medians change -.11% / -.98%. Frozen A/B hashes and all 15-workload
+A/A+ABBA observations in each of two campaigns are preserved and verified.
 
-First scalar campaign (`7e88ba59`) preserved in `scalar-broad-performance.json`:
-dynamic and modified conditions cost 8–20% native runtime despite smaller
-payloads. Remove that optional extension and keep their existing shared cleanup;
-only a proven integral condition selects the required terminal materialization
-policy. Retain destructor-observed destinations and narrowing within that policy.
-Constant-path runtime costs remain under review; full observations are retained.
+The initial optional dynamic/modified-condition policy cost 8–20% runtime and
+was removed. Final nonconstant benchmark LowIR/native bytes equal A. The required
+constant-condition O0 ordering retains a 12.1% native runtime cost, with smaller
+payload and lower compiler work/RSS; no runtime benefit is claimed. This required
+course-output cost is documented, without inventing a backend diagnosis or exit
+gate. Observed destinations still receive their final conversion/store before
+cleanup; volatile/modified/aliased conditions use the conservative shared path.
+
+Final completion audit: canonical IDs and selected facts flow through the existing
+semantic/lowering owners; implementation sources are registered; mandated array
+expansion remains capped at eight; no fixture/comparison changes in the final
+groups. The earlier authorized reference proof remains linked above. All required
+reports, explicit personal checks, performance campaigns and file audit complete.
