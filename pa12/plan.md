@@ -124,3 +124,10 @@ compile median growth above 5%; these are diagnostic targets, not course gates.
 Frozen A is `/tmp/pa12-scalar-base-cppgm` (`f3e7ce93` code). Compare dynamic and
 known conditions, observed destinations, modified conditions and unaffected code
 with A/A+ABBA compiler/RSS and checked native runtime/payload measurements.
+
+First scalar campaign (`7e88ba59`) preserved in `scalar-broad-performance.json`:
+dynamic and modified conditions cost 8–20% native runtime despite smaller
+payloads. Remove that optional extension and keep their existing shared cleanup;
+only a proven integral condition selects the required terminal materialization
+policy. Retain destructor-observed destinations and narrowing within that policy.
+Constant-path runtime costs remain under review; full observations are retained.

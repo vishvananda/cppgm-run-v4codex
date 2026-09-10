@@ -47,6 +47,11 @@ struct NarrowWatch{short* out;short expected;
 long read_narrow(Pair const& p,NarrowWatch const&){return p.first+p.second;}
 short narrow_destination(bool choose){
  short result=choose?read_narrow(make(4),NarrowWatch(&result,9)):read_narrow(make(7),NarrowWatch(&result,15));return result;}
+long known_observed_destination(){trace=0;bool choose=true;
+ long result=choose?read(make(4),Watch(&result,9)):read(make(7),Watch(&result,15));
+ if(trace!=123)__builtin_abort();return result;}
+short known_narrow_destination(){bool choose=false;
+ short result=choose?read_narrow(make(4),NarrowWatch(&result,9)):read_narrow(make(7),NarrowWatch(&result,15));return result;}
 int main(){
  if(dynamic(true)!=9||dynamic(false)!=15)return 1;
  if(constant_true()!=9||constant_false()!=15)return 2;
@@ -54,5 +59,6 @@ int main(){
  if(reference_destination(true)!=9||reference_destination(false)!=15)return 4;
  if(narrow_destination(true)!=9||narrow_destination(false)!=15)return 5;
  if(volatile_condition()!=15||narrow_condition()!=15||unevaluated_condition()!=15)return 6;
+ if(known_observed_destination()!=9||known_narrow_destination()!=15)return 7;
  return 0;
 }

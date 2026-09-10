@@ -68,14 +68,19 @@ void Analyzer::prepare_scalar_consumption(EntityId object)
     if (!conversion_id) conversion_id = expressions[source].incoming;
     NodeId root = source;
     while (ast[root].kind == Kind::Parenthesized) root = ast[root].first;
-    if (ast[root].kind != Kind::Conditional || class_value(expressions[root].type) || !direct_class_call(root)) return;
+    if (ast[root].kind != Kind::Conditional || class_value(expressions[root].type)) return;
+    // The constant branch has the required terminal materialization boundary.
+    // Unknown branches retain the shared cleanup path: extending this policy
+    // to them reduced LowIR size but regressed measured O0 native execution.
+    unsigned char truth = scalar_truth(ast[root].first);
+    if (!truth || !direct_class_call(root)) return;
     TypeId target = entities[object].type;
     Conversion selected = conversion_id ? conversions[conversion_id] : conversion(source,target);
     if (!selected.valid() || selected.reference || (selected.kind != Conversion::Kind::Standard &&
         selected.kind != Conversion::Kind::Explicit && selected.kind != Conversion::Kind::Contextual)) return;
     if (!conversion_id) { conversion_id = conversions.size(); conversions.push_back(selected); }
     ScalarConsumption record; record.expression = root; record.target = target; record.conversion = conversion_id;
-    record.private_destination = private_scalar(object); record.truth = scalar_truth(ast[root].first);
+    record.private_destination = private_scalar(object); record.truth = truth;
     scalar_consumption_index.put(object,scalar_consumptions.size()); scalar_consumptions.push_back(record);
 }
 } }
