@@ -60,7 +60,8 @@ void Analyzer::check_jumps(NodeId body)
         }
         if (k == Kind::Goto) { jumps.push_back({n, active}); record_use(); return; }
         if (k == Kind::Return) {
-            auto key_id = key(live, context); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
+            use.context = body;
+            auto key_id = key(live, body); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
         if (k == Kind::Break || k == Kind::Continue) { use.target = k == Kind::Break ? break_live : continue_live; record_use(); return; }
         if (k == Kind::ExpressionStatement || k == Kind::Iteration) { record_use(); return; }

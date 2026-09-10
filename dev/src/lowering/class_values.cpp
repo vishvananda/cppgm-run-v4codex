@@ -18,9 +18,9 @@ Value Procedural::class_address(EntityId object, TypeId t)
     if (!sem.static_temporary(object).object) object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
     return pointer;
 }
-void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination)
+void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal)
 {
-    guard_expression(n);
+    if (!terminal) guard_expression(n);
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
     if (c.kind == semantic::Conversion::Kind::User) { user_conversion(n,c,destination); return; }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
@@ -28,8 +28,8 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
     auto materialized = construction ? sem.conversion_objects[c.materialization] : semantic::ConversionObject();
     bool elided = construction ? materialized.elided : c.empty_copy && fact.category == ValueCategory::Prvalue;
-    if (construction && materialized.branches) { conditional(n,false,destination,materialized.branches); return; }
-    if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination); return; }
+    if (construction && materialized.branches) { conditional(n,false,destination,materialized.branches,terminal); return; }
+    if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination,0,terminal); return; }
     if (elided && fact.form == semantic::ExpressionForm::ListValue) {
         list_conversion(sem.conversion_fact(fact.conversions),destination); return;
     }
@@ -39,7 +39,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     if (elided && fact.form == semantic::ExpressionForm::Cast) {
         NodeId first = ast[n].first;
         NodeId operand = ast[n].kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
-        construct_value(operand,sem.conversion_fact(fact.conversions),destination); return;
+        construct_value(operand,sem.conversion_fact(fact.conversions),destination,terminal); return;
     }
     if (elided && (ast[n].kind == Kind::Call || fact.form == semantic::ExpressionForm::OperatorCall)) {
         call(n,destination); return;

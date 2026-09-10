@@ -98,7 +98,7 @@ void Procedural::return_statement(NodeId n)
             destination = address(Value(value.operand,value.ir,value.type,true));
         }
         if (!class_return.local || class_return.local != sem.return_object(active_function))
-            construct_value(class_return.source,sem.conversion_fact(class_return.conversion),destination);
+            construct_value(class_return.source,sem.conversion_fact(class_return.conversion),destination,true);
     } else if (has_value) {
         NodeId operand = ast[n].first;
         if (!operand) value = Value(Operand::integer(0), type(returned));

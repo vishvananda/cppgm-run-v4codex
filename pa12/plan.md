@@ -2,7 +2,7 @@
 
 Stage base commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
 Last reviewed commit: `91e5dbe0a850d79dc5bd911727ae0b89de3c2033`
-Target: PA12 full-stage. Phase: implement; incomplete (**250/257**).
+Target: PA12 full-stage. Phase: implement; incomplete (**252/257**).
 
 ## Design/spec alignment and remaining groups
 
@@ -14,13 +14,12 @@ replay, fake AST, reference delegation or a later native-backend exit gate.
 | --- | --- | --- |
 | Full-expression consumption | Source/conversion -> final consumer -> branch destination/cleanup; memoized nodes and immutable object prefixes | Terminal conditional member/return branches, direct class-call branch destinations, return cleanup across loop contexts |
 | Initialization and transfer | Selected typed action -> layout/storage operation; once per field/unit | Bit-field constructor instruction order and explicit conversion transfer |
-| ABI representation | Class facts -> independent argument/result convention; cached per class | Nontrivial base-copy parameter and empty return padding need representation/identity proofs beyond declaration triviality |
+| ABI representation | Class facts -> independent argument/result convention; cached per class | Nontrivial base-copy parameter needs a representation/identity proof beyond declaration triviality |
 
-Seven remaining LowIR fixtures, all `tests/general/`:
+Five remaining LowIR fixtures, all `tests/general/`:
 `300-bit-field-copy-semantics`, `300-direct-object-parameter-passthrough-base-copy`,
 `400-conditional-prvalue-member-temporary-lifetime`,
-`400-conditional-return-branch-temporary-lifetime`,
-`400-direct-init-class-explicit-conversion`, `400-for-iteration-temporary-dtor`,
+`400-direct-init-class-explicit-conversion`,
 and `500-direct-class-call-temporary-destination`.
 
 Completed owners include target-typed lists/defaults, delegation/unions, class
@@ -103,3 +102,20 @@ storage or changing a nontrivial parameter ABI needs a separate body/transfer
 proof. Terminal conditional cleanup needs a final-consumer fact that separates
 completed branch destinations from temporaries still used by an enclosing call;
 unconditional branch cleanup would regress passing lifetime controls.
+
+Consumption entry: clean `b1e936e8`, fresh **250/257** with all 13 controls.
+Prior goal turn made verified progress. Extend typed return ownership into a
+terminal-consumer flag for branch destinations; branch-local temporary suffixes
+can finish before merging, while enclosing-call arguments retain their prefixes.
+Owner/data flow: ValueReturn -> destination consumption -> conditional branch
+cleanup. Work follows existing conversion/control edges without another AST.
+Validate terminal members, nested argument conditionals, throwing constructors,
+scalar/object returns and shared return cleanup across loops together.
+
+Consumption implementation: **252/257**, two entry failures removed, none added;
+earlier **1327/1327**, all 13 controls and 63 personal checks pass. Terminal
+class branches destroy only their private suffix before merging. Return cleanup
+keys the enclosing function, independent of loops. Existing empty-object
+zeroing remains and is accepted by the course comparison; its supposed need for
+an extra padding-elision proof was an unsupported diagnostic assumption, not an
+exit requirement. No fixtures or comparison rules changed. Performance pending.

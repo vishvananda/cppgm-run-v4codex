@@ -79,7 +79,7 @@ class Procedural {
     TypeId returned = 0;
     Value return_destination;
     IRType result_type() const;
-    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination);
+    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false);
     Value list_conversion(const semantic::Conversion& conversion, Value destination = Value());
     Value class_temporary(EntityId object, TypeId type);
     Value class_address(EntityId object, TypeId type);
@@ -205,7 +205,7 @@ class Procedural {
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
-    Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0);
+    Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false);
     Value logical(NodeId n);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
