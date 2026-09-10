@@ -87,13 +87,14 @@ No fixture, reference or comparison rule changed in the latest groups.
 
 Latest entry: clean `4cefbabe`, freshly checked **248/257**. Now **250/257**:
 **two existing failures removed, none added**, unchanged coverage; **189 stage-base
-failures removed**. **62** personal source checks pass. Earlier **1327/1327**
+failures removed**. **62** personal source checks and the explicit late-defaulted LowIR property pass. Earlier **1327/1327**
 passes after the final refinement.
 File audit passes with three existing header advisories. Required stage pass is
 not claimed. Root reports run serially.
 Logs: `/tmp/pa12-zero-stage3.log` (exit 2),
 `/tmp/pa12-zero-final-prior.log` (exit 0),
-`/tmp/pa12-zero-personal3.log` (exit 0). Both frozen performance campaigns
+`/tmp/pa12-zero-final-personal.log` (exit 0). The extra property runs via
+`python3 student.tests/pa12/check_zero_initialization.py`. Both frozen performance campaigns
 completed; `8cfcc3fe` records the member-pointer measurements.
 
 Boundary: zero plans establish initialization values and representation, not
