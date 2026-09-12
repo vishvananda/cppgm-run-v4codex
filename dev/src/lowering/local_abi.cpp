@@ -26,7 +26,19 @@ abi_mangle::Id Procedural::abi_function_context(EntityId e)
     if (sem.destructor_member(e)) function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
     if (auto conversion = sem.member_fact(e).conversion_target) function.conversion = abi_type(conversion);
     local_member_abi(e,function);
+    template_function_abi(e,function);
     return abi_mangle::function_entity(abi,function);
+}
+void Procedural::template_function_abi(EntityId e, abi_mangle::Function& target)
+{
+    if (!sem.entities[e].specialization) return;
+    auto pack = sem.specialization_arguments(e);
+    target.template_prefix = true;
+    for (unsigned j = 0; j < pack.count; ++j)
+        target.arguments.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.template_argument(pack.offset+j))));
+    auto t = sem.types[sem.entities[sem.specialization_pattern(e)].type];
+    target.result = abi_type(t.child); target.parameters.clear();
+    for (unsigned j = 0; j < t.count; ++j) target.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
 }
 void Procedural::local_member_abi(EntityId e, abi_mangle::Function& target)
 {

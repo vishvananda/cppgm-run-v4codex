@@ -12,6 +12,7 @@ abi_mangle::Id Procedural::abi_scope(semantic::ScopeId s)
     if (abi_scopes[s]) return abi_scopes[s];
     auto scope = sem.scopes[s];
     auto parent = abi_scope(scope.parent);
+    if (scope.kind == semantic::ScopeKind::Template) return abi_scopes[s] = parent;
     return abi_scopes[s] = abi.name(parent, scope.name ? spelling(scope.name) : "_GLOBAL__N_1");
 }
 abi_mangle::Id Procedural::abi_type(TypeId id)
@@ -34,7 +35,8 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     }
     case TypeKind::Named: {
         auto e = sem.entities[t.entity];
-        if (e.class_info && sem.local_function(t.entity))
+        if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
+        else if (e.class_info && sem.local_function(t.entity))
             result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
         else result = abi.name(abi_scope(e.owner), spelling(e.name));
         break;
@@ -82,7 +84,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // In particular a root C++ variable's ABI spelling is the bare source name.
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
-    metadata.binding = internal ? SBM_INTERNAL : e.inline_function ? SBM_WEAK : SBM_STRONG;
+    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || e.specialization) ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
     if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
@@ -115,6 +117,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         local_member_abi(id,target.function);
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
+        template_function_abi(id,target.function);
     } else { target.kind = abi_mangle::TargetKind::Variable; target.type = aname; target.internal = internal; }
     std::uint64_t key = 0;
     if (!internal && (linkage.merge || e.c_linkage)) {
@@ -248,7 +251,7 @@ void Procedural::run()
         if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
-        if (entity.kind != semantic::EntityKind::Function) continue;
+        if (entity.kind != semantic::EntityKind::Function || entity.template_info) continue;
         bool defined = entity.body || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
         Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];

@@ -98,7 +98,10 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
 {
     if (!n) return base;
     NodeId name = decl_name(n);
-    if (name) s = name_owner(name, s, true);
+    if (name) {
+        auto owner = name_owner(name,s,true);
+        if (!(definitions && scopes[s].kind == ScopeKind::Template && scopes[owner].kind == ScopeKind::Namespace)) s = owner;
+    }
     NodeId nested = 0;
     std::vector<NodeId> suffixes;
     bool after_direct = false;
@@ -175,7 +178,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
     ScopeId owner = name_owner(name, s, true);
-    if (!encloses(s, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
+    ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
+    if (!encloses(enclosing, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
     if (destructor && scopes[owner].kind == ScopeKind::Class) {
         TextView text = ids.spelling(scopes[owner].name);
         std::string label = "~" + std::string(text.data, text.size);

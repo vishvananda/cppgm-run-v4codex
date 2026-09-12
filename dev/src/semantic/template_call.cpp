@@ -3,12 +3,12 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-void Analyzer::template_facts(EntityId e)
+void Analyzer::template_facts(EntityId e, ScopeId environment)
 {
-    TemplateFunction t; t.environment = entities[e].owner; t.offset = template_parameters.size();
+    TemplateFunction t; t.environment = environment ? environment : entities[e].owner; t.offset = template_parameters.size();
     for (std::uint32_t d = scopes[t.environment].first_decl; d; d = declarations[d].next) {
         EntityId p = declarations[d].entity;
-        if (entities[p].template_parameter) { template_parameters.push_back(p); ++t.count; }
+        if (entities[p].template_parameter) { parameter_ordinals.put(p,t.count+1); template_parameters.push_back(p); ++t.count; }
     }
     entities[e].template_info = templates.size(); templates.push_back(t);
 }

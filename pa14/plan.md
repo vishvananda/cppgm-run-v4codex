@@ -28,6 +28,13 @@ constraints retain their owning stages.
 
 - Entry inspection: clean HEAD above; no previous PA14 implementation turn exists
   in authoritative history. The preceding PA13 audit is verified progress.
+- Function demand/identity increment: **140/314** (174 failures), prior
+  **1621/1621**, file audit passes with the three inherited advisories.
+  Personal function demand/declaration controls execute successfully via PA8.
+  Parsed syntax is shared through compact source/context occurrences; one body
+  is computed per canonical specialization. Parameter-head canonicalization and
+  ABI consume typed identities. Local static objects remain outside the
+  inherited PA10 boundary; the personal identity control uses local classes.
 - Required checks pending after implementation: stage, through PA13/14, file
   audit, explicit personal controls and performance evidence.
 - No handoff boundary reached; implementation continues across related groups.

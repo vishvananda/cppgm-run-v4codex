@@ -3,7 +3,7 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_calls) : ast(tree), ids(identifiers), calls(with_calls)
+Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_calls, bool with_definitions) : ast(tree), definitions(with_definitions), ids(identifiers), calls(with_calls)
 {
     entities.push_back(Entity()); scopes.push_back(Scope()); declarations.push_back(Declaration());
     edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1); members.resize(1); bases.push_back({0,0}); actions.push_back({0,0,0});

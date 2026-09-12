@@ -24,6 +24,10 @@ void Analyzer::finish()
     EntityId boundary_cursor = 1;
     for (;;) {
         if (calls) schedule_parameter_bodies(boundary_cursor);
+        if (definitions && specialization_cursor < specialization_demand.size()) {
+            instantiate_function(specialization_demand[specialization_cursor++]);
+            continue;
+        }
         if (demand_cursor == demand_queue.size()) break;
         EntityId e = demand_queue[demand_cursor++];
         std::uint32_t m = entities[e].member_info;
@@ -99,7 +103,9 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         entities[e].type = types.named(e);
         bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
     }
+    ScopeId saved = active_template_scope; active_template_scope = ts;
     declaration(ast[params].next, ts);
+    active_template_scope = saved;
     // A template's declarations are visible outside its parameter environment;
     // parameters themselves are not exported.
     for (std::uint32_t d = scopes[ts].first_decl; d; d = declarations[d].next) {

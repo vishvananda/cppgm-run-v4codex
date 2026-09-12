@@ -24,7 +24,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
         syntax::Ast ast(stats);
         syntax::Cursor cursor(post, pp.identifiers(), ast);
         syntax::Parser parser(cursor, ast, pp.identifiers());
-        semantic::Analyzer sem(ast, pp.identifiers(), true);
+        semantic::Analyzer sem(ast, pp.identifiers(), true, true);
         parser.translation_unit(&sem); sem.finish();
         auto parsed = Clock::now();
         Procedural lower(ast, sem, pp.identifiers(), program, linkage); lower.run();

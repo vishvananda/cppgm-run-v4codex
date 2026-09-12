@@ -23,6 +23,9 @@ std::vector<EntityId> Analyzer::candidates(EntityId e)
 }
 EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor, TypeId conversion)
 {
+    if (definitions && active_template_scope &&
+        (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace))
+        return declare_template_function(owner,name,source,type);
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);
@@ -240,6 +243,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     EntityId associated = adl ? associated_lookup(terminal(ast[callee].detail), args) : 0;
     if (associated) {
         EntityId selected = merge_lookup(ordinary, associated);
+        if (definitions) selected = explicit_template(ast[callee].detail,selected,s);
         fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
         expressions[callee] = fn; expressions[callee].ready = true; expressions[callee].evaluated = !unevaluated_depth;
         facts[callee].entity = selected; facts[callee].scope = s;
@@ -302,11 +306,19 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             else sequences.resize(begin);
         }
         if (viable.empty()) throw std::runtime_error("no viable function");
+        auto better_candidate = [&](std::size_t a, std::size_t b) {
+            const Conversion* x = sequences.data()+viable[a].offset;
+            const Conversion* y = sequences.data()+viable[b].offset;
+            auto count = args.size()+object_ranking;
+            if (better(x,y,count)) return true;
+            if (better(y,x,count)) return false;
+            return !entities[viable[a].entity].specialization && entities[viable[b].entity].specialization;
+        };
         std::size_t best = 0;
         for (std::size_t i = 1; i < viable.size(); ++i)
-            if (better(sequences.data() + viable[i].offset, sequences.data() + viable[best].offset, args.size() + object_ranking)) best = i;
+            if (better_candidate(i,best)) best = i;
         for (std::size_t i = 0; i < viable.size(); ++i)
-            if (i != best && !better(sequences.data() + viable[best].offset, sequences.data() + viable[i].offset, args.size() + object_ranking))
+            if (i != best && viable[i].entity != viable[best].entity && !better_candidate(best,i))
                 throw std::runtime_error("ambiguous overload");
         EntityId selected = viable[best].entity;
         facts[n].entity = selected;

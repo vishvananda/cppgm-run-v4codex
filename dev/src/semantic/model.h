@@ -188,7 +188,9 @@ enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 struct Specialization {
     EntityId pattern = 0, entity = 0;
     std::uint32_t arguments = 0;
-    FactState declaration = FactState::NotStarted;
+    FactState declaration = FactState::NotStarted, body = FactState::NotStarted;
+    ScopeId environment = 0;
+    std::uint32_t context = 0;
     bool emission_demanded = false;
 };
 struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public;

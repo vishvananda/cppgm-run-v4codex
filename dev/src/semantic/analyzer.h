@@ -7,7 +7,7 @@ namespace cppgm { namespace semantic {
 // The parser calls this boundary before proceeding to the next source region.
 class Analyzer : public syntax::DeclarationConsumer {
 public:
-    Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false);
+    Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false);
     void consume(NodeId declaration) override;
     void finish();
     void write(std::ostream& out) const;
@@ -21,6 +21,10 @@ public:
     const Expression& expression_fact(NodeId n) const { return expressions[n]; }
     const ObjectUse& object_fact(NodeId n) const { return object_uses[expressions[n].object_use]; }
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
+    EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
+    TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
+    TypeId template_argument(std::uint32_t n) const { return argument_types[n]; }
+    unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
     // Queries completed expression facts; keys are the expression and target.
@@ -189,7 +193,8 @@ private:
     FieldFacts& field_metadata(EntityId e);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);
-    syntax::Ast& ast;
+    syntax::AstView ast;
+    bool definitions;
     IdentifierTable& ids;
     bool calls;
     bool c_linkage = false;
@@ -237,7 +242,10 @@ private:
     std::vector<MemberFacts> members;
     std::vector<BaseRelation> bases;
     std::vector<ObjectAction> actions;
-    Index object_actions, specialization_index;
+    Index object_actions, specialization_index, parameter_ordinals;
+    Index template_families, template_signatures;
+    std::vector<TypeId> canonical_parameters;
+    ScopeId active_template_scope = 0;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     std::vector<TypeArguments> argument_packs;
@@ -246,6 +254,7 @@ private:
     std::vector<Specialization> specializations;
     std::vector<unsigned char> type_dependence;
     std::vector<EntityId> specialization_demand;
+    std::size_t specialization_cursor = 0;
     std::vector<EntityId> demand_queue;
     std::size_t demand_cursor = 0;
     unsigned anonymous_classes = 0, anonymous_enums = 0;
@@ -302,7 +311,9 @@ private:
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
-    void template_facts(EntityId e);
+    void template_facts(EntityId e, ScopeId environment = 0);
+    EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
+    void instantiate_function(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
     bool dependent_type(TypeId type);

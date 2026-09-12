@@ -46,7 +46,7 @@ struct Linkage {
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.
 // Function-local construction state is discarded when its body is complete.
 class Procedural {
-    syntax::Ast& ast;
+    syntax::AstView ast;
     semantic::Analyzer& sem;
     IdentifierTable& identifiers;
     lowir_model::Program& p;
@@ -133,6 +133,7 @@ class Procedural {
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_function_context(EntityId e);
+    void template_function_abi(EntityId e, abi_mangle::Function& target);
     void local_member_abi(EntityId e, abi_mangle::Function& target);
     bool internal_scope(semantic::ScopeId s);
     abi_mangle::Id abi_scope(semantic::ScopeId s);

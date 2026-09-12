@@ -185,6 +185,27 @@ struct LiteralValue {
     std::uint32_t offset, bytes, elements;
 };
 
+// Parsed nodes are stored once. Instantiated semantic occurrences retain only
+// a source identity and a substitution-context identity in the shared ID space.
+class NodePool {
+public:
+    struct Occurrence { NodeId source; std::uint32_t context; };
+    explicit NodePool(std::size_t count = 0) : source_nodes(count), occurrences(count, {0,0}) {}
+    Node& operator[](NodeId id) { return source_nodes[occurrences[id].source]; }
+    const Node& operator[](NodeId id) const { return source_nodes[occurrences[id].source]; }
+    void push_back(const Node& n) {
+        occurrences.push_back({static_cast<NodeId>(source_nodes.size()),0}); source_nodes.push_back(n);
+    }
+    NodeId occurrence(NodeId source, std::uint32_t context) {
+        NodeId id = occurrences.size(); occurrences.push_back({occurrences[source].source,context}); return id;
+    }
+    std::size_t size() const { return occurrences.size(); }
+    std::size_t capacity() const { return occurrences.capacity(); }
+    std::size_t parsed_size() const { return source_nodes.size(); }
+    std::vector<Node> source_nodes;
+    std::vector<Occurrence> occurrences;
+};
+
 class Ast {
 public:
     explicit Ast(bool telemetry = false);
@@ -193,17 +214,45 @@ public:
     NodeId take_first(NodeId parent);
     Node& operator[](NodeId id) { return nodes[id]; }
     const Node& operator[](NodeId id) const { return nodes[id]; }
+    // A view projects structural edges through a context without copying syntax.
+    Node view(NodeId id) const;
+    NodeId instantiate(NodeId root, std::uint32_t context);
+    NodeId projected(NodeId source, std::uint32_t context) const;
+    std::uint32_t new_context() { return ++contexts; }
+    std::uint32_t contexts = 0;
+    IdIndex occurrence_index;
     std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);
     bool telemetry;
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
     IdIndex alignment_owners, class_packing;
     std::vector<AlignmentAttribute> alignments = std::vector<AlignmentAttribute>(1);
-    std::vector<Node> nodes;
+    NodePool nodes;
     std::vector<Location> locations;
     std::vector<LiteralValue> literals;
     // Class nodes use their kind-discriminated auxiliary index for token ranges.
     std::vector<ClassRegion> class_regions;
     std::vector<char> literal_bytes;
+};
+
+class AstView {
+    Ast& tree;
+public:
+    explicit AstView(Ast& a) : tree(a), telemetry(a.telemetry), nodes(a.nodes),
+        literals(a.literals), literal_bytes(a.literal_bytes), class_regions(a.class_regions),
+        alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments) {}
+    Node operator[](NodeId id) const { return tree.view(id); }
+    operator const Ast&() const { return tree; }
+    NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
+    NodeId projected(NodeId source, std::uint32_t context) const { return tree.projected(source,context); }
+    std::uint32_t new_context() { return tree.new_context(); }
+    bool& telemetry;
+    NodePool& nodes;
+    std::vector<LiteralValue>& literals;
+    std::vector<char>& literal_bytes;
+    std::vector<ClassRegion>& class_regions;
+    IdIndex& alignment_owners;
+    IdIndex& class_packing;
+    std::vector<AlignmentAttribute>& alignments;
 };
 
 const char* kind_name(Kind kind);
