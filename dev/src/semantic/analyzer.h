@@ -1,5 +1,6 @@
 #pragma once
 #include "semantic/type_query.h"
+#include "semantic/template_binding.h"
 #include "semantic/model.h"
 #include "syntax/parser.h"
 
@@ -266,6 +267,7 @@ private:
     QueryId substitute_query(QueryId id, const Index& bindings, Index& cache);
     TypeQueryFact query_fact(QueryId id);
     TypeId query_decltype(QueryId id, bool direct);
+    TypeId fundamental_cast_type(ETokenType op);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeQueryFact query_operator(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId dependent_decltype(NodeId n, ScopeId s);
@@ -362,6 +364,17 @@ private:
     std::size_t storage_cursor = 0;
     std::size_t template_definition_work = 0;
     ScopeId member_definition_environment = 0;
+    Index template_binding_index, template_pattern_entities, template_pattern_scopes, template_bound_bodies;
+    Index template_base_dependence, template_class_bindings;
+    std::vector<TemplateBinding> template_bindings = std::vector<TemplateBinding>(1);
+    std::size_t template_binding_work = 0;
+    TemplateBinding bind_template_name(NodeId n, ScopeId s);
+    bool bind_template_expression(NodeId n, ScopeId s, bool callee = false);
+    EntityId pattern_declaration(EntityKind kind, ScopeId s, IdentifierId name, NodeId source, bool dependent);
+    void bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred = 0);
+    void bind_template_body(const Body& body);
+    void bind_template_statement(NodeId n, ScopeId s);
+    ScopeId bind_template_class(NodeId n, ScopeId parent, EntityId entity = 0, std::vector<Body>* deferred = 0);
     void check_template_parameters(NodeId n, ScopeId s);
     void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
     void check_template_member_exception(NodeId d, std::uint32_t path, IdentifierId name, ScopeId s);
@@ -399,7 +412,7 @@ private:
     void write_object(std::ostream& out, EntityId e, NodeId init, unsigned depth) const;
     void write_action(std::ostream& out, const ObjectAction& action, unsigned depth) const;
     void function_body(const Body& body);
-    void check_jumps(NodeId body);
+    void check_jumps(NodeId body, bool binding_only = false);
     void schedule_body(const Body& body);
     void statements(NodeId n, ScopeId s);
     void resolve_statement(NodeId n, ScopeId s);

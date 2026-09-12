@@ -96,6 +96,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
             class_facts[entities[base].class_info].final_class)
             throw std::runtime_error("invalid nondependent template base");
     }
+    if (ast[n].kind == Kind::Class) bind_template_class(n,s,e);
     return entities[e].type;
 }
 bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args)

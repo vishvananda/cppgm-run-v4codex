@@ -93,7 +93,7 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
              entities[old].kind != EntityKind::Type && k != EntityKind::Type)
         throw std::runtime_error("function and ordinary binding conflict");
     ordinary.put(key(s, n), id);
-    if (target(id) || (definitions && (k == EntityKind::Type || k == EntityKind::Alias) && dependent_type(entities[id].type)))
+    if ((entities[id].template_pattern && (k == EntityKind::Type || k == EntityKind::Alias)) || target(id) || (definitions && (k == EntityKind::Type || k == EntityKind::Alias) && dependent_type(entities[id].type)))
         qualifiers.put(key(s, n), id);
     if (k == EntityKind::Type) tags.put(key(s, n), id);
     if (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias) namespaces.put(key(s, n), id);
@@ -136,6 +136,9 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
     if (function_binding(a) && function_binding(b)) {
         EntityId e = make_entity(EntityKind::Overload, 0, entities[a].name, 0);
         entities[e].first = a; entities[e].second = b;
+        entities[e].template_pattern = entities[a].template_pattern || entities[b].template_pattern;
+        if (entities[e].template_pattern) template_pattern_entities.put(e,
+            template_pattern_entities.get(a) == 2 || template_pattern_entities.get(b) == 2 ? 2 : 1);
         return e;
     }
     // The PA6 contract distinguishes independently declared aliases, including
@@ -295,6 +298,13 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
 {
     if (!n) return 0;
+    if (definitions && mode == Lookup::Ordinary && ast.nodes.occurrences[n].context) {
+        auto id = template_binding_index.get(ast.nodes.occurrences[n].source);
+        if (id) {
+            auto binding = template_bindings[id]; auto e = binding.entity;
+            if (e && !binding.dependent && !entities[e].template_pattern && !entities[e].template_parameter) return e;
+        }
+    }
     // Namespace-only lookup applies to the leading qualifier too.
     if (mode == Lookup::Namespace) {
         bool qualified = ast[n].op == OP_COLON2;

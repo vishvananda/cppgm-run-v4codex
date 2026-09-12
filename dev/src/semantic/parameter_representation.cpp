@@ -6,7 +6,7 @@ void Analyzer::schedule_parameter_bodies(EntityId& cursor)
     // entity, interleaved with body demand; never retry completed declarations.
     while (cursor < entities.size()) {
         EntityId e = cursor++;
-        if (entities[e].kind != EntityKind::Function || entities[e].template_info) continue;
+        if (entities[e].kind != EntityKind::Function || entities[e].template_info || entities[e].template_pattern) continue;
         Type f = types[entities[e].type];
         for (unsigned j = 0; j < f.count; ++j) query_parameter_representation(types.parameters[f.offset+j]);
     }

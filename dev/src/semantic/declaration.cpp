@@ -251,6 +251,7 @@ void Analyzer::schedule_body(const Body& body)
     if (calls && entities[body.entity].template_info) {
         TemplateFunction& t = templates[entities[body.entity].template_info];
         t.body = body.node; t.declarator = body.declarator; t.source = body.source;
+        if (definitions) bind_template_body(body);
         return;
     }
     if (calls && entities[body.entity].member_info) {

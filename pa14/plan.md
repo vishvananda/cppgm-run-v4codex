@@ -3,8 +3,8 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; previous checkpoint **281/314**; current **286/314**.
-**202 original failures resolved; five this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; previous checkpoint **281/314**; current **295/314**.
+**211 original failures resolved; fourteen this continuation; no lost passes or reduced coverage.**
 
 ## Design/spec alignment and remaining groups
 
@@ -41,6 +41,20 @@ coverage and mandated limits remain requirements; unsupported inherited diagnost
 gates are not stage exit gates. Common outputs/native binaries are byte-identical;
 4× new definition inputs yield 4× applications, 4.27× wall and 3.61× RSS.
 Compiler text grows 35,008 bytes this continuation; no optimization gain is claimed.
+
+## Active binding increment
+
+Owner: template definition binding facts, keyed by immutable source identity.
+Retained declarations build lexical class/function/block/control scopes; value
+uses store fixed declaration identities or dependence, and concrete occurrences
+consume fixed bindings. Fixed bases contribute lookup edges; dependent bases do
+not. Work is proportional to source nodes, declarations and required lookup
+edges, once per definition, with no layout or member-body emission demand.
+Validation: nine additional original failures fixed; through **1916/1935**,
+prior **1621/1621**, eleven personal native programs and ten unused-body rejection
+checks pass. Complete-class nested member scopes and renamed heads are retained;
+initialization-prefix jump validation is shared without runtime lifetime demand.
+Extend this owner next to retained out-of-class definition environments.
 
 ## Handoff ledger
 

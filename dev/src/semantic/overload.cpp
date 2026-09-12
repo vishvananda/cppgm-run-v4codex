@@ -120,6 +120,19 @@ Conversion Analyzer::ellipsis_conversion_value(Expression source)
     if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
     return c;
 }
+TypeId Analyzer::fundamental_cast_type(ETokenType op)
+{
+            switch (op) {
+            case KW_INT: return types.fundamental(FT_INT);
+            case KW_BOOL: return types.fundamental(FT_BOOL);
+            case KW_CHAR: return types.fundamental(FT_CHAR);
+            case KW_LONG: return types.fundamental(FT_LONG_INT);
+            case KW_FLOAT: return types.fundamental(FT_FLOAT);
+            case KW_DOUBLE: return types.fundamental(FT_DOUBLE);
+            case KW_VOID: return types.fundamental(FT_VOID);
+            default: return 0;
+            }
+}
 Expression Analyzer::call_expression(NodeId n, ScopeId s)
 {
     NodeId callee = ast[n].first, args_node = ast[callee].next;
@@ -189,18 +202,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         else if (detail && ast[ast[detail].first].detail && ast[ast[ast[detail].first].detail].kind == Kind::Decltype)
             cast_type = expression_type(ast[ast[ast[detail].first].detail].first, s, true);
         if (e && (entities[e].kind == EntityKind::Alias || entities[e].kind == EntityKind::Type)) cast_type = entities[e].type;
-        if (ast[callee].op != TOK_INVALID) {
-            switch (ast[callee].op) {
-            case KW_INT: cast_type = types.fundamental(FT_INT); break;
-            case KW_BOOL: cast_type = types.fundamental(FT_BOOL); break;
-            case KW_CHAR: cast_type = types.fundamental(FT_CHAR); break;
-            case KW_LONG: cast_type = types.fundamental(FT_LONG_INT); break;
-            case KW_FLOAT: cast_type = types.fundamental(FT_FLOAT); break;
-            case KW_DOUBLE: cast_type = types.fundamental(FT_DOUBLE); break;
-            case KW_VOID: cast_type = types.fundamental(FT_VOID); break;
-            default: break;
-            }
-        }
+        if (auto fundamental = fundamental_cast_type(ast[callee].op)) cast_type = fundamental;
         if (cast_type) {
             if (ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) {
                 auto c = list_initialization(args_node,cast_type,s,true);

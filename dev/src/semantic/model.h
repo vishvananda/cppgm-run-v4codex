@@ -130,7 +130,7 @@ struct Entity {
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;
     bool mutable_field = false;
-    bool template_member = false;
+    bool template_member = false, template_pattern = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;

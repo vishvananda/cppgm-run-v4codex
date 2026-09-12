@@ -3,7 +3,7 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-void Analyzer::check_jumps(NodeId body)
+void Analyzer::check_jumps(NodeId body, bool binding_only)
 {
     // Each initialization extends an immutable active-binding prefix. A jump
     // may leave prefixes but cannot enter a prefix absent at its origin.
@@ -18,8 +18,17 @@ void Analyzer::check_jumps(NodeId body)
     unsigned active = 0, switch_entry = 0;
     std::uint32_t live = 0, break_live = 0, continue_live = 0;
     NodeId context = 0;
+    auto enter_initialization = [&]() {
+        unsigned parent = active;
+        Frame frame; frame.next = frames[parent].child;
+        frames[parent].child = frames.size(); active = frames.size(); frames.push_back(frame);
+    };
     auto add_object = [&](EntityId e) {
         if (!e || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) || entities[e].is_static || entities[e].external_decl) return;
+        if (binding_only) {
+            if (entities[e].initializer) enter_initialization();
+            return;
+        }
         EntityId dtor = object_destructor(e);
         EntityId temporary = reference_temporary(e);
         bool destruction = reference_choices(e) || destructor_needed(dtor) || parameter_cleanup(e) || temporary_cleanup(temporary) ||
@@ -32,9 +41,7 @@ void Analyzer::check_jumps(NodeId body)
                 object_lifetimes.put(reference_alternatives[choice].object,live);
         }
         if (!entities[e].initializer && !destruction && !constructor_needed(object_constructor(e))) return;
-        unsigned parent = active;
-        Frame frame; frame.next = frames[parent].child;
-        frames[parent].child = frames.size(); active = frames.size(); frames.push_back(frame);
+        enter_initialization();
     };
     std::function<void(NodeId)> visit = [&](NodeId n) {
         if (!n) return;

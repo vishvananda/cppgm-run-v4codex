@@ -42,6 +42,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     switch (node.kind) {
     case Kind::IdExpression: {
         auto name = node.detail;
+        if (callee && (fundamental_cast_type(node.op) || ast[name].kind == Kind::TypeId)) {
+            q.kind = QueryKind::TypeValue; q.type = fundamental_cast_type(node.op);
+            if (!q.type) q.type = type_id(name,s);
+            break;
+        }
         auto e = resolve(name,s);
         if (!e && (!callee || ast[name].first != ast[name].last || ast[name].op == OP_COLON2))
             throw std::runtime_error("unbound name in type query");

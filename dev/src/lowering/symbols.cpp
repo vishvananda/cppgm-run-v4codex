@@ -251,6 +251,7 @@ void Procedural::run()
 {
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
+        if (entity.template_pattern) continue;
         if (sem.static_temporary(e).object) { reference_global(e); continue; }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (entity.member_info && sem.member_fact(e).virtual_member && !entity.body && !sem.synthetic_member(e) && !sem.member_fact(e).emission_reference) continue;
