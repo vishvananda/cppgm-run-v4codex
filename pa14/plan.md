@@ -54,6 +54,17 @@ bounds, correctness, coverage and measurements. See [performance.md](performance
 
 ## Handoff ledger
 
+Continuation entry `d6891c36`: the preceding call/constructor-recipe group is
+**verified progress**, with 1935/1935 through-stage checks and frozen evidence.
+Next owner: symbolic fixed object/member expressions and their call receiver
+edges. Source facts retain pattern declaration or source-expression identity,
+member selection, cv/category and base adjustment; each occurrence maps only
+its receiver/object identity and lifetime use. No concrete temporary may enter
+a source-owned receiver recipe. Work follows member/receiver edges once per
+source and once per use. Validate fixed class parameters/locals, fields, access,
+virtual and qualified dispatch, side effects and class-result lifetimes, then
+course/native/sanitizer checks and frozen compiler/native scaling evidence.
+
 Continuation entry `816c9dc0`: preceding scalar-fact work was **verified progress**.
 The earlier transfer/query continuation (`c05778ed`) and scalar/evidence commits
 (`b22e683f`, `d0030349`, `ced1c0d6`, `973b9928`, `d19a1ff7`, `816c9dc0`) remain
@@ -75,3 +86,9 @@ Frozen binaries, reduced proofs, exact commands/statuses and logs live in
 The fixed call/argument group is complete. The symbolic object/body and finer
 demand/failure boundary above remains incomplete. Intended changes are committed
 with a clean tree at handoff.
+
+Current object increment: fixed class/pointer objects, shared receiver views,
+member calls and one member-value owner pass through **1935/1935**, sixteen
+native programs, fourteen new object/member rejections and the reduced
+reference/static-member reproducer. Sanitizer/performance validation is pending.
+Dependent template-owned member paths remain a distinct incomplete owner.

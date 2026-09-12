@@ -21,7 +21,11 @@ public:
     std::vector<Declaration> declarations;
     std::vector<Fact> facts;
     const Expression& expression_fact(NodeId n) const { return expressions[n]; }
-    const ObjectUse& object_fact(NodeId n) const { return object_uses[expressions[n].object_use]; }
+    ObjectUse object_fact(NodeId n) const {
+        auto use = object_uses[expressions[n].object_use];
+        return use.source_owned ? project_object_use(use,n) : use;
+    }
+    ObjectUse project_object_use(ObjectUse use, NodeId n) const;
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
@@ -346,6 +350,7 @@ private:
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
+    Expression member_value(EntityId e, TypeId object, ValueCategory category);
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
     void instantiate_function(EntityId e);
@@ -384,6 +389,7 @@ private:
     void check_fixed_expression(NodeId n, ScopeId s);
     bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
     bool check_fixed_call(NodeId n, ScopeId s);
+    bool check_fixed_member(NodeId n, ScopeId s);
     void check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
     Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);

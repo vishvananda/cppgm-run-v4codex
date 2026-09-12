@@ -6,16 +6,20 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
 {
     auto callee = ast[n].first, designator = callee;
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
-    if (ast[designator].kind != Kind::IdExpression || ast[ast[designator].detail].kind != Kind::Name) return false;
-    auto name = ast[designator].detail;
-    auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[name].source)];
+    bool member = ast[designator].kind == Kind::Member;
+    if (!member && ast[designator].kind != Kind::IdExpression) return false;
+    if (member && !template_fixed_expressions.get(ast.nodes.occurrences[designator].source)) return false;
+    auto name = member ? ast[ast[ast[designator].first].next].detail : ast[designator].detail;
+    if (ast[name].kind != Kind::Name) return false;
+    auto binding = member ? TemplateBinding() : template_bindings[template_binding_index.get(ast.nodes.occurrences[name].source)];
+    if (member) binding.entity = expressions[designator].entity;
     if (binding.dependent) return false;
     bool direct = !binding.entity || function_binding(binding.entity);
-    bool adl = direct && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
+    bool adl = direct && !member && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
     if (!binding.entity && !adl) return false;
     if (direct) {
         for (auto e : candidates(binding.entity)) {
-            if (entities[e].template_pattern || (entities[e].member_info && !entities[e].is_static)) return false;
+            if (entities[e].template_pattern || (!member && entities[e].member_info && !entities[e].is_static)) return false;
             auto owner = scopes[entities[e].owner].kind;
             if (owner == ScopeKind::Class || owner == ScopeKind::Block || owner == ScopeKind::Function) adl = false;
         }
@@ -27,7 +31,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     }
     ++unevaluated_depth;
     try {
-    Expression fn;
+    Expression fn, result;
     auto associated = adl ? associated_lookup(terminal(name),args) : 0;
     if (!binding.entity && !associated) { --unevaluated_depth; return false; } // Intrinsic call owner.
     if (associated) {
@@ -35,15 +39,31 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue; fn.ready = true;
         expressions[callee] = fn; facts[callee].entity = fn.entity; facts[callee].scope = s;
     } else fn = expression(callee,s);
+    NodeId object_node = member ? ast[designator].first : 0;
+    TypeId object_type = member ? expressions[object_node].type : 0;
+    auto category = member ? expressions[object_node].category : ValueCategory::Lvalue;
+    if (member && ast[designator].op == OP_ARROW) { object_type = types[decay(object_type)].child; category = ValueCategory::Lvalue; }
+    auto naming = object_uses[expressions[designator].object_use].naming_scope;
     TypeId ft = 0; EntityId selected = 0; std::vector<Conversion> chosen;
     if (direct) {
-        auto choice = select_call(fn.entity,expressions,&args,0,ValueCategory::Lvalue,
-            object_uses[fn.object_use].naming_scope,0,chosen);
+        auto choice = select_call(fn.entity,expressions,&args,object_type,category,naming,0,chosen);
         if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable fixed template call");
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous fixed template call");
         selected = choice.entity; ft = entities[selected].type;
         if (deleted_transfer(selected)) throw std::runtime_error("deleted fixed template callee");
-        check_access(selected,s,object_uses[fn.object_use].naming_scope);
+        check_access(selected,s,naming,object_type);
+        if (member) {
+            bool nonstatic = entities[selected].member_info && !entities[selected].is_static;
+            if (nonstatic) {
+                Expression object; object.type = object_type; object.category = category;
+                check_fixed_conversion(object,object_node,chosen[0],s);
+            }
+            chosen.erase(chosen.begin());
+            record_object(result,object_node,nonstatic ? types.parameters[types[call_type(selected)].offset] : 0,
+                nonstatic ? base_steps(object_type,scopes[entities[selected].owner].entity) : 0);
+            auto& use = object_uses[result.object_use]; use.source_owned = true;
+            if (nonstatic && ast[name].first == ast[name].last) use.virtual_slot = members[entities[selected].member_info].virtual_slot;
+        }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {
             auto a = entities[selected].specialization ? instantiate_default(selected,i) : default_arguments[entities[selected].defaults+i];
@@ -67,7 +87,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
     for (unsigned i = 0; i < chosen.size(); ++i)
         check_fixed_conversion(expressions[args[i]],args[i],chosen[i],s);
-    Expression result; result.type = value_type(f.child);
+    result.type = value_type(f.child);
     result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[f.child].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
     if (class_value(result.type) && result.category == ValueCategory::Prvalue) {
@@ -89,13 +109,16 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     auto selected = facts[source].entity;
     auto callee = ast[n].first;
     if (selected) {
+        auto receiver = object_uses[result.object_use];
+        if (receiver.source_owned) receiver = project_object_use(receiver,n);
+        if (receiver.node) expression(receiver.node,s);
         auto pattern = ast[source].first;
         for (auto c = callee;; c = ast[c].first, pattern = ast[pattern].first) {
             expressions[c] = expressions[pattern]; expressions[c].evaluated = !unevaluated_depth;
             facts[c].type = facts[pattern].type; facts[c].entity = selected; facts[c].scope = s;
             if (ast[c].kind != Kind::Parenthesized) break;
         }
-        use_selected_function(selected,true);
+        use_selected_function(selected,!receiver.virtual_slot);
     } else {
         expression(callee,s);
         auto incoming = expressions[ast[source].first].incoming;

@@ -30,11 +30,13 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
         auto e = lookup(owner,p == ast[n].last ? terminal(n) : ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
-        r.dependent |= entities[e].template_parameter || entities[e].template_member || template_pattern_entities.get(e) == 2 ||
+        auto args = child(p,Kind::TemplateArguments);
+        bool class_id = args && entities[e].class_info && (entities[e].template_info || entities[e].specialization);
+        r.dependent |= entities[e].template_parameter || entities[e].template_member || (!class_id && template_pattern_entities.get(e) == 2) ||
             (entities[e].template_pattern && !entities[e].type &&
              (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) ||
             (entities[e].type && dependent_type(entities[e].type));
-        if (auto args = child(p,Kind::TemplateArguments)) {
+        if (args) {
             for (auto a = ast[args].first; a; a = ast[a].next) {
                 // The parser retains unresolved template arguments as value
                 // syntax when the owning class's aliases are not yet visible.
@@ -46,10 +48,15 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
                 }
                 r.dependent |= bind_template_expression(a,s);
             }
-            if (!r.dependent && !entities[e].template_pattern) r.entity = e = class_template_name(p,e,s);
+            if (!r.dependent && !entities[e].template_pattern) {
+                r.entity = e = class_template_name(p,e,s);
+                r.dependent |= entities[e].type && dependent_type(entities[e].type);
+            }
         }
         if (p == ast[n].last) break;
         if (r.dependent) { r.entity = 0; break; }
+        auto cls = entities[e].class_info ? e : entities[e].kind == EntityKind::Alias ? types[entities[e].type].entity : 0;
+        if (cls && entities[cls].class_info) complete_class(cls);
         owner = target(e); qualified = true;
         if (!owner) { r.entity = 0; break; }
     }

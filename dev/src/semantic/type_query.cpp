@@ -164,13 +164,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto cls = types[type].entity; complete_class(cls);
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
         if (!e) throw std::runtime_error("type query member not found");
-        x.entity = e;
-        if (function_binding(e)) { x.form = ExpressionForm::Overload; x.category = ValueCategory::Lvalue; }
-        else {
-            r.declared_type = entities[e].type; x.type = value_type(r.declared_type);
-            if (!entities[e].is_static && x.type == r.declared_type) x.type = types.qualify(x.type,types[type].cv & (entities[e].mutable_field ? 2 : 3));
-            x.category = q.op == OP_ARROW || types[r.declared_type].kind == TypeKind::LRef || entities[e].is_static ? ValueCategory::Lvalue : object.category;
-        }
+        x = member_value(e,type,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
+        if (function_binding(e)) { x.form = ExpressionForm::Overload; x.type = 0; }
+        else { check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type; }
         break;
     }
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;

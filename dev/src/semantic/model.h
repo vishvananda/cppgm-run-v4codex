@@ -253,7 +253,8 @@ struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0;
     std::uint32_t virtual_slot = 0;
-    unsigned adjustment = 0; std::uint32_t callee_conversion = 0; bool value_initialize = false; };
+    unsigned adjustment = 0; std::uint32_t callee_conversion = 0;
+    bool value_initialize = false, source_owned = false; };
 struct Conversion {
     TypeId target = 0;
     std::uint32_t adjustment = 0; // Zero: no projection; otherwise byte offset + 1.

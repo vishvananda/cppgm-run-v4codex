@@ -1,0 +1,1 @@
+int r;struct V{int& member;static int data;};int V::data;V make(){V v={r};return v;}template<class T>int& f(){return make().member;}template<class T>int& g(){return make().data;}int main(){f<int>()=4;g<int>()=5;return r!=4||V::data!=5;}

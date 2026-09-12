@@ -211,3 +211,51 @@ copy/default objects, repeated specialization use and public base pointers.
 Four reduced private-base cases close definition-time errors accepted at entry.
 This completes fixed call argument recipes; dependent member/object selection
 and declaration/return conversions require facts from their distinct owners.
+
+
+## Fixed object and member facts
+
+`template_object_facts.cpp` retains explicit member receiver edges on the source
+expression. Fixed class/pointer parameter and local identities use the existing
+pattern declaration identity and are mapped through the concrete declaration
+fact. A source-owned `ObjectUse` contains no temporary. `object_fact` projects
+only its receiver/member-pointer edges for the consumer; type, naming scope,
+base adjustment and virtual slot stay shared. Class-valued call results obtain
+a concrete object-use record when their per-use temporary is established.
+
+`template_call_facts.cpp` now consumes fixed member designators as well as free
+and indirect calls. Implicit-object ranking and base access are checked once;
+qualified calls suppress virtual dispatch and static calls retain receiver
+side effects. Occurrences demand the selected entry and consume their mapped
+receiver and argument expressions. Object-preserving related reference casts
+without conversion-function participation also share their fixed conversion.
+Other class casts remain owned by the pending cast/materialization graph.
+
+Explicit fixed class-template-ids derive dependence from their arguments,
+including defaults, rather than inheriting the primary's pattern marker.
+Qualified fixed class lookup completes only its required declaration/layout;
+selected unused member bodies remain undemanded. Contextually bound nested
+source regions still cannot publish definition-wide expression facts.
+
+`member_value.cpp` gives ordinary expressions and type queries one member
+value/type/category owner. It rejects nested types used as values and preserves
+lvalues for reference and static data members, prvalues for enumerators, and
+cv/mutable field rules. N3485 [expr.ref]/4 (`doc/n3485.txt:5834`) requires the
+reference/static distinction; `field-category.t` fails at entry and executes
+successfully after the change. Nonreference fields of rvalue objects are
+xvalues per [CWG 616](https://cplusplus.github.io/CWG/issues/616.html), the C++11
+defect resolution adopted in April 2013; queries now agree with ordinary
+expressions. No reference output was changed.
+
+Work follows a fixed source member/receiver edge once and each concrete receiver
+use once. Sharing named/field receiver recipes adds no per-use object arena
+record. `ObjectUse::source_owned` uses existing padding; entity/expression
+layouts remain unchanged. Fourteen new unused-member/type/query rejections,
+sixteen native programs and the through report (1935/1935) pass. Sanitizer and
+frozen performance evidence for this increment are pending.
+
+This covers receivers whose class type is fixed. A template-owned dependent
+class receiver still needs a symbolic member-declaration path and separately
+substituted layout/access facts. Constructor/operator expressions, broader
+casts, declaration/return conversions, dependent-only projection and finer
+demand/failure states remain current-stage work.

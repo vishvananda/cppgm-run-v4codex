@@ -176,19 +176,13 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (ast[part].op == KW_OPERATOR && ast[part].detail)
             e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
         if (!e) throw std::runtime_error("unknown member");
-        r.entity = e; facts[n].entity = e;
+        r = member_value(e,t,ast[n].op == OP_ARROW ? ValueCategory::Lvalue : object.category);
+        facts[n].entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);
         if (!function_binding(e)) check_access(e, s, naming, t);
         if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
         if (!r.object_use) record_object(r, 0, 0, 0);
         object_uses[r.object_use].naming_scope = naming;
-        if (entities[e].kind == EntityKind::Overload) r.form = ExpressionForm::Overload;
-        else {
-            r.type = value_type(entities[e].type);
-            if (nonstatic_field(e) && types[entities[e].type].kind != TypeKind::LRef && types[entities[e].type].kind != TypeKind::RRef)
-                r.type = types.qualify(r.type, types[t].cv & (entities[e].mutable_field ? 2 : 3));
-        }
-        r.category = ast[n].op == OP_ARROW || object.category == ValueCategory::Lvalue ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         return r;
     }
     default: throw std::runtime_error("unsupported expression");
