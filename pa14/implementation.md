@@ -112,3 +112,35 @@ and implicit-move eligibility, as required by N3485 [class.copy]/31–32
 independently of the function's return type. The frozen reduced program returns
 1 before the fix and 0 afterward (one volatile-lvalue copy, no move); it is
 also exercised by `object-transfers.cpp`. No reference output was changed.
+# Shared scalar body facts
+
+`semantic/template_expression.cpp` extends definition-time binding with fixed
+scalar expression checking. The existing source graph owns the completed
+`Expression`, type/category, constant identity and operand-conversion slice.
+The fixed index maps immutable parsed-source identity to its semantic NodeId;
+these differ when parsing continues after an earlier class instantiation.
+Only original definition contexts publish facts. Contextually bound nested
+definitions cannot populate this source-wide index.
+
+Instantiation reuses conversions and maps pattern local/parameter declarations
+through the occurrence's declaration fact. It retains occurrence-local scope,
+incoming conversion and evaluation/observation facts. Reference/address and
+mutation observations are applied to concrete objects; sizeof operands remain
+unevaluated. No selected conversion has a class materialization or lifetime
+record in this slice. Missing/mismatched concrete declaration facts are invariant
+failures. Unresolved pattern aliases and nested enum identities are deferred.
+
+The eligible slice includes scalar literals/names, unary/binary/assignment and
+conditional operators, parentheses, scalar casts, fixed sizeof/alignment and
+subscript expressions. Ordinary semantics validates it once, including unused
+bodies (README definition-time checks; N3485 [temp.res], [temp.dep.expr]/1–4,
+[temp.dep.constexpr]/1–2 and the respective expression operand constraints).
+Work is O(pattern nodes plus consumed occurrence edges), without repeated fixed
+operator conversion selection. TU-owned flat indices and existing fact/slice
+arenas have no per-node heap owner or process-global cache.
+
+This completes the scalar fact group, not the full body graph requirement.
+Calls/class operations, declaration/return/default conversions and dependent
+subgraphs still need richer typed edges. Full region occurrence projection and
+contextual expression records also remain; finer demand/failure states are a
+separate incomplete owner. Measured performance is recorded in performance.md.

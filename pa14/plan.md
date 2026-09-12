@@ -49,6 +49,15 @@ measurements, correctness, coverage and mandated bounds remain requirements.
 
 ## Handoff ledger
 
+Continuation entry `c05778ed`: previous turn is **verified progress**, with
+314/314 course tests and the architecture boundary retained. The next owner is
+definition-owned scalar expression facts: binding establishes fixed operands,
+ordinary semantics publishes types/conversion slices once, and specialization
+projects only declaration identities and operand consumption. Work is O(pattern
+expressions + demanded operand occurrences), with no repeated fixed conversion
+selection. Validate unused-body legality, shadowed/nested locals, volatile and
+reference effects, course/native/sanitizer parity, and frozen A/A+ABBA scaling.
+
 Entry `2c80bc70`: previous query/binding turn is **verified progress** (297/314).
 
 | Increment | Commit / validation |

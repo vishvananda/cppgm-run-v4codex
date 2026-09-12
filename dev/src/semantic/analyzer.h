@@ -372,8 +372,13 @@ private:
     Index template_base_dependence, template_class_bindings;
     std::vector<TemplateBinding> template_bindings = std::vector<TemplateBinding>(1);
     std::size_t template_binding_work = 0;
+    Index template_fixed_expressions;
+    std::size_t template_fixed_work = 0, template_fixed_uses = 0;
+    void check_fixed_expression(NodeId n, ScopeId s);
+    bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
     TemplateBinding bind_template_name(NodeId n, ScopeId s);
     bool bind_template_expression(NodeId n, ScopeId s, bool callee = false);
+    bool bind_template_expression_impl(NodeId n, ScopeId s, bool callee);
     EntityId pattern_declaration(EntityKind kind, ScopeId s, IdentifierId name, NodeId source, bool dependent);
     void bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred = 0);
     void bind_template_body(const Body& body);

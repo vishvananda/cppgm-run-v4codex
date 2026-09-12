@@ -22,9 +22,12 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         if (!unevaluated_depth && definitions) demand_template_storage(expressions[n].entity);
         return expressions[n];
     }
-    ++expression_work;
     facts[n].scope = s;
-    Expression result = resolve_expression(n, s);
+    Expression result;
+    if (!ast.nodes.occurrences[n].context || !reuse_fixed_expression(n,s,result)) {
+        ++expression_work;
+        result = resolve_expression(n, s);
+    }
     if (!unevaluated_depth && definitions) demand_template_storage(result.entity);
     if (result.entity && entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class &&
         entities[result.entity].constant.valid) {

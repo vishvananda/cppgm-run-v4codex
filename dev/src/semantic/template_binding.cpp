@@ -31,6 +31,8 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
         if (!e) { r.entity = 0; break; }
         r.entity = e;
         r.dependent |= entities[e].template_parameter || entities[e].template_member || template_pattern_entities.get(e) == 2 ||
+            (entities[e].template_pattern && !entities[e].type &&
+             (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) ||
             (entities[e].type && dependent_type(entities[e].type));
         if (auto args = child(p,Kind::TemplateArguments)) {
             for (auto a = ast[args].first; a; a = ast[a].next) {
@@ -58,6 +60,13 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
     return r;
 }
 bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
+{
+    bool dependent = bind_template_expression_impl(n,s,callee);
+    if (n && !dependent && !callee && !ast.nodes.occurrences[n].context)
+        check_fixed_expression(n,s);
+    return dependent;
+}
+bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
 {
     if (!n) return false;
     ++template_binding_work;
