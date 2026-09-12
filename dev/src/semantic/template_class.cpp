@@ -11,6 +11,15 @@ bool Analyzer::dependent_template_syntax(NodeId root, ScopeId s)
         if (!n || seen.get(n)) continue;
         seen.put(n,1);
         auto node = ast[n];
+        if (node.kind == Kind::Member) {
+            // The name after . or -> belongs to the object's class. It is
+            // never an unqualified reference to a surrounding type parameter.
+            work.push_back(node.first);
+            auto name = ast[ast[node.first].next].detail;
+            for (auto part = ast[name].first; part; part = ast[part].next)
+                if (auto args = child(part,Kind::TemplateArguments)) work.push_back(args);
+            continue;
+        }
         if (node.kind == Kind::Name && node.first) {
             auto e = lookup(node.op == OP_COLON2 ? global : s,ast[node.first].text);
             if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias) && dependent_type(entities[e].type)) return true;

@@ -44,6 +44,12 @@ constraints retain their owning stages.
   Remaining architecture work: definition-time dependent/nondependent facts,
   dependent-only fact reuse, finer body occurrence allocation, and defaults/
   out-of-class-definition ownership. These are open requirements, not waived.
+- Call integration increment: **219/314** (95 failures), **135 original
+  failures resolved, no newly failing entry tests**. Direct/partial/target
+  deduction, operators, forwarding references, lazy defaults and enum candidate
+  filtering share specialization facts. Four personal executables pass.
+  Value definitions demand class completion before transfer facts are published.
+  Base dependence follows qualified/member-name ownership.
 - Required checks pending after implementation: stage, through PA13/14, file
   audit, explicit personal controls and performance evidence.
 - No handoff boundary reached; implementation continues across related groups.
