@@ -21,9 +21,9 @@ The compiler implements the LowIR itself.
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The previous campaign checked 320 inputs; the current campaign checks 323 inputs
-with Clang's address and undefined behavior sanitizers, leak detection and
-halt-on-error enabled.
+The current campaign checks 329 inputs with Clang's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 48 explicit
+binding/query/scalar/call rejection cases.
 
 The [performance review](../../pa14/performance.md) explains the raw JSON and
 acceptance. `benchmark.py A B WORK OUT` uses the fixed PA10 compiler/native

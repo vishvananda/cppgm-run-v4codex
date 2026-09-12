@@ -627,3 +627,115 @@ diagnostics under stage-scoped acceptance. This does not excuse an identified
 avoidable regression, waive correctness/coverage or complete the remaining typed
 body/demand architecture. All current required checks, native tests and sanitizer
 checks pass; `verify_performance.py` validates the full retained history.
+
+
+## Fixed calls and constructor argument recipes
+
+Frozen entry A is `816c9dc0`; B is `421aa292`, incorporating `ba609e57`
+(unified typed selection) and `358a9d5b` (fixed call facts/access). The frozen
+`call_benchmark.py` extends all nineteen preceding body workloads with six
+call/unused/materialization scaling inputs and two live native loops. One warmup
+per binary, four A/A observations and two ABBA blocks give **476 observations**,
+bringing retained verified history to **5,194**. Every sample is retained.
+Binaries, inputs, flags, output hashes, wall/RSS/user/system/context-switch
+measurements and backend identity are in `call-performance.json` and
+`$RALPH_ARTIFACT_DIR/pa14-call-facts/`. No builds/tests ran during timing.
+
+All **27 compiler outputs and seven native outputs are byte-identical** between
+A/B. The nineteen inherited outputs also equal their preceding campaign's
+outputs. This is semantic fact reuse at O0, with no generated-code transform.
+
+| Compiler workload | A / B median wall s | A / B RSS KiB | A/A range s | Paired B/A |
+| --- | --- | --- | --- | --- |
+| calls-1 | 0.436602 / 0.434862 | 83168 / 83282 | 0.436237–0.445906 | 0.9613, 0.9916 |
+| calls-4 | 1.807302 / 1.837008 | 305104 / 305172 | 1.774867–1.859101 | 0.9977, 1.0208 |
+| memory-float-1 | 0.384674 / 0.382794 | 72626 / 72608 | 0.380503–0.409509 | 1.0035, 1.0114 |
+| memory-float-4 | 1.545971 / 1.548345 | 266964 / 266952 | 1.532602–1.546098 | 1.0164, 0.9863 |
+| template-semantics-1 | 0.075020 / 0.075467 | 13528 / 13538 | 0.073632–0.075136 | 1.0062, 0.9976 |
+| template-semantics-4 | 0.302856 / 0.294215 | 39498 / 39528 | 0.285281–0.535178 | 1.0153, 0.9333 |
+| query-instances-1000 | 0.151627 / 0.149416 | 31680 / 31642 | 0.150481–0.155842 | 1.0128, 1.5285 |
+| query-instances-4000 | 0.619438 / 0.604114 | 111338 / 111390 | 0.622641–0.626286 | 0.9855, 0.9976 |
+| binding-instances-1000 | 0.155961 / 0.153935 | 31164 / 31076 | 0.154365–0.163514 | 0.9856, 0.9767 |
+| binding-instances-4000 | 1.499989 / 1.586472 | 109402 / 110138 | 1.081589–1.498861 | 1.0096, 0.9936 |
+| fixed-instances-1000 | 0.313585 / 0.310443 | 30898 / 30936 | 0.292520–0.444456 | 0.9965, 0.9795 |
+| fixed-unused-1000 | 0.189404 / 0.199269 | 20176 / 20026 | 0.185436–0.228907 | 1.0083, 1.1880 |
+| fixed-instances-4000 | 1.330622 / 1.336693 | 108676 / 108652 | 1.234692–1.350465 | 1.0046, 0.9327 |
+| fixed-unused-4000 | 0.844164 / 0.889163 | 65162 / 65032 | 0.790150–1.085663 | 0.9459, 0.9857 |
+| call-instances-1000 | 0.263286 / 0.295711 | 23518 / 23238 | 0.243092–0.266715 | 0.9027, 1.0150 |
+| call-unused-1000 | 0.122254 / 0.148000 | 14204 / 15476 | 0.120140–0.124236 | 1.2392, 1.2086 |
+| call-materializations-1000 | 0.297839 / 0.272505 | 31548 / 31304 | 0.285899–0.304749 | 0.9126, 0.8846 |
+| call-instances-4000 | 0.997421 / 0.868713 | 79758 / 78260 | 0.951536–1.000416 | 0.7760, 0.7497 |
+| call-unused-4000 | 0.425015 / 0.525732 | 41812 / 46688 | 0.399572–0.454737 | 1.2286, 1.1904 |
+| call-materializations-4000 | 1.176891 / 1.096979 | 110950 / 109652 | 1.113925–1.198417 | 0.9113, 0.9045 |
+
+| Native workload | A / B median wall s | Payload bytes (both) | Paired B/A |
+| --- | --- | --- | --- |
+| calls-runtime | 0.979862 / 0.995758 | 206 | 1.0459, 0.9625 |
+| memory-runtime | 0.518311 / 0.566688 | 434 | 1.0040, 1.0369 |
+| floating-runtime | 0.664347 / 0.669875 | 230 | 1.0251, 0.9849 |
+| query-runtime | 0.384623 / 0.379001 | 182 | 0.9776, 0.9746 |
+| fixed-runtime | 0.394640 / 0.394729 | 268 | 1.0130, 0.9947 |
+| call-runtime | 0.181317 / 0.159162 | 367 | 0.9532, 1.0018 |
+| call-materializations-runtime | 0.086783 / 0.087291 | 1192 | 0.9690, 0.9586 |
+
+Native peak RSS is 256 KiB for every sample. The sectionless native text metric
+is still payload after entry, including support/data; compiler size is actual
+`.text`. Runtime-source compilation is approximately 10–13 ms and 5 MiB RSS;
+these startup-dominated samples remain recorded without speedup claims. Native
+outputs are identical, so timing differences are measurement variation, not a
+runtime optimization benefit.
+
+At 4,000 demanded scalar-call specializations, candidate work falls
+**48,000→4,011**, conversion selection **72,012→12,027**, conversion records
+**48,012→12,021** and expression work **60,015→12,022**. Five call facts serve
+20,000 uses. Median RSS falls 1,498 KiB. Paired times improve 22.4–25.0%, while
+the wall median improves 12.9%; A's ABBA observations range .9929–1.3220 s, so
+the precise gain is sensitive to that spread. The 1,000-instance timing is
+mixed: B's median is 12.3% higher, with pairs .9027/1.0150. A's calibration is
+.2431–.2667 s, while later A samples reach .3488/.3514 s; no uniform small-input
+speedup is claimed.
+
+Class materialization pairs improve **8.7–11.5% at 1,000** and **8.9–9.6% at
+4,000**. At 4,000, conversion selection also falls 72,012→12,027 and stored
+conversions 56,007→32,018; RSS falls 1,298 KiB. Source checking adds only two
+constructor recipes and one user-conversion recipe. Concrete entity/scope counts
+are identical to A: required objects/lifetimes remain per use. Occurrences remain
+50N for scalar calls and 53N for class calls, exposing the remaining full-region
+projection cost instead of claiming dependent-only instantiation is complete.
+
+Checking 4,000 unused call patterns costs **100.7 ms and 4,876 KiB** in median
+latency/RSS. B validates 20,000 fixed calls, 44,000 required candidates and
+60,000 additional conversions; A omitted those decisions. All seventeen reduced
+illegal unused definitions are accepted by A and rejected by B. The retained
+`rejection-recipes-progress.json` records status, source hashes and diagnostics.
+This is required definition-time checking (PA14 README, N3485 [temp.res]/8,
+[expr.call], [class.access] and [class.access.base]), with valid unused output
+still exactly equal. Defaults additionally preserve their own permitted user
+conversion, and native controls check effects and destruction across uses.
+
+Ordinary calls-4 now has pairs .9977/1.0208 and a 1.6% higher B median, with
+essentially equal RSS. All historical higher calls-4 medians remain preserved;
+this comparison does not erase them or establish a general compiler speedup.
+Query-1000 retains a .3159 s B outlier (.12 user + .03 system), compared with
+other B samples .1467–.1517 s, producing a second pair of 1.5285 despite a lower
+B median. Binding-4000 has a 5.8% higher B median, but pairs 1.0096/.9936 and
+substantial drift in A itself (1.0816–1.7241 s). Both binary order and all other
+outliers remain in the raw evidence; no sample was filtered or used as a gate.
+
+Compiler `.text` is **1,241,990 bytes**, +14,080 (**1.15%**) over A. Entity and
+expression records remain **112/36 bytes**. The added fixed support cost buys
+required definition-time legality, one selection owner and shared conversion
+recipes, with repeatable affected class-call benefits and lower repeated work
+and memory. It adds no optional optimizer or student native backend.
+
+**Work/growth budget:** definition-time call work follows the required candidate
+and argument edges once per source call; constructor recipes follow their
+parameter/default edges. Each demanded use consumes its argument edges and
+allocates only required object/lifetime records. Source indices/recipes are
+TU-owned, source-proportional and contain no per-node heap owner or global scan.
+Ordinary direct-call selection retains its required-candidate/arity bound.
+Generated-code growth budget is **zero**, established by exact IR/native equality.
+There is no mandated numeric PA14 compiler threshold; inherited self-selected
+gates remain diagnostics under stage-scoped acceptance. Measured required
+checking costs do not excuse an identified avoidable regression. Full body
+projection and finer demand/failure owners remain current-stage work.

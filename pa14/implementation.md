@@ -2,8 +2,9 @@
 
 Current contract result: **314/314**, zero course failures; prior assignments **1621/1621**.
 The transfer continuation resolved **all 17 of its entry failures**, with no lost passes.
-The following body-fact continuation preserves 314/314 and shares fixed scalar
-expression/conversion facts, including definition-time operand legality.
+The following body-fact continuations preserve 314/314 and share fixed scalar,
+call and constructor-argument facts, including definition-time operand/access
+legality and occurrence-owned materializations.
 Cumulatively, **all 230 stage-entry failures** are resolved. Fixtures,
 references and comparison rules are unchanged. PA15 has not been started.
 
@@ -40,14 +41,14 @@ than stopping at a test-progress threshold.
 
 | Owner | Current PA14 work still required by `spec.md` |
 | --- | --- |
-| Typed template body facts | Calls/class operations, declaration/return/default conversions, general expression/bound queries, and dependent-only checking instead of whole-region semantic projection. Fixed scalar expression/conversion facts are shared. |
+| Typed template body facts | Nonstatic member objects, constructor/operator expressions, declaration/return conversions, general expression/bound queries, and dependent-only checking instead of whole-region semantic projection. Fixed scalar/call/argument recipes are shared. |
 | Demand and failure facts | Finer declaration/layout/default/exception/body states, typed reasons and reverse dependency edges, narrow structured expected failures. |
 
-Parsed-node sharing and fixed name/query/scalar-expression sharing are implemented. Sharing all
+Parsed-node sharing and fixed name/query/scalar/call-argument sharing are implemented. Sharing all
 nondependent semantic body facts is **not** complete: concrete bodies still
-project entire regions and recompute many type/conversion facts. General fixed
-expression legality, finer occurrence demand and structured expected rejection
-need a broader typed body graph. This is the concrete incomplete handoff
+project entire regions and recompute many type/conversion facts. Pattern-owned nonstatic object/member facts, declaration/return conversions,
+finer occurrence demand and structured expected rejection need a broader typed
+body graph. This is the concrete incomplete handoff
 boundary, not a commit or progress threshold. These requirements are not waived
 by the stage-scoped performance review or deferred to PA15.
 
