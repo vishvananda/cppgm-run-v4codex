@@ -9,6 +9,7 @@ python3 student.tests/pa13/check_ir.py
 python3 student.tests/pa13/check_course.py dev/cppgm++
 python3 student.tests/pa13/check_literal_storage.py
 python3 student.tests/pa13/audit_check.py
+python3 student.tests/pa13/check_linkage.py
 ```
 
 The first four scripts accept an alternate compiler path, including the actual

@@ -15,12 +15,16 @@ void publish(Program& p, SymbolId symbol, const std::vector<DataItem>& data)
 SymbolId Procedural::abi_global(EntityId cls, abi_mangle::TargetKind kind)
 {
     abi_mangle::Target target; target.kind = kind; target.type = abi_type(sem.entities[cls].type);
+    bool internal = internal_scope(sem.entities[cls].owner);
     auto key = (std::uint64_t(16+unsigned(kind)) << 32) | target.type;
-    if (auto prior = linkage.external.get(key)) return SymbolId(prior);
+    if (!internal) if (auto prior = linkage.external.get(key)) return SymbolId(prior);
     SymbolId sym = fresh_symbol(kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name");
-    auto& meta = p.symbols[sym.index-1].metadata; meta.binding = SBM_WEAK;
-    meta.object = p.intern(abi_mangle::mangle(abi,target));
-    linkage.external.put(key,sym.index); return sym;
+    auto& meta = p.symbols[sym.index-1].metadata; meta.binding = internal ? SBM_INTERNAL : SBM_WEAK;
+    std::string object = abi_mangle::mangle(abi,target);
+    if (internal && linkage.merge) object += "." + std::to_string(sym.index);
+    meta.object = p.intern(object);
+    if (!internal) linkage.external.put(key,sym.index);
+    return sym;
 }
 SymbolId Procedural::typeinfo(EntityId cls)
 {
@@ -108,8 +112,11 @@ SymbolId Procedural::deleting_symbol(EntityId e)
     target.function.category = abi_mangle::FunctionCategory::Member;
     target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_DELETING;
     local_member_abi(e,target.function);
-    auto& s = p.symbols[sym.index-1]; s.metadata.binding = sem.entities[e].inline_function ? SBM_WEAK : SBM_STRONG;
-    s.metadata.object = p.intern(abi_mangle::mangle(abi,target));
+    bool internal = internal_scope(sem.entities[e].owner);
+    auto& s = p.symbols[sym.index-1]; s.metadata.binding = internal ? SBM_INTERNAL : sem.entities[e].inline_function ? SBM_WEAK : SBM_STRONG;
+    std::string object = abi_mangle::mangle(abi,target);
+    if (internal && linkage.merge) object += "." + std::to_string(sym.index);
+    s.metadata.object = p.intern(object);
     Function f; f.symbol = sym; f.declaration = !sem.entities[e].body && !sem.synthetic_member(e);
     f.signature = signature(sem.call_type(e),FunctionId(p.functions.size()+1));
     p.functions.push_back(f); s.kind = Symbol::FunctionSymbol; s.entity = p.functions.size();

@@ -76,8 +76,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
         sem.types[e.type].cv & 1 && !e.external_decl);
-    for (auto s = e.owner; s && s != sem.global; s = sem.scopes[s].parent)
-        if (sem.scopes[s].kind == semantic::ScopeKind::Namespace && !sem.scopes[s].name) internal = true;
+    internal |= internal_scope(e.owner);
     std::string name = spelling(e.name);
     // Source ABI spelling and internal IR identity occupy separate namespaces.
     // In particular a root C++ variable's ABI spelling is the bare source name.
@@ -163,7 +162,9 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     p.symbols[sid.index-1].metadata = metadata;
     if (!separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
         target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
-        ObjectAlias alias; alias.name = p.intern(abi_mangle::mangle(abi, target)); alias.target = sid; p.aliases.push_back(alias);
+        std::string alias_name = abi_mangle::mangle(abi,target);
+        if (internal && linkage.merge) alias_name += "." + std::to_string(sid.index);
+        ObjectAlias alias; alias.name = p.intern(alias_name); alias.target = sid; p.aliases.push_back(alias);
     }
     return sid;
 }

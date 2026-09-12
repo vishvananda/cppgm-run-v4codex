@@ -53,6 +53,7 @@ class Procedural {
     Linkage& linkage;
     abi_mangle::Graph& abi;
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
+    std::vector<unsigned char> internal_scopes;
     std::vector<SymbolId> symbols, strings, base_symbols;
     std::vector<SlotId> objects;
     std::vector<lowir_model::ValueId> object_addresses;
@@ -133,6 +134,7 @@ class Procedural {
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_function_context(EntityId e);
     void local_member_abi(EntityId e, abi_mangle::Function& target);
+    bool internal_scope(semantic::ScopeId s);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e, bool base = false, bool deleting = false);
     bool separate_base(EntityId e) const;

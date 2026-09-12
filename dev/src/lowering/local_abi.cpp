@@ -1,5 +1,17 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
+bool Procedural::internal_scope(semantic::ScopeId s)
+{
+    if (!s || s == sem.global) return false;
+    if (internal_scopes.size() <= s) internal_scopes.resize(sem.scopes.size());
+    if (internal_scopes[s]) return internal_scopes[s] == 2;
+    auto scope = sem.scopes[s];
+    bool local = (scope.kind == semantic::ScopeKind::Namespace && !scope.name) ||
+        (scope.kind == semantic::ScopeKind::Function && sem.entities[scope.entity].is_static &&
+         sem.scopes[sem.entities[scope.entity].owner].kind != semantic::ScopeKind::Class) || internal_scope(scope.parent);
+    internal_scopes[s] = local ? 2 : 1;
+    return local;
+}
 abi_mangle::Id Procedural::abi_function_context(EntityId e)
 {
     auto entity = sem.entities[e]; auto t = sem.types[entity.type];
