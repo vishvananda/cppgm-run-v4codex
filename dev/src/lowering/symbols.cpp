@@ -44,6 +44,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         break;
     }
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
+    case TypeKind::Decltype: result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity)); break;
     case TypeKind::DependentName: {
         result = abi.name(abi_type(t.child),spelling(t.entity));
         if (t.bound) {

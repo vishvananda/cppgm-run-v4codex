@@ -52,11 +52,15 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
 }
 EntityId Analyzer::associated_lookup(IdentifierId name, const std::vector<NodeId>& args)
 {
-    Index seen_types, seen_scopes;
     std::vector<TypeId> work;
+    for (NodeId n : args) if (expressions[n].type) work.push_back(expressions[n].type);
+    return associated_type_lookup(name,std::move(work));
+}
+EntityId Analyzer::associated_type_lookup(IdentifierId name, std::vector<TypeId> work)
+{
+    Index seen_types, seen_scopes;
     std::vector<ScopeId> spaces;
     EntityId result = 0;
-    for (NodeId n : args) if (expressions[n].type) work.push_back(expressions[n].type);
     for (std::size_t i = 0; i < work.size(); ++i) {
         TypeId id = work[i];
         if (seen_types.get(id)) continue;

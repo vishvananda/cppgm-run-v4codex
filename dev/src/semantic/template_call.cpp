@@ -43,7 +43,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::DependentName || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
+    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_type(argument_types[pack.offset+j]);
@@ -61,7 +61,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     if (cache.get(pattern)) return cache.get(pattern);
     Type p = types[pattern];
     TypeId result = pattern;
-    if (p.kind == TypeKind::DependentName) {
+    if (p.kind == TypeKind::Decltype) {
+        result = types.qualify(query_decltype(substitute_query(p.entity,bindings,cache),p.bound),p.cv);
+    } else if (p.kind == TypeKind::DependentName) {
         auto owner = substitute_type(p.child,bindings,cache);
         if (!owner) return 0;
         std::vector<TypeId> args;
@@ -140,7 +142,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 {
     Type p = types[pattern], a = types[actual];
-    if (p.kind == TypeKind::DependentName) return true; // non-deduced context
+    if (p.kind == TypeKind::DependentName || p.kind == TypeKind::Decltype) return true; // non-deduced context
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         TypeId old = bindings.get(p.entity);
         TypeId value = types.qualify(types.unqualified(actual), a.cv & ~p.cv);
@@ -164,7 +166,8 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
     if (p.child) return deduce_type(p.child, a.child, bindings);
     return types.unqualified(pattern) == types.unqualified(actual);
 }
-EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args)
+template<class Arguments>
+EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& args)
 {
     Type f = types[entities[pattern].type];
     if ((!f.variadic && args.size() > f.count) ||
@@ -175,14 +178,14 @@ EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& 
     for (unsigned i = 0; i < explicit_args.count; ++i)
         bindings.put(template_parameters[t.offset+i],argument_types[explicit_args.offset+i]);
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
-        TypeId p = types.parameters[f.offset+i], a = expressions[args[i]].type;
+        TypeId p = types.parameters[f.offset+i], a = args[i].type;
         if (!dependent_type(p)) continue;
-        if (expressions[args[i]].form == ExpressionForm::Overload) {
+        if (args[i].form == ExpressionForm::Overload) {
             auto kind = types[p].kind;
             auto adjusted = kind == TypeKind::LRef || kind == TypeKind::RRef ? types[p].child : p;
             Index selected;
             unsigned matches = 0;
-            for (auto candidate : candidates(expressions[args[i]].entity)) {
+            for (auto candidate : candidates(args[i].entity)) {
                 // [temp.deduct.call]: an overload set containing a template or
                 // multiple matching functions is a non-deduced context. Other
                 // arguments can establish the eventual conversion target.
@@ -206,7 +209,7 @@ EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& 
         if (!a) return 0;
         auto param = types[p];
         if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
-            entities[types[param.child].entity].template_parameter && !types[param.child].cv && expressions[args[i]].category == ValueCategory::Lvalue)
+            entities[types[param.child].entity].template_parameter && !types[param.child].cv && args[i].category == ValueCategory::Lvalue)
             a = types.compound(TypeKind::LRef,a);
         if (param.kind == TypeKind::LRef || param.kind == TypeKind::RRef) p = param.child;
         else a = decay(a);
@@ -221,6 +224,19 @@ EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& 
     auto primary = t.primary ? t.primary : pattern;
     if (arguments.size() != t.count && (!definitions || !template_defaults(primary,arguments))) return 0;
     return specialize(primary,arguments);
+}
+EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args)
+{
+    struct Values {
+        const std::vector<Expression>& facts; const std::vector<NodeId>& nodes;
+        std::size_t size() const { return nodes.size(); }
+        const Expression& operator[](std::size_t i) const { return facts[nodes[i]]; }
+    } values{expressions,args};
+    return deduce_function_values(pattern,values);
+}
+EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<Expression>& args)
+{
+    return deduce_function_values(pattern,args);
 }
 EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
 {

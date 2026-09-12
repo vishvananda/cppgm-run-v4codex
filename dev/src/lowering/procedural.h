@@ -132,6 +132,8 @@ class Procedural {
     NodeId child(NodeId n, syntax::Kind k) const;
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
+    abi_mangle::Id abi_query(semantic::QueryId q);
+    semantic::Index abi_queries;
     abi_mangle::Id abi_function_context(EntityId e);
     abi_mangle::Id abi_entity_name(EntityId e);
     void template_function_abi(EntityId e, abi_mangle::Function& target);

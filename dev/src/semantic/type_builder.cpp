@@ -155,16 +155,27 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         } else {
             std::vector<TypeId> params;
             bool variadic = false;
+            NodeId trailing = child(n, Kind::TrailingReturn);
+            ScopeId parameter_scope = s;
+            if (definitions && (active_template_scope || scopes[s].kind == ScopeKind::Template || trailing))
+                parameter_scope = make_scope(ScopeKind::Block,s);
             for (NodeId p = ast[c].first; p; p = ast[p].next) {
                 if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
-                params.push_back(parameter(p, s));
+                params.push_back(parameter(p, parameter_scope));
                 NodeId d = ast[ast[p].first].next;
                 if (child(d, Kind::ParameterPack)) variadic = true;
+                auto id = terminal(decl_name(d));
+                if (parameter_scope != s && id) {
+                    auto e = make_entity(EntityKind::Parameter,parameter_scope,id,p);
+                    auto type = params.back();
+                    entities[e].type = types[type].kind == TypeKind::Array ? types.compound(TypeKind::Pointer,types[type].child) :
+                        types[type].kind == TypeKind::Function ? types.compound(TypeKind::Pointer,types.signature(type)) : type;
+                    signature_parameters.put(e,params.size()); bind(parameter_scope,id,e);
+                }
             }
             if (params.size() == 1 && types[params[0]].kind == TypeKind::Fundamental &&
                 types[params[0]].fundamental == FT_VOID && !variadic) params.clear();
-            NodeId trailing = child(n, Kind::TrailingReturn);
-            if (trailing) base = type_id(ast[trailing].first, s);
+            if (trailing) base = type_id(ast[trailing].first, parameter_scope);
             unsigned member_cv = 0;
             RefQualifier ref = RefQualifier::None;
             for (NodeId q = ast[c].next; q; q = ast[q].next) {

@@ -141,6 +141,7 @@ std::string FactWriter::expression(Id id) {
     case Kind::Conversion: return join_form({"conversion ", ref('t', n.a), list(n, 'x')});
     case Kind::Cast: return join_form({std::string("cast "), operation_code(n.c), " ", ref('t', n.a), " ", ref('x', n.b)});
     case Kind::TemplateId: return join_form({"template-id ", g.spelling(n.a), list(n, 'a')});
+    case Kind::UnresolvedName: return join_form({"unresolved-name ", ref('t',n.a), n.b ? " yes" : " no", list(n,'a')});
     case Kind::TypeTrait: return join_form({"type-trait ", g.spelling(n.a), list(n, 't')});
     case Kind::SizeofType: return join_form({"sizeof-type ", ref('t', n.a)});
     case Kind::Member: return join_form({"member ", ref('t', n.a), (n.c ? " yes " : " no "), g.spelling(n.b), list(n, 'a')});

@@ -96,6 +96,17 @@ void Encoder::expression(Id id) {
         output += 'E'; break;
     case Kind::Cast: output += operation_code(n.c); type(n.a); expression(n.b); break;
     case Kind::TemplateId: source(n.a); args(n); break;
+    case Kind::UnresolvedName: {
+        auto name = g[n.a];
+        if (name.a) {
+            std::vector<Id> scopes;
+            for (auto p = name.a; p; p = g[p].a) scopes.push_back(p);
+            output += "sr";
+            for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) source(g[*p].b);
+            output += 'E';
+        }
+        source(name.b); if (n.b) args(n); break;
+    }
     case Kind::TypeTrait:
         output += 'u'; source(n.a);
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));

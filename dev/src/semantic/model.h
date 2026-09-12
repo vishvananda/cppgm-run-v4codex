@@ -11,7 +11,7 @@ typedef std::uint32_t ScopeId;
 
 using Index = IdIndex;
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
@@ -42,6 +42,7 @@ public:
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
     TypeId dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& arguments, bool template_id);
+    TypeId decltype_type(std::uint32_t expression, bool direct);
     TypeId adjusted(TypeId t);
     TypeId signature(TypeId t);
     TypeId composite(TypeId a, TypeId b);

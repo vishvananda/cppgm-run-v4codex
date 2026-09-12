@@ -1,0 +1,12 @@
+# Itanium unresolved-name rules: doc/itanium-mangling.txt, dependent expressions.
+let-expr argument function-param 0
+let-expr callee unresolved-name named:ns::f no
+let-expr call call callee argument
+type decltype call
+
+case
+let-arg I type int
+let-expr argument function-param 0
+let-expr callee unresolved-name named:f yes I
+let-expr call call callee argument
+type decltype call

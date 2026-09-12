@@ -85,6 +85,10 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
         Id name = g.string(take(w, p));
         return g.make(Kind::TemplateId, name, 0, 0, 0, refs(w, p, BindingKind::Argument));
     }
+    if (op == "unresolved-name") {
+        Id name = type(w,p); bool explicit_args = boolean(take(w,p));
+        return g.make(Kind::UnresolvedName,name,explicit_args,0,0,refs(w,p,BindingKind::Argument));
+    }
     if (op == "type-trait") {
         Id name = g.string(take(w, p)); std::vector<Id> types;
         while (p < w.size()) types.push_back(type(w, p));

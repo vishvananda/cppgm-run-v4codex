@@ -43,6 +43,10 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 }
 TypeId Types::fundamental(EFundamentalType f) { Type t; t.fundamental = f; return intern(t, {}); }
 TypeId Types::named(EntityId e) { Type t; t.kind = TypeKind::Named; t.entity = e; return intern(t, {}); }
+TypeId Types::decltype_type(std::uint32_t expression, bool direct)
+{
+    Type t; t.kind = TypeKind::Decltype; t.entity = expression; t.bound = direct; return intern(t,{});
+}
 TypeId Types::dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id)
 {
     Type t; t.kind = TypeKind::DependentName; t.child = owner; t.entity = name; t.bound = template_id;

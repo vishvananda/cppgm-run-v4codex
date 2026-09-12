@@ -1,4 +1,5 @@
 #pragma once
+#include "semantic/type_query.h"
 #include "semantic/model.h"
 #include "syntax/parser.h"
 
@@ -25,6 +26,9 @@ public:
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
     TypeId template_argument(std::uint32_t n) const { return argument_types[n]; }
     unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
+    const TypeQuery& type_query(QueryId id) const { return type_queries[id]; }
+    QueryId type_query_child(QueryId id, unsigned i) const { return query_edges[type_queries[id].offset+i]; }
+    TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
     // Queries completed expression facts; keys are the expression and target.
@@ -220,6 +224,7 @@ private:
     Index friendships, using_access, using_functions, hidden_friends;
     bool friend_declaration(NodeId n, ScopeId s);
     EntityId associated_lookup(IdentifierId name, const std::vector<NodeId>& args);
+    EntityId associated_type_lookup(IdentifierId name, std::vector<TypeId> work);
     ScopeId access_override = 0;
     Access declaration_access(ScopeId s) const;
     bool privileged(ScopeId context, EntityId cls) const;
@@ -250,6 +255,19 @@ private:
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     Index template_default_types;
+    std::vector<TypeQuery> type_queries = std::vector<TypeQuery>(1);
+    std::vector<QueryId> query_edges, query_slots;
+    std::vector<std::uint64_t> query_hashes = std::vector<std::uint64_t>(1);
+    std::vector<TypeQueryFact> query_facts = std::vector<TypeQueryFact>(1);
+    Index query_sources, query_callee_sources, signature_parameters;
+    std::size_t query_work = 0;
+    QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
+    QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
+    QueryId substitute_query(QueryId id, const Index& bindings, Index& cache);
+    TypeQueryFact query_fact(QueryId id);
+    TypeId query_decltype(QueryId id, bool direct);
+    TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
+    TypeId dependent_decltype(NodeId n, ScopeId s);
     std::vector<TypeArguments> argument_packs;
     std::vector<TypeId> argument_types;
     std::vector<std::uint32_t> argument_slots;
@@ -358,6 +376,8 @@ private:
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
     EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args);
+    EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args);
+    template<class Arguments> EntityId deduce_function_values(EntityId pattern, const Arguments& args);
     EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
     void demand_specialization(EntityId e);
     void demand_member(EntityId e);

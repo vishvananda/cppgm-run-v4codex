@@ -74,6 +74,10 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Conversion: edge(a, Role::Type); sequence(Role::Expression); return;
     case Kind::Cast: edge(a, Role::Type); edge(b, Role::Expression); operation_code(c); break;
     case Kind::TemplateId: text(a); sequence(Role::Argument); return;
+    case Kind::UnresolvedName:
+        edge(a,Role::Type); require((*this)[a].kind == Kind::Name && b <= 1);
+        for (auto parent = (*this)[a].a; parent; parent = (*this)[parent].a) require((*this)[parent].kind == Kind::Name);
+        sequence(Role::Argument); return;
     case Kind::TypeTrait: text(a); sequence(Role::Type); return;
     case Kind::Member: edge(a, Role::Type); text(b); require(c <= 1); sequence(Role::Argument); return;
     case Kind::ObjectMember:

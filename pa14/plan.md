@@ -3,8 +3,8 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; continuation entry **222/314**; current **281/314**.
-**197 original failures resolved; 59 this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; previous checkpoint **281/314**; current **286/314**.
+**202 original failures resolved; five this continuation; no lost passes or reduced coverage.**
 
 ## Design/spec alignment and remaining groups
 
@@ -43,6 +43,23 @@ gates are not stage exit gates. Common outputs/native binaries are byte-identica
 Compiler text grows 35,008 bytes this continuation; no optimization gain is claimed.
 
 ## Handoff ledger
+
+Continuation at `e27474c2`: prior turn is **verified progress** (59 existing
+failures resolved, committed code and checked evidence). Current group owner:
+typed expression/signature facts. Bind parameter ordinals in declaration-owned
+scopes, retain canonical operation/type/declaration edges, substitute dependent
+edges and reuse completed fixed type queries. Work follows recipe edges and
+required candidates. Validate trailing-return arithmetic/calls, reference-array
+parameters, callable-reference `decltype`, then definition-time fixed binding.
+
+Query increment: canonical typed recipe IDs retain bound names, parameter ordinals,
+operations, type arguments and call edges. Queries share fixed facts and have
+active/success/failure states; substitution visits dependent edges. Typed query
+calls reuse deduction, standard conversions, ADL and ranking helpers. ABI queries
+use the existing graph plus unresolved names. Through report **1907/1935**;
+prior **1621/1621**, ten personal executables, six query/ABI checks and file audit
+pass. Full expression legality/user conversions and fixed body binding continue;
+this is not a complete type-query interpreter or a stage handoff.
 
 Previous turn: **verified progress**, committed `4fafa38c`, revalidated 222/314.
 Earlier increments: `2cec3424` function demand; `73409fcc` canonical class demand;
