@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Independent type-query rejection and ABI checks; successful programs use check_functions.py."""
 from pathlib import Path
-import subprocess, tempfile
+import subprocess, sys, tempfile
 root=Path(__file__).resolve().parents[2]
+binary=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root/'dev/cppgm++'
 with tempfile.TemporaryDirectory(prefix='pa14-queries-') as directory:
  work=Path(directory)
  out=work/'names'
@@ -22,6 +23,7 @@ with tempfile.TemporaryDirectory(prefix='pa14-queries-') as directory:
  ]
  for i,source in enumerate(cases):
   path=work/f'reject-{i}.cpp';path.write_text(source)
-  r=subprocess.run([root/'dev/cppgm++','--emit-lowir','-O0','-o',work/'output',path],capture_output=True,text=True)
+  r=subprocess.run([binary,'--emit-lowir','-O0','-o',work/'output',path],capture_output=True,text=True)
   assert r.returncode==1,(i,r.returncode,r.stderr)
+  assert not any(s in r.stderr for s in ('AddressSanitizer','runtime error:','UndefinedBehaviorSanitizer')),(i,r.stderr)
  print('two unresolved-name ABI cases and seven type-query rejections PASS')

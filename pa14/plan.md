@@ -60,8 +60,11 @@ were extended together; nested specialization projects original parsed identitie
 Through **1918/1935**, prior **1621/1621**, eleven native programs and twelve
 unused-body rejection checks pass. A nested `Receiver<char>`/`Receiver<long>` runtime reducer exposed contextual
 bindings entering the source-wide cache. Contextual bindings now stay local;
-the reducer passes. The first timing campaign is retained as preliminary;
-repeat the frozen acceptance campaign after the correction. Inherited transfer/lifetime/ABI output ownership is
+the reducer passes. The first timing campaign is retained as preliminary.
+The corrected campaign isolated avoidable 40-byte expression records; packing
+flags restores the entry's 36-byte record (112-byte entities unchanged). Course,
+native and sanitizer checks still pass. Compare the packed frozen build directly
+and rerun the stage-entry A/A+ABBA campaign before publishing conclusions. Inherited transfer/lifetime/ABI output ownership is
 the next distinct group; general fixed expression typing and dependent-only body
 rechecking still require finer semantic facts.
 

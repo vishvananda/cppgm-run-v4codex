@@ -242,7 +242,10 @@ struct Expression {
     std::uint32_t arguments = 0, argument_count = 0;
     ValueCategory category = ValueCategory::Prvalue;
     ExpressionForm form = ExpressionForm::Ordinary;
-    bool ready = false, evaluated = false, null_pointer_constant = false;
+    bool ready : 1;
+    bool evaluated : 1;
+    bool null_pointer_constant : 1;
+    Expression() : ready(false), evaluated(false), null_pointer_constant(false) {}
 };
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;

@@ -125,6 +125,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"template_class_completions\":" << template_completions
         << ",\"template_definition_applications\":" << template_definition_work
+        << ",\"semantic_expression_bytes\":" << sizeof(Expression)
         << ",\"semantic_type_queries\":" << type_queries.size()-1
         << ",\"semantic_type_query_work\":" << query_work
         << ",\"semantic_template_binding_work\":" << template_binding_work
