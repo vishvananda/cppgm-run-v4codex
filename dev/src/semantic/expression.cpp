@@ -266,7 +266,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     if (!cv_cast && op != KW_REINTERPET_CAST) {
         Conversion standard = fundamental(to, FT_BOOL) ? boolean_conversion(operand) : conversion(operand, to);
         if (standard.valid()) {
-            if (cstyle && standard.derived) standard.kind = Conversion::Kind::Explicit;
+            if ((cstyle && standard.derived) || (arithmetic(x.type) && arithmetic(to))) standard.kind = Conversion::Kind::Explicit;
             record_conversion(r, operand, standard); return r;
         }
     }

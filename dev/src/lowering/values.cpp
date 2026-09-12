@@ -161,6 +161,11 @@ Value Procedural::converted_value(Value v, const semantic::Conversion& c)
         v.type = c.target; return v;
     }
     if (c.reference && !c.temporary && v.address) return address(v);
+    if (c.kind == semantic::Conversion::Kind::Explicit && v.type && type(v.type) == type(c.target) &&
+        type(c.target).integer() && sem.unsigned_type(v.type) != sem.unsigned_type(c.target)) {
+        v = load(v);
+        if (!v.operand.literal()) { auto result = emit(Opcode::Copy, v.ir, {v.operand}); result.type = c.target; return result; }
+    }
     Value result = convert(v,c.target,c.fold_widen,c.preserve_widen);
     if (c.kind == semantic::Conversion::Kind::Explicit && sem.types[c.target].kind == TypeKind::Pointer &&
         result.operand.kind == Operand::Integer && result.operand.data.integer) {

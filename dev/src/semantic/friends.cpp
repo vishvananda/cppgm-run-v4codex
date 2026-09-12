@@ -42,6 +42,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         function_defaults(function, d, s); exception_specification(function, d, s);
         record(s, function, d, type, EntityKind::Function);
         if (body) {
+            if (!qualified && !hidden_friend_definitions.get(function)) hidden_friend_definitions.put(function,1);
             entities[function].inline_function = true;
             schedule_body({body, d, s, function, n});
         }

@@ -59,6 +59,7 @@ Value Procedural::expression(NodeId n, bool location)
             if (ast[direct].kind == Kind::IdExpression && discarded.category != ValueCategory::Prvalue &&
                 !(sem.types[discarded.type].cv & 2) &&
                 (sem.entities[discarded.entity].kind == semantic::EntityKind::Parameter ||
+                 sem.entities[discarded.entity].kind == semantic::EntityKind::Variable ||
                  (sem.types[discarded.type].kind == TypeKind::Named && sem.entities[sem.types[discarded.type].entity].class_info))) {
                 Value v = expression(operand, true);
                 if (type(discarded.type).kind() == IRType::Object) address(v); else load(v);

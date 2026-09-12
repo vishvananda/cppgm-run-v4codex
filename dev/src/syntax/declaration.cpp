@@ -59,7 +59,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     for (NodeId s = ast[specs].first; s; s = ast[s].next) alias |= ast[s].op == KW_TYPEDEF;
     Category category = alias ? Category::Type : Category::Value;
     bool is_function = facts.first_operator == OP_LPAREN;
-    if (template_declaration && !alias && is_function) category = Category::TemplateValue;
+    if (template_declaration && !alias) category = Category::TemplateValue;
     if (!alias && is_function) {
         NodeId name = declarator_name(decl);
         ScopeId binding_owner = qualified_owner(name);

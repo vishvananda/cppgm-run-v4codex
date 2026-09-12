@@ -1,6 +1,21 @@
 #include "semantic/analyzer.h"
 
 namespace cppgm { namespace semantic {
+void Analyzer::prepare_static_vptrs()
+{
+    // Static storage already supplies zero-initialization. A demanded implicit
+    // default constructor with no subobject actions only installs this class's
+    // vptr, whose address is a link-time constant. No user body is evaluated.
+    for (const auto& action : actions) {
+        if (!action.object || !action.constructor) continue;
+        auto object = entities[action.object];
+        if (object.initializer || scopes[object.owner].kind != ScopeKind::Namespace || !class_value(object.type)) continue;
+        auto ctor = members[entities[action.constructor].member_info];
+        EntityId cls = types[object.type].entity;
+        if (ctor.synthetic && ctor.transfer == TransferKind::None && !ctor.inherited_constructor &&
+            !ctor.delegated_constructor && !ctor.action_count && polymorphic(cls)) static_vptr_objects.put(action.object,cls);
+    }
+}
 std::uint32_t Analyzer::constant_constructor(EntityId ctor)
 {
     if (auto known = constant_constructors.get(ctor)) return known;

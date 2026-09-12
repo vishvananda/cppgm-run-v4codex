@@ -79,6 +79,7 @@ void Procedural::global(EntityId e)
         if (class_object && !entity.initializer) dynamic = !sem.empty_value(t) || sem.constructor_needed(sem.object_constructor(e));
         if (!entity.initializer && sem.types[t].kind == TypeKind::Array)
             dynamic = sem.constructor_needed(sem.object_constructor(e));
+        if (sem.static_vptr(e)) dynamic = false;
         if (dynamic) {
             if (entity.thread_local_storage) prepare_tls(e);
             else global_initializers.push_back(e);
@@ -98,7 +99,13 @@ void Procedural::global(EntityId e)
             } else { g.data.begin = p.data.size(); p.data.push_back(constant_data(entity.initializer, t)); g.data.count = 1; }
         } else {
             g.data.begin = p.data.size();
-            if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
+            if (auto cls = sem.static_vptr(e)) {
+                if (!vtables[cls]) vtables[cls] = abi_global(cls,abi_mangle::TargetKind::Vtable);
+                DataItem item; item.kind = DataItem::Address; item.type = IRType::Ptr;
+                item.symbol = vtables[cls]; item.addend = 16; p.data.push_back(item);
+                if (sem.object_size(t) > 8) { DataItem zero; zero.zero_bytes = sem.object_size(t)-8; p.data.push_back(zero); }
+            }
+            else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
             else global_data(entity.initializer, t);
             g.data.count = p.data.size() - g.data.begin;
         }

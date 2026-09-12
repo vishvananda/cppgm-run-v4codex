@@ -3,8 +3,8 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; continuation entry **297/314**; current **306/314**.
-**222 original failures resolved; nine this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; continuation entry **297/314**; current **314/314**.
+**230 original failures resolved; all 17 continuation-entry failures fixed; no lost passes or reduced coverage.**
 
 Active continuation at `2c80bc70`: previous turn is **verified progress**.
 Entry rerun confirms 297/314. The next coherent owner is object transfer and
@@ -61,10 +61,15 @@ correctness, coverage, ownership and mandated limits remain requirements.
 
 ## Active validation
 
-Transfer/layout/ABI increment: PA14 **306/314**, prior **1621/1621**, file audit
-passes with three inherited advisories; twelve personal native programs pass.
+Transfer/layout/ABI and expression/lifetime increments: PA14 **314/314**, prior **1621/1621**, file audit
+passes with three inherited advisories; thirteen personal native programs and 21 query/binding checks pass.
 Entry binary is frozen in `$RALPH_ARTIFACT_DIR/pa14-transfer/`; current performance
 measurements remain pending. This is an implementation checkpoint, not a handoff.
+
+Second increment completes the course fixtures: hidden-friend emission follows the
+shared call/operator demand owner; static vptr installation uses prepared implicit
+constructor actions; deleting-entry bounds count nontrivial subobjects. O0 source
+casts/conditions and retained variable-template syntax preserve their context.
 
 ## Handoff ledger
 

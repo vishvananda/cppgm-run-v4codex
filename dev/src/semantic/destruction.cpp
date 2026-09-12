@@ -125,7 +125,9 @@ void Analyzer::destructor_actions(EntityId e)
     }
     // Small empty bodies may share their prepared single-base suffix with D0.
     // Otherwise D0 calls D1 once: linear cleanup work, with no body cloning.
-    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || work.size() > 1;
+    unsigned nontrivial = 0;
+    for (const auto& action : work) nontrivial += !trivial_destructor(action.type);
+    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || nontrivial > 1;
     members[m].destruction_begin = destruction_actions.size(); members[m].destruction_count = work.size();
     destruction_actions.insert(destruction_actions.end(), work.begin(), work.end());
 }

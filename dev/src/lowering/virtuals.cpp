@@ -57,7 +57,8 @@ void Procedural::emit_vtables()
 {
     for (EntityId cls = 1; cls < sem.entities.size(); ++cls) {
         if (!sem.polymorphic(cls) || !sem.virtual_class(cls).demanded) continue;
-        SymbolId table = vtables[cls] = abi_global(cls,abi_mangle::TargetKind::Vtable);
+        if (!vtables[cls]) vtables[cls] = abi_global(cls,abi_mangle::TargetKind::Vtable);
+        SymbolId table = vtables[cls];
         if (p.symbols[table.index-1].kind != Symbol::Unknown) continue;
         std::vector<DataItem> data = {scalar(IRType::I64,0),relocation(typeinfo(cls))};
         auto slots = sem.virtual_class(cls).slots;

@@ -77,7 +77,7 @@ void Analyzer::finish()
         for (EntityId seen : chain) delegation_states.put(seen, 2);
         chain.clear();
     }
-    if (calls) { finish_allocations(); prepare_function_boundaries(); }
+    if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); }
     for (NodeId body : jump_bodies) check_jumps(body);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
 }

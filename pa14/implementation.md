@@ -1,6 +1,6 @@
 # PA14 implementation ownership
 
-Current contract result: **306/314**, 8 failures; prior assignments **1621/1621**.
+Current contract result: **314/314**, zero course failures; prior assignments **1621/1621**.
 This continuation resolves **16 of its 33 entry failures**, with no lost passes.
 Cumulatively, **213 of the 230 stage-entry failures** are resolved. Fixtures,
 references and comparison rules are unchanged. PA15 has not been started.
@@ -74,3 +74,24 @@ by the stage-scoped performance review or deferred to PA15.
   programs. `object-transfers.cpp` checks reference identity, late-defaulted
   parameter ABI, empty-source effects, return moves, base copies and reentrant
   layout. No new performance benefit is claimed before measurement.
+
+## Lifetime entries, expression provenance and retained syntax
+
+- Static initialization owns a per-object vptr fact when the demanded implicit
+  constructor has no subobject actions. Lowering emits the relocation and zero
+  tail directly; user bodies and hierarchy construction keep dynamic actions.
+- Deleting-entry sharing counts nontrivial destruction actions, retaining the
+  single-action bound instead of counting trivial fields as emitted work.
+- Hidden friend bodies are checked normally but emitted on recorded function
+  use. Ordinary calls, operators and address selection share `demand_member`;
+  uses preceding the friend definition remain recorded.
+- Explicit arithmetic casts retain signedness conversion provenance. Template
+  layout queries keep their surrounding O0 conversion, while an unrelated
+  specialization cannot perturb a fixed layout immediate. Discarded names and
+  literal conditions follow the ordinary O0 expression/control path.
+- The parser records variable templates as value templates so later template-id
+  declaration forms remain parsed. This adds no variable-template specialization
+  semantics to PA14.
+- Validation: all 314 course tests, all 1621 earlier tests, thirteen native
+  personal programs, 21 binding/query checks and file audit pass. The remaining
+  architecture items described above are not erased by the course result.

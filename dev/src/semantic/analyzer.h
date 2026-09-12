@@ -41,6 +41,7 @@ public:
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
     TypeId call_type(EntityId e) const;
     bool member_demanded(EntityId e) const;
+    bool dormant_hidden_friend(EntityId e) const { return hidden_friend_definitions.get(e) == 1; }
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
@@ -67,6 +68,7 @@ public:
     std::vector<DestructionAction> destruction_actions;
     EntityId value_constructor(TypeId t) const;
     EntityId object_constructor(EntityId e) const;
+    EntityId static_vptr(EntityId e) const { return static_vptr_objects.get(e); }
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
     std::vector<SubobjectAction> subobject_actions;
     bool synthetic_member(EntityId e) const;
@@ -170,6 +172,8 @@ private:
     std::uint64_t scalar_transfer_work = 0;
     Index anonymous_objects;
     Index constant_constructors, constant_objects;
+    Index static_vptr_objects;
+    void prepare_static_vptrs();
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
     std::vector<ConstructorConstantAction> constructor_constant_actions;
     std::uint32_t constant_constructor(EntityId ctor);
@@ -222,7 +226,7 @@ private:
     Index variant_destruction_index;
     void register_destruction(EntityId e);
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
-    Index friendships, using_access, using_functions, hidden_friends;
+    Index friendships, using_access, using_functions, hidden_friends, hidden_friend_definitions;
     bool friend_declaration(NodeId n, ScopeId s);
     EntityId associated_lookup(IdentifierId name, const std::vector<NodeId>& args);
     EntityId associated_type_lookup(IdentifierId name, std::vector<TypeId> work);

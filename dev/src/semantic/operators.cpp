@@ -127,8 +127,18 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
     bool shift = op == OP_LSHIFT || op == OP_RSHIFT;
     Conversion left = conversion(an, shift ? ap : result), right = conversion(bn, shift ? bp : result);
     bool offset = op == OP_PLUS || op == OP_MINUS;
-    left.fold_widen = offset && facts[bn].value && (ast[bn].kind == Kind::Sizeof || expressions[bn].form == ExpressionForm::ConstantQuery);
-    right.fold_widen = offset && facts[an].value && (ast[an].kind == Kind::Sizeof || expressions[an].form == ExpressionForm::ConstantQuery);
+    auto fixed_layout = [&](NodeId query) {
+        if (!facts[query].value) return false;
+        if (expressions[query].form == ExpressionForm::ConstantQuery) return true;
+        if (ast[query].kind != Kind::Sizeof) return false;
+        TypeId operand = facts[ast[query].first].type;
+        // A specialization's layout is established by template demand. Keep
+        // its surrounding source conversion explicit at O0; unrelated template
+        // work cannot change the ordinary fixed-layout immediate policy.
+        return types[operand].kind != TypeKind::Named || !entities[types[operand].entity].specialization;
+    };
+    left.fold_widen = offset && fixed_layout(bn);
+    right.fold_widen = offset && fixed_layout(an);
     record_conversion(r, an, left);
     record_conversion(r, bn, right);
     if (shift) return ap;

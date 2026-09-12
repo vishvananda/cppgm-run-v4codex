@@ -76,6 +76,9 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
     }
     while (ast[n].kind == Kind::Parenthesized &&
         sem.conversion_fact(sem.expression_fact(n).incoming).kind != semantic::Conversion::Kind::User) n = ast[n].first;
+    if (ast[n].kind == Kind::KeywordLiteral && (ast[n].op == KW_TRUE || ast[n].op == KW_FALSE)) {
+        jump(ast[n].op == KW_TRUE ? yes : no); return;
+    }
     if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
         BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
         condition(ast[n].first, land ? rhs : yes, land ? no : rhs);

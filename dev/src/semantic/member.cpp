@@ -72,6 +72,8 @@ void Analyzer::member_facts(EntityId e)
 void Analyzer::demand_member(EntityId e)
 {
     if (unevaluated_depth) return;
+    if (!entities[e].member_info && entities[e].kind == EntityKind::Function && hidden_friend_definitions.get(e) != 2)
+        hidden_friend_definitions.put(e,2);
     std::uint32_t m = entities[e].member_info;
     if (m) members[m].referenced = true;
     if (m && (members[m].constructor || members[m].destructor)) demand_vtable(scopes[entities[e].owner].entity);
