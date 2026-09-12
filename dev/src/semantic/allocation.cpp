@@ -27,7 +27,8 @@ void Analyzer::finish_allocations()
         auto e = use.constructor; auto& m = members[entities[e].member_info];
         // An empty no-argument body with no subobject actions has no work per
         // element. Keep this proof on the allocation record, after demand.
-        bool empty = m.body && ast[m.body].kind == Kind::Compound && !ast[m.body].first &&
+        bool empty = !polymorphic(scopes[entities[e].owner].entity) &&
+            m.body && ast[m.body].kind == Kind::Compound && !ast[m.body].first &&
             !m.action_count && !m.inherited_constructor && !types[entities[e].type].count;
         use.construct = constructor_needed(e) && !empty;
         if (use.construct) m.complete_entry = true;
@@ -88,9 +89,10 @@ Expression Analyzer::delete_expression(NodeId n, ScopeId s)
     if (use.array && class_value(use.leaf)) use.cookie = std::max<std::uint64_t>(8,size(use.type,true));
     use.conversion = conversion(use.operand,pointer_type); apply_conversion(use.operand,use.conversion);
     use.destructor = default_destructor(use.type,s);
+    use.global_deallocation = child(n,Kind::Global);
     if (!use.array && use.destructor && members[entities[use.destructor].member_info].virtual_member)
-        use.virtual_slot = members[entities[use.destructor].member_info].virtual_slot + 1;
-    use.deallocation = select_deallocation(use.leaf,use.array,child(n,Kind::Global),s);
+        use.virtual_slot = members[entities[use.destructor].member_info].virtual_slot + !use.global_deallocation;
+    use.deallocation = select_deallocation(use.leaf,use.array,use.global_deallocation,s);
     use.sized = types[entities[use.deallocation].type].count == 2;
     delete_index.put(n,deletions.size()); deletions.push_back(use);
     Expression result; result.type = types.fundamental(FT_VOID); return result;

@@ -16,10 +16,12 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     Value object = record.object_entity ? converted_value(binding(record.object_entity),record.object) : converted(n,record.object);
     object = base_projection(object,record.adjustment);
     Operand arguments[3]; std::size_t count = 0;
-    arguments[count++] = Operand::symbol(symbol(c.function));
+    arguments[count++] = record.virtual_slot ? virtual_function(object,record.virtual_slot).operand : Operand::symbol(symbol(c.function));
     if (sem.indirect_value(returned)) arguments[count++] = call_destination.operand;
     arguments[count++] = object.operand;
-    Value result = guarded_call(Instruction(Opcode::Call,sem.indirect_value(returned) ? IRType(IRType::Void) : type(returned)),arguments,count);
+    Instruction call(Opcode::Call,sem.indirect_value(returned) ? IRType(IRType::Void) : type(returned));
+    if (record.virtual_slot) call.signature = virtual_signature(c.function);
+    Value result = guarded_call(call,arguments,count);
     if (result_slot) {
         emit(Opcode::Store,result.ir,{result.operand,Operand::slot(result_slot)});
         result = emit(Opcode::Load,result.ir,{Operand::slot(result_slot)});

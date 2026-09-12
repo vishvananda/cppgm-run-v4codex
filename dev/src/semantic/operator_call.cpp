@@ -103,8 +103,11 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
     demand_member(selected.entity);
-    if (selected.member) record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
-        base_steps(object, scopes[entities[selected.entity].owner].entity));
+    if (selected.member) {
+        record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
+            base_steps(object, scopes[entities[selected.entity].owner].entity));
+        object_uses[result.object_use].virtual_slot = members[entities[selected.entity].member_info].virtual_slot;
+    }
     result.form = ExpressionForm::OperatorCall;
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;

@@ -160,7 +160,9 @@ function @Derived__destroy(%this : ptr [object_bytes=8]) -> void [unwind=no, bin
   block ^entry:
     store ptr %this, $this
     %t1 = load ptr $this
-    call void @Derived___Derived(%t1)
+    %t2 = load ptr %t1
+    %t3 = load ptr %t2
+    call void %t3(%t1) as (%arg0 : ptr [object_bytes=8]) -> void [unwind=no]
     return void
 }
 function @Derived__Derived(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN7DerivedC1Ev, inline_hint=yes] {

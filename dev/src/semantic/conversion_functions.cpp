@@ -102,6 +102,7 @@ Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allo
     auto selected = viable[best];
     UserConversion sequence; sequence.object = selected.object; sequence.result = selected.second; sequence.object_entity = object_entity;
     sequence.adjustment = base_steps(source.type,scopes[entities[selected.function].owner].entity);
+    sequence.virtual_slot = members[entities[selected.function].member_info].virtual_slot;
     result.kind = Conversion::Kind::User; result.function = selected.function; result.rank = 5;
     result.reference = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     result.materialization = user_conversions.size(); user_conversions.push_back(sequence);

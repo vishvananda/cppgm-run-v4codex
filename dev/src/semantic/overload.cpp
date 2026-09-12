@@ -317,7 +317,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             NodeId direct = callee;
             while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
             NodeId name = ast[direct].kind == Kind::Member ? ast[ast[ast[direct].first].next].detail : ast[direct].detail;
-            if (!destructor_member(selected) && (!name || ast[name].first == ast[name].last))
+            if (!name || ast[name].first == ast[name].last)
                 object_uses[result.object_use].virtual_slot = members[entities[selected].member_info].virtual_slot;
         }
         ft = entities[selected].type;

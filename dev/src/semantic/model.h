@@ -262,7 +262,9 @@ struct ListObject { EntityId temporary = 0; std::uint32_t plan = 0, initializer 
 struct UserConversion {
     Conversion object, result;
     EntityId temporary = 0, source_temporary = 0, object_entity = 0;
-    unsigned adjustment = 0; bool prepared = false;
+    unsigned adjustment = 0;
+    std::uint32_t virtual_slot = 0;
+    bool prepared = false;
 };
 struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
 struct ScalarConsumption { NodeId expression = 0; TypeId target = 0; std::uint32_t conversion = 0; unsigned char truth = 0; bool private_destination = false; };
@@ -283,6 +285,7 @@ struct DeleteExpression {
     std::uint64_t cookie = 0;
     Conversion conversion; bool array = false, sized = false;
     std::uint32_t virtual_slot = 0;
+    bool global_deallocation = false;
 };
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;

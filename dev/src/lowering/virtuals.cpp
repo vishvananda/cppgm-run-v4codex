@@ -166,6 +166,11 @@ SignatureId Procedural::virtual_signature(EntityId e)
     if (virtual_signatures[e]) return virtual_signatures[e];
     auto source = signature(sem.call_type(e));
     auto sig = p.signatures[source.index-1];
+    // Refinements belong to this member-call signature, not the canonical
+    // function-pointer signature's shared parameter slice.
+    auto parameters = sig.parameters;
+    sig.parameters.begin = p.parameters.size();
+    for (unsigned j = 0; j < parameters.count; ++j) p.parameters.push_back(p.parameters[parameters.begin+j]);
     auto cls = sem.scopes[sem.entities[e].owner].entity;
     p.parameters[sig.parameters.begin + sem.indirect_value(sem.types[sem.entities[e].type].child)].object_bytes = sem.object_size(sem.entities[cls].type);
     if (sem.function_nonthrowing(e)) sig.boundary.unwind = ir_model::CUM_NO;

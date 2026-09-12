@@ -27,7 +27,10 @@ void Analyzer::virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId spe
     }
     Type f = types[entities[e].type];
     std::vector<TypeId> params(types.parameters.begin()+f.offset, types.parameters.begin()+f.offset+f.count);
-    members[m].virtual_signature = types.function(types.fundamental(FT_VOID), params, f.variadic, f.cv, f.ref);
+    // A conversion-type-id is part of a conversion function's name. Preserve
+    // that canonical type in the shape; ordinary returns do not identify slots.
+    members[m].virtual_signature = types.function(members[m].conversion_target ?
+        members[m].conversion_target : types.fundamental(FT_VOID), params, f.variadic, f.cv, f.ref);
 }
 void Analyzer::check_covariance(EntityId e, EntityId base)
 {

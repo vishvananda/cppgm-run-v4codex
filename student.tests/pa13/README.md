@@ -8,12 +8,19 @@ python3 student.tests/pa13/check_native.py
 python3 student.tests/pa13/check_ir.py
 python3 student.tests/pa13/check_course.py dev/cppgm++
 python3 student.tests/pa13/check_literal_storage.py
+python3 student.tests/pa13/audit_check.py
 ```
 
 The first four scripts accept an alternate compiler path, including the actual
 ASan/UBSan compiler built with `student.tests/pa10/build_sanitizer.py`. Native
 checks use the supplied PA8 backend after this compiler generates and validates
 its own LowIR. All execution inputs have defined behavior and checked outcomes.
+
+The five `audit-*.cpp` reducers cover heap-array vpointer initialization, explicit
+virtual destruction and qualification, global versus class deallocation,
+virtual conversion slots, and virtual assignment/call operators. `audit_check.py`
+also checks signature refinement ownership and array IR growth independently
+of runtime extent. [Reference proof](../../pa13/reference-corrections.md).
 
 The benchmark invocation is:
 

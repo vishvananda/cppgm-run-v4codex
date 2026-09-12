@@ -29,7 +29,33 @@ Value Procedural::delete_expression(NodeId n)
     if (use.virtual_slot) {
         auto callee = virtual_function(pointer,use.virtual_slot);
         Instruction call(Opcode::Call,IRType::Void); call.signature = signature(sem.call_type(use.destructor));
-        Operand args[] = {callee.operand,pointer.operand}; guarded_call(call,args,2);
+        Operand args[] = {callee.operand,pointer.operand};
+        if (!use.global_deallocation) guarded_call(call,args,2);
+        else {
+            // ::delete dispatches D1, then the selected global deallocator.
+            // Deallocation precedes enclosing local cleanup even on unwind.
+            bool outer = live && !emitting_cleanup && !full_expression.scalar_unreachable;
+            if (outer) {
+                if (full_expression.enabled) open_expression_region();
+                else {
+                    if (!resume_terminal) resume_terminal = block();
+                    emit(Opcode::EhTry,IRType(),{Operand::label(cleanup_suffix(live,resume_terminal))});
+                }
+            }
+            auto cleanup = block(), done = block();
+            auto release = [&]() {
+                Operand free_args[] = {Operand::symbol(symbol(use.deallocation)),pointer.operand,Operand::integer(sem.object_size(use.type))};
+                emit(Instruction(Opcode::Call,IRType::Void),free_args,use.sized ? 3 : 2);
+            };
+            emit(Opcode::EhCleanup,IRType(),{Operand::label(cleanup)});
+            emit(call,args,2); emit(Opcode::EhEnd,IRType(),{}); release(); jump(done);
+            start(cleanup); release(); emit(Opcode::EhEnd,IRType(),{}); emit(Opcode::Resume,IRType(),{});
+            start(done);
+            if (outer && !full_expression.enabled) {
+                emit(Opcode::EhEnd,IRType(),{});
+                auto continuation = block(); jump(continuation); flush_cleanups(); start(continuation);
+            }
+        }
         jump(end); start(end); return Value(Operand(),IRType::Void,sem.expression_fact(n).type);
     }
     Value allocation = pointer;
