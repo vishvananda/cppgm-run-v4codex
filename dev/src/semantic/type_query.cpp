@@ -7,7 +7,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     std::uint64_t hash = 1469598103934665603ULL;
     auto add = [&](std::uint64_t x) { hash = (hash ^ x) * 1099511628211ULL; };
     add(unsigned(q.kind)); add(q.op); add(q.type); add(q.entity); add(q.name);
-    add(q.context); add(q.arguments); add(q.value);
+    add(q.context); add(q.arguments); add(q.value); add(q.null_pointer_constant);
     for (auto c : children) add(c);
     if (query_slots.empty() || type_queries.size()*2 >= query_slots.size()) {
         query_slots.assign(query_slots.empty() ? 32 : query_slots.size()*2,0);
@@ -22,7 +22,8 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
         auto p = type_queries[id];
         bool same = query_hashes[id] == hash && p.kind == q.kind && p.op == q.op && p.type == q.type &&
             p.entity == q.entity && p.name == q.name && p.context == q.context &&
-            p.arguments == q.arguments && p.value == q.value && p.count == children.size();
+            p.arguments == q.arguments && p.value == q.value && p.count == children.size() &&
+            p.null_pointer_constant == q.null_pointer_constant;
         for (unsigned i = 0; same && i < p.count; ++i) same = query_edges[p.offset+i] == children[i];
         if (same) return id;
         pos = (pos+1)&(query_slots.size()-1);
@@ -66,13 +67,23 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     }
     case Kind::Literal: case Kind::KeywordLiteral: {
         auto value = expression(n,s); q.type = value.type;
-        auto constant = evaluate(n,s); q.value = constant.valid ? constant.bits : 0; break;
+        auto constant = evaluate(n,s); q.value = constant.valid ? constant.bits : 0;
+        q.null_pointer_constant = node.kind == Kind::Literal && constant.valid && !constant.bits && integral(q.type) &&
+            ast.literals[node.literal].kind != LiteralKind::character;
+        break;
     }
     case Kind::Parenthesized:
         q.kind = QueryKind::Parenthesized; children.push_back(expression_query(first,s,callee)); break;
     case Kind::Unary: case Kind::Binary: case Kind::Subscript:
         q.kind = node.kind == Kind::Unary ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
+        q.name = operator_name(q.op); q.context = s;
+        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+            q.context = scopes[q.context].parent;
+        if (q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW) {
+            auto ordinary = lookup(s,q.name);
+            if (function_binding(ordinary)) q.entity = ordinary;
+        }
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
     case Kind::Call:
@@ -131,7 +142,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     auto& x = r.expression;
     if (!r.dependent) switch (q.kind) {
-    case QueryKind::Value: x.type = q.type; break;
+    case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
     case QueryKind::Parameter: case QueryKind::Name:
         x.type = value_type(q.type); r.declared_type = q.type;
@@ -157,29 +168,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
         break;
     }
-    case QueryKind::Unary: {
-        auto a = children[0].expression; auto t = decay(a.type);
-        if (q.op == OP_STAR) { if (!pointer(t)) throw std::runtime_error("type query dereference needs pointer"); x.type = types[t].child; x.category = ValueCategory::Lvalue; }
-        else if (q.op == OP_AMP) { if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of type-query rvalue"); x.type = types.compound(TypeKind::Pointer,a.type); }
-        else if (q.op == OP_LNOT) x.type = types.fundamental(FT_BOOL);
-        else { if (!arithmetic(t)) throw std::runtime_error("arithmetic type query operand required"); x.type = promote(t); }
-        break;
-    }
-    case QueryKind::Binary: {
-        auto a = children[0].expression, b = children[1].expression;
-        if (q.op == OP_COMMA) { x = b; break; }
-        auto at = decay(a.type), bt = decay(b.type);
-        if (q.op == OP_LSQUARE) {
-            if (!pointer(at)) std::swap(at,bt);
-            if (!pointer(at) || !integral(bt)) throw std::runtime_error("invalid type-query subscript");
-            x.type = types[at].child; x.category = ValueCategory::Lvalue;
-        } else if (q.op == OP_EQ || q.op == OP_NE || q.op == OP_LT || q.op == OP_GT || q.op == OP_LE || q.op == OP_GE || q.op == OP_LAND || q.op == OP_LOR)
-            x.type = types.fundamental(FT_BOOL);
-        else if ((q.op == OP_PLUS || q.op == OP_MINUS) && pointer(at) && integral(bt)) x.type = at;
-        else if (q.op == OP_MINUS && pointer(at) && pointer(bt)) x.type = types.fundamental(FT_LONG_INT);
-        else x.type = arithmetic_type(at,bt);
-        break;
-    }
+    case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;
     case QueryKind::Call: r = query_call(q,children); break;
     case QueryKind::Sizeof: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
     }

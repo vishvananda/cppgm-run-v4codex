@@ -4,6 +4,10 @@
 namespace cppgm { namespace semantic {
 Conversion Analyzer::converting_constructor(NodeId n, TypeId target)
 {
+    return converting_constructor_value(expressions[n],target,n);
+}
+Conversion Analyzer::converting_constructor_value(Expression source, TypeId target, NodeId n)
+{
     Conversion result; result.target = target;
     EntityId cls = types[target].entity;
     complete_class(cls);
@@ -16,7 +20,8 @@ Conversion Analyzer::converting_constructor(NodeId n, TypeId target)
         Type f = types[entities[e].type];
         if (m.explicit_constructor || (!f.count && !f.variadic) || (f.count > 1 &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults+1]))) continue;
-        Conversion argument = f.count ? conversion(n, types.parameters[f.offset], false) : ellipsis_conversion(n);
+        Conversion argument = f.count ? (n ? conversion(n, types.parameters[f.offset], false) :
+            standard_conversion(source,types.parameters[f.offset])) : ellipsis_conversion_value(source);
         if (argument.valid()) viable.push_back({e, argument});
     }
     if (viable.empty()) return result;

@@ -2,14 +2,19 @@
 namespace cppgm { namespace semantic {
 std::vector<TypeId> Analyzer::builtin_operand_types(NodeId n)
 {
-    TypeId source = expressions[n].type;
+    return builtin_operand_types_value(expressions[n]);
+}
+std::vector<TypeId> Analyzer::builtin_operand_types_value(Expression expression)
+{
+    TypeId source = expression.type;
     if (!source) return {};
     if (!class_value(source)) return {decay(source)};
+    if (definitions) complete_class(types[source].entity);
     std::vector<TypeId> result;
     Index seen;
     for (EntityId e : conversion_candidates(source)) {
         auto member = members[entities[e].member_info];
-        if (member.explicit_constructor || !object_conversion(e,source,expressions[n].category).valid()) continue;
+        if (member.explicit_constructor || !object_conversion(e,source,expression.category).valid()) continue;
         TypeId t = decay(types[entities[e].type].child);
         if ((!arithmetic(t) && !pointer(t)) || seen.get(t)) continue;
         seen.put(t,1); result.push_back(t);
@@ -19,20 +24,33 @@ std::vector<TypeId> Analyzer::builtin_operand_types(NodeId n)
 void Analyzer::builtin_operators(ETokenType op, const std::vector<NodeId>& args, std::vector<BuiltinOperator>& results)
 {
     if (args.empty() || args.size() > 2 || (args.size() == 2 && !args[1])) return;
+    std::vector<Expression> values;
+    for (auto n : args) values.push_back(expressions[n]);
+    builtin_operators_values(op,values,results,&args);
+}
+void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Expression>& args, std::vector<BuiltinOperator>& results, const std::vector<NodeId>* nodes)
+{
+    if (args.empty() || args.size() > 2) return;
+    auto node = [&](unsigned i) { return nodes ? (*nodes)[i] : 0; };
+    auto null = [&](unsigned i) { return nodes ? null_constant((*nodes)[i]) :
+        args[i].null_pointer_constant || fundamental(args[i].type,FT_NULLPTR_T); };
+    auto convert_argument = [&](unsigned i, TypeId target) {
+        return nodes ? conversion(node(i),target) : conversion_value(args[i],target);
+    };
     Index seen;
     auto add = [&](TypeId a, TypeId b, TypeId type, ValueCategory category = ValueCategory::Prvalue) {
         if (!type || seen.get(key(a,b))) return;
         seen.put(key(a,b),1);
         BuiltinOperator candidate; candidate.type = type; candidate.category = category;
         bool contextual = op == OP_LNOT || op == OP_LAND || op == OP_LOR;
-        candidate.arguments[0] = contextual ? boolean_conversion(args[0]) : conversion(args[0],a);
-        if (args.size() == 2) candidate.arguments[1] = contextual ? boolean_conversion(args[1]) : conversion(args[1],b);
+        candidate.arguments[0] = contextual ? boolean_conversion_value(args[0],node(0)) : convert_argument(0,a);
+        if (args.size() == 2) candidate.arguments[1] = contextual ? boolean_conversion_value(args[1],node(1)) : convert_argument(1,b);
         if (candidate.arguments[0].valid() && (args.size() == 1 || candidate.arguments[1].valid())) results.push_back(candidate);
     };
     if (op == OP_LNOT || op == OP_LAND || op == OP_LOR) {
         TypeId boolean = types.fundamental(FT_BOOL); add(boolean,boolean,boolean); return;
     }
-    auto left = builtin_operand_types(args[0]);
+    auto left = builtin_operand_types_value(args[0]);
     if (args.size() == 1) {
         for (TypeId t : left) {
             if (op == OP_STAR && pointer(t) && !fundamental(types[t].child,FT_VOID)) add(t,0,types[t].child,ValueCategory::Lvalue);
@@ -42,7 +60,7 @@ void Analyzer::builtin_operators(ETokenType op, const std::vector<NodeId>& args,
         }
         return;
     }
-    auto right = builtin_operand_types(args[1]);
+    auto right = builtin_operand_types_value(args[1]);
     bool equality = op == OP_EQ || op == OP_NE;
     bool comparison = equality || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     for (TypeId a : left) for (TypeId b : right) {
@@ -61,8 +79,8 @@ void Analyzer::builtin_operators(ETokenType op, const std::vector<NodeId>& args,
         }
         if (comparison) {
             TypeId common = pointer(a) && pointer(b) ? composite_pointer(a,b) : 0;
-            if (equality && pointer(a) && null_constant(args[1])) common = a;
-            if (equality && pointer(b) && null_constant(args[0])) common = b;
+            if (equality && pointer(a) && null(1)) common = a;
+            if (equality && pointer(b) && null(0)) common = b;
             if (common && (equality || types[types[common].child].kind != TypeKind::Function)) add(common,common,types.fundamental(FT_BOOL));
         }
         bool shift = op == OP_LSHIFT || op == OP_RSHIFT;

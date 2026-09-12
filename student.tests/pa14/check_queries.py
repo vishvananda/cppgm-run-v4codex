@@ -16,9 +16,12 @@ with tempfile.TemporaryDirectory(prefix='pa14-queries-') as directory:
   'template<class T> auto bad(T p)->decltype(T) { return 0; }',
   'template<class T> auto bad(T p)->decltype(absent_call(p)); int main(){return bad(1);}',
   'template<class T> auto bad(T p)->decltype(*p); int main(){return bad(1);}',
+  'template<class T> auto bad(T p)->decltype(p&1); int main(){return bad(1.5);}',
+  'template<class T> auto bad(T p)->decltype(p<nullptr); int main(){return bad((int*)0);}',
+  'int f(int*); template<class T> auto bad(T p)->decltype(f(false));',
  ]
  for i,source in enumerate(cases):
   path=work/f'reject-{i}.cpp';path.write_text(source)
   r=subprocess.run([root/'dev/cppgm++','--emit-lowir','-O0','-o',work/'output',path],capture_output=True,text=True)
   assert r.returncode==1,(i,r.returncode,r.stderr)
- print('two unresolved-name ABI cases and four type-query rejections PASS')
+ print('two unresolved-name ABI cases and seven type-query rejections PASS')

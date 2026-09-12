@@ -12,12 +12,14 @@ struct TypeQuery {
     EntityId entity = 0;
     IdentifierId name = 0;
     ScopeId context = 0;
+    bool null_pointer_constant = false;
     std::uint32_t arguments = 0, offset = 0, count = 0;
     std::uint64_t value = 0;
 };
 struct TypeQueryFact {
     Expression expression;
     TypeId declared_type = 0;
+    EntityId selected = 0; // Unevaluated call/operator choice; no body demand.
     FactState state = FactState::NotStarted;
     bool dependent = false;
 };

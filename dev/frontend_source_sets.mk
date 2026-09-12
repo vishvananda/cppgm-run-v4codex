@@ -65,5 +65,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_checks
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/type_query semantic/query_call
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/query_operator
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/query_abi
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_instantiation

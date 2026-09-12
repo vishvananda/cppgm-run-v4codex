@@ -110,8 +110,12 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
 }
 Conversion Analyzer::ellipsis_conversion(NodeId n)
 {
+    return ellipsis_conversion_value(expressions[n]);
+}
+Conversion Analyzer::ellipsis_conversion_value(Expression source)
+{
     Conversion c; c.rank = 6;
-    c.target = promote(decay(expressions[n].type));
+    c.target = promote(decay(source.type));
     if (fundamental(c.target, FT_FLOAT)) c.target = types.fundamental(FT_DOUBLE);
     if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
     return c;

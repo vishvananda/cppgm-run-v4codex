@@ -55,10 +55,10 @@ parameters, callable-reference `decltype`, then definition-time fixed binding.
 Query increment: canonical typed recipe IDs retain bound names, parameter ordinals,
 operations, type arguments and call edges. Queries share fixed facts and have
 active/success/failure states; substitution visits dependent edges. Typed query
-calls reuse deduction, standard conversions, ADL and ranking helpers. ABI queries
+calls reuse deduction, ordinary standard/user conversions, builtin operators, ADL and ranking helpers. ABI queries
 use the existing graph plus unresolved names. Through report **1907/1935**;
-prior **1621/1621**, ten personal executables, six query/ABI checks and file audit
-pass. Full expression legality/user conversions and fixed body binding continue;
+prior **1621/1621**, ten personal executables, nine query/ABI checks and file audit
+pass. Selected calls/operators retain conversion ranges; fixed body binding and further expression forms continue;
 this is not a complete type-query interpreter or a stage handoff.
 
 Previous turn: **verified progress**, committed `4fafa38c`, revalidated 222/314.

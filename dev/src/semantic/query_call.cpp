@@ -42,6 +42,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         object = callee.op == OP_ARROW ? types[x.type].child : x.type;
         category = callee.op == OP_ARROW ? ValueCategory::Lvalue : x.category;
     }
+    TypeQueryFact r;
     TypeId function_type = 0;
     if (fn.entity && function_binding(fn.entity)) {
         struct Candidate { EntityId entity; unsigned offset; };
@@ -68,8 +69,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             } else if (entities[e].member_info && !entities[e].is_static) valid = false;
             for (unsigned i = 0; valid && i < args.size(); ++i) {
                 Conversion c;
-                if (i < f.count) c = standard_conversion(args[i],types.parameters[f.offset+i]);
-                else { c.rank = 6; c.target = promote(decay(args[i].type)); }
+                if (i < f.count) c = conversion_value(args[i],types.parameters[f.offset+i]);
+                else c = ellipsis_conversion_value(args[i]);
                 valid = c.valid(); sequences.push_back(c);
             }
             if (valid) viable.push_back({e,begin}); else sequences.resize(begin);
@@ -92,7 +93,10 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         if (entities[selected].member_info && members[entities[selected].member_info].deleted)
             throw std::runtime_error("deleted function in type query");
         check_access(selected,q.context,entities[selected].owner,object);
-        function_type = entities[selected].type;
+        function_type = entities[selected].type; r.selected = selected;
+        auto begin = viable[best].offset; auto count = args.size()+(object!=0);
+        r.expression.conversions = conversions.size(); r.expression.count = count;
+        conversions.insert(conversions.end(),sequences.begin()+begin,sequences.begin()+begin+count);
     } else {
         function_type = fn.type;
         if (pointer(function_type)) function_type = types[function_type].child;
@@ -100,10 +104,10 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
             throw std::runtime_error("invalid indirect type-query call");
         for (unsigned i = 0; i < f.count; ++i)
-            if (!standard_conversion(args[i],types.parameters[f.offset+i]).valid()) throw std::runtime_error("invalid type-query argument");
+            if (!conversion_value(args[i],types.parameters[f.offset+i]).valid()) throw std::runtime_error("invalid type-query argument");
     }
     auto returned = constructed ? constructed : types[function_type].child;
-    TypeQueryFact r; r.expression.type = value_type(returned);
+    r.expression.type = value_type(returned);
     if (!constructed && types[returned].kind == TypeKind::LRef) r.expression.category = ValueCategory::Lvalue;
     if (!constructed && types[returned].kind == TypeKind::RRef) r.expression.category = ValueCategory::Xvalue;
     return r;

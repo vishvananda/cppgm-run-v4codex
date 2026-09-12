@@ -189,7 +189,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         return c;
     }
     if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
-    if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || (n && null_constant(n)))) { c.rank = 2; return c; }
+    if ((pointer(to) || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || x.null_pointer_constant || (n && null_constant(n)))) { c.rank = 2; return c; }
     if (fundamental(to, FT_BOOL) && pointer(from)) { c.rank = 3; return c; }
     if (pointer(from) && pointer(to)) {
         unsigned added = 0;
@@ -314,10 +314,14 @@ void Analyzer::store_call(Expression& owner, const std::vector<NodeId>& args, co
 }
 Conversion Analyzer::boolean_conversion(NodeId n)
 {
-    Conversion c = class_value(expressions[n].type) ? conversion_function(n,types.fundamental(FT_BOOL),true) : conversion(n, types.fundamental(FT_BOOL));
+    return boolean_conversion_value(expressions[n],n);
+}
+Conversion Analyzer::boolean_conversion_value(Expression source, NodeId n)
+{
+    Conversion c = class_value(source.type) ? conversion_function_value(source,types.fundamental(FT_BOOL),true) : conversion_value(source, types.fundamental(FT_BOOL),true,n);
     // Contextual bool conversion uses direct-initialization, which admits
     // nullptr_t; ordinary copy-initialization of bool still rejects it.
-    if (fundamental(expressions[n].type, FT_NULLPTR_T)) {
+    if (fundamental(source.type, FT_NULLPTR_T)) {
         c.rank = 2; c.kind = Conversion::Kind::Contextual;
     }
     return c;

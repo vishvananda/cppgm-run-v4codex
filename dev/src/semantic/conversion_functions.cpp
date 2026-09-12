@@ -66,9 +66,13 @@ EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target)
 }
 Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
 {
-    Conversion result; result.target = to;
     Expression source = expressions[n];
     if (object_entity) { source.type = value_type(entities[object_entity].type); source.category = ValueCategory::Lvalue; }
+    return conversion_function_value(source,to,explicit_allowed,direct_reference,object_entity);
+}
+Conversion Analyzer::conversion_function_value(Expression source, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
+{
+    Conversion result; result.target = to;
     struct Candidate { EntityId function; Conversion object, second; };
     std::vector<Candidate> viable;
     for (EntityId e : conversion_candidates(source.type)) {
@@ -111,25 +115,29 @@ Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allo
 Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 {
     if (ast[n].kind == syntax::Kind::BracedInit) return list_initialization(n,to);
-    Conversion result = standard_conversion(expressions[n],to,n);
+    return conversion_value(expressions[n],to,user,n);
+}
+Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, NodeId n)
+{
+    Conversion result = standard_conversion(source,to,n);
     if (result.valid() || !user) return result;
     bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     if (ref) {
-        auto direct = conversion_function(n,to,false,true);
+        auto direct = conversion_function_value(source,to,false,true);
         if (direct.valid()) return direct;
     }
-    Conversion function = conversion_function(n,to);
+    Conversion function = conversion_function_value(source,to);
     Conversion constructor; constructor.target = to;
     TypeId target = value_type(to);
     if (class_value(target) && (!ref || types[to].kind == TypeKind::RRef || types[target].cv == 1)) {
-        constructor = converting_constructor(n,types.unqualified(target));
+        constructor = converting_constructor_value(source,types.unqualified(target),n);
         constructor.target = to; constructor.reference = ref; constructor.temporary = ref;
         constructor.preference = ref && types[to].kind == TypeKind::LRef;
         constructor.qualification = ref ? types[target].cv : 0;
     }
     if (function.valid() && constructor.valid()) {
         Type f = types[entities[constructor.function].type];
-        Conversion argument = standard_conversion(expressions[n],types.parameters[f.offset],n);
+        Conversion argument = standard_conversion(source,types.parameters[f.offset],n);
         auto object = user_conversions[function.materialization].object;
         if (better(&argument,&object,1)) return constructor;
         if (better(&object,&argument,1)) return function;
