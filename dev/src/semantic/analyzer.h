@@ -254,7 +254,7 @@ private:
     std::vector<Specialization> specializations;
     std::vector<unsigned char> type_dependence;
     std::vector<EntityId> specialization_demand;
-    std::size_t specialization_cursor = 0;
+    std::size_t specialization_cursor = 0, template_bodies = 0, template_completions = 0;
     std::vector<EntityId> demand_queue;
     std::size_t demand_cursor = 0;
     unsigned anonymous_classes = 0, anonymous_enums = 0;
@@ -314,7 +314,11 @@ private:
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
     void instantiate_function(EntityId e);
+    EntityId deduce_target(EntityId pattern, TypeId target);
+    bool template_more_specialized(EntityId a, EntityId b);
+    NodeId instantiate_default(EntityId e, unsigned parameter);
     TypeId declare_class_template(NodeId n, ScopeId s);
+    bool dependent_template_syntax(NodeId n, ScopeId s);
     EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);
     EntityId class_template_name(NodeId part, EntityId e, ScopeId s);
     void complete_class(EntityId e);

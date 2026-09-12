@@ -25,12 +25,26 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     std::vector<Conversion> sequences;
     for (EntityId e : candidates(family)) {
         ++candidate_work;
-        if (entities[e].template_info) continue;
+        if (entities[e].template_info) {
+            if (!definitions) continue;
+            e = deduce_function(e,args);
+            if (!e) continue;
+        }
         bool member = entities[e].member_info && !entities[e].is_static;
         Type f = types[entities[e].type];
         if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
             members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
         if (args.size() != f.count + member) continue;
+        if (!class_operand && !member) {
+            bool exact_enum = false;
+            for (unsigned j = 0; j < f.count; ++j) {
+                if (!args[j]) continue;
+                auto actual = types.unqualified(expressions[args[j]].type);
+                auto parameter = types.unqualified(value_type(types.parameters[f.offset+j]));
+                exact_enum |= types[actual].kind == TypeKind::Named && entities[types[actual].entity].key == KW_ENUM && actual == parameter;
+            }
+            if (!exact_enum) continue;
+        }
         std::size_t begin = sequences.size();
         bool valid = true;
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
@@ -73,11 +87,18 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     // Built-in comma, address and enum operations remain candidates when no
     // user-defined candidate is viable. Expected rejection does not throw.
     if (viable.empty()) return false;
+    auto better_candidate = [&](std::size_t a, std::size_t b) {
+        auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
+        if (better(x,y,args.size())) return true;
+        if (better(y,x,args.size())) return false;
+        auto ea = viable[a].entity, eb = viable[b].entity;
+        return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb));
+    };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i)
-        if (better(sequences.data()+viable[i].offset, sequences.data()+viable[best].offset, args.size())) best = i;
+        if (better_candidate(i,best)) best = i;
     for (std::size_t i = 0; i < viable.size(); ++i)
-        if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size()))
+        if (i != best && !better_candidate(best,i))
             throw std::runtime_error("ambiguous operator overload");
     Candidate selected = viable[best];
     if (selected.surrogate) {
@@ -103,6 +124,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
     demand_member(selected.entity);
+    demand_specialization(selected.entity);
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
             base_steps(object, scopes[entities[selected.entity].owner].entity));

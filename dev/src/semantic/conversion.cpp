@@ -134,9 +134,10 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         TypeId ft = ref || pointer(to) || target.kind == TypeKind::MemberPointer ? target.child : to;
         if (types[ft].kind != TypeKind::Function) return c;
         for (EntityId e : candidates(x.entity)) {
-            if (entities[e].type != ft) continue;
+            if (definitions && entities[e].template_info) e = deduce_target(e,ft);
+            if (!e || entities[e].type != ft) continue;
             if (target.kind == TypeKind::MemberPointer && scopes[entities[e].owner].entity != target.entity) continue;
-            if (c.function) return Conversion();
+            if (c.function && c.function != e) return Conversion();
             c.function = e;
         }
         if (c.function) { c.rank = 0; c.reference = ref; c.preference = target.kind == TypeKind::RRef; }

@@ -119,6 +119,10 @@ void Analyzer::telemetry(std::ostream& out) const
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_dependence_work\":" << dependence_work
         << ",\"semantic_specializations\":" << specializations.size() - 1
+        << ",\"template_body_transitions\":" << template_bodies
+        << ",\"template_class_completions\":" << template_completions
+        << ",\"parsed_nodes\":" << ast.nodes.parsed_size()
+        << ",\"template_occurrences\":" << ast.nodes.size() - ast.nodes.parsed_size()
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()

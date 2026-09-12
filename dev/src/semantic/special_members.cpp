@@ -77,6 +77,7 @@ Conversion Analyzer::transfer_conversion(TypeId from, ValueCategory category, Ty
 void Analyzer::ensure_transfers(TypeId t, bool assignment)
 {
     EntityId cls = types[t].entity;
+    if (definitions) complete_class(cls);
     auto info = entities[cls].class_info;
     unsigned mask = assignment ? 12 : 3;
     if ((class_facts[info].generated_transfers & mask) == mask) return;

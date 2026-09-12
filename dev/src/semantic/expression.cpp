@@ -58,7 +58,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (!e) throw std::runtime_error("unknown expression name");
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
         r.entity = e; facts[n].entity = e;
-        if (entities[e].kind == EntityKind::Overload) {
+        if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));
             if (naming) { record_object(r, 0, 0, 0); object_uses[r.object_use].naming_scope = naming; }

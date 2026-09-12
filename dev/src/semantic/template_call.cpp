@@ -98,10 +98,14 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     }
     cache.put(pattern, result); return result;
 }
-EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& args)
+EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input)
 {
     TemplateFunction t = templates[entities[pattern].template_info];
-    if (args.size() != t.count) return 0;
+    auto args = input;
+    if (args.size() > t.count) return 0;
+    if (definitions && args.size() < t.count) template_defaults(pattern,args);
+    bool partial = args.size() < t.count;
+    if (partial && !definitions) return 0;
     std::uint32_t pack = intern_arguments(args);
     std::uint32_t previous = specialization_index.get(key(pattern, pack));
     if (previous) return specializations[previous].entity;
@@ -109,11 +113,16 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& args)
     std::uint32_t index = specializations.size(); specializations.push_back(spec);
     specialization_index.put(key(pattern, pack), index);
     Index bindings, cache;
-    for (unsigned i = 0; i < t.count; ++i) bindings.put(template_parameters[t.offset + i], args[i]);
+    for (unsigned i = 0; i < t.count; ++i) bindings.put(template_parameters[t.offset + i], i < args.size() ? args[i] : entities[template_parameters[t.offset+i]].type);
     TypeId type = substitute_type(entities[pattern].type, bindings, cache);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
-    EntityId e = make_entity(EntityKind::Function, scopes[t.environment].parent, entities[pattern].name, entities[pattern].source);
+    EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].type = type; entities[e].specialization = index;
+    entities[e].defaults = entities[pattern].defaults;
+    if (partial) {
+        t.primary = pattern; t.explicit_arguments = pack;
+        entities[e].template_info = templates.size(); templates.push_back(t);
+    }
     if (scopes[entities[e].owner].kind == ScopeKind::Class) member_facts(e);
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;
     return e;
@@ -127,7 +136,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
         if (old && old != value) return false;
         bindings.put(p.entity, value); return true;
     }
-    if (p.kind != a.kind || (p.cv & ~a.cv)) return false;
+    if (p.kind != a.kind) return false;
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization) {
         auto ps = specializations[entities[p.entity].specialization], as = specializations[entities[a.entity].specialization];
         if (ps.pattern != as.pattern) return false;
@@ -147,22 +156,52 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args)
 {
     Type f = types[entities[pattern].type];
-    if (args.size() < f.count || (!f.variadic && args.size() != f.count)) return 0;
-    Index bindings;
-    for (unsigned i = 0; i < f.count; ++i) {
-        TypeId p = types.parameters[f.offset + i], a = expressions[args[i]].type;
-        if (types[p].kind == TypeKind::LRef || types[p].kind == TypeKind::RRef) p = types[p].child;
-        else a = decay(a);
-        if (dependent_type(p) && !deduce_type(p, a, bindings)) return 0;
-    }
+    if ((!f.variadic && args.size() > f.count) ||
+        (args.size() < f.count && (!entities[pattern].defaults || !default_arguments[entities[pattern].defaults+args.size()]))) return 0;
     TemplateFunction t = templates[entities[pattern].template_info];
+    TypeArguments explicit_args = argument_packs[t.explicit_arguments];
+    Index bindings;
+    for (unsigned i = 0; i < explicit_args.count; ++i)
+        bindings.put(template_parameters[t.offset+i],argument_types[explicit_args.offset+i]);
+    for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
+        TypeId p = types.parameters[f.offset+i], a = expressions[args[i]].type;
+        if (!dependent_type(p)) continue;
+        if (!a) return 0;
+        auto param = types[p];
+        if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
+            entities[types[param.child].entity].template_parameter && !types[param.child].cv && expressions[args[i]].category == ValueCategory::Lvalue)
+            a = types.compound(TypeKind::LRef,a);
+        if (param.kind == TypeKind::LRef || param.kind == TypeKind::RRef) p = param.child;
+        else a = decay(a);
+        if (!deduce_type(p,a,bindings)) return 0;
+    }
     std::vector<TypeId> arguments;
     for (unsigned i = 0; i < t.count; ++i) {
-        TypeId a = bindings.get(template_parameters[t.offset + i]);
-        if (!a) return 0;
+        TypeId a = bindings.get(template_parameters[t.offset+i]);
+        if (!a) break;
         arguments.push_back(a);
     }
-    return specialize(pattern, arguments);
+    auto primary = t.primary ? t.primary : pattern;
+    if (arguments.size() != t.count && (!definitions || !template_defaults(primary,arguments))) return 0;
+    return specialize(primary,arguments);
+}
+EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
+{
+    auto t = templates[entities[pattern].template_info];
+    auto explicit_args = argument_packs[t.explicit_arguments];
+    Index bindings;
+    for (unsigned j = 0; j < explicit_args.count; ++j)
+        bindings.put(template_parameters[t.offset+j],argument_types[explicit_args.offset+j]);
+    if (!deduce_type(entities[pattern].type,target,bindings)) return 0;
+    std::vector<TypeId> args;
+    for (unsigned j = 0; j < t.count; ++j) {
+        auto a = bindings.get(template_parameters[t.offset+j]);
+        if (!a) break;
+        args.push_back(a);
+    }
+    auto primary = t.primary ? t.primary : pattern;
+    if (args.size() != t.count && !template_defaults(primary,args)) return 0;
+    return specialize(primary,args);
 }
 EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
 {
@@ -189,5 +228,20 @@ void Analyzer::demand_specialization(EntityId e)
     if (!i || specializations[i].emission_demanded) return;
     specializations[i].emission_demanded = true;
     specialization_demand.push_back(e);
+}
+} }
+
+namespace cppgm { namespace semantic {
+bool Analyzer::template_more_specialized(EntityId a, EntityId b)
+{
+    if (!a || !b || !entities[a].specialization || !entities[b].specialization) return false;
+    auto shape = [&](EntityId e) {
+        auto t = types[entities[specialization_pattern(e)].type];
+        std::vector<TypeId> parameters(types.parameters.begin()+t.offset,types.parameters.begin()+t.offset+t.count);
+        return types.function(types.fundamental(FT_VOID),parameters,t.variadic,t.cv,t.ref);
+    };
+    auto x = shape(a), y = shape(b);
+    Index xy, yx;
+    return deduce_type(y,x,yx) && !deduce_type(x,y,xy);
 }
 } }

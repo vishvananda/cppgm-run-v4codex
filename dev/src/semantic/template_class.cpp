@@ -2,6 +2,24 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+bool Analyzer::dependent_template_syntax(NodeId root, ScopeId s)
+{
+    std::vector<NodeId> work(1,root);
+    Index seen;
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        NodeId n = work[i];
+        if (!n || seen.get(n)) continue;
+        seen.put(n,1);
+        auto node = ast[n];
+        if (node.kind == Kind::Name && node.first) {
+            auto e = lookup(node.op == OP_COLON2 ? global : s,ast[node.first].text);
+            if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias) && dependent_type(entities[e].type)) return true;
+        }
+        if (node.detail) work.push_back(node.detail);
+        for (auto child = node.first; child; child = ast[child].next) work.push_back(child);
+    }
+    return false;
+}
 TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
 {
     NodeId name = ast[n].detail;
@@ -38,6 +56,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     // specialization of this derived template will ever be requested.
     auto bases_node = child(n,Kind::Bases);
     for (auto b = ast[bases_node].first; b; b = ast[b].next) {
+        if (dependent_template_syntax(ast[child(b,Kind::BaseName)].detail,s)) continue;
         auto base = resolve(ast[child(b,Kind::BaseName)].detail,s,Lookup::Qualifier);
         if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
         if (base && dependent_type(entities[base].type)) continue;
@@ -125,7 +144,7 @@ void Analyzer::complete_class(EntityId e)
     auto pattern = templates[entities[specializations[index].pattern].template_info];
     if (!pattern.body) return;
     if (specializations[index].body == FactState::Failure) throw std::runtime_error("failed class specialization");
-    specializations[index].body = FactState::Active;
+    specializations[index].body = FactState::Active; ++template_completions;
     auto environment = specialization_environment(e);
     // An earlier forward declaration may have used different parameter names.
     auto pack = argument_packs[specializations[index].arguments];

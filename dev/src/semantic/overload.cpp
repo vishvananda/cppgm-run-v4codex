@@ -312,7 +312,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             auto count = args.size()+object_ranking;
             if (better(x,y,count)) return true;
             if (better(y,x,count)) return false;
-            return !entities[viable[a].entity].specialization && entities[viable[b].entity].specialization;
+            return (!entities[viable[a].entity].specialization && entities[viable[b].entity].specialization) ||
+                template_more_specialized(viable[a].entity,viable[b].entity);
         };
         std::size_t best = 0;
         for (std::size_t i = 1; i < viable.size(); ++i)
@@ -339,7 +340,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         std::vector<Conversion> chosen(sequences.begin() + viable[best].offset + object_ranking,
             sequences.begin() + viable[best].offset + object_ranking + args.size());
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {
-            NodeId a = default_arguments[entities[selected].defaults + i];
+            NodeId a = definitions && entities[selected].specialization ? instantiate_default(selected,i) : default_arguments[entities[selected].defaults + i];
             args.push_back(a);
             chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
         }

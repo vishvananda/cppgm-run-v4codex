@@ -28,6 +28,9 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
             NodeId value = ast[a].first;
             while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
                 value = ast[value].first;
+            if (definitions && entities[e].template_info) {
+                default_arguments[index] = value; seen = true; continue;
+            }
             if (ast[value].kind == Kind::BracedInit) {
                 expression(value,s); require_conversion(value,types.parameters[f.offset+i]);
             } else initialize(ast[a].first,types.parameters[f.offset+i],s);

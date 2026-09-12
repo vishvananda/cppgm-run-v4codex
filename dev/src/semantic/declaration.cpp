@@ -16,6 +16,9 @@ void Analyzer::consume(NodeId n)
 }
 void Analyzer::finish()
 {
+    typedef std::chrono::steady_clock Clock;
+    Clock::time_point started;
+    if (ast.telemetry) started = Clock::now();
     if (calls) for (EntityId e = 1; e < entities.size(); ++e) {
         if (!entities[e].class_info || !polymorphic(e)) continue;
         EntityId key = virtual_class(e).key_function;
@@ -72,6 +75,7 @@ void Analyzer::finish()
     }
     if (calls) { finish_allocations(); prepare_function_boundaries(); }
     for (NodeId body : jump_bodies) check_jumps(body);
+    if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 {
@@ -176,7 +180,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         NodeId name = ast[ast[n].first].detail;
         if (calls && scopes[s].kind == ScopeKind::Class && inherit_using(name, s)) break;
         for (NodeId p = ast[name].first; p; p = ast[p].next)
-            if (p == ast[name].last && ast[p].first) throw std::runtime_error("using declaration names template-id");
+            if (p == ast[name].last && child(p,Kind::TemplateArguments)) throw std::runtime_error("using declaration names template-id");
         EntityId e = resolve(name, s);
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {
@@ -260,6 +264,14 @@ void Analyzer::schedule_body(const Body& body)
 void Analyzer::function_body(const Body& body)
 {
     if (entities[body.entity].definition) throw std::runtime_error("function redefinition");
+    if (definitions) {
+        auto type = types[entities[body.entity].type];
+        if (class_value(type.child)) complete_class(types[type.child].entity);
+        for (unsigned j = 0; j < type.count; ++j) {
+            auto parameter = types.parameters[type.offset+j];
+            if (class_value(parameter)) complete_class(types[parameter].entity);
+        }
+    }
     ScopeId fs = make_scope(ScopeKind::Function, body.owner, entities[body.entity].name, body.entity);
     entities[body.entity].definition = body.source;
     entities[body.entity].body = body.node;

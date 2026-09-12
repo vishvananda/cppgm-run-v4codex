@@ -8,20 +8,13 @@ void Analyzer::instantiate_function(EntityId e)
     auto spec = specializations[index];
     auto pattern = templates[entities[spec.pattern].template_info];
     if (!pattern.body) return;
-    specializations[index].body = FactState::Active;
-    auto context = ast.new_context();
+    specializations[index].body = FactState::Active; ++template_bodies;
+    auto context = spec.context ? spec.context : ast.new_context();
     auto source = ast.instantiate(pattern.source,context);
     auto declarator = ast.projected(pattern.declarator,context);
     auto body = ast.projected(pattern.body,context);
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-    ScopeId environment = make_scope(ScopeKind::Template,scopes[pattern.environment].parent);
-    auto pack = argument_packs[spec.arguments];
-    for (unsigned j = 0; j < pack.count; ++j) {
-        auto parameter = template_parameters[pattern.offset+j];
-        auto alias = make_entity(EntityKind::Alias,environment,entities[parameter].name,0);
-        entities[alias].type = argument_types[pack.offset+j];
-        bind(environment,entities[alias].name,alias);
-    }
+    ScopeId environment = specialization_environment(e);
     specializations[index].context = context;
     specializations[index].environment = environment;
     // The declarator's source parameter types retain top-level cv for the body;
@@ -31,5 +24,19 @@ void Analyzer::instantiate_function(EntityId e)
     this->declarator(declarator,specifiers(specs,environment),environment);
     function_body({body,declarator,environment,e,source});
     specializations[index].body = FactState::Success;
+}
+NodeId Analyzer::instantiate_default(EntityId e, unsigned parameter)
+{
+    auto index = entities[e].specialization;
+    auto spec = specializations[index];
+    auto context = spec.context ? spec.context : ast.new_context();
+    specializations[index].context = context;
+    auto pattern = spec.pattern;
+    NodeId source = default_arguments[entities[pattern].defaults+parameter];
+    NodeId value = ast.instantiate(source,context);
+    facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
+    auto environment = specialization_environment(e);
+    expression(value,environment);
+    return value;
 }
 } }

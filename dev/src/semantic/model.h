@@ -180,6 +180,8 @@ struct TransferAction {
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
 struct TemplateFunction {
+    EntityId primary = 0;
+    std::uint32_t explicit_arguments = 0;
     ScopeId environment = 0;
     std::uint32_t offset = 0, count = 0;
     NodeId body = 0, declarator = 0, source = 0;
