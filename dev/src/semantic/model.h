@@ -268,6 +268,11 @@ struct Conversion {
     bool valid() const { return rank != 255; }
 };
 struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false, retained = false; };
+enum class CallFailure : unsigned char { None, NoViable, Ambiguous };
+struct CallSelection {
+    EntityId entity = 0, conflicting = 0;
+    CallFailure failure = CallFailure::NoViable;
+};
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     EntityId constructor = 0; Expression call;

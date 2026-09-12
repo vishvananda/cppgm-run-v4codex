@@ -273,6 +273,9 @@ private:
     TypeId query_decltype(QueryId id, bool direct);
     TypeId fundamental_cast_type(ETokenType op);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
+    CallSelection select_call(EntityId family, const std::vector<Expression>& values,
+        const std::vector<NodeId>* nodes, TypeId object, ValueCategory category,
+        ScopeId naming, std::uint32_t explicit_arguments, std::vector<Conversion>& selected);
     TypeQueryFact query_operator(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId dependent_decltype(NodeId n, ScopeId s);
     std::vector<TypeArguments> argument_packs;

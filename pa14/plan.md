@@ -54,6 +54,15 @@ bounds, correctness, coverage and all evidence.
 
 ## Handoff ledger
 
+Continuation entry `816c9dc0`: the preceding scalar-fact turn is **verified
+progress**. Next group: one typed direct-call selection owner for ordinary
+expressions, queries and fixed template facts; occurrence-owned argument
+application/materialization consumes the selected declaration and conversions.
+Candidate work follows required overloads and argument edges once per fact key;
+instantiations retain only new consumption/lifetime facts. Validate fixed calls,
+definition-time failures, default arguments, reference effects and class
+materializations, then course/native/sanitizer parity and frozen A/A+ABBA costs.
+
 Entry `c05778ed`: the previous transfer/query turn is **verified progress**,
 314/314 with 1935/1935 through-stage validation. Its implementation/evidence
 commits and measurements are retained in implementation.md and performance.md.

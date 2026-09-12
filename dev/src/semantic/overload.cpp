@@ -280,54 +280,13 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     }
     if (fn.form == ExpressionForm::Overload && !direct_name) throw std::runtime_error("unresolved indirect callee");
     if (direct_name && (fn.form == ExpressionForm::Overload || (fn.entity && entities[fn.entity].kind == EntityKind::Function))) {
-        struct Candidate { EntityId entity; std::size_t offset; };
-        std::vector<Candidate> viable;
-        bool object_ranking = object_type != 0;
-        std::vector<Conversion> sequences;
-        for (EntityId e : candidates(fn.entity)) {
-            ++candidate_work;
-            if (entities[e].template_info) e = deduce_function(e, args);
-            if (!e) continue;
-            Type function = types[entities[e].type];
-            if ((!function.variadic && args.size() > function.count) ||
-                (args.size() < function.count && (!entities[e].defaults ||
-                 !default_arguments[entities[e].defaults + args.size()]))) continue;
-            std::size_t begin = sequences.size();
-            bool valid = true;
-            if (object_ranking) {
-                Conversion c; c.rank = 0; c.target = object_type;
-                if (entities[e].member_info && !entities[e].is_static) {
-                    c = object_conversion(e, object_type, object_category, object_uses[fn.object_use].naming_scope);
-                    valid = c.valid();
-                }
-                sequences.push_back(c);
-            } else if (entities[e].member_info && !entities[e].is_static) valid = false;
-            for (std::size_t i = 0; valid && i < args.size(); ++i) {
-                Conversion c;
-                if (i < function.count) c = conversion(args[i], types.parameters[function.offset + i]);
-                else c = ellipsis_conversion(args[i]);
-                valid = c.valid(); sequences.push_back(c);
-            }
-            if (valid) viable.push_back({e, begin});
-            else sequences.resize(begin);
-        }
-        if (viable.empty()) throw std::runtime_error("no viable function");
-        auto better_candidate = [&](std::size_t a, std::size_t b) {
-            const Conversion* x = sequences.data()+viable[a].offset;
-            const Conversion* y = sequences.data()+viable[b].offset;
-            auto count = args.size()+object_ranking;
-            if (better(x,y,count)) return true;
-            if (better(y,x,count)) return false;
-            return (!entities[viable[a].entity].specialization && entities[viable[b].entity].specialization) ||
-                template_more_specialized(viable[a].entity,viable[b].entity);
-        };
-        std::size_t best = 0;
-        for (std::size_t i = 1; i < viable.size(); ++i)
-            if (better_candidate(i,best)) best = i;
-        for (std::size_t i = 0; i < viable.size(); ++i)
-            if (i != best && viable[i].entity != viable[best].entity && !better_candidate(best,i))
-                throw std::runtime_error("ambiguous overload");
-        EntityId selected = viable[best].entity;
+        std::vector<Conversion> chosen;
+        auto choice = select_call(fn.entity,expressions,&args,object_type,object_category,
+            object_uses[fn.object_use].naming_scope,0,chosen);
+        if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable function");
+        if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous overload");
+        EntityId selected = choice.entity;
+        if (object_type) chosen.erase(chosen.begin());
         facts[n].entity = selected;
         if (entities[selected].member_info && !entities[selected].is_static)
         {
@@ -343,8 +302,6 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);
         Type selected_type = types[ft];
         for (unsigned j = 0; j < selected_type.count; ++j) reject_abstract(types.parameters[selected_type.offset+j]);
-        std::vector<Conversion> chosen(sequences.begin() + viable[best].offset + object_ranking,
-            sequences.begin() + viable[best].offset + object_ranking + args.size());
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {
             NodeId a = definitions && entities[selected].specialization ? instantiate_default(selected,i) : default_arguments[entities[selected].defaults + i];
             args.push_back(a);
