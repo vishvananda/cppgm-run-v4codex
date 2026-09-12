@@ -11,7 +11,7 @@ typedef std::uint32_t ScopeId;
 
 using Index = IdIndex;
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
@@ -41,6 +41,7 @@ public:
     TypeId unqualified(TypeId t);
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
+    TypeId dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& arguments, bool template_id);
     TypeId adjusted(TypeId t);
     TypeId signature(TypeId t);
     TypeId composite(TypeId a, TypeId b);
@@ -128,6 +129,7 @@ struct Entity {
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;
     bool mutable_field = false;
+    bool template_member = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
@@ -144,6 +146,7 @@ struct MemberFacts {
     EntityId inherited_constructor = 0;
     EntityId delegated_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
+    ScopeId body_environment = 0;
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false, in_class_body = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
@@ -195,6 +198,11 @@ struct Specialization {
     std::uint32_t context = 0;
     bool emission_demanded = false;
 };
+struct TemplateDefinition {
+    NodeId source = 0, declarator = 0, initializer = 0;
+    std::uint32_t parameters = 0, count = 0, next = 0;
+};
+struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
 struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public;
     BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public) : base(b), next(n), access(a) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };

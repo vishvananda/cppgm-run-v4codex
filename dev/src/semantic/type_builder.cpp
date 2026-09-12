@@ -36,6 +36,10 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         if (node.kind == Kind::Enum) { result = enum_type(c, s, anonymous_name, node.flags & 1); continue; }
         if (node.op == KW_DECLTYPE) { result = expression_type(node.first, s, true); continue; }
         if (node.detail) {
+            if (definitions) {
+                result = type_name(node.detail,s); facts[c].entity = facts[node.detail].entity;
+                continue;
+            }
             EntityId e = resolve(node.detail, s);
             if (!e || (entities[e].kind != EntityKind::Type && entities[e].kind != EntityKind::Alias))
                 throw std::runtime_error("type name is not a visible type");
@@ -100,7 +104,8 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     NodeId name = decl_name(n);
     if (name) {
         auto owner = name_owner(name,s,true);
-        if (!(definitions && scopes[s].kind == ScopeKind::Template && scopes[owner].kind == ScopeKind::Namespace)) s = owner;
+        if (!(definitions && scopes[s].kind == ScopeKind::Template &&
+            (scopes[owner].kind == ScopeKind::Namespace || scopes[s].parent == owner))) s = owner;
     }
     NodeId nested = 0;
     std::vector<NodeId> suffixes;
@@ -178,6 +183,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
     ScopeId owner = name_owner(name, s, true);
+    ScopeId definition_scope = member_definition_environment == s ? s : owner;
     ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
     if (!encloses(enclosing, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
     if (destructor && scopes[owner].kind == ScopeKind::Class) {
@@ -261,7 +267,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
-    if (calls && function) { function_defaults(e, d, owner); exception_specification(e, d, owner); }
+    if (calls && function) { function_defaults(e, d, definition_scope); exception_specification(e, d, definition_scope); }
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
@@ -300,10 +306,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
             class_facts[info].variant_initializer = e;
         }
     }
-    if (calls && init && !function && !member_initializer) initialize(init, canonical, owner);
+    if (calls && init && !function && !member_initializer) initialize(init, canonical, definition_scope);
     if (calls && !init && !function && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
     if (init && !alias && !function && integral(t) && !member_initializer) {
-        Constant v = evaluate(init, owner);
+        Constant v = evaluate(init, definition_scope);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {
             v = convert(v, t);

@@ -43,7 +43,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::Named && entities[t.entity].template_parameter;
+    bool dependent = t.kind == TypeKind::DependentName || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_type(argument_types[pack.offset+j]);
@@ -61,7 +61,17 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     if (cache.get(pattern)) return cache.get(pattern);
     Type p = types[pattern];
     TypeId result = pattern;
-    if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
+    if (p.kind == TypeKind::DependentName) {
+        auto owner = substitute_type(p.child,bindings,cache);
+        if (!owner) return 0;
+        std::vector<TypeId> args;
+        for (unsigned j = 0; j < p.count; ++j) {
+            auto arg = substitute_type(types.parameters[p.offset+j],bindings,cache);
+            if (!arg) return 0;
+            args.push_back(arg);
+        }
+        result = types.qualify(qualified_type(owner,p.entity,args,p.bound),p.cv);
+    } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         result = bindings.get(p.entity);
         if (!result) return 0;
         result = types.qualify(result, p.cv);
@@ -130,6 +140,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 {
     Type p = types[pattern], a = types[actual];
+    if (p.kind == TypeKind::DependentName) return true; // non-deduced context
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         TypeId old = bindings.get(p.entity);
         TypeId value = types.qualify(types.unqualified(actual), a.cv & ~p.cv);

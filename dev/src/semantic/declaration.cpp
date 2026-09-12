@@ -27,17 +27,21 @@ void Analyzer::finish()
     EntityId boundary_cursor = 1;
     for (;;) {
         if (calls) schedule_parameter_bodies(boundary_cursor);
+        if (storage_cursor < storage_demand.size()) {
+            instantiate_member_definition(storage_demand[storage_cursor++]); continue;
+        }
         if (definitions && specialization_cursor < specialization_demand.size()) {
             instantiate_function(specialization_demand[specialization_cursor++]);
             continue;
         }
         if (demand_cursor == demand_queue.size()) break;
         EntityId e = demand_queue[demand_cursor++];
+        if (definitions) instantiate_member_definition(e);
         std::uint32_t m = entities[e].member_info;
         MemberFacts f = members[m];
         members[m].demand = DemandState::Active;
         if (f.body && !entities[e].definition)
-            function_body({f.body, f.declarator, entities[e].owner, e, f.source});
+            function_body({f.body, f.declarator, f.body_environment ? f.body_environment : entities[e].owner, e, f.source});
         if (members[m].synthetic && transfer_member(e)) {
             prepare_transfer(e);
             if (members[m].deleted) throw std::runtime_error("deleted defaulted special member");
@@ -109,7 +113,8 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
     }
     ScopeId saved = active_template_scope; active_template_scope = ts;
-    declaration(ast[params].next, ts);
+    if (definitions) check_template_parameters(ast[params].next,ts);
+    if (!definitions || !retain_template_definition(ast[params].next,ts)) declaration(ast[params].next, ts);
     active_template_scope = saved;
     // A template's declarations are visible outside its parameter environment;
     // parameters themselves are not exported.
@@ -251,6 +256,12 @@ void Analyzer::schedule_body(const Body& body)
         std::uint32_t m = entities[body.entity].member_info;
         if (members[m].source) throw std::runtime_error("duplicate member definition");
         members[m].body = body.node; members[m].declarator = body.declarator; members[m].source = body.source;
+        if (member_definition_environment && scopes[member_definition_environment].parent == entities[body.entity].owner) {
+            members[m].body_environment = member_definition_environment;
+            if (!entities[body.entity].inline_function && (members[m].constructor || members[m].destructor))
+                members[m].base_entry = true;
+            return;
+        }
         if (class_depth) {
             members[m].in_class_body = true;
             entities[body.entity].inline_function = true; return;

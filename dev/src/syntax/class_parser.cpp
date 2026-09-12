@@ -45,6 +45,9 @@ NodeId Parser::class_specifier()
         ast[result].kind = Kind::ClassForward;
         return result;
     }
+    if (template_declaration && owner != saved_scope) {
+        names.definition_parent(child,saved_scope); names.import(child,owner);
+    }
     IdentifierId saved_class = current_class;
     bool saved_template = template_declaration;
     template_declaration = false;
@@ -121,7 +124,10 @@ NodeId Parser::special_member(NodeId specs)
     ScopeId saved = scope;
     ScopeId parameter_scope;
     ScopeId qualified = ast[n].first != ast[n].last ? qualified_owner(n) : unknown_scope;
-    if (qualified != unknown_scope) scope = qualified;
+    if (qualified != unknown_scope) {
+        if (template_declaration) { scope = names.enter(saved); names.import(scope,qualified); }
+        else scope = qualified;
+    }
     ast.append(decl, parameters(parameter_scope));
     scope = parameter_scope;
     function_suffix(decl);

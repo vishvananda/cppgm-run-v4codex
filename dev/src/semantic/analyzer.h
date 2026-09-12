@@ -278,6 +278,8 @@ private:
     EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, TypeId conversion = 0);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
+    TypeId type_name(NodeId n, ScopeId s);
+    TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s, bool declaration = false);
     ScopeId common_ancestor(ScopeId a, ScopeId b) const;
@@ -324,6 +326,28 @@ private:
     void complete_class(EntityId e);
     bool template_defaults(EntityId pattern, std::vector<TypeId>& args);
     ScopeId specialization_environment(EntityId e);
+    bool retain_template_definition(NodeId n, ScopeId s);
+    std::uint32_t definition_root(EntityId pattern);
+    std::uint32_t definition_path(std::uint32_t parent, IdentifierId name);
+    TemplateDefinitionOwner definition_owner(EntityId cls);
+    bool instantiate_member_definition(EntityId e);
+    void demand_template_storage(EntityId e);
+    Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
+    std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
+    std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
+    std::vector<EntityId> storage_demand;
+    std::uint32_t definition_path_count = 0;
+    std::size_t storage_cursor = 0;
+    std::size_t template_definition_work = 0;
+    ScopeId member_definition_environment = 0;
+    void check_template_parameters(NodeId n, ScopeId s);
+    void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
+    void check_template_member_exception(NodeId d, std::uint32_t path, IdentifierId name, ScopeId s);
+    int template_exception(NodeId d, ScopeId s);
+    bool nullary_declarator(NodeId d) const;
+    Index template_prototype_index;
+    struct TemplatePrototype { NodeId declarator; ScopeId environment; std::uint32_t next; };
+    std::vector<TemplatePrototype> template_prototypes = std::vector<TemplatePrototype>(1);
 
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);

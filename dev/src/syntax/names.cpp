@@ -23,6 +23,10 @@ ScopeId Names::unnamed_namespace(ScopeId parent)
 }
 
 ScopeId Names::parent(ScopeId scope) const { return scopes_[scope].parent; }
+void Names::definition_parent(ScopeId scope, ScopeId parent)
+{
+    scopes_[scope].parent = parent; scopes_[scope].depth = scopes_[parent].depth+1;
+}
 
 std::size_t Names::slot(ScopeId scope, IdentifierId name) const
 {

@@ -17,10 +17,19 @@ Expression Analyzer::value_fact(const Expression& source) const
 }
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
-    if (expressions[n].ready) { expressions[n].evaluated |= !unevaluated_depth; return expressions[n]; }
+    if (expressions[n].ready) {
+        expressions[n].evaluated |= !unevaluated_depth;
+        if (!unevaluated_depth && definitions) demand_template_storage(expressions[n].entity);
+        return expressions[n];
+    }
     ++expression_work;
     facts[n].scope = s;
     Expression result = resolve_expression(n, s);
+    if (!unevaluated_depth && definitions) demand_template_storage(result.entity);
+    if (result.entity && entities[result.entity].template_member && entities[result.entity].is_static &&
+        entities[result.entity].constant.valid) {
+        facts[n].value = constants.size(); constants.push_back(entities[result.entity].constant);
+    }
     class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions[n] = result;
@@ -55,7 +64,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         auto op = operator_token(ast[n].detail);
         if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
         EntityId e = resolve(ast[n].detail, s);
-        if (!e) throw std::runtime_error("unknown expression name");
+        if (!e) {
+            auto text = ids.spelling(terminal(ast[n].detail));
+            throw std::runtime_error("unknown expression name: " + std::string(text.data,text.size));
+        }
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
         r.entity = e; facts[n].entity = e;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info)) {

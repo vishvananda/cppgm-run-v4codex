@@ -2,9 +2,9 @@
 
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
-Target: **pa14 full-stage**. Phase: **implement — incomplete checkpoint**.
-Entry **84/314**, 230 failures; current **222/314**, 92 failures.
-**138 original failures resolved; no entry passes lost; coverage unchanged.**
+Target: **pa14 full-stage**. Phase: **implement — dependent fact/definition owners**.
+Entry **84/314**, 230 failures; current **264/314**, 50 failures.
+**180 original failures resolved; no entry passes lost; coverage unchanged.**
 
 ## Design/spec alignment and remaining groups
 
@@ -25,8 +25,9 @@ Finer occurrence demand, dependent-only semantic checking, typed demand edges,
 distinct fact states and narrow failure memoization remain open **PA14 spec
 requirements**, not later-stage exemptions. The completed call-demand increment
 was extended through overloaded arguments and class-reference conversions.
-Further related work now requires the symbolic graph and indexed definition
-owners together; extending eager concrete lookup would entrench the wrong model.
+Typed qualified member types and indexed definition owners are now implemented.
+Dependent expression facts and finer semantic reuse remain open; related class
+demand, nested-owner and explicit-instantiation work continues in this turn.
 
 ## Performance evidence
 
@@ -40,6 +41,14 @@ wall stalls are disclosed. Historical diagnostic misses add no unsupported
 stage gate. O0, correctness, coverage, mandated limits and ownership remain intact.
 
 ## Handoff ledger
+
+Continuation entry `4fafa38c`: clean tree, revalidated **222/314**. Previous
+turn classified **progress** from committed implementation and verified fixture
+improvement. First group: typed dependent qualifier identities -> canonical
+substitution -> concrete member types; then declaration-owned indexed out-of-class
+definitions -> narrow member/storage demand. Work tracks qualifier edges and
+definitions for the requested owner. Validate dependent return/alias signatures,
+renamed member heads, nested definitions, and evaluated/unevaluated static uses.
 
 | Increment | Commit / result |
 | --- | --- |
@@ -58,3 +67,12 @@ release/ASan/UBSan status/output comparisons pass; rejection parity does not mea
 320 course-correct programs. All **1,148** performance observations verify.
 Fixtures/references and review markers are unchanged. Full logs and frozen
 artifacts: `$RALPH_ARTIFACT_DIR/pa14-measurements/`. PA15 has not been started.
+
+Current increment: **264/314**, through **1885/1935**, prior **1621/1621**,
+file audit passes, eight personal executables pass. **42 continuation-entry
+failures resolved with no regressions.** Qualified dependent types use canonical
+owner/name/argument identities; out-of-class definition heads, bodies and static
+initializers retain their parameter overlays. Indexed applications occur once
+per concrete owner/definition. Definition-time shadowing and independent nullary
+exception checks preserve the required rejection cases. Parser overlays retain
+renamed heads. Current performance/sanitizer evidence remains to be collected.

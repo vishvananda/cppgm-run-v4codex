@@ -60,6 +60,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     }
     templates[index].source = n;
     templates[index].body = ast[n].kind == Kind::Class ? n : previous.body;
+    if (ast[n].kind == Kind::Class) index_template_members(n,definition_root(e),s);
     bind(s,id,e); record(s,e,n,entities[e].type,EntityKind::Type);
     // Fixed bases are definition-time demands, independent of whether a
     // specialization of this derived template will ever be requested.
@@ -147,7 +148,8 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
 }
 void Analyzer::complete_class(EntityId e)
 {
-    if (!e || entities[e].complete || !entities[e].specialization) return;
+    if (!e || entities[e].complete) return;
+    if (!entities[e].specialization) { instantiate_member_definition(e); return; }
     auto index = entities[e].specialization;
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
     auto pattern = templates[entities[specializations[index].pattern].template_info];

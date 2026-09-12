@@ -116,7 +116,10 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts)
     NodeId declared_name = parsed.name;
     if (declared_name && ast[declared_name].first != ast[declared_name].last) {
         ScopeId qualified = qualified_owner(declared_name);
-        if (qualified != unknown_scope) scope = qualified;
+        if (qualified != unknown_scope) {
+            if (template_declaration) { scope = names.enter(saved_scope); names.import(scope,qualified); }
+            else scope = qualified;
+        }
     }
     for (;;) {
         attributes();

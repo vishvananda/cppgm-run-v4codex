@@ -44,6 +44,8 @@ void Analyzer::attach_scope(ScopeId s, ScopeId parent)
 EntityId Analyzer::make_entity(EntityKind k, ScopeId s, IdentifierId name, NodeId source)
 {
     Entity e; if (calls && source) e.access = declaration_access(s); e.kind = k; e.owner = s; e.name = name; e.source = source;
+    if (definitions && scopes[s].kind == ScopeKind::Class)
+        e.template_member = definition_owner(scopes[s].entity).specialization != 0;
     entities.push_back(e); return entities.size() - 1;
 }
 void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
@@ -91,7 +93,8 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
              entities[old].kind != EntityKind::Type && k != EntityKind::Type)
         throw std::runtime_error("function and ordinary binding conflict");
     ordinary.put(key(s, n), id);
-    if (target(id)) qualifiers.put(key(s, n), id);
+    if (target(id) || (definitions && (k == EntityKind::Type || k == EntityKind::Alias) && dependent_type(entities[id].type)))
+        qualifiers.put(key(s, n), id);
     if (k == EntityKind::Type) tags.put(key(s, n), id);
     if (k == EntityKind::Namespace || k == EntityKind::NamespaceAlias) namespaces.put(key(s, n), id);
 }

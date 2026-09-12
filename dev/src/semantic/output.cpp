@@ -48,6 +48,8 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     if (t.kind != TypeKind::Function && (t.cv & 2)) out << "volatile ";
     switch (t.kind) {
     case TypeKind::Fundamental: out << fundamental_name(t.fundamental); break;
+    case TypeKind::DependentName:
+        write_type(out,t.child); out << "::"; spelling(out,t.entity); break;
     case TypeKind::Named: {
         const Entity& e = entities[t.entity];
         out << keyword(key_op == TOK_INVALID ? e.key : key_op);
@@ -121,6 +123,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_specializations\":" << specializations.size() - 1
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"template_class_completions\":" << template_completions
+        << ",\"template_definition_applications\":" << template_definition_work
         << ",\"parsed_nodes\":" << ast.nodes.parsed_size()
         << ",\"template_occurrences\":" << ast.nodes.size() - ast.nodes.parsed_size()
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1

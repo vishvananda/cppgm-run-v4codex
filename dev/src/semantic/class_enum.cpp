@@ -25,7 +25,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     }
     EntityId instance = facts[n].entity;
     ScopeId owner = instance ? s : name_owner(name, s);
-    if (definition && !encloses(s, owner)) throw std::runtime_error("class definition outside enclosing scope");
+    ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
+    if (definition && !instance && !encloses(enclosing, owner)) throw std::runtime_error("class definition outside enclosing scope");
     EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
@@ -71,6 +72,13 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         std::size_t deferred_begin = bodies.size();
         ++class_depth;
         ScopeId cs = entities[e].scope;
+        if (member_definition_environment && s == member_definition_environment) {
+            // Complete the previously empty class scope with the defining
+            // head's lexical overlay; its declaration/entity identity is stable.
+            scopes[cs].parent = s; scopes[cs].depth = scopes[s].depth+1;
+            auto jump = scopes[s].jump, grandjump = scopes[jump].jump;
+            scopes[cs].jump = scopes[s].depth-scopes[jump].depth == scopes[jump].depth-scopes[grandjump].depth ? grandjump : s;
+        }
         class_facts[entities[e].class_info].current_access = key_op == KW_CLASS ? Access::Private : Access::Public;
         attach_scope(cs, owner);
         if (calls) {

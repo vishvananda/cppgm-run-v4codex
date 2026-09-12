@@ -43,6 +43,11 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 }
 TypeId Types::fundamental(EFundamentalType f) { Type t; t.fundamental = f; return intern(t, {}); }
 TypeId Types::named(EntityId e) { Type t; t.kind = TypeKind::Named; t.entity = e; return intern(t, {}); }
+TypeId Types::dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id)
+{
+    Type t; t.kind = TypeKind::DependentName; t.child = owner; t.entity = name; t.bound = template_id;
+    return intern(t,args);
+}
 TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)
 {
     Type base = records[child];
@@ -65,6 +70,8 @@ TypeId Types::qualify(TypeId id, unsigned cv)
     if (!cv || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Function) return id;
     if (t.kind == TypeKind::Array) return compound(t.kind, qualify(t.child, cv), t.bound);
     t.cv |= cv;
+    if (t.kind == TypeKind::DependentName)
+        return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
     return intern(t, {});
 }
 TypeId Types::unqualified(TypeId id)
@@ -72,6 +79,8 @@ TypeId Types::unqualified(TypeId id)
     Type t = records[id];
     if (!t.cv) return id;
     t.cv = 0;
+    if (t.kind == TypeKind::DependentName)
+        return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
     return intern(t, {});
 }
 TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv, RefQualifier ref)

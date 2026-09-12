@@ -44,6 +44,16 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         break;
     }
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
+    case TypeKind::DependentName: {
+        result = abi.name(abi_type(t.child),spelling(t.entity));
+        if (t.bound) {
+            std::vector<abi_mangle::Id> args;
+            for (unsigned j = 0; j < t.count; ++j)
+                args.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.types.parameters[t.offset+j])));
+            result = abi.make(abi_mangle::Kind::Template,result,0,0,0,args);
+        }
+        break;
+    }
     case TypeKind::LRef: result = abi.make(abi_mangle::Kind::Reference, abi_type(t.child)); break;
     case TypeKind::RRef: result = abi.make(abi_mangle::Kind::RvalueReference, abi_type(t.child)); break;
     case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, 0, t.bound); break;
@@ -79,14 +89,14 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
-        sem.types[e.type].cv & 1 && !e.external_decl);
+        sem.scopes[e.owner].kind != semantic::ScopeKind::Class && sem.types[e.type].cv & 1 && !e.external_decl);
     internal |= internal_scope(e.owner);
     std::string name = spelling(e.name);
     // Source ABI spelling and internal IR identity occupy separate namespaces.
     // In particular a root C++ variable's ABI spelling is the bare source name.
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
-    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || e.specialization) ? SBM_WEAK : SBM_STRONG;
+    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || e.specialization || e.template_member) ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
     if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {

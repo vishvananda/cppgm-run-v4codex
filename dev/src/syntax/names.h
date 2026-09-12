@@ -21,6 +21,7 @@ public:
     ScopeId enter(ScopeId parent);
     ScopeId unnamed_namespace(ScopeId parent);
     ScopeId parent(ScopeId scope) const;
+    void definition_parent(ScopeId scope, ScopeId parent);
     Binding local(ScopeId scope, IdentifierId name) const;
     Binding lookup(ScopeId scope, IdentifierId name) const;
     Binding qualified(ScopeId scope, IdentifierId name) const;
