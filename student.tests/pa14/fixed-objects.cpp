@@ -37,7 +37,11 @@ template<class T>int results(const Object& object){return inspect(object.value()
 template<class T>int temporary(int n){return produce(n).get();}
 template<class T>int static_receiver(int n){return read().fixed(n);}
 template<class T>int parenthesized(Object& object){return (object.base)();}
+template<class T>int rvalue_call(Object& object,int n){return static_cast<Object&&>(object).add(n);}
 template<class T>int scalar_pointer(int* p){return *p;}
+int twice(int n){return n*2;}
+struct Callback {int (*fn)(int);};
+template<class T>int callback(const Callback& c,int n){return c.fn(n);}
 int referred_value=0;
 struct References {int& member;static int data;};
 int References::data=0;
@@ -75,5 +79,8 @@ int main(){
     if(sizeof(category(queried_value<int>))!=sizeof(long)) return 13;
     if(sizeof(reference_category(queried_reference<int>))!=sizeof(long)) return 14;
     if(sizeof(enum_category(queried_enumerator<int>))!=sizeof(long)) return 15;
+    if(rvalue_call<int>(a,2)!=27 || rvalue_call<Tag>(b,3)!=31) return 16;
+    Callback cb={twice};
+    if(callback<int>(cb,3)!=6 || callback<Tag>(cb,4)!=8) return 17;
     return 0;
 }

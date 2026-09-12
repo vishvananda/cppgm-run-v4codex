@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory(prefix='pa14-fixed-objects-') as directory:
   r=subprocess.run([binary,'--emit-lowir','-O0','-o',work/'output',src],capture_output=True,text=True)
   assert r.returncode==1,(i,r.returncode,r.stderr)
   assert not any(x in r.stderr for x in ('AddressSanitizer','UndefinedBehaviorSanitizer','runtime error:')),(i,r.stderr)
- src=work/'unused.cpp';src.write_text('template<class T>struct Lazy{int bad(){return T::missing;}};template<class U>int unused(Lazy<int>& v){return v.bad();}int main(){return 0;}')
+ src=work/'unused.cpp';src.write_text('template<class T>struct Lazy{using Type=int;int bad(){return T::missing;}};using Alias=Lazy<int>;template<class U>int unused(Lazy<int>& v){Alias::Type n=0;return v.bad()+n;}int main(){return 0;}')
  r=subprocess.run([binary,'--emit-lowir','-O0','--stats','-o',work/'output',src],capture_output=True,text=True)
  assert r.returncode==0,r.stderr
  t=json.loads(r.stderr.splitlines()[0]);assert t['template_body_transitions']==0 and t['semantic_member_demands']==0,t
