@@ -14,9 +14,9 @@ Conversion Analyzer::converting_constructor(NodeId n, TypeId target)
         ++candidate_work;
         auto m = members[entities[e].member_info];
         Type f = types[entities[e].type];
-        if (m.explicit_constructor || !f.count || (f.count > 1 &&
+        if (m.explicit_constructor || (!f.count && !f.variadic) || (f.count > 1 &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults+1]))) continue;
-        Conversion argument = conversion(n, types.parameters[f.offset], false);
+        Conversion argument = f.count ? conversion(n, types.parameters[f.offset], false) : ellipsis_conversion(n);
         if (argument.valid()) viable.push_back({e, argument});
     }
     if (viable.empty()) return result;
@@ -74,8 +74,12 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
         if (!c.valid()) throw std::runtime_error("invalid converting constructor argument");
         apply_conversion(a, c); arguments.push_back(a); selected.push_back(c);
     }
-    materialized.call.arguments = call_arguments.size(); materialized.call.argument_count = f.count;
-    materialized.call.conversions = conversions.size(); materialized.call.count = f.count;
+    if (!f.count && f.variadic) {
+        auto c = ellipsis_conversion(n); apply_conversion(n,c);
+        arguments.push_back(n); selected.push_back(c);
+    }
+    materialized.call.arguments = call_arguments.size(); materialized.call.argument_count = arguments.size();
+    materialized.call.conversions = conversions.size(); materialized.call.count = selected.size();
     call_arguments.insert(call_arguments.end(), arguments.begin(), arguments.end());
     conversions.insert(conversions.end(), selected.begin(), selected.end());
     conversion.materialization = conversion_objects.size(); conversion_objects.push_back(materialized);

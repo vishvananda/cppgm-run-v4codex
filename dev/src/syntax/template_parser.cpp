@@ -5,6 +5,7 @@ namespace cppgm { namespace syntax {
 NodeId Parser::template_decl()
 {
     in.require("template");
+    if (!in.is("<")) return wrap(Kind::ExplicitInstantiation,declaration());
     ScopeId saved = scope;
     bool saved_template = template_declaration;
     scope = names.enter(scope);

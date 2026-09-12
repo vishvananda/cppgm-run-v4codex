@@ -20,7 +20,7 @@ NodeId Parser::unadorned_declaration()
     if (in.is("extern") && in.is("template", 1)) {
         in.take();
         in.take();
-        return wrap(Kind::ExplicitInstantiation, declaration());
+        auto n = wrap(Kind::ExplicitInstantiation, declaration()); ast[n].flags |= 1; return n;
     }
     if (in.is("extern") && in.peek(1).kind == PostTokenKind::literal) {
         in.take();

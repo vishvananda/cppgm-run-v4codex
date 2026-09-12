@@ -10,6 +10,11 @@ TypeId Analyzer::source_type(EntityId e) const
 EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type)
 {
     TypeId canonical = types.signature(type);
+    if (scopes[s].kind == ScopeKind::Class) {
+        auto previous = class_typedef_declarations.get(key(s,name));
+        if (previous && previous != source) throw std::runtime_error("class typedef-name redeclared");
+        class_typedef_declarations.put(key(s,name),source);
+    }
     EntityId e = local(s, name);
     if (e) {
         if ((entities[e].kind != EntityKind::Alias && entities[e].kind != EntityKind::Type) ||

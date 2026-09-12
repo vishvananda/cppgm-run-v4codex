@@ -191,10 +191,11 @@ NodeId Parser::substatement()
 bool Parser::declaration_ahead()
 {
     if (ast.telemetry) ++decisions;
-    if (in.is("typename")) return false;
     std::size_t prefix = probe_type(0);
     if (in.is("{", prefix)) return false;
     if (!in.is("(", prefix)) return true;
+    if (in.is("typename") && !identifier(prefix+1) && !in.is("*",prefix+1) &&
+        !in.is("&",prefix+1) && !in.is("&&",prefix+1) && !in.is("(",prefix+1)) return false;
     // Only this shared type/parenthesis prefix requires declaration preference.
     // Scan its balanced suffix without constructing or abandoning any AST.
     unsigned depth = 0;

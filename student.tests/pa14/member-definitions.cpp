@@ -19,11 +19,15 @@ template<class Renamed> Renamed objects::Box<Renamed>::total=Renamed(9);
 template<class Renamed> struct objects::Box<Renamed>::Nested {
     Renamed get() const { return Box<Renamed>::total; }
 };
+template<class T> T nested_read(objects::Box<T>&) {
+    typename objects::Box<T>::Nested nested;
+    return nested.get();
+}
 int use() {
     objects::Box<int> a(7);
     objects::Box<long> b(11);
     objects::Box<int>::Nested nested;
-    if (a.read()!=7 || b.read()!=11 || a.late()!=8 || nested.get()!=9) return 1;
+    if (a.read()!=7 || b.read()!=11 || a.late()!=8 || nested.get()!=9 || nested_read(a)!=9) return 1;
     objects::Box<int>::total=13;
     return objects::Box<long>::total!=9 || nested.get()!=13;
 }

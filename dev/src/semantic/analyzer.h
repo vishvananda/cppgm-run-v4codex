@@ -109,6 +109,7 @@ public:
     std::vector<ConstantField> constant_fields;
 private:
     Index list_index, direct_list_index, empty_list_index;
+    Index class_typedef_declarations;
     std::vector<ListField> list_fields;
     Conversion list_initialization(NodeId n, TypeId to, ScopeId s = 0, bool direct = false);
     Conversion list_element(NodeId& cursor, TypeId to, ScopeId s);
@@ -327,6 +328,7 @@ private:
     bool template_defaults(EntityId pattern, std::vector<TypeId>& args);
     ScopeId specialization_environment(EntityId e);
     bool retain_template_definition(NodeId n, ScopeId s);
+    void explicit_instantiation(NodeId n, ScopeId s);
     std::uint32_t definition_root(EntityId pattern);
     std::uint32_t definition_path(std::uint32_t parent, IdentifierId name);
     TemplateDefinitionOwner definition_owner(EntityId cls);

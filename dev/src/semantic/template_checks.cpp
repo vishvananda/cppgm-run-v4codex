@@ -24,7 +24,7 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum) name = node.detail;
         if (name && ast[name].first == ast[name].last && ast[name].op != OP_COLON2) declared = terminal(name);
         if (node.kind == Kind::Alias || node.kind == Kind::Enumerator) declared = node.text;
-        if (node.kind == Kind::UsingDeclaration) declared = terminal(node.detail);
+        if (node.kind == Kind::UsingDeclaration) declared = terminal(ast[node.first].detail);
         if (declared && parameters.get(declared)) throw std::runtime_error("declaration redeclares template parameter");
         if (node.kind == Kind::IdExpression && !item.callee && ast[node.detail].first == ast[node.detail].last &&
             parameters.get(terminal(node.detail))) throw std::runtime_error("type template parameter used as a value");

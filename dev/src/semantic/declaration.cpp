@@ -240,7 +240,8 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         c_linkage = saved; break;
     }
     case Kind::ExplicitInstantiation:
-        for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
+        if (definitions) explicit_instantiation(n,s);
+        else for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
         break;
     default: break;
     }

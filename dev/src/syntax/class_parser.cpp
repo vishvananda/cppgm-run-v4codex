@@ -10,7 +10,7 @@ NodeId Parser::class_specifier()
     NodeId key = leaf(Kind::ClassKey);
     std::uint32_t alignment = 0;
     unsigned attributes_flags = attributes(&alignment);
-    NodeId n = identifier() ? name(true) : 0;
+    NodeId n = identifier() || in.is("::") ? name(true) : 0;
     NodeId result = named(Kind::Class, n);
     if (alignment) ast.alignment_owners.put(result, alignment);
     if (packing) ast.class_packing.put(result, packing);
@@ -21,8 +21,13 @@ NodeId Parser::class_specifier()
     if (owner == unknown_scope) owner = scope;
     Binding previous = names.local(owner, final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);
-    names.bind(owner, final_name(n), template_declaration ? Category::TemplateType : Category::Type, child);
-    names.bind(child, final_name(n), template_declaration ? Category::TemplateType : Category::Type, child);
+    auto category = template_declaration || previous.category == Category::TemplateType ? Category::TemplateType : Category::Type;
+    names.bind(owner, final_name(n), category, child);
+    names.bind(child, final_name(n), category, child);
+    if (template_declaration && owner != saved_scope) {
+        names.definition_parent(child,saved_scope); names.import(child,owner);
+    }
+    scope = child;
     if (in.eat("final")) ast[result].flags |= 4;
     if (in.eat(":")) {
         NodeId bases = make(Kind::Bases);
@@ -43,10 +48,8 @@ NodeId Parser::class_specifier()
     }
     if (!in.eat("{")) {
         ast[result].kind = Kind::ClassForward;
+        scope = saved_scope;
         return result;
-    }
-    if (template_declaration && owner != saved_scope) {
-        names.definition_parent(child,saved_scope); names.import(child,owner);
     }
     IdentifierId saved_class = current_class;
     bool saved_template = template_declaration;

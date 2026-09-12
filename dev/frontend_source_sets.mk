@@ -64,3 +64,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_checks
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_instantiation
