@@ -23,11 +23,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         return expressions[n];
     }
     facts[n].scope = s;
-    Expression result;
-    if (!ast.nodes.occurrences[n].context || !reuse_fixed_expression(n,s,result)) {
-        ++expression_work;
-        result = resolve_expression(n, s);
-    }
+    Expression result = resolve_expression(n, s);
     if (!unevaluated_depth && definitions) demand_template_storage(result.entity);
     if (result.entity && entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class &&
         entities[result.entity].constant.valid) {
@@ -41,8 +37,10 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
 }
 Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
 {
-    NodeId first = ast[n].first;
     Expression r;
+    if (ast.nodes.occurrences[n].context && reuse_fixed_expression(n,s,r)) return r;
+    ++expression_work;
+    NodeId first = ast[n].first;
     switch (ast[n].kind) {
     case Kind::New: return placement_new(n, s);
     case Kind::Delete: return delete_expression(n,s);
