@@ -1,8 +1,8 @@
 # PA14 implementation ownership
 
 Current contract result: **314/314**, zero course failures; prior assignments **1621/1621**.
-This continuation resolves **16 of its 33 entry failures**, with no lost passes.
-Cumulatively, **213 of the 230 stage-entry failures** are resolved. Fixtures,
+This continuation resolves **all 17 entry failures**, with no lost passes.
+Cumulatively, **all 230 stage-entry failures** are resolved. Fixtures,
 references and comparison rules are unchanged. PA15 has not been started.
 
 ## Owners, data flow and bounds
@@ -28,22 +28,18 @@ the original 36-byte expression record; declarations remain 112 bytes. There is
 no grammar replay, reference delegation, global restoration retry or persistent
 semantic cache. The optional optimizer/native backend have not been introduced.
 
-## Remaining groups and concrete checkpoint boundary
+## Remaining architecture and concrete checkpoint boundary
 
-| Owner | Required next work | Remaining cases |
-| --- | --- | --- |
-| Inherited transfer/triviality/lifetime facts | Preserve reference-member and empty-object actions, implicit moves, constructor entries, virtual destruction and reentrant completion. Lower each selected action once. | Defaulted reference-member move; inherited typedef/friend overload; virtual destructor; reentrant collection layout/override; rvalue-reference move return; deleted-default member sizeof; base initializer/reference chains; inherited conversion; constref iterator; nested out-of-class defaulted copy. |
-| Local ABI and O0 expression/control output | Retain local type linkage/constructor-root provenance and the required discarded-value and constant-condition presentation. | Local enum identity; local alias noop; qualified discarded value; postfix-cv local alias. |
-| Remaining template/parser forms | Finish the still-failing declaration context without removing any fixture from coverage. | Variable-template-defaulted fixture; all 314 remain in the exit suite. |
-| General semantic fact sharing | Extend expression queries to the remaining expression/bound forms and move fixed body type/conversion facts out of concrete occurrence replay. Separate layout/default/exception/body states; add typed demand/reverse edges and narrow structured expected failures. | These are current PA14 spec requirements even where the course suite does not expose them. |
+The transfer, lifetime, local ABI, expression-output and retained-syntax groups
+are complete for all 314 course fixtures. Their selected facts now reach the
+ordinary lowering path; no fixture, reference or comparison rule was changed.
+The previous query/binding group was extended through these consumers rather
+than stopping at a test-progress threshold.
 
-The expression/signature and fixed-binding group was extended through ordinary
-user conversions/operators, out-of-class overlays, lexical jump checks, alias
-constructors, nested source projection and an enclosing-environment cache-key
-reducer. The remaining output failures consume inherited object/ABI/lifetime
-facts. The nested-definition fixture, for example, now binds and instantiates
-correctly but still emits calls to trivial defaulted copies instead of direct
-storage transfers. Further lookup patches cannot repair those decisions.
+| Owner | Current PA14 work still required by `spec.md` |
+| --- | --- |
+| Typed template body facts | General expression/bound queries, shared fixed body types/conversions, and dependent-only checking instead of whole-region semantic projection. |
+| Demand and failure facts | Finer declaration/layout/default/exception/body states, typed reasons and reverse dependency edges, narrow structured expected failures. |
 
 Parsed-node sharing and fixed name/query sharing are implemented. Sharing all
 nondependent semantic body facts is **not** complete: concrete bodies still
@@ -95,3 +91,9 @@ by the stage-scoped performance review or deferred to PA15.
 - Validation: all 314 course tests, all 1621 earlier tests, thirteen native
   personal programs, 21 binding/query checks and file audit pass. The remaining
   architecture items described above are not erased by the course result.
+
+The final emission-use representation occupies existing declaration padding
+(`Entity` remains 112 bytes). A byte of flags records hidden-friend origin and
+evaluated use, including uses preceding definition, without an auxiliary map
+for ordinary function calls. The intermediate map implementation and sanitizer
+parity evidence remain frozen in the transfer artifact directory.

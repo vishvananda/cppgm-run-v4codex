@@ -132,6 +132,8 @@ struct Entity {
     bool mutable_field = false;
     bool template_member = false, template_pattern = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
+    enum Emission : unsigned char { HiddenFriend = 1, Used = 2 };
+    unsigned char emission = 0;
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
     TypeId type = 0, underlying = 0;

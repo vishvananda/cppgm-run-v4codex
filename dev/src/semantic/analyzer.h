@@ -41,7 +41,7 @@ public:
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
     TypeId call_type(EntityId e) const;
     bool member_demanded(EntityId e) const;
-    bool dormant_hidden_friend(EntityId e) const { return hidden_friend_definitions.get(e) == 1; }
+    bool dormant_hidden_friend(EntityId e) const { return entities[e].emission == Entity::HiddenFriend; }
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
@@ -226,7 +226,7 @@ private:
     Index variant_destruction_index;
     void register_destruction(EntityId e);
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
-    Index friendships, using_access, using_functions, hidden_friends, hidden_friend_definitions;
+    Index friendships, using_access, using_functions, hidden_friends;
     bool friend_declaration(NodeId n, ScopeId s);
     EntityId associated_lookup(IdentifierId name, const std::vector<NodeId>& args);
     EntityId associated_type_lookup(IdentifierId name, std::vector<TypeId> work);
