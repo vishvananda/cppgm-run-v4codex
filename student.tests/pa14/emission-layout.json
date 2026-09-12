@@ -1,0 +1,50 @@
+[
+  {
+    "commit": "2818c8e2",
+    "model_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/model-map.h",
+    "model_sha256": "9608da7c02af40e13a257a6df8521a77ee5f170173fd841ceb41722ea18951d4",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-map.cpp",
+    "source_sha256": "cccdec001f76dba6377c705ae388c08fb03603ec8892d99c79683e0e0b83ed34",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-map",
+    "binary_sha256": "39fc445850a73912ef1158bd14ac2188b8cda2f4aa2775ca5e274f3db1e2915b",
+    "sizes": [
+      112,
+      36
+    ],
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-I",
+      "dev",
+      "-I",
+      "dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-map.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-map"
+    ]
+  },
+  {
+    "commit": "6fb57328",
+    "model_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/model-flags.h",
+    "model_sha256": "114dbe0e762b77fd0eeee6c517370b36640df074084bddc91418c3a31bfb88cf",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-flags.cpp",
+    "source_sha256": "31c547979c153465bd4ab11eef5d481492daec97a5a8174abce36a8e23968d63",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-flags",
+    "binary_sha256": "3200607f0413380cd0a58dfc9e3e7450428792e818f9fafcc3f1abe52e466e8f",
+    "sizes": [
+      112,
+      36
+    ],
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-I",
+      "dev",
+      "-I",
+      "dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-flags.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-transfer/record-layout-flags"
+    ]
+  }
+]

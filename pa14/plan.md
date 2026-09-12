@@ -2,94 +2,69 @@
 
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
-Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
+Target: **pa14 full-stage**. Phase: **implement**; architecture work remains.
 Stage entry **84/314**; continuation entry **297/314**; current **314/314**.
-**230 original failures resolved; all 17 continuation-entry failures fixed; no lost passes or reduced coverage.**
+All **230 original failures**, including all **17 continuation-entry failures**,
+are resolved. Coverage and reference/comparison rules are unchanged.
 
-Active continuation at `2c80bc70`: previous turn is **verified progress**.
-Entry rerun confirms 297/314. The next coherent owner is object transfer and
-lifetime facts: selected constructors and completed layouts feed explicit
-subobject actions, return-destination selection and ordinary LowIR lowering.
-Keep C++ triviality distinct from direct storage lowering and preserve empty
-object identity without copying nonexistent payload. Preparation stays linear
-in class members/return sites; array lowering retains its bounded expansion.
-Validate affected course cases, native reference/lifetime reducers, all earlier
-PAs and file audit. Freeze entry/current binaries and retain A/A+ABBA latency,
-RSS, executable runtime/text observations before claiming performance benefits.
-
-## Design/spec alignment and remaining groups
+## Design/spec alignment and remaining work
 
 Canonical declarations/types/arguments feed ordinary semantics and typed LowIR.
-Dependent type queries retain parameter ordinals, operation/type/declaration
-edges and selected conversions; fixed queries and name bindings are shared.
-Lexical definition scopes, fixed-base edges, initialization-prefix jump checks
-and retained out-of-class overlays validate unused bodies. Nested specialization
-projects original source identities and retains enclosing arguments separately.
-[Ownership, data flow, complexity and validation](implementation.md) records scope.
+The query/binding work now reaches transfer, layout, lifetime and ABI consumers:
+reference binding actions, empty payload handling, late-defaulted copy facts,
+return destinations, base entries, local type identities and reentrant constants.
+Static vptr facts and bounded deleting entries consume prepared constructor and
+destruction actions. Calls/operators share emission-use facts; O0 expressions
+retain source conversion/condition provenance. See [ownership](implementation.md).
 
-| Remaining owner | Next coherent group |
+| Remaining current-PA14 owner | Data flow, bounds and validation |
 | --- | --- |
-| Inherited transfer/lifetime/layout facts | Reference-member and empty transfers, implicit move returns, constructor entries, virtual destruction, reentrant collection layout/override. |
-| Local ABI and O0 expression/control output | Local enum linkage/root provenance, discarded-value loads and constant-condition presentation. |
-| Parser/template contexts | Remaining variable-template-defaulted fixture; retain all 314 tests. |
-| General typed body facts | Remaining query/bound forms; fixed body type/conversion sharing; dependent-only checking, finer occurrences, typed demand/reverse edges and narrow structured failures. |
+| Typed template body facts | Shared fixed types/conversions and dependent-only checking; replace whole-region semantic projection. Work must track pattern facts plus genuinely substituted facts. Extend query/bound/unused-body reducers and scaling checks. |
+| Demand/failure graph | Finer layout/default/exception/body states, typed reasons/reverse edges and structured expected failure. Validate cycles, narrow negative-cache keys and unrelated-declaration scaling. |
 
-The query/binding group was extended through user conversions, operators,
-complete-class/condition scopes, out-of-class definitions, alias constructors,
-nested source projection and an enclosing-environment cache reducer. Remaining
-output failures consume inherited object/ABI/lifetime facts; lookup fixes cannot
-repair those choices. Whole-body semantic sharing also needs a broader typed
-body graph. These are current PA14 requirements, not PA15 deferrals. This is the
-concrete incomplete handoff boundary; no fixture/reference was changed.
+The transfer/lifetime group was extended through every remaining course failure.
+Further action-list or lookup patches cannot replace whole-body fact projection:
+that needs a typed body graph spanning occurrence, expression and demand owners.
+This is the concrete incomplete boundary. Passing the course suite does not
+waive these `spec.md` requirements or defer them to PA15.
 
 ## Performance evidence
 
-The [performance review](performance.md) preserves **2,660 verified timed
-observations**, including all historical and new frozen campaigns. The context-cache reducer found a correctness
-error after the first campaign; that campaign remains preliminary. A second
-campaign exposed avoidable expression-record growth. Packing flags restores
-**36-byte expressions**, with **112-byte declarations** unchanged. Final A/A+ABBA and direct packing comparisons preserve every outlier. Packing
-saves 3,178/4,228 KiB peak RSS on two large workloads for 704 compiler text bytes.
-Final compiler text grows 65,280 bytes this continuation. Nineteen common outputs
-and five common executables are byte-identical. Fourfold new query/binding input
-yields 4.08×/4.06× wall and 3.53×/3.50× RSS; fixed binding work stays constant.
-No compiler/runtime speedup or native-size gain is claimed.
+[Performance review](performance.md) preserves **3,710 verified observations**,
+including 1,050 new A/A+ABBA observations and all outliers. Earlier campaigns remain frozen; they exposed unused deleted-copy preparation,
+and the final volatile-return boundary fix has its own repeated measurement.
+The negative-fact correction removes 4,000 entities/scopes and 8,000 unused actions from
+the 4,000-specialization B workload. Final fourfold transfer input gives 4.11×
+wall, 3.71× RSS and exactly 4× instructions/actions; fixed binding work stays 23.
+Reference-move runtime is about 3× faster for 12 payload bytes; late-copy runtime
+improves 12.2–13.7% and loses 44 bytes. Compiler text grows 6,784 bytes (0.56%).
+The largest transfer compile retains a 1.5% higher wall median and 3,246 KiB
+higher peak RSS median than entry. No general compiler speedup or isolated
+negative-fact speedup is claimed. Declaration/expression records remain
+**112/36 bytes**; array expansion and deleting-entry sharing retain their bounds.
 
-O0 adds no optional optimizer or native backend. There is no mandated numeric
-compiler threshold. Unsupported inherited diagnostic gates remain diagnostics;
-correctness, coverage, ownership and mandated limits remain requirements.
-
-## Active validation
-
-Transfer/layout/ABI and expression/lifetime increments: PA14 **314/314**, prior **1621/1621**, file audit
-passes with three inherited advisories; thirteen personal native programs and 21 query/binding checks pass.
-Entry binary is frozen in `$RALPH_ARTIFACT_DIR/pa14-transfer/`; current performance
-measurements remain pending. This is an implementation checkpoint, not a handoff.
-
-Second increment completes the course fixtures: hidden-friend emission follows the
-shared call/operator demand owner; static vptr installation uses prepared implicit
-constructor actions; deleting-entry bounds count nontrivial subobjects. O0 source
-casts/conditions and retained variable-template syntax preserve their context.
+O0 adds no optional optimizer or native backend, and has no mandated numeric
+compiler threshold. Historical self-selected gates remain diagnostics; all
+measurements, correctness, coverage and mandated bounds remain requirements.
 
 ## Handoff ledger
 
-Continuation at `e27474c2`: previous 59-case increment is **verified progress**.
+Entry `2c80bc70`: previous query/binding turn is **verified progress** (297/314).
 
-| Current increment | Commit / result |
+| Increment | Commit / validation |
 | --- | --- |
-| Canonical dependent queries and parameter scopes | `7c6c3528`: 286/314 |
-| Shared operator and user-conversion rules | `d8d6f07b`: query/ABI checks and native cases pass |
-| Lexical binding and initialization barriers | `0fa48c8e`: 295/314 |
-| Retained owner overlays and nested source projection | `af95f4d7`: 297/314 |
-| Enclosing-environment cache correction | `47f5f975`: reduced native failure fixed, no lost course passes |
-| Packed expression flags | `2dc67391`: 36-byte record restored; course/native/sanitizer checks pass |
+| Transfers, return slots, recursive layout and local ABI | `c5c4328a`: 306/314; prior 1621/1621; native reducers pass |
+| Lifetime entries, expression provenance, retained syntax | `2818c8e2`: 314/314; prior 1621/1621; thirteen native programs pass |
+| Emission facts in declaration padding | `6fb57328`: through report 1935/1935; 327 output/status checks unchanged |
+| Known-deleted transfer completion | `177f7545`: through report 1935/1935; native/sanitizer checks pass |
+| Volatile return eligibility | `c7507efd`: non-volatile source rule; reduced native failure fixed; through/native/sanitizer checks pass |
 
-Sequential `make test-pa14`: **297/314**; prior through report **1621/1621**;
-through PA14 **1918/1935**, only PA14 fails. Eleven personal native programs,
-12 unused-body rejections and nine query/ABI checks pass. **325** frozen
-release/ASan/UBSan status/output checks and 19 additional rejection checks pass;
-parity does not mean 325 course-correct inputs. File audit passes with the same
-three inherited header advisories. Current logs, exact exit statuses and frozen
-artifacts: `$RALPH_ARTIFACT_DIR/pa14-symbolic/`; previous evidence remains under
-`pa14-dependent/` and `pa14-measurements/`. The final evidence verifier passes. This is a verified incomplete checkpoint;
-all implementation/evidence changes are committed and the tree is clean.
+Final required PA14/prior checks and file audit pass. Thirteen native programs,
+12 binding rejections and nine query/ABI checks pass. Release/ASan/UBSan parity
+passes on **327 inputs**, plus 19 sanitizer rejection checks. Parity includes
+expected rejections; it is not a count of extra passing course tests. File audit
+has the same three inherited header advisories. Exact commands/statuses, frozen
+binaries, layouts and progress ledger: `$RALPH_ARTIFACT_DIR/pa14-transfer/`.
+Final evidence verification passes. All implementation and evidence changes are
+committed at handoff; the tree is clean. This is verified course-contract
+completion with the explicitly listed current-stage architecture work remaining.

@@ -8,18 +8,19 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
  symbolic=filename.startswith('symbolic-')
  packing=filename=='packing-performance.json'
- harness=ROOT/'student.tests/pa14'/('packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ transfer=filename.startswith('transfer-')
+ harness=ROOT/'student.tests/pa14'/('transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(19 if transfer else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
@@ -32,7 +33,7 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    if 'native' in out:
     native=out['native'];assert shared.sha(native['path'])==native['sha256']
     assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
-  if len(work['outputs'])==2: assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
+  if len(work['outputs'])==2 and (not transfer or work['exact_required']): assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
   campaigns=[work] if graph else [work['compiler']]+([work['runtime']] if 'runtime' in work else [])
   for campaign in campaigns:
    rows=campaign['observations'];common=len(work['outputs'])==2
@@ -46,6 +47,10 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    if common:
     pairs=[statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==0) for k in (4,8)]
     assert pairs==campaign['paired_c_over_b' if graph else 'paired_b_over_a']
+  if transfer and name.startswith('transfer-instances-'):
+   t=work['outputs'][-1]['telemetry'][0];n=int(name.rsplit('-',1)[1])
+   assert t['template_class_completions']==n and t['semantic_template_binding_work']==23
+   assert t['semantic_transfer_actions']==(4 if filename=='transfer-preliminary-performance.json' else 2)*n
   if not graph and name.startswith('template-repeat-'):
    assert work['outputs'][0]['telemetry'][0]['template_body_transitions']==1
    assert work['outputs'][0]['telemetry'][0]['template_occurrences']==24
@@ -73,3 +78,20 @@ for row in layout:
 assert [row['expression_bytes'] for row in layout]==[36,40,36]
 assert all(row['entity_bytes']==112 for row in layout)
 print('frozen expression/declaration record sizes verified')
+
+emission=json.loads((ROOT/'student.tests/pa14/emission-layout.json').read_text())
+for row in emission:
+ for kind in ('model','source','binary'):
+  assert shared.sha(row[kind+'_path'])==row[kind+'_sha256']
+ assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']==[112,36]
+print('frozen emission flags preserve declaration/expression sizes')
+
+preliminary=json.loads((ROOT/'student.tests/pa14/transfer-preliminary-performance.json').read_text())
+final=json.loads((ROOT/'student.tests/pa14/transfer-performance.json').read_text())
+for name,work in final['workloads'].items():
+ previous=preliminary['workloads'][name]
+ assert work['source_sha256']==previous['source_sha256']
+ assert [out['sha256'] for out in work['outputs']]==[out['sha256'] for out in previous['outputs']]
+ if 'runtime' in work:
+  assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in previous['outputs']]
+print('known-deleted fact correction preserves all frozen compiler/native outputs')

@@ -1,12 +1,10 @@
 # PA14 checkpoint performance review
 
-Earlier sections preserve the **222/314** and **281/314** checkpoint evidence.
-The final section records the **297/314** symbolic-query/binding implementation
-and its corrected enclosing-environment cache key. This is an O0 semantic
-implementation.
-It adds no target optimization pass or student native backend. New template
-behavior cannot be compared with the incorrect stage-entry output for a speedup.
-Common correct outputs and all three common executables are byte-identical.
+Earlier sections preserve the 222/314, 281/314 and 297/314 checkpoint evidence.
+The final section records the 314/314 object-transfer/lifetime implementation.
+Each campaign states its own equivalent-output checks. An implementation with
+incorrect new behavior is not a speedup baseline. All observations are retained.
+This O0 implementation adds no optional optimizer or student native backend.
 
 ## Frozen protocol and retained evidence
 
@@ -348,3 +346,176 @@ open; these measurements do not declare PA14 complete.
 `python3 student.tests/pa14/verify_performance.py` checks frozen hashes, orders,
 paired arithmetic, counters and record sizes. Full logs and frozen artifacts
 are under `$RALPH_ARTIFACT_DIR/pa14-symbolic/`.
+
+## PA14 transfer/lifetime campaign (314/314)
+
+The [preliminary campaign](../student.tests/pa14/transfer-preliminary-performance.json)
+compares entry `2c80bc70` with `6fb57328`. It retains 350 observations, including
+warmups and every scheduling outlier. Its cost review exposed preparation of
+known-deleted implicit copies. Commit `177f7545` completes that negative fact
+before creating scopes, parameters or transfer actions. A separate final run
+uses the same [frozen harness](../student.tests/pa14/transfer_benchmark.py), inputs
+and entry binary; the preliminary artifacts remain unchanged.
+
+The O0 implementation budgets are explicit: each transfer fact is prepared
+once, each reference action emits at most six instructions plus fixed object
+setup, cumulative array expansion stays at eight, and deleting-entry sharing
+covers at most one nontrivial subobject. Direct late-defaulted construction
+requires a proven representation transfer and otherwise retains a call. These
+are bounded construction policies, not a new optimization pass. The measured
+record sizes remain 112 bytes per declaration and 36 bytes per expression;
+[layout evidence](../student.tests/pa14/emission-layout.json) verifies both sides
+of moving emission-use flags into existing padding.
+
+The 4,000-specialization preliminary case retained 16,000 transfer actions and
+emitted 172,000 instructions versus the entry's 8,000 actions and 148,000
+instructions. Six explicit reference instructions per specialization account
+for the IR increase. Its wall medians were 1.262162/1.374061 seconds, with paired
+ratios 1.2533/1.0681. A B observation at 1.772677 seconds used 1.03 user + .23
+system seconds; it remains in the first pair. The binding-4,000 pairs were
+1.0538/1.0326, also retained. The template-semantics A stall at .562312 seconds
+(.22 user + .05 system) produced a .6887 first-pair ratio; no compiler speedup
+is inferred from it. Late-copy native observations include A .168351 and
+B .142094 seconds; neither was filtered.
+
+
+### Deleted-fact comparison (before the volatile-return boundary check)
+
+[Deleted-fact raw data](../student.tests/pa14/transfer-deleted-performance.json) compares
+`2c80bc70` with `177f7545`, without concurrent builds or tests. Together the two
+new campaigns contain **700 timed process observations**; at this checkpoint the verifier checked
+**3,360** across all PA14 campaigns. Fourteen common compiler outputs and four
+common executables are byte-identical. Two transfer scaling inputs retain the
+same binding operations; their native reducers and the late-copy reducer check
+both implementations' results. The return-slot case is B-only because A moves
+twice and fails its required count.
+
+Wall/RSS values below are medians of measured observations (warmups remain in
+the raw data). RSS is each process's peak in KiB; paired wall ratios include
+all observations. A/A ranges do not bound later scheduling stalls.
+
+| Compiler workload | A / B wall s | A / B peak RSS KiB | A/A wall range s | Paired B/A |
+| --- | --- | --- | --- | --- |
+| calls-4 | 1.790358 / 1.776011 | 305634 / 305624 | 1.755269–1.832074 | 0.9890, 1.0249 |
+| memory-float-4 | 1.500108 / 1.505510 | 266758 / 266714 | 1.490982–1.510406 | 0.9964, 0.9916 |
+| template-semantics-4 | 0.280988 / 0.278503 | 38932 / 38952 | 0.280179–0.284546 | 1.0014, 1.3474 |
+| query-instances-4000 | 0.595981 / 0.600911 | 111340 / 111240 | 0.590655–0.601819 | 1.0013, 1.0283 |
+| binding-instances-4000 | 0.626590 / 0.631126 | 109660 / 109358 | 0.617939–0.624691 | 0.9990, 0.9962 |
+| transfer-instances-1000 | 0.296639 / 0.301672 | 54372 / 55116 | 0.291527–0.297457 | 1.0139, 1.0066 |
+| transfer-instances-4000 | 1.239556 / 1.270937 | 200238 / 205384 | 1.224690–1.240262 | 0.9773, 1.0204 |
+
+| Native workload | A / B runtime s | A / B executable payload bytes | Paired B/A |
+| --- | --- | --- | --- |
+| calls-runtime | 0.477432 / 0.480184 | 206 / 206 | 1.0097, 1.0032 |
+| memory-runtime | 0.281006 / 0.279786 | 434 / 434 | 1.0001, 1.0009 |
+| floating-runtime | 0.331571 / 0.330852 | 230 / 230 | 0.9929, 1.0067 |
+| query-runtime | 0.183189 / 0.183046 | 182 / 182 | 1.0111, 1.0016 |
+| reference-move-runtime | 0.352279 / 0.117849 | 256 / 268 | 0.3345, 0.3337 |
+| late-copy-runtime | 0.115526 / 0.100830 | 266 / 222 | 0.8644, 0.8734 |
+| return-slot-runtime | — / 0.123003 | — / 472 | Correct B only |
+
+All native processes report 256 KiB peak RSS. Runtime-source compilation is
+startup-dominated (roughly 5.6–6.4 ms, 5.0–5.5 MiB RSS); its full compiler
+observations remain in the raw data and are not used for a compiler speedup
+claim. The supplied backend emits sectionless ELF, so the program size metric
+is executable payload after entry, including any support/data there, rather
+than an independently recoverable `.text` section.
+
+The reference move is repeatably about **3× faster** for **12 additional payload
+bytes**. The prefix now uses an eight-byte transfer followed by the explicit
+reference binding action. The late-defaulted copy is **12.7–13.6% faster** in the
+final pairs and removes **44 payload bytes** by consuming the proven storage
+transfer directly. Both preserve checked results and source-reference identity;
+this is executable evidence, not an inference from fewer IR instructions.
+The corrected return path costs .123003 seconds and 472 payload bytes; no
+speedup is claimed against its incorrect predecessor.
+
+Compiler `.text` grows from **1,216,518 to 1,223,302 bytes**: **6,784 bytes
+(0.56%)** this continuation, including 64 bytes for completing known-deleted
+facts early. The cumulative increase from the stage base is 199,360 bytes.
+Final transfer-4,000 compilation has a 2.5% higher wall median and 5,146 KiB
+higher median peak RSS than A. Its paired wall ratios are .9773/1.0204; the
+first includes an A stall at 1.343170 seconds. The selected move's extra six
+instructions per specialization explain the 148,000→172,000 instruction and
+8,231,201→9,184,093 serialized-byte growth. The action budget remains linear;
+there is no new pass or repeated scan.
+
+The negative-fact correction removes **4,000 entities, 4,000 scopes and 8,000
+unused actions** from the preliminary B at 4,000 specializations. Final B has
+92,009 entities, 48,005 scopes and 8,000 transfer actions. Fourfold input gives
+4.21× wall and 3.73× RSS; instructions and selected actions grow exactly 4×,
+while fixed binding work stays 23. These are work-count improvements; the two
+campaigns are not an isolated B/B timing experiment, so no isolated latency or
+RSS benefit is claimed for that correction.
+
+The final run retains a template-semantics B stall that produces a **1.3474**
+second-pair ratio, and a small-workload A/A stall at **.266296 seconds**. These
+observations are neither removed nor converted into a throughput claim. The
+preliminary binding-4,000 slowdown is preserved; the final pairs are
+.9990/.9962. There is no general compiler speedup claim.
+
+The measured executable gains justify the bounded transfer work and small
+compiler/native growth. Necessary O0 reference actions retain their measured
+serialization/memory cost. No mandated numeric performance threshold is added
+or weakened; historical self-imposed gates remain diagnostics under the
+stage-scoped acceptance rule. Correctness, complete coverage, explicit action
+budgets and frozen evidence remain required. Broader shared-body/demand-graph
+work in the plan remains current PA14 scope.
+
+### Final volatile-boundary binary and evidence
+
+The [final campaign](../student.tests/pa14/transfer-performance.json) compares
+entry `2c80bc70` with **`c7507efd`**. The volatile-source eligibility correction
+is required by N3485 [class.copy]/31–32; its separate frozen reducer checks one
+copy and no move. All 19 benchmark compiler outputs and seven executables are
+byte-identical to the preceding B campaigns. The full repeated campaign adds
+350 observations, for **1,050 this continuation and 3,710 verified in total**.
+No earlier campaign or outlier has been discarded.
+
+| Final compiler workload | A / B wall s | A / B peak RSS KiB | A/A wall range s | Paired B/A |
+| --- | --- | --- | --- | --- |
+| calls-4 | 1.768822 / 1.771949 | 305638 / 305646 | 1.760518–1.829441 | 1.0062, 1.0011 |
+| memory-float-4 | 1.494878 / 1.499050 | 261458 / 261364 | 1.489128–1.500390 | 0.9996, 1.0047 |
+| template-semantics-4 | 0.279857 / 0.281473 | 39700 / 39732 | 0.279368–0.281923 | 1.0083, 1.3797 |
+| query-instances-4000 | 0.589273 / 0.591730 | 111590 / 111628 | 0.582145–0.605259 | 1.0063, 1.0351 |
+| binding-instances-4000 | 0.629085 / 0.632280 | 109648 / 109688 | 0.624333–0.634825 | 1.0017, 1.0033 |
+| transfer-instances-1000 | 0.300896 / 0.305805 | 54436 / 54880 | 0.299140–0.303039 | 1.0155, 1.0202 |
+| transfer-instances-4000 | 1.238073 / 1.256695 | 200228 / 203474 | 1.227882–1.242997 | 0.9787, 0.9906 |
+
+| Final native workload | A / B runtime s | A / B payload bytes | Paired B/A |
+| --- | --- | --- | --- |
+| calls-runtime | 0.477830 / 0.479215 | 206 / 206 | 0.9955, 1.0162 |
+| memory-runtime | 0.280447 / 0.280135 | 434 / 434 | 0.9985, 0.9971 |
+| floating-runtime | 0.332336 / 0.331453 | 230 / 230 | 0.9953, 0.9967 |
+| query-runtime | 0.184318 / 0.184529 | 182 / 182 | 1.0446, 0.9943 |
+| reference-move-runtime | 0.349302 / 0.119073 | 256 / 268 | 0.3388, 0.3402 |
+| late-copy-runtime | 0.116140 / 0.100721 | 266 / 222 | 0.8632, 0.8777 |
+| return-slot-runtime | — / 0.123547 | — / 472 | Correct B only |
+
+The final compiler `.text` is unchanged at **1,223,302 bytes** (entry +6,784,
+0.56%). The final reference-move pairs are .3388/.3402 (about 3× faster,
++12 payload bytes); late-copy pairs are .8632/.8777 (12.2–13.7% faster,
+−44 bytes). All native peak RSS values remain 256 KiB. Runtime-source compiles
+remain startup-dominated; their latency/RSS observations are preserved without
+claiming a compiler speedup. The return path is still a correct-B-only result.
+
+At 4,000 transfers, final B has a **1.5% higher wall median** and **3,246 KiB
+higher median peak RSS** than A. Fourfold input gives **4.11× wall, 3.71× RSS**
+and exactly fourfold actions/instructions. The paired wall ratios .9787/.9906
+include slower A block observations (notably 1.338612 seconds); they do not
+establish a general compiler speedup. This retains the bounded six-instruction
+reference action and the earlier measured output-size increase.
+
+Scheduling spread remains visible: A memory-float-1 takes .546021 seconds
+(.28 user + .08 system), A template-semantics-1 takes .368702 (.05 + .01),
+and B template-semantics-4 takes .490137 (.22 + .06), producing its **1.3797**
+second-pair ratio. The smaller template B sample at .098772 seconds is also
+retained. These are disclosures, not filtered observations or new exit gates.
+
+The preceding budget/acceptance analysis therefore still applies to the final
+binary. Transfer runtime benefits repeat, the compiler/IR growth remains
+bounded and disclosed, and the redundant negative-fact preparation is gone.
+The verifier checks all hashes, observation orders, paired results, work counts,
+record sizes and repeated compiler/native outputs. Final correctness/status
+artifacts are under `$RALPH_ARTIFACT_DIR/pa14-transfer/`, including the reduced
+volatile-return proof and the full 1,935/1,935 through report.
