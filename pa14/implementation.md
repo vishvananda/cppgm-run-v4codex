@@ -1,49 +1,56 @@
-# PA14 implementation checkpoint
+# PA14 implementation ownership
 
-The stage remains incomplete: **222/314**, with **138 of the 230 entry failures
-resolved and no entry pass lost**. The six personal programs execute successfully.
-Neither course fixtures nor references have changed.
+Current code `16e7c163`: **281/314**, 33 failures. This continuation fixes **59
+of its 92 entry failures**, with no lost passes. Cumulatively, 197 of the stage's
+230 original failures are resolved. Fixtures, references and comparison rules
+are unchanged; PA15 has not been started.
 
-## Implemented ownership
+## Owners, data flow and bounds
 
-| Owner | Data flow and bounds |
-| --- | --- |
-| `syntax/occurrence.cpp`, `syntax/ast.h` | The streaming parser stores each source region once. Demanded regions receive compact source/context occurrence IDs; a projected view maps child edges without copying source nodes or replaying grammar. Ordinary source reads use an inline O(1) path. Source nodes, occurrence indexes and semantic facts belong to the translation unit. |
-| `semantic/template_declaration.cpp`, `template_call.cpp` | Declaration parameter ordinals normalize callable shapes into interned TypeId packs. Canonical template entity plus interned argument pack indexes specialization declarations. Partial explicit arguments, direct/target deduction and overloaded argument contexts feed the existing conversion/ranking machinery. Work follows visited candidate signatures; trial deductions contain only parameter bindings. |
-| `semantic/template_instantiation.cpp` | Selected calls and addresses enqueue a canonical specialization once. Its retained declarator/body is checked in a compact parameter overlay; defaults are demanded separately. Recursive demand observes the existing specialization. Local classes acquire specialization-specific entity identities. |
-| `semantic/template_class.cpp` | Class specializations have canonical identities before layout. Completion substitutes the retained class through the ordinary PA11–13 class path; member bodies retain independent demand. Defaults, nested identities, base validation and ADL use typed class/argument identities. Constructor conversion, value transfer and associated-class lookup request completion at their owning operation. |
-| `semantic/overload.cpp`, `conversion.cpp`, `syntax/declaration.cpp` | Explicit template arguments filter the ordinary/ADL candidate union; selected conversions own function address demand. A same-scope ordinary function preserves a template overload's parser name category, while local values hide it. |
-| `lowering/*` ABI integration | Typed specialization arguments and declaration ordinals construct ABI identities. Ordinary instantiated bodies feed typed LowIR; template patterns are not emitted. No reference tool participates in implementation. |
-
-## Remaining semantic groups
-
-These groups share a few failures. Representatives identify the next validation
-surface; they are not a narrowed test set. The full 314-case suite remains the gate.
-
-| Owner / remaining group | Required data flow and complexity | Representative validation |
+| Owner | Implemented data flow / complexity | Validation |
 | --- | --- | --- |
-| Template definition registry | Index retained out-of-class function, nested-class and static-data definitions by canonical template/member owner. Attach declaration-owned parameter heads and defaults to the definition; completion/storage/body consumers request the narrow fact. Notify only indexed dependents, never scan all specializations after a declaration. | `300-out-of-class-member-owner-param-rename`, `300-nested-out-of-class-member-definition-forms`, `300-later-redeclaration-default-template-argument`, `300-unevaluated-static-member-does-not-demand-definition`, reference-shell and owning-destructor cases. |
-| Dependent type/expression graph | Preserve symbolic qualified types, `decltype`, trailing returns and array bounds with their parameter environment. Substitute dependent edges, reuse fixed facts, then publish the concrete signature/layout. Declarator parameter names must be available to dependent trailing returns. Work is proportional to newly demanded dependent facts/edges. | `100-partial-explicit-function-template-id-call` (its unresolved part is the trailing return), `100-function-template-parameter-decltype-ref-array`, `300-dependent-sizeof-type-array-member`, current-specialization aliases. |
-| Definition-time lookup/checking | Record nondependent bindings and each base-specifier's dependence before specialization. Check unused bodies, condition/block scopes, template-parameter redeclarations and type/value categories at definition. Use lexical/base/associated indexes with per-owner validity. | Unused-body rejection cases, `100-dependent-direct-base-lookup-provenance`, `100-local-dependent-base-lookup-provenance`, `300-unqualified-call-skips-dependent-base`, typedef redefinition. |
-| Parser declaration context | Qualified declarators and template-ids must use their own name-category context. Preserve explicit class instantiation syntax and qualified nested definition owners without grammar replay. Keep checkpoints bounded by the declaration. | `300-qualified-explicit-class-instantiation`, `100-qualified-value-does-not-shadow-class-template`, `300-dependent-functional-template-id-hides-outer-function`, CV/alias declarator cases. |
-| Existing value/lifetime and LowIR facts | Carry the selected object/value category, empty-object transfer, local ABI root, and storage/lifetime actions through specialized PA12–13 paths exactly once. No template-specific text repair in lowering. | `100-local-constref-converting-iterator` now produces valid LowIR but differs in empty-object copies/root metadata; reference-member moves, rvalue-reference returns, local enum identity, static object/vpointer initialization and layout cases remain. |
+| `syntax/ast.h`, `occurrence.cpp` | One parsed source graph; compact source/context occurrences project edges without grammar replay or source-node copies. Ordinary reads retain the inline O(1) path. All storage belongs to the translation unit. | Previous frozen source-read measurements; current sanitizer parity. Whole-region occurrences remain a limitation below. |
+| `semantic/template_declaration.cpp`, `template_call.cpp` | Parameter ordinals normalize callable shapes; canonical template entities and interned type-argument packs index specialization declarations. Direct/target deduction feeds ordinary candidate/conversion machinery. | Existing declaration, call, address and overloaded-argument personal programs. |
+| `semantic/dependent_type.cpp`, `types.cpp` | `DependentName` owns canonical type qualifier, interned member name and type-argument slice. Substitution follows only these structural edges, completes the concrete owner as required, and resolves the member type. Qualified types remain non-deduced contexts. | Renamed function declarations/definitions, qualified return/member aliases, concrete short/long identity in `dependent-types.cpp`. |
+| `semantic/template_class.cpp` | Class identity precedes completion. Default types are resolved in their declaring head; ordinal substitutions merge defaults across renamed heads. A later forward declaration preserves the defining head/body. Default bindings are allocated only when a default changes heads. | Later defaults, forward upgrades, renamed heads and dependent alignment in `instantiation-demand.cpp`; related course families pass. |
+| `semantic/template_definition.cpp` | A canonical owner-path trie and `(path, member-name)` buckets retain parsed nested-class/function/static-data definitions and parameter slices. A concrete root/definition key has Active/Success/Failure state. A requested bucket gets one application per key and a compact head overlay; no scan of unrelated templates or specializations. Source definition environments feed ordinary declaration, body and initialization facts. | Renamed namespace-qualified constructors/destructors/static initializers, nested definitions, late bodies/destructors and unused invalid bodies in `member-definitions.cpp`; definition application scaling is measured separately. |
+| `semantic/explicit_instantiation.cpp`, `member.cpp`, `operators.cpp` | Explicit class demand visits only that class's declarations and available definitions, recursively including defined nested classes. Evaluated values/addresses request static storage; unevaluated operands do not. Member bodies retain separate demand. | Explicit qualified/global class instantiation, namespace/class-key rejection, zero-initialized static objects and unevaluated invalid initializers. Extern declaration syntax is retained; full extern emission suppression and general explicit function instantiation are **not** implemented. |
+| `semantic/template_checks.cpp` | One source walk checks active template-parameter redeclarations and direct type-parameter value misuse. An owner/name prototype index compares independent nullary exception specifications; dependent/signature-sensitive checks stay with concrete declarations. | Shadowing, using-declaration and exception rejection families. This is not full definition-time body checking. |
+| `syntax/class_parser.cpp`, `declarator.cpp`, `prediction.cpp` | Qualified definition overlays retain head names and class member precedence. Existing class parser scopes survive redeclaration. Base clauses see injected nested-class names; elaborated template-ids resolve to canonical semantic class identities. | Nested bases, renamed heads, local typename declarations, ordinary methods hiding outer class templates, elaborated aliases. |
+| `semantic/converting_constructors.cpp`, `lowering/*` | A variadic constructor with no named parameters records the actual ellipsis argument/conversion. Selected static constant values and template-member linkage provenance feed ordinary typed LowIR. ABI construction consumes canonical dependent type paths. | Native ellipsis-conversion counter, constant through dependent base, static storage address and nine personal executables. |
 
-## Spec alignment still open
+Definition paths, indexes, parameter overlays, occurrence facts and demand queues
+are translation-unit owned. Head merge work follows parameters/default type edges;
+member application work follows definitions in the requested owner/name bucket.
+An overloaded bucket currently applies all matching-name retained definitions;
+finer signature ownership and failure records remain to be developed. Body/storage
+queues deduplicate entities. Available late definitions are attached when the
+already-demanded entity is drained; there is no whole-program restoration retry.
 
-Sharing the parsed graph is implemented; sharing all nondependent **semantic
-facts** is not. Current demanded-region occurrences cover whole function/class
-regions, including metadata for unused member bodies. Finer occurrence demand,
-dependent-only fact checking, typed demand reasons/edges, distinct declaration/
-layout/default/body states and narrow structured failure memoization still need
-the symbolic graph and definition registry. These are current-stage requirements,
-not deferred-stage exemptions. No parser replay or syntax-tree cloning is an
-acceptable shortcut for that work.
+## Remaining groups and concrete checkpoint boundary
 
-The coherent boundary is the completed declaration/completion/call-demand
-increment, extended through overload-context handling. The remaining work changes
-what a generic declaration *means before substitution* and how later definitions
-attach to it. Extending eager concrete lookup or rechecking every projected node
-would make that architecture harder to implement and violate the spec. The next
-increment should establish the symbolic fact/definition owners together, then
-resolve their dependent signature, out-of-class and definition-time validation
-families. PA15 has not been started.
+| Owner | Next data flow / complexity requirement | Representative failures |
+| --- | --- | --- |
+| Symbolic expression/signature facts | Bind declarator parameters in a signature environment; retain dependent `decltype`, trailing-return and bound expressions as typed facts. Substitute dependent edges and share fixed bindings/results. Work follows newly demanded facts, not every projected node. | `100-function-template-parameter-decltype-ref-array`, `100-function-template-result-member-trailing-return`, `100-template-auto-trailing-return`, `300-dependent-decltype-function-pointer-reference-call`. |
+| Definition-time lookup and control facts | Record fixed ordinary bindings and base-specifier dependence before specialization. Check unused bodies with real lexical/condition scopes, value categories and jump-lifetime facts. Lookup follows indexed lexical/base/associated edges. | Missing/ambiguous/type-as-value rejection cases; direct/local dependent-base provenance; switch jump bypass. |
+| Inherited object, lifetime and ABI facts | Preserve implicit move/reference transfers, empty-object actions, local enum identity, constructor ABI entries and virtual-destructor lifetime through specialization. Lower recorded facts once. | Reference-member/defaulted moves, local constref iterator, nested out-of-class defaulted copy, inherited conversion, reentrant layout and rvalue-reference return cases. |
+| Remaining parser/template contexts | Replace spelling-based category guesses with declaration-owned context; complete the remaining inherited-call and template declaration forms within the contract. | Lazy right-shift member lookup, inherited constructor using, variable-template-defaulted fixture. No fixture is excluded from the 314-case exit suite. |
+
+The retained-definition group is complete as a checkpoint and was extended
+through explicit class demand, renamed/default heads, static address storage,
+elaborated identity, alignment and method hiding. The remaining nested-definition
+fixture now attaches its body successfully but differs in defaulted-copy lowering;
+that failure belongs to inherited transfer/triviality facts, not registry lookup.
+
+Further related work requires a new semantic representation: expression-valued
+dependent types need parameter bindings before a concrete callable exists, and
+fixed body names must keep definition-time results before substitution. Adding
+more concrete re-resolution to the registry cannot supply those facts and would
+violate dependent-only checking. That is the architectural boundary for this
+incomplete checkpoint, rather than a test-progress or commit-count threshold.
+
+Parsed-node sharing is implemented; sharing all nondependent **semantic facts**
+is not. Finer occurrence demand, explicit typed demand edges/reverse dependencies,
+separate layout/default/exception/body states and narrow structured expected
+failure memoization remain **current PA14 spec requirements**. They are not
+waived by the performance review or deferred to PA15.

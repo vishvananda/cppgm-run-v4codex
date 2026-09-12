@@ -7,15 +7,17 @@ sys.path.insert(0,str(ROOT/'student.tests/pa10'))
 import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
-                 'call-context-preliminary-performance.json','performance.json','graph-read-performance.json'):
+                 'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
+                 'definition-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
- harness=ROOT/'student.tests/pa14'/('graph_read_benchmark.py' if graph else 'benchmark.py')
+ definitions=filename=='definition-performance.json'
+ harness=ROOT/'student.tests/pa14'/('graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==16
+  assert len(data['workloads'])==(19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
@@ -47,5 +49,7 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    assert work['outputs'][0]['telemetry'][0]['template_occurrences']==24
   if not graph and name.startswith('class-instances-'):
    assert work['outputs'][0]['telemetry'][0]['template_class_completions']==int(name.rsplit('-',1)[1])
+  if definitions and name.startswith('definition-instances-'):
+   assert work['outputs'][0]['telemetry'][0]['template_definition_applications']==3*int(name.rsplit('-',1)[1])
  print(filename,'PASS')
 print(observations,'timed compiler/executable process observations verified')

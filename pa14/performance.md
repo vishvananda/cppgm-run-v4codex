@@ -1,6 +1,8 @@
 # PA14 checkpoint performance review
 
-This is an O0 semantic implementation checkpoint, **222/314** course tests.
+The first review below covers the previous **222/314** checkpoint. The final
+section records current **281/314** code and all 308 new observations. This is an
+O0 semantic implementation.
 It adds no target optimization pass or student native backend. New template
 behavior cannot be compared with the incorrect stage-entry output for a speedup.
 Common correct outputs and all three common executables are byte-identical.
@@ -152,3 +154,78 @@ Correctness, coverage, comparison rules and the spec's complexity/ownership
 requirements remain mandatory. The graph-access regression was addressed;
 remaining semantic architecture work is recorded rather than waived. This
 performance review does not declare the incomplete PA14 stage complete.
+
+## Dependent types and definition owners: current continuation
+
+[Raw evidence](../student.tests/pa14/definition-performance.json), produced by
+[the frozen harness](../student.tests/pa14/definition_benchmark.py), compares E
+`4fafa38c` (same compiler bytes as D) with F `16e7c163`. The protocol and host/O0
+flags above are retained: one warmup, four A/A observations and two ABBA blocks
+for every common workload; one warmup and six F-only observations for new
+semantics. This campaign ran after builds and sanitizer/course validation had
+finished. Every observation, including wall stalls, is preserved. New artifacts
+live under `$RALPH_ARTIFACT_DIR/pa14-dependent/performance-work/`.
+
+There are **308 new timed processes**, hence **1,456 total preserved observations**.
+The verifier checks all six raw datasets. All 16 common compiler outputs and all
+four common executables are byte-identical. The two new definition corpora and
+new executable use F only: E lacks required definitions, so its failure cannot
+be treated as faster equivalent compilation.
+
+| Compiler workload | E / F median wall seconds | E / F median peak RSS KiB | A/A range seconds | Paired F/E wall ratios |
+| --- | --- | --- | --- | --- |
+| calls-1 | .429755 / .433671 | 79670 / 79754 | .424769–.430028 | 1.009, .930 |
+| memory-float-1 | .364848 / .365697 | 69020 / 69094 | .362317–.374394 | 1.151, .986 |
+| calls-4 | 1.747527 / 1.742856 | 305474 / 305520 | 1.730739–1.812201 | .996, .959 |
+| memory-float-4 | 1.486482 / 1.490231 | 266660 / 266680 | 1.467547–1.490287 | .968, 1.009 |
+| references-4 | .053056 / .053113 | 14986 / 15000 | .052644–.053750 | 1.005, .997 |
+| template-semantics-4 | .275220 / .277662 | 38826 / 38932 | .271961–.278068 | 1.017, .620 |
+| repeated-template-4000 | .127354 / .127968 | 26246 / 26082 | .125981–.128834 | 1.003, .997 |
+| class-instances-250 | .038738 / .039633 | 10908 / 11148 | .038541–.039038 | 1.010, 1.019 |
+| class-instances-1000 | .142738 / .144451 | 29084 / 29398 | .140569–.145086 | .789, 1.018 |
+
+Large ordinary medians change by less than 1%; RSS is effectively unchanged.
+Class medians increase 1.2–2.3%, with 240–314 KiB higher median peak RSS. Canonical
+member-definition provenance/index queries are now part of class creation and
+demand. Work remains indexed by the requested owner, with no extra target code.
+Default-head binding maps are constructed only for actual defaults crossing
+heads; ordinary templates incur no such map population. The .620/.789 paired
+results and the 1.151 memory block coexist with near-equal medians: this is noisy
+wall evidence, not a claimed speedup or an excuse to discard observations.
+
+Compiler `.text` is E **1,116,230** / F **1,151,238** bytes: **35,008 bytes (3.14%)**
+added for required semantics. Total stage growth from A is **127,296 bytes
+(12.43%)**. No optional target optimization or inlining policy was added. The
+previous source-read change and its explicit local budget are unchanged. No new
+numeric gate is imposed on correctness work; the spec still requires indexed
+work, dependent-only semantic reuse and bounded fact ownership.
+
+| Newly correct definition workload | F median wall / peak RSS | Class completions / definition applications / occurrences |
+| --- | --- | --- |
+| 1000 distinct classes | .273597 s / 49774 KiB | 1000 / 3000 / 137000 |
+| 4000 distinct classes | 1.168195 s / 179910 KiB | 4000 / 12000 / 548000 |
+
+Each class demands one nested-class, one function and one static-data definition;
+repeated internal demands leave **exactly three applications** per concrete owner.
+Fourfold source growth yields **4.27×** median wall and **3.61×** RSS. Completion,
+definition application, expression and occurrence counters grow exactly fourfold;
+lookup work is 53,006 / 212,006. This supports the registry's indexed scaling on
+these inputs. It does not establish that remaining whole-region semantic checking
+satisfies the dependent-only requirement; that remains explicitly open.
+
+| Executable | E / F median runtime seconds | Paired F/E | E / F payload bytes |
+| --- | --- | --- | --- |
+| calls, 96M iterations | .477354 / .477684 | .997, 1.000 | 206 / 206 |
+| memory, 64M iterations | .279450 / .279393 | 1.007, .999 | 434 / 434 |
+| floating point, 32M iterations | .330688 / .331055 | 1.016, 1.002 | 230 / 230 |
+| common template, 16M iterations | .081224 / .081335 | 1.001, 1.000 | 183 / 183 |
+| out-of-class template member, 32M iterations | unavailable / .163888 | F only | unavailable / 172 |
+
+All runs check live results using volatile bounds. Common runtime differences
+are timing variation between identical binaries. The new member executable
+compiles in **.006275 s / 5120 KiB** median peak RSS; the common small runtime
+sources compile in roughly .0057–.0060 s, dominated by startup. Native payload
+uses the supplied sectionless ELF metric described above. No runtime/code-size
+optimization benefit is claimed. These costs are recorded alongside compiler
+work and code growth, with correctness and remaining PA14 architecture obligations
+preserved. The stage remains incomplete at **281/314**.

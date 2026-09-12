@@ -2,77 +2,65 @@
 
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
-Target: **pa14 full-stage**. Phase: **implement — dependent fact/definition owners**.
-Entry **84/314**, 230 failures; current **264/314**, 50 failures.
-**180 original failures resolved; no entry passes lost; coverage unchanged.**
+Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
+Stage entry **84/314**; continuation entry **222/314**; current **281/314**.
+**197 original failures resolved; 59 this continuation; no lost passes or reduced coverage.**
 
 ## Design/spec alignment and remaining groups
 
-Canonical template/argument identities now feed demanded declarations, bodies,
-class completion and ordinary typed LowIR/ABI. Parsed source is retained once
-with compact contextual occurrences; no grammar replay or syntax-tree copying.
-[Implementation ownership and remaining requirements](implementation.md) records
-the data flow, complexity, representative failures and concrete checkpoint boundary.
+Canonical template/type/argument identities feed ordinary semantics and typed
+LowIR. Qualified dependent types retain structural paths. Indexed retained
+out-of-class definitions own parameter overlays and narrow body/storage demand;
+class defaults retain their declaring head's types. Source is parsed once.
+[Ownership, data flow, complexity and validation](implementation.md) gives details.
 
-| Remaining owner | Next coherent work / validation |
+| Remaining owner | Next coherent group |
 | --- | --- |
-| Dependent fact graph | Symbolic qualified types/values, trailing returns and bounds; definition-owned parameter environments; substitute dependent edges and reuse fixed facts. Validate dependent signatures, current specialization and alias chains. |
-| Template definition registry | Indexed out-of-class member/nested-class/static-data definitions and declaration-owned defaults; narrow body/layout/storage demand, including unevaluated uses and late owning destructors. |
-| Definition-time lookup/checking | Bind nondependent names, preserve base-specifier provenance, check unused bodies/scopes and parameter shadowing. Validate the rejection and dependent-base families. |
-| Parser and inherited object facts | Qualified declarator/explicit-instantiation context; preserve value categories, empty-object transfers, local ABI roots and lifetime/storage actions through specialization. |
+| Symbolic expression/signature facts | Dependent `decltype`, trailing returns and bounds; parameter environments before concrete signatures; share fixed semantic facts. |
+| Definition-time binding/control | Fixed lookup and base provenance; unused-body checks with real block/condition/jump scopes. |
+| Inherited object/lifetime/ABI facts | Move/reference/empty transfers, local enum identities, constructor entries, virtual destruction and reentrant layout. |
+| Parser/template contexts | Declaration-owned categories for remaining inherited calls and template forms. |
 
-Finer occurrence demand, dependent-only semantic checking, typed demand edges,
-distinct fact states and narrow failure memoization remain open **PA14 spec
-requirements**, not later-stage exemptions. The completed call-demand increment
-was extended through overloaded arguments and class-reference conversions.
-Typed qualified member types and indexed definition owners are now implemented.
-Dependent expression facts and finer semantic reuse remain open; related class
-demand, nested-owner and explicit-instantiation work continues in this turn.
+Dependent-only semantic checking, finer occurrence demand, typed dependency edges,
+distinct monotonic fact states and narrow failure memoization remain PA14 spec
+requirements. The completed definition-demand group was extended through explicit
+instantiation, defaults, static addresses, elaborated types and alignment. The
+next group requires symbolic expression/binding facts before concrete signatures;
+more eager concrete lookup would violate the required design. This is the
+concrete incomplete-checkpoint boundary. PA15 has not been started.
 
 ## Performance evidence
 
-[Review](performance.md): **1,148** preserved timed processes across frozen A/B/C/D,
-A/A calibration and ABBA blocks; checked compiler wall/RSS, native runtime and
-size. Common outputs/executables are byte-identical. New templates are measured
-only on working implementations. Repeated demand computes one body; 4× class
-inputs produce 4× completion/occurrence work and 3.64× current median wall time.
-Measured source-read overhead was corrected; text growth and remaining costs/
-wall stalls are disclosed. Historical diagnostic misses add no unsupported
-stage gate. O0, correctness, coverage, mandated limits and ownership remain intact.
+The [performance review](performance.md) preserves **1,456** timed processes
+(1,148 historical + 308 new), frozen binaries and historical diagnostic misses. The new campaign
+compares continuation entry/current code on common correct inputs with A/A and
+ABBA; newly supported definitions are measured only on the working compiler.
+Compiler wall/RSS, native runtime/size and work counters are recorded. O0 has no
+optional optimizer or mandated numeric compiler threshold. Ownership, correctness,
+coverage and mandated limits remain requirements; unsupported inherited diagnostic
+gates are not stage exit gates. Common outputs/native binaries are byte-identical;
+4× new definition inputs yield 4× applications, 4.27× wall and 3.61× RSS.
+Compiler text grows 35,008 bytes this continuation; no optimization gain is claimed.
 
 ## Handoff ledger
 
-Continuation entry `4fafa38c`: clean tree, revalidated **222/314**. Previous
-turn classified **progress** from committed implementation and verified fixture
-improvement. First group: typed dependent qualifier identities -> canonical
-substitution -> concrete member types; then declaration-owned indexed out-of-class
-definitions -> narrow member/storage demand. Work tracks qualifier edges and
-definitions for the requested owner. Validate dependent return/alias signatures,
-renamed member heads, nested definitions, and evaluated/unevaluated static uses.
+Previous turn: **verified progress**, committed `4fafa38c`, revalidated 222/314.
+Earlier increments: `2cec3424` function demand; `73409fcc` canonical class demand;
+`45b15b80`/`c48def7d` calls/base provenance; `7e88952a` graph-read correction;
+`e0eb788f` overloaded arguments; `4fafa38c` preserved evidence.
 
-| Increment | Commit / result |
+| Current increment | Commit / result |
 | --- | --- |
-| Entry markers | `9bb7694a`: clean base above; prior PA13 audit was verified progress |
-| Function demand, canonical declarations and ABI | `2cec3424`: 140/314 |
-| Class registry, defaults, lazy completion and ADL | `73409fcc`: 202/314 |
-| Call deduction/defaults/operators and base provenance | `45b15b80`, `c48def7d`: 219/314 |
-| Static addresses and ordinary source-read fast path | `7e88952a`: 220/314 |
-| Overloaded argument/name contexts and conversion completion | `e0eb788f`: 222/314 |
-| Evidence consolidation | This plan, ownership/performance reviews, raw JSON and verification scripts |
+| Typed dependent names and retained definitions | `885cefb1`: 264/314; 42 continuation failures fixed |
+| Explicit class demand and defining scopes | `66e9e426`: 273/314 |
+| Canonical default owners and member storage | `16e7c163`: 281/314; cumulative 59 continuation failures fixed |
 
-Final checks: `make test-pa14` **222/314**; `make test-report-through-pa13`
-**1621/1621**; through PA14 **1843/1935**, only PA14 fails. File audit **passes**
-with three inherited header advisories. Six personal executables and **320**
-release/ASan/UBSan status/output comparisons pass; rejection parity does not mean
-320 course-correct programs. All **1,148** performance observations verify.
-Fixtures/references and review markers are unchanged. Full logs and frozen
-artifacts: `$RALPH_ARTIFACT_DIR/pa14-measurements/`. PA15 has not been started.
-
-Current increment: **264/314**, through **1885/1935**, prior **1621/1621**,
-file audit passes, eight personal executables pass. **42 continuation-entry
-failures resolved with no regressions.** Qualified dependent types use canonical
-owner/name/argument identities; out-of-class definition heads, bodies and static
-initializers retain their parameter overlays. Indexed applications occur once
-per concrete owner/definition. Definition-time shadowing and independent nullary
-exception checks preserve the required rejection cases. Parser overlays retain
-renamed heads. Current performance/sanitizer evidence remains to be collected.
+Current through report: **1902/1935**, only PA14 fails; prior **1621/1621**.
+Nine personal executables pass. **323** release/ASan/UBSan status/output checks
+pass (rejection parity does not mean 323 course-correct programs). File audit
+passes with three inherited header advisories. Sequential `make test-pa14` is
+**281/314**; `make test-report-through-pa13` is **1621/1621**. All **1,456** timed
+observations verify. Fixtures/references and review
+markers are unchanged. Full current logs/frozen artifacts:
+`$RALPH_ARTIFACT_DIR/pa14-dependent/`; earlier evidence remains under
+`pa14-measurements/`.

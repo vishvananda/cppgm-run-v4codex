@@ -7,19 +7,23 @@ python3 student.tests/pa14/check_functions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all six local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all nine local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
 overloaded argument deduction, ordinary/template overload sets, local hiding
-and converting class references. The compiler implements the LowIR itself.
+and converting class references. New sources cover dependent qualified types,
+renamed out-of-class/nested definitions, late definitions, class defaults,
+explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
+The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and six
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and nine
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The final campaign checked 320 inputs with Clang's address and undefined behavior
-sanitizers, leak detection and halt-on-error enabled.
+The previous campaign checked 320 inputs; the current campaign checks 323 inputs
+with Clang's address and undefined behavior sanitizers, leak detection and
+halt-on-error enabled.
 
 The [performance review](../../pa14/performance.md) explains the raw JSON and
 acceptance. `benchmark.py A B WORK OUT` uses the fixed PA10 compiler/native
@@ -31,7 +35,13 @@ pairings are retained. The verifier checks all artifacts and pairings, including
 historical measurements; it does not require a timing threshold.
 
 Frozen binaries and generated inputs/outputs live under
-`$RALPH_ARTIFACT_DIR/pa14-entry/` and `pa14-measurements/`. Raw JSON contains their
-absolute paths and SHA-256 identities. Those external artifacts are required to
+`$RALPH_ARTIFACT_DIR/pa14-entry/`, `pa14-measurements/` and `pa14-dependent/`.
+Raw JSON contains their absolute paths and SHA-256 identities. Those external artifacts are required to
 rerun hash verification; they are not compiler implementation inputs. No generated
 binaries, objects, test logs or `.my*` files are committed.
+
+`definition_benchmark.py A B WORK OUT` freezes the continuation-entry/current
+comparison on the previous common corpus plus new nested/member/static definition
+scaling and a live out-of-class member-call executable. Its 308 observations live
+in `definition-performance.json`; the same verifier checks them alongside the
+1,148 historical observations. No numerical timing threshold filters results.
