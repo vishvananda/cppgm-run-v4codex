@@ -103,11 +103,11 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     facts[n].type = t; facts[n].scope = s;
     return t;
 }
-TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array)
+TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved)
 {
     if (!n) return base;
     NodeId name = decl_name(n);
-    if (name) {
+    if (name && !name_resolved) {
         auto owner = name_owner(name,s,true);
         if (!(definitions && scopes[s].kind == ScopeKind::Template &&
             (scopes[owner].kind == ScopeKind::Namespace || scopes[s].parent == owner))) s = owner;
@@ -189,7 +189,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             facts[c].type = base;
         }
     }
-    if (nested) base = declarator(nested, base, s,dynamic_array);
+    if (nested) base = declarator(nested, base, s,dynamic_array,name_resolved);
     facts[n].type = base; facts[n].scope = s;
     return base;
 }

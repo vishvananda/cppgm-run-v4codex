@@ -26,13 +26,23 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
             owner = types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;
             qualified = true; continue;
         }
-        auto e = lookup(owner,ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,p == ast[n].last ? terminal(n) : ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
-        r.dependent |= entities[e].template_parameter || template_pattern_entities.get(e) == 2 ||
+        r.dependent |= entities[e].template_parameter || entities[e].template_member || template_pattern_entities.get(e) == 2 ||
             (entities[e].type && dependent_type(entities[e].type));
         if (auto args = child(p,Kind::TemplateArguments)) {
-            for (auto a = ast[args].first; a; a = ast[a].next) r.dependent |= bind_template_expression(a,s);
+            for (auto a = ast[args].first; a; a = ast[a].next) {
+                // The parser retains unresolved template arguments as value
+                // syntax when the owning class's aliases are not yet visible.
+                if (ast[a].kind == Kind::IdExpression) {
+                    auto argument = bind_template_name(ast[a].detail,s);
+                    if (argument.dependent || (argument.entity && (entities[argument.entity].kind == EntityKind::Type || entities[argument.entity].kind == EntityKind::Alias))) {
+                        r.dependent |= argument.dependent; continue;
+                    }
+                }
+                r.dependent |= bind_template_expression(a,s);
+            }
             if (!r.dependent && !entities[e].template_pattern) r.entity = e = class_template_name(p,e,s);
         }
         if (p == ast[n].last) break;
@@ -91,8 +101,12 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
 void Analyzer::bind_template_body(const Body& body)
 {
     auto source = ast.nodes.occurrences[body.node].source;
-    if (template_bound_bodies.get(source)) return;
+    auto state = template_bound_bodies.get(source);
+    if (state == unsigned(FactState::Success)) return;
+    if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed template body binding");
+    if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive template body binding");
     template_bound_bodies.put(source,unsigned(FactState::Active));
+    try {
     auto owner = entities[body.entity].template_info ? templates[entities[body.entity].template_info].environment : body.owner;
     auto fs = make_scope(ScopeKind::Function,owner,entities[body.entity].name,body.entity,false);
     template_pattern_scopes.put(fs,1);
@@ -111,5 +125,6 @@ void Analyzer::bind_template_body(const Body& body)
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);
     template_bound_bodies.put(source,unsigned(FactState::Success));
+    } catch (...) { template_bound_bodies.put(source,unsigned(FactState::Failure)); throw; }
 }
 } }

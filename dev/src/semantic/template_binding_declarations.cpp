@@ -66,7 +66,13 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
     }
     if (node.kind == Kind::UsingDeclaration) {
         auto name = ast[node.first].detail; auto value = bind_template_name(name,s);
-        if (value.dependent) pattern_declaration(EntityKind::Function,s,terminal(name),n,true);
+        if (value.dependent) {
+            // A repeated terminal qualifier is an inherited-constructor using;
+            // it does not introduce an ordinary name into the derived scope.
+            auto previous = ast[name].first;
+            while (ast[previous].next && ast[previous].next != ast[name].last) previous = ast[previous].next;
+            if (ast[previous].text != terminal(name)) pattern_declaration(EntityKind::Function,s,terminal(name),n,true);
+        }
         else if (value.entity) bind(s,terminal(name),value.entity);
         else throw std::runtime_error("unbound pattern using-declaration");
         return;
@@ -109,18 +115,18 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             auto id = special && ast[ast[name].last].op != KW_OPERATOR ? 0 : terminal(name);
             auto e = pattern_declaration(kind,s,id,d,dep);
             entities[e].initializer = init;
+            entities[e].is_static = spec_has(specs,KW_STATIC);
             if (!dep && !function) {
                 bool local_class = false;
                 for (auto c = ast[specs].first; c; c = ast[c].next)
                     local_class |= ast[c].kind == Kind::Class || ast[c].kind == Kind::ClassForward || ast[c].kind == Kind::Enum;
                 if (!local_class && !child(d,Kind::Array)) {
-                    entities[e].type = declarator(d,specifiers(specs,s),s); facts[d].type = entities[e].type;
+                    entities[e].type = declarator(d,specifiers(specs,s),s,0,true); facts[d].type = entities[e].type;
                 }
             }
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init && bind_template_expression(init,s)) template_pattern_entities.put(e,2);
-            entities[e].is_static = spec_has(specs,KW_STATIC);
         };
         if (node.kind == Kind::Function) { auto d = ast[specs].next; bind_decl(d,0,ast[d].next); }
         else if (special) { auto d = child(n,Kind::Declarator); bind_decl(d,0,child(n,Kind::Compound)); }

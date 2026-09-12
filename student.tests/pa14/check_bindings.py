@@ -4,6 +4,9 @@ from pathlib import Path
 import subprocess, tempfile
 root=Path(__file__).resolve().parents[2]
 cases=[
+ 'template<class T> struct S{static int f();}; template<class U> int S<U>::f(){return missing;}',
+ 'template<class T> struct S{struct I;}; template<class U> struct S<U>::I{int f(){return missing;}};',
+
  'template<class T> int f(){return missing;}',
  'template<class T> struct S { struct I { int f(){return missing;} }; };',
  'template<class T> int f(){typedef int value; return value;}',

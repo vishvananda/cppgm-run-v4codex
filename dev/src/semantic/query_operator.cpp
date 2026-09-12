@@ -22,7 +22,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     std::vector<Candidate> viable; std::vector<Conversion> sequences;
     for (auto e : candidates(family)) {
         ++candidate_work;
-        if (entities[e].template_info) e = deduce_function(e,args);
+        if (entities[e].template_info) e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static);
         if (!e) continue;
         bool member = entities[e].member_info && !entities[e].is_static;
         auto f = types[entities[e].type];

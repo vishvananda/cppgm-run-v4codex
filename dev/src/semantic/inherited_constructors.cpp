@@ -6,7 +6,10 @@ bool Analyzer::inherit_using(NodeId name, ScopeId scope)
 {
     if (ast[name].first == ast[name].last) return false;
     ScopeId owner = name_owner(name, scope);
-    if (scopes[owner].kind != ScopeKind::Class || terminal(name) != scopes[owner].name) return false;
+    auto qualifier = ast[name].first;
+    while (ast[qualifier].next && ast[qualifier].next != ast[name].last) qualifier = ast[qualifier].next;
+    if (scopes[owner].kind != ScopeKind::Class ||
+        (terminal(name) != scopes[owner].name && terminal(name) != ast[qualifier].text)) return false;
     EntityId cls = scopes[scope].entity, base = scopes[owner].entity;
     auto info = entities[cls].class_info;
     bool direct = false;

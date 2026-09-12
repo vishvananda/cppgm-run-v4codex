@@ -3,8 +3,8 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; previous checkpoint **281/314**; current **295/314**.
-**211 original failures resolved; fourteen this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; previous checkpoint **281/314**; current **297/314**.
+**213 original failures resolved; sixteen this continuation; no lost passes or reduced coverage.**
 
 ## Design/spec alignment and remaining groups
 
@@ -54,7 +54,14 @@ Validation: nine additional original failures fixed; through **1916/1935**,
 prior **1621/1621**, eleven personal native programs and ten unused-body rejection
 checks pass. Complete-class nested member scopes and renamed heads are retained;
 initialization-prefix jump validation is shared without runtime lifetime demand.
-Extend this owner next to retained out-of-class definition environments.
+Out-of-class definitions now use parameter overlays over pattern owners and
+share the same checks. Alias constructor names and operator member deduction
+were extended together; nested specialization projects original parsed identities.
+Through **1918/1935**, prior **1621/1621**, eleven native programs and twelve
+unused-body rejection checks pass. Freeze this increment for sanitizer and
+compiler/runtime evidence. Inherited transfer/lifetime/ABI output ownership is
+the next distinct group; general fixed expression typing and dependent-only body
+rechecking still require finer semantic facts.
 
 ## Handoff ledger
 

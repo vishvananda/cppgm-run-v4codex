@@ -4,7 +4,7 @@ namespace cppgm { namespace syntax {
 NodeId Ast::projected(NodeId source, std::uint32_t context) const
 {
     if (!source || !context) return source;
-    NodeId result = occurrence_index.get((std::uint64_t(context) << 32) | source);
+    NodeId result = occurrence_index.get((std::uint64_t(context) << 32) | nodes.occurrences[source].source);
     return result; // An edge outside this demanded source region is absent.
 }
 Node Ast::project_view(NodeId id) const
@@ -23,12 +23,11 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
     for (std::size_t i = 0; i < work.size(); ++i) {
         NodeId source = work[i];
         if (!source || projected(source,context)) continue;
-        Node n = view(source);
+        Node n = nodes[source];
         // Contexts refer to original source graph identities; nested demand
         // retains the enclosing specialization through its semantic environment.
-        if (nodes.occurrences[source].context) throw std::logic_error("nested occurrence requires source pattern");
         NodeId id = nodes.occurrence(source,context);
-        occurrence_index.put((std::uint64_t(context) << 32) | source,id);
+        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[source].source,id);
         if (n.detail) work.push_back(n.detail);
         for (NodeId c = n.first; c; c = nodes[c].next) work.push_back(c);
         if (auto packing = class_packing.get(source)) class_packing.put(id,packing);
@@ -46,7 +45,7 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
     for (NodeId source : work) {
         auto id = projected(source,context);
         for (auto a = alignment_owners.get(id); a; a = alignments[a].next)
-            if (nodes.occurrences[alignments[a].operand].context == 0)
+            if (nodes.occurrences[alignments[a].operand].context != context)
                 alignments[a].operand = projected(alignments[a].operand,context);
     }
     return projected(root,context);

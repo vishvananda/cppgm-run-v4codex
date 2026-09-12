@@ -137,6 +137,7 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
         EntityId e = make_entity(EntityKind::Overload, 0, entities[a].name, 0);
         entities[e].first = a; entities[e].second = b;
         entities[e].template_pattern = entities[a].template_pattern || entities[b].template_pattern;
+        entities[e].template_member = entities[a].template_member || entities[b].template_member;
         if (entities[e].template_pattern) template_pattern_entities.put(e,
             template_pattern_entities.get(a) == 2 || template_pattern_entities.get(b) == 2 ? 2 : 1);
         return e;

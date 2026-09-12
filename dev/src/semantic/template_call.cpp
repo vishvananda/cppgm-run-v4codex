@@ -225,18 +225,23 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     if (arguments.size() != t.count && (!definitions || !template_defaults(primary,arguments))) return 0;
     return specialize(primary,arguments);
 }
-EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args)
+EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin)
 {
     struct Values {
-        const std::vector<Expression>& facts; const std::vector<NodeId>& nodes;
-        std::size_t size() const { return nodes.size(); }
-        const Expression& operator[](std::size_t i) const { return facts[nodes[i]]; }
-    } values{expressions,args};
+        const std::vector<Expression>& facts; const std::vector<NodeId>& nodes; unsigned begin;
+        std::size_t size() const { return nodes.size()-begin; }
+        const Expression& operator[](std::size_t i) const { return facts[nodes[begin+i]]; }
+    } values{expressions,args,begin};
     return deduce_function_values(pattern,values);
 }
-EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<Expression>& args)
+EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<Expression>& args, unsigned begin)
 {
-    return deduce_function_values(pattern,args);
+    struct Values {
+        const std::vector<Expression>& facts; unsigned begin;
+        std::size_t size() const { return facts.size()-begin; }
+        const Expression& operator[](std::size_t i) const { return facts[begin+i]; }
+    } values{args,begin};
+    return deduce_function_values(pattern,values);
 }
 EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
 {

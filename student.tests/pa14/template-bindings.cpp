@@ -22,7 +22,14 @@ template<class T> int conditions(T x) {
     switch (int n=0) { case 0: { int k=n+1; return k; } default: return 4; }
 }
 template<class T> int jump() { goto label; { int n=1; } label: return 0; }
+template<class T> struct Outside { struct Inner; static int read(); static const int value=8; };
+template<class U> struct Outside<U>::Inner { int read(){return value;} };
+template<class V> int Outside<V>::read() { return value; }
+int nested_specializations();
 int main() {
+    if (nested_specializations()) return 4;
+    Outside<int>::Inner outside;
+    if (outside.read()!=8 || Outside<long>::read()!=8) return 3;
     Derived<DependentBase<int> > value;
     Derived<DependentBase<int> >::Nested fixed;
     CompleteContext<int>::Nested nested;
@@ -30,4 +37,14 @@ int main() {
     if (value.call()!=0 || fixed.call()!=5 || local_base<DependentBase<int> >()!=0) return 1;
     if (nested.read()!=7 || bits.read()!=6) return 2;
     return conditions(4)!=4 || conditions(0)!=1 || jump<int>()!=0;
+}
+// Nested specialization keeps its enclosing argument environment while using
+// the same parsed region for the inner function-template body.
+template<class Tag> struct Receiver {
+    template<class V> Receiver& operator>>(V& value) { value=sizeof(Tag); return *this; }
+};
+int nested_specializations() {
+    Receiver<char> small; Receiver<long> large;
+    int a=0,b=0; small>>a; large>>b;
+    return a!=1 || b!=8;
 }

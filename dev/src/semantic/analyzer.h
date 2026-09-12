@@ -389,8 +389,8 @@ private:
     bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
-    EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args);
-    EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args);
+    EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin = 0);
+    EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args, unsigned begin = 0);
     template<class Arguments> EntityId deduce_function_values(EntityId pattern, const Arguments& args);
     EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
     void demand_specialization(EntityId e);
@@ -476,7 +476,7 @@ private:
     TypeId enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name = 0, bool emit = true);
     TypeId specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name = 0);
     TypeId type_id(NodeId n, ScopeId s);
-    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0);
+    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false);
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
     Constant evaluate(NodeId n, ScopeId s);

@@ -91,6 +91,25 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         item = ast[item].next;
         if (item) { d = ast[item].first; name = decl_name(d); }
     } while (item);
+    // Definition-time lookup sees this head's parameters over the owning
+    // pattern class. The overlay contains only the declared parameters.
+    ScopeId binding_owner = entities[primary].scope;
+    IdentifierId previous_name = ast[primary_part].text;
+    for (auto p = ast[primary_part].next; p && p != ast[name].last; p = ast[p].next) {
+        if (ast[p].text == previous_name) continue;
+        auto nested = lookup(binding_owner,ast[p].text,Lookup::Qualifier,true);
+        binding_owner = target(nested); previous_name = ast[p].text;
+        if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
+    }
+    auto environment = make_scope(ScopeKind::Template,binding_owner,0,0,false);
+    for (unsigned j = 0; j < def.count; ++j) {
+        auto parameter = template_parameters[def.parameters+j];
+        bind(environment,entities[parameter].name,parameter);
+    }
+    if (ast[n].kind == Kind::Class) {
+        auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
+        bind_template_class(n,environment,nested);
+    } else bind_template_declaration(n,environment);
     return true;
 }
 bool Analyzer::instantiate_member_definition(EntityId e)
