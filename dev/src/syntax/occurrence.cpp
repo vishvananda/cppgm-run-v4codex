@@ -7,7 +7,7 @@ NodeId Ast::projected(NodeId source, std::uint32_t context) const
     NodeId result = occurrence_index.get((std::uint64_t(context) << 32) | source);
     return result; // An edge outside this demanded source region is absent.
 }
-Node Ast::view(NodeId id) const
+Node Ast::project_view(NodeId id) const
 {
     Node result = nodes[id];
     auto context = nodes.occurrences[id].context;

@@ -145,6 +145,14 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     TypeId from = x.type;
     if (!from) return c;
+    // A function-to-pointer/reference conversion selects the declaration even
+    // without an overload set. This owns demand for static member addresses.
+    if (types[from].kind == TypeKind::Function && x.entity && entities[x.entity].kind == EntityKind::Function &&
+        (ref || pointer(to)) && target.child == from &&
+        (!entities[x.entity].member_info || entities[x.entity].is_static)) {
+        c.rank = 0; c.function = x.entity; c.reference = ref;
+        c.preference = target.kind == TypeKind::RRef; return c;
+    }
     if (ref) {
         if (field_fact(x.entity).bit_field) {
             if (target.kind != TypeKind::LRef || types[target.child].cv != 1) return c;

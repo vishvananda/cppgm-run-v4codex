@@ -215,7 +215,11 @@ public:
     Node& operator[](NodeId id) { return nodes[id]; }
     const Node& operator[](NodeId id) const { return nodes[id]; }
     // A view projects structural edges through a context without copying syntax.
-    Node view(NodeId id) const;
+    Node view(NodeId id) const {
+        if (!nodes.occurrences[id].context) return nodes[id];
+        return project_view(id);
+    }
+    Node project_view(NodeId id) const;
     NodeId instantiate(NodeId root, std::uint32_t context);
     NodeId projected(NodeId source, std::uint32_t context) const;
     std::uint32_t new_context() { return ++contexts; }
