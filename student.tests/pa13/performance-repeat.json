@@ -1,0 +1,324 @@
+{
+  "protocol": "same frozen A/B inputs and flags; warmups, A/A four rows, four ABBA blocks",
+  "source_report_sha256": "f0883d2a6bd134579a32544c8361c3930e6f88b32e1ffde9ca8b6dde65403299",
+  "harness_sha256": "0f07d5d63eef29be67bb5a53305e558a7258ddab69e2f603678776ae52b7f437",
+  "cpu": 0,
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa13/compiler-A",
+      "sha256": "46aa205bfdc4f9a11fd28aec8e0cef7714ea110c61e280c4e7b03d9ab91e0ccb",
+      "text_bytes": 980742
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa13/compiler-B",
+      "sha256": "35547adc8e82fb94e30a7d687f6bb94e0d9ca4722639dc41423ee696e2513243",
+      "text_bytes": 1018502
+    }
+  ],
+  "compiler_flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "workloads": {
+    "class-4000": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa13/performance/class-4000.cpp",
+      "source_sha256": "3c0b941736abdf12d05a0c962e5e6145278886647c365c54f7ae19aef65159cd",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.586160925,
+          "rss_kib": 110400,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.600519273,
+          "rss_kib": 112336,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.581843301,
+          "rss_kib": 110448,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.585733917,
+          "rss_kib": 110412,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.576770878,
+          "rss_kib": 110376,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.573122185,
+          "rss_kib": 110372,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.569675868,
+          "rss_kib": 110436,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.582768664,
+          "rss_kib": 112300,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.576544218,
+          "rss_kib": 112192,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.572944732,
+          "rss_kib": 110428,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.576061413,
+          "rss_kib": 110364,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.588291774,
+          "rss_kib": 112220,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.578801817,
+          "rss_kib": 112336,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.573982291,
+          "rss_kib": 110396,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.57357788,
+          "rss_kib": 110428,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.57566636,
+          "rss_kib": 112260,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.760641007,
+          "rss_kib": 112300,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.570940749,
+          "rss_kib": 110308,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.575978268,
+          "rss_kib": 110452,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.579105358,
+          "rss_kib": 112384,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.578296165,
+          "rss_kib": 112288,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.575457998,
+          "rss_kib": 110268,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.0146087704002538,
+        1.014825425277925,
+        1.167571530196561,
+        1.0051807096720367
+      ],
+      "output_hashes": [
+        "c21ddb1fc8a257501b6db251578efc868556e32111ad07510c12fe67c89045a4",
+        "c21ddb1fc8a257501b6db251578efc868556e32111ad07510c12fe67c89045a4"
+      ]
+    },
+    "template-semantics-4": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa13/performance/template-semantics-4.cpp",
+      "source_sha256": "a9ba53cf364202cb89329ba46b17630d3339882f2152cdb2965f930c8a859784",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.266275709,
+          "rss_kib": 37408,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.266688879,
+          "rss_kib": 36888,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.268778626,
+          "rss_kib": 37396,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.399775972,
+          "rss_kib": 37732,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.267278333,
+          "rss_kib": 37396,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.264669809,
+          "rss_kib": 37404,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.265708794,
+          "rss_kib": 37400,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.266162383,
+          "rss_kib": 36796,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.264441844,
+          "rss_kib": 36724,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.266008808,
+          "rss_kib": 37408,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.266695375,
+          "rss_kib": 37420,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.265573179,
+          "rss_kib": 36740,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.265288758,
+          "rss_kib": 36996,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.269421823,
+          "rss_kib": 37408,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.266247616,
+          "rss_kib": 37504,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.264305632,
+          "rss_kib": 37008,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.264424288,
+          "rss_kib": 36948,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.268621314,
+          "rss_kib": 37468,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.267573391,
+          "rss_kib": 37428,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.269630122,
+          "rss_kib": 37128,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.266151454,
+          "rss_kib": 36936,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.267636163,
+          "rss_kib": 37556,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        0.9979060783472049,
+        0.9901975519166241,
+        0.9885224030492853,
+        1.0010687813693253
+      ],
+      "output_hashes": [
+        "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174",
+        "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174"
+      ]
+    }
+  }
+}
