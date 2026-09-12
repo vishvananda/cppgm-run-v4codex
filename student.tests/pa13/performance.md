@@ -1,5 +1,10 @@
 # PA13 O0 performance evidence
 
+This preserves the original stage-completion campaign. The
+[final audit review](../../pa13/final-audit-performance.md) records the current
+implementation and additional measurements; none of these historical samples
+or diagnostic misses is removed.
+
 The final implementation is `6ca0578c` (following `df2be861` and `9a80791c`).
 Stage entry is `823e929c`. The frozen binaries are:
 

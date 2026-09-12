@@ -1,0 +1,484 @@
+{
+  "source_report_sha256": "5a8e8c0e70294c6bf5d00cda8b9750c8a246413819d237eb453aa7812028df3c",
+  "harness_sha256": "38bd833362da16b382dfabc833e0a21e4ba72051a5f67dffa21efeec1588ad98",
+  "cpu": 0,
+  "protocol": "warmups; four A/A observations; four ABBA blocks",
+  "workloads": {
+    "class-4000": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa13-final-audit/performance/class-4000.cpp",
+      "source_sha256": "3c0b941736abdf12d05a0c962e5e6145278886647c365c54f7ae19aef65159cd",
+      "output_hashes": [
+        "c21ddb1fc8a257501b6db251578efc868556e32111ad07510c12fe67c89045a4",
+        "c21ddb1fc8a257501b6db251578efc868556e32111ad07510c12fe67c89045a4"
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.642393622,
+          "rss_kib": 112564,
+          "user_s": 0.49,
+          "system_s": 0.14,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.595358372,
+          "rss_kib": 112184,
+          "user_s": 0.46,
+          "system_s": 0.12,
+          "involuntary": 2,
+          "voluntary": 2,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.603718613,
+          "rss_kib": 112872,
+          "user_s": 0.47,
+          "system_s": 0.12,
+          "involuntary": 2,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.590342305,
+          "rss_kib": 112916,
+          "user_s": 0.46,
+          "system_s": 0.12,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.592441371,
+          "rss_kib": 112712,
+          "user_s": 0.45,
+          "system_s": 0.13,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.585162343,
+          "rss_kib": 112620,
+          "user_s": 0.45,
+          "system_s": 0.12,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.579142667,
+          "rss_kib": 112560,
+          "user_s": 0.45,
+          "system_s": 0.11,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.586118236,
+          "rss_kib": 112164,
+          "user_s": 0.46,
+          "system_s": 0.11,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.665985467,
+          "rss_kib": 112164,
+          "user_s": 0.45,
+          "system_s": 0.13,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.583672074,
+          "rss_kib": 112860,
+          "user_s": 0.46,
+          "system_s": 0.11,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.588357629,
+          "rss_kib": 112560,
+          "user_s": 0.46,
+          "system_s": 0.11,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.587030904,
+          "rss_kib": 112068,
+          "user_s": 0.46,
+          "system_s": 0.12,
+          "involuntary": 3,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.580407498,
+          "rss_kib": 112180,
+          "user_s": 0.46,
+          "system_s": 0.11,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.580057445,
+          "rss_kib": 112688,
+          "user_s": 0.45,
+          "system_s": 0.11,
+          "involuntary": 8,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.575732157,
+          "rss_kib": 112564,
+          "user_s": 0.45,
+          "system_s": 0.12,
+          "involuntary": 6,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.580523866,
+          "rss_kib": 112120,
+          "user_s": 0.45,
+          "system_s": 0.12,
+          "involuntary": 9,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.795448323,
+          "rss_kib": 112152,
+          "user_s": 0.46,
+          "system_s": 0.15,
+          "involuntary": 4,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.613183396,
+          "rss_kib": 112720,
+          "user_s": 0.47,
+          "system_s": 0.13,
+          "involuntary": 8,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.575735291,
+          "rss_kib": 112656,
+          "user_s": 0.45,
+          "system_s": 0.11,
+          "involuntary": 4,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.576833346,
+          "rss_kib": 112228,
+          "user_s": 0.44,
+          "system_s": 0.13,
+          "involuntary": 3,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.584082818,
+          "rss_kib": 112072,
+          "user_s": 0.44,
+          "system_s": 0.13,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.607823386,
+          "rss_kib": 112736,
+          "user_s": 0.47,
+          "system_s": 0.13,
+          "involuntary": 4,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.0767869195768993,
+        0.9991641052724045,
+        1.1573338287382973,
+        0.9808691250885909
+      ]
+    },
+    "virtual-4000": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa13-final-audit/performance/virtual-4000.cpp",
+      "source_sha256": "535130be356bcbc4f4e6c14edc27f5b1c181facc8a193083dbd130cfc932be85",
+      "output_hashes": [
+        "368362af906fbe07817b8dd5b8676aeb7e6827679bf65de46a6420dc52ad0bc8",
+        "368362af906fbe07817b8dd5b8676aeb7e6827679bf65de46a6420dc52ad0bc8"
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 1.575474591,
+          "rss_kib": 314108,
+          "user_s": 1.2,
+          "system_s": 0.36,
+          "involuntary": 9,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.585528326,
+          "rss_kib": 317380,
+          "user_s": 1.19,
+          "system_s": 0.37,
+          "involuntary": 15,
+          "voluntary": 7,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 1.594809698,
+          "rss_kib": 314132,
+          "user_s": 1.22,
+          "system_s": 0.36,
+          "involuntary": 10,
+          "voluntary": 7,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.857132175,
+          "rss_kib": 314004,
+          "user_s": 1.19,
+          "system_s": 0.34,
+          "involuntary": 10,
+          "voluntary": 4,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.640997688,
+          "rss_kib": 314060,
+          "user_s": 1.22,
+          "system_s": 0.32,
+          "involuntary": 10,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.588260708,
+          "rss_kib": 314136,
+          "user_s": 1.19,
+          "system_s": 0.37,
+          "involuntary": 13,
+          "voluntary": 12,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.751293874,
+          "rss_kib": 313924,
+          "user_s": 1.27,
+          "system_s": 0.37,
+          "involuntary": 10,
+          "voluntary": 8,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.645841107,
+          "rss_kib": 317368,
+          "user_s": 1.26,
+          "system_s": 0.36,
+          "involuntary": 9,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.653459734,
+          "rss_kib": 317504,
+          "user_s": 1.26,
+          "system_s": 0.38,
+          "involuntary": 12,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.937604311,
+          "rss_kib": 314076,
+          "user_s": 1.29,
+          "system_s": 0.33,
+          "involuntary": 7,
+          "voluntary": 4,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.612805654,
+          "rss_kib": 314180,
+          "user_s": 1.21,
+          "system_s": 0.35,
+          "involuntary": 9,
+          "voluntary": 4,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.565763748,
+          "rss_kib": 317488,
+          "user_s": 1.21,
+          "system_s": 0.34,
+          "involuntary": 10,
+          "voluntary": 7,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.785963859,
+          "rss_kib": 317380,
+          "user_s": 1.19,
+          "system_s": 0.36,
+          "involuntary": 11,
+          "voluntary": 5,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.584594761,
+          "rss_kib": 314144,
+          "user_s": 1.2,
+          "system_s": 0.36,
+          "involuntary": 11,
+          "voluntary": 7,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.590918502,
+          "rss_kib": 314080,
+          "user_s": 1.22,
+          "system_s": 0.36,
+          "involuntary": 10,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.78137647,
+          "rss_kib": 317428,
+          "user_s": 1.2,
+          "system_s": 0.34,
+          "involuntary": 9,
+          "voluntary": 4,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.577986684,
+          "rss_kib": 317392,
+          "user_s": 1.23,
+          "system_s": 0.33,
+          "involuntary": 11,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.587331515,
+          "rss_kib": 314080,
+          "user_s": 1.21,
+          "system_s": 0.36,
+          "involuntary": 10,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.569220645,
+          "rss_kib": 314108,
+          "user_s": 1.2,
+          "system_s": 0.35,
+          "involuntary": 12,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.603955341,
+          "rss_kib": 317380,
+          "user_s": 1.23,
+          "system_s": 0.36,
+          "involuntary": 13,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.579393274,
+          "rss_kib": 317444,
+          "user_s": 1.21,
+          "system_s": 0.35,
+          "involuntary": 11,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 1.864672264,
+          "rss_kib": 314108,
+          "user_s": 1.19,
+          "system_s": 0.36,
+          "involuntary": 14,
+          "voluntary": 4,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        0.8943865283178044,
+        1.0482664577373555,
+        1.0569851761287665,
+        0.9270378253953871
+      ]
+    }
+  }
+}

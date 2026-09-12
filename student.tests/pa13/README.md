@@ -36,3 +36,23 @@ binary, flag and output identities, records warmups and every A/A/ABBA sample,
 and measures new virtual semantics absolutely rather than comparing them to an
 incorrect stage-entry result. See [the report](performance.md) and [implementation
 trace](../../pa13/implementation.md).
+
+The independent final campaign uses the frozen audit-entry/final binaries:
+
+```sh
+python3 student.tests/pa13/audit_benchmark.py \
+  "$RALPH_ARTIFACT_DIR/pa13-final-audit/compiler-A" \
+  "$RALPH_ARTIFACT_DIR/pa13-final-audit/compiler-B" \
+  "$RALPH_ARTIFACT_DIR/pa13-final-audit/performance" \
+  student.tests/pa13/final-audit-performance.json
+python3 student.tests/pa13/audit_noise.py
+python3 student.tests/pa13/audit_scaling.py
+python3 student.tests/pa13/audit_verify.py
+python3 student.tests/pa13/verify_performance.py
+```
+
+Run the campaigns sequentially without concurrent builds/tests. Their fixed
+inputs reuse the original frozen corpus; the new executable behavior families
+are measured only on the corrected compiler. The
+[final review](../../pa13/final-audit-performance.md) retains all measurements,
+paired results and stage-scoped acceptance.

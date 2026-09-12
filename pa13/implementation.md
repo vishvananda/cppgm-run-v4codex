@@ -1,5 +1,10 @@
 # PA13 implementation and completion evidence
 
+This is the stage-completion checkpoint record at `cf1b9621`. The subsequent
+[independent final audit](audit.md) supersedes its completion conclusion and
+records the repaired paths, reference correction and final evidence. The
+historical measurements and validation below are retained as checkpoint facts.
+
 The stage is O0 C++11 source-to-LowIR polymorphism over PA12's single-inheritance
 object model. PA24 owns native encoding; the supplied backend is used only by
 independent execution and performance harnesses. No reference output, required
