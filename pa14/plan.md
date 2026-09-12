@@ -12,6 +12,7 @@ Entry: **84/314**, **230 failures**; prior through PA13 **1621/1621**.
 | Specialization demand and ABI | Canonical declaration + interned TypeId argument pack -> monotonic declaration/body/emission facts -> ordinary typed LowIR. Add body demand to the existing function specialization registry; retain one parsed pattern with contextual semantic occurrences, no token replay or syntax cloning. O(demanded nodes + candidates + emitted IR). Validate direct/recursive calls, references, local identities, ABI and repeated demand. |
 | Template declarations and lookup | Declaration-owned parameter environments and defaults -> compatible redeclarations, explicit/deduced calls, recorded nondependent binding. Indexed lexical/associated edges; no global retry. Validate declaration order, shadowing, scopes and unused-body diagnostics. |
 | Class specialization | Canonical arguments -> lazy member declarations/layout -> separately demanded bodies/static storage. Reuse PA11–13 class facts, conversions, lifetimes and virtuals. Validate dependent names/bases, nested/out-of-class definitions, completeness and unevaluated uses. |
+| Call-context continuation | Same-scope parser callable category preserves template participation; overloaded argument candidates -> bounded per-parameter deductions -> concrete callable -> recorded conversion. O(visited candidate signatures), no lookup replay or copied lexical environment. Validate mixed ordinary/template names, overloaded arguments and local hiding. |
 
 ## Performance acceptance
 

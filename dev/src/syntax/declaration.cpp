@@ -60,6 +60,14 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     Category category = alias ? Category::Type : Category::Value;
     bool is_function = facts.first_operator == OP_LPAREN;
     if (template_declaration && !alias && is_function) category = Category::TemplateValue;
+    if (!alias && is_function) {
+        NodeId name = declarator_name(decl);
+        ScopeId binding_owner = qualified_owner(name);
+        // An ordinary function adds to a same-scope overload set. Its template
+        // members still make '<' a template argument delimiter at a later use.
+        if (names.local(binding_owner,final_name(name)).category == Category::TemplateValue)
+            category = Category::TemplateValue;
+    }
     bind_declarator(decl, category, owner);
     if (alias && declarator_name(decl)) names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
     if (is_function && (in.is("{") || in.is("try"))) {

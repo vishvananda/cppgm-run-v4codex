@@ -6,6 +6,7 @@ Conversion Analyzer::converting_constructor(NodeId n, TypeId target)
 {
     Conversion result; result.target = target;
     EntityId cls = types[target].entity;
+    complete_class(cls);
     struct Candidate { EntityId entity; Conversion argument; };
     std::vector<Candidate> viable;
     for (EntityId e : candidates(class_facts[entities[cls].class_info].constructor)) {

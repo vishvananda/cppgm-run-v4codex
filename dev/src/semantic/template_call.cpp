@@ -166,6 +166,32 @@ EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& 
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
         TypeId p = types.parameters[f.offset+i], a = expressions[args[i]].type;
         if (!dependent_type(p)) continue;
+        if (expressions[args[i]].form == ExpressionForm::Overload) {
+            auto kind = types[p].kind;
+            auto adjusted = kind == TypeKind::LRef || kind == TypeKind::RRef ? types[p].child : p;
+            Index selected;
+            unsigned matches = 0;
+            for (auto candidate : candidates(expressions[args[i]].entity)) {
+                // [temp.deduct.call]: an overload set containing a template or
+                // multiple matching functions is a non-deduced context. Other
+                // arguments can establish the eventual conversion target.
+                if (entities[candidate].template_info) { matches = 2; break; }
+                ++candidate_work;
+                TypeId actual = entities[candidate].type;
+                if (kind != TypeKind::LRef && kind != TypeKind::RRef) actual = decay(actual);
+                Index trial;
+                if (!deduce_type(adjusted,actual,trial)) continue;
+                if (++matches > 1) break;
+                selected = std::move(trial);
+            }
+            if (matches == 1) for (unsigned j = 0; j < t.count; ++j) {
+                auto parameter = template_parameters[t.offset+j];
+                auto value = selected.get(parameter), previous = bindings.get(parameter);
+                if (value && previous && value != previous) return 0;
+                if (value) bindings.put(parameter,value);
+            }
+            continue;
+        }
         if (!a) return 0;
         auto param = types[p];
         if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
