@@ -8,19 +8,20 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
  symbolic=filename.startswith('symbolic-')
  packing=filename=='packing-performance.json'
  transfer=filename.startswith('transfer-')
- harness=ROOT/'student.tests/pa14'/('transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ body=filename.startswith('body-')
+ harness=ROOT/'student.tests/pa14'/('body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(19 if transfer else 4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
@@ -51,6 +52,21 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    t=work['outputs'][-1]['telemetry'][0];n=int(name.rsplit('-',1)[1])
    assert t['template_class_completions']==n and t['semantic_template_binding_work']==23
    assert t['semantic_transfer_actions']==(4 if filename=='transfer-preliminary-performance.json' else 2)*n
+  if body and name.startswith('fixed-instances-'):
+   a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
+   assert b['semantic_template_fixed_expressions']==20 and b['semantic_template_fixed_uses']==20*n
+   assert a['semantic_expression_work']==23*n and b['semantic_expression_work']==3*n+20
+   assert a['semantic_conversion_work']==18*n and b['semantic_conversion_work']==6*n+12
+   assert a['semantic_conversions']==20*n and b['semantic_conversions']==6*n+14
+   assert a['template_occurrences']==b['template_occurrences']==76*n
+  if body:
+   assert all(out['telemetry'][0]['semantic_expression_bytes']==36 and
+              out['telemetry'][0]['semantic_entity_bytes']==112 for out in work['outputs'])
+  if body and name.startswith('fixed-unused-'):
+   a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
+   assert a['semantic_expression_work']==0 and b['semantic_template_fixed_expressions']==20*n
+   assert b['semantic_template_fixed_uses']==0 and b['semantic_conversion_work']==12*n
+   assert b['semantic_conversions']==14*n and b['template_occurrences']==0
   if not graph and name.startswith('template-repeat-'):
    assert work['outputs'][0]['telemetry'][0]['template_body_transitions']==1
    assert work['outputs'][0]['telemetry'][0]['template_occurrences']==24
@@ -95,3 +111,15 @@ for name,work in final['workloads'].items():
  if 'runtime' in work:
   assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in previous['outputs']]
 print('known-deleted fact correction preserves all frozen compiler/native outputs')
+
+first=json.loads((ROOT/'student.tests/pa14/body-preliminary-performance.json').read_text())
+for filename in ('body-repeated-performance.json','body-performance.json'):
+ last=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ if filename=='body-repeated-performance.json': assert first['binaries']==last['binaries']
+ for name,work in last['workloads'].items():
+  previous=first['workloads'][name]
+  assert work['source_sha256']==previous['source_sha256']
+  assert [out['sha256'] for out in work['outputs']]==[out['sha256'] for out in previous['outputs']]
+  if 'runtime' in work:
+   assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in previous['outputs']]
+print('all fixed-body campaigns preserve all compiler/native outputs')

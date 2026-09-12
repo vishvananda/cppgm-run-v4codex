@@ -519,3 +519,111 @@ The verifier checks all hashes, observation orders, paired results, work counts,
 record sizes and repeated compiler/native outputs. Final correctness/status
 artifacts are under `$RALPH_ARTIFACT_DIR/pa14-transfer/`, including the reduced
 volatile-return proof and the full 1,935/1,935 through report.
+
+## Fixed scalar body facts: final evidence (`d19a1ff7`)
+
+A is the frozen continuation-entry `c05778ed` compiler (implementation `c7507efd`);
+B is the direct-result fixed-fact implementation `d19a1ff7`. The initial
+`b22e683f` binary has two preserved campaigns, including the repeat that motivated
+removing its extra result temporary. `body_benchmark.py` is frozen at `d0030349`.
+All three campaigns retain one warmup per binary, four A/A observations and two
+ABBA blocks per compiler/native command. They add **1,008 observations**, bringing
+verified history to **4,718**. No samples or previous gates/measurements were erased.
+
+All **19 compiler outputs and five native outputs are byte-identical** between
+A/B and across the three campaigns. Sources, binaries, harness/backend hashes,
+flags, CPU affinity, wall/user/system time, peak RSS and context-switch counts
+are retained in `student.tests/pa14/body*-performance.json` and
+`$RALPH_ARTIFACT_DIR/pa14-body-facts/`. No builds or tests ran during timing.
+
+| Final compiler workload | A / B wall s | A / B RSS KiB | A/A range s | Paired B/A |
+| --- | --- | --- | --- | --- |
+| calls-1 | 0.664348 / 0.448893 | 79880 / 79882 | 0.432105–0.796763 | 0.6785, 0.6071 |
+| calls-4 | 1.758530 / 1.956218 | 305638 / 305592 | 1.757587–2.395504 | 1.0179, 1.0934 |
+| memory-float-1 | 0.369888 / 0.370933 | 69210 / 69258 | 0.365098–0.487425 | 1.0094, 0.7956 |
+| memory-float-4 | 1.506896 / 1.509456 | 261354 / 261408 | 1.490878–1.536355 | 1.0060, 0.9910 |
+| template-semantics-1 | 0.072642 / 0.071997 | 13518 / 13224 | 0.072381–0.091587 | 0.9190, 1.0203 |
+| template-semantics-4 | 0.280224 / 0.279449 | 39706 / 39692 | 0.276377–0.289152 | 0.6719, 0.9876 |
+| query-instances-1000 | 0.146083 / 0.146953 | 31652 / 31778 | 0.143862–0.152566 | 1.0088, 1.0053 |
+| query-instances-4000 | 0.594335 / 0.597662 | 111608 / 111692 | 0.594300–0.598742 | 1.0379, 1.0103 |
+| binding-instances-1000 | 0.151066 / 0.150158 | 30904 / 30776 | 0.148782–0.153345 | 1.1843, 0.9957 |
+| binding-instances-4000 | 0.623317 / 0.644892 | 109706 / 109982 | 0.620264–0.737100 | 1.0427, 1.0127 |
+| fixed-instances-1000 | 0.160099 / 0.151760 | 31612 / 31080 | 0.157769–0.161860 | 0.9495, 0.9238 |
+| fixed-unused-1000 | 0.086422 / 0.096511 | 18270 / 19754 | 0.086322–0.091997 | 1.1282, 1.0672 |
+| fixed-instances-4000 | 0.670440 / 0.649078 | 111224 / 108870 | 0.657382–0.683033 | 0.9638, 1.0169 |
+| fixed-unused-4000 | 0.337981 / 0.390816 | 58784 / 65040 | 0.336771–0.338336 | 1.1843, 1.1212 |
+
+| Final native workload | A / B runtime s | Payload bytes (both) | Paired B/A |
+| --- | --- | --- | --- |
+| calls-runtime | 0.480416 / 0.480843 | 206 | 1.0002, 0.9996 |
+| memory-runtime | 0.280152 / 0.280083 | 434 | 0.9959, 1.0022 |
+| floating-runtime | 0.330596 / 0.331071 | 230 | 0.9995, 1.0018 |
+| query-runtime | 0.183145 / 0.183776 | 182 | 1.0012, 0.9995 |
+| fixed-runtime | 0.228685 / 0.228770 | 268 | 0.9900, 1.0034 |
+
+All native peak RSS observations are 256 KiB. The text metric remains actual
+compiler `.text` and the supplied sectionless ELF payload after entry (including
+support/data), not an independently recoverable native `.text` section. Compiler
+latency for runtime sources remains about 6 ms with roughly 5 MiB peak RSS;
+full startup-dominated observations remain in the JSON, without speedup claims.
+
+The fixed-instance corpus establishes **20 source-owned expression facts**.
+At N=4,000, expression checking falls from 92,000 to 12,020 operations, conversion
+selection from 72,000 to 24,012, and conversion records from 80,000 to 24,014.
+Only operand consumption and concrete declaration identity remain contextual.
+Fourfold input gives 4.28× B wall and 3.50× B RSS; occurrence nodes remain exactly
+76N, so complete dependent-only projection is still an architectural limit.
+
+For 1,000 demanded specializations, final pairs improve **5.1–7.6%**, with 532 KiB
+less median RSS. At 4,000, the wall median improves 3.2% and RSS falls 2,354 KiB,
+but paired results are mixed (.9638/1.0169). The earlier two 4,000-instance
+campaigns had pairs .9337/.9620 and .9473/.9493; the latter repeats the same binary.
+These support the work/memory reduction and a benefit on the smaller affected
+workload, not a general compiler speedup or a uniform large-workload timing gain.
+
+Unused definitions now receive required operand validation. At 4,000 separate
+patterns, B establishes 80,000 expression facts and 56,000 conversion records,
+where A established none. This costs **52.8 ms and 6,256 KiB** in final medians.
+The twelve retained rejection reducers are accepted by A and rejected by B;
+they establish the missing definition-time behavior (PA14 README; N3485
+[temp.res]/8, [temp.dep.expr]/1–4 and ordinary expression constraints). The valid
+unused corpus still produces the same empty output, making its required checking
+cost visible separately from repeated-specialization savings.
+
+Compiler text is **1,227,910 bytes**, entry +4,608 (0.38%); declaration/expression
+records remain **112/36 bytes**. The initial B was 1,228,038 bytes. Removing the
+extra wrapper temporary reduces text/work but has no isolated B/B speedup claim.
+
+Timing spread and common-workload costs remain disclosed. Final calls-4 has an
+11.2% higher B wall median and pairs 1.0179/1.0934, with essentially unchanged RSS.
+A itself ranges 1.7576–2.3955 s in calibration; in the second ABBA block A runs
+1.7331 and 2.3887 s, while B runs 2.0898 and 2.4169 s. User time also varies
+(A 1.38–1.94 s, B 1.69–1.99 s in that block), so a stable cause cannot be assigned
+to dispatch alone. The previous calls-4 pairs were 1.0012/1.1908 and 1.0196/1.0572.
+The remaining ordinary-path cost merits review as the pending body graph removes
+per-occurrence work; these observations are not discarded or called a speedup.
+
+Other retained final spread includes A calls-1 at .7968/.7628/.7666 s, A
+memory-float-1 at .4874/.5515 s, A template-semantics-4 at .5555 s (.23 user +
+.04 system), and B binding-instances-1000 at .2087 s (.11 + .03). The first
+campaign also retains its A query-1000 .4000 s observation, B binding-1000 .2298 s,
+and the 4,000-instance A/A range .8822–1.0667 s. The raw files retain every other
+observation; no outlier filter is an acceptance rule.
+
+**O0 work/growth budget:** each eligible definition node is checked once; each
+operand edge is consumed once per demanded occurrence; the reuse index has one
+entry per eligible source node; conversions occupy one source-owned bounded-arity
+slice. Eligibility adds no layout, overload, class materialization or global retry
+work. Ordinary dispatch is constant work per expression. The generated-code
+growth budget for this frontend reuse is **zero**, verified by exact IR/native
+equality. No optional optimizer or student native backend was added.
+
+The fixed support-code increase and source-proportional checking are justified
+by required semantic fact sharing, twelve closed legality holes, lower repeated
+conversion work/memory and the measured affected-workload benefit. The ordinary
+path refinement removes identified redundant construction. There is no mandated
+numeric compiler threshold at PA14; historical self-imposed gates remain
+diagnostics under stage-scoped acceptance. This does not excuse an identified
+avoidable regression, waive correctness/coverage or complete the remaining typed
+body/demand architecture. All current required checks, native tests and sanitizer
+checks pass; `verify_performance.py` validates the full retained history.

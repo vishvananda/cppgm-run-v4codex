@@ -1,7 +1,9 @@
 # PA14 implementation ownership
 
 Current contract result: **314/314**, zero course failures; prior assignments **1621/1621**.
-This continuation resolves **all 17 entry failures**, with no lost passes.
+The transfer continuation resolved **all 17 of its entry failures**, with no lost passes.
+The following body-fact continuation preserves 314/314 and shares fixed scalar
+expression/conversion facts, including definition-time operand legality.
 Cumulatively, **all 230 stage-entry failures** are resolved. Fixtures,
 references and comparison rules are unchanged. PA15 has not been started.
 
@@ -38,10 +40,10 @@ than stopping at a test-progress threshold.
 
 | Owner | Current PA14 work still required by `spec.md` |
 | --- | --- |
-| Typed template body facts | General expression/bound queries, shared fixed body types/conversions, and dependent-only checking instead of whole-region semantic projection. |
+| Typed template body facts | Calls/class operations, declaration/return/default conversions, general expression/bound queries, and dependent-only checking instead of whole-region semantic projection. Fixed scalar expression/conversion facts are shared. |
 | Demand and failure facts | Finer declaration/layout/default/exception/body states, typed reasons and reverse dependency edges, narrow structured expected failures. |
 
-Parsed-node sharing and fixed name/query sharing are implemented. Sharing all
+Parsed-node sharing and fixed name/query/scalar-expression sharing are implemented. Sharing all
 nondependent semantic body facts is **not** complete: concrete bodies still
 project entire regions and recompute many type/conversion facts. General fixed
 expression legality, finer occurrence demand and structured expected rejection
@@ -112,7 +114,8 @@ and implicit-move eligibility, as required by N3485 [class.copy]/31–32
 independently of the function's return type. The frozen reduced program returns
 1 before the fix and 0 afterward (one volatile-lvalue copy, no move); it is
 also exercised by `object-transfers.cpp`. No reference output was changed.
-# Shared scalar body facts
+
+## Shared scalar body facts
 
 `semantic/template_expression.cpp` extends definition-time binding with fixed
 scalar expression checking. The existing source graph owns the completed
@@ -130,7 +133,8 @@ unevaluated. No selected conversion has a class materialization or lifetime
 record in this slice. Missing/mismatched concrete declaration facts are invariant
 failures. Unresolved pattern aliases and nested enum identities are deferred.
 
-The eligible slice includes scalar literals/names, unary/binary/assignment and
+The eligible leaves are scalar literals and fundamental-type local, parameter
+or namespace names, including references to fundamental types. The slice adds unary/binary/assignment and
 conditional operators, parentheses, scalar casts, fixed sizeof/alignment and
 subscript expressions. Ordinary semantics validates it once, including unused
 bodies (README definition-time checks; N3485 [temp.res], [temp.dep.expr]/1–4,
@@ -144,3 +148,11 @@ Calls/class operations, declaration/return/default conversions and dependent
 subgraphs still need richer typed edges. Full region occurrence projection and
 contextual expression records also remain; finer demand/failure states are a
 separate incomplete owner. Measured performance is recorded in performance.md.
+
+Fixed-fact dispatch lives in `resolve_expression`, which constructs its existing
+result directly. The ordinary `expression` wrapper retains its original result
+construction path; the initial extra temporary was removed after common-workload
+measurements. The wrapper's release text returns from 762 to 623 bytes (its entry
+size); the resolver's hot text also decreases by 22 bytes. This is an implementation
+work reduction, not a standalone runtime-profit claim. Both preceding binary
+campaigns remain frozen alongside the final measurements.

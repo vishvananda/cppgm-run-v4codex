@@ -3,77 +3,73 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture work remains.
-Stage entry **84/314**; continuation entry **297/314**; current **314/314**.
-All **230 original failures**, including all **17 continuation-entry failures**,
-are resolved. Coverage and reference/comparison rules are unchanged.
+Stage entry **84/314**; this continuation entry/current **314/314**.
+All **230 original failures** are resolved. Coverage and reference/comparison
+rules are unchanged. PA15 has not started.
 
-## Design/spec alignment and remaining work
+## Design/spec alignment and remaining groups
 
 Canonical declarations/types/arguments feed ordinary semantics and typed LowIR.
-The query/binding work now reaches transfer, layout, lifetime and ABI consumers:
-reference binding actions, empty payload handling, late-defaulted copy facts,
-return destinations, base entries, local type identities and reentrant constants.
-Static vptr facts and bounded deleting entries consume prepared constructor and
-destruction actions. Calls/operators share emission-use facts; O0 expressions
-retain source conversion/condition provenance. See [ownership](implementation.md).
+The previous transfer/lifetime group completed the course contract. This turn
+adds definition-owned fixed scalar expression types, categories, constants and
+conversion slices. Concrete occurrences map local declaration identities and
+record evaluation/reference/mutation effects without repeating fixed operand
+validation. See [ownership and bounds](implementation.md).
 
-| Remaining current-PA14 owner | Data flow, bounds and validation |
+| Remaining current-PA14 owner | Data flow, complexity and validation |
 | --- | --- |
-| Typed template body facts | Shared fixed types/conversions and dependent-only checking; replace whole-region semantic projection. Work must track pattern facts plus genuinely substituted facts. Extend query/bound/unused-body reducers and scaling checks. |
-| Demand/failure graph | Finer layout/default/exception/body states, typed reasons/reverse edges and structured expected failure. Validate cycles, narrow negative-cache keys and unrelated-declaration scaling. |
+| Typed template body graph | Extend shared facts to calls/class operations and declaration/return/default conversions. Substitute dependent edges only; replace full-region projection. Validate materialization, access, unused-body legality and source/context provenance with native/scaling checks. |
+| Demand/failure graph | Separate layout/default/exception/body states, typed reasons/reverse edges and structured expected failure. Work follows demanded facts/edges; validate cycles, narrow negative-cache keys and unrelated-declaration scaling. |
 
-The transfer/lifetime group was extended through every remaining course failure.
-Further action-list or lookup patches cannot replace whole-body fact projection:
-that needs a typed body graph spanning occurrence, expression and demand owners.
-This is the concrete incomplete boundary. Passing the course suite does not
-waive these `spec.md` requirements or defer them to PA15.
+The fixed scalar group includes arithmetic, assignments, conditions, casts,
+sizeof/alignment and subscript expressions, with twelve new unused-body
+rejections. Calls require selected-callee/argument facts plus occurrence-owned
+materializations and emission demand; simply copying scalar records would lose
+those effects. That is the next concrete owner boundary. Entire source regions
+still project (76 occurrence nodes per specialization in the new corpus).
+Course success does not waive these architecture requirements or defer them.
 
 ## Performance evidence
 
-[Performance review](performance.md) preserves **3,710 verified observations**,
-including 1,050 new A/A+ABBA observations and all outliers. Earlier campaigns remain frozen; they exposed unused deleted-copy preparation,
-and the final volatile-return boundary fix has its own repeated measurement.
-The negative-fact correction removes 4,000 entities/scopes and 8,000 unused actions from
-the 4,000-specialization B workload. Final fourfold transfer input gives 4.11×
-wall, 3.71× RSS and exactly 4× instructions/actions; fixed binding work stays 23.
-Reference-move runtime is about 3× faster for 12 payload bytes; late-copy runtime
-improves 12.2–13.7% and loses 44 bytes. Compiler text grows 6,784 bytes (0.56%).
-The largest transfer compile retains a 1.5% higher wall median and 3,246 KiB
-higher peak RSS median than entry. No general compiler speedup or isolated
-negative-fact speedup is claimed. Declaration/expression records remain
-**112/36 bytes**; array expansion and deleting-entry sharing retain their bounds.
+The new frozen A/A+ABBA campaign measures fixed-body specialization reuse and
+unused-definition validation alongside prior calls, memory, floating-point and
+query workloads. Compiler and executable timing are separate; all observations
+and outliers are retained. Current compiler text grows 4,608 bytes (0.38%);
+expression/declaration records remain 36/112 bytes. The fixed corpus computes
+20 shared expression facts, versus repeated selection before this change.
+The three new campaigns retain 1,008 observations; **4,718 total** are verified.
+At 4,000 demanded specializations, conversions fall 80,000→24,014 and peak RSS
+falls 2,354 KiB. Final 1,000-instance pairs improve 5.1–7.6%; larger timing is
+mixed. Required unused-definition checking adds 52.8 ms/6,256 KiB at 4,000
+patterns. Calls-4 retains a higher wall median and timing spread; no general
+compiler speedup is claimed. All 19 compiler/five native outputs are identical.
+See [performance.md](performance.md) for paired results, costs and bounds.
 
-O0 adds no optional optimizer or native backend, and has no mandated numeric
-compiler threshold. Historical self-selected gates remain diagnostics; all
-measurements, correctness, coverage and mandated bounds remain requirements.
+Earlier **3,710 observations** remain preserved. The transfer campaign showed
+about 3× reference-move runtime benefit for 12 payload bytes and 12.2–13.7%
+late-copy benefit with 44 fewer bytes; its compiler/memory costs remain recorded.
+O0 adds no optional optimizer/native backend and has no mandated numeric compiler
+threshold. Historical self-imposed gates remain diagnostics; preserve mandated
+bounds, correctness, coverage and all evidence.
 
 ## Handoff ledger
 
-Continuation entry `c05778ed`: previous turn is **verified progress**, with
-314/314 course tests and the architecture boundary retained. The next owner is
-definition-owned scalar expression facts: binding establishes fixed operands,
-ordinary semantics publishes types/conversion slices once, and specialization
-projects only declaration identities and operand consumption. Work is O(pattern
-expressions + demanded operand occurrences), with no repeated fixed conversion
-selection. Validate unused-body legality, shadowed/nested locals, volatile and
-reference effects, course/native/sanitizer parity, and frozen A/A+ABBA scaling.
-
-Entry `2c80bc70`: previous query/binding turn is **verified progress** (297/314).
+Entry `c05778ed`: the previous transfer/query turn is **verified progress**,
+314/314 with 1935/1935 through-stage validation. Its implementation/evidence
+commits and measurements are retained in implementation.md and performance.md.
 
 | Increment | Commit / validation |
 | --- | --- |
-| Transfers, return slots, recursive layout and local ABI | `c5c4328a`: 306/314; prior 1621/1621; native reducers pass |
-| Lifetime entries, expression provenance, retained syntax | `2818c8e2`: 314/314; prior 1621/1621; thirteen native programs pass |
-| Emission facts in declaration padding | `6fb57328`: through report 1935/1935; 327 output/status checks unchanged |
-| Known-deleted transfer completion | `177f7545`: through report 1935/1935; native/sanitizer checks pass |
-| Volatile return eligibility | `c7507efd`: non-volatile source rule; reduced native failure fixed; through/native/sanitizer checks pass |
+| Fixed scalar types/conversions and definition-time legality | `b22e683f`: 314/314, through 1935/1935; fourteen native programs and twelve new rejections pass |
+| Frozen body performance protocol | `d0030349`, `ced1c0d6`, `973b9928`: exact A/B output and native equality; both preliminary campaigns retained |
+| Direct expression-result construction | `d19a1ff7`: through 1935/1935, native/sanitizer checks pass; final frozen campaign |
 
-Final required PA14/prior checks and file audit pass. Thirteen native programs,
-12 binding rejections and nine query/ABI checks pass. Release/ASan/UBSan parity
-passes on **327 inputs**, plus 19 sanitizer rejection checks. Parity includes
-expected rejections; it is not a count of extra passing course tests. File audit
-has the same three inherited header advisories. Exact commands/statuses, frozen
-binaries, layouts and progress ledger: `$RALPH_ARTIFACT_DIR/pa14-transfer/`.
-Final evidence verification passes. All implementation and evidence changes are
-committed at handoff; the tree is clean. This is verified course-contract
-completion with the explicitly listed current-stage architecture work remaining.
+Release/ASan/UBSan status/output parity passes on **328 inputs**, plus 31 sanitizer
+rejections. Parity includes expected rejections, not extra course passes. The
+file audit passes with the same three inherited header advisories. Current
+frozen binaries, commands/logs and evidence live in
+`$RALPH_ARTIFACT_DIR/pa14-body-facts/`; the preceding transfer directory remains
+unchanged. Required stage/prior checks, through report, native/sanitizer checks, file audit
+and final evidence verification pass. The scalar group is complete; the
+call/materialization and dependent-body graph boundary above remains current-stage
+work. All intended changes are committed at handoff, with a clean tree.
