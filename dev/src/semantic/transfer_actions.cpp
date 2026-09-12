@@ -8,6 +8,10 @@ void Analyzer::prepare_transfer(EntityId e)
     if (!members[m].synthetic || members[m].transfer == TransferKind::None) return;
     if (members[m].transfer_state == 2) return;
     if (members[m].transfer_state == 1) { members[m].deleted = true; return; }
+    // Class-level rules can delete an implicit copy before any subobject
+    // analysis (for example after declaring a move). Its completed negative
+    // fact needs neither a function scope nor transfer actions.
+    if (members[m].deleted) { members[m].transfer_state = 2; return; }
     members[m].transfer_state = 1;
     bool assignment = members[m].transfer == TransferKind::CopyAssignment || members[m].transfer == TransferKind::MoveAssignment;
     bool moving = members[m].transfer == TransferKind::MoveConstructor || members[m].transfer == TransferKind::MoveAssignment;
