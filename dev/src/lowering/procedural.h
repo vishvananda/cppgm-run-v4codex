@@ -53,7 +53,7 @@ class Procedural {
     Linkage& linkage;
     abi_mangle::Graph& abi;
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
-    std::vector<unsigned char> internal_scopes;
+    std::vector<unsigned char> internal_scopes, local_abi_scopes, local_abi_types;
     std::vector<SymbolId> symbols, strings, base_symbols;
     std::vector<SlotId> objects;
     std::vector<lowir_model::ValueId> object_addresses;
@@ -80,7 +80,7 @@ class Procedural {
     TypeId returned = 0;
     Value return_destination;
     IRType result_type() const;
-    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false);
+    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false, bool base = false);
     Value list_conversion(const semantic::Conversion& conversion, Value destination = Value());
     Value class_temporary(EntityId object, TypeId type);
     Value class_address(EntityId object, TypeId type);
@@ -139,6 +139,8 @@ class Procedural {
     void template_function_abi(EntityId e, abi_mangle::Function& target);
     void local_member_abi(EntityId e, abi_mangle::Function& target);
     bool internal_scope(semantic::ScopeId s);
+    bool local_abi_scope(semantic::ScopeId s);
+    bool local_abi_type(TypeId t);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e, bool base = false, bool deleting = false);
     bool separate_base(EntityId e) const;

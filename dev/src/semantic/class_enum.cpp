@@ -170,6 +170,13 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].key = KW_ENUM; entities[e].scoped = scoped;
+        if (calls) for (ScopeId context = owner; context; context = scopes[context].parent) {
+            if (scopes[context].kind != ScopeKind::Function) continue;
+            auto function = scopes[context].entity;
+            auto k = key(function,id), ordinal = std::uint64_t(local_class_names.get(k));
+            local_enum_functions.put(e,function); local_enum_ordinals.put(e,ordinal);
+            local_class_names.put(k,ordinal+1); break;
+        }
         entities[e].type = types.named(e); entities[e].underlying = underlying;
         entities[e].scope = make_scope(ScopeKind::Enum, owner, id, e, scoped);
         if (name || ast[n].text) bind(owner, id, e);

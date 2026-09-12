@@ -1,6 +1,6 @@
 # PA14 implementation ownership
 
-Current contract result: **297/314**, 17 failures; prior assignments **1621/1621**.
+Current contract result: **306/314**, 8 failures; prior assignments **1621/1621**.
 This continuation resolves **16 of its 33 entry failures**, with no lost passes.
 Cumulatively, **213 of the 230 stage-entry failures** are resolved. Fixtures,
 references and comparison rules are unchanged. PA15 has not been started.
@@ -52,3 +52,25 @@ expression legality, finer occurrence demand and structured expected rejection
 need a broader typed body graph. This is the concrete incomplete handoff
 boundary, not a commit or progress threshold. These requirements are not waived
 by the stage-scoped performance review or deferred to PA15.
+
+## Transfer, layout and local ABI continuation
+
+- `prepare_transfer` owns reference binding actions and legal storage prefixes.
+  Late defaulting remains nontrivial; only unrooted specializations with proven
+  representation actions may lower directly. Ordinary external definitions
+  retain their calls. Preparation is linear in subobjects, with the inherited
+  bounded array lowering unchanged.
+- Constructor actions retain the selected conversion constructor and base-entry
+  use. Lowering consumes those facts, omits empty payload work, and still
+  evaluates source expressions. The class return owner admits an indirect
+  return destination for an effect-free empty destructor without changing ABI
+  triviality; effectful destruction keeps the existing lifetime path.
+- `sizeof` publishes its constant index after recursive layout dependencies
+  finish, avoiding an index into a nested enumerator's constant.
+- Local enums retain function/ordinal identities. ABI locality is memoized over
+  canonical type arguments and scope edges, so member entries for local-type
+  specializations carry internal rooted metadata without repeated graph walks.
+- Validation: 306/314 current, 1621/1621 prior, file audit, twelve native personal
+  programs. `object-transfers.cpp` checks reference identity, late-defaulted
+  parameter ABI, empty-source effects, return moves, base copies and reentrant
+  layout. No new performance benefit is claimed before measurement.

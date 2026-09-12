@@ -70,7 +70,7 @@ void Procedural::transfer_body(EntityId e)
         } else if (action.function) {
             Value dst = project(this_slot, action), src = project(other, action);
             transfer_action(action, src, dst, assignment);
-        } else if (!assignment && action.kind != semantic::TransferAction::Unit) {
+        } else if (!assignment && action.kind != semantic::TransferAction::Unit && action.kind != semantic::TransferAction::Reference) {
             Value dst = project(this_slot, action), src = project(other, action);
             transfer_action(action, src, dst, assignment);
         } else {

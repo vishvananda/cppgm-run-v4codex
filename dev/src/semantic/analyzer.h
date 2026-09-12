@@ -42,8 +42,8 @@ public:
     TypeId call_type(EntityId e) const;
     bool member_demanded(EntityId e) const;
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
-    EntityId local_function(EntityId e) const { return class_facts[entities[e].class_info].local_function; }
-    unsigned local_ordinal(EntityId e) const { return class_facts[entities[e].class_info].local_ordinal; }
+    EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
+    unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
     bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
     std::uint64_t base_offset(TypeId t) { size(t); return class_facts[entities[types[t].entity].class_info].base_offset; }
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
@@ -193,7 +193,7 @@ private:
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;
     std::uint64_t parameter_queries = 0, parameter_query_work = 0;
-    Index field_index, local_class_names;
+    Index field_index, local_class_names, local_enum_functions, local_enum_ordinals;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);

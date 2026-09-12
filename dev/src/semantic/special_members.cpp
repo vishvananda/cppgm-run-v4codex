@@ -53,7 +53,12 @@ void Analyzer::classify_transfer(EntityId e, NodeId special, ScopeId context)
     members[m].synthetic = true;
     members[m].defaulted_late = context != entities[e].owner;
     if (!members[m].defaulted_late) entities[e].inline_function = true;
-    else { members[m].retained_root = true; demand_member(e); }
+    else {
+        // Ordinary out-of-line definitions retain an external entry. A member
+        // specialization follows its actual uses and may lower directly.
+        members[m].retained_root = !entities[e].template_member;
+        demand_member(e);
+    }
 }
 Conversion Analyzer::transfer_conversion(TypeId from, ValueCategory category, TypeId to)
 {

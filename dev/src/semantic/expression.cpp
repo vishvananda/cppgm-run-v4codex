@@ -121,7 +121,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         --unevaluated_depth;
         if (!t) throw std::runtime_error("sizeof unresolved overload");
         r.type = types.fundamental(FT_UNSIGNED_LONG_INT);
-        facts[n].value = constants.size(); constants.push_back(Constant(r.type, size(t, ast[n].op == KW_ALIGNOF)));
+        // Layout can instantiate a class whose bounds/enumerators publish
+        // other constants. Reserve this query's identity only after that
+        // dependency completes, so it cannot point at a nested query's value.
+        Constant value(r.type, size(t, ast[n].op == KW_ALIGNOF));
+        facts[n].value = constants.size(); constants.push_back(value);
         return r;
     }
     case Kind::Subscript: {
@@ -237,6 +241,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         if (!cv_cast && op != KW_REINTERPET_CAST && !(types[x.type].cv & ~types[target.child].cv)) {
             if (derived_from(x.type, target.child)) {
                 compatible = true; c.derived = true;
+                c.adjustment = base_steps(x.type, types[target.child].entity);
                 if (!cstyle) check_base_access(x.type, target.child, s);
             } else if (derived_from(target.child, x.type)) {
                 compatible = true; c.derived = true;

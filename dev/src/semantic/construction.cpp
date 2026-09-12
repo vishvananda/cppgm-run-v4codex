@@ -210,8 +210,16 @@ void Analyzer::constructor_actions(EntityId e)
         else if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef || (types[type].cv & 1))
             throw std::runtime_error("uninitialized reference or const member");
         base_initialization = saved_base;
+        if (initial) {
+            ctor = facts[initial].entity;
+            if (class_initialization(initial, type).source) {
+                auto c = conversions[class_initialization(initial, type).conversion];
+                if (c.kind == Conversion::Kind::Construction) ctor = conversion_objects[c.materialization].constructor;
+            }
+            if (!constructor_member(ctor)) ctor = 0;
+        }
         if (!field) {
-            EntityId selected = initial ? facts[initial].entity : ctor;
+            EntityId selected = ctor;
             if (selected && entities[selected].member_info) {
                 members[entities[selected].member_info].base_entry = true;
                 members[entities[selected].member_info].polymorphic_base_entry |= polymorphic(cls);

@@ -10,9 +10,15 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
         zero_object(sem.entities[cls].type,object);
     }
     if (sem.direct_transfer(ctor)) {
-        auto fact = sem.expression_fact(init);
-        Value source = converted(sem.call_arguments[fact.arguments], sem.conversion_fact(fact.conversions));
         TypeId target = sem.entities[sem.scopes[sem.entities[ctor].owner].entity].type;
+        auto fact = sem.expression_fact(init);
+        if (sem.empty_class(target)) {
+            const auto c = sem.conversion_fact(fact.conversions);
+            if (c.kind == semantic::Conversion::Kind::Standard) discard(sem.call_arguments[fact.arguments], false);
+            else converted(sem.call_arguments[fact.arguments], c);
+            return;
+        }
+        Value source = converted(sem.call_arguments[fact.arguments], sem.conversion_fact(fact.conversions));
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
         emit(copy, {source.operand, object.operand}); return;
     }
@@ -49,6 +55,9 @@ void Procedural::constructor_body(EntityId e)
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
         if (action.field && !vptr_written) { vpointer_store(cls); vptr_written = true; }
+        if (!action.field && action.initializer && !sem.initializer_work(sem.initializer_plan(action.initializer, action.type))) continue;
+        if (!action.field && sem.empty_class(action.type) && sem.object_fact(action.initializer).value_initialize &&
+            !sem.constructor_needed(action.constructor)) continue;
         if (!action.initializer && !sem.constructor_needed(action.constructor)) { constructor_cleanup(action); continue; }
         begin_full_expression(action.initializer);
         auto t = sem.types[action.type];
@@ -87,7 +96,9 @@ void Procedural::constructor_body(EntityId e)
         }
         if (scalar) store(value, at);
         else if (action.initializer) {
-            if (!action.field && sem.constructor_member(sem.facts[action.initializer].entity)) {
+            auto value = sem.class_initialization(action.initializer, action.type);
+            if (value.source) construct_value(value.source, sem.conversion_fact(value.conversion), address(at), false, !action.field);
+            else if (!action.field && sem.constructor_member(sem.facts[action.initializer].entity)) {
                 at.address = false; construct(sem.facts[action.initializer].entity, action.initializer, at, true);
             } else initialize(action.initializer, action.type, at);
         }

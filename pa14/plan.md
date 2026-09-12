@@ -3,8 +3,19 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; continuation entry **281/314**; current **297/314**.
-**213 original failures resolved; 16 this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; continuation entry **297/314**; current **306/314**.
+**222 original failures resolved; nine this continuation; no lost passes or reduced coverage.**
+
+Active continuation at `2c80bc70`: previous turn is **verified progress**.
+Entry rerun confirms 297/314. The next coherent owner is object transfer and
+lifetime facts: selected constructors and completed layouts feed explicit
+subobject actions, return-destination selection and ordinary LowIR lowering.
+Keep C++ triviality distinct from direct storage lowering and preserve empty
+object identity without copying nonexistent payload. Preparation stays linear
+in class members/return sites; array lowering retains its bounded expansion.
+Validate affected course cases, native reference/lifetime reducers, all earlier
+PAs and file audit. Freeze entry/current binaries and retain A/A+ABBA latency,
+RSS, executable runtime/text observations before claiming performance benefits.
 
 ## Design/spec alignment and remaining groups
 
@@ -47,6 +58,13 @@ No compiler/runtime speedup or native-size gain is claimed.
 O0 adds no optional optimizer or native backend. There is no mandated numeric
 compiler threshold. Unsupported inherited diagnostic gates remain diagnostics;
 correctness, coverage, ownership and mandated limits remain requirements.
+
+## Active validation
+
+Transfer/layout/ABI increment: PA14 **306/314**, prior **1621/1621**, file audit
+passes with three inherited advisories; twelve personal native programs pass.
+Entry binary is frozen in `$RALPH_ARTIFACT_DIR/pa14-transfer/`; current performance
+measurements remain pending. This is an implementation checkpoint, not a handoff.
 
 ## Handoff ledger
 

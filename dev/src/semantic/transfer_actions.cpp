@@ -28,6 +28,7 @@ void Analyzer::prepare_transfer(EntityId e)
     Type f = types[entities[e].type];
     TypeId source = value_type(types.parameters[f.offset]);
     bool deleted = members[m].deleted, trivial = !members[m].defaulted_late && !polymorphic(cls), no_throw = true;
+    bool representation_copy = !polymorphic(cls);
     bool is_union = entities[cls].key == KW_UNION;
     std::vector<TransferAction> actions;
     std::uint64_t unit_offset = 0, unit_bytes = 0;
@@ -48,12 +49,13 @@ void Analyzer::prepare_transfer(EntityId e)
                 action.function = selected;
                 bool simple = trivial_transfer(selected);
                 trivial &= simple;
+                representation_copy &= simple && copy_storage_type(element);
                 no_throw &= function_nonthrowing(selected);
                 if (is_union && !simple) deleted = true;
             }
             action.kind = TransferAction::Subobject;
         } else if (assignment && (types[element].cv & 1)) deleted = true;
-        if (types[element].cv & 2) trivial = false;
+        if (types[element].cv & 2) trivial = representation_copy = false;
         const FieldFacts layout = field_fact(field);
         if (layout.bit_field) {
             if (!layout.declared_width) { prior_unit = false; return; }
@@ -91,9 +93,9 @@ void Analyzer::prepare_transfer(EntityId e)
         for (const auto& action : actions) {
             TypeId element = action.type;
             while (types[element].kind == TypeKind::Array) element = types[element].child;
-            if (action.kind == TransferAction::Empty || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 2)) break;
+            if (action.kind == TransferAction::Empty || action.kind == TransferAction::Reference || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 2)) break;
             if (action.function && (!trivial_transfer(action.function) || !copy_storage_type(element))) break;
-            storage_subobject |= action.function || types[action.type].kind == TypeKind::Array;
+            storage_subobject |= action.function || types[action.type].kind == TypeKind::Array || types[element].kind == TypeKind::Pointer;
             bool ref = types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef;
             std::uint64_t end = (action.field ? entities[action.field].member_offset : 0) + (ref ? 8 : size(action.type));
             bytes = std::max(bytes, end); ++prefix;
@@ -111,6 +113,11 @@ void Analyzer::prepare_transfer(EntityId e)
     }
     members[m].deleted = deleted;
     members[m].transfer_trivial = trivial && !deleted;
+    // Defaulting after the first declaration remains user-provided (and thus
+    // nontrivial). Its prepared member-wise actions can nevertheless prove a
+    // direct representation transfer; this fact must not alter the value ABI.
+    if (members[m].defaulted_late && !members[m].retained_root && !assignment)
+        members[m].transfer_direct = representation_copy && !deleted;
     members[m].transfer_noexcept = no_throw && !deleted;
     members[m].transfer_begin = transfers.size(); members[m].transfer_count = actions.size();
     transfers.insert(transfers.end(), actions.begin(), actions.end());

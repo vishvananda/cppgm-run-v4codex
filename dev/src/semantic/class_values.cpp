@@ -114,7 +114,11 @@ void Analyzer::finish_class_returns(EntityId e)
     TypeId type = types[entities[e].type].child; prepare_value_boundary(type);
     EntityId local = value_returns[function_returns[f].first].local;
     for (auto r = function_returns[f].first; r; r = value_returns[r].next) if (value_returns[r].local != local) local = 0;
-    if (!indirect_value(type) || !trivial_destructor(type)) local = 0;
+    // An empty user-provided destructor is nontrivial for the value ABI, but
+    // does not need a local cleanup when the object occupies the return slot.
+    // Effectful destruction keeps the ordinary local lifetime path for now.
+    if (!indirect_value(type) || (types[type].cv & 2) ||
+        (!trivial_destructor(type) && (polymorphic(types[type].entity) || variant_destruction_effects(type)))) local = 0;
     function_returns[f].object = local;
     for (auto r = function_returns[f].first; r; r = value_returns[r].next) {
         auto c = conversions[value_returns[r].conversion];

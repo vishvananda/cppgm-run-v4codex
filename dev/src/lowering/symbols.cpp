@@ -38,7 +38,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::Named: {
         auto e = sem.entities[t.entity];
         if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
-        else if (e.class_info && sem.local_function(t.entity))
+        else if (sem.local_function(t.entity))
             result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
         else result = abi_entity_name(t.entity);
         break;
@@ -77,6 +77,7 @@ bool Procedural::separate_base(EntityId id) const
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
     if (sem.member_fact(id).virtual_member && sem.destructor_member(id)) return true;
     if (sem.member_fact(id).polymorphic_base_entry && !sem.synthetic_member(id)) return true;
+    if (e.template_member && !sem.synthetic_member(id)) return true;
     return sem.member_fact(id).complete_entry || (e.body && !e.inline_function);
 }
 SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
@@ -102,8 +103,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
         metadata.object_root |= sem.member_fact(id).retained_root;
-        for (auto s = e.owner; s && s != sem.global; s = sem.scopes[s].parent)
-            if (sem.scopes[s].kind == semantic::ScopeKind::Function) { metadata.object_root = true; metadata.binding = SBM_INTERNAL; }
+        if (local_abi_scope(e.owner)) { metadata.object_root = true; metadata.binding = SBM_INTERNAL; }
     }
     if (e.c_linkage) metadata.linkage = LLM_C;
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;

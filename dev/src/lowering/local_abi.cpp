@@ -23,6 +23,34 @@ bool Procedural::internal_scope(semantic::ScopeId s)
     internal_scopes[s] = local ? 2 : 1;
     return local;
 }
+bool Procedural::local_abi_type(TypeId t)
+{
+    if (!t) return false;
+    if (local_abi_types.size() <= t) local_abi_types.resize(sem.types.records.size());
+    if (local_abi_types[t]) return local_abi_types[t] == 2;
+    auto type = sem.types[t];
+    bool local = local_abi_type(type.child);
+    if (type.kind == TypeKind::Named) {
+        auto e = sem.entities[type.entity];
+        local |= local_abi_scope(e.owner);
+        auto args = sem.specialization_arguments(type.entity);
+        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_type(sem.template_argument(args.offset+j));
+    } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(sem.entities[type.entity].type);
+    if (type.kind == TypeKind::Function)
+        for (unsigned j = 0; j < type.count; ++j) local |= local_abi_type(sem.types.parameters[type.offset+j]);
+    local_abi_types[t] = local ? 2 : 1; return local;
+}
+bool Procedural::local_abi_scope(semantic::ScopeId s)
+{
+    if (!s || s == sem.global) return false;
+    if (local_abi_scopes.size() <= s) local_abi_scopes.resize(sem.scopes.size());
+    if (local_abi_scopes[s]) return local_abi_scopes[s] == 2;
+    auto scope = sem.scopes[s];
+    bool local = scope.kind == semantic::ScopeKind::Function || local_abi_scope(scope.parent);
+    if (scope.kind == semantic::ScopeKind::Class && sem.entities[scope.entity].specialization)
+        local |= local_abi_type(sem.entities[scope.entity].type);
+    local_abi_scopes[s] = local ? 2 : 1; return local;
+}
 abi_mangle::Id Procedural::abi_function_context(EntityId e)
 {
     auto entity = sem.entities[e]; auto t = sem.types[entity.type];

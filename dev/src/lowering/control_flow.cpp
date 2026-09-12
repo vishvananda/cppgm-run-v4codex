@@ -26,6 +26,12 @@ void Procedural::discard(NodeId n, bool access)
     if (!n) return;
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
     if (sem.expression_fact(n).form == semantic::ExpressionForm::OperatorCall) { expression(n); return; }
+    // A discarded address still evaluates its source, but a plain name or
+    // dot projection has no value access of its own.
+    if (!access && sem.expression_fact(n).form == semantic::ExpressionForm::Ordinary) {
+        if (ast[n].kind == Kind::IdExpression) return;
+        if (ast[n].kind == Kind::Member && ast[n].op != OP_ARROW) { discard(ast[n].first, false); return; }
+    }
     if (ast[n].kind == Kind::Conditional) {
         // Prvalue arms undergo their normal conversions even if discarded.
         // A discarded volatile glvalue is read only for the forms in

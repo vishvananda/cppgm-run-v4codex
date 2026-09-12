@@ -18,7 +18,7 @@ Value Procedural::class_address(EntityId object, TypeId t)
     if (!sem.static_temporary(object).object) object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
     return pointer;
 }
-void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal)
+void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal, bool base)
 {
     if (!terminal) guard_expression(n);
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
@@ -45,7 +45,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         call(n,destination); return;
     }
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
-    if (!construction || sem.trivial_transfer(materialized.constructor)) {
+    if (!construction || sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)) {
         Value source = construction ? converted(sem.call_arguments[materialized.call.arguments],sem.conversion_fact(materialized.call.conversions)) : address(expression(n,true));
         if (!sem.empty_class(target)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
@@ -58,7 +58,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     bool saved_guard = full_expression.suppress_guard;
     if (scalar) full_expression.suppress_guard = true;
     std::size_t begin = call_work.size();
-    call_work.push_back(Operand::symbol(symbol(materialized.constructor))); call_work.push_back(destination.operand);
+    call_work.push_back(Operand::symbol(symbol(materialized.constructor, base))); call_work.push_back(destination.operand);
     for (unsigned j = 0; j < materialized.call.argument_count; ++j)
         call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j],sem.conversion_fact(materialized.call.conversions+j)).operand);
     full_expression.suppress_guard = saved_guard;

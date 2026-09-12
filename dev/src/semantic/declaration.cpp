@@ -47,7 +47,7 @@ void Analyzer::finish()
             if (members[m].deleted) throw std::runtime_error("deleted defaulted special member");
             if (members[m].constructor) {
                 bool direct = members[m].transfer_trivial && copy_storage_type(entities[scopes[entities[e].owner].entity].type);
-                members[m].transfer_direct = direct;
+                members[m].transfer_direct |= direct;
             }
             for (unsigned j = 0; j < members[m].transfer_count; ++j) {
                 auto action = transfers[members[m].transfer_begin+j];
