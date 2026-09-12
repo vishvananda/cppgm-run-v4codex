@@ -58,8 +58,10 @@ Out-of-class definitions now use parameter overlays over pattern owners and
 share the same checks. Alias constructor names and operator member deduction
 were extended together; nested specialization projects original parsed identities.
 Through **1918/1935**, prior **1621/1621**, eleven native programs and twelve
-unused-body rejection checks pass. Freeze this increment for sanitizer and
-compiler/runtime evidence. Inherited transfer/lifetime/ABI output ownership is
+unused-body rejection checks pass. A nested `Receiver<char>`/`Receiver<long>` runtime reducer exposed contextual
+bindings entering the source-wide cache. Contextual bindings now stay local;
+the reducer passes. The first timing campaign is retained as preliminary;
+repeat the frozen acceptance campaign after the correction. Inherited transfer/lifetime/ABI output ownership is
 the next distinct group; general fixed expression typing and dependent-only body
 rechecking still require finer semantic facts.
 

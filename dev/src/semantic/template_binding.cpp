@@ -13,7 +13,8 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
 {
     if (!n) return TemplateBinding();
     auto source = ast.nodes.occurrences[n].source;
-    if (auto id = template_binding_index.get(source)) return template_bindings[id];
+    bool pattern = !ast.nodes.occurrences[n].context;
+    if (pattern) if (auto id = template_binding_index.get(source)) return template_bindings[id];
     ++template_binding_work;
     TemplateBinding r; r.scope = s;
     auto owner = ast[n].op == OP_COLON2 ? global : s;
@@ -50,7 +51,11 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
         owner = target(e); qualified = true;
         if (!owner) { r.entity = 0; break; }
     }
-    template_binding_index.put(source,template_bindings.size()); template_bindings.push_back(r); return r;
+    // A retained nested function may first be bound in a concrete enclosing
+    // specialization. Those bindings belong to that environment and cannot be
+    // published as definition-wide source facts for other specializations.
+    if (pattern) { template_binding_index.put(source,template_bindings.size()); template_bindings.push_back(r); }
+    return r;
 }
 bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
 {

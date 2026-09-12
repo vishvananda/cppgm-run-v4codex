@@ -41,10 +41,11 @@ int main() {
 // Nested specialization keeps its enclosing argument environment while using
 // the same parsed region for the inner function-template body.
 template<class Tag> struct Receiver {
+    template<class V> long cast(V value) { return Tag(value); }
     template<class V> Receiver& operator>>(V& value) { value=sizeof(Tag); return *this; }
 };
 int nested_specializations() {
     Receiver<char> small; Receiver<long> large;
     int a=0,b=0; small>>a; large>>b;
-    return a!=1 || b!=8;
+    return a!=1 || b!=8 || small.cast(258)!=2 || large.cast(258)!=258;
 }
