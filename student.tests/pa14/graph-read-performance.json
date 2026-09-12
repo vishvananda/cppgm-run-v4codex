@@ -1,0 +1,2286 @@
+{
+  "protocol": "warmup, A/A four observations, two ABBA blocks; batched small compiles with every constituent sample retained",
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "harness_sha256": "3e3eb67f78ecfcb67058188709a2f0ad0535d63249591e5addf342d0ad7ae8dd",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/cppgm++-B",
+      "sha256": "304ef544415760eef92c75e33488b1728bd5095667cc3315c3a094d0176ba6f2",
+      "text_bytes": 1057926
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/cppgm++-C",
+      "sha256": "8b50d745f70bdafff9c1084ad1aac2a80bd1e2ab55b4d2d4939e427b75d8096e",
+      "text_bytes": 1114950
+    }
+  ],
+  "acceptance": {
+    "phase": "compiler source-graph access",
+    "per_read_work": "O(1), no new allocation",
+    "generated_lowir_growth_bytes": 0,
+    "note": "Host C++ inlining changes compiler text; no target optimization pass. Preserve compiler text cost and require measured benefit on affected common-correct work."
+  },
+  "workloads": {
+    "calls-4": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/work/calls-4.cpp",
+      "source_sha256": "b4b59bc690810c69d586a384b6cda0b4350927e200a8217d43422a5c6a3411f6",
+      "mode": "--emit-lowir",
+      "repeat": 1,
+      "outputs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/calls-4-0.out",
+          "sha256": "5a4221d02cfbe72f091b0d066f91e0f9bc9ef8b1e3acbf00e5679cdd23583486",
+          "bytes": 14737864
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/calls-4-1.out",
+          "sha256": "5a4221d02cfbe72f091b0d066f91e0f9bc9ef8b1e3acbf00e5679cdd23583486",
+          "bytes": 14737864
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.889579943,
+              "rss_kib": 305520,
+              "user_s": 1.51,
+              "system_s": 0.36,
+              "involuntary": 11,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.889579943,
+          "rss_kib": 305520
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.782701467,
+              "rss_kib": 305512,
+              "user_s": 1.4,
+              "system_s": 0.37,
+              "involuntary": 10,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.782701467,
+          "rss_kib": 305512
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.871127786,
+              "rss_kib": 305512,
+              "user_s": 1.5,
+              "system_s": 0.36,
+              "involuntary": 13,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.871127786,
+          "rss_kib": 305512
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.989409078,
+              "rss_kib": 305452,
+              "user_s": 1.48,
+              "system_s": 0.39,
+              "involuntary": 15,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.989409078,
+          "rss_kib": 305452
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.985322773,
+              "rss_kib": 305628,
+              "user_s": 1.52,
+              "system_s": 0.38,
+              "involuntary": 15,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.985322773,
+          "rss_kib": 305628
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.892273884,
+              "rss_kib": 305416,
+              "user_s": 1.52,
+              "system_s": 0.36,
+              "involuntary": 12,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.892273884,
+          "rss_kib": 305416
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.844363055,
+              "rss_kib": 305396,
+              "user_s": 1.48,
+              "system_s": 0.35,
+              "involuntary": 12,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.844363055,
+          "rss_kib": 305396
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.75780268,
+              "rss_kib": 305520,
+              "user_s": 1.41,
+              "system_s": 0.34,
+              "involuntary": 12,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.75780268,
+          "rss_kib": 305520
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.774558207,
+              "rss_kib": 305416,
+              "user_s": 1.4,
+              "system_s": 0.36,
+              "involuntary": 13,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.774558207,
+          "rss_kib": 305416
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.968990308,
+              "rss_kib": 305448,
+              "user_s": 1.49,
+              "system_s": 0.35,
+              "involuntary": 17,
+              "voluntary": 9,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.968990308,
+          "rss_kib": 305448
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.878670293,
+              "rss_kib": 305368,
+              "user_s": 1.49,
+              "system_s": 0.35,
+              "involuntary": 13,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.878670293,
+          "rss_kib": 305368
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.756670313,
+              "rss_kib": 305512,
+              "user_s": 1.39,
+              "system_s": 0.35,
+              "involuntary": 15,
+              "voluntary": 2,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.756670313,
+          "rss_kib": 305512
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.758309738,
+              "rss_kib": 305516,
+              "user_s": 1.39,
+              "system_s": 0.36,
+              "involuntary": 14,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.758309738,
+          "rss_kib": 305516
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.845259825,
+              "rss_kib": 305628,
+              "user_s": 1.45,
+              "system_s": 0.38,
+              "involuntary": 15,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.845259825,
+          "rss_kib": 305628
+        }
+      ],
+      "paired_c_over_b": [
+        0.9263135489287726,
+        0.9438899065291214
+      ]
+    },
+    "memory-float-4": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/work/memory-float-4.cpp",
+      "source_sha256": "a463c94be980f80b656f69febd49c761b05e36e01d031def905820ca7d3a066a",
+      "mode": "--emit-lowir",
+      "repeat": 1,
+      "outputs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/memory-float-4-0.out",
+          "sha256": "fcd1662dcc1d6c403d9f7e904881a521c92bad8cb2d0fc39089718c8b33a1082",
+          "bytes": 13954693
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/memory-float-4-1.out",
+          "sha256": "fcd1662dcc1d6c403d9f7e904881a521c92bad8cb2d0fc39089718c8b33a1082",
+          "bytes": 13954693
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.570739225,
+              "rss_kib": 266912,
+              "user_s": 1.22,
+              "system_s": 0.34,
+              "involuntary": 13,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.570739225,
+          "rss_kib": 266912
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.473031199,
+              "rss_kib": 266780,
+              "user_s": 1.14,
+              "system_s": 0.32,
+              "involuntary": 14,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.473031199,
+          "rss_kib": 266780
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.550938892,
+              "rss_kib": 266828,
+              "user_s": 1.21,
+              "system_s": 0.33,
+              "involuntary": 13,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.550938892,
+          "rss_kib": 266828
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.549312237,
+              "rss_kib": 266912,
+              "user_s": 1.22,
+              "system_s": 0.31,
+              "involuntary": 11,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.549312237,
+          "rss_kib": 266912
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.546960154,
+              "rss_kib": 266924,
+              "user_s": 1.23,
+              "system_s": 0.3,
+              "involuntary": 12,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.546960154,
+          "rss_kib": 266924
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.571188613,
+              "rss_kib": 266920,
+              "user_s": 1.24,
+              "system_s": 0.3,
+              "involuntary": 14,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.571188613,
+          "rss_kib": 266920
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.575656005,
+              "rss_kib": 266920,
+              "user_s": 1.21,
+              "system_s": 0.33,
+              "involuntary": 16,
+              "voluntary": 4,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.575656005,
+          "rss_kib": 266920
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.648687044,
+              "rss_kib": 266908,
+              "user_s": 1.15,
+              "system_s": 0.31,
+              "involuntary": 8,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.648687044,
+          "rss_kib": 266908
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.565098235,
+              "rss_kib": 266920,
+              "user_s": 1.17,
+              "system_s": 0.3,
+              "involuntary": 7,
+              "voluntary": 2,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.565098235,
+          "rss_kib": 266920
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.552678001,
+              "rss_kib": 266884,
+              "user_s": 1.22,
+              "system_s": 0.32,
+              "involuntary": 14,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.552678001,
+          "rss_kib": 266884
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.764034637,
+              "rss_kib": 266884,
+              "user_s": 1.24,
+              "system_s": 0.3,
+              "involuntary": 14,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.764034637,
+          "rss_kib": 266884
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.599946714,
+              "rss_kib": 267016,
+              "user_s": 1.12,
+              "system_s": 0.32,
+              "involuntary": 13,
+              "voluntary": 2,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.599946714,
+          "rss_kib": 267016
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 1.471393557,
+              "rss_kib": 266884,
+              "user_s": 1.15,
+              "system_s": 0.3,
+              "involuntary": 10,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.471393557,
+          "rss_kib": 266884
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 1.552002325,
+              "rss_kib": 266680,
+              "user_s": 1.23,
+              "system_s": 0.3,
+              "involuntary": 9,
+              "voluntary": 3,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.552002325,
+          "rss_kib": 266680
+        }
+      ],
+      "paired_c_over_b": [
+        1.027315265197421,
+        0.9262080930327098
+      ]
+    },
+    "template-semantics-4": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/work/template-semantics-4.cpp",
+      "source_sha256": "a9ba53cf364202cb89329ba46b17630d3339882f2152cdb2965f930c8a859784",
+      "mode": "--emit-semantics",
+      "repeat": 4,
+      "outputs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/template-semantics-4-0.out",
+          "sha256": "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174",
+          "bytes": 3321056
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/template-semantics-4-1.out",
+          "sha256": "14d65ab39607d4b6a3c119c7f2bb117a5c1f9b4089520ab2896af2d44b37b174",
+          "bytes": 3321056
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.291091599,
+              "rss_kib": 39440,
+              "user_s": 0.22,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.296749621,
+              "rss_kib": 39348,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.292463105,
+              "rss_kib": 39504,
+              "user_s": 0.22,
+              "system_s": 0.06,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.293822344,
+              "rss_kib": 39336,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.174126669,
+          "rss_kib": 39504
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.273009845,
+              "rss_kib": 39344,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274047337,
+              "rss_kib": 39368,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274765967,
+              "rss_kib": 39624,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.277071032,
+              "rss_kib": 39532,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 6,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.098894181,
+          "rss_kib": 39624
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.292819181,
+              "rss_kib": 39532,
+              "user_s": 0.24,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.29263543,
+              "rss_kib": 39476,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.293261061,
+              "rss_kib": 39500,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.290280398,
+              "rss_kib": 39540,
+              "user_s": 0.24,
+              "system_s": 0.04,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.16899607,
+          "rss_kib": 39540
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.293341122,
+              "rss_kib": 39416,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.29332319,
+              "rss_kib": 39616,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.291939509,
+              "rss_kib": 39448,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.296999586,
+              "rss_kib": 39508,
+              "user_s": 0.24,
+              "system_s": 0.05,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.175603407,
+          "rss_kib": 39616
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.296476878,
+              "rss_kib": 39476,
+              "user_s": 0.24,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 2,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.290322646,
+              "rss_kib": 39508,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.288717655,
+              "rss_kib": 39476,
+              "user_s": 0.22,
+              "system_s": 0.06,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.291480422,
+              "rss_kib": 39468,
+              "user_s": 0.24,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.166997601,
+          "rss_kib": 39508
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.291469282,
+              "rss_kib": 39484,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.288987752,
+              "rss_kib": 39276,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.290546271,
+              "rss_kib": 39352,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.288375255,
+              "rss_kib": 39344,
+              "user_s": 0.23,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.15937856,
+          "rss_kib": 39484
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.290755974,
+              "rss_kib": 39436,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.34669958,
+              "rss_kib": 39368,
+              "user_s": 0.28,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.358598131,
+              "rss_kib": 39464,
+              "user_s": 0.28,
+              "system_s": 0.06,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.295849905,
+              "rss_kib": 39512,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.29190359,
+          "rss_kib": 39512
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.27505807,
+              "rss_kib": 39476,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274224135,
+              "rss_kib": 39568,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.271528127,
+              "rss_kib": 39476,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274731581,
+              "rss_kib": 39504,
+              "user_s": 0.22,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.095541913,
+          "rss_kib": 39568
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.273827732,
+              "rss_kib": 39572,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.272736273,
+              "rss_kib": 39512,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.286819539,
+              "rss_kib": 39556,
+              "user_s": 0.22,
+              "system_s": 0.05,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.357138124,
+              "rss_kib": 39476,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.190521668,
+          "rss_kib": 39572
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.289453771,
+              "rss_kib": 39508,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.290397741,
+              "rss_kib": 39464,
+              "user_s": 0.23,
+              "system_s": 0.04,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.297469461,
+              "rss_kib": 39504,
+              "user_s": 0.25,
+              "system_s": 0.04,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.294269289,
+              "rss_kib": 39372,
+              "user_s": 0.24,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.171590262,
+          "rss_kib": 39508
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.290123248,
+              "rss_kib": 39508,
+              "user_s": 0.22,
+              "system_s": 0.06,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.291319091,
+              "rss_kib": 39512,
+              "user_s": 0.23,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.292797232,
+              "rss_kib": 39480,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.290275239,
+              "rss_kib": 39372,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.16451481,
+          "rss_kib": 39512
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.273278453,
+              "rss_kib": 39476,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274701853,
+              "rss_kib": 39632,
+              "user_s": 0.22,
+              "system_s": 0.05,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274055977,
+              "rss_kib": 39308,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.275235343,
+              "rss_kib": 39572,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.097271626,
+          "rss_kib": 39632
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.274551074,
+              "rss_kib": 39588,
+              "user_s": 0.21,
+              "system_s": 0.05,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.273253756,
+              "rss_kib": 39536,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274217893,
+              "rss_kib": 39436,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.274895115,
+              "rss_kib": 39504,
+              "user_s": 0.22,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.096917838,
+          "rss_kib": 39588
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.291920642,
+              "rss_kib": 39436,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.596022422,
+              "rss_kib": 39328,
+              "user_s": 0.23,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.291559034,
+              "rss_kib": 39508,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.295180279,
+              "rss_kib": 39512,
+              "user_s": 0.23,
+              "system_s": 0.05,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.474682377,
+          "rss_kib": 39512
+        }
+      ],
+      "paired_c_over_b": [
+        0.927976166510035,
+        0.8313851935005113
+      ]
+    },
+    "class-instances-1000": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/work/class-instances-1000.cpp",
+      "source_sha256": "66b123436c242685f1f2a50cf31393248b3f8064b46673733ddbb008a3d40f0e",
+      "mode": "--emit-lowir",
+      "repeat": 8,
+      "outputs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/class-instances-1000-0.out",
+          "sha256": "6de6a5821276dc9509f898be84d06bbd2245494bc91328cf97a6b5dcee133df2",
+          "bytes": 834298
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-measurements/read-comparison/class-instances-1000-1.out",
+          "sha256": "6de6a5821276dc9509f898be84d06bbd2245494bc91328cf97a6b5dcee133df2",
+          "bytes": 834298
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.146045065,
+              "rss_kib": 28952,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146708592,
+              "rss_kib": 29088,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145684798,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145077235,
+              "rss_kib": 29228,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.148283178,
+              "rss_kib": 29128,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.14661281,
+              "rss_kib": 29308,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146354863,
+              "rss_kib": 29320,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145327178,
+              "rss_kib": 29244,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.170093719,
+          "rss_kib": 29320
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.14168357,
+              "rss_kib": 29160,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143182608,
+              "rss_kib": 29028,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.142663889,
+              "rss_kib": 28896,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143004368,
+              "rss_kib": 29072,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144385055,
+              "rss_kib": 28992,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143576669,
+              "rss_kib": 29028,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145648031,
+              "rss_kib": 29136,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146598736,
+              "rss_kib": 28952,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.150742926,
+          "rss_kib": 29160
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.146501608,
+              "rss_kib": 28980,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145785506,
+              "rss_kib": 28988,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146833249,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145659634,
+              "rss_kib": 29084,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145603182,
+              "rss_kib": 29080,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145862986,
+              "rss_kib": 28980,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145989852,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145799099,
+              "rss_kib": 29168,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.168035116,
+          "rss_kib": 29168
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.146576227,
+              "rss_kib": 29240,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147379532,
+              "rss_kib": 28916,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146205749,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145540944,
+              "rss_kib": 29080,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147110835,
+              "rss_kib": 28924,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146950689,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146176825,
+              "rss_kib": 29132,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144282315,
+              "rss_kib": 29108,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.170223116,
+          "rss_kib": 29240
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.149107624,
+              "rss_kib": 29164,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147213335,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145793402,
+              "rss_kib": 29096,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147281249,
+              "rss_kib": 29116,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146758159,
+              "rss_kib": 29112,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.151285945,
+              "rss_kib": 28988,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147367543,
+              "rss_kib": 29124,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147067594,
+              "rss_kib": 29236,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.181874851,
+          "rss_kib": 29236
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.146704009,
+              "rss_kib": 29140,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144855816,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145620556,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145412483,
+              "rss_kib": 29260,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147435158,
+              "rss_kib": 29084,
+              "user_s": 0.12,
+              "system_s": 0.01,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.148425789,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146183401,
+              "rss_kib": 29124,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145720943,
+              "rss_kib": 29016,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.170358155,
+          "rss_kib": 29260
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.144469322,
+              "rss_kib": 28984,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145741358,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146041723,
+              "rss_kib": 29080,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145423468,
+              "rss_kib": 28956,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.14873976,
+              "rss_kib": 29164,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145040041,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145028739,
+              "rss_kib": 28936,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145671601,
+              "rss_kib": 29216,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.166156012,
+          "rss_kib": 29216
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.141963822,
+              "rss_kib": 28960,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.141729482,
+              "rss_kib": 29028,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.142613384,
+              "rss_kib": 29148,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 2,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.216713381,
+              "rss_kib": 29016,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.151313914,
+              "rss_kib": 29004,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145734976,
+              "rss_kib": 29128,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144949317,
+              "rss_kib": 29164,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143660275,
+              "rss_kib": 29032,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.228678551,
+          "rss_kib": 29164
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.142940002,
+              "rss_kib": 28944,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143701565,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.142404376,
+              "rss_kib": 29080,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143073101,
+              "rss_kib": 29152,
+              "user_s": 0.1,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144516486,
+              "rss_kib": 28908,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144883967,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.142457209,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.142772458,
+              "rss_kib": 28984,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.146749164,
+          "rss_kib": 29160
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.149117086,
+              "rss_kib": 28956,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.14726541,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.148709076,
+              "rss_kib": 29128,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146796407,
+              "rss_kib": 29120,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145982935,
+              "rss_kib": 28988,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.150862816,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.158070787,
+              "rss_kib": 28984,
+              "user_s": 0.12,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.151327408,
+              "rss_kib": 29104,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.198131925,
+          "rss_kib": 29160
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.146673667,
+              "rss_kib": 29132,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145555925,
+              "rss_kib": 29160,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145758007,
+              "rss_kib": 28956,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145289285,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145065318,
+              "rss_kib": 28988,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146372633,
+              "rss_kib": 29040,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.149329031,
+              "rss_kib": 28940,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147741347,
+              "rss_kib": 29316,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.171785213,
+          "rss_kib": 29316
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.14326476,
+              "rss_kib": 28988,
+              "user_s": 0.1,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.144282114,
+              "rss_kib": 29144,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146953304,
+              "rss_kib": 29156,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146242875,
+              "rss_kib": 29156,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.153595197,
+              "rss_kib": 29108,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.250927738,
+              "rss_kib": 29020,
+              "user_s": 0.13,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143339862,
+              "rss_kib": 28964,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143063274,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.271669124,
+          "rss_kib": 29156
+        },
+        {
+          "binary": 1,
+          "samples": [
+            {
+              "wall_s": 0.14441575,
+              "rss_kib": 29028,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.14610175,
+              "rss_kib": 29116,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.145074504,
+              "rss_kib": 28956,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 5,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.146320354,
+              "rss_kib": 28924,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.188775889,
+              "rss_kib": 29036,
+              "user_s": 0.15,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.141299475,
+              "rss_kib": 28984,
+              "user_s": 0.11,
+              "system_s": 0.02,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.143330035,
+              "rss_kib": 29208,
+              "user_s": 0.1,
+              "system_s": 0.02,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.147436371,
+              "rss_kib": 29080,
+              "user_s": 0.1,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.202754128,
+          "rss_kib": 29208
+        },
+        {
+          "binary": 0,
+          "samples": [
+            {
+              "wall_s": 0.152240687,
+              "rss_kib": 29136,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.152670922,
+              "rss_kib": 29032,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.148446089,
+              "rss_kib": 28988,
+              "user_s": 0.11,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.157711019,
+              "rss_kib": 28988,
+              "user_s": 0.12,
+              "system_s": 0.02,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.177254639,
+              "rss_kib": 28988,
+              "user_s": 0.13,
+              "system_s": 0.03,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.221227674,
+              "rss_kib": 29244,
+              "user_s": 0.17,
+              "system_s": 0.03,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.24864127,
+              "rss_kib": 29168,
+              "user_s": 0.2,
+              "system_s": 0.04,
+              "involuntary": 4,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.250916575,
+              "rss_kib": 29212,
+              "user_s": 0.2,
+              "system_s": 0.04,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ],
+          "wall_s": 1.509108875,
+          "rss_kib": 29244
+        }
+      ],
+      "paired_c_over_b": [
+        1.0047116841505077,
+        0.9229843368582938
+      ]
+    }
+  }
+}
