@@ -1,5 +1,16 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
+abi_mangle::Id Procedural::abi_entity_name(EntityId e)
+{
+    auto entity = sem.entities[e];
+    auto name = abi.name(abi_scope(entity.owner),spelling(entity.name));
+    if (!entity.specialization) return name;
+    auto pack = sem.specialization_arguments(e);
+    std::vector<abi_mangle::Id> arguments;
+    for (unsigned j = 0; j < pack.count; ++j)
+        arguments.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.template_argument(pack.offset+j))));
+    return abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);
+}
 bool Procedural::internal_scope(semantic::ScopeId s)
 {
     if (!s || s == sem.global) return false;

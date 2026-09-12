@@ -19,6 +19,7 @@ std::uint64_t layout_align(std::uint64_t bytes, std::uint64_t alignment)
 std::uint64_t Analyzer::size(TypeId id, bool alignment)
 {
     Type t = types[id];
+    if (definitions && t.kind == TypeKind::Named && entities[t.entity].class_info) complete_class(t.entity);
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment);
     if (t.kind == TypeKind::Pointer) return 8;
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;

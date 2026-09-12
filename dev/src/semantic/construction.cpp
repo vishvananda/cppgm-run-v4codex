@@ -6,6 +6,7 @@ using syntax::Kind;
 EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope, bool direct, bool probe)
 {
     EntityId cls = types[t].entity;
+    if (definitions) complete_class(cls);
     if (args.size() == 1 && types[expressions[args[0]].type].kind == TypeKind::Named &&
         (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t) || class_value(expressions[args[0]].type)))
         ensure_transfers(t, false);
@@ -78,6 +79,7 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
+    if (definitions) complete_class(types[t].entity);
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
     if (class_facts[c].constructor && (class_facts[c].user_constructor || class_facts[c].inherited_base)) return choose_constructor(t, {}, 0, s, true, !demand);

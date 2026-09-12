@@ -314,6 +314,13 @@ private:
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
     void instantiate_function(EntityId e);
+    TypeId declare_class_template(NodeId n, ScopeId s);
+    EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);
+    EntityId class_template_name(NodeId part, EntityId e, ScopeId s);
+    void complete_class(EntityId e);
+    bool template_defaults(EntityId pattern, std::vector<TypeId>& args);
+    ScopeId specialization_environment(EntityId e);
+
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
     bool dependent_type(TypeId type);

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Independent function-template behavior, validated and executed via PA8."""
+"""Independent first-tier template behavior, validated and executed via PA8."""
 from pathlib import Path
 import subprocess, tempfile
 root = Path(__file__).resolve().parents[2]
 with tempfile.TemporaryDirectory(prefix='pa14-functions-') as tmp:
-    for source in sorted((root/'student.tests/pa14').glob('function-*.cpp')):
+    for source in sorted((root/'student.tests/pa14').glob('*.cpp')):
         ir = Path(tmp)/(source.stem+'.lowir')
         exe = Path(tmp)/source.stem
         for command in ([root/'dev/cppgm++','--emit-lowir','-O0','--validate-lowir','-o',ir,source],

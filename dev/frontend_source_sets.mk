@@ -60,3 +60,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/lifecycle_order
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/destructor_exception
 FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/occurrence semantic/template_instantiation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_declaration
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class

@@ -85,7 +85,7 @@ struct ClassFacts {
     unsigned char parameter_abi = 0;
     unsigned char parameter_state = 0; // Unqueried, rejected, body pending, proven.
     EntityId parameter_transfer = 0;
-    bool user_constructor = false, user_destructor = false;
+    bool user_constructor = false, user_destructor = false, final_class = false;
 };
 // Sparse member storage facts. Ordinary fields keep their existing offset;
 // bit-fields and explicit alignment use this descriptor by canonical EntityId.

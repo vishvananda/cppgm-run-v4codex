@@ -23,7 +23,7 @@ NodeId Parser::class_specifier()
     ScopeId child = previous.target ? previous.target : names.enter(owner);
     names.bind(owner, final_name(n), template_declaration ? Category::TemplateType : Category::Type, child);
     names.bind(child, final_name(n), template_declaration ? Category::TemplateType : Category::Type, child);
-    in.eat("final");
+    if (in.eat("final")) ast[result].flags |= 4;
     if (in.eat(":")) {
         NodeId bases = make(Kind::Bases);
         do {

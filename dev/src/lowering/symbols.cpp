@@ -11,6 +11,8 @@ abi_mangle::Id Procedural::abi_scope(semantic::ScopeId s)
     if (!s || s == sem.global) return 0;
     if (abi_scopes[s]) return abi_scopes[s];
     auto scope = sem.scopes[s];
+    if (scope.kind == semantic::ScopeKind::Class && sem.entities[scope.entity].specialization)
+        return abi_scopes[s] = abi_entity_name(scope.entity);
     auto parent = abi_scope(scope.parent);
     if (scope.kind == semantic::ScopeKind::Template) return abi_scopes[s] = parent;
     return abi_scopes[s] = abi.name(parent, scope.name ? spelling(scope.name) : "_GLOBAL__N_1");
@@ -38,7 +40,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
         else if (e.class_info && sem.local_function(t.entity))
             result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
-        else result = abi.name(abi_scope(e.owner), spelling(e.name));
+        else result = abi_entity_name(t.entity);
         break;
     }
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;

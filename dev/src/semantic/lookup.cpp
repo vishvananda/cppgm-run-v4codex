@@ -187,6 +187,7 @@ ScopeId Analyzer::common_ancestor(ScopeId a, ScopeId b) const
 }
 EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified)
 {
+    if (definitions && scopes[s].kind == ScopeKind::Class) complete_class(scopes[s].entity);
     if (qualified) return imported(s, n, mode, ++walk);
     // Nominated declarations participate at the nearest common ancestor of
     // their namespace and the active directive, not at the directive's scope.
@@ -279,6 +280,8 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
             s = entities[types[t].entity].scope; qualified = true; continue;
         }
         EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
+        if (definitions) e = class_template_name(p,e,context);
+        if (definitions && e && entities[e].class_info) complete_class(e);
         if (calls && e && !declaration) check_access(e, context, s);
         s = target(e);
         if (!s) throw std::runtime_error("name qualifier has no scope");
@@ -307,6 +310,7 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
         if (cls) ensure_transfers(entities[scopes[cls].entity].type, true);
     }
     EntityId result = lookup(owner, terminal(n), mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
+    if (definitions) result = class_template_name(ast[n].last,result,s);
     if (calls && result && !function_binding(result)) check_access(result, s, owner);
     return result;
 }

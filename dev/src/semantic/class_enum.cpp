@@ -6,6 +6,7 @@ using syntax::Kind;
 TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bool emit, bool static_union)
 {
     if (facts[n].type) return facts[n].type;
+    if (definitions && active_template_scope == s) return declare_class_template(n,s);
     NodeId name = ast[n].detail;
     IdentifierId id = name ? terminal(name) : anonymous_name;
     ETokenType key_op = ast[ast[n].first].op;
@@ -22,7 +23,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         std::string generated = "__anonymous_union_type__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
-    ScopeId owner = name_owner(name, s);
+    EntityId instance = facts[n].entity;
+    ScopeId owner = instance ? s : name_owner(name, s);
     if (definition && !encloses(s, owner)) throw std::runtime_error("class definition outside enclosing scope");
     EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
@@ -55,6 +57,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             if (f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
             f.requested_alignment = alignment;
         }
+        if (definition) f.final_class = ast[n].flags & 4;
         if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
     }
     TypeId t = entities[e].type;
@@ -75,7 +78,10 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             for (NodeId b = ast[list].first; b; b = ast[b].next) {
                 EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, owner, Lookup::Qualifier);
                 if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
+                if (definitions && base && entities[base].class_info) complete_class(base);
                 if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
+                if (!entities[base].complete || entities[base].key == KW_UNION || class_facts[entities[base].class_info].final_class)
+                    throw std::runtime_error("base must be a complete non-final non-union class");
                 std::uint32_t info = entities[e].class_info;
                 class_facts[info].aggregate = false;
                 NodeId access = child(b, Kind::Access);

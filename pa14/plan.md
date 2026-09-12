@@ -35,6 +35,15 @@ constraints retain their owning stages.
   is computed per canonical specialization. Parameter-head canonicalization and
   ABI consume typed identities. Local static objects remain outside the
   inherited PA10 boundary; the personal identity control uses local classes.
+- Class registry/completion increment: **202/314** (112 failures), prior
+  **1621/1621**. Class/default argument keys, immutable parameter overlays,
+  lazy completion, member-body reuse, nested identity and template-aware ADL
+  now feed existing layouts/lifetimes. Fixed bases are checked at definition;
+  inherited class metadata is completed before constructor/virtual selection.
+  The personal class-demand executable passes, including unused invalid bodies.
+  Remaining architecture work: definition-time dependent/nondependent facts,
+  dependent-only fact reuse, finer body occurrence allocation, and defaults/
+  out-of-class-definition ownership. These are open requirements, not waived.
 - Required checks pending after implementation: stage, through PA13/14, file
   audit, explicit personal controls and performance evidence.
 - No handoff boundary reached; implementation continues across related groups.

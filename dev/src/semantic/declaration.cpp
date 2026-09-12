@@ -95,11 +95,12 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::TypeParameter) continue;
         NodeId identifier = child(p, Kind::Identifier);
-        if (!identifier) continue;
+        if (!identifier && !definitions) continue;
         IdentifierId name = ast[identifier].text;
         EntityId e = make_entity(EntityKind::Type, ts, name, p);
         entities[e].key = child(p, Kind::TemplateTemplate) ? KW_TEMPLATE : KW_TYPENAME;
         entities[e].template_parameter = true;
+        entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
         entities[e].type = types.named(e);
         bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
     }
@@ -175,7 +176,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         NodeId name = ast[ast[n].first].detail;
         if (calls && scopes[s].kind == ScopeKind::Class && inherit_using(name, s)) break;
         for (NodeId p = ast[name].first; p; p = ast[p].next)
-            if (ast[p].first) throw std::runtime_error("using declaration names template-id");
+            if (p == ast[name].last && ast[p].first) throw std::runtime_error("using declaration names template-id");
         EntityId e = resolve(name, s);
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {

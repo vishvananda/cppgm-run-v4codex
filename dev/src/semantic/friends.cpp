@@ -68,6 +68,11 @@ EntityId Analyzer::associated_lookup(IdentifierId name, const std::vector<NodeId
         } else if (type.kind == TypeKind::Named) {
             EntityId cls = type.entity;
             if (entities[cls].class_info) {
+                if (definitions) complete_class(cls);
+                if (entities[cls].specialization) {
+                    auto pack = specialization_arguments(cls);
+                    for (unsigned j = 0; j < pack.count; ++j) work.push_back(argument_types[pack.offset+j]);
+                }
                 result = merge_lookup(result, hidden_friends.get(key(cls, name)));
                 for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) work.push_back(entities[bases[b].base].type);
             }
