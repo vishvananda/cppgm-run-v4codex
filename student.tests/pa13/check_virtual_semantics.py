@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Independent declaration/covariance controls; run explicitly from the root."""
-import pathlib, subprocess, tempfile
+import pathlib, subprocess, tempfile, sys
+compiler = sys.argv[1] if len(sys.argv)>1 else "dev/cppgm++"
 cases = [
  ('ref-overload', 'struct B { virtual int f() &; virtual int f() &&; }; struct D:B { int f() & override; int f() && override; };', True),
  ('ref-mismatch', 'struct B { virtual int f() &; }; struct D:B { int f() && override; };', False),
@@ -21,6 +22,6 @@ cases = [
 with tempfile.TemporaryDirectory(prefix='pa13-semantic-') as work:
  for name, source, valid in cases:
   src=pathlib.Path(work)/(name+'.cpp'); src.write_text(source+'\nint main() { return 0; }\n')
-  result=subprocess.run(['dev/cppgm++','--emit-lowir','-O0','-o',str(pathlib.Path(work)/'out'),str(src)],capture_output=True)
+  result=subprocess.run([compiler,'--emit-lowir','-O0','-o',str(pathlib.Path(work)/'out'),str(src)],capture_output=True)
   assert (result.returncode == 0) == valid, (name,result.stderr.decode())
 print(f'{len(cases)} virtual semantic controls passed')

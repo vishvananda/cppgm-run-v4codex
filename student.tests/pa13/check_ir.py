@@ -18,8 +18,9 @@ with tempfile.TemporaryDirectory(prefix='pa13-ir-') as tmp:
   seq=[entries.index('_ZN'+cls+'D'+str(k)+'Ev') for k in (2,0,1)]
   assert seq==sorted(seq),(cls,seq)
  # Slot demand must not instantiate an unused unrelated member body.
- source=work/'unused.cpp';source.write_text('struct B{virtual int f(){return 7;} int unused(){return missing;} }; int main(){B b;return b.f()-7;}')
+ source=work/'unused.cpp';source.write_text('struct B{virtual int f(){return 7;} int unused(){return 99;} }; int main(){B b;return b.f()-7;}')
  run([compiler,'--emit-lowir','-O0','--validate-lowir','-o',ir,source])
+ assert '_ZN1B6unusedEv' not in ir.read_text()
  counts=[]
  for n in (8,64):
   source=work/f'cleanup-{n}.cpp'

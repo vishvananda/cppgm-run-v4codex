@@ -43,6 +43,9 @@ void Validator::value(const Operand& o, Type type) const
 void Validator::integer(const Operand& o) const { require(value_type(o).integer(), "expected integer value"); }
 void Validator::pointer(const Operand& o, bool object) const
 {
+    // Literal operands acquire their type from the operation. PA13 virtual
+    // delete retains a load from literal zero in its unreachable nonnull arm.
+    if (o.literal()) { validate_literal(o, Type::Ptr); return; }
     Type t = value_type(o);
     require(t == Type::Ptr || (object && t.kind() == Type::Object), "expected pointer value");
 }
@@ -57,7 +60,7 @@ void Validator::storage(const Operand& o, Type t) const
         const Global& g = p_.globals.at(s.entity-1);
         require(g.structured || g.type == Type() || g.type == t, "incompatible global access");
     } else {
-        require(o.kind == Operand::Temporary, "invalid storage operand");
+        require(o.kind == Operand::Temporary || o.literal(), "invalid storage operand");
         pointer(o, true);
     }
 }
