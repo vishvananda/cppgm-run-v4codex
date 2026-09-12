@@ -129,7 +129,9 @@ void Parser::predeclare_class()
     // This category-only lookahead does not construct/reparse any grammar node.
     std::size_t i = 0;
     bool templated = false;
+    bool friend_declaration = false;
     while (!in.is("}", i) && in.peek(i).kind != PostTokenKind::eof) {
+        friend_declaration |= in.is("friend",i);
         if (in.is("template", i) && in.is("<", i + 1)) {
             std::size_t end = probe_angles(i + 1);
             if (end > i + 1) {
@@ -163,7 +165,10 @@ void Parser::predeclare_class()
             names.bind(scope, in.peek(i).text, Category::Value);
         if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class)
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
-        if (in.is(";", i) || in.is("{", i)) templated = false;
+        if (!templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
+            in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1)))
+            names.bind(scope,in.peek(i).text,Category::Value);
+        if (in.is(";", i) || in.is("{", i)) { templated = false; friend_declaration = false; }
         if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
         ++i;
     }

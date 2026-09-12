@@ -99,8 +99,10 @@ void Analyzer::check_template_member_exception(NodeId d, std::uint32_t path, Ide
         unsigned result = 0;
         for (auto n = ast[child(decl,Kind::Parameters)].next; n; n = ast[n].next) {
             auto op = ast[n].op;
-            if (op == KW_CONST) result |= 1; if (op == KW_VOLATILE) result |= 2;
-            if (op == OP_AMP) result |= 4; if (op == OP_LAND) result |= 8;
+            if (op == KW_CONST) result |= 1;
+            if (op == KW_VOLATILE) result |= 2;
+            if (op == OP_AMP) result |= 4;
+            if (op == OP_LAND) result |= 8;
         }
         return result;
     };

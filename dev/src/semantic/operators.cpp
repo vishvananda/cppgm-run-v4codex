@@ -18,7 +18,13 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         ast[ast[operand].detail].first != ast[ast[operand].detail].last;
     if (qualified_address) ++unevaluated_depth;
     Expression a = expression(operand, s), r;
-    if (qualified_address) --unevaluated_depth;
+    if (qualified_address) {
+        --unevaluated_depth;
+        if (!unevaluated_depth) {
+            expressions[operand].evaluated = true;
+            if (definitions) demand_template_storage(a.entity);
+        }
+    }
     if (types[a.type].kind == TypeKind::Named) {
         std::vector<NodeId> args(1, operand);
         if (ast[n].kind == Kind::Postfix) args.push_back(0);

@@ -11,6 +11,14 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     IdentifierId id = name ? terminal(name) : anonymous_name;
     ETokenType key_op = ast[ast[n].first].op;
     bool definition = ast[n].kind == Kind::Class;
+    if (definitions && !definition && name && child(ast[name].last,Kind::TemplateArguments)) {
+        auto e = resolve(name,s,Lookup::Qualifier);
+        if (!e || !entities[e].class_info || !entities[e].specialization ||
+            ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
+            throw std::runtime_error("invalid elaborated class template-id");
+        facts[n].type = entities[e].type; facts[n].entity = e; facts[n].scope = s;
+        return entities[e].type;
+    }
     bool anonymous_union = !id && key_op == KW_UNION;
     if (calls && !name && !anonymous_union) {
         std::string generated = "__local_type" + std::to_string(++anonymous_classes);

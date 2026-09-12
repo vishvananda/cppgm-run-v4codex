@@ -20,6 +20,8 @@ NodeId Parser::class_specifier()
     ScopeId owner = n ? qualified_owner(n) : scope;
     if (owner == unknown_scope) owner = scope;
     Binding previous = names.local(owner, final_name(n));
+    if (template_declaration && owner == saved_scope && previous.category == Category::Unknown)
+        previous = names.local(names.parent(owner),final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);
     auto category = template_declaration || previous.category == Category::TemplateType ? Category::TemplateType : Category::Type;
     names.bind(owner, final_name(n), category, child);
@@ -27,6 +29,8 @@ NodeId Parser::class_specifier()
     if (template_declaration && owner != saved_scope) {
         names.definition_parent(child,saved_scope); names.import(child,owner);
     }
+    if (template_declaration && owner == saved_scope && (in.is("{") || in.is(":") || in.is("final")))
+        names.definition_parent(child,saved_scope);
     scope = child;
     if (in.eat("final")) ast[result].flags |= 4;
     if (in.eat(":")) {

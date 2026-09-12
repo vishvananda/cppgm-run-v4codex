@@ -143,7 +143,8 @@ NodeId Parser::unary()
         ast.append(node, unary());
         return node;
     }
-    if (in.is("sizeof") || in.is("typeid") || in.is("alignof") || in.is("noexcept"))
+    if (in.is("sizeof") || in.is("typeid") || in.is("alignof") || in.is("noexcept") ||
+        in.is("__alignof") || in.is("__alignof__"))
         return postfix(type_trait());
     if (in.is("static_cast") || in.is("dynamic_cast") || in.is("reinterpret_cast") || in.is("const_cast")) {
         NodeId node = leaf(Kind::Cast);
@@ -174,7 +175,9 @@ NodeId Parser::unary()
 
 NodeId Parser::type_trait()
 {
+    bool gnu_alignment = in.is("__alignof") || in.is("__alignof__");
     Token keyword = in.take();
+    if (gnu_alignment) keyword.op = KW_ALIGNOF;
     bool size = keyword.op == KW_SIZEOF;
     NodeId result = size ? make(Kind::Sizeof) : ast.make(Kind::TypeTrait, keyword);
     if (size && in.eat("...")) {

@@ -46,20 +46,41 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
         entities[e].scope = make_scope(ScopeKind::Class,s,id,e,false);
         bind(owner,id,e);
     }
-    auto previous = entities[e].template_info ? templates[entities[e].template_info] : TemplateFunction();
+    auto previous_index = entities[e].template_info;
+    auto previous = previous_index ? templates[previous_index] : TemplateFunction();
     if (ast[n].kind == Kind::Class && previous.body) throw std::runtime_error("class template redefinition");
     template_facts(e,s);
     auto index = entities[e].template_info;
     if (previous.environment && previous.count != templates[index].count) throw std::runtime_error("different template parameter count");
-    if (previous.environment) {
-        for (unsigned j = 0; j < previous.count; ++j) {
-            auto old = template_parameters[previous.offset+j], current = template_parameters[templates[index].offset+j];
-            if (entities[old].initializer && entities[current].initializer) throw std::runtime_error("duplicate template default argument");
-            if (!entities[current].initializer) entities[current].initializer = entities[old].initializer;
+    auto current = templates[index];
+    // A later declaration adds defaults to the canonical head without replacing
+    // the definition's parameter environment or reinterpreting its source names.
+    if (previous.body) { index = previous_index; entities[e].template_info = index; }
+    auto selected = templates[index];
+    Index old_bindings, current_bindings, old_cache, current_cache;
+    bool old_ready = false, current_ready = false;
+    auto translate = [&](TypeId value, const TemplateFunction& head, Index& bindings, Index& cache, bool& ready) {
+        if (head.offset == selected.offset) return value;
+        if (!ready) {
+            for (unsigned j = 0; j < head.count; ++j)
+                bindings.put(template_parameters[head.offset+j],entities[template_parameters[selected.offset+j]].type);
+            ready = true;
         }
+        return substitute_type(value,bindings,cache);
+    };
+    for (unsigned j = 0; j < current.count; ++j) {
+        auto parameter = template_parameters[current.offset+j];
+        auto init = entities[parameter].initializer;
+        auto old = previous.environment ? template_default_types.get(template_parameters[previous.offset+j]) : 0;
+        if (old && init) throw std::runtime_error("duplicate template default argument");
+        TypeId value = init ? translate(type_id(ast[init].first,s),current,current_bindings,current_cache,current_ready) :
+            old ? translate(old,previous,old_bindings,old_cache,old_ready) : 0;
+        if (value) template_default_types.put(template_parameters[selected.offset+j],value);
     }
-    templates[index].source = n;
-    templates[index].body = ast[n].kind == Kind::Class ? n : previous.body;
+    if (!previous.body) {
+        templates[index].source = n;
+        templates[index].body = ast[n].kind == Kind::Class ? n : previous.body;
+    }
     if (ast[n].kind == Kind::Class) index_template_members(n,definition_root(e),s);
     bind(s,id,e); record(s,e,n,entities[e].type,EntityKind::Type);
     // Fixed bases are definition-time demands, independent of whether a
@@ -85,9 +106,12 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args)
     for (unsigned j = 0; j < t.count; ++j) {
         auto p = template_parameters[t.offset+j];
         if (j == args.size()) {
-            NodeId d = entities[p].initializer;
-            if (!d) return false;
-            TypeId value = type_id(ast[d].first,t.environment);
+            TypeId value = template_default_types.get(p);
+            if (!value) {
+                NodeId d = entities[p].initializer;
+                if (!d) return false;
+                value = type_id(ast[d].first,t.environment);
+            }
             value = substitute_type(value,bindings,cache);
             if (!value) return false;
             args.push_back(value);

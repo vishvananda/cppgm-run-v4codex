@@ -249,6 +249,7 @@ private:
     ScopeId active_template_scope = 0;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
+    Index template_default_types;
     std::vector<TypeArguments> argument_packs;
     std::vector<TypeId> argument_types;
     std::vector<std::uint32_t> argument_slots;
