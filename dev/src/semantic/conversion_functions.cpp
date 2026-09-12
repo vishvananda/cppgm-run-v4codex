@@ -176,10 +176,13 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         Type ctor = types[entities[second.function].type];
         std::vector<NodeId> args(1,0);
-        std::vector<Conversion> selected(1,standard_conversion(value,types.parameters[ctor.offset]));
+        auto recipe = second.materialization;
+        auto call = recipe ? conversion_objects[recipe].call : Expression();
+        std::vector<Conversion> selected(1,recipe ? conversions[call.conversions] : standard_conversion(value,types.parameters[ctor.offset]));
         for (unsigned j = 1; j < ctor.count; ++j) {
-            NodeId arg = default_arguments[entities[second.function].defaults+j];
-            args.push_back(arg); selected.push_back(conversion(arg,types.parameters[ctor.offset+j]));
+            NodeId arg = recipe ? call_arguments[call.arguments+j] : default_arguments[entities[second.function].defaults+j];
+            if (recipe) expression(arg,facts[n].scope);
+            args.push_back(arg); selected.push_back(recipe ? copy_conversion_recipe(conversions[call.conversions+j]) : conversion(arg,types.parameters[ctor.offset+j]));
         }
         record_call(transfer.call,args,selected);
         user_conversions[c.materialization].result.materialization = conversion_objects.size();

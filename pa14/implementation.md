@@ -182,7 +182,7 @@ materializations and lifetimes from unprepared recipes. Declaration-owned
 default arguments retain their owner and are evaluated at each required use.
 Fixed function pointers/references, reference returns, fixed explicit function
 specializations, hidden-friend ADL, defaults and temporary chains have native
-controls. Thirteen new unused-definition rejections supplement the course suite.
+controls. Seventeen new unused-definition rejections supplement the course suite.
 
 Selection visits language-required candidates/arguments once per fixed source
 call; reuse visits each concrete argument once. Source/occurrence call slices
@@ -192,3 +192,21 @@ materialization records. Record layouts stay 112/36 bytes. Nonstatic implicit
 objects and pattern-owned member signatures, constructor/operator expressions,
 declaration/return conversions and dependent projection remain separate current
 owners. These are not claimed complete by fixed direct/indirect call sharing.
+
+
+The follow-on conversion owner records constructor argument recipes without a
+concrete temporary. `materialize_conversion` distinguishes that source recipe
+from a completed object by its zero temporary identity, copies each argument's
+consumption facts and applies the recorded conversions. User-conversion result
+transfers consume the same recipe mechanism, cloning unprepared user records
+before use. Standard and nested constructor conversions validate base access
+at definition time, including conversion-function pointer results. Default
+constructor arguments permit their own user conversion; the restriction on a
+second user conversion belongs only to the supplied first argument.
+
+Additional native controls cover side-effecting constructor defaults, class
+conversion of defaults, conversion-function reference results with secondary
+copy/default objects, repeated specialization use and public base pointers.
+Four reduced private-base cases close definition-time errors accepted at entry.
+This completes fixed call argument recipes; dependent member/object selection
+and declaration/return conversions require facts from their distinct owners.

@@ -36,7 +36,8 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
 }
 void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool defer)
 {
-    if (conversion.materialization) return;
+    auto recipe = conversion.materialization;
+    if (recipe && conversion_objects[recipe].temporary) return;
     EntityId ctor = conversion.function;
     auto m = entities[ctor].member_info;
     if (deleted_transfer(ctor)) throw std::runtime_error("deleted converting constructor");
@@ -72,15 +73,18 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
     Type f = types[entities[ctor].type];
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected;
+    auto call = recipe ? conversion_objects[recipe].call : Expression();
     for (unsigned j = 0; j < f.count; ++j) {
-        NodeId a = j ? default_arguments[entities[ctor].defaults+j] : n;
-        Conversion c = !j && conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
-            this->conversion(a, types.parameters[f.offset+j], false);
+        NodeId a = j ? (recipe ? call_arguments[call.arguments+j] : default_arguments[entities[ctor].defaults+j]) : n;
+        if (recipe && j) expression(a,facts[n].scope);
+        Conversion c = recipe ? copy_conversion_recipe(conversions[call.conversions+j]) :
+            !j && conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
+            this->conversion(a, types.parameters[f.offset+j], j != 0);
         if (!c.valid()) throw std::runtime_error("invalid converting constructor argument");
         apply_conversion(a, c); arguments.push_back(a); selected.push_back(c);
     }
     if (!f.count && f.variadic) {
-        auto c = ellipsis_conversion(n); apply_conversion(n,c);
+        auto c = recipe ? conversions[call.conversions] : ellipsis_conversion(n); apply_conversion(n,c);
         arguments.push_back(n); selected.push_back(c);
     }
     materialized.call.arguments = call_arguments.size(); materialized.call.argument_count = arguments.size();

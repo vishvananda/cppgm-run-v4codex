@@ -384,6 +384,8 @@ private:
     void check_fixed_expression(NodeId n, ScopeId s);
     bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
     bool check_fixed_call(NodeId n, ScopeId s);
+    void check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
+    Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);
     void use_selected_function(EntityId e, bool direct);
     TemplateBinding bind_template_name(NodeId n, ScopeId s);

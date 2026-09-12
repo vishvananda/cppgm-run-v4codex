@@ -48,6 +48,30 @@ template<class T>int associated(int n){return pick(adl::make(n));}
 struct Protected { protected: static int inherited(int n){return n+4;} };
 template<class T>struct Derived:Protected {int run(int n){return inherited(n);}};
 template<class T>int local_access(int n){struct Local:Protected{static int run(int n){return inherited(n);}};return Local::run(n);}
+int adjustments=0;
+int adjustment(){return ++adjustments;}
+struct WithDefault {int n;WithDefault(int v,int extra=adjustment()):n(v+extra){}};
+int inspect_default(WithDefault v){return v.n;}
+template<class T>int constructor_default(int n){return inspect_default(n);}
+struct ClassDefault {int n;ClassDefault(int v,Value extra=4):n(v+extra.n){}};
+int inspect_class_default(ClassDefault v){return v.n;}
+template<class T>int class_constructor_default(int n){return inspect_class_default(n);}
+struct BaseValue{int n;};struct PublicValue:BaseValue{};
+PublicValue public_value;PublicValue* public_pointer(){return &public_value;}
+int inspect_base(const BaseValue* p){return p->n;}
+template<class T>int base_conversion(){return inspect_base(public_pointer());}
+int copy_live=0;
+struct CopyValue {
+    int n;
+    CopyValue(int v):n(v){++copy_live;}
+    CopyValue(const CopyValue& v,Value extra=4):n(v.n+extra.n-4){++copy_live;}
+    ~CopyValue(){--copy_live;}
+};
+CopyValue persistent(23);
+struct CopySource {operator const CopyValue&()const{return persistent;}};
+CopySource copy_source(){return CopySource();}
+int inspect_copy(CopyValue v){return v.n;}
+template<class T>int secondary_conversion(){return inspect_copy(copy_source());}
 int main(){
     if(fixed<int>(3)!=13 || fixed<Tag>(4)!=14 || longs!=2 || ints) return 1;
     if(default_call<int>(2)!=9 || default_call<Tag>(3)!=10 || defaults!=2) return 2;
@@ -65,5 +89,10 @@ int main(){
     if(object_defaults<int>()!=10 || live || object_defaults<Tag>()!=10 || live) return 13;
     Derived<int> d;Derived<Tag> e;
     if(d.run(2)!=6 || e.run(3)!=7 || local_access<int>(4)!=8 || local_access<Tag>(5)!=9) return 14;
+    if(constructor_default<int>(3)!=4 || constructor_default<Tag>(4)!=6 || adjustments!=2) return 15;
+    public_value.n=19;
+    if(base_conversion<int>()!=19 || base_conversion<Tag>()!=19) return 16;
+    if(secondary_conversion<int>()!=23 || copy_live!=1 || live || secondary_conversion<Tag>()!=23 || copy_live!=1 || live) return 17;
+    if(class_constructor_default<int>(2)!=6 || live || class_constructor_default<Tag>(3)!=7 || live || inspect_class_default(4)!=8 || live) return 18;
     return 0;
 }

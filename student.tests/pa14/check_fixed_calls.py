@@ -18,6 +18,11 @@ rejections=[
  'struct B{private:static int call(int);};template<class T>struct D:B{int f(int n){return call(n);}};',
  'struct B{protected:static int call(int);};template<class T>int f(int n){return B::call(n);}',
  'struct B{public:static int call(int);};class D:B{};template<class T>struct E:D{int f(int n){return call(n);}};',
+ 'struct B{};struct D:private B{};D make();int call(const B&);template<class T>int f(){return call(make());}',
+ 'struct B{};struct D:private B{};D make();int call(B);template<class T>int f(){return call(make());}',
+ 'struct B{};struct D:private B{};D* make();int call(B*);template<class T>int f(){return call(make());}',
+ 'struct B{};struct D:private B{};struct V{operator D*();};V make();int call(B*);template<class T>int f(){return call(make());}',
+
 ]
 with tempfile.TemporaryDirectory(prefix='pa14-fixed-calls-') as directory:
  work=Path(directory)

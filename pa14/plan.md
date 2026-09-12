@@ -87,7 +87,13 @@ results will be recorded before its handoff.
 
 Current increment: `ba609e57` unifies typed call selection. Fixed call facts,
 parameter adjustment and source fixed-base access pass through **1935/1935**,
-fifteen personal native programs, thirteen fixed-call rejections and the existing
+fifteen personal native programs, seventeen fixed-call rejections and the existing
 binding/query/scalar checks. File audit passes with three inherited advisories.
 Artifacts: `$RALPH_ARTIFACT_DIR/pa14-call-facts/`. Performance and sanitizer
 acceptance are pending; previous measurements remain frozen and valid.
+
+Related extension: fixed constructor/default and user-result conversion recipes
+now share argument decisions; concrete uses own objects/lifetimes. Private-base
+conversion rejection is checked before instantiation. Initial call-fact release
+and sanitizer parity passed on 329 inputs; the extended recipe implementation
+is receiving the same checks before the frozen entry/final benchmark.

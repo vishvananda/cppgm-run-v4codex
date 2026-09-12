@@ -65,27 +65,8 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     }
     auto f = types[ft];
     for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
-    for (unsigned i = 0; i < chosen.size(); ++i) {
-        auto c = chosen[i];
-        if (!c.valid()) throw std::runtime_error("invalid fixed call argument");
-        if (c.kind == Conversion::Kind::Construction || c.kind == Conversion::Kind::User) {
-            if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed argument conversion");
-            check_access(c.function,s,entities[c.function].owner);
-        }
-        if (c.kind == Conversion::Kind::Construction) default_destructor(value_type(c.target),s,false);
-        if (c.kind == Conversion::Kind::User) {
-            auto recipe = user_conversions[c.materialization];
-            auto from = expressions[args[i]].type;
-            if (recipe.adjustment) check_base_access(from,entities[scopes[entities[c.function].owner].entity].type,s);
-            if (recipe.result.function) {
-                if (deleted_transfer(recipe.result.function)) throw std::runtime_error("deleted fixed conversion result transfer");
-                check_access(recipe.result.function,s,entities[recipe.result.function].owner);
-            }
-            auto returned = types[entities[c.function].type].child;
-            if (class_value(returned)) default_destructor(returned,s,false);
-            if (recipe.result.kind == Conversion::Kind::Construction) default_destructor(value_type(c.target),s,false);
-        }
-    }
+    for (unsigned i = 0; i < chosen.size(); ++i)
+        check_fixed_conversion(expressions[args[i]],args[i],chosen[i],s);
     Expression result; result.type = value_type(f.child);
     result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[f.child].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
@@ -127,13 +108,8 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         auto original = call_arguments[result.arguments+i];
         auto a = ast.projected(original,context); if (!a) a = original; // Declaration-owned default.
         expression(a,s); args.push_back(a);
-        auto c = conversions[result.conversions+i];
+        auto c = copy_conversion_recipe(conversions[result.conversions+i]);
         materialize |= c.kind == Conversion::Kind::Construction || c.kind == Conversion::Kind::User || c.kind == Conversion::Kind::ListPlan;
-        if (c.kind == Conversion::Kind::User) {
-            auto recipe = user_conversions[c.materialization];
-            if (recipe.prepared) throw std::logic_error("fixed call owns a concrete user conversion");
-            c.materialization = user_conversions.size(); user_conversions.push_back(recipe);
-        }
         chosen.push_back(c);
     }
     if (materialize) record_call(result,args,chosen);
