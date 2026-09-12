@@ -318,6 +318,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         ft = entities[selected].type;
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);
         Type selected_type = types[ft];
+        for (unsigned j = 0; j < selected_type.count; ++j) reject_abstract(types.parameters[selected_type.offset+j]);
         std::vector<Conversion> chosen(sequences.begin() + viable[best].offset + object_ranking,
             sequences.begin() + viable[best].offset + object_ranking + args.size());
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {

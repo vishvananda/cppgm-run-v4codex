@@ -32,6 +32,10 @@ public:
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
     TypeId call_type(EntityId e) const;
     bool member_demanded(EntityId e) const;
+    const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
+    bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
+    std::uint64_t base_offset(TypeId t) { size(t); return class_facts[entities[types[t].entity].class_info].base_offset; }
+    EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
     bool destructor_needed(EntityId e);
@@ -197,7 +201,7 @@ private:
     Index object_destructors, lifetime_index, object_lifetimes, return_counts;
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
     std::vector<NodeId> jump_bodies;
-    EntityId default_destructor(TypeId t, ScopeId s = 0);
+    EntityId default_destructor(TypeId t, ScopeId s = 0, bool demand = true);
     void destructor_actions(EntityId e);
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
@@ -286,6 +290,11 @@ private:
     unsigned base_steps(TypeId from, EntityId to) const;
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
+    void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
+    void complete_virtuals(EntityId cls);
+    void check_covariance(EntityId e, EntityId base);
+    void reject_abstract(TypeId t);
+    std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);

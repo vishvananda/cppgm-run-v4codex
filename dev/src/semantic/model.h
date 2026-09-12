@@ -71,6 +71,8 @@ struct ClassFacts {
     ScopeId default_constructor = 0;
     unsigned char layout_state = 0;
     bool aggregate = true, empty = true;
+    std::uint32_t virtual_info = 0;
+    std::uint64_t base_offset = 0;
     EntityId value_constructor = 0;
     EntityId variant_initializer = 0;
     unsigned char declared_transfers = 0, generated_transfers = 0;
@@ -153,8 +155,17 @@ struct MemberFacts {
     unsigned char transfer_state = 0;
     bool transfer_trivial = false, transfer_direct = false, transfer_noexcept = false, defaulted_late = false;
     bool scalar_transfer_body = false;
+    bool virtual_member = false, pure = false, final_member = false, override_member = false;
+    std::uint32_t virtual_slot = 0; // One-based slot within the address point.
+    TypeId virtual_signature = 0;
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
+};
+struct VirtualClass {
+    std::vector<EntityId> slots; // Complete, then deleting destructor occupies two entries.
+    Index signatures;
+    EntityId key_function = 0;
+    bool abstract = false, demanded = false;
 };
 struct TransferAction {
     enum Kind : unsigned char { Scalar, Reference, Subobject, Unit, Storage, Empty } kind = Scalar;

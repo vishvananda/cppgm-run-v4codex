@@ -33,6 +33,7 @@ necessary semantic cost is disclosed, diagnostic targets are not new gates.
 | Group | Commit / result |
 | --- | --- |
 | Entry | `823e929c`: 2/37; no coverage or reference changes |
+| Virtual declaration/signature/covariance ownership | 12/37; all required rejections and 12 personal controls pass; inherited 1584/1584 and file audit pass |
 
 No handoff yet. Required final checks: `make test-pa13`,
 `make test-report-through-pa13`, file audit, explicit personal controls,

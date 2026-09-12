@@ -30,7 +30,7 @@ bool Analyzer::destructor_member(EntityId e) const
 {
     return e && entities[e].member_info && members[entities[e].member_info].destructor;
 }
-EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
+EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
@@ -50,7 +50,7 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s)
     }
     if (members[entities[dtor].member_info].deleted) throw std::runtime_error("deleted destructor");
     check_access(dtor, s, entities[dtor].owner);
-    demand_member(dtor);
+    if (demand) demand_member(dtor);
     return dtor;
 }
 void Analyzer::register_destruction(EntityId e)

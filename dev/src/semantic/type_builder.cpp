@@ -279,6 +279,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         classify_transfer(e, special, s);
         if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
     }
+    if (calls) virtual_declaration(e, d, init, specs, source, s);
     record(owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
     if (calls && init && !function && scopes[s].kind == ScopeKind::Class && entities[e].is_static &&

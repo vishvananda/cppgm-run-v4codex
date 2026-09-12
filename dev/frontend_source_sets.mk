@@ -54,3 +54,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/member_pointers lowering/member_point
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/zero_initialization lowering/zero_initialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/scalar_transfer semantic/parameter_representation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/scalar_consumption lowering/scalar_consumption
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/virtuals
