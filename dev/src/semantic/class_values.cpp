@@ -87,7 +87,7 @@ void Analyzer::record_class_return(NodeId n, ScopeId s)
     while (ast[id].kind == Kind::Parenthesized) id = ast[id].first;
     EntityId local = ast[id].kind == Kind::IdExpression ? expressions[id].entity : 0;
     bool eligible = local && (entities[local].kind == EntityKind::Variable || entities[local].kind == EntityKind::Parameter) &&
-        !entities[local].is_static && !entities[local].external_decl && class_value(entities[local].type) &&
+        !entities[local].is_static && !entities[local].external_decl && !(types[entities[local].type].cv & 2) && class_value(entities[local].type) &&
         encloses(entities[current_function].scope,entities[local].owner);
     Conversion c = conversion(source,return_type);
     if (eligible && types.unqualified(x.type) == types.unqualified(return_type)) {

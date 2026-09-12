@@ -97,3 +97,18 @@ The final emission-use representation occupies existing declaration padding
 evaluated use, including uses preceding definition, without an auxiliary map
 for ordinary function calls. The intermediate map implementation and sanitizer
 parity evidence remain frozen in the transfer artifact directory.
+
+The performance review exposed preparation of already-deleted implicit copies.
+`prepare_transfer` now publishes the known negative fact before creating a
+function scope, parameters or subobject actions. On the transfer corpus this
+removes two unused actions per specialization while preserving the selected
+move and its reference-binding actions. The first 350-observation campaign
+remains preliminary evidence; a separate final campaign measures this change.
+The through report remains 1935/1935 and thirteen native reducers pass.
+
+A final return-boundary reducer also excludes volatile locals from both NRVO
+and implicit-move eligibility, as required by N3485 [class.copy]/31–32
+(`doc/n3485.txt:15295`). The qualifier check belongs to the source object,
+independently of the function's return type. The frozen reduced program returns
+1 before the fix and 0 afterward (one volatile-lvalue copy, no move); it is
+also exercised by `object-transfers.cpp`. No reference output was changed.

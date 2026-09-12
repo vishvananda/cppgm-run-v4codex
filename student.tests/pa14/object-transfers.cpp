@@ -49,6 +49,16 @@ struct Node;
 struct Node { int prefix[6]; Link<Node> link; int tail; };
 int extent() { return sizeof(Link<Node>); }
 }
+namespace volatile_return {
+int copies = 0, moves = 0;
+struct Value {
+    Value() {}
+    Value(volatile Value&) { ++copies; }
+    Value(volatile Value&&) { ++moves; }
+};
+Value produce() { volatile Value local; return local; }
+int check() { Value result = produce(); return copies != 1 || moves != 0; }
+}
 int main() {
     Holder holder;
     if (calls != 1) return 1;
@@ -66,5 +76,6 @@ int main() {
     Chain<long, Chain<int>> outer(5, inner);
     if (outer.number != 5 || static_cast<Chain<int>&>(outer).number != 4) return 5;
     if (layout::extent() != 4 || sizeof(layout::Node) != 32) return 6;
+    if (volatile_return::check()) return 7;
     return 0;
 }
