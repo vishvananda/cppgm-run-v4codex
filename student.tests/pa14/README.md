@@ -7,7 +7,7 @@ python3 student.tests/pa14/check_functions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all nine local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all fifteen local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -17,7 +17,7 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and nine
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and fifteen
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
@@ -45,3 +45,16 @@ comparison on the previous common corpus plus new nested/member/static definitio
 scaling and a live out-of-class member-call executable. Its 308 observations live
 in `definition-performance.json`; the same verifier checks them alongside the
 1,148 historical observations. No numerical timing threshold filters results.
+
+
+`check_bindings.py`, `check_queries.py`, `check_fixed_expressions.py` and
+`check_fixed_calls.py` run definition-time rejection and non-demand controls;
+each accepts a frozen compiler path for sanitizer repetition. Fixed calls cover
+ADL, indirect/reference parameters, class temporaries/defaults, access, deleted
+conversions and unused selected-specialization bodies.
+
+`call_benchmark.py A B WORK OUT` extends the frozen body corpus with fixed-call,
+unused-definition and class-conversion scaling plus two checked native loops.
+A/A calibration and two ABBA blocks retain every sample and output hash. The
+harness and input corpus are frozen before timing; no numerical gate filters
+observations or replaces correctness.

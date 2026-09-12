@@ -10,6 +10,10 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
     auto node = ast[n];
     auto first = node.first;
     switch (node.kind) {
+    case Kind::Call:
+        if (!check_fixed_call(n,s)) return;
+        template_fixed_expressions.put(source,n); ++template_fixed_work;
+        return;
     case Kind::Literal:
         if (ast.literals[node.literal].suffix || ast.literals[node.literal].kind == LiteralKind::string) return;
         break;
@@ -20,8 +24,11 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[node.detail].source)];
         auto e = binding.entity;
         auto type = entities[e].type;
+        auto value = value_type(type);
+        bool function_pointer = types[value].kind == TypeKind::Function ||
+            (types[value].kind == TypeKind::Pointer && types[types[value].child].kind == TypeKind::Function);
         if (!e || binding.dependent || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) ||
-            !type || scopes[entities[e].owner].kind == ScopeKind::Class || types[value_type(type)].kind != TypeKind::Fundamental)
+            !type || scopes[entities[e].owner].kind == ScopeKind::Class || (types[value].kind != TypeKind::Fundamental && !function_pointer))
             return;
         break;
     }
@@ -41,7 +48,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
     case Kind::Parenthesized: case Kind::Unary: case Kind::Postfix:
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: case Kind::Subscript:
         for (auto c = first; c; c = ast[c].next)
-            if (!fixed(c)) return;
+            if (!fixed(c) || class_value(expressions[fixed(c)].type)) return;
         break;
     default: return;
     }
@@ -61,6 +68,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     auto source = template_fixed_expressions.get(occurrence.source);
     if (!source) return false;
     ++template_fixed_uses;
+    if (ast[n].kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
     auto first = ast[n].first;
     bool unevaluated = ast[n].kind == Kind::Sizeof || ast[n].kind == Kind::TypeTrait;

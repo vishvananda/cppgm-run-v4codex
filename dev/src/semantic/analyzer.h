@@ -234,6 +234,8 @@ private:
     Access declaration_access(ScopeId s) const;
     bool privileged(ScopeId context, EntityId cls) const;
     bool class_derives(EntityId derived, EntityId base) const;
+    std::uint32_t access_base(EntityId entity) const;
+    void check_base_entity_access(EntityId from, EntityId to, ScopeId context);
     void check_access(EntityId e, ScopeId context, ScopeId naming = 0, TypeId object = 0);
     void check_base_access(TypeId from, TypeId to, ScopeId context);
     ScopeId naming_class(ScopeId s) const;
@@ -272,6 +274,7 @@ private:
     TypeQueryFact query_fact(QueryId id);
     TypeId query_decltype(QueryId id, bool direct);
     TypeId fundamental_cast_type(ETokenType op);
+    TypeId parameter_body_type(TypeId source);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     CallSelection select_call(EntityId family, const std::vector<Expression>& values,
         const std::vector<NodeId>* nodes, TypeId object, ValueCategory category,
@@ -372,13 +375,17 @@ private:
     std::size_t template_definition_work = 0;
     ScopeId member_definition_environment = 0;
     Index template_binding_index, template_pattern_entities, template_pattern_scopes, template_bound_bodies;
-    Index template_base_dependence, template_class_bindings;
+    Index template_base_dependence, template_class_bindings, template_pattern_bases;
     std::vector<TemplateBinding> template_bindings = std::vector<TemplateBinding>(1);
     std::size_t template_binding_work = 0;
     Index template_fixed_expressions;
     std::size_t template_fixed_work = 0, template_fixed_uses = 0;
+    std::size_t template_fixed_call_work = 0, template_fixed_call_uses = 0;
     void check_fixed_expression(NodeId n, ScopeId s);
     bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
+    bool check_fixed_call(NodeId n, ScopeId s);
+    void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);
+    void use_selected_function(EntityId e, bool direct);
     TemplateBinding bind_template_name(NodeId n, ScopeId s);
     bool bind_template_expression(NodeId n, ScopeId s, bool callee = false);
     bool bind_template_expression_impl(NodeId n, ScopeId s, bool callee);

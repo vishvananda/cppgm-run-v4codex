@@ -10,11 +10,17 @@ ScopeId Analyzer::naming_class(ScopeId s) const
     for (; s; s = scopes[s].parent) if (scopes[s].kind == ScopeKind::Class) return s;
     return 0;
 }
+std::uint32_t Analyzer::access_base(EntityId entity) const
+{
+    auto info = entities[entity].class_info;
+    auto edge = info ? class_facts[info].first_base : 0;
+    return edge ? edge : template_pattern_bases.get(entity);
+}
 bool Analyzer::class_derives(EntityId derived, EntityId base) const
 {
-    for (EntityId current = derived; current && entities[current].class_info;) {
+    for (EntityId current = derived; current;) {
         if (current == base) return true;
-        auto edge = class_facts[entities[current].class_info].first_base;
+        auto edge = access_base(current);
         current = edge ? bases[edge].base : 0;
     }
     return false;
@@ -30,10 +36,13 @@ bool Analyzer::privileged(ScopeId context, EntityId cls) const
 }
 void Analyzer::check_base_access(TypeId from, TypeId to, ScopeId context)
 {
+    check_base_entity_access(types[from].entity,types[to].entity,context);
+}
+void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId context)
+{
     if (access_override) context = access_override;
-    EntityId cls = types[from].entity, target = types[to].entity;
     for (EntityId current = cls; current && current != target;) {
-        auto edge = class_facts[entities[current].class_info].first_base;
+        auto edge = access_base(current);
         if (!edge) throw std::runtime_error("unrelated base conversion");
         Access level = bases[edge].access;
         bool allowed = level == Access::Public || privileged(context, current);
@@ -42,7 +51,7 @@ void Analyzer::check_base_access(TypeId from, TypeId to, ScopeId context)
                 if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, current)) allowed = true;
             for (EntityId d = cls; !allowed && d && d != current;) {
                 allowed = privileged(context, d);
-                auto b = class_facts[entities[d].class_info].first_base; d = b ? bases[b].base : 0;
+                auto b = access_base(d); d = b ? bases[b].base : 0;
             }
         }
         if (!allowed) throw std::runtime_error("inaccessible base conversion");
@@ -62,9 +71,9 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
         auto exposed = using_access.get(key(entities[current].scope, e));
         if (exposed) { introduced = current; level = Access(exposed-1); break; }
         if (current == owner) break;
-        auto b = class_facts[entities[current].class_info].first_base; current = b ? bases[b].base : 0;
+        auto b = access_base(current); current = b ? bases[b].base : 0;
     }
-    if (named != introduced) check_base_access(entities[named].type, entities[introduced].type, context);
+    if (named != introduced) check_base_entity_access(named,introduced,context);
     if (level == Access::Public || privileged(context, introduced)) return;
     if (level == Access::Protected) {
         bool object_bound = !entities[e].is_static && (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Function);
@@ -75,7 +84,7 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
         }
         for (EntityId candidate = actual; candidate && class_derives(candidate, introduced);) {
             if (privileged(context, candidate)) return;
-            auto b = class_facts[entities[candidate].class_info].first_base; candidate = b ? bases[b].base : 0;
+            auto b = access_base(candidate); candidate = b ? bases[b].base : 0;
         }
         if (!object_bound) for (auto s = context; s; s = scopes[s].parent)
             if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, introduced)) return;

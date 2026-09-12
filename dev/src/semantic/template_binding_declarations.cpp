@@ -31,6 +31,14 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
         if (base && entities[base].class_info) complete_class(base);
         if (!base || !target(base)) throw std::runtime_error("invalid fixed pattern base");
+        auto access = child(b,Kind::Access);
+        auto level = access ? (ast[access].op == KW_PRIVATE ? Access::Private :
+            ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) :
+            ast[ast[n].first].op == KW_CLASS ? Access::Private : Access::Public;
+        // Definition-time access consumes the fixed base edge without asking
+        // for a concrete specialization's layout or giving a local pattern a type.
+        bases.push_back({base,template_pattern_bases.get(entity),level});
+        template_pattern_bases.put(entity,bases.size()-1);
         add_edge(cs,target(base));
     }
     std::vector<Body> bodies;

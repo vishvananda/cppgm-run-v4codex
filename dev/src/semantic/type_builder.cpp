@@ -3,6 +3,11 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::parameter_body_type(TypeId source)
+{
+    return types[source].kind == TypeKind::Array ? types.compound(TypeKind::Pointer,types.signature(types[source].child)) :
+        types[source].kind == TypeKind::Function ? types.compound(TypeKind::Pointer,types.signature(source)) : types.signature(source);
+}
 TypeId Analyzer::source_type(EntityId e) const
 {
     return entities[e].kind == EntityKind::Alias && entities[e].source ? facts[entities[e].source].type : entities[e].type;

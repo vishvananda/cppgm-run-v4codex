@@ -62,7 +62,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
 bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
 {
     bool dependent = bind_template_expression_impl(n,s,callee);
-    if (n && !dependent && !callee && !ast.nodes.occurrences[n].context)
+    if (n && !dependent && !ast.nodes.occurrences[n].context)
         check_fixed_expression(n,s);
     return dependent;
 }
@@ -134,7 +134,7 @@ void Analyzer::bind_template_body(const Body& body)
         auto specs = ast[p].first, decl = ast[specs].next;
         bool dependent = bind_template_expression(specs,fs) | bind_template_expression(decl,fs);
         auto e = pattern_declaration(EntityKind::Parameter,fs,terminal(decl_name(decl)),p,dependent);
-        if (!dependent) entities[e].type = declarator(decl,specifiers(specs,fs),fs);
+        if (!dependent) entities[e].type = parameter_body_type(declarator(decl,specifiers(specs,fs),fs));
     }
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);

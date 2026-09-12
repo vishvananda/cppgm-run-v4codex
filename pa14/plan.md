@@ -18,14 +18,15 @@ validation. See [ownership and bounds](implementation.md).
 
 | Remaining current-PA14 owner | Data flow, complexity and validation |
 | --- | --- |
-| Typed template body graph | Extend shared facts to calls/class operations and declaration/return/default conversions. Substitute dependent edges only; replace full-region projection. Validate materialization, access, unused-body legality and source/context provenance with native/scaling checks. |
+| Typed template body graph | Extend shared facts to nonstatic member/class operations and declaration/return conversions. Substitute dependent edges only; replace full-region projection. Validate materialization, access, unused-body legality and source/context provenance with native/scaling checks. |
 | Demand/failure graph | Separate layout/default/exception/body states, typed reasons/reverse edges and structured expected failure. Work follows demanded facts/edges; validate cycles, narrow negative-cache keys and unrelated-declaration scaling. |
 
 The fixed scalar group includes arithmetic, assignments, conditions, casts,
 sizeof/alignment and subscript expressions, with twelve new unused-body
-rejections. Calls require selected-callee/argument facts plus occurrence-owned
-materializations and emission demand; simply copying scalar records would lose
-those effects. That is the next concrete owner boundary. Entire source regions
+rejections. Fixed direct/indirect calls now share selected-callee/argument facts and ADL,
+while occurrences own materializations and emission demand. Nonstatic member
+objects, constructor/operator expressions and declaration/return conversions
+are the next typed-fact boundaries. Entire source regions
 still project (76 occurrence nodes per specialization in the new corpus).
 Course success does not waive these architecture requirements or defer them.
 
@@ -81,4 +82,12 @@ frozen binaries, commands/logs and evidence live in
 unchanged. Required stage/prior checks, through report, native/sanitizer checks, file audit
 and final evidence verification pass. The scalar group is complete; the
 call/materialization and dependent-body graph boundary above remains current-stage
-work. All intended changes are committed at handoff, with a clean tree.
+work. The present call group is under validation; sanitizer and frozen performance
+results will be recorded before its handoff.
+
+Current increment: `ba609e57` unifies typed call selection. Fixed call facts,
+parameter adjustment and source fixed-base access pass through **1935/1935**,
+fifteen personal native programs, thirteen fixed-call rejections and the existing
+binding/query/scalar checks. File audit passes with three inherited advisories.
+Artifacts: `$RALPH_ARTIFACT_DIR/pa14-call-facts/`. Performance and sanitizer
+acceptance are pending; previous measurements remain frozen and valid.

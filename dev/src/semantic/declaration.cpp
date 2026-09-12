@@ -307,8 +307,7 @@ void Analyzer::function_body(const Body& body)
         if (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID) continue;
         IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
-        entities[e].type = types[t].kind == TypeKind::Array ? types.compound(TypeKind::Pointer, types.signature(types[t].child)) :
-            types[t].kind == TypeKind::Function ? types.compound(TypeKind::Pointer, types.signature(t)) : types.signature(t);
+        entities[e].type = parameter_body_type(t);
         bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }

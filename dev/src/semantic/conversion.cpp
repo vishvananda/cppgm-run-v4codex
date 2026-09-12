@@ -226,10 +226,7 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
     expressions[n].type = entities[e].type;
     facts[n].type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
     facts[n].entity = e;
-    if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
-    if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;
-    demand_member(e);
-    demand_specialization(e);
+    use_selected_function(e,direct);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
         select_function(ast[n].first, e, direct);
         if (ast[n].kind == Kind::Unary) {
@@ -239,6 +236,13 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
             facts[n].type = expressions[n].type;
         }
     }
+}
+void Analyzer::use_selected_function(EntityId e, bool direct)
+{
+    if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
+    if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;
+    demand_member(e);
+    demand_specialization(e);
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {

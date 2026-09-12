@@ -156,3 +156,39 @@ measurements. The wrapper's release text returns from 762 to 623 bytes (its entr
 size); the resolver's hot text also decreases by 22 bytes. This is an implementation
 work reduction, not a standalone runtime-profit claim. Both preceding binary
 campaigns remain frozen alongside the final measurements.
+
+
+## Shared fixed call facts
+
+`call_selection.cpp` is the typed direct-call candidate owner used by ordinary
+calls, type queries and fixed template calls. Arity/category filters precede
+argument conversions; candidate ranking returns a compact selected/ambiguous/
+no-viable result. Query and source callers preserve their respective typed/null
+literal inputs. The borrowed expression vector survives recursive arena growth.
+This does not yet remove exceptions from every dependent candidate operation.
+
+`template_call_facts.cpp` records fixed callee identity, argument types/categories,
+ADL contribution and immutable conversion recipes on the source expression.
+It validates unused bodies, deleted/access constraints, class results and
+conversion-result transfers without demanding function bodies or constructing
+source-owned temporaries. Function parameters share ordinary array/function
+adjustment through `parameter_body_type`. Pattern fixed-base access has an
+explicit indexed edge with its access level, independent of concrete layout;
+local pattern classes need no invented type or layout to validate access.
+
+Each occurrence consumes its mapped operands and emission demand. Scalar
+conversions share arena slices; object/user conversions produce occurrence-owned
+materializations and lifetimes from unprepared recipes. Declaration-owned
+default arguments retain their owner and are evaluated at each required use.
+Fixed function pointers/references, reference returns, fixed explicit function
+specializations, hidden-friend ADL, defaults and temporary chains have native
+controls. Thirteen new unused-definition rejections supplement the course suite.
+
+Selection visits language-required candidates/arguments once per fixed source
+call; reuse visits each concrete argument once. Source/occurrence call slices
+and access edges are TU-owned, with no global scan or process cache. Scalar
+conversions add no per-specialization copy. Object conversions retain new
+materialization records. Record layouts stay 112/36 bytes. Nonstatic implicit
+objects and pattern-owned member signatures, constructor/operator expressions,
+declaration/return conversions and dependent projection remain separate current
+owners. These are not claimed complete by fixed direct/indirect call sharing.
