@@ -23,7 +23,8 @@ references and comparison rules are unchanged. PA15 has not been started.
 | `semantic/inherited_constructors.cpp`, parser contexts | Constructor using-declarations recognize aliases naming the direct base. Declaration-owned parser scopes preserve qualified class-template names, head names and member precedence. | Alias-inherited constructor and lazy right-shift member lookup now pass. |
 
 All indexes, source regions, query pools, argument packs and binding scopes are
-translation-unit owned. Candidate and traversal vectors are temporary. There is
+translation-unit owned. Candidate and traversal vectors are temporary. Packed expression flags restore
+the original 36-byte expression record; declarations remain 112 bytes. There is
 no grammar replay, reference delegation, global restoration retry or persistent
 semantic cache. The optional optimizer/native backend have not been introduced.
 

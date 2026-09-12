@@ -1,0 +1,68 @@
+[
+  {
+    "label": "entry",
+    "revision": "e27474c2",
+    "model_sha256": "bdbaf76a95cbafaf9a4e4dfe1e8bb5762152a304521698e03ee90748cdf9c225",
+    "model_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/entry/semantic/model.h",
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-O3",
+      "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/entry",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/entry-sizes"
+    ],
+    "expression_bytes": 36,
+    "entity_bytes": 112,
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/entry-sizes",
+    "binary_sha256": "9a656b9ee23ba3250b571e59f2d12a30ced22c2d12c0544f9f16d6e2730fa7c2",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+    "source_sha256": "84ca519b62caa79fd802eea53b786490f0d4a9f887a64d2eff3d6a82b9b68768"
+  },
+  {
+    "label": "context",
+    "revision": "47f5f975",
+    "model_sha256": "3dd9b9be985d2ab84e74dea8cb8fdc30b61075bd397c24e820314f60c0e2e06e",
+    "model_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/context/semantic/model.h",
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-O3",
+      "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/context",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/context-sizes"
+    ],
+    "expression_bytes": 40,
+    "entity_bytes": 112,
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/context-sizes",
+    "binary_sha256": "f2b8671ae660efeb0819caeda50d22a73419aeefc2882480ce847a5d7d184910",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+    "source_sha256": "84ca519b62caa79fd802eea53b786490f0d4a9f887a64d2eff3d6a82b9b68768"
+  },
+  {
+    "label": "packed",
+    "revision": "2dc67391",
+    "model_sha256": "9608da7c02af40e13a257a6df8521a77ee5f170173fd841ceb41722ea18951d4",
+    "model_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/packed/semantic/model.h",
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-O3",
+      "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/packed",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/packed-sizes"
+    ],
+    "expression_bytes": 36,
+    "entity_bytes": 112,
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/packed-sizes",
+    "binary_sha256": "9a656b9ee23ba3250b571e59f2d12a30ced22c2d12c0544f9f16d6e2730fa7c2",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-symbolic/expression-layout/sizes.cc",
+    "source_sha256": "84ca519b62caa79fd802eea53b786490f0d4a9f887a64d2eff3d6a82b9b68768"
+  }
+]

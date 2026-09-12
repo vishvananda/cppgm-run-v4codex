@@ -1,8 +1,9 @@
 # PA14 checkpoint performance review
 
-The first review below covers the previous **222/314** checkpoint. The final
-section records current **281/314** code and all 308 new observations. This is an
-O0 semantic implementation.
+Earlier sections preserve the **222/314** and **281/314** checkpoint evidence.
+The final section records the **297/314** symbolic-query/binding implementation
+and its corrected enclosing-environment cache key. This is an O0 semantic
+implementation.
 It adds no target optimization pass or student native backend. New template
 behavior cannot be compared with the incorrect stage-entry output for a speedup.
 Common correct outputs and all three common executables are byte-identical.
@@ -229,3 +230,121 @@ uses the supplied sectionless ELF metric described above. No runtime/code-size
 optimization benefit is claimed. These costs are recorded alongside compiler
 work and code growth, with correctness and remaining PA14 architecture obligations
 preserved. The stage remains incomplete at **281/314**.
+
+## Symbolic queries, fixed binding and packed records: 297/314
+
+Entry `e27474c2` is compared with final code `2dc67391`. Intermediate binaries
+and observations are retained. The protocol, CPU affinity, flags, exact source
+hashes, output hashes and executable hashes are recorded in each file.
+
+| New evidence | Frozen code | Timed process observations |
+| --- | --- | ---: |
+| [Preliminary queries/binding](../student.tests/pa14/symbolic-preliminary-performance.json) | entry / `af95f4d7` | 378 |
+| [Enclosing-context correction](../student.tests/pa14/symbolic-context-performance.json) | entry / `47f5f975` | 378 |
+| [Final packed implementation](../student.tests/pa14/symbolic-performance.json) | entry / `2dc67391` | 378 |
+| [Direct packing comparison](../student.tests/pa14/packing-performance.json) | `47f5f975` / `2dc67391` | 70 |
+
+Together with the preserved 1,456 historical observations, **2,660 timed
+processes verify**. Each common campaign includes two warmups, four A/A samples
+and two ABBA blocks; new-only workloads include a warmup and six samples. All
+samples, including warmups and outliers, are retained. The preliminary campaign
+preceded discovery of an enclosing-specialization cache-key bug; it is not
+acceptance evidence for that behavior. A short native diagnostic also overlapped
+part of that preliminary campaign. Neither issue is hidden by deleting samples.
+The corrected and final campaigns ran separately from builds and tests.
+
+The final campaign verifies **19 byte-identical common compiler outputs** and
+**five byte-identical common native executables**. New dependent-query and fixed
+binding workloads run only on the final compiler where the entry is incorrect
+or unsupported. Compiler timing excludes telemetry and validation; separate
+runs collect existing work counters and validate LowIR. Runtime inputs remain
+volatile and results are checked. There is no optional target optimization pass,
+assembly roundtrip or student native backend in this O0 stage.
+
+### Compiler latency and peak memory
+
+Wall values are observation medians in seconds. RSS is median per-process peak
+KiB. Both ABBA ratios are shown; ratios below one favor the final compiler.
+These are diagnostic observations, not additional assignment exit gates.
+
+| Common workload | Entry / final wall | Entry / final peak RSS | Two final/entry ABBA ratios |
+| --- | --- | --- | --- |
+| calls, 14,000 groups | 1.789161 / 1.760971 | 305658 / 305668 | 0.9964, 0.9457 |
+| memory/float, 14,000 functions | 1.500998 / 1.501049 | 266648 / 266738 | 0.9763, 1.0104 |
+| references, 3,200 links | 0.054091 / 0.053967 | 15032 / 14970 | 0.9955, 0.9962 |
+| template semantics, 14,000 calls | 0.280722 / 0.291606 | 38908 / 38928 | 1.0198, 1.5384 |
+| repeated specialization, 4,000 calls | 0.129213 / 0.128319 | 26096 / 26402 | 1.0021, 0.9963 |
+| class instances, 1,000 | 0.150779 / 0.148181 | 29414 / 29466 | 0.9910, 0.9926 |
+| retained definitions, 4,000 owners | 1.161043 / 1.180420 | 179902 / 184500 | 1.0188, 1.0078 |
+
+Spread matters. Large calls span 1.7610–1.9138 s at entry and 1.7517–1.8005 s
+at final; their A/A range is 1.7610–1.8463 s. The template-semantics workload has
+one final 0.577835 s sample with only 0.22 s user + 0.05 s system CPU; it raises
+the second paired ratio to 1.5384. A small compiler startup sample likewise takes
+0.321161 s with rounded CPU times of zero. These wall/CPU gaps indicate delay
+outside CPU execution; they do not establish extra semantic work. They remain
+in the raw data and in the ratios. No general compiler speedup is claimed.
+
+The context-corrected run isolated an avoidable representation cost:
+`Expression` had grown from 36 to 40 bytes when null-pointer provenance was
+added. [Frozen host-layout measurements](../student.tests/pa14/expression-layout.json)
+confirm **36 / 40 / 36 bytes** for entry / unpacked / packed; `Entity` stays
+**112 bytes** throughout. Flags now occupy one packed byte, without a new
+allocation, semantic pass or additional query. The direct correct/correct
+comparison shows:
+
+| Packing workload | Unpacked / packed wall | Unpacked / packed peak RSS | Two packed/unpacked ratios |
+| --- | --- | --- | --- |
+| template semantics, 14,000 calls | 0.278637 / 0.277368 | 42718 / 39540 | 0.9927, 0.9971 |
+| calls, 14,000 groups | 1.786970 / 1.805144 | 309958 / 305730 | 1.0065, 1.0046 |
+| dependent queries, 4,000 types | 0.601702 / 0.593799 | 113026 / 111406 | 0.9421, 1.0062 |
+
+Packing removes 3,178 KiB peak RSS in the semantic workload and 4,228 KiB in the
+calls workload. Its large-calls A/A range is 1.7539–1.7923 s; the small paired
+latency differences do not justify a speed claim. This bounded representation
+repair costs **704 compiler text bytes** and restores the existing record budget.
+Final compiler text is **1,216,518 bytes**, versus continuation entry
+**1,151,238**: +65,280 bytes (+5.67%). Cumulative growth from stage base is
+192,576 bytes (+18.81%). This is required frontend/ABI machinery, not an optional
+optimization justified by an IR-size claim.
+
+### Work scaling and generated programs
+
+| New workload | 1,000 / 4,000 wall | 1,000 / 4,000 peak RSS | Work evidence |
+| --- | --- | --- | --- |
+| dependent member-reference queries | 0.146255 / 0.596761 | 31530 / 111300 | Query facts = 3N+6; definition binding work stays 12, with two name facts. |
+| fixed names through dependent bases | 0.152969 / 0.621472 | 31294 / 109654 | Definition binding work stays 13, with three name facts. |
+
+Four times the new query input yields **4.08× wall / 3.53× RSS**; fixed-binding
+input yields **4.06× wall / 3.50× RSS**. The fixed binding work stays constant
+while concrete declarations/bodies grow. This supports the implemented narrow
+sharing; it does **not** prove that all nondependent body semantics are shared.
+All earlier application/body/occurrence assertions continue to verify.
+
+| Native workload | Entry / final median seconds | Native payload bytes, both |
+| --- | --- | ---: |
+| calls | 0.478020 / 0.477369 | 206 |
+| memory | 0.281050 / 0.280489 | 434 |
+| floating point | 0.331783 / 0.331707 | 230 |
+| template member/function calls | 0.081322 / 0.081880 | 183 |
+| retained member definitions | 0.162502 / 0.162259 | 172 |
+
+The new dependent-query executable is **182 bytes**, runs in median
+**0.183470 s** (0.183239–0.184015 s), and checks its computed result. In the
+direct packing comparison it is byte-identical, with medians 0.183259 /
+0.183835 s. One packed sample is 0.235065 s with 0.18 s user CPU; paired ratios
+are 1.1411 and 1.0015. That outlier is preserved. No runtime or native-size gain
+is claimed. Native size uses the supplied sectionless ELF payload metric stated
+above, including support/data; compiler size uses `.text`.
+
+Stage-scoped acceptance preserves mandated correctness/coverage/ownership and
+all historical measurements. Unsupported inherited numeric diagnostic gates
+remain diagnostics. There is no optional target optimizer work or code-growth
+budget consumed in PA14. The packing repair has bounded constant work, no new
+semantic traversals, and a measured memory benefit for its 704-byte compiler
+cost. Remaining 17 course failures and the semantic-graph requirements remain
+open; these measurements do not declare PA14 complete.
+
+`python3 student.tests/pa14/verify_performance.py` checks frozen hashes, orders,
+paired arithmetic, counters and record sizes. Full logs and frozen artifacts
+are under `$RALPH_ARTIFACT_DIR/pa14-symbolic/`.

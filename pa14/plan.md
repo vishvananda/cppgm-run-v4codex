@@ -3,107 +3,70 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; stage remains incomplete.
-Stage entry **84/314**; previous checkpoint **281/314**; current **297/314**.
-**213 original failures resolved; sixteen this continuation; no lost passes or reduced coverage.**
+Stage entry **84/314**; continuation entry **281/314**; current **297/314**.
+**213 original failures resolved; 16 this continuation; no lost passes or reduced coverage.**
 
 ## Design/spec alignment and remaining groups
 
-Canonical template/type/argument identities feed ordinary semantics and typed
-LowIR. Qualified dependent types retain structural paths. Indexed retained
-out-of-class definitions own parameter overlays and narrow body/storage demand;
-class defaults retain their declaring head's types. Source is parsed once.
-[Ownership, data flow, complexity and validation](implementation.md) gives details.
+Canonical declarations/types/arguments feed ordinary semantics and typed LowIR.
+Dependent type queries retain parameter ordinals, operation/type/declaration
+edges and selected conversions; fixed queries and name bindings are shared.
+Lexical definition scopes, fixed-base edges, initialization-prefix jump checks
+and retained out-of-class overlays validate unused bodies. Nested specialization
+projects original source identities and retains enclosing arguments separately.
+[Ownership, data flow, complexity and validation](implementation.md) records scope.
 
 | Remaining owner | Next coherent group |
 | --- | --- |
-| Symbolic expression/signature facts | Dependent `decltype`, trailing returns and bounds; parameter environments before concrete signatures; share fixed semantic facts. |
-| Definition-time binding/control | Fixed lookup and base provenance; unused-body checks with real block/condition/jump scopes. |
-| Inherited object/lifetime/ABI facts | Move/reference/empty transfers, local enum identities, constructor entries, virtual destruction and reentrant layout. |
-| Parser/template contexts | Declaration-owned categories for remaining inherited calls and template forms. |
+| Inherited transfer/lifetime/layout facts | Reference-member and empty transfers, implicit move returns, constructor entries, virtual destruction, reentrant collection layout/override. |
+| Local ABI and O0 expression/control output | Local enum linkage/root provenance, discarded-value loads and constant-condition presentation. |
+| Parser/template contexts | Remaining variable-template-defaulted fixture; retain all 314 tests. |
+| General typed body facts | Remaining query/bound forms; fixed body type/conversion sharing; dependent-only checking, finer occurrences, typed demand/reverse edges and narrow structured failures. |
 
-Dependent-only semantic checking, finer occurrence demand, typed dependency edges,
-distinct monotonic fact states and narrow failure memoization remain PA14 spec
-requirements. The completed definition-demand group was extended through explicit
-instantiation, defaults, static addresses, elaborated types and alignment. The
-next group requires symbolic expression/binding facts before concrete signatures;
-more eager concrete lookup would violate the required design. This is the
-concrete incomplete-checkpoint boundary. PA15 has not been started.
+The query/binding group was extended through user conversions, operators,
+complete-class/condition scopes, out-of-class definitions, alias constructors,
+nested source projection and an enclosing-environment cache reducer. Remaining
+output failures consume inherited object/ABI/lifetime facts; lookup fixes cannot
+repair those choices. Whole-body semantic sharing also needs a broader typed
+body graph. These are current PA14 requirements, not PA15 deferrals. This is the
+concrete incomplete handoff boundary; no fixture/reference was changed.
 
 ## Performance evidence
 
-The [performance review](performance.md) preserves **1,456** timed processes
-(1,148 historical + 308 new), frozen binaries and historical diagnostic misses. The new campaign
-compares continuation entry/current code on common correct inputs with A/A and
-ABBA; newly supported definitions are measured only on the working compiler.
-Compiler wall/RSS, native runtime/size and work counters are recorded. O0 has no
-optional optimizer or mandated numeric compiler threshold. Ownership, correctness,
-coverage and mandated limits remain requirements; unsupported inherited diagnostic
-gates are not stage exit gates. Common outputs/native binaries are byte-identical;
-4× new definition inputs yield 4× applications, 4.27× wall and 3.61× RSS.
-Compiler text grows 35,008 bytes this continuation; no optimization gain is claimed.
+The [performance review](performance.md) preserves **2,660 verified timed
+observations**, including all historical and new frozen campaigns. The context-cache reducer found a correctness
+error after the first campaign; that campaign remains preliminary. A second
+campaign exposed avoidable expression-record growth. Packing flags restores
+**36-byte expressions**, with **112-byte declarations** unchanged. Final A/A+ABBA and direct packing comparisons preserve every outlier. Packing
+saves 3,178/4,228 KiB peak RSS on two large workloads for 704 compiler text bytes.
+Final compiler text grows 65,280 bytes this continuation. Nineteen common outputs
+and five common executables are byte-identical. Fourfold new query/binding input
+yields 4.08×/4.06× wall and 3.53×/3.50× RSS; fixed binding work stays constant.
+No compiler/runtime speedup or native-size gain is claimed.
 
-## Active binding increment
-
-Owner: template definition binding facts, keyed by immutable source identity.
-Retained declarations build lexical class/function/block/control scopes; value
-uses store fixed declaration identities or dependence, and concrete occurrences
-consume fixed bindings. Fixed bases contribute lookup edges; dependent bases do
-not. Work is proportional to source nodes, declarations and required lookup
-edges, once per definition, with no layout or member-body emission demand.
-Validation: nine additional original failures fixed; through **1916/1935**,
-prior **1621/1621**, eleven personal native programs and ten unused-body rejection
-checks pass. Complete-class nested member scopes and renamed heads are retained;
-initialization-prefix jump validation is shared without runtime lifetime demand.
-Out-of-class definitions now use parameter overlays over pattern owners and
-share the same checks. Alias constructor names and operator member deduction
-were extended together; nested specialization projects original parsed identities.
-Through **1918/1935**, prior **1621/1621**, eleven native programs and twelve
-unused-body rejection checks pass. A nested `Receiver<char>`/`Receiver<long>` runtime reducer exposed contextual
-bindings entering the source-wide cache. Contextual bindings now stay local;
-the reducer passes. The first timing campaign is retained as preliminary.
-The corrected campaign isolated avoidable 40-byte expression records; packing
-flags restores the entry's 36-byte record (112-byte entities unchanged). Course,
-native and sanitizer checks still pass. Compare the packed frozen build directly
-and rerun the stage-entry A/A+ABBA campaign before publishing conclusions. Inherited transfer/lifetime/ABI output ownership is
-the next distinct group; general fixed expression typing and dependent-only body
-rechecking still require finer semantic facts.
+O0 adds no optional optimizer or native backend. There is no mandated numeric
+compiler threshold. Unsupported inherited diagnostic gates remain diagnostics;
+correctness, coverage, ownership and mandated limits remain requirements.
 
 ## Handoff ledger
 
-Continuation at `e27474c2`: prior turn is **verified progress** (59 existing
-failures resolved, committed code and checked evidence). Current group owner:
-typed expression/signature facts. Bind parameter ordinals in declaration-owned
-scopes, retain canonical operation/type/declaration edges, substitute dependent
-edges and reuse completed fixed type queries. Work follows recipe edges and
-required candidates. Validate trailing-return arithmetic/calls, reference-array
-parameters, callable-reference `decltype`, then definition-time fixed binding.
-
-Query increment: canonical typed recipe IDs retain bound names, parameter ordinals,
-operations, type arguments and call edges. Queries share fixed facts and have
-active/success/failure states; substitution visits dependent edges. Typed query
-calls reuse deduction, ordinary standard/user conversions, builtin operators, ADL and ranking helpers. ABI queries
-use the existing graph plus unresolved names. Through report **1907/1935**;
-prior **1621/1621**, ten personal executables, nine query/ABI checks and file audit
-pass. Selected calls/operators retain conversion ranges; fixed body binding and further expression forms continue;
-this is not a complete type-query interpreter or a stage handoff.
-
-Previous turn: **verified progress**, committed `4fafa38c`, revalidated 222/314.
-Earlier increments: `2cec3424` function demand; `73409fcc` canonical class demand;
-`45b15b80`/`c48def7d` calls/base provenance; `7e88952a` graph-read correction;
-`e0eb788f` overloaded arguments; `4fafa38c` preserved evidence.
+Continuation at `e27474c2`: previous 59-case increment is **verified progress**.
 
 | Current increment | Commit / result |
 | --- | --- |
-| Typed dependent names and retained definitions | `885cefb1`: 264/314; 42 continuation failures fixed |
-| Explicit class demand and defining scopes | `66e9e426`: 273/314 |
-| Canonical default owners and member storage | `16e7c163`: 281/314; cumulative 59 continuation failures fixed |
+| Canonical dependent queries and parameter scopes | `7c6c3528`: 286/314 |
+| Shared operator and user-conversion rules | `d8d6f07b`: query/ABI checks and native cases pass |
+| Lexical binding and initialization barriers | `0fa48c8e`: 295/314 |
+| Retained owner overlays and nested source projection | `af95f4d7`: 297/314 |
+| Enclosing-environment cache correction | `47f5f975`: reduced native failure fixed, no lost course passes |
+| Packed expression flags | `2dc67391`: 36-byte record restored; course/native/sanitizer checks pass |
 
-Current through report: **1902/1935**, only PA14 fails; prior **1621/1621**.
-Nine personal executables pass. **323** release/ASan/UBSan status/output checks
-pass (rejection parity does not mean 323 course-correct programs). File audit
-passes with three inherited header advisories. Sequential `make test-pa14` is
-**281/314**; `make test-report-through-pa13` is **1621/1621**. All **1,456** timed
-observations verify. Fixtures/references and review
-markers are unchanged. Full current logs/frozen artifacts:
-`$RALPH_ARTIFACT_DIR/pa14-dependent/`; earlier evidence remains under
-`pa14-measurements/`.
+Sequential `make test-pa14`: **297/314**; prior through report **1621/1621**;
+through PA14 **1918/1935**, only PA14 fails. Eleven personal native programs,
+12 unused-body rejections and nine query/ABI checks pass. **325** frozen
+release/ASan/UBSan status/output checks and 19 additional rejection checks pass;
+parity does not mean 325 course-correct inputs. File audit passes with the same
+three inherited header advisories. Current logs, exact exit statuses and frozen
+artifacts: `$RALPH_ARTIFACT_DIR/pa14-symbolic/`; previous evidence remains under
+`pa14-dependent/` and `pa14-measurements/`. The final evidence verifier passes. This is a verified incomplete checkpoint;
+all implementation/evidence changes are committed and the tree is clean.
