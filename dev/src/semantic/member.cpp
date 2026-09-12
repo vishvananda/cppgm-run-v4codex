@@ -34,16 +34,18 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     c.preference = rvalue && f.ref == RefQualifier::Lvalue;
     return c;
 }
-unsigned Analyzer::base_steps(TypeId from, EntityId to) const
+unsigned Analyzer::base_steps(TypeId from, EntityId to)
 {
     EntityId e = types[from].entity;
-    unsigned count = 0;
+    unsigned count = 0, offset = 0;
     while (e && e != to) {
         auto b = class_facts[entities[e].class_info].first_base;
         if (!b) return 0;
+        size(entities[e].type);
+        offset += class_facts[entities[e].class_info].base_offset;
         e = bases[b].base; ++count;
     }
-    return count;
+    return count ? offset + 1 : 0;
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {
@@ -72,6 +74,7 @@ void Analyzer::demand_member(EntityId e)
     if (unevaluated_depth) return;
     std::uint32_t m = entities[e].member_info;
     if (m) members[m].referenced = true;
+    if (m && (members[m].constructor || members[m].destructor)) demand_vtable(scopes[entities[e].owner].entity);
     require_member_body(e);
 }
 void Analyzer::require_member_body(EntityId e)

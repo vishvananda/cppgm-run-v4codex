@@ -50,6 +50,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     if (base && polymorphic(base)) {
         auto inherited = class_facts[entities[base].class_info].virtual_info;
         v = virtual_classes.size(); virtual_classes.push_back(VirtualClass());
+        virtual_slot_work += virtual_classes[inherited].slots.size();
         virtual_classes[v].slots = virtual_classes[inherited].slots;
         virtual_classes[v].signatures = virtual_classes[inherited].signatures;
         class_facts[info].virtual_info = v;
@@ -67,6 +68,7 @@ void Analyzer::complete_virtuals(EntityId cls)
         methods.push_back(dtor);
     }
     for (EntityId e : methods) {
+        ++virtual_declaration_work;
         auto m = entities[e].member_info;
         auto k = key(members[m].destructor ? 0 : entities[e].name, members[m].virtual_signature);
         auto slot = v ? virtual_classes[v].signatures.get(k) : 0;
@@ -74,6 +76,7 @@ void Analyzer::complete_virtuals(EntityId cls)
             EntityId old = virtual_classes[v].slots[slot-1];
             if (entities[e].is_static || members[entities[old].member_info].final_member) throw std::runtime_error("invalid virtual override");
             check_covariance(e,old);
+            if (function_nonthrowing(old) && !function_nonthrowing(e)) throw std::runtime_error("looser virtual exception specification");
             members[m].virtual_member = true;
         }
         if (members[m].override_member && !slot) throw std::runtime_error("override without matching base virtual");
@@ -103,5 +106,32 @@ void Analyzer::reject_abstract(TypeId t)
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (class_value(t) && polymorphic(types[t].entity) && virtual_class(types[t].entity).abstract)
         throw std::runtime_error("abstract class value");
+}
+} }
+
+namespace cppgm { namespace semantic {
+void Analyzer::demand_vtable(EntityId cls)
+{
+    if (!polymorphic(cls)) return;
+    auto v = class_facts[entities[cls].class_info].virtual_info;
+    if (virtual_classes[v].demanded) return;
+    virtual_classes[v].demanded = true; ++virtual_demands;
+    // Copy compact IDs because demanded bodies may introduce local classes.
+    auto slots = virtual_classes[v].slots;
+    EntityId previous = 0;
+    for (EntityId e : slots) {
+        ++virtual_slot_work;
+        if (e == previous) continue;
+        previous = e;
+        auto m = entities[e].member_info;
+        if (members[m].pure) continue;
+        members[m].emission_reference = true;
+        demand_member(e);
+        if (members[m].destructor) {
+            members[m].complete_entry = true;
+            EntityId deallocation = select_deallocation(entities[cls].type,false,false,entities[e].owner);
+            members[m].deleting_deallocation = deallocation;
+        }
+    }
 }
 } }

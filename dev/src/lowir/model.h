@@ -199,6 +199,9 @@ struct Program {
     NameIndex symbol_names;
     Pool<Symbol> symbols;
     Pool<Function> functions;
+    // Optional stable emission schedule, independent of function identity.
+    // Text readers leave it empty; source lowering groups lifecycle entries.
+    std::vector<FunctionId> function_order;
     Pool<Signature> signatures;
     Pool<Parameter> parameters;
     Pool<Value> values;

@@ -156,7 +156,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)
 {
     if (c.derived) {
-        v = base_projection(c.reference && !c.temporary ? address(v) : load(v), 1);
+        v = c.reference ? base_projection(!c.temporary ? address(v) : load(v), c.adjustment) : pointer_projection(load(v),c.adjustment);
         if (c.temporary) { v.type = sem.types[c.target].child; return convert(v, c.target); }
         v.type = c.target; return v;
     }
@@ -175,8 +175,8 @@ Value Procedural::incoming(NodeId n)
 }
 Value Procedural::base_projection(Value base, unsigned steps)
 {
-    // Single inheritance puts the entire selected base path at offset zero.
-    if (steps) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(0)});
+    // The semantic owner records a complete base-path byte offset plus one.
+    if (steps) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(steps-1)});
     return base;
 }
 Value Procedural::field(Value base, EntityId e, unsigned steps)

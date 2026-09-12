@@ -32,7 +32,7 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
                 parts.push_back({id,offset});
             };
             auto info = entities[type.entity].class_info;
-            for (auto b = class_facts[info].first_base; b; b = bases[b].next) add(entities[bases[b].base].type,0);
+            for (auto b = class_facts[info].first_base; b; b = bases[b].next) add(entities[bases[b].base].type,class_facts[info].base_offset);
             std::uint64_t unit_offset = 0, unit_bytes = 0; bool unit = false;
             for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
                 EntityId field = declarations[d].entity;

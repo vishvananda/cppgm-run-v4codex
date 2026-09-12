@@ -88,6 +88,8 @@ Expression Analyzer::delete_expression(NodeId n, ScopeId s)
     if (use.array && class_value(use.leaf)) use.cookie = std::max<std::uint64_t>(8,size(use.type,true));
     use.conversion = conversion(use.operand,pointer_type); apply_conversion(use.operand,use.conversion);
     use.destructor = default_destructor(use.type,s);
+    if (!use.array && use.destructor && members[entities[use.destructor].member_info].virtual_member)
+        use.virtual_slot = members[entities[use.destructor].member_info].virtual_slot + 1;
     use.deallocation = select_deallocation(use.leaf,use.array,child(n,Kind::Global),s);
     use.sized = types[entities[use.deallocation].type].count == 2;
     delete_index.put(n,deletions.size()); deletions.push_back(use);

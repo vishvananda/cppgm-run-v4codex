@@ -161,7 +161,11 @@ void Writer::write()
     for (const Global& g : p_.globals) if (g.declaration) global(g);
     for (const Function& f : p_.functions) if (f.declaration) function(f);
     for (const Global& g : p_.globals) if (!g.declaration) global(g);
-    for (const Function& f : p_.functions) if (!f.declaration) function(f);
+    if (p_.function_order.empty()) {
+        for (const Function& f : p_.functions) if (!f.declaration) function(f);
+    } else for (FunctionId id : p_.function_order) {
+        const auto& f = p_.functions[id.index-1]; if (!f.declaration) function(f);
+    }
     for (const ObjectAlias& a : p_.aliases) { out_ << "alias object " << p_.name(a.name) << " = "; symbol(a.target); out_ << '\n'; }
 }
 void write_program(const Program& p, std::ostream& out) { Writer(p, out).write(); }

@@ -314,6 +314,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         {
             record_object(result, object_node, types.parameters[types[call_type(selected)].offset],
                 base_steps(object_type, scopes[entities[selected].owner].entity));
+            NodeId direct = callee;
+            while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
+            NodeId name = ast[direct].kind == Kind::Member ? ast[ast[ast[direct].first].next].detail : ast[direct].detail;
+            if (!destructor_member(selected) && (!name || ast[name].first == ast[name].last))
+                object_uses[result.object_use].virtual_slot = members[entities[selected].member_info].virtual_slot;
         }
         ft = entities[selected].type;
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);
@@ -327,7 +332,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
         }
         record_call(result, args, chosen);
-        select_function(callee, selected);
+        select_function(callee, selected, !result.object_use || !object_uses[result.object_use].virtual_slot);
     } else {
         ft = fn.type;
         if (pointer(ft)) ft = types[ft].child;

@@ -16,6 +16,11 @@ void Analyzer::consume(NodeId n)
 }
 void Analyzer::finish()
 {
+    if (calls) for (EntityId e = 1; e < entities.size(); ++e) {
+        if (!entities[e].class_info || !polymorphic(e)) continue;
+        EntityId key = virtual_class(e).key_function;
+        if (key && (entities[key].body || members[entities[key].member_info].body)) demand_vtable(e);
+    }
     EntityId boundary_cursor = 1;
     for (;;) {
         if (calls) schedule_parameter_bodies(boundary_cursor);

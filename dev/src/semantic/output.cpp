@@ -150,6 +150,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_reference_binding_work\":" << reference_binding_work
         << ",\"semantic_reference_alternatives\":" << reference_alternatives.size()-1
         << ",\"semantic_lifetime_uses\":" << lifetime_uses.size()-1
+        << ",\"semantic_virtual_classes\":" << virtual_classes.size()-1
+        << ",\"semantic_virtual_slot_work\":" << virtual_slot_work
+        << ",\"semantic_virtual_declaration_work\":" << virtual_declaration_work
+        << ",\"semantic_virtual_demands\":" << virtual_demands
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work

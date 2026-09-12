@@ -29,6 +29,14 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].class_info = class_facts.size();
         class_facts.push_back(ClassFacts());
+        if (calls) for (ScopeId context = owner; context; context = scopes[context].parent) {
+            if (scopes[context].kind != ScopeKind::Function) continue;
+            auto function = scopes[context].entity;
+            auto k = key(function,id);
+            auto& info = class_facts[entities[e].class_info];
+            info.local_function = function; info.local_ordinal = local_class_names.get(k);
+            local_class_names.put(k,info.local_ordinal+1); break;
+        }
         entities[e].key = key_op;
         entities[e].type = types.named(e);
         entities[e].scope = make_scope(ScopeKind::Class, owner, id, e, false);

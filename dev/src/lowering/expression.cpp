@@ -48,7 +48,7 @@ Value Procedural::expression(NodeId n, bool location)
                 v.operand = Operand::slot(slot); v.address = true;
             }
             if (sem.conversion_fact(fact.conversions).derived) {
-                v = base_projection(address(v), 1); v.address = true;
+                v = base_projection(address(v), sem.conversion_fact(fact.conversions).adjustment); v.address = true;
             }
             v.type = fact.type; return v;
         }
@@ -244,8 +244,8 @@ Value Procedural::binary(NodeId n, bool location)
     Value rhs = sem.conversion_fact(fact.conversions+1).kind == semantic::Conversion::Kind::User ? converted(b,sem.conversion_fact(fact.conversions+1)) : load(expression(b));
     lhs = convert(lhs, sem.conversion_fact(fact.conversions).target, sem.conversion_fact(fact.conversions).fold_widen);
     rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target, sem.conversion_fact(fact.conversions+1).fold_widen);
-    if (sem.conversion_fact(fact.conversions).derived) lhs = base_projection(lhs, 1);
-    if (sem.conversion_fact(fact.conversions+1).derived) rhs = base_projection(rhs, 1);
+    if (sem.conversion_fact(fact.conversions).derived) lhs = pointer_projection(lhs, sem.conversion_fact(fact.conversions).adjustment);
+    if (sem.conversion_fact(fact.conversions+1).derived) rhs = pointer_projection(rhs, sem.conversion_fact(fact.conversions+1).adjustment);
     return operation(op, lhs, rhs, fact.type);
 }
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
@@ -346,6 +346,9 @@ Value Procedural::call(NodeId n, Value destination)
     if (object_use.member_pointer) {
         call_work[begin] = member_function.operand;
         i.signature = signature(sem.expression_fact(object_use.member_pointer).type);
+    } else if (object_use.virtual_slot) {
+        call_work[begin] = virtual_function(Value(call_work[begin+1+indirect_result],IRType::Ptr),object_use.virtual_slot).operand;
+        i.signature = virtual_signature(selected);
     } else if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
         auto c = sem.conversion_fact(object_use.callee_conversion);

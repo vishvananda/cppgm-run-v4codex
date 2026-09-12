@@ -67,6 +67,7 @@ void Analyzer::register_destruction(EntityId e)
     }
     EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);
+    if (dtor && members[entities[dtor].member_info].virtual_member) members[entities[dtor].member_info].base_entry = true;
     if (dtor && entities[e].kind == EntityKind::Parameter && !trivial_destructor(entities[e].type))
         members[entities[dtor].member_info].retained_root = true;
 }
@@ -79,7 +80,7 @@ bool Analyzer::trivial_destructor(TypeId t)
     if (class_facts[c].trivial_destructor_state) return class_facts[c].trivial_destructor_state == 3;
     class_facts[c].trivial_destructor_state = 1;
     EntityId dtor = class_facts[c].destructor;
-    bool trivial = !dtor || (members[entities[dtor].member_info].synthetic && !members[entities[dtor].member_info].defaulted_late);
+    bool trivial = (!dtor || !members[entities[dtor].member_info].virtual_member) && (!dtor || (members[entities[dtor].member_info].synthetic && !members[entities[dtor].member_info].defaulted_late));
     for (auto d = scopes[entities[cls].scope].first_decl; trivial && d; d = declarations[d].next) {
         EntityId field = declarations[d].entity;
         if (nonstatic_field(field) && entities[field].owner == entities[cls].scope) trivial = trivial_destructor(entities[field].type);
@@ -122,6 +123,9 @@ void Analyzer::destructor_actions(EntityId e)
             work.push_back({0, base, dtor});
         }
     }
+    // Small empty bodies may share their prepared single-base suffix with D0.
+    // Otherwise D0 calls D1 once: linear cleanup work, with no body cloning.
+    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || work.size() > 1;
     members[m].destruction_begin = destruction_actions.size(); members[m].destruction_count = work.size();
     destruction_actions.insert(destruction_actions.end(), work.begin(), work.end());
 }
@@ -133,7 +137,7 @@ bool Analyzer::destructor_needed(EntityId e)
     if (members[m].destruction_state == 2) return members[m].destruction_needed;
     if (members[m].destruction_state == 1) throw std::logic_error("cyclic destruction actions");
     members[m].destruction_state = 1;
-    bool needed = false;
+    bool needed = members[m].virtual_member;
     EntityId cls = scopes[entities[e].owner].entity;
     // O0 keeps an explicit union boundary when an inactive variant has an
     // effectful destructor. This is a conservative emission policy: it does
@@ -209,9 +213,7 @@ bool Analyzer::function_nonthrowing(EntityId e)
     if (members[m].exception_state == 2) return members[m].nonthrowing;
     if (members[m].exception_state == 1) throw std::logic_error("cyclic destructor exception specification");
     members[m].exception_state = 1;
-    bool no_throw = true;
-    for (unsigned j = 0; j < members[m].destruction_count; ++j)
-        no_throw &= function_nonthrowing(destruction_actions[members[m].destruction_begin+j].destructor);
+    bool no_throw = implicit_destructor_nonthrowing(scopes[entities[e].owner].entity);
     members[m].exception_state = 2; members[m].nonthrowing = no_throw;
     return no_throw;
 }

@@ -5,6 +5,14 @@
 namespace lowir_model {
 void Validator::symbols() const
 {
+    if (!p_.function_order.empty()) {
+        require(p_.function_order.size() == p_.functions.size(), "incomplete function schedule");
+        std::vector<bool> seen(p_.functions.size());
+        for (FunctionId f : p_.function_order) {
+            require(f.index && f.index <= seen.size() && !seen[f.index-1], "invalid function schedule");
+            seen[f.index-1] = true;
+        }
+    }
     std::uint32_t roles[SR_RTTI_DATA+1] = {};
     std::vector<bool> tls(p_.symbols.size());
     for (const Symbol& s : p_.symbols) {

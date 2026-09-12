@@ -99,7 +99,7 @@ std::size_t Program::pool_storage_bytes() const
     return symbols.storage_bytes() + functions.storage_bytes() + signatures.storage_bytes() + parameters.storage_bytes() +
         values.storage_bytes() + slots.storage_bytes() + blocks.storage_bytes() + slot_order.storage_bytes() +
         block_order.storage_bytes() + instructions.storage_bytes() + operands.storage_bytes() + globals.storage_bytes() +
-        data.storage_bytes() + aliases.storage_bytes();
+        data.storage_bytes() + aliases.storage_bytes() + function_order.capacity()*sizeof(FunctionId);
 }
 ValueId FunctionBuilder::value(Name name)
 {

@@ -26,6 +26,12 @@ Value Procedural::delete_expression(NodeId n)
         BlockId run = block(); end = block();
         emit(Opcode::Branch,IRType(),{nonnull.operand,Operand::label(run),Operand::label(end)}); start(run);
     }
+    if (use.virtual_slot) {
+        auto callee = virtual_function(pointer,use.virtual_slot);
+        Instruction call(Opcode::Call,IRType::Void); call.signature = signature(sem.call_type(use.destructor));
+        Operand args[] = {callee.operand,pointer.operand}; guarded_call(call,args,2);
+        jump(end); start(end); return Value(Operand(),IRType::Void,sem.expression_fact(n).type);
+    }
     Value allocation = pointer;
     Operand bytes = Operand::integer(sem.object_size(use.type));
     if (use.cookie) {

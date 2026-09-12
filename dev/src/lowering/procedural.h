@@ -40,7 +40,7 @@ struct Linkage {
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge;
-    SymbolId allocation_roles[2];
+    SymbolId allocation_roles[2], rtti_roles[3];
     explicit Linkage(bool merge) : merge(merge) {}
 };
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.
@@ -131,8 +131,10 @@ class Procedural {
     NodeId child(NodeId n, syntax::Kind k) const;
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
+    abi_mangle::Id abi_function_context(EntityId e);
+    void local_member_abi(EntityId e, abi_mangle::Function& target);
     abi_mangle::Id abi_scope(semantic::ScopeId s);
-    SymbolId symbol(EntityId e, bool base = false);
+    SymbolId symbol(EntityId e, bool base = false, bool deleting = false);
     bool separate_base(EntityId e) const;
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
@@ -221,6 +223,19 @@ class Procedural {
     Value binding(EntityId e);
     Value field(Value base, EntityId e, unsigned steps = 0);
     Value base_projection(Value base, unsigned steps);
+    Value pointer_projection(Value base, unsigned adjustment);
+    std::vector<SymbolId> vtables, typeinfos, deleting_symbols;
+    SymbolId pure_virtual;
+    void emit_vtables();
+    SymbolId deleting_symbol(EntityId e);
+    void emit_deleting_entries();
+    void order_lifecycle_entries();
+    SymbolId typeinfo(EntityId cls);
+    SymbolId abi_global(EntityId cls, abi_mangle::TargetKind kind);
+    void vpointer_store(EntityId cls);
+    Value virtual_function(Value object, unsigned slot);
+    SignatureId virtual_signature(EntityId e);
+    std::vector<SignatureId> virtual_signatures;
     Value member_pointer_value(EntityId member, TypeId type);
     Value member_pointer_address(Value value);
     Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);

@@ -33,8 +33,18 @@ necessary semantic cost is disclosed, diagnostic targets are not new gates.
 | Group | Commit / result |
 | --- | --- |
 | Entry | `823e929c`: 2/37; no coverage or reference changes |
-| Virtual declaration/signature/covariance ownership | 12/37; all required rejections and 12 personal controls pass; inherited 1584/1584 and file audit pass |
+| Virtual declaration/signature/covariance ownership | `9a80791c`: 12/37; all required rejections and 12 personal controls pass; inherited 1584/1584 and file audit pass |
 
-No handoff yet. Required final checks: `make test-pa13`,
+| Polymorphic layout, ABI, dispatch, lifecycle and deletion | 37/37; through-stage 1621/1621, six native sources, 15 semantic controls, raw lifecycle-order/demand/bounded-cleanup/multi-TU controls pass. |
+
+Implemented owners also preserve vptr identity on assignment, construct copies
+field-wise, handle nullable nonzero base conversions, and determine destructor
+exception specifications independently of body demand. Deleting entries inline
+at most one prepared suffix; larger/bodyful destruction calls D1 once. The
+semantic class/function identities produce local RTTI and grouped D2/D0/D1
+emission without mangled-name lookup. Eight to 64 destructor fields produce
+274 to 1326 total instructions (4.84x for 8x source growth).
+
+No handoff yet. Performance campaign and sanitizer validation remain. Required final checks: `make test-pa13`,
 `make test-report-through-pa13`, file audit, explicit personal controls,
 performance evidence and committed clean worktree.

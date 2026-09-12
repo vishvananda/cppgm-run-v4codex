@@ -33,6 +33,8 @@ public:
     TypeId call_type(EntityId e) const;
     bool member_demanded(EntityId e) const;
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
+    EntityId local_function(EntityId e) const { return class_facts[entities[e].class_info].local_function; }
+    unsigned local_ordinal(EntityId e) const { return class_facts[entities[e].class_info].local_ordinal; }
     bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
     std::uint64_t base_offset(TypeId t) { size(t); return class_facts[entities[types[t].entity].class_info].base_offset; }
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
@@ -181,7 +183,7 @@ private:
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;
     std::uint64_t parameter_queries = 0, parameter_query_work = 0;
-    Index field_index;
+    Index field_index, local_class_names;
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);
@@ -203,6 +205,8 @@ private:
     std::vector<NodeId> jump_bodies;
     EntityId default_destructor(TypeId t, ScopeId s = 0, bool demand = true);
     void destructor_actions(EntityId e);
+    bool implicit_destructor_nonthrowing(EntityId cls);
+    bool type_destructor_nonthrowing(TypeId type);
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
     void register_destruction(EntityId e);
@@ -287,14 +291,16 @@ private:
     void add_edge(ScopeId s, ScopeId to, bool is_inline = false);
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
-    unsigned base_steps(TypeId from, EntityId to) const;
+    unsigned base_steps(TypeId from, EntityId to);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
     void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
     void complete_virtuals(EntityId cls);
+    void demand_vtable(EntityId cls);
     void check_covariance(EntityId e, EntityId base);
     void reject_abstract(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
+    std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
     void template_facts(EntityId e);
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
@@ -366,7 +372,7 @@ private:
     Conversion boolean_conversion(NodeId n);
     Expression value_fact(const Expression& source) const;
     void require_conversion(NodeId n, TypeId target, bool direct = false);
-    void select_function(NodeId n, EntityId e);
+    void select_function(NodeId n, EntityId e, bool direct = true);
     void initialize(NodeId init, TypeId target, ScopeId s);
     TypeId builtin_binary(ETokenType op, NodeId a, NodeId b, Expression& result);
     void modifiable(NodeId n);

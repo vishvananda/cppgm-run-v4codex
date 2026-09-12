@@ -27,7 +27,7 @@ void Analyzer::prepare_transfer(EntityId e)
     }
     Type f = types[entities[e].type];
     TypeId source = value_type(types.parameters[f.offset]);
-    bool deleted = members[m].deleted, trivial = !members[m].defaulted_late, no_throw = true;
+    bool deleted = members[m].deleted, trivial = !members[m].defaulted_late && !polymorphic(cls), no_throw = true;
     bool is_union = entities[cls].key == KW_UNION;
     std::vector<TransferAction> actions;
     std::uint64_t unit_offset = 0, unit_bytes = 0;
@@ -102,7 +102,7 @@ void Analyzer::prepare_transfer(EntityId e)
         // small bulk operation costs more than those accesses. Whole-object
         // representation transfers and prefixes containing storage subobjects
         // retain their bounded bulk form (and can remove nested helper calls).
-        if (prefix && (prefix == actions.size() || storage_subobject)) {
+        if (!polymorphic(cls) && prefix && (prefix == actions.size() || storage_subobject)) {
             if (prefix == actions.size()) bytes = size(target);
             TransferAction storage; storage.kind = TransferAction::Storage; storage.bytes = bytes;
             storage.alignment = size(target, true);

@@ -48,11 +48,18 @@ void Analyzer::class_layout(EntityId e)
     class_facts[info].layout_state = 1;
     std::uint64_t cursor = 0, align = 1, ordinary_end = 0;
     bool is_union = entities[e].key == KW_UNION;
+    EntityId direct = direct_base(e);
+    if (polymorphic(e)) {
+        align = 8; class_facts[info].empty = false;
+        if (!direct || !polymorphic(direct)) cursor = 64;
+    }
     Index empty_bases;
     bool has_empty_base = false;
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         TypeId base = entities[bases[b].base].type;
         auto bytes = size(base);
+        class_facts[info].base_offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
+        if (!class_facts[entities[types[base].entity].class_info].empty) cursor = class_facts[info].base_offset*8;
         if (!class_facts[entities[types[base].entity].class_info].empty) {
             if (bytes > std::numeric_limits<std::uint64_t>::max()/8) throw std::runtime_error("base layout overflow");
             cursor = layout_add(cursor, bytes*8); class_facts[info].empty = false;

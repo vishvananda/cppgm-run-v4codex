@@ -33,7 +33,11 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         result = abi.builtin(kinds[t.fundamental]); break;
     }
     case TypeKind::Named: {
-        auto e = sem.entities[t.entity]; result = abi.name(abi_scope(e.owner), spelling(e.name)); break;
+        auto e = sem.entities[t.entity];
+        if (e.class_info && sem.local_function(t.entity))
+            result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
+        else result = abi.name(abi_scope(e.owner), spelling(e.name));
+        break;
     }
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
     case TypeKind::LRef: result = abi.make(abi_mangle::Kind::Reference, abi_type(t.child)); break;
@@ -56,9 +60,11 @@ bool Procedural::separate_base(EntityId id) const
     auto e = sem.entities[id];
     if (e.member_info && sem.member_fact(id).defaulted_late && (sem.constructor_member(id) || sem.destructor_member(id))) return true;
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
+    if (sem.member_fact(id).virtual_member && sem.destructor_member(id)) return true;
+    if (sem.member_fact(id).polymorphic_base_entry && !sem.synthetic_member(id)) return true;
     return sem.member_fact(id).complete_entry || (e.body && !e.inline_function);
 }
-SymbolId Procedural::symbol(EntityId id, bool base)
+SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
 {
     auto e = sem.entities[id];
     bool external = e.member_info && !e.body && !sem.synthetic_member(id);
@@ -66,6 +72,7 @@ SymbolId Procedural::symbol(EntityId id, bool base)
     bool base_only = e.member_info && (external || sem.member_fact(id).inherited_constructor) &&
         sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
     base = base && separate;
+    if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
         sem.types[e.type].cv & 1 && !e.external_decl);
@@ -106,6 +113,7 @@ SymbolId Procedural::symbol(EntityId id, bool base)
         if (sem.destructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
         if (base || base_only) target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         target.function.c_linkage = e.c_linkage && !internal;
+        local_member_abi(id,target.function);
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
     } else { target.kind = abi_mangle::TargetKind::Variable; target.type = aname; target.internal = internal; }
@@ -219,13 +227,16 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
 }
 Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, Program& out, Linkage& links)
     : ast(a), sem(s), identifiers(ids), p(out), linkage(links), abi(links.abi), abi_types(s.types.records.size()), abi_scopes(s.scopes.size()),
-      symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {}
+      symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {
+    virtual_signatures.resize(s.entities.size()); vtables.resize(s.entities.size()); typeinfos.resize(s.entities.size()); deleting_symbols.resize(s.entities.size());
+}
 void Procedural::run()
 {
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         if (sem.static_temporary(e).object) { reference_global(e); continue; }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
+        if (entity.member_info && sem.member_fact(e).virtual_member && !entity.body && !sem.synthetic_member(e) && !sem.member_fact(e).emission_reference) continue;
         if (sem.constructor_member(e)) {
             auto m = sem.member_fact(e);
             if (m.array_entry && !m.complete_entry && !m.base_entry && !m.retained_root) continue;
@@ -277,6 +288,11 @@ void Procedural::run()
         bool external = !sem.entities[e].body && !sem.synthetic_member(e);
         Function f; f.symbol = symbol(e, true);
         f.declaration = external;
+        auto prior = p.symbols[f.symbol.index-1];
+        if (prior.kind == Symbol::FunctionSymbol) {
+            if (!external && p.functions[prior.entity-1].declaration) p.functions[prior.entity-1].declaration = false;
+            continue;
+        }
         FunctionId id(p.functions.size()+1);
         f.signature = signature(sem.call_type(e), id);
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
@@ -293,15 +309,18 @@ void Procedural::run()
             string_literal(n);
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
+    emit_vtables();
     for (EntityId e : definitions) {
         function_body(e);
         if (base_symbols[e]) function_body(e, true);
     }
+    emit_deleting_entries();
     emit_allocation_adapters();
     if (!global_initializers.empty()) global_initialization();
     emit_tls_initializers();
     emit_aggregate_helpers();
     global_finalization();
+    order_lifecycle_entries();
 }
 void Procedural::function_body(EntityId e, bool base)
 {
@@ -340,7 +359,10 @@ void Procedural::function_body(EntityId e, bool base)
     }
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
     else if (sem.constructor_member(e)) constructor_body(e);
-    if (sem.destructor_member(e)) destructor_prologue(e);
+    if (sem.destructor_member(e)) {
+        destructor_prologue(e);
+        vpointer_store(sem.scopes[sem.entities[e].owner].entity);
+    }
     mark_control_entries(sem.entities[e].body);
     statement(sem.entities[e].body);
     if (destructor_handler) destructor_finish(e);

@@ -13,6 +13,9 @@ cases = [
  ('final-nonvirtual', 'struct B { void f() final; };', False),
  ('inherited-final', 'struct B { virtual void f() final; }; struct D:B {}; struct E:D { void f(); };', False),
  ('destructor-override', 'struct B { virtual ~B(); }; struct D:B { ~D() override; };', True),
+ ('noexcept-override', 'struct B{virtual void f() noexcept;};struct D:B{void f() override;};', False),
+ ('throwing-member-destructor', 'struct M{~M()noexcept(false);};struct B{M m;virtual ~B(){} };struct D:B{~D()noexcept(false)override{}};', True),
+ ('throwing-override-destructor', 'struct M{~M()noexcept(false);};struct B{virtual ~B(){} };struct D:B{M m;};', False),
  ('destructor-final', 'struct B { virtual ~B() final; }; struct D:B {};', False),
 ]
 with tempfile.TemporaryDirectory(prefix='pa13-semantic-') as work:

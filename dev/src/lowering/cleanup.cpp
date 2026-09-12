@@ -68,7 +68,7 @@ BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal)
 }
 Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t count)
 {
-    bool no_throw = false;
+    bool no_throw = i.signature && p.signatures[i.signature.index-1].boundary.unwind == ir_model::CUM_NO;
     if (count && args[0].kind == Operand::Symbol) {
         auto s = p.symbols[args[0].ref-1];
         if (s.kind == Symbol::FunctionSymbol)
@@ -162,14 +162,15 @@ void Procedural::emit_cleanups()
         auto action = entry.action;
         if (sem.types[action.type].kind == TypeKind::Array) {
             array_destroy(sem.type_destructor(action.type), action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-                {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}});
+                {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type), action.field != 0}});
             emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
+        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type))});
         EntityId dtor = sem.type_destructor(action.type);
-        destroy(dtor, action.type, at);
+        Operand args[] = {Operand::symbol(symbol(dtor,!action.field)),at.operand};
+        guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
         emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {});
     }
 }

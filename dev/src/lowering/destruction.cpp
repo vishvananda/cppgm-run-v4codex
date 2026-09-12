@@ -91,13 +91,14 @@ void Procedural::destroy_subobject(const semantic::DestructionAction& action)
 {
     if (sem.types[action.type].kind == TypeKind::Array) {
         array_destroy(action.destructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-            {{action.field ? sem.entities[action.field].member_offset : 0, action.field != 0}}, true);
+            {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type), action.field != 0}}, true);
         return;
     }
     Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
     Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-    Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : 0)});
-    destroy(action.destructor, action.type, at);
+    Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type))});
+    Operand args[] = {Operand::symbol(symbol(action.destructor,!action.field)),at.operand};
+    guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
 }
 void Procedural::destructor_finish(EntityId e)
 {

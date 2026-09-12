@@ -73,11 +73,14 @@ struct ClassFacts {
     bool aggregate = true, empty = true;
     std::uint32_t virtual_info = 0;
     std::uint64_t base_offset = 0;
+    EntityId local_function = 0;
+    unsigned local_ordinal = 0;
     EntityId value_constructor = 0;
     EntityId variant_initializer = 0;
     unsigned char declared_transfers = 0, generated_transfers = 0;
     unsigned char copy_storage_state = 0;
     unsigned char trivial_destructor_state = 0;
+    unsigned char destructor_exception_state = 0;
     unsigned char value_abi = 0;
     unsigned char parameter_abi = 0;
     unsigned char parameter_state = 0; // Unqueried, rejected, body pending, proven.
@@ -158,6 +161,8 @@ struct MemberFacts {
     bool virtual_member = false, pure = false, final_member = false, override_member = false;
     std::uint32_t virtual_slot = 0; // One-based slot within the address point.
     TypeId virtual_signature = 0;
+    EntityId deleting_deallocation = 0;
+    bool emission_reference = false, polymorphic_base_entry = false, deleting_complete = false;
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
 };
@@ -229,9 +234,11 @@ struct Expression {
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0;
+    std::uint32_t virtual_slot = 0;
     unsigned adjustment = 0; std::uint32_t callee_conversion = 0; bool value_initialize = false; };
 struct Conversion {
     TypeId target = 0;
+    std::uint32_t adjustment = 0; // Zero: no projection; otherwise byte offset + 1.
     EntityId function = 0; // Target-selected overload, if any.
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
@@ -275,6 +282,7 @@ struct DeleteExpression {
     TypeId type = 0, leaf = 0; NodeId operand = 0;
     std::uint64_t cookie = 0;
     Conversion conversion; bool array = false, sized = false;
+    std::uint32_t virtual_slot = 0;
 };
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String } kind = Invalid;
