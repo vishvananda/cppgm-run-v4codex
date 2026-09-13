@@ -208,7 +208,11 @@ void Analyzer::record_default_dependency(DefaultDependencyKind kind, std::uint32
 }
 void Analyzer::capture_default_conversion(const Conversion& c)
 {
-    if (c.function) {
+    // Runtime materialization records ordinary conversion calls, including
+    // whether a copy is elided. Only deferred template definitions need a
+    // separate dependency here; demanding an ordinary elided copy would also
+    // mark its unused entry for emission.
+    if (c.function && (entities[c.function].template_member || entities[c.function].specialization)) {
         record_default_dependency(DefaultDependencyKind::Member,c.function);
         if (entities[c.function].specialization) record_default_dependency(DefaultDependencyKind::Specialization,c.function);
     }

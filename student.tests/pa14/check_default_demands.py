@@ -32,6 +32,8 @@ CASES.update({
  'self-default':('struct C{int n;C(int v):n(v){}static int f(C c={4}){return c.n;}};int main(){return C::f()!=4;}',True),
  'later-member':('struct C{static int f(int n=g()){return n;}static int g(){return 4;}};int main(){return C::f()!=4;}',True),
  'nested-later-member':('struct C{struct Inner{static int f(int n=g()){return n;}};static int g(){return 4;}};int main(){return C::Inner::f()!=4;}',True),
+ 'elided-template-copy-bad':('template<class T>struct C{C(int){}C(const C&){int n=T::missing;}};template<class T>C<T>make(){return C<T>(4);}template<class T>void f(C<T> c=make<T>());int main(){f<int>();}',False),
+ 'unused-template-copy-bad':('template<class T>struct C{C(int){}C(const C&){int n=T::missing;}};template<class T>C<T>make(){return C<T>(4);}template<class T>void f(C<T> c=make<T>());int main(){C<int> value(4);return 0;}',True),
  'incomplete-reference':('struct C;C&get();void use(C&);void f(){use({get()});}',True),
 })
 COMPILE_ONLY={'incomplete-reference'}
