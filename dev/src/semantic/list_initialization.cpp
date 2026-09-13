@@ -189,11 +189,19 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     }
     ListObject object; object.plan = c.materialization;
     if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array)) {
-        object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,plan.scope),0,n);
+        object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,n ? facts[n].scope : plan.scope),0,n);
         entities[object.temporary].type = t; register_destruction(object.temporary);
     }
     std::vector<NodeId> args;
-    for (unsigned i = 0; i < plan.call.argument_count; ++i) args.push_back(call_argument(plan.call,i));
+    for (unsigned i = 0; i < plan.call.argument_count; ++i) {
+        auto a = call_argument(plan.call,i);
+        if (n && ast.nodes.occurrences[n].context) {
+            auto projected = ast.projected(a,ast.nodes.occurrences[n].context);
+            if (projected) a = projected;
+        }
+        if (a) expression(a,n ? facts[n].scope : plan.scope);
+        args.push_back(a);
+    }
     std::vector<Conversion> selected;
     for (unsigned i = 0; i < plan.call.count; ++i)
         selected.push_back(copy_conversion_recipe(conversions[plan.call.conversions+i]));

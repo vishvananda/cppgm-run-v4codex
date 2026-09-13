@@ -208,6 +208,7 @@ private:
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
+    void list_conversion_from(NodeId n, TypeId from, TypeId target);
     Index scalar_observations, scalar_consumption_index;
     std::vector<ScalarConsumption> scalar_consumptions = std::vector<ScalarConsumption>(1);
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
@@ -239,6 +240,15 @@ private:
     Index template_initializer_bindings;
     std::size_t template_initializer_binding_work = 0, template_initializer_binding_queued = 0;
     void bind_template_initializer(EntityId entity, ScopeId scope);
+    void check_template_initialization(NodeId n, TypeId target, ScopeId scope);
+    bool check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId scope);
+    bool check_template_constructor(NodeId n, TypeId target, ScopeId scope);
+    bool reuse_template_constructor(NodeId n, TypeId target, const std::vector<NodeId>& args,
+        Expression& result, ScopeId scope, EntityId& selected);
+    std::uint32_t retained_initialization(NodeId n, TypeId target);
+    void remember_initialization(NodeId n, Conversion conversion);
+    Index template_initialization_conversions, template_initializer_calls, template_initializer_narrowing;
+    std::size_t initializer_recipe_work = 0, initializer_recipe_uses = 0;
     Index template_default_bindings;
     std::uint64_t default_argument_key(EntityId e, unsigned parameter) const;
     Index default_argument_index;
@@ -540,7 +550,8 @@ private:
     void require_member_body(EntityId e);
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
-    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0, bool direct = true, bool probe = false);
+    EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0,
+        bool direct = true, bool probe = false, const std::vector<Expression>* values = 0);
     bool converting_transfer(EntityId constructor, const Expression& call) const;
     Conversion result_conversion(EntityId constructor, const Expression& call, TypeId target);
     void constructor_actions(EntityId e);
@@ -561,6 +572,9 @@ private:
     void resolve_condition(NodeId n, ScopeId s, bool is_switch);
     TypeId condition_target(Expression value, bool is_switch);
     Expression template_statement_value(NodeId n, ScopeId s);
+    bool fixed_initializer_operands(NodeId n) const;
+    bool template_aggregate_type(TypeId target) const;
+    Index template_pattern_aggregates;
     void bind_template_condition(NodeId n, ScopeId s, bool is_switch);
     void bind_template_return(NodeId n, ScopeId s);
     Index template_statement_conversions;

@@ -20,6 +20,7 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         scopes[cs].jump = scopes[parent].depth-scopes[jump].depth == scopes[jump].depth-scopes[grand].depth ? grand : parent;
     }
     template_pattern_scopes.put(cs,1); template_class_bindings.put(source,cs);
+    entities[entity].key = ast[ast[n].first].op;
     // A local pattern owns a type identity even when its layout and concrete
     // declaration differ in each enclosing function specialization.
     if (!entities[entity].type) for (auto scope = parent; scope; scope = scopes[scope].parent)
@@ -54,7 +55,26 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
             ClassBinding(ScopeId& a, ScopeId current) : active(a), prior(a) { active = current; }
             ~ClassBinding() { active = prior; }
         } binding(active_template_class,cs);
-        for (auto c = ast[n].first; c; c = ast[c].next) bind_template_declaration(c,cs,deferred ? deferred : &bodies);
+        bool aggregate = !child(n,Kind::Bases);
+        auto access = entities[entity].key == KW_CLASS ? Access::Private : Access::Public;
+        for (auto c = ast[n].first; c; c = ast[c].next) {
+            if (ast[c].kind == Kind::Access) access = ast[c].op == KW_PUBLIC ? Access::Public :
+                ast[c].op == KW_PRIVATE ? Access::Private : Access::Protected;
+            auto last = scopes[cs].last_decl;
+            bind_template_declaration(c,cs,deferred ? deferred : &bodies);
+            if (spec_has(ast[c].first,KW_VIRTUAL) || spec_has(child(c,Kind::MemberSpecifiers),KW_VIRTUAL)) aggregate = false;
+            if (ast[c].kind == Kind::SpecialMember || ast[c].kind == Kind::SpecialDefinition) {
+                auto d = child(c,Kind::Declarator), name = decl_name(d);
+                auto special = child(child(c,Kind::Initializer),Kind::SpecialInitializer);
+                if (terminal(name) == entities[entity].name && ast[ast[name].last].op != OP_COMPL && !special)
+                    aggregate = false;
+            }
+            for (auto d = last ? declarations[last].next : scopes[cs].first_decl; d; d = declarations[d].next) {
+                auto member = declarations[d].entity; entities[member].access = access;
+                if (nonstatic_field(member) && (access != Access::Public || entities[member].initializer)) aggregate = false;
+            }
+        }
+        template_pattern_aggregates.put(entity,ast[n].kind == Kind::ClassForward ? 3 : aggregate ? 2 : 1);
     }
     if (!active_template_class) {
         // Detach this complete class's source obligations before checking them:
@@ -162,14 +182,18 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             auto e = pattern_declaration(kind,s,id,d,dep);
             entities[e].initializer = init;
             entities[e].is_static = spec_has(specs,KW_STATIC);
+            entities[e].external_decl = spec_has(specs,KW_EXTERN);
             entities[e].mutable_field = spec_has(specs,KW_MUTABLE);
             if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
-            if (type) { entities[e].type = types.signature(type); facts.edit(d).type = type; }
+            if (type) {
+                if (kind == EntityKind::Variable && spec_has(specs,KW_CONSTEXPR)) type = types.qualify(type,1);
+                entities[e].type = types.signature(type); facts.edit(d).type = type;
+            }
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init) {
-                if (kind == EntityKind::Variable && scopes[s].kind == ScopeKind::Class && !entities[e].is_static)
+                if (kind == EntityKind::Variable)
                     bind_template_initializer(e,s);
                 else if (bind_template_expression(init,s)) template_pattern_entities.put(e,2);
             }

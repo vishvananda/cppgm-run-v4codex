@@ -5,6 +5,7 @@ using syntax::Kind;
 Expression Analyzer::template_statement_value(NodeId n, ScopeId s)
 {
     if (expressions[n].ready) return expressions[n];
+    facts.edit(n).scope = s;
     // Query unsupported/dependent forms conservatively without creating an
     // object, demanding a body or replaying grammar. The query owns its result.
     struct Probe {
@@ -15,6 +16,10 @@ Expression Analyzer::template_statement_value(NodeId n, ScopeId s)
     auto id = expression_query(n,s);
     if (!id) return Expression();
     auto result = query_fact(id);
+    if (!result.dependent && class_value(result.expression.type) && result.expression.category == ValueCategory::Prvalue) {
+        complete_class(types[result.expression.type].entity); reject_abstract(result.expression.type);
+        default_destructor(result.expression.type,s,false);
+    }
     return result.dependent ? Expression() : result.expression;
 }
 void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
@@ -51,6 +56,16 @@ void Analyzer::bind_template_return(NodeId n, ScopeId s)
         return;
     }
     if (dependent) return;
+    if (ast[c].kind == Kind::BracedInit && fixed_initializer_operands(c)) {
+        ++unevaluated_depth;
+        try {
+            auto conversion = list_initialization(c,return_type,s);
+            check_fixed_conversion(Expression(),c,conversion,s);
+            template_statement_conversions.put(ast.nodes.occurrences[c].source,conversions.size());
+            conversions.push_back(conversion); ++statement_conversion_work;
+        } catch (...) { --unevaluated_depth; throw; }
+        --unevaluated_depth; return;
+    }
     auto value = template_statement_value(c,s);
     if (!value.type) return;
     if (fundamental(return_type,FT_VOID)) {

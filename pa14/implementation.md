@@ -1043,3 +1043,9 @@ The independent full-stage audit begins at `78c2f13e`. Its current architecture,
 findings and remaining ownership work are consolidated in [audit.md](audit.md)
 and [plan.md](plan.md); the historical increments above remain evidence, not a
 substitute for that review.
+
+The explicit-initializer continuation retains source conversions/constructor
+recipes and projects list operands into concrete object/lifetime contexts.
+[Its evidence](../student.tests/pa14/initializer-performance.md) records the
+current checks, costs and newly found common initialization-mode/query handoffs.
+The full-stage audit remains open.

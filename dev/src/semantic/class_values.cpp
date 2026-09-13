@@ -75,7 +75,8 @@ void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 }
 bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId source, const Conversion* selected)
 {
-    Conversion c = selected ? *selected : conversion(source,target);
+    auto retained = selected ? 0 : retained_initialization(source,target);
+    Conversion c = selected ? *selected : retained ? copy_conversion_recipe(conversions[retained]) : conversion(source,target);
     if (!c.valid()) throw std::runtime_error("invalid class value initialization");
     apply_conversion(source,c);
     ValueInitialization init; init.source = source; init.conversion = conversions.size(); conversions.push_back(c);

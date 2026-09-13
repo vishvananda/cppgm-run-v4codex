@@ -71,7 +71,7 @@ void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
     if (state == SourceBindingState::Active) throw std::runtime_error("recursive source member initializer binding");
     if (state == SourceBindingState::Failed) throw FailedSemanticFact(SemanticFact::InitializerBinding,e,entities[e].initializer);
     if (state == SourceBindingState::Queued && active_template_class) return;
-    if (active_template_class) {
+    if (active_template_class && !entities[e].is_static && scopes[scope].kind == ScopeKind::Class) {
         template_initializer_bindings.put(e,unsigned(SourceBindingState::Queued));
         ++template_initializer_binding_queued;
         template_class_uses.push_back({entities[e].initializer,scope,0,e,TemplateClassUseKind::MemberInitializer});
@@ -80,7 +80,15 @@ void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
     template_initializer_bindings.put(e,unsigned(SourceBindingState::Active));
     ++template_initializer_binding_work;
     try {
-        if (bind_template_expression(entities[e].initializer,scope)) template_pattern_entities.put(e,2);
+        bool dependent = bind_template_expression(entities[e].initializer,scope);
+        if (dependent) template_pattern_entities.put(e,2);
+        else if (entities[e].type)
+            check_template_initialization(entities[e].initializer,entities[e].type,scope);
+        auto type = entities[e].type;
+        if (!dependent && type && integral(type) && types[type].cv == 1) {
+            auto value = evaluate(entities[e].initializer,scope);
+            if (value.valid) entities[e].constant = convert(value,type);
+        }
         template_initializer_bindings.put(e,unsigned(SourceBindingState::Complete));
     } catch (...) {
         template_initializer_bindings.put(e,unsigned(SourceBindingState::Failed)); throw;

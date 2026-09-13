@@ -3040,3 +3040,9 @@ are preserved under `$RALPH_ARTIFACT_DIR/pa14-default-facts/`.
 The independent body/statement audit adds [532 frozen observations](../student.tests/pa14/body-audit-performance.md)
 (16,380 cumulative), including repeated calibration and all four performance
 dimensions. Historical measurements and stage-scoped acceptance remain intact.
+
+The [explicit-initializer campaign](../student.tests/pa14/initializer-performance.md)
+adds 616 observations (16,996 cumulative), preserves all ten executable hashes,
+and reports source work bounds, compiler text/RSS costs and the noisy main/repeat
+timings without asserting a speedup. Common initialization-mode and query-owner
+findings keep the full-stage audit open.

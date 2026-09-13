@@ -343,3 +343,10 @@ Run `python3 student.tests/pa14/verify_body_audit.py` for frozen evidence,
 with a scratch directory for repeated public body/lifetime queries. The corrected
 `body_compare.pl` adapter uses the unchanged course comparator; it avoids Perl
 sort-variable shadowing in older personal adapters.
+
+The [initializer evidence](initializer-performance.md) adds 82 source controls
+per build, four deferred/required-definition controls across three compilers,
+and frozen AA/ABBA compiler/native measurements. Run `verify_initializers.py`
+for current identities; the cumulative verifier checks body sources against
+their committed revision and keeps every older campaign. The control refresh
+records and repairs an artifact-name collision without weakening either test.

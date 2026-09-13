@@ -16,13 +16,15 @@ indexed scopes support sparse concrete facts. Definition, body, lifetime,
 default, layout and emission owners are separate. Typed lowering consumes
 selected operations and ABI entries; PA14 ends at O0 LowIR.
 
-The default-fact handoff and newly reviewed body-publication path are covered.
+The default-fact handoff, body publication and explicit initializer recipe paths
+have been traced and validated. The latest review also exposed common
+initialization-mode defects; passing course tests does not close them.
 Remaining work, in ownership order:
 
-1. Validate fixed source initializers and braced returns; reuse checked recipes
-   in concrete initialization/lifetime consumers.
-2. Finish query-only call/condition and temporary-destruction coverage and fact
-   reuse; inspect complete keys and context-sensitive invalidation.
+1. Correct copy versus list constructor candidate sets, aggregate member copy
+   initialization, and known clause mapping around dependent aggregate fields.
+2. Complete source default initialization and query-only call/condition/list
+   obligations and reuse; inspect keys, temporary destruction and invalidation.
 3. Close remaining whole-stage identity, demand, storage and typed-lowering
    questions, recording later-stage boundaries explicitly.
 4. Freeze final performance evidence, run both required gates, consolidate the
@@ -39,9 +41,10 @@ limit, fixture, reference or comparison rule has been weakened.
 | Default slots, demand, list readiness, elision and access through `b3927732` | `default-final-*.json`, 85 checks; 952 additional observations |
 | Body and lifetime terminal publication, definition-time statements, fixed return recipes | 51 checks; 349 entry/current and sanitizer comparisons; 64 statement controls per build; nine repeated body-query cases per build |
 | Current body performance | [532 observations](../student.tests/pa14/body-audit-performance.md); 16,380 cumulative; all nine executable payload sizes unchanged |
+| Explicit initializer recipes and concrete list operands | [616 observations](../student.tests/pa14/initializer-performance.md); 16,996 cumulative; 67 checks, 82 controls per build; ten identical executables |
 | Personal comparator adapter | Fixed Perl sort-variable shadowing; one allowed top-level order difference; course comparator unchanged |
-| Remaining initializer/query ownership | Three reduced accepted-invalid inputs documented in audit; work remains open |
+| Remaining initialization modes, default and query ownership | Eight reduced incorrect outcomes documented in audit; work remains open |
 
 Artifacts: `$RALPH_ARTIFACT_DIR/pa14-final-audit/`. Both required gates passed
-for the body change, with 1,266 fixture/reference hashes unchanged. These checks
+for the initializer change, with 1,266 fixture/reference hashes unchanged. These checks
 do not close the remaining whole-stage defects.

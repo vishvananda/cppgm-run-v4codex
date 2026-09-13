@@ -68,19 +68,50 @@ supported unused bodies. No reference output was corrected.
 
 ## Remaining findings and handoffs
 
-These fixed-invalid inputs still succeed:
+The initial three initializer reproducers are now rejected. Source initialization
+checks retain scalar/reference conversions, constructor/default recipes,
+narrowing facts and source aggregate shape. Static initializer dependence binds
+immediately; nonstatic member initializers wait for complete class context.
+Local const/constexpr values keep their qualifiers and constants. Query-only
+constructor operands use the common typed selector without source temporaries.
+Concrete list materialization projects operands and lifetime scopes into the
+use's occurrence context. The 82 controls include 71 entry-accepted invalid
+programs and eleven native programs; one valid constexpr case failed at entry.
+
+This continuation independently found more work, rather than treating the new
+pass as completion. Four frozen source-owner reproducers still succeed:
 
 ```cpp
-template<class T> void f(){int* p=42;} int main(){}
-template<class T> struct C{int* p=42;}; int main(){}
-template<class T> int* g(){return {42};} int main(){}
+template<class T> void f(){int& r;} int main(){}
+struct D{D()=delete;}; template<class T> void f(){D d;} int main(){}
+struct C{int operator()()=delete;}; template<class T> void f(){C c;c();} int main(){}
+struct C{int operator()(){return 42;}};
+template<class T> int* f(){return {C()()};} int main(){}
 ```
 
-Binding initializer operands does not validate initialization. The source owner
-and concrete consumers need checked initialization/list recipes; a default's
-parameter-slot cache cannot own these. Fixed condition conversions and query-only
-calls also need reuse, complete-context keys and temporary/destructor obligations
-reviewed. These are remaining implementation work, not a waiver or blocker.
+They concern default object initialization and publication of query-only source
+expressions. A variable's runtime identity also currently makes its callable
+type query dependent even when its class type is fixed; `F v; D d(v());` can
+therefore miss a deleted `F::operator()` in an unused template. Fixed condition
+recipes and query-only calls still need reuse and temporary/destructor review.
+
+Three more reduced mode/mapping defects were confirmed after the initializer
+campaign ([handoff manifest](../student.tests/pa14/initializer-mode-handoff.json),
+which also records the variable-callable case):
+
+- With `explicit E(int)` and `E(double)`, `E e=1` inside an unused template is
+  wrongly rejected. Ordinary copy initialization must exclude explicit
+  constructors from its candidates; copy-list initialization considers them and
+  rejects a selected explicit constructor. The common selector/consumer path
+  needs this distinction, not a source-only diagnostic patch.
+- `struct A{E e;}; A a{{1}};` wrongly accepts an explicit-only `E(int)`:
+  aggregate elements are copy-initialized ([dcl.init.aggr]/2).
+- For `struct A{T x;int* p;}; A a{{1},{42}};`, mapping stops at dependent `T`
+  even though the explicit braces delimit that field and expose the fixed
+  invalid pointer initializer.
+
+These eight observed errors remain implementation work, not a waiver or an
+external blocker. The common copy/list initialization modes are the next owner.
 
 ## Performance, acceptance and validation
 
@@ -91,6 +122,17 @@ runtime transform is added and no runtime-profit claim is made. Source checks
 and concrete object/lifetime work have separate budgets; generated growth is
 zero on comparable inputs. Historical diagnostic targets do not create extra
 PA14/O0 exit gates.
+
+The [initializer campaign](../student.tests/pa14/initializer-performance.md)
+adds 616 observations, bringing the verified history to 16,996. All ten native
+executables are byte-identical. Source initialization recipes scale as 2M and
+concrete uses as 2KM; candidate visits at K=128 fall 2176→144. No timing or
+runtime gain is claimed amid the preserved A/A and paired variation. Compiler
+text grows 1.466%; Analyzer grows 144 bytes, and other measured records do not
+grow. The 67 release/sanitizer checks include current inherited default,
+lifecycle, virtual, demand and ABI controls. An artifact-name collision in two
+personal controls was corrected by rerunning both 82-case groups under the same
+frozen binaries; the prior script/manifest and the other 65 results remain.
 
 The body change passed 51 checks: file audit/root report, 349 release/sanitizer
 and 349 entry/current comparisons, 35 existing native programs, both builds'

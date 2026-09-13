@@ -80,3 +80,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/query_operator
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/query_abi
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_instantiation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_statement_facts
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_initializers

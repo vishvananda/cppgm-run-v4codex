@@ -33,7 +33,12 @@ std::uint32_t Analyzer::initializer_plan(NodeId n, TypeId t) const
 }
 void Analyzer::list_conversion(NodeId n, TypeId target)
 {
-    TypeId from = expressions[n].type;
+    auto occurrence = ast.nodes.occurrences[n];
+    if (occurrence.context && template_initializer_narrowing.get(occurrence.source) == target) return;
+    list_conversion_from(n,expressions[n].type,target);
+}
+void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target)
+{
     if (!arithmetic(from) || !arithmetic(target)) return;
     bool a = integral(from), b = integral(target);
     bool narrowing = false;

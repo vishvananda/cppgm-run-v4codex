@@ -3,12 +3,15 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result, ScopeId scope, bool direct, bool probe)
+EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result,
+    ScopeId scope, bool direct, bool probe, const std::vector<Expression>* values)
 {
+    if (values && (!probe || values->size() != args.size())) throw std::logic_error("invalid constructor value probe");
+    auto value = [&](unsigned i) { return values ? (*values)[i] : expressions[args[i]]; };
     EntityId cls = types[t].entity;
     if (definitions) complete_class(cls);
-    if (args.size() == 1 && types[expressions[args[0]].type].kind == TypeKind::Named &&
-        (types.unqualified(expressions[args[0]].type) == types.unqualified(t) || derived_from(expressions[args[0]].type, t) || class_value(expressions[args[0]].type)))
+    if (args.size() == 1 && types[value(0).type].kind == TypeKind::Named &&
+        (types.unqualified(value(0).type) == types.unqualified(t) || derived_from(value(0).type, t) || class_value(value(0).type)))
         ensure_transfers(t, false);
     if (args.empty() && !class_facts[entities[cls].class_info].user_constructor && !class_facts[entities[cls].class_info].inherited_base)
         return default_constructor(t, scope, !probe);
@@ -31,10 +34,13 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         bool valid = true;
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
             Conversion c;
-            if (direct && !i && transfer_member(e) && class_value(expressions[args[i]].type) &&
-                types.unqualified(expressions[args[i]].type) != types.unqualified(t))
-                c = conversion_function(args[i],types.parameters[f.offset+i],true);
-            if (!c.valid()) c = i < f.count ? conversion(args[i], types.parameters[f.offset+i]) : ellipsis_conversion(args[i]);
+            auto typed = values && !expressions[args[i]].ready;
+            if (direct && !i && transfer_member(e) && class_value(value(i).type) &&
+                types.unqualified(value(i).type) != types.unqualified(t))
+                c = typed ? conversion_function_value(value(i),types.parameters[f.offset+i],true) :
+                    conversion_function(args[i],types.parameters[f.offset+i],true);
+            if (!c.valid()) c = i < f.count ? (typed ? conversion_value(value(i),types.parameters[f.offset+i]) :
+                conversion(args[i], types.parameters[f.offset+i])) : (typed ? ellipsis_conversion_value(value(i)) : ellipsis_conversion(args[i]));
             valid = c.valid(); sequences.push_back(c);
         }
         if (valid) viable.push_back({e, begin}); else sequences.resize(begin);
@@ -119,14 +125,17 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         args.push_back(a);
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
-    EntityId ctor = choose_constructor(target, args, &result, s, !copy);
+    EntityId ctor = 0;
+    bool reused = reuse_template_constructor(n,target,args,result,s,ctor);
+    if (!reused)
+        ctor = choose_constructor(target, args, &result, s, !copy);
     if (converting_transfer(ctor,result)) {
         auto c = result_conversion(ctor,result,target);
         ValueInitialization init; init.source = args[0]; init.conversion = conversions.size(); conversions.push_back(c);
         class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
         facts.edit(n).type = target; return true;
     }
-    if (ast[list].kind == Kind::BracedInit) {
+    if (!reused && ast[list].kind == Kind::BracedInit) {
         Type f = types[entities[ctor].type];
         for (std::size_t j = 0; j < args.size() && j < f.count; ++j)
             list_conversion(args[j], value_type(types.parameters[f.offset+j]));

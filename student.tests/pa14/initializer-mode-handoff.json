@@ -1,0 +1,38 @@
+{
+  "binary": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/initializer-cppgm++",
+  "binary_sha256": "c85b790913e7cccb5c62a1f8db26679f9eb16b364facc82d9bc37e2334ce9421",
+  "cases": [
+    {
+      "name": "copy-overload",
+      "source": "struct E{explicit E(int){}E(double){}};template<class T>void f(){E e=1;}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/remaining-initializer-modes/copy-overload.cpp",
+      "required_exit": 0,
+      "exit_code": 1,
+      "stderr": "ERROR: explicit constructor in fixed copy initialization\n"
+    },
+    {
+      "name": "aggregate-copy-list",
+      "source": "struct E{explicit E(int){}};struct A{E e;};template<class T>void f(){A a{{1}};}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/remaining-initializer-modes/aggregate-copy-list.cpp",
+      "required_exit": 1,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "name": "partial-aggregate",
+      "source": "template<class T>void f(){struct A{T x;int* p;};A a{{1},{42}};}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/remaining-initializer-modes/partial-aggregate.cpp",
+      "required_exit": 1,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "name": "variable-callable",
+      "source": "struct F{int operator()()=delete;};struct D{D(int){}};template<class T>void f(){F v;D d(v());}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/remaining-initializer-modes/variable-callable.cpp",
+      "required_exit": 1,
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}
