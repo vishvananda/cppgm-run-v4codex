@@ -7,7 +7,9 @@ EntityId Analyzer::pattern_declaration(EntityKind kind, ScopeId s, IdentifierId 
     auto e = make_entity(kind,s,name,source);
     entities[e].template_pattern = true;
     template_pattern_entities.put(e,dependent ? 2 : 1);
-    bind(s,name,e); record(s,e,source,0,kind);
+    // Binding a declaration in a pattern/prototype scope publishes identity.
+    // It must not erase a raw type already established by the source signature.
+    bind(s,name,e); record(s,e,source,facts[source].type,kind);
     template_declaration_sources.put(ast.nodes.occurrences[source].source,e);
     ++template_declaration_work;
     return e;

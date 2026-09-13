@@ -19,8 +19,12 @@ TypeId Analyzer::template_method_shape(NodeId parameters, ScopeId scope)
         auto type = parameter(p,parameter_scope); params.push_back(type);
         auto name = terminal(decl_name(d));
         if (name && parameter_scope != scope) {
-            auto e = pattern_declaration(EntityKind::Parameter,parameter_scope,name,p,false);
+            // Prototype names exist only to bind signature queries. They do
+            // not republish the source declaration or replace a body object's
+            // canonical pattern identity and raw type.
+            auto e = make_entity(EntityKind::Parameter,parameter_scope,name,p);
             entities[e].type = parameter_body_type(type); signature_parameters.put(e,params.size());
+            bind(parameter_scope,name,e);
         }
     }
     if (params.size() == 1 && fundamental(params[0],FT_VOID) && !variadic) params.clear();

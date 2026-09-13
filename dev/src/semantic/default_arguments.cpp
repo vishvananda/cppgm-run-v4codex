@@ -2,11 +2,18 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+namespace {
+enum class DefaultBindingState : unsigned char { NotStarted, Queued, Active, Complete, Failed };
+}
 void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool allowed)
 {
     if (!d || ast.nodes.occurrences[d].context) return;
     auto source = ast.nodes.occurrences[d].source;
-    if (template_default_bindings.get(source)) return;
+    auto state = DefaultBindingState(template_default_bindings.get(source));
+    if (state == DefaultBindingState::Complete) return;
+    if (state == DefaultBindingState::Active) throw std::runtime_error("recursive source default argument binding");
+    if (state == DefaultBindingState::Failed) throw std::runtime_error("failed source default argument binding");
+    if (state == DefaultBindingState::Queued && active_template_class) return;
     NodeId parameters = 0;
     for (auto node = d; node;) {
         if (auto p = child(node,Kind::Parameters)) parameters = p;
@@ -14,9 +21,19 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     }
     bool needed = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
-    if (!needed) return;
+    if (!needed) { template_default_bindings.put(source,unsigned(DefaultBindingState::Complete)); return; }
     if (!allowed) throw std::runtime_error("class template member default must appear on its initial declaration");
-    template_default_bindings.put(source,1);
+    // Default arguments see the whole enclosing class, including declarations
+    // that follow this member and defaults in nested class member functions.
+    // The source class completion event drains just its collected consumers.
+    if (active_template_class && scopes[s].kind == ScopeKind::Class) {
+        template_default_bindings.put(source,unsigned(DefaultBindingState::Queued));
+        ++template_default_binding_queued;
+        template_pending_defaults.push_back({d,s,head}); return;
+    }
+    template_default_bindings.put(source,unsigned(DefaultBindingState::Active));
+    ++template_default_binding_work;
+    try {
     auto scope = make_scope(ScopeKind::Block,s,0,0,false);
     template_pattern_scopes.put(scope,1);
     if (head && head != s) for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
@@ -38,6 +55,10 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         // Fixed names are definition-time obligations. Dependent calls/types
         // retain their bindings without demanding a concrete default value.
         bind_template_expression(child(p,Kind::DefaultArgument),scope);
+    }
+    template_default_bindings.put(source,unsigned(DefaultBindingState::Complete));
+    } catch (...) {
+        template_default_bindings.put(source,unsigned(DefaultBindingState::Failed)); throw;
     }
 }
 void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)

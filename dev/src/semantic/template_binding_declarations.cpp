@@ -48,7 +48,21 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         add_edge(cs,target(base));
     }
     std::vector<Body> bodies;
-    for (auto c = ast[n].first; c; c = ast[c].next) bind_template_declaration(c,cs,deferred ? deferred : &bodies);
+    {
+        struct ClassBinding {
+            ScopeId& active; ScopeId prior;
+            ClassBinding(ScopeId& a, ScopeId current) : active(a), prior(a) { active = current; }
+            ~ClassBinding() { active = prior; }
+        } binding(active_template_class,cs);
+        for (auto c = ast[n].first; c; c = ast[c].next) bind_template_declaration(c,cs,deferred ? deferred : &bodies);
+    }
+    if (!active_template_class) {
+        // Detach this complete class's source obligations before checking them:
+        // a check can demand another class with its own completion event.
+        std::vector<TemplateDefaultBinding> defaults;
+        defaults.swap(template_pending_defaults);
+        for (auto argument : defaults) bind_template_defaults(argument.declarator,argument.scope,argument.head);
+    }
     for (auto body : bodies) bind_template_body(body);
     return cs;
 }

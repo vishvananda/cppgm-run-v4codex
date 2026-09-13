@@ -43,12 +43,15 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
     }
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind != syntax::Kind::Parameter) continue;
+        auto occurrence = ast.projected(p,context);
+        if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
+        if (facts[occurrence].type) continue;
         auto type = facts[p].type;
         if (!type) throw std::logic_error("missing retained template parameter type");
         auto concrete = substitute_type(type,bindings,cache,frame);
         if (!concrete) throw std::runtime_error("invalid instantiated parameter type");
-        auto occurrence = ast.projected(p,context);
         { auto& published = facts.edit(occurrence); published.type = concrete; published.scope = environment; }
+        ++parameter_publications;
     }
 }
 ScopeId Analyzer::default_environment(EntityId e, ScopeId head)

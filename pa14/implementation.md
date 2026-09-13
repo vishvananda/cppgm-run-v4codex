@@ -876,3 +876,42 @@ programs and 345 release/ASan/UBSan parity sources pass, and file audit passes
 with three inherited advisories. The complete local binding, initializer,
 sparse-store and grouped-publication behavior group is committed with its
 acceptance evidence; remaining architecture ownership is described above.
+
+
+Continuation from 97006205 reuses checked ordinary and special member function
+signatures together with raw parameter publications. Source signature records
+retain the declaration NodeId separately from its packed source index. Existing
+canonical type/query substitution resolves parameter ordinals and access contexts;
+prototype lookup scopes and parameter entities need not be reconstructed per
+specialization. Raw cv/array/function forms are published once per concrete
+parameter occurrence for the body. Concrete declaration creation continues through
+the existing default, exception, transfer, virtual and lifetime owners.
+
+The first native run exposed template_method_shape binding prototype names by
+republishing source declarations. That erased raw parameter types and could
+replace body parameter identity. Prototype bindings now use their own local
+entities without republishing source declarations; pattern identity publication
+also preserves an already-established raw source type. The original patch,
+compiler and diagnostic traces are retained. The source-index/declaration-ID
+separation independently preserves streaming/interleaved instantiation identity.
+
+The new combined native control exposed an entry failure for a member default
+that calls a later-declared private static member. N3485 [basic.scope.class]/1 and
+[class.mem]/2 make defaults complete-class contexts, including defaults in nested
+classes. Source defaults now queue once per declaration and bind after the
+outermost enclosing source class declarations are complete. A detached local
+batch permits reentrant completion of another class without retrying unrelated
+consumers. Not-started, queued, active, complete and failed states belong to the
+source default declaration. Binding fixed names remains definition-time work;
+dependent default values/bodies remain demand-driven. The batch releases its
+storage at source completion.
+
+Stage/prior through validation passes all 1935 tests; all 32 personal native
+programs, six new rejection controls, three signature reducers and inherited
+object reducers pass. Controls include const/array/function parameter bodies,
+trailing-return and parameter queries, nested declarators, static/nonstatic
+prototype identities, local copies/cleanup, late constructor and nested defaults,
+and unused ill-formed dependent defaults supplied with explicit arguments.
+File audit passes with three inherited advisories. Signature, raw-parameter and
+source-default work counters are available; isolated scaling, sanitizer parity,
+C++11 proof manifests and full performance acceptance remain to be completed.

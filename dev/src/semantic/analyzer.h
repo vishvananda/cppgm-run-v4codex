@@ -222,6 +222,10 @@ private:
     StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source);
     void bind_template_defaults(NodeId d, ScopeId s, ScopeId head = 0, bool allowed = true);
+    struct TemplateDefaultBinding { NodeId declarator; ScopeId scope, head; };
+    std::vector<TemplateDefaultBinding> template_pending_defaults;
+    ScopeId active_template_class = 0;
+    std::size_t template_default_binding_work = 0, template_default_binding_queued = 0;
     Index template_default_bindings;
     NodeId default_argument(EntityId e, unsigned parameter);
     Index default_argument_states;
@@ -332,9 +336,10 @@ private:
     EntityId substitution_binding(std::uint32_t frame, EntityId source);
     ScopeId substitution_scope(std::uint32_t frame, ScopeId source) const;
     bool pattern_scope(ScopeId scope) const;
-    Index template_type_sources;
+    Index template_type_sources, template_signature_sources;
     bool template_type_probe = false;
     std::size_t template_type_work = 0, template_type_uses = 0;
+    std::size_t template_signature_work = 0, template_signature_uses = 0, parameter_publications = 0;
     TypeId bind_template_type(NodeId specs, NodeId declarator, ScopeId scope);
     TypeId bind_template_special_type(NodeId d, ScopeId scope);
     TypeId reuse_template_type(NodeId node, ScopeId scope);

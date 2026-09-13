@@ -9,7 +9,19 @@ are unchanged. PA15 has not started. Current implementation: `af01c062`.
 
 ## Design/spec alignment
 
-Active continuation from `fda0a178`; previous turn: **verified progress**.
+Active continuation from `97006205`; previous turn: **verified progress**.
+Current group: publish checked ordinary/special function signatures and raw
+parameter facts together. Source prototype queries retain parameter ordinals,
+raw types and access contexts; substitute them per frame, then let concrete
+declaration/default/exception/transfer/virtual owners publish their own facts.
+Measure source/signature/parameter publication scaling with N/K/Q and preserve
+raw cv/array/function types, trailing returns, nested declarators, overloads and
+unused-body/default/exception demand. The preceding acceptance below is inherited.
+Implementation now passes through 1935, native 32, six new rejection controls and
+three signature reducers. Prototype names no longer republish source identities.
+Late/nested source defaults bind on the enclosing class completion event under
+separate queued/active/complete/failed states. Next freeze proofs, sanitizer parity
+and source/signature/parameter/default scaling before performance acceptance.
 The completed group extends source declarations through concrete local types,
 query substitution, object/lifetime consumers and sparse stable fact storage.
 A source declaration owns its pattern EntityId; a substitution frame publishes

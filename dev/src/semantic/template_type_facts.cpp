@@ -112,8 +112,14 @@ TypeId Analyzer::bind_template_type(NodeId specs, NodeId d, ScopeId scope)
     TypeId base = known ? known-1 : specifiers(specs,scope);
     if (!known && !occurrence.context) { template_type_sources.put(source,base+1); ++template_type_work; }
     TypeId type = base ? declarator(d,base,scope,0,true) : 0;
-    if (!occurrence.context && d && type && types[type].kind != TypeKind::Function)
-        template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
+    if (!occurrence.context && d && type) {
+        auto source = ast.nodes.occurrences[d].source;
+        if (types[type].kind == TypeKind::Function) {
+            if (!template_signature_sources.get(source)) ++template_signature_work;
+            template_signature_sources.put(source,d);
+        }
+        template_type_sources.put(source,type+1);
+    }
     return type;
 }
 TypeId Analyzer::bind_template_special_type(NodeId d, ScopeId scope)
@@ -126,7 +132,14 @@ TypeId Analyzer::bind_template_special_type(NodeId d, ScopeId scope)
     auto name = ast[decl_name(d)].last;
     auto result = ast[name].op == KW_OPERATOR && ast[name].detail ?
         type_id(ast[name].detail,scope) : types.fundamental(FT_VOID);
-    return result ? declarator(d,result,scope,0,true) : 0;
+    auto type = result ? declarator(d,result,scope,0,true) : 0;
+    auto occurrence = ast.nodes.occurrences[d];
+    if (type && !occurrence.context) {
+        if (!template_signature_sources.get(occurrence.source)) ++template_signature_work;
+        template_signature_sources.put(occurrence.source,d);
+        template_type_sources.put(occurrence.source,type+1);
+    }
+    return type;
 }
 TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
 {
@@ -135,12 +148,26 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
     auto known = template_type_sources.get(occurrence.source);
     if (known <= 1) return 0;
     auto type = known-1;
+    auto frame = template_type_contexts.get(occurrence.context);
     if (dependent_type(type)) {
-        auto frame = template_type_contexts.get(occurrence.context);
         if (!frame) return 0;
         Index bindings, cache;
         type = substitute_type(type,bindings,cache,frame);
         if (!type) throw std::runtime_error("invalid substituted declaration type");
+    }
+    if (types[type].kind == TypeKind::Function &&
+        (ast[node].kind == syntax::Kind::Declarator || ast[node].kind == syntax::Kind::AbstractDeclarator)) {
+        // The callable type alone is insufficient: a body consumes the raw
+        // parameter cv/array/function forms retained by the source signature.
+        // Prototype queries already own ordinal/type identities, so applying
+        // them needs no reconstructed name lookup scope or parameter entities.
+        if (!frame) throw std::logic_error("function signature has no substitution frame");
+        // A packed source-node index is not a NodeId after streaming semantic
+        // construction has interleaved earlier specialization occurrences.
+        auto source = template_signature_sources.get(occurrence.source);
+        if (!source) throw std::logic_error("missing source signature declaration");
+        instantiate_parameters(source,occurrence.context,frame,scope);
+        ++template_signature_uses;
     }
     ++template_type_uses;
     { auto& published = facts.edit(node); published.type = type; published.scope = scope; }

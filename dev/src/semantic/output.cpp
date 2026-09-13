@@ -134,6 +134,11 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_substitution_frames\":" << substitution_frames.size()-1
         << ",\"semantic_template_type_work\":" << template_type_work
         << ",\"semantic_template_type_uses\":" << template_type_uses
+        << ",\"semantic_template_signature_work\":" << template_signature_work
+        << ",\"semantic_template_signature_uses\":" << template_signature_uses
+        << ",\"semantic_parameter_publications\":" << parameter_publications
+        << ",\"semantic_template_default_binding_work\":" << template_default_binding_work
+        << ",\"semantic_template_default_binding_queued\":" << template_default_binding_queued
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"template_class_completions\":" << template_completions
         << ",\"template_definition_applications\":" << template_definition_work
