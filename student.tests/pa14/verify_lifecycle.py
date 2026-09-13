@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check all lifecycle observations, legality proofs, states and live layouts."""
+"""Check frozen lifecycle observations, legality proofs, states and layouts."""
 from pathlib import Path
 import json
 from verify_special_signatures import ROOT,document,checked,shared
@@ -51,13 +51,13 @@ def verify():
   assert row['build_exit']==0 and len(row['headers'])==24
   for h in row['headers']:
    assert shared.sha(h['path'])==h['sha256']
-   if row['label']=='current':assert shared.sha(h['source'])==h['sha256']
+   # The default-fact verifier now owns live headers; these stay frozen.
   for k in ['binary','dump']:assert shared.sha(row[k+'_path'])==row[k+'_sha256']
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
  assert layout['layouts'][0]['sizes']==[112,36,36,20,8,504,48,48,124,32,20,56,6216,120,28,24,64,1472]
  assert layout['layouts'][1]['sizes']==[112,36,36,20,8,504,48,48,120,32,20,56,6216,120,28,24,64,1472]
  data=document('lifecycle-performance.json')
- assert shared.sha(ROOT/'dev/cppgm++')==data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
+ assert data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
  assert data['binaries'][0]['sha256']==validation['binaries'][0]['sha256']
  assert shared.sha(ROOT/'student.tests/pa14/lifecycle_benchmark.py')==data['harness_sha256']
  assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
@@ -91,6 +91,6 @@ def verify():
    count+=campaign(row['runtime'])
    assert row['outputs'][0]['native']['sha256']==row['outputs'][1]['native']['sha256']
  assert count==392
- print('392 lifecycle observations, 349 parity inputs, 20 public query runs, cross-TU lifetime controls and 24 live headers verified')
+ print('392 lifecycle observations, 349 parity inputs, 20 public query runs, cross-TU lifetime controls and 24 frozen headers verified')
  return count
 if __name__=='__main__':verify()

@@ -2890,3 +2890,149 @@ rejection, virtual-state, repeated-failure and PA13 ABI/semantic/linkage/audit
 controls also pass. The new validation manifest records 79 top-level checks;
 all 1266 course fixture/reference hashes remain unchanged. Artifacts are under
 `$RALPH_ARTIFACT_DIR/pa14-lifecycle-facts/`.
+
+
+## Default argument facts and declaration-context consumption
+
+Entry A is `460f495a`, SHA `8430cc38dfb90547541bdb1626e592ecc11d8b97fadd40d82086f18b75322c1c`.
+Final B is `b3927732`, SHA `577f68adc1b606835c3f6f2d386a415d59e1dd23e4a9366971596ede82356c01`.
+Compiler `.text` changes **1,329,734 → 1,337,734 bytes (+8,000; +0.602%)**.
+The final [main](../student.tests/pa14/default-final-performance.json) and
+[repeat](../student.tests/pa14/default-final-noise.json) contain 350 and 126
+observations. Flags, inputs and binaries are frozen; a CPU is pinned; each
+campaign retains two warmups, four A/A observations and two ABBA blocks.
+All 17 LowIR hashes and eight complete executable hashes match. Compilation,
+runtime and telemetry collection are separate; no timing overlaps builds, tests,
+proofs, layout probes or verification. Runtime inputs check loop results and
+observable state. The supplied sectionless backend has no separate `.text`
+section, so the tables report executable payload after entry, alongside the
+stronger whole-executable equality check. Short compiler runs are startup
+observations, not frontend throughput evidence.
+
+The ownership budget is one source binding and checked copy-initialization per
+complete default key, one dependency-registration transition and edge visit,
+and O(required arguments) per-call materialization. Fact keys combine the
+immutable declaration slot with concrete function-specialization identity;
+member-specialization declarations own distinct slots. Checked conversions and
+later dependency/body failures are separate facts. Class defaults drain their
+root completion interval; selected list constructors consume previously checked
+default recipes in the declaring access context. Unselected defaults do no body
+work. Capturing deferred definitions must not mark ordinary elided copies for
+emission; the final implementation preserves all 349 inherited output hashes.
+
+Work controls vary unrelated aliases N, defaults K, constructor candidates M
+and calls Q independently. Final checking/demand counts are **K**, and this
+workload records/visits **3K** dependency edges, independent of N, M and Q.
+Increasing Q from 1 to 4000 adds exactly 3999 candidate visits at both M=1 and
+M=32: call selection remains necessary, while default conversion ranking is
+shared. At M=32/Q=4000 total candidate work falls **132,069 → 4,101**. General
+edge storage is proportional to checked expression/conversion uses (edges need
+not be unique entities), and underlying definition worklists deduplicate owners.
+No whole-TU retry or optional runtime transform is introduced. Generated growth
+on comparable correct inputs is budgeted at zero. PA14/O0 has no mandated
+numerical compiler wall/RSS/text ceiling; historical self-selected thresholds
+remain diagnostics under the stage-scoped acceptance rule.
+
+Layouts freeze 24 transitive headers. `DefaultArgumentFact` is 20 bytes and each
+`DefaultDependency` is 12; these are record payloads, not total cache allocation.
+`ListPlan` stays **68 bytes** because the terminal validation states fit its
+padding. Analyzer grows **6216 → 6312**, while the other 17 inherited measured
+records, including Entity 112, Expression 36 and MemberFacts 120, stay unchanged.
+All indices and geometric vectors are TU-owned; no per-fact heap object is added.
+
+The tables use medians of the four A/four B ABBA observations, retain both paired
+block means and display A/A spread. Every raw observation remains in JSON.
+
+Final compiler measurements:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| virtual-runtime | 0.006279 / 0.006167 | 5206 / 5244 | 0.006118–0.006192 | 0.9822, 0.9894 |
+| destructor-runtime | 0.005971 / 0.005932 | 5410 / 5306 | 0.005942–0.006058 | 0.9975, 0.9972 |
+| body-run-4000-128 | 0.605202 / 0.605813 | 94546 / 95084 | 0.599125–0.616379 | 0.9971, 1.0933 |
+| declaration-instances-1000 | 0.555570 / 0.555881 | 77096 / 76998 | 0.555583–0.560455 | 0.9978, 1.0066 |
+| demand-uses-1000-128-4 | 3.033395 / 3.049750 | 346058 / 346128 | 3.025759–3.045246 | 1.0129, 0.9978 |
+| demand-runtime | 0.006710 / 0.006641 | 5370 / 5570 | 0.006616–0.006748 | 0.9899, 0.9861 |
+| region-runtime | 0.007591 / 0.007558 | 5576 / 5564 | 0.007634–0.007747 | 0.9957, 1.0028 |
+| calls-runtime | 0.005618 / 0.005656 | 5262 / 5342 | 0.005671–0.005862 | 1.0147, 0.9918 |
+| memory-runtime | 0.005597 / 0.005574 | 5254 / 5332 | 0.005545–0.005793 | 1.0061, 0.9966 |
+| floating-runtime | 0.005832 / 0.005667 | 5430 / 5354 | 0.005775–0.005906 | 0.9784, 0.9722 |
+| default-16000-1-1-1 | 0.082855 / 0.082353 | 15636 / 15706 | 0.083051–0.084617 | 0.9938, 0.9850 |
+| default-64000-1-1-1 | 0.320492 / 0.320865 | 47334 / 47338 | 0.319893–0.323632 | 1.0111, 1.0001 |
+| default-16000-512-1-1 | 0.117696 / 0.118318 | 22278 / 22188 | 0.114808–0.117542 | 1.0014, 1.0099 |
+| default-16000-1-32-1 | 0.083014 / 0.082749 | 15664 / 15702 | 0.081599–0.082929 | 0.9935, 0.9929 |
+| default-16000-1-32-4000 | 0.164081 / 0.140017 | 24964 / 25276 | 0.161927–0.176801 | 0.8481, 0.8579 |
+| default-16000-1-1-4000 | 0.139834 / 0.137495 | 24540 / 24952 | 0.139724–0.141874 | 0.9925, 0.9771 |
+| default-runtime | 0.005792 / 0.005800 | 5184 / 5354 | 0.005816–0.005929 | 1.0104, 0.9981 |
+
+Final executable measurements:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks | A / B executable payload bytes |
+| --- | --- | --- | --- | --- | --- |
+| virtual-runtime | 0.295737 / 0.296794 | 256 / 256 | 0.294844–0.298010 | 1.0090, 0.9892 | 2360 / 2360 |
+| destructor-runtime | 0.494313 / 0.494757 | 320000 / 320000 | 0.494275–0.497250 | 0.9980, 1.0077 | 2072 / 2072 |
+| demand-runtime | 0.155932 / 0.155458 | 256 / 256 | 0.155402–0.156258 | 1.0005, 0.9958 | 261 / 261 |
+| region-runtime | 0.059161 / 0.059163 | 256 / 256 | 0.059105–0.059632 | 1.0022, 1.0001 | 206 / 206 |
+| calls-runtime | 0.478709 / 0.478687 | 256 / 256 | 0.477750–0.480421 | 0.9987, 1.0000 | 206 / 206 |
+| memory-runtime | 0.280279 / 0.280338 | 256 / 256 | 0.279445–0.281358 | 0.9979, 1.0017 | 434 / 434 |
+| floating-runtime | 0.331373 / 0.330799 | 256 / 256 | 0.330832–0.332746 | 0.9989, 0.9967 | 230 / 230 |
+| default-runtime | 0.668456 / 0.680070 | 256 / 256 | 0.669353–0.689322 | 1.0199, 1.0168 | 300 / 300 |
+
+Isolated compiler repeat:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| default-16000-1-32-4000 | 0.162598 / 0.139790 | 24382 / 25228 | 0.161643–0.166895 | 0.8550, 0.8612 |
+| default-16000-1-1-4000 | 0.142527 / 0.137728 | 24654 / 24950 | 0.136973–0.139997 | 0.9122, 0.9761 |
+| default-16000-512-1-1 | 0.116627 / 0.117298 | 22276 / 22306 | 0.115567–0.117894 | 1.0039, 1.0068 |
+| default-16000-1-1-1 | 0.081542 / 0.081490 | 15672 / 15544 | 0.081328–0.082669 | 1.0015, 1.0048 |
+| body-run-4000-128 | 0.599380 / 0.602315 | 94580 / 95116 | 0.598093–0.606914 | 1.0044, 1.0321 |
+| declaration-instances-1000 | 0.560051 / 0.563401 | 75720 / 75762 | 0.551891–0.565423 | 1.0595, 1.0039 |
+| demand-uses-1000-128-4 | 3.047669 / 3.100930 | 346224 / 346208 | 3.028663–3.074709 | 1.0245, 1.0070 |
+| default-runtime | 0.005839 / 0.005864 | 5292 / 5308 | 0.005751–0.005906 | 1.0098, 0.9983 |
+
+Isolated executable repeat:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks | A / B executable payload bytes |
+| --- | --- | --- | --- | --- | --- |
+| default-runtime | 0.675495 / 0.670402 | 256 / 256 | 0.663782–0.699727 | 0.9865, 1.0051 | 300 / 300 |
+
+The wide repeated-default compiler median improves **14.67%**, repeated
+**14.03%**, with all four paired ratios below 0.862. The one-candidate repeated
+case improves 1.67%/3.37%, though its repeat contains a larger noisy pair; the
+wide-case benefit is the stronger evidence. Peak RSS medians on the wide input
+rise **312 KiB** and **846 KiB**; no broad memory reduction is claimed.
+The 512-default case costs **0.53%/0.58%**. Retained bodies cost **0.10%/0.49%**,
+declarations **0.06%/0.60%**, and repeated demands **0.54%/1.75%**. These positive
+costs include the additional dependency-capture guards and record ownership;
+work remains proportional to the existing requests, with no new scans or retry
+product. The compiler-work benefit on repeated conversion ranking and bounded
+storage justify this required fact ownership; no optional generated-code
+optimization is being retained to excuse those costs.
+
+The body main paired block reaches 1.0933, the declaration repeat 1.0595, and the
+narrow-default repeat 0.9122. Their causes are unisolated, and none is discarded.
+The default executable median changes +1.74%, then −0.75%, for identical bytes;
+this is measurement variation, not a runtime algorithm change or claimed gain.
+Other executable medians are within 0.36% in the main campaign. RSS spread and
+all startup-sensitive compiler measurements remain visible above.
+
+The first [default campaign](../student.tests/pa14/default-performance.json) and
+[repeat](../student.tests/pa14/default-noise.json), using frozen `decd2e52` B
+(SHA `362384828685cfd9ace73012d106427926d5ec323b1a274c25f436c88facaafc`), retain
+another **476 observations**. Their comparable inputs are correct and all
+output hashes match; two subsequent access-context reducers motivated the final
+binary. That earlier wide-input benefit was 13.94%/13.87%; declaration costs were
+1.35%/1.02%, and repeated-demand changes −0.49%/0.00%. All observations and
+outliers remain evidence, not an additional historical exit gate.
+
+The **952** new observations bring the preserved total to **15,848**.
+Final validation passes **314 stage / 1621 prior / 1935 through**, file audit,
+349 sanitizer and entry/current parity inputs, 35 existing native programs,
+inherited lifecycle/public failure/virtual controls and PA13 ABI checks. Seven
+conversion and three dependency/body/isolation probes each repeat 10,000
+requests under release and sanitizers. The 25 new source controls include 21
+native programs, three required rejections and one incomplete-reference IR
+control. The final manifest records 85 top-level checks, and all 1266 course
+fixture/reference hashes are unchanged. Artifacts and failed exploratory checks
+are preserved under `$RALPH_ARTIFACT_DIR/pa14-default-facts/`.
