@@ -1,0 +1,45 @@
+{
+  "commit": "d2ae96654abf644805396a8b5a547dc5dcb0618c",
+  "headers": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/semantic/model.h",
+      "sha256": "9de0d28d9ff7bfbaac06eb98b269bb201606fde1610f8c219cd5c9ed5d9e5045"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/semantic/analyzer.h",
+      "sha256": "c1793268f77d93551116bde790926d70020f4f3457d7b1c51c54999de4c4e2b3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/semantic/template_binding.h",
+      "sha256": "b7cb29a1bfe5985925d72afd5717507116eca58bf26fa0d2086747c1704a5312"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/lowering/procedural.h",
+      "sha256": "9d6268a03342bc5437c072828200e307d8ab0dc786f8d85971675353dbe64a03"
+    }
+  ],
+  "command": [
+    "g++",
+    "-std=gnu++11",
+    "-fdump-lang-class",
+    "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout",
+    "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/probe.cpp",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/probe"
+  ],
+  "sizes": [
+    112,
+    36,
+    36,
+    8,
+    12,
+    2
+  ],
+  "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/probe.cpp",
+  "source_sha256": "8a4d3252253ce52e604a7b4f2062d4f391cae5fbaf63e6f7be426ffc9b9c956f",
+  "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/probe",
+  "binary_sha256": "e37a7a35151afc145fa9b3e32be0571265a627e34742ddb19e40169f5cbcf73f",
+  "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-dependent-objects/layout/probe.cpp.001l.class",
+  "dump_sha256": "b05e8cc0a693e2efa73d89d53f41709ae0d348ee80ac705a9b08073cbc01a2b8"
+}
