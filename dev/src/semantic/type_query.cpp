@@ -47,6 +47,16 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             if (!q.type) q.type = type_id(name,s);
             break;
         }
+        auto last = ast[name].first;
+        while (ast[last].next && ast[last].next != ast[name].last) last = ast[last].next;
+        if (definitions && !ast.nodes.occurrences[n].context && last != ast[name].last && bind_template_name(name,s,last).dependent) {
+            auto owner = type_name(name,s,last);
+            if (!owner && template_type_probe) return 0;
+            q.kind = QueryKind::QualifiedValue; q.type = owner; q.name = terminal(name); q.context = s;
+            while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+                q.context = scopes[q.context].parent;
+            break;
+        }
         auto e = resolve(name,s);
         if (!e && (!callee || ast[name].first != ast[name].last || ast[name].op == OP_COLON2))
             throw std::runtime_error("unbound name in type query");
@@ -90,6 +100,26 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     }
     case Kind::Parenthesized:
         q.kind = QueryKind::Parenthesized; children.push_back(expression_query(first,s,callee)); break;
+    case Kind::Conditional:
+        q.kind = QueryKind::Conditional; q.context = s;
+        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+            q.context = scopes[q.context].parent;
+        for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
+        break;
+    case Kind::Cast: {
+        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST) {
+            if (template_type_probe) return 0;
+            throw std::runtime_error("cast is not supported in a constant type query");
+        }
+        q.kind = QueryKind::Cast; q.op = node.op; q.type = type_id(first,s);
+        auto child = expression_query(ast[first].next,s);
+        if (template_type_probe) {
+            if (!q.type || !child || dependent_type(q.type) || !arithmetic(q.type)) return 0;
+            auto type = query_fact(child).expression.type;
+            if (!type || dependent_type(type) || !arithmetic(type)) return 0;
+        }
+        children.push_back(child); break;
+    }
     case Kind::Unary: case Kind::Binary: case Kind::Subscript:
         q.kind = node.kind == Kind::Unary ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
@@ -183,9 +213,36 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_type(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
+    if (q.kind == QueryKind::Sizeof) x.type = types.fundamental(FT_UNSIGNED_LONG_INT);
+    // Layout changes the value of sizeof, not its type. Fixed arithmetic
+    // operands still impose definition-time obligations, including operands
+    // that a later constant evaluation will short-circuit.
+    if (r.dependent && (q.kind == QueryKind::Unary || q.kind == QueryKind::Binary || q.kind == QueryKind::Conditional)) {
+        bool fixed = true;
+        for (auto child : children) fixed &= child.expression.type && arithmetic(child.expression.type);
+        if (fixed) {
+            r = q.kind == QueryKind::Conditional ? query_conditional(q,children) : query_operator(q,children);
+            r.dependent = true;
+        }
+    }
     if (!r.dependent) switch (q.kind) {
     case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
+    case QueryKind::QualifiedValue: {
+        if (!class_value(q.type)) throw std::runtime_error("value qualifier is not a class");
+        auto cls = types[q.type].entity; complete_class(cls);
+        auto entity = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
+        if (!entity) throw std::runtime_error("qualified value not found");
+        auto kind = entities[entity].kind;
+        if (kind != EntityKind::Variable && kind != EntityKind::Enumerator && !function_binding(entity))
+            throw std::runtime_error("qualified type used as value");
+        check_access(entity,q.context,entities[cls].scope);
+        x.type = value_type(entities[entity].type); x.entity = entity;
+        r.declared_type = entities[entity].type;
+        if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
+        if (function_binding(entity)) x.form = ExpressionForm::Overload;
+        break;
+    }
     case QueryKind::Parameter: case QueryKind::Name:
         x.type = value_type(q.type); r.declared_type = q.type;
         x.category = ValueCategory::Lvalue; x.entity = q.entity;
@@ -196,6 +253,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             r.declared_type = entities[q.entity].type;
         break;
     case QueryKind::Parenthesized: r = children[0]; r.declared_type = 0; break;
+    case QueryKind::Conditional: r = query_conditional(q,children); break;
+    case QueryKind::Cast:
+        if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))
+            throw std::runtime_error("constant query cast requires arithmetic operands");
+        x.type = q.type; break;
     case QueryKind::Member: {
         auto object = children[0].expression; auto type = object.type;
         if (q.op == OP_ARROW) { if (!pointer(type)) throw std::runtime_error("type query arrow needs pointer"); type = types[type].child; }

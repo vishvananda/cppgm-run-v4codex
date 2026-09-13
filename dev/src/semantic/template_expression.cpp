@@ -119,6 +119,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     }
     } catch (...) { if (unevaluated) --unevaluated_depth; throw; }
     if (unevaluated) --unevaluated_depth;
+    reuse_value_conversions(n,source,result);
     if (result.entity && entities[result.entity].template_pattern) {
         if (nonstatic_field(result.entity)) result.entity = template_field_use(result.entity,s).entity;
         else {

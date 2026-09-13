@@ -11,7 +11,7 @@ typedef std::uint32_t ScopeId;
 
 using Index = IdIndex;
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {

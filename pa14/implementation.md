@@ -503,3 +503,30 @@ without copying a source non-constant marker over a dependent concrete value.
 Query checking validates the operand of nested sizeof even in unevaluated uses.
 The initial group passes 314 course cases, 22 native programs and eight explicit
 rejection controls. Value-dependent array types and full evidence remain active.
+
+
+Dependent array bounds now retain a canonical query ID with their element type.
+Substitution evaluates integral query values once per concrete query, then
+publishes an ordinary canonical array type. Qualified static constants/enumerators,
+sizeof/alignment, unary/binary operations, arithmetic casts and conditional
+selection use the existing semantic/conversion rules. Both arms must be well
+formed; only the selected conditional/logical operand is evaluated. Parameter
+array adjustment precedes later parameter queries. Source arithmetic obligations
+remain checked even when layout makes the value dependent.
+
+The ABI graph consumes those query identities directly, including `st`/`sz`,
+`at`/`az`, `qu`, and cast forms from the
+[Itanium expression grammar](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-expressions).
+No reference output changed. The first typed-value implementation exposed an O0
+constant-widening output difference. Conversion sequences now share at most four
+source/flag variants; entry/current LowIR and native bytes match for the reduced
+left/right layout-offset control and body-values program. The initial differing
+outputs remain in the artifacts. Value/query tables are translation-unit owned;
+query Active/Success/Failure states and canonical frame/query keys bound repeated
+work. This does not replace whole-region occurrence projection or the remaining
+local identity/lifetime dependency owners.
+
+Current correctness before measurement: PA14 314/314 and prior 1621/1621;
+23 native programs, eight body-value and fourteen bound rejection controls,
+four new ABI controls and the explicit conversion reducer. Frozen performance,
+sanitizer and final source-layout validation follow this implementation increment.

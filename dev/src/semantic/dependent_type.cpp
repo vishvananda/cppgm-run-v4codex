@@ -17,8 +17,9 @@ TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vect
     }
     return source_type(member);
 }
-TypeId Analyzer::type_name(NodeId n, ScopeId s)
+TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
 {
+    if (!last) last = ast[n].last;
     ScopeId owner = ast[n].op == OP_COLON2 ? global : s;
     bool qualified = ast[n].op == OP_COLON2;
     TypeId prefix = 0;
@@ -33,17 +34,19 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s)
                 args.push_back(types.signature(type));
             }
             prefix = types.dependent_name(prefix,ast[p].text,args,list);
+            if (p == last) return prefix;
             continue;
         }
         if (ast[ast[p].detail].kind == Kind::Decltype) {
             prefix = expression_type(ast[ast[p].detail].first,s,true);
             if (template_type_probe && !prefix) return 0;
+            if (p == last) return prefix;
             if (dependent_type(prefix)) continue;
             if (types[prefix].kind != TypeKind::Named) throw std::runtime_error("decltype qualifier is not a class");
             complete_class(types[prefix].entity);
             owner = entities[types[prefix].entity].scope; qualified = true; continue;
         }
-        auto e = lookup(owner,ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         auto instance = class_template_name(p,e,s);
         if (template_type_probe && e && !instance) return 0;
         e = instance;
@@ -55,9 +58,9 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s)
         // concrete declaration type yet. Qualified aliases can still supply
         // a canonical symbolic type through their already bound class scope.
         if (template_type_probe && entities[e].class_info && entities[e].template_info) prefix = 0;
-        if (p == ast[n].last) {
+        if (p == last) {
             if (!type) throw std::runtime_error("type name denotes a value");
-            facts[n].entity = e;
+            if (last == ast[n].last) facts[n].entity = e;
             return prefix;
         }
         if (prefix && dependent_type(prefix)) continue;

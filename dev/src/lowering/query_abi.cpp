@@ -43,7 +43,12 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         auto name = abi.name(q.name ? 0 : abi_scope(entity.owner),spelling(q.name ? q.name : entity.name));
         result = abi.make(Kind::UnresolvedName,name,q.arguments!=0,0,0,args); break;
     }
+    case QueryKind::QualifiedValue: result = abi.make(Kind::Member,abi_type(q.type),abi.string(spelling(q.name))); break;
     case QueryKind::Parenthesized: result = child(0); break;
+    case QueryKind::Conditional: result = abi.make(Kind::Conditional,child(0),child(1),child(2)); break;
+    case QueryKind::Cast:
+        result = q.op == KW_STATIC_CAST ? abi.make(Kind::Cast,abi_type(q.type),child(0),abi_mangle::operation("sc")) :
+            abi.make(Kind::Conversion,abi_type(q.type),0,0,0,{child(0)}); break;
     case QueryKind::Unary: result = abi.make(Kind::Unary,child(0),abi_mangle::operation(query_operation(q.op,true))); break;
     case QueryKind::Binary: result = abi.make(Kind::Binary,child(0),child(1),abi_mangle::operation(query_operation(q.op,false))); break;
     case QueryKind::Member: result = abi.make(Kind::ObjectMember,child(0),abi.string(spelling(q.name)),abi_mangle::operation(query_operation(q.op,false)),0,args); break;
@@ -54,8 +59,8 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
             abi.make(Kind::Call,child(0),0,0,0,args); break;
     }
     case QueryKind::Sizeof:
-        if (!q.type) throw std::logic_error("missing expression sizeof ABI representation");
-        result = abi.make(Kind::SizeofType,abi_type(q.type)); break;
+        result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
+            abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_ALIGNOF ? "az" : "sz")); break;
     case QueryKind::TypeValue: throw std::logic_error("type-query type used as ABI expression");
     }
     abi_queries.put(id,result); return result;

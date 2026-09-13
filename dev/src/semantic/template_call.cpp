@@ -43,7 +43,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
+    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_type(argument_types[pack.offset+j]);
@@ -65,7 +65,20 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     ++substitution_work;
     Type p = types[pattern];
     TypeId result = pattern;
-    if (p.kind == TypeKind::Decltype) {
+    if (p.kind == TypeKind::DependentArray) {
+        auto child = substitute_type(p.child,bindings,cache,owner);
+        auto query = substitute_query(p.bound,bindings,cache,owner);
+        if (!child || !query) return 0;
+        if (query_fact(query).dependent) result = types.compound(TypeKind::DependentArray,child,query);
+        else {
+            auto value = constants[query_value(query)];
+            if (!value.valid || !integral(value.type) || scoped_enum(value.type) || !value.bits ||
+                (!is_unsigned(value.type) && static_cast<std::int64_t>(value.bits) < 0))
+                throw std::runtime_error("substituted array bound must be a positive integral constant");
+            result = types.compound(TypeKind::Array,child,value.bits);
+        }
+        result = types.qualify(result,p.cv);
+    } else if (p.kind == TypeKind::Decltype) {
         auto query = substitute_query(p.entity,bindings,cache,owner);
         if (!query) return 0;
         result = types.qualify(query_decltype(query,p.bound),p.cv);
@@ -150,6 +163,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 {
     Type p = types[pattern], a = types[actual];
+    if (p.kind == TypeKind::DependentArray)
+        return (a.kind == TypeKind::Array || a.kind == TypeKind::DependentArray) && deduce_type(p.child,a.child,bindings);
     if (p.kind == TypeKind::DependentName || p.kind == TypeKind::Decltype) return true; // non-deduced context
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         TypeId old = bindings.get(p.entity);

@@ -90,4 +90,47 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     conversions.insert(conversions.end(),sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
     return r;
 }
+Expression Analyzer::conditional_value(Expression b, Expression c)
+{
+    Expression result; TypeId common = 0;
+    if (class_value(b.type) && types.unqualified(b.type) == types.unqualified(c.type))
+        common = types.qualify(types.unqualified(b.type),types[b.type].cv | types[c.type].cv);
+    else if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type,c.type)) common = c.type;
+    else if (!(types[c.type].cv & ~types[b.type].cv) && derived_from(c.type,b.type)) common = b.type;
+    if ((b.type == c.type || common) && b.category == c.category && b.category != ValueCategory::Prvalue) {
+        result.type = common ? common : b.type; result.category = b.category;
+        result.entity = b.entity == c.entity ? b.entity : 0; return result;
+    }
+    auto left = decay(b.type), right = decay(c.type);
+    if (left == right) result.type = left;
+    else if (pointer(left) && pointer(right)) result.type = composite_pointer(left,right);
+    else if (pointer(left) && c.null_pointer_constant) result.type = left;
+    else if (pointer(right) && b.null_pointer_constant) result.type = right;
+    else result.type = arithmetic_type(left,right);
+    if (!result.type) throw std::runtime_error("incompatible conditional operands");
+    return result;
+}
+TypeQueryFact Analyzer::query_conditional(const TypeQuery& query, const std::vector<TypeQueryFact>& children)
+{
+    auto condition = boolean_conversion_value(children[0].expression);
+    if (!condition.valid()) throw std::runtime_error("invalid query condition");
+    TypeQueryFact result; result.expression = conditional_value(children[1].expression,children[2].expression);
+    auto& value = result.expression;
+    auto target = value.category == ValueCategory::Prvalue ? value.type :
+        types.compound(value.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,value.type);
+    std::vector<Conversion> selected(1,condition);
+    for (unsigned i = 1; i < 3; ++i) {
+        auto conversion = conversion_value(children[i].expression,target);
+        if (!conversion.valid()) throw std::runtime_error("invalid query branch conversion");
+        if (conversion.derived && conversion.kind != Conversion::Kind::Explicit) {
+            auto from = children[i].expression.type, to = types[target].child;
+            if (pointer(from)) from = types[from].child;
+            if (pointer(to)) to = types[to].child;
+            check_base_access(from,to,query.context);
+        }
+        selected.push_back(conversion);
+    }
+    value.conversions = conversions.size(); value.count = selected.size();
+    conversions.insert(conversions.end(),selected.begin(),selected.end()); return result;
+}
 } }

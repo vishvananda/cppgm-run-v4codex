@@ -7,7 +7,7 @@ namespace {
 const char* const operations[] = {
     "ad", "de", "ps", "ng", "co", "nt", "pl", "mi", "ml", "dv", "rm",
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
-    "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt"
+    "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az"
 };
 }
 Id operation(const std::string& code) {
@@ -112,6 +112,7 @@ void Encoder::expression(Id id) {
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
         output += 'E'; break;
     case Kind::SizeofType: output += "st"; type(n.a); break;
+    case Kind::AlignofType: output += "at"; type(n.a); break;
     case Kind::Member:
         output += "sr"; type(n.a); if (n.c) output += 'E'; source(n.b);
         if (n.count) args(n);

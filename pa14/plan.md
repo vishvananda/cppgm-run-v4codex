@@ -10,7 +10,7 @@ unchanged. PA15 has not started.
 ## Design/spec alignment
 
 Active continuation from `c78e8d3b`; previous turn: **verified progress**.
-The body value owner will distinguish fixed expression types/conversions from
+The body value owner now distinguishes fixed expression types/conversions from
 value-dependent layout queries. Source sizeof/alignment queries retain canonical
 typed operands; complete frame/query keys substitute only dependencies. Enclosing
 fixed scalar operations should retain their semantic decisions even when operand
@@ -19,7 +19,10 @@ where its type/constant owners apply. Work follows unique source queries, comple
 substitution keys and demanded values; preserve short-circuit evaluation, source
 checks, local identities, default-head ownership and lifetime consumers. Validate
 course/native parity, new definition-time rejection proofs and frozen compiler/RSS
-plus executable measurements before closing this group.
+plus executable measurements before closing this group. Typed array bounds,
+qualified constants, short-circuit operations and scalar casts are implemented;
+314 stage and 1,621 prior tests pass. The conversion-offset reducer preserves
+entry LowIR/native output. Frozen measurement and sanitizer validation remain.
 
 Continuation from `ca42e706` is **verified progress**. Member bodies, constructor
 initializers and default expressions now have separate demand roots. Concrete

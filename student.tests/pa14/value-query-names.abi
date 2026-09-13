@@ -1,0 +1,16 @@
+# https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-expressions
+let-type T template-param 0
+let-expr size sizeof-type T
+type array-expression size int
+case
+let-type T template-param 0
+let-expr alignment alignof-type T
+type array-expression alignment int
+case
+let-expr parameter function-param 0
+let-expr size unary sz parameter
+type array-expression size int
+case
+let-expr parameter function-param 0
+let-expr alignment unary az parameter
+type array-expression alignment int

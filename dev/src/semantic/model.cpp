@@ -56,9 +56,9 @@ TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)
 {
     Type base = records[child];
     bool ref = base.kind == TypeKind::LRef || base.kind == TypeKind::RRef;
-    if ((k == TypeKind::Pointer || k == TypeKind::Array) && ref)
+    if ((k == TypeKind::Pointer || k == TypeKind::Array || k == TypeKind::DependentArray) && ref)
         throw std::runtime_error("pointer or array of reference");
-    if (k == TypeKind::Array && (base.kind == TypeKind::Function ||
+    if ((k == TypeKind::Array || k == TypeKind::DependentArray) && (base.kind == TypeKind::Function ||
         (base.kind == TypeKind::Fundamental && base.fundamental == FT_VOID)))
         throw std::runtime_error("invalid array element");
     if ((k == TypeKind::LRef || k == TypeKind::RRef) && ref) {
@@ -72,7 +72,7 @@ TypeId Types::qualify(TypeId id, unsigned cv)
 {
     Type t = records[id];
     if (!cv || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Function) return id;
-    if (t.kind == TypeKind::Array) return compound(t.kind, qualify(t.child, cv), t.bound);
+    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return compound(t.kind, qualify(t.child, cv), t.bound);
     t.cv |= cv;
     if (t.kind == TypeKind::DependentName)
         return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
@@ -89,7 +89,7 @@ TypeId Types::unqualified(TypeId id)
 }
 TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv, RefQualifier ref)
 {
-    if (records[result].kind == TypeKind::Array || records[result].kind == TypeKind::Function)
+    if (records[result].kind == TypeKind::Array || records[result].kind == TypeKind::DependentArray || records[result].kind == TypeKind::Function)
         throw std::runtime_error("invalid function return type");
     Type t; t.kind = TypeKind::Function; t.child = result; t.variadic = variadic; t.cv = cv; t.ref = ref;
     return intern(t, params);
@@ -104,7 +104,7 @@ TypeId Types::adjusted(TypeId id)
     if (adjustments.size() <= id) adjustments.resize(id + 1);
     if (adjustments[id]) return adjustments[id];
     Type t = records[id];
-    TypeId result = t.kind == TypeKind::Array ? compound(TypeKind::Pointer, signature(t.child)) :
+    TypeId result = t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray ? compound(TypeKind::Pointer, signature(t.child)) :
         t.kind == TypeKind::Function ? compound(TypeKind::Pointer, signature(id)) : unqualified(signature(id));
     adjustments[id] = result;
     return result;
@@ -123,7 +123,7 @@ TypeId Types::signature(TypeId id)
         return result;
     }
     TypeId result = id;
-    if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array)
+    if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
         result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
     if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer(t.entity, signature(t.child)), t.cv);
     signatures[id] = result;

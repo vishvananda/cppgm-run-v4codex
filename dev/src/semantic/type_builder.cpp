@@ -5,7 +5,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 TypeId Analyzer::parameter_body_type(TypeId source)
 {
-    return types[source].kind == TypeKind::Array ? types.compound(TypeKind::Pointer,types.signature(types[source].child)) :
+    return types[source].kind == TypeKind::Array || types[source].kind == TypeKind::DependentArray ? types.compound(TypeKind::Pointer,types.signature(types[source].child)) :
         types[source].kind == TypeKind::Function ? types.compound(TypeKind::Pointer,types.signature(source)) : types.signature(source);
 }
 TypeId Analyzer::source_type(EntityId e) const
@@ -197,7 +197,14 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         if (ast[c].kind == Kind::Array) {
             std::uint64_t bound = 0;
             if (ast[c].first) {
-                if (template_type_probe && bind_template_expression(ast[c].first,s)) return 0;
+                if (definitions && !ast.nodes.occurrences[c].context && (template_type_probe || active_template_scope) &&
+                    bind_template_expression(ast[c].first,s)) {
+                    auto query = expression_query(ast[c].first,s);
+                    if (!query && template_type_probe) return 0;
+                    query_fact(query);
+                    base = types.compound(TypeKind::DependentArray,base,query);
+                    continue;
+                }
                 Constant v = evaluate(ast[c].first, s);
                 if (c == dynamic_array) {
                     auto x = expression(ast[c].first,s);
@@ -226,7 +233,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 if (parameter_scope != s && id) {
                     auto e = make_entity(EntityKind::Parameter,parameter_scope,id,p);
                     auto type = params.back();
-                    entities[e].type = types[type].kind == TypeKind::Array ? types.compound(TypeKind::Pointer,types[type].child) :
+                    entities[e].type = (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::DependentArray) ? types.compound(TypeKind::Pointer,types[type].child) :
                         types[type].kind == TypeKind::Function ? types.compound(TypeKind::Pointer,types.signature(type)) : type;
                     signature_parameters.put(e,params.size()); bind(parameter_scope,id,e);
                 }

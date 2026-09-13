@@ -130,18 +130,8 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
     bool shift = op == OP_LSHIFT || op == OP_RSHIFT;
     Conversion left = conversion(an, shift ? ap : result), right = conversion(bn, shift ? bp : result);
     bool offset = op == OP_PLUS || op == OP_MINUS;
-    auto fixed_layout = [&](NodeId query) {
-        if (!facts[query].value) return false;
-        if (expressions[query].form == ExpressionForm::ConstantQuery) return true;
-        if (ast[query].kind != Kind::Sizeof) return false;
-        TypeId operand = facts[ast[query].first].type;
-        // A specialization's layout is established by template demand. Keep
-        // its surrounding source conversion explicit at O0; unrelated template
-        // work cannot change the ordinary fixed-layout immediate policy.
-        return types[operand].kind != TypeKind::Named || !entities[types[operand].entity].specialization;
-    };
-    left.fold_widen = offset && fixed_layout(bn);
-    right.fold_widen = offset && fixed_layout(an);
+    left.fold_widen = offset && fixed_layout_operand(bn);
+    right.fold_widen = offset && fixed_layout_operand(an);
     record_conversion(r, an, left);
     record_conversion(r, bn, right);
     if (shift) return ap;
@@ -160,26 +150,12 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         NodeId cn = ast[bn].next;
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
-        TypeId common_class = 0;
-        if (class_value(b.type) && types.unqualified(b.type) == types.unqualified(c.type))
-            common_class = types.qualify(types.unqualified(b.type),types[b.type].cv | types[c.type].cv);
-        else if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type, c.type)) common_class = c.type;
-        else if (!(types[c.type].cv & ~types[b.type].cv) && derived_from(c.type, b.type)) common_class = b.type;
-        if ((b.type == c.type || common_class) && b.category == c.category && b.category != ValueCategory::Prvalue) {
-            r.type = common_class ? common_class : b.type; r.category = b.category;
-            r.entity = b.entity == c.entity ? b.entity : 0;
-            TypeId ref = types.compound(b.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, r.type);
-            record_conversion(r, bn, conversion(bn, ref)); record_conversion(r, cn, conversion(cn, ref));
-            return r;
-        }
-        TypeId bt = decay(b.type), ct = decay(c.type);
-        if (bt == ct) r.type = bt;
-        else if (pointer(bt) && pointer(ct)) r.type = composite_pointer(bt, ct);
-        else if (pointer(bt) && null_constant(cn)) r.type = bt;
-        else if (pointer(ct) && null_constant(bn)) r.type = ct;
-        else r.type = arithmetic_type(bt, ct);
-        if (!r.type) throw std::runtime_error("incompatible conditional operands");
-        record_conversion(r, bn, conversion(bn, r.type)); record_conversion(r, cn, conversion(cn, r.type));
+        b.null_pointer_constant = null_constant(bn); c.null_pointer_constant = null_constant(cn);
+        auto value = conditional_value(b,c);
+        r.type = value.type; r.category = value.category; r.entity = value.entity;
+        auto target = r.category == ValueCategory::Prvalue ? r.type :
+            types.compound(r.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,r.type);
+        record_conversion(r,bn,conversion(bn,target)); record_conversion(r,cn,conversion(cn,target));
         return r;
     }
     if (op == OP_COMMA) {

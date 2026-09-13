@@ -289,6 +289,10 @@ private:
     std::uint32_t query_value(QueryId id);
     bool bind_template_size(NodeId node, ScopeId scope);
     bool reuse_template_value(NodeId node, ScopeId scope, Expression& result);
+    bool fixed_layout_operand(NodeId node) const;
+    void reuse_value_conversions(NodeId node, NodeId source, Expression& result);
+    Index template_value_conversions;
+    std::size_t value_conversion_variants = 0, value_conversion_records = 0;
     QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
     QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
     QueryId substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner = 0);
@@ -301,6 +305,8 @@ private:
         const std::vector<NodeId>* nodes, TypeId object, ValueCategory category,
         ScopeId naming, std::uint32_t explicit_arguments, std::vector<Conversion>& selected);
     TypeQueryFact query_operator(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
+    Expression conditional_value(Expression left, Expression right);
+    TypeQueryFact query_conditional(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId dependent_decltype(NodeId n, ScopeId s);
     std::vector<TypeArguments> argument_packs;
     std::vector<TypeId> argument_types;
@@ -351,7 +357,7 @@ private:
     EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, TypeId conversion = 0);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
-    TypeId type_name(NodeId n, ScopeId s);
+    TypeId type_name(NodeId n, ScopeId s, NodeId last = 0);
     TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s, bool declaration = false);
@@ -446,7 +452,7 @@ private:
     Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);
     void use_selected_function(EntityId e, bool direct);
-    TemplateBinding bind_template_name(NodeId n, ScopeId s);
+    TemplateBinding bind_template_name(NodeId n, ScopeId s, NodeId last = 0);
     bool bind_template_expression(NodeId n, ScopeId s, bool callee = false);
     bool bind_template_expression_impl(NodeId n, ScopeId s, bool callee);
     EntityId pattern_declaration(EntityKind kind, ScopeId s, IdentifierId name, NodeId source, bool dependent);

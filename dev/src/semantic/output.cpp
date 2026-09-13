@@ -49,6 +49,7 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     switch (t.kind) {
     case TypeKind::Fundamental: out << fundamental_name(t.fundamental); break;
     case TypeKind::Decltype: out << "dependent decltype query " << t.entity; break;
+    case TypeKind::DependentArray: out << "array bound query " << t.bound << " of "; write_type(out,t.child); break;
     case TypeKind::DependentName:
         write_type(out,t.child); out << "::"; spelling(out,t.entity); break;
     case TypeKind::Named: {
@@ -199,6 +200,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_value_query_work\":" << query_value_work
         << ",\"semantic_template_value_sources\":" << template_value_work
         << ",\"semantic_template_value_uses\":" << template_value_uses
+        << ",\"semantic_value_conversion_variants\":" << value_conversion_variants
+        << ",\"semantic_value_conversion_records\":" << value_conversion_records
         << ",\"semantic_types\":" << types.records.size() - 1
         << ",\"semantic_entities\":" << entities.size() - 1
         << ",\"semantic_scopes\":" << scopes.size() - 1

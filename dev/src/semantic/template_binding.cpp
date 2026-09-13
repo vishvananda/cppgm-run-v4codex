@@ -9,11 +9,13 @@ EntityId Analyzer::pattern_declaration(EntityKind kind, ScopeId s, IdentifierId 
     template_pattern_entities.put(e,dependent ? 2 : 1);
     bind(s,name,e); record(s,e,source,0,kind); return e;
 }
-TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
+TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
 {
     if (!n) return TemplateBinding();
+    bool full = !last || last == ast[n].last;
+    if (!last) last = ast[n].last;
     auto source = ast.nodes.occurrences[n].source;
-    bool pattern = !ast.nodes.occurrences[n].context;
+    bool pattern = full && !ast.nodes.occurrences[n].context;
     if (pattern) if (auto id = template_binding_index.get(source)) return template_bindings[id];
     ++template_binding_work;
     TemplateBinding r; r.scope = s;
@@ -27,7 +29,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
             owner = types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;
             qualified = true; continue;
         }
-        auto e = lookup(owner,p == ast[n].last ? terminal(n) : ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,full && p == last ? terminal(n) : ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
         auto args = child(p,Kind::TemplateArguments);
@@ -53,7 +55,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
                 r.dependent |= entities[e].type && dependent_type(entities[e].type);
             }
         }
-        if (p == ast[n].last) break;
+        if (p == last) break;
         if (r.dependent) { r.entity = 0; break; }
         auto cls = entities[e].class_info ? e : entities[e].kind == EntityKind::Alias ? types[entities[e].type].entity : 0;
         if (cls && entities[cls].class_info) complete_class(cls);

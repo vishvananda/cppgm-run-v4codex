@@ -10,7 +10,7 @@ bool accepts(Kind kind, Role role) {
     case Role::Type: return kind <= Kind::Lambda;
     case Role::Argument: return kind >= Kind::TypeArgument && kind <= Kind::EntityArgument;
     case Role::Expression:
-        return kind == Kind::Value || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Value || kind == Kind::AlignofType || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -47,7 +47,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Cv: require(b <= 3); edge(a, Role::Type); break;
     case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
     case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value:
-    case Kind::TemplateEntity: case Kind::SizeofType: edge(a, Role::Type); break;
+    case Kind::TemplateEntity: case Kind::SizeofType: case Kind::AlignofType: edge(a, Role::Type); break;
     case Kind::Vendor: edge(a, Role::Type); text(b); break;
     case Kind::Array: edge(a, Role::Type); if (b) edge(b, Role::Expression); break;
     case Kind::Transform: text(b); sequence(Role::Type); return;
