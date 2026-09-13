@@ -94,7 +94,11 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
 bool Analyzer::prototype_scope_needed(NodeId parameters)
 {
     auto source = ast.nodes.occurrences[parameters].source;
-    if (auto known = prototype_scope_requirements.get(source)) return known == 2;
+    auto slot = source/4, shift = (source%4)*2;
+    if (slot >= prototype_scope_requirements.size())
+        prototype_scope_requirements.resize((ast.nodes.parsed_size()+3)/4);
+    auto known = (prototype_scope_requirements[slot] >> shift) & 3;
+    if (known) return known == 2;
     // A source-only predicate: parameter type expressions may refer to earlier
     // parameters. Reuse it across every concrete declaration of this syntax.
     bool needed = false;
@@ -111,7 +115,7 @@ bool Analyzer::prototype_scope_needed(NodeId parameters)
         if (node.detail) work.push_back(node.detail);
         for (auto child = node.first; child; child = ast[child].next) work.push_back(child);
     }
-    prototype_scope_requirements.put(source,needed ? 2 : 1);
+    prototype_scope_requirements[slot] |= (needed ? 2 : 1) << shift;
     return needed;
 }
 FunctionQualifiers Analyzer::function_qualifiers(NodeId parameters)
