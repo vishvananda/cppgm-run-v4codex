@@ -59,6 +59,12 @@ corpus.append(('object-runtime',source,'--emit-lowir',True,True,True))
 count=6000000;expected=((count//1024)*sum(n+7 for n in range(1024))+sum(n+7 for n in range(count%1024)))&65535
 source=values+valuepattern+f'int main(){{volatile int n={count};Factory value(7);int sum=0;for(int i=0;i<n;++i)sum=(sum+compute<int>(value,i&1023))&65535;return sum!={expected}||live;}}'
 corpus.append(('object-results-runtime',source,'--emit-lowir',True,True,True))
+defaults='int live=0,counter=0;struct Value{int n;Value(int n):n(n){++live;}Value(const Value& v):n(v.n){++live;}~Value(){--live;}};Value make(){return Value(++counter);}const Value& value(const Value& v=make()){return v;}int pair(const Value& a,const Value& b){return a.n!=b.n && a.n+b.n==2*counter-1 && live==2;}template<class T>int compute(){return pair(value(),value());}\n'
+for n in (1000,4000):
+ uses=''.join(f'struct Tag{i}{{}};int run{i}(){{return compute<Tag{i}>();}}\n' for i in range(n))
+ corpus.append((f'default-identities-{n}',defaults+uses,'--emit-lowir',False,False,True))
+source=defaults+'int main(){volatile int n=1000000;int sum=0;for(int i=0;i<n;++i)sum+=compute<int>();return sum!=n||live;}'
+corpus.append(('default-identities-runtime',source,'--emit-lowir',False,True,True))
 for name,source,mode,common,executable,exact_required in corpus:
  src=WORK/(name+'.cpp');src.write_text(source); outputs=[];commands={};runtimes={}
  for b in ((0,1) if common else (1,)):
@@ -72,11 +78,19 @@ for name,source,mode,common,executable,exact_required in corpus:
  if common and exact_required:
   assert outputs[0]['sha256']==outputs[1]['sha256'],(name,'common correct output changed')
   if executable: assert outputs[0]['native']['sha256']==outputs[1]['native']['sha256'],name
- proof=('byte-identical correct A/B output' if exact_required else
+ proof=('B only: A aliases two overlapping default temporaries and fails the checked identity result' if not common else
+        'byte-identical correct A/B output' if exact_required else
         'both execute the same checked sum; reference-copy representations preserve the same bound address' if common else
         'correct B only; A performs an extra move and fails the required move count')
  item=dict(source_path=str(src),source_sha256=shared.sha(src),mode=mode,outputs=outputs,
   exact_required=exact_required,equivalence=proof,compiler=campaign(commands))
+ if not common and executable:
+  ir=WORK/(name+'-invalid-entry.lowir');exe=WORK/(name+'-invalid-entry')
+  shared.run([binaries[0],'--emit-lowir','-O0','--validate-lowir','-o',ir,src])
+  shared.run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir])
+  failed=subprocess.run([exe],capture_output=True,timeout=60)
+  assert failed.returncode==1,(name,'entry identity proof no longer fails',failed.returncode)
+  item['entry_failure']=dict(path=str(ir),sha256=shared.sha(ir),native_path=str(exe),native_sha256=shared.sha(exe),exit_status=failed.returncode)
  if not executable and not exact_required:
   item['equivalence']='same constructor/binding operations repeated across independent types; corresponding reference-move-runtime checks both native outputs'
  if runtimes:item['runtime']=campaign(runtimes)
