@@ -236,6 +236,7 @@ class Procedural {
     std::vector<SymbolId> vtables, typeinfos, deleting_symbols;
     SymbolId pure_virtual;
     void emit_vtables();
+    SymbolId vtable_symbol(EntityId cls);
     SymbolId deleting_symbol(EntityId e);
     void emit_deleting_entries();
     void order_lifecycle_entries();

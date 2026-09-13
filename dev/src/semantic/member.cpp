@@ -75,7 +75,8 @@ void Analyzer::demand_member(EntityId e)
     entities[e].emission |= Entity::Used;
     std::uint32_t m = entities[e].member_info;
     if (m) members[m].referenced = true;
-    if (m && (members[m].constructor || members[m].destructor)) demand_vtable(scopes[entities[e].owner].entity);
+    if (m && (members[m].constructor || members[m].destructor))
+        demand_vtable(scopes[entities[e].owner].entity, members[m].constructor ? VtableReason::Constructor : VtableReason::Destructor);
     require_member_body(e);
 }
 void Analyzer::require_member_body(EntityId e)

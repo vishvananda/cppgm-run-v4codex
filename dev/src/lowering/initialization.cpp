@@ -100,9 +100,8 @@ void Procedural::global(EntityId e)
         } else {
             g.data.begin = p.data.size();
             if (auto cls = sem.static_vptr(e)) {
-                if (!vtables[cls]) vtables[cls] = abi_global(cls,abi_mangle::TargetKind::Vtable);
                 DataItem item; item.kind = DataItem::Address; item.type = IRType::Ptr;
-                item.symbol = vtables[cls]; item.addend = 16; p.data.push_back(item);
+                item.symbol = vtable_symbol(cls); item.addend = 16; p.data.push_back(item);
                 if (sem.object_size(t) > 8) { DataItem zero; zero.zero_bytes = sem.object_size(t)-8; p.data.push_back(zero); }
             }
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }

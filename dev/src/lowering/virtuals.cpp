@@ -28,10 +28,11 @@ SymbolId Procedural::abi_global(EntityId cls, abi_mangle::TargetKind kind)
 }
 SymbolId Procedural::typeinfo(EntityId cls)
 {
-    if (typeinfos[cls]) return typeinfos[cls];
+    auto id = sem.entities[cls].class_info;
+    if (typeinfos[id]) return typeinfos[id];
     auto base = sem.direct_base(cls);
     SymbolId base_info = base ? typeinfo(base) : SymbolId();
-    SymbolId info = typeinfos[cls] = abi_global(cls,abi_mangle::TargetKind::Typeinfo);
+    SymbolId info = typeinfos[id] = abi_global(cls,abi_mangle::TargetKind::Typeinfo);
     if (p.symbols[info.index-1].kind != Symbol::Unknown) return info;
     SymbolId name = abi_global(cls,abi_mangle::TargetKind::TypeinfoName);
     abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Type; target.type = abi_type(sem.entities[cls].type);
@@ -53,15 +54,21 @@ SymbolId Procedural::typeinfo(EntityId cls)
     if (role == 2) { data.push_back(scalar(IRType::I32,0)); data.push_back(scalar(IRType::I32,1)); data.push_back(relocation(base_info)); data.push_back(scalar(IRType::I64,(sem.base_offset(sem.entities[cls].type)<<8)|2)); }
     publish(p,info,data); return info;
 }
+SymbolId Procedural::vtable_symbol(EntityId cls)
+{
+    if (sem.virtual_class(cls).demand != semantic::FactState::Success)
+        throw std::logic_error("unpublished vtable demand");
+    auto id = sem.virtual_class_id(cls);
+    if (!vtables[id]) vtables[id] = abi_global(cls,abi_mangle::TargetKind::Vtable);
+    return vtables[id];
+}
 void Procedural::emit_vtables()
 {
-    for (EntityId cls = 1; cls < sem.entities.size(); ++cls) {
-        if (!sem.polymorphic(cls) || !sem.virtual_class(cls).demanded) continue;
-        if (!vtables[cls]) vtables[cls] = abi_global(cls,abi_mangle::TargetKind::Vtable);
-        SymbolId table = vtables[cls];
+    for (EntityId cls : sem.demanded_vtables()) {
+        SymbolId table = vtable_symbol(cls);
         if (p.symbols[table.index-1].kind != Symbol::Unknown) continue;
         std::vector<DataItem> data = {scalar(IRType::I64,0),relocation(typeinfo(cls))};
-        auto slots = sem.virtual_class(cls).slots;
+        const auto& slots = sem.virtual_class(cls).slots;
         for (unsigned j = 0; j < slots.size(); ++j) {
             EntityId e = slots[j]; auto m = sem.member_fact(e);
             if (m.pure) {
@@ -81,9 +88,10 @@ void Procedural::emit_vtables()
 void Procedural::vpointer_store(EntityId cls)
 {
     if (!sem.polymorphic(cls)) return;
-    if (!vtables[cls]) throw std::logic_error("undemanded vtable in lifecycle entry");
+    auto symbol = vtables[sem.virtual_class_id(cls)];
+    if (!symbol) throw std::logic_error("undemanded vtable in lifecycle entry");
     Value object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
-    Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(vtables[cls])});
+    Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
     Value point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(16)});
     emit(Opcode::Store,IRType::Ptr,{point.operand,object.operand});
 }

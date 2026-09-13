@@ -13,7 +13,7 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -188,11 +188,14 @@ struct MemberFacts {
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
 };
+enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4 };
 struct VirtualClass {
     std::vector<EntityId> slots; // Complete, then deleting destructor occupies two entries.
     Index signatures;
     EntityId key_function = 0;
-    bool abstract = false, demanded = false;
+    bool abstract = false;
+    FactState demand = FactState::NotStarted;
+    unsigned char reasons = 0;
 };
 struct TransferAction {
     enum Kind : unsigned char { Scalar, Reference, Subobject, Unit, Storage, Empty } kind = Scalar;

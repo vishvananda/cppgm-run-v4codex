@@ -6,6 +6,18 @@ Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original **84/314**, current **314/314**: all 230 original failures resolved,
 with unchanged fixtures, references and comparison rules. PA15 has not started.
 
+Active continuation from `c1e17cdc`; previous turn: **verified progress**.
+Current group: explicit key-definition/lifecycle → vtable → member-body/emission
+edges. Publish key-definition availability through its owning class, enqueue each
+consumer once, and retain independent active/success/failure vtable state. Stable
+slot IDs provide outgoing dependencies without copying the slot vector. Lowering
+will consume the published demanded-class list and class-owned symbol caches.
+Work/storage budgets: one queued key notification and one emitted-class ID per
+relevant class, one visit per demanded slot, no work proportional to unrelated
+entities for vtable scheduling/emission. Validate late definitions, reverse source
+order, recursive lifecycle demands, delayed template members and failure retries;
+then required reports, native/sanitizer controls and frozen measurements.
+
 ## Design/spec alignment
 
 | Owner / data flow | Complexity and validation |

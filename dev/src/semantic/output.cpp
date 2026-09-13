@@ -211,6 +211,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_slot_work\":" << virtual_slot_work
         << ",\"semantic_virtual_declaration_work\":" << virtual_declaration_work
         << ",\"semantic_virtual_demands\":" << virtual_demands
+        << ",\"semantic_key_vtable_notifications\":" << key_vtable_demand.size()
+        << ",\"semantic_key_vtable_processed\":" << key_vtable_cursor
+        << ",\"semantic_vtable_emissions\":" << vtable_emission.size()
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work

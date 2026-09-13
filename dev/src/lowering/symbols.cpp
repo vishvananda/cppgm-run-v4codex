@@ -246,7 +246,8 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
 Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, Program& out, Linkage& links)
     : ast(a), sem(s), identifiers(ids), p(out), linkage(links), abi(links.abi), abi_types(s.types.records.size()), abi_scopes(s.scopes.size()),
       symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {
-    virtual_signatures.resize(s.entities.size()); vtables.resize(s.entities.size()); typeinfos.resize(s.entities.size()); deleting_symbols.resize(s.entities.size());
+    virtual_signatures.resize(s.entities.size()); vtables.resize(s.virtual_class_count());
+    typeinfos.resize(s.class_count()); deleting_symbols.resize(s.entities.size());
 }
 void Procedural::run()
 {

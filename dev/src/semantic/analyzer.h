@@ -50,6 +50,10 @@ public:
     bool member_demanded(EntityId e) const;
     bool dormant_hidden_friend(EntityId e) const { return entities[e].emission == Entity::HiddenFriend; }
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
+    std::uint32_t virtual_class_id(EntityId e) const { return class_facts[entities[e].class_info].virtual_info; }
+    std::size_t virtual_class_count() const { return virtual_classes.size(); }
+    std::size_t class_count() const { return class_facts.size(); }
+    const std::vector<EntityId>& demanded_vtables() const { return vtable_emission; }
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
     bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
@@ -404,10 +408,13 @@ private:
     void member_facts(EntityId e);
     void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
     void complete_virtuals(EntityId cls);
-    void demand_vtable(EntityId cls);
+    void vtable_definition_available(EntityId e);
+    void demand_vtable(EntityId cls, VtableReason reason);
     void check_covariance(EntityId e, EntityId base);
     void reject_abstract(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
+    std::vector<EntityId> key_vtable_demand, vtable_emission;
+    std::size_t key_vtable_cursor = 0;
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
     Expression member_value(EntityId e, unsigned object_cv, ValueCategory category);

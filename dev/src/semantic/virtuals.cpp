@@ -102,6 +102,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     if (v) {
         class_facts[info].aggregate = false;
         for (EntityId e : virtual_classes[v].slots) virtual_classes[v].abstract |= members[entities[e].member_info].pure;
+        if (virtual_classes[v].key_function) vtable_definition_available(virtual_classes[v].key_function);
     }
 }
 void Analyzer::reject_abstract(TypeId t)
@@ -113,16 +114,37 @@ void Analyzer::reject_abstract(TypeId t)
 } }
 
 namespace cppgm { namespace semantic {
-void Analyzer::demand_vtable(EntityId cls)
+void Analyzer::vtable_definition_available(EntityId e)
+{
+    if (!calls) return;
+    EntityId cls = scopes[entities[e].owner].entity;
+    if (!polymorphic(cls)) return;
+    auto v = virtual_class_id(cls);
+    // The owning class is the reverse dependency of its one selected key.
+    // Availability is distinct from checking the body; defer the consumer until
+    // finish so later source declarations can satisfy its outgoing demands.
+    auto bit = static_cast<unsigned char>(VtableReason::KeyDefinition);
+    if (virtual_classes[v].key_function != e || (virtual_classes[v].reasons & bit) ||
+        (!entities[e].body && !members[entities[e].member_info].body)) return;
+    virtual_classes[v].reasons |= bit;
+    if (virtual_classes[v].demand == FactState::NotStarted) key_vtable_demand.push_back(cls);
+}
+void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
 {
     if (!polymorphic(cls)) return;
     auto v = class_facts[entities[cls].class_info].virtual_info;
-    if (virtual_classes[v].demanded) return;
-    virtual_classes[v].demanded = true; ++virtual_demands;
-    // Copy compact IDs because demanded bodies may introduce local classes.
-    auto slots = virtual_classes[v].slots;
+    virtual_classes[v].reasons |= static_cast<unsigned char>(reason);
+    if (virtual_classes[v].demand == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::Vtable,cls,entities[cls].source);
+    if (virtual_classes[v].demand != FactState::NotStarted) return;
+    virtual_classes[v].demand = FactState::Active; ++virtual_demands;
+    try {
+    // Slot identities are immutable after class completion. Reacquire by ID
+    // because outgoing member demands may relocate the outer class vector.
+    auto count = virtual_classes[v].slots.size();
     EntityId previous = 0;
-    for (EntityId e : slots) {
+    for (std::size_t j = 0; j < count; ++j) {
+        EntityId e = virtual_classes[v].slots[j];
         ++virtual_slot_work;
         if (e == previous) continue;
         previous = e;
@@ -135,6 +157,11 @@ void Analyzer::demand_vtable(EntityId cls)
             EntityId deallocation = select_deallocation(entities[cls].type,false,false,entities[e].owner);
             members[m].deleting_deallocation = deallocation;
         }
+    }
+    vtable_emission.push_back(cls);
+    virtual_classes[v].demand = FactState::Success;
+    } catch (...) {
+        virtual_classes[v].demand = FactState::Failure; throw;
     }
 }
 } }

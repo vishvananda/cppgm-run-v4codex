@@ -1,6 +1,7 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 #include <chrono>
+#include <algorithm>
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -25,13 +26,11 @@ void Analyzer::finish()
     typedef std::chrono::steady_clock Clock;
     Clock::time_point started;
     if (ast.telemetry) started = Clock::now();
-    if (calls) for (EntityId e = 1; e < entities.size(); ++e) {
-        if (!entities[e].class_info || !polymorphic(e)) continue;
-        EntityId key = virtual_class(e).key_function;
-        if (key && (entities[key].body || members[entities[key].member_info].body)) demand_vtable(e);
-    }
     EntityId boundary_cursor = 1;
     for (;;) {
+        if (key_vtable_cursor < key_vtable_demand.size()) {
+            demand_vtable(key_vtable_demand[key_vtable_cursor++], VtableReason::KeyDefinition); continue;
+        }
         if (calls) schedule_parameter_bodies(boundary_cursor);
         if (storage_cursor < storage_demand.size()) {
             instantiate_member_definition(storage_demand[storage_cursor++]); continue;
@@ -88,6 +87,8 @@ void Analyzer::finish()
         chain.clear();
     }
     if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); }
+    // Semantic discovery order is independent of deterministic ABI publication.
+    std::sort(vtable_emission.begin(), vtable_emission.end());
     for (NodeId body : jump_bodies) check_jumps(body);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
     completion_state = FactState::Success;
@@ -272,6 +273,7 @@ void Analyzer::schedule_body(const Body& body)
         std::uint32_t m = entities[body.entity].member_info;
         if (members[m].source) throw std::runtime_error("duplicate member definition");
         members[m].body = body.node; members[m].declarator = body.declarator; members[m].source = body.source;
+        vtable_definition_available(body.entity);
         if (member_definition_environment && scopes[member_definition_environment].parent == entities[body.entity].owner) {
             members[m].body_environment = member_definition_environment;
             if (!entities[body.entity].inline_function && (members[m].constructor || members[m].destructor))
