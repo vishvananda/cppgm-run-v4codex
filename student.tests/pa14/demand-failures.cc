@@ -43,6 +43,10 @@ int main(int argc, char** argv) {
         }
         if (!i) { nodes = ast.nodes.size(); entities = sem.entities.size(); }
         else { assert(nodes == ast.nodes.size()); assert(entities == sem.entities.size()); }
+#ifdef EXPECT_TERMINAL_FACTS
+        if (std::string(argv[2]) == "definition")
+            assert(!sem.entities[sem.types[target].entity].complete);
+#endif
     }
     std::cout << "failures " << failures << " nodes " << nodes << " entities " << entities << '\n';
     if (good) assert(sem.object_size(good) == 4);

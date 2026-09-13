@@ -98,6 +98,10 @@ N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12–13 justify the corrected
 optional observation plus a separate demanded-use rejection. Artifacts:
 `$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.
 
-Current validation: eight repeated-demand controls (10,000 requests each), **34**
+Current validation: nine repeated-demand controls (10,000 requests each), **34**
 native programs, stage **314**, prior **1621**, through **1935**, file audit pass.
 Sanitizer and frozen performance acceptance remain in progress.
+
+Late nested-definition guard: clear its complete flag if post-publication layout
+validation fails. The pre-fix ASan API control reproduces the stale flag; final
+release passes all nine controls and required reports.

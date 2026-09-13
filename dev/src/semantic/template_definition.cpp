@@ -249,6 +249,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
             definition_applications.put(k,unsigned(DefinitionState::Failed));
             active_template_scope = saved_template; member_definition_environment = saved_environment;
             class_depth = saved_depth; bodies.resize(saved_bodies);
+            if (entities[e].class_info) entities[e].complete = false;
             throw;
         }
         active_template_scope = saved_template; member_definition_environment = saved_environment;

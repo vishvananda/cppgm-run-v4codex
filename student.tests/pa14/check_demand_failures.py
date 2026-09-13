@@ -15,6 +15,7 @@ CASES={
  'recursive_layout':('template<class T>struct C{C field;};using Target=C<int>;struct Good{int value;};','size'),
  'nested_definition':('template<class T>struct Outer{struct Inner;};template<class U>struct Outer<U>::Inner{typename U::missing field;};using Target=Outer<int>::Inner;struct Good{int value;};','size'),
  'direct_layout':('struct Target{Target field;};struct Good{int value;};','layout'),
+ 'nested_late_definition':('template<class T>struct Outer{struct Inner;};template<class U>struct alignas(1) Outer<U>::Inner{U field;};using Target=Outer<long>::Inner;struct Good{int value;};','definition'),
 }
 def run(command):
  p=subprocess.run(list(map(str,command)),cwd=ROOT,capture_output=True,text=True,timeout=180)
