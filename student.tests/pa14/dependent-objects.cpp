@@ -39,6 +39,7 @@ template<class T>int forward(){
 template<class T>struct Out {
     T padding; int n;
     Out();int get()const;int get(int);static int get(long);int& change();
+    static int pair(int k,decltype(k) l);int pair(long,long);
     static unsigned width();
     struct Nested {int n;int get()const;};
 };
@@ -47,11 +48,13 @@ template<class U>int Out<U>::get()const{return this->n;}
 template<class U>int Out<U>::get(int k){return n+k;}
 template<class U>int Out<U>::get(long k){return k+1;}
 template<class U>int& Out<U>::change(){return ++(n);}
+template<class U>int Out<U>::pair(int k,decltype(k) l){return k+l;}
+template<class U>int Out<U>::pair(long k,long l){return n+k+l;}
 template<class U>unsigned Out<U>::width(){return sizeof(n);}
 template<class U>int Out<U>::Nested::get()const{return n+2;}
 template<class T>int out(){
     Out<T> o;typename Out<T>::Nested n;n.n=3;
     if(o.get()!=8 || o.get(3)!=11 || Out<T>::get(2L)!=3 || Out<T>::width()!=sizeof(int) || n.get()!=5)return 1;
-    o.change()=10;return o.get()!=10;
+    o.change()=10;return o.get()!=10 || Out<T>::pair(2,3)!=5 || o.pair(2L,3L)!=15;
 }
 int main(){Width<char> narrow;Width<unsigned> wide;return exercise<int>() || exercise<Large>() || !narrow.check() || !wide.check() || forward<int>()!=7 || forward<Large>()!=7 || out<int>() || out<Large>();}

@@ -353,6 +353,7 @@ private:
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
     Expression member_value(EntityId e, unsigned object_cv, ValueCategory category);
     FunctionQualifiers function_qualifiers(NodeId parameters);
+    bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
@@ -401,6 +402,7 @@ private:
     TemplateMemberUse template_field_use(EntityId field, ScopeId scope, EntityId pattern = 0);
     Index template_object_context_index, template_field_sources, template_member_use_index;
     Index template_method_shapes;
+    Index prototype_scope_requirements;
     Index template_class_patterns, template_class_contexts;
     std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
     std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);

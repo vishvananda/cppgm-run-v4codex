@@ -6,15 +6,22 @@ TypeId Analyzer::template_method_shape(NodeId parameters, ScopeId scope)
 {
     if (auto cached = template_method_shapes.get(parameters)) return cached-1;
     std::vector<TypeId> params;
+    auto parameter_scope = prototype_scope_needed(parameters) ? make_scope(ScopeKind::Block,scope,0,0,false) : scope;
+    if (parameter_scope != scope) template_pattern_scopes.put(parameter_scope,1);
     bool known = true, variadic = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
         auto specs = ast[p].first, d = ast[specs].next;
         // Dependent signatures and bounds belong to substitution. A missing
         // shape is conservative evidence, never a guessed overload identity.
-        if (bind_template_expression(specs,scope) | bind_template_expression(d,scope)) { known = false; break; }
+        if (bind_template_expression(specs,parameter_scope) | bind_template_expression(d,parameter_scope)) { known = false; break; }
         if (child(d,Kind::Array)) { known = false; break; }
-        params.push_back(parameter(p,scope));
+        auto type = parameter(p,parameter_scope); params.push_back(type);
+        auto name = terminal(decl_name(d));
+        if (name && parameter_scope != scope) {
+            auto e = pattern_declaration(EntityKind::Parameter,parameter_scope,name,p,false);
+            entities[e].type = parameter_body_type(type); signature_parameters.put(e,params.size());
+        }
     }
     if (params.size() == 1 && fundamental(params[0],FT_VOID) && !variadic) params.clear();
     TypeId shape = known ? types.signature(types.function(types.fundamental(FT_VOID),params,variadic)) : 0;

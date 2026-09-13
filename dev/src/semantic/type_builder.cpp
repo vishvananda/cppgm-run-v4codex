@@ -91,6 +91,27 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     facts[n].type = result; facts[n].scope = s;
     return result;
 }
+bool Analyzer::prototype_scope_needed(NodeId parameters)
+{
+    auto source = ast.nodes.occurrences[parameters].source;
+    if (auto known = prototype_scope_requirements.get(source)) return known == 2;
+    // A source-only predicate: parameter type expressions may refer to earlier
+    // parameters. Reuse it across every concrete declaration of this syntax.
+    bool needed = false;
+    std::vector<NodeId> work;
+    for (auto p = ast[parameters].first; p; p = ast[p].next) {
+        if (ast[p].kind != Kind::Parameter) continue;
+        auto specs = ast[p].first; work.push_back(specs); work.push_back(ast[specs].next);
+    }
+    for (std::size_t j = 0; j < work.size() && !needed; ++j) {
+        auto node = ast[work[j]];
+        if (node.kind == Kind::IdExpression || node.op == KW_DECLTYPE) { needed = true; break; }
+        if (node.detail) work.push_back(node.detail);
+        for (auto child = node.first; child; child = ast[child].next) work.push_back(child);
+    }
+    prototype_scope_requirements.put(source,needed ? 2 : 1);
+    return needed;
+}
 FunctionQualifiers Analyzer::function_qualifiers(NodeId parameters)
 {
     FunctionQualifiers result;
@@ -174,7 +195,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             bool variadic = false;
             NodeId trailing = child(n, Kind::TrailingReturn);
             ScopeId parameter_scope = s;
-            if (definitions && (active_template_scope || scopes[s].kind == ScopeKind::Template || trailing))
+            if (definitions && (active_template_scope || scopes[s].kind == ScopeKind::Template || trailing || prototype_scope_needed(c)))
                 parameter_scope = make_scope(ScopeKind::Block,s);
             for (NodeId p = ast[c].first; p; p = ast[p].next) {
                 if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }

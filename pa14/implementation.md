@@ -335,4 +335,14 @@ The extended increment passes thirteen rejection controls, eighteen native
 programs and through 1935/1935. Work is proportional to source method contexts,
 actual overload candidates and distinct field/object keys; no class layout or
 unused member body is demanded by context discovery. `--stats` exposes context
-and concrete field-use record counts. Sanitizer/scaling evidence is pending.
+and concrete field-use record counts.
+
+Prototype scopes retain sequential parameter declarations when later parameter
+types query them (`decltype(a)`, including concrete class members). The source
+predicate is cached by parsed parameter-list identity, and the ordinary type
+builder and fixed method-shape checker share it. Prototype parameters contribute
+ordinal/type query facts; they cannot publish runtime-object recipes that would
+require a body declaration before the signature exists. `parameter-shape.t`
+reduces an inherited rejection; the native class and ordinary function cases
+follow C++11 [basic.scope.pdecl], [basic.scope.proto] and [dcl.type.simple]. No
+reference output was changed. Full final sanitizer/scaling evidence is pending.
