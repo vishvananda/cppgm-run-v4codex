@@ -1,0 +1,267 @@
+{
+  "entry_commit": "fda0a178",
+  "implementation_commit": "af01c062",
+  "evidence_commit": "facf8d64",
+  "release_sha256": "83177231510ba413f05f6f830e4eac38879152755dc3bd1ef2ff8be5d53559dc",
+  "checks": [
+    {
+      "name": "stage",
+      "command": "make test-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage.log",
+      "log_sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "name": "prior",
+      "command": "make test-report-through-pa13",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/prior.log",
+      "log_sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "name": "through",
+      "command": "make test-report-through-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/through-fact-views-reviewed.log",
+      "log_sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "name": "file_audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa14 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "native",
+      "command": "python3 student.tests/pa14/check_functions.py",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-fact-views-reviewed.log",
+      "log_sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    }
+  ],
+  "initial_observations": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/audit-fact-store.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/audit-local-types.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/audit.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/body-large-1000-128-stats.log",
+      "sha256": "21a3be4f80f69c902f224d735e3bd031620f71b608817b711d6e341e59e0c8a6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-bindings.log",
+      "sha256": "dd83bd69c5ede97ac4397fd2ea27bb187ae4d37f21bcdf69416ee3116dcebf4a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-fact-counters.log",
+      "sha256": "9608d026b22230225caa091476a3bb5ae3fb0219414466f9025119a4bbf6d989"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-fact-store.log",
+      "sha256": "e1a2ee19484e0719835b8fed3c68d22c00a7a542aa063195cf35c36b3914ba31"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-fact-views-reviewed.log",
+      "sha256": "310977106826c2c311f172be0d073e28d19542bfffaa82d8221d81286e400ac2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-fact-views.log",
+      "sha256": "dd5795fee44a55afe3d0ff89d4e1784d731d590309aa1b2ed364decc03cf46ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-initializer.log",
+      "sha256": "67650bf192fb748a53e4c116b9f9eb86160d06502e975a672c0a686920259cdf"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-local-types.log",
+      "sha256": "18657fa34e8b95f9f2dcdca39d3b7aae760e991d685aa7ecb8defc875057621f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/build-sanitizer.log",
+      "sha256": "a6b44ba241236b28549a3732b6bcb6680371a5b7996f501538b5ceab8926415e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/evidence-initial.py",
+      "sha256": "cb1b398a3345ba1d02b01b7868267444be4eebbee44621bcf9d9031a9802534b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/fact-store-control.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/fact-store-sanitized.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/fact-views-initial.patch",
+      "sha256": "2df0e011853f79be2799cf7abb1cf612e10c9fb84ffb107e7c5563bcb85aa524"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/input-uses-1000-128-stats.log",
+      "sha256": "ff114e210984b737b0bf1a3f1d6ccda82a1a2e1be0ebd61fdeecfddde1a7f2eb"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/local-control-initial.cpp",
+      "sha256": "b97c2e8622e1c0a70311916d463051879586e635fa825e473636662a61189cd0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/local-entry.log",
+      "sha256": "11ff8cf93c9714334a558f2efb2d409d372c3a215e2e32a2688ede302e686772"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/local-host-fixed.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/local-host-supported.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/local-host.log",
+      "sha256": "3d96c6aafcabf0ff7189a922fde43c83b0e89465729226c0689e2a43ad189849"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/measurements.log",
+      "sha256": "95d6e02ad67408ce8fab0528477969b40c919b0f077d74447995e4f32275ed4f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-bindings.log",
+      "sha256": "5da80f6caf128fd8d6cf036a815c322ff5e0e1e69f1cad61557568a1a4880d0f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-fact-counters.log",
+      "sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-fact-store.log",
+      "sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-fact-views-reviewed.log",
+      "sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-fact-views.log",
+      "sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-initializer.log",
+      "sha256": "0361be93d55105a456749bb487e84c7aa98e7cd03a131e6cb2e682aba78ee888"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-local-control.log",
+      "sha256": "c427c110726d7b4bbd01bf0130a45cf23f617d55a9a681ccca68ceaeaa00ede0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-local-types.log",
+      "sha256": "5da80f6caf128fd8d6cf036a815c322ff5e0e1e69f1cad61557568a1a4880d0f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/native-supported.log",
+      "sha256": "065f0df2cbc81f0db2afa0e62b10f65d01a69a0ff7b0bd3d8f1c307f1ea3267b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/preflight.json",
+      "sha256": "7be2f287132eb9d8aea611c41c3d675f701ee17cbd7cab0f9f10e6f643f4013d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/preflight.log",
+      "sha256": "169696d43ff7fca5d8d00bac289d2d823b8d235d09d3f285c8ec705845120c46"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/prior-bindings.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/prior.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/proofs-final.log",
+      "sha256": "7b39a5f893eee2932ddeea9927bb9236222cd882bc268e36c90bb1d13acede90"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/proofs.log",
+      "sha256": "991abcd234cce205e6954dda3feabe8a461a28ff05fde8b3211f7e87ce7a3588"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/special-uses-1000-128-4-stats.log",
+      "sha256": "4b912cdcd354e5c3fca78d00377ee1b5a0d28b5a0837a0fd76a5126c985526bd"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage-bindings.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage-fact-store.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage-local-types.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage-supported.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/stage.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/through-fact-store.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/through-fact-views-reviewed.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/through-fact-views.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/trial-sparse.log",
+      "sha256": "8b8eae4eb8ded4c5cc813fa34e80c00266e210428b29d5cf1b28fbddef85f7fc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/trial-views.log",
+      "sha256": "8b8eae4eb8ded4c5cc813fa34e80c00266e210428b29d5cf1b28fbddef85f7fc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/validation.log",
+      "sha256": "5f343cf806fd4fc3848d7e2329e4b515da87e55e8b3c9440b38eb74720fd2c25"
+    }
+  ],
+  "intermediate_binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/cppgm++-local-types",
+      "sha256": "051cf39c69ddb1476d4525796b3ed97f7764da316a23dc653505b7aa25bfa5e5"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-declaration-facts/cppgm++-sparse-facts",
+      "sha256": "974e0c0ddbcbe7fdffc025d4d839452a963fcc1e17c9bc576efa81ea9b7c765a"
+    }
+  ],
+  "notes": [
+    "Stage coverage remains 314 sources and 1266 fixture/reference files. No reference or comparison rule changed.",
+    "The corrected local declaration control and direct-initializer reducer fail under entry but execute correctly under the frozen declaration intermediate and final compiler, with equal LowIR and native hashes. C++11 rules are recorded in the proof manifest.",
+    "The first personal control omitted typename and used unsupported function-local static storage. Its source and failures remain. The corrected control uses PA10-supported template static data members without weakening the specialization identity check.",
+    "The initial positive proof harness passed a .t source to g++ without -x c++; that invocation failed before the harness correction. Both harness versions and logs remain, with unchanged reducer source.",
+    "The initial grouped-write patch moved an entity publication under a value-dependence conditional. Review restored unconditional publication before the implementation freeze. Both the initial patch and initial/reviewed passing validation logs remain; tests alone did not identify the conditional change.",
+    "Two isolated three-input trials retain 84 observations. The complete isolated 49-input/11-native campaign terminates with exit code zero and retains 840 more observations. No build/test/proof/layout process overlaps timing.",
+    "All 49 A/B LowIR hashes and all 11 native hashes match exactly. No comparison adapter was needed. The unchanged comparison/contract hashes remain recorded.",
+    "The declaration-fact layout checks 18 current transitive headers. Earlier layout guards retain frozen snapshot integrity; no mandated layout limit or prior measurement was removed.",
+    "All source/key/use equations describe the frozen implementation and inputs; they are diagnostic ownership evidence, not permanent numerical gates. PA14 O0 has no mandated latency/RSS/compiler-text ceiling. Source/key/concrete-use storage, four O0 conversion variants per source operation, one local view per publication and zero generated growth remain explicit budgets.",
+    "Full-stage architecture remains open at ordinary declaration/prototype/raw-parameter/query ownership and independent typed demand/failure/reverse dependencies. The concrete local binding, initializer correction and sparse Fact publication group is complete."
+  ]
+}

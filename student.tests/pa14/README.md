@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all thirty local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all thirty-one local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -240,8 +240,35 @@ reference or course comparison rule changed.
 `special_signature_validation.py` records 344 release/sanitizer parity sources,
 157 rejection controls, six ABI controls, seven native reducers, thirty native
 programs and store/lifetime controls. `verify_special_signatures.py` verifies the
-proofs, baseline identities, measurements, work equations and live layouts; the
+proofs, baseline identities, measurements, work equations and frozen layouts; the
 cumulative verifier includes this campaign. Earlier layout probes remain frozen
 snapshot evidence. `special-signature-handoff.json` preserves command statuses,
 failed initial probes and intermediate binaries under
 `$RALPH_ARTIFACT_DIR/pa14-special-signatures/`.
+
+
+`local-declaration-facts.cpp` checks local/nested/shadowed class and enum identities,
+raw/decltype/reference aliases, layout and bounds, copies and destruction across
+function specializations. `direct-initializer.t` isolates literal cast operands
+in direct initialization while preserving possible function declarations.
+`fact-store.cc` explicitly verifies absent reads allocate no records and references
+remain valid across optional-index and record-slab growth.
+
+`declaration_fact_validation.py RELEASE SANITIZED WORK OUT ENTRY` records 345
+release/ASan/UBSan parity inputs, 157 rejection controls, six ABI controls, seven
+inherited reducers, 31 native programs and the initializer/store/lifetime controls.
+`declaration_fact_evidence.py` retains the two positive C++11 proofs, entry
+rejections, the correct declaration intermediate and the current 18-header layout
+probe. Earlier probes keep their immutable snapshots. No course fixture or
+comparison rule changes.
+
+`declaration_fact_trial.py A B WORK OUT` retains two isolated three-input campaigns
+for sparse records and then grouped writable views (84 observations total).
+`declaration_fact_benchmark.py A B WORK OUT` retains all 44 prior inputs, adds four
+local declaration N/K/Q scalings and a checked live native loop. The full campaign
+has 49 compiler inputs and eleven executables, with warmups, A/A calibration and
+two ABBA blocks (840 observations). `PREFLIGHT_ONLY=1` checks the entire frozen
+corpus without timing. `verify_declaration_facts.py` is included by the cumulative
+verifier and checks hashes, every observation, work/storage equations, proofs,
+current layouts and required checks. Frozen binaries, outputs and failed initial
+probes live under `$RALPH_ARTIFACT_DIR/pa14-declaration-facts/`.

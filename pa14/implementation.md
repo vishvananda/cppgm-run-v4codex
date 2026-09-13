@@ -835,3 +835,44 @@ one mechanical grouping that moved an unconditional entity assignment under a
 value condition; the initial patch/logs remain. The reviewed code again passes
 all 1935 course tests and 31 native controls. Repeat the same frozen trial before
 full sanitizer and corpus/performance acceptance.
+
+
+The final source review confirms that all grouped Fact writes preserve their
+original conditional scope and use stable slab references. The concrete local
+binding owner is published by declaration/class/enum producers before type-query
+or fixed-expression consumers run; immutable parent frames resolve enclosing
+bindings. Fact indices still follow whole-region occurrence identities, but
+absent reads no longer manufacture semantic records.
+
+The next signature change has a concrete joint boundary. `bind_template_type`
+retains checked specifier and non-function declarator types, while ordinary
+function declarations still run `declarator`. That path establishes prototype
+parameter scopes, signature-parameter identities, raw parameter types and
+trailing-return query contexts before `declare_object` establishes concrete
+identity, defaults, exception, transfer and virtual facts. The existing
+`instantiate_parameters` helper supplies raw body types for selected functions
+and out-of-class definitions; it does not by itself replace those declaration
+scope publications. Reusing only a Function TypeId would bypass required facts.
+Some class-scope enum/embedded type queries also lack source identities. Their
+producers and consumers must change together, with independent parameter/context
+scaling and demand/failure states; this is the remaining architecture boundary,
+not a failed course test or an external blocker.
+
+
+The declaration/fact campaign completes with 924 new unfiltered observations:
+84 from the two preliminary trials and 840 from 49 compiler inputs/eleven native
+programs. All four local scaling cases improve median latency in both blocks;
+three save peak RSS, while the 4000-specialization case adds 16,308 KiB. Compiler
+text adds 6080 bytes and Analyzer adds 80; generated output growth is zero, with
+all 49 LowIR and eleven native hashes exactly equal. The full report retains
+paired spread, timing outliers, both trials, inherited regressions and the
+unisolated native allocation variations. Explicit source/key/use and O0 budgets
+remain; no unsupported numerical threshold overrides stage-scoped acceptance.
+
+The cumulative verifier passes all 12,838 observations, source/output proofs,
+current transitive layouts, work/storage equations and validation manifests.
+Required stage/prior/through reports pass 314/1621/1935 tests, all 31 native
+programs and 345 release/ASan/UBSan parity sources pass, and file audit passes
+with three inherited advisories. The complete local binding, initializer,
+sparse-store and grouped-publication behavior group is committed with its
+acceptance evidence; remaining architecture ownership is described above.
