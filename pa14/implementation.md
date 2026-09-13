@@ -250,9 +250,9 @@ expressions. No reference output was changed.
 Work follows a fixed source member/receiver edge once and each concrete receiver
 use once. Sharing named/field receiver recipes adds no per-use object arena
 record. `ObjectUse::source_owned` uses existing padding; entity/expression
-layouts remain unchanged. Fourteen new unused-member/type/query rejections,
-sixteen native programs and the through report (1935/1935) pass. Sanitizer and
-frozen performance evidence for this increment are pending.
+layouts remain unchanged. Twenty unused-member/type/query/pointer rejections, seventeen native programs,
+the through report (1935/1935) and final release/sanitizer parity on 331 inputs
+pass. The frozen receiver and follow-up evidence is in [performance.md](performance.md).
 
 This covers receivers whose class type is fixed. A template-owned dependent
 class receiver still needs a symbolic member-declaration path and separately
@@ -292,7 +292,10 @@ destructor identities and small/looped arrays. N3485 [dcl.fct.default]/9 and
 call, distinct overlapping lifetimes, full-expression destruction and array
 element default cleanup. The intermediate conditional reducer also exposed a
 missing semantic argument edge in lifetime classification. All seventeen native
-programs and through 1935/1935 pass; sanitizer/performance checks are pending.
+programs, through 1935/1935 and release/sanitizer parity on 331 inputs pass.
+The final `conversion_call` accessor returns an immutable view; effect consumers
+do not copy descriptors. All 6,104 retained observations verify, including
+compiler wall/RSS, native runtime/payload, outliers and separate correctness costs.
 The attempted try/throw extension is preserved in the artifact directory with
 its rejection log; source exception lowering belongs to PA21, not this stage.
 Default definition/demand states remain a separate unfinished semantic owner.

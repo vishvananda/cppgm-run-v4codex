@@ -179,3 +179,37 @@ for name,previous in body_data['workloads'].items():
 for work in call_data['workloads'].values():
  if 'runtime' in work: assert work['outputs'][0]['native']['sha256']==work['outputs'][1]['native']['sha256']
 print('fixed-call campaign preserves all prior and new compiler/native outputs')
+
+object_data=json.loads((ROOT/'student.tests/pa14/object-performance.json').read_text())
+view_data=json.loads((ROOT/'student.tests/pa14/object-view-performance.json').read_text())
+for name,previous in call_data['workloads'].items():
+ current=object_data['workloads'][name]
+ assert current['source_sha256']==previous['source_sha256']
+ assert all(out['sha256']==previous['outputs'][1]['sha256'] for out in current['outputs'])
+for name,current in view_data['workloads'].items():
+ previous=object_data['workloads'][name]
+ assert current['source_sha256']==previous['source_sha256']
+ assert all(out['sha256']==previous['outputs'][-1]['sha256'] for out in current['outputs'])
+print('receiver and immutable-view campaigns preserve inherited compiler outputs')
+
+layout=json.loads((ROOT/'student.tests/pa14/object-layout.json').read_text())
+for row in layout:
+ for header in row['headers']: assert shared.sha(header['path'])==header['sha256']
+ for kind in ('source','binary','dump'): assert shared.sha(row[kind+'_path'])==row[kind+'_sha256']
+ assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==[112,36,36]
+assert [row['temporary_state'] for row in layout]==[28,32]
+declaration=next(line for line in (ROOT/'dev/src/lowering/procedural.h').read_text().splitlines() if 'struct TemporaryState :' in line).strip()
+assert declaration==layout[1]['temporary_declaration']
+assert shared.sha(ROOT/'dev/src/semantic/model.h')==layout[1]['headers'][0]['sha256']
+print('receiver layouts unchanged; concrete cleanup address costs four bytes')
+
+proofs=Path(object_data['binaries'][0]['path']).parent/'proofs'
+rejections=json.loads((proofs/'rejections.json').read_text())
+assert len(rejections)==20 and sum(row['outputs'][0]['exit']==0 for row in rejections)==18
+for row in rejections:
+ assert shared.sha(row['source'])==row['sha256'] and row['outputs'][1]['exit']==1
+identity=json.loads((proofs/'default-identity.json').read_text())
+assert [row['native_exit'] for row in identity]==[1,0]
+for row in identity:
+ for kind in ('source','ir','native'): assert shared.sha(row[kind])==row[kind+'_sha256']
+print('eighteen newly rejected errors and the native default-identity proof verified')

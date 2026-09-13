@@ -1,0 +1,78 @@
+[
+  {
+    "commit": "d6891c36",
+    "headers": [
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/semantic/model.h",
+        "sha256": "436b81115b328a00425c3d6d17ba328fb6765801f295de79b27c04cec2bd4cac"
+      },
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/semantic/analyzer.h",
+        "sha256": "9ab8b6bc1c9b9efe1f4c39b86166960e25a4ef4b7db4c39a686977c3576f60f4"
+      },
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/lowering/procedural.h",
+        "sha256": "af5419f2c6d00a1a48d2b3782184bd765e5a5d3cb7350ffa9371780369dd9dcc"
+      }
+    ],
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-fdump-lang-class",
+      "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/probe.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/probe"
+    ],
+    "entity": 112,
+    "expression": 36,
+    "object_use": 36,
+    "temporary_state": 28,
+    "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/probe.cpp.001l.class",
+    "dump_sha256": "71071d5ed87182718e9d2d617e639501f0805c8597c2ce309045ff59cb5ba519",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/probe.cpp",
+    "source_sha256": "039f9c325fe0c98f762411439c574bb9aa235b66499c40527fe4703fd7e4f85a",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/d6891c36/probe",
+    "binary_sha256": "9b6a4328aaef993d2059533b1c182a19a7197adf75ea2b6a2eb4c7df65fef11a",
+    "temporary_declaration": "struct TemporaryState : semantic::LifetimeState { SlotId selector; std::uint32_t yes = 0, no = 0; };"
+  },
+  {
+    "commit": "607752d1",
+    "headers": [
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/semantic/model.h",
+        "sha256": "ac9f92896fc5306fa7850c0d42b47739b6b1f5e459935c169c6f172eb8c6a6b2"
+      },
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/semantic/analyzer.h",
+        "sha256": "5159d5b523f6432021e4179ff15d8e39fec83626706428588b27734ae2b80e9f"
+      },
+      {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/lowering/procedural.h",
+        "sha256": "edadc30021e261ce8bc4884f6d2714fb8a0cf45bf4fe49a7d3300e9e36b3f64a"
+      }
+    ],
+    "command": [
+      "g++",
+      "-std=gnu++11",
+      "-fdump-lang-class",
+      "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/probe.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/probe"
+    ],
+    "entity": 112,
+    "expression": 36,
+    "object_use": 36,
+    "temporary_state": 32,
+    "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/probe.cpp.001l.class",
+    "dump_sha256": "6f4268a2229d1f7d03aeb4dfd9395c9514aa4f0401254b15819e653dd55a016a",
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/probe.cpp",
+    "source_sha256": "039f9c325fe0c98f762411439c574bb9aa235b66499c40527fe4703fd7e4f85a",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-object-facts/layouts/607752d1/probe",
+    "binary_sha256": "9b6a4328aaef993d2059533b1c182a19a7197adf75ea2b6a2eb4c7df65fef11a",
+    "temporary_declaration": "struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector; std::uint32_t yes = 0, no = 0; };"
+  }
+]

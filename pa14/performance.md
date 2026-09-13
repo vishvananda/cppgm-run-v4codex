@@ -739,3 +739,226 @@ There is no mandated numeric PA14 compiler threshold; inherited self-selected
 gates remain diagnostics under stage-scoped acceptance. Measured required
 checking costs do not excuse an identified avoidable regression. Full body
 projection and finer demand/failure owners remain current-stage work.
+
+
+## Fixed object receivers and default evaluation storage
+
+The frozen source/code points are A `d6891c36`, B `607752d1` and final C
+`70775cfd`. B includes fixed receiver/member facts, pointer legality and repeated
+default materialization storage. C consumes conversion-call descriptors by
+immutable pointer instead of copying them during lifetime classification.
+Implementation ownership and C++11 proofs are in [implementation.md](implementation.md).
+
+| Binary | SHA-256 | Compiler .text bytes |
+| --- | --- | ---: |
+| A | `8a33268218faa96c18683f3a4d9dcddd79602d3c2d04fd26a0f9051cd21be9c9` | 1,241,990 |
+| B | `ea874014083cebcbb3033165979ca76f1b7e1bba9ba9e93d50f3696682069eb4` | 1,253,062 |
+| C | `dd0f62e7e1fccb82dfaf4ab9a39a61b82fac84b6c793725bab87fe4f2d95c128` | 1,253,062 |
+
+Compiler text grows **11,072 bytes (0.89%)** from entry; the final view refinement
+adds no text. Frozen host layout probes retain Entity/Expression/ObjectUse at
+**112/36/36 bytes**. TemporaryState grows **28→32 bytes** to preserve the concrete
+cleanup address of each emitted evaluation. Probe headers, commands, class-layout
+dumps and hashes are retained under `pa14-object-facts/layouts/`.
+
+`object_benchmark.py` was frozen before timing. Its **644 observations** cover
+38 compiler inputs and ten native programs: 35 common compiler/nine native
+pairs, plus three correct-B-only compiler cases and one B-only native case.
+All 27 preceding compiler inputs are preserved by hash. One warmup per binary,
+four A/A observations and two ABBA blocks retain all samples; B-only cases have
+one warmup and six observations. Flags are `--emit-lowir -O0` (or the inherited
+semantics dump mode), release `g++ -std=gnu++11 -Wall -O3` with TEST_RUNNER_ENABLE,
+and the supplied backend at `-O0`. Affinity, host version, binary/backend/input/
+output hashes, wall/user/system/RSS/context-switch observations are in the JSON.
+No builds or correctness tests ran during timed campaigns.
+
+The first focused repeat completed one case before a harness error passed `-O0`
+to semantics mode. Its **14 valid observations** and rejection log remain in
+`object-repeat-preliminary-performance.json`; neither the samples nor the old
+harness were overwritten. The corrected, separately frozen six-case repeat adds
+**84 observations**. The final B/C descriptor-view campaign adds **168** on ten
+compiler/two native workloads. Total increment **910**, total retained history
+**6,104 verified observations**. Preflight/compiler failures are recorded
+separately and never counted as timed successful observations.
+
+Every common A/B LowIR/native output is byte-identical. Final C preflight
+preserves all 35 common outputs and all three corrected default outputs; its
+measured B/C outputs are also byte-identical. Native figures below use the
+supplied sectionless ELF payload after its entry (including support/data), not
+an ELF `.text` section. All native sample RSS values are 256 KiB. The small
+native loops are diagnostic controls, with no generated-program speedup claim.
+
+### Compiler measurements: A to B
+
+Wall columns are medians in seconds, RSS columns median KiB, and ratios are the
+two complete ABBA block means B/A. All warmups, A/A ranges and outliers remain
+in `object-performance.json`; no observations are filtered from these medians.
+
+| Workload | A wall s | B wall s | RSS KiB A→B | ABBA B/A |
+| --- | ---: | ---: | ---: | --- |
+| calls-1 | 0.437722 | 0.438296 | 79920→79876 | 1.0037/1.0032 |
+| calls-4 | 1.798453 | 1.796330 | 305716→305644 | 1.0144/0.9861 |
+| memory-float-1 | 0.370313 | 0.375243 | 69044→69082 | 1.0140/1.2649 |
+| memory-float-4 | 1.509020 | 1.513425 | 266646→266694 | 1.0261/1.0007 |
+| template-semantics-1 | 0.073672 | 0.073177 | 13164→13248 | 0.9651/1.0072 |
+| template-semantics-4 | 0.279177 | 0.281908 | 38900→38840 | 0.6635/1.0131 |
+| query-instances-1000 | 0.145606 | 0.149702 | 31634→31700 | 1.0217/1.0099 |
+| query-instances-4000 | 0.604345 | 0.597643 | 111144→111168 | 0.9907/0.9990 |
+| binding-instances-1000 | 0.150080 | 0.152177 | 31166→31162 | 1.0231/0.9780 |
+| binding-instances-4000 | 0.627091 | 0.614844 | 109986→109960 | 0.9889/0.9760 |
+| calls-runtime | 0.006599 | 0.006855 | 5154→5162 | 1.0206/1.0372 |
+| memory-runtime | 0.006137 | 0.006104 | 5164→5174 | 0.9895/0.9730 |
+| floating-runtime | 0.005736 | 0.005638 | 5334→5366 | 0.9750/1.0074 |
+| query-runtime | 0.005806 | 0.005821 | 5100→5150 | 0.9807/1.0039 |
+| fixed-instances-1000 | 0.155163 | 0.155442 | 30810→30974 | 0.9873/1.0067 |
+| fixed-unused-1000 | 0.099554 | 0.098477 | 20096→20082 | 1.0104/0.9924 |
+| fixed-instances-4000 | 0.657629 | 0.655064 | 109086→109122 | 1.0073/0.9516 |
+| fixed-unused-4000 | 0.390354 | 0.390293 | 65004→65006 | 0.9785/0.9999 |
+| fixed-runtime | 0.006162 | 0.006195 | 5120→5134 | 0.9908/1.0055 |
+| call-instances-1000 | 0.105111 | 0.105984 | 23284→23274 | 1.0069/1.0050 |
+| call-unused-1000 | 0.075323 | 0.074975 | 15452→15586 | 1.0086/0.9954 |
+| call-materializations-1000 | 0.134228 | 0.135363 | 30944→31016 | 1.0698/0.9941 |
+| call-instances-4000 | 0.425405 | 0.437754 | 77924→78072 | 1.1007/1.0340 |
+| call-unused-4000 | 0.286897 | 0.291075 | 46692→46728 | 0.9877/1.0204 |
+| call-materializations-4000 | 0.544552 | 0.578582 | 110376→110438 | 1.0577/1.2607 |
+| call-runtime | 0.006033 | 0.005975 | 5130→5220 | 0.9972/0.9972 |
+| call-materializations-runtime | 0.006416 | 0.006447 | 5136→5178 | 1.0092/0.9993 |
+| object-instances-1000 | 0.164210 | 0.155748 | 34204→33722 | 0.9442/0.9255 |
+| object-unused-1000 | 0.086786 | 0.094353 | 18232→19174 | 1.0938/1.0771 |
+| object-results-1000 | 0.132720 | 0.126239 | 28420→28460 | 0.7551/0.9632 |
+| object-instances-4000 | 0.681021 | 0.649173 | 121038→119426 | 0.9742/0.8994 |
+| object-unused-4000 | 0.340358 | 0.372159 | 58372→61448 | 1.0972/1.0505 |
+| object-results-4000 | 0.534766 | 0.508689 | 100790→97786 | 0.9553/0.9544 |
+| object-runtime | 0.006457 | 0.006515 | 5182→5156 | 0.9974/1.0259 |
+| object-results-runtime | 0.006478 | 0.006478 | 5152→5212 | 1.0137/1.0065 |
+| default-identities-1000 | — | 0.083873 | 20852 | B only |
+| default-identities-4000 | — | 0.330051 | 70854 | B only |
+| default-identities-runtime | — | 0.006345 | 5180 | B only |
+
+At 4,000 fixed-receiver specializations, object-use records fall **20,003→8**,
+expression work **52,011→12,019**, candidate visits **12,000→4,002**, conversion
+selection **44,006→20,012**, and stored conversions **48,007→20,014**. Entity/scope
+counts are unchanged; two source call facts serve 8,000 concrete calls. Median
+wall improves 4.7%, with 1,612 KiB less peak RSS. The repeat pairs .9402/.9640
+and median .684089→.652375 s support a receiver-path improvement.
+
+Class-result receivers preserve one required concrete result object per use:
+object-use records **16,003→4,007** at 4,000, candidates **12,006→4,008**, with
+3,004 KiB less RSS and a 4.9% median improvement. The 1,000-result initial first
+pair (.7551) includes an A outlier; the repeat .9723/.9438 is the more modest
+confirmation. Whole-region occurrences remain **77N/46N**, so this does not
+claim completion of dependent-only body storage.
+
+Unused definitions now incur required legality checking. At 4,000, B stores
+20,000 receiver recipes, checks 8,000 calls and 24,000 conversions, and adds
+31.8 ms/3,076 KiB. Eighteen of twenty retained object/pointer reducers are
+accepted incorrectly by A and rejected by B/C; the other two preserve prior
+rejections. The positive unused-specialization control still demands zero
+member bodies. Costs follow required source edges, not speculative instantiation.
+
+The default-identity source has two simultaneously live reference-bound defaults.
+A compiles it but its executable exits 1; B/C exit 0. The B-only 4,000-input
+median is .330051 s/70,854 KiB. Its native payload is 1,520 bytes and median
+.039612 s. These are correctness costs, not a speedup against invalid A output.
+The expanded reducer additionally checks destructor identities, conditional
+arms, conversion functions, constructor defaults and per-array-element cleanup.
+
+### Native measurements: A to B
+
+The compiler cost of each runtime source appears in the preceding table.
+
+| Workload | A runtime s | B runtime s | RSS KiB A→B | ABBA B/A | Payload bytes A/B |
+| --- | ---: | ---: | ---: | --- | ---: |
+| calls-runtime | 0.480540 | 0.479946 | 256→256 | 1.0010/1.0015 | 206/206 |
+| memory-runtime | 0.281237 | 0.280181 | 256→256 | 0.9920/1.0091 | 434/434 |
+| floating-runtime | 0.331884 | 0.332632 | 256→256 | 0.9986/1.0058 | 230/230 |
+| query-runtime | 0.183566 | 0.183075 | 256→256 | 1.0056/0.9985 | 182/182 |
+| fixed-runtime | 0.229347 | 0.229792 | 256→256 | 1.0015/1.0015 | 268/268 |
+| call-runtime | 0.101660 | 0.101559 | 256→256 | 0.9883/1.0036 | 367/367 |
+| call-materializations-runtime | 0.052658 | 0.052566 | 256→256 | 0.9959/0.9994 | 1192/1192 |
+| object-runtime | 0.041655 | 0.041525 | 256→256 | 0.9939/1.0073 | 696/696 |
+| object-results-runtime | 0.112728 | 0.112544 | 256→256 | 0.9833/1.0115 | 1208/1208 |
+| default-identities-runtime | — | 0.039612 | 256 | B only | 1520 |
+
+### Follow-up, final views and retained spread
+
+The corrected A/B repeat preserves the original binaries and input hashes:
+
+| Workload | A wall s | B wall s | RSS KiB A→B | ABBA B/A |
+| --- | ---: | ---: | ---: | --- |
+| memory-float-1 | 0.374112 | 0.374354 | 69040→69110 | 0.9956/1.2795 |
+| template-semantics-4 | 0.280307 | 0.282125 | 38852→38928 | 1.0001/1.3915 |
+| call-instances-4000 | 0.422844 | 0.428346 | 77956→78088 | 1.1018/1.0075 |
+| call-materializations-4000 | 0.545820 | 0.560192 | 110334→110430 | 1.0166/1.2109 |
+| object-instances-4000 | 0.684089 | 0.652375 | 120996→119460 | 0.9402/0.9640 |
+| object-results-1000 | 0.135303 | 0.127880 | 28358→28416 | 0.9723/0.9438 |
+
+The initial ordinary calls-4 pairs are 1.0144/.9861. Initial memory-float-1 has
+B at .574671 s (.29 user + .08 system); template-semantics-4 has A at .562585 s
+(.22 + .05). Large scalar calls have B at .512905 s (.32 + .09); class calls have
+B at .819264 s (.43 + .12), and the 1,000-result case has A at .199204 s (.09 +
+.03). Repetition retains further large wall-only samples rather than selecting
+a quieter run. The repeated class-call median .545820→.560192 s also retains a
+small CPU increase (.53→.54 s median), prompting review of descriptor copying.
+
+Final B/C view comparison (ratios C/B):
+
+| Workload | B wall s | C wall s | RSS KiB B→C | ABBA C/B |
+| --- | ---: | ---: | ---: | --- |
+| calls-4 | 1.862341 | 1.843074 | 305732→305718 | 0.9924/0.9923 |
+| memory-float-4 | 1.525371 | 1.500249 | 266738→266744 | 0.9749/0.9956 |
+| call-instances-4000 | 0.428968 | 0.429029 | 78042→78074 | 0.8460/0.9992 |
+| call-materializations-4000 | 0.587705 | 0.568483 | 110350→110390 | 0.9785/0.8626 |
+| object-instances-4000 | 0.663039 | 0.652061 | 119476→119454 | 0.9933/0.6932 |
+| object-results-4000 | 0.519749 | 0.520450 | 97778→97882 | 1.0032/1.0314 |
+| object-unused-4000 | 0.378840 | 0.404254 | 61582→61606 | 1.0194/1.1306 |
+| default-identities-4000 | 0.336875 | 0.341317 | 70736→70834 | 1.0054/0.9997 |
+| call-materializations-runtime | 0.008731 | 0.008772 | 5142→5168 | 0.9936/1.0000 |
+| default-identities-runtime | 0.006557 | 0.006549 | 5144→5180 | 1.0504/0.9907 |
+
+Read-only views remove transient descriptor copies and retain exactly the same
+semantic work counters. Calls-4 improves in both pairs (.9924/.9923), with no
+code growth; class-call pairs improve .9785/.8626, but the second includes B at
+.766554 s (.44 + .11). The object-instance second pair includes B at 1.236648 s
+(.51 + .13), so its apparent 30.7% gain is not attributed to this change.
+Object-results is mixed/slightly slower (1.0032/1.0314). The unused case regresses
+1.0194/1.1306, including C CPU sums .41/.41 s against B .36/.37 in the last block;
+its semantic work and output are unchanged, and the changed lowering accessor
+is not needed by those unused bodies. The cause of that variation is not
+established. No general gain is inferred from the view refinement. Median RSS
+deltas in this campaign range from -22 to +104 KiB, with no new semantic records.
+
+The two final native payloads remain 1,192 and 1,520 bytes. Class-call native
+medians B/C are .052890/.052478 s (pairs .8294/1.0021); default native medians
+.040629/.040136 s (pairs .9962/.9890). The class-call A/A range .052582–1.248936 s
+includes a 1.248936 s observation with .05 user time. Identical executable bytes
+preclude attributing these runtime differences to compiler output. Every sample
+and every earlier historical cost remains retained.
+
+### Stage-scoped acceptance and ownership boundary
+
+At O0 this is required semantic validation/fact sharing and lifetime lowering,
+with indexed source facts, constant-time receiver projection, cached expression
+effects and work proportional to required semantic argument edges and emitted
+objects. Receiver recipes occupy source-proportional storage; concrete class
+results/default evaluations own their required storage and cleanup actions.
+There is no optional optimizer/native-backend pass or unbounded search here.
+The sharing benefit on affected receivers justifies the fixed 0.89% compiler
+support-code growth and source checking; the descriptor refinement adds no
+compiler text or semantic records and avoids copied immutable facts.
+
+The zero generated-code growth target for fixed-fact reuse is verified on all
+common-correct inputs. Extending that target to an invalid default-identity
+baseline would be an unsupported gate: C++11 requires the extra overlapping
+storage and correct cleanup. The failing reducer, raw costs, coverage and
+comparison rules are preserved. PA14/O0 has no mandated numeric compiler-latency
+threshold; historical self-imposed gates remain diagnostics under the spec.
+This does not dismiss measured regressions, waive mandated bounds or complete
+the remaining dependent object/body and finer demand/failure owners.
+
+Final checks pass: PA14 314/314, earlier 1621/1621, through 1935/1935, seventeen
+native programs, two standalone reducers, release/ASan/UBSan parity on 331 inputs
+plus those reducers, 68 explicit sanitizer rejections, two ABI controls and file
+audit with three inherited header advisories. The full-stage architecture goal
+remains active. Logs, complete command/status manifests, reduced proofs, layouts,
+preflights and frozen binaries live in `$RALPH_ARTIFACT_DIR/pa14-object-facts/`.

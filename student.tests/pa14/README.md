@@ -4,10 +4,12 @@ Run from the repository root:
 
 ```sh
 python3 student.tests/pa14/check_functions.py
+python3 student.tests/pa14/check_fixed_objects.py
+python3 student.tests/pa14/check_object_reducers.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all fifteen local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all seventeen local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -17,13 +19,15 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and fifteen
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and seventeen
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 329 inputs with Clang's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 48 explicit
-binding/query/scalar/call rejection cases.
+The current campaign checks 331 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 68 explicit
+binding/query/scalar/call/object rejection cases. Both `.t` object reducers also
+pass release/sanitizer output parity and native execution. The ABI controls
+remain part of `check_queries.py`.
 
 The [performance review](../../pa14/performance.md) explains the raw JSON and
 acceptance. `benchmark.py A B WORK OUT` uses the fixed PA10 compiler/native
@@ -58,3 +62,20 @@ unused-definition and class-conversion scaling plus two checked native loops.
 A/A calibration and two ABBA blocks retain every sample and output hash. The
 harness and input corpus are frozen before timing; no numerical gate filters
 observations or replaces correctness.
+
+`fixed-objects.cpp` covers fixed class/pointer objects, member cv/categories,
+virtual/qualified/static calls, reference casts, function-pointer fields and
+callable objects. `default-object-identity.cpp` checks repeated default values,
+conditional lifetimes, conversions, constructor defaults and array-element
+cleanup. Its per-value instance counts tolerate optional return copy elision.
+The two reduced `.t` inputs preserve the entry failures independently.
+
+`object_benchmark.py A B WORK OUT` retains all 27 preceding compiler inputs,
+adds six receiver/result scaling inputs and two native loops, and measures
+three corrected default-identity inputs on B only. Its 644 observations include
+the failing A native identity proof. `object_repeat_final.py WORK OUT` repeats
+six noisy cases from that frozen corpus; the interrupted first harness and its
+fourteen completed observations remain preserved. `object_view_benchmark.py
+A B WORK OUT` isolates immutable conversion-call views on ten correct compiler
+inputs and two native loops. All frozen artifacts live in
+`$RALPH_ARTIFACT_DIR/pa14-object-facts/`; the verifier retains every campaign.
