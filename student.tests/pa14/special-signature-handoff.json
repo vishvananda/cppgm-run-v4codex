@@ -1,0 +1,231 @@
+{
+  "entry_commit": "60cf761c",
+  "implementation_commit": "5b947a18",
+  "evidence_commit": "f84029d0",
+  "release_sha256": "dcce35ef47ad992313d5dadd48385d25b242c52376b47ba5c9b0b6c1b392b71a",
+  "checks": [
+    {
+      "name": "stage",
+      "command": "make test-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/stage-definition-forms.log",
+      "log_sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "name": "prior",
+      "command": "make test-report-through-pa13",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/prior-definition-forms.log",
+      "log_sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "name": "through",
+      "command": "make test-report-through-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/through.log",
+      "log_sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "name": "file_audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa14 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "native",
+      "command": "python3 student.tests/pa14/check_functions.py",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-definition-forms.log",
+      "log_sha256": "5da80f6caf128fd8d6cf036a815c322ff5e0e1e69f1cad61557568a1a4880d0f"
+    }
+  ],
+  "initial_observations": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/audit.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/benchmark-contract-initial.py",
+      "sha256": "feae5aa7b6732044b45cf7ddaaa62ccdf1b3e0ba4ca4fa886869c749e3cfe965"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/benchmark-initial.py",
+      "sha256": "be1160fcca5bf3694c8681b246bb2ec8c7789b68905007fb590b7f3b601e3adb"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/benchmark-preflight-student.py",
+      "sha256": "e5e52ea44f5313c0cb7c3f74befa610e76ebbdf3e1baa55fea8f9ffa333787c6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-definition-forms.log",
+      "sha256": "2586c912ce6308fc1ae966d0dfef19c90960beca4742e7bb07a3d1b96a1b1ba9"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-direct-special.log",
+      "sha256": "2586c912ce6308fc1ae966d0dfef19c90960beca4742e7bb07a3d1b96a1b1ba9"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-injected-heads.log",
+      "sha256": "02fe135f48a19aa11fc7fbec63c34b4ec62ed588a6b132abc32b15c77092fa3c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-sanitizer.log",
+      "sha256": "5affd702e6b27b5f23ec8f9f4511c94d0ccb13af489025d8cd73c1ee9edc280e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-typed-special-fixed.log",
+      "sha256": "22400b32f969f892f94eddb2f48ef89019ce24f52a6e87abd931d26703b6e597"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/build-typed-special.log",
+      "sha256": "b8befc7b89abce78a722c6423d77180a6f9be8d271f094fef754d2aac706243f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/comparison-cli-initial.py",
+      "sha256": "090071942889039112b039cf8db90774c82a4b68564b7ad5a55caa93e564598c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/evidence-before-head-baseline.py",
+      "sha256": "30769a6436deeb082c29181812af24cbbf2d8eb1144f978bedde5cbcb1cd89a5"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/evidence-initial.py",
+      "sha256": "a69745cbf3befefc5c5fded73b929080a3b543d178dfc66aba7b79809598ba4b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/measurements.log",
+      "sha256": "98fc9bf518930303fce27803c6284adc8ef4f0f853b18d0028c05c675b91a958"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-definition-forms.log",
+      "sha256": "5da80f6caf128fd8d6cf036a815c322ff5e0e1e69f1cad61557568a1a4880d0f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-direct-special.log",
+      "sha256": "5da80f6caf128fd8d6cf036a815c322ff5e0e1e69f1cad61557568a1a4880d0f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-injected-heads.log",
+      "sha256": "da4db2d9aebc376f56a89ccd633c621c8f3b31478cbff607de5e533eda29256d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-special-targets.log",
+      "sha256": "da4db2d9aebc376f56a89ccd633c621c8f3b31478cbff607de5e533eda29256d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/native-typed-special-fixed.log",
+      "sha256": "fa65a80143aee261e266ab0ac7edbb319676d0230c5ca3a615b3233a11404bc0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/ordinary-rejections-direct-special.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/ordinary-rejections-typed-special-fixed.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/preflight-contract.log",
+      "sha256": "e0cedd0e7daedede487b616eb1b8791118042b1b7109e51795f01c90017cc3a0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/preflight-student.json",
+      "sha256": "30eba4470bbadcc339920f17d6ecc812eef93fca224e6a14f398437dd3025420"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/preflight-student.log",
+      "sha256": "0e853e75d37a19675f8575383b24bee04edc9f8e005a8d1da235c68730f92b6f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/preflight.log",
+      "sha256": "fa4b30c44de150782269245a360dadcd84f026a94fe15ae504f2a7064c20a66b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/prior-definition-forms.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/prior-typed-special.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-before-head-baseline.json",
+      "sha256": "2653933f1d3a3f36af9b7e65f4a66a171a589ba0e07e77de21091be284ed2b13"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-final.log",
+      "sha256": "4660c72fd20765c6d7c57e5ea60b4523c7bb4c744e473abd0058cc6418f5739b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline.log",
+      "sha256": "4660c72fd20765c6d7c57e5ea60b4523c7bb4c744e473abd0058cc6418f5739b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs.log",
+      "sha256": "4f8d44318fbf871536a3a260109e445ade7e188e170a0edd7e0ad5253c9fca07"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/rejections-definition-forms.log",
+      "sha256": "0c220c6d89ab4cae3380569dfb2c4f568bc45a84b2988ab33483c1198ff4b863"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/rejections-direct-special.log",
+      "sha256": "164d2c54bb4ebe3a6fe0f35654f324679625db65783d6b98f1af8cd7b1dd88d2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/rejections-injected-heads.log",
+      "sha256": "164d2c54bb4ebe3a6fe0f35654f324679625db65783d6b98f1af8cd7b1dd88d2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/rejections-typed-special-fixed.log",
+      "sha256": "164d2c54bb4ebe3a6fe0f35654f324679625db65783d6b98f1af8cd7b1dd88d2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/stage-definition-forms.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/stage-direct-special.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/stage-injected-heads.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/stage-typed-special-fixed.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/through.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/validation.log",
+      "sha256": "e53c75af21cb6ec19b4fab60b452180f87ae233512f28ccc01129a00c2d459a8"
+    }
+  ],
+  "intermediate_binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-typed-special",
+      "sha256": "0605465c01945043cff1d21bacfabe1c3b6b8073bd309abf3d3e6ad1f6f46955"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-injected-heads",
+      "sha256": "625ca5e722b23f3619a6acd48abea0505cbb078aec53a9ec7dbacd83a3745195"
+    }
+  ],
+  "notes": [
+    "Stage coverage remains 314 sources and 1266 fixture/reference files. No reference or comparison rule changed.",
+    "The first build lacked a helper declaration; the fixed build and all subsequent validation pass. The initial log remains.",
+    "Entry accepted 20 of 21 invalid special-member definitions. Entry already rejected conversion_noexcept; that coverage remains.",
+    "Entry rejects both new valid positive controls. Correct injected-head and direct-special compilers accept them with identical native output.",
+    "Initial raw-byte preflight failed on local slot suffixes; the later reference-mode preflight imposed canonical-reference presentation on a student output. Both complete logs and harness versions remain. The final adapter uses unchanged course student validation and exact canonical comparison, with no generated-projection fallback.",
+    "The initial positive evidence probe incorrectly assumed entry accepted injected-signatures.cpp. Its failure remains; the completed proof records the entry rejection and uses the correct frozen injected-head intermediate for the two nested-head timings.",
+    "The full benchmark process was observed running after its initial tool response was lost to compaction. It was not restarted. The process later terminated with all 44 measurements logged and no traceback; the final verifier separately checks all observations, outputs and frozen binary hashes.",
+    "All 756 new and 11158 inherited performance observations remain unfiltered. The head baseline override is explicit in every affected workload.",
+    "Current record sizes are unchanged. The preceding live-header check is reclassified as historical snapshot integrity, while the special-signature proof verifies current headers.",
+    "Full-stage architecture remains open: joint local declaration/type-query/scope/object/lifetime identities and complete typed reverse demand/failure edges. The class-scope special-member signature/application group is complete."
+  ]
+}

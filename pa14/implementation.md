@@ -734,3 +734,51 @@ assignment, nested raw aliases spanning U/V heads, returned references and late
 defaulted operations. All 314 stage tests, 1621 prior tests, 30 native programs
 and 21 special-signature rejection controls pass. Freeze full sanitizer, layout
 and source/key/request performance evidence before accepting the owner costs.
+
+
+The completed signature group has 21 reduced rejection controls: entry accepted
+20 invalid definitions, while its existing conversion-noexcept rejection remains
+covered. The proofs cite N3485 [class.mem]/1, [class.mfct]/2, [class.conv.fct]/1,
+[except.spec]/3–4, [basic.def.odr]/1 and [dcl.fct.def.delete]/4. Injected-name
+controls also cover [temp.local]/1–2. Both new valid programs fail at entry and
+execute successfully with the corrected head-frame and direct-application builds.
+Host results support the source-rule proofs; no reference output changed.
+
+Performance comparisons validate both compiler outputs using the unchanged
+course LowIR rules. Five new constructor cases differ only in local slot
+suffixes, which PA8's positional canonicalization absorbs. A personal adapter
+loads the course validator/canonicalizer with student presentation mode for both
+inputs and requires identical canonical output. It does not invoke the broader
+generated-projection fallback. The initial raw-byte requirement and subsequent
+reference-only ordering requirement were inappropriate for two student outputs;
+both failed preflights and their harness versions remain frozen. Thirty-nine
+cases have exact LowIR hashes, and all ten native executable hashes match.
+
+Nested-head timing uses the frozen correct head-frame build as its A baseline:
+entry rejects the valid nested alias program. This separates the measured direct
+application change from the necessary semantic correction. The other 42 cases
+compare continuation entry with final. The new live layout probe retains 17
+transitive headers; earlier probes remain immutable historical snapshots.
+
+The complete validation records 344 release/ASan/UBSan parity sources, 157
+rejection controls, six ABI controls, seven native reducers, thirty native
+programs and expression-store/lifetime controls. The stage, prior and through
+reports pass 314, 1621 and 1935 tests respectively, and file audit passes with
+three inherited header advisories. The remaining architecture group requires
+joint local declaration/type-query/scope/object/lifetime identities and their
+consumers; class-scope special/injected signatures are now established. Typed
+reverse demand edges, narrow failure records and all independent fact states
+also remain open. No external blocker prevents that subsequent work.
+
+
+The isolated special-member campaign is accepted with all 756 observations
+retained (11,914 cumulative). Constructor scaling improves 7.06–57.12% in median
+latency and reduces peak RSS; both ABBA blocks improve for each affected case.
+Nested-head direct application also improves against its correct intermediate
+baseline. Compiler text grows 960 bytes, measured layouts stay unchanged and all
+ten generated executables remain byte identical. The full report discloses
+inherited latency increases, the 3,622 KiB body-large-8 RSS increase, calibration
+spread and historical costs. The cumulative verifier passes all new and inherited
+measurements, source proofs, current layouts and required-check evidence. The
+class-scope signature/application group is complete; the remaining joint
+local-declaration/lifetime/demand graph is the explicit handoff boundary.

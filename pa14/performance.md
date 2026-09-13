@@ -1840,3 +1840,192 @@ does not isolate the precise native allocator policy responsible. The measured
 RSS cost remains, with both complete profiles and commands in the handoff
 manifest. It is not 15 MiB of new live semantic records, and no allocator tuning
 or benchmark-specific production path was introduced to suppress it.
+
+
+## Special-member signatures, injected types and direct application
+
+Continuation entry is `60cf761c`; production changes are `bdbb04d4` and
+`5b947a18`, with frozen proofs/harnesses at `f84029d0`. The complete isolated
+campaign in `special-signature-performance.json` retains **756 observations**:
+44 compiler inputs and ten checked native programs, each with one warmup per
+binary, four A/A calibration samples and two ABBA blocks. Together with the
+unchanged 11,158 preceding observations, **11,914** observations are retained.
+All binaries, flags, sources, equivalent outputs and harnesses were frozen before
+timing. Compiler and runtime measurements are separate, pinned to the recorded
+CPU; builds, validation and probes were not run concurrently with timing.
+
+A is the entry compiler (SHA `288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc`);
+B is the final direct-special compiler (SHA `dcce35ef47ad992313d5dadd48385d25b242c52376b47ba5c9b0b6c1b392b71a`).
+The two `special-heads` cases instead use the correct frozen injected-head build
+(SHA `625ca5e722b23f3619a6acd48abea0505cbb078aec53a9ec7dbacd83a3745195`) as A:
+entry rejects the valid nested alias program. This explicitly recorded override
+measures direct application between correct implementations. It does not time
+rejection as successful compilation. All 37 inherited sources and outputs remain
+byte identical to their preceding campaign.
+
+The compiler tables report medians of the four A and four B ABBA observations;
+calibration is reported separately. Every warmup, sample, RSS value, context
+switch count and outlier remains in the JSON. Spreads are min–max, and paired
+ratios use each block's arithmetic means. No outlier is removed.
+
+| Compiler workload | Median seconds A/B | Median RSS KiB A/B | A/A seconds | ABBA range seconds A/B | Paired B/A |
+| --- | --- | --- | --- | --- | --- |
+| body-run-1000-8 | 0.157616 / 0.157332 | 28,342 / 28,292 | 0.154423–0.198110 | 0.153606–0.193319 / 0.155902–0.158488 | 0.9027 / 1.0020 |
+| body-run-1000-128 | 0.157381 / 0.158745 | 28,690 / 28,830 | 0.157798–0.197920 | 0.154597–0.197852 / 0.156563–0.163308 | 0.9099 / 1.0071 |
+| body-run-4000-128 | 0.656344 / 0.659578 | 98,594 / 98,846 | 0.657013–0.672506 | 0.634941–0.713083 / 0.632868–0.677204 | 1.0010 / 0.9757 |
+| body-large-1000-8 | 0.272327 / 0.255358 | 44,438 / 48,060 | 0.250085–0.296377 | 0.250150–0.359631 / 0.255092–0.260584 | 0.8353 / 0.9496 |
+| body-large-1000-128 | 2.092869 / 2.151097 | 321,612 / 321,360 | 2.020567–2.557939 | 2.073115–2.257721 / 2.021408–2.383809 | 1.0256 / 1.0191 |
+| default-unused-1000 | 0.052843 / 0.053038 | 13,330 / 13,272 | 0.052395–0.053762 | 0.052606–0.053246 / 0.052833–0.053775 | 1.0118 / 0.9990 |
+| default-repeated-1000 | 0.030242 / 0.030401 | 8,930 / 8,946 | 0.030026–0.030911 | 0.029989–0.030787 / 0.029989–0.030774 | 0.9877 / 1.0174 |
+| default-dependent-1000 | 0.052065 / 0.052422 | 13,400 / 13,414 | 0.052291–0.053704 | 0.051768–0.052094 / 0.051544–0.052845 | 1.0095 / 1.0025 |
+| default-unused-4000 | 0.203845 / 0.204304 | 38,166 / 38,048 | 0.202249–0.441973 | 0.200393–0.246054 / 0.202307–0.206045 | 1.0113 / 0.9073 |
+| default-repeated-4000 | 0.104685 / 0.104580 | 20,400 / 20,434 | 0.103070–0.142705 | 0.103820–0.106542 / 0.103843–0.106155 | 1.0019 / 0.9954 |
+| default-dependent-4000 | 0.210658 / 0.201907 | 37,830 / 37,868 | 0.205051–0.511231 | 0.201827–0.255198 / 0.201090–0.209238 | 0.8789 / 0.9795 |
+| region-runtime | 0.007624 / 0.007654 | 5,474 / 5,556 | 0.007663–0.008298 | 0.007594–0.007794 / 0.007574–0.007682 | 1.0027 / 0.9926 |
+| dependent-default-runtime | 0.006238 / 0.006182 | 5,226 / 5,392 | 0.006066–0.006231 | 0.006109–0.006334 / 0.006087–0.006357 | 0.9960 / 0.9951 |
+| declaration-instances-1000 | 0.575233 / 0.574736 | 83,334 / 83,312 | 0.574847–0.575936 | 0.574192–0.577683 / 0.572771–0.579147 | 0.9995 / 0.9997 |
+| declaration-outside-1000 | 0.317263 / 0.314377 | 56,164 / 56,136 | 0.314028–0.317213 | 0.312749–0.324180 / 0.310515–0.324274 | 0.9957 / 0.9918 |
+| member-repeated-1000 | 0.055174 / 0.054381 | 15,044 / 15,048 | 0.054024–0.054724 | 0.054899–0.182479 / 0.054020–0.054480 | 0.9908 / 0.4558 |
+| calls-4 | 1.699534 / 1.719451 | 270,020 / 270,032 | 1.709251–1.920076 | 1.694950–1.710048 / 1.695465–1.785815 | 1.0275 / 1.0067 |
+| memory-float-1 | 0.362763 / 0.367051 | 63,032 / 63,012 | 0.361960–0.484849 | 0.359315–0.370993 / 0.361214–0.367826 | 1.0101 / 1.0001 |
+| calls-runtime | 0.005493 / 0.005521 | 5,198 / 5,176 | 0.005574–0.005947 | 0.005439–0.005613 / 0.005448–0.005606 | 1.0086 / 0.9967 |
+| memory-runtime | 0.006113 / 0.005954 | 5,232 / 5,256 | 0.006102–0.006277 | 0.005848–0.006406 / 0.005845–0.006063 | 0.9559 / 0.9907 |
+| floating-runtime | 0.005620 / 0.005569 | 5,486 / 5,288 | 0.005628–0.006342 | 0.005530–0.005665 / 0.005509–0.005634 | 1.0020 / 0.9843 |
+| value-offset-1000-8 | 0.176547 / 0.176702 | 35,402 / 35,422 | 0.174717–0.176873 | 0.176104–0.178608 / 0.175476–0.192093 | 1.0425 / 0.9949 |
+| value-offset-1000-128 | 2.142794 / 2.143584 | 337,822 / 337,938 | 2.132349–2.156443 | 2.121510–2.165040 / 2.125995–2.164439 | 1.0032 / 0.9981 |
+| value-offset-4000-8 | 0.753972 / 0.753322 | 126,460 / 126,372 | 0.739694–0.756620 | 0.748210–0.778472 / 0.745818–0.755757 | 0.9975 / 0.9852 |
+| value-bound-1000 | 0.091427 / 0.091226 | 21,454 / 21,370 | 0.090336–0.100026 | 0.090917–0.091598 / 0.090791–0.091731 | 0.9966 / 1.0012 |
+| value-bound-4000 | 0.366460 / 0.367662 | 69,442 / 69,446 | 0.363229–0.372723 | 0.363076–0.528201 / 0.362866–0.374903 | 1.0186 / 0.8159 |
+| value-runtime | 0.005712 / 0.005686 | 5,330 / 5,142 | 0.005774–0.006002 | 0.005648–0.005812 / 0.005637–0.005736 | 0.9970 / 0.9910 |
+| bound-runtime | 0.005718 / 0.005671 | 5,184 / 5,254 | 0.005776–0.005895 | 0.005678–0.005794 / 0.005644–0.005702 | 0.9921 / 0.9886 |
+| input-uses-1000-8 | 0.168201 / 0.167492 | 35,098 / 35,122 | 0.165649–0.170818 | 0.165102–0.226188 / 0.164705–0.170169 | 0.8518 / 1.0020 |
+| input-uses-1000-128 | 1.819844 / 1.886133 | 270,032 / 269,992 | 1.769391–1.825078 | 1.790140–1.831531 / 1.783015–2.001065 | 0.9934 / 1.0871 |
+| input-uses-4000-8 | 0.701366 / 0.704496 | 120,050 / 120,088 | 0.696179–0.719975 | 0.697204–0.719538 / 0.693564–0.778027 | 1.0481 / 0.9949 |
+| input-runtime | 0.006385 / 0.006480 | 5,214 / 5,370 | 0.006618–0.006674 | 0.006308–0.006426 / 0.006358–0.006721 | 0.9994 / 1.0426 |
+| demand-uses-1000-8-4 | 0.392309 / 0.389048 | 55,834 / 55,862 | 0.387850–0.392524 | 0.388577–0.393968 / 0.385930–0.402493 | 1.0079 / 0.9912 |
+| demand-uses-1000-128-4 | 3.492002 / 3.492226 | 372,360 / 372,298 | 3.508639–3.540510 | 3.476379–3.532002 / 3.488897–3.521506 | 0.9986 / 1.0017 |
+| demand-uses-4000-8-4 | 1.590042 / 1.593490 | 207,148 / 207,254 | 1.587734–1.596380 | 1.574078–1.603782 / 1.586813–1.608328 | 1.0140 / 0.9938 |
+| demand-uses-1000-8-64 | 2.001867 / 2.000309 | 265,072 / 264,984 | 1.990666–2.023587 | 1.996510–2.028203 / 1.991706–2.011013 | 0.9970 / 0.9968 |
+| demand-runtime | 0.007105 / 0.007040 | 5,312 / 5,330 | 0.006966–0.007304 | 0.007066–0.007214 / 0.006880–0.007125 | 0.9865 / 0.9849 |
+| special-uses-1000-8-4 | 0.736660 / 0.513465 | 106,186 / 81,518 | 0.725700–0.731302 | 0.734699–0.753979 / 0.508003–0.516523 | 0.6859 / 0.6994 |
+| special-uses-1000-128-4 | 7.473621 / 3.204839 | 789,926 / 385,470 | 7.188911–7.645654 | 7.397737–7.539747 / 3.138208–3.227404 | 0.4257 / 0.4293 |
+| special-uses-4000-8-4 | 3.070506 / 2.115285 | 408,810 / 305,840 | 3.043246–3.163439 | 3.058051–3.089953 / 2.111123–2.125002 | 0.6871 / 0.6908 |
+| special-uses-1000-8-64 | 3.496290 / 3.249456 | 492,458 / 480,686 | 3.458864–3.579768 | 3.477324–3.986703 / 3.220685–3.303878 | 0.9294 / 0.8741 |
+| special-heads-1000 | 1.405064 / 1.316381 | 70,080 / 69,126 | 1.113409–1.650007 | 1.246395–1.523094 / 1.253320–1.405118 | 0.9563 / 0.9411 |
+| special-heads-4000 | 3.973118 / 3.758667 | 263,904 / 261,838 | 3.908652–4.192809 | 3.932223–4.063050 / 3.737394–3.866606 | 0.9402 / 0.9569 |
+| special-runtime | 0.019396 / 0.019605 | 5,584 / 5,430 | 0.018050–0.019669 | 0.018700–0.020522 / 0.018324–0.019996 | 1.0236 / 0.9651 |
+
+The four constructor N/K/Q cases improve **30.30%, 57.12%, 31.11% and 7.06%**;
+both paired blocks improve in every case. Median peak RSS falls by **24,668,
+404,456, 102,970 and 11,772 KiB** respectively. The nested-head cases improve
+6.31% and 5.40%, with 954 and 2,066 KiB less median peak RSS. Their broad A/A
+ranges make the precise latency estimates less certain; their counter reductions
+and both paired blocks support the direction. The tiny native-input compiler
+measurements are retained but do not establish profitability.
+
+Inherited median latency increases include body-large-1000-128 (+58.2 ms, 2.78%),
+calls-4 (+19.9 ms, 1.17%), input-uses-1000-128 (+66.3 ms, 3.64%) and memory-float-1
+(+4.3 ms, 1.18%). The input-128 paired blocks disagree (0.9934/1.0871), and its
+later B samples reach 2.001065/1.976459 seconds. Calls-4 and input-128 have
+identical recorded semantic work. The body-large cases add one symbolic entity,
+one scope and 1,109 type probes while eliminating 2,000 repeated source-type uses;
+that is bounded work for the now-retained constructor signature/current type.
+The large-body timing increase is smaller than its 2.020567–2.557939-second A/A
+range; it remains disclosed rather than characterized as a proven slowdown or
+an overall speedup. Its semantic preflight time was 765.861→762.077 ms, which is
+untimed diagnostic context rather than another performance sample.
+
+Body-large-1000-8 median RSS rises **3,622 KiB**, despite only one additional
+entity/scope and unchanged measured record sizes. Its exact native allocation
+cause is not isolated. All other inherited positive median RSS deltas are at
+most 252 KiB in this campaign. Neither this cost nor the historical +6,714 KiB,
+roughly +15 MiB and +15,206 KiB costs is erased or converted into a required
+numeric gate. The previous Massif evidence remains as recorded and is not
+extrapolated to diagnose this different case. Required source signature facts
+are retained; no optional runtime transform or global cache was added.
+
+Timing outliers also affect apparent improvements: body-large-1000-8 has an A
+sample of .359631 s; member-repeated-1000 has a paired ratio of .4558. Complete
+calibration and ABBA ranges above retain their effects. No whole-corpus speedup
+is claimed.
+
+| Checked executable | Median seconds A/B | Payload bytes A/B | A/A seconds | ABBA range seconds A/B | Paired B/A |
+| --- | --- | --- | --- | --- | --- |
+| region-runtime | 0.058913 / 0.058864 | 206 / 206 | 0.058956–0.108571 | 0.058897–0.058945 / 0.058842–0.059218 | 0.9989 / 1.0022 |
+| dependent-default-runtime | 2.742641 / 2.746852 | 344 / 344 | 2.630390–2.677017 | 2.676240–2.796340 / 2.693630–2.905592 | 1.0401 / 0.9845 |
+| calls-runtime | 0.481555 / 0.478608 | 206 / 206 | 0.478885–0.500751 | 0.478331–0.490018 / 0.478489–0.479542 | 0.9950 / 0.9882 |
+| memory-runtime | 0.279276 / 0.279426 | 434 / 434 | 0.278965–0.280998 | 0.278322–0.280056 / 0.278888–0.284272 | 1.0002 / 1.0089 |
+| floating-runtime | 0.330980 / 0.332555 | 230 / 230 | 0.330736–0.331311 | 0.330584–0.331972 / 0.331358–0.345677 | 1.0051 / 1.0215 |
+| value-runtime | 0.060010 / 0.061568 | 184 / 184 | 0.059773–0.060814 | 0.059885–0.062249 / 0.060290–0.061881 | 1.0159 / 1.0102 |
+| bound-runtime | 0.059079 / 0.059168 | 194 / 194 | 0.059021–0.059413 | 0.058687–0.059480 / 0.058742–0.059616 | 1.0007 / 1.0024 |
+| input-runtime | 0.261858 / 0.262098 | 356 / 356 | 0.259595–0.262709 | 0.260563–0.266513 / 0.261451–0.267662 | 0.9923 / 1.0126 |
+| demand-runtime | 0.155910 / 0.157020 | 261 / 261 | 0.155580–0.156935 | 0.155634–0.156241 / 0.155904–0.159546 | 1.0097 / 1.0089 |
+| special-runtime | 0.340637 / 0.333398 | 400 / 400 | 0.322196–0.332866 | 0.334760–0.348443 / 0.327619–0.336840 | 0.9480 / 1.0044 |
+
+All ten executable hashes match exactly, with **zero generated-code growth**.
+The new program executes four constructor/read/destructor scopes during each
+of twelve million iterations, using a volatile bound and checked checksum.
+The earlier memory, floating-point and call loops remain unchanged. Native peak
+RSS is 256 KiB; payload follows the retained sectionless-ELF convention. Runtime
+differences (including small increases for floating/value/demand loops) are
+recorded in full; identical executables support no changed-work or runtime
+optimization claim. Native output is produced using PA8's supplied backend,
+separately from this compiler's own LowIR construction.
+
+Thirty-nine compiler outputs have equal raw LowIR hashes. Five new constructor
+outputs differ in local slot suffixes but compare equal under the unchanged
+course validator and positional canonicalizer. The personal Perl adapter loads
+those functions and validates both inputs with student presentation ordering;
+it requires exact canonical equality and does not use generated-projection
+fallback. PA8 LowIR's comparison contract makes local slot names presentation
+and absorbs top-level presentation ordering. The initial byte-only preflight
+and the subsequent reference-order preflight were unsupported self-imposed
+requirements for two student outputs. Both failed runs, comparison inputs and
+harness versions are preserved. No fixture, reference, validation rule or
+comparison implementation changed. The adapter, course comparator and contract
+hashes are verified in both the proof and performance manifests.
+
+For N specializations, K constructor overloads and Q repeated uses, source
+signature requests/work are K+1, selected applications/direct applications and
+visited definition edges are 2N, total definition requests are 2N(Q+1), and
+completed traversal hits are 2NQ. Entry applies N(K+1) definitions. Required
+candidate work stays NKQ. Frames fall from N(K+2) to 3N, and occurrence records
+from N(47K+52) to N(17K+82). N=1000/K=8/Q=4, N=1000/K=128/Q=4,
+N=4000/K=8/Q=4 and N=1000/K=8/Q=64 vary those dimensions independently.
+
+Nested-head cases compare the correct intermediate to final. Both apply 5N
+definitions with 6N frames, 224N occurrences, 12N requests, 5N hits, 7N edges and
+four source signature computations. Direct applications rise N→4N. At N=1000,
+concrete entities/scopes fall by 4000/3000, lookup work falls 94075→46075 and
+source-type substitution records rise 5000→9000. The added raw-parameter facts
+replace reconstructed declarations and scopes; the timed benefit and bounded
+storage justify those records. Body/default/exception/transfer/ABI decisions
+retain their existing semantic owners.
+
+Compiler text grows **1,310,598→1,311,558 bytes: 960 bytes (0.0732%)**. Relative
+to the correct injected-head intermediate, direct application adds 512 bytes.
+Measured layouts remain unchanged: Entity/Expression/ObjectUse 112/36/36,
+expression properties/uses 24/20, frame 20, occurrence eight, Ast 504, query/type
+facts 48/48, MemberFacts 124, TemplateDefinition 32, TemplatePrototype 24 and
+Analyzer 5920. The current probe checks 17 transitive live headers. The preceding
+probe now checks its immutable frozen snapshot, preserving all original hashes,
+dumps and measurements; historical live-header equality is not a mandated limit.
+
+PA14/O0 has no mandated numeric compiler latency/RSS/text ceiling. Explicit
+budgets remain source/key/concrete-use-proportional storage, at most four O0
+conversion variants per source operation, one local view per visit and zero
+generated growth. The repeatable constructor savings, lower affected-case RSS
+and limited compiler growth justify this completed owner change. Necessary
+semantic work and all inherited costs remain visible; this acceptance does not
+waive the remaining declaration/lifetime/demand architecture requirements.
+
+Validation passes 314 stage tests, 1621 prior tests, the 1935-test through report,
+344 release/ASan/UBSan parity sources, 157 rejection controls, six ABI controls,
+seven native reducers, thirty native programs and store/lifetime controls.
+File audit passes with three inherited header advisories. Twenty newly rejected
+invalid special definitions have reduced C++11 rule proofs; the already-rejected
+conversion-noexcept control remains. Both new valid positive controls fail at
+entry and execute under the corrected intermediate and final builds. Frozen
+logs, initial failures, binaries, layouts and the final check manifest live under
+`$RALPH_ARTIFACT_DIR/pa14-special-signatures/`. The cumulative verifier checks all
+11,914 observations without changing prior evidence.

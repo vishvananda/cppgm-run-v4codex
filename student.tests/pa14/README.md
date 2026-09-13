@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all twenty-eight local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all thirty local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -22,7 +22,7 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-eight
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and thirty
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
@@ -211,3 +211,37 @@ the disclosed native RSS increase on a retained call-input case; they are not
 timing observations. The full frozen campaign and both profiles remain under
 `$RALPH_ARTIFACT_DIR/pa14-definition-demands/`. Performance acceptance and remaining
 special-member/declaration/lifetime/demand ownership are documented in the plan.
+
+`special-signatures.cpp` and `injected-signatures.cpp` execute distinct conversion
+targets, constructor/copy/move/assignment signatures, renamed nested heads, raw
+aliases, returned references and late defaulted special members. Run
+`check_special_signatures.py` explicitly for 21 invalid definitions; entry accepted
+20 of them. `special_signature_evidence.py` records those C++11 rule proofs, both
+new positive programs and the current transitive layout probe. Entry rejected
+both positive programs; the frozen injected-head intermediate and final compiler
+accept them and produce identical checked native output.
+
+`special_signature_benchmark.py A B WORK OUT HEAD_BASELINE` retains all 37 previous
+inputs and adds constructor N/K/Q scaling, nested-head scaling and a live native
+loop. The two nested-head cases compare the correct intermediate compiler against
+the final direct-application compiler. Other cases compare continuation entry
+against final. `PREFLIGHT_ONLY=1` performs output checks without timing. The full
+campaign measures 44 compiler inputs and ten executables, with one warmup each,
+four A/A samples and two ABBA blocks per campaign: 756 observations.
+
+`special_signature_compare.py` and its Perl adapter use the unchanged course
+validator and canonicalizer, validating both compiler outputs in student mode.
+Five new constructor outputs differ in local slot suffixes but have equal
+canonical LowIR; 39 outputs match byte for byte. The adapter does not use the
+generated-projection fallback. All ten executable hashes match. The initial
+byte-only and reference-order preflight failures are preserved; no fixture,
+reference or course comparison rule changed.
+
+`special_signature_validation.py` records 344 release/sanitizer parity sources,
+157 rejection controls, six ABI controls, seven native reducers, thirty native
+programs and store/lifetime controls. `verify_special_signatures.py` verifies the
+proofs, baseline identities, measurements, work equations and live layouts; the
+cumulative verifier includes this campaign. Earlier layout probes remain frozen
+snapshot evidence. `special-signature-handoff.json` preserves command statuses,
+failed initial probes and intermediate binaries under
+`$RALPH_ARTIFACT_DIR/pa14-special-signatures/`.
