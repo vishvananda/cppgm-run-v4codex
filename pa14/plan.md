@@ -5,7 +5,7 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; continuation entry/current **314/314**. All **230
 original failures** are resolved. Coverage, references and course comparisons
-are unchanged. PA15 has not started. Current implementation: `5b947a18`.
+are unchanged. PA15 has not started. Current implementation: `af01c062`.
 
 ## Design/spec alignment
 

@@ -46,7 +46,9 @@ def verify():
   assert row['head_output']['native_sha256']==row['outputs'][0]['native_sha256']
   host=row['host'];checked(host['build']);checked(host['executed']);assert shared.sha(host['path'])==host['sha256']
  layout=proof['layout'];checked(layout['build'])
- for header in layout['headers']:assert shared.sha(header['path'])==shared.sha(header['source'])==header['sha256']
+ # Declaration-fact probes validate current headers; preserve this completed
+ # campaign's exact frozen source/layout snapshot.
+ for header in layout['headers']:assert shared.sha(header['path'])==header['sha256']
  assert len(layout['headers'])==17
  for kind in ('source','binary','dump'):assert shared.sha(layout[kind+'_path'])==layout[kind+'_sha256']
  assert shared.sha(ROOT/'student.tests/pa14/special_signature_layout_probe.cc')==layout['source_sha256']
@@ -124,6 +126,6 @@ def verify():
  assert [row['name'] for row in handoff['checks']]==['stage','prior','through','file_audit','native']
  for row in handoff['checks']:checked(row)
  for row in handoff['initial_observations']+handoff['intermediate_binaries']:assert shared.sha(row['path'])==row['sha256']
- print('756 special-signature observations, 20 new rejection proofs, 344 sanitizer inputs, typed head/native controls and current layouts verified')
+ print('756 special-signature observations, 20 new rejection proofs, 344 sanitizer inputs, typed head/native controls and frozen layouts verified')
  return count
 if __name__=='__main__':verify()

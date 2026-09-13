@@ -596,3 +596,7 @@ print(observations+new_samples+owner_observations+view_observations+definition_o
 from verify_special_signatures import verify as verify_special_signatures
 special_observations=verify_special_signatures()
 print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations,'total frozen performance observations verified')
+
+from verify_declaration_facts import verify as verify_declaration_facts
+declaration_observations=verify_declaration_facts()
+print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations+declaration_observations,'total frozen performance observations verified')
