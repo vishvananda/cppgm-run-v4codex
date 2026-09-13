@@ -300,7 +300,7 @@ The attempted try/throw extension is preserved in the artifact directory with
 its rejection log; source exception lowering belongs to PA21, not this stage.
 Default definition/demand states remain a separate unfinished semantic owner.
 
-## Template-owned field paths (in progress)
+## Template-owned fixed field paths
 
 `template_member_facts.cpp` separates a source field's fixed type/category from
 its template-owned object. Definition-time method contexts retain the owning
@@ -345,7 +345,12 @@ ordinal/type query facts; they cannot publish runtime-object recipes that would
 require a body declaration before the signature exists. `parameter-shape.t`
 reduces an inherited rejection; the native class and ordinary function cases
 follow C++11 [basic.scope.pdecl], [basic.scope.proto] and [dcl.type.simple]. No
-reference output was changed. Full final sanitizer/scaling evidence is pending.
+reference output was changed. Scope classification uses two bits per parsed
+source node (unknown/unnecessary/needed). One reusable work vector retains at
+most the largest parameter-type syntax traversal. The predicate scans syntax
+only, so its scratch cannot be reentered through semantic declaration work.
+This bounds required classification storage and avoids repeated per-declaration
+traversal allocations; it does not explain the measured ordinary-call RSS delta.
 
 Out-of-line matching selects the function suffix nearest the method name,
 including through nested pointer-return declarators. Returned function parameter
@@ -354,3 +359,19 @@ both static and nonstatic overloads returning function pointers; the fourteenth
 rejection control checks the converse invalid static field use. This follows
 C++11 [dcl.fct] and [dcl.ptr], using the same structural selection rule as
 ordinary function-body parameter binding.
+
+The expanded reducer also preserves distinct nested enum types across class
+specializations and defers unresolved enum signatures during static/nonstatic
+matching. Final validation passes all 314 PA14 cases, 1,621 earlier cases,
+1,935 through cases, eighteen native programs, 332 release/ASan/UBSan parity
+inputs, 82 rejection controls, two ABI controls and all four standalone reducers.
+The final four reducers have frozen current inputs and release/sanitizer/native
+output hashes. Eight new campaigns add 1,162 verified observations; work and
+storage equations, compiler/runtime costs, retained outliers and open RSS
+investigation are recorded in [performance.md](performance.md).
+
+This completes fixed-value field facts for template-owned object paths, including
+separate class/body declaration contexts. Dependent value/type/storage forms
+must enter a context-keyed typed body graph rather than this source-only fact
+index. Whole-region projection and finer demand/failure states remain explicit
+current-stage work in [plan.md](plan.md).

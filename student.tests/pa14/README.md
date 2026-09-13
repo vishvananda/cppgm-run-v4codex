@@ -5,11 +5,12 @@ Run from the repository root:
 ```sh
 python3 student.tests/pa14/check_functions.py
 python3 student.tests/pa14/check_fixed_objects.py
+python3 student.tests/pa14/check_dependent_objects.py
 python3 student.tests/pa14/check_object_reducers.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all seventeen local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all eighteen local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -19,13 +20,13 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and seventeen
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and eighteen
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 331 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 68 explicit
-binding/query/scalar/call/object rejection cases. Both `.t` object reducers also
+The current campaign checks 332 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 82 explicit
+binding/query/scalar/call/object rejection cases. All four `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
 remain part of `check_queries.py`.
 
@@ -69,6 +70,28 @@ callable objects. `default-object-identity.cpp` checks repeated default values,
 conditional lifetimes, conversions, constructor defaults and array-element
 cleanup. Its per-value instance counts tolerate optional return copy elision.
 The two reduced `.t` inputs preserve the entry failures independently.
+
+`dependent-objects.cpp` checks template-owned implicit/explicit `this` fields,
+mutable/reference members, fixed-base access, bit-field promotion, nested and
+out-of-line owners, late forward declarations and prototype parameter queries.
+`check_dependent_objects.py` rejects fourteen invalid unused member bodies; the
+entry compiler accepted each reducer. `parameter-shape.t` separately checks
+earlier parameter names in subsequent `decltype` parameter types for template
+members and an ordinary function. `method-parameters.t` covers nested
+function-pointer returns, static/nonstatic overloads and deferred enum signatures.
+
+`dependent_object_benchmark.py A B WORK OUT` freezes sixteen compiler workloads
+and four checked native loops. Two full campaigns and focused follow-ups retain
+specialization-count, repetition, unused-body, out-of-line and inherited control
+measurements, including every outlier. `prototype_benchmark.py` records required
+prototype-scope costs; `method_parameter_benchmark.py` adds nested declarator
+scaling and a checked native loop with a complete prior-output preflight.
+Eight new campaigns add 1,162 observations; all 7,266 historical/current
+observations verify. Artifacts and reducer proofs live under
+`$RALPH_ARTIFACT_DIR/pa14-dependent-objects/`. The verifier checks complete orders,
+outputs, unchanged hot record sizes, source/context work equations, fourteen
+entry-accepted invalid bodies and four frozen final reducer inputs. Earlier
+versions and observations remain preserved.
 
 `object_benchmark.py A B WORK OUT` retains all 27 preceding compiler inputs,
 adds six receiver/result scaling inputs and two native loops, and measures

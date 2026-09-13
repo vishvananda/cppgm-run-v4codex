@@ -2,94 +2,98 @@
 
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
-Target: **pa14 full-stage**. Phase: **implement**; architecture work remains.
-Original entry **84/314**; continuation entry/current **314/314**.
-All **230 original failures** are resolved. Coverage, references and comparison
-rules are unchanged. PA15 has not started.
+Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
+Original entry **84/314**; continuation entry/current **314/314**. All **230
+original failures** are resolved. Coverage, references and comparisons are
+unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
-One parsed graph and canonical declaration/type/argument identities feed shared
-fixed scalar, call, conversion and explicit receiver facts. Ordinary expressions
-and type queries share member value/category rules. Source-owned receivers have
-no temporary; concrete uses project object edges and establish required storage.
-Repeated default expressions retain their semantic decisions while each emitted
-materialization gets its own storage and cleanup address. Lifetime classifiers
-follow semantic default edges and consume immutable conversion-call views.
-Owners, standard rules and reducers are in [implementation.md](implementation.md).
+Canonical source bindings and shared scalar/call/receiver facts now retain fixed
+fields owned by templates. Method contexts carry the pattern owner, cv and
+availability of `this`. Concrete field identity and base adjustment are cached
+by source field plus concrete object type, including cv. Class declaration
+contexts survive separate out-of-line bodies and later forward declarations.
+Preserved operator-result identities use the same field cache. Mutable/reference
+members, fixed-base access and known bit-field promotions use ordinary rules.
+
+Out-of-line declarations establish static status from candidate evidence;
+unknown mixed dependent signatures remain deferred. Nested pointer-return
+declarators select the method's own parameter list. Prototype scopes bind
+parameters sequentially for later type queries. Two bits per parsed source node
+and reusable scratch avoid repeated syntax scans and allocation per declaration.
+Prototype parameter ordinals describe type queries, separate from runtime
+objects. Detailed ownership, C++11 rules and reducers: [implementation.md](implementation.md).
 
 | Remaining current-stage owner | Data flow, complexity and validation |
 | --- | --- |
-| Dependent body/object graph | Represent template-owned member/implicit-object declaration paths, substituted signatures/layout/access, constructor/operator expressions and declaration/return conversions. Replace whole-region projection with dependent-only facts. Key contextual facts by source plus canonical environment; follow required dependent edges. Validate access, unused-body legality, nested classes, lifetimes and scaling. |
-| Demand/failure graph | Separate declaration/definition/layout/default/exception/body/vtable/emission states, typed reasons/reverse dependencies and structured expected failures. Follow demanded facts once per complete key; validate recursion, negative keys and unrelated-declaration scaling. Default evaluation storage is fixed; default semantic demand is still distinct unfinished work. |
+| Dependent typed body graph | Symbolic current-instantiation receiver/field types, dependent declarators/signatures, static value/storage dependencies, constructor/operator nodes and declaration/return conversions must feed substituted facts. Replace whole-region projection with dependent-only work. Validate access, nested environments, cv/categories, queries, lifetimes and source/instance scaling. |
+| Demand/failure graph | Separate declaration/definition/layout/default/exception/body/vtable/emission states, typed reasons/reverse edges and structured expected failures. Compute once per complete key; validate recursion, negative keys and unrelated-declaration scaling. |
 
-**Concrete boundary:** the completed receiver cache accepts fixed class identities.
-A template-owned receiver's member declaration, access path and layout depend on
-its enclosing specialization. Publishing those in the source-only index would
-mix environments. The next group needs symbolic declaration paths and complete
-context keys across binding/substitution/member owners before it can remove
-projection. Existing regions still project **77N/46N** nodes in the new receiver
-corpora (50N/53N in the earlier call corpora). Extending the fixed cache alone
-cannot safely implement that owner. These are current-stage requirements, not
-waived by course success or performance acceptance. No external blocker exists.
+**Concrete boundary:** the completed group maps template-owned objects whose
+field value facts are fixed. Receivers/fields with substituted types require
+symbolic type propagation across declarations, queries, overloads and member
+uses. They cannot enter the source-only fixed-expression index without mixing
+environments. That is the next graph owner, beyond extending this field cache.
+Whole regions still project **92N/130N** nodes in the member instance corpora,
+**32N+176** in the repeated-field corpus; inherited receiver corpora remain
+77N/46N. These are current-stage defects, not waived by green tests or performance
+acceptance. No external blocker exists.
 
 ## Performance evidence and budgets
 
-The receiver/default campaign and retained follow-ups add **910 observations**,
-**6,104 total verified**. All 35 common compiler/nine native outputs are identical;
-three default-identity inputs have correct-B-only evidence, including a failing
-entry executable. Final preflight preserves all these outputs. Compiler text is
-1,253,062 bytes, **+11,072 (0.89%)** from entry; records remain 112/36/36 bytes.
-Temporary cleanup records grow 28→32 bytes for the required concrete address.
+All **7,266 observations** verify: 6,104 inherited plus 1,162 from eight frozen
+member, allocation, packed-storage, prototype and method campaigns. See
+[performance.md](performance.md). Correctness costs are separated from
+common-correct reuse comparisons; every outlier is retained.
+The inherited source-hash/layout check now uses a current model snapshot while
+preserving previous probes. Hot Entity/Expression/ObjectUse records remain
+112/36/36 bytes; new method-context/member-use records are 8/12 bytes.
 
-At 4,000 fixed receivers, object-use records fall **20,003→8**, candidates
-12,000→4,002 and RSS 1,612 KiB; compiler median .681021→.649173 s. Class-result
-RSS falls 3,004 KiB, median .534766→.508689 s. Required checking of 4,000 unused
-definitions adds 31.8 ms/3,076 KiB; eighteen reduced entry-accepted errors justify
-the missing work. The final descriptor-view comparison has unchanged text and median RSS deltas -22 to +104 KiB,
-modest ordinary-call benefit and mixed results elsewhere, including an unused
-case regression. All outliers, CPU samples and earlier costs are retained in
-[performance.md](performance.md); no general compiler/native speedup is claimed.
+At 4,000 class instances, expression work falls 96,004→52,009 and object uses
+40,000→24,000. Repeated-field work falls 36,024→8,020; object uses 16,012→12.
+Final repeated-1,000 latency is .061380→.058063 s (ABBA .9398/.9431).
+Final compiler text is 1,265,670 bytes, +12,608 (+1.006%) from entry.
+Unused source validation costs .082713→.088259 s at 1,000, with fourteen newly
+rejected invalid bodies. Ordinary calls-4 RSS remains about +15 MiB; scratch
+reuse and packed flags did not explain it. This investigation remains open;
+the delta is not attributed to necessary semantics or waived as harmless.
 
-Work/storage follow source facts, semantic argument edges, concrete uses and
-emitted materializations; lookups are indexed and completed effects are cached.
-The fixed-fact reuse has a zero generated-code growth budget on common-correct
-inputs, verified exactly. Correcting overlapping default objects requires storage
-and cleanup; an invalid entry output cannot establish a profit comparison or a
-zero-growth gate for that correction. O0 adds no optional optimizer/native
-backend and has no mandated numeric compiler threshold. Historical self-imposed
-gates remain diagnostics; mandated limits, correctness and coverage are preserved.
+Work/storage follow source type syntax, actual overload candidates, concrete
+field/object keys and emitted uses. Scope flags occupy two bits per parsed node;
+scratch retains at most the largest parameter-type traversal. Common-correct
+fixed reuse has a **zero generated-code growth budget**, checked by exact LowIR
+and executable hashes. Necessary prototype-query behavior has B-only compiler
+and native baselines because the entry rejects it. No optional optimizer/native
+backend was added. O0 has no mandated numeric compiler latency/RSS threshold;
+unsupported inherited diagnostic gates do not override stage-scoped acceptance.
+Correctness, mandated limits and coverage remain required.
 
 ## Handoff ledger
 
-Continuation entry `33b791da`: preceding receiver/default-use work is **verified
-progress**, with all required checks, native controls and frozen evidence passing.
-Next owner: template-owned data-member paths. Retain the source declaration and
-fixed type/category/cv facts, then map declaration and receiver layout through
-the concrete owning class and its declaration context. Cache each complete
-member/owner key once. Validate definition-time legality, implicit/explicit
-`this`, static/mutable/reference fields, nested/out-of-line owners and fixed-base
-access, then course/native/sanitizer checks and compiler/native scaling evidence.
-
-Entry `d6891c36` is **verified progress** from the fixed-call/default-recipe group.
-Earlier transfer/body/call commits and all 5,194 preceding observations remain
-preserved in the linked reports and repository history.
+Entry `33b791da` was **verified progress** from receiver/default-use work.
 
 | Coherent increment | Commit / evidence |
 | --- | --- |
-| Fixed receivers, explicit member calls, one member value/category owner | `80c344a6`; through 1935/1935, sixteen native controls |
-| Frozen receiver scaling and broader object controls | `ba0490fc`; release/sanitizer parity on 330 inputs |
-| Selected pointer completeness and callable-object routing | `ba6dcc2d`; twenty object rejections, including six pointer/query cases |
-| Repeated default storage, cleanup identities and semantic effect edges | `607752d1`; seventeen native controls, branch/conversion/array reducers |
-| Immutable conversion-call views | `70775cfd`; through 1935/1935, 331 sanitizer parity inputs, unchanged generated outputs |
-| Frozen evidence/proofs | `f8eb4512`, `196c21f1`, `bb64e08d`, `4851afd2`; interrupted-harness samples and corrected follow-up retained |
+| Template-owned fixed fields, bit-field properties and concrete class mapping | `78bdbc3f`; initial through 1935/1935 and eighteen native controls |
+| Out-of-line contexts and preserved field-result identities | `d2ae9665`; thirteen entry-accepted invalid unused bodies now rejected |
+| Frozen field workloads/layouts and removal of free-function qualifier work | `480e7a36`, `a6c99a0b`; first complete AA/ABBA campaign preserved |
+| Prototype parameter scope and type-only identities | `b8ad7f6b`; inherited positive reducer repaired; through 1935/1935 |
+| Reusable prototype traversal scratch | `e9893b21`; repeated required/native checks pass |
+| Packed prototype classification | `918f3971`; source-indexed two-bit facts; full output preflight |
+| Actual method parameters through nested declarators | `24ad2c45`; fourteen invalid-body proofs; four positive reducers, enum coverage `ff744067` |
+| Frozen follow-up harnesses | `e41b0025`, `e10cac38`, `625a0182`, `d1f229e0`; eight campaigns and final sixteen-input/four-executable preflight |
 
-Final checks: **314/314 PA14**, **1621/1621 earlier**, **1935/1935 through**;
-seventeen native programs, two standalone reducers, **331** release/ASan/UBSan
-status/output checks plus both reducers, **68** explicit sanitizer rejections,
-two ABI controls and file audit (three inherited header advisories) pass.
-Rejection parity and added controls are not counted as course progress.
-Artifacts, exact commands/statuses, hashes, layouts and measurements are under
-`$RALPH_ARTIFACT_DIR/pa14-object-facts/`. The receiver/default-use group is complete;
-the two architectural owners above remain. Changes are committed and clean at
-handoff; the full-stage goal remains active.
+Validation at implementation `24ad2c45`: **314/314** PA14, **1621/1621** default
+prior report, **1935/1935** serial through report, eighteen native programs,
+**332** release/ASan/UBSan parity inputs, **82** rejection controls, two ABI
+controls, four reducer parity/native checks and file audit (three inherited
+header advisories). The default through attempt's twelve PA1/PA2 I/O timeouts
+are retained; the retry changes concurrency only, with identical coverage and
+timeouts. Expanded reducers at `ff744067` also pass release/sanitizer/native.
+
+Logs, command/status manifests, proofs and frozen binaries are under
+`$RALPH_ARTIFACT_DIR/pa14-dependent-objects/`; raw campaigns and verification
+are committed in `student.tests/pa14/`. This handoff finishes the fixed-field,
+prototype-scope and method-declarator group. The two graph owners and measured
+RSS investigation above remain; the full-stage goal is active.

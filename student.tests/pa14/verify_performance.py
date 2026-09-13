@@ -8,7 +8,7 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json','dependent-object-final-performance.json','dependent-object-repeat-performance.json','prototype-performance.json','dependent-object-packed-performance.json','prototype-packed-performance.json','method-parameter-performance.json','prototype-methods-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
@@ -19,20 +19,26 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
  calls=filename=='call-performance.json'
  objects=filename.startswith('object-');repeat=filename.startswith('object-repeat-');preliminary=filename=='object-repeat-preliminary-performance.json'
  views=filename=='object-view-performance.json'
- dependent=filename=='dependent-object-performance.json'
- harness=ROOT/'student.tests/pa14'/('dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ methods=filename=='method-parameter-performance.json'
+ dependent=filename.startswith('dependent-object-') or methods
+ packed=filename=='dependent-object-packed-performance.json'
+ repeated=filename=='dependent-object-repeat-performance.json' or packed
+ prototype=filename.startswith('prototype-')
+ harness=ROOT/'student.tests/pa14'/('method_parameter_benchmark.py' if methods else 'prototype_benchmark.py' if prototype else 'dependent_object_packed.py' if packed else 'dependent_object_repeat.py' if repeated else 'dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
- if repeat or views: assert shared.sha(data['parent_path'])==data['parent_sha256']
+ if repeat or views or repeated or methods: assert shared.sha(data['parent_path'])==data['parent_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(16 if dependent else 10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(3 if prototype else 10 if methods or repeated else 16 if dependent else 10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
   assert shared.text_size(binary['path'])==binary['text_bytes']
  for name,work in data['workloads'].items():
   assert shared.sha(work['source_path'])==work['source_sha256']
+  if 'entry_rejection' in work:
+   rejected=work['entry_rejection'];assert rejected['exit_code']==1 and shared.sha(rejected['path'])==rejected['sha256']
   if 'entry_failure' in work:
    failed=work['entry_failure'];assert shared.sha(failed['path'])==failed['sha256']
    assert shared.sha(failed['native_path'])==failed['native_sha256'] and failed['exit_status']==1
@@ -245,3 +251,93 @@ assert [row['native_exit'] for row in identity]==[1,0]
 for row in identity:
  for kind in ('source','ir','native'): assert shared.sha(row[kind])==row[kind+'_sha256']
 print('eighteen newly rejected errors and the native default-identity proof verified')
+
+field_initial=json.loads((ROOT/'student.tests/pa14/dependent-object-performance.json').read_text())
+field_final=json.loads((ROOT/'student.tests/pa14/dependent-object-final-performance.json').read_text())
+field_repeat=json.loads((ROOT/'student.tests/pa14/dependent-object-repeat-performance.json').read_text())
+for data in [field_final,field_repeat]:
+ for name,current in data['workloads'].items():
+  prior=field_initial['workloads'][name]
+  assert current['source_sha256']==prior['source_sha256']
+  assert [out['sha256'] for out in current['outputs']]==[out['sha256'] for out in prior['outputs']]
+  if 'runtime' in current:assert [out['native']['sha256'] for out in current['outputs']]==[out['native']['sha256'] for out in prior['outputs']]
+assert len(field_repeat['preflight'])==16
+for row in field_repeat['preflight']:
+ for kind in ['source','native']:
+  if kind+'_path' in row:assert shared.sha(row[kind+'_path'])==row[kind+'_sha256']
+ assert shared.sha(row['path'])==row['sha256']
+ if 'native_path' in row:assert row['native_exit']==0
+print('all member campaigns and complete final preflight preserve compiler/native outputs')
+parameter_proof=field_proofs.parent/'parameter-shape.json'
+rows=json.loads(parameter_proof.read_text());assert [row['exit'] for row in rows]==[1,0]
+for row in rows:
+ for kind in ['source','binary','log','ir','native']:
+  if kind in row:assert shared.sha(row[kind])==row[kind+'_sha256']
+assert rows[1]['native_exit']==0
+print('prototype-scope entry rejection and corrected native proof verified')
+
+packed=json.loads((ROOT/'student.tests/pa14/dependent-object-packed-performance.json').read_text())
+assert len(packed['preflight'])==16
+for name,w in packed['workloads'].items():
+ previous=field_repeat['workloads'][name]
+ assert w['source_sha256']==previous['source_sha256']
+ assert [o['sha256'] for o in w['outputs']]==[o['sha256'] for o in previous['outputs']]
+ for key in ['semantic_entities','semantic_scopes','semantic_expression_work','semantic_object_uses','template_occurrences']:
+  assert w['outputs'][1]['telemetry'][0][key]==previous['outputs'][1]['telemetry'][0][key]
+for row in packed['preflight']:
+ assert shared.sha(row['source_path'])==row['source_sha256'] and shared.sha(row['path'])==row['sha256']
+ if 'native_path' in row:assert shared.sha(row['native_path'])==row['native_sha256'] and row['native_exit']==0
+prototype_first=json.loads((ROOT/'student.tests/pa14/prototype-performance.json').read_text())
+prototype_final=json.loads((ROOT/'student.tests/pa14/prototype-packed-performance.json').read_text())
+for name,w in prototype_final['workloads'].items():
+ previous=prototype_first['workloads'][name]
+ assert w['source_sha256']==previous['source_sha256'] and w['outputs'][0]['sha256']==previous['outputs'][0]['sha256']
+ if 'runtime' in w:assert w['outputs'][0]['native']['sha256']==previous['outputs'][0]['native']['sha256']
+print('packed source facts preserve all repeated and prototype compiler/native outputs')
+
+methods=json.loads((ROOT/'student.tests/pa14/method-parameter-performance.json').read_text())
+assert len(methods['preflight'])==16
+for row in methods['preflight']:
+ assert shared.sha(row['source_path'])==row['source_sha256'] and shared.sha(row['path'])==row['sha256']
+ name=Path(row['path']).name.removesuffix('-preflight.lowir');previous=field_final['workloads'][name]
+ assert row['source_sha256']==previous['source_sha256'] and row['sha256']==previous['outputs'][1]['sha256']
+ if 'native_path' in row:assert shared.sha(row['native_path'])==row['native_sha256']==previous['outputs'][1]['native']['sha256'] and row['native_exit']==0
+ for key in ['semantic_entities','semantic_scopes','semantic_expression_work','semantic_object_uses','template_occurrences']:
+  assert row['telemetry'][0][key]==previous['outputs'][1]['telemetry'][0][key]
+proto_methods=json.loads((ROOT/'student.tests/pa14/prototype-methods-performance.json').read_text())
+for name,w in proto_methods['workloads'].items():
+ previous=prototype_final['workloads'][name]
+ assert w['source_sha256']==previous['source_sha256'] and w['outputs'][0]['sha256']==previous['outputs'][0]['sha256']
+ if 'runtime' in w:assert w['outputs'][0]['native']['sha256']==previous['outputs'][0]['native']['sha256']
+rows=json.loads((field_proofs.parent/'final-methods/rejections.json').read_text());assert len(rows)==14
+for row in rows:
+ assert shared.sha(row['source'])==row['source_sha256'] and [out['exit'] for out in row['outputs']]==[0,1]
+ for out in row['outputs']:
+  assert shared.sha(out['binary'])==out['binary_sha256'] and shared.sha(out['log'])==out['log_sha256']
+print('final method selection preserves all prior work/output facts; fourteen rejection proofs verified')
+
+field_artifacts=field_proofs.parent.parent
+reducers=json.loads((field_artifacts/'reducer-parity-final.json').read_text())
+assert len(reducers['reducers'])==4
+for row in reducers['reducers']:
+ assert shared.sha(row['source'])==row['source_sha256']
+ assert len(row['outputs'])==2 and row['outputs'][0]['sha256']==row['outputs'][1]['sha256']
+ for out in row['outputs']:
+  assert out['exit_code']==0 and shared.sha(out['path'])==out['sha256']
+  assert shared.sha(out['binary'])==out['binary_sha256'] and shared.sha(out['log'])==out['log_sha256']
+  native=out['native'];assert shared.sha(native['path'])==native['sha256']
+  for result in (native['backend'],native['execution']):
+   assert result['exit_code']==0 and shared.sha(result['log'])==result['log_sha256']
+ assert row['outputs'][0]['native']['sha256']==row['outputs'][1]['native']['sha256']
+proof_dir=field_proofs.parent/'final-reducers'
+historical=json.loads((proof_dir/'historical-source.json').read_text())
+assert shared.sha(historical['source'])==historical['source_sha256']
+assert historical['source_sha256']==json.loads(Path(historical['manifest']).read_text())[-1]['source_sha256']
+rows=json.loads((proof_dir/'method-proof.json').read_text())
+assert [row['exit_code'] for row in rows]==[0,1,0]
+for row in rows:
+ for kind in ('source','binary','log','ir','native'):
+  if kind in row:assert shared.sha(row[kind])==row[kind+'_sha256']
+ if 'execution' in row:
+  execution=row['execution'];assert execution['exit_code']==0 and shared.sha(execution['log'])==execution['log_sha256']
+print('four final frozen reducers preserve sanitizer/native parity; nested method regression and historical source verified')

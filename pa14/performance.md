@@ -962,3 +962,221 @@ plus those reducers, 68 explicit sanitizer rejections, two ABI controls and file
 audit with three inherited header advisories. The full-stage architecture goal
 remains active. Logs, complete command/status manifests, reduced proofs, layouts,
 preflights and frozen binaries live in `$RALPH_ARTIFACT_DIR/pa14-object-facts/`.
+
+## Template-owned fixed fields, prototype scopes and method declarators
+
+This continuation starts at `33b791da` and ends with implementation `24ad2c45`
+(expanded reducer coverage `ff744067`). It retains the 6,104 preceding
+observations and adds **1,162**, for **7,266 verified process observations**.
+Artifacts are under `$RALPH_ARTIFACT_DIR/pa14-dependent-objects/`. The compiler
+implements all semantic and LowIR work; the supplied PA8 backend executes its
+output. No reference, fixture or comparison rule changed.
+
+### Frozen protocol and provenance
+
+All harnesses were committed before timing. Compiler builds use
+`g++ -std=gnu++11 -Wall -O3` with `TEST_RUNNER_ENABLE`; measured compilations use
+`--emit-lowir -O0`, with `--stats --validate-lowir` in separate preflights. The
+native backend uses `-O0`. CPU affinity is fixed to CPU 0. No task-owned build or
+test ran concurrently with timing. A/A calibration, two ABBA blocks and one
+warmup per binary retain all fourteen observations per common-correct workload.
+Tables use the four observations per binary within the ABBA blocks; paired
+ratios use block means. Prototype cases rejected by entry have one warmup plus
+six B-only observations, with no optimization-profit comparison.
+
+| Raw campaign in `student.tests/pa14/` | Implementation B | Compiler/native workloads | Observations |
+| --- | --- | ---: | ---: |
+| [dependent-object-performance.json](../student.tests/pa14/dependent-object-performance.json) | `d2ae9665` | 16/4 | 280 |
+| [dependent-object-final-performance.json](../student.tests/pa14/dependent-object-final-performance.json) | `b8ad7f6b` | 16/4 | 280 |
+| [dependent-object-repeat-performance.json](../student.tests/pa14/dependent-object-repeat-performance.json) | `e9893b21` | 10/2 | 168 |
+| [dependent-object-packed-performance.json](../student.tests/pa14/dependent-object-packed-performance.json) | `918f3971` | 10/2 | 168 |
+| [prototype-performance.json](../student.tests/pa14/prototype-performance.json) | `e9893b21` | 3/1, B only | 28 |
+| [prototype-packed-performance.json](../student.tests/pa14/prototype-packed-performance.json) | `918f3971` | 3/1, B only | 28 |
+| [method-parameter-performance.json](../student.tests/pa14/method-parameter-performance.json) | `24ad2c45` | 10/3 | 182 |
+| [prototype-methods-performance.json](../student.tests/pa14/prototype-methods-performance.json) | `24ad2c45` | 3/1, B only | 28 |
+
+The JSON records frozen source/output/binary/backend/harness hashes, complete
+wall/RSS/user/system/context-switch samples, flags and CPU. Harness-recorded
+HEAD may include a later test-only commit; implementation revisions are listed
+above. The final method campaign preflights all sixteen prior compiler inputs
+and four native programs, including full-sized inherited controls, and retains
+their semantic counters. Every common-correct LowIR and executable is
+byte-identical. The prototype native output is identical across its three
+working binaries. The verifier checks these hashes, counts, order and equations.
+
+Entry compiler `.text` is **1,253,062 bytes**, SHA-256
+`dd0f62e7e1fccb82dfaf4ab9a39a61b82fac84b6c793725bab87fe4f2d95c128`.
+Intermediate text sizes are 1,263,238 (`d2ae9665`), 1,265,670 (`b8ad7f6b`),
+1,265,350 (`e9893b21`) and 1,265,478 (`918f3971`). Final text is
+**1,265,670 bytes**, **+12,608 (+1.006%)**, SHA-256
+`f254aebfbdf9534bc1f62ecc23051d183a005c32886ae9525bb6e930affe6458`.
+Frozen release and ASan/UBSan binaries are preserved for each implementation.
+
+### Owner, data flow and work/storage bounds
+
+The source method context retains pattern class identity, cv and availability of
+`this`. Fixed field facts retain the source declaration's type/category without
+a fictitious concrete object. A concrete cache keyed by **(source field EntityId,
+concrete object TypeId)** supplies mapped field identity and base adjustment;
+object TypeId includes class and cv. Class definition contexts are separate from
+out-of-line body contexts. Static status follows candidate declarations and
+known parameter shapes; unresolved shapes stay dependent. The actual method
+suffix is selected through nested pointer-return declarators. Prototype scopes
+bind earlier parameter names before later type queries.
+
+Work is bounded by source syntax, actual overload candidates and required
+field/object keys. Source contexts take 8 bytes; concrete member-use records
+12 bytes; qualifier pairs 2 bytes. Existing Entity/Expression/ObjectUse sizes
+remain **112/36/36 bytes**, verified by the frozen layout probe. The prototype
+predicate uses **two bits per parsed source node**, with geometrically grown
+vector capacity; reusable scratch retains at most the largest parameter-type
+traversal. Ordinary free functions skip template member qualifier work. There
+is no optional optimizer or speculative search budget.
+
+For N demanded in-class or out-of-line instances, entity/scope counts stay
+equal, expression work falls **24N+4→13N+9**, and object-use records fall
+**10N→6N**. There are two source method contexts and **2N** concrete member
+records. At N=4,000: expressions **96,004→52,009**, objects **40,000→24,000**,
+conversion work **68,000→28,010**, conversion records **80,000→28,013**, and
+lookup work **124,027→52,029**. Fixed source expression facts rise **4→15** and
+their uses **4N→15N**. Whole-region occurrence storage remains **92N/130N**;
+this is a remaining architecture defect, not an accepted dependent-only graph.
+
+For N repeated source field statements across four types, expression work falls
+**9N+24→2N+20**, object uses **4N+12→12**; one source context and four concrete
+member records suffice. At N=4,000 this is **36,024→8,020** expressions and
+**16,012→12** object uses. Occurrences remain **32N+176**. For N unused class
+definitions, source checking rises **3N→7N** expressions and **3N→12N** fixed
+facts; N contexts demand zero concrete member records, object uses, occurrences,
+class completions or member bodies. Fourteen entry-accepted invalid unused
+bodies now reject. This validates the source-checking cost separately from reuse.
+
+### Compiler results and retained regressions
+
+Initial field implementation (`d2ae9665`), all cases at scale 4,000:
+
+| Workload | A wall s | B wall s | RSS KiB A→B | ABBA B/A |
+| --- | ---: | ---: | ---: | --- |
+| member instances | 1.040334 | .989108 | 167312→163504 | .9982/.9422 |
+| out-of-line members | 1.200624 | 1.170945 | 181324→175510 | .9835/.9674 |
+| unused members | .320184 | .347978 | 60910→64386 | 1.0801/1.0930 |
+| repeated fields | .247079 | .228475 | 50054→49184 | .9445/.9138 |
+| ordinary calls-4 | 1.756444 | 1.772123 | 305620→305648 | 1.0038/1.0100 |
+| memory-float-4 | 1.492083 | 1.475310 | 261386→261388 | .9774/.9990 |
+
+Required prototype scope handling initially adds ordinary-call peak RSS despite
+equal semantic entity/scope/work counts. Reusing traversal scratch avoids a real
+allocation per declaration, but does not resolve the measured RSS increase.
+Packed source classification removes the observed memory/float footprint delta;
+the larger ordinary-call delta persists:
+
+| Implementation / control | A wall s | B wall s | RSS KiB A→B | ABBA B/A |
+| --- | ---: | ---: | ---: | --- |
+| prototype / calls-4 | 1.773835 | 1.795414 | 305664→320350 | 1.0078/1.0172 |
+| prototype / memory-float-4 | 1.478803 | 1.488735 | 261384→265776 | 1.0091/.9812 |
+| scratch / calls-4 | 1.757762 | 1.773591 | 305606→320512 | .9841/1.0546 |
+| scratch / memory-float-4 | 1.591714 | 3.734941 | 261384→265738 | 2.0544/1.2115 |
+| packed / calls-4 | 1.874016 | 1.971902 | 305642→320942 | 1.1857/.9891 |
+| packed / memory-float-4 | 1.516516 | 1.617590 | 261406→261390 | .8520/1.0668 |
+| packed / repeated fields-4000 | .256890 | .240684 | 50002→49008 | .9415/.9331 |
+
+The calls-4 logical classification data requires 325,501 bytes for 1,302,002
+parsed nodes, far below the **15,300 KiB** packed campaign RSS delta. The
+remaining high-water/allocator cause is **not established**; this delta cannot
+be attributed wholesale to necessary semantic storage. It remains an explicit
+performance investigation. Neither scratch reuse nor packed storage supports a
+general compiler-speed claim.
+
+All outliers remain. In the scratch memory case, B observations include 4.574617 s
+with 1.16+.34 CPU seconds, and 7.683436 s with 6.24+1.35 CPU seconds; A also
+has 7.240080 s with 5.94+1.27 CPU seconds. These include CPU variation as well as
+wall-only stalls, so their cause is not assigned to one external factor. Scratch
+repeated-field pairs are .9344/1.1884, with a .356712 s B observation (.18+.04
+CPU). Packed member-instance A/A spans 1.022387–1.772402 s; its first ABBA gain
+of .7163 includes A at 1.767318 s (.82+.19 CPU). The packed out-of-line median
+1.488713→1.193394 s likewise does not establish that entire apparent gain.
+
+Final implementation (`24ad2c45`), new method cases and matched controls:
+
+| Workload | A wall s | B wall s | RSS KiB A→B | ABBA B/A |
+| --- | ---: | ---: | ---: | --- |
+| method instances-1000 | .246363 | .248496 | 40470→40756 | 1.0038/1.0089 |
+| method instances-4000 | 1.023855 | 1.018445 | 145340→145976 | .9953/.9969 |
+| member instances-1000 | .236807 | .231914 | 44190→43858 | .9807/.9801 |
+| out-of-line members-1000 | .287390 | .279693 | 48308→49402 | .6986/.9868 |
+| unused members-1000 | .082713 | .088259 | 18742→19762 | 1.0661/1.0686 |
+| repeated fields-1000 | .061380 | .058063 | 16448→16522 | .9398/.9431 |
+| ordinary calls-1 | .435626 | .436929 | 80550→83458 | 1.0049/1.0074 |
+
+Method-4000 A/A is 1.016996–1.028738 s; ABBA observations span
+1.020607–1.028483 (A), 1.013812–1.030077 (B). The small median improvement is
+within that spread. Repeated-1000 A/A is .061932–.062276 s and ABBA spans
+.061270–.062586 (A), .057784–.058263 (B). Together with the initial and packed
+4,000 cases, this supports a repeatable benefit on repeated fixed field work.
+Final out-of-line A includes .512430 s; calls-1 A/A spans .426896–.514450 s.
+Their outlier-sensitive ratios do not support a broad speedup claim.
+
+### Native execution and necessary prototype costs
+
+Each native loop has a volatile 3,000,000-iteration bound and checks its result.
+The method loop calls both returned function pointers and verifies field updates.
+The supplied sectionless ELF's payload after entry is the retained text metric.
+Final common-correct generated bytes are unchanged:
+
+| Native workload | A wall s | B wall s | RSS KiB A/B | ABBA B/A | Payload bytes A/B |
+| --- | ---: | ---: | ---: | --- | ---: |
+| method runtime | .040438 | .040476 | 256/256 | .9961/.9988 | 444/444 |
+| member runtime | .036331 | .036395 | 256/256 | 1.0037/1.0003 | 313/313 |
+| class call materializations | .051892 | .052074 | 256/256 | 1.0055/.9990 | 1192/1192 |
+
+Method A/A is .040464–.040750 s; the member A/A range is .036286–.036464 s;
+class-call A/A is .051887–.052319 s. Identical executable bytes mean runtime
+variation is not a generated-code benefit. The complete final preflight also
+preserves the default-identity executable's 1,520-byte payload.
+
+The entry rejects the valid prototype-query corpus, so final B-only baselines
+are: 1,000 instances **.276395 s / 49,312 KiB**, 4,000 **1.149982 s /
+182,718 KiB**. Six-observation wall ranges are .272810–.376954 and
+1.143088–1.197902 s. The .376954 observation retains .21+.05 CPU seconds.
+Its native loop compiles in **.005984 s / 5,156 KiB** and runs in **.023805 s /
+256 KiB**, range .023751–.023915 s, with **266 bytes** of payload. Small runtime
+sources are compiler cost baselines, not startup-dominated speed claims. The
+valid prototype reducer's entry rejection and corrected native result are frozen.
+
+### Acceptance, validation and concrete boundary
+
+Source fact reuse has a **zero generated-code growth budget** on common-correct
+inputs; all campaigns meet it by exact hashes. Its repeatable affected-workload
+benefit accompanies a fixed 12,608-byte compiler text increase and the bounded
+source/context/key storage above. No native optimization was added or claimed.
+Required unused-body checking and previously rejected prototype behavior have
+separate correctness proofs and measured costs. O0 has no mandated numeric
+compiler wall/RSS gate. Inventing a zero-overhead threshold would contradict
+stage-scoped acceptance, but reclassification does not excuse the unexplained
+ordinary-call RSS regression or complete the remaining architecture work.
+
+Final implementation passes `make test-pa14` **314/314**, default
+`make test-report-through-pa13` **1621/1621**, and
+`make test-report-through-pa14 TEST_REPORT_ASSIGNMENT_JOBS=1 TEST_REPORT_SUBTEST_JOBS=1`
+**1935/1935**. The preceding default through attempt is retained at **1923/1935**:
+twelve unchanged PA1/PA2 lexer cases timed out while workers were observed in
+`rq_qos_wait`, with host I/O full-pressure avg60 around 60–62%. The retry changes
+only concurrency; coverage, fixtures, comparisons and timeouts are unchanged.
+This observation supports an I/O explanation for that test episode, not every
+timing outlier above. File audit passes with three inherited header advisories.
+
+Eighteen native programs, **332** course/personal release/ASan/UBSan parity
+inputs, **82** explicit rejection controls, two ABI controls and four standalone
+reducer native/parity checks pass. The expanded enum/method reducer has frozen
+entry/packed/final statuses **0/1/0**, with correct entry/final native execution;
+the matching invalid static-use reducer is one of fourteen entry-accepted errors
+now rejected. `checks-final.json`, `progress-final.json`, `reducer-parity-final.json`
+and the `proofs/` directory preserve commands, statuses, source and output hashes.
+Earlier intermediate proofs and sources remain available.
+
+The fixed field/prototype/method group is complete. Substituted receiver types,
+dependent declaration/value/storage facts and dependent signatures require
+context-keyed typed graph propagation; the source-only fixed index cannot own
+them safely. Whole-region projection and separate demand/failure states remain
+current-stage owners, alongside the RSS investigation. The full-stage goal
+remains active; [plan.md](plan.md) records the boundary and next work.
