@@ -1390,3 +1390,128 @@ observations, not extra exit requirements. Correctness, mandated limits, coverag
 and all raw measurements are preserved. Dependent-only construction *within*
 used bodies and broader typed demand/failure dependencies remain current-stage
 work; this region cache does not complete those graph owners.
+
+
+## Typed body values and dependent bounds (`66fe52c1`)
+
+The frozen `value-query-performance.json` adds **462 observations** to the
+8,932 inherited observations. The complete corpus was preflighted before timing:
+all 21 prior workloads plus three source/repetition scaling cases, two newly
+accepted array cases, and two checked native loops. A is `c78e8d3b` (SHA-256
+`4809031b0b8e2cd39a6751deb0a2611f24768b956b012e9ffb05136597514a57`);
+B is `66fe52c1` (`2f52c047020bc6b4c959a804863b16ddaf41428bf04198c7685ae34993b05d4b`).
+Both use the recorded release flags and `--emit-lowir -O0`; PA8's supplied native
+backend runs the compiler's LowIR. Binaries, harness, sources and outputs were
+frozen before the isolated campaign. No builds, tests or probes ran during timing.
+One warmup per compiler precedes four A/A observations and two ABBA blocks.
+Entry-rejected bound inputs receive six B-only observations and no speedup claim.
+All samples, CPU affinity, flags, hashes, RSS and context switches remain in JSON.
+
+Compiler values below are medians of ABBA observations, or all six B-only samples.
+Very small executable-source compilations expose startup cost and are controls,
+not evidence for compiler profitability.
+
+| Compiler workload | A/B wall seconds | A/B peak RSS KiB | Paired B/A |
+| --- | --- | --- | --- |
+| body-run-1000-8 | 0.161339 / 0.163402 | 31,756 / 31,614 | 1.0044 / 1.2056 |
+| body-run-1000-128 | 0.164792 / 0.166778 | 31,868 / 31,870 | 1.0174 / 1.0084 |
+| body-run-4000-128 | 0.681140 / 0.687916 | 111,882 / 111,528 | 0.9955 / 1.0241 |
+| body-large-1000-8 | 0.286593 / 0.278092 | 52,330 / 53,600 | 0.9806 / 0.6082 |
+| body-large-1000-128 | 2.378760 / 2.248171 | 369,076 / 357,102 | 1.0573 / 0.9474 |
+| default-unused-1000 | 0.053503 / 0.053246 | 14,790 / 14,818 | 0.9722 / 0.9922 |
+| default-repeated-1000 | 0.031615 / 0.031760 | 9,510 / 9,480 | 0.9934 / 1.0173 |
+| default-dependent-1000 | 0.054870 / 0.055272 | 14,638 / 14,666 | 1.0133 / 0.9982 |
+| default-unused-4000 | 0.210622 / 0.209819 | 44,322 / 44,440 | 0.9901 / 0.9893 |
+| default-repeated-4000 | 0.109066 / 0.109270 | 22,370 / 22,324 | 0.9954 / 1.0035 |
+| default-dependent-4000 | 0.213492 / 0.214095 | 43,568 / 43,520 | 1.0115 / 1.0008 |
+| region-runtime | 0.007232 / 0.007512 | 5,536 / 5,426 | 1.0155 / 1.0403 |
+| dependent-default-runtime | 0.005951 / 0.005990 | 5,214 / 5,198 | 1.0038 / 1.0040 |
+| declaration-instances-1000 | 0.614259 / 0.612886 | 94,260 / 91,086 | 0.9929 / 1.0002 |
+| declaration-outside-1000 | 0.355727 / 0.352581 | 64,272 / 64,190 | 1.0048 / 0.9081 |
+| member-repeated-1000 | 0.059492 / 0.059267 | 17,092 / 17,110 | 0.9917 / 0.9954 |
+| calls-4 | 1.778973 / 1.784324 | 305,872 / 306,348 | 0.9940 / 1.0336 |
+| memory-float-1 | 0.377432 / 0.373781 | 69,676 / 69,660 | 0.9849 / 0.9968 |
+| calls-runtime | 0.005917 / 0.005966 | 5,320 / 5,300 | 1.0105 / 1.0160 |
+| memory-runtime | 0.005771 / 0.005842 | 5,348 / 5,262 | 0.9922 / 1.0251 |
+| floating-runtime | 0.005627 / 0.005721 | 5,308 / 5,326 | 1.0054 / 1.0120 |
+| value-offset-1000-8 | 0.203966 / 0.195041 | 42,590 / 41,888 | 0.9597 / 0.9562 |
+| value-offset-1000-128 | 2.574320 / 2.446097 | 395,534 / 372,962 | 0.9453 / 0.9402 |
+| value-offset-4000-8 | 0.859922 / 0.840842 | 155,094 / 152,206 | 0.8584 / 1.0034 |
+| value-bound-1000 | 0.099200 | 23,722 | B only |
+| value-bound-4000 | 0.392247 | 79,218 | B only |
+| value-runtime | 0.005673 / 0.005726 | 5,314 / 5,204 | 0.9955 / 1.0146 |
+| bound-runtime | 0.005921 | 5,148 | B only |
+
+Both N=1,000 offset workloads improve in both paired blocks. W=128 has A/A
+2.554534–2.630221 s, ABBA A 2.556135–2.647615 s and B 2.402514–2.464936 s.
+Its median falls 2.574320→2.446097 s (4.98%) and peak RSS 395,534→372,962 KiB
+(22,572 KiB, 5.71%). The used-body median also falls, but its B outlier 2.790742 s
+makes the first pair slower; its A/A range is 2.425298–2.885152 s. That case does
+not establish a repeatable timing gain. The N=4,000 offset result likewise has
+one nearly unchanged pair and an A outlier 1.092089 s; it supports scaling/work
+bounds, not a separate repeatable timing claim. Other costs remain visible:
+unused W=128 body medians rise about 1%, ordinary calls rise 0.3%, and the small
+used body adds 1,270 KiB RSS. The small-unused-body B outlier .227352 s and calls
+B outlier 1.860144 s remain included. No claim relies on removing those samples.
+
+| Checked executable | A/B runtime seconds | Executable payload bytes | Paired B/A |
+| --- | --- | --- | --- |
+| region-runtime | 0.059342 / 0.060518 | 206 / 206 | 1.0013 / 1.0314 |
+| dependent-default-runtime | 2.746361 / 2.700448 | 344 / 344 | 0.9842 / 0.9760 |
+| calls-runtime | 0.478612 / 0.477344 | 206 / 206 | 0.9999 / 0.9953 |
+| memory-runtime | 0.283686 / 0.279636 | 434 / 434 | 0.9918 / 0.9846 |
+| floating-runtime | 0.331501 / 0.331878 | 230 / 230 | 1.0005 / 0.9996 |
+| value-runtime | 0.060076 / 0.060115 | 184 / 184 | 0.9984 / 1.0035 |
+| bound-runtime | 0.059404 | 194 | B only |
+
+The new loops check twelve million live iterations with volatile runtime counts,
+checksums and array updates. All six common-correct executable hashes and all 25
+common-correct LowIR hashes match exactly. Generated-code growth is **zero**;
+there is no runtime optimization claim. The B-only array loop checks behavior
+and establishes its baseline. Payload measurement uses the supplied sectionless
+ELF's bytes after its entry point, as in prior campaigns.
+
+The value graph gives sizeof/alignment a fixed result type while retaining
+their value dependence. For the used-body corpus, expression work is `4N+2W+3` and
+conversion work `3N+2W+2`, replacing the repeated operand checking. The offset
+corpus has expression work `3N+4W+1` and conversion work `3N+4W`. Both evaluate
+N canonical layout queries with NW uses. Conversion variants are bounded by
+four two-bit policies per source operator: these inputs use W variants and 3W
+or 2W retained conversion records, independent of N. Array-bound value work is
+`3N+1`. Types/queries, frame substitutions, cached constants and conversion
+slices are translation-unit owned and indexed by complete typed keys. Expected
+nonconstants share the invalid-constant sentinel; active/failed query states do
+not restart the query. Full constexpr interpretation is outside PA14.
+
+The first implementation changed constant-widening instructions around layout
+queries. The initial LowIR outputs and both native results remain in
+`pa14-value-facts/`; they are correctness observations, not a performance
+comparison. Shared conversion policy variants correct that difference, with
+entry/final byte parity on `value-conversion.t` and `body-values.cpp`. The broader
+bound controls cover both conditional arms' type obligations, short-circuit
+value evaluation, casts, static constants/enumerators, access, renamed heads,
+deduction, multidimensional arrays and parameter adjustment. No course fixture,
+reference or comparison changed. Six new invalid-unused-body proofs follow
+N3485 [expr.sizeof]/1,6 and fixed operand rules; `value-query-proofs.json` retains
+all 22 rejection results and three positive compiler/native proofs.
+
+Compiler text grows 1,282,758→1,294,278 bytes, **11,520 (0.898%)**. The current
+transitive-header probe preserves Entity/Expression/ObjectUse at 112/36/36 bytes,
+frames at 20, occurrences at eight and Ast at 504; TypeQuery/TypeQueryFact are
+48/48 and the sparse queried-value record is eight bytes. Historical layout
+snapshots remain checked unchanged. Their old model-header hashes are not an
+extra current-layout gate: adding DependentArray and query kinds changes enum
+source without changing hot layouts. The new live-header probe establishes
+current sizes while retaining every historical measurement.
+
+At PA14/O0 no numeric compiler latency/RSS/text ceiling is mandated. Required
+source-time checking and dependent array semantics, complete-key work bounds,
+and repeatable offset compilation savings justify the compiler work and text
+cost. The explicit budgets are source/key-proportional query storage, at most
+four conversion variants per source operation, and zero common-correct generated
+growth. No optional optimizer was added. No historical measurement or mandated
+limit was removed. The earlier isolated source-cache +6,714 KiB and calls-4
+roughly +15 MiB RSS deltas remain unexplained; this campaign does not establish
+their cause. Large used regions still allocate occurrences and per-occurrence
+fact slots; typed local identity/lifetime overlays and broad demand/failure
+edges remain current-stage architecture work.

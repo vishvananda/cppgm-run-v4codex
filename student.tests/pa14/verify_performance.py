@@ -269,7 +269,8 @@ field_layout=json.loads((ROOT/'student.tests/pa14/dependent-object-layout.json')
 for header in field_layout['headers']:assert shared.sha(header['path'])==header['sha256']
 for kind in ('source','binary','dump'):assert shared.sha(field_layout[kind+'_path'])==field_layout[kind+'_sha256']
 assert list(map(int,shared.run([field_layout['binary_path']]).stdout.split()))==field_layout['sizes']==[112,36,36,8,12,2]
-assert shared.sha(ROOT/'dev/src/semantic/model.h')==field_layout['headers'][0]['sha256']
+# The historical field header is frozen above. Current transitive headers and
+# hot sizes are checked by value-layout.json below after the dependent-array enum extension.
 print('current field-context layouts preserve 112/36/36 byte hot records; new records 8/12/2 bytes')
 
 field_proofs=Path(field_layout['source_path']).parent.parent/'proofs/rejections.json'
@@ -423,8 +424,8 @@ for filename,ast_growth in (('region-initial-layout.json',48),('region-layout.js
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
   assert row['sizes'][:5]==[112,36,36,20,8]
  assert layouts[1]['sizes'][5]-layouts[0]['sizes'][5]==ast_growth
- if filename=='region-layout.json':
-  for header in layouts[1]['headers']:assert shared.sha(header['source'])==header['sha256']
+ # Historical region snapshots remain immutable; value-layout.json checks
+ # current live headers after the typed-query extension.
  assert shared.sha(ROOT/'student.tests/pa14/region_layout_probe.cc')==layouts[1]['source_sha256']
 for filename in ('region-initial-proofs.json','region-proofs.json'):
  proofs=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
@@ -471,3 +472,105 @@ for row in validation['reducers']+[validation['attribute_proof']]:
   assert not any(marker in Path(out['log']).read_text() for marker in ('AddressSanitizer','UndefinedBehaviorSanitizer','runtime error:'))
  assert len(set(out['sha256'] for out in row['outputs']))==len(set(out['native_sha256'] for out in row['outputs']))==1
 print('final region validation preserves contract coverage, 335 sanitizer parity inputs, 102 rejections and six reducer/native proofs')
+
+# Current value/query snapshot checks every live transitive header and the
+# measured private value record, without equating changed enums to old bytes.
+layout=json.loads((ROOT/'student.tests/pa14/value-layout.json').read_text())
+for header in layout['headers']:
+ assert shared.sha(header['path'])==shared.sha(header['source'])==header['sha256']
+for kind in ('source','binary','dump'):assert shared.sha(layout[kind+'_path'])==layout[kind+'_sha256']
+assert shared.sha(ROOT/'student.tests/pa14/value_layout_probe.cc')==layout['source_sha256']
+assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48]
+assert layout['query_value_size']==8 and layout['query_value_align']==4
+assert 'Class cppgm::semantic::Analyzer::QueryValue\n   size=8 align=4' in Path(layout['dump_path']).read_text()
+proofs=json.loads((ROOT/'student.tests/pa14/value-query-proofs.json').read_text())
+assert shared.sha(ROOT/'student.tests/pa14/value_query_evidence.py')==proofs['harness_sha256']
+for row in proofs['rejection_harnesses']:assert shared.sha(row['path'])==row['sha256']
+for row in proofs['binaries']:assert shared.sha(row['path'])==row['sha256']
+assert len(proofs['rejections'])==22 and len(proofs['positives'])==3
+assert sum(row['outputs'][0]['exit']==0 for row in proofs['rejections'])==6
+for row in proofs['rejections']+proofs['positives']:
+ assert shared.sha(row['source_path'])==row['source_sha256']
+ for out in row['outputs']:
+  assert shared.sha(out['log_path'])==out['log_sha256']
+  if 'native_path' in out:
+   assert out['exit']==out['native_exit']==0
+   assert shared.sha(out['path'])==out['sha256'] and shared.sha(out['native_path'])==out['native_sha256']
+for row in proofs['rejections']:assert row['outputs'][1]['exit']==1
+for row in proofs['positives']:
+ assert [o['exit'] for o in row['outputs']]==([1,0] if Path(row['source_path']).name=='dependent-bounds.cpp' else [0,0])
+ if row['outputs'][0]['exit']==0:
+  assert len(set(o['sha256'] for o in row['outputs']))==len(set(o['native_sha256'] for o in row['outputs']))==1
+value=json.loads((ROOT/'student.tests/pa14/value-query-performance.json').read_text())
+assert shared.sha(ROOT/'student.tests/pa14/value_query_benchmark.py')==value['harness_sha256']
+assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==value['shared_harness_sha256']
+assert shared.sha(ROOT/'reference-binaries/lowir2native')==value['backend_sha256']
+assert shared.sha(value['parent_path'])==value['parent_sha256']
+parent=json.loads(Path(value['parent_path']).read_text())
+assert len(value['workloads'])==28
+for binary in value['binaries']:
+ assert shared.sha(binary['path'])==binary['sha256'] and shared.text_size(binary['path'])==binary['text_bytes']
+new_samples=0
+for name,work in value['workloads'].items():
+ assert shared.sha(work['source_path'])==work['source_sha256']
+ common=len(work['outputs'])==2
+ assert common==work['exact_required']
+ if name in parent['workloads']:assert work['source_sha256']==parent['workloads'][name]['source_sha256']
+ if not common:
+  reject=work['entry_rejection'];assert reject['exit_code']==1 and shared.sha(reject['path'])==reject['sha256']
+ for out in work['outputs']:
+  assert shared.sha(out['path'])==out['sha256'] and Path(out['path']).stat().st_size==out['bytes']
+  if name in parent['workloads']:assert out['sha256']==parent['workloads'][name]['outputs'][-1]['sha256']
+  if 'native' in out:
+   native=out['native'];assert shared.sha(native['path'])==native['sha256']
+   assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
+ if common:
+  assert len(set(o['sha256'] for o in work['outputs']))==1
+  if 'runtime' in work:assert len(set(o['native']['sha256'] for o in work['outputs']))==1
+ for campaign in [work['compiler']]+([work['runtime']] if 'runtime' in work else []):
+  rows=campaign['observations'];assert [r['binary'] for r in rows]==(shared.ORDER if common else [1]*6)
+  assert [r['binary'] for r in campaign['warmups']]==([0,1] if common else [1])
+  for row in campaign['warmups']+rows:
+   assert row['wall_s']>0 and row['rss_kib']>0 and row['checked_exit']==0;new_samples+=1
+  if common:
+   assert campaign['aa_range_s']==[min(r['wall_s'] for r in rows[:4]),max(r['wall_s'] for r in rows[:4])]
+   assert campaign['paired_b_over_a']==[statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==0) for k in (4,8)]
+ b=work['outputs'][-1]['telemetry'][0]
+ if name.startswith(('body-large-','value-offset-')):
+  n,width=map(int,name.split('-')[-2:])
+  assert b['semantic_value_query_work']==n and b['semantic_template_value_uses']==n*width
+  assert b['semantic_template_value_sources']==b['semantic_value_conversion_variants']==width
+  if name.startswith('body-large-'):
+   assert b['semantic_expression_work']==4*n+2*width+3 and b['semantic_conversion_work']==3*n+2*width+2
+   assert b['semantic_value_conversion_records']==3*width
+  else:
+   assert b['semantic_expression_work']==3*n+4*width+1 and b['semantic_conversion_work']==3*n+4*width
+   assert b['semantic_value_conversion_records']==2*width
+ if name.startswith('value-bound-'):
+  n=int(name.rsplit('-',1)[1]);assert b['semantic_value_query_work']==3*n+1
+assert new_samples==462
+print(observations+new_samples,'total frozen performance observations verified')
+validation=json.loads((ROOT/'student.tests/pa14/value-query-validation.json').read_text())
+assert shared.sha(ROOT/'student.tests/pa14/value_query_validation.py')==validation['harness_sha256']
+assert [validation[k] for k in ('stage_sources','prior_tests','through_tests','personal_native','parity_sources','rejection_controls','abi_controls','reducer_controls')]==[314,1621,1935,23,337,124,6,7]
+for binary in validation['binaries']:assert shared.sha(binary['path'])==binary['sha256']
+assert len(validation['personal'])==23 and len(validation['coverage'])==1266
+for row in validation['coverage']+validation['personal']:assert shared.sha(ROOT/row['path'])==row['sha256']
+assert sum(row['path'].endswith('.t') for row in validation['coverage'])==314
+assert len(validation['checks'])==65 and len(validation['reducers'])==7
+for row in validation['checks']:
+ assert row['exit_code']==0 and shared.sha(row['log'])==row['log_sha256']
+for row in validation['reducers']:
+ assert shared.sha(row['source_path'])==row['source_sha256']
+ for out in row['outputs']:
+  assert out['native_exit']==0 and shared.sha(out['path'])==out['sha256'] and shared.sha(out['native_path'])==out['native_sha256']
+ assert len(set(o['sha256'] for o in row['outputs']))==len(set(o['native_sha256'] for o in row['outputs']))==1
+print('typed value/layout, six new rejection proofs, 337 sanitizer inputs, 124 rejection controls and seven native reducers verified')
+
+handoff=json.loads((ROOT/'student.tests/pa14/value-query-handoff.json').read_text())
+assert handoff['implementation_commit']=='66fe52c1' and handoff['release_sha256']==value['binaries'][1]['sha256']
+assert [row['name'] for row in handoff['checks']]==['stage','prior','through','file_audit','native']
+for row in handoff['checks']:
+ assert row['exit_code']==0 and shared.sha(row['log'])==row['log_sha256']
+for row in handoff['initial_observations']:assert shared.sha(row['path'])==row['sha256']
+print('current required stage/prior/through/native/audit command evidence and initial failures preserved')

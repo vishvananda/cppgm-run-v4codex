@@ -530,3 +530,13 @@ Current correctness before measurement: PA14 314/314 and prior 1621/1621;
 23 native programs, eight body-value and fourteen bound rejection controls,
 four new ABI controls and the explicit conversion reducer. Frozen performance,
 sanitizer and final source-layout validation follow this implementation increment.
+
+
+Final validation of `66fe52c1` also passes through PA14 (1,935 tests), 337
+release/sanitizer status-and-LowIR parity inputs, 124 explicit rejection controls
+on both compilers, six ABI controls and seven reducer/native parity checks.
+The frozen value campaign adds 462 verified observations; all 9,394 historical
+and current observations verify. Offset workloads improve in both paired blocks,
+with zero common-correct generated-code growth. Performance costs, current/frozen
+layouts and the remaining occurrence/identity/lifetime boundary are recorded in
+performance.md and the compact plan. No course or reference coverage changed.

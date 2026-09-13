@@ -4,102 +4,78 @@ Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; continuation entry/current **314/314**. All **230
-original failures** are resolved. Coverage, references and comparisons are
+original failures** are resolved. Coverage, references and comparisons remain
 unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
-Active continuation from `c78e8d3b`; previous turn: **verified progress**.
-The body value owner now distinguishes fixed expression types/conversions from
-value-dependent layout queries. Source sizeof/alignment queries retain canonical
-typed operands; complete frame/query keys substitute only dependencies. Enclosing
-fixed scalar operations should retain their semantic decisions even when operand
-values depend on a template. Extend this graph into value-dependent array bounds
-where its type/constant owners apply. Work follows unique source queries, complete
-substitution keys and demanded values; preserve short-circuit evaluation, source
-checks, local identities, default-head ownership and lifetime consumers. Validate
-course/native parity, new definition-time rejection proofs and frozen compiler/RSS
-plus executable measurements before closing this group. Typed array bounds,
-qualified constants, short-circuit operations and scalar casts are implemented;
-314 stage and 1,621 prior tests pass. The conversion-offset reducer preserves
-entry LowIR/native output. Frozen measurement and sanitizer validation remain.
-
-Continuation from `ca42e706` is **verified progress**. Member bodies, constructor
-initializers and default expressions now have separate demand roots. Concrete
-defaults retain semantic active/success/failure state and the declaring template
-head, including renamed definitions and calls preceding those definitions.
-Fixed default names are checked at definition time; dependent values wait for
-an omitted argument. Later declarations cannot add template defaults contrary
-to N3485 [dcl.fct.default]/4–6. Six invalid-default controls are newly rejected.
+Continuation from `c78e8d3b`: **verified progress**. This group closes typed
+layout-query values and extends that owner into dependent array bounds,
+qualified constants, conditional/logical queries, scalar casts and ABI output.
+sizeof/alignment retain fixed result types while values depend on the template.
+Fixed operand obligations are checked at definition time, including operands
+whose values will be short-circuited. Source conversion decisions survive value
+substitution; shared O0 policy variants preserve entry LowIR/native bytes.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
-| Declaration types (inherited, implemented) | Source types → immutable substitution frames → concrete declaration facts. Complete frame/type/query keys; raw body parameters preserve cv, reference collapse and declarator adjustment. Previous evidence remains in `ca42e706` and performance.md. |
-| Source regions and defaults (this group, implemented) | Parsed source root → immutable node/root/attribute ID slices → demanded source/context occurrences → body/initializer/default semantic owner. Index each demanded source region once; work/storage follow indexed source edges and concrete demand. Defaults compute once per specialization/root; declaring-head overlays contain only head parameters. Validate nested/local classes, explicit/omitted arguments, side effects, renamed heads, alignment/packing and 1,000/4,000 scaling. |
-| Dependent typed body graph (remaining) | Expressions, local class/enum identities, value-dependent bounds, receivers, storage dependencies, constructors/operators and declaration/return conversions need explicit typed dependencies. Reuse fixed nodes within used regions; validate contexts, identities, lifetimes and source/instance scaling. |
-| Demand/failure graph (remaining) | Extend separate declaration/definition/layout/default/exception/body/vtable/emission states with typed reasons, reverse dependencies and structured expected failures. Compute once per complete key; validate recursive demand, negative keys and unrelated-declaration scaling. |
+| Declaration types, source regions and defaults (inherited) | Immutable source topology → demanded regions and declaration-owned frames → concrete facts. Source indexes once per region; defaults once per complete key, with declaring-head identity and separate body/initializer demand. Prior evidence retained. |
+| Typed values and bounds (implemented) | Source expression/type → canonical query → immutable frame substitution → cached constant → ordinary array type and direct ABI graph. Query Active/Success/Failure states and complete typed keys; source scalar decisions shared. Work follows unique queries and demanded values; conversion policy has at most four variants per source operation. Validate casts, short circuits, access, deduction, renamed heads, parameter adjustment and native output. |
+| Dependent body identities and lifetimes (remaining) | Used regions still project all source occurrences and allocate fact slots. Expressions, local class/enum/object identities, receivers, materialization, storage, cleanup and declaration/return conversions need explicit source/context overlays consumed by semantics and lowering. Validate identity/lifetime separation and source/instance scaling. |
+| Demand/failure dependencies (remaining) | Extend the separate declaration/definition/layout/default/exception/body/vtable/emission states with typed reasons, reverse edges and structured expected failures. Compute once per complete key; validate recursive demand, negative keys and unrelated-declaration scaling. |
 
-**Concrete boundary:** this group separates regions and indexes their immutable
-source topology. A used region still projects occurrences for all its contents.
-Replacing that projection requires expression, declaration-identity, conversion
-and lifetime dependencies shared by semantic analysis and lowering. Extending a
-source-region index cannot establish those facts. These are current-stage defects,
-not later-stage exemptions; the new region/default owner is coherent and tested.
-No external blocker exists. The two remaining graph owners require a separate
-representation change across their producers and consumers.
+**Concrete boundary:** `demand_region`/`instantiate_function` still resize facts
+and expressions for every projected NodeId. Local declarations, object uses,
+conversion inputs and cleanup consumers depend on those concrete IDs. The new
+query owner can substitute types/values but cannot identify a local object or its
+lifetime. Removing the projection requires a joint declaration/object/lifetime
+overlay and corresponding lowering changes; extending constant evaluation would
+either duplicate those decisions or alias distinct objects. This handoff closes
+the coherent value/bound owner. The remaining representation change is a separate
+current-stage group, with no external blocker or later-stage exemption.
 
 ## Performance evidence and budgets
 
-All **8,932 observations** verify: 7,854 inherited, three frozen 336-row region
-campaigns and a 70-row isolated cache comparison. [performance.md](performance.md)
-retains every sample, A/A calibration, ABBA pairing, spread and compiler/native
-hash. Large unused-body N=4,000 latency is 4.114022→.672118 s (ratios .1635/.1640),
-peak RSS 777,150→111,708 KiB. The intermediate fully-used-body slowdown is retained
-and corrected: final 2.538970→2.393640 s (.9459/.9704). Isolating the source cache
-against the already-correct demand implementation improves both body workloads
-in both paired blocks; its used-body RSS rises **6,714 KiB**, still unexplained.
-The inherited roughly +15 MiB calls-4 RSS delta against `33b791da` also remains
-open; measurements moving both A and B together do not establish its cause.
+All **9,394 observations** verify: 8,932 inherited plus 462 from the frozen
+28-input/seven-executable value campaign. [performance.md](performance.md) retains
+all samples, A/A calibration, ABBA pairs, spreads, hashes and costs. Repeated
+layout offsets at N=1,000 W=128 improve 2.574320→2.446097 s, paired ratios
+.9453/.9402; peak RSS 395,534→372,962 KiB. W=8 also improves in both blocks.
+The used-body and N=4,000 offset results retain outliers and do not establish
+separate repeatable timing gains. Unused-body medians rise about 1%, calls 0.3%;
+the small used-body RSS rises 1,270 KiB. No runtime optimization is claimed.
 
-Body occurrences change from `(88+11W)N` to `69N` for the small used body and
-`(65+11W)N` for the large used body. The small-body source index stays at two
-regions, 65 nodes and five roots, independent of N/W. Unused defaults fall from
-34N to 21N occurrences with zero semantic default work. Repeated defaults retain
-28 occurrences and one default computation, independent of call count. Index
-storage follows source nodes/roots/attributes; specialization storage follows
-demanded occurrences and complete semantic keys. Used-region projection remains.
+Used-body expression/conversion work is `4N+2W+3` / `3N+2W+2`; offset work is
+`3N+4W+1` / `3N+4W`. Both evaluate N canonical layout queries with NW uses and
+W conversion variants. Bound query work is `3N+1`. Storage is source/key/occurrence
+proportional; whole-region occurrences remain. Compiler text is 1,294,278 bytes,
++11,520 (+0.898%). Entity/Expression/ObjectUse remain 112/36/36 bytes, frames 20,
+occurrences eight, Ast 504, query/type facts 48/48 and queried values eight.
+All historical layout snapshots remain; the new probe verifies live headers.
 
-Compiler text is 1,282,758 bytes, **+8,704 (+0.683%)** from entry; the cache itself
-adds 2,240 bytes. Entity/Expression/ObjectUse remain 112/36/36 bytes, frames 20
-and occurrences eight. Per-TU Ast grows 304→352→504 bytes. Frozen historical
-layout snapshots and a current live-header probe replace an unsupported demand
-for unchanged historical header hashes. Native hashes/payload sizes are identical
-for common-correct inputs; the generated-code growth budget remains **zero**.
-No optional optimizer or native backend was added. O0 has no mandated numeric
-compiler latency/RSS/text ceiling. Source/key work bounds and repeatable body
-savings justify the cache; all measured costs, correctness, mandated limits and
-coverage remain. Unsupported diagnostic targets are not additional exit gates.
+Explicit budgets remain at most four conversion variants per source operation,
+source/key-proportional query storage and **zero common-correct generated-code
+growth**. O0 has no mandated numeric compiler latency/RSS/text ceiling. Required
+semantics and repeatable offset savings justify the recorded costs. No optional
+optimizer was added; unsupported historical diagnostic gates remain observations.
+The inherited isolated source-cache +6,714 KiB and calls-4 roughly +15 MiB RSS
+deltas remain unexplained; this campaign does not establish their cause.
 
 ## Handoff ledger
 
 | Coherent increment | Commit / evidence |
 | --- | --- |
-| Inherited field/receiver/prototype ownership, declaration types, substitution frames and query contexts | `78bdbc3f` through `ca42e706`; prior proofs and 7,854 observations preserved |
-| Independent member body, initializer and default demand | `feac8cd6`, `6edb0f18`; unused dependent defaults and declaring-head identity/native proofs |
-| Frozen region compiler/native corpus | `8a672653`; three full campaigns, exact common-correct output preservation |
-| Initial declaration ownership of template defaults | `03e76021`; six new rejections, CWG 15/217 proof; incorrectly permissive personal source preserved, no course/reference change |
-| Independent proofs and layout probe | `0e2761bb`; two new native successes and frozen historical/current layouts |
-| Immutable source-region index | `e1afac7c`; stage/through/native pass, source work equations and alignment/packing parity |
-| Isolated cache comparison | `10807fc9`; both body workloads improve in both paired blocks; RSS/outlier costs disclosed |
+| Field/receiver/prototype ownership, declaration types and immutable frames | `78bdbc3f` through `ca42e706`; prior proofs and measurements retained |
+| Region/default ownership, declaring heads and source topology cache | `feac8cd6` through `c78e8d3b`; six new default rejections, prior 8,932 observations and source work equations retained |
+| Typed layout values and fixed source scalar decisions | `8bb47eb3`; eight value rejections, six newly rejected unused bodies |
+| Canonical bounds, qualified values, short-circuit/cast queries and O0 conversion variants | `66fe52c1`; dependent-bound native control and exact conversion reducer parity |
+| Frozen workload, standard proofs and current transitive-header probe | `025cb21b`; 22 rejection proofs, three native proofs, immutable entry/final binaries |
 
-Final validation of `e1afac7c`: PA14 **314/314**, prior **1621/1621**, default
-through **1935/1935**, 21 native programs, **335** release/ASan/UBSan parity inputs,
-**102** rejection controls on both compilers, two ABI controls, six explicit
-reducer parity/native checks, all performance evidence and file audit (three
-inherited header advisories). Command/status manifests, earlier failed probes,
-frozen binaries and proofs are under `$RALPH_ARTIFACT_DIR/pa14-regions/`; raw
-evidence and verification are committed in `student.tests/pa14/`.
-
-This handoff completes region/default ownership and the related source-index
-extension. Full-stage dependent-body and demand/failure graph work, plus the
-unexplained RSS observations above, remain open at the concrete boundary stated.
+Validation of `66fe52c1`: PA14 **314/314**, prior **1621/1621**, through
+**1935/1935**, **23** native programs, **337** release/ASan/UBSan parity inputs,
+**124** rejection controls on both compilers, **six** ABI controls and **seven**
+reducer parity/native checks. File audit passes with three inherited header
+advisories. Raw evidence/verifiers are committed in `student.tests/pa14/`;
+command/status manifests, frozen binaries, outputs and initial failed probes
+remain under `$RALPH_ARTIFACT_DIR/pa14-value-facts/`. Full-stage graph work remains
+at the concrete ownership boundary above.

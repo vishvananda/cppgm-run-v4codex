@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all twenty-one local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all twenty-three local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -22,15 +22,15 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-one
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-three
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 335 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 102 explicit
-binding/query/scalar/call/object/default rejection cases. All six `.t` reducers also
+The current campaign checks 337 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 124 explicit
+binding/query/scalar/call/object/default rejection cases. All seven `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
-remain part of `check_queries.py`.
+are in `check_queries.py` and `check_value_queries.py`.
 
 The [performance review](../../pa14/performance.md) explains the raw JSON and
 acceptance. `benchmark.py A B WORK OUT` uses the fixed PA10 compiler/native
@@ -140,3 +140,24 @@ checks the live headers. None of these artifacts are compiler inputs.
 classes inside demanded member bodies. `check_object_reducers.py` runs it with
 the earlier object/prototype reducers. The entry, final release and sanitizer
 compilers preserve identical validated LowIR and checked native output.
+
+
+`body-values.cpp` checks fixed expression types and selected conversions around
+value-dependent sizeof/alignment. `dependent-bounds.cpp` checks dependent array
+identity/deduction, renamed declarations, static constants/enumerators, adjustment
+of array parameters, scalar casts, and conditional/logical evaluation. The
+`value-conversion.t` reducer preserves O0 constant-width decisions for fundamental
+and class-template operands. Run `check_body_values.py` and
+`check_value_queries.py` explicitly; together they cover 22 rejection cases and
+four new ABI forms. Six invalid unused bodies were accepted by the entry compiler;
+`value_query_evidence.py` retains both results and C++11 rule references.
+
+`value_query_benchmark.py A B WORK OUT` adds source/repetition/key scaling and two
+checked native loops to all 21 preceding inputs. `PREFLIGHT_ONLY=1` checks the
+entire corpus without timing. The frozen final campaign records compiler wall/RSS,
+executable runtime/payload, A/A calibration and two ABBA blocks. New array cases
+rejected by A have B-only observations. `value_query_validation.py RELEASE
+SANITIZED WORK OUT` records all 337 parity inputs, 124 rejection controls, six ABI
+controls and seven reducer output/native checks. Current layout validation uses
+`value_layout_probe.cc` and frozen transitive headers; prior header snapshots
+remain intact. Artifacts live under `$RALPH_ARTIFACT_DIR/pa14-value-facts/`.

@@ -1,0 +1,90 @@
+{
+  "implementation_commit": "66fe52c1",
+  "release_sha256": "2f52c047020bc6b4c959a804863b16ddaf41428bf04198c7685ae34993b05d4b",
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/stage-final.log",
+      "log_sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "name": "prior",
+      "command": [
+        "make",
+        "test-report-through-pa13"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/prior-final.log",
+      "log_sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/through-final.log",
+      "log_sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "name": "file_audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa14",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/audit-final.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "native",
+      "command": [
+        "python3",
+        "student.tests/pa14/check_functions.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/native-final.log",
+      "log_sha256": "abf63025837a868a8aebc0b3a532e27948af1f3fb6e2fb3b05762753ac4cf5ae"
+    }
+  ],
+  "initial_observations": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/value-conversion.t-entry.lowir",
+      "sha256": "6419e051d6d2da2f029bff04ce4d67d13050eaaef47e3e38ebeb68b5adf019fa"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/value-conversion.t-current.lowir",
+      "sha256": "8cf54a7e74a8b3bd3ab9811e01f6f10dffc3817d62d2df592c02fdf8febec9a7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/body-values.cpp-entry.lowir",
+      "sha256": "1909eeaa99bdcd15b0613d647c203b2174ddfc245171e0caa2d0fb6b6f323f32"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/body-values.cpp-current.lowir",
+      "sha256": "f254900db24b80eadd90ad23d2fd8fec3d3e406baba23d1e04e1d8050fa9cb1f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/native-arrays.log",
+      "sha256": "cc585d5fe04968181daac667e538ab2e6253d90ab64fd8af5d82fabdfa84825d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/native-bound-qualifier.log",
+      "sha256": "445ee691747103704cf45ae0c7abb35522f2f54c464e9ed7f69ccc37b0f62620"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/value-query-controls.log",
+      "sha256": "232211fbb947787fdcccaef5f5ee1242858d245d98a5093634673d7b2d13d52b"
+    }
+  ]
+}
