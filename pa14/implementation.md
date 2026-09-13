@@ -15,7 +15,7 @@ references and comparison rules are unchanged. PA15 has not been started.
 | `syntax/ast.h`, `occurrence.cpp` | One parsed graph. Compact source/context occurrences project structural edges; nested specialization keys use original source identities. Semantic environments retain enclosing arguments. Ordinary reads keep the inline O(1) path. | Nested member-operator specializations, source-read benchmarks, sanitizer parity. Whole-region occurrences remain a limitation. |
 | `semantic/template_declaration.cpp`, `template_call.cpp` | Parameter ordinals normalize callable shapes; canonical template entities and interned argument packs index specialization declarations. Direct and target deduction use ordinary conversion/ranking rules. Operator member deduction excludes the implicit object through a bounded argument view. | Declaration/call/address cases, overloaded arguments and nested right-shift operator. |
 | `semantic/dependent_type.cpp`, `types.cpp` | Canonical dependent type qualifiers, member identifiers and argument slices. Substitution follows dependent structural edges; fixed TypeIds are shared. Concrete member lookup demands the necessary class declaration. | Qualified member aliases, renamed heads, nested concrete type identity. |
-| `semantic/type_query.cpp`, `type_query.h` | Canonical query IDs retain bound names, parameter ordinals, literal/null provenance, operations, types and child slices. Each query has Active/Success/Failure state. Substitution visits dependent edges and reuses completed fixed queries. | All five previously failing dependent-signature cases now pass; query-instance scaling and work counters. General casts, assignments, conditionals, dependent value paths and array bounds are still incomplete. |
+| `semantic/type_query.cpp`, `type_query.h` | Canonical query IDs retain bound names, parameter ordinals, literal/null provenance, operations, types and child slices. Each query has Active/Success/Failure state. Substitution visits dependent edges and reuses completed fixed queries. | All five previously failing dependent-signature cases now pass; query-instance scaling and work counters. Later continuations add scalar casts, conditional/logical values and dependent bounds; broader query forms remain bounded by PA14. |
 | `semantic/query_call.cpp`, `query_operator.cpp`, conversion/operator helpers | Typed query operands reuse standard/user conversions, constructor conversions, builtin operator legality, contextual bool, deduction, ADL and ranking. Query facts retain selected declarations and conversion ranges without demanding called bodies. | User conversion, converting constructor, overloaded arithmetic, reference-array results, hidden-friend ADL, null literal distinctions; seven query rejections. This does not yet cover every ordinary callable/surrogate form. |
 | `semantic/type_builder.cpp`, `lowering/query_abi.cpp`, `abi_mangle/*` | Function signatures get parameter scopes before trailing returns and dependent `decltype`. Typed queries feed the existing ABI graph; unresolved names have typed qualifier/name/argument edges. Declarators with an already-resolved owning environment retain that scope. | Renamed declarations, trailing returns, function-pointer/reference queries and two independent unresolved-name ABI encodings. No text is used as a semantic key. |
 | `semantic/template_class.cpp` | Class identity precedes completion. Defaults keep their declaring head; ordinal substitution merges defaults across renamed heads. Fixed bases are validated at definition time. | Default owners, forward upgrades, fixed-base rejection and dependent alignment. |
@@ -41,16 +41,19 @@ than stopping at a test-progress threshold.
 
 | Owner | Current PA14 work still required by `spec.md` |
 | --- | --- |
-| Typed template body facts | Nonstatic member objects, constructor/operator expressions, declaration/return conversions, general expression/bound queries, and dependent-only checking instead of whole-region semantic projection. Fixed scalar/call/argument recipes are shared. |
+| Typed template body facts | Source properties and call-input slices are shared; concrete identity/evaluation state has sparse use ownership. Joint declaration/scope/lifetime ownership must still establish which context facts are newly required and eliminate remaining fixed rechecks. Whole-region occurrence and dense Fact storage remain. |
 | Demand and failure facts | Finer declaration/layout/default/exception/body states, typed reasons and reverse dependency edges, narrow structured expected failures. |
 
-Parsed-node sharing and fixed name/query/scalar/call-argument sharing are implemented. Sharing all
-nondependent semantic body facts is **not** complete: concrete bodies still
-project entire regions and recompute many type/conversion facts. Pattern-owned nonstatic object/member facts, declaration/return conversions,
-finer occurrence demand and structured expected rejection need a broader typed
-body graph. This is the concrete incomplete handoff
-boundary, not a commit or progress threshold. These requirements are not waived
-by the stage-scoped performance review or deferred to PA15.
+Parsed source nodes, fixed name/query/scalar/call properties and declaration type
+recipes are shared. Concrete expression bindings, receivers and conversion
+applications now have separate use owners. The remaining full-stage audit crosses
+`demand_region`, parameter/local declaration facts, block scopes, object/storage
+identities and lifetime consumers. An expression property cannot replace those
+identities. Source/context occurrences remain compact views of one parsed graph;
+zero occurrence count is not a mandated numerical budget. The open work is to
+complete the typed demand/failure/dependency ownership and dependent-only semantic
+checking, not to meet an invented record-count ceiling. No requirement is deferred
+to PA15.
 
 ## Transfer, layout and local ABI continuation
 
@@ -574,3 +577,13 @@ persistent cache, invalidation, semantic recomputation or output transform.
 PA14, prior/through reports, file audit and all 24 native programs pass. The
 initial 560-observation ownership campaign and CPU profile remain frozen; the
 local-view candidate receives separate sanitizer and AA/ABBA validation.
+
+
+Final validation of `5ae726e0` passes all required stage/prior/through reports,
+file audit and 24 native programs. The 338-input sanitizer parity campaign, 124
+rejections, six ABI controls, seven reducers and storage/lifetime controls pass.
+The final frozen comparison resolves the layout-offset slowdown: both paired
+blocks improve, with identical LowIR/native bytes and lower peak RSS. Both
+560-observation campaigns and all earlier measurements verify, totaling 10,514.
+The complete cost/spread review and remaining declaration/lifetime/demand boundary
+are recorded in performance.md and plan.md. No course/reference coverage changed.

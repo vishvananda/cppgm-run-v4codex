@@ -1515,3 +1515,165 @@ roughly +15 MiB RSS deltas remain unexplained; this campaign does not establish
 their cause. Large used regions still allocate occurrences and per-occurrence
 fact slots; typed local identity/lifetime overlays and broad demand/failure
 edges remain current-stage architecture work.
+
+
+## Immutable expression properties, concrete uses and local views
+
+The continuation compares frozen entry `5a795af4` with property/use ownership
+`c4e4e6f4`, then with local expression views `5ae726e0`. The two complete campaigns
+retain **1,120 new observations**, bringing the verified total to **10,514**.
+[Initial ownership data](../student.tests/pa14/expression-owner-performance.json)
+and [final local-view data](../student.tests/pa14/expression-view-performance.json)
+retain all 32 compiler inputs and eight checked executables, binary/source/output
+hashes, flags, warmups, A/A calibration, two ABBA blocks, RSS, wall time, context
+switches and spreads. Both use the same frozen harness and inputs. Builds, tests,
+probes and evidence verification were stopped during each timing campaign.
+Medians below use the four samples per binary in the ABBA blocks; calibration
+and outliers remain in the raw data and paired means.
+
+The initial store reduced peak memory but regressed the repeated layout-offset
+case in both blocks. It was not accepted as an unresolved performance gate:
+
+| Compiler workload | A/B median seconds | A/B peak RSS KiB | Paired B/A |
+| --- | --- | --- | --- |
+| body-large-1000-128 | 3.501168 / 3.540093 | 357,994 / 321,408 | 0.9677 / 1.0288 |
+| value-offset-1000-128 | 2.418760 / 2.551136 | 373,214 / 337,862 | 1.0299 / 1.0630 |
+| input-uses-1000-128 | 2.017796 / 1.936081 | 322,480 / 271,000 | 0.9679 / 0.9530 |
+
+The retained diagnostic CPU-clock profile attributed 45.90% of samples to
+`IdIndex::get` and 8.98% to `Ast::project_view`. It is diagnostic evidence, not a
+replacement timing campaign. Fixed-expression reuse and ordinary expression,
+unary, binary and call lowering repeatedly projected the same source/context
+edges for separate field reads. Each now retains one stack view during its visit.
+Source topology and that occurrence's context are immutable; recursive arena
+growth cannot invalidate the copied view. This adds no persistent cache, semantic
+rechecking, output transform or invalidation policy. Final paired results follow:
+
+| Compiler workload | A/B median seconds | A/B peak RSS KiB | Paired B/A |
+| --- | --- | --- | --- |
+| body-run-1000-8 | 0.161517 / 0.153301 | 31,764 / 28,172 | 0.9584 / 0.9387 |
+| body-run-1000-128 | 0.164276 / 0.154318 | 32,052 / 28,714 | 0.9389 / 0.9436 |
+| body-run-4000-128 | 0.673710 / 0.636663 | 109,112 / 98,838 | 0.9419 / 0.9495 |
+| body-large-1000-8 | 0.269335 / 0.248170 | 51,478 / 44,660 | 0.5862 / 0.9249 |
+| body-large-1000-128 | 2.198947 / 1.992706 | 356,254 / 321,168 | 0.8889 / 0.9062 |
+| default-unused-1000 | 0.053995 / 0.051616 | 14,758 / 13,284 | 0.9734 / 0.2337 |
+| default-repeated-1000 | 0.031186 / 0.029899 | 9,328 / 8,930 | 0.9618 / 0.9557 |
+| default-dependent-1000 | 0.054848 / 0.052387 | 14,714 / 13,328 | 0.9538 / 0.9481 |
+| default-unused-4000 | 0.207285 / 0.198888 | 44,304 / 38,326 | 0.9624 / 0.9544 |
+| default-repeated-4000 | 0.109293 / 0.104097 | 22,392 / 20,464 | 0.9552 / 0.9514 |
+| default-dependent-4000 | 0.207901 / 0.196971 | 43,648 / 37,978 | 0.9444 / 0.9563 |
+| region-runtime | 0.007149 / 0.007066 | 5,588 / 5,552 | 0.9875 / 0.9950 |
+| dependent-default-runtime | 0.005850 / 0.005965 | 5,254 / 5,244 | 0.9932 / 4.4638 |
+| declaration-instances-1000 | 0.607083 / 0.568326 | 91,082 / 79,706 | 0.9497 / 0.9348 |
+| declaration-outside-1000 | 0.342989 / 0.333848 | 64,226 / 56,554 | 0.9778 / 0.9826 |
+| member-repeated-1000 | 0.058643 / 0.055488 | 17,304 / 15,074 | 0.9490 / 0.9401 |
+| calls-4 | 1.798629 / 1.707297 | 320,468 / 271,046 | 0.9366 / 0.9660 |
+| memory-float-1 | 0.370979 / 0.358584 | 69,346 / 62,992 | 0.7318 / 0.9689 |
+| calls-runtime | 0.005367 / 0.005438 | 5,172 / 5,212 | 1.0192 / 1.0063 |
+| memory-runtime | 0.005736 / 0.005748 | 5,136 / 5,208 | 1.0031 / 1.0111 |
+| floating-runtime | 0.005540 / 0.005608 | 5,290 / 5,420 | 1.0171 / 0.9880 |
+| value-offset-1000-8 | 0.196707 / 0.175125 | 41,876 / 35,414 | 0.8857 / 0.9004 |
+| value-offset-1000-128 | 2.428378 / 2.147875 | 373,240 / 337,888 | 0.8939 / 0.8464 |
+| value-offset-4000-8 | 0.825672 / 0.744993 | 152,088 / 126,944 | 0.8220 / 0.9807 |
+| value-bound-1000 | 0.094753 / 0.089273 | 23,722 / 21,226 | 0.9384 / 0.9310 |
+| value-bound-4000 | 0.390178 / 0.360977 | 80,150 / 70,408 | 0.9207 / 0.9256 |
+| value-runtime | 0.005615 / 0.005452 | 5,304 / 5,198 | 0.9760 / 0.9649 |
+| bound-runtime | 0.005653 / 0.005680 | 5,216 / 5,388 | 1.0089 / 1.0023 |
+| input-uses-1000-8 | 0.182286 / 0.160708 | 37,630 / 33,816 | 0.8759 / 0.8891 |
+| input-uses-1000-128 | 2.018831 / 1.799594 | 300,792 / 254,716 | 0.8928 / 0.8902 |
+| input-uses-4000-8 | 0.770104 / 0.696235 | 135,188 / 120,594 | 0.9141 / 0.9070 |
+| input-runtime | 0.005818 / 0.005775 | 5,176 / 5,276 | 0.9882 / 0.9954 |
+
+The large used-body median improves 9.38%, layout offsets 11.55%, and repeated
+call inputs 10.86%; all improve in both paired blocks. Their peak RSS falls by
+35,086, 35,352 and 46,076 KiB respectively. These are entry/final comparisons;
+cross-campaign elapsed times are not used to isolate the local-view change.
+Representative calibration and full ABBA spreads are:
+
+| Compiler workload | A/A seconds | ABBA A seconds | ABBA B seconds |
+| --- | --- | --- | --- |
+| body-large-1000-128 | 2.243043–2.883895 | 2.179881–2.338324 | 1.978803–2.037215 |
+| value-offset-1000-128 | 2.398331–2.573583 | 2.389339–2.618517 | 2.129583–2.152546 |
+| input-uses-1000-128 | 1.956701–2.000573 | 1.993306–2.057720 | 1.787284–1.824624 |
+| body-large-1000-8 | 0.270014–0.272625 | 0.267143–0.577856 | 0.247512–0.248750 |
+| default-unused-1000 | 0.052206–0.053324 | 0.052284–0.395491 | 0.050972–0.053384 |
+| memory-float-1 | 0.367585–0.375005 | 0.369417–0.611291 | 0.356631–0.362342 |
+| dependent-default-runtime | 0.005773–0.005876 | 0.005769–0.006489 | 0.005698–0.049191 |
+
+The small used-body, unused-default and mixed-memory A outliers remain included;
+their unusually low paired ratios are not claimed as the steady-state benefit.
+The dependent-default compiler B outlier .049191 s also remains included. Tiny
+compiler inputs take about 5–7 ms and are dominated by startup: calls, memory and
+bound medians rise by approximately 71, 12 and 27 microseconds; floating compilation
+rises by 68 microseconds with mixed paired results. These observations and small
+RSS increases remain visible. They do not establish useful speed improvements
+or a numerical exit threshold. Longer affected workloads support the acceptance.
+
+| Checked executable | A/B median runtime seconds | Payload bytes A/B | Paired B/A |
+| --- | --- | --- | --- |
+| region-runtime | 0.059130 / 0.059117 | 206 / 206 | 1.0008 / 0.9986 |
+| dependent-default-runtime | 2.658709 / 2.660871 | 344 / 344 | 1.0162 / 0.9603 |
+| calls-runtime | 0.476964 / 0.477789 | 206 / 206 | 1.0004 / 1.0018 |
+| memory-runtime | 0.279431 / 0.278993 | 434 / 434 | 0.9775 / 0.9997 |
+| floating-runtime | 0.330093 / 0.330018 | 230 / 230 | 1.0000 / 0.9986 |
+| value-runtime | 0.059907 / 0.059924 | 184 / 184 | 1.0008 / 0.9988 |
+| bound-runtime | 0.058876 / 0.058784 | 194 / 194 | 0.9970 / 0.9985 |
+| input-runtime | 0.261036 / 0.260819 | 356 / 356 | 0.9954 / 0.9993 |
+
+All 32 common-correct LowIR hashes and all eight executable hashes match exactly
+in both campaigns. The new input loop checks twelve million live iterations,
+volatile runtime bounds and a checksum; the inherited loops retain calls, memory
+and floating work. Generated-code growth is **zero**, with no runtime optimization
+claim. Payload follows the earlier sectionless-ELF measurement convention.
+
+The TU-owned expression store retains immutable 24-byte properties, sparse
+20-byte uses and a four-byte NodeId-to-use index. A use owns concrete entity and
+receiver identities, incoming conversion and ready/evaluated state. Sharing source
+properties does not share distinct local objects or lifetime actions. Source call
+argument slices produce contextual views through the already-established occurrence
+index; materialized argument objects keep concrete slices. Semantics, lowering,
+conversion, unwind and cleanup consumers use the same typed accessor.
+
+For N specializations and W repeated source operations, measured property/use
+counts are respectively `4N+4W+4` / `N(3W+5)+3W+4` for large used bodies,
+`3N+6W+1` / `N(5W+4)+5W+1` for layout offsets, and
+`3N+5W+8` / `N(5W+6)+5W+7` for call-input uses. N=1,000 and W=8/128, plus
+N=4,000 and W=8, vary source and instance dimensions independently. The retained
+call-input edge count is `N+2W`; the former append path required `N+2W+2NW` by
+source inspection (the entry did not expose that counter). Expression/conversion
+and query work counters remain identical between these equivalent implementations.
+The raw expression storage is `4S+20U+24F+44` bytes for S slots, U concrete uses and
+F published property records and two sentinels, excluding geometric capacity and the bounded flat
+conversion-variant index. Records release with the translation unit; local views
+release on return. Whole-region occurrences and dense declaration Fact slots remain.
+
+Compiler text changes 1,294,278→1,305,414 bytes for the first store, then to
+**1,303,046 bytes**, a final increase of **8,768 (0.677%)**. The final local-view
+change removes 2,368 bytes from the intermediate compiler. Public Entity,
+Expression and ObjectUse sizes remain 112/36/36 bytes; frames remain 20, occurrences
+eight, Ast 504 and query/type facts 48/48. Analyzer grows 5,576→5,680 bytes per TU.
+The current probe verifies all 17 transitive live headers; historical snapshots
+and their original measurements remain unchanged. The former live-header equality
+to a historical probe is reclassified as snapshot evidence, while the latest probe
+continues to check current headers and layouts.
+
+At PA14/O0 no numeric compiler latency/RSS/text ceiling is mandated. Explicit
+budgets remain at most four conversion variants per source operation, source/key/
+concrete-use-proportional storage, one local view per visit and zero generated
+growth. Repeatable compilation savings and lower memory justify the recorded
+compiler text and per-TU owner cost. No optional optimizer was added. Compact
+source/context occurrence views share one parsed graph; a zero-occurrence-count
+gate is not inferred from the spec. Remaining fixed semantic rechecks and typed
+demand/failure dependencies still require their own ownership audit. The inherited
+source-cache +6,714 KiB and calls-4 roughly +15 MiB RSS deltas remain unexplained;
+this campaign does not establish their cause.
+
+Both frozen implementations pass 314 PA14 tests, 1,621 earlier tests and the
+1,935-test through report, with unchanged coverage and comparisons. Each new
+validation campaign records 338 release/ASan/UBSan parity inputs, 124 rejection
+controls, six ABI controls, seven reducer/native checks, the storage/snapshot
+control under both builds, and the lifetime control under entry/release/sanitizer.
+The final native suite has 24 programs. File audit passes with the same three
+inherited header advisories. Command/status manifests retain the initial failed
+store adapter build, intermediate binaries, the profile and completed required
+checks. The full verifier passes on all **10,514 observations** and these proofs.

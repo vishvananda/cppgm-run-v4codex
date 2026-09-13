@@ -5,7 +5,8 @@ import json,statistics,sys,re
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'student.tests/pa10'))
 import benchmark as shared
-def verify():
+def verify(performance_name='expression-owner-performance.json', validation_name='expression-owner-validation.json',
+           handoff_name='expression-owner-handoff.json', implementation='c4e4e6f4'):
  layout=json.loads((ROOT/'student.tests/pa14/expression-owner-layout.json').read_text())
  for header in layout['headers']:assert shared.sha(header['path'])==shared.sha(header['source'])==header['sha256']
  for kind in ('source','binary','dump'):assert shared.sha(layout[kind+'_path'])==layout[kind+'_sha256']
@@ -14,7 +15,7 @@ def verify():
  for name,expected in (('ExpressionStore::Properties',24),('ExpressionStore::Use',20),('Analyzer',5680)):
   m=re.search(r'Class cppgm::semantic::'+name+r'\n\s*size=(\d+) align=(\d+)',Path(layout['dump_path']).read_text());assert m
   assert int(m[1])==layout['records'][name]['size']==expected and int(m[2])==layout['records'][name]['align']
- data=json.loads((ROOT/'student.tests/pa14/expression-owner-performance.json').read_text())
+ data=json.loads((ROOT/'student.tests/pa14'/performance_name).read_text())
  assert shared.sha(ROOT/'student.tests/pa14/expression_owner_benchmark.py')==data['harness_sha256']
  assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
  assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
@@ -57,7 +58,7 @@ def verify():
     assert b['semantic_expression_uses']==n*(5*width+6)+5*width+7
     assert b['semantic_call_argument_edges']==n+2*width
  assert count==560
- validation=json.loads((ROOT/'student.tests/pa14/expression-owner-validation.json').read_text())
+ validation=json.loads((ROOT/'student.tests/pa14'/validation_name).read_text())
  assert shared.sha(ROOT/'student.tests/pa14/expression_owner_validation.py')==validation['harness_sha256']
  assert [validation[k] for k in ('stage_sources','prior_tests','through_tests','personal_native','parity_sources','rejection_controls','abi_controls','reducer_controls')]==[314,1621,1935,24,338,124,6,7]
  for binary in validation['binaries']:assert shared.sha(binary['path'])==binary['sha256']
@@ -74,8 +75,8 @@ def verify():
   assert len(set(o['sha256'] for o in row['outputs']))==len(set(o['native_sha256'] for o in row['outputs']))==1
  control=validation['store_control'];assert shared.sha(control['source_path'])==control['source_sha256']
  for out in control['outputs']:assert out['exit_code']==0 and shared.sha(out['path'])==out['sha256']
- handoff=json.loads((ROOT/'student.tests/pa14/expression-owner-handoff.json').read_text())
- assert handoff['implementation_commit'].startswith('c4e4e6f4') and handoff['entry_commit'].startswith('5a795af4')
+ handoff=json.loads((ROOT/'student.tests/pa14'/handoff_name).read_text())
+ assert handoff['implementation_commit'].startswith(implementation) and handoff['entry_commit'].startswith('5a795af4')
  assert handoff['release_sha256']==data['binaries'][1]['sha256']==validation['binaries'][0]['sha256']
  assert [row['name'] for row in handoff['checks']]==['stage','prior','through','file_audit','native']
  for row in handoff['checks']:assert row['exit_code']==0 and shared.sha(row['log'])==row['log_sha256']

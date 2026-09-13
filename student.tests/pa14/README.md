@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all twenty-three local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all twenty-four local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -22,11 +22,11 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-three
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-four
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 337 inputs with GCC's address and undefined
+The current campaign checks 338 inputs with GCC's address and undefined
 behavior sanitizers, leak detection and halt-on-error enabled, plus 124 explicit
 binding/query/scalar/call/object/default rejection cases. All seven `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
@@ -158,6 +158,32 @@ entire corpus without timing. The frozen final campaign records compiler wall/RS
 executable runtime/payload, A/A calibration and two ABBA blocks. New array cases
 rejected by A have B-only observations. `value_query_validation.py RELEASE
 SANITIZED WORK OUT` records all 337 parity inputs, 124 rejection controls, six ABI
-controls and seven reducer output/native checks. Current layout validation uses
+controls and seven reducer output/native checks. The value-stage layout was recorded with
 `value_layout_probe.cc` and frozen transitive headers; prior header snapshots
 remain intact. Artifacts live under `$RALPH_ARTIFACT_DIR/pa14-value-facts/`.
+
+
+`expression-owners.cpp` checks fixed call/default inputs, distinct local and
+receiver identities, conditional reference lifetimes, full-expression temporary
+cleanup, move-only values and indirect reference calls. `expression-store.cc` is
+a separately compiled storage control: immutable properties share source IDs,
+concrete bindings and incoming/evaluation state remain independent, conversion
+variants are shared, and snapshots survive recursive arena growth.
+
+`expression_owner_benchmark.py A B WORK OUT` retains all 28 value-stage compiler
+inputs and adds three source/instance call-input scalings and one checked native
+loop. Each full campaign has 32 compiler and eight executable measurements,
+each with warmups, A/A calibration and two ABBA blocks.
+`expression-owner-performance.json` retains the initial ownership campaign;
+`expression-view-performance.json` records the local-view follow-up against the
+same entry compiler and inputs. Neither campaign replaces earlier observations.
+
+`expression_owner_validation.py RELEASE SANITIZED WORK OUT ENTRY` records 338
+parity inputs, 124 rejection controls, six ABI controls, seven reducers, storage
+controls under both builds, and the lifetime program under entry/release/sanitizer
+builds. Both validation manifests are retained. `expression_owner_layout_probe.cc`
+and 17 frozen transitive headers establish the current property/use records and
+public views; historical layout artifacts remain unchanged. The full verifier
+also checks current header hashes, ownership/scaling equations and required root
+check manifests. Artifacts live under
+`$RALPH_ARTIFACT_DIR/pa14-expression-owners/`.

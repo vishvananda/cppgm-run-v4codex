@@ -578,3 +578,13 @@ print('current required stage/prior/through/native/audit command evidence and in
 from verify_expression_owners import verify as verify_expression_owners
 owner_observations=verify_expression_owners()
 print(observations+new_samples+owner_observations,'total frozen performance observations verified')
+view_observations=verify_expression_owners('expression-view-performance.json','expression-view-validation.json',
+ 'expression-view-handoff.json','5ae726e0')
+owners=json.loads((ROOT/'student.tests/pa14/expression-owner-performance.json').read_text())
+views=json.loads((ROOT/'student.tests/pa14/expression-view-performance.json').read_text())
+assert owners['workloads'].keys()==views['workloads'].keys()
+for name,work in views['workloads'].items():
+ assert work['source_sha256']==owners['workloads'][name]['source_sha256']
+ assert work['outputs'][0]['sha256']==owners['workloads'][name]['outputs'][0]['sha256']
+ assert work['outputs'][1]['sha256']==owners['workloads'][name]['outputs'][1]['sha256']
+print(observations+new_samples+owner_observations+view_observations,'total frozen performance observations verified')
