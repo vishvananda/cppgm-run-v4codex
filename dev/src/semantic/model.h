@@ -13,7 +13,10 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable };
+// Boolean success has two outcomes, while active and failed remain distinct.
+// This compact encoding does not confuse a pending query with a false value.
+enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -23,6 +26,15 @@ struct FailedSemanticFact : std::exception {
     NodeId source;
     FailedSemanticFact(SemanticFact f, EntityId e, NodeId n) : fact(f), entity(e), source(n) {}
     const char* what() const noexcept override { return "previously failed semantic fact"; }
+};
+// An absent prerequisite is not a failed computation for a complete key. A
+// later declaration may make it available; no negative result is published.
+struct UnavailableSemanticFact : std::exception {
+    SemanticFact fact;
+    EntityId entity;
+    NodeId source;
+    UnavailableSemanticFact(SemanticFact f, EntityId e, NodeId n) : fact(f), entity(e), source(n) {}
+    const char* what() const noexcept override { return "semantic prerequisite unavailable"; }
 };
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray };
@@ -96,8 +108,8 @@ struct ClassFacts {
     EntityId variant_initializer = 0;
     unsigned char declared_transfers = 0, generated_transfers = 0;
     unsigned char copy_storage_state = 0;
-    unsigned char trivial_destructor_state = 0;
-    unsigned char destructor_exception_state = 0;
+    BooleanFact trivial_destructor_state = BooleanFact::NotStarted;
+    BooleanFact destructor_exception_state = BooleanFact::NotStarted;
     unsigned char value_abi = 0;
     unsigned char parameter_abi = 0;
     unsigned char parameter_state = 0; // Unqueried, rejected, body pending, proven.
@@ -173,7 +185,8 @@ struct MemberFacts {
     bool complete_entry = false, retained_root = false;
     std::uint32_t action_begin = 0, action_count = 0;
     std::uint32_t default_conversions = 0;
-    unsigned char trivial_state = 0, destruction_state = 0, exception_state = 0;
+    unsigned char trivial_state = 0, destruction_state = 0;
+    FactState exception_state = FactState::NotStarted;
     bool destruction_needed = false, nonthrowing = false;
     std::uint32_t destruction_begin = 0, destruction_count = 0;
     TransferKind transfer = TransferKind::None;

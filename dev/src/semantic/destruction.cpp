@@ -77,8 +77,14 @@ bool Analyzer::trivial_destructor(TypeId t)
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return true;
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
-    if (class_facts[c].trivial_destructor_state) return class_facts[c].trivial_destructor_state == 3;
-    class_facts[c].trivial_destructor_state = 1;
+    require_destructor_class(cls);
+    auto state = class_facts[c].trivial_destructor_state;
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorTriviality,cls,entities[cls].source);
+    if (state == BooleanFact::Active) throw std::logic_error("cyclic destructor triviality query");
+    class_facts[c].trivial_destructor_state = BooleanFact::Active;
+    try {
     EntityId dtor = class_facts[c].destructor;
     bool trivial = (!dtor || !members[entities[dtor].member_info].virtual_member) && (!dtor || (members[entities[dtor].member_info].synthetic && !members[entities[dtor].member_info].defaulted_late));
     for (auto d = scopes[entities[cls].scope].first_decl; trivial && d; d = declarations[d].next) {
@@ -86,8 +92,13 @@ bool Analyzer::trivial_destructor(TypeId t)
         if (nonstatic_field(field) && entities[field].owner == entities[cls].scope) trivial = trivial_destructor(entities[field].type);
     }
     for (auto b = class_facts[c].first_base; trivial && b; b = bases[b].next) trivial = trivial_destructor(entities[bases[b].base].type);
-    class_facts[c].trivial_destructor_state = trivial ? 3 : 2;
+    class_facts[c].trivial_destructor_state = trivial ? BooleanFact::True : BooleanFact::False;
     return trivial;
+    } catch (const UnavailableSemanticFact&) {
+        class_facts[c].trivial_destructor_state = BooleanFact::NotStarted; throw;
+    } catch (...) {
+        class_facts[c].trivial_destructor_state = BooleanFact::Failure; throw;
+    }
 }
 void Analyzer::destructor_actions(EntityId e)
 {
@@ -199,8 +210,17 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     bool destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
     bool prior_throwing = previous == 0 || previous == 2;
     bool current_throwing = spec == 0 || spec == 2;
-    if ((old & 128) && (!destructor || (previous && spec)) && prior_throwing != current_throwing)
-        throw std::runtime_error("conflicting exception specifications");
+    if (old & 128) {
+        if (destructor && (previous || spec) && (!previous || !spec)) {
+            auto cls = scopes[entities[e].owner].entity;
+            require_destructor_class(cls);
+            bool implicit_throwing = !implicit_destructor_nonthrowing(cls);
+            if (!previous) prior_throwing = implicit_throwing;
+            if (!spec) current_throwing = implicit_throwing;
+        }
+        if (prior_throwing != current_throwing)
+            throw std::runtime_error("conflicting exception specifications");
+    }
     entities[e].exception_spec = 128 | (spec ? spec : destructor ? previous : 0);
 }
 bool Analyzer::function_nonthrowing(EntityId e)
@@ -212,11 +232,19 @@ bool Analyzer::function_nonthrowing(EntityId e)
     }
     if (!destructor_member(e)) return false;
     auto m = entities[e].member_info;
-    if (members[m].exception_state == 2) return members[m].nonthrowing;
-    if (members[m].exception_state == 1) throw std::logic_error("cyclic destructor exception specification");
-    members[m].exception_state = 1;
+    if (members[m].exception_state == FactState::Success) return members[m].nonthrowing;
+    if (members[m].exception_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorException,e,entities[e].source);
+    if (members[m].exception_state == FactState::Active) throw std::logic_error("cyclic destructor exception specification");
+    members[m].exception_state = FactState::Active;
+    try {
     bool no_throw = implicit_destructor_nonthrowing(scopes[entities[e].owner].entity);
-    members[m].exception_state = 2; members[m].nonthrowing = no_throw;
+    members[m].exception_state = FactState::Success; members[m].nonthrowing = no_throw;
     return no_throw;
+    } catch (const UnavailableSemanticFact&) {
+        members[m].exception_state = FactState::NotStarted; throw;
+    } catch (...) {
+        members[m].exception_state = FactState::Failure; throw;
+    }
 }
 } }

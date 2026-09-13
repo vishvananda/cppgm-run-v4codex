@@ -6,6 +6,17 @@ Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original **84/314**, current **314/314**: all 230 original failures resolved,
 with unchanged fixtures, references and comparison rules. PA15 has not started.
 
+Active continuation from `d06d62b2`; previous turn: **verified progress**.
+Current audit: destructor declaration properties → subobject declaration completion;
+compatible implicit/explicit exception specifications → member declaration;
+action preparation → constructor/destructor emission facts. Preserve mutually
+exclusive member ownership with one typed action-state field, and use typed
+boolean fact outcomes to distinguish active, success and failure without adding
+per-query allocations. Validate uninstantiated template subobjects, exception
+redeclarations, repeated failure and late declaration availability. Work budgets
+are one property computation per completed class/member key and one visit per
+required subobject edge; preserve body-demand separation and ABI output.
+
 ## Design/spec alignment
 
 | Owner / data flow | Complexity and validation |

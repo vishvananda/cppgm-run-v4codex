@@ -11,7 +11,7 @@ bool Analyzer::indirect_parameter(TypeId t) const
 bool Analyzer::empty_class(TypeId t) const
 { return class_value(t) && class_facts[entities[types[t].entity].class_info].empty; }
 bool Analyzer::parameter_cleanup(EntityId e) const
-{ return entities[e].kind == EntityKind::Parameter && class_value(entities[e].type) && class_facts[entities[types[entities[e].type].entity].class_info].trivial_destructor_state == 2; }
+{ return entities[e].kind == EntityKind::Parameter && class_value(entities[e].type) && class_facts[entities[types[entities[e].type].entity].class_info].trivial_destructor_state == BooleanFact::False; }
 const ValueInitialization& Analyzer::class_initialization(NodeId n, TypeId t) const
 { return value_initializations[class_initializer_index.get(key(n,t))]; }
 const ValueReturn& Analyzer::class_return(NodeId n) const

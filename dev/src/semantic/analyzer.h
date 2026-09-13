@@ -252,6 +252,7 @@ private:
     void destructor_actions(EntityId e);
     bool implicit_destructor_nonthrowing(EntityId cls);
     bool type_destructor_nonthrowing(TypeId type);
+    void require_destructor_class(EntityId cls);
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
     void register_destruction(EntityId e);
