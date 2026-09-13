@@ -217,8 +217,8 @@ private:
     Index static_index;
     std::vector<StaticFact> static_facts;
     StaticValue static_value_impl(NodeId n, TypeId target);
-    void function_defaults(EntityId e, NodeId d, ScopeId s);
-    void bind_template_defaults(NodeId d, ScopeId s, ScopeId head = 0);
+    void function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source);
+    void bind_template_defaults(NodeId d, ScopeId s, ScopeId head = 0, bool allowed = true);
     Index template_default_bindings;
     NodeId default_argument(EntityId e, unsigned parameter);
     Index default_argument_states;
@@ -442,7 +442,7 @@ private:
     bool bind_template_expression(NodeId n, ScopeId s, bool callee = false);
     bool bind_template_expression_impl(NodeId n, ScopeId s, bool callee);
     EntityId pattern_declaration(EntityKind kind, ScopeId s, IdentifierId name, NodeId source, bool dependent);
-    void bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred = 0);
+    void bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred = 0, bool defaults_allowed = true);
     void bind_template_body(const Body& body);
     void bind_template_statement(NodeId n, ScopeId s);
     ScopeId bind_template_class(NodeId n, ScopeId parent, EntityId entity = 0, std::vector<Body>* deferred = 0);

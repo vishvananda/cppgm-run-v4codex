@@ -2,7 +2,7 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head)
+void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool allowed)
 {
     if (!d || ast.nodes.occurrences[d].context) return;
     auto source = ast.nodes.occurrences[d].source;
@@ -15,6 +15,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head)
     bool needed = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
     if (!needed) return;
+    if (!allowed) throw std::runtime_error("class template member default must appear on its initial declaration");
     template_default_bindings.put(source,1);
     auto scope = make_scope(ScopeKind::Block,s,0,0,false);
     template_pattern_scopes.put(scope,1);
@@ -39,7 +40,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head)
         bind_template_expression(child(p,Kind::DefaultArgument),scope);
     }
 }
-void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
+void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
 {
     Type f = types[entities[e].type];
     if (!f.count) return;
@@ -64,6 +65,8 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
         NodeId a = child(p, Kind::DefaultArgument);
         unsigned index = entities[e].defaults + i;
         if (a) {
+            if (head && source != entities[e].source)
+                throw std::runtime_error("function template default added by a later declaration");
             if (default_arguments[index]) throw std::runtime_error("duplicate default argument");
             // Class specialization declares member defaults without demanding
             // their expressions. Preserve the declaration's access environment.

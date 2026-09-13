@@ -336,7 +336,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
-    if (calls && function) { function_defaults(e, d, definition_scope); exception_specification(e, d, definition_scope); }
+    if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;

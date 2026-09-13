@@ -42,13 +42,11 @@ template<class T> int tick(int n=next()) { return n; }
 template<class T> int late(int n=sizeof(T));
 int before_definition() { return late<int>(); }
 template<class U> int late(int n) { return U(n)+sizeof(U); }
-template<class T> int added(int n) { return T(n); }
-template<class V> int added(int n=sizeof(V));
 namespace Named {
     const int offset=3;
-    template<class T> int qualified(int n);
+    template<class T> int qualified(int n=sizeof(T)+offset);
 }
-template<class U> int Named::qualified(int n=sizeof(U)+offset) { return n; }
+template<class U> int Named::qualified(int n) { return n; }
 int main() {
     Choice<int> a(4); Choice<long> b(9);
     if (a.add(3)!=7 || b.add(5)!=14) return 1;
@@ -63,5 +61,5 @@ int main() {
     if (choose<int>()!=sizeof(int) || choose<long>()!=sizeof(long)) return 7;
     if (tick<int>()!=4 || tick<int>()!=5 || tick<long>()!=6) return 8;
     return before_definition()!=2*sizeof(int) || late<long>()!=2*sizeof(long) ||
-        added<long>()!=sizeof(long) || Named::qualified<int>()!=sizeof(int)+3;
+        Named::qualified<int>()!=sizeof(int)+3;
 }

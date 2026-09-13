@@ -109,7 +109,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Class) {
         auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
         bind_template_class(n,environment,nested);
-    } else bind_template_declaration(n,environment);
+    } else bind_template_declaration(n,environment,0,false);
     return true;
 }
 bool Analyzer::instantiate_member_definition(EntityId e)

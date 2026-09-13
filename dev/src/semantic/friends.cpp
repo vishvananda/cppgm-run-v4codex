@@ -39,7 +39,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         declare_operator(function, name);
         friendships.put(key(cls, function), 1);
         if (!qualified) hidden_friends.put(key(cls, terminal(name)), merge_lookup(hidden_friends.get(key(cls, terminal(name))), function));
-        function_defaults(function, d, s); exception_specification(function, d, s);
+        function_defaults(function, d, s, n); exception_specification(function, d, s);
         record(s, function, d, type, EntityKind::Function);
         if (body) {
             if (!qualified) entities[function].emission |= Entity::HiddenFriend;

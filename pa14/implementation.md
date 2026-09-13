@@ -451,9 +451,20 @@ the future body's environment. Qualified namespace lookup uses the declaration
 scope while retaining the source head's type parameters.
 
 Current checks pass PA14 314/314, a default through report 1935/1935,
-twenty-one native controls and eight new rejections. `demand-regions.cpp` is
+twenty-one native controls and twelve new rejections. `demand-regions.cpp` is
 entry-rejected and current-accepted, covering unused dependent defaults,
 explicit constructor/member arguments, repeated default side effects,
-local/nested classes, converting constructors, renamed heads in both declaration
-orders, defaults used before definitions and qualified namespace definitions.
+local/nested classes, converting constructors, renamed heads across declarations and definitions, defaults used before definitions and qualified namespace definitions.
 Final cache checks and frozen performance/sanitizer evidence remain pending.
+
+The standards review moved incorrectly permissive personal controls for defaults
+added on later template declarations into the rejection suite; their original
+source is preserved in the region artifacts. N3485 [dcl.fct.default]/4 and /6
+restrict these additions, as confirmed by [CWG 15](https://cplusplus.github.io/CWG/issues/15.html)
+and [CWG 217](https://cplusplus.github.io/CWG/issues/217.html). Initial defaults
+remain valid across renamed definitions and early calls. Out-of-class member
+binding receives an explicit restriction from its declaration owner; function
+templates compare the current declaration with the canonical initial source.
+No course fixture, reference, or comparison rule changed. Current checks pass
+314 PA14 cases, 21 native programs, twelve rejection controls and the focused
+`default-heads.t` compiler/native reducer. The final evidence campaign follows.
