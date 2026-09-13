@@ -126,7 +126,7 @@ ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
         auto spec = specializations[entities[t.entity].specialization];
         if (spec.pattern != primary) return 0;
         auto args = argument_packs[spec.arguments];
-        if (args.count > canonical_parameters.size()) return 0;
+        if (args.count != templates[entities[primary].template_info].count || args.count > canonical_parameters.size()) return 0;
         for (unsigned i = 0; i < args.count; ++i)
             if (argument_types[args.offset+i] != canonical_parameters[i]) return 0;
         return entities[primary].scope;
@@ -145,6 +145,7 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
     cache.put(type,type);
     auto t = types[type]; TypeId result = type;
     auto child = t.child ? template_member_aliases(t.child,primary,cache) : 0;
+    if (t.child && !child) return 0;
     if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(child,primary);
         auto alias = owner && !t.bound ? local(owner,t.entity,Lookup::Qualifier) : 0;
@@ -152,14 +153,30 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
             // Only aliases of this current instantiation are expanded. A
             // different dependent specialization retains its symbolic member.
             auto head = templates[entities[primary].template_info]; Index bindings, substitution;
-            for (unsigned i = 0; i < head.count; ++i)
-                bindings.put(template_parameters[head.offset+i],canonical_parameters[i]);
+            for (auto scope = entities[alias].owner; scope; scope = scopes[scope].parent) {
+                if (scopes[scope].kind != ScopeKind::Template) continue;
+                auto declaration_head = definition_source_heads.get(scope);
+                if (!declaration_head) declaration_head = scope;
+                for (auto d = scopes[declaration_head].first_decl; d; d = declarations[d].next) {
+                    auto parameter = declarations[d].entity;
+                    if (!entities[parameter].template_parameter) continue;
+                    auto ordinal = parameter_ordinals.get(parameter);
+                    if (ordinal && ordinal <= head.count)
+                        bindings.put(parameter,canonical_parameters[ordinal-1]);
+                }
+            }
             auto value = substitute_type(entities[alias].type,bindings,substitution);
-            result = types.qualify(template_member_aliases(value,primary,cache),t.cv);
+            if (!value) return 0;
+            value = template_member_aliases(value,primary,cache);
+            if (!value) return 0;
+            result = types.qualify(value,t.cv);
         } else {
             std::vector<TypeId> args;
-            for (unsigned i = 0; i < t.count; ++i)
-                args.push_back(template_member_aliases(types.parameters[t.offset+i],primary,cache));
+            for (unsigned i = 0; i < t.count; ++i) {
+                auto value = template_member_aliases(types.parameters[t.offset+i],primary,cache);
+                if (!value) return 0;
+                args.push_back(value);
+            }
             result = types.qualify(types.dependent_name(child,t.entity,args,t.bound),t.cv);
         }
     } else if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
@@ -167,13 +184,18 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         std::vector<TypeId> args; bool changed = false;
         for (unsigned i = 0; i < pack.count; ++i) {
             auto source = argument_types[pack.offset+i];
-            auto value = template_member_aliases(source,primary,cache); args.push_back(value); changed |= value != source;
+            auto value = template_member_aliases(source,primary,cache);
+            if (!value) return 0;
+            args.push_back(value); changed |= value != source;
         }
         if (changed) result = types.qualify(entities[specialize_class(spec.pattern,args)].type,t.cv);
     } else if (t.kind == TypeKind::Function) {
         std::vector<TypeId> params;
-        for (unsigned i = 0; i < t.count; ++i)
-            params.push_back(template_member_aliases(types.parameters[t.offset+i],primary,cache));
+        for (unsigned i = 0; i < t.count; ++i) {
+            auto parameter = template_member_aliases(types.parameters[t.offset+i],primary,cache);
+            if (!parameter) return 0;
+            params.push_back(parameter);
+        }
         result = types.signature(types.function(child,params,t.variadic,t.cv,t.ref));
     } else if (t.child) {
         result = t.kind == TypeKind::MemberPointer ? types.member_pointer(t.entity,child) : types.compound(t.kind,child,t.bound);

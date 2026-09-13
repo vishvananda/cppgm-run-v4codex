@@ -420,6 +420,7 @@ private:
     void demand_template_storage(EntityId e);
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
     Index definition_traversals, unmatched_definitions;
+    Index definition_source_heads;
     std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
     std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
     std::vector<EntityId> storage_demand;

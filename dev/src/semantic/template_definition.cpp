@@ -111,6 +111,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
     }
     auto environment = make_scope(ScopeKind::Template,binding_owner,0,0,false);
+    definition_source_heads.put(environment,s);
     for (unsigned j = 0; j < def.count; ++j) {
         auto parameter = template_parameters[def.parameters+j];
         bind(environment,entities[parameter].name,parameter);

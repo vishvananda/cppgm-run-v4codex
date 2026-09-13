@@ -654,3 +654,13 @@ combined state optimization. Later source publication changes only the affected
 head identity. The overload control drops six entry applications to two, with
 three source signature visits and identical validated LowIR/native output.
 PA14, prior13, all 27 native programs and twelve rejection controls pass.
+
+
+Out-of-class nested aliases retain their declaring template head explicitly.
+The binding overlay records that head, so aliases introduced under U and later
+used by a member definition under V normalize against their own parameter IDs.
+The reduced nested-head program was accepted by entry, rejected by the initial
+selected-definition build, and now passes; both original outputs remain in the
+artifact directory. All 314 stage tests, 1621 prior tests, 27 native programs
+and twelve rejection controls pass after the correction and unresolved-type
+guards. No semantic decision uses parameter spelling as identity.
