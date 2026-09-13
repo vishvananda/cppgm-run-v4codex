@@ -7,6 +7,10 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     Expression fn = children[0].expression;
     std::vector<Expression> args;
     for (unsigned i = 1; i < children.size(); ++i) args.push_back(children[i].expression);
+    if (callee.kind != QueryKind::TypeValue && class_value(fn.type)) {
+        TypeQuery call = q; call.op = OP_LPAREN; call.name = operator_name(OP_LPAREN); call.entity = 0;
+        return query_operator(call,children);
+    }
     if (callee.kind == QueryKind::Name && callee.name) {
         bool adl = !fn.entity || function_binding(fn.entity);
         if (fn.entity && adl) for (auto e : candidates(fn.entity)) {
@@ -46,6 +50,13 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         for (auto e : candidates(fn.entity)) if (entities[e].member_info) {
             auto implicit = implicit_object_type(q.context);
             if (implicit) object = types[implicit].child;
+            else {
+                // A retained member body has a symbolic object identity and
+                // cv, with fixed base edges, before its class has a layout.
+                auto context = template_object_context(q.context);
+                if (context.owner && context.available)
+                    object = types.qualify(types.named(context.owner),context.cv);
+            }
             break;
         }
     }

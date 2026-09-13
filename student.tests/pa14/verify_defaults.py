@@ -5,7 +5,7 @@ import json
 from verify_special_signatures import ROOT,document,checked,shared
 from verify_declaration_facts import binary,campaign,outputs
 
-def verify():
+def verify(check_live=True):
  proof=document('default-proofs.json')
  assert shared.sha(ROOT/'student.tests/pa14/default_evidence.py')==proof['harness_sha256']
  for row in proof['sources']+proof['artifacts']+[proof['spec'],proof['standard'],proof['handout']]:binary(row)
@@ -54,7 +54,7 @@ def verify():
   assert row['build_exit']==0 and len(row['headers'])==24
   for h in row['headers']:
    assert shared.sha(h['path'])==h['sha256']
-   if row['label']=='current':assert shared.sha(h['source'])==h['sha256']
+   if check_live and row['label']=='current':assert shared.sha(h['source'])==h['sha256']
   for k in ['binary','dump']:assert shared.sha(row[k+'_path'])==row[k+'_sha256']
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
  assert layout['layouts'][0]['sizes']==[112,36,36,20,8,504,48,48,120,32,20,56,6216,120,28,24,64,1472]
@@ -66,7 +66,8 @@ def verify():
  for k in ['source','binary']:assert shared.sha(row[k+'_path'])==row[k+'_sha256']
  assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']==[68]
  data=document('default-final-performance.json')
- assert shared.sha(ROOT/'dev/cppgm++')==data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
+ assert data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
+ if check_live:assert shared.sha(ROOT/'dev/cppgm++')==data['binaries'][1]['sha256']
  assert data['binaries'][0]['sha256']==validation['binaries'][0]['sha256']
  assert shared.sha(ROOT/'student.tests/pa14/default_benchmark.py')==data['harness_sha256']
  assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
@@ -121,6 +122,6 @@ def verify():
  assert len(prior['checks'])==85
  for row in prior['checks']:checked(row)
  for row in prior['binaries']:binary(row)
- print('952 default observations, 349 unchanged parity inputs, 20 public query runs, 25 source controls and 24 live headers verified')
+ print('952 default observations, 349 unchanged parity inputs, 20 public query runs, 25 source controls and 24 '+('live' if check_live else 'frozen')+' headers verified')
  return count
 if __name__=='__main__':verify()

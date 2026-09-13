@@ -3036,3 +3036,7 @@ native programs, three required rejections and one incomplete-reference IR
 control. The final manifest records 85 top-level checks, and all 1266 course
 fixture/reference hashes are unchanged. Artifacts and failed exploratory checks
 are preserved under `$RALPH_ARTIFACT_DIR/pa14-default-facts/`.
+
+The independent body/statement audit adds [532 frozen observations](../student.tests/pa14/body-audit-performance.md)
+(16,380 cumulative), including repeated calibration and all four performance
+dimensions. Historical measurements and stage-scoped acceptance remain intact.

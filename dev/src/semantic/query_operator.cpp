@@ -16,9 +16,9 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         complete_class(types[object].entity); naming = entities[types[object].entity].scope;
         family = merge_lookup(family,lookup(naming,q.name,Lookup::Ordinary,true));
     }
-    if (named && q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW)
+    if (named && q.op != OP_LPAREN && q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW)
         family = merge_lookup(family,associated_type_lookup(q.name,std::move(argument_types)));
-    struct Candidate { EntityId entity; unsigned offset, builtin; };
+    struct Candidate { EntityId entity; unsigned offset, builtin; TypeId surrogate; };
     std::vector<Candidate> viable; std::vector<Conversion> sequences;
     for (auto e : candidates(family)) {
         ++candidate_work;
@@ -41,11 +41,30 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
                 conversion_value(args[i],types.parameters[f.offset+i-member]);
             valid = c.valid(); sequences.push_back(c);
         }
-        if (valid) viable.push_back({e,begin,0}); else sequences.resize(begin);
+        if (valid) viable.push_back({e,begin,0,0}); else sequences.resize(begin);
+    }
+    if (q.op == OP_LPAREN) {
+        Index seen;
+        for (EntityId e : conversion_candidates(object)) {
+            TypeId target = decay(types[entities[e].type].child);
+            if (!pointer(target) || types[types[target].child].kind != TypeKind::Function || seen.get(target)) continue;
+            seen.put(target,1);
+            auto f = types[types[target].child];
+            if (args.size()-1 < f.count || (!f.variadic && args.size()-1 != f.count)) continue;
+            auto begin = sequences.size();
+            auto callee = conversion_function_value(args[0],target);
+            bool valid = callee.valid(); sequences.push_back(callee);
+            for (unsigned j = 1; valid && j < args.size(); ++j) {
+                auto c = j <= f.count ? conversion_value(args[j],types.parameters[f.offset+j-1]) : ellipsis_conversion_value(args[j]);
+                valid = c.valid(); sequences.push_back(c);
+            }
+            if (valid) viable.push_back({callee.function,unsigned(begin),0,types[target].child});
+            else sequences.resize(begin);
+        }
     }
     std::vector<BuiltinOperator> builtins; builtin_operators_values(q.op,args,builtins);
     for (unsigned i = 0; i < builtins.size(); ++i) {
-        viable.push_back({0,unsigned(sequences.size()),i+1});
+        viable.push_back({0,unsigned(sequences.size()),i+1,0});
         for (unsigned j = 0; j < args.size(); ++j) sequences.push_back(builtins[i].arguments[j]);
     }
     TypeQueryFact r;
@@ -80,7 +99,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     } else {
         if (deleted_transfer(selected.entity)) throw std::runtime_error("deleted type-query operator");
         check_access(selected.entity,q.context,naming,object);
-        auto returned = types[entities[selected.entity].type].child;
+        auto returned = types[selected.surrogate ? selected.surrogate : entities[selected.entity].type].child;
         r.expression.type = value_type(returned);
         r.expression.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

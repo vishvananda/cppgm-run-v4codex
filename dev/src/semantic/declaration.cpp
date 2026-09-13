@@ -7,12 +7,15 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::consume(NodeId n)
 {
+    if (completion_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::TranslationUnit,0,n);
     typedef std::chrono::steady_clock Clock;
     Clock::time_point start;
     if (ast.telemetry) start = Clock::now();
     facts.resize(ast.nodes.size());
     if (calls) expressions.resize(ast.nodes.size());
-    declaration(n, global);
+    try { declaration(n, global); }
+    catch (...) { completion_state = FactState::Failure; throw; }
     if (ast.telemetry) analysis_ms += std::chrono::duration<double, std::milli>(Clock::now() - start).count();
 }
 void Analyzer::finish()
@@ -89,7 +92,7 @@ void Analyzer::finish()
     if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); }
     // Semantic discovery order is independent of deterministic ABI publication.
     std::sort(vtable_emission.begin(), vtable_emission.end());
-    for (NodeId body : jump_bodies) check_jumps(body);
+    for (EntityId e : jump_bodies) finish_body(e);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
     completion_state = FactState::Success;
     } catch (...) {
@@ -292,7 +295,29 @@ void Analyzer::schedule_body(const Body& body)
 }
 void Analyzer::function_body(const Body& body)
 {
+    if (entities[body.entity].body_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::FunctionDefinition,body.entity,body.source);
     if (entities[body.entity].definition) throw std::runtime_error("function redefinition");
+    entities[body.entity].body_state = FactState::Active;
+    ++body_checks;
+    // A nested body owns its own control context. Preserve enclosing switch
+    // storage only when it is live; ordinary bodies reuse the scratch capacity.
+    TypeId saved_return = return_type;
+    EntityId saved_function = current_function;
+    auto saved_loop = loop_depth, saved_switch = switch_depth;
+    std::vector<SwitchContext> enclosing_switches;
+    bool nested_switch = !switches.empty();
+    if (nested_switch) enclosing_switches.swap(switches);
+    loop_depth = switch_depth = 0;
+    current_function = body.entity;
+    return_type = types[entities[body.entity].type].child;
+    auto restore = [&]() {
+        return_type = saved_return; current_function = saved_function;
+        loop_depth = saved_loop; switch_depth = saved_switch;
+        switches.clear();
+        if (nested_switch) switches.swap(enclosing_switches);
+    };
+    try {
     demand_region(body.node);
     if (definitions) {
         auto type = types[entities[body.entity].type];
@@ -328,21 +353,45 @@ void Analyzer::function_body(const Body& body)
         bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }
-    TypeId saved_return = return_type;
-    EntityId saved_function = current_function; current_function = body.entity;
-    return_type = types[entities[body.entity].type].child;
-    try {
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
     if (calls) finish_class_returns(body.entity);
-    if (calls) jump_bodies.push_back(body.node);
-    } catch (...) {
-        return_type = saved_return; current_function = saved_function; throw;
-    }
-    return_type = saved_return;
-    current_function = saved_function;
     if (calls && (constructor_member(body.entity) || destructor_member(body.entity)))
         require_member_definition(body.entity);
+    if (calls) jump_bodies.push_back(body.entity);
+    entities[body.entity].body_state = FactState::Success;
+    } catch (...) {
+        entities[body.entity].body_state = FactState::Failure;
+        restore(); throw;
+    }
+    restore();
+}
+void Analyzer::finish_body(EntityId e)
+{
+    auto& state = entities[e].lifetime_state;
+    if (state == FactState::Success) return;
+    if (state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].definition);
+    if (state == FactState::Active) throw std::logic_error("recursive function lifetime checking");
+    state = FactState::Active;
+    ++body_lifetime_checks;
+    try {
+        check_jumps(entities[e].body);
+        entities[e].lifetime_state = FactState::Success;
+    } catch (...) {
+        entities[e].lifetime_state = FactState::Failure;
+        if (auto m = entities[e].member_info) members[m].demand = DemandState::Failed;
+        if (auto s = entities[e].specialization) specializations[s].body = FactState::Failure;
+        throw;
+    }
+}
+void Analyzer::require_body_facts(EntityId e) const
+{
+    auto entity = entities[e];
+    if (entity.body_state == FactState::Failure || entity.lifetime_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entity.definition);
+    if (entity.body_state != FactState::Success || entity.lifetime_state != FactState::Success)
+        throw std::logic_error("missing checked function body facts");
 }
 void Analyzer::statements(NodeId n, ScopeId s)
 {

@@ -345,6 +345,7 @@ void Procedural::run()
 }
 void Procedural::function_body(EntityId e, bool base)
 {
+    if (sem.entities[e].body) sem.require_body_facts(e);
     function = FunctionId(p.symbols[(base ? base_symbols[e] : symbols[e]).index-1].entity);
     builder.reset(new FunctionBuilder(p, function));
     reset_lifetime(e);

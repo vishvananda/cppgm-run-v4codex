@@ -1038,3 +1038,8 @@ excludes member pointers, PA13 does not introduce them, and PA14 excludes templa
 requiring unsupported earlier class features. It adds no stage requirement or
 production change. Performance evidence for the required group is recorded in
 [performance.md](performance.md) and in the demand-failure manifests.
+
+The independent full-stage audit begins at `78c2f13e`. Its current architecture,
+findings and remaining ownership work are consolidated in [audit.md](audit.md)
+and [plan.md](plan.md); the historical increments above remain evidence, not a
+substitute for that review.

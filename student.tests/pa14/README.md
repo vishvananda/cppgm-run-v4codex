@@ -336,3 +336,10 @@ includes both historical and current evidence. Raw artifacts are in
 The archived member-pointer exploration is outside the PA14 boundary: PA12
 explicitly excludes that feature, and PA13–PA14 do not add it. It is preserved
 in `pa14-member-pointer-types/`, without production changes or an exit gate.
+
+The body/statement audit is documented in [body-audit-performance.md](body-audit-performance.md).
+Run `python3 student.tests/pa14/verify_body_audit.py` for frozen evidence,
+`check_statement_facts.py` for source controls, and `check_body_publication.py`
+with a scratch directory for repeated public body/lifetime queries. The corrected
+`body_compare.pl` adapter uses the unchanged course comparator; it avoids Perl
+sort-variable shadowing in older personal adapters.

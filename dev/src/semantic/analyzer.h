@@ -14,6 +14,7 @@ public:
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false);
     void consume(NodeId declaration) override;
     void finish();
+    void require_body_facts(EntityId e) const;
     void write(std::ostream& out) const;
     void write_semantics(std::ostream& out, NodeId root) const;
     void telemetry(std::ostream& out) const;
@@ -256,7 +257,8 @@ private:
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
     Index object_destructors, lifetime_index, object_lifetimes, return_counts;
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
-    std::vector<NodeId> jump_bodies;
+    std::vector<EntityId> jump_bodies;
+    void finish_body(EntityId e);
     EntityId default_destructor(TypeId t, ScopeId s = 0, bool demand = true);
     void destructor_actions(EntityId e);
     bool implicit_destructor_nonthrowing(EntityId cls);
@@ -557,6 +559,14 @@ private:
     void statements(NodeId n, ScopeId s);
     void resolve_statement(NodeId n, ScopeId s);
     void resolve_condition(NodeId n, ScopeId s, bool is_switch);
+    TypeId condition_target(Expression value, bool is_switch);
+    Expression template_statement_value(NodeId n, ScopeId s);
+    void bind_template_condition(NodeId n, ScopeId s, bool is_switch);
+    void bind_template_return(NodeId n, ScopeId s);
+    Index template_statement_conversions;
+    std::size_t body_checks = 0, body_lifetime_checks = 0;
+    std::size_t statement_conversion_work = 0, statement_conversion_uses = 0;
+    Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);
     Expression resolve_expression(NodeId n, ScopeId s);
     Expression call_expression(NodeId n, ScopeId s);

@@ -94,11 +94,7 @@ void Analyzer::record_class_return(NodeId n, ScopeId s)
     bool eligible = local && (entities[local].kind == EntityKind::Variable || entities[local].kind == EntityKind::Parameter) &&
         !entities[local].is_static && !entities[local].external_decl && !(types[entities[local].type].cv & 2) && class_value(entities[local].type) &&
         encloses(entities[current_function].scope,entities[local].owner);
-    Conversion c = conversion(source,return_type);
-    if (eligible && types.unqualified(x.type) == types.unqualified(return_type)) {
-        EntityId ctor = select_transfer(return_type,x.type,ValueCategory::Xvalue,false);
-        if (ctor) { c.kind = Conversion::Kind::Construction; c.function = ctor; c.rank = 0; c.implicit_move = true; }
-    }
+    Conversion c = return_conversion(source,x,return_type,eligible);
     if (!c.valid()) throw std::runtime_error("invalid class return conversion");
     if (c.kind == Conversion::Kind::Construction) materialize_conversion(source,c,true);
     else apply_conversion(source,c);
@@ -111,6 +107,21 @@ void Analyzer::record_class_return(NodeId n, ScopeId s)
     if (function_returns[owner].last) value_returns[function_returns[owner].last].next = r;
     else function_returns[owner].first = r;
     function_returns[owner].last = r;
+}
+Conversion Analyzer::return_conversion(NodeId source, Expression value, TypeId target, bool eligible)
+{
+    auto occurrence = ast.nodes.occurrences[source];
+    auto retained = occurrence.context ? template_statement_conversions.get(occurrence.source) : 0;
+    if (retained && conversions[retained].target == target) {
+        ++statement_conversion_uses;
+        return copy_conversion_recipe(conversions[retained]);
+    }
+    Conversion c = expressions[source].ready ? conversion(source,target) : conversion_value(value,target);
+    if (eligible && types.unqualified(value.type) == types.unqualified(target)) {
+        EntityId ctor = select_transfer(target,value.type,ValueCategory::Xvalue,false);
+        if (ctor) { c.kind = Conversion::Kind::Construction; c.function = ctor; c.rank = 0; c.implicit_move = true; }
+    }
+    return c;
 }
 void Analyzer::finish_class_returns(EntityId e)
 {

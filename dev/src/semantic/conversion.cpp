@@ -264,7 +264,11 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
 }
 void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 {
-    Conversion c = direct && class_value(expressions[n].type) ? conversion_function(n,target,true) : conversion(n, target);
+    auto occurrence = ast.nodes.occurrences[n];
+    auto retained = occurrence.context && !direct ? template_statement_conversions.get(occurrence.source) : 0;
+    if (retained && conversions[retained].target == target) ++statement_conversion_uses;
+    Conversion c = retained && conversions[retained].target == target ? copy_conversion_recipe(conversions[retained]) :
+        direct && class_value(expressions[n].type) ? conversion_function(n,target,true) : conversion(n, target);
     if (!c.valid()) throw std::runtime_error("invalid implicit conversion");
     apply_conversion(n, c);
     expressions.incoming(n,conversions.size());

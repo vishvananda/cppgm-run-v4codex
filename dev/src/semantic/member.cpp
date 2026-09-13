@@ -13,7 +13,7 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     while (cls && entities[cls].scope != entities[e].owner) {
         ScopeId scope = entities[cls].scope;
         if (using_access.get(key(scope, e))) { wanted = types.qualify(entities[cls].type, f.cv); break; }
-        auto edge = class_facts[entities[cls].class_info].first_base;
+        auto edge = access_base(cls);
         cls = edge ? bases[edge].base : 0;
     }
     // [over.match.funcs]/4: conversion functions rank as members of the
@@ -27,7 +27,8 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     if (f.ref == RefQualifier::Rvalue && !rvalue) return c;
     if (f.ref == RefQualifier::Lvalue && rvalue && types[wanted].cv != 1) return c;
     if (!destructor_member(e) && (types[object].cv & ~types[wanted].cv)) return c;
-    bool derived = derived_from(object, wanted);
+    bool derived = types[object].kind == TypeKind::Named && types[wanted].kind == TypeKind::Named &&
+        types[object].entity != types[wanted].entity && class_derives(types[object].entity,types[wanted].entity);
     if (types.unqualified(object) != types.unqualified(wanted) && !derived) return c;
     c.rank = derived ? 2 : 0; c.derived = derived;
     c.qualification = types[wanted].cv & ~types[object].cv;
@@ -93,6 +94,8 @@ void Analyzer::require_member_definition(EntityId e)
 void Analyzer::require_member_body(EntityId e)
 {
     if (unevaluated_depth) return;
+    if (entities[e].body_state == FactState::Failure || entities[e].lifetime_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].definition);
     if (definitions) instantiate_member_definition(e);
     auto m = entities[e].member_info;
     if (m && members[m].demand == DemandState::Failed)

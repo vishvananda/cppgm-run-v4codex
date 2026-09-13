@@ -148,6 +148,7 @@ struct Entity {
     EntityKind kind = EntityKind::Variable;
     ETokenType key = TOK_INVALID;
     bool complete = false, scoped = false, template_parameter = false, is_static = false;
+    FactState body_state = FactState::NotStarted;
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
@@ -161,6 +162,9 @@ struct Entity {
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     enum Emission : unsigned char { HiddenFriend = 1, Used = 2 };
     unsigned char emission = 0;
+    // Source presence is not successful checking. Bodies and their later
+    // lifetime/control facts have independent terminal publication states.
+    FactState lifetime_state = FactState::NotStarted;
     std::uint32_t defaults = 0;
     std::uint64_t member_offset = 0;
     TypeId type = 0, underlying = 0;

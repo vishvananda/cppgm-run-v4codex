@@ -170,6 +170,19 @@ void Analyzer::bind_template_body(const Body& body)
     if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed template body binding");
     if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive template body binding");
     template_bound_bodies.put(source,unsigned(FactState::Active));
+    struct ControlBinding {
+        Analyzer& sem; TypeId result; unsigned loops, switches;
+        std::vector<SwitchContext> contexts;
+        ControlBinding(Analyzer& a, TypeId type) : sem(a), result(a.return_type),
+            loops(a.loop_depth), switches(a.switch_depth) {
+            contexts.swap(sem.switches); sem.loop_depth = sem.switch_depth = 0;
+            sem.return_type = type;
+        }
+        ~ControlBinding() {
+            contexts.swap(sem.switches); sem.loop_depth = loops; sem.switch_depth = switches;
+            sem.return_type = result;
+        }
+    } control(*this,types[entities[body.entity].type].child);
     try {
     auto owner = entities[body.entity].template_info ? templates[entities[body.entity].template_info].environment : body.owner;
     auto fs = make_scope(ScopeKind::Function,owner,entities[body.entity].name,body.entity,false);

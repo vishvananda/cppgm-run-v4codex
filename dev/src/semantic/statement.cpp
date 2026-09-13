@@ -3,6 +3,30 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::condition_target(Expression value, bool is_switch)
+{
+    auto t = value.type;
+    if (!t) throw std::runtime_error("unresolved condition");
+    if (class_value(value_type(t))) {
+        if (!is_switch) return types.fundamental(FT_BOOL);
+        TypeId converted = 0;
+        for (EntityId e : conversion_candidates(value_type(t))) {
+            TypeId result = value_type(types[entities[e].type].child);
+            if (members[entities[e].member_info].explicit_constructor || !integral(result)) continue;
+            if (!object_conversion(e,value_type(t),value.category).valid()) continue;
+            result = types.unqualified(result);
+            if (converted && result != converted) throw std::runtime_error("ambiguous contextual integral conversion");
+            converted = result;
+        }
+        if (!converted) throw std::runtime_error("missing contextual integral conversion");
+        return promote(converted);
+    }
+    if (is_switch) {
+        if (!integral(t)) throw std::runtime_error("switch requires integral or enum condition");
+    } else if (scoped_enum(t) || (!arithmetic(t) && !pointer(decay(t)) && !fundamental(t, FT_NULLPTR_T)))
+        throw std::runtime_error("invalid boolean condition");
+    return is_switch ? promote(t) : types.fundamental(FT_BOOL);
+}
 void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
 {
     facts.edit(n).scope = s;
@@ -14,35 +38,18 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
         t = declarator(d, specifiers(specs, s), s);
         facts.edit(n).entity = declare_object(d, ast[d].next, t, specs, s, c);
     } else t = expression(c, s).type;
-    if (!t) throw std::runtime_error("unresolved condition");
+    Expression value; value.type = t;
+    value.category = facts[n].entity ? ValueCategory::Lvalue : expressions[c].category;
+    auto target = condition_target(value,is_switch);
     if (class_value(value_type(t))) {
-        TypeId converted = types.fundamental(FT_BOOL);
-        if (is_switch) {
-            converted = 0;
-            for (EntityId e : conversion_candidates(value_type(t))) {
-                TypeId result = value_type(types[entities[e].type].child);
-                if (members[entities[e].member_info].explicit_constructor || !integral(result)) continue;
-                ValueCategory category = facts[n].entity ? ValueCategory::Lvalue : expressions[c].category;
-                if (!object_conversion(e,value_type(t),category).valid()) continue;
-                result = types.unqualified(result);
-                if (converted && result != converted) throw std::runtime_error("ambiguous contextual integral conversion");
-                converted = result;
-            }
-            if (!converted) throw std::runtime_error("missing contextual integral conversion");
-            converted = promote(converted);
-        }
-        Conversion conversion = conversion_function(facts[n].entity ? n : c,converted,!is_switch,false,facts[n].entity);
-        Expression result; result.type = converted; result.ready = true;
+        Conversion conversion = conversion_function(facts[n].entity ? n : c,target,!is_switch,false,facts[n].entity);
+        Expression result; result.type = target; result.ready = true;
         record_conversion(result,facts[n].entity ? n : c,conversion);
-        facts.edit(n).type = converted; expressions.set(n,result);
-        if (is_switch) switches.back().type = converted;
+        facts.edit(n).type = target; expressions.set(n,result);
+        if (is_switch) switches.back().type = target;
         return;
     }
-    if (is_switch) {
-        if (!integral(t)) throw std::runtime_error("switch requires integral or enum condition");
-    } else if (scoped_enum(t) || (!arithmetic(t) && !pointer(decay(t)) && !fundamental(t, FT_NULLPTR_T)))
-        throw std::runtime_error("invalid boolean condition");
-    facts.edit(n).type = is_switch ? promote(t) : types.fundamental(FT_BOOL);
+    facts.edit(n).type = target;
     if (is_switch) switches.back().type = facts[n].type;
     Expression result; result.type = facts[n].type; result.ready = true;
     if (ast[c].kind != Kind::ConditionDeclaration)
