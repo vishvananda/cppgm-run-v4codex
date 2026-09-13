@@ -441,10 +441,19 @@ recursive or failed demands. Template definition-time binding still checks
 fixed names inside defaults in a sequential parameter scope. This follows
 N3485 [temp.inst] and [dcl.fct.default], independent of diagnostic wording.
 
-Initial validation: PA14 314/314, twenty-one native controls and eight new
-rejection controls. `demand-regions.cpp` is rejected by the entry compiler and
-passes the current compiler/native backend, covering unused invalid dependent
-defaults, explicit constructor/member arguments, repeated default side effects,
-local/nested classes, renamed members and converting constructors. Complete
-function-template default-region identity, through checks and frozen final
-performance/sanitizer evidence are the next related steps.
+The source wrapper also owns each function-template default region, whether
+its default is used before or after the body. Successful defaults retain their
+expression identity for constant-time reuse; expected failure/active states are
+separate from projection. A default's declaring template head owns lookup.
+Complete specialization/head keys cache immutable overlays containing only that
+head's parameters. A default used before a later definition does not establish
+the future body's environment. Qualified namespace lookup uses the declaration
+scope while retaining the source head's type parameters.
+
+Current checks pass PA14 314/314, a default through report 1935/1935,
+twenty-one native controls and eight new rejections. `demand-regions.cpp` is
+entry-rejected and current-accepted, covering unused dependent defaults,
+explicit constructor/member arguments, repeated default side effects,
+local/nested classes, converting constructors, renamed heads in both declaration
+orders, defaults used before definitions and qualified namespace definitions.
+Final cache checks and frozen performance/sanitizer evidence remain pending.

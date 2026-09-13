@@ -2,7 +2,7 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-void Analyzer::bind_template_defaults(NodeId d, ScopeId s)
+void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head)
 {
     if (!d || ast.nodes.occurrences[d].context) return;
     auto source = ast.nodes.occurrences[d].source;
@@ -18,6 +18,10 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s)
     template_default_bindings.put(source,1);
     auto scope = make_scope(ScopeKind::Block,s,0,0,false);
     template_pattern_scopes.put(scope,1);
+    if (head && head != s) for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
+        auto parameter = declarations[d].entity;
+        if (entities[parameter].template_parameter) bind(scope,entities[parameter].name,parameter);
+    }
     unsigned ordinal = 0;
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
@@ -39,7 +43,9 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
 {
     Type f = types[entities[e].type];
     if (!f.count) return;
-    if (definitions && entities[e].template_info) bind_template_defaults(d,s);
+    auto head = definitions && entities[e].template_info ?
+        (active_template_scope ? active_template_scope : templates[entities[e].template_info].environment) : 0;
+    if (head) bind_template_defaults(d,s,head);
     if (!entities[e].defaults) {
         if (default_arguments.empty()) default_arguments.push_back(0);
         entities[e].defaults = default_arguments.size();
@@ -69,7 +75,8 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
             while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
                 value = ast[value].first;
             if (definitions && entities[e].template_info) {
-                default_arguments[index] = value; seen = true; continue;
+                default_arguments[index] = a; facts[a].scope = head;
+                seen = true; continue;
             }
             if (ast[value].kind == Kind::BracedInit) {
                 expression(value,s); require_conversion(value,types.parameters[f.offset+i]);
@@ -90,6 +97,7 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter)
     if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive member default argument");
     if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed member default argument");
     default_argument_states.put(root,unsigned(FactState::Active));
+    ++default_argument_work;
     try {
         demand_region(root);
         auto scope = facts[root].scope;

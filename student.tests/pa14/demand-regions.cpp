@@ -36,6 +36,19 @@ template<class T> struct Convert {
     int value;
     Convert(int n, int extra=sizeof(T)):value(n+extra) {}
 };
+template<class T> int choose(int n=sizeof(T));
+template<class U> int choose(int n) { return n; }
+template<class T> int tick(int n=next()) { return n; }
+template<class T> int late(int n=sizeof(T));
+int before_definition() { return late<int>(); }
+template<class U> int late(int n) { return U(n)+sizeof(U); }
+template<class T> int added(int n) { return T(n); }
+template<class V> int added(int n=sizeof(V));
+namespace Named {
+    const int offset=3;
+    template<class T> int qualified(int n);
+}
+template<class U> int Named::qualified(int n=sizeof(U)+offset) { return n; }
 int main() {
     Choice<int> a(4); Choice<long> b(9);
     if (a.add(3)!=7 || b.add(5)!=14) return 1;
@@ -46,5 +59,9 @@ int main() {
     Defined<int> d(8); Defined<long> e(11);
     if (d.run()!=8+sizeof(int) || e.run()!=11+sizeof(long)) return 5;
     Convert<int> ci=2; Convert<long> cl=3;
-    return ci.value!=2+sizeof(int) || cl.value!=3+sizeof(long);
+    if (ci.value!=2+sizeof(int) || cl.value!=3+sizeof(long)) return 6;
+    if (choose<int>()!=sizeof(int) || choose<long>()!=sizeof(long)) return 7;
+    if (tick<int>()!=4 || tick<int>()!=5 || tick<long>()!=6) return 8;
+    return before_definition()!=2*sizeof(int) || late<long>()!=2*sizeof(long) ||
+        added<long>()!=sizeof(long) || Named::qualified<int>()!=sizeof(int)+3;
 }

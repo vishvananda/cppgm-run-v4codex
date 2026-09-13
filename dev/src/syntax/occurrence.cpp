@@ -36,6 +36,11 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
         if (created) {
             id = nodes.occurrence(source,context);
             occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[source].source,id);
+            // A function default can be demanded before its containing body.
+            // Its root still owns the same region when that body is projected.
+            if (!work[i].deferred && n.kind == Kind::DefaultArgument) {
+                deferred_occurrences.put(id,2); ++deferred_regions; ++demanded_regions;
+            }
         }
         if (work[i].deferred) {
             deferred_occurrences.put(id,1); ++deferred_regions;

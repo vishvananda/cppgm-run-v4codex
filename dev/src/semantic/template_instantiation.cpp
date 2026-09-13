@@ -48,6 +48,30 @@ void Analyzer::instantiate_function(EntityId e)
     function_body({body,declarator,environment,e,source});
     specializations[index].body = FactState::Success;
 }
+ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
+{
+    auto index = entities[e].specialization;
+    auto spec = specializations[index];
+    auto pattern = templates[entities[spec.pattern].template_info];
+    if (head == pattern.environment && pattern.body) return specialization_environment(e);
+    auto k = key(index,head);
+    if (auto known = default_environments.get(k)) return known;
+    // A default belongs to its declaring head, independently of a later body
+    // definition. This immutable overlay contains only that head's parameters.
+    auto environment = make_scope(ScopeKind::Template,entities[spec.pattern].owner);
+    ++default_environment_work;
+    auto pack = argument_packs[spec.arguments]; unsigned ordinal = 0;
+    for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
+        auto parameter = declarations[d].entity;
+        if (!entities[parameter].template_parameter) continue;
+        if (ordinal == pack.count) throw std::logic_error("default head argument count mismatch");
+        auto alias = make_entity(EntityKind::Alias,environment,entities[parameter].name,0);
+        entities[alias].type = argument_types[pack.offset+ordinal++];
+        bind(environment,entities[alias].name,alias);
+    }
+    if (ordinal != pack.count) throw std::logic_error("incomplete default argument head");
+    default_environments.put(k,environment); return environment;
+}
 NodeId Analyzer::instantiate_default(EntityId e, unsigned parameter)
 {
     auto index = entities[e].specialization;
@@ -56,10 +80,26 @@ NodeId Analyzer::instantiate_default(EntityId e, unsigned parameter)
     specializations[index].context = context;
     auto pattern = spec.pattern;
     NodeId source = default_arguments[entities[pattern].defaults+parameter];
-    NodeId value = ast.instantiate(source,context);
+    if (auto root = ast.projected(source,context)) {
+        auto state = default_argument_states.get(root);
+        if (state == unsigned(FactState::Success)) return facts[root].target;
+        if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive function default argument");
+        if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed function default argument");
+    }
+    NodeId root = ast.instantiate(source,context);
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-    auto environment = specialization_environment(e);
-    expression(value,environment);
+    auto environment = default_environment(e,facts[source].scope);
+    NodeId value = ast[root].first;
+    while (ast[value].kind == syntax::Kind::Initializer || ast[value].kind == syntax::Kind::ParenInitializer)
+        value = ast[value].first;
+    default_argument_states.put(root,unsigned(FactState::Active)); ++default_argument_work;
+    try {
+        expression(value,environment);
+        facts[root].target = value; facts[root].scope = environment;
+        default_argument_states.put(root,unsigned(FactState::Success));
+    } catch (...) {
+        default_argument_states.put(root,unsigned(FactState::Failure)); throw;
+    }
     return value;
 }
 } }

@@ -218,10 +218,13 @@ private:
     std::vector<StaticFact> static_facts;
     StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s);
-    void bind_template_defaults(NodeId d, ScopeId s);
+    void bind_template_defaults(NodeId d, ScopeId s, ScopeId head = 0);
     Index template_default_bindings;
     NodeId default_argument(EntityId e, unsigned parameter);
     Index default_argument_states;
+    Index default_environments;
+    std::size_t default_environment_work = 0, default_argument_work = 0;
+    ScopeId default_environment(EntityId e, ScopeId head);
     void demand_region(NodeId root);
     std::vector<Expression> expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
