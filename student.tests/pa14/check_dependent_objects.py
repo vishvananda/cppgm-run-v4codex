@@ -13,6 +13,11 @@ rejections=[
  'template<class T>struct C{int n;int f(){return this->n.missing;}};',
  'template<class T>struct C{int n;struct Inner{int f(){return n;}};};',
  'struct Base{private:int n;};template<class T>struct C:Base{int f(){return n;}};',
+ 'template<class T>struct C{int n;int f()const;};template<class U>int C<U>::f()const{return ++n;}',
+ 'template<class T>struct C{int n;static int f();};template<class U>int C<U>::f(){return n;}',
+ 'template<class T>struct C{int n;int f();};template<class U>int C<U>::f(){return *this->n;}',
+ 'template<class T>struct C{int n;static int f(int);int f(long);};template<class U>int C<U>::f(int){return n;}',
+ 'template<class T>struct C{int n;static int f();};template<class U>int C<U>::f(){return sizeof(this);}',
 ]
 with tempfile.TemporaryDirectory(prefix='pa14-dependent-objects-') as tmp:
  work=Path(tmp)

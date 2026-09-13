@@ -2,6 +2,25 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::template_method_shape(NodeId parameters, ScopeId scope)
+{
+    if (auto cached = template_method_shapes.get(parameters)) return cached-1;
+    std::vector<TypeId> params;
+    bool known = true, variadic = false;
+    for (auto p = ast[parameters].first; p; p = ast[p].next) {
+        if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
+        auto specs = ast[p].first, d = ast[specs].next;
+        // Dependent signatures and bounds belong to substitution. A missing
+        // shape is conservative evidence, never a guessed overload identity.
+        if (bind_template_expression(specs,scope) | bind_template_expression(d,scope)) { known = false; break; }
+        if (child(d,Kind::Array)) { known = false; break; }
+        params.push_back(parameter(p,scope));
+    }
+    if (params.size() == 1 && fundamental(params[0],FT_VOID) && !variadic) params.clear();
+    TypeId shape = known ? types.signature(types.function(types.fundamental(FT_VOID),params,variadic)) : 0;
+    template_method_shapes.put(parameters,shape+1);
+    return shape;
+}
 TemplateObjectContext Analyzer::template_object_context(ScopeId s) const
 {
     while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
@@ -11,9 +30,39 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
 {
     auto e = scopes[function].entity;
     auto owner = entities[e].owner;
+    auto qualifiers = function_qualifiers(parameters);
+    bool available = !entities[e].is_static;
+    if (scopes[owner].kind == ScopeKind::Template && scopes[scopes[owner].parent].kind == ScopeKind::Class) {
+        owner = scopes[owner].parent;
+        if (entities[e].name) {
+            std::vector<EntityId> possible;
+            unsigned kinds = 0;
+            for (auto candidate : candidates(local(owner,entities[e].name))) {
+                if (entities[candidate].owner != owner) continue;
+                auto p = child(entities[candidate].source,Kind::Parameters);
+                auto q = function_qualifiers(p);
+                if (!p || q.cv != qualifiers.cv || q.ref != qualifiers.ref) continue;
+                possible.push_back(candidate); kinds |= entities[candidate].is_static ? 1 : 2;
+            }
+            if (kinds == 3) {
+                auto shape = template_method_shape(parameters,entities[e].owner);
+                if (shape) {
+                    kinds = 0;
+                    for (auto candidate : possible) {
+                        auto other = template_method_shape(child(entities[candidate].source,Kind::Parameters),owner);
+                        if (!other || shape == other) kinds |= entities[candidate].is_static ? 1 : 2;
+                    }
+                }
+            }
+            // All possible declarations must agree. Static is not repeated in
+            // the definition, and unresolved mixed signatures stay deferred.
+            if (kinds != 1 && kinds != 2) return;
+            available = kinds == 2;
+        }
+    }
     if (scopes[owner].kind != ScopeKind::Class) return;
     TemplateObjectContext context; context.owner = scopes[owner].entity;
-    context.cv = function_qualifiers(parameters).cv; context.available = !entities[e].is_static;
+    context.cv = qualifiers.cv; context.available = available;
     template_object_context_index.put(function,template_object_contexts.size());
     template_object_contexts.push_back(context);
 }
@@ -41,23 +90,21 @@ bool Analyzer::check_template_field(NodeId n, ScopeId s, EntityId field, bool ex
     template_fixed_expressions.put(source,n); ++template_fixed_work;
     return true;
 }
-bool Analyzer::reuse_template_field(NodeId n, ScopeId s, Expression& result)
+TemplateMemberUse Analyzer::template_field_use(EntityId field, ScopeId s, EntityId pattern)
 {
-    auto path = template_field_sources.get(ast.nodes.occurrences[n].source);
-    if (!path) return false;
-    auto context = template_object_contexts[path];
     auto object_type = implicit_object_type(s);
     auto scope = s;
     while (scope && scopes[scope].kind != ScopeKind::Function) scope = scopes[scope].parent;
     auto function = scopes[scope].entity;
     auto cls = scopes[entities[function].owner].entity;
-    if (!cls || template_class_patterns.get(cls) != context.owner)
+    if (!pattern && entities[field].template_pattern) pattern = scopes[entities[field].owner].entity;
+    if (!cls || (pattern && template_class_patterns.get(cls) != pattern))
         throw std::logic_error("missing concrete template object owner");
     if (!object_type && !unevaluated_depth) throw std::logic_error("template field use lacks its object");
-    auto key = this->key(result.entity,object_type ? object_type : entities[cls].type);
+    auto key = this->key(field,object_type ? object_type : entities[cls].type);
     auto id = template_member_use_index.get(key);
     if (!id) {
-        TemplateMemberUse use; use.entity = result.entity;
+        TemplateMemberUse use; use.entity = field;
         if (entities[use.entity].template_pattern) {
             auto declaration = ast.projected(entities[use.entity].source,template_class_contexts.get(cls));
             use.entity = facts[declaration].entity;
@@ -74,7 +121,13 @@ bool Analyzer::reuse_template_field(NodeId n, ScopeId s, Expression& result)
         id = template_member_uses.size(); template_member_uses.push_back(use);
         template_member_use_index.put(key,id);
     }
-    auto use = template_member_uses[id];
+    return template_member_uses[id];
+}
+bool Analyzer::reuse_template_field(NodeId n, ScopeId s, Expression& result)
+{
+    auto path = template_field_sources.get(ast.nodes.occurrences[n].source);
+    if (!path) return false;
+    auto use = template_field_use(result.entity,s,template_object_contexts[path].owner);
     if (use.type != result.type || result.category != ValueCategory::Lvalue)
         throw std::logic_error("fixed template field value facts changed");
     result.entity = use.entity; result.object_use = use.object;

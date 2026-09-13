@@ -395,9 +395,12 @@ private:
     bool check_fixed_member(NodeId n, ScopeId s);
     bool check_template_field(NodeId n, ScopeId s, EntityId field, bool explicit_object = false);
     void bind_template_object_context(ScopeId function, NodeId parameters);
+    TypeId template_method_shape(NodeId parameters, ScopeId scope);
     TemplateObjectContext template_object_context(ScopeId scope) const;
     bool reuse_template_field(NodeId n, ScopeId scope, Expression& result);
+    TemplateMemberUse template_field_use(EntityId field, ScopeId scope, EntityId pattern = 0);
     Index template_object_context_index, template_field_sources, template_member_use_index;
+    Index template_method_shapes;
     Index template_class_patterns, template_class_contexts;
     std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
     std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);

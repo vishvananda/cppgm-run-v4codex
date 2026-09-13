@@ -320,5 +320,19 @@ identity and layout. No source-owned field recipe contains a concrete object.
 Known bit-field widths use the ordinary property owner; unknown widths defer
 because they can change integral promotion. Eight definition-time rejections,
 eighteen native programs and through 1935/1935 pass at the initial increment.
-Qualified out-of-line method contexts and further current-object forms remain
-in this active group; sanitizer/scaling evidence has not yet been collected.
+Qualified out-of-line contexts now retain the actual pattern owner, including
+nested and repeated injected-class-name qualifiers. Candidate declaration cv/ref
+facts and, when necessary, cached fixed parameter-type shapes establish static
+status only when every remaining declaration agrees. Mixed dependent signatures
+remain deferred. Shapes use canonical adjusted function parameter types; no
+name spelling or assumed nonstatic status substitutes for declaration evidence.
+Field identity preserved by parentheses, assignment and prefix operators uses
+the same class-context cache, even when the body has a separate definition
+context. This fixed the course's out-of-line `operator++` control after the
+initial extension exposed its previous body-context mapping assumption.
+
+The extended increment passes thirteen rejection controls, eighteen native
+programs and through 1935/1935. Work is proportional to source method contexts,
+actual overload candidates and distinct field/object keys; no class layout or
+unused member body is demanded by context discovery. `--stats` exposes context
+and concrete field-use record counts. Sanitizer/scaling evidence is pending.

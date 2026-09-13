@@ -115,11 +115,14 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     } catch (...) { if (unevaluated) --unevaluated_depth; throw; }
     if (unevaluated) --unevaluated_depth;
     if (result.entity && entities[result.entity].template_pattern) {
+        if (nonstatic_field(result.entity)) result.entity = template_field_use(result.entity,s).entity;
+        else {
         auto declaration = ast.projected(entities[result.entity].source,occurrence.context);
         auto entity = facts[declaration].entity;
         if (!entity || entities[entity].template_pattern) throw std::logic_error("missing concrete fixed-expression declaration");
         if (result.type != value_type(entities[entity].type)) throw std::logic_error("fixed expression declaration type changed");
         result.entity = entity;
+        }
     }
     if (ast[n].kind == Kind::Assignment || ast[n].op == OP_INC || ast[n].op == OP_DEC ||
         (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) observe_scalar(first);
