@@ -11,12 +11,20 @@ bool Analyzer::direct_transfer(EntityId e) const
 bool Analyzer::copy_storage_type(TypeId t)
 {
     auto info = entities[types[t].entity].class_info;
-    if (class_facts[info].copy_storage_state) return class_facts[info].copy_storage_state == 3;
-    class_facts[info].copy_storage_state = 1;
+    auto state = class_facts[info].copy_storage_state;
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::CopyStorage,types[t].entity,entities[types[t].entity].source);
+    if (state == BooleanFact::Active) throw std::logic_error("cyclic copy storage query");
+    class_facts[info].copy_storage_state = BooleanFact::Active;
+    try {
     EntityId copy = select_transfer(t, types.qualify(t, 1), ValueCategory::Lvalue, false);
     bool simple = copy && !deleted_transfer(copy) && trivial_transfer(copy);
-    class_facts[info].copy_storage_state = simple ? 3 : 2;
+    class_facts[info].copy_storage_state = simple ? BooleanFact::True : BooleanFact::False;
     return simple;
+    } catch (...) {
+        class_facts[info].copy_storage_state = BooleanFact::Failure; throw;
+    }
 }
 void Analyzer::classify_transfer(EntityId e, NodeId special, ScopeId context)
 {

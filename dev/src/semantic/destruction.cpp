@@ -103,8 +103,11 @@ bool Analyzer::trivial_destructor(TypeId t)
 void Analyzer::destructor_actions(EntityId e)
 {
     auto m = entities[e].member_info;
-    if (members[m].actions_ready) return;
-    members[m].actions_ready = true;
+    if (members[m].actions_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
+    if (members[m].actions_state != FactState::NotStarted) return;
+    members[m].actions_state = FactState::Active;
+    try {
     EntityId cls = scopes[entities[e].owner].entity;
     if (!entities[e].scope) entities[e].scope = make_scope(ScopeKind::Function, entities[e].owner, entities[e].name, e);
     size(entities[cls].type);
@@ -141,15 +144,27 @@ void Analyzer::destructor_actions(EntityId e)
     members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || nontrivial > 1;
     members[m].destruction_begin = destruction_actions.size(); members[m].destruction_count = work.size();
     destruction_actions.insert(destruction_actions.end(), work.begin(), work.end());
+    members[m].actions_state = FactState::Success;
+    } catch (...) {
+        members[m].actions_state = FactState::Failure; throw;
+    }
 }
 bool Analyzer::destructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
+    if (members[m].actions_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
     if (!members[m].synthetic && (!members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;
-    if (members[m].destruction_state == 2) return members[m].destruction_needed;
-    if (members[m].destruction_state == 1) throw std::logic_error("cyclic destruction actions");
-    members[m].destruction_state = 1;
+    if (members[m].actions_state != FactState::Success)
+        throw UnavailableSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
+    auto state = members[m].destructor_effects;
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorEffects,e,members[m].source);
+    if (state == BooleanFact::Active) throw std::logic_error("cyclic destruction actions");
+    members[m].destructor_effects = BooleanFact::Active;
+    try {
     bool needed = members[m].virtual_member;
     EntityId cls = scopes[entities[e].owner].entity;
     // O0 keeps an explicit union boundary when an inactive variant has an
@@ -159,11 +174,16 @@ bool Analyzer::destructor_needed(EntityId e)
         needed = variant_destruction_effects(entities[cls].type);
     for (unsigned j = 0; j < members[m].destruction_count; ++j)
         needed |= destructor_needed(destruction_actions[members[m].destruction_begin+j].destructor);
-    members[m].destruction_state = 2; members[m].destruction_needed = needed;
     // A defined empty body with effect-free subobjects needs no call, but its
     // externally visible ABI entry remains available to other translation units.
     if (!needed && !trivial_destructor(entities[cls].type)) members[m].retained_root = true;
+    members[m].destructor_effects = needed ? BooleanFact::True : BooleanFact::False;
     return needed;
+    } catch (const UnavailableSemanticFact&) {
+        members[m].destructor_effects = BooleanFact::NotStarted; throw;
+    } catch (...) {
+        members[m].destructor_effects = BooleanFact::Failure; throw;
+    }
 }
 bool Analyzer::temporary_cleanup(EntityId object)
 {
@@ -174,8 +194,14 @@ bool Analyzer::variant_destruction_effects(TypeId t)
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return false;
     EntityId cls = types[t].entity;
-    if (auto state = variant_destruction_index.get(cls)) return state != 2;
-    variant_destruction_index.put(cls, 1);
+    require_destructor_class(cls);
+    auto state = static_cast<BooleanFact>(variant_destruction_index.get(cls));
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::DestructorEffects,cls,entities[cls].source);
+    if (state == BooleanFact::Active) throw std::logic_error("cyclic variant destruction query");
+    variant_destruction_index.put(cls, static_cast<unsigned>(BooleanFact::Active));
+    try {
     EntityId dtor = type_destructor(t);
     bool effects = false;
     if (dtor && !members[entities[dtor].member_info].synthetic) {
@@ -189,8 +215,13 @@ bool Analyzer::variant_destruction_effects(TypeId t)
     }
     for (auto b = class_facts[entities[cls].class_info].first_base; b && !effects; b = bases[b].next)
         effects = variant_destruction_effects(entities[bases[b].base].type);
-    variant_destruction_index.put(cls, effects ? 3 : 2);
+    variant_destruction_index.put(cls, static_cast<unsigned>(effects ? BooleanFact::True : BooleanFact::False));
     return effects;
+    } catch (const UnavailableSemanticFact&) {
+        variant_destruction_index.put(cls, static_cast<unsigned>(BooleanFact::NotStarted)); throw;
+    } catch (...) {
+        variant_destruction_index.put(cls, static_cast<unsigned>(BooleanFact::Failure)); throw;
+    }
 }
 void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
 {

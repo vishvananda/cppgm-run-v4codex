@@ -17,6 +17,12 @@ redeclarations, repeated failure and late declaration availability. Work budgets
 are one property computation per completed class/member key and one visit per
 required subobject edge; preserve body-demand separation and ABI output.
 
+Action/effect increment: typed action, omission, transfer and copy-storage facts
+now cache terminal failure and withhold omission answers until their action plan
+is complete. Six public controls repeat queries 10,000 times without graph growth;
+314/314 stage tests pass. Next connected defect: external destructor use must not
+demand subobject bodies; a local out-of-line definition must root that work.
+
 ## Design/spec alignment
 
 | Owner / data flow | Complexity and validation |

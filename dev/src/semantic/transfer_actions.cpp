@@ -6,13 +6,16 @@ void Analyzer::prepare_transfer(EntityId e)
 {
     auto m = entities[e].member_info;
     if (!members[m].synthetic || members[m].transfer == TransferKind::None) return;
-    if (members[m].transfer_state == 2) return;
-    if (members[m].transfer_state == 1) { members[m].deleted = true; return; }
+    if (members[m].transfer_state == FactState::Success) return;
+    if (members[m].transfer_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::Transfer,e,members[m].source);
+    if (members[m].transfer_state == FactState::Active) throw std::logic_error("cyclic transfer preparation");
     // Class-level rules can delete an implicit copy before any subobject
     // analysis (for example after declaring a move). Its completed negative
     // fact needs neither a function scope nor transfer actions.
-    if (members[m].deleted) { members[m].transfer_state = 2; return; }
-    members[m].transfer_state = 1;
+    if (members[m].deleted) { members[m].transfer_state = FactState::Success; return; }
+    members[m].transfer_state = FactState::Active;
+    try {
     bool assignment = members[m].transfer == TransferKind::CopyAssignment || members[m].transfer == TransferKind::MoveAssignment;
     bool moving = members[m].transfer == TransferKind::MoveConstructor || members[m].transfer == TransferKind::MoveAssignment;
     EntityId cls = scopes[entities[e].owner].entity;
@@ -125,6 +128,9 @@ void Analyzer::prepare_transfer(EntityId e)
     members[m].transfer_noexcept = no_throw && !deleted;
     members[m].transfer_begin = transfers.size(); members[m].transfer_count = actions.size();
     transfers.insert(transfers.end(), actions.begin(), actions.end());
-    members[m].transfer_state = 2;
+    members[m].transfer_state = FactState::Success;
+    } catch (...) {
+        members[m].transfer_state = FactState::Failure; throw;
+    }
 }
 } }

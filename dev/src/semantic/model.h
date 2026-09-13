@@ -16,7 +16,7 @@ enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 // Boolean success has two outcomes, while active and failed remain distinct.
 // This compact encoding does not confuse a pending query with a false value.
 enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -107,7 +107,7 @@ struct ClassFacts {
     EntityId value_constructor = 0;
     EntityId variant_initializer = 0;
     unsigned char declared_transfers = 0, generated_transfers = 0;
-    unsigned char copy_storage_state = 0;
+    BooleanFact copy_storage_state = BooleanFact::NotStarted;
     BooleanFact trivial_destructor_state = BooleanFact::NotStarted;
     BooleanFact destructor_exception_state = BooleanFact::NotStarted;
     unsigned char value_abi = 0;
@@ -181,16 +181,17 @@ struct MemberFacts {
     DemandState demand = DemandState::Dormant;
     bool synthetic = false, referenced = false, in_class_body = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
-    bool nontrivial = false, actions_ready = false, source_demand = false, base_entry = false, array_entry = false;
+    FactState actions_state = FactState::NotStarted;
+    bool source_demand = false, base_entry = false, array_entry = false;
     bool complete_entry = false, retained_root = false;
     std::uint32_t action_begin = 0, action_count = 0;
     std::uint32_t default_conversions = 0;
-    unsigned char trivial_state = 0, destruction_state = 0;
+    BooleanFact constructor_effects = BooleanFact::NotStarted, destructor_effects = BooleanFact::NotStarted;
     FactState exception_state = FactState::NotStarted;
-    bool destruction_needed = false, nonthrowing = false;
+    bool nonthrowing = false;
     std::uint32_t destruction_begin = 0, destruction_count = 0;
     TransferKind transfer = TransferKind::None;
-    unsigned char transfer_state = 0;
+    FactState transfer_state = FactState::NotStarted;
     bool transfer_trivial = false, transfer_direct = false, transfer_noexcept = false, defaulted_late = false;
     bool scalar_transfer_body = false;
     bool virtual_member = false, pure = false, final_member = false, override_member = false;

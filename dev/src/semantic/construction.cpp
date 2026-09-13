@@ -144,8 +144,12 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
 void Analyzer::constructor_actions(EntityId e)
 {
     auto m = entities[e].member_info;
-    if (members[m].actions_ready) return;
-    members[m].actions_ready = true;
+    if (members[m].actions_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::ConstructorActions,e,members[m].source);
+    if (members[m].actions_state != FactState::NotStarted) return;
+    members[m].actions_state = FactState::Active;
+    bool saved_base = base_initialization;
+    try {
     EntityId cls = scopes[entities[e].owner].entity;
     ScopeId scope = entities[e].scope;
     if (!scope) {
@@ -179,7 +183,7 @@ void Analyzer::constructor_actions(EntityId e)
             members[m].delegated_constructor = selected;
             members[m].action_begin = subobject_actions.size(); members[m].action_count = 1;
             subobject_actions.push_back({0, entities[cls].type, init, selected});
-            members[m].nontrivial = true;
+            members[m].actions_state = FactState::Success;
             return;
         }
         if (explicit_initializers.get(field)) throw std::runtime_error("duplicate constructor initializer");
@@ -246,10 +250,12 @@ void Analyzer::constructor_actions(EntityId e)
         add(field, entities[field].type, init);
     }
     members[m].action_begin = subobject_actions.size(); members[m].action_count = work.size();
-    // Necessary initialization is conservatively nontrivial here. A later
-    // lifecycle fact can prove default subobject actions trivial independently.
-    members[m].nontrivial = !work.empty();
     subobject_actions.insert(subobject_actions.end(), work.begin(), work.end());
+    members[m].actions_state = FactState::Success;
+    } catch (...) {
+        base_initialization = saved_base;
+        members[m].actions_state = FactState::Failure; throw;
+    }
 }
 } }
 
@@ -258,11 +264,27 @@ bool Analyzer::constructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
-    if (transfer_member(e) && members[m].synthetic) return !members[m].constructor || !members[m].transfer_direct;
+    if (members[m].actions_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::ConstructorActions,e,members[m].source);
+    if (transfer_member(e) && members[m].synthetic) {
+        if (members[m].transfer_state == FactState::Failure)
+            throw FailedSemanticFact(SemanticFact::Transfer,e,members[m].source);
+        if (members[m].transfer_state != FactState::Success)
+            throw UnavailableSemanticFact(SemanticFact::Transfer,e,members[m].source);
+        return !members[m].constructor || !members[m].transfer_direct;
+    }
     if (!members[m].synthetic || members[m].inherited_constructor) return true;
-    if (members[m].trivial_state == 2) return members[m].nontrivial;
-    if (members[m].trivial_state == 1) throw std::logic_error("cyclic constructor actions");
-    members[m].trivial_state = 1;
+    // Omission needs a completed action plan; an external/user-provided entry
+    // is required independently of that plan and was handled above.
+    if (members[m].actions_state != FactState::Success)
+        throw UnavailableSemanticFact(SemanticFact::ConstructorActions,e,members[m].source);
+    auto state = members[m].constructor_effects;
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::ConstructorEffects,e,members[m].source);
+    if (state == BooleanFact::Active) throw std::logic_error("cyclic constructor actions");
+    members[m].constructor_effects = BooleanFact::Active;
+    try {
     bool needed = polymorphic(scopes[entities[e].owner].entity);
     for (unsigned j = 0; j < members[m].action_count; ++j) {
         auto action = subobject_actions[members[m].action_begin+j];
@@ -271,7 +293,12 @@ bool Analyzer::constructor_needed(EntityId e)
             needed |= ctor && constructor_member(ctor) ? constructor_needed(ctor) : true;
         } else needed |= constructor_needed(action.constructor);
     }
-    members[m].nontrivial = needed; members[m].trivial_state = 2;
+    members[m].constructor_effects = needed ? BooleanFact::True : BooleanFact::False;
     return needed;
+    } catch (const UnavailableSemanticFact&) {
+        members[m].constructor_effects = BooleanFact::NotStarted; throw;
+    } catch (...) {
+        members[m].constructor_effects = BooleanFact::Failure; throw;
+    }
 }
 } }
