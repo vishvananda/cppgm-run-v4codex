@@ -1,0 +1,2161 @@
+{
+  "harness_sha256": "4defc76abb7877dffa923a7371429ae5528f458df964f8c565311a942efbb210",
+  "control_sha256": "037c2cdfeb6504a86213d910ac1be5e51ae3bfe89cb738875e822b3b81f66c0b",
+  "standard_path": "/home/vishvananda/work/private/v4codex/checkout/doc/n3485.txt",
+  "standard_sha256": "a46755160cd2946a9c6fd0adf45efd40c18bf2fde66ba2b0eb931826b2188d03",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+      "sha256": "b680a54c0841a517f9816b7711ad01e53a595e16790c3a9b2913fe2b1ed2b8a3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+      "sha256": "288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc"
+    }
+  ],
+  "rejections": [
+    {
+      "name": "parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter.cpp",
+      "source_sha256": "487c1d6fb3ad6ac5a3528dc48c8afee730bcf3c46459060ff52332701acceaed",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/parameter-host.log",
+        "log_sha256": "cb8223cb6d068e15430ac6f27306234a5fdf224ad4d6a4b862bba8ac305128c5"
+      }
+    },
+    {
+      "name": "return",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return.cpp",
+      "source_sha256": "67cee4bf86c92256a89a7aba45891039f48d021d1624841d5812f5d018a2bdec",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/return-host.log",
+        "log_sha256": "bb537bee3cfdec418c1edd6444bd45bbcdb44065a308b28f4224af2d2c7dd670"
+      }
+    },
+    {
+      "name": "cv",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv.cpp",
+      "source_sha256": "c657b7938c5a5e8a33721bdf1ed826fedc6ecf813811156c015e0b454a4659f3",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/cv-host.log",
+        "log_sha256": "66cce2676c3612875b5719aaf1726020c538935f986b976f6a292ad1bf6d9b9a"
+      }
+    },
+    {
+      "name": "ref",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref.cpp",
+      "source_sha256": "86d81533dbb4c610268c71975d480d255d7e7585e7ac5116cf94e78c50a7e92b",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/ref-host.log",
+        "log_sha256": "6efb173da669f0dcce9448d49bfcbf9bf60626c2401ee54a2accfd8c01c59abe"
+      }
+    },
+    {
+      "name": "variadic",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic.cpp",
+      "source_sha256": "e07a45f9fac45adb280a68d6e2b6baa87feb1cec4921575dc39a9c56444b64fc",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/variadic-host.log",
+        "log_sha256": "9718addfc6bd55671191597108ee35fc7a91c3aab6b11da2916b87755ebee9a4"
+      }
+    },
+    {
+      "name": "overload",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload.cpp",
+      "source_sha256": "554cded9454ea5bf8b650639bacfc16193f852ab2feae873bb1420e2356f541d",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/overload-host.log",
+        "log_sha256": "d260393c08fb5de05ed9888f2764d2936a38f10f3eff7c6c11c7632517402948"
+      }
+    },
+    {
+      "name": "dependent_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter.cpp",
+      "source_sha256": "69d957d4216c3df66e66751a827fd4e99e4634b3b2bc85bc88619e8bc7b8d95f",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_parameter-host.log",
+        "log_sha256": "43785dc7cfeaf2255fe2d49d9f219c365a4cd502075c8672e3145088fc89b8ae"
+      }
+    },
+    {
+      "name": "dependent_return",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return.cpp",
+      "source_sha256": "04ec958e72f3e9e586d8fff600eaf3230fb35e5ff8e221fded4bcf747685dbd8",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/dependent_return-host.log",
+        "log_sha256": "c4739f490eaf850f91fe3d3536213eea6c4f1b8f668dc606a18784f3922ebc16"
+      }
+    },
+    {
+      "name": "noexcept",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept.cpp",
+      "source_sha256": "869ebdd5230fd28df633c28b6d7a8af00b251efd1c4d0962911569981f21b827",
+      "clauses": [
+        "[except.spec]/3\u20134"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-1.log",
+          "log_sha256": "b9d7d75cdc2d0b5f419b35df3db58fdb4162324d287dfbb0a89b2e1c4b3a975c"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/noexcept-host.log",
+        "log_sha256": "af46c4bed7707f3c1ed7503242034d743cb5c5e0fecf1081d4c470d716694c2d"
+      }
+    },
+    {
+      "name": "friend_not_member",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member.cpp",
+      "source_sha256": "894fcfb88e7b2d6439be7b17680ffb4cb29bbc79d7dff281a97c88088ed1aeef",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[class.mfct]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-1.log",
+          "log_sha256": "debe1c253697f60869958ca9d385d84fefd07d1c1a7ea8744d338161ecd9b109"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/friend_not_member-host.log",
+        "log_sha256": "99eec08feab8805bfbaa4eba192c5776b6a503a307582ec77b1bd08d4a5edb70"
+      }
+    },
+    {
+      "name": "redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition.cpp",
+      "source_sha256": "d2fab04512cbc73c75dec70a3dc9d640ad4a5cfcff9cfafa4df406b1421692d4",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-1.log",
+          "log_sha256": "b421d66b00d636977dc0b06e4f98208038db098809b754cde8b563178093543f"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/redefinition-host.log",
+        "log_sha256": "2ff15de2a2e98651208b53395ff3651d3e6e31db31edb08139905eec7a5f376f"
+      }
+    },
+    {
+      "name": "inline_redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition.cpp",
+      "source_sha256": "e92b576dbcbde02093a71e5d540f2883b15fef36eb330710431af9ebad01e7bd",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-1.log",
+          "log_sha256": "be8b3079275a7e4dc990d33b7d22ca658f72ef41f9bbb959a98de2593c183bb2"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/inline_redefinition-host.log",
+        "log_sha256": "e78e63771eda91a202ed132bd204457e8ba4d183c65c1a08ab33c9fae4c0f957"
+      }
+    }
+  ],
+  "positive": [
+    {
+      "name": "definition-demands",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands.cpp",
+      "source_sha256": "b9c93ae9db90190e9e15c64e648f982e5acd5a0d15e78aaed95e3596055291af",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0-compile.log",
+          "log_sha256": "c18101b1b4e6f01cf7b74dc000bd432d4848ac3375b0442d14afb431c28fdac5",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0.lowir",
+          "sha256": "e768b6d611f48ea5b4dee44dea9beec756448e101bacdc4ac57051525751c086",
+          "telemetry": [
+            {
+              "tokens": 460,
+              "max_pending": 48,
+              "node_growths": 8,
+              "delimiter_work": 460,
+              "semantic_ms": 0.945535,
+              "semantic_dependence_work": 14,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 6,
+              "semantic_type_substitution_hits": 8,
+              "semantic_type_substitution_records": 6,
+              "semantic_substitution_frames": 12,
+              "semantic_template_type_work": 13,
+              "semantic_template_type_uses": 30,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 10,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 3,
+              "semantic_type_query_work": 3,
+              "semantic_template_binding_work": 95,
+              "semantic_template_bindings": 13,
+              "semantic_template_fixed_expressions": 9,
+              "semantic_template_fixed_uses": 16,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 5,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 712,
+              "template_occurrences": 520,
+              "template_deferred_regions": 8,
+              "template_demanded_regions": 7,
+              "template_source_regions": 10,
+              "template_region_nodes": 265,
+              "template_region_roots": 4,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 25,
+              "semantic_expression_facts": 131,
+              "semantic_expression_uses": 138,
+              "semantic_expression_slots": 1232,
+              "semantic_expression_inherited": 16,
+              "semantic_expression_variants": 1,
+              "semantic_call_argument_edges": 10,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 10,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 13,
+              "semantic_demand_processed": 13,
+              "semantic_expression_work": 115,
+              "semantic_candidate_work": 30,
+              "semantic_conversion_work": 117,
+              "semantic_conversions": 96,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 5,
+              "semantic_constants": 4,
+              "semantic_value_queries": 2,
+              "semantic_value_query_work": 2,
+              "semantic_template_value_sources": 1,
+              "semantic_template_value_uses": 2,
+              "semantic_value_conversion_variants": 1,
+              "semantic_value_conversion_records": 2,
+              "semantic_types": 73,
+              "semantic_entities": 106,
+              "semantic_scopes": 94,
+              "semantic_edges": 0,
+              "semantic_declarations": 73,
+              "semantic_regions": 47,
+              "semantic_lookup_work": 307,
+              "semantic_signature_work": 23,
+              "semantic_type_probes": 456,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 1.70341,
+              "lowering_ms": 0.253691,
+              "write_ms": 0.144947,
+              "peak_rss_kib": 24568,
+              "nodes": 1232,
+              "static_requests": 6,
+              "static_hits": 2,
+              "control_work": 38,
+              "discard_work": 0,
+              "full_expression_work": 175,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 23,
+              "abi_bytes": 2138,
+              "instructions": 155,
+              "operands": 245,
+              "ir_pool_growths": 74,
+              "ir_capacity_bytes": 35168
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0",
+          "native_sha256": "916681ae2309c1891e330989b9cfb269b8190625b73404c7108aed0f7b8adaac",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-0-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1-compile.log",
+          "log_sha256": "284c5096e97467b3a4fbf42e918c580986c3ff4c1c834b6c138095cc365985dd",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1.lowir",
+          "sha256": "e768b6d611f48ea5b4dee44dea9beec756448e101bacdc4ac57051525751c086",
+          "telemetry": [
+            {
+              "tokens": 460,
+              "max_pending": 48,
+              "node_growths": 8,
+              "delimiter_work": 460,
+              "semantic_ms": 0.865824,
+              "semantic_dependence_work": 19,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 6,
+              "semantic_type_substitution_hits": 8,
+              "semantic_type_substitution_records": 6,
+              "semantic_substitution_frames": 11,
+              "semantic_template_type_work": 13,
+              "semantic_template_type_uses": 22,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 9,
+              "template_definition_direct_applications": 7,
+              "template_definition_requests": 37,
+              "template_definition_hits": 5,
+              "template_definition_edges": 14,
+              "template_definition_signature_requests": 5,
+              "template_definition_signature_work": 5,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 3,
+              "semantic_type_query_work": 3,
+              "semantic_template_binding_work": 95,
+              "semantic_template_bindings": 13,
+              "semantic_template_fixed_expressions": 9,
+              "semantic_template_fixed_uses": 16,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 5,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 712,
+              "template_occurrences": 496,
+              "template_deferred_regions": 7,
+              "template_demanded_regions": 7,
+              "template_source_regions": 10,
+              "template_region_nodes": 265,
+              "template_region_roots": 4,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 25,
+              "semantic_expression_facts": 131,
+              "semantic_expression_uses": 138,
+              "semantic_expression_slots": 1208,
+              "semantic_expression_inherited": 16,
+              "semantic_expression_variants": 1,
+              "semantic_call_argument_edges": 10,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 10,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 13,
+              "semantic_demand_processed": 13,
+              "semantic_expression_work": 115,
+              "semantic_candidate_work": 30,
+              "semantic_conversion_work": 117,
+              "semantic_conversions": 96,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 5,
+              "semantic_constants": 4,
+              "semantic_value_queries": 2,
+              "semantic_value_query_work": 2,
+              "semantic_template_value_sources": 1,
+              "semantic_template_value_uses": 2,
+              "semantic_value_conversion_variants": 1,
+              "semantic_value_conversion_records": 2,
+              "semantic_types": 73,
+              "semantic_entities": 91,
+              "semantic_scopes": 85,
+              "semantic_edges": 0,
+              "semantic_declarations": 72,
+              "semantic_regions": 39,
+              "semantic_lookup_work": 209,
+              "semantic_signature_work": 23,
+              "semantic_type_probes": 385,
+              "semantic_constant_work": 6
+            },
+            {
+              "frontend_ms": 1.72901,
+              "lowering_ms": 0.274333,
+              "write_ms": 0.1525,
+              "peak_rss_kib": 24568,
+              "nodes": 1208,
+              "static_requests": 6,
+              "static_hits": 2,
+              "control_work": 38,
+              "discard_work": 0,
+              "full_expression_work": 175,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 23,
+              "abi_bytes": 2138,
+              "instructions": 155,
+              "operands": 245,
+              "ir_pool_growths": 74,
+              "ir_capacity_bytes": 35168
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1",
+          "native_sha256": "916681ae2309c1891e330989b9cfb269b8190625b73404c7108aed0f7b8adaac",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-demands-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ]
+    },
+    {
+      "name": "definition-signatures",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures.cpp",
+      "source_sha256": "83b8799e0f8c28a76ee43f2d673527e717c8b9787c0ba3cd1b2bd6cb11c27952",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0-compile.log",
+          "log_sha256": "60d25dd1957a57e065bf60474f13ad0f6ab17b05c679eef90e7c572f71807ef4",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0.lowir",
+          "sha256": "4715511dfa7658cd3a13650074427dda9d64aa53a9c4959a76cfa26cc26c2d6a",
+          "telemetry": [
+            {
+              "tokens": 602,
+              "max_pending": 84,
+              "node_growths": 10,
+              "delimiter_work": 602,
+              "semantic_ms": 1.3034,
+              "semantic_dependence_work": 36,
+              "semantic_specializations": 6,
+              "semantic_type_substitution_work": 28,
+              "semantic_type_substitution_hits": 22,
+              "semantic_type_substitution_records": 28,
+              "semantic_substitution_frames": 16,
+              "semantic_template_type_work": 20,
+              "semantic_template_type_uses": 41,
+              "template_body_transitions": 0,
+              "template_class_completions": 3,
+              "template_definition_applications": 13,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 2,
+              "semantic_type_query_work": 2,
+              "semantic_template_binding_work": 203,
+              "semantic_template_bindings": 36,
+              "semantic_template_fixed_expressions": 12,
+              "semantic_template_fixed_uses": 17,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 8,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 992,
+              "template_occurrences": 928,
+              "template_deferred_regions": 12,
+              "template_demanded_regions": 12,
+              "template_source_regions": 19,
+              "template_region_nodes": 571,
+              "template_region_roots": 8,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 5,
+              "semantic_object_uses": 24,
+              "semantic_expression_facts": 140,
+              "semantic_expression_uses": 155,
+              "semantic_expression_slots": 1920,
+              "semantic_expression_inherited": 17,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 14,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 15,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 22,
+              "semantic_demand_processed": 22,
+              "semantic_expression_work": 133,
+              "semantic_candidate_work": 14,
+              "semantic_conversion_work": 107,
+              "semantic_conversions": 106,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 11,
+              "semantic_constants": 3,
+              "semantic_value_queries": 0,
+              "semantic_value_query_work": 0,
+              "semantic_template_value_sources": 0,
+              "semantic_template_value_uses": 0,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 138,
+              "semantic_entities": 159,
+              "semantic_scopes": 145,
+              "semantic_edges": 0,
+              "semantic_declarations": 108,
+              "semantic_regions": 66,
+              "semantic_lookup_work": 547,
+              "semantic_signature_work": 68,
+              "semantic_type_probes": 757,
+              "semantic_constant_work": 3
+            },
+            {
+              "frontend_ms": 2.28835,
+              "lowering_ms": 0.300742,
+              "write_ms": 0.162638,
+              "peak_rss_kib": 24568,
+              "nodes": 1920,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 47,
+              "discard_work": 0,
+              "full_expression_work": 164,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 34,
+              "abi_bytes": 3690,
+              "instructions": 167,
+              "operands": 286,
+              "ir_pool_growths": 76,
+              "ir_capacity_bytes": 45312
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0",
+          "native_sha256": "b43a3df0c814835da923965d5342b95f6bfd87505d2d0838571de2ba8a154e48",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-0-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1-compile.log",
+          "log_sha256": "ef4c3be2ef86ec2b3ce42d7f9c4d924df43bb854122fe4fa9a169cffa3229fca",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1.lowir",
+          "sha256": "4715511dfa7658cd3a13650074427dda9d64aa53a9c4959a76cfa26cc26c2d6a",
+          "telemetry": [
+            {
+              "tokens": 602,
+              "max_pending": 84,
+              "node_growths": 10,
+              "delimiter_work": 602,
+              "semantic_ms": 1.18027,
+              "semantic_dependence_work": 82,
+              "semantic_specializations": 8,
+              "semantic_type_substitution_work": 79,
+              "semantic_type_substitution_hits": 24,
+              "semantic_type_substitution_records": 32,
+              "semantic_substitution_frames": 16,
+              "semantic_template_type_work": 20,
+              "semantic_template_type_uses": 29,
+              "template_body_transitions": 0,
+              "template_class_completions": 3,
+              "template_definition_applications": 13,
+              "template_definition_direct_applications": 12,
+              "template_definition_requests": 53,
+              "template_definition_hits": 12,
+              "template_definition_edges": 14,
+              "template_definition_signature_requests": 8,
+              "template_definition_signature_work": 8,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 3,
+              "semantic_type_query_work": 3,
+              "semantic_template_binding_work": 203,
+              "semantic_template_bindings": 36,
+              "semantic_template_fixed_expressions": 12,
+              "semantic_template_fixed_uses": 17,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 8,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 992,
+              "template_occurrences": 928,
+              "template_deferred_regions": 12,
+              "template_demanded_regions": 12,
+              "template_source_regions": 19,
+              "template_region_nodes": 571,
+              "template_region_roots": 8,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 6,
+              "semantic_object_uses": 24,
+              "semantic_expression_facts": 138,
+              "semantic_expression_uses": 153,
+              "semantic_expression_slots": 1920,
+              "semantic_expression_inherited": 17,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 14,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 15,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 22,
+              "semantic_demand_processed": 22,
+              "semantic_expression_work": 131,
+              "semantic_candidate_work": 14,
+              "semantic_conversion_work": 107,
+              "semantic_conversions": 106,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 13,
+              "semantic_constants": 3,
+              "semantic_value_queries": 0,
+              "semantic_value_query_work": 0,
+              "semantic_template_value_sources": 0,
+              "semantic_template_value_uses": 0,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 162,
+              "semantic_entities": 149,
+              "semantic_scopes": 137,
+              "semantic_edges": 0,
+              "semantic_declarations": 108,
+              "semantic_regions": 54,
+              "semantic_lookup_work": 344,
+              "semantic_signature_work": 85,
+              "semantic_type_probes": 601,
+              "semantic_constant_work": 3
+            },
+            {
+              "frontend_ms": 2.14456,
+              "lowering_ms": 0.316954,
+              "write_ms": 0.148557,
+              "peak_rss_kib": 24568,
+              "nodes": 1920,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 47,
+              "discard_work": 0,
+              "full_expression_work": 164,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 34,
+              "abi_bytes": 3690,
+              "instructions": 167,
+              "operands": 286,
+              "ir_pool_growths": 76,
+              "ir_capacity_bytes": 45312
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1",
+          "native_sha256": "b43a3df0c814835da923965d5342b95f6bfd87505d2d0838571de2ba8a154e48",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-signatures-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ]
+    },
+    {
+      "name": "definition-overloads",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads.cpp",
+      "source_sha256": "84a96dfa200bb3ac7d38fc85a873f6bd638bf6dade6b3fd717262f25710f9b81",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0-compile.log",
+          "log_sha256": "8535cd2fb2c1846670534e4dee5b9f8fe01cc749508ef9e67f5255b7364bb8db",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0.lowir",
+          "sha256": "f53ad2bf67b8e9e14cc12e440b90cf0cab3b19555e56dfbe530e1b27a1edce03",
+          "telemetry": [
+            {
+              "tokens": 169,
+              "max_pending": 22,
+              "node_growths": 9,
+              "delimiter_work": 169,
+              "semantic_ms": 0.474589,
+              "semantic_dependence_work": 10,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 2,
+              "semantic_type_substitution_hits": 0,
+              "semantic_type_substitution_records": 2,
+              "semantic_substitution_frames": 8,
+              "semantic_template_type_work": 6,
+              "semantic_template_type_uses": 12,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 6,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 4,
+              "semantic_type_query_work": 4,
+              "semantic_template_binding_work": 52,
+              "semantic_template_bindings": 5,
+              "semantic_template_fixed_expressions": 7,
+              "semantic_template_fixed_uses": 7,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 3,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 272,
+              "template_occurrences": 255,
+              "template_deferred_regions": 6,
+              "template_demanded_regions": 2,
+              "template_source_regions": 6,
+              "template_region_nodes": 140,
+              "template_region_roots": 3,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 8,
+              "semantic_expression_facts": 41,
+              "semantic_expression_uses": 43,
+              "semantic_expression_slots": 527,
+              "semantic_expression_inherited": 7,
+              "semantic_expression_variants": 1,
+              "semantic_call_argument_edges": 4,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 6,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 6,
+              "semantic_demand_processed": 6,
+              "semantic_expression_work": 34,
+              "semantic_candidate_work": 12,
+              "semantic_conversion_work": 37,
+              "semantic_conversions": 30,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 3,
+              "semantic_constants": 2,
+              "semantic_value_queries": 2,
+              "semantic_value_query_work": 2,
+              "semantic_template_value_sources": 2,
+              "semantic_template_value_uses": 2,
+              "semantic_value_conversion_variants": 1,
+              "semantic_value_conversion_records": 2,
+              "semantic_types": 41,
+              "semantic_entities": 58,
+              "semantic_scopes": 47,
+              "semantic_edges": 0,
+              "semantic_declarations": 33,
+              "semantic_regions": 22,
+              "semantic_lookup_work": 103,
+              "semantic_signature_work": 12,
+              "semantic_type_probes": 275,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 0.859771,
+              "lowering_ms": 0.131617,
+              "write_ms": 0.096369,
+              "peak_rss_kib": 24568,
+              "nodes": 527,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8,
+              "discard_work": 0,
+              "full_expression_work": 52,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 12,
+              "abi_bytes": 958,
+              "instructions": 56,
+              "operands": 90,
+              "ir_pool_growths": 54,
+              "ir_capacity_bytes": 12224
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0",
+          "native_sha256": "8eb54ffcd55997c260371a8c9e58c2a4cb9f09ea0290575e7a3d8783a63373d1",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-0-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1-compile.log",
+          "log_sha256": "3970d14c8f9dd309ec3c5653cd8a76c97f2da334de25ac22524848daa9bcd36f",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1.lowir",
+          "sha256": "f53ad2bf67b8e9e14cc12e440b90cf0cab3b19555e56dfbe530e1b27a1edce03",
+          "telemetry": [
+            {
+              "tokens": 169,
+              "max_pending": 22,
+              "node_growths": 9,
+              "delimiter_work": 169,
+              "semantic_ms": 0.451224,
+              "semantic_dependence_work": 13,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 2,
+              "semantic_type_substitution_hits": 0,
+              "semantic_type_substitution_records": 2,
+              "semantic_substitution_frames": 4,
+              "semantic_template_type_work": 6,
+              "semantic_template_type_uses": 6,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 2,
+              "template_definition_direct_applications": 2,
+              "template_definition_requests": 16,
+              "template_definition_hits": 4,
+              "template_definition_edges": 2,
+              "template_definition_signature_requests": 3,
+              "template_definition_signature_work": 3,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 4,
+              "semantic_type_query_work": 4,
+              "semantic_template_binding_work": 52,
+              "semantic_template_bindings": 5,
+              "semantic_template_fixed_expressions": 7,
+              "semantic_template_fixed_uses": 7,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 3,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 272,
+              "template_occurrences": 167,
+              "template_deferred_regions": 2,
+              "template_demanded_regions": 2,
+              "template_source_regions": 5,
+              "template_region_nodes": 121,
+              "template_region_roots": 2,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 8,
+              "semantic_expression_facts": 41,
+              "semantic_expression_uses": 43,
+              "semantic_expression_slots": 439,
+              "semantic_expression_inherited": 7,
+              "semantic_expression_variants": 1,
+              "semantic_call_argument_edges": 4,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 6,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 6,
+              "semantic_demand_processed": 6,
+              "semantic_expression_work": 34,
+              "semantic_candidate_work": 12,
+              "semantic_conversion_work": 37,
+              "semantic_conversions": 30,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 3,
+              "semantic_constants": 2,
+              "semantic_value_queries": 2,
+              "semantic_value_query_work": 2,
+              "semantic_template_value_sources": 2,
+              "semantic_template_value_uses": 2,
+              "semantic_value_conversion_variants": 1,
+              "semantic_value_conversion_records": 2,
+              "semantic_types": 41,
+              "semantic_entities": 44,
+              "semantic_scopes": 37,
+              "semantic_edges": 0,
+              "semantic_declarations": 29,
+              "semantic_regions": 16,
+              "semantic_lookup_work": 43,
+              "semantic_signature_work": 12,
+              "semantic_type_probes": 213,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 0.886313,
+              "lowering_ms": 0.133228,
+              "write_ms": 0.09184,
+              "peak_rss_kib": 24568,
+              "nodes": 439,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 8,
+              "discard_work": 0,
+              "full_expression_work": 52,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 12,
+              "abi_bytes": 958,
+              "instructions": 56,
+              "operands": 90,
+              "ir_pool_growths": 54,
+              "ir_capacity_bytes": 12224
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1",
+          "native_sha256": "8eb54ffcd55997c260371a8c9e58c2a4cb9f09ea0290575e7a3d8783a63373d1",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-overloads-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ]
+    },
+    {
+      "name": "definition-parameters",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters.cpp",
+      "source_sha256": "51e4fe7870df6b9d77525940ddf92ba43a194b80d98af324bbbcabd87182512c",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0-compile.log",
+          "log_sha256": "c8124778a2fe3221e8c8483a32dd333d392c0283a2101ab041d1e2117b198c5e",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0.lowir",
+          "sha256": "540ec0b177fbaf84054d93abc4645d66109a7ab0b491797cda60af93d817cf05",
+          "telemetry": [
+            {
+              "tokens": 387,
+              "max_pending": 44,
+              "node_growths": 10,
+              "delimiter_work": 387,
+              "semantic_ms": 0.800458,
+              "semantic_dependence_work": 18,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 14,
+              "semantic_type_substitution_hits": 14,
+              "semantic_type_substitution_records": 14,
+              "semantic_substitution_frames": 8,
+              "semantic_template_type_work": 6,
+              "semantic_template_type_uses": 12,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 6,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 18,
+              "semantic_type_query_work": 18,
+              "semantic_template_binding_work": 149,
+              "semantic_template_bindings": 25,
+              "semantic_template_fixed_expressions": 14,
+              "semantic_template_fixed_uses": 28,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 3,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 603,
+              "template_occurrences": 564,
+              "template_deferred_regions": 6,
+              "template_demanded_regions": 6,
+              "template_source_regions": 7,
+              "template_region_nodes": 282,
+              "template_region_roots": 3,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 16,
+              "semantic_expression_facts": 127,
+              "semantic_expression_uses": 149,
+              "semantic_expression_slots": 1167,
+              "semantic_expression_inherited": 28,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 14,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 6,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 10,
+              "semantic_demand_processed": 10,
+              "semantic_expression_work": 111,
+              "semantic_candidate_work": 14,
+              "semantic_conversion_work": 103,
+              "semantic_conversions": 97,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 3,
+              "semantic_constants": 24,
+              "semantic_value_queries": 8,
+              "semantic_value_query_work": 8,
+              "semantic_template_value_sources": 4,
+              "semantic_template_value_uses": 8,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 76,
+              "semantic_entities": 77,
+              "semantic_scopes": 84,
+              "semantic_edges": 0,
+              "semantic_declarations": 54,
+              "semantic_regions": 30,
+              "semantic_lookup_work": 343,
+              "semantic_signature_work": 41,
+              "semantic_type_probes": 424,
+              "semantic_constant_work": 12
+            },
+            {
+              "frontend_ms": 1.47673,
+              "lowering_ms": 0.250501,
+              "write_ms": 0.136978,
+              "peak_rss_kib": 24568,
+              "nodes": 1167,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 46,
+              "discard_work": 0,
+              "full_expression_work": 169,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 27,
+              "abi_bytes": 1850,
+              "instructions": 138,
+              "operands": 229,
+              "ir_pool_growths": 71,
+              "ir_capacity_bytes": 35456
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0",
+          "native_sha256": "37e871bf7c3da4dd31fd2da7d5fc24dcac049098adae7c7dadc083ee2cbb75bb",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-0-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1-compile.log",
+          "log_sha256": "a41e2ce144bdd54a726204cb2840325e9b0b2c736543773c370c0b16cda3ab4c",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1.lowir",
+          "sha256": "540ec0b177fbaf84054d93abc4645d66109a7ab0b491797cda60af93d817cf05",
+          "telemetry": [
+            {
+              "tokens": 387,
+              "max_pending": 44,
+              "node_growths": 10,
+              "delimiter_work": 387,
+              "semantic_ms": 0.846452,
+              "semantic_dependence_work": 37,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 38,
+              "semantic_type_substitution_hits": 16,
+              "semantic_type_substitution_records": 16,
+              "semantic_substitution_frames": 8,
+              "semantic_template_type_work": 6,
+              "semantic_template_type_uses": 6,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 6,
+              "template_definition_direct_applications": 6,
+              "template_definition_requests": 22,
+              "template_definition_hits": 6,
+              "template_definition_edges": 6,
+              "template_definition_signature_requests": 3,
+              "template_definition_signature_work": 3,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 18,
+              "semantic_type_query_work": 18,
+              "semantic_template_binding_work": 149,
+              "semantic_template_bindings": 25,
+              "semantic_template_fixed_expressions": 14,
+              "semantic_template_fixed_uses": 26,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 3,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 603,
+              "template_occurrences": 564,
+              "template_deferred_regions": 6,
+              "template_demanded_regions": 6,
+              "template_source_regions": 7,
+              "template_region_nodes": 282,
+              "template_region_roots": 3,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 16,
+              "semantic_expression_facts": 127,
+              "semantic_expression_uses": 147,
+              "semantic_expression_slots": 1167,
+              "semantic_expression_inherited": 26,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 14,
+              "semantic_constructor_actions": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 8,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 6,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 10,
+              "semantic_demand_processed": 10,
+              "semantic_expression_work": 111,
+              "semantic_candidate_work": 14,
+              "semantic_conversion_work": 103,
+              "semantic_conversions": 97,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 3,
+              "semantic_constants": 24,
+              "semantic_value_queries": 8,
+              "semantic_value_query_work": 8,
+              "semantic_template_value_sources": 4,
+              "semantic_template_value_uses": 8,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 85,
+              "semantic_entities": 70,
+              "semantic_scopes": 76,
+              "semantic_edges": 0,
+              "semantic_declarations": 54,
+              "semantic_regions": 24,
+              "semantic_lookup_work": 253,
+              "semantic_signature_work": 49,
+              "semantic_type_probes": 386,
+              "semantic_constant_work": 12
+            },
+            {
+              "frontend_ms": 1.53445,
+              "lowering_ms": 0.264077,
+              "write_ms": 0.142473,
+              "peak_rss_kib": 24568,
+              "nodes": 1167,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 46,
+              "discard_work": 0,
+              "full_expression_work": 169,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 27,
+              "abi_bytes": 1850,
+              "instructions": 138,
+              "operands": 229,
+              "ir_pool_growths": 71,
+              "ir_capacity_bytes": 35456
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1",
+          "native_sha256": "37e871bf7c3da4dd31fd2da7d5fc24dcac049098adae7c7dadc083ee2cbb75bb",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/definition-parameters-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ]
+    }
+  ],
+  "layout": {
+    "build": {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include",
+        "-fdump-lang-class=/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/classes.txt",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/definition_demand_layout_probe.cc",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/probe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout-build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "headers": [
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/analyzer.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/semantic/analyzer.h",
+        "sha256": "bbcb66b6c48d28945aa78e533282b120245cd05605fb21eaf9da30ce1deac7b3"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/type_query.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/semantic/type_query.h",
+        "sha256": "d4ffda8f22ef87efd55d25dd23ea6e5f34dc4cde2694437a495ee1c0f7b23a7c"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/model.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/semantic/model.h",
+        "sha256": "dccc3320a430979c9397dcd933ecc26ea489efb7fa01bbe3f99c57080dc6adc0"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/ast.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/syntax/ast.h",
+        "sha256": "aa90c04d058c81cac8cced75e91fcc28f0a1e533b9cbe4d67fe57adda3060e02"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/posttoken/token.h",
+        "sha256": "3d09ef949cae144030b60c50bef5a944624037a4942f6ba634d189a1ca64ec33"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token_types.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/posttoken/token_types.h",
+        "sha256": "871b468fd872ed348f791f462a7c9ac080b9a70afe29763514dc3faa1d2a7dd9"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/source.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/preprocess/source.h",
+        "sha256": "19643d89fb93d777fd07609e1d2cbead69003ea5cbfa5b487a789a262d78540e"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/token_cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/preprocess/token_cursor.h",
+        "sha256": "b3d2a027a810e447a2c97248a302561e1488ecdb152ed95f498140d2f3dc0ec3"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/identifier_table.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/preprocess/identifier_table.h",
+        "sha256": "38508fcd71f6d38258282f3689e5ef9311bee3657d69488260ea7ee38d3a349c"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/support/id_index.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/support/id_index.h",
+        "sha256": "e38c022510de243c166d74d42241a499e29396875a157e61e89bcdf5788fb569"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/expression_store.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/semantic/expression_store.h",
+        "sha256": "13074e65df9f3fd7bbd50441de01db5dcff290ccd8dafdfa6b949ba5ee0040fd"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/template_binding.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/semantic/template_binding.h",
+        "sha256": "30ea5aa0741cbbe537e843848c60dc123a838bc6436692e2352d9bd0fb3ef99d"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/parser.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/syntax/parser.h",
+        "sha256": "4066934956a8f514cb8dbd5d7f2ddd040751166e7652e80d9bd0ce6c441da889"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/syntax/cursor.h",
+        "sha256": "fee1aee355021d719b211321fd22a7635efd980ba385f7b3bb5b94bf18da25d4"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/posttoken/cursor.h",
+        "sha256": "ebb10c8507b6fefac16193bc723ce073f091dc52a20a48918a271f3c82261f67"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/literal.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/posttoken/literal.h",
+        "sha256": "a71cb923f8e011af34b8a1f32c7db5339e15fed9ca4656d1125dc21b69ea113e"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/names.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/include/syntax/names.h",
+        "sha256": "14e4295b8d6b07f9530bea8e0ffd170e3a98968f8cde27c3d38fd5f4902c1047"
+      }
+    ],
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/definition_demand_layout_probe.cc",
+    "source_sha256": "22a5469407f39beb7dba3695abecc42503794f009dfd6a461a41b29a7e1d7134",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/probe",
+    "binary_sha256": "a730dd97c9b5c3775e60adeeb24f80431ecfe77fddc58ac493a0fda9bade7b3a",
+    "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs/layout/classes.txt",
+    "dump_sha256": "4476d04bf9b87a09f057645cd28f70eb23069360131ce8e1e0d8da64c37b0a54",
+    "records": {
+      "ExpressionStore::Properties": {
+        "size": 24,
+        "align": 4
+      },
+      "ExpressionStore::Use": {
+        "size": 20,
+        "align": 4
+      },
+      "Analyzer": {
+        "size": 5920,
+        "align": 8
+      },
+      "Analyzer::TemplatePrototype": {
+        "size": 24,
+        "align": 4
+      },
+      "MemberFacts": {
+        "size": 124,
+        "align": 4
+      },
+      "TemplateDefinition": {
+        "size": 32,
+        "align": 4
+      }
+    },
+    "sizes": [
+      112,
+      36,
+      36,
+      20,
+      8,
+      504,
+      48,
+      48,
+      124,
+      32
+    ]
+  }
+}

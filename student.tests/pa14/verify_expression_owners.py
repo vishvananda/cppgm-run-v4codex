@@ -8,7 +8,9 @@ import benchmark as shared
 def verify(performance_name='expression-owner-performance.json', validation_name='expression-owner-validation.json',
            handoff_name='expression-owner-handoff.json', implementation='c4e4e6f4'):
  layout=json.loads((ROOT/'student.tests/pa14/expression-owner-layout.json').read_text())
- for header in layout['headers']:assert shared.sha(header['path'])==shared.sha(header['source'])==header['sha256']
+ # This completed campaign owns its frozen header snapshot. The definition
+ # demand probe now checks live headers, including its new prototype records.
+ for header in layout['headers']:assert shared.sha(header['path'])==header['sha256']
  for kind in ('source','binary','dump'):assert shared.sha(layout[kind+'_path'])==layout[kind+'_sha256']
  assert shared.sha(ROOT/'student.tests/pa14/expression_owner_layout_probe.cc')==layout['source_sha256']
  assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48]

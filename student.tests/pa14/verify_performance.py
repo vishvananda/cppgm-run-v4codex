@@ -588,3 +588,7 @@ for name,work in views['workloads'].items():
  assert work['outputs'][0]['sha256']==owners['workloads'][name]['outputs'][0]['sha256']
  assert work['outputs'][1]['sha256']==owners['workloads'][name]['outputs'][1]['sha256']
 print(observations+new_samples+owner_observations+view_observations,'total frozen performance observations verified')
+
+from verify_definition_demands import verify as verify_definition_demands
+definition_observations=verify_definition_demands()
+print(observations+new_samples+owner_observations+view_observations+definition_observations,'total frozen performance observations verified')
