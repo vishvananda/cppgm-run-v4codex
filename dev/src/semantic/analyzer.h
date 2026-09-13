@@ -403,6 +403,7 @@ private:
     Index template_object_context_index, template_field_sources, template_member_use_index;
     Index template_method_shapes;
     Index prototype_scope_requirements;
+    std::vector<NodeId> prototype_scope_work;
     Index template_class_patterns, template_class_contexts;
     std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
     std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);

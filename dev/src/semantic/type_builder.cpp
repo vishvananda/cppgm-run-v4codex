@@ -98,7 +98,9 @@ bool Analyzer::prototype_scope_needed(NodeId parameters)
     // A source-only predicate: parameter type expressions may refer to earlier
     // parameters. Reuse it across every concrete declaration of this syntax.
     bool needed = false;
-    std::vector<NodeId> work;
+    // This syntax walk cannot reenter semantic analysis. Retain one scratch
+    // buffer up to the largest parameter list, without per-declaration churn.
+    auto& work = prototype_scope_work; work.clear();
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
         auto specs = ast[p].first; work.push_back(specs); work.push_back(ast[specs].next);
