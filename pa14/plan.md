@@ -22,7 +22,7 @@ preserve definitions first needed in a type query, while unused initializers
 retain checked recipes without instantiating bodies. Selected constructor defaults
 wait until after ranking; ordinary defaults wait for complete-class context.
 Local-class template defaults remain lazy. Seven conversion and three dependency
-probes repeat 10,000 requests; 21 new source controls, 35 inherited native programs
+probes repeat 10,000 requests; 25 new source controls, 35 inherited native programs
 and 314 stage tests pass. Sanitizer, full through and performance work is active.
 
 ## Design/spec alignment

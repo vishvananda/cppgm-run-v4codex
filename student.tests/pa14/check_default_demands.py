@@ -34,6 +34,8 @@ CASES.update({
  'nested-later-member':('struct C{struct Inner{static int f(int n=g()){return n;}};static int g(){return 4;}};int main(){return C::Inner::f()!=4;}',True),
  'elided-template-copy-bad':('template<class T>struct C{C(int){}C(const C&){int n=T::missing;}};template<class T>C<T>make(){return C<T>(4);}template<class T>void f(C<T> c=make<T>());int main(){f<int>();}',False),
  'unused-template-copy-bad':('template<class T>struct C{C(int){}C(const C&){int n=T::missing;}};template<class T>C<T>make(){return C<T>(4);}template<class T>void f(C<T> c=make<T>());int main(){C<int> value(4);return 0;}',True),
+ 'fixed-private-default':('struct Owner;class Secret{friend struct Owner;operator int(){return 9;}};struct Owner{static int f(int n=Secret()){return n;}};template<class T>int use(){return Owner::f();}int main(){return use<int>()!=9;}',True),
+ 'list-private-default':('struct Owner;class Secret{friend struct Owner;operator int(){return 9;}};struct Owner{int n;Owner(int v=Secret()):n(v){}};int use(Owner x){return x.n;}int main(){return use({})!=9;}',True),
  'incomplete-reference':('struct C;C&get();void use(C&);void f(){use({get()});}',True),
 })
 COMPILE_ONLY={'incomplete-reference'}

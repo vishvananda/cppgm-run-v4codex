@@ -30,6 +30,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
         args.push_back(a);
     }
+    const auto supplied = args.size();
     ++unevaluated_depth;
     try {
     Expression fn, result;
@@ -86,7 +87,9 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     }
     auto f = types[ft];
     for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
-    for (unsigned i = 0; i < chosen.size(); ++i)
+    // Defaults already own checked conversion recipes in their declaration
+    // environment. Rechecking them here would use the caller's access context.
+    for (unsigned i = 0; i < supplied; ++i)
         check_fixed_conversion(expressions[args[i]],args[i],chosen[i],s);
     result.type = value_type(f.child);
     result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :

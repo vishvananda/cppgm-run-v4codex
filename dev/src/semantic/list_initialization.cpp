@@ -166,7 +166,10 @@ void Analyzer::validate_list_plan(std::uint32_t id)
                 list_conversion(n,value_type(c.target));
             if (!i && !plan.aggregate && !plan.constructor && n && ast[n].kind != Kind::BracedInit)
                 list_conversion(n,value_type(plan.target));
-            check_fixed_conversion(expressions[n],n,c,plan.scope);
+            // Selected constructor defaults were checked in their own
+            // declaration environment, not this list's calling scope.
+            if (!plan.constructor || i < plan.explicit_count)
+                check_fixed_conversion(expressions[n],n,c,plan.scope);
             conversions[plan.call.conversions+i] = c;
         }
         list_plans[id].validation = FactState::Success;
