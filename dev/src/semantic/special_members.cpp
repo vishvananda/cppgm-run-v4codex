@@ -65,7 +65,7 @@ void Analyzer::classify_transfer(EntityId e, NodeId special, ScopeId context)
         // Ordinary out-of-line definitions retain an external entry. A member
         // specialization follows its actual uses and may lower directly.
         members[m].retained_root = !entities[e].template_member;
-        demand_member(e);
+        require_member_definition(e);
     }
 }
 Conversion Analyzer::transfer_conversion(TypeId from, ValueCategory category, TypeId to)

@@ -151,7 +151,7 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
         auto m = entities[e].member_info;
         if (members[m].pure) continue;
         members[m].emission_reference = true;
-        demand_member(e);
+        demand_member(e, MemberDemandReason::Vtable);
         if (members[m].destructor) {
             members[m].complete_entry = true;
             EntityId deallocation = select_deallocation(entities[cls].type,false,false,entities[e].owner);

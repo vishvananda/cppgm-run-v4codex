@@ -169,6 +169,7 @@ struct Entity {
     Constant constant;
 };
 enum class DemandState : unsigned char { Dormant, Queued, Active, Complete, Failed };
+enum class MemberDemandReason : unsigned char { Use = 1, LocalDefinition = 2, Vtable = 4, Transfer = 8 };
 struct MemberFacts {
     std::uint32_t prototype = 0;
     TypeId call_type = 0;
@@ -179,6 +180,7 @@ struct MemberFacts {
     NodeId body = 0, declarator = 0, source = 0;
     ScopeId body_environment = 0;
     DemandState demand = DemandState::Dormant;
+    unsigned char demand_reasons = 0;
     bool synthetic = false, referenced = false, in_class_body = false;
     bool constructor = false, destructor = false, explicit_constructor = false, deleted = false;
     FactState actions_state = FactState::NotStarted;

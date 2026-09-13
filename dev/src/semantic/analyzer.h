@@ -521,7 +521,8 @@ private:
     template<class Arguments> EntityId deduce_function_values(EntityId pattern, const Arguments& args);
     EntityId explicit_template(NodeId name, EntityId binding, ScopeId s);
     void demand_specialization(EntityId e);
-    void demand_member(EntityId e);
+    void demand_member(EntityId e, MemberDemandReason reason = MemberDemandReason::Use);
+    void require_member_definition(EntityId e);
     void require_member_body(EntityId e);
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);

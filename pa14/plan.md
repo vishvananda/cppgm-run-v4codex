@@ -20,8 +20,11 @@ required subobject edge; preserve body-demand separation and ABI output.
 Action/effect increment: typed action, omission, transfer and copy-storage facts
 now cache terminal failure and withhold omission answers until their action plan
 is complete. Six public controls repeat queries 10,000 times without graph growth;
-314/314 stage tests pass. Next connected defect: external destructor use must not
-demand subobject bodies; a local out-of-line definition must root that work.
+314/314 stage tests pass. External destructor use now leaves subobject bodies
+deferred; local lifecycle definitions publish typed definition demand. Five
+cross-TU/source controls pass (four failed at entry), including emitted cleanup
+and vptr initialization without a use in the defining TU. Prior 1621 tests,
+35 native programs and the property/action controls pass after this increment.
 
 ## Design/spec alignment
 

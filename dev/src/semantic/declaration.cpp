@@ -62,10 +62,10 @@ void Analyzer::finish()
                     if (action.field) members[entities[action.function].member_info].complete_entry = true;
                     else members[entities[action.function].member_info].base_entry = true;
                 }
-                demand_member(action.function);
+                demand_member(action.function, MemberDemandReason::Transfer);
             }
-        } else if (members[m].constructor) constructor_actions(e);
-        if (members[m].destructor) destructor_actions(e);
+        } else if (members[m].constructor && (members[m].synthetic || members[m].body)) constructor_actions(e);
+        if (members[m].destructor && (members[m].synthetic || members[m].body)) destructor_actions(e);
         members[m].demand = DemandState::Complete;
         } catch (...) {
             members[m].demand = DemandState::Failed; throw;
@@ -341,6 +341,8 @@ void Analyzer::function_body(const Body& body)
     }
     return_type = saved_return;
     current_function = saved_function;
+    if (calls && (constructor_member(body.entity) || destructor_member(body.entity)))
+        require_member_definition(body.entity);
 }
 void Analyzer::statements(NodeId n, ScopeId s)
 {

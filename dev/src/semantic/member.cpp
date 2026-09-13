@@ -69,15 +69,25 @@ void Analyzer::member_facts(EntityId e)
     for (unsigned i = 0; i < f.count; ++i) params.push_back(types.parameters[f.offset + i]);
     members[entities[e].member_info].call_type = types.function(f.child, params, f.variadic);
 }
-void Analyzer::demand_member(EntityId e)
+void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
 {
     if (unevaluated_depth) return;
     entities[e].emission |= Entity::Used;
     std::uint32_t m = entities[e].member_info;
-    if (m) members[m].referenced = true;
+    if (m) { members[m].referenced = true; members[m].demand_reasons |= static_cast<unsigned char>(reason); }
     if (m && (members[m].constructor || members[m].destructor))
         demand_vtable(scopes[entities[e].owner].entity, members[m].constructor ? VtableReason::Constructor : VtableReason::Destructor);
     require_member_body(e);
+}
+void Analyzer::require_member_definition(EntityId e)
+{
+    auto m = entities[e].member_info;
+    // A processed external declaration had no local body prerequisite. The
+    // newly published definition is a distinct key and wakes just this member.
+    if (members[m].demand == DemandState::Complete &&
+        !(members[m].demand_reasons & static_cast<unsigned char>(MemberDemandReason::LocalDefinition)))
+        members[m].demand = DemandState::Dormant;
+    demand_member(e, MemberDemandReason::LocalDefinition);
 }
 void Analyzer::require_member_body(EntityId e)
 {
