@@ -14,6 +14,10 @@ Value Procedural::class_temporary(EntityId object, TypeId t)
 }
 Value Procedural::class_address(EntityId object, TypeId t)
 {
+    // A semantic temporary identifies a materialization recipe. A shared
+    // default expression can emit that recipe more than once in one function.
+    if (object && !sem.static_temporary(object).object)
+        objects[object] = builder->add_slot(0,type(t));
     Value pointer = address(class_temporary(object,t));
     if (!sem.static_temporary(object).object) object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
     return pointer;

@@ -31,6 +31,7 @@ void Procedural::activate_temporary(EntityId e)
     bool reopen = full_expression.open;
     close_expression_region();
     TemporaryState state; state.object = e; state.destructor = dtor; state.tail = live;
+    state.location = object_addresses[e];
     state.depth = lifetime_state(live).depth + 1;
     temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
     if (reopen) open_expression_region();

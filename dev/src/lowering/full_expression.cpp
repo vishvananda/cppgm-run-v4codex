@@ -15,6 +15,13 @@ bool Procedural::unwind_expression(NodeId n)
         x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor) ||
         x.form == semantic::ExpressionForm::OperatorCall || (callee && sem.constructor_member(callee));
     if (call) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
+    auto arguments = [&](const semantic::Expression& call) {
+        for (unsigned i = 0; i < call.argument_count; ++i) {
+            auto a = sem.call_arguments[call.arguments+i];
+            if (a && a != n) result |= unwind_expression(a);
+        }
+    };
+    arguments(x);
     auto conversion = [&](const semantic::Conversion& c) {
         if (c.kind == semantic::Conversion::Kind::User) result |= !sem.function_nonthrowing(c.function);
         if (c.kind == semantic::Conversion::Kind::Construction && c.materialization && !sem.conversion_objects[c.materialization].elided)
@@ -24,6 +31,7 @@ bool Procedural::unwind_expression(NodeId n)
             auto plan = sem.list_plans[object.plan];
             if (plan.constructor) result |= sem.constructor_needed(plan.constructor) && !sem.function_nonthrowing(plan.constructor);
         }
+        arguments(conversion_call(c));
     };
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));

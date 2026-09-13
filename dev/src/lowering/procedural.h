@@ -100,10 +100,11 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
-    struct TemporaryState : semantic::LifetimeState { SlotId selector; std::uint32_t yes = 0, no = 0; };
+    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector; std::uint32_t yes = 0, no = 0; };
     std::vector<TemporaryState> temporary_states;
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false);
+    semantic::Expression conversion_call(const semantic::Conversion& conversion) const;
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
     struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;

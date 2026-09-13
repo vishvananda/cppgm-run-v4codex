@@ -268,3 +268,31 @@ after candidate selection, so it cannot reject an unselected builtin when a
 user operator wins. Six new reduced rejections cover addition, subtraction,
 increment, subscript and their query forms. Callable class objects retain the
 ordinary operator owner until that owner supplies a reusable call recipe.
+
+## Repeated default materializations
+
+Default expression facts and their selected callees/conversions remain shared.
+`lowering/class_values.cpp` establishes a fresh storage identity each time that
+materialization is emitted. `TemporaryState` captures its concrete address;
+normal and unwind cleanup consume that address rather than the recipe's latest
+binding. Class storage consumers reuse the location of the current evaluation.
+No syntax clone, lookup, overload selection or template substitution is added.
+
+The lifetime/unwind classifiers follow semantic call-argument edges, including
+constructor and user-result defaults outside the caller's syntax. Completed
+expression summaries remain cached; work is bounded by syntax and required
+semantic argument/conversion edges. Elided constructor calls do not contribute
+default-argument effects. Storage and cleanup records follow emitted objects.
+
+`default-object-identity.cpp` fails at entry (native exit 1). Its expanded
+control checks ordinary/template calls, dependent defaults, conditional arms,
+conversion functions, converting-constructor defaults, trivial class addresses,
+destructor identities and small/looped arrays. N3485 [dcl.fct.default]/9 and
+[class.temporary]/3-5 (`doc/n3485.txt:10776`, `14038`) require evaluation on each
+call, distinct overlapping lifetimes, full-expression destruction and array
+element default cleanup. The intermediate conditional reducer also exposed a
+missing semantic argument edge in lifetime classification. All seventeen native
+programs and through 1935/1935 pass; sanitizer/performance checks are pending.
+The attempted try/throw extension is preserved in the artifact directory with
+its rejection log; source exception lowering belongs to PA21, not this stage.
+Default definition/demand states remain a separate unfinished semantic owner.

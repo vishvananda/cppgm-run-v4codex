@@ -96,5 +96,8 @@ Dependent template-owned member paths remain a distinct incomplete owner.
 Receiver extension: selected pointer arithmetic/subscript operations and type
 queries validate complete pointees; callable class objects route to their
 operator owner. Through 1935/1935 and twenty object rejections pass. A related
-default-argument identity control exposed shared lowered temporary storage;
-its materialization/lifetime group is in progress, with source semantics shared.
+default-argument identity control exposed shared lowered temporary storage.
+That group now gives each emitted materialization its own location and captures
+cleanup addresses; classifiers follow semantic default edges. Seventeen native
+programs (including destructor/branch/default/array controls), through 1935/1935
+and file audit pass. Sanitizer and frozen performance validation remain pending.
