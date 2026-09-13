@@ -4,14 +4,17 @@
 int main() {
     using namespace cppgm::semantic;
     ExpressionStore store; store.resize(5);
+    assert(store.use_count()==0 && store.slot_count()==5);
     Expression source; source.type=3; source.conversions=7; source.count=2; source.ready=true;
     store.set(1,source);
     store.inherit(2,1); store.inherit(3,1);
     source.incoming=11; source.evaluated=true; store.set(2,source);
     source.incoming=13; source.evaluated=false; store.set(3,source);
+    source.entity=41; source.object_use=43; store.set(3,source);
     assert(store.fact_count()==1 && store[1].incoming==0 && !store[1].evaluated);
     assert(store[2].incoming==11 && store[2].evaluated);
     assert(store[3].incoming==13 && !store[3].evaluated);
+    assert(store[3].entity==41 && store[3].object_use==43 && !store[1].entity && !store[2].object_use);
     auto snapshot=store[2];
     store.inherit_conversions(2,1,17); store.inherit_conversions(3,1,17);
     source.conversions=17; store.set(3,source);

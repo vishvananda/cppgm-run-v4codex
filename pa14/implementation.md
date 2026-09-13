@@ -540,3 +540,25 @@ and current observations verify. Offset workloads improve in both paired blocks,
 with zero common-correct generated-code growth. Performance costs, current/frozen
 layouts and the remaining occurrence/identity/lifetime boundary are recorded in
 performance.md and the compact plan. No course or reference coverage changed.
+
+
+Expression ownership continuation from `5a795af4`: immutable properties now
+have compact fact identities; concrete value/receiver identities, incoming
+conversions and evaluation state have separate sparse use records. Definition
+facts are reused by identity and only changed properties publish new records.
+Snapshots remain valid across recursive arena growth. Layout-conversion variants
+reuse source/sequence keys. This separates declaration and object bindings from
+shared type/category/conversion properties without recomputing those decisions.
+
+Fixed call inputs retain their source slices. Typed `CallInputs` distinguishes
+concrete slices, retained source slices and contextual expression views. All
+semantic, lowering, conversion, unwind and cleanup consumers use the same
+`call_argument` accessor. It projects an already-established source/context
+identity; declaration-owned defaults retain their own context. Argument
+materializations keep concrete slices and distinct objects/lifetimes.
+
+PA14 314/314, prior 1621/1621, through 1935/1935, 24 native programs, and the
+explicit storage/snapshot control pass. A complete untimed preflight of all 28
+prior workloads plus three call-input scaling cases and one checked native loop
+preserves exact LowIR/native outputs. Performance and sanitizer acceptance are
+still active; remaining whole-region projection and demand dependencies persist.
