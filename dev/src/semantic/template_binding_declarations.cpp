@@ -82,10 +82,10 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         auto es = make_scope(ScopeKind::Enum,s,entities[e].name,e,false); entities[e].scope = es;
         bool scoped = child(n,Kind::EnumKey);
         entities[e].key = KW_ENUM; entities[e].scoped = scoped;
-        for (auto scope = s; scope; scope = scopes[scope].parent)
-            if (scopes[scope].kind == ScopeKind::Function) {
-                entities[e].type = types.named(e); break;
-            }
+        // Enum identity belongs to its source declaration. Every concrete
+        // enum publishes that binding before signatures or value queries use
+        // it, including member, local and anonymous enum types.
+        entities[e].type = types.named(e);
         for (auto c = node.first; c; c = ast[c].next) if (ast[c].kind == Kind::Enumerator) {
             auto value = pattern_declaration(EntityKind::Enumerator,es,ast[c].text,c,bind_template_expression(ast[c].first,es));
             entities[value].type = entities[e].type;

@@ -929,3 +929,22 @@ dependent initializer; nine rejection controls and four reduced native programs
 pass. The unchanged 1935-test through report and all 32 personal native programs
 also pass. This extension preserves the prior failed probes and adds initializer
 binding work/queue counters before the full evidence campaign.
+
+
+Class-scope enum declarations now retain the same symbolic Named identity as
+local/anonymous enums. Canonical source signature matching expands qualified
+enum members of the current instantiation to that declaration identity, including
+renamed and nested out-of-class definition heads. Concrete enum producers already
+publish the binding before member signatures and queries consume it; substitution
+uses that binding directly. A correct intermediate using symbolic qualified enum
+types and its native proof remain frozen, while the final source identity avoids
+reconstructing a qualified member lookup during each substitution.
+
+The new enum-signatures.cpp control covers scoped/unscoped and anonymous enum
+aliases, underlying widths, dependent enumerator values, nested definitions,
+renamed heads and distinct overload identities across class specializations.
+Entry and the host accept it; both the qualified intermediate and final compiler
+execute it successfully. The through report remains 1935/1935, all 33 personal
+native programs pass, and all nine new signature/class-use rejections plus the
+21 inherited special-signature rejections pass. Full sanitizer/proof/performance
+acceptance follows this completed source declaration/signature/class-use group.

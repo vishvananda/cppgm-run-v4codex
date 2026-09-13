@@ -5,7 +5,7 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; continuation entry/current **314/314**. All **230
 original failures** are resolved. Coverage, references and course comparisons
-are unchanged. PA15 has not started. Current implementation: `af01c062`.
+are unchanged. PA15 has not started. Accepted baseline: `af01c062`; active signature/class-use/enum group.
 
 ## Design/spec alignment
 
@@ -22,7 +22,9 @@ three signature reducers. Prototype names no longer republish source identities.
 Late/nested source defaults and non-static member initializers bind on the
 enclosing class completion event under typed reasons and separate
 queued/active/complete/failed states; static initializers retain declaration-point
-lookup. Nine new rejection controls and four signature reducers pass. Next freeze proofs, sanitizer parity
+lookup. Nine new rejection controls and four signature reducers pass. Member/local/anonymous enums now retain direct declaration identity; qualified
+current-instantiation signatures canonicalize to that same identity. Through
+1935 and all 33 native programs pass. Next freeze proofs, sanitizer parity
 and source/signature/parameter/default scaling before performance acceptance.
 The completed group extends source declarations through concrete local types,
 query substitution, object/lifetime consumers and sparse stable fact storage.

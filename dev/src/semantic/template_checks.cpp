@@ -117,9 +117,11 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
     if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(child,primary);
         auto alias = owner && !t.bound ? local(owner,t.entity,Lookup::Qualifier) : 0;
-        if (alias && entities[alias].kind == EntityKind::Alias && entities[alias].type) {
-            // Only aliases of this current instantiation are expanded. A
-            // different dependent specialization retains its symbolic member.
+        if (alias && entities[alias].type && (entities[alias].kind == EntityKind::Alias ||
+            (entities[alias].kind == EntityKind::Type && entities[alias].key == KW_ENUM))) {
+            // Canonical aliases and enum declarations of this current
+            // instantiation have source type identity. A different dependent
+            // specialization retains its symbolic member qualification.
             Index bindings, substitution;
             template_signature_bindings(entities[alias].owner,primary,bindings);
             auto value = substitute_type(entities[alias].type,bindings,substitution);
