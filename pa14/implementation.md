@@ -664,3 +664,20 @@ selected-definition build, and now passes; both original outputs remain in the
 artifact directory. All 314 stage tests, 1621 prior tests, 27 native programs
 and twelve rejection controls pass after the correction and unresolved-type
 guards. No semantic decision uses parameter spelling as identity.
+
+
+Matched ordinary definitions apply directly to the retained concrete member.
+Function-template and ordinary member bodies share parameter-fact substitution:
+raw source cv, array and function forms survive independently of the callable
+signature. Declaration attributes use a shared application helper; defaults,
+exception checks and virtual specifiers retain their existing owners. Body
+registration stays deferred. This removes repeated name/declarator/overload
+reconstruction on the matched path. Unresolved and special-member definitions
+continue through their established declaration path. A direct-application
+counter makes the two paths observable without adding analysis work.
+
+The new definition-parameters.cpp executes array/function adjustment, body const,
+nested function-pointer returns, renamed heads, dependent noexcept and inline
+attributes across int/long specializations. Stage 314/314, prior 1621/1621,
+all 28 native programs and twelve rejection controls pass. Freeze the current
+implementation for full parity, transitive layout and A/A+ABBA evidence next.

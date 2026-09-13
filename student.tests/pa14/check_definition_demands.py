@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Definition matching: N3485 [class.mem]/1, [class.mfct]/2, [except.spec]/3."""
+"""Definition matching: N3485 [class.mem]/1, [class.mfct]/2, [except.spec]/3–4, [basic.def.odr]/1."""
 from pathlib import Path
 import subprocess,sys,tempfile
 ROOT=Path(__file__).resolve().parents[2]

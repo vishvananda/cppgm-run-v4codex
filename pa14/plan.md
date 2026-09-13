@@ -9,20 +9,19 @@ unchanged. PA15 has not started. Last complete evidence baseline: `5ae726e0`.
 
 ## Design/spec alignment
 
-Active continuation from `167f5f43`; previous turn: **verified progress**. Trace
-typed declaration/member demand before changing scheduling. Existing body/storage
-queues already deduplicate. First close repeated out-of-class definition-bucket
-walks: source list head + concrete specialization owns a completed traversal;
-new definitions extend an immutable tail and reuse completed prior tails.
-Validate repeated overload demand, re-entrant definitions, late publication,
-nested/static members and rejection behavior. Work should follow unique requested
-heads and newly visited definition edges, with no global invalidation or output
-change. Extend into related application-state/dependency ownership after this
-base owner is established; measure the full frozen corpus and source/key scaling.
-The same path exposed unmatched unused member definitions. Typed signature
-matching now normalizes declaring-head parameters and current-instantiation
-aliases; nine mismatch controls reject and all 26 native programs pass. Extend
-retained prototype identity into precise definition selection before acceptance.
+Active continuation from `167f5f43`; previous turn: **verified progress**.
+Ordinary member prototypes now own canonical signatures and selected definition
+lists. Concrete members retain prototype IDs; application state belongs to
+specialization/definition, completed traversal to member/source-head. Source
+checking publishes selection only on completion. Renamed nested alias heads are
+explicit source relationships. Matched bodies register against the selected
+entity and substitute retained raw parameter facts. Defaults/exception/virtual
+checks keep their current owners; unrelated overload definitions are not applied.
+Work tracks source prototypes, unique demanded members/heads and substitution
+keys. Stage 314, prior 1621, 28 native and twelve rejection controls pass. Next:
+freeze full parity/layout proofs and the inherited corpus plus source/key/request
+scaling before accepting compiler work/storage/text costs. Special-member source
+signatures and the broader declaration/lifetime/demand graph remain open.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |

@@ -132,6 +132,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"template_class_completions\":" << template_completions
         << ",\"template_definition_applications\":" << template_definition_work
+        << ",\"template_definition_direct_applications\":" << definition_direct_work
         << ",\"template_definition_requests\":" << definition_requests
         << ",\"template_definition_hits\":" << definition_hits
         << ",\"template_definition_edges\":" << definition_edges

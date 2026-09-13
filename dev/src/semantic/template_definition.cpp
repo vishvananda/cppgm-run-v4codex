@@ -163,6 +163,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         // Preserve source order within the two immutable lists, without
         // visiting definitions matched to a different member declaration.
         auto id = current > unmatched ? current : unmatched;
+        bool matched = selected && id == current;
         auto next = template_definitions[id].selected_next;
         if (id == current) current = selected ? next : template_definitions[id].next;
         else unmatched = next;
@@ -190,12 +191,27 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto specialization = entities[owner.specialization].specialization;
         auto head = templates[entities[specializations[specialization].pattern].template_info];
         auto parent = substitution_frame(specialization,head.offset,head.count);
-        attach_template_context(context,substitution_frame(specialization,def.parameters,def.count,parent));
+        auto frame = substitution_frame(specialization,def.parameters,def.count,parent);
+        attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         auto saved_template = active_template_scope, saved_environment = member_definition_environment;
         active_template_scope = 0; member_definition_environment = environment;
         try {
-            if (ast[source].kind == Kind::SimpleDeclaration) {
+            if (matched && ast[source].kind == Kind::Function) {
+                ++definition_direct_work;
+                // The checked source signature selected this concrete member.
+                // Apply its definition facts without declaring or resolving it
+                // again; the body region remains deferred until body demand.
+                auto d = ast.projected(def.declarator,context);
+                instantiate_parameters(def.declarator,context,frame,environment);
+                auto specs = ast[source].first;
+                declaration_attributes(e,specs,source);
+                function_defaults(e,d,environment,source);
+                exception_specification(e,d,environment);
+                virtual_declaration(e,d,0,specs,source,environment);
+                record(entities[e].owner,e,d,entities[e].type,EntityKind::Function);
+                schedule_body({ast[d].next,d,entities[e].owner,e,source});
+            } else if (ast[source].kind == Kind::SimpleDeclaration) {
                 auto specs = ast[source].first, d = ast.projected(def.declarator,context);
                 auto type = declarator(d,specifiers(specs,environment),environment);
                 declare_object(d,ast.projected(def.initializer,context),type,specs,environment,source);

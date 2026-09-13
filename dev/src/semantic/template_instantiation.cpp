@@ -24,13 +24,18 @@ void Analyzer::instantiate_function(EntityId e)
     ScopeId environment = specialization_environment(e);
     specializations[index].context = context;
     specializations[index].environment = environment;
-    // The source signature already owns typed parameter declarations. Substitute
-    // those facts, preserving body cv/array/function forms independently of the
-    // adjusted callable type; body demand must not rebuild the signature syntax.
-    Index bindings, cache;
     auto frame = substitution_frame(index,pattern.offset,pattern.count);
     attach_template_context(context,frame);
-    NodeId parameters = 0, d = pattern.declarator;
+    instantiate_parameters(pattern.declarator,context,frame,environment);
+    function_body({body,declarator,environment,e,source});
+    specializations[index].body = FactState::Success;
+}
+void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment)
+{
+    // The source signature owns raw parameter types. Preserve body cv, array
+    // and function forms independently from the adjusted callable signature.
+    Index bindings, cache;
+    NodeId parameters = 0;
     while (d) {
         if (auto p = child(d,syntax::Kind::Parameters)) parameters = p;
         auto nested = child(d,syntax::Kind::NestedDeclarator);
@@ -45,8 +50,6 @@ void Analyzer::instantiate_function(EntityId e)
         auto occurrence = ast.projected(p,context);
         facts[occurrence].type = concrete; facts[occurrence].scope = environment;
     }
-    function_body({body,declarator,environment,e,source});
-    specializations[index].body = FactState::Success;
 }
 ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
 {

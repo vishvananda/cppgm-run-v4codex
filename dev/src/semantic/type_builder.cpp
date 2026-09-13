@@ -253,6 +253,22 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     facts[n].type = base; facts[n].scope = s;
     return base;
 }
+void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
+{
+    entities[e].c_linkage |= c_linkage;
+    entities[e].no_inline |= ast[source].flags & 64;
+    entities[e].force_inline |= ast[source].flags & 128;
+    if (calls && (ast[source].flags & 16)) {
+        Type f = types[entities[e].type];
+        if (f.kind != TypeKind::Function || f.variadic || !f.count || !(arithmetic(f.child) || integral(f.child) || pointer(f.child)) ||
+            !integral(types.parameters[f.offset+f.count-1])) throw std::runtime_error("invalid stable-prefix query signature");
+        entities[e].stable_prefix = true;
+    }
+    entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
+    entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
+    entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
+    entities[e].external_decl |= spec_has(specs, KW_EXTERN);
+}
 EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source)
 {
     NodeId name = decl_name(d);
@@ -328,19 +344,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("static member cannot be ref qualified");
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
-    entities[e].c_linkage |= c_linkage;
-    entities[e].no_inline |= ast[source].flags & 64;
-    entities[e].force_inline |= ast[source].flags & 128;
-    if (calls && (ast[source].flags & 16)) {
-        Type f = types[canonical];
-        if (!function || f.variadic || !f.count || !(arithmetic(f.child) || integral(f.child) || pointer(f.child)) ||
-            !integral(types.parameters[f.offset+f.count-1])) throw std::runtime_error("invalid stable-prefix query signature");
-        entities[e].stable_prefix = true;
-    }
-    entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
-    entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
-    entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
-    entities[e].external_decl |= spec_has(specs, KW_EXTERN);
+    declaration_attributes(e,specs,source);
     if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }

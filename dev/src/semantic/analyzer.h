@@ -401,6 +401,7 @@ private:
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
     void instantiate_function(EntityId e);
+    void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);
     bool template_more_specialized(EntityId a, EntityId b);
     NodeId instantiate_default(EntityId e, unsigned parameter);
@@ -426,7 +427,7 @@ private:
     std::vector<EntityId> storage_demand;
     std::uint32_t definition_path_count = 0;
     std::size_t storage_cursor = 0;
-    std::size_t template_definition_work = 0;
+    std::size_t template_definition_work = 0, definition_direct_work = 0;
     std::size_t definition_requests = 0, definition_hits = 0, definition_edges = 0;
     std::size_t definition_signature_requests = 0, definition_signature_work = 0;
     ScopeId member_definition_environment = 0;
@@ -581,6 +582,7 @@ private:
     TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false);
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
+    void declaration_attributes(EntityId e, NodeId specs, NodeId source);
     Constant evaluate(NodeId n, ScopeId s);
     Constant evaluate_value(NodeId n, ScopeId s);
     Constant binary(ETokenType op, Constant a, Constant b, bool converted = false);
