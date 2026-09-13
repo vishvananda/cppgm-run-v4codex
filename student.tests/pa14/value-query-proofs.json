@@ -1,0 +1,917 @@
+{
+  "harness_sha256": "e949045d1721410a175ca49937efc409c6b9a6791e9e01aeff274f404c9def6b",
+  "rejection_harnesses": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_body_values.py",
+      "sha256": "b8d5b89c7dae0f7c6b55f9f67e8762aeb4113f5293071f8c2240609f79e21e91"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_value_queries.py",
+      "sha256": "7f5499521b41aa365a3f9402e3fc62e58d3b73498964eee9a04172b3ddb2b466"
+    }
+  ],
+  "rules": [
+    "N3485 [expr.sizeof]/1,6",
+    "N3485 [temp.dep.constexpr]/2",
+    "N3485 [dcl.array]/1",
+    "N3485 [dcl.fct]/5",
+    "N3485 [expr.cond]",
+    "N3485 [expr.const]/2",
+    "https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-expressions"
+  ],
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+      "sha256": "4809031b0b8e2cd39a6751deb0a2611f24768b956b012e9ffb05136597514a57"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+      "sha256": "2f52c047020bc6b4c959a804863b16ddaf41428bf04198c7685ae34993b05d4b"
+    }
+  ],
+  "rejections": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0.cpp",
+      "source_sha256": "305895e93aeca2d4f533fa7e3ffae4a462ec1e2c1ccce3ebb0eb6715969e175b",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-0-1.log",
+          "log_sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1.cpp",
+      "source_sha256": "5e2a3f8c2ba687bf0d562e3993e062edf1a4b1a596aa14842b3291bb8bdfc0d5",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-1-1.log",
+          "log_sha256": "624a9f6e948307820d4d2ddebed8e9596e8e7eead36fa75b70d6024cdedeaa20"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2.cpp",
+      "source_sha256": "069595ca5a0b4e1869f10ea1ae345a247790ce75067f34d21cdf2800a550710a",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-2-1.log",
+          "log_sha256": "75b1e6daa20b2d17dfc02165bebee7f70ea3614ace344975561b3f38755c45d8"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3.cpp",
+      "source_sha256": "9aa4366474b4af739aac441dc0470e46bce7086950461ef56c3b3eaf5844cf3f",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-3-1.log",
+          "log_sha256": "96efcbd50e21fe7921ac84e9f3b34f97dda118294962039c31a2247b2b3247fd"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4.cpp",
+      "source_sha256": "a338895777bf25416668e2ca8d6140aa7f8c285a7a801a27da5294daf3ca398e",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-4-1.log",
+          "log_sha256": "1869668c8bc5a2db135651ab7c05cfc4968a31bd23a14648517c419c457bb3d2"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5.cpp",
+      "source_sha256": "0cfba8814b56f9b96e259a52d9475b0340add87f207ec8eb07655c91429540eb",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-5-1.log",
+          "log_sha256": "578de30422c570e77e29dbea30debc81128f9e9f28620f730466181499d847da"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6.cpp",
+      "source_sha256": "0af80e50005982ead5d2271396a7d347e65d8b478c04acd2e33b9ca7e5d0b008",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-6-1.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7.cpp",
+      "source_sha256": "46e4d19d71878e94f5082aeb2dc8f0333bd2e987f3c2a4beef0b0842d18ef352",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-7-1.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8.cpp",
+      "source_sha256": "8e6eb9b73bcb867531ae38ed97b776a4568713d52247e9500d7c39fdb03aa1eb",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-8-1.log",
+          "log_sha256": "47fa6e1195a6cf9af837afad024b9db6bdc0fd383ceb6f19a2e6a9e52df00842"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9.cpp",
+      "source_sha256": "f154205663deb6ab4f5e8c035327b301b683874b9c86110a3f5d7a2d5af71a18",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-9-1.log",
+          "log_sha256": "47fa6e1195a6cf9af837afad024b9db6bdc0fd383ceb6f19a2e6a9e52df00842"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10.cpp",
+      "source_sha256": "115a785f10f51eab5158f4222678a7d7bd48aed44f7911b549ddd745954410b8",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-10-1.log",
+          "log_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11.cpp",
+      "source_sha256": "db1a2ab11d63928a08d120c1dc8a62a48d281f9996e0428397f25b26bf5424f2",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-11-1.log",
+          "log_sha256": "c6c5f105f9325d9ffb4df860b95c567654f45d5e071127ae0ef8282d57409dda"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12.cpp",
+      "source_sha256": "36ff8da218e072bcdc6c84700242c0f532c0959f1f4622dbe92a789a33093dc9",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-12-1.log",
+          "log_sha256": "0f5546a6a37ff059d804010411147a996780441a9265edc308f4a00f76d1c3cd"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13.cpp",
+      "source_sha256": "f1d4141bc9f42817225f62961009174f529f176c8ca9aea3e0f21948ffff4ec4",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-13-1.log",
+          "log_sha256": "47fa6e1195a6cf9af837afad024b9db6bdc0fd383ceb6f19a2e6a9e52df00842"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14.cpp",
+      "source_sha256": "55b08ce741fdce0df0e759c65ebd755f73da88282f13144e3577a9843f794e0d",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-14-1.log",
+          "log_sha256": "47fa6e1195a6cf9af837afad024b9db6bdc0fd383ceb6f19a2e6a9e52df00842"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15.cpp",
+      "source_sha256": "0d1b90f7966604d827c470b5c676566846ae3220bd8d4fdcfe98f5c370a27506",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-15-1.log",
+          "log_sha256": "290c1968cf2aac6fae6201c72ec7636e01af12acc403f1bcb293dfcb3cf4e2e8"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16.cpp",
+      "source_sha256": "76494ee1e8f279a60124309111de72914af0d2b06c498186de980ce482ea3864",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-16-1.log",
+          "log_sha256": "ccbd3a5f8231e4822cb2ed87a5f5045782591ff3e1357df829ea75feb998d11d"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17.cpp",
+      "source_sha256": "a0341740fb1a4aace473d5c42c0621803d4a3e21875e70f7c7768560c0632353",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-17-1.log",
+          "log_sha256": "7582937ff8e83a8d0828ef0637b9746a981192a6fddaec766484772dab7202b0"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18.cpp",
+      "source_sha256": "7c89de501ca98531df2dc6f6ce5f2013155a6636b2a678fa950c01be835ef1a7",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-18-1.log",
+          "log_sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19.cpp",
+      "source_sha256": "20830c2f530d001978de59b23e2d68a26eac999515399ef7f9d7d7db16bf5db9",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-19-1.log",
+          "log_sha256": "ccbd3a5f8231e4822cb2ed87a5f5045782591ff3e1357df829ea75feb998d11d"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20.cpp",
+      "source_sha256": "31626847a5e52baaebc9781ecb4e95077095be3c3da158b04c0b81f6c30dc041",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-20-1.log",
+          "log_sha256": "d7be52dca25ae54628178d1e0ca3636273b67504b5b0feb07332e6efd98d0975"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21.cpp",
+      "source_sha256": "c9a871db88bd62822f04e79b017c52cc5ce72a9ac778b29415e5ec6fd9e88e1d",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/reject-21-1.log",
+          "log_sha256": "ccbd3a5f8231e4822cb2ed87a5f5045782591ff3e1357df829ea75feb998d11d"
+        }
+      ]
+    }
+  ],
+  "positives": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values.cpp",
+      "source_sha256": "4d787f3e17d9b34e1fcbdf0b2146f2b6849ddc07f283886b8ef217a8e9f07733",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-0.lowir",
+          "sha256": "1909eeaa99bdcd15b0613d647c203b2174ddfc245171e0caa2d0fb6b6f323f32",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-0",
+          "native_sha256": "8eb822981ca194288e44e343344dda11fafd7be9978f92dc6a178a31c0dd49e8",
+          "native_exit": 0
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-1.lowir",
+          "sha256": "1909eeaa99bdcd15b0613d647c203b2174ddfc245171e0caa2d0fb6b6f323f32",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/body-values-1",
+          "native_sha256": "8eb822981ca194288e44e343344dda11fafd7be9978f92dc6a178a31c0dd49e8",
+          "native_exit": 0
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds.cpp",
+      "source_sha256": "47e79609378cb250da26ef1bc759f632b3fa29b21df0e3b3393f411213f984bb",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-0.log",
+          "log_sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-1.lowir",
+          "sha256": "0bc8ce73d08f138dce2fd00097f2d7e987b0045d404956ca39ae439b99b0f1ae",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/dependent-bounds-1",
+          "native_sha256": "84f05e2b05da97938c28a58fd7dc40932aff91dc841e368ed9566d874b629cb9",
+          "native_exit": 0
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion.t",
+      "source_sha256": "760559081df07af5f2473c66ce820c2e15bc0aca7789aa8fe9b9043f87a83083",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion.t"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-0.lowir",
+          "sha256": "6419e051d6d2da2f029bff04ce4d67d13050eaaef47e3e38ebeb68b5adf019fa",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-0",
+          "native_sha256": "c44fd3e9b93fda49c22c1c12e56cf54ead7611f33077a00e19dd8a5c97276001",
+          "native_exit": 0
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/cppgm++-release",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion.t"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-1.lowir",
+          "sha256": "6419e051d6d2da2f029bff04ce4d67d13050eaaef47e3e38ebeb68b5adf019fa",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-value-facts/proofs-final/value-conversion-1",
+          "native_sha256": "c44fd3e9b93fda49c22c1c12e56cf54ead7611f33077a00e19dd8a5c97276001",
+          "native_exit": 0
+        }
+      ]
+    }
+  ]
+}
