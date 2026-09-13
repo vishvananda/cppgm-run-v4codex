@@ -16,7 +16,7 @@ enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 // Boolean success has two outcomes, while active and failed remain distinct.
 // This compact encoding does not confuse a pending query with a false value.
 enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage, DefaultArgument, ListConversion };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage, DefaultArgument, ListConversion, DefaultDemand, DefaultBinding, InitializerBinding, ListInitialization };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -169,7 +169,7 @@ struct Entity {
     Constant constant;
 };
 enum class DemandState : unsigned char { Dormant, Queued, Active, Complete, Failed };
-enum class MemberDemandReason : unsigned char { Use = 1, LocalDefinition = 2, Vtable = 4, Transfer = 8 };
+enum class MemberDemandReason : unsigned char { Use = 1, LocalDefinition = 2, Vtable = 4, Transfer = 8, DefaultArgument = 16 };
 struct MemberFacts {
     std::uint32_t prototype = 0;
     TypeId call_type = 0;
@@ -314,17 +314,26 @@ struct CallSelection {
 };
 // Declaration slots identify defaults; a function specialization supplies the
 // concrete parameter/environment component of a default's fact key.
+enum class DefaultReason : unsigned char { Declaration = 1, Argument = 2, Recipe = 4 };
+enum class DefaultDependencyKind : unsigned char { Member, Specialization, Storage, Argument };
+struct DefaultDependency {
+    std::uint32_t target = 0, next = 0;
+    DefaultDependencyKind kind = DefaultDependencyKind::Member;
+    DefaultDependency(std::uint32_t t, std::uint32_t n, DefaultDependencyKind k) : target(t), next(n), kind(k) {}
+};
 struct DefaultArgumentFact {
     NodeId root = 0, value = 0;
-    std::uint32_t conversion = 0;
-    FactState state = FactState::NotStarted;
+    std::uint32_t conversion = 0, dependencies = 0;
+    FactState state = FactState::NotStarted, demand = FactState::NotStarted;
+    unsigned char reasons = 0;
 };
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
     bool aggregate = false, direct_binding = false, direct = false, zero = false;
-    unsigned char state = 0, rank = 255;
+    FactState state = FactState::NotStarted;
+    unsigned char rank = 255;
     FactState validation = FactState::NotStarted;
 };
 struct ListField { EntityId field = 0; TypeId type = 0; std::uint64_t index = 0, count = 1; };

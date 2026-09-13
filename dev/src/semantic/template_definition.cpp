@@ -186,6 +186,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto saved_template = active_template_scope, saved_environment = member_definition_environment;
         auto saved_depth = class_depth;
         auto saved_bodies = bodies.size();
+        auto saved_defaults = declaration_defaults.size();
         try {
         auto def = template_definitions[id];
         auto pack = specialization_arguments(owner.specialization);
@@ -248,7 +249,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         } catch (...) {
             definition_applications.put(k,unsigned(DefinitionState::Failed));
             active_template_scope = saved_template; member_definition_environment = saved_environment;
-            class_depth = saved_depth; bodies.resize(saved_bodies);
+            class_depth = saved_depth; bodies.resize(saved_bodies); declaration_defaults.resize(saved_defaults);
             if (entities[e].class_info) entities[e].complete = false;
             throw;
         }
@@ -259,6 +260,9 @@ bool Analyzer::instantiate_member_definition(EntityId e)
 }
 void Analyzer::demand_template_storage(EntityId e)
 {
+    if (e && entities[e].kind == EntityKind::Variable && entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class)
+        record_default_dependency(DefaultDependencyKind::Storage,e);
+    if (unevaluated_depth) return;
     if (!e || entities[e].kind != EntityKind::Variable || !entities[e].is_static ||
         scopes[entities[e].owner].kind != ScopeKind::Class || storage_requested.get(e)) return;
     if (!definition_owner(scopes[entities[e].owner].entity).specialization) return;

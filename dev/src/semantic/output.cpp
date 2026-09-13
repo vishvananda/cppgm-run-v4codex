@@ -170,6 +170,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_region_roots\":" << static_cast<const syntax::Ast&>(ast).region_roots.size()
         << ",\"template_default_environment_work\":" << default_environment_work
         << ",\"template_default_argument_work\":" << default_argument_work
+        << ",\"template_default_facts\":" << default_argument_facts.size()-1
+        << ",\"template_default_dependencies\":" << default_dependencies.size()
+        << ",\"template_default_dependency_work\":" << default_dependency_work
+        << ",\"template_default_demands\":" << default_demand_work
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_expression_facts\":" << expressions.fact_count()

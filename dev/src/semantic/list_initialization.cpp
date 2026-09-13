@@ -50,7 +50,7 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     store_call(plan.call,args,selected);
     plan.explicit_count = args.size(); plan.fields = list_fields.size();
     list_fields.insert(list_fields.end(),fields.begin(),fields.end());
-    plan.state = 2; if (valid) plan.rank = rank;
+    plan.state = FactState::Success; if (valid) plan.rank = rank;
     auto id = list_plans.size(); list_plans.push_back(plan); return id;
 }
 Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool direct)
@@ -60,7 +60,8 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
     Index& cache = !n ? empty_list_index : direct ? direct_list_index : list_index;
     auto id = cache.get(k);
     if (!id) {
-        id = list_plans.size(); list_plans.emplace_back(); list_plans[id].state = 1; cache.put(k,id);
+        id = list_plans.size(); list_plans.emplace_back(); list_plans[id].state = FactState::Active; cache.put(k,id);
+        try {
         ListPlan plan; plan.source = n; plan.target = to; plan.scope = s; plan.direct = direct;
         Type target = types[to];
         bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
@@ -78,6 +79,11 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
         while (types[qualified].kind == TypeKind::Array) qualified = types[qualified].child;
         bool can_bind = !ref || target.kind == TypeKind::RRef || types[qualified].cv == 1;
         if (!plan.direct_binding && can_bind) {
+            if (class_value(t)) {
+                complete_class(types[t].entity);
+                if (!entities[types[t].entity].complete)
+                    throw UnavailableSemanticFact(SemanticFact::ClassDefinition,types[t].entity,n);
+            }
             if (aggregate_type(t)) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
@@ -102,11 +108,13 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 }
             }
         }
-        plan.state = 2; list_plans[id] = plan;
+        plan.state = FactState::Success; list_plans[id] = plan;
+        } catch (...) { list_plans[id].state = FactState::Failure; throw; }
     }
     auto plan = list_plans[id];
+    if (plan.state == FactState::Failure) throw FailedSemanticFact(SemanticFact::ListInitialization,0,n);
     Conversion c; c.target = to; c.kind = Conversion::Kind::ListPlan; c.materialization = id;
-    if (plan.state != 2) return c;
+    if (plan.state != FactState::Success) return c;
     c.rank = plan.rank; c.function = plan.constructor;
     c.reference = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     c.temporary = c.reference && !plan.direct_binding;
@@ -126,7 +134,7 @@ void Analyzer::validate_list_plan(std::uint32_t id)
     if (plan.validation == FactState::Active) throw std::logic_error("recursive list validation");
     list_plans[id].validation = FactState::Active;
     try {
-        if (plan.state != 2 || plan.rank == 255) throw std::runtime_error("invalid list initialization");
+        if (plan.state != FactState::Success || plan.rank == 255) throw std::runtime_error("invalid list initialization");
         TypeId t = value_type(plan.target);
         if (plan.constructor) {
             auto ctor = plan.constructor;
@@ -134,6 +142,20 @@ void Analyzer::validate_list_plan(std::uint32_t id)
             if (!plan.direct && members[entities[ctor].member_info].explicit_constructor)
                 throw std::runtime_error("explicit constructor in copy-list initialization");
             check_access(ctor,plan.scope,entities[ctor].owner);
+            auto signature = types[entities[ctor].type];
+            if (plan.call.argument_count < signature.count) {
+                // Candidate ranking only inspected supplied arguments. Once
+                // selected, complete this immutable call recipe's defaults.
+                std::vector<NodeId> args; std::vector<Conversion> chosen;
+                for (unsigned i = 0; i < signature.count; ++i) {
+                    Conversion c;
+                    auto n = i < plan.call.argument_count ? call_argument(plan.call,i) :
+                        default_argument(ctor,i,&c,DefaultReason::Recipe);
+                    if (i < plan.call.argument_count) c = conversions[plan.call.conversions+i];
+                    args.push_back(n); chosen.push_back(c);
+                }
+                store_call(plan.call,args,chosen); list_plans[id].call = plan.call;
+            }
         } else if (class_value(t) && !plan.aggregate && !plan.direct_binding)
             throw std::runtime_error("ambiguous list constructor");
         if (!plan.direct_binding) default_destructor(t,plan.scope,false);
@@ -160,6 +182,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     if (plan.zero) prepare_zero_initialization(t);
     if (plan.constructor) {
         demand_member(plan.constructor); members[entities[plan.constructor].member_info].complete_entry = true;
+        for (unsigned i = plan.explicit_count; i < plan.call.argument_count; ++i) default_argument(plan.constructor,i);
     }
     ListObject object; object.plan = c.materialization;
     if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array)) {

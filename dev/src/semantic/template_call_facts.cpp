@@ -67,7 +67,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {
-            Conversion c; auto a = default_argument(selected,i,&c);
+            Conversion c; auto a = default_argument(selected,i,&c,DefaultReason::Recipe);
             args.push_back(a); chosen.push_back(c);
         }
         for (auto c = callee;; c = ast[c].first) {
@@ -129,7 +129,10 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     }
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     bool materialize = false;
+    auto explicit_argument = ast[ast[ast[source].first].next].first;
     for (unsigned i = 0; i < result.argument_count; ++i) {
+        if (explicit_argument) explicit_argument = ast[explicit_argument].next;
+        else if (selected) default_argument(selected,i);
         auto original = call_argument(result,i);
         auto a = ast.projected(original,context); if (!a) a = original; // Declaration-owned default.
         expression(a,s); args.push_back(a);

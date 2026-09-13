@@ -12,7 +12,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     auto state = SourceBindingState(template_default_bindings.get(source));
     if (state == SourceBindingState::Complete) return;
     if (state == SourceBindingState::Active) throw std::runtime_error("recursive source default argument binding");
-    if (state == SourceBindingState::Failed) throw std::runtime_error("failed source default argument binding");
+    if (state == SourceBindingState::Failed) throw FailedSemanticFact(SemanticFact::DefaultBinding,0,d);
     if (state == SourceBindingState::Queued && active_template_class) return;
     NodeId parameters = 0;
     for (auto node = d; node;) {
@@ -22,7 +22,10 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     bool needed = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
     if (!needed) { template_default_bindings.put(source,unsigned(SourceBindingState::Complete)); return; }
-    if (!allowed) throw std::runtime_error("class template member default must appear on its initial declaration");
+    if (!allowed) {
+        template_default_bindings.put(source,unsigned(SourceBindingState::Failed));
+        throw std::runtime_error("class template member default must appear on its initial declaration");
+    }
     // Default arguments see the whole enclosing class, including declarations
     // that follow this member and defaults in nested class member functions.
     // The source class completion event drains just its collected consumers.
@@ -66,7 +69,7 @@ void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
     auto state = SourceBindingState(template_initializer_bindings.get(e));
     if (state == SourceBindingState::Complete) return;
     if (state == SourceBindingState::Active) throw std::runtime_error("recursive source member initializer binding");
-    if (state == SourceBindingState::Failed) throw std::runtime_error("failed source member initializer binding");
+    if (state == SourceBindingState::Failed) throw FailedSemanticFact(SemanticFact::InitializerBinding,e,entities[e].initializer);
     if (state == SourceBindingState::Queued && active_template_class) return;
     if (active_template_class) {
         template_initializer_bindings.put(e,unsigned(SourceBindingState::Queued));
@@ -114,15 +117,14 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
             // Keep the declaration slot immutable. Function specializations
             // share the source slot but own separate concrete default facts.
             default_arguments[index] = a; facts.edit(a).scope = head ? head : s;
-            if (head || (definitions && ast.nodes.occurrences[a].context)) {
+            // A member of a local class in a function specialization is also
+            // a templated entity, though its class has no specialization ID.
+            if (head || (definitions && (entities[e].template_member ||
+                    (scopes[s].kind == ScopeKind::Class && ast.nodes.occurrences[a].context)))) {
                 seen = true; continue;
             }
-            Conversion converted;
-            auto value = default_argument(e,i,&converted);
-            // Ordinary defaults are checked as variable initializers at their
-            // declaration. Preserve their evaluated definition dependencies.
-            apply_conversion(value,converted);
-            expressions.incoming(value,conversions.size()); conversions.push_back(converted);
+            if (class_depth) declaration_defaults.push_back({e,i});
+            else default_argument(e,i,0,DefaultReason::Declaration);
         }
         if (default_arguments[index]) seen = true;
         else if (seen) throw std::runtime_error("missing trailing default argument");
@@ -141,7 +143,7 @@ NodeId Analyzer::default_argument_value(EntityId e, unsigned parameter) const
         throw std::logic_error("missing checked default argument");
     return default_argument_facts[id].value;
 }
-NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* converted)
+NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* converted, DefaultReason reason)
 {
     auto source = default_arguments[entities[e].defaults+parameter];
     if (!source) throw std::logic_error("missing default argument declaration");
@@ -151,12 +153,17 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* co
         id = default_argument_facts.size(); default_argument_facts.emplace_back();
         default_argument_index.put(k,id);
     }
+    if (reason != DefaultReason::Declaration) record_default_dependency(DefaultDependencyKind::Argument,id);
+    default_argument_facts[id].reasons |= static_cast<unsigned char>(reason);
     auto state = default_argument_facts[id].state;
     if (state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::DefaultArgument,e,source);
     if (state == FactState::Active) throw std::runtime_error("recursive default argument");
     if (state == FactState::NotStarted) {
         default_argument_facts[id].state = FactState::Active; ++default_argument_work;
+        auto saved_default = active_default_fact;
+        auto saved_unevaluated = unevaluated_depth;
+        active_default_fact = id; unevaluated_depth = 1;
         try {
             auto root = definitions && entities[e].specialization ? instantiate_default(e,source) : source;
             demand_region(root);
@@ -170,16 +177,89 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* co
             // Validate copy-initialization once, in the declaring environment.
             // The immutable recipe contains no per-call conversion temporary.
             check_fixed_conversion(expressions[value],value,c,scope);
+            capture_default_conversion(c);
             auto conversion_id = conversions.size(); conversions.push_back(c);
+            if (reason == DefaultReason::Declaration) {
+                // Preserve the ordinary initializer view without instantiating
+                // specializations before this default is used [temp.inst]/10.
+                auto applied = copy_conversion_recipe(c); apply_conversion(value,applied);
+                expressions.incoming(value,conversions.size()); conversions.push_back(applied);
+            }
             auto& fact = default_argument_facts[id];
             fact.root = root; fact.value = value; fact.conversion = conversion_id;
             fact.state = FactState::Success;
         } catch (...) {
+            active_default_fact = saved_default; unevaluated_depth = saved_unevaluated;
             default_argument_facts[id].state = FactState::Failure; throw;
         }
+        active_default_fact = saved_default; unevaluated_depth = saved_unevaluated;
     }
+    if (reason == DefaultReason::Argument && !active_default_fact) demand_default_fact(id);
     auto fact = default_argument_facts[id];
     if (converted) *converted = copy_conversion_recipe(conversions[fact.conversion]);
     return fact.value;
+}
+void Analyzer::record_default_dependency(DefaultDependencyKind kind, std::uint32_t target)
+{
+    if (!active_default_fact || !target || (kind != DefaultDependencyKind::Argument && unevaluated_depth != 1)) return;
+    auto next = default_argument_facts[active_default_fact].dependencies;
+    default_dependencies.emplace_back(target,next,kind);
+    default_argument_facts[active_default_fact].dependencies = default_dependencies.size();
+}
+void Analyzer::capture_default_conversion(const Conversion& c)
+{
+    if (c.function) {
+        record_default_dependency(DefaultDependencyKind::Member,c.function);
+        if (entities[c.function].specialization) record_default_dependency(DefaultDependencyKind::Specialization,c.function);
+    }
+    auto destruction = [&](TypeId t) {
+        if (auto dtor = type_destructor(value_type(t))) record_default_dependency(DefaultDependencyKind::Member,dtor);
+    };
+    if (c.kind == Conversion::Kind::Construction) {
+        destruction(c.target);
+        auto call = conversion_objects[c.materialization].call;
+        for (unsigned i = 0; i < call.count; ++i) capture_default_conversion(conversions[call.conversions+i]);
+    } else if (c.kind == Conversion::Kind::User) {
+        destruction(types[entities[c.function].type].child);
+        capture_default_conversion(user_conversions[c.materialization].result);
+    } else if (c.kind == Conversion::Kind::ListPlan) {
+        auto plan = list_plans[c.materialization];
+        if (!plan.direct_binding) destruction(plan.target);
+        for (unsigned i = 0; i < plan.call.count; ++i) capture_default_conversion(conversions[plan.call.conversions+i]);
+        if (plan.constructor) for (unsigned i = plan.explicit_count; i < plan.call.argument_count; ++i) {
+            auto child = default_argument_index.get(default_argument_key(plan.constructor,i));
+            if (!child) throw std::logic_error("list recipe lost its checked default");
+            record_default_dependency(DefaultDependencyKind::Argument,child);
+        }
+    }
+}
+void Analyzer::demand_default_fact(std::uint32_t id)
+{
+    auto state = default_argument_facts[id].demand;
+    if (state == FactState::Success || state == FactState::Active) return;
+    if (state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DefaultDemand,0,default_argument_facts[id].root);
+    default_argument_facts[id].demand = FactState::Active; ++default_demand_work;
+    auto saved_unevaluated = unevaluated_depth; unevaluated_depth = 0;
+    try {
+        // A default is a separate definition [temp.decls]/2. Using it in a
+        // call requires its initializer's dependencies even inside decltype.
+        // A sizeof within the initializer did not record evaluated edges.
+        for (auto edge = default_argument_facts[id].dependencies; edge;) {
+            auto use = default_dependencies[edge-1]; edge = use.next; ++default_dependency_work;
+            switch (use.kind) {
+            case DefaultDependencyKind::Member: demand_member(use.target,MemberDemandReason::DefaultArgument); break;
+            case DefaultDependencyKind::Specialization: demand_specialization(use.target); break;
+            case DefaultDependencyKind::Storage: demand_template_storage(use.target); break;
+            case DefaultDependencyKind::Argument: demand_default_fact(use.target); break;
+            }
+        }
+        expressions.evaluated(default_argument_facts[id].value,true);
+        default_argument_facts[id].demand = FactState::Success;
+    } catch (...) {
+        unevaluated_depth = saved_unevaluated;
+        default_argument_facts[id].demand = FactState::Failure; throw;
+    }
+    unevaluated_depth = saved_unevaluated;
 }
 } }

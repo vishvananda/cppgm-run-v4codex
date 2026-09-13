@@ -188,6 +188,7 @@ void Analyzer::complete_class(EntityId e)
     ScopeId saved = active_template_scope;
     auto saved_depth = class_depth;
     auto saved_bodies = bodies.size();
+    auto saved_defaults = declaration_defaults.size();
     try {
     auto environment = specialization_environment(e);
     // An earlier forward declaration may have used different parameter names.
@@ -210,7 +211,7 @@ void Analyzer::complete_class(EntityId e)
     specializations[index].body = FactState::Success;
     } catch (...) {
         active_template_scope = saved; class_depth = saved_depth;
-        bodies.resize(saved_bodies);
+        bodies.resize(saved_bodies); declaration_defaults.resize(saved_defaults);
         entities[e].complete = false;
         specializations[index].body = FactState::Failure;
         throw;

@@ -13,7 +13,7 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
         std::vector<NodeId> args; std::vector<Conversion> chosen;
         for (unsigned i = 0; i < f.count; ++i) {
             Conversion argument;
-            auto a = i ? default_argument(c.function,i,&argument) : n;
+            auto a = i ? default_argument(c.function,i,&argument,DefaultReason::Recipe) : n;
             if (!i) {
                 auto target = types.parameters[f.offset+i];
                 argument = c.implicit_move ? transfer_conversion(source.type,ValueCategory::Xvalue,target) :

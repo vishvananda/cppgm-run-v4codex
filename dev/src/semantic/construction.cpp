@@ -59,9 +59,10 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     Type f = types[entities[selected].type];
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;
-    for (std::size_t i = 0; i < std::max<std::size_t>(args.size(), f.count); ++i) {
+    auto count = probe ? args.size() : std::max<std::size_t>(args.size(), f.count);
+    for (std::size_t i = 0; i < count; ++i) {
         Conversion c;
-        NodeId arg = i < args.size() ? args[i] : default_argument(selected,i,&c);
+        NodeId arg = i < args.size() ? args[i] : default_argument(selected,i,&c,probe ? DefaultReason::Recipe : DefaultReason::Argument);
         if (i < args.size()) c = sequences[viable[best].offset+i];
         if (!c.valid()) { if (probe) return 0; throw std::runtime_error("invalid constructor default argument"); }
         arguments.push_back(arg); selected_arguments.push_back(c);

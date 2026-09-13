@@ -86,6 +86,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     if (definition) {
         if (entities[e].complete) throw std::runtime_error("class redefinition");
         std::size_t deferred_begin = bodies.size();
+        auto defaults_begin = declaration_defaults.size();
         ++class_depth;
         ScopeId cs = entities[e].scope;
         if (member_definition_environment && s == member_definition_environment) {
@@ -121,6 +122,14 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         entities[e].definition = n;
         if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);
         if (!--class_depth) {
+            // Defaults are complete-class contexts, including names introduced
+            // later in an enclosing class. Drain only this root's consumers.
+            auto defaults_end = declaration_defaults.size();
+            for (auto i = defaults_begin; i < defaults_end; ++i) {
+                auto use = declaration_defaults[i];
+                default_argument(use.function,use.parameter,0,DefaultReason::Declaration);
+            }
+            declaration_defaults.resize(defaults_begin);
             // Only complete-class contexts defer bodies. Each outermost class
             // owns its queue interval; a local class can drain its own interval
             // without delaying lookup past declarations following that class.

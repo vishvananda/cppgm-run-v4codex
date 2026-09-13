@@ -14,13 +14,16 @@ default/body work, and O(required call arguments) materialization. Validate
 invalid conversions, access context, repeated failures, recursive defaults and
 independent object lifetimes; preserve earlier source-identity controls.
 
-Conversion increment: immutable declaration slots now address concrete default
-facts, including the function-specialization key. Copy-initialization and list
-recipe validation publish terminal success/failure before calls consume them.
-Seven public probes repeat 10,000 requests; 314 stage, 1621 prior and 35 native
-controls pass. Related demand defect remains active: defaults first seen in a
-type query can lose required function/member/storage definitions. Ordinary unused
-defaults must also defer those dependencies under N3485 [temp.inst]/10.
+Default conversion/demand increment: immutable declaration slots address facts
+keyed by concrete function specialization and parameter slot. Copy-initialization
+and list recipes publish terminal success/failure separately from dependency
+registration. Typed member, specialization, storage and nested-default edges
+preserve definitions first needed in a type query, while unused initializers
+retain checked recipes without instantiating bodies. Selected constructor defaults
+wait until after ranking; ordinary defaults wait for complete-class context.
+Local-class template defaults remain lazy. Seven conversion and three dependency
+probes repeat 10,000 requests; 21 new source controls, 35 inherited native programs
+and 314 stage tests pass. Sanitizer, full through and performance work is active.
 
 ## Design/spec alignment
 

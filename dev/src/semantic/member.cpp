@@ -71,6 +71,7 @@ void Analyzer::member_facts(EntityId e)
 }
 void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
 {
+    record_default_dependency(DefaultDependencyKind::Member,e);
     if (unevaluated_depth) return;
     entities[e].emission |= Entity::Used;
     std::uint32_t m = entities[e].member_info;

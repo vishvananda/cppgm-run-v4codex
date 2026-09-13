@@ -39,7 +39,7 @@ public:
     TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
-    NodeId default_argument(EntityId e, unsigned parameter, Conversion* converted = 0);
+    NodeId default_argument(EntityId e, unsigned parameter, Conversion* converted = 0, DefaultReason reason = DefaultReason::Argument);
     NodeId default_argument_value(EntityId e, unsigned parameter) const;
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
@@ -242,6 +242,12 @@ private:
     std::uint64_t default_argument_key(EntityId e, unsigned parameter) const;
     Index default_argument_index;
     std::vector<DefaultArgumentFact> default_argument_facts = std::vector<DefaultArgumentFact>(1);
+    std::vector<DefaultDependency> default_dependencies;
+    std::uint32_t active_default_fact = 0;
+    void record_default_dependency(DefaultDependencyKind kind, std::uint32_t target);
+    void capture_default_conversion(const Conversion& c);
+    void demand_default_fact(std::uint32_t id);
+    std::size_t default_dependency_work = 0, default_demand_work = 0;
     Index default_environments;
     std::size_t default_environment_work = 0, default_argument_work = 0;
     ScopeId default_environment(EntityId e, ScopeId head);
@@ -370,6 +376,8 @@ private:
     std::uint64_t walk = 0;
     std::size_t lookup_work = 0, analyzed = 0, constant_work = 0;
     struct Body { NodeId node, declarator; ScopeId owner; EntityId entity; NodeId source; };
+    struct DeferredDefault { EntityId function; unsigned parameter; };
+    std::vector<DeferredDefault> declaration_defaults;
     std::vector<Body> bodies;
     unsigned class_depth = 0;
     enum class Lookup { Ordinary, Tag, Namespace, Qualifier };
