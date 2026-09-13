@@ -104,7 +104,7 @@ class Procedural {
     std::vector<TemporaryState> temporary_states;
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false);
-    semantic::Expression conversion_call(const semantic::Conversion& conversion) const;
+    const semantic::Expression* conversion_call(const semantic::Conversion& conversion) const;
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
     struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;

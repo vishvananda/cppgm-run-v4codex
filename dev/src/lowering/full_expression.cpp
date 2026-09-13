@@ -31,7 +31,7 @@ bool Procedural::unwind_expression(NodeId n)
             auto plan = sem.list_plans[object.plan];
             if (plan.constructor) result |= sem.constructor_needed(plan.constructor) && !sem.function_nonthrowing(plan.constructor);
         }
-        arguments(conversion_call(c));
+        if (auto call = conversion_call(c)) arguments(*call);
     };
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));

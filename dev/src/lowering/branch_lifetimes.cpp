@@ -1,16 +1,18 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
-semantic::Expression Procedural::conversion_call(const semantic::Conversion& conversion) const
+const semantic::Expression* Procedural::conversion_call(const semantic::Conversion& conversion) const
 {
-    auto c = conversion;
-    if (c.kind == semantic::Conversion::Kind::User)
-        c = sem.user_conversions[c.materialization].result;
-    if (c.kind == semantic::Conversion::Kind::Construction)
-        return sem.conversion_objects[c.materialization].elided ? semantic::Expression() : sem.conversion_objects[c.materialization].call;
-    if (c.kind == semantic::Conversion::Kind::List)
-        return sem.list_objects[c.materialization].call;
-    return semantic::Expression();
+    auto c = &conversion;
+    if (c->kind == semantic::Conversion::Kind::User)
+        c = &sem.user_conversions[c->materialization].result;
+    if (c->kind == semantic::Conversion::Kind::Construction) {
+        const auto& object = sem.conversion_objects[c->materialization];
+        return object.elided ? nullptr : &object.call;
+    }
+    if (c->kind == semantic::Conversion::Kind::List)
+        return &sem.list_objects[c->materialization].call;
+    return nullptr;
 }
 bool Procedural::cleanup_expression(NodeId n, bool omit_result)
 {
@@ -43,9 +45,9 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
         }
     };
     arguments(expression);
-    if (incoming) arguments(conversion_call(sem.conversion_fact(incoming)));
+    if (incoming) if (auto call = conversion_call(sem.conversion_fact(incoming))) arguments(*call);
     for (unsigned i = 0; i < expression.count; ++i)
-        arguments(conversion_call(sem.conversion_fact(expression.conversions+i)));
+        if (auto call = conversion_call(sem.conversion_fact(expression.conversions+i))) arguments(*call);
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
             (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
