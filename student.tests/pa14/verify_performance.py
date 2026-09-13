@@ -8,7 +8,7 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
@@ -17,18 +17,22 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
  transfer=filename.startswith('transfer-')
  body=filename.startswith('body-')
  calls=filename=='call-performance.json'
- harness=ROOT/'student.tests/pa14'/('call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ objects=filename=='object-performance.json'
+ harness=ROOT/'student.tests/pa14'/('object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
   assert shared.text_size(binary['path'])==binary['text_bytes']
  for name,work in data['workloads'].items():
   assert shared.sha(work['source_path'])==work['source_sha256']
+  if 'entry_failure' in work:
+   failed=work['entry_failure'];assert shared.sha(failed['path'])==failed['sha256']
+   assert shared.sha(failed['native_path'])==failed['native_sha256'] and failed['exit_status']==1
   for out in work['outputs']:
    assert shared.sha(out['path'])==out['sha256']
    assert Path(out['path']).stat().st_size==out['bytes']
@@ -36,6 +40,8 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
     native=out['native'];assert shared.sha(native['path'])==native['sha256']
     assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
   if len(work['outputs'])==2 and (not transfer or work['exact_required']): assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
+  if objects and len(work['outputs'])==2 and 'runtime' in work:
+   assert work['outputs'][0]['native']['sha256']==work['outputs'][1]['native']['sha256']
   campaigns=[work] if graph else [work['compiler']]+([work['runtime']] if 'runtime' in work else [])
   for campaign in campaigns:
    rows=campaign['observations'];common=len(work['outputs'])==2
@@ -49,6 +55,17 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    if common:
     pairs=[statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==0) for k in (4,8)]
     assert pairs==campaign['paired_c_over_b' if graph else 'paired_b_over_a']
+  if objects and name.rsplit('-',1)[1].isdigit() and name.startswith(('object-instances-','object-results-','object-unused-')):
+   a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
+   assert a['semantic_entities']==b['semantic_entities'] and a['semantic_scopes']==b['semantic_scopes']
+   if name.startswith('object-unused-'):
+    assert b['semantic_template_fixed_calls']==2*n and b['semantic_template_fixed_call_uses']==0
+    assert b['semantic_object_uses']==5*n and b['template_occurrences']==0
+   else:
+    assert b['semantic_template_fixed_calls']==2 and b['semantic_template_fixed_call_uses']==2*n
+    result=name.startswith('object-results-')
+    assert b['semantic_object_uses']==(n+7 if result else 8)
+    assert a['semantic_object_uses']==(4*n+3 if result else 5*n+3)
   if calls and name.rsplit('-',1)[1].isdigit() and name.startswith(('call-instances-','call-materializations-','call-unused-')):
    a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
    assert a['semantic_entities']==b['semantic_entities'] and a['semantic_scopes']==b['semantic_scopes']
