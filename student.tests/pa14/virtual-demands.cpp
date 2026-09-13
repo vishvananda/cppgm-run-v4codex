@@ -1,6 +1,6 @@
 // Lifecycle recursion and virtual slot identities survive template/local-class growth.
 int destroyed = 0;
-struct Base { virtual int value() = 0; virtual ~Base() { ++destroyed; } };
+struct Base { virtual int value() { return 0; } virtual ~Base() { ++destroyed; } };
 template<class T> struct Box : Base {
     T data;
     Box(T x) : data(x) {}
@@ -24,5 +24,9 @@ int main() {
         First first; Second second;
         if (invoke(a) != 14 || invoke(b) != 22 || first.value()+second.value() != 8) return 1;
     }
-    return destroyed != 6;
+    if (destroyed != 6) return 2;
+    Base* heap = new Box<int>(13);
+    if (invoke(*heap) != 26) return 3;
+    delete heap;
+    return destroyed != 9;
 }

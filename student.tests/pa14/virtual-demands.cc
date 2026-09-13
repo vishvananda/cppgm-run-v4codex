@@ -15,7 +15,8 @@ int main(int argc, char** argv) {
     syntax::Parser parser(cursor, ast, pp.identifiers());
     Analyzer sem(ast, pp.identifiers(), true, true);
     parser.translation_unit(&sem);
-    bool failed = std::string(argv[2]) == "failure";
+    std::string mode = argv[2];
+    bool failed = mode != "success";
     unsigned failures = 0;
     std::size_t nodes = 0, entities = 0;
     for (unsigned i = 0; i < 10000; ++i) {
@@ -24,7 +25,9 @@ int main(int argc, char** argv) {
         assert(nodes == ast.nodes.size() && entities == sem.entities.size());
     }
     assert(failures == (failed ? 10000u : 0u));
-    unsigned broken = 0, complete = 0;
+    unsigned broken = 0, complete = 0, broken_bodies = 0;
+    for (EntityId e = 1; e < sem.entities.size(); ++e)
+        if (sem.entities[e].member_info && sem.member_fact(e).demand == DemandState::Failed) ++broken_bodies;
     for (EntityId e = 1; e < sem.entities.size(); ++e) if (sem.polymorphic(e)) {
         const auto& v = sem.virtual_class(e);
         if (v.demand == FactState::Failure) ++broken;
@@ -33,7 +36,8 @@ int main(int argc, char** argv) {
         if (v.key_function && sem.member_fact(v.key_function).body)
             assert(v.reasons & static_cast<unsigned char>(VtableReason::KeyDefinition));
     }
-    assert(broken == (failed ? 1u : 0u));
+    assert(broken == (mode == "failure" ? 1u : 0u));
+    if (mode == "body-failure") assert(broken_bodies == 1 && complete == 1);
     assert(complete == sem.demanded_vtables().size());
     const auto& emitted = sem.demanded_vtables();
     for (std::size_t j = 1; j < emitted.size(); ++j) assert(emitted[j-1] < emitted[j]);

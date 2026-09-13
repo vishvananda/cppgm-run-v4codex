@@ -1,5 +1,6 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
+#include <algorithm>
 namespace cppgm { namespace lowering {
 using namespace lowir_model;
 namespace {
@@ -114,8 +115,10 @@ Value Procedural::pointer_projection(Value base, unsigned adjustment)
 }
 SymbolId Procedural::deleting_symbol(EntityId e)
 {
-    if (deleting_symbols[e]) return deleting_symbols[e];
-    auto sym = fresh_symbol("@deleting_destructor"); deleting_symbols[e] = sym;
+    auto id = sem.entities[e].member_info;
+    if (deleting_symbols[id]) return deleting_symbols[id];
+    auto sym = fresh_symbol("@deleting_destructor"); deleting_symbols[id] = sym;
+    deleting_entries.push_back(e);
     abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Function;
     target.function.name = abi.name(abi_scope(sem.entities[e].owner),spelling(sem.entities[e].name));
     target.function.category = abi_mangle::FunctionCategory::Member;
@@ -133,9 +136,9 @@ SymbolId Procedural::deleting_symbol(EntityId e)
 }
 void Procedural::emit_deleting_entries()
 {
-    for (EntityId e = 1; e < sem.entities.size(); ++e) {
-        if (!deleting_symbols[e]) continue;
-        function = FunctionId(p.symbols[deleting_symbols[e].index-1].entity);
+    std::sort(deleting_entries.begin(), deleting_entries.end());
+    for (EntityId e : deleting_entries) {
+        function = FunctionId(p.symbols[deleting_symbols[sem.entities[e].member_info].index-1].entity);
         if (p.functions[function.index-1].declaration) continue;
         builder.reset(new FunctionBuilder(p,function)); reset_lifetime(e); returned = sem.types.fundamental(FT_VOID);
         start(block()); this_slot = builder->add_slot(0,IRType::Ptr);
@@ -179,7 +182,8 @@ void Procedural::emit_deleting_entries()
 namespace cppgm { namespace lowering {
 SignatureId Procedural::virtual_signature(EntityId e)
 {
-    if (virtual_signatures[e]) return virtual_signatures[e];
+    auto id = sem.entities[e].member_info;
+    if (virtual_signatures[id]) return virtual_signatures[id];
     auto source = signature(sem.call_type(e));
     auto sig = p.signatures[source.index-1];
     // Refinements belong to this member-call signature, not the canonical
@@ -190,6 +194,6 @@ SignatureId Procedural::virtual_signature(EntityId e)
     auto cls = sem.scopes[sem.entities[e].owner].entity;
     p.parameters[sig.parameters.begin + sem.indirect_value(sem.types[sem.entities[e].type].child)].object_bytes = sem.object_size(sem.entities[cls].type);
     if (sem.function_nonthrowing(e)) sig.boundary.unwind = ir_model::CUM_NO;
-    p.signatures.push_back(sig); return virtual_signatures[e] = SignatureId(p.signatures.size());
+    p.signatures.push_back(sig); return virtual_signatures[id] = SignatureId(p.signatures.size());
 }
 } }

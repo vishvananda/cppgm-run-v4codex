@@ -12,6 +12,7 @@ CASES={
  'late':('template<class T>struct C{virtual int f();};template<class T>int C<T>::f(){return 7;} C<int>& instance();template<class T>int invoke(C<T>& c){return c.C<T>::f();}int result(){return invoke(instance());}',1,1),
  'unused':('template<class T>struct C{virtual int f(){return T::missing;}}; C<int>* pointer;',0,0),
  'failure':('struct Target{virtual ~Target(){};static void operator delete(void*,char*);};template<class T>void invoke(T* p){p->~T();}void test(Target* p){invoke(p);}',0,0),
+ 'body-failure':('template<class T>struct C{virtual int f();};template<class T>int C<T>::f(){return T::missing;} C<int>& instance();template<class T>int invoke(C<T>& c){return c.C<T>::f();}int result(){return invoke(instance());}',1,1),
 }
 def run(command):
  p=subprocess.run(list(map(str,command)),cwd=ROOT,capture_output=True,text=True,timeout=180)
@@ -24,7 +25,7 @@ run(['g++','-std=c++11','-O2',*flags,'-I'+str(ROOT/'dev/src'),ROOT/'student.test
 rows=[]
 for name,(source,emissions,notifications) in CASES.items():
  path=WORK/(name+'.cpp');path.write_text(source)
- output=run([exe,path,'failure' if name=='failure' else 'success'])
+ output=run([exe,path,name if 'failure' in name else 'success'])
  log=WORK/(name+'.log');log.write_text(output)
  stats=json.loads(output.splitlines()[-1].replace('{,','{'))
  assert stats['semantic_vtable_emissions']==emissions,(name,stats)

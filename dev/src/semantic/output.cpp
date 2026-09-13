@@ -214,6 +214,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_key_vtable_notifications\":" << key_vtable_demand.size()
         << ",\"semantic_key_vtable_processed\":" << key_vtable_cursor
         << ",\"semantic_vtable_emissions\":" << vtable_emission.size()
+        << ",\"semantic_vtable_queue_bytes\":" << (key_vtable_demand.capacity()+vtable_emission.capacity())*sizeof(EntityId)
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work

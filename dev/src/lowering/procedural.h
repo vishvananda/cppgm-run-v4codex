@@ -234,6 +234,7 @@ class Procedural {
     Value base_projection(Value base, unsigned steps);
     Value pointer_projection(Value base, unsigned adjustment);
     std::vector<SymbolId> vtables, typeinfos, deleting_symbols;
+    std::vector<EntityId> deleting_entries;
     SymbolId pure_virtual;
     void emit_vtables();
     SymbolId vtable_symbol(EntityId cls);
@@ -265,6 +266,11 @@ class Procedural {
     void start(BlockId b);
     void jump(BlockId b);
 public:
+    std::size_t virtual_cache_bytes() const {
+        return (vtables.capacity()+typeinfos.capacity()+deleting_symbols.capacity())*sizeof(SymbolId)
+            + virtual_signatures.capacity()*sizeof(SignatureId) + deleting_entries.capacity()*sizeof(EntityId);
+    }
+    std::size_t deleting_entry_count() const { return deleting_entries.size(); }
     std::size_t control_work = 0, discard_work = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);

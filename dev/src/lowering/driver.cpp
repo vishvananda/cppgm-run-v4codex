@@ -38,6 +38,8 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             std::cerr << "{\"tokens\":" << cursor.produced << ",\"max_pending\":" << cursor.max_pending
                 << ",\"node_growths\":" << ast.node_growths << ",\"delimiter_work\":" << cursor.delimiter_work;
             sem.telemetry(std::cerr);
+            std::cerr << ",\"lower_virtual_cache_bytes\":" << lower.virtual_cache_bytes()
+                << ",\"lower_deleting_entries\":" << lower.deleting_entry_count();
             std::cerr << "}\n";
         }
     }

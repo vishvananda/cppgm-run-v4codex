@@ -53,6 +53,7 @@ public:
     std::uint32_t virtual_class_id(EntityId e) const { return class_facts[entities[e].class_info].virtual_info; }
     std::size_t virtual_class_count() const { return virtual_classes.size(); }
     std::size_t class_count() const { return class_facts.size(); }
+    std::size_t member_count() const { return members.size(); }
     const std::vector<EntityId>& demanded_vtables() const { return vtable_emission; }
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
