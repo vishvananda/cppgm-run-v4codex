@@ -1,0 +1,112 @@
+{
+  "harness_sha256": "d22f6881df1a2fb15ff3d7181b26110b8c39820205eca483f6929542d83661d3",
+  "stage_base": "8af3c149454e4e43e441206e6978f4d1300e079b",
+  "last_reviewed": "8af3c149454e4e43e441206e6978f4d1300e079b",
+  "status": "virtual-group-complete; full-stage architecture open",
+  "implementation_commits": [
+    "8d596c53",
+    "9ec76f55"
+  ],
+  "accepted_binary": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+    "sha256": "2f861df4e72e173970ba38f535742dd4c02ce804d0304ad303265927ff031494",
+    "text_bytes": 1326790
+  },
+  "observations": 392,
+  "total_observations": 14504,
+  "stage_tests": 314,
+  "prior_tests": 1621,
+  "through_tests": 1935,
+  "parity_inputs": 349,
+  "native_programs": 35,
+  "virtual_api_runs": 12,
+  "inherited_failure_api_runs": 18,
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/stage.log",
+      "log_sha256": "701fbf65706ff531d0f50e2a1e383a7b38c0b7d8a77082725339caadc42474c1"
+    },
+    {
+      "name": "prior",
+      "command": [
+        "make",
+        "test-report-through-pa13"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/prior.log",
+      "log_sha256": "185c9b18faaee48b3dbb84e919407bc8f2b2e06af396cd5b50abc023e2873ba9"
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/through.log",
+      "log_sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900"
+    },
+    {
+      "name": "file-audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa14",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/file-audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    }
+  ],
+  "verification": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/verification-combined.log",
+    "sha256": "90540747333f4dabaddc4dcf3795af29f8443cf6ad646f4a231e9ee0a40d526d"
+  },
+  "evidence": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-performance.json",
+      "sha256": "db38318610f98f970560b16af0a466b19b4528424889d586bcf79ee4e285371a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-noise.json",
+      "sha256": "916e53dc3a25eabcd2abd19920af0f04e128deb59eaf5bd25f2db7029dc57f2e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-validation.json",
+      "sha256": "19f625cc58589b21c090d4440a415906dba967686543b41d06e5ffdb98bc4093"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-abi-validation.json",
+      "sha256": "9ab68cbc6494d4638f1ebf4deb3dfeb8feaffa80ee5e32a899fc5567444d82eb"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-proofs.json",
+      "sha256": "5799a60f48775e6d65fc743fc6419e2417e8fa3b40aa42141f27752af3726d98"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/virtual-demand-layout.json",
+      "sha256": "6f9f0a422b3aae5f51c173307810266e44562163ecdc00422b222ae2c20ac5b8"
+    }
+  ],
+  "documentation": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/pa14/plan.md",
+      "sha256": "c5b8e15fa5645d0dd6e93f1f795536184ca8ba504837e4dfd684bcbf45ef9f4d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/pa14/performance.md",
+      "sha256": "511177ffed4e4ec4844804f4200d92a8bdcceacb084dbd0d8f97bb2a5a82ab4b"
+    }
+  ],
+  "boundary": "Default occurrences, destructor exception truth and shared constructor/destructor action state need a separate insertion/completeness/cycle audit across type-only queries and execution. Completed virtual/ABI dependencies do not supply those keys.",
+  "storage": "63 groups of archived identical LowIR were verified before deduplication; all paths/hashes preserved, shared files read-only, 5157573103 logical bytes recovered."
+}

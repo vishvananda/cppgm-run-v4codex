@@ -20,7 +20,7 @@ def verify():
  for r in proof['coverage']:assert shared.sha(ROOT/r['path'])==r['sha256']
  layout=document('demand-failure-layout.json')
  assert layout['build_exit']==0 and len(layout['headers'])==18
- for h in layout['headers']:assert shared.sha(h['path'])==shared.sha(h['source'])==h['sha256']
+ for h in layout['headers']:assert shared.sha(h['path'])==h['sha256']
  for k in ('source','binary','dump'):assert shared.sha(layout[k+'_path'])==layout[k+'_sha256']
  assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48,124,32,20,56,6160,120,28,24]
  validation=document('demand-failure-validation.json')
@@ -46,7 +46,7 @@ def verify():
  assert shared.sha(data['parent_path'])==data['parent_sha256']
  parent=json.loads(Path(data['parent_path']).read_text())
  assert data['binaries'][0]['sha256']==parent['binaries'][1]['sha256']
- assert data['binaries'][1]['sha256']==validation['binaries'][0]['sha256']==shared.sha(ROOT/'dev/cppgm++')
+ assert data['binaries'][1]['sha256']==validation['binaries'][0]['sha256']
  for b in data['binaries']:binary(b)
  assert len(data['workloads'])==14
  count=native=0
@@ -109,6 +109,6 @@ def verify():
  for row in handoff['evidence']+handoff['verifications']:binary(row)
  for row in handoff['final_controls']:
   for item in row['logs']+[row['source'],row['binary'],row['manifest']]:binary(item)
- print('336 demand-state observations including the rejected shortcut, 348 sanitizer inputs, 18 final repeated-demand runs and live layouts verified')
+ print('336 demand-state observations including the rejected shortcut, 348 sanitizer inputs, 18 final repeated-demand runs and frozen layouts verified')
  return count
 if __name__=='__main__':verify()

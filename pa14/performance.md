@@ -2623,3 +2623,129 @@ mandated limits and comparison rules are preserved. PA14/O0 mandates no numerica
 latency, RSS or compiler-text ceiling; source/key/use-proportional storage, the
 existing four-variant conversion bound, one writable Fact publication view and
 zero generated growth remain the explicit budgets.
+
+
+## Virtual demand edges and ABI caches (`9ec76f55`)
+
+The [main campaign](../student.tests/pa14/virtual-demand-performance.json) compares
+frozen correct A (`c1e17cdc`, SHA `3e3483ed…`) and B (`9ec76f55`, SHA `2f861df4…`).
+Both use `g++ -std=gnu++11 -Wall -O3` with the shared test runner, compiling LowIR
+at O0. Fifteen compiler inputs and seven native programs passed output/hash
+preflight before timing. One warmup per binary, four A/A observations and two
+ABBA blocks ran on one pinned CPU without concurrent builds, tests, layout
+probes or evidence verification. All **308 observations** are retained.
+
+The change implements required explicit demand dependencies and independent
+fact states. A key definition publishes only to its owning class; constructor
+and destructor demand retain their synchronous ordering. Each immutable slot
+registers its outgoing member-body demand once. Successful vtable demand means
+those dependencies and deallocation facts are registered, independently of
+whether a later member-body computation succeeds. Lowering consumes completed
+class IDs, compact class/member symbol caches and recorded deleting-entry IDs.
+Final sorting preserves deterministic ABI presentation without an entity scan.
+
+Compiler text is **1,323,142 → 1,326,790 bytes** (+3648, **0.276%**).
+Analyzer is **6160 → 6216 bytes**, Procedural **1456 → 1472**, VirtualClass stays
+**64**; Entity, Expression, MemberFacts and the other existing hot records retain
+their sizes. [Layout evidence](../student.tests/pa14/virtual-demand-layout.json)
+owns **24 live transitive headers**; older probes now verify their frozen snapshots.
+
+Budgets: at most one key notification and one emitted-class ID per relevant
+class, one visit per demanded slot, no scheduling/emission scan of unrelated
+entities, and geometric storage proportional to classes/members/recorded entries.
+Sorting is bounded by the number of emitted classes or deleting entries. The
+new queue capacity is at most 16 bytes per class in these independent controls.
+The existing O0 four-conversion-variant and single writable Fact-view bounds are
+unchanged. There is no optional runtime transform and no runtime-speedup claim.
+
+The generated N/K/S/Q controls independently vary unrelated aliases, key classes,
+slots and evaluated calls. Raising N from 16,000 to 64,000 or Q from 1 to 4,000
+leaves one notification, one emission, four slot visits, **8 queue bytes** and
+**56 lowering cache bytes**. With K=512, notifications/emissions are exactly 512;
+slot work grows from 2048 to 32768 as S changes from 4 to 64. All common work and
+storage counters equal A; only the newly exposed ownership counters differ in
+availability. No existing semantic work or generated output was suppressed.
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| virtual-runtime | 0.006652 / 0.006683 | 5176 / 5182 | 0.006535–0.007073 | 1.0186, 0.9871 |
+| destructor-runtime | 0.006250 / 0.006265 | 5298 / 5212 | 0.006265–0.006371 | 0.9520, 1.0023 |
+| body-run-4000-128 | 0.608497 / 0.622748 | 95246 / 95186 | 0.609054–0.614094 | 1.0230, 1.0569 |
+| declaration-instances-1000 | 0.567939 / 0.564395 | 75904 / 75640 | 0.557975–0.565866 | 0.9326, 0.9975 |
+| demand-uses-1000-128-4 | 3.099334 / 3.086899 | 346836 / 346902 | 3.082592–3.121767 | 0.9899, 0.9989 |
+| demand-runtime | 0.007320 / 0.007370 | 5602 / 5496 | 0.007094–0.007305 | 1.0069, 0.9929 |
+| region-runtime | 0.008047 / 0.008106 | 5646 / 5436 | 0.007821–0.007955 | 1.0155, 0.9981 |
+| calls-runtime | 0.006270 / 0.006193 | 5242 / 5296 | 0.005947–0.006275 | 0.9857, 1.0035 |
+| memory-runtime | 0.006000 / 0.006021 | 5416 / 5234 | 0.005982–0.006202 | 0.9896, 1.0109 |
+| floating-runtime | 0.006035 / 0.006081 | 5396 / 5434 | 0.005860–0.006453 | 1.0076, 1.0180 |
+| virtual-16000-1-4-1 | 0.083550 / 0.083567 | 15894 / 15634 | 0.083216–0.089463 | 0.9952, 1.0006 |
+| virtual-64000-1-4-1 | 0.331036 / 0.330180 | 48266 / 47202 | 0.326666–0.330336 | 1.0089, 0.9917 |
+| virtual-16000-512-4-1 | 0.157758 / 0.158846 | 27656 / 27450 | 0.157404–0.159366 | 1.0042, 0.9988 |
+| virtual-16000-512-64-1 | 1.163112 / 1.157970 | 165586 / 165762 | 1.148815–1.158906 | 1.0022, 0.9925 |
+| virtual-16000-1-4-4000 | 0.150234 / 0.150746 | 29252 / 29008 | 0.148990–0.151207 | 1.0063, 0.6860 |
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| virtual-runtime | 0.298044 / 0.298512 | 256 / 256 | 0.295925–0.298308 | 1.0102, 0.9951 |
+| destructor-runtime | 0.497894 / 0.500329 | 320000 / 320000 | 0.496085–0.531027 | 0.9912, 1.0055 |
+| demand-runtime | 0.155788 / 0.155827 | 256 / 256 | 0.155077–0.156114 | 1.0008, 1.0056 |
+| region-runtime | 0.058926 / 0.058862 | 256 / 256 | 0.058859–0.060101 | 1.0021, 0.9989 |
+| calls-runtime | 0.479155 / 0.482548 | 256 / 256 | 0.476521–0.481842 | 1.0009, 1.0084 |
+| memory-runtime | 0.280496 / 0.280034 | 256 / 256 | 0.278798–0.280232 | 1.0001, 0.9838 |
+| floating-runtime | 0.331725 / 0.332129 | 256 / 256 | 0.330479–0.332236 | 0.9968, 1.0017 |
+
+Native text bytes are identical: virtual-runtime 2360, destructor-runtime 2072, demand-runtime 261, region-runtime 206, calls-runtime 206, memory-runtime 434, floating-runtime 230.
+
+The large-alias case saves **1064 KiB** median peak RSS in the main campaign.
+Its old four entity-sized cache arrays contained 1,024,160 payload bytes; their
+class/member replacements contain 56 bytes, plus 8 semantic queue bytes. These
+are storage counts, distinct from measured process RSS. Other measured large
+compiler RSS changes range from −264 to +176 KiB. Latency changes on affected
+virtual cases range from −0.44% to +0.69%; this is not a broad speedup claim.
+Short compiler inputs accompanying native workloads are startup-sensitive.
+
+The retained-body workload initially measured **+2.34%** (paired 1.0230/1.0569).
+The [isolated repeat](../student.tests/pa14/virtual-demand-noise.json) retains
+**84 more observations** on the same frozen binaries, including affected controls:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| body-run-4000-128 | 0.621441 / 0.623679 | 95868 / 95098 | 0.605541–0.613011 | 0.9853, 1.0498 |
+| virtual-64000-1-4-1 | 0.333231 / 0.327728 | 48418 / 47344 | 0.323552–0.330417 | 0.9918, 0.9664 |
+| virtual-16000-512-64-1 | 1.150780 / 1.147915 | 165590 / 165836 | 1.135700–1.148290 | 1.0243, 0.9979 |
+| virtual-16000-1-4-4000 | 0.150670 / 0.148642 | 29298 / 29056 | 0.147155–0.149525 | 0.9835, 0.9943 |
+| virtual-runtime | 0.006017 / 0.005943 | 5214 / 5192 | 0.006131–0.006441 | 0.9850, 0.9896 |
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| virtual-runtime | 0.297189 / 0.301216 | 256 / 256 | 0.296736–0.307764 | 1.0136, 0.7753 |
+
+The body median increase fell to **+0.36%**, with mixed paired results
+(0.9853/1.0498). The larger initial magnitude did not repeat; neither campaign
+establishes a body speedup. The alias case again saves **1074 KiB** peak RSS.
+The main repeated-use block ratio 0.6860 and the repeat virtual-runtime ratio
+0.7753 contain wall-time outliers whose causes are unisolated; they remain in
+the reports and support no benefit claim. Executables are byte-identical in
+both campaigns, with zero generated growth and no algorithmic runtime change.
+
+Acceptance is scoped to PA14/O0: required dependency/state ownership, bounded
+work/storage and preserved outputs. No numerical latency/RSS/compiler-text
+ceiling is mandated. Small, mixed latency observations do not create a new
+self-imposed gate; no avoidable consistent regression or optional unprofitable
+transform was retained. The 392 new observations bring the preserved total to
+**14,504**. The 14,112 prior observations were verified in full after deduplicating
+63 groups of frozen LowIR artifacts: paths and hashes remain unchanged, shared
+files are read-only, and 5,157,573,103 logical bytes of duplicate storage were
+recovered. Deduplication is storage housekeeping, not a compiler speed claim.
+
+Validation includes **314 stage / 1621 prior / 1935 through**, 349 release/sanitizer
+and entry/current parity inputs, 35 native programs, the inherited rejection and
+ABI controls, nine inherited repeated-failure cases under each compiler, and
+six virtual-state cases under each compiler. Five owning PA13 scripts run under
+release and sanitizer builds (native, semantic, lifecycle IR, linkage and audit),
+plus the shared LowIR literal adapter checks. The initial abstract-base native
+input is retained as `virtual-demands-pure.t`: both compilers validate identical
+LowIR, while the supplied backend cannot resolve its pure-virtual support symbol.
+Its concrete-base companion executes dispatch, local-class growth and heap
+deletion through the supplied backend. All 1266 course fixture/reference hashes
+are unchanged. No reference correction or comparison-rule change was made.

@@ -1,0 +1,823 @@
+{
+  "harness_sha256": "cfc74fa45da769999c327a3e2455fb535ab5a5525a97f234eed44fafb52b6551",
+  "control_sha256": "204afb2493330a6e08a333970dcbdb64c1573fab0fd2471532b6b760328370b4",
+  "probe_sha256": "1993fd0539b55c7c8e84c645a5abb99a0dbaaf1108b2a2eb81552d00adededf3",
+  "parent_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-validation.json",
+  "parent_sha256": "650d1c2fe072fdae89c9b87bf15d023b01dc8df2fba82e9c9ebd57751de73aab",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/cppgm++-final",
+      "sha256": "3e3483edad9ab591d2a72289371520149f66f3b0c5552fa07f0b51ce99c9884a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+      "sha256": "2f861df4e72e173970ba38f535742dd4c02ce804d0304ad303265927ff031494"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized",
+      "sha256": "6f5e938ba625bbde50414a6cac0043880630634a4c63c6786dfc9ff1c194b68f"
+    }
+  ],
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/stage.log",
+      "log_sha256": "701fbf65706ff531d0f50e2a1e383a7b38c0b7d8a77082725339caadc42474c1"
+    },
+    {
+      "name": "prior",
+      "command": [
+        "make",
+        "test-report-through-pa13"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/prior.log",
+      "log_sha256": "185c9b18faaee48b3dbb84e919407bc8f2b2e06af396cd5b50abc023e2873ba9"
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/through.log",
+      "log_sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900"
+    },
+    {
+      "name": "file-audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa14",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/file-audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "sanitizer-parity",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_sanitizers.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitizer-parity.log",
+      "log_sha256": "790355b5458f804f7f5270e16b6f9e9e8f2e973bd5edf12c69206ccfac3376e4"
+    },
+    {
+      "name": "baseline-parity",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_sanitizers.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/cppgm++-final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/baseline-parity.log",
+      "log_sha256": "790355b5458f804f7f5270e16b6f9e9e8f2e973bd5edf12c69206ccfac3376e4"
+    },
+    {
+      "name": "release-bindings",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_bindings.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-bindings.log",
+      "log_sha256": "7b1dd0137722cafb79ad2212f0ec6a51d6b7fdd61a7dbeeb15a5678b728456f9"
+    },
+    {
+      "name": "release-queries",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_queries.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-queries.log",
+      "log_sha256": "027aec1173ef8635696a0169bd6cdd31736898c43adac45b8380cfba4fb49915"
+    },
+    {
+      "name": "release-fixed_expressions",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_expressions.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-fixed_expressions.log",
+      "log_sha256": "8b5a17123b5be823b05d5b1f7658d127b1aa75bedec2438cb0dcb0c9d71d5c6d"
+    },
+    {
+      "name": "release-fixed_calls",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_calls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-fixed_calls.log",
+      "log_sha256": "b622e8c9ae049ad37bd64388cee61ab4849bbe2632e1ed368e4b48f4fe98f966"
+    },
+    {
+      "name": "release-fixed_objects",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_objects.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-fixed_objects.log",
+      "log_sha256": "a037763fc09238c0373c5cbc022c066000077aa0c97b1e78696c4d7b49816c25"
+    },
+    {
+      "name": "release-dependent_objects",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_dependent_objects.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-dependent_objects.log",
+      "log_sha256": "261488c1fea4fb0518491fdd78f54239dac79639df31e72a8457b86461751ee6"
+    },
+    {
+      "name": "release-declaration_types",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_declaration_types.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-declaration_types.log",
+      "log_sha256": "f815e8884b55e524a145c88219c73d3141d35bed73be188efcd2c27f29961ca4"
+    },
+    {
+      "name": "release-demand_regions",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_demand_regions.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-demand_regions.log",
+      "log_sha256": "d3d330a4c0e8a5f780bb9f62df0f22486310d1cb0166fda7a6f176eab907d7f4"
+    },
+    {
+      "name": "release-body_values",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_body_values.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-body_values.log",
+      "log_sha256": "fb8bb0e5917390467a6b43c9745b7f2640107ec9c34fe9f6c303a153d29d4a0c"
+    },
+    {
+      "name": "release-value_queries",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_value_queries.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-value_queries.log",
+      "log_sha256": "772d4278e70400657d67ed1bafad9cd117075ae224094d2490ecfbcacc7efa85"
+    },
+    {
+      "name": "release-object_reducers",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_object_reducers.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-object_reducers.log",
+      "log_sha256": "8c148ad25a20945a1855ef892c9fdd5a71bc172d0d3e34c8a597c2a83eafea53"
+    },
+    {
+      "name": "release-definition_demands",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_definition_demands.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-definition_demands.log",
+      "log_sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "name": "release-special_signatures",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_special_signatures.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-special_signatures.log",
+      "log_sha256": "0c220c6d89ab4cae3380569dfb2c4f568bc45a84b2988ab33483c1198ff4b863"
+    },
+    {
+      "name": "release-signature_publications",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_signature_publications.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-signature_publications.log",
+      "log_sha256": "111e6b81d6a0d34aa2857088c5c6b1eb8c856dea38c51bacf8e404dec8257fce"
+    },
+    {
+      "name": "release-virtual-demands",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_virtual_demands.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/virtual-release",
+        "/home/vishvananda/work/private/v4codex/checkout/obj/dev",
+        "current"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-virtual-demands.log",
+      "log_sha256": "702ad02dbf0cf2dc30cc369ca0ce29a413ad7ed859eb3ed921ad2884e275a1e1"
+    },
+    {
+      "name": "release-demand-failures",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_demand_failures.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/demands-release",
+        "/home/vishvananda/work/private/v4codex/checkout/obj/dev",
+        "current"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/release-demand-failures.log",
+      "log_sha256": "84c7ac3107740b5893ccd8bfe62b235fe4d477e23bb762b0144e41d2c17c9c80"
+    },
+    {
+      "name": "sanitized-bindings",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_bindings.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-bindings.log",
+      "log_sha256": "7b1dd0137722cafb79ad2212f0ec6a51d6b7fdd61a7dbeeb15a5678b728456f9"
+    },
+    {
+      "name": "sanitized-queries",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_queries.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-queries.log",
+      "log_sha256": "027aec1173ef8635696a0169bd6cdd31736898c43adac45b8380cfba4fb49915"
+    },
+    {
+      "name": "sanitized-fixed_expressions",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_expressions.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-fixed_expressions.log",
+      "log_sha256": "8b5a17123b5be823b05d5b1f7658d127b1aa75bedec2438cb0dcb0c9d71d5c6d"
+    },
+    {
+      "name": "sanitized-fixed_calls",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_calls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-fixed_calls.log",
+      "log_sha256": "b622e8c9ae049ad37bd64388cee61ab4849bbe2632e1ed368e4b48f4fe98f966"
+    },
+    {
+      "name": "sanitized-fixed_objects",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_fixed_objects.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-fixed_objects.log",
+      "log_sha256": "a037763fc09238c0373c5cbc022c066000077aa0c97b1e78696c4d7b49816c25"
+    },
+    {
+      "name": "sanitized-dependent_objects",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_dependent_objects.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-dependent_objects.log",
+      "log_sha256": "261488c1fea4fb0518491fdd78f54239dac79639df31e72a8457b86461751ee6"
+    },
+    {
+      "name": "sanitized-declaration_types",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_declaration_types.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-declaration_types.log",
+      "log_sha256": "f815e8884b55e524a145c88219c73d3141d35bed73be188efcd2c27f29961ca4"
+    },
+    {
+      "name": "sanitized-demand_regions",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_demand_regions.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-demand_regions.log",
+      "log_sha256": "d3d330a4c0e8a5f780bb9f62df0f22486310d1cb0166fda7a6f176eab907d7f4"
+    },
+    {
+      "name": "sanitized-body_values",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_body_values.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-body_values.log",
+      "log_sha256": "fb8bb0e5917390467a6b43c9745b7f2640107ec9c34fe9f6c303a153d29d4a0c"
+    },
+    {
+      "name": "sanitized-value_queries",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_value_queries.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-value_queries.log",
+      "log_sha256": "772d4278e70400657d67ed1bafad9cd117075ae224094d2490ecfbcacc7efa85"
+    },
+    {
+      "name": "sanitized-object_reducers",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_object_reducers.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-object_reducers.log",
+      "log_sha256": "8c148ad25a20945a1855ef892c9fdd5a71bc172d0d3e34c8a597c2a83eafea53"
+    },
+    {
+      "name": "sanitized-definition_demands",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_definition_demands.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-definition_demands.log",
+      "log_sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "name": "sanitized-special_signatures",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_special_signatures.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-special_signatures.log",
+      "log_sha256": "0c220c6d89ab4cae3380569dfb2c4f568bc45a84b2988ab33483c1198ff4b863"
+    },
+    {
+      "name": "sanitized-signature_publications",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_signature_publications.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-signature_publications.log",
+      "log_sha256": "111e6b81d6a0d34aa2857088c5c6b1eb8c856dea38c51bacf8e404dec8257fce"
+    },
+    {
+      "name": "sanitized-virtual-demands",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_virtual_demands.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/virtual-sanitized",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-asan-obj/dev",
+        "sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-virtual-demands.log",
+      "log_sha256": "6c312f89d506220e39055e5a99e8d93e11efd2d0d69028795103975968798e6a"
+    },
+    {
+      "name": "sanitized-demand-failures",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_demand_failures.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/demands-sanitized",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-asan-obj/dev",
+        "sanitized"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/sanitized-demand-failures.log",
+      "log_sha256": "84c7ac3107740b5893ccd8bfe62b235fe4d477e23bb762b0144e41d2c17c9c80"
+    },
+    {
+      "name": "field-category-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/field-category.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "field-category-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "field-category-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-identity-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/default-identity.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-identity-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-identity-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "parameter-shape-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/parameter-shape.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "parameter-shape-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "parameter-shape-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "method-parameters-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/method-parameters.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "method-parameters-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "method-parameters-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "region-attributes-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/region-attributes.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "region-attributes-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "region-attributes-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-heads-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/default-heads.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-heads-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "default-heads-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "value-conversion-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/value-conversion.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "value-conversion-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "value-conversion-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "direct-initializer-compile",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/direct-initializer.t"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "direct-initializer-native",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.exe",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.lowir"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer-native.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "direct-initializer-run",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.exe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer-run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "all-native",
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/check_functions.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/all-native.log",
+      "log_sha256": "2d07d9b00348d937f6d8e649756c33231f8d1a7e20b69346a74b39e88fec2931"
+    }
+  ],
+  "reducers": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/field-category.t",
+      "source_sha256": "5e8c3540fdf91cf06f2934254fb4aa193ca61c6ad87c13ce6b464a45a3efa51f",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.lowir",
+      "sha256": "03db985fe9a9a31df3f9a6149bd407f655e7a6edcc287f4d3e9d67b92a72325f",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/field-category.exe",
+      "native_sha256": "db6bfd1ad89eedba452f6de7b10c16315a712d2605e9407c13669a51c25ba178"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/default-identity.t",
+      "source_sha256": "398c869b2dc932f0aa4ce339567133325d8f26b890095563be0d193d9f5207eb",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.lowir",
+      "sha256": "a3d0a2d21dd11986c56b9694b6c64bb23a8c5746ad0227d9df04f3174e6d7614",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-identity.exe",
+      "native_sha256": "735c989717779ade2019c14ceaeab062adea3509c6fc0e4f7770b907f51c8bbb"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/parameter-shape.t",
+      "source_sha256": "4772426b3f1e0247aec82fc9cd3a2d398542002da1540d4ac6f4c2a58bd26710",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.lowir",
+      "sha256": "9bb61c03c57949aa9ed47a760772c07d7f398eada9c04a02f835a86a628cd08a",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/parameter-shape.exe",
+      "native_sha256": "11ae079b2b49f7efa07a2c473320b6dd35aed30dbea383a398ec7c2fbebb68b8"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/method-parameters.t",
+      "source_sha256": "cb854b7773fa4ba47f1f23e8d5efc4ed6dd2a02c23f0456d6f1f039285b7aa8f",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.lowir",
+      "sha256": "d303aae0cad92f1d769cb10ef6d816b098f147c9f13f3c85bd195ea5b17e8dba",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/method-parameters.exe",
+      "native_sha256": "beec0a6250c0abe412cb03a911faef83bc6d81db68619ade5572cb8dd9de5e3a"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/region-attributes.t",
+      "source_sha256": "0cb3a858a23171fd5e6cf0ec0e47a02feba11e81375545f6fe10458016a7eb9b",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.lowir",
+      "sha256": "37cdd1158a5d70ed1cf62ea7fb0c01d48a5b05bb78b4561a20880d1ed1168897",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/region-attributes.exe",
+      "native_sha256": "e5e799b7efbc05d51c816cd46ba53d112750f998529843b09cd3c1701b05772a"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/default-heads.t",
+      "source_sha256": "aebd92bfa3b563206d09b6f981b4bd3e3dbdfed55b24cb389b889d8c0582f3f2",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.lowir",
+      "sha256": "337be3c50e5ef13fb9c247df44274663747b5c7655d49ad83a75b9608857af48",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/default-heads.exe",
+      "native_sha256": "2cf2938a00e68e32e72ecab43e1ca2796101be6b4841ab3a9cd6c7bdfa211fd1"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/value-conversion.t",
+      "source_sha256": "760559081df07af5f2473c66ce820c2e15bc0aca7789aa8fe9b9043f87a83083",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.lowir",
+      "sha256": "6419e051d6d2da2f029bff04ce4d67d13050eaaef47e3e38ebeb68b5adf019fa",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/value-conversion.exe",
+      "native_sha256": "c44fd3e9b93fda49c22c1c12e56cf54ead7611f33077a00e19dd8a5c97276001"
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/direct-initializer.t",
+      "source_sha256": "2e24942a68c0accfaf84e0ca631c09822418c19c5c3228ab62ad5ba1c8783d4b",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.lowir",
+      "sha256": "e64b3bed32add9aa118fefc2f67bc29a4fb8b9822cbf1680d5b531f3869d7266",
+      "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/validation/direct-initializer.exe",
+      "native_sha256": "3184aa38aa4f973db807d89e8011f4b8a8e7f49ab1e53aba65031c55674b7d78"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "harness_sha256": "f64377f5742110be54fe8803598944d1f0fdb26007663a2a092e6046b6737b95",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release",
+      "sha256": "2f861df4e72e173970ba38f535742dd4c02ce804d0304ad303265927ff031494"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized",
+      "sha256": "6f5e938ba625bbde50414a6cac0043880630634a4c63c6786dfc9ff1c194b68f"
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_native.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_native.py",
+      "harness_sha256": "d7c796ef5f2ad8b97be6bc1549abf12fc72257c1e86fec1e68e5c73577d198ae",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-check_native.log",
+      "log_sha256": "d80af52aa4183707ad59f322ac3b223f89c6a4faea6db7686f453e443bb8fc64",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_virtual_semantics.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_virtual_semantics.py",
+      "harness_sha256": "103a169b20d2f5b5d9a397b934a5f976a23cbb1c3fa417de1e41397147fdf47c",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-check_virtual_semantics.log",
+      "log_sha256": "e84309ba6df5b9482620d576dce9ff232beaa597fc8aabd92f4952b50ede581b",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_ir.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_ir.py",
+      "harness_sha256": "8c16044a4cbf48832229f06b54659fb9653928ae4433fc50925633249d11f463",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-check_ir.log",
+      "log_sha256": "2eecaa61d7ce9ab429d0e760a98c4373c6d1127f6b0420d5fad44fc9b5b2a435",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_linkage.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_linkage.py",
+      "harness_sha256": "2821a8bdca8738333505f6f86a368f0846419472fc70e29976c96aba33ad8531",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-check_linkage.log",
+      "log_sha256": "ef5a96b43c4cfea178b95dcb8ad7788d64e54ca7ee593fc67bfe99c972a08145",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/audit_check.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/audit_check.py",
+      "harness_sha256": "1fbd2ed1deb62389120f1e2c894281ff4ddedd133bc34d8a34ecff4b34bd57f3",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-audit_check.log",
+      "log_sha256": "1be294ad80be7022f9a15075f1a88c322993401684dbefcbea787c21ca900d54",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_literal_storage.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-release"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_literal_storage.py",
+      "harness_sha256": "a76bd22615196f410bb1991d7167dd5716a521fd0d2f730797fdd0e86b7fd5db",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/release-check_literal_storage.log",
+      "log_sha256": "163795d34fa87312db29239ec810e3ac72aa3ced6a121f8ffb30fe556986660b",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_native.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_native.py",
+      "harness_sha256": "d7c796ef5f2ad8b97be6bc1549abf12fc72257c1e86fec1e68e5c73577d198ae",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-check_native.log",
+      "log_sha256": "d80af52aa4183707ad59f322ac3b223f89c6a4faea6db7686f453e443bb8fc64",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_virtual_semantics.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_virtual_semantics.py",
+      "harness_sha256": "103a169b20d2f5b5d9a397b934a5f976a23cbb1c3fa417de1e41397147fdf47c",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-check_virtual_semantics.log",
+      "log_sha256": "e84309ba6df5b9482620d576dce9ff232beaa597fc8aabd92f4952b50ede581b",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_ir.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_ir.py",
+      "harness_sha256": "8c16044a4cbf48832229f06b54659fb9653928ae4433fc50925633249d11f463",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-check_ir.log",
+      "log_sha256": "2eecaa61d7ce9ab429d0e760a98c4373c6d1127f6b0420d5fad44fc9b5b2a435",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_linkage.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_linkage.py",
+      "harness_sha256": "2821a8bdca8738333505f6f86a368f0846419472fc70e29976c96aba33ad8531",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-check_linkage.log",
+      "log_sha256": "ef5a96b43c4cfea178b95dcb8ad7788d64e54ca7ee593fc67bfe99c972a08145",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/audit_check.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/audit_check.py",
+      "harness_sha256": "1fbd2ed1deb62389120f1e2c894281ff4ddedd133bc34d8a34ecff4b34bd57f3",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-audit_check.log",
+      "log_sha256": "1be294ad80be7022f9a15075f1a88c322993401684dbefcbea787c21ca900d54",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_literal_storage.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/cppgm++-sanitized"
+      ],
+      "harness_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa13/check_literal_storage.py",
+      "harness_sha256": "a76bd22615196f410bb1991d7167dd5716a521fd0d2f730797fdd0e86b7fd5db",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-virtual-demands/abi-validation/sanitized-check_literal_storage.log",
+      "log_sha256": "163795d34fa87312db29239ec810e3ac72aa3ced6a121f8ffb30fe556986660b",
+      "exit_code": 0
+    }
+  ]
+}
