@@ -2749,3 +2749,144 @@ LowIR, while the supplied backend cannot resolve its pure-virtual support symbol
 Its concrete-base companion executes dispatch, local-class growth and heap
 deletion through the supplied backend. All 1266 course fixture/reference hashes
 are unchanged. No reference correction or comparison-rule change was made.
+
+## Lifecycle declaration, action and definition ownership (`ebe35d0b`)
+
+This correctness group separates unavailable declarations, completed Boolean
+properties and terminal failure; it also separates external destructor use from
+local lifecycle-definition work. The source reducers and cited N3485 rules are
+frozen in [lifecycle-proofs.json](../student.tests/pa14/lifecycle-proofs.json).
+Absent destructor exception specifications are inferred independently on each
+redeclaration (12.4/3, 15.4/3–4). Subobject declarations supply implicit exception
+properties without demanding unused bodies (15.4/5,14; 14.7.1/1). Defined
+destructors destroy members even without a use in their defining TU (12.4/8).
+No course fixture, reference or comparison rule changed.
+
+The action cache is owned by a member, which is either a constructor or a
+destructor; the shared action-state field was not itself a defect. Separate
+Boolean fact states distinguish active, false, true and failure for omission,
+triviality, exception and copy-storage queries. A deleted transfer is a successful
+negative language result, distinct from a failed preparation. Definition/use/
+vtable/transfer reasons are recorded in the member owner. External declarations
+leave local action preparation pending; a checked local definition roots that
+work. A newly available local definition can wake its own previously processed
+external request without retrying unrelated members.
+
+Frozen A is `d06d62b2`, SHA
+`2f861df4e72e173970ba38f535742dd4c02ce804d0304ad303265927ff031494`;
+B is `ebe35d0b`, SHA
+`8430cc38dfb90547541bdb1626e592ecc11d8b97fadd40d82086f18b75322c1c`.
+Both use `g++ -std=gnu++11 -Wall -O3` and the test runner, compiling
+`--emit-lowir -O0`; native execution uses the supplied backend at O0. Compiler
+`.text` is **1,326,790 → 1,329,734 bytes (+0.222%)**. The 24 transitive layout
+headers are frozen: **MemberFacts 124 → 120 bytes**, ClassFacts 120, Analyzer
+6216 and Procedural 1472; all other measured hot record sizes are unchanged.
+Historical layout evidence now verifies its frozen headers; this group owns the
+live-header and live-compiler checks.
+
+Work bounds are one completed property/action preparation per required class or
+member key, one traversal of each required subobject edge, and no body demand
+from declaration-property queries. Controls vary unrelated aliases N, owning
+classes K, fields S and use sites Q independently. The five shapes produce
+**K+1 member requests/processed entries and K×S destruction actions**, independent
+of N and Q. The shared Leaf<int> definition receives one additional cached
+definition request to publish its local-definition reason; no definition is
+recomputed. Repeated public failure/availability queries preserve graph sizes.
+No optional runtime transform is introduced; zero generated growth is required
+on the comparable correct outputs. PA14/O0 mandates no numerical latency, RSS or
+compiler-text ceiling. The necessary state checks and definition roots meet these
+work/storage budgets; the small positive timings below are disclosed costs, not
+an additional self-imposed exit gate.
+
+The [main campaign](../student.tests/pa14/lifecycle-performance.json) contains
+**308 observations**: 15 compiler inputs and seven runnable programs, two warmups,
+four A/A observations and two ABBA blocks per campaign. All 15 LowIR hashes and
+seven executable hashes match exactly. Runtime text sizes therefore match too.
+Bug reducers on which A is incorrect are separate correctness controls and are
+not represented as performance comparisons. Timing was isolated from builds,
+tests, proofs, layout probes and verifiers. All samples, wall/RSS measurements,
+context-switch counts, paired means and A/A ranges are retained. The table
+medians and RSS medians use the four A and four B observations in ABBA blocks;
+A/A samples remain the noise calibration.
+
+Compiler measurements:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| virtual-runtime | 0.006387 / 0.006334 | 5200 / 5290 | 0.006337–0.006533 | 1.0020, 0.9950 |
+| destructor-runtime | 0.006263 / 0.006363 | 5282 / 5220 | 0.006207–0.006406 | 1.0142, 1.0098 |
+| body-run-4000-128 | 0.615834 / 0.616275 | 95210 / 95154 | 0.607871–0.616877 | 0.9730, 1.0078 |
+| declaration-instances-1000 | 0.573918 / 0.584252 | 75700 / 75596 | 0.568015–0.639290 | 1.0327, 1.0172 |
+| demand-uses-1000-128-4 | 3.037815 / 3.067947 | 346838 / 346286 | 3.031014–3.083644 | 1.0060, 1.0073 |
+| demand-runtime | 0.007099 / 0.006975 | 5306 / 5432 | 0.006958–0.007316 | 0.9925, 0.9863 |
+| region-runtime | 0.007989 / 0.007897 | 5486 / 5592 | 0.007753–0.007918 | 0.9825, 0.9988 |
+| calls-runtime | 0.006064 / 0.005997 | 5208 / 5224 | 0.005860–0.006269 | 0.9893, 1.0096 |
+| memory-runtime | 0.006191 / 0.006059 | 5302 / 5208 | 0.006055–0.006244 | 0.9647, 0.9818 |
+| floating-runtime | 0.005737 / 0.006386 | 5442 / 5452 | 0.005653–0.006114 | 1.0001, 1.2053 |
+| lifecycle-16000-1-4-1 | 0.087597 / 0.082635 | 15482 / 15632 | 0.083194–0.091301 | 0.8910, 0.9468 |
+| lifecycle-64000-1-4-1 | 0.325383 / 0.324120 | 47100 / 47100 | 0.326905–0.336704 | 0.9929, 1.0031 |
+| lifecycle-16000-512-4-1 | 0.285199 / 0.287072 | 32368 / 31772 | 0.161630–0.166118 | 1.9830, 1.0066 |
+| lifecycle-16000-512-32-1 | 0.473227 / 0.473073 | 86680 / 86734 | 0.469125–0.548870 | 1.0010, 0.9977 |
+| lifecycle-16000-1-4-4000 | 0.119081 / 0.119678 | 20956 / 21008 | 0.117738–0.510013 | 1.0052, 0.9960 |
+
+Executable measurements:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks | A / B .text bytes |
+| --- | --- | --- | --- | --- | --- |
+| virtual-runtime | 0.294888 / 0.297867 | 256 / 256 | 0.296296–0.299946 | 1.0579, 1.0045 | 2360 / 2360 |
+| destructor-runtime | 0.497044 / 0.498730 | 320000 / 320000 | 0.489353–0.498662 | 1.0089, 0.9982 | 2072 / 2072 |
+| demand-runtime | 0.155584 / 0.156055 | 256 / 256 | 0.155534–0.156248 | 1.0065, 1.0006 | 261 / 261 |
+| region-runtime | 0.059370 / 0.059044 | 256 / 256 | 0.059179–0.059519 | 0.9973, 0.9937 | 206 / 206 |
+| calls-runtime | 0.477943 / 0.479691 | 256 / 256 | 0.477537–0.478376 | 1.0004, 1.0075 | 206 / 206 |
+| memory-runtime | 0.279232 / 0.281806 | 256 / 256 | 0.278952–0.281035 | 0.9996, 0.9891 | 434 / 434 |
+| floating-runtime | 0.331623 / 0.331487 | 256 / 256 | 0.331839–0.333742 | 0.9994, 0.9984 | 230 / 230 |
+
+The retained-body compiler median changes **+0.07%**, declaration instances
+**+1.80%**, and repeated demands **+0.99%**. Large-alias and wide-field cases
+change **−0.39%** and **−0.03%**. These values do not establish broad speed or RSS
+benefits. The 512-owner/four-field block contains a 1.9830 paired ratio after an
+A/A range around 0.16s; later observations are around 0.28s. Another A/A sample
+is 0.5100s on the repeated-use input. Their causes are unisolated. The short
+floating-point compilation has a +11.31% median and one 1.2053 paired block;
+startup-sensitive cases do not establish frontend throughput.
+
+The [isolated repeat](../student.tests/pa14/lifecycle-noise.json) retains **84
+additional observations**, using the same frozen binaries and inputs:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks |
+| --- | --- | --- | --- | --- |
+| declaration-instances-1000 | 0.559672 / 0.563531 | 78404 / 78520 | 0.551185–0.560542 | 1.0023, 1.0123 |
+| demand-uses-1000-128-4 | 3.082490 / 3.077558 | 352372 / 346074 | 3.055555–3.076082 | 0.9965, 1.0021 |
+| lifecycle-16000-512-4-1 | 0.159764 / 0.162608 | 31922 / 33696 | 0.160696–0.162227 | 1.0122, 1.1142 |
+| lifecycle-16000-1-4-1 | 0.083253 / 0.082593 | 15602 / 15656 | 0.081493–0.084726 | 0.9940, 0.9933 |
+| floating-runtime | 0.005435 / 0.005493 | 5422 / 5346 | 0.005561–0.005679 | 1.0582, 0.9959 |
+
+Executable repeat:
+
+| Workload | A / B median seconds | A / B peak RSS KiB | A/A wall range | B/A paired blocks | A / B .text bytes |
+| --- | --- | --- | --- | --- | --- |
+| floating-runtime | 0.331033 / 0.330900 | 256 / 256 | 0.330841–0.331696 | 1.0034, 0.9973 | 230 / 230 |
+
+The declaration median increase falls to **+0.69%**, while the repeated-demand
+case changes **−0.16%**. The small-owner apparent benefit falls from −5.66% to
+−0.79%; no speedup is claimed. The 512-owner/four-field case increases **+1.78%**
+in the repeat (paired 1.0122/1.1142); its main campaign is +0.66%. This positive
+cost and the noisy block are retained, with no additional scans or repeated
+fact computation found. The floating compilation increase falls to **+1.08%**,
+with mixed pairs. RSS observations are also mixed: for example, the 512-owner
+repeat rises 1774 KiB while the main falls 596 KiB. The four-byte member-record
+reduction is established by layouts, not inferred from these noisy RSS values.
+All generated programs remain byte-identical; their small runtime differences
+are measurement variation, not an algorithmic change or benefit.
+
+The 392 new observations bring the preserved total to **14,896**. The earlier
+14,504 observations remain intact, including rejected trials and outliers.
+Validation passes **314 stage / 1621 prior / 1935 through**, 349 release/sanitizer
+and entry/current parity inputs, 35 existing native programs, and four additional
+cross-TU native programs plus an external-only declaration control. Twelve
+source-property cases and ten public query cases run under release and sanitizers,
+including 10,000 repeated requests in each action/transfer case. Inherited
+rejection, virtual-state, repeated-failure and PA13 ABI/semantic/linkage/audit
+controls also pass. The new validation manifest records 79 top-level checks;
+all 1266 course fixture/reference hashes remain unchanged. Artifacts are under
+`$RALPH_ARTIFACT_DIR/pa14-lifecycle-facts/`.

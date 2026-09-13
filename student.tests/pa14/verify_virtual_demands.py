@@ -30,7 +30,6 @@ def verify():
   assert row['build_exit']==0 and len(row['headers'])==24
   for h in row['headers']:
    assert shared.sha(h['path'])==h['sha256']
-   if row['label']=='current':assert shared.sha(h['source'])==h['sha256']
   for k in ('binary','dump'):assert shared.sha(row[k+'_path'])==row[k+'_sha256']
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
  assert layout['layouts'][0]['sizes']==[112,36,36,20,8,504,48,48,124,32,20,56,6160,120,28,24,64,1456]
@@ -55,7 +54,7 @@ def verify():
  for row in abi['binaries']:binary(row)
  for row in abi['checks']:checked(row);assert shared.sha(row['harness_path'])==row['harness_sha256']
  data=document('virtual-demand-performance.json');noise=document('virtual-demand-noise.json')
- assert shared.sha(ROOT/'dev/cppgm++')==data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
+ assert data['binaries'][1]['sha256']==validation['binaries'][1]['sha256']
  assert data['binaries']==noise['binaries']
  count=0
  for report,harness,total,native_count in [(data,'virtual_demand_benchmark.py',15,7),(noise,'virtual_demand_noise.py',5,1)]:
@@ -95,6 +94,6 @@ def verify():
  for row in dedup['groups']:
   first=Path(row['paths'][0]);assert shared.sha(first)==row['sha256'] and first.stat().st_size==row['bytes']
   for name in row['paths']:assert first.samefile(name) and not (Path(name).stat().st_mode & 0o222)
- print('392 virtual-demand observations, 349 parity inputs, 12 public state runs, 24 live layout headers and preserved deduplicated archives verified')
+ print('392 virtual-demand observations, 349 parity inputs, 12 public state runs, 24 frozen layout headers and preserved deduplicated archives verified')
  return count
 if __name__=='__main__':verify()
