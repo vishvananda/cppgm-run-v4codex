@@ -1002,3 +1002,39 @@ coverage and validation manifests. Required checks and the frozen release
 identity remain recorded in signature-publication-handoff.json. This completes
 the behavior group and its performance acceptance, with the remaining concrete
 demand/failure and embedded type/query boundary retained in the compact plan.
+
+## Terminal concrete demand failures
+
+Specialization declaration/body, class layout, selected member-definition and
+translation-unit completion producers now publish terminal failure on an aborted
+attempt. Retried failures identify a typed fact kind, entity and source without
+allocating diagnostic strings. The original request retains its original error.
+Function and class completion restore their temporary semantic context; a failed
+nested definition clears its complete flag even when validation fails after that
+flag was published. Class completion checks failure independently of the complete
+flag. These changes add one analyzer state byte (eight bytes after padding),
+with no growth in existing entity, class, member or specialization records.
+
+The public API controls repeat nine failed demands 10,000 times each, requiring
+terminal rejection and stable graph sizes, then query an unrelated valid layout.
+Entry observations preserve two completion loops that reject only once and then
+return success, class errors that turn into spurious incomplete/recursive errors,
+and the stale complete flag under ASan. Native controls preserve recursion,
+forward uses, nested definitions and unused dependent bodies/defaults. The course
+fixtures, references and comparison rules are unchanged.
+
+This finishes the audited failure intervals, including member-definition
+environment construction. It does not provide a shared dependency scheduler.
+Defaults still have occurrence keys; selected definitions have source-head keys;
+destruction/exception facts and vtable/emission facts have separate producers.
+Their ready/absent results need insertion-aware dependency edges before they can
+share scheduling. In particular, `actions_ready` is shared storage for distinct
+constructor/destructor paths, while destructor exception caches also encode a
+boolean result. Replacing those flags with a blanket state table would conflate
+independent facts. That producer/consumer audit is the next implementation group.
+
+The member-pointer exploration is archived outside the checkout. PA12 explicitly
+excludes member pointers, PA13 does not introduce them, and PA14 excludes templates
+requiring unsupported earlier class features. It adds no stage requirement or
+production change. Performance evidence for the required group is recorded in
+[performance.md](performance.md) and in the demand-failure manifests.

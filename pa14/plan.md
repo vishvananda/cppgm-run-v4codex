@@ -3,105 +3,79 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
-Original entry **84/314**; current **314/314**. All **230 original failures**
-are resolved with unchanged coverage, references and comparisons. PA15 has not
-started. Completed group: `97006205` → `dad19c39`.
+Original **84/314**, current **314/314**: all 230 original failures resolved,
+with unchanged fixtures, references and comparison rules. PA15 has not started.
 
-Active continuation from `1978d615`. Scope correction: member pointers are
-explicitly outside PA12 and are not added by PA13–PA14. The exploratory patch,
-reducers and observations remain in `pa14-member-pointer-types/`; they impose
-no PA14 exit gate and make no production change.
-
-Current owner group (required reports and native controls pass): specialization declaration/body, selected member-definition and class-layout terminal
-states, plus their enclosing completion boundary. Data flow: canonical entity
-and fact kind → one active producer → successful publication or cached failure.
-Member-definition failure guards cover environment/frame construction as well as
-declaration application. Restore temporary class/function context on failure; retain declaration usability
-during valid recursive demand. Validate repeated failed demands through the public
-semantic API, unrelated successful requests, recursion, late definitions, all course
-and personal controls. Work/storage stays proportional to existing fact keys.
-Measure frozen correct A/B affected scaling and representative native programs.
-The full historical 54-input timing campaign is diagnostic, not a mandated exit
-gate; preserve all historical measurements and correctness coverage.
-
-## Design/spec alignment and ownership
+## Design/spec alignment
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
-| Checked callable signatures (completed) | Source declaration NodeId → retained Function TypeId and raw parameter types → canonical per-frame substitution → one concrete parameter publication. Prototype query entities keep ordinals/access contexts without replacing source/body identity. Controls execute cv/array/function parameters, trailing returns, nested declarators, overloads and cleanup. |
-| Complete-class source uses (completed) | Typed default/initializer uses queue once at the owning source class and drain after enclosing declarations complete. Separate queued/active/complete/failed states prevent duplicate work; detached local batches permit reentrant completion and release in bulk. Later private/nested lookup, initializer order and overridden dependent defaults/initializers execute correctly. Static initializers retain declaration-point lookup. |
-| Enum identities (completed) | Member/local/anonymous enum declarations retain Named identity; current-instantiation signatures canonicalize to it. Concrete enum publication supplies the per-frame binding before queries/signatures consume it. Renamed/nested heads, enum widths and overload separation pass. |
-| Inherited owners (completed) | Source/local declaration bindings, sparse stable Facts, expression/value queries, immutable regions, defaults and selected definitions retain their previous evidence. No syntax replay or source-fact recovery through projected occurrence IDs. |
-| Remaining type/query graph | Some embedded dependent type/query forms still require declarator construction. Joint source identity, scope, object/lifetime and query producers must exist before removing their concrete semantic work. Whole-region occurrence IDs and optional Fact indices remain. |
-| Remaining demand/failure graph | Integrate independent declaration/definition/layout/default/exception/body/vtable/emission states with typed reasons, precise reverse dependencies and structured expected failure. Current source-completion uses cover defaults/initializers; they do not replace these distinct concrete owners. |
+| Inherited source facts, signatures, defaults/initializers and enum identities | Retained source identities → immutable substitution frames → concrete publications. Existing source/key/use bounds, native controls and all historical evidence remain intact through `1978d615`. |
+| Specialization declaration/body and class layout | Canonical entity/fact key → active producer → success or terminal failure. Failed requests cannot resume partial publication or masquerade as recursion. Existing per-key state bytes; O(1) completed/failed lookup. |
+| Selected member definitions | Specialization/source key owns the entire attempt, including environment/frame construction. Restore class/function context on failure and clear a nested class's complete flag after late validation failure. Source-head selection remains independently versioned. |
+| Completion boundary | One terminal translation-unit state prevents an advanced queue cursor from skipping a failed producer on a second finish request. Typed cached diagnostics carry fact kind, entity and source. |
 
-**Concrete boundary:** this continuation completed the joint signature/raw-parameter
-change, then extended it through exposed late-default and initializer failures
-and enum identities. Remaining work crosses `template_definition`,
-`template_instantiation`, `default_arguments`, layout, exception and emission
-owners. A source completion queue cannot safely serve as their shared concrete
-fact scheduler: source definitions can arrive later, recursive declarations may
-be usable before definitions finish, and defaults/bodies must remain independent.
-That requires a separate producer/consumer and failure-key audit with insertion,
-recursion and demand scaling controls. There is no external blocker.
+Nine public API controls each make 10,000 failed requests under release and
+ASan/UBSan, assert stable graph size, and check unrelated valid layout. Entry
+proofs preserve finish loops that rejected only once, spurious incomplete/recursive
+errors and a stale nested-class complete flag. Native controls exercise recursion,
+forward uses, renamed nested definitions and unused dependent bodies/defaults.
 
-## Performance evidence and budgets
+## Remaining groups and concrete boundary
 
-**13,776 observations**: 12,838 inherited, 924 from the full 54-input/12-native
-campaign and fourteen from an unchanged wide-case repeat. All 54 LowIR and twelve
-native hashes match exactly. New N/K/Q signature cases improve median latency
-**5.87 / 5.72 / 4.51 / 0.68%**, each in both ABBA blocks; peak RSS falls
-**10,632 / 63,294 / 29,430 / 11,818 KiB**. Source signature work is K+1,
-applications N(K+1), raw parameter publications 6NK, and source default/initializer
-work each K, independent of Q. Additional keyed substitution/canonicalization
-work remains disclosed. Generated growth is zero; no runtime gain is claimed.
+The audited failure intervals are complete. Remaining required work spans typed
+demand reasons, precise reverse dependencies and structured expected rejection
+across defaults, destruction/exception specifications, bodies, vtables and emission.
+Defaults use occurrence keys; definitions use source-head keys; destruction and
+exception caches own separate values. `actions_ready` shares storage between
+constructor/destructor paths, and destructor exception states also encode truth.
+A blanket state table would conflate independent completeness, value and body
+demands or freeze absence before a later definition arrives. The next increment
+needs a producer/consumer and insertion/cycle audit before replacing these owners.
+There is no external blocker. The in-scope retained type/query audit also remains;
+unsupported language forms do not create architecture exit gates.
 
-The inherited wide local case initially showed +13.18% latency during an
-unisolated eleven-second → 25–31-second transition affecting both binaries.
-The unchanged repeat returns to eleven seconds and B improves **0.84%** in both
-blocks. Both observations remain intact. Repeated-special has **+17,564 KiB RSS**
-despite fewer Facts, with allocation cause unisolated, while latency improves
-2.03%. Other inherited increases and outliers remain in performance.md. Correct
-late-member proofs use `7ef73440`; rejected entry sources are never timing baselines.
+Scope correction: PA12 explicitly excludes member pointers; PA13–PA14 do not add
+them. The exploratory patch, reducers and observations are preserved outside the
+checkout in `pa14-member-pointer-types/`. They make no production change and impose
+no stage gate.
 
-Current compiler text: **1,317,638 → 1,320,774** (+3,136 bytes, 0.238%).
-Analyzer: **6000 → 6152** bytes; typed class use: **20**. Other public hot-record
-sizes remain unchanged. The current probe owns all 18 live transitive headers;
-older probes retain snapshot integrity. Historical layout/measurement data and
-RSS costs remain in [performance.md](performance.md).
+## Performance acceptance
 
-Explicit budgets: source/key/concrete-use-proportional storage, at most four O0
-conversion variants per source operation, one local writable view per Fact
-publication, and zero generated growth. PA14/O0 mandates no numerical
-latency/RSS/compiler-text ceiling. Historical diagnostic equations/layouts are
-snapshot evidence, not permanent implementation gates. No mandated limit,
-correctness requirement or coverage was removed.
+**14,112 observations**: 13,776 inherited, 266 accepted-state measurements and 70
+from a rejected completed-class shortcut. Fourteen LowIR and five executable
+hashes match exactly; observed work/storage counters are unchanged. The largest
+consistent large-input median increase is **1.39%** (wide member definitions),
+with peak-RSS differences across large inputs **−76 to +146 KiB**. Compiler text
+is **1,320,774 → 1,323,142** bytes (+0.1793%); Analyzer **6152 → 6160**; existing
+hot records retain their sizes. No runtime benefit is claimed.
+
+The shortcut showed mixed compiler results and made the wide case 0.61% slower;
+it was removed. Its patch, binaries, validation and observations remain intact.
+The restored accepted compiler matches its frozen SHA exactly. Current layout
+proofs own eighteen live transitive headers; older probes retain their snapshots.
+Details, outliers and paired results remain in [performance.md](performance.md).
+
+Budgets remain source/key/use-proportional storage, at most four O0 conversion
+variants, one writable Fact publication view and zero generated growth. PA14/O0
+mandates no numerical latency/RSS/compiler-text ceiling. Repeating all 54 historical
+timing inputs is a diagnostic campaign choice, not a stage exit gate; this campaign
+covers affected N/K/Q dimensions and representative compiler/native work. No
+historical measurement, mandated limit or correctness coverage was removed.
 
 ## Handoff ledger
 
 | Increment | Commit / evidence |
 | --- | --- |
-| Inherited owners and performance | Through `97006205`; 12,838 observations and all earlier proofs retained |
-| Retained signatures/raw parameters and complete-class defaults | `84567172`; original missing-parameter failure and identity traces preserved |
-| Typed complete-class member initializer uses | `7ef73440`; valid late initializer entry rejection and native order/override controls |
-| Direct member enum identity | `dad19c39`; correct qualified intermediate also preserved |
-| Proof/sanitizer/required validation | `85d3acd6`; six native proofs, 118 recorded checks, all required reports pass |
-| Performance acceptance | `signature-publication-handoff.json`; 938 new observations, all 13,776 cumulative observations verified |
+| Inherited source ownership and performance | Through `1978d615`; 13,776 preserved observations |
+| Terminal specialization/layout/completion states | `3715bc22`; public repeated-demand proofs |
+| Complete member-definition failure interval | `a4f88e1b`; environment and class-context restoration |
+| Late nested-class publication failure | `b49acc80`; pre-fix ASan assertion and corrected control |
+| Performance and final acceptance | `demand-failure-handoff.json`; accepted B, rejected shortcut, all evidence retained |
 
-Validation: **314 stage / 1621 prior / 1935 through**, **33 native programs**,
-**347 release/ASan/UBSan parity sources**, **166 required rejections**, one optional
-unused-default diagnostic, six ABI controls, seven inherited and four new native
-reducers, plus initializer/store/lifetime checks. File audit passes with three
-inherited header advisories. All **1266 fixture/reference files** remain intact.
-The first proof's unsupported mandatory unused-default diagnostic is preserved;
-N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12–13 justify the corrected
-optional observation plus a separate demanded-use rejection. Artifacts:
-`$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.
-
-Current validation: nine repeated-demand controls (10,000 requests each), **34**
-native programs, stage **314**, prior **1621**, through **1935**, file audit pass.
-Sanitizer and frozen performance acceptance remain in progress.
-
-Late nested-definition guard: clear its complete flag if post-publication layout
-validation fails. The pre-fix ASan API control reproduces the stale flag; final
-release passes all nine controls and required reports.
+Validation: **314 stage / 1621 prior / 1935 through**, **34 native programs**,
+**348 sanitizer parity inputs**, **166 required rejections**, one optional diagnostic,
+six ABI controls, inherited reducers and initializer/store/lifetime checks, plus
+nine repeated-demand controls per compiler. File audit passes with three inherited
+header advisories. All **1266 fixture/reference files** are unchanged. Artifacts:
+`$RALPH_ARTIFACT_DIR/pa14-demand-failures/`. Full-stage architecture remains open.

@@ -36,7 +36,9 @@ def verify():
   for o in row['outputs']+[row['host']]:
    assert o['exit_code'] in ((0,1) if row['optional'] else (1,)) and shared.sha(o['log'])==o['log_sha256']
  layout=proof['layout'];checked(layout['build']);assert len(layout['headers'])==18
- for h in layout['headers']:assert shared.sha(h['path'])==shared.sha(h['source'])==h['sha256']
+ # This historical probe owns its frozen headers. The demand-failure probe
+ # now checks all live transitive headers; retain every historical measurement.
+ for h in layout['headers']:assert shared.sha(h['path'])==h['sha256']
  for k in ('source','binary','dump'):assert shared.sha(layout[k+'_path'])==layout[k+'_sha256']
  assert shared.sha(ROOT/'student.tests/pa14/signature_publication_layout_probe.cc')==layout['source_sha256']
  assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48,124,32,20,56]
@@ -128,6 +130,6 @@ def verify():
  assert [c['name'] for c in handoff['checks']]==['stage','prior','through','file_audit','native']
  for c in handoff['checks']:checked(c)
  for r in handoff['initial_observations']+handoff['intermediate_binaries']:binary(r)
- print('938 signature/publication observations, 347 sanitizer inputs, six native proofs, complete-class diagnostic controls and live layouts verified')
+ print('938 signature/publication observations, 347 sanitizer inputs, six native proofs, complete-class diagnostic controls and frozen layouts verified')
  return observations
 if __name__=='__main__':verify()

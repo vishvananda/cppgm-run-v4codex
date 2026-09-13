@@ -314,3 +314,25 @@ samples to 25–31-second A/B samples, affecting both frozen compilers.
 with equivalent output checks and the same 14-observation protocol. It persists
 each completed sample. The original observations remain in the full campaign;
 this repeat investigates the apparent regression without changing production.
+# Terminal demand failures
+
+`demand-recursion.cpp` executes recursive function/class specializations, calls
+before a definition, renamed nested definitions and unused dependent members.
+`check_demand_failures.py WORK [OBJECT_ROOT [MODE]]` links the public semantic API
+control against the current compiler objects. Its nine cases each repeat a failed
+demand 10,000 times, require a terminal typed failure without graph growth, and
+check an unrelated successful layout. `MODE=sanitized` uses sanitizer objects;
+`MODE=entry` records the historical behavior without current-state assertions.
+Compile the API probe with headers and objects from the same checkout revision.
+
+`demand_failure_validation.py` retains the full inherited controls and adds these
+API checks. `demand_failure_benchmark.py A B WORK OUT` measures fourteen frozen
+compiler inputs and five native programs, with correct-output preflight, A/A and
+ABBA observations. `verify_demand_failures.py` owns current live header/layout
+checks; previous probes retain their frozen snapshots. The cumulative verifier
+includes both historical and current evidence. Raw artifacts are in
+`$RALPH_ARTIFACT_DIR/pa14-demand-failures/`.
+
+The archived member-pointer exploration is outside the PA14 boundary: PA12
+explicitly excludes that feature, and PA13–PA14 do not add it. It is preserved
+in `pa14-member-pointer-types/`, without production changes or an exit gate.

@@ -1,0 +1,195 @@
+{
+  "implementation_commit": "b49acc80",
+  "entry_commit": "1978d615",
+  "accepted_binary": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/cppgm++-final",
+    "sha256": "3e3483edad9ab591d2a72289371520149f66f3b0c5552fa07f0b51ce99c9884a",
+    "text_bytes": 1323142
+  },
+  "harness_sha256": "a9a533877a706cc0f1f1d37c1b81dfd942f85d77083ee81ee32a264eac4f1d65",
+  "checks": [
+    {
+      "name": "stage",
+      "command": "make test-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/stage-restored.log",
+      "log_sha256": "701fbf65706ff531d0f50e2a1e383a7b38c0b7d8a77082725339caadc42474c1"
+    },
+    {
+      "name": "prior",
+      "command": "make test-report-through-pa13",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/prior-restored.log",
+      "log_sha256": "185c9b18faaee48b3dbb84e919407bc8f2b2e06af396cd5b50abc023e2873ba9"
+    },
+    {
+      "name": "through",
+      "command": "make test-report-through-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/through-restored.log",
+      "log_sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900"
+    },
+    {
+      "name": "file-audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa14 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/file-audit-restored.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-proofs.json",
+      "sha256": "8bfaf5cf9ff5e997c7951cd3f018fbe20e155dfaf1a1a84d76af06dc1cf2d7b7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-layout.json",
+      "sha256": "228d6b8901bb65158ca62432d0eed2039f55bcea1b3af4a82222d9cd112a2d69"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-validation.json",
+      "sha256": "650d1c2fe072fdae89c9b87bf15d023b01dc8df2fba82e9c9ebd57751de73aab"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-performance.json",
+      "sha256": "48954030f922c8a0d16bd1dc29aa39a0767461d3fbec7e001ef79c25d6911807"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-fastpath-validation.json",
+      "sha256": "3c54b884da5ebcc8f60b738dbd87294143b5a69450c2ef2f9ddaa2836718bcdd"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failure-fastpath-performance.json",
+      "sha256": "9bed111b5d988c3b640de77a1e14124d972673eeba7d9d85188039c360f46423"
+    }
+  ],
+  "final_controls": [
+    {
+      "mode": "release",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failures.cc",
+        "sha256": "1993fd0539b55c7c8e84c645a5abb99a0dbaaf1108b2a2eb81552d00adededf3"
+      },
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/probe",
+        "sha256": "5b9ded520e9a9b7ae9825a56d24b4e301e03f3a8d66d12dc364ed42579281b30"
+      },
+      "manifest": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/checks.json",
+        "sha256": "d2183917de0d119b01dc8e71f20bef6860902eade81cdeac2040501af14de6bd"
+      },
+      "logs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/function_body.log",
+          "sha256": "1f7534af7aab01bdf10edf79346a8a277e7de60ce9098248ccead33499f2292a"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/member_body.log",
+          "sha256": "98ab574fcb43b218e5413536bf0ff6065f10f2b06ffe0da422965c4b0c777c7a"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/class_definition.log",
+          "sha256": "9a932351e13bd3f948e8e2b6ee0106d3b9dcf1283d4b2a893c542cdb75c1e180"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/void_field.log",
+          "sha256": "2e3b5848177fe80cb04ade3c65f66abe3f52255136f9fb8231788b0c941095f1"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/class_layout.log",
+          "sha256": "632ca0087af5545a427aee6201aa30f5c84e8c60326194d9472883b2d8b14d65"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/recursive_layout.log",
+          "sha256": "00dfbaa15023371347aa832ac80284b0cad1f9e8761536cb92064c9062ff0120"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/nested_definition.log",
+          "sha256": "a9c7ee7368ec01dab1a1fad31ddea56dbdce182459261e149701cd0bee2f2d00"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/direct_layout.log",
+          "sha256": "8c1379e047a34bd5bd7d88e8b95c06fa48a5331714b6f5a54f1ff373d3e8b5b8"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-release/nested_late_definition.log",
+          "sha256": "17bbf19dc3dfcc872c751071410999b4043f7050afbb01143efb4b10997b29b8"
+        }
+      ]
+    },
+    {
+      "mode": "sanitized",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/demand-failures.cc",
+        "sha256": "1993fd0539b55c7c8e84c645a5abb99a0dbaaf1108b2a2eb81552d00adededf3"
+      },
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/probe",
+        "sha256": "5a7435237abf95604f059fb16fc649624c45b5031f8c24dfae226cc82323259e"
+      },
+      "manifest": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/checks.json",
+        "sha256": "a3f7d66d3bb31f3b69fca8249d50e6baa42b53882f58e64619fe60245aa975a5"
+      },
+      "logs": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/function_body.log",
+          "sha256": "45e89a1e7c0e79309850a60c14984fd1e5d79cf32cecacdee69d2669cfc86de7"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/member_body.log",
+          "sha256": "c009ee4ce6ed9af7e853a2317bc1030809d94a9ce11a93075f2c093b9ba4911a"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/class_definition.log",
+          "sha256": "9435bdd2b418a46c2be2b4c01cc90ae0b0a47d635abefe4d9988bef9392420e5"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/void_field.log",
+          "sha256": "00f54ed6f1caf07e272f9e84c26bd717895c260a7957f0392cb7853890c3b5f1"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/class_layout.log",
+          "sha256": "288bf4d437435b9210ac5fe263cc2db9c1d35467b3f6fed02c77286863b610de"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/recursive_layout.log",
+          "sha256": "4c5c846597ff1980817c63053d414a21e73546e778010b5e45475e99c6dd57fe"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/nested_definition.log",
+          "sha256": "969630a021ca6874a0d95934e19d439d47d35c731316900cfe4daf706c0f611d"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/direct_layout.log",
+          "sha256": "d4bcd61b7b0bbe09d029862d9b054ae49404c834b6144193a10ff0ac05a616c4"
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/validation-final/demands-sanitized/nested_late_definition.log",
+          "sha256": "a901ffdb3bdb01e3e5ad71d79ea9bde3a039b0da0d4d6534bf8e96a21aa4feff"
+        }
+      ]
+    }
+  ],
+  "trial": {
+    "status": "rejected",
+    "reason": "No repeatable compiler latency benefit; wide case +0.61%, mixed other compiler pairs, no text or generated-code reduction.",
+    "patch": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/complete-fastpath.patch",
+      "sha256": "9e6b9e03a801caec1cc9b1c2a244eb9d30c07b3e7d2f38ed13931329f4bd270c"
+    }
+  },
+  "verifications": [
+    {
+      "observations": 13776,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/verification-history.log",
+      "sha256": "23cb433d7d483847d1057e1a5118d03edb4e8df0e65f443f070ddbd6e2bad031"
+    },
+    {
+      "observations": 336,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-demand-failures/verification-accepted.log",
+      "sha256": "5b0a36c889e9e935020ef14826808fb2573582c4969f70a1136c5b2bf1620293"
+    }
+  ],
+  "total_observations": 14112
+}
