@@ -14,6 +14,8 @@ REJECTIONS=[
     'template<class T>int f(){void (*p)(int)=0;return p(1)+1;}',
     'template<class T>struct C{int (*p)(int);int f(){return p();}};',
     'class Secret{int value;};template<class T>int read(T& v){using V=decltype(v.value);return sizeof(V);}int main(){Secret s;return read(s);}',
+    'template<class T>int f(int n){return *n;}',
+    'template<class T>int f(const int n){return ++n;}',
 ]
 if __name__=='__main__':
     with tempfile.TemporaryDirectory(prefix='pa14-declaration-types-') as tmp:

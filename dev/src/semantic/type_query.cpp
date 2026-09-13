@@ -172,7 +172,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         children.push_back(query_fact(query_edges[q.offset+i])); r.dependent |= children.back().dependent;
     }
     r.dependent |= q.type && dependent_type(q.type);
-    r.dependent |= q.context && pattern_scope(q.context);
+    // A template access context belongs to the key, but does not alone make
+    // fixed operands dependent: unknown_call(1) must fail at definition time.
     r.dependent |= q.entity && entities[q.entity].template_pattern;
     if (q.arguments) {
         auto pack = argument_packs[q.arguments];

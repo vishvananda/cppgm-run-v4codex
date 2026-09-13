@@ -15,7 +15,7 @@ frames. Renamed heads retain enclosing class bindings; complete frame/type/query
 keys share signature/body/local work. Access contexts, overload unions and
 parameter type identities substitute without runtime-object guesses. Source
 work tracks declaration syntax; concrete work tracks distinct dependent type
-nodes and actual uses. Twenty native controls and six new rejections pass;
+nodes and actual uses. Twenty native controls and eight new rejections pass;
 final performance/sanitizer evidence is in progress.
 
 Canonical source bindings and shared scalar/call/receiver facts now retain fixed

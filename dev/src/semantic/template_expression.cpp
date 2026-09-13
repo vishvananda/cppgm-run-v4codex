@@ -29,9 +29,10 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         auto e = binding.entity;
         auto type = entities[e].type;
         auto value = value_type(type);
-        // Prototype parameters provide type-query ordinals, not runtime
-        // objects whose declaration can be projected before the signature.
-        if (signature_parameters.get(e)) return;
+        // Prototype parameters provide type-query ordinals without runtime
+        // objects. Body parameters also have ordinals, but still require
+        // ordinary fixed-expression validation and concrete object identities.
+        if (signature_parameters.get(e) && scopes[entities[e].owner].kind != ScopeKind::Function) return;
         bool object = class_value(value) || types[value].kind == TypeKind::Pointer || types[value].kind == TypeKind::Function;
         if (!e || binding.dependent || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) ||
             !type || scopes[entities[e].owner].kind == ScopeKind::Class || (types[value].kind != TypeKind::Fundamental && !object))

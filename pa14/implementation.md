@@ -407,10 +407,15 @@ cv, while ordinary member-value rules handle mutable/reference fields. Named
 member calls use the concrete implicit object for overload selection. These are
 C++11 [basic.scope.pdecl], [basic.scope.proto], [dcl.fct], [dcl.type.simple],
 [expr.ref], [class.access] and [temp.mem] requirements, exercised by
-`signature-facts.cpp`, `declaration-types.cpp` and six rejection controls.
+`signature-facts.cpp`, `declaration-types.cpp` and eight rejection controls.
 
 Validation before the evidence campaign: 314 PA14 cases, a default 1935-case
-through report, twenty native controls and six declaration-type rejections.
+through report, twenty native controls and eight declaration-type rejections.
 The final post-fix checks and frozen performance/sanitizer results are pending.
+Body parameter ordinals remain eligible for fixed-expression checking; only
+prototype objects are excluded. A source access context participates in query
+identity without itself making fixed operands dependent. This preserves
+definition-time rejection of invalid parameter operations and unknown fixed
+calls, verified alongside the inherited binding controls.
 Whole-region projection, remaining dependent body forms and structured failure
 states are still current-stage work; these type caches do not complete them.
