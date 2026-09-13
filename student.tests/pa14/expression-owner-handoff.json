@@ -1,0 +1,157 @@
+{
+  "implementation_commit": "c4e4e6f4b1589708586dd87f71c079da989350ad",
+  "entry_commit": "5a795af48bafd28817a38fbdb295ca3e09848a52",
+  "release_sha256": "10277a5d3e7afe12d6080f8a0ed0e3377e4056273ebd2d776c912958d8d340db",
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/stage-use-owners.log",
+      "log_sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "name": "prior",
+      "command": [
+        "make",
+        "test-report-through-pa13"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/prior-use-owners.log",
+      "log_sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa14"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/through-use-owners.log",
+      "log_sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "name": "file_audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa14",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/audit-use-owners.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "native",
+      "command": [
+        "python3",
+        "student.tests/pa14/check_functions.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/native-use-owners.log",
+      "log_sha256": "8306d487a8215b7ad6aa01522646104241e0f96366da82a961e400403f4ecbe6"
+    }
+  ],
+  "initial_observations": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-initial.log",
+      "sha256": "b61670e9e9c0e547e895e18a42e5221f52182730aa0609294307b63b03b94afd"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-store.log",
+      "sha256": "5e650d75ba4959cc9e4ab43a294df228f28a3e6edf7724ac4365c6e84c5a72f7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/stage-store.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/native-store.log",
+      "sha256": "abf63025837a868a8aebc0b3a532e27948af1f3fb6e2fb3b05762753ac4cf5ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-variants.log",
+      "sha256": "45071a537fd799e16f2b062994e36435168b76a6f736007fddd1b7ad3a7d0ebc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/stage-variants.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/prior-variants.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/native-variants.log",
+      "sha256": "abf63025837a868a8aebc0b3a532e27948af1f3fb6e2fb3b05762753ac4cf5ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-call-views.log",
+      "sha256": "c35694547df14b4f79325d7e02dddda329ad731bed47bb6cb9126cd0bb874568"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/stage-call-views.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-call-final.log",
+      "sha256": "c5f1bce07cec76e8bb5fff25abe9b760b745b98a3973a96cb64ae4bc2731edba"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/native-call-final.log",
+      "sha256": "8306d487a8215b7ad6aa01522646104241e0f96366da82a961e400403f4ecbe6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/stage-call-final.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/prior-call-final.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-use-owners.log",
+      "sha256": "e6fac305b90e5459cf241e45a7d3fdfa804d42cf33cdb989a6106d7f73e06a02"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/preflight-uses.log",
+      "sha256": "cf00b6c300be45af04bd85849a96dd9608a29a34881ed938dd779ad0990009e2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/preflight-uses.json",
+      "sha256": "339a7aade4ec44fe110e07d813e7717aa4a0ee82365130f82cb0e785ae776f51"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-sanitized.log",
+      "sha256": "246a6970012d75b4b92ccc392bffb0c7c2f7c5e08378a7a8ec5387e7c9040894"
+    }
+  ],
+  "intermediate_binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/cppgm++-store",
+      "sha256": "9069cd0680fa661728cc65d6ee41bcfbafbb4d237d3f8afdd683105ccf1ccec1",
+      "commit": "4aedd84c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/cppgm++-call-views",
+      "sha256": "d33fc0ee52ed95503fe02932dfebc021360fed27e43d6711a22fbb88439677ae",
+      "commit": "158e7b0a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/cppgm++-use-owners",
+      "sha256": "10277a5d3e7afe12d6080f8a0ed0e3377e4056273ebd2d776c912958d8d340db",
+      "commit": "c4e4e6f4"
+    }
+  ],
+  "failed_build": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-expression-owners/build-initial.log",
+    "exit_code": 2,
+    "reason": "The first expression store adapter still required std::vector<Expression>; the borrowed Values adapter was corrected before successful validation."
+  }
+}

@@ -477,7 +477,7 @@ print('final region validation preserves contract coverage, 335 sanitizer parity
 # measured private value record, without equating changed enums to old bytes.
 layout=json.loads((ROOT/'student.tests/pa14/value-layout.json').read_text())
 for header in layout['headers']:
- assert shared.sha(header['path'])==shared.sha(header['source'])==header['sha256']
+ assert shared.sha(header['path'])==header['sha256'] # Historical snapshot; latest owner probe checks live headers.
 for kind in ('source','binary','dump'):assert shared.sha(layout[kind+'_path'])==layout[kind+'_sha256']
 assert shared.sha(ROOT/'student.tests/pa14/value_layout_probe.cc')==layout['source_sha256']
 assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48]
@@ -574,3 +574,7 @@ for row in handoff['checks']:
  assert row['exit_code']==0 and shared.sha(row['log'])==row['log_sha256']
 for row in handoff['initial_observations']:assert shared.sha(row['path'])==row['sha256']
 print('current required stage/prior/through/native/audit command evidence and initial failures preserved')
+
+from verify_expression_owners import verify as verify_expression_owners
+owner_observations=verify_expression_owners()
+print(observations+new_samples+owner_observations,'total frozen performance observations verified')

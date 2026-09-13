@@ -21,6 +21,15 @@ materialization and cleanup controls, then measure the full frozen corpus and
 source/repetition scaling before accepting the representation cost.
 
 
+The initial expression-owner campaign is frozen and verified: 560 new / 9,954
+total observations. All 32 LowIR and eight native outputs match exactly. RSS
+falls on the larger workloads, but value-offset-1000-128 rises 2.418760→2.551136 s
+with paired ratios 1.0299/1.0630. This regression is under investigation before
+acceptance. A retained CPU profile identifies source/context index lookup and
+repeated full AST views as the dominant cost; testing bounded local view reuse
+is the next related increment. No timing observation or historical gate is removed.
+
+
 Continuation from `c78e8d3b`: **verified progress**. This group closes typed
 layout-query values and extends that owner into dependent array bounds,
 qualified constants, conditional/logical queries, scalar casts and ABI output.
