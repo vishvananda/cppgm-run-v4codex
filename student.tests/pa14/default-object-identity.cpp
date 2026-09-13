@@ -1,9 +1,10 @@
 int live=0,counter=0,destroyed=0;
+int instances[64];
 struct Value {
     int n;
-    Value(int n):n(n){++live;}
-    Value(const Value& v):n(v.n){++live;}
-    ~Value(){destroyed+=n;--live;}
+    Value(int n):n(n){++live;++instances[n];}
+    Value(const Value& v):n(v.n){++live;++instances[n];}
+    ~Value(){if(!--instances[n])destroyed+=n;--live;}
 };
 Value make(){return Value(++counter);}
 const Value& value(const Value& v=make()){return v;}
