@@ -1,0 +1,2038 @@
+{
+  "harness_sha256": "fbbcfb59bb4cb6e233de6c75bde095a627c15d3f6ed44fe26c8cd8c5a91453cc",
+  "control_sha256": "b37a8e977110808e7ec0501e59105ac883922d9e4b7a492e453c467558e13f91",
+  "comparison_harness_sha256": "16fc2f3f9ee93cd19b12936e83c46391d18e56791039b6e0c731e485172f51a8",
+  "comparison_adapter_sha256": "4a00a12220feccf34795ce6bed28459a4b1d9d0ed24bd7f073bc5c38629bdb7e",
+  "comparison_sha256": "7a788ba03375adab223ae7a123be266e8461fa162fc814ac2a6a23f91fda00a5",
+  "contract_sha256": "94ffdddb13c95348dc32ef4f25cf2632b0c3c962bb9c5bb354400313ed1ce87d",
+  "standard_path": "/home/vishvananda/work/private/v4codex/checkout/doc/n3485.txt",
+  "standard_sha256": "a46755160cd2946a9c6fd0adf45efd40c18bf2fde66ba2b0eb931826b2188d03",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+      "sha256": "288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+      "sha256": "dcce35ef47ad992313d5dadd48385d25b242c52376b47ba5c9b0b6c1b392b71a"
+    }
+  ],
+  "rejections": [
+    {
+      "name": "constructor_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter.cpp",
+      "source_sha256": "4e6afe174a9d6272f773698ef4401db69c063a94b7e794da6fbab7724c5880b7",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_parameter-host.log",
+        "log_sha256": "fec3a55ff4fa17b7c53968b6f06b56a68a6d9481f5b167957048bbdef10872a4"
+      }
+    },
+    {
+      "name": "constructor_dependent",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent.cpp",
+      "source_sha256": "9b4a4ae5aca6ef294ad08f50d761cfb323bc9e5cce771595be1be2b7acd01da3",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_dependent-host.log",
+        "log_sha256": "3162d223267d5152d645e412b23a30a3d516c15f4a31072782ee0a5080ee3781"
+      }
+    },
+    {
+      "name": "constructor_reference",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference.cpp",
+      "source_sha256": "fcc84ff5308fadeea8e12c4ea753aeee2a3db7f5f87ce934038f9797bb84d023",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_reference-host.log",
+        "log_sha256": "a02db56f9fdaf12ec4ddc5011544d53740c2d96b3e66a493d70abc23fd4ada9d"
+      }
+    },
+    {
+      "name": "constructor_noexcept",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept.cpp",
+      "source_sha256": "da17bae63531d6e8dd258188c6718fbceb65c103547861bc70210c286402ecbb",
+      "clauses": [
+        "[except.spec]/3\u20134"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-1.log",
+          "log_sha256": "b9d7d75cdc2d0b5f419b35df3db58fdb4162324d287dfbb0a89b2e1c4b3a975c"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_noexcept-host.log",
+        "log_sha256": "befe9fa5ceee4d76c56a78fb5ae4a27a088a5109e32890c547bd7c5a5031810c"
+      }
+    },
+    {
+      "name": "copy_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter.cpp",
+      "source_sha256": "35f003478c1aeb4a6cf6fe678fabd63d8b9fa9cc8ecfd09cb62bee0aabe06ec5",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[temp.local]/1\u20132"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/copy_parameter-host.log",
+        "log_sha256": "73fea3cfb854e5d50e096e922f70155a68d30cb81fc827763a156b62cb501ef0"
+      }
+    },
+    {
+      "name": "move_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter.cpp",
+      "source_sha256": "144249a3b5b51fd4ac8d2536456905dac172da1fd08be2b1cb56018befc8cd9e",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[temp.local]/1\u20132"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/move_parameter-host.log",
+        "log_sha256": "13b8cc5df0991817f9b19b69ddde5af9a698ba26e969b2f4787dba2202ce06b0"
+      }
+    },
+    {
+      "name": "assignment_result",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result.cpp",
+      "source_sha256": "a60d9758af1801345f8b8d8181606f79339751c644eb70c26833234aee9ac63a",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[temp.local]/1\u20132"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_result-host.log",
+        "log_sha256": "f5c3e2139411af4db5b09415cff2f01602d0e115818131685755f49822d20a34"
+      }
+    },
+    {
+      "name": "assignment_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter.cpp",
+      "source_sha256": "8014467a957ac931a42eef01aa89c9508f4d90069b858153fe1ff582261ca681",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[temp.local]/1\u20132"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/assignment_parameter-host.log",
+        "log_sha256": "78ce0ad3bd76319121d7bad0ea95649a0a7280165f87547cf360d33e94d914a2"
+      }
+    },
+    {
+      "name": "constructor_arity",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity.cpp",
+      "source_sha256": "bbb225601ab089e41ffb48c1d4b0fcc7b0f2863e2eadc64961a14eea58715f41",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_arity-host.log",
+        "log_sha256": "064c3aa964e125547b28e3eb2c9388e56e12617ed944deb2c5db8ce23f92fd73"
+      }
+    },
+    {
+      "name": "conversion_result",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result.cpp",
+      "source_sha256": "1058c8b75732d6e9d70ea9c50eb0a6f28b3342411dcaa15b4ddb66be39908174",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[class.conv.fct]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_result-host.log",
+        "log_sha256": "f74004a1fd04b5b5aedfde468234ef30e612395131b79f3dfd65125438536b33"
+      }
+    },
+    {
+      "name": "conversion_cv",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv.cpp",
+      "source_sha256": "1a0d03785c375f63052694503943cf2c50bb3469899c73f0b3de774f8ce261a0",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[class.conv.fct]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_cv-host.log",
+        "log_sha256": "07500548e820a98c562344ef69d238b545303941113b0156f2c45844a43402a0"
+      }
+    },
+    {
+      "name": "conversion_ref",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref.cpp",
+      "source_sha256": "c97e6ab34f7014e2d887d50dba79c6cb0b16c400a231d4406110ddb699392944",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[class.conv.fct]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_ref-host.log",
+        "log_sha256": "5402f13b5de3ea0759784cba28d6d8a8ef6f7bcfda1c6d6d05543e4ec7fe9d07"
+      }
+    },
+    {
+      "name": "conversion_noexcept",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept.cpp",
+      "source_sha256": "abe340d79ae3693fd5b7efe85a429323be6922af8d3c82b4239ec521fe552cae",
+      "clauses": [
+        "[except.spec]/3\u20134",
+        "[class.conv.fct]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept-0.log",
+          "log_sha256": "b9d7d75cdc2d0b5f419b35df3db58fdb4162324d287dfbb0a89b2e1c4b3a975c"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept-1.log",
+          "log_sha256": "b9d7d75cdc2d0b5f419b35df3db58fdb4162324d287dfbb0a89b2e1c4b3a975c"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/conversion_noexcept-host.log",
+        "log_sha256": "f556dad468c8d1a73084b15609df0e19de44f6f86637c8765cd68df0f4e6f31e"
+      }
+    },
+    {
+      "name": "constructor_redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition.cpp",
+      "source_sha256": "0b459c94b29f8a6afc8e1f72335ba3e8393f7fb27dcbeeb18909e83356a2a84d",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-1.log",
+          "log_sha256": "b421d66b00d636977dc0b06e4f98208038db098809b754cde8b563178093543f"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redefinition-host.log",
+        "log_sha256": "46bc8d536427851f4891f4d5af4acbfc3f01e1acec657e8cf9d636c6ab979997"
+      }
+    },
+    {
+      "name": "destructor_redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition.cpp",
+      "source_sha256": "accba8177f7c140d9ccb988fcdf8425617b33f34a645b6c0b202db70f99d2100",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-1.log",
+          "log_sha256": "b421d66b00d636977dc0b06e4f98208038db098809b754cde8b563178093543f"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/destructor_redefinition-host.log",
+        "log_sha256": "977a83e3b0cfe0bf6fd08d96b13a99743145a092873433ce607d24023bbe56bb"
+      }
+    },
+    {
+      "name": "inline_destructor",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor.cpp",
+      "source_sha256": "36bf753f4101bbacd0f4f280d157faf6b55531cc89df4c0eb20ad666c4d9ffdb",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-1.log",
+          "log_sha256": "be8b3079275a7e4dc990d33b7d22ca658f72ef41f9bbb959a98de2593c183bb2"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/inline_destructor-host.log",
+        "log_sha256": "fea268760f5c9cfdbc6da2fbb10fe7ead379496a26f887a5f65d5bd814576a9e"
+      }
+    },
+    {
+      "name": "defaulted_constructor_redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition.cpp",
+      "source_sha256": "6b064790358aa04235c7367602ffbdb3264ffedbe357607919686243ec819377",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-1.log",
+          "log_sha256": "b421d66b00d636977dc0b06e4f98208038db098809b754cde8b563178093543f"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_constructor_redefinition-host.log",
+        "log_sha256": "fe6a0238090c75e506304a8186f313fdb1f223f544100f45731d0ad6b95b868c"
+      }
+    },
+    {
+      "name": "defaulted_destructor_redefinition",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition.cpp",
+      "source_sha256": "4af8f5b6235939d0bf6cf8a92f542e781339cc5606813ce38fa0c4b323d477f1",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[basic.def.odr]/1"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-1.log",
+          "log_sha256": "b421d66b00d636977dc0b06e4f98208038db098809b754cde8b563178093543f"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/defaulted_destructor_redefinition-host.log",
+        "log_sha256": "365987b385e79f4ed3315ffb8b9f269fc8fd7b06cdfded371739448445e13268"
+      }
+    },
+    {
+      "name": "constructor_redeclaration",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration.cpp",
+      "source_sha256": "c23059aaeafa8a7991f61e5cf0896d43c85c16444b86eeef89bdeb4fdc8be6c5",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-1.log",
+          "log_sha256": "fe08dd8447ff3b911b9c801c09f4b170443e95f73a5f327d24d0a6c288536815"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/constructor_redeclaration-host.log",
+        "log_sha256": "6537e5124da5e210edd80ae56871f512d817d770ac0904a1a4511ebd5d8a6625"
+      }
+    },
+    {
+      "name": "late_deleted_constructor",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor.cpp",
+      "source_sha256": "832c8e78401094e78a049557fd8dfcd3bada8d588cbdd340fa7e924de5898795",
+      "clauses": [
+        "[dcl.fct.def.delete]/4"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-1.log",
+          "log_sha256": "a0b8434548e99cf0436f415880abc14ee738934fa79e27ff179d9ece3bdb3e3e"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/late_deleted_constructor-host.log",
+        "log_sha256": "d256f46c276039668870856de3e795022b39c5a7d7f438fd73cb2b3a6bc234b4"
+      }
+    },
+    {
+      "name": "nested_alias_parameter",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter.cpp",
+      "source_sha256": "c65f275ff21576ef84bf9b84a6b14b75dc76942f4c13fb6105b266240113e8b2",
+      "clauses": [
+        "[class.mem]/1",
+        "[class.mfct]/2",
+        "[temp.local]/1\u20132"
+      ],
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-0.lowir",
+          "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter.cpp"
+          ],
+          "exit_code": 1,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-1.log",
+          "log_sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+        }
+      ],
+      "host": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-pedantic-errors",
+          "-fsyntax-only",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/nested_alias_parameter-host.log",
+        "log_sha256": "40693ea5ddcac6d06ce87a1b7752c0f064c798e839f865a7239a596eb89bdc7e"
+      }
+    }
+  ],
+  "positive": [
+    {
+      "name": "special-signatures",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures.cpp",
+      "source_sha256": "03328e7804dea1c4c57dceafb09ce8dca867b7f988af5fbc0cf92325b703bd41",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1-compile.log",
+          "log_sha256": "bb76b9742e55bb58a2bb5911282ca9222f01702a3a203d4864e24a9dd749c713",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1.lowir",
+          "sha256": "3ea7222e25b4ca8c6af8272185b2ce16f79a28a815f16a08665bbace4fdedfd0",
+          "telemetry": [
+            {
+              "tokens": 268,
+              "max_pending": 37,
+              "node_growths": 9,
+              "delimiter_work": 268,
+              "semantic_ms": 0.538894,
+              "semantic_dependence_work": 20,
+              "semantic_specializations": 2,
+              "semantic_type_substitution_work": 0,
+              "semantic_type_substitution_hits": 0,
+              "semantic_type_substitution_records": 0,
+              "semantic_substitution_frames": 10,
+              "semantic_template_type_work": 2,
+              "semantic_template_type_uses": 4,
+              "template_body_transitions": 0,
+              "template_class_completions": 2,
+              "template_definition_applications": 8,
+              "template_definition_direct_applications": 8,
+              "template_definition_requests": 16,
+              "template_definition_hits": 8,
+              "template_definition_edges": 8,
+              "template_definition_signature_requests": 6,
+              "template_definition_signature_work": 6,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 0,
+              "semantic_type_query_work": 0,
+              "semantic_template_binding_work": 41,
+              "semantic_template_bindings": 5,
+              "semantic_template_fixed_expressions": 7,
+              "semantic_template_fixed_uses": 14,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 6,
+              "semantic_template_member_uses": 4,
+              "parsed_nodes": 393,
+              "template_occurrences": 342,
+              "template_deferred_regions": 10,
+              "template_demanded_regions": 10,
+              "template_source_regions": 13,
+              "template_region_nodes": 204,
+              "template_region_roots": 7,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 2,
+              "semantic_object_uses": 4,
+              "semantic_expression_facts": 41,
+              "semantic_expression_uses": 55,
+              "semantic_expression_slots": 735,
+              "semantic_expression_inherited": 14,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 2,
+              "semantic_constructor_actions": 2,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 4,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 2,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 11,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 12,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 8,
+              "semantic_demand_processed": 8,
+              "semantic_expression_work": 34,
+              "semantic_candidate_work": 14,
+              "semantic_conversion_work": 51,
+              "semantic_conversions": 39,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 3,
+              "semantic_constants": 0,
+              "semantic_value_queries": 0,
+              "semantic_value_query_work": 0,
+              "semantic_template_value_sources": 0,
+              "semantic_template_value_uses": 0,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 46,
+              "semantic_entities": 65,
+              "semantic_scopes": 74,
+              "semantic_edges": 0,
+              "semantic_declarations": 55,
+              "semantic_regions": 28,
+              "semantic_lookup_work": 72,
+              "semantic_signature_work": 20,
+              "semantic_type_probes": 305,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 1.05171,
+              "lowering_ms": 0.222389,
+              "write_ms": 0.172935,
+              "peak_rss_kib": 24276,
+              "nodes": 735,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 33,
+              "discard_work": 0,
+              "full_expression_work": 65,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 17,
+              "abi_bytes": 1708,
+              "instructions": 145,
+              "operands": 206,
+              "ir_pool_growths": 72,
+              "ir_capacity_bytes": 35056
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1",
+          "native_sha256": "15168461a81cdaf0028e3d05f32e59a74ee80bb2b9623829083d2ce5443b1afa",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ],
+      "entry_rejection": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "--stats",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-0.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-0-compile.log",
+        "log_sha256": "b9d7d75cdc2d0b5f419b35df3db58fdb4162324d287dfbb0a89b2e1c4b3a975c"
+      },
+      "host": {
+        "build": {
+          "command": [
+            "g++",
+            "-std=c++11",
+            "-pedantic-errors",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-host"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-host-build.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executed": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-host"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-host-run.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-host",
+        "sha256": "30de5dc1df29fbbcad6bc1b85c4988667eda5fa20b0d374999c982ba5c06ee7d"
+      },
+      "head_output": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-injected-heads",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "--stats",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures.cpp"
+        ],
+        "exit_code": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head-compile.log",
+        "log_sha256": "572b8618fb4bb553571e512dc7037f05c91e602bfd33171020ba86052e0398e9",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head.lowir",
+        "sha256": "3ea7222e25b4ca8c6af8272185b2ce16f79a28a815f16a08665bbace4fdedfd0",
+        "telemetry": [
+          {
+            "tokens": 268,
+            "max_pending": 37,
+            "node_growths": 9,
+            "delimiter_work": 268,
+            "semantic_ms": 0.6034,
+            "semantic_dependence_work": 20,
+            "semantic_specializations": 2,
+            "semantic_type_substitution_work": 0,
+            "semantic_type_substitution_hits": 0,
+            "semantic_type_substitution_records": 0,
+            "semantic_substitution_frames": 10,
+            "semantic_template_type_work": 2,
+            "semantic_template_type_uses": 4,
+            "template_body_transitions": 0,
+            "template_class_completions": 2,
+            "template_definition_applications": 8,
+            "template_definition_direct_applications": 0,
+            "template_definition_requests": 16,
+            "template_definition_hits": 8,
+            "template_definition_edges": 8,
+            "template_definition_signature_requests": 6,
+            "template_definition_signature_work": 6,
+            "semantic_expression_bytes": 36,
+            "semantic_type_queries": 0,
+            "semantic_type_query_work": 0,
+            "semantic_template_binding_work": 41,
+            "semantic_template_bindings": 5,
+            "semantic_template_fixed_expressions": 7,
+            "semantic_template_fixed_uses": 14,
+            "semantic_template_fixed_calls": 0,
+            "semantic_template_fixed_call_uses": 0,
+            "semantic_template_object_contexts": 6,
+            "semantic_template_member_uses": 4,
+            "parsed_nodes": 393,
+            "template_occurrences": 342,
+            "template_deferred_regions": 10,
+            "template_demanded_regions": 10,
+            "template_source_regions": 13,
+            "template_region_nodes": 204,
+            "template_region_roots": 7,
+            "template_default_environment_work": 0,
+            "template_default_argument_work": 0,
+            "semantic_argument_packs": 2,
+            "semantic_object_uses": 4,
+            "semantic_expression_facts": 41,
+            "semantic_expression_uses": 55,
+            "semantic_expression_slots": 735,
+            "semantic_expression_inherited": 14,
+            "semantic_expression_variants": 0,
+            "semantic_call_argument_edges": 2,
+            "semantic_constructor_actions": 2,
+            "semantic_conversion_objects": 0,
+            "semantic_user_conversions": 4,
+            "semantic_list_plans": 0,
+            "semantic_list_objects": 0,
+            "semantic_value_initializations": 0,
+            "semantic_value_returns": 0,
+            "semantic_function_returns": 0,
+            "semantic_placement_objects": 0,
+            "semantic_constant_constructor_actions": 0,
+            "semantic_constant_fields": 0,
+            "semantic_initializer_actions": 0,
+            "semantic_zero_plans": 0,
+            "semantic_zero_parts": 0,
+            "semantic_field_descriptors": 0,
+            "semantic_transfer_unit_fields": 0,
+            "semantic_scalar_observations": 0,
+            "semantic_scalar_consumptions": 0,
+            "semantic_scalar_consumption_work": 0,
+            "semantic_parameter_queries": 0,
+            "semantic_parameter_query_work": 0,
+            "semantic_destruction_actions": 0,
+            "semantic_transfer_actions": 0,
+            "semantic_scalar_transfer_work": 0,
+            "semantic_scalar_transfer_cache_bytes": 0,
+            "semantic_lifetime_states": 2,
+            "semantic_reference_binding_work": 0,
+            "semantic_reference_alternatives": 0,
+            "semantic_lifetime_uses": 11,
+            "semantic_virtual_classes": 0,
+            "semantic_virtual_slot_work": 0,
+            "semantic_virtual_declaration_work": 12,
+            "semantic_virtual_demands": 0,
+            "semantic_member_demands": 8,
+            "semantic_demand_processed": 8,
+            "semantic_expression_work": 34,
+            "semantic_candidate_work": 14,
+            "semantic_conversion_work": 51,
+            "semantic_conversions": 39,
+            "semantic_entity_bytes": 112,
+            "semantic_class_facts": 3,
+            "semantic_constants": 0,
+            "semantic_value_queries": 0,
+            "semantic_value_query_work": 0,
+            "semantic_template_value_sources": 0,
+            "semantic_template_value_uses": 0,
+            "semantic_value_conversion_variants": 0,
+            "semantic_value_conversion_records": 0,
+            "semantic_types": 46,
+            "semantic_entities": 69,
+            "semantic_scopes": 82,
+            "semantic_edges": 0,
+            "semantic_declarations": 55,
+            "semantic_regions": 36,
+            "semantic_lookup_work": 140,
+            "semantic_signature_work": 20,
+            "semantic_type_probes": 394,
+            "semantic_constant_work": 0
+          },
+          {
+            "frontend_ms": 1.18313,
+            "lowering_ms": 0.218364,
+            "write_ms": 0.141745,
+            "peak_rss_kib": 24276,
+            "nodes": 735,
+            "static_requests": 0,
+            "static_hits": 0,
+            "control_work": 33,
+            "discard_work": 0,
+            "full_expression_work": 65,
+            "full_expression_regions": 0,
+            "linkage_requests": 0,
+            "linkage_hits": 0,
+            "abi_nodes": 17,
+            "abi_bytes": 1708,
+            "instructions": 145,
+            "operands": 206,
+            "ir_pool_growths": 72,
+            "ir_capacity_bytes": 35056
+          }
+        ],
+        "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head",
+        "native_sha256": "15168461a81cdaf0028e3d05f32e59a74ee80bb2b9623829083d2ce5443b1afa",
+        "native": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head.lowir"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head-native.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executed": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/special-signatures-head-run.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "injected-signatures",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures.cpp",
+      "source_sha256": "847319023b3542e898e1120545c3d8e069933bb0f7cdea820d8b7d6814d185db",
+      "outputs": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-direct-special",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "--stats",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures.cpp"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1-compile.log",
+          "log_sha256": "c1fefc34e2c468453de5006d4681dcdfc309ae5b56883b7f9d8d9f41ec8da1ff",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1.lowir",
+          "sha256": "b54b37e039ef570936fe17561c197f21faa52ae14f6f6e5764f03de2b210faee",
+          "telemetry": [
+            {
+              "tokens": 817,
+              "max_pending": 52,
+              "node_growths": 11,
+              "delimiter_work": 817,
+              "semantic_ms": 1.61243,
+              "semantic_dependence_work": 115,
+              "semantic_specializations": 19,
+              "semantic_type_substitution_work": 152,
+              "semantic_type_substitution_hits": 20,
+              "semantic_type_substitution_records": 58,
+              "semantic_substitution_frames": 28,
+              "semantic_template_type_work": 13,
+              "semantic_template_type_uses": 25,
+              "template_body_transitions": 0,
+              "template_class_completions": 5,
+              "template_definition_applications": 23,
+              "template_definition_direct_applications": 21,
+              "template_definition_requests": 65,
+              "template_definition_hits": 27,
+              "template_definition_edges": 33,
+              "template_definition_signature_requests": 13,
+              "template_definition_signature_work": 13,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 0,
+              "semantic_type_query_work": 0,
+              "semantic_template_binding_work": 199,
+              "semantic_template_bindings": 37,
+              "semantic_template_fixed_expressions": 10,
+              "semantic_template_fixed_uses": 20,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 9,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 1390,
+              "template_occurrences": 1314,
+              "template_deferred_regions": 26,
+              "template_demanded_regions": 26,
+              "template_source_regions": 31,
+              "template_region_nodes": 754,
+              "template_region_roots": 14,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "semantic_argument_packs": 14,
+              "semantic_object_uses": 44,
+              "semantic_expression_facts": 203,
+              "semantic_expression_uses": 223,
+              "semantic_expression_slots": 2704,
+              "semantic_expression_inherited": 20,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 17,
+              "semantic_constructor_actions": 9,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 0,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 2,
+              "semantic_scalar_transfer_work": 49,
+              "semantic_scalar_transfer_cache_bytes": 2704,
+              "semantic_lifetime_states": 6,
+              "semantic_reference_binding_work": 0,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 34,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 22,
+              "semantic_virtual_demands": 0,
+              "semantic_member_demands": 23,
+              "semantic_demand_processed": 23,
+              "semantic_expression_work": 189,
+              "semantic_candidate_work": 67,
+              "semantic_conversion_work": 198,
+              "semantic_conversions": 135,
+              "semantic_entity_bytes": 112,
+              "semantic_class_facts": 24,
+              "semantic_constants": 0,
+              "semantic_value_queries": 0,
+              "semantic_value_query_work": 0,
+              "semantic_template_value_sources": 0,
+              "semantic_template_value_uses": 0,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 189,
+              "semantic_entities": 206,
+              "semantic_scopes": 194,
+              "semantic_edges": 0,
+              "semantic_declarations": 151,
+              "semantic_regions": 75,
+              "semantic_lookup_work": 588,
+              "semantic_signature_work": 143,
+              "semantic_type_probes": 1115,
+              "semantic_constant_work": 0
+            },
+            {
+              "frontend_ms": 2.81568,
+              "lowering_ms": 0.570686,
+              "write_ms": 0.323016,
+              "peak_rss_kib": 24276,
+              "nodes": 2704,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 98,
+              "discard_work": 0,
+              "full_expression_work": 281,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "abi_nodes": 43,
+              "abi_bytes": 3694,
+              "instructions": 545,
+              "operands": 795,
+              "ir_pool_growths": 92,
+              "ir_capacity_bytes": 137328
+            }
+          ],
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1",
+          "native_sha256": "c405bae617494e26943da79a017110cd8acde84573af05c5a3ca3c072ef52ddd",
+          "native": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1",
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1.lowir"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1-native.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "executed": {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1"
+            ],
+            "exit_code": 0,
+            "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-1-run.log",
+            "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      ],
+      "entry_rejection": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-entry",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "--stats",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-0.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures.cpp"
+        ],
+        "exit_code": 1,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-0-compile.log",
+        "log_sha256": "951304b84db6112ffd36e7878a01a863baacec1bf6aa01e215e1ffbab20bb100"
+      },
+      "host": {
+        "build": {
+          "command": [
+            "g++",
+            "-std=c++11",
+            "-pedantic-errors",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-host"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-host-build.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executed": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-host"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-host-run.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-host",
+        "sha256": "fac12581511096657bf698ce67d58df762a91863fe4af250f7c7ab09b3d64939"
+      },
+      "head_output": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-injected-heads",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "--stats",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures.cpp"
+        ],
+        "exit_code": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head-compile.log",
+        "log_sha256": "e0d5dba8e7a26e77ca810289574c0b119cbad8a3a6d893eb2b93e4b92a581b97",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head.lowir",
+        "sha256": "b54b37e039ef570936fe17561c197f21faa52ae14f6f6e5764f03de2b210faee",
+        "telemetry": [
+          {
+            "tokens": 817,
+            "max_pending": 52,
+            "node_growths": 11,
+            "delimiter_work": 817,
+            "semantic_ms": 1.73058,
+            "semantic_dependence_work": 115,
+            "semantic_specializations": 19,
+            "semantic_type_substitution_work": 124,
+            "semantic_type_substitution_hits": 20,
+            "semantic_type_substitution_records": 30,
+            "semantic_substitution_frames": 28,
+            "semantic_template_type_work": 13,
+            "semantic_template_type_uses": 26,
+            "template_body_transitions": 0,
+            "template_class_completions": 5,
+            "template_definition_applications": 23,
+            "template_definition_direct_applications": 6,
+            "template_definition_requests": 65,
+            "template_definition_hits": 27,
+            "template_definition_edges": 33,
+            "template_definition_signature_requests": 13,
+            "template_definition_signature_work": 13,
+            "semantic_expression_bytes": 36,
+            "semantic_type_queries": 0,
+            "semantic_type_query_work": 0,
+            "semantic_template_binding_work": 199,
+            "semantic_template_bindings": 37,
+            "semantic_template_fixed_expressions": 10,
+            "semantic_template_fixed_uses": 20,
+            "semantic_template_fixed_calls": 0,
+            "semantic_template_fixed_call_uses": 0,
+            "semantic_template_object_contexts": 9,
+            "semantic_template_member_uses": 0,
+            "parsed_nodes": 1390,
+            "template_occurrences": 1314,
+            "template_deferred_regions": 26,
+            "template_demanded_regions": 26,
+            "template_source_regions": 31,
+            "template_region_nodes": 754,
+            "template_region_roots": 14,
+            "template_default_environment_work": 0,
+            "template_default_argument_work": 0,
+            "semantic_argument_packs": 14,
+            "semantic_object_uses": 44,
+            "semantic_expression_facts": 203,
+            "semantic_expression_uses": 223,
+            "semantic_expression_slots": 2704,
+            "semantic_expression_inherited": 20,
+            "semantic_expression_variants": 0,
+            "semantic_call_argument_edges": 17,
+            "semantic_constructor_actions": 9,
+            "semantic_conversion_objects": 0,
+            "semantic_user_conversions": 0,
+            "semantic_list_plans": 0,
+            "semantic_list_objects": 0,
+            "semantic_value_initializations": 0,
+            "semantic_value_returns": 0,
+            "semantic_function_returns": 0,
+            "semantic_placement_objects": 0,
+            "semantic_constant_constructor_actions": 0,
+            "semantic_constant_fields": 0,
+            "semantic_initializer_actions": 0,
+            "semantic_zero_plans": 0,
+            "semantic_zero_parts": 0,
+            "semantic_field_descriptors": 0,
+            "semantic_transfer_unit_fields": 0,
+            "semantic_scalar_observations": 0,
+            "semantic_scalar_consumptions": 0,
+            "semantic_scalar_consumption_work": 0,
+            "semantic_parameter_queries": 0,
+            "semantic_parameter_query_work": 0,
+            "semantic_destruction_actions": 0,
+            "semantic_transfer_actions": 2,
+            "semantic_scalar_transfer_work": 49,
+            "semantic_scalar_transfer_cache_bytes": 2704,
+            "semantic_lifetime_states": 6,
+            "semantic_reference_binding_work": 0,
+            "semantic_reference_alternatives": 0,
+            "semantic_lifetime_uses": 34,
+            "semantic_virtual_classes": 0,
+            "semantic_virtual_slot_work": 0,
+            "semantic_virtual_declaration_work": 22,
+            "semantic_virtual_demands": 0,
+            "semantic_member_demands": 23,
+            "semantic_demand_processed": 23,
+            "semantic_expression_work": 189,
+            "semantic_candidate_work": 67,
+            "semantic_conversion_work": 198,
+            "semantic_conversions": 135,
+            "semantic_entity_bytes": 112,
+            "semantic_class_facts": 24,
+            "semantic_constants": 0,
+            "semantic_value_queries": 0,
+            "semantic_value_query_work": 0,
+            "semantic_template_value_sources": 0,
+            "semantic_template_value_uses": 0,
+            "semantic_value_conversion_variants": 0,
+            "semantic_value_conversion_records": 0,
+            "semantic_types": 189,
+            "semantic_entities": 226,
+            "semantic_scopes": 209,
+            "semantic_edges": 0,
+            "semantic_declarations": 151,
+            "semantic_regions": 89,
+            "semantic_lookup_work": 760,
+            "semantic_signature_work": 143,
+            "semantic_type_probes": 1299,
+            "semantic_constant_work": 0
+          },
+          {
+            "frontend_ms": 2.93773,
+            "lowering_ms": 0.577675,
+            "write_ms": 0.34022,
+            "peak_rss_kib": 24276,
+            "nodes": 2704,
+            "static_requests": 0,
+            "static_hits": 0,
+            "control_work": 98,
+            "discard_work": 0,
+            "full_expression_work": 281,
+            "full_expression_regions": 0,
+            "linkage_requests": 0,
+            "linkage_hits": 0,
+            "abi_nodes": 43,
+            "abi_bytes": 3694,
+            "instructions": 545,
+            "operands": 795,
+            "ir_pool_growths": 92,
+            "ir_capacity_bytes": 137328
+          }
+        ],
+        "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head",
+        "native_sha256": "c405bae617494e26943da79a017110cd8acde84573af05c5a3ca3c072ef52ddd",
+        "native": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head.lowir"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head-native.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executed": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head"
+          ],
+          "exit_code": 0,
+          "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/injected-signatures-head-run.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "head_baseline": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/cppgm++-injected-heads",
+    "sha256": "625ca5e722b23f3619a6acd48abea0505cbb078aec53a9ec7dbacd83a3745195",
+    "text_bytes": 1311046
+  },
+  "layout": {
+    "build": {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include",
+        "-fdump-lang-class=/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/classes.txt",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/special_signature_layout_probe.cc",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/probe"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout-build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "headers": [
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/analyzer.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/semantic/analyzer.h",
+        "sha256": "fb5275ee97179295ca765b1ec6002c818a1696bc4b22cebe79bd7f0962e92a12"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/type_query.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/semantic/type_query.h",
+        "sha256": "d4ffda8f22ef87efd55d25dd23ea6e5f34dc4cde2694437a495ee1c0f7b23a7c"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/model.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/semantic/model.h",
+        "sha256": "dccc3320a430979c9397dcd933ecc26ea489efb7fa01bbe3f99c57080dc6adc0"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/ast.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/syntax/ast.h",
+        "sha256": "aa90c04d058c81cac8cced75e91fcc28f0a1e533b9cbe4d67fe57adda3060e02"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/posttoken/token.h",
+        "sha256": "3d09ef949cae144030b60c50bef5a944624037a4942f6ba634d189a1ca64ec33"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token_types.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/posttoken/token_types.h",
+        "sha256": "871b468fd872ed348f791f462a7c9ac080b9a70afe29763514dc3faa1d2a7dd9"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/source.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/preprocess/source.h",
+        "sha256": "19643d89fb93d777fd07609e1d2cbead69003ea5cbfa5b487a789a262d78540e"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/token_cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/preprocess/token_cursor.h",
+        "sha256": "b3d2a027a810e447a2c97248a302561e1488ecdb152ed95f498140d2f3dc0ec3"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/identifier_table.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/preprocess/identifier_table.h",
+        "sha256": "38508fcd71f6d38258282f3689e5ef9311bee3657d69488260ea7ee38d3a349c"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/support/id_index.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/support/id_index.h",
+        "sha256": "e38c022510de243c166d74d42241a499e29396875a157e61e89bcdf5788fb569"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/expression_store.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/semantic/expression_store.h",
+        "sha256": "13074e65df9f3fd7bbd50441de01db5dcff290ccd8dafdfa6b949ba5ee0040fd"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/template_binding.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/semantic/template_binding.h",
+        "sha256": "30ea5aa0741cbbe537e843848c60dc123a838bc6436692e2352d9bd0fb3ef99d"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/parser.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/syntax/parser.h",
+        "sha256": "4066934956a8f514cb8dbd5d7f2ddd040751166e7652e80d9bd0ce6c441da889"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/syntax/cursor.h",
+        "sha256": "fee1aee355021d719b211321fd22a7635efd980ba385f7b3bb5b94bf18da25d4"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/cursor.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/posttoken/cursor.h",
+        "sha256": "ebb10c8507b6fefac16193bc723ce073f091dc52a20a48918a271f3c82261f67"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/literal.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/posttoken/literal.h",
+        "sha256": "a71cb923f8e011af34b8a1f32c7db5339e15fed9ca4656d1125dc21b69ea113e"
+      },
+      {
+        "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/names.h",
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/include/syntax/names.h",
+        "sha256": "14e4295b8d6b07f9530bea8e0ffd170e3a98968f8cde27c3d38fd5f4902c1047"
+      }
+    ],
+    "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/special_signature_layout_probe.cc",
+    "source_sha256": "22a5469407f39beb7dba3695abecc42503794f009dfd6a461a41b29a7e1d7134",
+    "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/probe",
+    "binary_sha256": "b45da155d866d4579ecb5f2647dd29cda2adfda01f9e49150f867c44dcb26d15",
+    "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-special-signatures/proofs-head-baseline/layout/classes.txt",
+    "dump_sha256": "c4007301a7b7369ae4f2e8234279d8ac1bc4c5452c2d9d5932d16c4d3e9ba7cd",
+    "records": {
+      "ExpressionStore::Properties": {
+        "size": 24,
+        "align": 4
+      },
+      "ExpressionStore::Use": {
+        "size": 20,
+        "align": 4
+      },
+      "Analyzer": {
+        "size": 5920,
+        "align": 8
+      },
+      "Analyzer::TemplatePrototype": {
+        "size": 24,
+        "align": 4
+      },
+      "MemberFacts": {
+        "size": 124,
+        "align": 4
+      },
+      "TemplateDefinition": {
+        "size": 32,
+        "align": 4
+      }
+    },
+    "sizes": [
+      112,
+      36,
+      36,
+      20,
+      8,
+      504,
+      48,
+      48,
+      124,
+      32
+    ]
+  }
+}
