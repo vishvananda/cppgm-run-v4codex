@@ -113,4 +113,105 @@ void Analyzer::check_template_member_exception(NodeId d, std::uint32_t path, Ide
         if (spec >= 0 && current != spec) throw std::runtime_error("conflicting template member exception specifications");
     }
 }
+ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
+{
+    auto t = types[type];
+    if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
+        auto spec = specializations[entities[t.entity].specialization];
+        if (spec.pattern != primary) return 0;
+        auto args = argument_packs[spec.arguments];
+        if (args.count > canonical_parameters.size()) return 0;
+        for (unsigned i = 0; i < args.count; ++i)
+            if (argument_types[args.offset+i] != canonical_parameters[i]) return 0;
+        return entities[primary].scope;
+    }
+    if (t.kind == TypeKind::DependentName && !t.bound) {
+        auto owner = template_signature_owner(t.child,primary);
+        auto member = owner ? local(owner,t.entity,Lookup::Qualifier) : 0;
+        if (member && entities[member].kind == EntityKind::Type) return entities[member].scope;
+    }
+    return 0;
+}
+TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& cache)
+{
+    if (!type || !dependent_type(type)) return type;
+    if (auto known = cache.get(type)) return known;
+    cache.put(type,type);
+    auto t = types[type]; TypeId result = type;
+    auto child = t.child ? template_member_aliases(t.child,primary,cache) : 0;
+    if (t.kind == TypeKind::DependentName) {
+        auto owner = template_signature_owner(child,primary);
+        auto alias = owner && !t.bound ? local(owner,t.entity,Lookup::Qualifier) : 0;
+        if (alias && entities[alias].kind == EntityKind::Alias && entities[alias].type) {
+            // Only aliases of this current instantiation are expanded. A
+            // different dependent specialization retains its symbolic member.
+            auto head = templates[entities[primary].template_info]; Index bindings, substitution;
+            for (unsigned i = 0; i < head.count; ++i)
+                bindings.put(template_parameters[head.offset+i],canonical_parameters[i]);
+            auto value = substitute_type(entities[alias].type,bindings,substitution);
+            result = types.qualify(template_member_aliases(value,primary,cache),t.cv);
+        } else {
+            std::vector<TypeId> args;
+            for (unsigned i = 0; i < t.count; ++i)
+                args.push_back(template_member_aliases(types.parameters[t.offset+i],primary,cache));
+            result = types.qualify(types.dependent_name(child,t.entity,args,t.bound),t.cv);
+        }
+    } else if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
+        auto spec = specializations[entities[t.entity].specialization]; auto pack = argument_packs[spec.arguments];
+        std::vector<TypeId> args; bool changed = false;
+        for (unsigned i = 0; i < pack.count; ++i) {
+            auto source = argument_types[pack.offset+i];
+            auto value = template_member_aliases(source,primary,cache); args.push_back(value); changed |= value != source;
+        }
+        if (changed) result = types.qualify(entities[specialize_class(spec.pattern,args)].type,t.cv);
+    } else if (t.kind == TypeKind::Function) {
+        std::vector<TypeId> params;
+        for (unsigned i = 0; i < t.count; ++i)
+            params.push_back(template_member_aliases(types.parameters[t.offset+i],primary,cache));
+        result = types.signature(types.function(child,params,t.variadic,t.cv,t.ref));
+    } else if (t.child) {
+        result = t.kind == TypeKind::MemberPointer ? types.member_pointer(t.entity,child) : types.compound(t.kind,child,t.bound);
+        result = types.qualify(result,t.cv);
+    }
+    cache.put(type,result); return result;
+}
+TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId primary)
+{
+    if (!type || !dependent_type(type)) return type;
+    Index bindings, cache; unsigned ordinal = 0;
+    for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
+        auto parameter = declarations[d].entity;
+        if (!entities[parameter].template_parameter) continue;
+        if (ordinal == canonical_parameters.size()) {
+            auto e = make_entity(EntityKind::Type,0,0,0);
+            entities[e].template_parameter = true; entities[e].type = types.named(e);
+            canonical_parameters.push_back(entities[e].type);
+        }
+        bindings.put(parameter,canonical_parameters[ordinal++]);
+    }
+    auto result = substitute_type(type,bindings,cache);
+    Index aliases; return template_member_aliases(result,primary,aliases);
+}
+void Analyzer::check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary)
+{
+    auto declared = facts[d].type;
+    if (!declared || types[declared].kind != TypeKind::Function) return;
+    auto signature = template_member_signature(declared,head,primary);
+    if (!signature) return;
+    bool unresolved = false;
+    for (auto p = template_prototype_index.get(key(path,name)); p; p = template_prototypes[p].next) {
+        auto prototype = template_prototypes[p];
+        auto type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary);
+        if (!type) { unresolved = true; continue; }
+        if (type != signature) continue;
+        auto current = template_exception(d,head);
+        auto previous = template_exception(prototype.declarator,prototype.environment);
+        if (current >= 0 && previous >= 0 && current != previous)
+            throw std::runtime_error("conflicting template member exception specifications");
+        return;
+    }
+    // Special-member and not-yet-established declaration types retain their
+    // own checking owner. A complete ordinary signature must name a member.
+    if (!unresolved) throw std::runtime_error("template definition does not match a declared member");
+}
 } }

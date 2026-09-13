@@ -617,3 +617,21 @@ completed. Re-entrant Active applications do not publish that derived fact.
 This removes the preliminary second index and its duplicated keys; only three
 telemetry counters extend the Analyzer owner. PA14, prior13 and all 25 native
 programs still pass after the representation change.
+
+
+Ordinary out-of-class member definitions now match retained typed prototypes at
+definition time. Head parameters normalize by ordinal; current-instantiation
+aliases expand through their declaring class and immutable argument bindings.
+Aliases of unrelated dependent specializations remain symbolic. Parameter shape,
+return type, cv/ref qualifiers, variadic form and known exception specifications
+must agree. Special-member and unavailable source types retain their existing
+checking owner pending the broader typed prototype extension.
+
+N3485 [class.mem]/1 and [class.mfct]/2 prohibit adding an undeclared member in
+an out-of-class definition; [except.spec]/3 requires compatible exception
+specifications. Nine focused unused-definition controls now reject. A valid
+current-instantiation alias chain initially exposed incomplete normalization; its
+313/314 log remains, and the alias normalization restores 314/314. Prior13, all
+26 native programs and file audit pass. definition-signatures.cpp covers renamed
+heads, nested aliases, array adjustment, function pointers, ref qualifiers and
+trailing decltype returns. No course fixture or reference changed.

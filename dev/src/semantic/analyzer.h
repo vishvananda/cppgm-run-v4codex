@@ -466,6 +466,10 @@ private:
     void check_template_parameters(NodeId n, ScopeId s);
     void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
     void check_template_member_exception(NodeId d, std::uint32_t path, IdentifierId name, ScopeId s);
+    TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary);
+    TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
+    ScopeId template_signature_owner(TypeId type, EntityId primary);
+    void check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
     int template_exception(NodeId d, ScopeId s);
     bool nullary_declarator(NodeId d) const;
     Index template_prototype_index;

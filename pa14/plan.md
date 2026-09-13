@@ -19,6 +19,10 @@ nested/static members and rejection behavior. Work should follow unique requeste
 heads and newly visited definition edges, with no global invalidation or output
 change. Extend into related application-state/dependency ownership after this
 base owner is established; measure the full frozen corpus and source/key scaling.
+The same path exposed unmatched unused member definitions. Typed signature
+matching now normalizes declaring-head parameters and current-instantiation
+aliases; nine mismatch controls reject and all 26 native programs pass. Extend
+retained prototype identity into precise definition selection before acceptance.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
