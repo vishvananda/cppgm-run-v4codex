@@ -57,7 +57,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
 {
     if (!s) s = facts[n].scope;
     auto k = n ? key(n,to) : key(to,s);
-    Index& cache = !n ? empty_list_index : direct ? direct_list_index : list_index;
+    Index& cache = !n ? (direct ? empty_direct_list_index : empty_list_index) : direct ? direct_list_index : list_index;
     auto id = cache.get(k);
     if (!id) {
         id = list_plans.size(); list_plans.emplace_back(); list_plans[id].state = FactState::Active; cache.put(k,id);

@@ -95,23 +95,61 @@ type query dependent even when its class type is fixed; `F v; D d(v());` can
 therefore miss a deleted `F::operator()` in an unused template. Fixed condition
 recipes and query-only calls still need reuse and temporary/destructor review.
 
-Three more reduced mode/mapping defects were confirmed after the initializer
+Three reduced mode/mapping defects were confirmed after the initializer
 campaign ([handoff manifest](../student.tests/pa14/initializer-mode-handoff.json),
 which also records the variable-callable case):
 
-- With `explicit E(int)` and `E(double)`, `E e=1` inside an unused template is
+- With `explicit E(int)` and `E(double)`, `E e=1` inside an unused template was
   wrongly rejected. Ordinary copy initialization must exclude explicit
   constructors from its candidates; copy-list initialization considers them and
   rejects a selected explicit constructor. The common selector/consumer path
-  needs this distinction, not a source-only diagnostic patch.
-- `struct A{E e;}; A a{{1}};` wrongly accepts an explicit-only `E(int)`:
+  now preserves this distinction.
+- `struct A{E e;}; A a{{1}};` wrongly accepted an explicit-only `E(int)`:
   aggregate elements are copy-initialized ([dcl.init.aggr]/2).
-- For `struct A{T x;int* p;}; A a{{1},{42}};`, mapping stops at dependent `T`
+- For `struct A{T x;int* p;}; A a{{1},{42}};`, mapping stopped at dependent `T`
   even though the explicit braces delimit that field and expose the fixed
   invalid pointer initializer.
 
-These eight observed errors remain implementation work, not a waiver or an
-external blocker. The common copy/list initialization modes are the next owner.
+The three mode/mapping defects are corrected. Five default/query outcomes above
+remain implementation work, with no external blocker. The next owner is source
+default initialization and query-only expression publication/reuse.
+
+## Copy/direct/list ownership correction
+
+`InitializationMode` passes the source use's context through ordinary and
+retained initialization. Ordinary copy initialization consumes a conversion
+recipe, including the common converting-constructor/conversion-function choice.
+Direct and copy-list construction retain all candidates, with the latter
+rejecting an explicit winner. Same/derived class transfer selection excludes
+explicit copy/move constructors in implicit conversions and returns; direct
+subobject transfer and ABI queries retain their own policy. Selection itself has
+no negative cache to acquire an incomplete mode key.
+
+Aggregate elements and omitted elements use copy initialization. Explicit braces
+around a dependent field delimit one clause, so the source checker continues to
+known later fields; unknown brace-elided widths still defer to the concrete
+aggregate. A new native control also exposed an expression ownership collision:
+a scalar clause's expression had been overwritten by its class construction.
+The copy-conversion record now owns that operation separately, preserving the
+scalar operand through typed LowIR. No synthetic syntax node was introduced.
+
+Source conversion recipes remain keyed by source use, with target verification;
+that source use uniquely fixes its initialization mode and declaration context.
+Concrete materializations map operands through the occurrence frame. Empty-list
+facts now have separate direct/copy indexes, each keyed by canonical target and
+access scope. Success and failure remain terminal in their respective plan and
+validation owners; adding a completed fact does not invalidate unrelated caches.
+The inspection probe alternates both query orders 10,000 times, verifies the
+qualified conversion target and checks stable node/entity/plan/conversion counts.
+
+The 75 controls include 49 rejections and 26 checked native programs. Against the
+frozen initializer entry, 35 statuses and three native results were incorrect.
+The proof cites N3485 [over.match.ctor]/1, [over.match.copy]/1,
+[over.match.list]/1, [dcl.init.aggr]/2,7, [class.copy]/31–32 and [temp.res]/8;
+compiler agreement is not used as the language proof. No reference was changed.
+An interrupted validation is retained with its initial binaries: source review
+caught a dropped cv-qualified target before any timing. Current validation and
+measurements use the corrected binaries and separate paths.
 
 ## Performance, acceptance and validation
 
@@ -139,3 +177,12 @@ and 349 entry/current comparisons, 35 existing native programs, both builds'
 64 statement and nine repeated body controls, inherited failure/rejection/demand
 suites and PA13 ABI/lifetime controls. All 1,266 fixture/reference hashes are
 unchanged. Root count: 1935/1935, all 14 stages. Remaining findings prevent closure.
+
+The [mode campaign](../student.tests/pa14/modes-performance.md) adds 728 frozen
+observations and 71 passing validation groups, bringing the ledger to 17,724.
+All 11 native executables are byte-identical. It also exposes avoidable copy
+initialization metadata: 128 instances × 8 initializers add 1,024 temporary
+entities/scopes despite an existing destination, and RSS rises 806–824 KiB.
+Removing this duplication is the next ownership correction; these measurements
+are retained and do not constitute performance acceptance. Five default/query
+reproducers remain independently confirmed under the mode binary.

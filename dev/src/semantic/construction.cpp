@@ -24,6 +24,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     std::vector<Viable> viable;
     std::vector<Conversion> sequences;
     for (EntityId e : candidates(binding)) {
+        if (!direct && members[entities[e].member_info].explicit_constructor) continue;
         ++candidate_work;
         Type f = types[entities[e].type];
         if ((!f.variadic && args.size() > f.count) || (args.size() < f.count &&
@@ -104,10 +105,10 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
     if (demand) demand_member(ctor);
     return ctor;
 }
-bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
+bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     NodeId list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
-    bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
+    bool copy = mode == InitializationMode::Copy;
     auto info = entities[types[target].entity].class_info;
     if (ast[list].kind == Kind::BracedInit && class_facts[info].aggregate) return false;
     if (!copy && ast[list].kind == Kind::Call) {
@@ -120,15 +121,21 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
     bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer || ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
     for (NodeId a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) {
         Expression value = expression(a, s);
-        if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target))
-            return record_class_initialization(n,target,a);
+        if (!grouped && copy) return record_class_initialization(n,target,a);
+        if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target)) {
+            auto retained = retained_initialization(a,target);
+            auto c = retained ? copy_conversion_recipe(conversions[retained]) : transfer_initialization(value,target,mode);
+            return record_class_initialization(n,target,a,&c);
+        }
         args.push_back(a);
     }
     Expression result; result.type = target; result.ready = true; result.evaluated = true;
     EntityId ctor = 0;
     bool reused = reuse_template_constructor(n,target,args,result,s,ctor);
     if (!reused)
-        ctor = choose_constructor(target, args, &result, s, !copy);
+        ctor = choose_constructor(target, args, &result, s, !copy || ast[list].kind == Kind::BracedInit);
+    if (copy && members[entities[ctor].member_info].explicit_constructor)
+        throw std::runtime_error("explicit constructor in copy-list initialization");
     if (converting_transfer(ctor,result)) {
         auto c = result_conversion(ctor,result,target);
         ValueInitialization init; init.source = args[0]; init.conversion = conversions.size(); conversions.push_back(c);
@@ -141,9 +148,6 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
             list_conversion(args[j], value_type(types.parameters[f.offset+j]));
     }
     if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
-    // The initializer wrapper retains its starting token, including '='.
-    if (copy && members[entities[ctor].member_info].explicit_constructor)
-        throw std::runtime_error("explicit constructor in copy initialization");
     if (args.empty() && grouped && members[entities[ctor].member_info].synthetic && !members[entities[ctor].member_info].defaulted_late) {
         prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;

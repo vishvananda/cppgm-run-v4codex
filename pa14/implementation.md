@@ -1049,3 +1049,14 @@ recipes and projects list operands into concrete object/lifetime contexts.
 [Its evidence](../student.tests/pa14/initializer-performance.md) records the
 current checks, costs and newly found common initialization-mode/query handoffs.
 The full-stage audit remains open.
+
+The copy/direct/list continuation corrects common candidate sets, return/argument
+transfers, aggregate copy initialization and dependent clause mapping. It keeps
+scalar source expressions separate from their class construction records and
+keys empty-list facts by mode. The current ownership review is in
+[audit.md](audit.md); default/query handoffs remain open.
+
+[The mode campaign](../student.tests/pa14/modes-performance.md) preserves 728
+observations and identifies redundant destination temporary metadata. Its
+correction remains required before whole-stage acceptance. No measurement,
+mandated limit, fixture or comparison rule has been removed.

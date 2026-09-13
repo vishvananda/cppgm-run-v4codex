@@ -73,6 +73,19 @@ void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
     register_destruction(temporary);
     object_uses[result.object_use].temporary = temporary;
 }
+Conversion Analyzer::transfer_initialization(Expression value, TypeId target, InitializationMode mode)
+{
+    Conversion c; c.target = target;
+    if (types.unqualified(value.type) == types.unqualified(target) && empty_value(target)) {
+        c.rank = 0; c.empty_copy = true; return c;
+    }
+    auto ctor = select_transfer(target,value.type,value.category,false,mode);
+    if (ctor) {
+        c.function = ctor; c.kind = Conversion::Kind::Construction;
+        c.rank = types.unqualified(value.type) == types.unqualified(target) ? 0 : 2;
+    }
+    return c;
+}
 bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId source, const Conversion* selected)
 {
     auto retained = selected ? 0 : retained_initialization(source,target);
@@ -119,7 +132,7 @@ Conversion Analyzer::return_conversion(NodeId source, Expression value, TypeId t
     }
     Conversion c = expressions[source].ready ? conversion(source,target) : conversion_value(value,target);
     if (eligible && types.unqualified(value.type) == types.unqualified(target)) {
-        EntityId ctor = select_transfer(target,value.type,ValueCategory::Xvalue,false);
+        EntityId ctor = select_transfer(target,value.type,ValueCategory::Xvalue,false,InitializationMode::Copy);
         if (ctor) { c.kind = Conversion::Kind::Construction; c.function = ctor; c.rank = 0; c.implicit_move = true; }
     }
     return c;

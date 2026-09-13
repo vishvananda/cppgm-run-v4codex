@@ -130,7 +130,7 @@ void Analyzer::ensure_transfers(TypeId t, bool assignment)
         if (!assignment) class_facts[info].constructor = merge_lookup(class_facts[info].constructor, e);
     }
 }
-EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment)
+EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment, InitializationMode mode)
 {
     ensure_transfers(target, assignment);
     EntityId cls = types[target].entity;
@@ -138,6 +138,7 @@ EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory c
     struct Candidate { EntityId entity; Conversion sequence[2]; };
     std::vector<Candidate> viable;
     for (EntityId e : candidates(family)) {
+        if (!assignment && mode == InitializationMode::Copy && members[entities[e].member_info].explicit_constructor) continue;
         Type f = types[entities[e].type];
         if (!f.count || (f.count > 1 && (!entities[e].defaults || !default_arguments[entities[e].defaults+1]))) continue;
         ++candidate_work;

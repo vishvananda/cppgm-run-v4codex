@@ -184,8 +184,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     to = types.unqualified(to);
     from = decay(from);
     if (class_value(to) && class_value(from) && (to == from || derived_from(from,to)) && (to != from || !empty_value(to))) {
-        EntityId ctor = select_transfer(to,x.type,x.category,false);
-        if (ctor) { c.function = ctor; c.kind = Conversion::Kind::Construction; c.rank = to == from ? 0 : 2; }
+        c = transfer_initialization(x,c.target,InitializationMode::Copy);
         return c;
     }
     if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
@@ -337,10 +336,11 @@ Conversion Analyzer::boolean_conversion_value(Expression source, NodeId n)
     }
     return c;
 }
-void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
+void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
-    if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s)) return;
-    if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s); return; }
+    if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
+    if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s, mode)) return;
+    if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s, mode); return; }
     if (ast[n].kind == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
         expression(n,s); require_conversion(n,target); return;
     }
@@ -356,7 +356,7 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
         if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
         if (ast[n].kind != Kind::BracedInit && ast[ast[n].first].kind != Kind::BracedInit && class_value(expression(ast[n].first,s).type) && !class_value(value_type(target)))
             require_conversion(ast[n].first,target,true);
-        else initialize(ast[n].first, target, s);
+        else initialize(ast[n].first, target, s, mode);
         if (ast[n].kind == Kind::BracedInit) list_conversion(ast[n].first, target);
         facts.edit(n).type = target;
         return;

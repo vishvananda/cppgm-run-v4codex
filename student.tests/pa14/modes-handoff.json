@@ -1,0 +1,56 @@
+{
+  "binary": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-cppgm++",
+  "binary_sha256": "669c8cb9d6e9e8d1fb5a090445ecf657438c77ea0473b9ed4852ec610eec8d19",
+  "cases": [
+    {
+      "name": "reference",
+      "source": "template<class T>void f(){int& r;}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/reference.cpp",
+      "source_sha256": "2389a6ce719262908cf982a0e70d4799d046a1f45eef3b97bcbb9ab4ff343f56",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/reference.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "required_exit": 1
+    },
+    {
+      "name": "default-constructor",
+      "source": "struct D{D()=delete;};template<class T>void f(){D d;}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/default-constructor.cpp",
+      "source_sha256": "1ffad16850e95c88df6c17f91e8802c839a0b21b6457e3b33125991125d6e0bd",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/default-constructor.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "required_exit": 1
+    },
+    {
+      "name": "callable-statement",
+      "source": "struct C{int operator()()=delete;};template<class T>void f(){C c;c();}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/callable-statement.cpp",
+      "source_sha256": "66de284cc1c86be775d0ad48cbc6173bb04e2b8dfa1b3e6f60ed99e6ec5fe6b4",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/callable-statement.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "required_exit": 1
+    },
+    {
+      "name": "query-list-return",
+      "source": "struct C{int operator()(){return 42;}};template<class T>int* f(){return {C()()};}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/query-list-return.cpp",
+      "source_sha256": "9ce26613f55320e6d4d102fe83153d30dc618d3932c14f36330b51e2a8625070",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/query-list-return.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "required_exit": 1
+    },
+    {
+      "name": "variable-callable",
+      "source": "struct F{int operator()()=delete;};struct D{D(int){}};template<class T>void f(){F v;D d(v());}int main(){}",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/variable-callable.cpp",
+      "source_sha256": "31e36174ce0ee6675c8e6a18018d7dd33ebf29301819a2d7757626ae78415d8c",
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/modes-remaining/variable-callable.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "required_exit": 1
+    }
+  ]
+}

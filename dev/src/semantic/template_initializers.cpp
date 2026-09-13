@@ -37,10 +37,10 @@ std::uint32_t Analyzer::retained_initialization(NodeId n, TypeId target)
     if (!id || conversions[id].target != target) return 0;
     ++initializer_recipe_uses; return id;
 }
-bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s)
+bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     auto list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
-    bool copy = ast[n].kind == Kind::Initializer && (ast[n].flags & 1);
+    bool copy = mode == InitializationMode::Copy;
     bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer ||
         ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
     std::vector<NodeId> args;
@@ -49,16 +49,21 @@ bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s)
         if (ast[a].kind == Kind::BracedInit && fixed_initializer_operands(a)) expression(a,s);
         auto value = template_statement_value(a,s);
         if (!value.type && value.form != ExpressionForm::InitializerList && value.form != ExpressionForm::Overload) return false;
+        if (!grouped && copy) {
+            auto c = expressions[a].ready ? conversion(a,target) : conversion_value(value,target);
+            check_fixed_conversion(value,expressions[a].ready ? a : 0,c,s);
+            remember_initialization(a,c); return true;
+        }
         if (!grouped && value.category == ValueCategory::Prvalue &&
             types.unqualified(value.type) == types.unqualified(target)) {
-            auto c = expressions[a].ready ? conversion(a,target) : conversion_value(value,target);
+            auto c = transfer_initialization(value,target,mode);
             check_fixed_conversion(value,expressions[a].ready ? a : 0,c,s);
             remember_initialization(a,c); return true;
         }
         args.push_back(a); values.push_back(value);
     }
     Expression result;
-    auto ctor = choose_constructor(target,args,&result,s,!copy,true,&values);
+    auto ctor = choose_constructor(target,args,&result,s,!copy || ast[list].kind == Kind::BracedInit,true,&values);
     if (!ctor || deleted_transfer(ctor)) throw std::runtime_error("invalid fixed initializer constructor");
     auto access = ctor;
     while (members[entities[access].member_info].inherited_constructor)
@@ -108,10 +113,12 @@ bool Analyzer::reuse_template_constructor(NodeId n, TypeId target, const std::ve
 bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId s)
 {
     // A dependent field can consume an unknown number of brace-elided clauses.
-    // Its enclosing source mapping stops here; the concrete aggregate owns it.
+    // An explicit braced clause delimits one field even when its type is unknown.
     if (dependent_type(target) && types[target].kind != TypeKind::Array &&
         !(types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 2)) {
-        return false;
+        if (!cursor) return true;
+        if (ast[cursor].kind != Kind::BracedInit) return false;
+        cursor = ast[cursor].next; return true;
     }
     if (!cursor) {
         auto c = list_initialization(0,target,s); check_fixed_conversion(Expression(),0,c,s); return true;
@@ -127,7 +134,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         cursor = ast[source].next; return true;
     }
     if (!template_aggregate_type(target)) {
-        check_template_initialization(source,target,s);
+        check_template_initialization(source,target,s,InitializationMode::Copy);
         if (!grouped) {
             auto value = template_statement_value(source,s);
             if (value.type) {
@@ -168,9 +175,10 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     cursor = grouped ? ast[source].next : inner;
     return true;
 }
-void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s)
+void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     if (!target || ast.nodes.occurrences[n].context) return;
+    if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
     if (types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 3)
         throw std::runtime_error("initializer needs complete local class");
     if (dependent_type(target) && types[target].kind != TypeKind::Array &&
@@ -180,10 +188,10 @@ void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s)
     if (class_value(target)) {
         complete_class(types[target].entity); reject_abstract(target);
         if (!aggregate_type(target) || ast[list].kind != Kind::BracedInit) {
-            check_template_constructor(n,target,s); return;
+            check_template_constructor(n,target,s,mode); return;
         }
     }
-    if (ast[n].kind == Kind::Initializer) { check_template_initialization(list,target,s); return; }
+    if (ast[n].kind == Kind::Initializer) { check_template_initialization(list,target,s,mode); return; }
     if (template_aggregate_type(target)) {
         NodeId cursor = n; check_template_initializer_item(cursor,target,s); return;
     }
@@ -201,7 +209,7 @@ void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s)
         }
         if (child != ast[n].last) throw std::runtime_error("excess fixed scalar initializer");
         if (braced || ast[child].kind == Kind::BracedInit) {
-            check_template_initialization(child,target,s);
+            check_template_initialization(child,target,s,mode);
             if (braced) {
                 auto value = template_statement_value(child,s);
                 if (value.type) {

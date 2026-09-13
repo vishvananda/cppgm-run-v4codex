@@ -33,6 +33,9 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
         auto c = entities[type.entity].class_info;
         if (!class_facts[c].aggregate) {
             EntityId ctor = default_constructor(t, s);
+            // This path initializes omitted aggregate elements from {}.
+            if (members[entities[ctor].member_info].explicit_constructor)
+                throw std::runtime_error("explicit constructor for omitted aggregate element");
             class_facts[c].value_constructor = ctor;
             if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
         } else {

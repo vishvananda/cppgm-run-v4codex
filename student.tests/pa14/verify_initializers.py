@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 """Verify live initialization ownership and every frozen AA/ABBA observation."""
 from pathlib import Path
-import json
+import hashlib,json,subprocess
 from verify_special_signatures import ROOT,document,checked,shared
 from verify_declaration_facts import binary,campaign
 
-def verify():
+def verify(check_live=True):
  v=document('initializer-validation.json')
  assert shared.sha(ROOT/'student.tests/pa14/initializer_audit_validation.py')==v['harness_sha256']
- assert shared.sha(ROOT/'dev/cppgm++')==v['binaries'][1]['sha256']
+ if check_live:assert shared.sha(ROOT/'dev/cppgm++')==v['binaries'][1]['sha256']
  assert len(v['checks'])==67 and len(v['coverage'])==1266
  refresh=v['refresh']
  for name in ['harness','prior_manifest','prior_control']:binary(refresh[name])
  assert refresh['rechecked']==['release-initializers','sanitized-initializers']
- for row in v['binaries']+v['sources']+v['coverage']:binary(row)
+ for row in v['binaries']+v['coverage']:binary(row)
+ for row in v['sources']:
+  if check_live:binary(row)
+  else:
+   path=Path(row['path']).relative_to(ROOT)
+   frozen=subprocess.run(['git','show','dc112d7e:'+str(path)],cwd=ROOT,check=True,stdout=subprocess.PIPE).stdout
+   assert hashlib.sha256(frozen).hexdigest()==row['sha256']
  for row in v['checks']:checked(row)
  logs={r['name']:Path(r['log']).read_text() for r in v['checks']}
  assert 'ALL TESTS PASSED SUCCESSFULLY! (1935 / 1935)' in logs['through']
@@ -42,7 +48,7 @@ def verify():
   assert row['build_exit']==0 and len(row['headers'])==24
   for h in row['headers']:
    assert shared.sha(h['path'])==h['sha256']
-   if row['label']=='current':assert shared.sha(h['source'])==h['sha256']
+   if check_live and row['label']=='current':assert shared.sha(h['source'])==h['sha256']
   for k in ['binary','dump']:assert shared.sha(row[k+'_path'])==row[k+'_sha256']
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
  a,b=[r['sizes'] for r in layout['layouts']]

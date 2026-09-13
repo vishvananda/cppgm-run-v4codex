@@ -13,6 +13,7 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
+enum class InitializationMode : unsigned char { Direct, Copy };
 // Boolean success has two outcomes, while active and failed remain distinct.
 // This compact encoding does not confuse a pending query with a false value.
 enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };

@@ -131,7 +131,7 @@ public:
     std::vector<ConstantField> constant_fields;
 private:
     FactState completion_state = FactState::NotStarted;
-    Index list_index, direct_list_index, empty_list_index;
+    Index list_index, direct_list_index, empty_list_index, empty_direct_list_index;
     Index class_typedef_declarations;
     std::vector<ListField> list_fields;
     Conversion list_initialization(NodeId n, TypeId to, ScopeId s = 0, bool direct = false);
@@ -179,7 +179,9 @@ private:
     void prepare_transfer(EntityId e);
     bool copy_storage_type(TypeId t);
     bool deleted_transfer(EntityId e);
-    EntityId select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment);
+    EntityId select_transfer(TypeId target, TypeId source, ValueCategory category, bool assignment,
+        InitializationMode mode = InitializationMode::Direct);
+    Conversion transfer_initialization(Expression value, TypeId target, InitializationMode mode);
     Conversion transfer_conversion(TypeId from, ValueCategory category, TypeId to);
     bool transfer_accessible(EntityId e, ScopeId context) const;
     void prepare_scalar_transfer(EntityId e);
@@ -240,9 +242,10 @@ private:
     Index template_initializer_bindings;
     std::size_t template_initializer_binding_work = 0, template_initializer_binding_queued = 0;
     void bind_template_initializer(EntityId entity, ScopeId scope);
-    void check_template_initialization(NodeId n, TypeId target, ScopeId scope);
+    void check_template_initialization(NodeId n, TypeId target, ScopeId scope,
+        InitializationMode mode = InitializationMode::Direct);
     bool check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId scope);
-    bool check_template_constructor(NodeId n, TypeId target, ScopeId scope);
+    bool check_template_constructor(NodeId n, TypeId target, ScopeId scope, InitializationMode mode);
     bool reuse_template_constructor(NodeId n, TypeId target, const std::vector<NodeId>& args,
         Expression& result, ScopeId scope, EntityId& selected);
     std::uint32_t retained_initialization(NodeId n, TypeId target);
@@ -558,7 +561,7 @@ private:
     bool inherit_using(NodeId name, ScopeId scope);
     void inherited_constructors(EntityId cls);
     bool base_initialization = false;
-    bool class_initialize(NodeId n, TypeId target, ScopeId s);
+    bool class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode);
     void default_initialize(EntityId object);
     bool derived_from(TypeId from, TypeId to);
     void write_function(std::ostream& out, EntityId e, NodeId body, ScopeId scope, unsigned depth, bool definition = true) const;
@@ -627,7 +630,7 @@ private:
     Expression value_fact(const Expression& source) const;
     void require_conversion(NodeId n, TypeId target, bool direct = false);
     void select_function(NodeId n, EntityId e, bool direct = true);
-    void initialize(NodeId init, TypeId target, ScopeId s);
+    void initialize(NodeId init, TypeId target, ScopeId s, InitializationMode mode = InitializationMode::Direct);
     TypeId builtin_binary(ETokenType op, NodeId a, NodeId b, Expression& result);
     void modifiable(NodeId n);
     void write_resolved(std::ostream& out, NodeId n, unsigned depth) const;

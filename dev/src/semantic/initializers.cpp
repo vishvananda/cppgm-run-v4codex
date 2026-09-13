@@ -111,9 +111,9 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     }
     if (!aggregate) {
         if (types[t].kind == TypeKind::Named && entities[types[t].entity].class_info) {
-            initialize(source, t, s); initializers[id].kind = InitKind::Constructor;
+            initialize(source, t, s, InitializationMode::Copy); initializers[id].kind = InitKind::Constructor;
         } else {
-            initialize(source, t, s);
+            initialize(source, t, s, InitializationMode::Copy);
             NodeId scalar = source;
             while (ast[scalar].kind == Kind::BracedInit || ast[scalar].kind == Kind::ParenArguments || ast[scalar].kind == Kind::ParenInitializer) scalar = ast[scalar].first;
             if (scalar) list_conversion(scalar, t);

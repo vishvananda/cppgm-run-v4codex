@@ -620,11 +620,16 @@ print(observations+new_samples+owner_observations+view_observations+definition_o
 from verify_defaults import verify as verify_defaults
 from verify_body_audit import verify as verify_body_audit
 from verify_initializers import verify as verify_initializers
-# The initializer campaign owns live identities. Body sources are checked
-# against their committed revision, and all prior frozen evidence remains.
-initializer_observations=verify_initializers()
+# The mode campaign owns live identities. Earlier source hashes are checked
+# against their committed revisions; all prior frozen evidence remains.
+initializer_observations=verify_initializers(check_live=False)
 body_observations=verify_body_audit(check_live=False)
 default_observations=verify_defaults(check_live=False)
 print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations+declaration_observations+signature_publication_observations+demand_failure_observations+virtual_demand_observations+lifecycle_observations+default_observations,'total frozen performance observations verified')
 print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations+declaration_observations+signature_publication_observations+demand_failure_observations+virtual_demand_observations+lifecycle_observations+default_observations+body_observations,'total frozen performance observations verified')
 print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations+declaration_observations+signature_publication_observations+demand_failure_observations+virtual_demand_observations+lifecycle_observations+default_observations+body_observations+initializer_observations,'total frozen performance observations verified')
+
+from verify_modes import verify as verify_modes
+mode_observations=verify_modes()
+assert mode_observations==728
+print(16996+mode_observations,"total frozen performance observations verified")

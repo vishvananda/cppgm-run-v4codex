@@ -17,12 +17,12 @@ default, layout and emission owners are separate. Typed lowering consumes
 selected operations and ABI entries; PA14 ends at O0 LowIR.
 
 The default-fact handoff, body publication and explicit initializer recipe paths
-have been traced and validated. The latest review also exposed common
-initialization-mode defects; passing course tests does not close them.
+have been traced and validated. Copy/direct/list mode ownership has now been
+corrected across source checks, transfers, aggregate clauses and lowering.
 Remaining work, in ownership order:
 
-1. Correct copy versus list constructor candidate sets, aggregate member copy
-   initialization, and known clause mapping around dependent aggregate fields.
+1. Remove the measured redundant destination temporary in copy initialization;
+   retain checks/lifetimes and repeat frozen performance evidence.
 2. Complete source default initialization and query-only call/condition/list
    obligations and reuse; inspect keys, temporary destruction and invalidation.
 3. Close remaining whole-stage identity, demand, storage and typed-lowering
@@ -43,8 +43,10 @@ limit, fixture, reference or comparison rule has been weakened.
 | Current body performance | [532 observations](../student.tests/pa14/body-audit-performance.md); 16,380 cumulative; all nine executable payload sizes unchanged |
 | Explicit initializer recipes and concrete list operands | [616 observations](../student.tests/pa14/initializer-performance.md); 16,996 cumulative; 67 checks, 82 controls per build; ten identical executables |
 | Personal comparator adapter | Fixed Perl sort-variable shadowing; one allowed top-level order difference; course comparator unchanged |
-| Remaining initialization modes, default and query ownership | Eight reduced incorrect outcomes documented in audit; work remains open |
+| Copy/direct/list ownership | [728 observations](../student.tests/pa14/modes-performance.md), 71 checks, 75 controls per build; redundant destination metadata remains to be corrected |
+| Remaining default and query ownership | Five reduced incorrect outcomes documented in audit; work remains open |
 
 Artifacts: `$RALPH_ARTIFACT_DIR/pa14-final-audit/`. Both required gates passed
-for the initializer change, with 1,266 fixture/reference hashes unchanged. These checks
+for the mode change, with 1,266 fixture/reference hashes unchanged. The verified
+performance ledger now totals 17,724 observations. These checks
 do not close the remaining whole-stage defects.
