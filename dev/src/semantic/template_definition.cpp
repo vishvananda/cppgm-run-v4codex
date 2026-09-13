@@ -174,7 +174,8 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto k = key(owner.specialization,id);
         auto state = DefinitionState(definition_applications.get(k));
         ++definition_edges;
-        if (state == DefinitionState::Failed) throw std::runtime_error("failed template member definition");
+        if (state == DefinitionState::Failed)
+            throw FailedSemanticFact(SemanticFact::MemberDefinition,owner.specialization,template_definitions[id].source);
         if (state != DefinitionState::NotStarted) {
             // Recursive demand can consume established declarations, but must
             // not publish completion for a still-active definition application.
@@ -182,6 +183,10 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         }
         definition_applications.put(k,unsigned(DefinitionState::Active));
         ++template_definition_work;
+        auto saved_template = active_template_scope, saved_environment = member_definition_environment;
+        auto saved_depth = class_depth;
+        auto saved_bodies = bodies.size();
+        try {
         auto def = template_definitions[id];
         auto pack = specialization_arguments(owner.specialization);
         ScopeId environment = make_scope(ScopeKind::Template,entities[e].owner);
@@ -208,9 +213,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto frame = substitution_frame(specialization,def.parameters,def.count,parent);
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-        auto saved_template = active_template_scope, saved_environment = member_definition_environment;
         active_template_scope = 0; member_definition_environment = environment;
-        try {
             if (matched && entities[e].kind == EntityKind::Function) {
                 ++definition_direct_work;
                 // The checked source signature selected this concrete member.
@@ -245,6 +248,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         } catch (...) {
             definition_applications.put(k,unsigned(DefinitionState::Failed));
             active_template_scope = saved_template; member_definition_environment = saved_environment;
+            class_depth = saved_depth; bodies.resize(saved_bodies);
             throw;
         }
         active_template_scope = saved_template; member_definition_environment = saved_environment;

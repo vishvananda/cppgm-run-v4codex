@@ -12,10 +12,11 @@ explicitly outside PA12 and are not added by PA13–PA14. The exploratory patch,
 reducers and observations remain in `pa14-member-pointer-types/`; they impose
 no PA14 exit gate and make no production change.
 
-Current owner group (required reports and native controls pass): specialization declaration/body and class-layout terminal
+Current owner group (required reports and native controls pass): specialization declaration/body, selected member-definition and class-layout terminal
 states, plus their enclosing completion boundary. Data flow: canonical entity
 and fact kind → one active producer → successful publication or cached failure.
-Restore temporary class/function context on failure; retain declaration usability
+Member-definition failure guards cover environment/frame construction as well as
+declaration application. Restore temporary class/function context on failure; retain declaration usability
 during valid recursive demand. Validate repeated failed demands through the public
 semantic API, unrelated successful requests, recursion, late definitions, all course
 and personal controls. Work/storage stays proportional to existing fact keys.
@@ -97,6 +98,6 @@ N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12–13 justify the corrected
 optional observation plus a separate demanded-use rejection. Artifacts:
 `$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.
 
-Current validation: six repeated-demand controls (10,000 requests each), **34**
+Current validation: eight repeated-demand controls (10,000 requests each), **34**
 native programs, stage **314**, prior **1621**, through **1935**, file audit pass.
 Sanitizer and frozen performance acceptance remain in progress.

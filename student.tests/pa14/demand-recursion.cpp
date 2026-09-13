@@ -24,8 +24,12 @@ template<class U> int late(int value) {
 }
 template<class T> struct Unused { typename T::missing field; };
 Unused<int>* never_completed=nullptr;
+template<class T> struct Outer { struct Inner; };
+template<class U> struct Outer<U>::Inner { U value; int get() { return int(value); } };
 int main() {
     if (early()!=8 || late<int>(4)!=10 || count(7)!=7 || count(5L)!=5) return 1;
     Chain<int> object; object.value=11; object.next=nullptr;
-    return object.sum()!=11 || never_completed!=nullptr;
+    Outer<int>::Inner first; first.value=12;
+    Outer<long>::Inner second; second.value=13;
+    return object.sum()!=11 || never_completed!=nullptr || first.get()!=12 || second.get()!=13;
 }

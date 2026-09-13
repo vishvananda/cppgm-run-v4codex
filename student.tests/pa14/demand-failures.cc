@@ -12,7 +12,9 @@ int main(int argc, char** argv) {
     syntax::Ast ast(true);
     syntax::Cursor cursor(post, pp.identifiers(), ast);
     syntax::Parser parser(cursor, ast, pp.identifiers());
-    semantic::Analyzer sem(ast, pp.identifiers(), true, true);
+    // Type-only construction leaves physical layout to the explicit API demand.
+    bool deferred_layout = std::string(argv[2]) == "layout";
+    semantic::Analyzer sem(ast, pp.identifiers(), !deferred_layout, !deferred_layout);
     parser.translation_unit(&sem);
     bool finish = std::string(argv[2]) == "finish";
     semantic::TypeId target = 0, good = 0;

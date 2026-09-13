@@ -13,6 +13,8 @@ CASES={
  'void_field':('template<class T>struct C{T field;};using Target=C<void>;struct Good{int value;};','size'),
  'class_layout':('template<class T>struct C{alignas(1) T field;};using Target=C<long>;struct Good{int value;};','size'),
  'recursive_layout':('template<class T>struct C{C field;};using Target=C<int>;struct Good{int value;};','size'),
+ 'nested_definition':('template<class T>struct Outer{struct Inner;};template<class U>struct Outer<U>::Inner{typename U::missing field;};using Target=Outer<int>::Inner;struct Good{int value;};','size'),
+ 'direct_layout':('struct Target{Target field;};struct Good{int value;};','layout'),
 }
 def run(command):
  p=subprocess.run(list(map(str,command)),cwd=ROOT,capture_output=True,text=True,timeout=180)
@@ -21,6 +23,7 @@ def run(command):
 names=run(['make','-s','-C','dev','--eval=probe-objects:\n\t@echo $(FRONTEND_OBJ_BASENAMES_cppgm++)','probe-objects']).split()
 exe=WORK/'probe'
 flags=[] if mode=='entry' else ['-DEXPECT_TERMINAL_FACTS']
+if mode=='sanitized': flags += ['-fsanitize=address,undefined','-fno-pie','-no-pie']
 run(['g++','-std=c++11','-O2',*flags,'-I'+str(ROOT/'dev/src'),ROOT/'student.tests/pa14/demand-failures.cc',*[objects/(n+'.o') for n in names],'-o',exe])
 records=[]
 for name,(source,kind) in CASES.items():

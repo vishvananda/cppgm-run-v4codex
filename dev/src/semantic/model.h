@@ -13,7 +13,7 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
