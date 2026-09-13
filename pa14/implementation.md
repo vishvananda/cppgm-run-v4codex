@@ -709,3 +709,28 @@ control pass, alongside stage 314/314, prior 1621/1621 and all 29 native program
 A missing helper declaration caused the first build to fail; that log remains.
 The next owner change supplies injected-class and declaring-head parameter facts
 before extending direct special-member body application.
+
+
+Injected primary/member-class names now carry symbolic current-instantiation
+types during source checking. Nonterminal injected qualifiers still consult their
+bound source scope, preserving fixed alias facts. Definition overlays retain
+parameter slices rather than just head scopes. Canonical matching sees the actual
+source class/head chain; concrete application builds the corresponding immutable
+parent frames, including an out-of-class nested definition's differently named
+head. Qualified injected-class names normalize to their owning current type.
+
+Matched constructors, destructors, conversions and defaulted definitions now
+apply to the selected member identity. Raw parameter substitution, default and
+exception owners, transfer classification, virtual facts and body registration
+are shared with existing semantics. User-written bodies remain deferred; defaulted
+members keep late-definition demand and base/complete-entry behavior. No syntax
+or overload reconstruction is needed on the matched path. The same prototype
+owner rejects duplicate defaulted definitions, nondefinition redeclarations and
+late deleted definitions (N3485 [class.mfct]/2, [basic.def.odr]/1,
+[dcl.fct.def.delete]/4).
+
+The injected-signatures.cpp control executes renamed copy/move construction and
+assignment, nested raw aliases spanning U/V heads, returned references and late
+defaulted operations. All 314 stage tests, 1621 prior tests, 30 native programs
+and 21 special-signature rejection controls pass. Freeze full sanitizer, layout
+and source/key/request performance evidence before accepting the owner costs.

@@ -17,6 +17,30 @@ TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vect
     }
     return source_type(member);
 }
+TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
+{
+    if (!e || entities[e].kind != EntityKind::Type) return 0;
+    if (entities[e].class_info && entities[e].template_info) {
+        if (!encloses(entities[e].scope,use)) return 0;
+        auto head = templates[entities[e].template_info];
+        auto parameters = head.offset;
+        // An out-of-class source overlay owns a parameter slice, independent
+        // of the spelling and identity of the primary's original head.
+        for (auto scope = use; scope; scope = scopes[scope].parent)
+            if (auto source = definition_source_parameters.get(scope)) {
+                parameters = source-1; break;
+            }
+        std::vector<TypeId> args;
+        for (unsigned i = 0; i < head.count; ++i)
+            args.push_back(entities[template_parameters[parameters+i]].type);
+        return entities[specialize_class(e,args)].type;
+    }
+    auto scope = entities[e].scope, parent = entities[e].owner;
+    if (!entities[e].template_pattern || !entities[e].name || !scope ||
+        scopes[scope].kind != ScopeKind::Class || scopes[parent].kind != ScopeKind::Class) return 0;
+    auto owner = injected_template_type(scopes[parent].entity,use);
+    return owner ? types.dependent_name(owner,entities[e].name,{},false) : 0;
+}
 TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
 {
     if (!last) last = ast[n].last;
@@ -54,10 +78,12 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         check_access(e,s,owner);
         bool type = entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias;
         prefix = type ? source_type(e) : 0;
-        // A local pattern class/enum or the primary's injected name has no
-        // concrete declaration type yet. Qualified aliases can still supply
-        // a canonical symbolic type through their already bound class scope.
-        if (template_type_probe && entities[e].class_info && entities[e].template_info) prefix = 0;
+        // Member class identities have symbolic current-instantiation types.
+        // Nonterminal injected names still use the bound source class scope
+        // so fixed qualified aliases keep their definition-time type facts.
+        if (template_type_probe && entities[e].class_info && entities[e].template_info)
+            prefix = p == last ? injected_template_type(e,s) : 0;
+        else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {
             if (!type) throw std::runtime_error("type name denotes a value");
             if (last == ast[n].last) facts[n].entity = e;

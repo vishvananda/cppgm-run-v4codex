@@ -20,9 +20,8 @@ Defaults, exceptions and virtual checks retain their existing owners.
 
 Active continuation from `60cf761c`; previous turn: **verified progress**. Extend
 the retained source-signature owner to special members, replacing nullary syntax
-matching with complete typed signatures. Then establish injected-class/current
-nested types under declaring-head identities and route known special definitions
-to direct body application. Preserve transfer, exception and base/complete-entry
+matching with complete typed signatures. Injected-class/current nested types now retain declaring-head parameter slices;
+matched special definitions use direct member application. Preserve transfer, exception and base/complete-entry
 owners. Validate constructor/copy/move/conversion overloads, unused rejection,
 renamed heads, deferred destruction and source/key/demand scaling; freeze full
 correctness/layout/performance evidence before acceptance.

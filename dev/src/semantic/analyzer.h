@@ -361,6 +361,7 @@ private:
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
     TypeId type_name(NodeId n, ScopeId s, NodeId last = 0);
+    TypeId injected_template_type(EntityId e, ScopeId use);
     TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s, bool declaration = false);
@@ -422,7 +423,7 @@ private:
     void demand_template_storage(EntityId e);
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
     Index definition_traversals, unmatched_definitions;
-    Index definition_source_heads;
+    Index definition_source_parameters;
     std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
     std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
     std::vector<EntityId> storage_demand;
@@ -470,7 +471,8 @@ private:
     ScopeId bind_template_class(NodeId n, ScopeId parent, EntityId entity = 0, std::vector<Body>* deferred = 0);
     void check_template_parameters(NodeId n, ScopeId s);
     void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
-    TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary);
+    TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary, ScopeId owner);
+    void template_signature_bindings(ScopeId scope, EntityId primary, Index& bindings);
     TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
     ScopeId template_signature_owner(TypeId type, EntityId primary);
     std::uint32_t check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);

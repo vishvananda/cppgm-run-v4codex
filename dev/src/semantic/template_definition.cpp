@@ -110,7 +110,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
     }
     auto environment = make_scope(ScopeKind::Template,binding_owner,0,0,false);
-    definition_source_heads.put(environment,s);
+    definition_source_parameters.put(environment,def.parameters+1);
     for (unsigned j = 0; j < def.count; ++j) {
         auto parameter = template_parameters[def.parameters+j];
         bind(environment,entities[parameter].name,parameter);
@@ -124,7 +124,12 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         if (d) prototype = check_template_member_definition(d,path,definition_name,s,primary);
     }
     if (prototype) {
-        if (template_prototypes[prototype].definitions && (ast[n].kind == Kind::Function || ast[n].kind == Kind::SpecialDefinition))
+        auto special = child(def.initializer ? def.initializer : child(n,Kind::Initializer),Kind::SpecialInitializer);
+        if (ast[n].kind != Kind::Function && ast[n].kind != Kind::SpecialDefinition && !special)
+            throw std::runtime_error("out-of-class member must be a definition");
+        if (special && ast[special].op == KW_DELETE)
+            throw std::runtime_error("deleted definition must be the first declaration");
+        if (template_prototypes[prototype].definitions)
             throw std::runtime_error("duplicate out-of-class template member definition");
         template_definitions[retained].selected_next = template_prototypes[prototype].definitions;
         template_prototypes[prototype].definitions = retained;
@@ -190,26 +195,47 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto specialization = entities[owner.specialization].specialization;
         auto head = templates[entities[specializations[specialization].pattern].template_info];
         auto parent = substitution_frame(specialization,head.offset,head.count);
+        // A nested class definition can introduce aliases under another head.
+        // Preserve those source parameter identities in parent-linked frames.
+        std::vector<std::uint32_t> parents;
+        for (auto scope = facts[def.declarator].scope; scope; scope = scopes[scope].parent) {
+            auto parameters = definition_source_parameters.get(scope);
+            if (parameters && parameters-1 != def.parameters && parameters-1 != head.offset)
+                parents.push_back(parameters-1);
+        }
+        for (auto p = parents.rbegin(); p != parents.rend(); ++p)
+            parent = substitution_frame(specialization,*p,def.count,parent);
         auto frame = substitution_frame(specialization,def.parameters,def.count,parent);
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         auto saved_template = active_template_scope, saved_environment = member_definition_environment;
         active_template_scope = 0; member_definition_environment = environment;
         try {
-            if (matched && ast[source].kind == Kind::Function) {
+            if (matched && entities[e].kind == EntityKind::Function) {
                 ++definition_direct_work;
                 // The checked source signature selected this concrete member.
-                // Apply its definition facts without declaring or resolving it
-                // again; the body region remains deferred until body demand.
+                // Apply body/defaulted facts through the existing lifetime and
+                // exception owners without reconstructing its declaration.
                 auto d = ast.projected(def.declarator,context);
                 instantiate_parameters(def.declarator,context,frame,environment);
-                auto specs = ast[source].first;
+                auto kind = ast[source].kind;
+                bool special_member = kind == Kind::SpecialDefinition || kind == Kind::SpecialMember;
+                auto specs = special_member ? 0 : ast[source].first;
+                auto init = ast.projected(def.initializer,context);
+                if (!init) init = child(source,Kind::Initializer);
                 declaration_attributes(e,specs,source);
                 function_defaults(e,d,environment,source);
                 exception_specification(e,d,environment);
-                virtual_declaration(e,d,0,specs,source,environment);
+                auto special = child(init,Kind::SpecialInitializer);
+                if (special) {
+                    members[entities[e].member_info].deleted = ast[special].op == KW_DELETE;
+                    classify_transfer(e,special,environment);
+                }
+                virtual_declaration(e,d,init,specs,source,environment);
                 record(entities[e].owner,e,d,entities[e].type,EntityKind::Function);
-                schedule_body({ast[d].next,d,entities[e].owner,e,source});
+                auto body = kind == Kind::Function ? ast[d].next : child(source,Kind::Compound);
+                if (!body) body = child(source,Kind::FunctionTry);
+                if (body) schedule_body({body,d,entities[e].owner,e,source});
             } else if (ast[source].kind == Kind::SimpleDeclaration) {
                 auto specs = ast[source].first, d = ast.projected(def.declarator,context);
                 auto type = declarator(d,specifiers(specs,environment),environment);

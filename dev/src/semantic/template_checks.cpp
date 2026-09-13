@@ -120,24 +120,16 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         if (alias && entities[alias].kind == EntityKind::Alias && entities[alias].type) {
             // Only aliases of this current instantiation are expanded. A
             // different dependent specialization retains its symbolic member.
-            auto head = templates[entities[primary].template_info]; Index bindings, substitution;
-            for (auto scope = entities[alias].owner; scope; scope = scopes[scope].parent) {
-                if (scopes[scope].kind != ScopeKind::Template) continue;
-                auto declaration_head = definition_source_heads.get(scope);
-                if (!declaration_head) declaration_head = scope;
-                for (auto d = scopes[declaration_head].first_decl; d; d = declarations[d].next) {
-                    auto parameter = declarations[d].entity;
-                    if (!entities[parameter].template_parameter) continue;
-                    auto ordinal = parameter_ordinals.get(parameter);
-                    if (ordinal && ordinal <= head.count)
-                        bindings.put(parameter,canonical_parameters[ordinal-1]);
-                }
-            }
+            Index bindings, substitution;
+            template_signature_bindings(entities[alias].owner,primary,bindings);
             auto value = substitute_type(entities[alias].type,bindings,substitution);
             if (!value) return 0;
             value = template_member_aliases(value,primary,cache);
             if (!value) return 0;
             result = types.qualify(value,t.cv);
+        } else if (alias && alias == scopes[owner].entity) {
+            // A qualified injected-class-name denotes its current owner.
+            result = types.qualify(child,t.cv);
         } else {
             std::vector<TypeId> args;
             for (unsigned i = 0; i < t.count; ++i) {
@@ -171,20 +163,36 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
     }
     cache.put(type,result); return result;
 }
-TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId primary)
+void Analyzer::template_signature_bindings(ScopeId scope, EntityId primary, Index& bindings)
+{
+    auto head = templates[entities[primary].template_info];
+    for (; scope; scope = scopes[scope].parent) {
+        if (auto parameters = definition_source_parameters.get(scope)) {
+            for (unsigned i = 0; i < head.count; ++i)
+                bindings.put(template_parameters[parameters-1+i],canonical_parameters[i]);
+        } else if (scopes[scope].kind == ScopeKind::Template) {
+            for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
+                auto parameter = declarations[d].entity;
+                if (!entities[parameter].template_parameter) continue;
+                auto ordinal = parameter_ordinals.get(parameter);
+                if (ordinal && ordinal <= head.count)
+                    bindings.put(parameter,canonical_parameters[ordinal-1]);
+            }
+        }
+    }
+}
+TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId primary, ScopeId owner)
 {
     if (!type || !dependent_type(type)) return type;
-    Index bindings, cache; unsigned ordinal = 0;
-    for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
-        auto parameter = declarations[d].entity;
-        if (!entities[parameter].template_parameter) continue;
-        if (ordinal == canonical_parameters.size()) {
-            auto e = make_entity(EntityKind::Type,0,0,0);
-            entities[e].template_parameter = true; entities[e].type = types.named(e);
-            canonical_parameters.push_back(entities[e].type);
-        }
-        bindings.put(parameter,canonical_parameters[ordinal++]);
+    auto count = templates[entities[primary].template_info].count;
+    while (canonical_parameters.size() < count) {
+        auto e = make_entity(EntityKind::Type,0,0,0);
+        entities[e].template_parameter = true; entities[e].type = types.named(e);
+        canonical_parameters.push_back(entities[e].type);
     }
+    Index bindings, cache;
+    template_signature_bindings(head,primary,bindings);
+    template_signature_bindings(owner,primary,bindings);
     auto result = substitute_type(type,bindings,cache);
     Index aliases; return template_member_aliases(result,primary,aliases);
 }
@@ -192,7 +200,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
 {
     auto declared = facts[d].type;
     if (!declared || types[declared].kind != TypeKind::Function) return 0;
-    auto signature = template_member_signature(declared,head,primary);
+    auto signature = template_member_signature(declared,head,primary,facts[d].scope);
     if (!signature) return 0;
     ++definition_signature_requests;
     auto group = template_prototype_index.get(key(path,name));
@@ -203,7 +211,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
             auto prototype = template_prototypes[p];
             auto type = prototype.signature;
             if (!type) {
-                type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary);
+                type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary,facts[prototype.declarator].scope);
                 template_prototypes[p].signature = type;
             }
             if (!type) { unresolved = true; continue; }
