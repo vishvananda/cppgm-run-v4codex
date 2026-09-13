@@ -30,9 +30,11 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
 {
     auto e = scopes[function].entity;
     auto owner = entities[e].owner;
+    bool outside = scopes[owner].kind == ScopeKind::Template && scopes[scopes[owner].parent].kind == ScopeKind::Class;
+    if (!outside && scopes[owner].kind != ScopeKind::Class) return;
     auto qualifiers = function_qualifiers(parameters);
     bool available = !entities[e].is_static;
-    if (scopes[owner].kind == ScopeKind::Template && scopes[scopes[owner].parent].kind == ScopeKind::Class) {
+    if (outside) {
         owner = scopes[owner].parent;
         if (entities[e].name) {
             std::vector<EntityId> possible;
@@ -60,7 +62,6 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
             available = kinds == 2;
         }
     }
-    if (scopes[owner].kind != ScopeKind::Class) return;
     TemplateObjectContext context; context.owner = scopes[owner].entity;
     context.cv = qualifiers.cv; context.available = available;
     template_object_context_index.put(function,template_object_contexts.size());

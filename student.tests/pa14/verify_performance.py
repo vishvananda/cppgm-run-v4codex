@@ -8,7 +8,7 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
@@ -19,13 +19,14 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
  calls=filename=='call-performance.json'
  objects=filename.startswith('object-');repeat=filename.startswith('object-repeat-');preliminary=filename=='object-repeat-preliminary-performance.json'
  views=filename=='object-view-performance.json'
- harness=ROOT/'student.tests/pa14'/('object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ dependent=filename=='dependent-object-performance.json'
+ harness=ROOT/'student.tests/pa14'/('dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
  if repeat or views: assert shared.sha(data['parent_path'])==data['parent_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(16 if dependent else 10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
@@ -42,7 +43,7 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
     native=out['native'];assert shared.sha(native['path'])==native['sha256']
     assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
   if len(work['outputs'])==2 and (not transfer or work['exact_required']): assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
-  if objects and len(work['outputs'])==2 and 'runtime' in work:
+  if (objects or dependent) and len(work['outputs'])==2 and 'runtime' in work:
    assert work['outputs'][0]['native']['sha256']==work['outputs'][1]['native']['sha256']
   campaigns=[work] if graph else [work['compiler']]+([work['runtime']] if 'runtime' in work else [])
   for campaign in campaigns:
@@ -61,6 +62,23 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    a,b=[out['telemetry'][0] for out in work['outputs']]
    for key in ('semantic_entities','semantic_scopes','semantic_object_uses','semantic_candidate_work','semantic_conversion_work','semantic_expression_work','template_occurrences'):
     assert a[key]==b[key]
+  if dependent and name.startswith('member-') and name.rsplit('-',1)[1].isdigit():
+   a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
+   assert a['semantic_entities']==b['semantic_entities'] and a['semantic_scopes']==b['semantic_scopes']
+   if name.startswith('member-unused-'):
+    assert b['semantic_template_object_contexts']==n and b['semantic_template_member_uses']==0
+    assert a['semantic_expression_work']==3*n and b['semantic_expression_work']==7*n
+    assert b['template_occurrences']==b['template_class_completions']==b['template_body_transitions']==0
+   elif name.startswith('member-repeated-'):
+    assert b['semantic_template_object_contexts']==1 and b['semantic_template_member_uses']==4
+    assert a['semantic_expression_work']==9*n+24 and b['semantic_expression_work']==2*n+20
+    assert a['semantic_object_uses']==4*n+12 and b['semantic_object_uses']==12
+    assert a['template_occurrences']==b['template_occurrences']==32*n+176
+   else:
+    assert b['semantic_template_object_contexts']==2 and b['semantic_template_member_uses']==2*n
+    assert a['semantic_expression_work']==24*n+4 and b['semantic_expression_work']==13*n+9
+    assert a['semantic_object_uses']==10*n and b['semantic_object_uses']==6*n
+    assert a['template_occurrences']==b['template_occurrences']==(130 if name.startswith('member-outside-') else 92)*n
   if objects and not views and name.rsplit('-',1)[1].isdigit() and name.startswith(('object-instances-','object-results-','object-unused-')):
    a,b=[out['telemetry'][0] for out in work['outputs']];n=int(name.rsplit('-',1)[1])
    assert a['semantic_entities']==b['semantic_entities'] and a['semantic_scopes']==b['semantic_scopes']
@@ -200,8 +218,22 @@ for row in layout:
 assert [row['temporary_state'] for row in layout]==[28,32]
 declaration=next(line for line in (ROOT/'dev/src/lowering/procedural.h').read_text().splitlines() if 'struct TemporaryState :' in line).strip()
 assert declaration==layout[1]['temporary_declaration']
-assert shared.sha(ROOT/'dev/src/semantic/model.h')==layout[1]['headers'][0]['sha256']
 print('receiver layouts unchanged; concrete cleanup address costs four bytes')
+
+field_layout=json.loads((ROOT/'student.tests/pa14/dependent-object-layout.json').read_text())
+for header in field_layout['headers']:assert shared.sha(header['path'])==header['sha256']
+for kind in ('source','binary','dump'):assert shared.sha(field_layout[kind+'_path'])==field_layout[kind+'_sha256']
+assert list(map(int,shared.run([field_layout['binary_path']]).stdout.split()))==field_layout['sizes']==[112,36,36,8,12,2]
+assert shared.sha(ROOT/'dev/src/semantic/model.h')==field_layout['headers'][0]['sha256']
+print('current field-context layouts preserve 112/36/36 byte hot records; new records 8/12/2 bytes')
+
+field_proofs=Path(field_layout['source_path']).parent.parent/'proofs/rejections.json'
+rows=json.loads(field_proofs.read_text());assert len(rows)==13
+for row in rows:
+ assert shared.sha(row['source'])==row['sha256']
+ assert [out['exit'] for out in row['outputs']]==[0,1]
+ for out in row['outputs']:assert shared.sha(out['log_path'])==out['log_sha256']
+print('thirteen new definition-time field-context rejection proofs verified')
 
 proofs=Path(object_data['binaries'][0]['path']).parent/'proofs'
 rejections=json.loads((proofs/'rejections.json').read_text())
