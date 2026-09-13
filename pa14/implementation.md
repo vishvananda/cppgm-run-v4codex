@@ -965,3 +965,40 @@ the typed class use at 20 bytes, and unchanged public hot-record sizes. Older
 probes now validate frozen snapshot integrity; the current probe checks live
 headers. Historical live-header equality was a diagnostic gate, not a mandated
 PA14 limit. All historical sizes and measurements remain intact.
+
+
+Performance acceptance freezes 54 compiler inputs and twelve executables with
+924 observations, plus fourteen observations repeating an unchanged wide local
+case after an unisolated timing transition. All 54 LowIR and twelve native hashes
+match exactly. The four new N/K/Q signature cases improve median compiler latency
+5.87/5.72/4.51/0.68%, in both ABBA blocks each, and reduce peak RSS by
+10,632/63,294/29,430/11,818 KiB. Source signatures are checked K+1 times, concrete
+applications N(K+1), raw parameter publications 6NK, and each source default and
+initializer binds K times, independent of repeated calls. Keyed substitutions
+and canonical signature construction increase as recorded in performance.md;
+6K(N−1) entities and K(N+1) scopes are avoided on these inputs.
+
+The wide local case initially showed +13.18% median latency as both binaries
+shifted from roughly eleven-second to 25–31-second samples. The unchanged repeat
+returns to eleven seconds and B improves 0.84% in both blocks. Neither the initial
+result nor its unisolated cause is hidden. The inherited repeated-special case
+has +17,564 KiB peak RSS despite 49,000 fewer Facts and 983,040 fewer bytes of Fact
+storage; its exact native allocation cause remains unisolated. It improves
+latency 2.03% in both blocks. Other inherited costs and outliers remain disclosed.
+The compiler grows 3,136 text bytes (0.2380%); generated growth is zero and no
+runtime optimization benefit is claimed. This satisfies the stage-scoped
+source/key/use work and storage budgets without inventing a numerical O0 gate.
+
+The completed behavior group includes the related raw signature, complete-class
+default, non-static initializer and member enum changes. Further work crosses
+concrete definition/layout/default/exception/body/vtable/emission owners and
+structured failure/reverse dependencies; their independent recursion and late
+source-definition semantics cannot be replaced by the new source-completion
+batch. Remaining embedded type/query producers also need an ownership audit
+before eliminating their declarator work. No external blocker exists.
+
+The cumulative verifier passes all **13,776** observations and the proof, layout,
+coverage and validation manifests. Required checks and the frozen release
+identity remain recorded in signature-publication-handoff.json. This completes
+the behavior group and its performance acceptance, with the remaining concrete
+demand/failure and embedded type/query boundary retained in the compact plan.

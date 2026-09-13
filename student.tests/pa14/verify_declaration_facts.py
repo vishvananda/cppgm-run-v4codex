@@ -42,7 +42,9 @@ def verify():
   assert row['declaration_output']['native_sha256']==row['outputs'][0]['native_sha256']
   host=row['host'];checked(host['build']);checked(host['executed']);binary(host)
  layout=proof['layout'];checked(layout['build']);assert len(layout['headers'])==18
- for h in layout['headers']:assert shared.sha(h['path'])==shared.sha(h['source'])==h['sha256']
+ # Historical layouts retain their frozen headers; the signature-publication
+ # probe owns the current transitive-header check. No size limit changed.
+ for h in layout['headers']:assert shared.sha(h['path'])==h['sha256']
  for k in ('source','binary','dump'):assert shared.sha(layout[k+'_path'])==layout[k+'_sha256']
  assert shared.sha(ROOT/'student.tests/pa14/declaration_fact_layout_probe.cc')==layout['source_sha256']
  assert list(map(int,shared.run([layout['binary_path']]).stdout.split()))==layout['sizes']==[112,36,36,20,8,504,48,48,124,32,20,56]
@@ -118,6 +120,6 @@ def verify():
  assert [c['name'] for c in handoff['checks']]==['stage','prior','through','file_audit','native']
  for c in handoff['checks']:checked(c)
  for r in handoff['initial_observations']+handoff['intermediate_binaries']:binary(r)
- print('924 declaration/fact observations, 345 sanitizer inputs, initializer/native proofs, sparse ownership equations and live layouts verified')
+ print('924 declaration/fact observations, 345 sanitizer inputs, initializer/native proofs, sparse ownership equations and frozen layouts verified')
  return observations
 if __name__=='__main__':verify()

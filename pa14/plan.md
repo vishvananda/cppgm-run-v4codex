@@ -5,7 +5,7 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; current **314/314**. All **230 original failures**
 are resolved with unchanged coverage, references and comparisons. PA15 has not
-started. Active continuation: `97006205` → `dad19c39`.
+started. Completed group: `97006205` → `dad19c39`.
 
 ## Design/spec alignment and ownership
 
@@ -30,12 +30,22 @@ recursion and demand scaling controls. There is no external blocker.
 
 ## Performance evidence and budgets
 
-**12,838 inherited observations** remain verified and preserved. The new frozen
-54-input/12-executable campaign is in output-equivalence preflight; no current
-speedup is claimed yet. Measure N/K/Q signature, raw-parameter, enum and source-use
-work plus compiler latency/RSS, native runtime and text. Correct late-default and
-initializer proofs compare with `7ef73440`; entry rejects them and is not a valid
-performance baseline for those sources.
+**13,776 observations**: 12,838 inherited, 924 from the full 54-input/12-native
+campaign and fourteen from an unchanged wide-case repeat. All 54 LowIR and twelve
+native hashes match exactly. New N/K/Q signature cases improve median latency
+**5.87 / 5.72 / 4.51 / 0.68%**, each in both ABBA blocks; peak RSS falls
+**10,632 / 63,294 / 29,430 / 11,818 KiB**. Source signature work is K+1,
+applications N(K+1), raw parameter publications 6NK, and source default/initializer
+work each K, independent of Q. Additional keyed substitution/canonicalization
+work remains disclosed. Generated growth is zero; no runtime gain is claimed.
+
+The inherited wide local case initially showed +13.18% latency during an
+unisolated eleven-second → 25–31-second transition affecting both binaries.
+The unchanged repeat returns to eleven seconds and B improves **0.84%** in both
+blocks. Both observations remain intact. Repeated-special has **+17,564 KiB RSS**
+despite fewer Facts, with allocation cause unisolated, while latency improves
+2.03%. Other inherited increases and outliers remain in performance.md. Correct
+late-member proofs use `7ef73440`; rejected entry sources are never timing baselines.
 
 Current compiler text: **1,317,638 → 1,320,774** (+3,136 bytes, 0.238%).
 Analyzer: **6000 → 6152** bytes; typed class use: **20**. Other public hot-record
@@ -58,8 +68,8 @@ correctness requirement or coverage was removed.
 | Retained signatures/raw parameters and complete-class defaults | `84567172`; original missing-parameter failure and identity traces preserved |
 | Typed complete-class member initializer uses | `7ef73440`; valid late initializer entry rejection and native order/override controls |
 | Direct member enum identity | `dad19c39`; correct qualified intermediate also preserved |
-| Proof/sanitizer/required validation | Six native proofs; 118 recorded checks; all required reports pass |
-| Performance acceptance | Pending full isolated campaign and cumulative verification |
+| Proof/sanitizer/required validation | `85d3acd6`; six native proofs, 118 recorded checks, all required reports pass |
+| Performance acceptance | `signature-publication-handoff.json`; 938 new observations, all 13,776 cumulative observations verified |
 
 Validation: **314 stage / 1621 prior / 1935 through**, **33 native programs**,
 **347 release/ASan/UBSan parity sources**, **166 required rejections**, one optional

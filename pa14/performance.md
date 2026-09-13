@@ -2287,3 +2287,254 @@ observations verified**. Its command log is retained as
 records required check statuses, frozen compiler identity and initial failures.
 Full-stage work remains open at joint signature/parameter/query ownership and
 typed demand/failure dependencies.
+
+
+## Retained signatures, complete-class uses and enum identities
+
+Continuation `97006205` → `dad19c39`, with evidence freeze `85d3acd6`. A/B are the recorded release binaries built with `g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE`; compiler flags are `--emit-lowir -O0`, and PA8 native-backend flags are `-O0`. CPU affinity, platform, binary/input/output hashes, flags and harness hashes are frozen in `signature-publication-performance.json`. Each of 54 compiler and twelve native campaigns has one warmup each, four A/A calibration samples and two ABBA blocks: **924 observations**. Output preflight completes before sampling. No build, test, proof, layout probe or verifier overlaps timing. The same measurement directory holds preflight and timed outputs to respect the shared storage budget.
+
+Every one of the **54 LowIR hashes and twelve native executable hashes matches exactly**. All 49 inherited A outputs equal the previous campaign’s final outputs. The course comparison adapter and contract hashes remain recorded but no presentation comparison was needed. Generated growth is **zero**; runtime variation between identical executables is not an optimization benefit. Native payload uses the established sectionless-ELF metric. The new native loop reads a volatile bound of three million and checks a modulo-65536 checksum of `48*i+64`; live calls, fields, defaults and function-pointer calls contribute to that result.
+
+Tables use medians/ranges of the eight ABBA observations, with A/A calibration and both paired block ratios shown separately. All warmups and individual samples remain in JSON. No aggregate corpus speedup is claimed.
+
+| Compiler input | Median seconds A/B | Change | A/A range seconds | ABBA range seconds A/B | Paired B/A |
+| --- | --- | --- | --- | --- | --- |
+| body-run-1000-8 | 0.154169 / 0.148467 | -3.70% | 0.151984–0.155614 | 0.151991–1.147786 / 0.145062–0.149733 | 0.9585 / 0.2292 |
+| body-run-1000-128 | 0.158208 / 0.150362 | -4.96% | 0.242942–0.262061 | 0.156564–0.190632 / 0.149029–0.154571 | 0.8536 / 0.9744 |
+| body-run-4000-128 | 0.642083 / 0.624003 | -2.82% | 0.649582–0.669347 | 0.636365–0.697701 / 0.610223–0.673928 | 0.9718 / 0.9626 |
+| body-large-1000-8 | 0.270165 / 0.251807 | -6.80% | 0.252415–0.254062 | 0.252733–0.397415 / 0.246441–0.255593 | 0.9573 / 0.7585 |
+| body-large-1000-128 | 2.153749 / 2.100339 | -2.48% | 1.962534–2.160669 | 2.023201–2.371668 / 1.994023–2.323457 | 0.9875 / 0.9712 |
+| default-unused-1000 | 0.058008 / 0.055193 | -4.85% | 0.056975–0.062197 | 0.055494–0.058982 / 0.051454–0.056958 | 0.9575 / 0.9410 |
+| default-repeated-1000 | 0.032499 / 0.032197 | -0.93% | 0.032008–0.033809 | 0.031809–0.034592 / 0.031877–0.033175 | 1.0147 / 0.9568 |
+| default-dependent-1000 | 0.060925 / 0.055676 | -8.62% | 0.056956–0.058747 | 0.057666–0.063040 / 0.054135–0.056552 | 0.9292 / 0.9018 |
+| default-unused-4000 | 0.201834 / 0.193488 | -4.13% | 0.203095–0.657880 | 0.201489–0.202405 / 0.192610–0.194744 | 0.9636 / 0.9541 |
+| default-repeated-4000 | 0.187182 / 0.180673 | -3.48% | 0.102345–0.103550 | 0.103610–0.191010 / 0.107121–0.184734 | 0.9913 / 0.9647 |
+| default-dependent-4000 | 0.201889 / 0.191587 | -5.10% | 0.200061–0.201155 | 0.198969–0.204646 / 0.190010–0.192641 | 0.9626 / 0.9346 |
+| region-runtime | 0.007882 / 0.007986 | +1.32% | 0.007811–0.008052 | 0.007830–0.008000 / 0.007935–0.008262 | 1.0335 / 1.0029 |
+| dependent-default-runtime | 0.006371 / 0.006318 | -0.83% | 0.006347–0.006471 | 0.006332–0.013702 / 0.006219–0.006371 | 0.9880 / 0.6308 |
+| declaration-instances-1000 | 0.565258 / 0.559008 | -1.11% | 0.553787–0.566806 | 0.560591–0.574185 / 0.554245–0.574201 | 1.0006 / 0.9827 |
+| declaration-outside-1000 | 0.317080 / 0.315462 | -0.51% | 0.319002–0.321747 | 0.316502–0.318997 / 0.314276–0.316635 | 0.9924 / 0.9953 |
+| member-repeated-1000 | 0.055232 / 0.055169 | -0.12% | 0.053728–0.054929 | 0.054479–0.183708 / 0.054430–0.055992 | 0.4636 / 1.0035 |
+| calls-4 | 1.678068 / 1.684695 | +0.39% | 1.676860–1.803573 | 1.672869–1.685643 / 1.672848–1.750649 | 1.0208 / 1.0025 |
+| memory-float-1 | 0.359275 / 0.349014 | -2.86% | 0.352266–0.669190 | 0.348457–0.369172 / 0.346323–0.350734 | 0.9763 / 0.9664 |
+| calls-runtime | 0.005484 / 0.005590 | +1.93% | 0.005521–0.005731 | 0.005435–0.005601 / 0.005547–0.005602 | 1.0078 / 1.0218 |
+| memory-runtime | 0.005641 / 0.005792 | +2.68% | 0.005704–0.005755 | 0.005556–0.005739 / 0.005632–0.005821 | 1.0053 / 1.0357 |
+| floating-runtime | 0.006305 / 0.006298 | -0.11% | 0.006147–0.006706 | 0.006223–0.006426 / 0.006056–0.006616 | 0.9719 / 1.0284 |
+| value-offset-1000-8 | 0.174467 / 0.177794 | +1.91% | 0.172783–0.173876 | 0.172530–0.175180 / 0.173949–0.180526 | 1.0211 / 1.0174 |
+| value-offset-1000-128 | 2.085633 / 2.129237 | +2.09% | 2.091018–2.120049 | 2.077668–2.109665 / 2.078135–2.689857 | 1.1661 / 0.9945 |
+| value-offset-4000-8 | 0.764149 / 0.742034 | -2.89% | 0.733179–0.757923 | 0.733397–0.930743 / 0.735953–0.888821 | 0.9763 / 0.9711 |
+| value-bound-1000 | 0.088397 / 0.087491 | -1.02% | 0.087872–0.090200 | 0.088234–0.088452 / 0.087120–0.087980 | 0.9901 / 0.9907 |
+| value-bound-4000 | 0.356062 / 0.357590 | +0.43% | 0.351138–0.356605 | 0.352418–0.358092 / 0.356380–0.573987 | 1.0009 / 1.3136 |
+| value-runtime | 0.005988 / 0.005865 | -2.05% | 0.005843–0.005922 | 0.005767–0.006091 / 0.005782–0.005905 | 0.9906 / 0.9746 |
+| bound-runtime | 0.005911 / 0.005873 | -0.65% | 0.005926–0.006234 | 0.005888–0.005956 / 0.005839–0.005894 | 0.9951 / 0.9891 |
+| input-uses-1000-8 | 0.160280 / 0.159925 | -0.22% | 0.157316–0.163483 | 0.158268–0.161008 / 0.157961–0.210756 | 0.9980 / 1.1537 |
+| input-uses-1000-128 | 1.806757 / 1.774238 | -1.80% | 1.779427–1.823075 | 1.749950–2.148352 / 1.740069–1.806084 | 0.9787 / 0.9128 |
+| input-uses-4000-8 | 0.969790 / 0.673604 | -30.54% | 0.678563–1.001550 | 0.686745–1.111405 / 0.666970–0.840905 | 0.7255 / 0.8127 |
+| input-runtime | 0.006365 / 0.006380 | +0.24% | 0.006261–0.006298 | 0.006231–0.006541 / 0.006332–0.006454 | 0.9894 / 1.0144 |
+| demand-uses-1000-8-4 | 0.384023 / 0.355875 | -7.33% | 0.382600–0.402547 | 0.381551–0.385705 / 0.354521–0.361302 | 0.9255 / 0.9341 |
+| demand-uses-1000-128-4 | 3.534677 / 3.104923 | -12.16% | 3.504685–3.593387 | 3.516607–3.920160 / 3.054513–3.379214 | 0.8793 / 0.8643 |
+| demand-uses-4000-8-4 | 1.563370 / 1.456912 | -6.81% | 1.554159–1.575065 | 1.558858–1.565566 / 1.440337–1.496017 | 0.9464 / 0.9253 |
+| demand-uses-1000-8-64 | 2.016687 / 1.947732 | -3.42% | 1.981087–1.992060 | 1.979519–2.053235 / 1.945126–1.952569 | 0.9637 / 0.9686 |
+| demand-runtime | 0.009970 / 0.009941 | -0.29% | 0.009975–0.010381 | 0.009784–0.010298 / 0.009868–0.010026 | 0.9903 / 0.9975 |
+| special-uses-1000-8-4 | 0.499036 / 0.474751 | -4.87% | 0.499276–0.511663 | 0.492356–0.501445 / 0.467084–0.480583 | 0.9620 / 0.9428 |
+| special-uses-1000-128-4 | 3.230197 / 2.770163 | -14.24% | 3.226869–3.304507 | 3.211438–3.296974 / 2.764880–2.789629 | 0.8508 / 0.8603 |
+| special-uses-4000-8-4 | 2.097669 / 2.003876 | -4.47% | 2.074434–2.143476 | 2.082031–3.920556 / 1.981614–2.027417 | 0.9449 / 0.6751 |
+| special-uses-1000-8-64 | 3.227420 / 3.161998 | -2.03% | 3.198285–3.283774 | 3.208799–3.535085 / 3.128246–3.238609 | 0.9441 / 0.9797 |
+| special-heads-1000 | 0.426076 / 0.423049 | -0.71% | 0.416338–0.724380 | 0.422559–0.433318 / 0.413409–0.432545 | 0.9802 / 1.0009 |
+| special-heads-4000 | 1.760946 / 1.742627 | -1.04% | 1.765797–1.888042 | 1.744428–1.862498 / 1.715585–1.815214 | 0.9554 / 1.0136 |
+| special-runtime | 0.007226 / 0.007152 | -1.04% | 0.007025–0.007314 | 0.007112–0.007362 / 0.007077–0.007368 | 1.0026 / 0.9851 |
+| local-facts-1000-4-4 | 1.223407 / 1.214132 | -0.76% | 1.227140–1.424898 | 1.209233–1.260370 / 1.203482–1.288570 | 0.9768 / 1.0254 |
+| local-facts-1000-32-4 | 25.289624 / 28.623682 | +13.18% | 11.303331–11.734488 | 11.971328–27.359281 / 25.736393–31.116083 | 1.5531 / 1.0482 |
+| local-facts-4000-4-4 | 5.328973 / 5.259902 | -1.30% | 5.271659–6.234625 | 5.188875–5.919293 / 5.241501–5.264084 | 1.0072 / 0.9279 |
+| local-facts-1000-4-64 | 13.615769 / 13.365302 | -1.84% | 13.137936–14.140031 | 13.344710–13.994428 / 13.266417–13.649976 | 0.9900 / 0.9761 |
+| local-runtime | 0.008050 / 0.007994 | -0.70% | 0.007932–0.008297 | 0.007927–0.008161 / 0.007874–0.008091 | 1.0025 / 0.9829 |
+| signature-uses-1000-4-4 | 1.718522 / 1.617562 | -5.87% | 1.690253–1.707173 | 1.677449–1.763822 / 1.608650–1.688600 | 0.9197 / 0.9811 |
+| signature-uses-1000-32-4 | 13.815332 / 13.025674 | -5.72% | 13.673662–13.872625 | 13.696390–13.973333 / 12.886251–13.288756 | 0.9458 / 0.9430 |
+| signature-uses-4000-4-4 | 7.135269 / 6.813413 | -4.51% | 7.084956–7.507000 | 7.106802–7.182694 / 6.772125–6.863746 | 0.9596 / 0.9496 |
+| signature-uses-1000-4-64 | 12.508671 / 12.423362 | -0.68% | 12.423937–12.565085 | 12.315488–12.633980 / 12.292758–12.591846 | 0.9959 / 0.9946 |
+| signature-runtime | 0.007975 / 0.008001 | +0.33% | 0.008144–0.008302 | 0.007942–0.008193 / 0.007858–0.008093 | 0.9845 / 1.0074 |
+
+| Compiler input | Median peak RSS KiB A/B | Change KiB | ABBA range KiB A/B |
+| --- | --- | --- | --- |
+| body-run-1000-8 | 27576 / 27404 | -172 | 27432–27616 / 27272–27628 |
+| body-run-1000-128 | 28080 / 27958 | -122 | 28028–28148 / 27928–27988 |
+| body-run-4000-128 | 96170 / 95486 | -684 | 96112–96180 / 95396–95540 |
+| body-large-1000-8 | 44810 / 46454 | +1644 | 44668–44832 / 46336–46564 |
+| body-large-1000-128 | 285780 / 285504 | -276 | 285760–285872 / 285432–285572 |
+| default-unused-1000 | 13124 / 13148 | +24 | 13044–13204 / 13000–13196 |
+| default-repeated-1000 | 8778 / 8842 | +64 | 8728–8824 / 8804–8888 |
+| default-dependent-1000 | 13174 / 12882 | -292 | 13116–13180 / 12880–12916 |
+| default-unused-4000 | 36966 / 36970 | +4 | 36932–37020 / 36872–36972 |
+| default-repeated-4000 | 20190 / 20152 | -38 | 20076–20204 / 19964–20204 |
+| default-dependent-4000 | 36744 / 36456 | -288 | 36708–36800 / 36384–36568 |
+| region-runtime | 5484 / 5512 | +28 | 5416–5680 / 5424–5624 |
+| dependent-default-runtime | 5218 / 5392 | +174 | 5152–5412 / 5304–5448 |
+| declaration-instances-1000 | 78852 / 79510 | +658 | 78760–78904 / 79304–79600 |
+| declaration-outside-1000 | 54374 / 54076 | -298 | 54328–54408 / 54048–54092 |
+| member-repeated-1000 | 14546 / 14618 | +72 | 14472–14596 / 14588–14740 |
+| calls-4 | 271110 / 271010 | -100 | 271044–271168 / 270832–271096 |
+| memory-float-1 | 61042 / 61014 | -28 | 60968–61056 / 60996–61232 |
+| calls-runtime | 5244 / 5234 | -10 | 5112–5404 / 5172–5388 |
+| memory-runtime | 5156 / 5202 | +46 | 5144–5404 / 5164–5408 |
+| floating-runtime | 5410 / 5342 | -68 | 5384–5488 / 5196–5440 |
+| value-offset-1000-8 | 34206 / 34220 | +14 | 34088–34288 / 34120–34284 |
+| value-offset-1000-128 | 321034 / 321004 | -30 | 320936–321100 / 320920–321092 |
+| value-offset-4000-8 | 125372 / 125328 | -44 | 125312–125424 / 125156–125396 |
+| value-bound-1000 | 20716 / 20426 | -290 | 20656–20756 / 20340–20496 |
+| value-bound-4000 | 67200 / 67244 | +44 | 67160–67236 / 67080–67300 |
+| value-runtime | 5214 / 5192 | -22 | 5192–5404 / 5120–5256 |
+| bound-runtime | 5238 / 5244 | +6 | 5148–5256 / 5156–5380 |
+| input-uses-1000-8 | 31024 / 31020 | -4 | 31000–31132 / 30972–31144 |
+| input-uses-1000-128 | 256832 / 241728 | -15104 | 256780–256864 / 241688–241776 |
+| input-uses-4000-8 | 109340 / 109328 | -12 | 109256–109364 / 109276–109368 |
+| input-runtime | 5218 / 5322 | +104 | 5160–5412 / 5184–5444 |
+| demand-uses-1000-8-4 | 53312 / 52584 | -728 | 53276–53388 / 52180–52608 |
+| demand-uses-1000-128-4 | 347404 / 346838 | -566 | 347340–347512 / 346644–346960 |
+| demand-uses-4000-8-4 | 197658 / 195452 | -2206 | 197632–197676 / 195308–195536 |
+| demand-uses-1000-8-64 | 265522 / 262070 | -3452 | 265248–265564 / 261960–262096 |
+| demand-runtime | 5210 / 5418 | +208 | 5160–5436 / 5188–5464 |
+| special-uses-1000-8-4 | 77756 / 76420 | -1336 | 77680–77916 / 76368–76464 |
+| special-uses-1000-128-4 | 370240 / 359806 | -10434 | 370096–370344 / 359576–359828 |
+| special-uses-4000-8-4 | 296448 / 292492 | -3956 | 296332–296536 / 292368–292532 |
+| special-uses-1000-8-64 | 428860 / 446424 | +17564 | 428668–428916 / 446332–446460 |
+| special-heads-1000 | 66922 / 67042 | +120 | 66636–67016 / 66944–67156 |
+| special-heads-4000 | 253250 / 252354 | -896 | 253196–253292 / 252308–252420 |
+| special-runtime | 5516 / 5460 | -56 | 5464–5608 / 5332–5704 |
+| local-facts-1000-4-4 | 200914 / 199952 | -962 | 200784–200996 / 199860–199988 |
+| local-facts-1000-32-4 | 1236608 / 1237094 | +486 | 1236576–1236688 / 1236964–1237176 |
+| local-facts-4000-4-4 | 670326 / 659310 | -11016 | 670268–670376 / 659260–659392 |
+| local-facts-1000-4-64 | 1291696 / 1291628 | -68 | 1291644–1291752 / 1291500–1291680 |
+| local-runtime | 5456 / 5476 | +20 | 5380–5492 / 5428–5644 |
+| signature-uses-1000-4-4 | 257070 / 246438 | -10632 | 257048–257104 / 246380–246484 |
+| signature-uses-1000-32-4 | 1672266 / 1608972 | -63294 | 1672192–1672344 / 1608928–1609064 |
+| signature-uses-4000-4-4 | 924306 / 894876 | -29430 | 924216–924416 / 894796–894988 |
+| signature-uses-1000-4-64 | 1529196 / 1517378 | -11818 | 1529196–1529220 / 1517332–1517556 |
+| signature-runtime | 5488 / 5542 | +54 | 5432–5660 / 5400–5652 |
+
+| Checked executable | Median seconds A/B | Payload bytes A/B | A/A range seconds | ABBA range seconds A/B | Paired B/A | Median peak RSS KiB A/B (range) |
+| --- | --- | --- | --- | --- | --- | --- |
+| region-runtime | 0.059159 / 0.059325 | 206 / 206 | 0.058928–0.059957 | 0.058950–0.059295 / 0.059191–0.059505 | 1.0029 / 1.0037 | 256 / 256 (256–256 / 256–256) |
+| dependent-default-runtime | 2.664612 / 2.894011 | 344 / 344 | 2.682967–2.807540 | 2.623113–2.672001 / 2.867753–3.284819 | 1.1624 / 1.0851 | 256 / 256 (256–256 / 256–256) |
+| calls-runtime | 0.475925 / 0.475844 | 206 / 206 | 0.475769–0.480476 | 0.475480–0.548947 / 0.475428–0.476335 | 0.9283 / 1.0008 | 256 / 256 (256–256 / 256–256) |
+| memory-runtime | 0.278588 / 0.278880 | 434 / 434 | 0.277827–0.294169 | 0.278054–0.283620 / 0.278310–0.279384 | 1.0028 / 0.9912 | 256 / 256 (256–256 / 256–256) |
+| floating-runtime | 0.330508 / 0.330015 | 230 / 230 | 0.330170–0.331442 | 0.330210–0.331207 / 0.329874–0.330305 | 0.9974 / 0.9993 | 256 / 256 (256–256 / 256–256) |
+| value-runtime | 0.059676 / 0.059863 | 184 / 184 | 0.059807–0.060551 | 0.059563–0.060156 / 0.059610–0.060069 | 1.0001 / 1.0027 | 256 / 256 (256–256 / 256–256) |
+| bound-runtime | 0.059210 / 0.058977 | 194 / 194 | 0.058775–0.059255 | 0.058983–0.059494 / 0.058954–0.059054 | 0.9961 / 0.9960 | 256 / 256 (256–256 / 256–256) |
+| input-runtime | 0.262958 / 0.262704 | 356 / 356 | 0.261677–0.266584 | 0.262417–0.263677 / 0.261857–0.263192 | 0.9950 / 1.0021 | 256 / 256 (256–256 / 256–256) |
+| demand-runtime | 0.155789 / 0.155361 | 261 / 261 | 0.162164–0.270645 | 0.155207–0.226064 / 0.155114–0.161346 | 0.8280 / 1.0002 | 256 / 256 (256–256 / 256–256) |
+| special-runtime | 0.182358 / 0.182588 | 400 / 400 | 0.181748–0.184197 | 0.182033–0.183607 / 0.181904–0.182931 | 0.9979 / 1.0012 | 256 / 256 (256–256 / 256–256) |
+| local-runtime | 0.127210 / 0.126859 | 958 / 958 | 0.126755–0.127266 | 0.126880–0.127915 / 0.126524–0.126991 | 0.9959 / 0.9963 | 256 / 256 (256–256 / 256–256) |
+| signature-runtime | 0.473374 / 0.470337 | 2000 / 2000 | 0.466871–0.468788 | 0.466536–1.060930 / 0.465595–0.471866 | 0.6081 / 1.0066 | 256 / 256 (256–256 / 256–256) |
+
+The four new signature N/K/Q cases improve median compiler latency **5.87% /
+5.72% / 4.51% / 0.68%**, each in both ABBA blocks. Median peak RSS falls
+**10,632 / 63,294 / 29,430 / 11,818 KiB**. The repeated-call gain is modest:
+source and publication work are independent of repeated calls, while those
+calls still require their ordinary expression/lowering work.
+
+For N distinct specializations, K member signature groups and Q repeated calls,
+checked source signature work is **K+1**, concrete signature applications
+**N(K+1)**, and raw parameter publications **6NK**. Source default and initializer
+binding work/queued uses are each **K**, independent of N and Q. Source declaration
+work/publications stay **10K+1 / N(10K+1)**. Source type work falls **8K+1 → 2K+1**;
+retained type uses are **N(12K+1) → 2N(2K+1)**. Type substitution work rises
+**5N → N(2K+6)**, with two canonical type queries in both binaries. B creates
+**6K(N−1)** fewer entities and **K(N+1)** fewer scopes. Canonical signature-cache
+work rises **N(2K+1)+9 → N(3K+1)+2K+11**; this counter measures uncached canonical
+type construction, separately from source signature checking. Increased keyed
+substitution/canonicalization work is disclosed, not described as eliminated.
+These equations are observed ownership evidence for the frozen inputs, not
+permanent numeric gates on later implementations.
+
+Inherited peak RSS increases include **+17,564 KiB** on special-uses-1000-8-64,
+**+1,644 KiB** on body-large-1000-8 and **+658 KiB** on declaration-instances-1000.
+The repeated-special case improves median latency 2.03% in both blocks while
+its RSS rises. Its published Facts decrease **1,133,222 → 1,084,222**, measured
+Fact storage **33,625,200 → 32,642,160 bytes**, lookup work **1,194,154 → 1,162,154**
+and type probes **2,059,343 → 2,026,215**; other shared non-time telemetry is equal.
+These counts do not isolate the native allocation cause of the higher peak.
+The RSS cost remains disclosed within source/key/use-proportional storage;
+no across-the-board memory improvement or allocator attribution is claimed.
+All historical RSS costs and separate earlier Massif observations remain intact.
+
+Other inherited median latency increases include calls-4 **+0.39%**,
+value-offset-1000-8 **+1.91%**, value-offset-1000-128 **+2.09%** and
+value-bound-4000 **+0.43%**. The first two increase in both blocks; wide-offset
+has mixed pairs, and bound includes a large B outlier. Compiler invocations for
+small native controls show increases up to 2.68% among roughly 5–10 ms runs;
+these startup-scale results remain in the tables, not used to claim speedups.
+
+Substantial outliers remain unfiltered. Body-run-1000-8 has an A sample of
+1.147786 seconds among a 0.154169 median; member-repeated-1000 has A 0.183708
+among 0.055232; value-bound-4000 has B 0.573987 among 0.357590; special-uses-4000-8-4
+has A 3.920556 among 2.097669. The new native loop has A 1.060930 among 0.473374,
+producing a first paired ratio of 0.6081 between identical binaries. Full ranges,
+individual samples, CPU time and context switches remain recorded.
+
+The wide local declaration case needs a separate interpretation. Its warmups
+and four A/A observations are about 11 seconds. The first block changes from
+A 11.971 to B 31.116/29.968, then A 27.359; subsequent A/B observations are
+24.875–27.279 seconds. User/system CPU time rises with wall time, so scheduling
+counts alone do not establish the cause. Full-campaign medians show **+13.18%**
+and paired ratios **1.5531 / 1.0482**, with RSS **+486 KiB**. The transition affects
+both unchanged binaries and its cause remains unisolated. A separate unchanged
+case repeat preserves this initial result and checks whether the apparent
+regression persists.
+
+| Wide local declaration repeat | Median seconds A/B | Change | A/A seconds | ABBA range seconds A/B | Paired B/A | Peak RSS KiB A/B (range) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Same frozen input and binaries | 11.388415 / 11.292718 | -0.84% | 11.396662–11.664918 | 11.371431–12.182603 / 11.195679–11.357395 | 0.9886 / 0.9605 | 1237072 / 1236604 (1237052–1237124 / 1236536–1236684) |
+
+The repeat returns to roughly eleven-second samples and improves B median
+latency **0.84%**, with both paired ratios below one. Its peak RSS changes
+**−468 KiB**. The first campaign's 13.18% apparent regression is not reproduced;
+its transition and all measurements remain intact, with no claimed causal
+explanation. `signature-publication-repeat.json` retains fourteen additional
+observations and preflight checks of the same source/output/binary hashes. This
+is an evidence-based follow-up, not a retroactive replacement or a new numerical
+exit gate. Total current evidence is **938 observations**, bringing the cumulative
+record to **13,776**.
+
+Compiler text grows **1,317,638 → 1,320,774 bytes**, or **3,136 bytes (0.2380%)**.
+Analyzer grows **6000 → 6152 bytes**; each typed complete-class use is twenty bytes.
+The eighteen-header live layout probe retains Entity/Expression/ObjectUse
+112/36/36, properties/uses 24/20, frame/occurrence 20/8, Ast 504, query/query fact
+48/48, MemberFacts 124, TemplatePrototype/TemplateDefinition 24/32, Fact 20 and
+FactStore 56. Defaults and initializer source states have independent owners;
+source class completion drains only its collected consumers. Local detached
+batches release in bulk, and source signatures/parameter publications retain
+stable declaration identity. Older layout probes check their immutable snapshots;
+all historical layouts remain preserved. Live-header equality across revisions
+was a diagnostic gate, not a mandated layout limit.
+
+Explicit budgets remain source/key/concrete-use-proportional storage, at most
+four O0 conversion variants per source operation, one local writable view per
+Fact publication and zero generated growth. PA14/O0 has no mandated numerical
+latency/RSS/compiler-text ceiling. The repeatable affected-case compiler benefits
+justify the bounded substitution/publication work and compiler growth, with all
+inherited latency and RSS costs disclosed above. No optional runtime transform
+or process-global cache was added. No mandated limit, correctness requirement,
+coverage or course comparison was weakened. This acceptance covers the completed
+signature/default/initializer/enum group; the separate concrete demand/failure
+and remaining type/query graph work remains open.
+
+Required validation passes **314 stage / 1621 prior / 1935 through**, **33 personal
+native programs**, **347 release/ASan/UBSan parity sources**, **166 required
+rejections**, one optional unused-default observation, six ABI controls, seven
+inherited and four new native reducers, and initializer/store/lifetime controls
+(**118 recorded checks**). File audit passes with three inherited advisories;
+all **1266 fixture/reference files** remain intact. Six C++11/native proofs use a
+correct class-use intermediate where entry rejects late defaults/initializers.
+The first proof harness's unsupported mandatory unused-private-default diagnostic
+is preserved, alongside the corrected optional observation and demanded-use
+rejection justified by [temp.decls]/2, [temp.res]/8 and [temp.inst]/1,12–13.
+Initial missing-raw-parameter failures, traces, patches, intermediate binaries,
+complete initial validation and corrected proofs remain frozen under
+`$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.
+
+Cumulative verification completes with exit status zero and **13,776 frozen
+observations verified**, including the new ownership equations, current live
+layouts, historical snapshots and full validation manifests. Its immutable
+acceptance log and required command statuses are recorded in
+`signature-publication-handoff.json`. No implementation changed after the frozen
+release passed stage/prior/through, native, sanitizer and file-audit validation.

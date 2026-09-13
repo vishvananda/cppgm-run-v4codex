@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all thirty-one local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all thirty-three local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -22,15 +22,15 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and thirty
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and 33
 personal sources through both frozen compilers. It requires equal status,
-byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
-incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 342 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 136 explicit
-binding/query/scalar/call/object/default rejection cases. All seven `.t` reducers also
-pass release/sanitizer output parity and native execution. The ABI controls
-are in `check_queries.py` and `check_value_queries.py`.
+byte-identical successful LowIR and no ASan/UBSan report. The current signature
+publication campaign checks 347 inputs with leak detection and halt-on-error
+enabled, plus 166 required rejection controls and one optional unused-default
+diagnostic. Seven inherited and four signature `.t` reducers also pass
+release/sanitizer output parity and native execution. Direct initialization,
+expression/fact storage and lifetime controls remain included. The six ABI
+controls are in `check_queries.py` and `check_value_queries.py`.
 
 The [performance review](../../pa14/performance.md) explains the raw JSON and
 acceptance. `benchmark.py A B WORK OUT` uses the fixed PA10 compiler/native
@@ -272,3 +272,45 @@ corpus without timing. `verify_declaration_facts.py` is included by the cumulati
 verifier and checks hashes, every observation, work/storage equations, proofs,
 current layouts and required checks. Frozen binaries, outputs and failed initial
 probes live under `$RALPH_ARTIFACT_DIR/pa14-declaration-facts/`.
+
+
+`signature-publications.cpp` executes raw cv/array/function parameters, trailing
+queries, static/nonstatic prototypes, late private/nested defaults and non-static
+initializers, including initialization order and overridden dependent failures.
+`enum-signatures.cpp` exercises member/local/anonymous enum identity, renamed
+heads, nested definitions and overload separation. The personal native catalog
+now contains 33 programs. `check_signature_publications.py BINARY` explicitly
+runs nine required rejections, an optional early-diagnostic observation and four
+reduced native programs. N3485 [temp.decls]/2, [temp.res]/8 and [temp.inst]/1,12–13
+justify retaining the unused private-default case as optional and demanding
+rejection in a separate call using the default. The initial stricter harness and
+its host acceptance remain frozen.
+
+`signature_publication_evidence.py A B WORK OUT CLASS_USE_BASELINE` preserves six
+C++11/native proofs and the current 18-header layout probe. The first and two
+late-member reducers fail under entry; the correct class-use intermediate and
+final compiler execute them. `signature_publication_validation.py RELEASE
+SANITIZED WORK OUT ENTRY` records 347 parity sources, 166 required rejections,
+one optional diagnostic, six ABI controls, eleven native reducers and inherited
+initializer/store/lifetime controls (118 recorded checks).
+
+`signature_publication_benchmark.py A B WORK OUT` retains all 49 previous inputs,
+adds four signature N/K/Q scalings and a checked live native loop. The complete
+54-input/12-native campaign has 924 observations: one warmup each, four A/A
+samples and two ABBA blocks for each compiler/runtime campaign. The new timing
+sources place their initializer/default target before uses so both frozen
+compilers are correct. Late-member fixes have separate correctness proofs;
+rejected entry programs are never treated as valid timing baselines.
+`PREFLIGHT_ONLY=1` checks output equivalence without timing. The unchanged course
+comparison adapter is available for presentation differences.
+`verify_signature_publications.py` checks the full evidence and live layouts;
+older probes keep immutable snapshots. Artifacts, including the original raw
+parameter failure and correct qualified-enum intermediate, are under
+`$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.
+
+The full campaign's wide local-declaration case changed from 11-second A/A
+samples to 25–31-second A/B samples, affecting both frozen compilers.
+`signature_publication_repeat.py PARENT WORK OUT` repeats that unchanged case
+with equivalent output checks and the same 14-observation protocol. It persists
+each completed sample. The original observations remain in the full campaign;
+this repeat investigates the apparent regression without changing production.
