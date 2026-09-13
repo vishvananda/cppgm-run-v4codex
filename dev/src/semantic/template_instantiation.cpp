@@ -84,34 +84,14 @@ ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
     if (ordinal != pack.count) throw std::logic_error("incomplete default argument head");
     default_environments.put(k,environment); return environment;
 }
-NodeId Analyzer::instantiate_default(EntityId e, unsigned parameter)
+NodeId Analyzer::instantiate_default(EntityId e, NodeId source)
 {
     auto index = entities[e].specialization;
-    auto spec = specializations[index];
-    auto context = spec.context ? spec.context : ast.new_context();
-    specializations[index].context = context;
-    auto pattern = spec.pattern;
-    NodeId source = default_arguments[entities[pattern].defaults+parameter];
-    if (auto root = ast.projected(source,context)) {
-        auto state = default_argument_states.get(root);
-        if (state == unsigned(FactState::Success)) return facts[root].target;
-        if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive function default argument");
-        if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed function default argument");
-    }
-    NodeId root = ast.instantiate(source,context);
+    auto context = specializations[index].context;
+    if (!context) specializations[index].context = context = ast.new_context();
+    auto root = ast.instantiate(source,context);
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-    auto environment = default_environment(e,facts[source].scope);
-    NodeId value = ast[root].first;
-    while (ast[value].kind == syntax::Kind::Initializer || ast[value].kind == syntax::Kind::ParenInitializer)
-        value = ast[value].first;
-    default_argument_states.put(root,unsigned(FactState::Active)); ++default_argument_work;
-    try {
-        expression(value,environment);
-        { auto& published = facts.edit(root); published.target = value; published.scope = environment; }
-        default_argument_states.put(root,unsigned(FactState::Success));
-    } catch (...) {
-        default_argument_states.put(root,unsigned(FactState::Failure)); throw;
-    }
-    return value;
+    facts.edit(root).scope = default_environment(e,facts[source].scope);
+    return root;
 }
 } }

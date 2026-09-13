@@ -305,6 +305,7 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 }
 void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected)
 {
+    for (const auto& c : selected) if (!c.valid()) throw std::logic_error("call lacks a valid argument conversion");
     for (std::size_t j = 0; j < args.size(); ++j) if (args[j] || selected[j].kind == Conversion::Kind::ListPlan) apply_conversion(args[j], selected[j]);
     store_call(owner,args,selected);
     for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions.incoming(args[j],owner.conversions+j);

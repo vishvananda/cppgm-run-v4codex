@@ -67,8 +67,8 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {
-            auto a = default_argument(selected,i);
-            args.push_back(a); chosen.push_back(conversion(a,types.parameters[f.offset+i]));
+            Conversion c; auto a = default_argument(selected,i,&c);
+            args.push_back(a); chosen.push_back(c);
         }
         for (auto c = callee;; c = ast[c].first) {
             auto value = expressions[c]; value.entity = selected; value.form = ExpressionForm::Ordinary; value.type = ft;

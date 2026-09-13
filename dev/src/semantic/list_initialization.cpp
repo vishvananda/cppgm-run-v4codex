@@ -117,21 +117,50 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
     }
     return c;
 }
+void Analyzer::validate_list_plan(std::uint32_t id)
+{
+    auto plan = list_plans[id];
+    if (plan.validation == FactState::Success) return;
+    if (plan.validation == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::ListConversion,plan.constructor,plan.source);
+    if (plan.validation == FactState::Active) throw std::logic_error("recursive list validation");
+    list_plans[id].validation = FactState::Active;
+    try {
+        if (plan.state != 2 || plan.rank == 255) throw std::runtime_error("invalid list initialization");
+        TypeId t = value_type(plan.target);
+        if (plan.constructor) {
+            auto ctor = plan.constructor;
+            if (deleted_transfer(ctor)) throw std::runtime_error("deleted list constructor");
+            if (!plan.direct && members[entities[ctor].member_info].explicit_constructor)
+                throw std::runtime_error("explicit constructor in copy-list initialization");
+            check_access(ctor,plan.scope,entities[ctor].owner);
+        } else if (class_value(t) && !plan.aggregate && !plan.direct_binding)
+            throw std::runtime_error("ambiguous list constructor");
+        if (!plan.direct_binding) default_destructor(t,plan.scope,false);
+        for (unsigned i = 0; i < plan.call.argument_count; ++i) {
+            auto n = call_argument(plan.call,i);
+            auto c = conversions[plan.call.conversions+i];
+            if (n && ast[n].kind != Kind::BracedInit && i < plan.explicit_count)
+                list_conversion(n,value_type(c.target));
+            if (!i && !plan.aggregate && !plan.constructor && n && ast[n].kind != Kind::BracedInit)
+                list_conversion(n,value_type(plan.target));
+            check_fixed_conversion(expressions[n],n,c,plan.scope);
+            conversions[plan.call.conversions+i] = c;
+        }
+        list_plans[id].validation = FactState::Success;
+    } catch (...) {
+        list_plans[id].validation = FactState::Failure; throw;
+    }
+}
 void Analyzer::prepare_list(NodeId n, Conversion& c)
 {
+    validate_list_plan(c.materialization);
     auto plan = list_plans[c.materialization];
-    if (!c.valid()) throw std::runtime_error("invalid list initialization");
     TypeId t = value_type(c.target);
     if (plan.zero) prepare_zero_initialization(t);
     if (plan.constructor) {
-        auto ctor = plan.constructor;
-        if (deleted_transfer(ctor)) throw std::runtime_error("deleted list constructor");
-        if (!plan.direct && members[entities[ctor].member_info].explicit_constructor)
-            throw std::runtime_error("explicit constructor in copy-list initialization");
-        check_access(ctor,plan.scope,entities[ctor].owner);
-        demand_member(ctor); members[entities[ctor].member_info].complete_entry = true;
-    } else if (class_value(t) && !plan.aggregate && !plan.direct_binding)
-        throw std::runtime_error("ambiguous list constructor");
+        demand_member(plan.constructor); members[entities[plan.constructor].member_info].complete_entry = true;
+    }
     ListObject object; object.plan = c.materialization;
     if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array)) {
         object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,plan.scope),0,n);
@@ -139,12 +168,9 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     }
     std::vector<NodeId> args;
     for (unsigned i = 0; i < plan.call.argument_count; ++i) args.push_back(call_argument(plan.call,i));
-    std::vector<Conversion> selected(conversions.begin()+plan.call.conversions,conversions.begin()+plan.call.conversions+plan.call.count);
-    for (unsigned j = 0; j < args.size(); ++j)
-        if (args[j] && ast[args[j]].kind != Kind::BracedInit && j < plan.explicit_count)
-            list_conversion(args[j],value_type(selected[j].target));
-    if (!plan.aggregate && !plan.constructor && !args.empty() && ast[args[0]].kind != Kind::BracedInit)
-        list_conversion(args[0],value_type(c.target));
+    std::vector<Conversion> selected;
+    for (unsigned i = 0; i < plan.call.count; ++i)
+        selected.push_back(copy_conversion_recipe(conversions[plan.call.conversions+i]));
     record_call(object.call,args,selected);
     if (plan.aggregate) {
         InitAction root; root.kind = InitKind::Group; root.type = t; root.source = plan.source;

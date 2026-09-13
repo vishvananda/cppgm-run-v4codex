@@ -180,9 +180,10 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
         auto call = recipe ? conversion_objects[recipe].call : Expression();
         std::vector<Conversion> selected(1,recipe ? conversions[call.conversions] : standard_conversion(value,types.parameters[ctor.offset]));
         for (unsigned j = 1; j < ctor.count; ++j) {
-            NodeId arg = recipe ? call_argument(call,j) : default_argument(second.function,j);
-            if (recipe) expression(arg,facts[n].scope);
-            args.push_back(arg); selected.push_back(recipe ? copy_conversion_recipe(conversions[call.conversions+j]) : conversion(arg,types.parameters[ctor.offset+j]));
+            Conversion argument;
+            NodeId arg = recipe ? call_argument(call,j) : default_argument(second.function,j,&argument);
+            if (recipe) { expression(arg,facts[n].scope); argument = copy_conversion_recipe(conversions[call.conversions+j]); }
+            args.push_back(arg); selected.push_back(argument);
         }
         record_call(transfer.call,args,selected);
         user_conversions[c.materialization].result.materialization = conversion_objects.size();

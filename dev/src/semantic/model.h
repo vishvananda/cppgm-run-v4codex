@@ -16,7 +16,7 @@ enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 // Boolean success has two outcomes, while active and failed remain distinct.
 // This compact encoding does not confuse a pending query with a false value.
 enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage, DefaultArgument, ListConversion };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -312,12 +312,20 @@ struct CallSelection {
     EntityId entity = 0, conflicting = 0;
     CallFailure failure = CallFailure::NoViable;
 };
+// Declaration slots identify defaults; a function specialization supplies the
+// concrete parameter/environment component of a default's fact key.
+struct DefaultArgumentFact {
+    NodeId root = 0, value = 0;
+    std::uint32_t conversion = 0;
+    FactState state = FactState::NotStarted;
+};
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
     bool aggregate = false, direct_binding = false, direct = false, zero = false;
     unsigned char state = 0, rank = 255;
+    FactState validation = FactState::NotStarted;
 };
 struct ListField { EntityId field = 0; TypeId type = 0; std::uint64_t index = 0, count = 1; };
 struct ListObject { EntityId temporary = 0; std::uint32_t plan = 0, initializer = 0; Expression call; };

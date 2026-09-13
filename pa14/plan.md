@@ -5,7 +5,22 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original **84/314**, current **314/314**: all 230 original failures resolved,
 with unchanged fixtures, references and comparison rules. PA15 has not started.
-This continuation starts at `d06d62b2`; the preceding turn was verified progress.
+Active continuation from `460f495a`; the preceding turn was verified progress.
+Audit scope: declaration/default binding → checked default expression/conversion
+→ per-call materialization. Group failures by declaration environment, concrete
+parameter/default key, terminal failure, and consumer-owned lifetime. Budgets:
+one binding and conversion check per complete default key, no unused dependent
+default/body work, and O(required call arguments) materialization. Validate
+invalid conversions, access context, repeated failures, recursive defaults and
+independent object lifetimes; preserve earlier source-identity controls.
+
+Conversion increment: immutable declaration slots now address concrete default
+facts, including the function-specialization key. Copy-initialization and list
+recipe validation publish terminal success/failure before calls consume them.
+Seven public probes repeat 10,000 requests; 314 stage, 1621 prior and 35 native
+controls pass. Related demand defect remains active: defaults first seen in a
+type query can lose required function/member/storage definitions. Ordinary unused
+defaults must also defer those dependencies under N3485 [temp.inst]/10.
 
 ## Design/spec alignment
 

@@ -4,6 +4,7 @@ namespace cppgm { namespace semantic {
 void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
 {
     if (!c.valid()) throw std::runtime_error("invalid fixed call argument");
+    if (c.kind == Conversion::Kind::ListPlan) { validate_list_plan(c.materialization); return; }
     if (c.kind == Conversion::Kind::Construction) {
         if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed converting constructor");
         check_access(c.function,s,entities[c.function].owner);
@@ -11,12 +12,14 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
         auto f = types[entities[c.function].type];
         std::vector<NodeId> args; std::vector<Conversion> chosen;
         for (unsigned i = 0; i < f.count; ++i) {
-            auto a = i ? default_argument(c.function,i) : n;
-            auto value = i ? expression(a,s) : source;
-            auto target = types.parameters[f.offset+i];
-            auto argument = !i && c.implicit_move ? transfer_conversion(value.type,ValueCategory::Xvalue,target) :
-                a ? conversion(a,target,i != 0) : standard_conversion(value,target);
-            check_fixed_conversion(value,a,argument,s);
+            Conversion argument;
+            auto a = i ? default_argument(c.function,i,&argument) : n;
+            if (!i) {
+                auto target = types.parameters[f.offset+i];
+                argument = c.implicit_move ? transfer_conversion(source.type,ValueCategory::Xvalue,target) :
+                    a ? conversion(a,target,false) : standard_conversion(source,target);
+                check_fixed_conversion(source,a,argument,s);
+            }
             args.push_back(a); chosen.push_back(argument);
         }
         if (!f.count && f.variadic) {

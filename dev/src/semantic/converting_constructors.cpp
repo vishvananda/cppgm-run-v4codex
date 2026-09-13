@@ -75,11 +75,12 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
     std::vector<Conversion> selected;
     auto call = recipe ? conversion_objects[recipe].call : Expression();
     for (unsigned j = 0; j < f.count; ++j) {
-        NodeId a = j ? (recipe ? call_argument(call,j) : default_argument(ctor,j)) : n;
+        Conversion c;
+        NodeId a = j ? (recipe ? call_argument(call,j) : default_argument(ctor,j,&c)) : n;
         if (recipe && j) expression(a,facts[n].scope);
-        Conversion c = recipe ? copy_conversion_recipe(conversions[call.conversions+j]) :
-            !j && conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
-            this->conversion(a, types.parameters[f.offset+j], j != 0);
+        if (recipe) c = copy_conversion_recipe(conversions[call.conversions+j]);
+        else if (!j) c = conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
+            this->conversion(a, types.parameters[f.offset+j],false);
         if (!c.valid()) throw std::runtime_error("invalid converting constructor argument");
         apply_conversion(a, c); arguments.push_back(a); selected.push_back(c);
     }

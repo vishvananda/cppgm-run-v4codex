@@ -39,6 +39,8 @@ public:
     TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
+    NodeId default_argument(EntityId e, unsigned parameter, Conversion* converted = 0);
+    NodeId default_argument_value(EntityId e, unsigned parameter) const;
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
     std::size_t static_requests = 0, static_hits = 0;
@@ -237,8 +239,9 @@ private:
     std::size_t template_initializer_binding_work = 0, template_initializer_binding_queued = 0;
     void bind_template_initializer(EntityId entity, ScopeId scope);
     Index template_default_bindings;
-    NodeId default_argument(EntityId e, unsigned parameter);
-    Index default_argument_states;
+    std::uint64_t default_argument_key(EntityId e, unsigned parameter) const;
+    Index default_argument_index;
+    std::vector<DefaultArgumentFact> default_argument_facts = std::vector<DefaultArgumentFact>(1);
     Index default_environments;
     std::size_t default_environment_work = 0, default_argument_work = 0;
     ScopeId default_environment(EntityId e, ScopeId head);
@@ -429,7 +432,8 @@ private:
     void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);
     bool template_more_specialized(EntityId a, EntityId b);
-    NodeId instantiate_default(EntityId e, unsigned parameter);
+    NodeId instantiate_default(EntityId e, NodeId source);
+    void validate_list_plan(std::uint32_t id);
     TypeId declare_class_template(NodeId n, ScopeId s);
     bool dependent_template_syntax(NodeId n, ScopeId s);
     EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);

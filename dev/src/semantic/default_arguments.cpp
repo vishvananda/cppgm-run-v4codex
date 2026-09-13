@@ -111,56 +111,75 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
             if (head && source != entities[e].source)
                 throw std::runtime_error("function template default added by a later declaration");
             if (default_arguments[index]) throw std::runtime_error("duplicate default argument");
-            // Class specialization declares member defaults without demanding
-            // their expressions. Preserve the declaration's access environment.
-            if (definitions && ast.nodes.occurrences[a].context) {
-                default_arguments[index] = a; facts.edit(a).scope = s;
+            // Keep the declaration slot immutable. Function specializations
+            // share the source slot but own separate concrete default facts.
+            default_arguments[index] = a; facts.edit(a).scope = head ? head : s;
+            if (head || (definitions && ast.nodes.occurrences[a].context)) {
                 seen = true; continue;
             }
-            NodeId value = ast[a].first;
-            while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
-                value = ast[value].first;
-            if (definitions && entities[e].template_info) {
-                default_arguments[index] = a; facts.edit(a).scope = head;
-                seen = true; continue;
-            }
-            if (ast[value].kind == Kind::BracedInit) {
-                expression(value,s); require_conversion(value,types.parameters[f.offset+i]);
-            } else initialize(ast[a].first,types.parameters[f.offset+i],s);
-            default_arguments[index] = value;
+            Conversion converted;
+            auto value = default_argument(e,i,&converted);
+            // Ordinary defaults are checked as variable initializers at their
+            // declaration. Preserve their evaluated definition dependencies.
+            apply_conversion(value,converted);
+            expressions.incoming(value,conversions.size()); conversions.push_back(converted);
         }
         if (default_arguments[index]) seen = true;
         else if (seen) throw std::runtime_error("missing trailing default argument");
     }
 }
-NodeId Analyzer::default_argument(EntityId e, unsigned parameter)
+std::uint64_t Analyzer::default_argument_key(EntityId e, unsigned parameter) const
 {
-    if (definitions && entities[e].specialization) return instantiate_default(e,parameter);
-    auto slot = entities[e].defaults+parameter;
-    auto root = default_arguments[slot];
-    if (ast[root].kind != Kind::DefaultArgument) return root;
-    auto state = default_argument_states.get(root);
-    if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive member default argument");
-    if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed member default argument");
-    default_argument_states.put(root,unsigned(FactState::Active));
-    ++default_argument_work;
-    try {
-        demand_region(root);
-        auto scope = facts[root].scope;
-        auto type = types[entities[e].type];
-        auto target = types.parameters[type.offset+parameter];
-        auto value = ast[root].first;
-        while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
-            value = ast[value].first;
-        if (ast[value].kind == Kind::BracedInit) {
-            expression(value,scope); require_conversion(value,target);
-        } else initialize(ast[root].first,target,scope);
-        default_arguments[slot] = value;
-        default_argument_states.put(root,unsigned(FactState::Success));
-        return value;
-    } catch (...) {
-        default_argument_states.put(root,unsigned(FactState::Failure));
-        throw;
+    // Inherited constructors share their original declaration's slots/types.
+    // Function template specializations additionally supply the substitution.
+    return key(definitions && entities[e].specialization ? e : 0, entities[e].defaults+parameter);
+}
+NodeId Analyzer::default_argument_value(EntityId e, unsigned parameter) const
+{
+    auto id = default_argument_index.get(default_argument_key(e,parameter));
+    if (!id || default_argument_facts[id].state != FactState::Success)
+        throw std::logic_error("missing checked default argument");
+    return default_argument_facts[id].value;
+}
+NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* converted)
+{
+    auto source = default_arguments[entities[e].defaults+parameter];
+    if (!source) throw std::logic_error("missing default argument declaration");
+    auto k = default_argument_key(e,parameter);
+    auto id = default_argument_index.get(k);
+    if (!id) {
+        id = default_argument_facts.size(); default_argument_facts.emplace_back();
+        default_argument_index.put(k,id);
     }
+    auto state = default_argument_facts[id].state;
+    if (state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DefaultArgument,e,source);
+    if (state == FactState::Active) throw std::runtime_error("recursive default argument");
+    if (state == FactState::NotStarted) {
+        default_argument_facts[id].state = FactState::Active; ++default_argument_work;
+        try {
+            auto root = definitions && entities[e].specialization ? instantiate_default(e,source) : source;
+            demand_region(root);
+            auto scope = facts[root].scope;
+            auto value = ast[root].first;
+            while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
+                value = ast[value].first;
+            expression(value,scope);
+            auto type = types[entities[e].type];
+            auto c = conversion(value,types.parameters[type.offset+parameter]);
+            // Validate copy-initialization once, in the declaring environment.
+            // The immutable recipe contains no per-call conversion temporary.
+            check_fixed_conversion(expressions[value],value,c,scope);
+            auto conversion_id = conversions.size(); conversions.push_back(c);
+            auto& fact = default_argument_facts[id];
+            fact.root = root; fact.value = value; fact.conversion = conversion_id;
+            fact.state = FactState::Success;
+        } catch (...) {
+            default_argument_facts[id].state = FactState::Failure; throw;
+        }
+    }
+    auto fact = default_argument_facts[id];
+    if (converted) *converted = copy_conversion_recipe(conversions[fact.conversion]);
+    return fact.value;
 }
 } }

@@ -303,9 +303,8 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         Type selected_type = types[ft];
         for (unsigned j = 0; j < selected_type.count; ++j) reject_abstract(types.parameters[selected_type.offset+j]);
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {
-            NodeId a = default_argument(selected,i);
-            args.push_back(a);
-            chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
+            Conversion c; NodeId a = default_argument(selected,i,&c);
+            args.push_back(a); chosen.push_back(c);
         }
         record_call(result, args, chosen);
         select_function(callee, selected, !result.object_use || !object_uses[result.object_use].virtual_slot);

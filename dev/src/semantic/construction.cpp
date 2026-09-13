@@ -60,8 +60,9 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;
     for (std::size_t i = 0; i < std::max<std::size_t>(args.size(), f.count); ++i) {
-        NodeId arg = i < args.size() ? args[i] : default_argument(selected,i);
-        Conversion c = i < args.size() ? sequences[viable[best].offset+i] : conversion(arg, types.parameters[f.offset+i]);
+        Conversion c;
+        NodeId arg = i < args.size() ? args[i] : default_argument(selected,i,&c);
+        if (i < args.size()) c = sequences[viable[best].offset+i];
         if (!c.valid()) { if (probe) return 0; throw std::runtime_error("invalid constructor default argument"); }
         arguments.push_back(arg); selected_arguments.push_back(c);
     }

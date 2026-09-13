@@ -32,7 +32,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
     } else {
         auto e = sem.entities[ctor]; auto f = sem.types[e.type];
         for (unsigned j = 0; j < f.count; ++j)
-            call_work.push_back(converted(sem.default_arguments[e.defaults+j],
+            call_work.push_back(converted(sem.default_argument_value(ctor,j),
                 sem.conversion_fact(sem.member_fact(ctor).default_conversions+j)).operand);
     }
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
