@@ -16,6 +16,12 @@ void Analyzer::consume(NodeId n)
 }
 void Analyzer::finish()
 {
+    if (completion_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::TranslationUnit,0,0);
+    if (completion_state == FactState::Success) return;
+    if (completion_state == FactState::Active) throw std::logic_error("recursive semantic finish");
+    completion_state = FactState::Active;
+    try {
     typedef std::chrono::steady_clock Clock;
     Clock::time_point started;
     if (ast.telemetry) started = Clock::now();
@@ -36,10 +42,11 @@ void Analyzer::finish()
         }
         if (demand_cursor == demand_queue.size()) break;
         EntityId e = demand_queue[demand_cursor++];
-        if (definitions) instantiate_member_definition(e);
         std::uint32_t m = entities[e].member_info;
-        MemberFacts f = members[m];
         members[m].demand = DemandState::Active;
+        try {
+        if (definitions) instantiate_member_definition(e);
+        MemberFacts f = members[m];
         if (f.body && !entities[e].definition)
             function_body({f.body, f.declarator, f.body_environment ? f.body_environment : entities[e].owner, e, f.source});
         if (members[m].synthetic && transfer_member(e)) {
@@ -61,6 +68,9 @@ void Analyzer::finish()
         } else if (members[m].constructor) constructor_actions(e);
         if (members[m].destructor) destructor_actions(e);
         members[m].demand = DemandState::Complete;
+        } catch (...) {
+            members[m].demand = DemandState::Failed; throw;
+        }
     }
     // The delegation graph has at most one edge per constructor. Each demanded
     // vertex is colored once; converging chains do not repeat completed work.
@@ -80,6 +90,10 @@ void Analyzer::finish()
     if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); }
     for (NodeId body : jump_bodies) check_jumps(body);
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
+    completion_state = FactState::Success;
+    } catch (...) {
+        completion_state = FactState::Failure; throw;
+    }
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 {
@@ -315,10 +329,14 @@ void Analyzer::function_body(const Body& body)
     TypeId saved_return = return_type;
     EntityId saved_function = current_function; current_function = body.entity;
     return_type = types[entities[body.entity].type].child;
+    try {
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
     if (calls) finish_class_returns(body.entity);
     if (calls) jump_bodies.push_back(body.node);
+    } catch (...) {
+        return_type = saved_return; current_function = saved_function; throw;
+    }
     return_type = saved_return;
     current_function = saved_function;
 }

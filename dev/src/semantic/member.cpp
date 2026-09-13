@@ -83,6 +83,8 @@ void Analyzer::require_member_body(EntityId e)
     if (unevaluated_depth) return;
     if (definitions) instantiate_member_definition(e);
     auto m = entities[e].member_info;
+    if (m && members[m].demand == DemandState::Failed)
+        throw FailedSemanticFact(SemanticFact::MemberBody,e,members[m].source);
     bool retained_owner = definitions && definition_owner(scopes[entities[e].owner].entity).specialization;
     if (!m || members[m].demand != DemandState::Dormant || (!members[m].body && !members[m].synthetic && !members[m].destructor && !retained_owner)) return;
     members[m].demand = DemandState::Queued;

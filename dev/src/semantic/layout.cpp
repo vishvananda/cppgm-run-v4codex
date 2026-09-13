@@ -44,9 +44,12 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment)
 void Analyzer::class_layout(EntityId e)
 {
     auto info = entities[e].class_info;
-    if (class_facts[info].layout_state == 2) return;
-    if (class_facts[info].layout_state == 1) throw std::runtime_error("recursive class layout");
-    class_facts[info].layout_state = 1;
+    if (class_facts[info].layout_state == FactState::Success) return;
+    if (class_facts[info].layout_state == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::ClassLayout,e,entities[e].definition);
+    if (class_facts[info].layout_state == FactState::Active) throw std::runtime_error("recursive class layout");
+    class_facts[info].layout_state = FactState::Active;
+    try {
     std::uint64_t cursor = 0, align = 1, ordinary_end = 0;
     bool is_union = entities[e].key == KW_UNION;
     EntityId direct = direct_base(e);
@@ -132,6 +135,9 @@ void Analyzer::class_layout(EntityId e)
     align = std::max(align, requested);
     class_facts[info].alignment = align;
     class_facts[info].size = layout_align(std::max<std::uint64_t>(1, layout_add(cursor, 7)/8), align);
-    class_facts[info].layout_state = 2;
+    class_facts[info].layout_state = FactState::Success;
+    } catch (...) {
+        class_facts[info].layout_state = FactState::Failure; throw;
+    }
 }
 } }

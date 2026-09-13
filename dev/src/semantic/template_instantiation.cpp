@@ -11,11 +11,14 @@ void Analyzer::demand_region(NodeId root)
 void Analyzer::instantiate_function(EntityId e)
 {
     auto index = entities[e].specialization;
+    if (index && specializations[index].body == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].source);
     if (!index || specializations[index].body != FactState::NotStarted) return;
     auto spec = specializations[index];
     auto pattern = templates[entities[spec.pattern].template_info];
     if (!pattern.body) return;
     specializations[index].body = FactState::Active; ++template_bodies;
+    try {
     auto context = spec.context ? spec.context : ast.new_context();
     auto source = ast.instantiate(pattern.source,context);
     auto declarator = ast.projected(pattern.declarator,context);
@@ -29,6 +32,9 @@ void Analyzer::instantiate_function(EntityId e)
     instantiate_parameters(pattern.declarator,context,frame,environment);
     function_body({body,declarator,environment,e,source});
     specializations[index].body = FactState::Success;
+    } catch (...) {
+        specializations[index].body = FactState::Failure; throw;
+    }
 }
 void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment)
 {

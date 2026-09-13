@@ -1,6 +1,7 @@
 #pragma once
 #include "syntax/ast.h"
 #include <cstdint>
+#include <exception>
 #include <vector>
 
 namespace cppgm { namespace semantic {
@@ -10,6 +11,19 @@ typedef std::uint32_t EntityId;
 typedef std::uint32_t ScopeId;
 
 using Index = IdIndex;
+
+enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit };
+// A cached rejection names its narrow producer without owning diagnostic text.
+// The initial request reports the original error; subsequent demands cannot
+// reinterpret partial publication as recursion or successful completion.
+struct FailedSemanticFact : std::exception {
+    SemanticFact fact;
+    EntityId entity;
+    NodeId source;
+    FailedSemanticFact(SemanticFact f, EntityId e, NodeId n) : fact(f), entity(e), source(n) {}
+    const char* what() const noexcept override { return "previously failed semantic fact"; }
+};
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
@@ -72,7 +86,7 @@ struct ClassFacts {
     EntityId first_conversion = 0;
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
-    unsigned char layout_state = 0;
+    FactState layout_state = FactState::NotStarted;
     bool aggregate = true, empty = true;
     std::uint32_t virtual_info = 0;
     std::uint64_t base_offset = 0;
@@ -142,7 +156,7 @@ struct Entity {
     EntityId first = 0, second = 0; // Immutable overload union edges.
     Constant constant;
 };
-enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
+enum class DemandState : unsigned char { Dormant, Queued, Active, Complete, Failed };
 struct MemberFacts {
     std::uint32_t prototype = 0;
     TypeId call_type = 0;
@@ -194,7 +208,6 @@ struct TemplateFunction {
     std::uint32_t offset = 0, count = 0;
     NodeId body = 0, declarator = 0, source = 0;
 };
-enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 struct Specialization {
     EntityId pattern = 0, entity = 0;
     std::uint32_t arguments = 0;

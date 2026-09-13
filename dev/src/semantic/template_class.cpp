@@ -175,14 +175,20 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
 }
 void Analyzer::complete_class(EntityId e)
 {
-    if (!e || entities[e].complete) return;
-    if (!entities[e].specialization) { instantiate_member_definition(e); return; }
+    if (!e) return;
     auto index = entities[e].specialization;
+    if (index && specializations[index].body == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::ClassDefinition,e,entities[e].source);
+    if (entities[e].complete) return;
+    if (!entities[e].specialization) { instantiate_member_definition(e); return; }
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
     auto pattern = templates[entities[specializations[index].pattern].template_info];
     if (!pattern.body) return;
-    if (specializations[index].body == FactState::Failure) throw std::runtime_error("failed class specialization");
     specializations[index].body = FactState::Active; ++template_completions;
+    ScopeId saved = active_template_scope;
+    auto saved_depth = class_depth;
+    auto saved_bodies = bodies.size();
+    try {
     auto environment = specialization_environment(e);
     // An earlier forward declaration may have used different parameter names.
     auto pack = argument_packs[specializations[index].arguments];
@@ -197,10 +203,17 @@ void Analyzer::complete_class(EntityId e)
     specializations[index].context = context;
     attach_template_context(context,substitution_frame(index,pattern.offset,pattern.count));
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-    ScopeId saved = active_template_scope; active_template_scope = 0;
+    active_template_scope = 0;
     facts.edit(source).entity = e;
     class_type(source,environment,0,true);
     active_template_scope = saved;
     specializations[index].body = FactState::Success;
+    } catch (...) {
+        active_template_scope = saved; class_depth = saved_depth;
+        bodies.resize(saved_bodies);
+        entities[e].complete = false;
+        specializations[index].body = FactState::Failure;
+        throw;
+    }
 }
 } }

@@ -122,6 +122,7 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     std::vector<ConstantField> constant_fields;
 private:
+    FactState completion_state = FactState::NotStarted;
     Index list_index, direct_list_index, empty_list_index;
     Index class_typedef_declarations;
     std::vector<ListField> list_fields;

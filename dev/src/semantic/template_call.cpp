@@ -152,6 +152,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     Specialization spec; spec.pattern = pattern; spec.arguments = pack; spec.declaration = FactState::Active;
     std::uint32_t index = specializations.size(); specializations.push_back(spec);
     specialization_index.put(key(pattern, pack), index);
+    try {
     Index bindings, cache;
     auto frame = dependent_type(entities[pattern].type) ? substitution_frame(index,t.offset,t.count) : 0;
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
@@ -166,6 +167,9 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     if (scopes[entities[e].owner].kind == ScopeKind::Class) member_facts(e);
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;
     return e;
+    } catch (...) {
+        specializations[index].declaration = FactState::Failure; throw;
+    }
 }
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 {
