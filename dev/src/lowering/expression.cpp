@@ -7,8 +7,9 @@ Value Procedural::expression(NodeId n, bool location)
 {
     if (!n) throw std::logic_error("missing expression node");
     guard_expression(n);
+    auto node = ast[n];
     auto fact = sem.expression_fact(n);
-    NodeId a = ast[n].first;
+    NodeId a = node.first;
     if (fact.form == semantic::ExpressionForm::ListValue) {
         auto c = sem.conversion_fact(fact.conversions);
         EntityId e = sem.list_objects[c.materialization].temporary;
@@ -20,7 +21,7 @@ Value Procedural::expression(NodeId n, bool location)
     if (fact.form >= semantic::ExpressionForm::FloatFinite && fact.form <= semantic::ExpressionForm::FloatClassify) return floating_builtin(n);
     if (fact.form == semantic::ExpressionForm::LiteralCall) {
         Value string = emit(Opcode::Addr, IRType(), {Operand::symbol(strings[n])});
-        auto lit = ast.literals[ast[n].literal];
+        auto lit = ast.literals[node.literal];
         Instruction widen(Opcode::Convert, IRType::I64); widen.source_type = IRType::I32; widen.operation = Operation::Sext;
         Value length = emit(widen, {Operand::integer(lit.elements-1)});
         Operand arguments[] = {Operand::symbol(symbol(sem.facts[n].entity)), string.operand, length.operand};
@@ -33,7 +34,7 @@ Value Procedural::expression(NodeId n, bool location)
         pointer.type = fact.type; pointer.address = true; return pointer;
     }
     if (fact.form == semantic::ExpressionForm::Cast) {
-        NodeId operand = ast[n].kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
+        NodeId operand = node.kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
         if (!operand) return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
         TypeId target = sem.facts[n].type;
         if (reference(target)) {
@@ -77,16 +78,16 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = converted(operand, c);
         v.type = fact.type; return v;
     }
-    if (fact.form == semantic::ExpressionForm::ConstantQuery || ast[n].kind == Kind::Sizeof || ast[n].kind == Kind::TypeTrait) {
+    if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait) {
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
         Value v = emit(Opcode::Const, type(c.type), {Operand::integer(c.bits)}); v.type = c.type; return v;
     }
-    switch (ast[n].kind) {
+    switch (node.kind) {
     case Kind::New: return placement_new(n);
     case Kind::Delete: return delete_expression(n);
     case Kind::Literal: {
-        auto lit = ast.literals[ast[n].literal];
+        auto lit = ast.literals[node.literal];
         if (lit.kind == LiteralKind::string) return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true);
         Operand o;
         if (lit.type == FT_FLOAT) { float v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
@@ -96,11 +97,11 @@ Value Procedural::expression(NodeId n, bool location)
         return Value(o, type(fact.type), fact.type);
     }
     case Kind::KeywordLiteral:
-        if (ast[n].op == KW_THIS) {
+        if (node.op == KW_THIS) {
             Value v = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}); v.type = fact.type; return v;
         }
-        return Value(ast[n].op == KW_NULLPTR ? Operand::null() : Operand::integer(ast[n].op == KW_TRUE),
-        ast[n].op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
+        return Value(node.op == KW_NULLPTR ? Operand::null() : Operand::integer(node.op == KW_TRUE),
+        node.op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
         if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
             auto c = sem.constant_fact(n); return Value(Operand::integer(c.bits), type(fact.type), fact.type);
@@ -141,20 +142,21 @@ Value Procedural::expression(NodeId n, bool location)
             return Value(Operand::integer(member.constant.bits), type(fact.type), fact.type);
         }
         if (member.is_static) { discard(a, false); return binding(fact.entity); }
-        Value base = ast[n].op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
+        Value base = node.op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
         Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
         if (a) return expression(a, location);
         return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
-    default: throw std::runtime_error(std::string("unsupported lowering expression: ") + syntax::kind_name(ast[n].kind));
+    default: throw std::runtime_error(std::string("unsupported lowering expression: ") + syntax::kind_name(node.kind));
     }
 }
 Value Procedural::unary(NodeId n)
 {
-    NodeId a = ast[n].first;
+    auto node = ast[n];
+    NodeId a = node.first;
     auto fact = sem.expression_fact(n);
-    ETokenType op = ast[n].op;
+    ETokenType op = node.op;
     if (op == OP_AMP) {
         if (sem.types[fact.type].kind == TypeKind::MemberPointer) return member_pointer_value(sem.expression_fact(a).entity,fact.type);
         Value v = address(expression(a, true)); v.type = fact.type; return v;
@@ -171,7 +173,7 @@ Value Procedural::unary(NodeId n)
             value = Value(Operand::integer(1), IRType::U8, dest.type);
         else value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, convert(old, promoted),
             Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), promoted);
-        if (dest.bit_field && ast[n].kind != Kind::Postfix && ast[a].kind == Kind::Member && ast[a].op == OP_DOT) {
+        if (dest.bit_field && node.kind != Kind::Postfix && ast[a].kind == Kind::Member && ast[a].op == OP_DOT) {
             NodeId object = ast[a].first;
             EntityId root = sem.expression_fact(object).entity;
             // Reacquire a prefix result's stable named storage using recorded
@@ -183,7 +185,7 @@ Value Procedural::unary(NodeId n)
         }
         if (!dest.bit_field) value = convert(value, dest.type);
         value = store(value, dest);
-        if (ast[n].kind == Kind::Postfix) return old;
+        if (node.kind == Kind::Postfix) return old;
         dest.cached = true; dest.stored = value.operand; return dest;
     }
     Value v = op == OP_LNOT && sem.conversion_fact(fact.conversions).kind != semantic::Conversion::Kind::User ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
@@ -193,16 +195,17 @@ Value Procedural::unary(NodeId n)
 }
 Value Procedural::binary(NodeId n, bool location)
 {
-    NodeId a = ast[n].first, b = ast[a].next;
+    auto node = ast[n];
+    NodeId a = node.first, b = ast[a].next;
     auto fact = sem.expression_fact(n);
-    ETokenType op = ast[n].op;
+    ETokenType op = node.op;
     if (op == OP_DOTSTAR || op == OP_ARROWSTAR) {
         if (sem.types[fact.type].kind == TypeKind::Function) throw std::runtime_error("bound member function requires a call");
         Value v = member_pointer_object(sem.object_fact(n)); v.type = fact.type; v.address = true; return v;
     }
     if (op == OP_COMMA) { discard(a); return expression(b, location); }
     if (op == OP_LAND || op == OP_LOR) return logical(n);
-    if (ast[n].kind == Kind::Assignment) {
+    if (node.kind == Kind::Assignment) {
         Value rhs, dest, lhs;
         if (op == OP_ASS && sem.field_fact(sem.expression_fact(a).entity).bit_field) {
             rhs = load(expression(b)); dest = expression(a, true);
@@ -301,9 +304,10 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 }
 Value Procedural::call(NodeId n, Value destination)
 {
+    auto node = ast[n];
     auto fact = sem.expression_fact(n);
     if (fact.form == semantic::ExpressionForm::PseudoDestructor) {
-        NodeId member = ast[n].first;
+        NodeId member = node.first;
         while (ast[member].kind == Kind::Parenthesized) member = ast[member].first;
         Value object = expression(ast[member].first);
         if (ast[member].op == OP_ARROW) load(object);
@@ -341,7 +345,7 @@ Value Procedural::call(NodeId n, Value destination)
         NodeId argument = sem.call_argument(fact,j);
         call_work.push_back(argument ? converted(argument, sem.conversion_fact(fact.conversions+j)).operand : Operand::integer(0));
     }
-    NodeId callee = ast[n].first;
+    NodeId callee = node.first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
     if (object_use.member_pointer) {

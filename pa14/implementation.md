@@ -562,3 +562,15 @@ explicit storage/snapshot control pass. A complete untimed preflight of all 28
 prior workloads plus three call-input scaling cases and one checked native loop
 preserves exact LowIR/native outputs. Performance and sanitizer acceptance are
 still active; remaining whole-region projection and demand dependencies persist.
+
+
+Local expression views extend the same immutable ownership boundary. Semantic
+fixed-expression reuse and ordinary expression/operator/call lowering retain a
+single stack snapshot of the established source/context view during each visit.
+They no longer project all child edges again for each kind/operator/first-child
+read. Recursive arena growth cannot invalidate the copied view; source topology
+and the occurrence context do not change during these visits. This adds no
+persistent cache, invalidation, semantic recomputation or output transform.
+PA14, prior/through reports, file audit and all 24 native programs pass. The
+initial 560-observation ownership campaign and CPU profile remain frozen; the
+local-view candidate receives separate sanitizer and AA/ABBA validation.

@@ -91,20 +91,22 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     expressions.inherit(n,source);
     ++template_fixed_uses;
     if (reuse_template_value(n,s,result)) return true;
-    if (ast[n].kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
+    // Source topology and this occurrence context stay fixed during this visit.
+    auto node = ast[n];
+    if (node.kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
     if (reuse_template_field(n,s,result)) {
         facts[n].type = facts[source].type; facts[n].entity = result.entity;
         return true;
     }
-    auto first = ast[n].first;
-    if (ast[n].kind == Kind::Member) {
+    auto first = node.first;
+    if (node.kind == Kind::Member) {
         expression(first,s); // The shared receiver edge is projected by object_fact.
         facts[n].type = facts[source].type; facts[n].entity = result.entity; facts[n].value = facts[source].value;
         return true;
     }
-    bool unevaluated = ast[n].kind == Kind::Sizeof || ast[n].kind == Kind::TypeTrait;
-    if (ast[n].kind == Kind::Cast || (unevaluated && ast[first].kind == Kind::TypeId)) {
+    bool unevaluated = node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait;
+    if (node.kind == Kind::Cast || (unevaluated && ast[first].kind == Kind::TypeId)) {
         facts[first].type = facts[ast[source].first].type;
         first = ast[first].next;
     }
@@ -131,8 +133,8 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         result.entity = entity;
         }
     }
-    if (ast[n].kind == Kind::Assignment || ast[n].op == OP_INC || ast[n].op == OP_DEC ||
-        (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) observe_scalar(first);
+    if (node.kind == Kind::Assignment || node.op == OP_INC || node.op == OP_DEC ||
+        (node.kind == Kind::Unary && node.op == OP_AMP)) observe_scalar(first);
     facts[n].type = facts[source].type;
     if (!template_value_dependence.get(occurrence.source)) facts[n].value = facts[source].value;
     facts[n].entity = result.entity;
