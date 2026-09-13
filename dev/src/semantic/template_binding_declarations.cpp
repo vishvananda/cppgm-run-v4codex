@@ -59,9 +59,11 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
     if (!active_template_class) {
         // Detach this complete class's source obligations before checking them:
         // a check can demand another class with its own completion event.
-        std::vector<TemplateDefaultBinding> defaults;
-        defaults.swap(template_pending_defaults);
-        for (auto argument : defaults) bind_template_defaults(argument.declarator,argument.scope,argument.head);
+        std::vector<TemplateClassUse> uses;
+        uses.swap(template_class_uses);
+        for (auto use : uses)
+            if (use.kind == TemplateClassUseKind::DefaultArgument) bind_template_defaults(use.source,use.scope,use.head);
+            else bind_template_initializer(use.entity,use.scope);
     }
     for (auto body : bodies) bind_template_body(body);
     return cs;
@@ -166,7 +168,11 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
-            } else if (init && bind_template_expression(init,s)) template_pattern_entities.put(e,2);
+            } else if (init) {
+                if (kind == EntityKind::Variable && scopes[s].kind == ScopeKind::Class && !entities[e].is_static)
+                    bind_template_initializer(e,s);
+                else if (bind_template_expression(init,s)) template_pattern_entities.put(e,2);
+            }
             return e;
         };
         if (node.kind == Kind::Function) { auto d = ast[specs].next; bind_decl(d,0,ast[d].next); }

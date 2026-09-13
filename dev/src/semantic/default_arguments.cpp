@@ -3,17 +3,17 @@
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 namespace {
-enum class DefaultBindingState : unsigned char { NotStarted, Queued, Active, Complete, Failed };
+enum class SourceBindingState : unsigned char { NotStarted, Queued, Active, Complete, Failed };
 }
 void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool allowed)
 {
     if (!d || ast.nodes.occurrences[d].context) return;
     auto source = ast.nodes.occurrences[d].source;
-    auto state = DefaultBindingState(template_default_bindings.get(source));
-    if (state == DefaultBindingState::Complete) return;
-    if (state == DefaultBindingState::Active) throw std::runtime_error("recursive source default argument binding");
-    if (state == DefaultBindingState::Failed) throw std::runtime_error("failed source default argument binding");
-    if (state == DefaultBindingState::Queued && active_template_class) return;
+    auto state = SourceBindingState(template_default_bindings.get(source));
+    if (state == SourceBindingState::Complete) return;
+    if (state == SourceBindingState::Active) throw std::runtime_error("recursive source default argument binding");
+    if (state == SourceBindingState::Failed) throw std::runtime_error("failed source default argument binding");
+    if (state == SourceBindingState::Queued && active_template_class) return;
     NodeId parameters = 0;
     for (auto node = d; node;) {
         if (auto p = child(node,Kind::Parameters)) parameters = p;
@@ -21,17 +21,17 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     }
     bool needed = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
-    if (!needed) { template_default_bindings.put(source,unsigned(DefaultBindingState::Complete)); return; }
+    if (!needed) { template_default_bindings.put(source,unsigned(SourceBindingState::Complete)); return; }
     if (!allowed) throw std::runtime_error("class template member default must appear on its initial declaration");
     // Default arguments see the whole enclosing class, including declarations
     // that follow this member and defaults in nested class member functions.
     // The source class completion event drains just its collected consumers.
     if (active_template_class && scopes[s].kind == ScopeKind::Class) {
-        template_default_bindings.put(source,unsigned(DefaultBindingState::Queued));
+        template_default_bindings.put(source,unsigned(SourceBindingState::Queued));
         ++template_default_binding_queued;
-        template_pending_defaults.push_back({d,s,head}); return;
+        template_class_uses.push_back({d,s,head,0,TemplateClassUseKind::DefaultArgument}); return;
     }
-    template_default_bindings.put(source,unsigned(DefaultBindingState::Active));
+    template_default_bindings.put(source,unsigned(SourceBindingState::Active));
     ++template_default_binding_work;
     try {
     auto scope = make_scope(ScopeKind::Block,s,0,0,false);
@@ -56,9 +56,31 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         // retain their bindings without demanding a concrete default value.
         bind_template_expression(child(p,Kind::DefaultArgument),scope);
     }
-    template_default_bindings.put(source,unsigned(DefaultBindingState::Complete));
+    template_default_bindings.put(source,unsigned(SourceBindingState::Complete));
     } catch (...) {
-        template_default_bindings.put(source,unsigned(DefaultBindingState::Failed)); throw;
+        template_default_bindings.put(source,unsigned(SourceBindingState::Failed)); throw;
+    }
+}
+void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
+{
+    auto state = SourceBindingState(template_initializer_bindings.get(e));
+    if (state == SourceBindingState::Complete) return;
+    if (state == SourceBindingState::Active) throw std::runtime_error("recursive source member initializer binding");
+    if (state == SourceBindingState::Failed) throw std::runtime_error("failed source member initializer binding");
+    if (state == SourceBindingState::Queued && active_template_class) return;
+    if (active_template_class) {
+        template_initializer_bindings.put(e,unsigned(SourceBindingState::Queued));
+        ++template_initializer_binding_queued;
+        template_class_uses.push_back({entities[e].initializer,scope,0,e,TemplateClassUseKind::MemberInitializer});
+        return;
+    }
+    template_initializer_bindings.put(e,unsigned(SourceBindingState::Active));
+    ++template_initializer_binding_work;
+    try {
+        if (bind_template_expression(entities[e].initializer,scope)) template_pattern_entities.put(e,2);
+        template_initializer_bindings.put(e,unsigned(SourceBindingState::Complete));
+    } catch (...) {
+        template_initializer_bindings.put(e,unsigned(SourceBindingState::Failed)); throw;
     }
 }
 void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)

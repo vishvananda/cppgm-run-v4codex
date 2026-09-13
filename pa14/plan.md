@@ -19,8 +19,10 @@ raw cv/array/function types, trailing returns, nested declarators, overloads and
 unused-body/default/exception demand. The preceding acceptance below is inherited.
 Implementation now passes through 1935, native 32, six new rejection controls and
 three signature reducers. Prototype names no longer republish source identities.
-Late/nested source defaults bind on the enclosing class completion event under
-separate queued/active/complete/failed states. Next freeze proofs, sanitizer parity
+Late/nested source defaults and non-static member initializers bind on the
+enclosing class completion event under typed reasons and separate
+queued/active/complete/failed states; static initializers retain declaration-point
+lookup. Nine new rejection controls and four signature reducers pass. Next freeze proofs, sanitizer parity
 and source/signature/parameter/default scaling before performance acceptance.
 The completed group extends source declarations through concrete local types,
 query substitution, object/lifetime consumers and sparse stable fact storage.

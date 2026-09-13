@@ -7,6 +7,7 @@ int cv(const long*) { return 0; }
 int twist(int n) { return n+2; }
 long twist(long n) { return n+3; }
 int destroyed;
+int initialized;
 
 template<class T> struct Signature {
     T stored;
@@ -46,6 +47,18 @@ template<class T> struct UnusedDefault {
     static T make() { return T::missing; }
 };
 
+template<class T> struct Initializers {
+    int first=++initialized;
+    int value=first+make();
+    struct Inner { int value=make(); };
+private:
+    static int make() { return ++initialized; }
+};
+template<class T> struct OverriddenInitializer {
+    int value=T::missing;
+    OverriddenInitializer(int supplied) : value(supplied) {}
+};
+
 template<class T> int local_signature(T value) {
     struct Local {
         T stored;
@@ -78,5 +91,11 @@ int main() {
     if (defaults.stored!=11 || Defaults<long>::Inner::get()!=11) return 10;
     UnusedDefault<int> unused;
     if (unused.get(13)!=13) return 11;
+    Initializers<int> fields;
+    if (fields.first!=1 || fields.value!=3 || initialized!=2) return 12;
+    Initializers<long>::Inner nested;
+    if (nested.value!=3 || initialized!=3) return 13;
+    OverriddenInitializer<int> supplied(17);
+    if (supplied.value!=17) return 14;
     return 0;
 }

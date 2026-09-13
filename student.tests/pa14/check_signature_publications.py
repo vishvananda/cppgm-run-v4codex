@@ -11,6 +11,9 @@ CASES={
  'demanded_default_body': 'template<class T>struct C{int get(int value=make()){return value;}static int make(){return T::missing;}};int main(){C<int> c;return c.get();}',
  'later_added_default': 'template<class T>struct C{int get(int);};template<class T>int C<T>::get(int value=3){return value;}',
  'nested_type_value': 'template<class T>struct C{struct Inner{int get(int value=Later){return value;}};using Later=int;};',
+ 'missing_initializer': 'template<class T>struct C{int value=missing();};',
+ 'late_initializer_type': 'template<class T>struct C{int value=Later;using Later=int;};',
+ 'static_initializer_scope': 'template<class T>struct C{static const int value=later;static const int later=7;};',
 }
 CLAUSES={
  'missing_default':'N3485 [basic.lookup.unqual], [dcl.fct.default]/5',
@@ -19,8 +22,11 @@ CLAUSES={
  'demanded_default_body':'N3485 [temp.inst]/1, [temp.dep]',
  'later_added_default':'N3485 [dcl.fct.default]/6',
  'nested_type_value':'N3485 [basic.scope.class]/1, [class.mem]/2, [expr.prim.general]',
+ 'missing_initializer':'N3485 [basic.lookup.unqual], [class.mem]/2',
+ 'late_initializer_type':'N3485 [basic.scope.class]/1, [class.mem]/2, [expr.prim.general]',
+ 'static_initializer_scope':'N3485 [basic.scope.class]/1, [class.mem]/2',
 }
-REDUCERS=['signature-source-identity.t','signature-query-reducer.t','signature-late-default.t']
+REDUCERS=['signature-source-identity.t','signature-query-reducer.t','signature-late-default.t','signature-late-initializer.t']
 if __name__=='__main__':
  with tempfile.TemporaryDirectory(prefix='pa14-signature-publications-') as tmp:
   work=Path(tmp)

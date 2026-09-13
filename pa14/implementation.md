@@ -915,3 +915,17 @@ and unused ill-formed dependent defaults supplied with explicit arguments.
 File audit passes with three inherited advisories. Signature, raw-parameter and
 source-default work counters are available; isolated scaling, sanitizer parity,
 C++11 proof manifests and full performance acceptance remain to be completed.
+
+
+The same complete-class event now owns non-static data-member initializer
+bindings. The reduced signature-late-initializer.t is rejected by entry and the
+signature/default intermediate even though N3485 [basic.scope.class]/1 and
+[class.mem]/2 make it valid. Typed DefaultArgument and MemberInitializer uses
+collect only affected source consumers; each initializer has its own
+queued/active/complete/failed record keyed by pattern entity. Static initializer
+lookup keeps its declaration-point rules. The expanded native control checks
+nested late lookup, member initialization order and an overridden ill-formed
+dependent initializer; nine rejection controls and four reduced native programs
+pass. The unchanged 1935-test through report and all 32 personal native programs
+also pass. This extension preserves the prior failed probes and adds initializer
+binding work/queue counters before the full evidence campaign.

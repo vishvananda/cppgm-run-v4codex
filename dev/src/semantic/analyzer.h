@@ -222,10 +222,14 @@ private:
     StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source);
     void bind_template_defaults(NodeId d, ScopeId s, ScopeId head = 0, bool allowed = true);
-    struct TemplateDefaultBinding { NodeId declarator; ScopeId scope, head; };
-    std::vector<TemplateDefaultBinding> template_pending_defaults;
+    enum class TemplateClassUseKind : unsigned char { DefaultArgument, MemberInitializer };
+    struct TemplateClassUse { NodeId source; ScopeId scope, head; EntityId entity; TemplateClassUseKind kind; };
+    std::vector<TemplateClassUse> template_class_uses;
     ScopeId active_template_class = 0;
     std::size_t template_default_binding_work = 0, template_default_binding_queued = 0;
+    Index template_initializer_bindings;
+    std::size_t template_initializer_binding_work = 0, template_initializer_binding_queued = 0;
+    void bind_template_initializer(EntityId entity, ScopeId scope);
     Index template_default_bindings;
     NodeId default_argument(EntityId e, unsigned parameter);
     Index default_argument_states;
