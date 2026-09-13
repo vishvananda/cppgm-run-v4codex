@@ -17,61 +17,88 @@ Node Ast::project_view(NodeId id) const
     }
     return result;
 }
+std::uint32_t Ast::source_region(NodeId root)
+{
+    auto key = nodes.occurrences[root].source;
+    if (auto known = source_region_index.get(key)) return known-1;
+    SourceRegion region{std::uint32_t(region_nodes.size()),0,
+        std::uint32_t(region_roots.size()),0,std::uint32_t(region_metadata.size()),0};
+    // Source topology is immutable after parsing. This cache retains IDs and
+    // attribute references, never a second syntax tree or semantic decisions.
+    auto& work = projection_work; work.clear(); work.push_back(root);
+    IdIndex seen;
+    auto defer = [&](NodeId source) {
+        if (seen.get(source)) return;
+        seen.put(source,1); region_roots.push_back(source);
+    };
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        auto source = work[i];
+        if (!source || seen.get(source)) continue;
+        seen.put(source,1); region_nodes.push_back(source);
+        auto node = nodes[source];
+        if (node.detail) work.push_back(node.detail);
+        bool function = node.kind == Kind::Function || node.kind == Kind::SpecialDefinition;
+        if (function || node.kind == Kind::Parameter) {
+            for (auto c = node.first; c; c = nodes[c].next) {
+                auto kind = nodes[c].kind;
+                bool body = function && (kind == Kind::Compound || kind == Kind::FunctionTry || kind == Kind::CtorInitializer);
+                if (body || kind == Kind::DefaultArgument) defer(c);
+                else work.push_back(c);
+            }
+        } else for (auto c = node.first; c; c = nodes[c].next) work.push_back(c);
+        auto packing = class_packing.get(source), alignment = alignment_owners.get(source);
+        if (packing || alignment) region_metadata.push_back({source,packing,alignment});
+        for (auto a = alignment; a; a = alignments[a].next) work.push_back(alignments[a].operand);
+    }
+    region.count = region_nodes.size()-region.begin;
+    region.roots_count = region_roots.size()-region.roots_begin;
+    region.metadata_count = region_metadata.size()-region.metadata_begin;
+    auto id = source_regions.size(); source_regions.push_back(region);
+    source_region_index.put(key,id+1); return id;
+}
 NodeId Ast::instantiate(NodeId root, std::uint32_t context)
 {
-    struct Region { NodeId source; bool deferred; };
-    std::vector<Region> work(1,Region{root,false});
-    for (std::size_t i = 0; i < work.size(); ++i) {
-        NodeId source = work[i].source;
-        if (!source) continue;
-        auto id = projected(source,context);
-        bool created = !id;
-        if (id) {
-            if (work[i].deferred || !pending_region(id)) continue;
-            deferred_occurrences.put(id,2); ++demanded_regions;
-        }
-        Node n = nodes[source];
-        // Contexts refer to original source graph identities; nested demand
-        // retains the enclosing specialization through its semantic environment.
-        if (created) {
-            id = nodes.occurrence(source,context);
-            occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[source].source,id);
-            // A function default can be demanded before its containing body.
-            // Its root still owns the same region when that body is projected.
-            if (!work[i].deferred && n.kind == Kind::DefaultArgument) {
-                deferred_occurrences.put(id,2); ++deferred_regions; ++demanded_regions;
-            }
-        }
-        if (work[i].deferred) {
-            deferred_occurrences.put(id,1); ++deferred_regions;
-            continue;
-        }
-        if (n.detail) work.push_back({n.detail,false});
-        for (NodeId c = n.first; c; c = nodes[c].next) {
-            auto kind = nodes[c].kind;
-            bool body = (n.kind == Kind::Function || n.kind == Kind::SpecialDefinition) &&
-                (kind == Kind::Compound || kind == Kind::FunctionTry || kind == Kind::CtorInitializer);
-            work.push_back({c,body || kind == Kind::DefaultArgument});
-        }
-        if (!created) continue;
-        if (auto packing = class_packing.get(source)) class_packing.put(id,packing);
-        if (auto attribute = alignment_owners.get(source)) {
-            std::uint32_t first = 0, previous = 0;
-            for (; attribute; attribute = alignments[attribute].next) {
-                auto value = alignments[attribute]; value.next = 0;
-                auto index = alignments.size(); alignments.push_back(value);
-                if (previous) alignments[previous].next = index; else first = index;
-                previous = index; work.push_back({value.operand,false});
-            }
-            alignment_owners.put(id,first);
-        }
+    if (!root || !context) return root;
+    auto existing = projected(root,context);
+    auto pending = existing ? deferred_occurrences.get(existing) : 0;
+    if (existing && pending <= 1) return existing;
+    auto source = pending > 1 ? pending-1 : root;
+    auto region = source_regions[source_region(source)];
+    for (std::uint32_t j = 0; j < region.count; ++j) {
+        auto n = region_nodes[region.begin+j];
+        if (projected(n,context)) continue;
+        auto id = nodes.occurrence(n,context);
+        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
     }
-    for (auto region : work) {
-        auto id = projected(region.source,context);
-        for (auto a = alignment_owners.get(id); a; a = alignments[a].next)
-            if (nodes.occurrences[alignments[a].operand].context != context)
-                alignments[a].operand = projected(alignments[a].operand,context);
+    for (std::uint32_t j = 0; j < region.roots_count; ++j) {
+        auto n = region_roots[region.roots_begin+j];
+        if (projected(n,context)) continue;
+        auto id = nodes.occurrence(n,context);
+        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
+        // Parsed source IDs exclude the reserved zero and maximum IDs.
+        deferred_occurrences.put(id,n+1); ++deferred_regions;
     }
-    return projected(root,context);
+    for (std::uint32_t j = 0; j < region.metadata_count; ++j) {
+        auto metadata = region_metadata[region.metadata_begin+j];
+        auto id = projected(metadata.source,context);
+        if (metadata.packing) class_packing.put(id,metadata.packing);
+        if (!metadata.alignment || alignment_owners.get(id)) continue;
+        std::uint32_t first = 0, previous = 0;
+        for (auto a = metadata.alignment; a; a = alignments[a].next) {
+            auto value = alignments[a]; value.next = 0;
+            value.operand = projected(value.operand,context);
+            auto index = alignments.size(); alignments.push_back(value);
+            if (previous) alignments[previous].next = index; else first = index;
+            previous = index;
+        }
+        alignment_owners.put(id,first);
+    }
+    auto id = projected(root,context);
+    if (pending > 1) { deferred_occurrences.put(id,1); ++demanded_regions; }
+    else if (nodes[source].kind == Kind::DefaultArgument) {
+        // A default can be demanded before its containing function body.
+        deferred_occurrences.put(id,1); ++deferred_regions; ++demanded_regions;
+    }
+    return id;
 }
 } }

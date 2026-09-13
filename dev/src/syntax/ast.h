@@ -222,12 +222,23 @@ public:
     Node project_view(NodeId id) const;
     NodeId instantiate(NodeId root, std::uint32_t context);
     NodeId projected(NodeId source, std::uint32_t context) const;
-    bool pending_region(NodeId root) const { return deferred_occurrences.get(root) == 1; }
+    bool pending_region(NodeId root) const { return deferred_occurrences.get(root) > 1; }
     std::uint32_t new_context() { return ++contexts; }
     std::uint32_t contexts = 0;
     IdIndex occurrence_index;
+    // Zero is absent, one is projected, otherwise the original source ID + 1.
     IdIndex deferred_occurrences;
     std::size_t deferred_regions = 0, demanded_regions = 0;
+    std::vector<NodeId> projection_work;
+    struct SourceRegion {
+        std::uint32_t begin, count, roots_begin, roots_count, metadata_begin, metadata_count;
+    };
+    struct RegionMetadata { NodeId source; std::uint32_t packing, alignment; };
+    std::uint32_t source_region(NodeId root);
+    IdIndex source_region_index;
+    std::vector<SourceRegion> source_regions;
+    std::vector<NodeId> region_nodes, region_roots;
+    std::vector<RegionMetadata> region_metadata;
     std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);
     bool telemetry;
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;

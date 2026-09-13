@@ -468,3 +468,13 @@ templates compare the current declaration with the canonical initial source.
 No course fixture, reference, or comparison rule changed. Current checks pass
 314 PA14 cases, 21 native programs, twelve rejection controls and the focused
 `default-heads.t` compiler/native reducer. The final evidence campaign follows.
+
+The AST owns a translation-unit source-region index keyed by parsed root identity.
+Each demanded source region is walked once to retain flat node-ID, deferred-root
+and attribute-reference slices. Projection consumes those slices for each complete
+source/context key. Deferred roots retain the original parsed ID so later demand
+uses source attributes even when invoked with an occurrence. All concrete nodes
+exist before alignment operands are projected. Storage follows indexed source
+regions plus demanded occurrences; there is no per-specialization tree walk or
+per-node attribute lookup. This is a region boundary, not yet dependent-only
+projection within a used body.

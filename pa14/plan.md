@@ -10,8 +10,13 @@ unchanged. PA15 has not started.
 ## Design/spec alignment
 
 Active continuation from `ca42e706` (previous turn: verified progress). The
-projection/demand owner will separate member bodies, constructor initializers
-and default arguments from declaration completion. Shared source regions retain
+Projection now separates member bodies, constructor initializers and default
+arguments from declaration completion. Default values retain their declaring
+template head and independent semantic state. Immutable source-region indexes
+retain node IDs, deferred roots and attributes once; each specialization allocates
+only occurrences for demanded regions. Cached topology removes repeated source
+walks and per-node attribute lookups. Stage/native controls pass; the final
+performance and sanitizer campaign is pending. Shared source regions retain
 roots; demanded regions establish context-owned occurrences and facts. Work
 must follow declaration syntax plus demanded regions, with no repeated traversal
 of undemanded bodies. Validate unused dependent defaults, explicit arguments,

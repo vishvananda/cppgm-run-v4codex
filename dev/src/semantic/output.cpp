@@ -146,6 +146,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_occurrences\":" << ast.nodes.size() - ast.nodes.parsed_size()
         << ",\"template_deferred_regions\":" << static_cast<const syntax::Ast&>(ast).deferred_regions
         << ",\"template_demanded_regions\":" << static_cast<const syntax::Ast&>(ast).demanded_regions
+        << ",\"template_source_regions\":" << static_cast<const syntax::Ast&>(ast).source_regions.size()
+        << ",\"template_region_nodes\":" << static_cast<const syntax::Ast&>(ast).region_nodes.size()
+        << ",\"template_region_roots\":" << static_cast<const syntax::Ast&>(ast).region_roots.size()
         << ",\"template_default_environment_work\":" << default_environment_work
         << ",\"template_default_argument_work\":" << default_argument_work
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
