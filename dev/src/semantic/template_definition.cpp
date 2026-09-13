@@ -2,6 +2,11 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+namespace {
+// CompleteTail also records that this head's own application succeeded. This
+// derived fact shares the compact source/specialization entry with its state.
+enum class DefinitionState : unsigned char { NotStarted, Active, Applied, Failed, CompleteTail };
+}
 std::uint32_t Analyzer::definition_root(EntityId pattern)
 {
     auto id = definition_roots.get(pattern);
@@ -124,20 +129,22 @@ bool Analyzer::instantiate_member_definition(EntityId e)
     // introduce a new head; completed old tails remain valid for this concrete
     // specialization, independently of other owners or declaration insertion.
     auto traversal = key(owner.specialization,head);
-    if (definition_traversals.get(traversal)) { ++definition_hits; return true; }
+    if (definition_applications.get(traversal) == unsigned(DefinitionState::CompleteTail)) {
+        ++definition_hits; return true;
+    }
     bool complete = true;
     for (auto id = head; id; id = template_definitions[id].next) {
         auto k = key(owner.specialization,id);
-        if (definition_traversals.get(k)) { ++definition_hits; break; }
+        auto state = DefinitionState(definition_applications.get(k));
+        if (state == DefinitionState::CompleteTail) { ++definition_hits; break; }
         ++definition_edges;
-        auto state = definition_applications.get(k);
-        if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed template member definition");
-        if (state) {
+        if (state == DefinitionState::Failed) throw std::runtime_error("failed template member definition");
+        if (state != DefinitionState::NotStarted) {
             // Recursive demand can consume established declarations, but must
             // not publish completion for a still-active definition application.
-            complete &= state == unsigned(FactState::Success); continue;
+            complete &= state == DefinitionState::Applied; continue;
         }
-        definition_applications.put(k,unsigned(FactState::Active));
+        definition_applications.put(k,unsigned(DefinitionState::Active));
         ++template_definition_work;
         auto def = template_definitions[id];
         auto pack = specialization_arguments(owner.specialization);
@@ -162,15 +169,15 @@ bool Analyzer::instantiate_member_definition(EntityId e)
                 auto type = declarator(d,specifiers(specs,environment),environment);
                 declare_object(d,ast.projected(def.initializer,context),type,specs,environment,source);
             } else declaration(source,environment);
-            definition_applications.put(k,unsigned(FactState::Success));
+            definition_applications.put(k,unsigned(DefinitionState::Applied));
         } catch (...) {
-            definition_applications.put(k,unsigned(FactState::Failure));
+            definition_applications.put(k,unsigned(DefinitionState::Failed));
             active_template_scope = saved_template; member_definition_environment = saved_environment;
             throw;
         }
         active_template_scope = saved_template; member_definition_environment = saved_environment;
     }
-    if (complete) definition_traversals.put(traversal,1);
+    if (complete) definition_applications.put(traversal,unsigned(DefinitionState::CompleteTail));
     return true;
 }
 void Analyzer::demand_template_storage(EntityId e)

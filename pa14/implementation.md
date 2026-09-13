@@ -608,3 +608,12 @@ The initial personal pointer comparison was ill-formed between int* and long*;
 explicit void-pointer conversion preserves the intended distinct-storage test.
 Its original source and failure log remain in the artifacts. Full source/key
 scaling, sanitizer and performance acceptance follow this coherent increment.
+
+
+The application and completed-tail facts now share one compact index entry.
+Typed NotStarted/Active/Applied/Failed/CompleteTail states preserve their separate
+meaning: CompleteTail proves this head applied and every reachable older head
+completed. Re-entrant Active applications do not publish that derived fact.
+This removes the preliminary second index and its duplicated keys; only three
+telemetry counters extend the Analyzer owner. PA14, prior13 and all 25 native
+programs still pass after the representation change.
