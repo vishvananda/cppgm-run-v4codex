@@ -490,3 +490,16 @@ All 8,932 performance observations verify; the corrected fully-used-body slowdow
 isolated cache benefit and remaining RSS costs are retained in performance.md.
 Dependent-only projection inside used regions and typed demand/failure dependency
 graphs remain separate current-stage representation work.
+
+## Typed body value dependencies (active continuation)
+
+A source layout query now retains its canonical type-query identity separately
+from its fixed size_t result type. Body binding can therefore establish scalar
+operator conversions and call selection even when a value depends on T. The
+source graph does not invent a constant for that value. Each concrete frame/query
+substitutes only dependent facts; a separate monotonic value owner caches the
+constant identity. Enclosing fixed expressions reuse their type/conversion facts
+without copying a source non-constant marker over a dependent concrete value.
+Query checking validates the operand of nested sizeof even in unevaluated uses.
+The initial group passes 314 course cases, 22 native programs and eight explicit
+rejection controls. Value-dependent array types and full evidence remain active.

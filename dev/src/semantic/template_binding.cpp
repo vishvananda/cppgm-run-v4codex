@@ -69,8 +69,20 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s)
 bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
 {
     bool dependent = bind_template_expression_impl(n,s,callee);
-    if (n && !dependent && !ast.nodes.occurrences[n].context)
-        check_fixed_expression(n,s);
+    if (n && !ast.nodes.occurrences[n].context) {
+        auto kind = ast[n].kind;
+        if (dependent && template_body_values) {
+            template_value_dependence.put(ast.nodes.occurrences[n].source,1);
+            if (kind == Kind::Sizeof || kind == Kind::TypeTrait) bind_template_size(n,s);
+        }
+        // Value dependence alone does not change scalar operand types or the
+        // selected built-in conversions. Each checker still requires complete
+        // fixed operand facts before publishing its source semantic decision.
+        bool scalar = kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional ||
+            kind == Kind::Unary || kind == Kind::Postfix || kind == Kind::Parenthesized || kind == Kind::Subscript ||
+            kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast;
+        if (!dependent || (template_body_values && scalar)) check_fixed_expression(n,s);
+    }
     return dependent;
 }
 bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
@@ -177,6 +189,11 @@ void Analyzer::bind_template_body(const Body& body)
             entities[e].type = parameter_body_type(declared_type);
         }
     }
+    struct ValueBinding {
+        bool& mode; bool prior;
+        ValueBinding(bool& value) : mode(value), prior(value) { mode = true; }
+        ~ValueBinding() { mode = prior; }
+    } value_binding(template_body_values);
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);
     template_bound_bodies.put(source,unsigned(FactState::Success));

@@ -89,6 +89,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     auto source = template_fixed_expressions.get(occurrence.source);
     if (!source) return false;
     ++template_fixed_uses;
+    if (reuse_template_value(n,s,result)) return true;
     if (ast[n].kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
     if (reuse_template_field(n,s,result)) {
@@ -131,7 +132,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     if (ast[n].kind == Kind::Assignment || ast[n].op == OP_INC || ast[n].op == OP_DEC ||
         (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) observe_scalar(first);
     facts[n].type = facts[source].type;
-    facts[n].value = facts[source].value;
+    if (!template_value_dependence.get(occurrence.source)) facts[n].value = facts[source].value;
     facts[n].entity = result.entity;
     return true;
 }

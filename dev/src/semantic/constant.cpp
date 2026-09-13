@@ -79,6 +79,8 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 Constant Analyzer::evaluate(NodeId n, ScopeId s)
 {
     if (!n) return Constant();
+    if (definitions && !ast.nodes.occurrences[n].context &&
+        template_value_dependence.get(ast.nodes.occurrences[n].source)) return Constant();
     if (calls && !expressions[n].ready) {
         switch (ast[n].kind) {
         case Kind::Literal: case Kind::KeywordLiteral: case Kind::IdExpression: case Kind::Parenthesized:

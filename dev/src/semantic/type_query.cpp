@@ -115,7 +115,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         children.push_back(expression_query(first,s)); break;
     case Kind::Sizeof: case Kind::TypeTrait:
         q.kind = QueryKind::Sizeof; q.op = node.op;
-        if (ast[first].kind == Kind::TypeId) q.type = type_id(first,s);
+        if (ast[first].kind == Kind::TypeId) {
+            q.type = type_id(first,s);
+            if (template_type_probe && !q.type) return 0;
+        }
         else children.push_back(expression_query(first,s));
         break;
     default:
@@ -207,7 +210,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;
     case QueryKind::Call: r = query_call(q,children); break;
-    case QueryKind::Sizeof: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
+    case QueryKind::Sizeof:
+        size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
+        x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
     }
     r.state = FactState::Success; query_facts[id] = r; return r;
     } catch (...) { query_facts[id].state = FactState::Failure; throw; }

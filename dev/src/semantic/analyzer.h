@@ -281,6 +281,14 @@ private:
     std::vector<TypeQueryFact> query_facts = std::vector<TypeQueryFact>(1);
     Index query_sources, query_callee_sources, signature_parameters;
     std::size_t query_work = 0;
+    struct QueryValue { std::uint32_t constant = 0; FactState state = FactState::NotStarted; };
+    Index query_value_index, template_value_queries, template_value_dependence;
+    std::vector<QueryValue> query_values = std::vector<QueryValue>(1);
+    bool template_body_values = false;
+    std::size_t query_value_work = 0, template_value_work = 0, template_value_uses = 0;
+    std::uint32_t query_value(QueryId id);
+    bool bind_template_size(NodeId node, ScopeId scope);
+    bool reuse_template_value(NodeId node, ScopeId scope, Expression& result);
     QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
     QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
     QueryId substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner = 0);
