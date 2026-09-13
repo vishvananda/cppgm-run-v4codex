@@ -43,7 +43,8 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray || (t.kind == TypeKind::Named && entities[t.entity].template_parameter);
+    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray ||
+        (t.kind == TypeKind::Named && (entities[t.entity].template_parameter || entities[t.entity].template_pattern));
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_type(argument_types[pack.offset+j]);
@@ -96,6 +97,12 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);
         if (!result) return 0;
         result = types.qualify(result, p.cv);
+    } else if (p.kind == TypeKind::Named && entities[p.entity].template_pattern) {
+        // Local declaration identity is an input to substitution, independently
+        // of whether the declaration's members use template parameters.
+        if (!owner) return pattern;
+        auto entity = substitution_binding(owner,p.entity);
+        result = types.qualify(entities[entity].type,p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].specialization) {
         auto spec = specializations[entities[p.entity].specialization];
         auto pack = argument_packs[spec.arguments];

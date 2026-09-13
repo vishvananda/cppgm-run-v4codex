@@ -38,19 +38,25 @@ void Analyzer::attach_template_context(std::uint32_t context, std::uint32_t fram
     if (prior && prior != context) throw std::logic_error("substitution frame has two declaration contexts");
     template_type_contexts.put(context,frame); substitution_frame_contexts.put(frame,context);
 }
+void Analyzer::publish_template_binding(NodeId source, EntityId concrete)
+{
+    auto occurrence = ast.nodes.occurrences[source];
+    if (!occurrence.context) return;
+    auto pattern = template_declaration_sources.get(occurrence.source);
+    if (!pattern) return;
+    auto frame = template_type_contexts.get(occurrence.context);
+    if (!frame) throw std::logic_error("declaration has no substitution frame");
+    auto k = key(frame,pattern);
+    auto prior = substitution_binding_cache.get(k);
+    if (prior && prior != concrete) throw std::logic_error("substituted declaration identity changed");
+    substitution_binding_cache.put(k,concrete);
+}
 EntityId Analyzer::substitution_entity(std::uint32_t frame, EntityId source) const
 {
-    auto node = entities[source].source;
-    for (; frame; frame = substitution_frames[frame].parent) {
-        auto spec = specializations[substitution_frames[frame].specialization];
-        auto context = substitution_frame_contexts.get(frame);
-        if (!context) context = spec.context;
-        auto occurrence = ast.projected(node,context);
-        if (occurrence && ast.nodes.occurrences[occurrence].context) {
-            auto entity = facts[occurrence].entity;
-            if (entity && !entities[entity].template_pattern) return entity;
-        }
-    }
+    // Concrete declarations publish their identity. Consumers never recover
+    // that semantic decision from a projected syntax node or its Fact slot.
+    for (; frame; frame = substitution_frames[frame].parent)
+        if (auto entity = substitution_binding_cache.get(key(frame,source))) return entity;
     return 0;
 }
 bool Analyzer::pattern_scope(ScopeId scope) const

@@ -9,15 +9,16 @@ are unchanged. PA15 has not started. Current implementation: `5b947a18`.
 
 ## Design/spec alignment
 
-Continuation from `60cf761c`; previous turn: **verified progress**. This turn
-closes class-scope special-member signatures through definition application.
-Constructors/destructors retain void signatures; conversions retain their target
-types. Injected primary/nested names and renamed definition heads carry canonical
-source identities and parameter slices. Matching uses the retained source/head
-chain; concrete substitution uses immutable parent frames. Selected constructors,
-destructors, conversions and defaulted definitions apply to their known member.
-Raw parameters, defaults, exceptions, transfer classification, virtual facts and
-base/complete entries keep their existing owners. Bodies remain deferred.
+Active continuation from `fda0a178`; previous turn: **verified progress**.
+Extend source declaration ownership through local class/enum identities, concrete
+entity/scope publication, query substitution and object/lifetime consumers.
+Source declarations publish canonical identity; per-frame overlays publish only
+concrete bindings. Replace syntax-occurrence recovery at those consumers, then
+reduce dense occurrence Fact storage where the same ownership permits it.
+Validate distinct local types, self references, aliases, dependent enum/layout
+queries, nested scopes, concrete objects and cleanup; freeze source/key/use
+scaling and equivalent output before accepting compiler cost. Completed special
+signature behavior and the preceding acceptance evidence remain inherited.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |

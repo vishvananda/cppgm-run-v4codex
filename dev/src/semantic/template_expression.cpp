@@ -126,8 +126,8 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     if (result.entity && entities[result.entity].template_pattern) {
         if (nonstatic_field(result.entity)) result.entity = template_field_use(result.entity,s).entity;
         else {
-        auto declaration = ast.projected(entities[result.entity].source,occurrence.context);
-        auto entity = facts[declaration].entity;
+        auto frame = template_type_contexts.get(occurrence.context);
+        auto entity = substitution_binding(frame,result.entity);
         if (!entity || entities[entity].template_pattern) throw std::logic_error("missing concrete fixed-expression declaration");
         if (result.type != value_type(entities[entity].type)) throw std::logic_error("fixed expression declaration type changed");
         result.entity = entity;

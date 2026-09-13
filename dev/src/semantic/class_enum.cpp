@@ -78,6 +78,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         }
     }
     facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
+    if (definitions) publish_template_binding(n,e);
     if (emit && !anonymous_union) {
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);
         declarations[d].key = key_op;
@@ -192,6 +193,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         throw std::runtime_error("incompatible enum declaration");
     TypeId t = entities[e].type;
     facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
+    if (definitions) publish_template_binding(n,e);
     ScopeId es = entities[e].scope;
     ScopeId output_owner = owner;
     bool qualified_definition = definition && name && ast[name].first != ast[name].last;

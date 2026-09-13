@@ -74,6 +74,14 @@ bool Parser::parameter_clause_ahead()
         if (in.is("...", i)) return true;
         if (!type_start(i)) return false;
         i = probe_type(i);
+        // After a type, a parenthesis can start a nested declarator or a
+        // function suffix. An expression-only first token instead establishes
+        // direct initialization, as in object(T(5)). No grammar is replayed.
+        if (in.is("{",i)) return false;
+        if (in.is("(",i) && !in.is(")",i+1) && !in.is("...",i+1) &&
+            !in.is("*",i+1) && !in.is("&",i+1) && !in.is("&&",i+1) &&
+            !in.is("(",i+1) && !in.is("[",i+1) && !in.is("::",i+1) &&
+            !identifier(i+1) && !type_start(i+1)) return false;
         // Inspect each parameter prefix; nested suffixes and default arguments
         // cannot introduce a parameter at this delimiter level.
         while (i < end && !in.is(",", i)) {

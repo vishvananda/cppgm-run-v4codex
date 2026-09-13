@@ -782,3 +782,28 @@ spread and historical costs. The cumulative verifier passes all new and inherite
 measurements, source proofs, current layouts and required-check evidence. The
 class-scope signature/application group is complete; the remaining joint
 local-declaration/lifetime/demand graph is the explicit handoff boundary.
+
+
+Continuation from fda0a178 publishes concrete template declarations through the
+source-declaration/substitution-frame owner. Source binding records the canonical
+pattern entity; concrete declaration, class and enum producers publish its
+selected identity before consumers run. Type-query binding and fixed-expression
+uses consume that overlay directly, including parent frames. They no longer
+recover entity decisions from projected syntax and dense Fact slots. Local class
+and enum patterns retain symbolic Named identities; substitution resolves them
+through the same published declaration owner before layout, aliases or objects
+are consumed. Concrete destruction remains attached to the resulting object.
+
+The local-declaration-facts.cpp control covers copied local objects, raw aliases,
+decltype/reference aliases, enum-driven bounds, nested local types, lexical
+shadowing, specialization identity and cleanup. It exposed declaration prediction
+misclassifying object(T(5)) as a function declaration. The bounded lookahead now
+rejects expression-only tokens at that parameter-prefix position, consistent with
+N3485 [dcl.ambig.res]/1; it builds no speculative grammar tree. An initial control
+missed typename and used function-local static storage outside PA10's inherited
+boundary. That source and all failures remain in the artifact directory. The
+corrected control uses supported class-template static data members and executes
+successfully under the host and this compiler. Stage 314, prior 1621 and all 31
+personal native controls pass. Next reduce dense occurrence Fact storage while
+preserving these explicit publication and lifetime consumers; full evidence and
+performance acceptance follow the complete owner group.

@@ -20,6 +20,12 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         scopes[cs].jump = scopes[parent].depth-scopes[jump].depth == scopes[jump].depth-scopes[grand].depth ? grand : parent;
     }
     template_pattern_scopes.put(cs,1); template_class_bindings.put(source,cs);
+    // A local pattern owns a type identity even when its layout and concrete
+    // declaration differ in each enclosing function specialization.
+    if (!entities[entity].type) for (auto scope = parent; scope; scope = scopes[scope].parent)
+        if (scopes[scope].kind == ScopeKind::Function) {
+            entities[entity].type = types.named(entity); break;
+        }
     bind(cs,entities[entity].name,entity);
     auto list = child(n,Kind::Bases);
     for (auto b = ast[list].first; b; b = ast[b].next) {
@@ -59,8 +65,14 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         auto e = pattern_declaration(EntityKind::Type,s,terminal(node.detail),n,false);
         auto es = make_scope(ScopeKind::Enum,s,entities[e].name,e,false); entities[e].scope = es;
         bool scoped = child(n,Kind::EnumKey);
+        entities[e].key = KW_ENUM; entities[e].scoped = scoped;
+        for (auto scope = s; scope; scope = scopes[scope].parent)
+            if (scopes[scope].kind == ScopeKind::Function) {
+                entities[e].type = types.named(e); break;
+            }
         for (auto c = node.first; c; c = ast[c].next) if (ast[c].kind == Kind::Enumerator) {
             auto value = pattern_declaration(EntityKind::Enumerator,es,ast[c].text,c,bind_template_expression(ast[c].first,es));
+            entities[value].type = entities[e].type;
             if (!scoped) bind(s,ast[c].text,value);
         }
         return;

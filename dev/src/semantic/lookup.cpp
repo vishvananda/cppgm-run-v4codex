@@ -105,7 +105,10 @@ std::uint32_t Analyzer::record(ScopeId s, EntityId e, NodeId source, TypeId type
     if (scopes[s].last_decl) declarations[scopes[s].last_decl].next = id;
     else scopes[s].first_decl = id;
     scopes[s].last_decl = id;
-    if (source) { facts[source].entity = e; facts[source].type = type; facts[source].scope = s; }
+    if (source) {
+        facts[source].entity = e; facts[source].type = type; facts[source].scope = s;
+        if (definitions) publish_template_binding(source,e);
+    }
     return id;
 }
 void Analyzer::add_edge(ScopeId s, ScopeId to, bool is_inline)

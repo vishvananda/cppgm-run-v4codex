@@ -317,6 +317,8 @@ private:
     // A complete substitution frame and source type/query identify immutable
     // facts. Separate indexes retain the complete 32-bit ID spaces.
     Index specialization_type_cache, specialization_query_cache, substitution_binding_cache;
+    Index template_declaration_sources;
+    void publish_template_binding(NodeId source, EntityId concrete);
     std::size_t substitution_work = 0, substitution_hits = 0, substitution_records = 0;
     Index substitution_frame_index, template_type_contexts, substitution_frame_contexts;
     std::vector<TemplateSubstitutionFrame> substitution_frames = std::vector<TemplateSubstitutionFrame>(1);
