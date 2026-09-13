@@ -67,7 +67,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {
-            auto a = entities[selected].specialization ? instantiate_default(selected,i) : default_arguments[entities[selected].defaults+i];
+            auto a = default_argument(selected,i);
             args.push_back(a); chosen.push_back(conversion(a,types.parameters[f.offset+i]));
         }
         for (auto c = callee;; c = ast[c].first) {

@@ -137,6 +137,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             entities[e].mutable_field = spec_has(specs,KW_MUTABLE);
             if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
             if (type) { entities[e].type = types.signature(type); facts[d].type = type; }
+            if (function) bind_template_defaults(d,s);
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init && bind_template_expression(init,s)) template_pattern_entities.put(e,2);

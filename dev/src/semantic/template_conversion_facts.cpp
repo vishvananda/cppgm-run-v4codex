@@ -11,7 +11,7 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
         auto f = types[entities[c.function].type];
         std::vector<NodeId> args; std::vector<Conversion> chosen;
         for (unsigned i = 0; i < f.count; ++i) {
-            auto a = i ? default_arguments[entities[c.function].defaults+i] : n;
+            auto a = i ? default_argument(c.function,i) : n;
             auto value = i ? expression(a,s) : source;
             auto target = types.parameters[f.offset+i];
             auto argument = !i && c.implicit_move ? transfer_conversion(value.type,ValueCategory::Xvalue,target) :

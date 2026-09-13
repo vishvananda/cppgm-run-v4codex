@@ -2,10 +2,44 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+void Analyzer::bind_template_defaults(NodeId d, ScopeId s)
+{
+    if (!d || ast.nodes.occurrences[d].context) return;
+    auto source = ast.nodes.occurrences[d].source;
+    if (template_default_bindings.get(source)) return;
+    NodeId parameters = 0;
+    for (auto node = d; node;) {
+        if (auto p = child(node,Kind::Parameters)) parameters = p;
+        auto nested = child(node,Kind::NestedDeclarator); node = nested ? ast[nested].first : 0;
+    }
+    bool needed = false;
+    for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
+    if (!needed) return;
+    template_default_bindings.put(source,1);
+    auto scope = make_scope(ScopeKind::Block,s,0,0,false);
+    template_pattern_scopes.put(scope,1);
+    unsigned ordinal = 0;
+    for (auto p = ast[parameters].first; p; p = ast[p].next) {
+        if (ast[p].kind != Kind::Parameter) continue;
+        auto specs = ast[p].first, decl = ast[specs].next;
+        auto type = facts[p].type;
+        if (!type) type = bind_template_type(specs,decl,scope);
+        auto name = terminal(decl_name(decl));
+        auto e = make_entity(EntityKind::Parameter,scope,name,p);
+        entities[e].template_pattern = true;
+        entities[e].type = type ? parameter_body_type(type) : 0;
+        template_pattern_entities.put(e,!type || dependent_type(type) ? 2 : 1);
+        signature_parameters.put(e,++ordinal); bind(scope,name,e);
+        // Fixed names are definition-time obligations. Dependent calls/types
+        // retain their bindings without demanding a concrete default value.
+        bind_template_expression(child(p,Kind::DefaultArgument),scope);
+    }
+}
 void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
 {
     Type f = types[entities[e].type];
     if (!f.count) return;
+    if (definitions && entities[e].template_info) bind_template_defaults(d,s);
     if (!entities[e].defaults) {
         if (default_arguments.empty()) default_arguments.push_back(0);
         entities[e].defaults = default_arguments.size();
@@ -25,6 +59,12 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
         unsigned index = entities[e].defaults + i;
         if (a) {
             if (default_arguments[index]) throw std::runtime_error("duplicate default argument");
+            // Class specialization declares member defaults without demanding
+            // their expressions. Preserve the declaration's access environment.
+            if (definitions && ast.nodes.occurrences[a].context) {
+                default_arguments[index] = a; facts[a].scope = s;
+                seen = true; continue;
+            }
             NodeId value = ast[a].first;
             while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
                 value = ast[value].first;
@@ -38,6 +78,35 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s)
         }
         if (default_arguments[index]) seen = true;
         else if (seen) throw std::runtime_error("missing trailing default argument");
+    }
+}
+NodeId Analyzer::default_argument(EntityId e, unsigned parameter)
+{
+    if (definitions && entities[e].specialization) return instantiate_default(e,parameter);
+    auto slot = entities[e].defaults+parameter;
+    auto root = default_arguments[slot];
+    if (ast[root].kind != Kind::DefaultArgument) return root;
+    auto state = default_argument_states.get(root);
+    if (state == unsigned(FactState::Active)) throw std::runtime_error("recursive member default argument");
+    if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed member default argument");
+    default_argument_states.put(root,unsigned(FactState::Active));
+    try {
+        demand_region(root);
+        auto scope = facts[root].scope;
+        auto type = types[entities[e].type];
+        auto target = types.parameters[type.offset+parameter];
+        auto value = ast[root].first;
+        while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
+            value = ast[value].first;
+        if (ast[value].kind == Kind::BracedInit) {
+            expression(value,scope); require_conversion(value,target);
+        } else initialize(ast[root].first,target,scope);
+        default_arguments[slot] = value;
+        default_argument_states.put(root,unsigned(FactState::Success));
+        return value;
+    } catch (...) {
+        default_argument_states.put(root,unsigned(FactState::Failure));
+        throw;
     }
 }
 } }

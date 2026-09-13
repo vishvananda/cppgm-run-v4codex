@@ -277,6 +277,7 @@ void Analyzer::schedule_body(const Body& body)
 void Analyzer::function_body(const Body& body)
 {
     if (entities[body.entity].definition) throw std::runtime_error("function redefinition");
+    demand_region(body.node);
     if (definitions) {
         auto type = types[entities[body.entity].type];
         if (class_value(type.child)) complete_class(types[type.child].entity);

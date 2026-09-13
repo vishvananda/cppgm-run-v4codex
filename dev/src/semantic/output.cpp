@@ -144,6 +144,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_template_member_uses\":" << template_member_uses.size()-1
         << ",\"parsed_nodes\":" << ast.nodes.parsed_size()
         << ",\"template_occurrences\":" << ast.nodes.size() - ast.nodes.parsed_size()
+        << ",\"template_deferred_regions\":" << static_cast<const syntax::Ast&>(ast).deferred_regions
+        << ",\"template_demanded_regions\":" << static_cast<const syntax::Ast&>(ast).demanded_regions
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()

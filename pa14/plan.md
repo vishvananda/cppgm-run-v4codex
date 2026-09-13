@@ -9,6 +9,15 @@ unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
+Active continuation from `ca42e706` (previous turn: verified progress). The
+projection/demand owner will separate member bodies, constructor initializers
+and default arguments from declaration completion. Shared source regions retain
+roots; demanded regions establish context-owned occurrences and facts. Work
+must follow declaration syntax plus demanded regions, with no repeated traversal
+of undemanded bodies. Validate unused dependent defaults, explicit arguments,
+recursive/nested demands, context identity, course/native parity and compiler/RSS
+scaling before extending the same region ownership further.
+
 Continuation from `5b1afe54` is **verified progress**. Raw function parameter
 types now feed bodies directly, preserving cv, array/function adjustment and
 reference collapse. Canonical declaration facts extend that path to supported

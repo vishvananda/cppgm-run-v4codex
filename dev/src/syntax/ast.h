@@ -222,9 +222,12 @@ public:
     Node project_view(NodeId id) const;
     NodeId instantiate(NodeId root, std::uint32_t context);
     NodeId projected(NodeId source, std::uint32_t context) const;
+    bool pending_region(NodeId root) const { return deferred_occurrences.get(root) == 1; }
     std::uint32_t new_context() { return ++contexts; }
     std::uint32_t contexts = 0;
     IdIndex occurrence_index;
+    IdIndex deferred_occurrences;
+    std::size_t deferred_regions = 0, demanded_regions = 0;
     std::uint32_t save_literal(const PostToken& token, IdentifierId prefix);
     bool telemetry;
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
@@ -248,6 +251,7 @@ public:
     operator const Ast&() const { return tree; }
     NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
     NodeId projected(NodeId source, std::uint32_t context) const { return tree.projected(source,context); }
+    bool pending_region(NodeId root) const { return tree.pending_region(root); }
     std::uint32_t new_context() { return tree.new_context(); }
     bool& telemetry;
     NodePool& nodes;

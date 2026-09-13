@@ -19,17 +19,36 @@ Node Ast::project_view(NodeId id) const
 }
 NodeId Ast::instantiate(NodeId root, std::uint32_t context)
 {
-    std::vector<NodeId> work(1,root);
+    struct Region { NodeId source; bool deferred; };
+    std::vector<Region> work(1,Region{root,false});
     for (std::size_t i = 0; i < work.size(); ++i) {
-        NodeId source = work[i];
-        if (!source || projected(source,context)) continue;
+        NodeId source = work[i].source;
+        if (!source) continue;
+        auto id = projected(source,context);
+        bool created = !id;
+        if (id) {
+            if (work[i].deferred || !pending_region(id)) continue;
+            deferred_occurrences.put(id,2); ++demanded_regions;
+        }
         Node n = nodes[source];
         // Contexts refer to original source graph identities; nested demand
         // retains the enclosing specialization through its semantic environment.
-        NodeId id = nodes.occurrence(source,context);
-        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[source].source,id);
-        if (n.detail) work.push_back(n.detail);
-        for (NodeId c = n.first; c; c = nodes[c].next) work.push_back(c);
+        if (created) {
+            id = nodes.occurrence(source,context);
+            occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[source].source,id);
+        }
+        if (work[i].deferred) {
+            deferred_occurrences.put(id,1); ++deferred_regions;
+            continue;
+        }
+        if (n.detail) work.push_back({n.detail,false});
+        for (NodeId c = n.first; c; c = nodes[c].next) {
+            auto kind = nodes[c].kind;
+            bool body = (n.kind == Kind::Function || n.kind == Kind::SpecialDefinition) &&
+                (kind == Kind::Compound || kind == Kind::FunctionTry || kind == Kind::CtorInitializer);
+            work.push_back({c,body || kind == Kind::DefaultArgument});
+        }
+        if (!created) continue;
         if (auto packing = class_packing.get(source)) class_packing.put(id,packing);
         if (auto attribute = alignment_owners.get(source)) {
             std::uint32_t first = 0, previous = 0;
@@ -37,13 +56,13 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
                 auto value = alignments[attribute]; value.next = 0;
                 auto index = alignments.size(); alignments.push_back(value);
                 if (previous) alignments[previous].next = index; else first = index;
-                previous = index; work.push_back(value.operand);
+                previous = index; work.push_back({value.operand,false});
             }
             alignment_owners.put(id,first);
         }
     }
-    for (NodeId source : work) {
-        auto id = projected(source,context);
+    for (auto region : work) {
+        auto id = projected(region.source,context);
         for (auto a = alignment_owners.get(id); a; a = alignments[a].next)
             if (nodes.occurrences[alignments[a].operand].context != context)
                 alignments[a].operand = projected(alignments[a].operand,context);

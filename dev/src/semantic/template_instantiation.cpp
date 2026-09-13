@@ -1,6 +1,13 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+void Analyzer::demand_region(NodeId root)
+{
+    if (!root || !ast.pending_region(root)) return;
+    auto context = ast.nodes.occurrences[root].context;
+    ast.instantiate(root,context);
+    facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
+}
 void Analyzer::instantiate_function(EntityId e)
 {
     auto index = entities[e].specialization;

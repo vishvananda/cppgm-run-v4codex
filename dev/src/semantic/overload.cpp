@@ -303,7 +303,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         Type selected_type = types[ft];
         for (unsigned j = 0; j < selected_type.count; ++j) reject_abstract(types.parameters[selected_type.offset+j]);
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {
-            NodeId a = definitions && entities[selected].specialization ? instantiate_default(selected,i) : default_arguments[entities[selected].defaults + i];
+            NodeId a = default_argument(selected,i);
             args.push_back(a);
             chosen.push_back(conversion(a, types.parameters[selected_type.offset+i]));
         }

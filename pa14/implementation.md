@@ -423,3 +423,28 @@ definition-time rejection of invalid parameter operations and unknown fixed
 calls, verified alongside the inherited binding controls.
 Whole-region projection, remaining dependent body forms and structured failure
 states are still current-stage work; these type caches do not complete them.
+
+## Declaration, body and default-argument regions (active continuation)
+
+Projection retains member body, constructor-initializer and default-argument
+roots separately from declaration contents. Each complete source/context key
+has at most one occurrence; a deferred root transitions once to demanded and
+only then projects its contents. Function body and constructor semantic owners
+request their own regions and grow context facts before consuming them. Local
+classes preserve the same nested boundary rather than eagerly projecting their
+unused methods.
+
+Concrete member defaults retain their declaring scope and are analyzed only
+when an argument is omitted. A single default accessor serves ordinary calls,
+constructor/conversion paths and retained call recipes. Default state detects
+recursive or failed demands. Template definition-time binding still checks
+fixed names inside defaults in a sequential parameter scope. This follows
+N3485 [temp.inst] and [dcl.fct.default], independent of diagnostic wording.
+
+Initial validation: PA14 314/314, twenty-one native controls and eight new
+rejection controls. `demand-regions.cpp` is rejected by the entry compiler and
+passes the current compiler/native backend, covering unused invalid dependent
+defaults, explicit constructor/member arguments, repeated default side effects,
+local/nested classes, renamed members and converting constructors. Complete
+function-template default-region identity, through checks and frozen final
+performance/sanitizer evidence are the next related steps.
