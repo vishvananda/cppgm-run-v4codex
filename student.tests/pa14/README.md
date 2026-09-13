@@ -12,7 +12,7 @@ python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all twenty-four local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all twenty-eight local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -22,12 +22,12 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-four
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-eight
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 338 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 124 explicit
+The current campaign checks 342 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 136 explicit
 binding/query/scalar/call/object/default rejection cases. All seven `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
 are in `check_queries.py` and `check_value_queries.py`.
@@ -187,3 +187,27 @@ public views; historical layout artifacts remain unchanged. The full verifier
 also checks current header hashes, ownership/scaling equations and required root
 check manifests. Artifacts live under
 `$RALPH_ARTIFACT_DIR/pa14-expression-owners/`.
+
+
+`definition_demand_benchmark.py A B WORK OUT` retains the full 32-input expression
+corpus and adds N/K/Q scaling and a live member-call loop. The resulting 37 compiler
+inputs and nine native programs record 644 observations. `definition_demand_evidence.py`
+freezes twelve entry-accepted invalid-definition proofs, four exact LowIR/native
+controls and the current 17-header layout probe. `definition_demand_validation.py`
+records 342 sanitizer parity sources and 136 rejection controls, including the
+new `check_definition_demands.py`. `verify_definition_demands.py` checks these
+artifacts and is included by the cumulative verifier (11,158 observations).
+
+`definition-demands.cpp`, `definition-signatures.cpp`, `definition-overloads.cpp`
+and `definition-parameters.cpp` cover repeated/late demand, overload selection,
+renamed nested alias heads, body parameter cv/array/function forms, dependent
+noexcept and nested function-pointer returns. Source matching uses N3485
+[class.mem]/1, [class.mfct]/1–2, [except.spec]/3–4 and [basic.def.odr]/1; host
+agreement supplements those rules. No course/reference output changed.
+
+`definition-demand-handoff.json` records the final command statuses and preserves
+initial failures and intermediate binaries. Its separate Massif profiles diagnose
+the disclosed native RSS increase on a retained call-input case; they are not
+timing observations. The full frozen campaign and both profiles remain under
+`$RALPH_ARTIFACT_DIR/pa14-definition-demands/`. Performance acceptance and remaining
+special-member/declaration/lifetime/demand ownership are documented in the plan.

@@ -1,0 +1,451 @@
+{
+  "entry_commit": "167f5f43",
+  "implementation_commit": "0fc50a95",
+  "release_sha256": "288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc",
+  "checks": [
+    {
+      "name": "stage",
+      "command": "make test-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-definition-parameters.log",
+      "log_sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "name": "prior",
+      "command": "make test-report-through-pa13",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-definition-parameters.log",
+      "log_sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "name": "through",
+      "command": "make test-report-through-pa14",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/through.log",
+      "log_sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "name": "file_audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa14 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "native",
+      "command": "python3 student.tests/pa14/check_functions.py",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-definition-parameters.log",
+      "log_sha256": "fa65a80143aee261e266ab0ac7edbb319676d0230c5ca3a615b3233a11404bc0"
+    }
+  ],
+  "initial_observations": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/audit-matching.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/audit-prototype-index.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/audit.log",
+      "sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-definition-heads.log",
+      "sha256": "765d891e02131584f8bd4c0d8f9a4c2bcab20fe3818f9a4e1e8aa6fd6973d54d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-definition-parameters.log",
+      "sha256": "d322b7007e0e409c041281a721e2255022db2ff6f07a5571767b744aeb8d72db"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-definition-publication.log",
+      "sha256": "7a9036d04d13761421bdabb5fc6fa251488fbcec1c1a018e684f0933995bbed7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-definition-states.log",
+      "sha256": "f6623ab6ae6c37d926db9d384e107a50b1dc174591b9c9aa49cdc27907fefbe5"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-direct-definitions.log",
+      "sha256": "1fca64c46e798644922d71c959d83a2eecc543868f9ba37c13e6169982296cc9"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-head-guards.log",
+      "sha256": "565ef66664e6e9d1370f65b9066c1479ebfc71bc745679c2fd1c3415a8b2741e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-member-matching.log",
+      "sha256": "22203f7d35282710f4c5258b0db66fe729dfa41caedf8fd375320a0962a608e6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-prototype-index.log",
+      "sha256": "0ec661edb381fe121fe74c98bab5aa8c2054cf81fc5ac0f337b2ac3171a550a6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-sanitizer.log",
+      "sha256": "d95a7cbd79aa6dfe96834da09c756c87a8ef033273aa64d70005baeff9366c81"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-selected-definitions.log",
+      "sha256": "a4c97e75d799335a0861884439fdda3ad74e915599ded7a0212b5550ee46995a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-signature-aliases.log",
+      "sha256": "a7a34118c5f10abeb38246056851be5e0b6c8b088906f55daa6407c8cbfeaebd"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/build-traversals.log",
+      "sha256": "9e0864807cb8319b2effcbf4af681ec479fc422bfcc50df0742a926bc0811477"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/entry-control.log",
+      "sha256": "c830f91d91cde2ad141ac9b7150c1f5ca7f467d26f6995ce29a9f0cdec6e101f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/entry-nested-heads.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/entry-overloads.log",
+      "sha256": "8a0a85bfa4f753384eba4da44b04c545567757659c8d2f26402836998a44bec7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/matching-rejections.log",
+      "sha256": "37b80a21c22881063d3ca3506db84e9bd671c6147e0a751a985d9696ee3cc9af"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/measurements.log",
+      "sha256": "19d3823796bebbbaf94d3f0a197fbfc56d3e473d81f11527ce1867f4f0b7680a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-definition-heads.log",
+      "sha256": "a568d91a4d69c2a8cceadb44fe1a3ff646fb81b63be0836c3f77e6ea018a039c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-definition-parameters.log",
+      "sha256": "fa65a80143aee261e266ab0ac7edbb319676d0230c5ca3a615b3233a11404bc0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-definition-publication.log",
+      "sha256": "a568d91a4d69c2a8cceadb44fe1a3ff646fb81b63be0836c3f77e6ea018a039c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-definition-states.log",
+      "sha256": "3a6e449b7d7b4d27491eceab201b70985fadb62504379fe8a6729d10a2865545"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-direct-definitions.log",
+      "sha256": "a568d91a4d69c2a8cceadb44fe1a3ff646fb81b63be0836c3f77e6ea018a039c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-head-guards.log",
+      "sha256": "a568d91a4d69c2a8cceadb44fe1a3ff646fb81b63be0836c3f77e6ea018a039c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-matching-expanded.log",
+      "sha256": "78321f1fe737c071106483395ba956f23b62b120e7368ff3df1c09414c8d1f80"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-prototype-index.log",
+      "sha256": "a568d91a4d69c2a8cceadb44fe1a3ff646fb81b63be0836c3f77e6ea018a039c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-selected-definitions.log",
+      "sha256": "78321f1fe737c071106483395ba956f23b62b120e7368ff3df1c09414c8d1f80"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-signature-aliases.log",
+      "sha256": "3a6e449b7d7b4d27491eceab201b70985fadb62504379fe8a6729d10a2865545"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-traversals-fixed.log",
+      "sha256": "3a6e449b7d7b4d27491eceab201b70985fadb62504379fe8a6729d10a2865545"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/native-traversals.log",
+      "sha256": "21e5c86ff05b9b09794c4214c5a5a28f655a60a05bf1a4050f4a99b7dc906304"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/preflight.log",
+      "sha256": "531f8c981daf155bfc4fcc108ec525af6a81240c33149090c7a2668db551f972"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-definition-heads.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-definition-parameters.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-definition-publication.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-definition-states.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-prototype-index.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-signature-aliases.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/prior-traversals.log",
+      "sha256": "4d953ae8155d455c317f8b87eec0928bd17776df25b36663a3578d22c28392ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/proofs.log",
+      "sha256": "e8b48c056834a4bcd97b0003058b1b4ffd47b542cc751114925bef7c72962f81"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-definition-heads.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-definition-parameters.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-definition-publication.log",
+      "sha256": "763ed0b2ed81f0224705fb3a3dac3991245d581767e22846769dd1cad5f4cdd0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-direct-definitions.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-head-guards.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-prototype-index.log",
+      "sha256": "9f719b51be6fec3683bd7db3856adb545229de80487317b371b243c87c8f9393"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/rejections-selected-definitions.log",
+      "sha256": "37b80a21c22881063d3ca3506db84e9bd671c6147e0a751a985d9696ee3cc9af"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/selected-nested-heads.log",
+      "sha256": "101936e8cf77852f17fde3fb69581bca756b06fff118afb952d63d49afd9772d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/selected-overloads.log",
+      "sha256": "25dc6b4ad08f07bc106c1f09e75379918e712ad9a64ee073ecdf7e264096ee76"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-definition-heads.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-definition-parameters.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-definition-publication.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-definition-states.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-direct-definitions.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-head-guards.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-member-matching.log",
+      "sha256": "36390c1c35675f2f0eb5ba23dc3c07b217e63b2b30ef60ff2bbd35cf998d8cc6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-prototype-index.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-selected-definitions.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-signature-aliases.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/stage-traversals.log",
+      "sha256": "e567c0e0ddda3e8d8fa26fa765ba8907103b0c641f6bef8808d34610c113fee2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/through.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/traversals-control.log",
+      "sha256": "e5f9869bc656317700221c08dea4ceab2b6e471f1f3a9c618dd5b6f7d8677a09"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/unmatched-current.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/unmatched-entry.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/unmatched-host.log",
+      "sha256": "78a7d19ce002df7b0cdd6c79321f3a7ec04a84041f352d0cc0f65bedd9e8552f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/validation.log",
+      "sha256": "717dc332ae5ee097193e07ce58cac72c6235197181a32352e04b0fc09b7fda07"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/definition-demands-invalid-pointer.cpp",
+      "sha256": "4fbed782edc36d4c5e5be4014dfd3be3960ca230c989fa476e5df48f3971b571"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/definition-signatures-initial.cpp",
+      "sha256": "3256f9e5e4fc775db680948bc6f67218609258ced70aecc5229c96bf32b21360"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/unmatched-definition.cpp",
+      "sha256": "324f57abf6c72a33c5cc612cc9511b88f805f786e4719b4d909c47f2261bccee"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/nested-signature-heads.cpp",
+      "sha256": "4bd35c5596c9b71e8854ad024e940edd5fa7817a86a2a700e6b730ce414ed822"
+    }
+  ],
+  "intermediate_binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+      "sha256": "288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+      "sha256": "b680a54c0841a517f9816b7711ad01e53a595e16790c3a9b2913fe2b1ed2b8a3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-sanitized",
+      "sha256": "b0f47fd9f14c3b65fe6776b0332f69f677da91199a56b0bfdfeb6fc96d8fdb4d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-selected-definitions",
+      "sha256": "889b801de2b1cd4b67535ddee5991303a4079aded1e685c9c6d914f23ca5cffa"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-signature-matching",
+      "sha256": "5893644376304ff8486d3ebedea977ff4f3921daf860ed39104b7e4a2f662d03"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-states",
+      "sha256": "b048ff4674953924d625ccfbd32909b3b6af771beee43e213658ae76d19a661c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-traversals",
+      "sha256": "b549bb37bf4805d8fc67e5ecf9fb2e4229bbfa7a0daeaa6d91a3f791ad24386c"
+    }
+  ],
+  "heap_profiles": [
+    {
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+        "sha256": "b680a54c0841a517f9816b7711ad01e53a595e16790c3a9b2913fe2b1ed2b8a3"
+      },
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/measurements/input-uses-1000-128.cpp",
+        "sha256": "5be40be6b4fb0237357df0d7a7d5fb9f9b5bc96bfbe2d5dec1bd8ae7a6c9628d"
+      },
+      "profile": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-0.massif",
+        "sha256": "96e96455c3e663e2e40551cf40ee40e9303f75346e2e0e105b57d02663d64b0e"
+      },
+      "output": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-0.lowir",
+        "sha256": "c4f763d8faf7baf9b298884994d859b7546e97de9330755c1fc6b35c39482581"
+      },
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-0.log",
+        "sha256": "991e31471b5d3030cacfde33ef9547b395fa4c0cf813c8bb311dd6b486e3c731"
+      },
+      "command": [
+        "valgrind",
+        "--tool=massif",
+        "--time-unit=B",
+        "--detailed-freq=1",
+        "--max-snapshots=60",
+        "--depth=20",
+        "--massif-out-file=/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-0.massif",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-entry",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-0.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/measurements/input-uses-1000-128.cpp"
+      ],
+      "exit_code": 0,
+      "peak_live_bytes": 308822014,
+      "peak_extra_bytes": 38802
+    },
+    {
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+        "sha256": "288643cc7b0d9ca819bc7708a6a725a9790f8e1baa0ad8ed716d414fb17647dc"
+      },
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/measurements/input-uses-1000-128.cpp",
+        "sha256": "5be40be6b4fb0237357df0d7a7d5fb9f9b5bc96bfbe2d5dec1bd8ae7a6c9628d"
+      },
+      "profile": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-1.massif",
+        "sha256": "bc6591bee1d9f4944b8e5d920e40c37c0a05324048517a4020bb0c1e5e7ecace"
+      },
+      "output": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-1.lowir",
+        "sha256": "c4f763d8faf7baf9b298884994d859b7546e97de9330755c1fc6b35c39482581"
+      },
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-1.log",
+        "sha256": "a8a4430670c16d217e3d1ef21b08a7c841729a2344ce5f7ea9c8a636ff950b5a"
+      },
+      "command": [
+        "valgrind",
+        "--tool=massif",
+        "--time-unit=B",
+        "--detailed-freq=1",
+        "--max-snapshots=60",
+        "--depth=20",
+        "--massif-out-file=/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-1.massif",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/cppgm++-direct-definitions",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/heap-1.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-definition-demands/measurements/input-uses-1000-128.cpp"
+      ],
+      "exit_code": 0,
+      "peak_live_bytes": 308822038,
+      "peak_extra_bytes": 38794
+    }
+  ],
+  "heap_profile_tool": "valgrind-3.26.0",
+  "notes": [
+    "Stage coverage remains 314, with 1266 checked-in fixture/reference files and unchanged comparisons.",
+    "native-traversals.log records an invalid personal int*/long* comparison; original source retained, fixed by explicit const void* conversions.",
+    "stage-member-matching.log is the initial 313/314 run: current-instantiation alias-return matching was incomplete. All later complete stage runs pass.",
+    "nested-signature-heads.cpp preserves the renamed out-of-class nested alias regression: entry accepted, selected-definition build rejected, current passes.",
+    "The first entry-control telemetry parser failed after a successful compile/native run; the corrected complete probe and original compiler log remain. That partial probe is not counted as completed validation.",
+    "All 644 performance observations and 10514 inherited observations remain unfiltered.",
+    "Massif profiles are separate allocation diagnostics, not timing samples or a claim about instrumented/native RSS equivalence. Native RSS regression remains disclosed.",
+    "Full-stage architecture remains open: special-member/injected-class source signatures, declaration/lifetime facts, and typed reverse demand/failure edges."
+  ]
+}

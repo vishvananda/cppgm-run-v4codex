@@ -681,3 +681,19 @@ nested function-pointer returns, renamed heads, dependent noexcept and inline
 attributes across int/long specializations. Stage 314/314, prior 1621/1621,
 all 28 native programs and twelve rejection controls pass. Freeze the current
 implementation for full parity, transitive layout and A/A+ABBA evidence next.
+
+
+The complete definition-owner campaign retains 644 new observations alongside
+10,514 earlier observations. Four independent N/K/Q cases improve 12–56% in both
+paired blocks with lower peak RSS; all 37 LowIR/nine native hashes match. Compiler
+text grows 7,552 bytes and Analyzer 240 bytes. New source/member record sizes,
+every inherited latency/RSS increase and all outliers remain in performance.md.
+The call-input-128 native RSS increase is retained: separate Massif traces show
+only a 24-byte peak-live difference with identical dominant allocations, supporting
+an allocator/page-retention explanation without proving the exact native cause.
+
+All 342 release/sanitizer parity inputs, 136 rejection controls, six ABI controls,
+seven native reducers, 28 native programs and store/lifetime controls pass. Stage,
+prior, through and file audit pass. Source signatures for special members and the
+joint declaration/lifetime/demand graph remain current-stage work; missing source
+types prevent safely extending direct ordinary application by a local shortcut.

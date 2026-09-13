@@ -97,6 +97,19 @@ def verify():
  assert [row['name'] for row in handoff['checks']]==['stage','prior','through','file_audit','native']
  for row in handoff['checks']:checked(row)
  for row in handoff['initial_observations']+handoff['intermediate_binaries']:assert shared.sha(row['path'])==row['sha256']
+ assert len(handoff['heap_profiles'])==2 and handoff['heap_profile_tool']=='valgrind-3.26.0'
+ work=data['workloads']['input-uses-1000-128']
+ for b,row in enumerate(handoff['heap_profiles']):
+  assert row['exit_code']==0
+  for kind in ('binary','source','profile','output','log'):
+   assert shared.sha(row[kind]['path'])==row[kind]['sha256']
+  assert row['binary']['sha256']==data['binaries'][b]['sha256']
+  assert row['source']['sha256']==work['source_sha256'] and row['output']['sha256']==work['outputs'][b]['sha256']
+  snapshots=Path(row['profile']['path']).read_text().split('#-----------\nsnapshot=')[1:]
+  peak=max(snapshots,key=lambda s:int(re.search(r'mem_heap_B=(\d+)',s)[1]))
+  assert int(re.search(r'mem_heap_B=(\d+)',peak)[1])==row['peak_live_bytes']
+  assert int(re.search(r'mem_heap_extra_B=(\d+)',peak)[1])==row['peak_extra_bytes']
+ assert [r['peak_live_bytes'] for r in handoff['heap_profiles']]==[308822014,308822038]
  print('644 definition-demand observations, twelve rejection proofs, 342 sanitizer inputs and current layout/parameter/lifetime controls verified')
  return count
 if __name__=='__main__':verify()

@@ -5,90 +5,79 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; continuation entry/current **314/314**. All **230
 original failures** are resolved. Coverage, references and comparisons are
-unchanged. PA15 has not started. Last complete evidence baseline: `5ae726e0`.
+unchanged. PA15 has not started. Current implementation/evidence: `0fc50a95`.
 
 ## Design/spec alignment
 
-Active continuation from `167f5f43`; previous turn: **verified progress**.
-Ordinary member prototypes now own canonical signatures and selected definition
-lists. Concrete members retain prototype IDs; application state belongs to
-specialization/definition, completed traversal to member/source-head. Source
-checking publishes selection only on completion. Renamed nested alias heads are
-explicit source relationships. Matched bodies register against the selected
-entity and substitute retained raw parameter facts. Defaults/exception/virtual
-checks keep their current owners; unrelated overload definitions are not applied.
-Work tracks source prototypes, unique demanded members/heads and substitution
-keys. Stage 314, prior 1621, 28 native and twelve rejection controls pass. Next:
-freeze full parity/layout proofs and the inherited corpus plus source/key/request
-scaling before accepting compiler work/storage/text costs. Special-member source
-signatures and the broader declaration/lifetime/demand graph remain open.
+Continuation from `167f5f43` closes ordinary member definition matching, selection
+and application together. Source prototype IDs and canonical signatures select
+definitions; concrete members retain that identity. Application state belongs to
+specialization/definition; traversal success/absence belongs to member/source-head.
+Source checking publishes selection only after completion. Renamed nested aliases
+retain their declaring head. Matched bodies register against the selected entity
+and substitute raw source parameter facts, preserving cv/array/function forms.
+Defaults, exceptions and virtual checks retain their existing owners.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
-| Declaration types, regions, defaults and typed values (inherited) | Immutable source topology → declaration-owned frames → canonical type/value queries → demanded concrete facts and ABI output. Source indexes once per region; defaults/queries once per complete key. Earlier proofs, work equations and measurements remain. |
-| Expression properties and uses (implemented) | Source properties → shared fact ID → sparse concrete entity/receiver/incoming/evaluation use. Publish only changed properties; conversion variants use source/sequence IDs. Snapshot reads survive recursive growth. Validate identity separation, conversion sharing, defaults, moves and conditional/full-expression lifetimes. |
-| Call-input and local expression views (implemented) | Source argument slice → existing occurrence context → concrete argument use; materialized arguments keep concrete slices. Semantics, lowering, conversions, unwind and cleanup use one typed accessor. One stack AST view per affected visit removes repeated projections without a persistent cache or new semantic decisions. |
-| Declaration/scope/object/lifetime graph (remaining) | Whole demanded regions still allocate occurrence IDs and dense Fact slots. Joint ownership must distinguish newly required context identities from fixed facts and eliminate remaining fixed rechecks. Validate local classes/enums, storage, return/declaration conversions and cleanup alongside source/instance scaling. |
-| Demand/failure dependencies (remaining) | Complete typed reasons, reverse edges, separate declaration/definition/layout/default/exception/body/vtable/emission states and structured expected failures. Compute once per complete key; validate recursive demand, negative keys and unrelated-declaration scaling. |
+| Ordinary definition matching/application (completed group) | Source prototypes → canonical signature index → per-prototype definition list → concrete member/body facts. For N specializations, K overloads and Q requests: source work K, applications/edges N, requests N(Q+1), hits NQ; required candidate work NKQ is unchanged. Validate late/re-entrant publication, overload isolation, renamed/nested heads, parameters and twelve unused-definition rejections. |
+| Expression, region/default and typed-value owners (inherited) | Immutable source topology → parent-linked frames → canonical queries → concrete uses/lifetimes and ABI facts. Earlier source/instance equations, negative keys, conversion sharing and measurements remain verified. |
+| Special-member source signatures (remaining) | Establish typed injected-class/current-instantiation signatures for constructors, destructors and conversions. These still use unresolved source types and the broad declaration path. Couple signature identities to transfer/default/exception and base/complete-entry consumers. |
+| Declaration/scope/object/lifetime graph (remaining) | Demanded regions still establish occurrence IDs and dense Fact slots. Distinguish required local object/scope identities from fixed facts and eliminate remaining fixed rechecks jointly with cleanup and lowering consumers. |
+| Demand/failure dependencies (remaining) | Finish typed reasons, reverse edges and separate declaration/definition/layout/default/exception/body/vtable/emission states. Memoize structured expected failures per complete key; enqueue only affected consumers. |
 
-**Concrete boundary:** `demand_region` and `instantiate_function` still establish
-NodeIds consumed by parameter/local declarations, block scopes, object/storage
-identities and lifetime actions. `Fact::target/type/entity/scope/value` crosses
-those owners. Expression properties and argument views cannot replace these
-identities: changing only their store would alias distinct local objects or omit
-required declaration/lifetime work. Further removal of fixed rechecks requires
-that joint producer/consumer change, with broader demand/failure validation.
-This closes the expression ownership and access group, including its measured
-regression. The remaining current-stage work has no external blocker.
+**Concrete boundary:** the completed ordinary path has a checked source signature
+and known concrete EntityId. Special members do not consistently have that source
+type: injected-class lookup under a renamed head, conversion targets and transfer
+classification still cross declaration, class completion and lifetime ownership.
+Routing those cases through the new path would assume missing facts. Likewise,
+removing region occurrences independently would alias local objects or lose cleanup
+and parameter facts. Further work requires those joint producer/consumer changes,
+not another local signature/traversal shortcut. There is no external blocker.
 
 ## Performance evidence and budgets
 
-All **10,514 observations** verify: 9,394 inherited plus two frozen campaigns of
-560 observations each (32 compiler inputs/eight executables). See
-[performance.md](performance.md) for medians, paired results, spreads, hashes,
-all costs and the retained initial slowdown. Final entry/current large-body
-medians are 2.198947→1.992706 s, layout offsets 2.428378→2.147875 s, and repeated
-call inputs 2.018831→1.799594 s. Each improves in both ABBA blocks. Peak RSS falls
-35,086 / 35,352 / 46,076 KiB respectively. Tiny compiler inputs retain startup
-noise, small median increases and an unfiltered .049191 s B outlier. All 32 LowIR
-and eight executable hashes match; generated-code growth is **zero**. No runtime
-optimization is claimed. Initial and final measurements both remain verified.
+**11,158 observations** are retained: 10,514 inherited plus 644 new observations
+on 37 compiler inputs/nine executables. The new N/K/Q scaling cases improve
+36.63%, 56.38%, 37.64% and 12.21%, each in both ABBA blocks; peak RSS falls by
+25,574 / 414,794 / 99,770 / 34,922 KiB. All 37 LowIR and nine executable hashes
+match; generated growth is **zero**, with no runtime optimization claim. Full
+medians, calibration/spreads, every regression and outlier are in
+[performance.md](performance.md) and the raw JSON.
 
-Properties/use records are 24/20 bytes with a four-byte occurrence-to-use index.
-For N instances and W source operations, used-body properties are `4N+4W+4`,
-offset properties `3N+6W+1`, and call-input properties `3N+5W+8`; concrete uses
-track emitted work. Retained call-input edges are `N+2W`. Expression/conversion
-and query work is unchanged from the equivalent entry compiler. Public
-Entity/Expression/ObjectUse remain 112/36/36 bytes; Analyzer grows 5,576→5,680
-bytes per TU. Compiler text is 1,303,046 bytes, **+8,768 (0.677%)**. Current and
-historical transitive-header layout probes verify.
+Compiler text grows 7,552 bytes (0.580%). Analyzer grows 5,680→5,920 bytes per TU;
+source prototype/definition records grow 16→24 / 24→32; MemberFacts grows 120→124.
+Entity/Expression/ObjectUse stay 112/36/36, expression properties/uses 24/20.
+The inherited call-input-128 RSS rises 15,206 KiB. Separate Massif profiles show
+only 24 bytes more peak live heap and identical dominant allocations/counters,
+supporting an allocator/page-retention explanation without identifying its exact
+native cause. The RSS increase and both profiles remain; no tuning hides them.
 
-Explicit budgets: at most four conversion variants per source operation,
-source/key/concrete-use-proportional storage, one local view per affected visit,
-and zero generated growth. O0 has no mandated numeric latency/RSS/text ceiling.
-Measured compilation and memory savings justify the recorded owner/text costs.
-Historical live-header equality is snapshot evidence; the newest probe checks
-live headers. Compact occurrences share one parsed graph; zero occurrence count
-is not an extra numerical gate. Fixed semantic rechecks and incomplete demand
-ownership remain spec work. No mandated limit or measurement was removed. The
-inherited source-cache +6,714 KiB and calls-4 roughly +15 MiB RSS deltas remain
-unexplained; these campaigns do not establish their cause.
+Explicit budgets: source/key/concrete-use-proportional storage, at most four
+conversion variants per source operation, one local view per visit, and zero
+generated growth. O0 has no mandated numeric latency/RSS/text ceiling. Repeatable
+affected-workload savings justify the source/member owner costs; small inherited
+latency/RSS increases remain disclosed. The latest transitive probe checks live
+headers; preceding live-header equality is reclassified as frozen snapshot
+integrity. Zero occurrences is not a numerical gate. No mandated limit, coverage
+or measurement was removed. Historical source-cache +6,714 KiB and calls-4 roughly
++15 MiB RSS deltas remain unexplained by this campaign.
 
 ## Handoff ledger
 
 | Coherent increment | Commit / evidence |
 | --- | --- |
-| Field/receiver/prototype, declaration types and immutable frames | `78bdbc3f` through `ca42e706`; earlier proofs retained |
-| Region/default ownership and typed layout values/bounds | `feac8cd6` through `5a795af4`; prior 9,394 observations and rejection/native proofs |
-| Immutable expression properties and concrete use state | `4aedd84c`; snapshot and conversion-variant control |
-| Contextual call inputs and sparse concrete identities | `158e7b0a`, `c4e4e6f4`; lifetime/native controls and source/instance equations |
-| Frozen workload/layout and initial ownership evidence | `1faaabd9`, `5780dfbe`; 560 observations, unchanged outputs, offset regression retained |
-| Local semantic/lowering views and final validation | `5ae726e0`; separate 560-observation campaign resolves the offset regression |
+| Earlier declaration/frame/default/value owners | `78bdbc3f` through `5a795af4`; preceding proofs and measurements retained |
+| Immutable expression uses, contextual inputs and local views | `4aedd84c` through `5ae726e0`; prior 10,514 observations and lifetime controls |
+| Completed definition traversal/application states | `c65dbfe6`, `00495eb1`; initial combined owner later replaced by distinct correct keys |
+| Typed source signatures and precise prototype demand | `39f385af`, `367d64a8`; twelve rejection proofs and unused-overload isolation |
+| Declaring-head aliases and direct parameter/entity application | `5743a3cd`, `0fc50a95`; four exact LowIR/native controls |
+| Frozen proofs, corpus, layouts and full acceptance | `6dc728f8` onward; 644 observations, sanitizer/native evidence and heap diagnostics |
 
-Validation: PA14 **314/314**, prior **1621/1621**, through **1935/1935**, **24**
-native programs, **338** release/ASan/UBSan parity inputs, **124** rejection
-controls on both compilers, **six** ABI controls, **seven** reducer/native checks,
-plus storage/snapshot and entry/release/sanitizer lifetime controls. File audit
-passes with three inherited header advisories. Raw evidence and verifiers live
-in `student.tests/pa14/`; frozen binaries, outputs, profile, command/status logs
-and initial failed probes remain under `$RALPH_ARTIFACT_DIR/pa14-expression-owners/`.
+Validation: stage **314/314**, prior **1621/1621**, through **1935/1935**, **28**
+native programs, **342** release/ASan/UBSan parity inputs, **136** rejection
+controls, **six** ABI controls, **seven** native reducers, expression-store checks
+and entry/release/sanitizer lifetime controls. File audit passes with three
+inherited header advisories. Evidence/verifiers live in `student.tests/pa14/`;
+frozen binaries, outputs, profiles, command/status logs and initial failed probes
+remain under `$RALPH_ARTIFACT_DIR/pa14-definition-demands/`.
