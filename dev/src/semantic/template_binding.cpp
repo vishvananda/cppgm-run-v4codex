@@ -165,8 +165,13 @@ void Analyzer::bind_template_body(const Body& body)
         if (ast[p].kind != Kind::Parameter) continue;
         auto specs = ast[p].first, decl = ast[specs].next;
         bool dependent = bind_template_expression(specs,fs) | bind_template_expression(decl,fs);
+        auto declared_type = facts[p].type;
         auto e = pattern_declaration(EntityKind::Parameter,fs,terminal(decl_name(decl)),p,dependent);
-        if (!dependent) entities[e].type = parameter_body_type(declarator(decl,specifiers(specs,fs),fs));
+        if (declared_type) {
+            facts[p].type = declared_type;
+            entities[e].type = parameter_body_type(declared_type);
+        }
+        else if (!dependent) entities[e].type = parameter_body_type(declarator(decl,specifiers(specs,fs),fs));
     }
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);

@@ -375,3 +375,20 @@ separate class/body declaration contexts. Dependent value/type/storage forms
 must enter a context-keyed typed body graph rather than this source-only fact
 index. Whole-region projection and finer demand/failure states remain explicit
 current-stage work in [plan.md](plan.md).
+
+## Retained function signature types (active continuation)
+
+Function-template parameter declarations retain the signature's source TypeId
+when definition-time body binding creates lexical parameter identities. Body
+instantiation substitutes these typed facts directly; it no longer resolves the
+function's declarator or return type from syntax a second time. Source parameter
+cv, array and function forms remain separate from the adjusted callable type.
+The body consumes concrete types and creates only its required runtime parameter
+identities. Nested pointer-return declarators use the suffix nearest the name.
+
+The initial change passes PA14 314/314, the default through report 1935/1935 and
+nineteen native controls. `signature-facts.cpp` covers top-level cv, reference
+collapsing, array/function adjustment, nested pointer returns, renamed heads,
+sequential prototype queries and dependent qualified types. Substitution cache
+ownership and local declaration type propagation are the next related work;
+final sanitizer and performance evidence will cover the completed group.

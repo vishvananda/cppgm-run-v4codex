@@ -9,6 +9,14 @@ unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
+Active continuation from `5b1afe54` (previous turn: verified progress): the
+declaration-type owner will feed retained function parameter types into concrete
+body binding through canonical substitution. Source parameter cv/array/function
+forms stay distinct from the adjusted callable signature. Work is bounded by
+signature parameters and distinct dependent type nodes per environment; validate
+renamed heads, reference collapsing, type queries, native behavior, course parity
+and compiler/native scaling before extending the same path to local declarations.
+
 Canonical source bindings and shared scalar/call/receiver facts now retain fixed
 fields owned by templates. Method contexts carry the pattern owner, cv and
 availability of `this`. Concrete field identity and base adjustment are cached
