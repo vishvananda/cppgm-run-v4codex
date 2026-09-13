@@ -22,6 +22,7 @@ public:
     std::vector<Declaration> declarations;
     std::vector<Fact> facts;
     Expression expression_fact(NodeId n) const { return expressions[n]; }
+    NodeId call_argument(const Expression& call, unsigned i = 0) const;
     ObjectUse object_fact(NodeId n) const {
         auto use = object_uses[expressions[n].object_use];
         return use.source_owned ? project_object_use(use,n) : use;

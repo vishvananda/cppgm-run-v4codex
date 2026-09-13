@@ -5,7 +5,7 @@ NodeId Analyzer::reference_operand(NodeId n) const
 {
     auto c = conversions[expressions[n].incoming];
     if (c.kind == Conversion::Kind::List && list_plans[list_objects[c.materialization].plan].direct_binding)
-        return call_arguments[list_objects[c.materialization].call.arguments];
+        return call_argument(list_objects[c.materialization].call);
     // A scalar conversion/bit-field binding creates its own temporary; a
     // conversion function returning a reference does not extend its receiver.
     if (c.reference && (c.temporary || c.kind == Conversion::Kind::User)) return 0;

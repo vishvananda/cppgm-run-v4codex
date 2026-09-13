@@ -50,7 +50,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     }
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
     if (!construction || sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)) {
-        Value source = construction ? converted(sem.call_arguments[materialized.call.arguments],sem.conversion_fact(materialized.call.conversions)) : address(expression(n,true));
+        Value source = construction ? converted(sem.call_argument(materialized.call),sem.conversion_fact(materialized.call.conversions)) : address(expression(n,true));
         if (!sem.empty_class(target)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
             emit(copy,{source.operand,destination.operand});
@@ -58,13 +58,13 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         return;
     }
     bool scalar = full_expression.terminal_branch && materialized.call.argument_count == 1 &&
-        sem.scalar_transfer_source(materialized.constructor,sem.call_arguments[materialized.call.arguments]);
+        sem.scalar_transfer_source(materialized.constructor,sem.call_argument(materialized.call));
     bool saved_guard = full_expression.suppress_guard;
     if (scalar) full_expression.suppress_guard = true;
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(materialized.constructor, base))); call_work.push_back(destination.operand);
     for (unsigned j = 0; j < materialized.call.argument_count; ++j)
-        call_work.push_back(converted(sem.call_arguments[materialized.call.arguments+j],sem.conversion_fact(materialized.call.conversions+j)).operand);
+        call_work.push_back(converted(sem.call_argument(materialized.call,j),sem.conversion_fact(materialized.call.conversions+j)).operand);
     full_expression.suppress_guard = saved_guard;
     Instruction transfer(Opcode::Call,IRType::Void); transfer.copy_elision = materialized.elision_permission;
     if (scalar) emit(transfer,call_work.data()+begin,call_work.size()-begin);

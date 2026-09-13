@@ -88,7 +88,7 @@ void Procedural::emit_aggregate_helpers()
                     std::size_t begin = call_work.size();
                     call_work.push_back(Operand::symbol(symbol(action.helper_transfer))); call_work.push_back(at.operand); call_work.push_back(source.operand);
                     for (unsigned k = 1; k < transfer.argument_count; ++k)
-                        call_work.push_back(converted(sem.call_arguments[transfer.arguments+k],sem.conversion_fact(transfer.conversions+k)).operand);
+                        call_work.push_back(converted(sem.call_argument(transfer,k),sem.conversion_fact(transfer.conversions+k)).operand);
                     guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin); call_work.resize(begin);
                 }
             } else store(value, at);

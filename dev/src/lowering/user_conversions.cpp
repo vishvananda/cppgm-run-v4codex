@@ -57,7 +57,7 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
             call_work.push_back(Operand::symbol(symbol(materialized.constructor)));
             call_work.push_back(destination.operand); call_work.push_back(source.operand);
             for (unsigned j = 1; j < call.argument_count; ++j)
-                call_work.push_back(converted(sem.call_arguments[call.arguments+j],sem.conversion_fact(call.conversions+j)).operand);
+                call_work.push_back(converted(sem.call_argument(call,j),sem.conversion_fact(call.conversions+j)).operand);
             guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin);
             call_work.resize(begin);
         }

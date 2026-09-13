@@ -17,7 +17,7 @@ bool Procedural::unwind_expression(NodeId n)
     if (call) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
     auto arguments = [&](const semantic::Expression& call) {
         for (unsigned i = 0; i < call.argument_count; ++i) {
-            auto a = sem.call_arguments[call.arguments+i];
+            auto a = sem.call_argument(call,i);
             if (a && a != n) result |= unwind_expression(a);
         }
     };

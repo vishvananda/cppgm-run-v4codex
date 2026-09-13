@@ -137,7 +137,8 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
         object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,plan.scope),0,n);
         entities[object.temporary].type = t; register_destruction(object.temporary);
     }
-    std::vector<NodeId> args(call_arguments.begin()+plan.call.arguments,call_arguments.begin()+plan.call.arguments+plan.call.argument_count);
+    std::vector<NodeId> args;
+    for (unsigned i = 0; i < plan.call.argument_count; ++i) args.push_back(call_argument(plan.call,i));
     std::vector<Conversion> selected(conversions.begin()+plan.call.conversions,conversions.begin()+plan.call.conversions+plan.call.count);
     for (unsigned j = 0; j < args.size(); ++j)
         if (args[j] && ast[args[j]].kind != Kind::BracedInit && j < plan.explicit_count)

@@ -38,7 +38,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     // Include constructor and conversion-function defaults as well as calls.
     auto arguments = [&](const semantic::Expression& call) {
         for (unsigned i = 0; i < call.argument_count; ++i) {
-            auto a = sem.call_arguments[call.arguments+i];
+            auto a = sem.call_argument(call,i);
             bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
                 (ast[n].kind == syntax::Kind::Conditional && a != ast[n].first));
             if (a && a != n) needed |= cleanup_expression(a,omit);

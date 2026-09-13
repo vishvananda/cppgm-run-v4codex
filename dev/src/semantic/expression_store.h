@@ -12,6 +12,7 @@ class ExpressionStore {
 public:
     Expression operator[](NodeId n) const {
         Expression value = values[uses[n].fact];
+        if (value.inputs == CallInputs::Source) { value.inputs = CallInputs::Context; value.arguments = n; }
         value.incoming = uses[n].incoming;
         value.ready = states[n]&1; value.evaluated = states[n]&2;
         return value;
@@ -23,6 +24,7 @@ public:
     void inherit(NodeId n, NodeId source);
     void inherit_conversions(NodeId n, NodeId source, std::uint32_t conversions);
     void set(NodeId n, Expression value);
+    std::uint32_t argument_slice(NodeId n) const { return values[uses[n].fact].arguments; }
     std::size_t fact_count() const { return values.size()-1; }
     std::size_t use_count() const { return uses.size(); }
     std::size_t inherited = 0, changed = 0, variants = 0;

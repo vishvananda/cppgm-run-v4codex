@@ -15,7 +15,7 @@ Value Procedural::placement_new(NodeId n)
     }
     call_work.push_back(bytes);
     for (unsigned j = 0; j < use.call.argument_count; ++j)
-        call_work.push_back(converted(sem.call_arguments[use.call.arguments+j], sem.conversion_fact(use.call.conversions+j)).operand);
+        call_work.push_back(converted(sem.call_argument(use.call,j), sem.conversion_fact(use.call.conversions+j)).operand);
     Value result = guarded_call(Instruction(Opcode::Call, IRType::Ptr), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin);
     BlockId initialize_block, end;

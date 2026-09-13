@@ -6,7 +6,7 @@ Value Procedural::floating_builtin(NodeId n)
 {
     auto fact = sem.expression_fact(n);
     unsigned last = fact.argument_count-1;
-    Value x = converted(sem.call_arguments[fact.arguments+last], sem.conversion_fact(fact.conversions+last));
+    Value x = converted(sem.call_argument(fact,last), sem.conversion_fact(fact.conversions+last));
     auto binary = [&](Operation op, Value a, Value b) { return emit(Opcode::Binary, IRType::I32, {a.operand, b.operand}, op); };
     Value one(Operand::integer(1), IRType::I32);
     auto invert = [&](Value v) { return binary(Operation::Sub, one, v); };
@@ -51,7 +51,7 @@ Value Procedural::floating_builtin(NodeId n)
         Value predicates[] = {is_nan, is_infinite, is_normal, is_subnormal, is_zero};
         result = Value(Operand::integer(0), IRType::I32);
         for (unsigned j = 0; j < 5; ++j) {
-            Value category = converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j));
+            Value category = converted(sem.call_argument(fact,j), sem.conversion_fact(fact.conversions+j));
             Value term = binary(Operation::Mul, category, predicates[j]);
             result = binary(Operation::Add, result, term);
         }

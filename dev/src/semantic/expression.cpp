@@ -33,7 +33,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);
     if (!facts[n].type) facts[n].type = result.type;
-    return result;
+    return expressions[n];
 }
 Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
 {

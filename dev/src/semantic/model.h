@@ -235,6 +235,7 @@ struct Declaration {
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember };
+enum class CallInputs : unsigned char { Concrete, Source, Context };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -245,6 +246,7 @@ struct Expression {
     std::uint32_t arguments = 0, argument_count = 0;
     ValueCategory category = ValueCategory::Prvalue;
     ExpressionForm form = ExpressionForm::Ordinary;
+    CallInputs inputs = CallInputs::Concrete;
     bool ready : 1;
     bool evaluated : 1;
     bool null_pointer_constant : 1;

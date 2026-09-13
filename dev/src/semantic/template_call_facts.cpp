@@ -96,7 +96,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         default_destructor(result.type,s,false);
     }
     // No argument application or result temporary belongs to the definition.
-    store_call(result,args,chosen); result.ready = true;
+    store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
     expressions.set(n,result); facts[n].type = f.child; facts[n].scope = s; facts[n].entity = selected;
     ++template_fixed_call_work;
     } catch (...) { --unevaluated_depth; throw; }
@@ -130,7 +130,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     bool materialize = false;
     for (unsigned i = 0; i < result.argument_count; ++i) {
-        auto original = call_arguments[result.arguments+i];
+        auto original = call_argument(result,i);
         auto a = ast.projected(original,context); if (!a) a = original; // Declaration-owned default.
         expression(a,s); args.push_back(a);
         auto c = copy_conversion_recipe(conversions[result.conversions+i]);
@@ -142,8 +142,17 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         for (unsigned i = 0; i < args.size(); ++i) {
             apply_conversion(args[i],chosen[i]); expressions.incoming(args[i],result.conversions+i);
         }
-        result.arguments = call_arguments.size(); call_arguments.insert(call_arguments.end(),args.begin(),args.end());
+        result.arguments = expressions.argument_slice(source); result.inputs = CallInputs::Source;
     }
     facts[n].type = facts[source].type; facts[n].entity = selected;
+}
+NodeId Analyzer::call_argument(const Expression& call, unsigned i) const
+{
+    if (call.inputs != CallInputs::Context) return call_arguments[call.arguments+i];
+    auto node = call.arguments;
+    auto source = call_arguments[expressions.argument_slice(node)+i];
+    auto context = ast.nodes.occurrences[node].context;
+    if (context) if (auto use = ast.projected(source,context)) return use;
+    return source; // A declaration-owned default can lie outside the caller.
 }
 } }

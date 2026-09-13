@@ -311,6 +311,7 @@ void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, s
 }
 void Analyzer::store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected)
 {
+    owner.inputs = CallInputs::Concrete;
     owner.arguments = call_arguments.size(); owner.argument_count = args.size();
     owner.conversions = conversions.size(); owner.count = args.size();
     conversions.insert(conversions.end(), selected.begin(), selected.end());

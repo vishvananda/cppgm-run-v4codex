@@ -44,7 +44,7 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(use.allocation))); call_work.push_back(bytes);
     for (unsigned j = 0; j < use.call.argument_count; ++j)
-        call_work.push_back(converted(sem.call_arguments[use.call.arguments+j],sem.conversion_fact(use.call.conversions+j)).operand);
+        call_work.push_back(converted(sem.call_argument(use.call,j),sem.conversion_fact(use.call.conversions+j)).operand);
     Value allocation = guarded_call(Instruction(Opcode::Call,IRType::Ptr),call_work.data()+begin,call_work.size()-begin);
     call_work.resize(begin);
     BlockId nullable_end; SlotId nullable_result;

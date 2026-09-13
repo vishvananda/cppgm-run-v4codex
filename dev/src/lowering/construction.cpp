@@ -14,11 +14,11 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
         auto fact = sem.expression_fact(init);
         if (sem.empty_class(target)) {
             const auto c = sem.conversion_fact(fact.conversions);
-            if (c.kind == semantic::Conversion::Kind::Standard) discard(sem.call_arguments[fact.arguments], false);
-            else converted(sem.call_arguments[fact.arguments], c);
+            if (c.kind == semantic::Conversion::Kind::Standard) discard(sem.call_argument(fact), false);
+            else converted(sem.call_argument(fact), c);
             return;
         }
-        Value source = converted(sem.call_arguments[fact.arguments], sem.conversion_fact(fact.conversions));
+        Value source = converted(sem.call_argument(fact), sem.conversion_fact(fact.conversions));
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
         emit(copy, {source.operand, object.operand}); return;
     }
@@ -28,7 +28,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
     if (init) {
         auto fact = sem.expression_fact(init);
         for (unsigned j = 0; j < fact.argument_count; ++j)
-            call_work.push_back(converted(sem.call_arguments[fact.arguments+j], sem.conversion_fact(fact.conversions+j)).operand);
+            call_work.push_back(converted(sem.call_argument(fact,j), sem.conversion_fact(fact.conversions+j)).operand);
     } else {
         auto e = sem.entities[ctor]; auto f = sem.types[e.type];
         for (unsigned j = 0; j < f.count; ++j)

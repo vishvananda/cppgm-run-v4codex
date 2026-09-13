@@ -27,7 +27,7 @@ Conversion Analyzer::result_conversion(EntityId ctor, const Expression& call, Ty
     }
     c.target = target; c.reference = false; c.materialization = user_conversions.size(); user_conversions.push_back(record);
     if (retained) {
-        prepare_user_conversion(call_arguments[call.arguments],c);
+        prepare_user_conversion(call_argument(call),c);
         auto transfer = user_conversions[c.materialization].result.materialization;
         conversion_objects[transfer].retained = true;
         auto m = entities[ctor].member_info;
@@ -180,7 +180,7 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
         auto call = recipe ? conversion_objects[recipe].call : Expression();
         std::vector<Conversion> selected(1,recipe ? conversions[call.conversions] : standard_conversion(value,types.parameters[ctor.offset]));
         for (unsigned j = 1; j < ctor.count; ++j) {
-            NodeId arg = recipe ? call_arguments[call.arguments+j] : default_argument(second.function,j);
+            NodeId arg = recipe ? call_argument(call,j) : default_argument(second.function,j);
             if (recipe) expression(arg,facts[n].scope);
             args.push_back(arg); selected.push_back(recipe ? copy_conversion_recipe(conversions[call.conversions+j]) : conversion(arg,types.parameters[ctor.offset+j]));
         }

@@ -61,7 +61,7 @@ void Analyzer::finish_parameter_representation(TypeId type)
     auto conversion = conversions[call.conversions];
     if (conversion.kind != Conversion::Kind::Standard || !conversion.reference || !conversion.derived ||
         conversion.temporary || conversion.function) return;
-    NodeId argument = call_arguments[call.arguments];
+    NodeId argument = call_argument(call);
     while (ast[argument].kind == syntax::Kind::Parenthesized) {
         ++parameter_query_work; argument = ast[argument].first;
     }

@@ -7,7 +7,7 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
     auto call = object.call;
     TypeId t = reference(c.target) ? sem.types[c.target].child : c.target;
     bool supplied = destination.ir != IRType::Void;
-    if (plan.direct_binding) return converted(sem.call_arguments[call.arguments],sem.conversion_fact(call.conversions));
+    if (plan.direct_binding) return converted(sem.call_argument(call),sem.conversion_fact(call.conversions));
     Value value;
     if (object.temporary && !supplied) destination = class_address(object.temporary,t);
     if (plan.aggregate) {
@@ -18,7 +18,7 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
             zero_object(t,destination);
         }
         if (sem.direct_transfer(plan.constructor)) {
-            Value source = converted(sem.call_arguments[call.arguments],sem.conversion_fact(call.conversions));
+            Value source = converted(sem.call_argument(call),sem.conversion_fact(call.conversions));
             if (!sem.empty_class(t)) {
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
                 emit(copy,{source.operand,destination.operand});
@@ -27,12 +27,12 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
             std::size_t begin = call_work.size();
             call_work.push_back(Operand::symbol(symbol(plan.constructor))); call_work.push_back(destination.operand);
             for (unsigned j = 0; j < call.argument_count; ++j)
-                call_work.push_back(converted(sem.call_arguments[call.arguments+j],sem.conversion_fact(call.conversions+j)).operand);
+                call_work.push_back(converted(sem.call_argument(call,j),sem.conversion_fact(call.conversions+j)).operand);
             guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin);
             call_work.resize(begin);
         }
     } else {
-        value = call.argument_count ? converted(sem.call_arguments[call.arguments],sem.conversion_fact(call.conversions)) :
+        value = call.argument_count ? converted(sem.call_argument(call),sem.conversion_fact(call.conversions)) :
             initialization_value(0,t);
         if (supplied || object.temporary) { Value at = destination; at.address = true; at.type = t; store(value,at); }
     }

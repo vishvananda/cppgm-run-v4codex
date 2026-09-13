@@ -74,11 +74,11 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
         for (unsigned j = 0; result.valid && j < call.argument_count; ++j) {
             auto conversion = conversions[call.conversions+j];
             result.valid = conversion.kind != Conversion::Kind::Construction &&
-                static_value(call_arguments[call.arguments+j], conversion.target).kind != StaticValue::Invalid;
+                static_value(call_argument(call,j), conversion.target).kind != StaticValue::Invalid;
         }
         for (unsigned j = 0; result.valid && j < summary.count; ++j) {
             auto action = constructor_constant_actions[summary.first+j];
-            NodeId source = action.argument ? call_arguments[call.arguments+action.argument-1] : action.source;
+            NodeId source = action.argument ? call_argument(call,action.argument-1) : action.source;
             if (action.argument) {
                 auto converted = conversions[call.conversions+action.argument-1];
                 // Do not collapse two different scalar conversions. The

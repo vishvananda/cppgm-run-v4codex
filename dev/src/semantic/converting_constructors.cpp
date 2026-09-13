@@ -75,7 +75,7 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
     std::vector<Conversion> selected;
     auto call = recipe ? conversion_objects[recipe].call : Expression();
     for (unsigned j = 0; j < f.count; ++j) {
-        NodeId a = j ? (recipe ? call_arguments[call.arguments+j] : default_argument(ctor,j)) : n;
+        NodeId a = j ? (recipe ? call_argument(call,j) : default_argument(ctor,j)) : n;
         if (recipe && j) expression(a,facts[n].scope);
         Conversion c = recipe ? copy_conversion_recipe(conversions[call.conversions+j]) :
             !j && conversion.implicit_move ? transfer_conversion(expressions[a].type,ValueCategory::Xvalue,types.parameters[f.offset+j]) :
@@ -87,6 +87,7 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
         auto c = recipe ? conversions[call.conversions] : ellipsis_conversion(n); apply_conversion(n,c);
         arguments.push_back(n); selected.push_back(c);
     }
+    materialized.call.inputs = CallInputs::Concrete;
     materialized.call.arguments = call_arguments.size(); materialized.call.argument_count = arguments.size();
     materialized.call.conversions = conversions.size(); materialized.call.count = selected.size();
     call_arguments.insert(call_arguments.end(), arguments.begin(), arguments.end());

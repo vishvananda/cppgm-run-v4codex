@@ -21,4 +21,9 @@ int main() {
     for (unsigned i=0;i<4000;++i) { source.type=100+i; store.set(4,source); }
     assert(snapshot.type==3 && snapshot.conversions==7 && snapshot.incoming==11);
     assert(store[2].type==3 && store[3].type==3 && store[1].type==9);
+    source.inputs=CallInputs::Source; source.arguments=19; source.argument_count=2;
+    store.set(1,source); store.inherit(2,1); store.set(2,store[1]);
+    assert(store[1].inputs==CallInputs::Context && store[1].arguments==1);
+    assert(store[2].inputs==CallInputs::Context && store[2].arguments==2);
+    assert(store.argument_slice(1)==19 && store.argument_slice(2)==19);
 }

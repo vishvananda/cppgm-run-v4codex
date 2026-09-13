@@ -338,7 +338,7 @@ Value Procedural::call(NodeId n, Value destination)
     // The course's indirect-call fixtures evaluate arguments before fetching
     // the callee; C++11 leaves their relative evaluation order unspecified.
     for (unsigned j = 0; j < fact.argument_count; ++j) {
-        NodeId argument = sem.call_arguments[fact.arguments+j];
+        NodeId argument = sem.call_argument(fact,j);
         call_work.push_back(argument ? converted(argument, sem.conversion_fact(fact.conversions+j)).operand : Operand::integer(0));
     }
     NodeId callee = ast[n].first;
