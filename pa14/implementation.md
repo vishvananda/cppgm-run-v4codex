@@ -948,3 +948,20 @@ execute it successfully. The through report remains 1935/1935, all 33 personal
 native programs pass, and all nine new signature/class-use rejections plus the
 21 inherited special-signature rejections pass. Full sanitizer/proof/performance
 acceptance follows this completed source declaration/signature/class-use group.
+
+
+The first proof harness required the host to diagnose an unused private-call
+default, but GCC accepted that unused definition. N3485 [temp.decls]/2 makes
+each default a separate definition; [temp.inst]/1 defers defaults, /12–13
+checks a demanded default, and [temp.res]/8 permits early diagnostics when no
+valid uninstantiated specialization exists. The unused input remains an optional
+early-diagnostic observation, and a separate call using that default requires
+rejection. Both harness versions, the host's acceptance, the partial proof and
+the initial 118 passing validation checks are preserved. The corrected catalog
+keeps nine required rejections plus the optional input; no course check changed.
+Six native proofs and the corrected full 118-check release/sanitizer validation
+pass. The current 18-header probe measures Analyzer at 6152 bytes (was 6000),
+the typed class use at 20 bytes, and unchanged public hot-record sizes. Older
+probes now validate frozen snapshot integrity; the current probe checks live
+headers. Historical live-header equality was a diagnostic gate, not a mandated
+PA14 limit. All historical sizes and measurements remain intact.

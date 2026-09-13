@@ -3,101 +3,70 @@
 Stage base commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
-Original entry **84/314**; continuation entry/current **314/314**. All **230
-original failures** are resolved. Coverage, references and course comparisons
-are unchanged. PA15 has not started. Accepted baseline: `af01c062`; active signature/class-use/enum group.
+Original entry **84/314**; current **314/314**. All **230 original failures**
+are resolved with unchanged coverage, references and comparisons. PA15 has not
+started. Active continuation: `97006205` → `dad19c39`.
 
-## Design/spec alignment
-
-Active continuation from `97006205`; previous turn: **verified progress**.
-Current group: publish checked ordinary/special function signatures and raw
-parameter facts together. Source prototype queries retain parameter ordinals,
-raw types and access contexts; substitute them per frame, then let concrete
-declaration/default/exception/transfer/virtual owners publish their own facts.
-Measure source/signature/parameter publication scaling with N/K/Q and preserve
-raw cv/array/function types, trailing returns, nested declarators, overloads and
-unused-body/default/exception demand. The preceding acceptance below is inherited.
-Implementation now passes through 1935, native 32, six new rejection controls and
-three signature reducers. Prototype names no longer republish source identities.
-Late/nested source defaults and non-static member initializers bind on the
-enclosing class completion event under typed reasons and separate
-queued/active/complete/failed states; static initializers retain declaration-point
-lookup. Nine new rejection controls and four signature reducers pass. Member/local/anonymous enums now retain direct declaration identity; qualified
-current-instantiation signatures canonicalize to that same identity. Through
-1935 and all 33 native programs pass. Next freeze proofs, sanitizer parity
-and source/signature/parameter/default scaling before performance acceptance.
-The completed group extends source declarations through concrete local types,
-query substitution, object/lifetime consumers and sparse stable fact storage.
-A source declaration owns its pattern EntityId; a substitution frame publishes
-its concrete EntityId before use. Consumers no longer recover that decision
-from projected syntax. Local classes/enums retain symbolic Named type identity.
-The direct-initializer correction keeps bounded declaration lookahead and
-preserves real function declarations. No source region is reparsed.
+## Design/spec alignment and ownership
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
-| Declaration publication (completed) | Source declaration → canonical pattern → per-frame concrete binding → type/query/object/lifetime use. For N specializations and K local groups: source work 8K+1, publications N(8K+1), type substitutions N(4K+1), query work K(3N+4), independent of repeated uses Q. Local/nested/shadowed identities, aliases, enum bounds, copies and cleanup execute correctly. |
-| Sparse facts (completed) | Four-byte optional index per syntax/occurrence; only explicit publication allocates a twenty-byte Fact. TU-owned 1024-record slabs preserve references across growth and release in bulk. Absent reads allocate nothing; one local writable view per grouped publication. Standalone release/sanitizer storage control and full semantic parity verify consumers. |
-| Definition, expression, region/default and value owners (inherited) | Checked source signatures → selected definitions → concrete member/body/lifetime facts. Immutable regions, parent-linked frames, canonical queries and conversion sharing retain their prior equations, proofs and measurements. |
-| Remaining declaration/parameter graph | Ordinary member signature reconstruction still establishes prototype scopes and raw parameter facts; some embedded/class-scope types and queries lack source facts. Joint declaration/type-query/scope/object/lifetime ownership must precede eliminating these rechecks. Whole-region occurrence IDs and their optional indices remain. |
-| Demand/failure dependencies (remaining) | Finish typed reasons, reverse edges and independent declaration/definition/layout/default/exception/body/vtable/emission states. Memoize structured expected failure per complete key; enqueue only affected consumers. |
+| Checked callable signatures (completed) | Source declaration NodeId → retained Function TypeId and raw parameter types → canonical per-frame substitution → one concrete parameter publication. Prototype query entities keep ordinals/access contexts without replacing source/body identity. Controls execute cv/array/function parameters, trailing returns, nested declarators, overloads and cleanup. |
+| Complete-class source uses (completed) | Typed default/initializer uses queue once at the owning source class and drain after enclosing declarations complete. Separate queued/active/complete/failed states prevent duplicate work; detached local batches permit reentrant completion and release in bulk. Later private/nested lookup, initializer order and overridden dependent defaults/initializers execute correctly. Static initializers retain declaration-point lookup. |
+| Enum identities (completed) | Member/local/anonymous enum declarations retain Named identity; current-instantiation signatures canonicalize to it. Concrete enum publication supplies the per-frame binding before queries/signatures consume it. Renamed/nested heads, enum widths and overload separation pass. |
+| Inherited owners (completed) | Source/local declaration bindings, sparse stable Facts, expression/value queries, immutable regions, defaults and selected definitions retain their previous evidence. No syntax replay or source-fact recovery through projected occurrence IDs. |
+| Remaining type/query graph | Some embedded dependent type/query forms still require declarator construction. Joint source identity, scope, object/lifetime and query producers must exist before removing their concrete semantic work. Whole-region occurrence IDs and optional Fact indices remain. |
+| Remaining demand/failure graph | Integrate independent declaration/definition/layout/default/exception/body/vtable/emission states with typed reasons, precise reverse dependencies and structured expected failure. Current source-completion uses cover defaults/initializers; they do not replace these distinct concrete owners. |
 
-**Concrete boundary:** the source-to-concrete local declaration binding and sparse
-Fact consumers are complete. Further signature reuse crosses `declarator`'s
-prototype scopes, parameter adjustment and trailing-return queries,
-`instantiate_parameters`' raw body types, and `declare_object`'s default,
-exception, transfer and virtual facts. A Function TypeId alone cannot replace
-those publications. Remaining class-scope enum/embedded queries also need source
-owners before reuse. This requires a joint producer/consumer change and new
-parameter/context scaling controls, followed by typed demand-state work; merely
-removing more Fact slots would lose semantic decisions. This continuation
-extended through local identities, the exposed parser failure, all fact writes
-and grouped publication views. There is no external blocker.
+**Concrete boundary:** this continuation completed the joint signature/raw-parameter
+change, then extended it through exposed late-default and initializer failures
+and enum identities. Remaining work crosses `template_definition`,
+`template_instantiation`, `default_arguments`, layout, exception and emission
+owners. A source completion queue cannot safely serve as their shared concrete
+fact scheduler: source definitions can arrive later, recursive declarations may
+be usable before definitions finish, and defaults/bodies must remain independent.
+That requires a separate producer/consumer and failure-key audit with insertion,
+recursion and demand scaling controls. There is no external blocker.
 
 ## Performance evidence and budgets
 
-**12,838 observations verified**: 11,914 inherited, 84 from two isolated trials and
-840 from the full 49-input/eleven-executable campaign. All four local N/K/Q cases
-improve median compiler latency **4.45% / 4.41% / 7.45% / 9.19%**, each in both
-ABBA blocks. Peak RSS changes **−3,192 / −64,882 / +16,308 / −107,906 KiB**;
-the 4000-specialization increase remains a disclosed peak-memory cost, whose
-exact native allocation cause is unisolated. All 49 LowIR and eleven native
-hashes match exactly; generated growth is **zero**, with no runtime optimization
-claim. [performance.md](performance.md) retains every median, spread and cost.
+**12,838 inherited observations** remain verified and preserved. The new frozen
+54-input/12-executable campaign is in output-equivalence preflight; no current
+speedup is claimed yet. Measure N/K/Q signature, raw-parameter, enum and source-use
+work plus compiler latency/RSS, native runtime and text. Correct late-default and
+initializer proofs compare with `7ef73440`; entry rejects them and is not a valid
+performance baseline for those sources.
 
-Compiler text grows **6,080 bytes (0.4636%)**. Entity/Expression/ObjectUse remain
-112/36/36; Fact is 20, FactStore 56 and Analyzer grows 5920→6000. The live probe
-covers 18 transitive headers; earlier probes preserve frozen snapshot integrity.
-Inherited latency increases include calls-4 +1.04%, demand-wide +0.19% (mixed
-pairs) and special-wide +2.05%; the latter saves 14,900 KiB RSS. Preliminary trials,
-large timing outliers, native allocation variation and all historical RSS costs
-and separate Massif evidence remain disclosed. No whole-corpus speedup is claimed.
+Current compiler text: **1,317,638 → 1,320,774** (+3,136 bytes, 0.238%).
+Analyzer: **6000 → 6152** bytes; typed class use: **20**. Other public hot-record
+sizes remain unchanged. The current probe owns all 18 live transitive headers;
+older probes retain snapshot integrity. Historical layout/measurement data and
+RSS costs remain in [performance.md](performance.md).
 
-Budgets remain source/key/concrete-use-proportional storage, at most four O0
-conversion variants/source operation, one local view per publication and zero
-generated growth. O0 has no mandated numerical latency/RSS/compiler-text ceiling.
-Repeatable affected-case benefits justify the bounded facts, sparse indirection
-and compiler growth. Unsupported historical live-header gates are snapshot
-checks; no mandated limit, correctness or coverage was removed. Performance
-acceptance leaves the remaining architecture group open.
+Explicit budgets: source/key/concrete-use-proportional storage, at most four O0
+conversion variants per source operation, one local writable view per Fact
+publication, and zero generated growth. PA14/O0 mandates no numerical
+latency/RSS/compiler-text ceiling. Historical diagnostic equations/layouts are
+snapshot evidence, not permanent implementation gates. No mandated limit,
+correctness requirement or coverage was removed.
 
 ## Handoff ledger
 
-| Coherent increment | Commit / evidence |
+| Increment | Commit / evidence |
 | --- | --- |
-| Earlier declaration/frame/default/value/expression and ordinary/special definition owners | `78bdbc3f` through `fda0a178`; 11,914 verified observations, proofs and heap diagnostics retained |
-| Concrete declaration publication, local types and direct initialization | `58ead665`; distinct local/nested/shadowed types, aliases, enum bounds, copies and cleanup |
-| Stable sparse Fact storage and telemetry | `15b8ac6d`; all 137 writes publish explicitly, absent reads allocate nothing |
-| One writable view per grouped publication | `af01c062`; reviewed conditional scope, latency/text follow-up; both trial campaigns retained |
-| Frozen proofs, validation, layouts and harnesses | `facf8d64`; two positive reducers, 18-header live probe and 345 sanitizer inputs |
-| Full performance acceptance | `declaration-fact-performance.json` / `declaration-fact-handoff.json`; 924 new observations and cumulative verifier pass |
+| Inherited owners and performance | Through `97006205`; 12,838 observations and all earlier proofs retained |
+| Retained signatures/raw parameters and complete-class defaults | `84567172`; original missing-parameter failure and identity traces preserved |
+| Typed complete-class member initializer uses | `7ef73440`; valid late initializer entry rejection and native order/override controls |
+| Direct member enum identity | `dad19c39`; correct qualified intermediate also preserved |
+| Proof/sanitizer/required validation | Six native proofs; 118 recorded checks; all required reports pass |
+| Performance acceptance | Pending full isolated campaign and cumulative verification |
 
-Validation: **314/314 stage**, **1621/1621 prior**, **1935/1935 through**, **31**
-native programs, **345** release/ASan/UBSan parity sources, **157** rejections,
-**six** ABI controls, **seven** inherited reducers and initializer/store/lifetime
-controls (**92** recorded checks). File audit passes with three inherited header
-advisories. Coverage retains all **1266** fixture/reference files. Initial failures,
-patches, logs, binaries and outputs remain under
-`$RALPH_ARTIFACT_DIR/pa14-declaration-facts/`; evidence/verifiers are in
-`student.tests/pa14/`. Full-stage work remains incomplete at the joint
-signature/parameter/query and typed demand/failure boundary above.
+Validation: **314 stage / 1621 prior / 1935 through**, **33 native programs**,
+**347 release/ASan/UBSan parity sources**, **166 required rejections**, one optional
+unused-default diagnostic, six ABI controls, seven inherited and four new native
+reducers, plus initializer/store/lifetime checks. File audit passes with three
+inherited header advisories. All **1266 fixture/reference files** remain intact.
+The first proof's unsupported mandatory unused-default diagnostic is preserved;
+N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12–13 justify the corrected
+optional observation plus a separate demanded-use rejection. Artifacts:
+`$RALPH_ARTIFACT_DIR/pa14-signature-publications/`.

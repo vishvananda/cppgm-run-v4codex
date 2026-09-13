@@ -15,10 +15,15 @@ CASES={
  'late_initializer_type': 'template<class T>struct C{int value=Later;using Later=int;};',
  'static_initializer_scope': 'template<class T>struct C{static const int value=later;static const int later=7;};',
 }
+CASES['private_default_use']=CASES['private_default']+'int main(){C<int> c;return c.get();}'
+# N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12-13: an unused
+# default is a separate definition; an early diagnostic is permitted.
+OPTIONAL={'private_default'}
 CLAUSES={
  'missing_default':'N3485 [basic.lookup.unqual], [dcl.fct.default]/5',
  'late_type_value':'N3485 [basic.scope.class]/1, [class.mem]/2, [expr.prim.general]',
- 'private_default':'N3485 [dcl.fct.default]/5, [class.access]',
+ 'private_default':'N3485 [temp.decls]/2, [temp.res]/8, [temp.inst]/1,12-13, [class.access]',
+ 'private_default_use':'N3485 [temp.inst]/12-13, [class.access]',
  'demanded_default_body':'N3485 [temp.inst]/1, [temp.dep]',
  'later_added_default':'N3485 [dcl.fct.default]/6',
  'nested_type_value':'N3485 [basic.scope.class]/1, [class.mem]/2, [expr.prim.general]',
@@ -33,9 +38,9 @@ if __name__=='__main__':
   for name,source in CASES.items():
    path=work/(name+'.cpp');path.write_text(source)
    p=subprocess.run([BINARY,'--emit-lowir','-O0','-o',work/'rejected.lowir',path],capture_output=True,text=True,timeout=60)
-   assert p.returncode==1,(name,p.returncode,p.stderr)
+   assert p.returncode in ((0,1) if name in OPTIONAL else (1,)),(name,p.returncode,p.stderr)
    assert not any(x in p.stderr for x in ['AddressSanitizer','UndefinedBehaviorSanitizer','runtime error:']),(name,p.stderr)
-   print(name,'rejection PASS')
+   print(name,'optional diagnostic observed' if name in OPTIONAL else 'rejection PASS',p.returncode)
   for name in REDUCERS:
    ir=work/(name+'.lowir');exe=work/(name+'.exe');source=ROOT/'student.tests/pa14'/name
    for command in ([BINARY,'--emit-lowir','-O0','--validate-lowir','-o',ir,source],
