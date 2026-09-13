@@ -138,7 +138,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
     }
     facts[n].entity = ctor; facts[n].type = target; facts[n].scope = s;
-    expressions[n] = result;
+    expressions.set(n,result);
     return true;
 }
 void Analyzer::constructor_actions(EntityId e)

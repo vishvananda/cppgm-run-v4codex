@@ -21,7 +21,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
     if (qualified_address) {
         --unevaluated_depth;
         if (!unevaluated_depth) {
-            expressions[operand].evaluated = true;
+            expressions.evaluated(operand,true);
             if (definitions) demand_template_storage(a.entity);
         }
     }

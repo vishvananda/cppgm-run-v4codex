@@ -154,6 +154,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_default_argument_work\":" << default_argument_work
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
+        << ",\"semantic_expression_facts\":" << expressions.fact_count()
+        << ",\"semantic_expression_uses\":" << expressions.use_count()
+        << ",\"semantic_expression_inherited\":" << expressions.inherited
+        << ",\"semantic_expression_variants\":" << expressions.variants
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()
         << ",\"semantic_conversion_objects\":" << conversion_objects.size()-1
         << ",\"semantic_user_conversions\":" << user_conversions.size()-1

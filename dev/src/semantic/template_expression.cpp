@@ -88,6 +88,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     if (!occurrence.context) return false;
     auto source = template_fixed_expressions.get(occurrence.source);
     if (!source) return false;
+    expressions.inherit(n,source);
     ++template_fixed_uses;
     if (reuse_template_value(n,s,result)) return true;
     if (ast[n].kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
@@ -113,7 +114,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         expression(c,s);
         auto incoming = expressions[template_fixed_expressions.get(ast.nodes.occurrences[c].source)].incoming;
         if (incoming >= result.conversions && incoming-result.conversions < result.count) {
-            expressions[c].incoming = incoming;
+            expressions.incoming(c,incoming);
             if (conversions[incoming].reference && !conversions[incoming].temporary) observe_scalar(c);
         }
     }

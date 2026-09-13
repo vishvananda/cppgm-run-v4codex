@@ -251,9 +251,9 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
 EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin)
 {
     struct Values {
-        const std::vector<Expression>& facts; const std::vector<NodeId>& nodes; unsigned begin;
+        const ExpressionStore& facts; const std::vector<NodeId>& nodes; unsigned begin;
         std::size_t size() const { return nodes.size()-begin; }
-        const Expression& operator[](std::size_t i) const { return facts[nodes[begin+i]]; }
+        Expression operator[](std::size_t i) const { return facts[nodes[begin+i]]; }
     } values{expressions,args,begin};
     return deduce_function_values(pattern,values);
 }

@@ -100,7 +100,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         auto lit = ast.literals[ast[inner].literal];
         if (types[t].bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
         expression(inner, s);
-        expressions[inner].evaluated = false; // Direct character initialization has no backing-array address use.
+        expressions.evaluated(inner,false); // Direct character initialization has no backing-array address use.
         initializers[id].source = inner; initializers[id].kind = InitKind::String;
         cursor = ast[source].next; return id;
     }
@@ -187,7 +187,8 @@ void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
     if (cursor && cursor != ast[n].next) throw std::runtime_error("excess initializer at object boundary");
     initializer_index.put(key(n, t), plan);
     facts[n].type = t; facts[n].scope = s;
-    expressions[n].type = t; expressions[n].category = ValueCategory::Lvalue;
-    expressions[n].ready = true; expressions[n].evaluated = initializers[plan].kind != InitKind::String;
+    auto value = expressions[n]; value.type = t; value.category = ValueCategory::Lvalue;
+    expressions.set(n,value);
+    expressions.ready(n,true); expressions.evaluated(n,initializers[plan].kind != InitKind::String);
 }
 } }

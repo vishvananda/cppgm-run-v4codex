@@ -34,7 +34,7 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
         Conversion conversion = conversion_function(facts[n].entity ? n : c,converted,!is_switch,false,facts[n].entity);
         Expression result; result.type = converted; result.ready = true;
         record_conversion(result,facts[n].entity ? n : c,conversion);
-        facts[n].type = converted; expressions[n] = result;
+        facts[n].type = converted; expressions.set(n,result);
         if (is_switch) switches.back().type = converted;
         return;
     }
@@ -55,7 +55,7 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
         conversion.kind = Conversion::Kind::Contextual;
         record_conversion(result, 0, conversion);
     }
-    expressions[n] = result;
+    expressions.set(n,result);
 }
 void Analyzer::resolve_statement(NodeId n, ScopeId s)
 {

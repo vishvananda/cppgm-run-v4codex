@@ -221,19 +221,19 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
         if (ast[n].op == OP_ARROW) object = types[object].child;
     } else if (TypeId implicit = implicit_object_type(facts[n].scope)) object = types[implicit].child;
     check_access(e, facts[n].scope, naming, object);
-    expressions[n].entity = e;
-    expressions[n].form = ExpressionForm::Ordinary;
-    expressions[n].type = entities[e].type;
+    auto value = expressions[n];
+    value.entity = e; value.form = ExpressionForm::Ordinary; value.type = entities[e].type;
+    expressions.set(n,value);
     facts[n].type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
     facts[n].entity = e;
     use_selected_function(e,direct);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
         select_function(ast[n].first, e, direct);
         if (ast[n].kind == Kind::Unary) {
-            expressions[n].type = entities[e].member_info && !entities[e].is_static ?
+            value = expressions[n]; value.type = entities[e].member_info && !entities[e].is_static ?
                 types.member_pointer(scopes[entities[e].owner].entity, entities[e].type) : types.compound(TypeKind::Pointer, entities[e].type);
-            expressions[n].category = ValueCategory::Prvalue;
-            facts[n].type = expressions[n].type;
+            value.category = ValueCategory::Prvalue; expressions.set(n,value);
+            facts[n].type = value.type;
         }
     }
 }
@@ -267,7 +267,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
     Conversion c = direct && class_value(expressions[n].type) ? conversion_function(n,target,true) : conversion(n, target);
     if (!c.valid()) throw std::runtime_error("invalid implicit conversion");
     apply_conversion(n, c);
-    expressions[n].incoming = conversions.size();
+    expressions.incoming(n,conversions.size());
     conversions.push_back(c);
 }
 void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
@@ -299,7 +299,7 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
         }
         if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User && c.kind != Conversion::Kind::List) select_function(n, c.function);
         if (expressions[n].entity) demand_specialization(expressions[n].entity);
-        expressions[n].incoming = conversions.size();
+        expressions.incoming(n,conversions.size());
     }
     conversions.push_back(c);
 }
@@ -307,7 +307,7 @@ void Analyzer::record_call(Expression& owner, const std::vector<NodeId>& args, s
 {
     for (std::size_t j = 0; j < args.size(); ++j) if (args[j] || selected[j].kind == Conversion::Kind::ListPlan) apply_conversion(args[j], selected[j]);
     store_call(owner,args,selected);
-    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions[args[j]].incoming = owner.conversions+j;
+    for (std::size_t j = 0; j < args.size(); ++j) if (args[j]) expressions.incoming(args[j],owner.conversions+j);
 }
 void Analyzer::store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected)
 {
@@ -342,7 +342,10 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
         aggregate_initialization(n, target, s); return;
     }
     if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
-        if (!ast[n].first) { facts[n].type = target; expressions[n].type = target; expressions[n].ready = true; return; }
+        if (!ast[n].first) {
+            facts[n].type = target; auto value = expressions[n]; value.type = target; value.ready = true;
+            expressions.set(n,value); return;
+        }
         if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
         if (ast[n].kind != Kind::BracedInit && ast[ast[n].first].kind != Kind::BracedInit && class_value(expression(ast[n].first,s).type) && !class_value(value_type(target)))
             require_conversion(ast[n].first,target,true);

@@ -9,6 +9,18 @@ unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
+Active continuation from `5a795af4`; previous turn: **verified progress**.
+Split immutable expression facts from per-use incoming conversion/evaluation
+state. Source-owned facts publish once; substituted object/call facts publish
+new identities. Fixed-expression reuse aliases the source fact until a concrete
+result differs. Storage/work follow source facts, changed facts and use edges;
+no content hash or syntax replay. Extend the same ownership split to retained
+call-input slices and source/context views, so concrete argument use IDs do not
+force copies of fixed callee/conversion facts. Validate all prior identity, default, scalar,
+materialization and cleanup controls, then measure the full frozen corpus and
+source/repetition scaling before accepting the representation cost.
+
+
 Continuation from `c78e8d3b`: **verified progress**. This group closes typed
 layout-query values and extends that owner into dependent array bounds,
 qualified constants, conditional/logical queries, scalar casts and ABI output.

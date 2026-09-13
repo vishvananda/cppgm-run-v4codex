@@ -1,5 +1,6 @@
 #pragma once
 #include "semantic/type_query.h"
+#include "semantic/expression_store.h"
 #include "semantic/template_binding.h"
 #include "semantic/model.h"
 #include "syntax/parser.h"
@@ -20,7 +21,7 @@ public:
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
     std::vector<Fact> facts;
-    const Expression& expression_fact(NodeId n) const { return expressions[n]; }
+    Expression expression_fact(NodeId n) const { return expressions[n]; }
     ObjectUse object_fact(NodeId n) const {
         auto use = object_uses[expressions[n].object_use];
         return use.source_owned ? project_object_use(use,n) : use;
@@ -226,7 +227,7 @@ private:
     std::size_t default_environment_work = 0, default_argument_work = 0;
     ScopeId default_environment(EntityId e, ScopeId head);
     void demand_region(NodeId root);
-    std::vector<Expression> expressions;
+    ExpressionStore expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
     Index object_destructors, lifetime_index, object_lifetimes, return_counts;
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);

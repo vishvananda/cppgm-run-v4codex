@@ -18,7 +18,7 @@ Expression Analyzer::value_fact(const Expression& source) const
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
     if (expressions[n].ready) {
-        expressions[n].evaluated |= !unevaluated_depth;
+        if (!unevaluated_depth) expressions.evaluated(n,true);
         if (!unevaluated_depth && definitions) demand_template_storage(expressions[n].entity);
         return expressions[n];
     }
@@ -31,7 +31,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
-    expressions[n] = result;
+    expressions.set(n,result);
     if (!facts[n].type) facts[n].type = result.type;
     return result;
 }

@@ -65,6 +65,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_binding semantic/template_binding_declarations semantic/template_binding_statements semantic/template_checks
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_expression
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/expression_store
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_call_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_conversion_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_object_facts

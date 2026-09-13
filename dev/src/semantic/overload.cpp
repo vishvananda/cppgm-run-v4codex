@@ -251,7 +251,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         EntityId selected = merge_lookup(ordinary, associated);
         if (definitions) selected = explicit_template(ast[callee].detail,selected,s);
         fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
-        expressions[callee] = fn; expressions[callee].ready = true; expressions[callee].evaluated = !unevaluated_depth;
+        expressions.set(callee,fn); expressions.ready(callee,true); expressions.evaluated(callee,!unevaluated_depth);
         facts[callee].entity = selected; facts[callee].scope = s;
     } else fn = expression(callee, s);
     if (fn.type && types[fn.type].kind == TypeKind::Named && entities[types[fn.type].entity].class_info) {
@@ -281,7 +281,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
     if (fn.form == ExpressionForm::Overload && !direct_name) throw std::runtime_error("unresolved indirect callee");
     if (direct_name && (fn.form == ExpressionForm::Overload || (fn.entity && entities[fn.entity].kind == EntityKind::Function))) {
         std::vector<Conversion> chosen;
-        auto choice = select_call(fn.entity,expressions,&args,object_type,object_category,
+        auto choice = select_call(fn.entity,{},&args,object_type,object_category,
             object_uses[fn.object_use].naming_scope,0,chosen);
         if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable function");
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous overload");

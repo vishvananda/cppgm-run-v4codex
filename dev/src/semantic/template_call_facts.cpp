@@ -38,7 +38,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (associated) {
         fn.entity = explicit_template(name,merge_lookup(binding.entity,associated),s);
         fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue; fn.ready = true;
-        expressions[callee] = fn; facts[callee].entity = fn.entity; facts[callee].scope = s;
+        expressions.set(callee,fn); facts[callee].entity = fn.entity; facts[callee].scope = s;
     } else fn = expression(callee,s);
     NodeId object_node = member ? ast[designator].first : 0;
     TypeId object_type = member ? expressions[object_node].type : 0;
@@ -47,7 +47,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     auto naming = object_uses[expressions[designator].object_use].naming_scope;
     TypeId ft = 0; EntityId selected = 0; std::vector<Conversion> chosen;
     if (direct) {
-        auto choice = select_call(fn.entity,expressions,&args,object_type,category,naming,0,chosen);
+        auto choice = select_call(fn.entity,{},&args,object_type,category,naming,0,chosen);
         if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable fixed template call");
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous fixed template call");
         selected = choice.entity; ft = entities[selected].type;
@@ -71,8 +71,8 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
             args.push_back(a); chosen.push_back(conversion(a,types.parameters[f.offset+i]));
         }
         for (auto c = callee;; c = ast[c].first) {
-            expressions[c].entity = selected; expressions[c].form = ExpressionForm::Ordinary;
-            expressions[c].type = ft; facts[c].entity = selected; facts[c].type = call_type(selected);
+            auto value = expressions[c]; value.entity = selected; value.form = ExpressionForm::Ordinary; value.type = ft;
+            expressions.set(c,value); facts[c].entity = selected; facts[c].type = call_type(selected);
             if (ast[c].kind != Kind::Parenthesized) break;
         }
     } else {
@@ -97,7 +97,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     }
     // No argument application or result temporary belongs to the definition.
     store_call(result,args,chosen); result.ready = true;
-    expressions[n] = result; facts[n].type = f.child; facts[n].scope = s; facts[n].entity = selected;
+    expressions.set(n,result); facts[n].type = f.child; facts[n].scope = s; facts[n].entity = selected;
     ++template_fixed_call_work;
     } catch (...) { --unevaluated_depth; throw; }
     --unevaluated_depth; return true;
@@ -115,7 +115,8 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         if (receiver.node) expression(receiver.node,s);
         auto pattern = ast[source].first;
         for (auto c = callee;; c = ast[c].first, pattern = ast[pattern].first) {
-            expressions[c] = expressions[pattern]; expressions[c].evaluated = !unevaluated_depth;
+            expressions.inherit(c,pattern);
+            expressions.set(c,expressions[pattern]); expressions.evaluated(c,!unevaluated_depth);
             facts[c].type = facts[pattern].type; facts[c].entity = selected; facts[c].scope = s;
             if (ast[c].kind != Kind::Parenthesized) break;
         }
@@ -124,7 +125,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         expression(callee,s);
         auto incoming = expressions[ast[source].first].incoming;
         auto conversion = conversions[incoming]; apply_conversion(callee,conversion);
-        expressions[callee].incoming = incoming;
+        expressions.incoming(callee,incoming);
     }
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     bool materialize = false;
@@ -139,7 +140,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     if (materialize) record_call(result,args,chosen);
     else {
         for (unsigned i = 0; i < args.size(); ++i) {
-            apply_conversion(args[i],chosen[i]); expressions[args[i]].incoming = result.conversions+i;
+            apply_conversion(args[i],chosen[i]); expressions.incoming(args[i],result.conversions+i);
         }
         result.arguments = call_arguments.size(); call_arguments.insert(call_arguments.end(),args.begin(),args.end());
     }

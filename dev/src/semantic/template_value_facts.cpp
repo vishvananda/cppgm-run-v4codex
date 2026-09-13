@@ -15,7 +15,7 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
     if (!query) return false; // Local identity or another expression owner is not yet typed.
     template_value_queries.put(source,query); ++template_value_work;
     Expression result; result.type = types.fundamental(FT_UNSIGNED_LONG_INT); result.ready = true;
-    expressions[node] = result; facts[node].type = result.type; facts[node].scope = scope;
+    expressions.set(node,result); facts[node].type = result.type; facts[node].scope = scope;
     template_fixed_expressions.put(source,node); ++template_fixed_work;
     return true;
 }
@@ -142,10 +142,11 @@ void Analyzer::reuse_value_conversions(NodeId node, NodeId source, Expression& r
         value_conversion_records += result.count;
     }
     result.conversions = begin;
+    expressions.inherit_conversions(node,source,begin);
     for (auto child = first; child; child = ast[child].next) {
         auto incoming = expressions[child].incoming;
         if (incoming >= original && incoming-original < result.count)
-            expressions[child].incoming = begin+incoming-original;
+            expressions.incoming(child,begin+incoming-original);
     }
 }
 } }
