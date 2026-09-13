@@ -87,6 +87,10 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     ++template_fixed_uses;
     if (ast[n].kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
+    if (reuse_template_field(n,s,result)) {
+        facts[n].type = facts[source].type; facts[n].entity = result.entity;
+        return true;
+    }
     auto first = ast[n].first;
     if (ast[n].kind == Kind::Member) {
         expression(first,s); // The shared receiver edge is projected by object_fact.

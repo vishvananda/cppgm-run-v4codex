@@ -164,7 +164,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto cls = types[type].entity; complete_class(cls);
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
         if (!e) throw std::runtime_error("type query member not found");
-        x = member_value(e,type,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
+        x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         if (function_binding(e)) { x.form = ExpressionForm::Overload; x.type = 0; }
         else { check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type; }
         break;

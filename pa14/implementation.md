@@ -299,3 +299,26 @@ compiler wall/RSS, native runtime/payload, outliers and separate correctness cos
 The attempted try/throw extension is preserved in the artifact directory with
 its rejection log; source exception lowering belongs to PA21, not this stage.
 Default definition/demand states remain a separate unfinished semantic owner.
+
+## Template-owned field paths (in progress)
+
+`template_member_facts.cpp` separates a source field's fixed type/category from
+its template-owned object. Definition-time method contexts retain the owning
+pattern, availability of `this` and cv qualifiers. Ordinary/member-query value
+rules now consume cv directly, without constructing a fake source object type.
+The ordinary declarator and pattern body share function-qualifier extraction.
+
+Each concrete class definition records its source pattern and declaration
+context. A `(source field entity, concrete object TypeId)` cache maps the field
+declaration, validates fixed value facts and records the required base adjustment
+once; object TypeIds include class identity and cv. Unevaluated static contexts
+use the concrete class identity without an object. Later forward declarations
+do not replace the definition's context. Repeated field occurrences consume this
+record and the shared scalar/call facts above it, preserving concrete member
+identity and layout. No source-owned field recipe contains a concrete object.
+
+Known bit-field widths use the ordinary property owner; unknown widths defer
+because they can change integral promotion. Eight definition-time rejections,
+eighteen native programs and through 1935/1935 pass at the initial increment.
+Qualified out-of-line method contexts and further current-object forms remain
+in this active group; sanitizer/scaling evidence has not yet been collected.

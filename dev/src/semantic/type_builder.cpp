@@ -91,6 +91,18 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     facts[n].type = result; facts[n].scope = s;
     return result;
 }
+FunctionQualifiers Analyzer::function_qualifiers(NodeId parameters)
+{
+    FunctionQualifiers result;
+    for (auto q = ast[parameters].next; q; q = ast[q].next) {
+        if (ast[q].kind == Kind::CvQualifier) result.cv |= ast[q].op == KW_CONST ? 1 : 2;
+        if (ast[q].kind == Kind::FunctionQualifier && (ast[q].op == OP_AMP || ast[q].op == OP_LAND)) {
+            if (result.ref != RefQualifier::None) throw std::runtime_error("duplicate ref qualifier");
+            result.ref = ast[q].op == OP_AMP ? RefQualifier::Lvalue : RefQualifier::Rvalue;
+        }
+    }
+    return result;
+}
 TypeId Analyzer::type_id(NodeId n, ScopeId s)
 {
     if (facts[n].type) return facts[n].type;
@@ -181,16 +193,8 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             if (params.size() == 1 && types[params[0]].kind == TypeKind::Fundamental &&
                 types[params[0]].fundamental == FT_VOID && !variadic) params.clear();
             if (trailing) base = type_id(ast[trailing].first, parameter_scope);
-            unsigned member_cv = 0;
-            RefQualifier ref = RefQualifier::None;
-            for (NodeId q = ast[c].next; q; q = ast[q].next) {
-                if (ast[q].kind == Kind::CvQualifier) member_cv |= ast[q].op == KW_CONST ? 1 : 2;
-                if (ast[q].kind == Kind::FunctionQualifier && (ast[q].op == OP_AMP || ast[q].op == OP_LAND)) {
-                    if (ref != RefQualifier::None) throw std::runtime_error("duplicate ref qualifier");
-                    ref = ast[q].op == OP_AMP ? RefQualifier::Lvalue : RefQualifier::Rvalue;
-                }
-            }
-            base = types.function(base, params, variadic, member_cv, ref);
+            auto qualifiers = function_qualifiers(c);
+            base = types.function(base, params, variadic, qualifiers.cv, qualifiers.ref);
             facts[c].type = base;
         }
     }

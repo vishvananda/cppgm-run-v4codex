@@ -9,4 +9,7 @@ struct TemplateBinding {
     ScopeId scope = 0;
     bool dependent = false;
 };
+// Declaration/type identity is shared; a concrete owning class supplies layout.
+struct TemplateObjectContext { EntityId owner = 0; unsigned char cv = 0; bool available = false; };
+struct TemplateMemberUse { EntityId entity = 0; std::uint32_t object = 0; TypeId type = 0; };
 } }

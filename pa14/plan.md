@@ -62,6 +62,15 @@ gates remain diagnostics; mandated limits, correctness and coverage are preserve
 
 ## Handoff ledger
 
+Continuation entry `33b791da`: preceding receiver/default-use work is **verified
+progress**, with all required checks, native controls and frozen evidence passing.
+Next owner: template-owned data-member paths. Retain the source declaration and
+fixed type/category/cv facts, then map declaration and receiver layout through
+the concrete owning class and its declaration context. Cache each complete
+member/owner key once. Validate definition-time legality, implicit/explicit
+`this`, static/mutable/reference fields, nested/out-of-line owners and fixed-base
+access, then course/native/sanitizer checks and compiler/native scaling evidence.
+
 Entry `d6891c36` is **verified progress** from the fixed-call/default-recipe group.
 Earlier transfer/body/call commits and all 5,194 preceding observations remain
 preserved in the linked reports and repository history.

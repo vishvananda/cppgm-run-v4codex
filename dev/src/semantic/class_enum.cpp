@@ -70,6 +70,13 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
     }
     TypeId t = entities[e].type;
+    if (definitions && definition && ast.nodes.occurrences[n].context) {
+        auto pattern = template_class_bindings.get(ast.nodes.occurrences[n].source);
+        if (pattern) {
+            template_class_patterns.put(e,scopes[pattern].entity);
+            template_class_contexts.put(e,ast.nodes.occurrences[n].context);
+        }
+    }
     facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
     if (emit && !anonymous_union) {
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);

@@ -124,6 +124,8 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             auto e = pattern_declaration(kind,s,id,d,dep);
             entities[e].initializer = init;
             entities[e].is_static = spec_has(specs,KW_STATIC);
+            entities[e].mutable_field = spec_has(specs,KW_MUTABLE);
+            if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
             if (!dep && !function) {
                 bool local_class = false;
                 for (auto c = ast[specs].first; c; c = ast[c].next)
@@ -135,13 +137,19 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init && bind_template_expression(init,s)) template_pattern_entities.put(e,2);
+            return e;
         };
         if (node.kind == Kind::Function) { auto d = ast[specs].next; bind_decl(d,0,ast[d].next); }
         else if (special) { auto d = child(n,Kind::Declarator); bind_decl(d,0,child(n,Kind::Compound)); }
         else if (node.kind == Kind::ConditionDeclaration) { auto d = ast[specs].next; bind_decl(d,ast[d].next,0); }
         else if (node.kind == Kind::BitField) {
             for (auto c = node.first; c; c = ast[c].next) if (ast[c].kind == Kind::BitFieldDeclarator) {
-                auto d = ast[c].first; bind_decl(d,0,0); bind_template_expression(ast[d].next,s);
+                auto d = ast[c].first; auto field = bind_decl(d,0,0);
+                auto dependent_width = bind_template_expression(ast[d].next,s);
+                if (entities[field].type && !dependent_type(entities[field].type) && !dependent_width) {
+                    auto count = evaluate(ast[d].next,s);
+                    if (count.valid) bit_field_properties(field,count);
+                }
             }
         } else for (auto c = ast[child(n,Kind::InitDeclarators)].first; c; c = ast[c].next) {
             auto d = ast[c].first; bind_decl(d,ast[d].next,0);

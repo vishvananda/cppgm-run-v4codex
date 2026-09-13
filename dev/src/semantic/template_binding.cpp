@@ -84,6 +84,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         if (callee && ast[name].kind == Kind::TypeId) return bind_template_expression(name,s);
         auto binding = bind_template_name(name,s);
         auto e = binding.entity;
+        if (!binding.dependent && check_template_field(n,s,e)) return false;
         if (!binding.dependent && !e && !callee) throw std::runtime_error("unbound template value name");
         if (e && !callee && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias ||
             entities[e].kind == EntityKind::Namespace || entities[e].kind == EntityKind::NamespaceAlias))
@@ -110,10 +111,33 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         auto name = ast[ast[node.first].next].detail;
         for (auto p = ast[name].first; p; p = ast[p].next)
             if (auto args = child(p,Kind::TemplateArguments)) dependent |= bind_template_expression(args,s);
+        auto receiver = node.first;
+        while (ast[receiver].kind == Kind::Parenthesized) receiver = ast[receiver].first;
+        bool current = node.op == OP_ARROW && ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;
+        if (node.op == OP_DOT && ast[receiver].kind == Kind::Unary && ast[receiver].op == OP_STAR) {
+            receiver = ast[receiver].first;
+            while (ast[receiver].kind == Kind::Parenthesized) receiver = ast[receiver].first;
+            current = ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;
+        }
+        auto object = template_object_context(s);
+        if (current && object.owner && ast[name].first == ast[name].last && !child(ast[name].last,Kind::TemplateArguments)) {
+            auto field = lookup(entities[object.owner].scope,terminal(name),Lookup::Ordinary,true);
+            if (check_template_field(n,s,field,true)) return false;
+        }
         return dependent;
     }
     if (node.kind == Kind::Name) return bind_template_name(n,s).dependent;
     if (node.kind == Kind::Identifier) return false; // A declaration's own name.
+    if (node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait) {
+        ++unevaluated_depth; bool dependent = false;
+        try { for (auto c = node.first; c; c = ast[c].next) dependent |= bind_template_expression(c,s); }
+        catch (...) { --unevaluated_depth; throw; }
+        --unevaluated_depth; return dependent;
+    }
+    if (node.kind == Kind::KeywordLiteral && node.op == KW_THIS) {
+        auto object = template_object_context(s);
+        if (object.owner && !object.available) throw std::runtime_error("this in static template member");
+    }
     bool dependent = node.kind == Kind::KeywordLiteral && node.op == KW_THIS;
     if (node.detail) dependent |= bind_template_expression(node.detail,s);
     for (auto c = node.first; c; c = ast[c].next) dependent |= bind_template_expression(c,s);
@@ -136,6 +160,7 @@ void Analyzer::bind_template_body(const Body& body)
         if (auto p = child(d,Kind::Parameters)) params = p;
         auto nested = child(d,Kind::NestedDeclarator); d = nested ? ast[nested].first : 0;
     }
+    bind_template_object_context(fs,params);
     for (auto p = ast[params].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
         auto specs = ast[p].first, decl = ast[specs].next;

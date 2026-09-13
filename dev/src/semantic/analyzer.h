@@ -205,6 +205,7 @@ private:
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);
+    void bit_field_properties(EntityId field, Constant count);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);
     syntax::AstView ast;
@@ -350,7 +351,8 @@ private:
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;
     Conversion object_conversion(EntityId e, TypeId object, ValueCategory category, ScopeId naming = 0);
-    Expression member_value(EntityId e, TypeId object, ValueCategory category);
+    Expression member_value(EntityId e, unsigned object_cv, ValueCategory category);
+    FunctionQualifiers function_qualifiers(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
     void template_facts(EntityId e, ScopeId environment = 0);
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
@@ -391,6 +393,14 @@ private:
     bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
     bool check_fixed_call(NodeId n, ScopeId s);
     bool check_fixed_member(NodeId n, ScopeId s);
+    bool check_template_field(NodeId n, ScopeId s, EntityId field, bool explicit_object = false);
+    void bind_template_object_context(ScopeId function, NodeId parameters);
+    TemplateObjectContext template_object_context(ScopeId scope) const;
+    bool reuse_template_field(NodeId n, ScopeId scope, Expression& result);
+    Index template_object_context_index, template_field_sources, template_member_use_index;
+    Index template_class_patterns, template_class_contexts;
+    std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
+    std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);
     void check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
     Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);

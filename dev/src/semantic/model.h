@@ -13,6 +13,7 @@ using Index = IdIndex;
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
+struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
     unsigned char cv = 0;

@@ -51,9 +51,18 @@ void Analyzer::bit_field_declaration(NodeId n, ScopeId s)
             e = make_entity(EntityKind::Variable, s, 0, field); entities[e].type = t;
             record(s, e, field, t, EntityKind::Variable);
         }
-        auto& f = field_metadata(e); f.bit_field = true; f.declared_width = count.bits;
-        f.storage_type = types[t].kind == TypeKind::Named ? entities[types[t].entity].underlying : types.unqualified(t);
-        f.width = std::min<std::uint64_t>(count.bits, width(f.storage_type));
+        bit_field_properties(e,count);
     }
+}
+void Analyzer::bit_field_properties(EntityId e, Constant count)
+{
+    auto t = entities[e].type;
+    if (!integral(t)) throw std::runtime_error("nonintegral bit-field");
+    if (!count.valid || !integral(count.type) || (!is_unsigned(count.type) && std::int64_t(count.bits) < 0))
+        throw std::runtime_error("invalid bit-field width");
+    if (entities[e].name && !count.bits) throw std::runtime_error("named zero-width bit-field");
+    auto& f = field_metadata(e); f.bit_field = true; f.declared_width = count.bits;
+    f.storage_type = types[t].kind == TypeKind::Named ? entities[types[t].entity].underlying : types.unqualified(t);
+    f.width = std::min<std::uint64_t>(count.bits,width(f.storage_type));
 }
 } }
