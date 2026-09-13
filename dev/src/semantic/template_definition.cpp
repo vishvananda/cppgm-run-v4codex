@@ -135,6 +135,10 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         }
         auto context = ast.new_context();
         auto source = ast.instantiate(def.source,context);
+        auto specialization = entities[owner.specialization].specialization;
+        auto head = templates[entities[specializations[specialization].pattern].template_info];
+        auto parent = substitution_frame(specialization,head.offset,head.count);
+        attach_template_context(context,substitution_frame(specialization,def.parameters,def.count,parent));
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         auto saved_template = active_template_scope, saved_environment = member_definition_environment;
         active_template_scope = 0; member_definition_environment = environment;

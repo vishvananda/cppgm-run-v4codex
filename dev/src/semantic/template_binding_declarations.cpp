@@ -79,7 +79,8 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             // it does not introduce an ordinary name into the derived scope.
             auto previous = ast[name].first;
             while (ast[previous].next && ast[previous].next != ast[name].last) previous = ast[previous].next;
-            if (ast[previous].text != terminal(name)) pattern_declaration(EntityKind::Function,s,terminal(name),n,true);
+            if (ast[previous].text != terminal(name))
+                pattern_declaration(node.flags & 1 ? EntityKind::Alias : EntityKind::Function,s,terminal(name),n,true);
         }
         else if (value.entity) bind(s,terminal(name),value.entity);
         else throw std::runtime_error("unbound pattern using-declaration");
@@ -87,8 +88,15 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
     }
     if (node.kind == Kind::Alias) {
         auto dep = bind_template_expression(node.first,s);
+        auto specs = ast[node.first].first;
+        auto type = bind_template_type(specs,ast[specs].next,s);
         auto e = pattern_declaration(EntityKind::Alias,s,node.text,n,dep);
-        if (!dep) { entities[e].type = type_id(node.first,s); facts[n].type = entities[e].type; }
+        if (type) {
+            entities[e].type = types.signature(type); facts[n].type = type;
+            facts[node.first].type = type;
+            if (!ast.nodes.occurrences[node.first].context)
+                template_type_sources.put(ast.nodes.occurrences[node.first].source,type+1);
+        }
         return;
     }
     if (node.kind == Kind::StaticAssert) { bind_template_expression(node.first,s); return; }
@@ -119,6 +127,8 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             for (auto c = ast[d].first; c; c = ast[c].next)
                 if (ast[c].kind != Kind::Parameters && ast[c].kind != Kind::Identifier && ast[c].kind != Kind::TrailingReturn)
                     dep |= bind_template_expression(c,s);
+            auto type = special ? 0 : bind_template_type(specs,d,s);
+            if (type) function = types[type].kind == TypeKind::Function;
             auto kind = spec_has(specs,KW_TYPEDEF) ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
             auto id = special && ast[ast[name].last].op != KW_OPERATOR ? 0 : terminal(name);
             auto e = pattern_declaration(kind,s,id,d,dep);
@@ -126,14 +136,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             entities[e].is_static = spec_has(specs,KW_STATIC);
             entities[e].mutable_field = spec_has(specs,KW_MUTABLE);
             if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
-            if (!dep && !function) {
-                bool local_class = false;
-                for (auto c = ast[specs].first; c; c = ast[c].next)
-                    local_class |= ast[c].kind == Kind::Class || ast[c].kind == Kind::ClassForward || ast[c].kind == Kind::Enum;
-                if (!local_class && !child(d,Kind::Array)) {
-                    entities[e].type = declarator(d,specifiers(specs,s),s,0,true); facts[d].type = entities[e].type;
-                }
-            }
+            if (type) { entities[e].type = types.signature(type); facts[d].type = type; }
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init && bind_template_expression(init,s)) template_pattern_entities.put(e,2);

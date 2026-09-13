@@ -157,12 +157,13 @@ NodeId Parser::using_declaration()
         return result;
     }
     bool directive = in.eat("namespace");
-    in.eat("typename");
+    bool type = in.eat("typename");
     NodeId n = name();
     NodeId result = wrap(directive ? Kind::UsingDirective : Kind::UsingDeclaration, named(Kind::Target, n));
+    if (type) ast[result].flags |= 1;
     Binding binding = name_binding(n);
     if (directive && binding.target) names.import(scope, binding.target, true);
-    else if (!directive) names.bind(scope, final_name(n), binding.category, binding.target);
+    else if (!directive) names.bind(scope, final_name(n), type ? Category::Type : binding.category, binding.target);
     in.require(";");
     return result;
 }

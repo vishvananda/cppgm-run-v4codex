@@ -376,7 +376,7 @@ must enter a context-keyed typed body graph rather than this source-only fact
 index. Whole-region projection and finer demand/failure states remain explicit
 current-stage work in [plan.md](plan.md).
 
-## Retained function signature types (active continuation)
+## Retained declaration types and substitution frames
 
 Function-template parameter declarations retain the signature's source TypeId
 when definition-time body binding creates lexical parameter identities. Body
@@ -386,9 +386,31 @@ cv, array and function forms remain separate from the adjusted callable type.
 The body consumes concrete types and creates only its required runtime parameter
 identities. Nested pointer-return declarators use the suffix nearest the name.
 
-The initial change passes PA14 314/314, the default through report 1935/1935 and
-nineteen native controls. `signature-facts.cpp` covers top-level cv, reference
-collapsing, array/function adjustment, nested pointer returns, renamed heads,
-sequential prototype queries and dependent qualified types. Substitution cache
-ownership and local declaration type propagation are the next related work;
-final sanitizer and performance evidence will cover the completed group.
+Canonical substitution frames identify a specialization, its source declaration
+head and an optional enclosing frame. Arguments remain in immutable interned
+packs; source parameter identity and ordinal must both match. Renamed member
+heads overlay the defining class head. Signature and body substitution share
+successful type/query facts keyed by complete frame and source identity.
+
+Source specifiers, aliases and supported declarators publish canonical types
+before introducing the new declaration's name. Concrete declarations reuse fixed
+types or substitute dependent types through those frames. A deferred fact stays
+explicitly empty for local class/enum identity, value-dependent bounds and query
+syntax owned by other semantic paths. The source probe never constructs a type
+from zero and never catches a semantic error to retry with guessed information.
+`using typename` now retains its type category through parsing and source binding.
+
+Query frames also map definition access scopes and source overload unions to
+concrete declarations. Parameter queries retain type-only ordinals; signature
+queries need no runtime parameter object. Member queries retain implicit-object
+cv, while ordinary member-value rules handle mutable/reference fields. Named
+member calls use the concrete implicit object for overload selection. These are
+C++11 [basic.scope.pdecl], [basic.scope.proto], [dcl.fct], [dcl.type.simple],
+[expr.ref], [class.access] and [temp.mem] requirements, exercised by
+`signature-facts.cpp`, `declaration-types.cpp` and six rejection controls.
+
+Validation before the evidence campaign: 314 PA14 cases, a default 1935-case
+through report, twenty native controls and six declaration-type rejections.
+The final post-fix checks and frozen performance/sanitizer results are pending.
+Whole-region projection, remaining dependent body forms and structured failure
+states are still current-stage work; these type caches do not complete them.

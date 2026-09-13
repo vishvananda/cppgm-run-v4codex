@@ -275,7 +275,7 @@ private:
     std::size_t query_work = 0;
     QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
     QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
-    QueryId substitute_query(QueryId id, const Index& bindings, Index& cache);
+    QueryId substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     TypeQueryFact query_fact(QueryId id);
     TypeId query_decltype(QueryId id, bool direct);
     TypeId fundamental_cast_type(ETokenType op);
@@ -290,6 +290,25 @@ private:
     std::vector<TypeId> argument_types;
     std::vector<std::uint32_t> argument_slots;
     std::vector<Specialization> specializations;
+    // A complete substitution frame and source type/query identify immutable
+    // facts. Separate indexes retain the complete 32-bit ID spaces.
+    Index specialization_type_cache, specialization_query_cache, substitution_binding_cache;
+    std::size_t substitution_work = 0, substitution_hits = 0, substitution_records = 0;
+    Index substitution_frame_index, template_type_contexts, substitution_frame_contexts;
+    std::vector<TemplateSubstitutionFrame> substitution_frames = std::vector<TemplateSubstitutionFrame>(1);
+    std::uint32_t substitution_frame(std::uint32_t specialization, std::uint32_t parameters,
+        std::uint32_t count, std::uint32_t parent = 0);
+    TypeId substitution_argument(std::uint32_t frame, EntityId parameter) const;
+    void attach_template_context(std::uint32_t context, std::uint32_t frame);
+    EntityId substitution_entity(std::uint32_t frame, EntityId source) const;
+    EntityId substitution_binding(std::uint32_t frame, EntityId source);
+    ScopeId substitution_scope(std::uint32_t frame, ScopeId source) const;
+    bool pattern_scope(ScopeId scope) const;
+    Index template_type_sources;
+    bool template_type_probe = false;
+    std::size_t template_type_work = 0, template_type_uses = 0;
+    TypeId bind_template_type(NodeId specs, NodeId declarator, ScopeId scope);
+    TypeId reuse_template_type(NodeId node, ScopeId scope);
     std::vector<unsigned char> type_dependence;
     std::vector<EntityId> specialization_demand;
     std::size_t specialization_cursor = 0, template_bodies = 0, template_completions = 0;
@@ -431,7 +450,7 @@ private:
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
     bool dependent_type(TypeId type);
-    TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache);
+    TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
     EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin = 0);
     EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args, unsigned begin = 0);

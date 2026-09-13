@@ -161,17 +161,21 @@ void Analyzer::bind_template_body(const Body& body)
         auto nested = child(d,Kind::NestedDeclarator); d = nested ? ast[nested].first : 0;
     }
     bind_template_object_context(fs,params);
+    unsigned ordinal = 0;
     for (auto p = ast[params].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
         auto specs = ast[p].first, decl = ast[specs].next;
         bool dependent = bind_template_expression(specs,fs) | bind_template_expression(decl,fs);
         auto declared_type = facts[p].type;
+        if (!declared_type) declared_type = bind_template_type(specs,decl,fs);
         auto e = pattern_declaration(EntityKind::Parameter,fs,terminal(decl_name(decl)),p,dependent);
+        // Type queries can refer to an earlier parameter while the signature
+        // is being instantiated, before runtime parameter objects exist.
+        signature_parameters.put(e,++ordinal);
         if (declared_type) {
             facts[p].type = declared_type;
             entities[e].type = parameter_body_type(declared_type);
         }
-        else if (!dependent) entities[e].type = parameter_body_type(declarator(decl,specifiers(specs,fs),fs));
     }
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);

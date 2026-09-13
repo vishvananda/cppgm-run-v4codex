@@ -55,26 +55,32 @@ bool Analyzer::dependent_type(TypeId id)
     type_dependence[id] = dependent ? 2 : 1;
     return dependent;
 }
-TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& cache)
+TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner)
 {
     if (!dependent_type(pattern)) return pattern;
-    if (cache.get(pattern)) return cache.get(pattern);
+    auto cache_key = key(owner,pattern);
+    if (owner) {
+        if (auto known = specialization_type_cache.get(cache_key)) { ++substitution_hits; return known; }
+    } else if (auto known = cache.get(pattern)) return known;
+    ++substitution_work;
     Type p = types[pattern];
     TypeId result = pattern;
     if (p.kind == TypeKind::Decltype) {
-        result = types.qualify(query_decltype(substitute_query(p.entity,bindings,cache),p.bound),p.cv);
+        auto query = substitute_query(p.entity,bindings,cache,owner);
+        if (!query) return 0;
+        result = types.qualify(query_decltype(query,p.bound),p.cv);
     } else if (p.kind == TypeKind::DependentName) {
-        auto owner = substitute_type(p.child,bindings,cache);
-        if (!owner) return 0;
+        auto qualifier = substitute_type(p.child,bindings,cache,owner);
+        if (!qualifier) return 0;
         std::vector<TypeId> args;
         for (unsigned j = 0; j < p.count; ++j) {
-            auto arg = substitute_type(types.parameters[p.offset+j],bindings,cache);
+            auto arg = substitute_type(types.parameters[p.offset+j],bindings,cache,owner);
             if (!arg) return 0;
             args.push_back(arg);
         }
-        result = types.qualify(qualified_type(owner,p.entity,args,p.bound),p.cv);
+        result = types.qualify(qualified_type(qualifier,p.entity,args,p.bound),p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
-        result = bindings.get(p.entity);
+        result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);
         if (!result) return 0;
         result = types.qualify(result, p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].specialization) {
@@ -82,24 +88,24 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         auto pack = argument_packs[spec.arguments];
         std::vector<TypeId> args;
         for (unsigned j = 0; j < pack.count; ++j) {
-            auto value = substitute_type(argument_types[pack.offset+j],bindings,cache);
+            auto value = substitute_type(argument_types[pack.offset+j],bindings,cache,owner);
             if (!value) return 0;
             args.push_back(value);
         }
         auto e = specialize_class(spec.pattern,args);
         result = types.qualify(entities[e].type,p.cv);
     } else if (p.kind == TypeKind::Function) {
-        TypeId returned = substitute_type(p.child, bindings, cache);
+        TypeId returned = substitute_type(p.child, bindings, cache,owner);
         if (!returned || types[returned].kind == TypeKind::Array || types[returned].kind == TypeKind::Function) return 0;
         std::vector<TypeId> params;
         for (unsigned i = 0; i < p.count; ++i) {
-            TypeId t = substitute_type(types.parameters[p.offset + i], bindings, cache);
+            TypeId t = substitute_type(types.parameters[p.offset + i], bindings, cache,owner);
             if (!t || fundamental(t, FT_VOID)) return 0;
             params.push_back(t);
         }
         result = types.signature(types.function(returned, params, p.variadic, p.cv, p.ref));
     } else if (p.child) {
-        TypeId child = substitute_type(p.child, bindings, cache);
+        TypeId child = substitute_type(p.child, bindings, cache,owner);
         if (!child) return 0;
         bool reference = types[child].kind == TypeKind::LRef || types[child].kind == TypeKind::RRef;
         if (reference && (p.kind == TypeKind::Pointer || p.kind == TypeKind::Array || p.kind == TypeKind::MemberPointer)) return 0;
@@ -108,7 +114,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         result = p.kind == TypeKind::MemberPointer ? types.member_pointer(p.entity, child) : types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
     }
-    cache.put(pattern, result); return result;
+    if (owner) { specialization_type_cache.put(cache_key,result); ++substitution_records; }
+    else cache.put(pattern, result);
+    return result;
 }
 EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input)
 {
@@ -125,8 +133,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     std::uint32_t index = specializations.size(); specializations.push_back(spec);
     specialization_index.put(key(pattern, pack), index);
     Index bindings, cache;
-    for (unsigned i = 0; i < t.count; ++i) bindings.put(template_parameters[t.offset + i], i < args.size() ? args[i] : entities[template_parameters[t.offset+i]].type);
-    TypeId type = substitute_type(entities[pattern].type, bindings, cache);
+    auto frame = dependent_type(entities[pattern].type) ? substitution_frame(index,t.offset,t.count) : 0;
+    TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].type = type; entities[e].specialization = index;

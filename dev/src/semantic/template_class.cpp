@@ -167,7 +167,9 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
         if (ast[a].kind != Kind::TypeId) throw std::runtime_error("type template argument required");
-        args.push_back(type_id(a,s));
+        auto type = type_id(a,s);
+        if (template_type_probe && !type) return 0;
+        args.push_back(type);
     }
     return specialize_class(pattern,args);
 }
@@ -193,6 +195,7 @@ void Analyzer::complete_class(EntityId e)
     auto context = ast.new_context();
     auto source = ast.instantiate(pattern.body,context);
     specializations[index].context = context;
+    attach_template_context(context,substitution_frame(index,pattern.offset,pattern.count));
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
     ScopeId saved = active_template_scope; active_template_scope = 0;
     facts[source].entity = e;

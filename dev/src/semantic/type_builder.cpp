@@ -33,21 +33,28 @@ EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, Ty
 }
 TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
 {
+    if (definitions) if (auto type = reuse_template_type(n,s)) return type;
     TypeId result = 0;
     unsigned cv = 0, longs = 0;
     bool unsign = false, sign = false, short_int = false;
     EFundamentalType fundamental = FT_INT;
     for (NodeId c = ast[n].first; c; c = ast[c].next) {
         const syntax::Node node = ast[c];
+        if (template_type_probe && (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum)) return 0;
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward) {
             result = class_type(c, s, anonymous_name, node.kind == Kind::Class, spec_has(n, KW_STATIC));
             continue;
         }
         if (node.kind == Kind::Enum) { result = enum_type(c, s, anonymous_name, node.flags & 1); continue; }
-        if (node.op == KW_DECLTYPE) { result = expression_type(node.first, s, true); continue; }
+        if (node.op == KW_DECLTYPE) {
+            result = expression_type(node.first, s, true);
+            if (template_type_probe && !result) return 0;
+            continue;
+        }
         if (node.detail) {
             if (definitions) {
                 result = type_name(node.detail,s); facts[c].entity = facts[node.detail].entity;
+                if (template_type_probe && !result) return 0;
                 continue;
             }
             EntityId e = resolve(node.detail, s);
@@ -133,6 +140,7 @@ FunctionQualifiers Analyzer::function_qualifiers(NodeId parameters)
 TypeId Analyzer::type_id(NodeId n, ScopeId s)
 {
     if (facts[n].type) return facts[n].type;
+    if (definitions) if (auto type = reuse_template_type(n,s)) return type;
     NodeId specs = ast[n].first;
     TypeId t = declarator(ast[specs].next, specifiers(specs, s), s);
     facts[n].type = t; facts[n].scope = s;
@@ -149,7 +157,9 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
 }
 TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved)
 {
+    if (template_type_probe && !base) return 0;
     if (!n) return base;
+    if (definitions && !dynamic_array) if (auto type = reuse_template_type(n,s)) return type;
     NodeId name = decl_name(n);
     if (name && !name_resolved) {
         auto owner = name_owner(name,s,true);
@@ -164,6 +174,8 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         case Kind::Pointer:
             if (ast[c].detail) {
                 EntityId owner = resolve(ast[c].detail, s, Lookup::Qualifier);
+                if (template_type_probe && owner && (entities[owner].template_pattern ||
+                    entities[owner].template_parameter || dependent_type(entities[owner].type))) return 0;
                 if (!owner || !entities[owner].class_info) throw std::runtime_error("invalid member pointer owner");
                 base = types.member_pointer(owner, base);
                 break;
@@ -185,6 +197,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         if (ast[c].kind == Kind::Array) {
             std::uint64_t bound = 0;
             if (ast[c].first) {
+                if (template_type_probe && bind_template_expression(ast[c].first,s)) return 0;
                 Constant v = evaluate(ast[c].first, s);
                 if (c == dynamic_array) {
                     auto x = expression(ast[c].first,s);
@@ -206,6 +219,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             for (NodeId p = ast[c].first; p; p = ast[p].next) {
                 if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
                 params.push_back(parameter(p, parameter_scope));
+                if (template_type_probe && !params.back()) return 0;
                 NodeId d = ast[ast[p].first].next;
                 if (child(d, Kind::ParameterPack)) variadic = true;
                 auto id = terminal(decl_name(d));
@@ -219,7 +233,10 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             }
             if (params.size() == 1 && types[params[0]].kind == TypeKind::Fundamental &&
                 types[params[0]].fundamental == FT_VOID && !variadic) params.clear();
-            if (trailing) base = type_id(ast[trailing].first, parameter_scope);
+            if (trailing) {
+                base = type_id(ast[trailing].first, parameter_scope);
+                if (template_type_probe && !base) return 0;
+            }
             auto qualifiers = function_qualifiers(c);
             base = types.function(base, params, variadic, qualifiers.cv, qualifiers.ref);
             facts[c].type = base;

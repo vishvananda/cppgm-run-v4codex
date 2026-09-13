@@ -42,6 +42,13 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         object = callee.op == OP_ARROW ? types[x.type].child : x.type;
         category = callee.op == OP_ARROW ? ValueCategory::Lvalue : x.category;
     }
+    if (callee.kind == QueryKind::Name && fn.entity && function_binding(fn.entity)) {
+        for (auto e : candidates(fn.entity)) if (entities[e].member_info) {
+            auto implicit = implicit_object_type(q.context);
+            if (implicit) object = types[implicit].child;
+            break;
+        }
+    }
     TypeQueryFact r;
     TypeId function_type = 0;
     if (fn.entity && function_binding(fn.entity)) {

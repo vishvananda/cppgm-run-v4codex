@@ -28,24 +28,33 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s)
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
                 if (ast[a].kind != Kind::TypeId) throw std::runtime_error("type template argument required");
-                args.push_back(types.signature(type_id(a,s)));
+                auto type = type_id(a,s);
+                if (template_type_probe && !type) return 0;
+                args.push_back(types.signature(type));
             }
             prefix = types.dependent_name(prefix,ast[p].text,args,list);
             continue;
         }
         if (ast[ast[p].detail].kind == Kind::Decltype) {
             prefix = expression_type(ast[ast[p].detail].first,s,true);
+            if (template_type_probe && !prefix) return 0;
             if (dependent_type(prefix)) continue;
             if (types[prefix].kind != TypeKind::Named) throw std::runtime_error("decltype qualifier is not a class");
             complete_class(types[prefix].entity);
             owner = entities[types[prefix].entity].scope; qualified = true; continue;
         }
         auto e = lookup(owner,ast[p].text,p == ast[n].last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
-        e = class_template_name(p,e,s);
+        auto instance = class_template_name(p,e,s);
+        if (template_type_probe && e && !instance) return 0;
+        e = instance;
         if (!e) throw std::runtime_error("type name is not visible");
         check_access(e,s,owner);
         bool type = entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias;
         prefix = type ? source_type(e) : 0;
+        // A local pattern class/enum or the primary's injected name has no
+        // concrete declaration type yet. Qualified aliases can still supply
+        // a canonical symbolic type through their already bound class scope.
+        if (template_type_probe && entities[e].class_info && entities[e].template_info) prefix = 0;
         if (p == ast[n].last) {
             if (!type) throw std::runtime_error("type name denotes a value");
             facts[n].entity = e;
@@ -54,6 +63,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s)
         if (prefix && dependent_type(prefix)) continue;
         if (prefix && types[prefix].kind == TypeKind::Named) complete_class(types[prefix].entity);
         owner = target(e); qualified = true;
+        if (template_type_probe && !owner && type && !prefix) return 0;
         if (!owner) throw std::runtime_error("type qualifier has no scope");
     }
     return prefix;

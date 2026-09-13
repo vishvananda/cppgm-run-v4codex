@@ -122,6 +122,12 @@ void Analyzer::telemetry(std::ostream& out) const
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_dependence_work\":" << dependence_work
         << ",\"semantic_specializations\":" << specializations.size() - 1
+        << ",\"semantic_type_substitution_work\":" << substitution_work
+        << ",\"semantic_type_substitution_hits\":" << substitution_hits
+        << ",\"semantic_type_substitution_records\":" << substitution_records
+        << ",\"semantic_substitution_frames\":" << substitution_frames.size()-1
+        << ",\"semantic_template_type_work\":" << template_type_work
+        << ",\"semantic_template_type_uses\":" << template_type_uses
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"template_class_completions\":" << template_completions
         << ",\"template_definition_applications\":" << template_definition_work

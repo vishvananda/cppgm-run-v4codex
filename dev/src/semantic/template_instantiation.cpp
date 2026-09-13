@@ -21,9 +21,8 @@ void Analyzer::instantiate_function(EntityId e)
     // those facts, preserving body cv/array/function forms independently of the
     // adjusted callable type; body demand must not rebuild the signature syntax.
     Index bindings, cache;
-    auto pack = argument_packs[spec.arguments];
-    for (unsigned j = 0; j < pack.count; ++j)
-        bindings.put(template_parameters[pattern.offset+j],argument_types[pack.offset+j]);
+    auto frame = substitution_frame(index,pattern.offset,pattern.count);
+    attach_template_context(context,frame);
     NodeId parameters = 0, d = pattern.declarator;
     while (d) {
         if (auto p = child(d,syntax::Kind::Parameters)) parameters = p;
@@ -34,7 +33,7 @@ void Analyzer::instantiate_function(EntityId e)
         if (ast[p].kind != syntax::Kind::Parameter) continue;
         auto type = facts[p].type;
         if (!type) throw std::logic_error("missing retained template parameter type");
-        auto concrete = substitute_type(type,bindings,cache);
+        auto concrete = substitute_type(type,bindings,cache,frame);
         if (!concrete) throw std::runtime_error("invalid instantiated parameter type");
         auto occurrence = ast.projected(p,context);
         facts[occurrence].type = concrete; facts[occurrence].scope = environment;
