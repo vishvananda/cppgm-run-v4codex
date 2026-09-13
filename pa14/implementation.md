@@ -697,3 +697,15 @@ seven native reducers, 28 native programs and store/lifetime controls pass. Stag
 prior, through and file audit pass. Source signatures for special members and the
 joint declaration/lifetime/demand graph remain current-stage work; missing source
 types prevent safely extending direct ordinary application by a local shortcut.
+
+
+Special-member source checking now retains void constructor/destructor signatures
+and declared conversion targets through the ordinary typed declarator machinery.
+The canonical prototype matcher replaces the old nullary syntax/exception scan,
+so different conversion targets may have different exception specifications.
+Special definitions also participate in duplicate/in-class-definition checking.
+Twelve focused rejection controls and a native conversion/constructor/destructor
+control pass, alongside stage 314/314, prior 1621/1621 and all 29 native programs.
+A missing helper declaration caused the first build to fail; that log remains.
+The next owner change supplies injected-class and declaring-head parameter facts
+before extending direct special-member body application.

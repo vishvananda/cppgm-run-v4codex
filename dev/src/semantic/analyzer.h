@@ -332,6 +332,7 @@ private:
     bool template_type_probe = false;
     std::size_t template_type_work = 0, template_type_uses = 0;
     TypeId bind_template_type(NodeId specs, NodeId declarator, ScopeId scope);
+    TypeId bind_template_special_type(NodeId d, ScopeId scope);
     TypeId reuse_template_type(NodeId node, ScopeId scope);
     std::vector<unsigned char> type_dependence;
     std::vector<EntityId> specialization_demand;
@@ -469,13 +470,11 @@ private:
     ScopeId bind_template_class(NodeId n, ScopeId parent, EntityId entity = 0, std::vector<Body>* deferred = 0);
     void check_template_parameters(NodeId n, ScopeId s);
     void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
-    void check_template_member_exception(NodeId d, std::uint32_t path, IdentifierId name, ScopeId s);
     TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary);
     TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
     ScopeId template_signature_owner(TypeId type, EntityId primary);
     std::uint32_t check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
     int template_exception(NodeId d, ScopeId s);
-    bool nullary_declarator(NodeId d) const;
     Index template_prototype_index, template_prototype_sources;
     Index template_signature_index, template_signature_groups;
     struct TemplatePrototype {

@@ -18,6 +18,15 @@ retain their declaring head. Matched bodies register against the selected entity
 and substitute raw source parameter facts, preserving cv/array/function forms.
 Defaults, exceptions and virtual checks retain their existing owners.
 
+Active continuation from `60cf761c`; previous turn: **verified progress**. Extend
+the retained source-signature owner to special members, replacing nullary syntax
+matching with complete typed signatures. Then establish injected-class/current
+nested types under declaring-head identities and route known special definitions
+to direct body application. Preserve transfer, exception and base/complete-entry
+owners. Validate constructor/copy/move/conversion overloads, unused rejection,
+renamed heads, deferred destruction and source/key/demand scaling; freeze full
+correctness/layout/performance evidence before acceptance.
+
 | Owner / data flow | Complexity and validation |
 | --- | --- |
 | Ordinary definition matching/application (completed group) | Source prototypes → canonical signature index → per-prototype definition list → concrete member/body facts. For N specializations, K overloads and Q requests: source work K, applications/edges N, requests N(Q+1), hits NQ; required candidate work NKQ is unchanged. Validate late/re-entrant publication, overload isolation, renamed/nested heads, parameters and twelve unused-definition rejections. |

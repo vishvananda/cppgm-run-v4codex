@@ -65,17 +65,8 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
                 add(d,child(ast[d].next,Kind::SpecialInitializer));
             }
         } else add(ast[c].kind == Kind::Function ? ast[ast[c].first].next : child(c,Kind::Declarator),
-            ast[c].kind == Kind::Function || child(c,Kind::Compound) || child(child(c,Kind::Initializer),Kind::SpecialInitializer));
+            ast[c].kind == Kind::Function || ast[c].kind == Kind::SpecialDefinition || child(child(c,Kind::Initializer),Kind::SpecialInitializer));
     }
-}
-bool Analyzer::nullary_declarator(NodeId d) const
-{
-    auto list = child(d,Kind::Parameters);
-    if (!list) return false;
-    auto p = ast[list].first;
-    if (!p) return true;
-    auto spec = ast[ast[p].first].first;
-    return !ast[p].next && ast[spec].op == KW_VOID && !ast[spec].next && !ast[ast[p].first].next;
 }
 int Analyzer::template_exception(NodeId d, ScopeId s)
 {
@@ -95,29 +86,6 @@ int Analyzer::template_exception(NodeId d, ScopeId s)
         return value.bits != 0;
     }
     return ast[ast[decl_name(d)].last].op == OP_COMPL ? -1 : 0;
-}
-void Analyzer::check_template_member_exception(NodeId d, std::uint32_t path, IdentifierId name, ScopeId s)
-{
-    if (!nullary_declarator(d)) return;
-    auto current = template_exception(d,s);
-    if (current < 0) return;
-    auto qualifiers = [&](NodeId decl) {
-        unsigned result = 0;
-        for (auto n = ast[child(decl,Kind::Parameters)].next; n; n = ast[n].next) {
-            auto op = ast[n].op;
-            if (op == KW_CONST) result |= 1;
-            if (op == KW_VOLATILE) result |= 2;
-            if (op == OP_AMP) result |= 4;
-            if (op == OP_LAND) result |= 8;
-        }
-        return result;
-    };
-    for (auto p = template_prototype_index.get(key(path,name)); p; p = template_prototypes[p].next) {
-        auto previous = template_prototypes[p];
-        if (!nullary_declarator(previous.declarator) || qualifiers(d) != qualifiers(previous.declarator)) continue;
-        auto spec = template_exception(previous.declarator,previous.environment);
-        if (spec >= 0 && current != spec) throw std::runtime_error("conflicting template member exception specifications");
-    }
 }
 ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
 {

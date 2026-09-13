@@ -92,8 +92,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         auto k = key(path,member);
         definition_bucket = k; definition_name = member;
         if (d && !template_prototype_index.get(k)) throw std::runtime_error("out-of-class member was not declared");
-        if (d) check_template_member_exception(d,path,member,s);
-        else if (ast[n].kind == Kind::Class) index_template_members(n,definition_path(path,member),s);
+        if (!d && ast[n].kind == Kind::Class) index_template_members(n,definition_path(path,member),s);
         def.next = definition_index.get(k);
         retained = template_definitions.size();
         definition_index.put(k,retained); template_definitions.push_back(def);
@@ -125,7 +124,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         if (d) prototype = check_template_member_definition(d,path,definition_name,s,primary);
     }
     if (prototype) {
-        if (template_prototypes[prototype].definitions && ast[n].kind == Kind::Function)
+        if (template_prototypes[prototype].definitions && (ast[n].kind == Kind::Function || ast[n].kind == Kind::SpecialDefinition))
             throw std::runtime_error("duplicate out-of-class template member definition");
         template_definitions[retained].selected_next = template_prototypes[prototype].definitions;
         template_prototypes[prototype].definitions = retained;

@@ -108,6 +108,18 @@ TypeId Analyzer::bind_template_type(NodeId specs, NodeId d, ScopeId scope)
         template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
     return type;
 }
+TypeId Analyzer::bind_template_special_type(NodeId d, ScopeId scope)
+{
+    struct Probe {
+        bool& mode; unsigned& depth; bool saved;
+        Probe(bool& m, unsigned& d) : mode(m), depth(d), saved(m) { mode = true; ++depth; }
+        ~Probe() { mode = saved; --depth; }
+    } probe(template_type_probe,unevaluated_depth);
+    auto name = ast[decl_name(d)].last;
+    auto result = ast[name].op == KW_OPERATOR && ast[name].detail ?
+        type_id(ast[name].detail,scope) : types.fundamental(FT_VOID);
+    return result ? declarator(d,result,scope,0,true) : 0;
+}
 TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
 {
     auto occurrence = ast.nodes.occurrences[node];
