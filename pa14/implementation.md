@@ -346,3 +346,11 @@ require a body declaration before the signature exists. `parameter-shape.t`
 reduces an inherited rejection; the native class and ordinary function cases
 follow C++11 [basic.scope.pdecl], [basic.scope.proto] and [dcl.type.simple]. No
 reference output was changed. Full final sanitizer/scaling evidence is pending.
+
+Out-of-line matching selects the function suffix nearest the method name,
+including through nested pointer-return declarators. Returned function parameter
+lists do not determine member static status or cv. `method-parameters.t` checks
+both static and nonstatic overloads returning function pointers; the fourteenth
+rejection control checks the converse invalid static field use. This follows
+C++11 [dcl.fct] and [dcl.ptr], using the same structural selection rule as
+ordinary function-body parameter binding.

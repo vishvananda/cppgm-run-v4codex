@@ -44,11 +44,20 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
     if (outside) {
         owner = scopes[owner].parent;
         if (entities[e].name) {
+            auto parameters_of = [&](NodeId d) {
+                NodeId parameters = 0;
+                while (d) {
+                    if (auto p = child(d,Kind::Parameters)) parameters = p;
+                    auto nested = child(d,Kind::NestedDeclarator);
+                    d = nested ? ast[nested].first : 0;
+                }
+                return parameters;
+            };
             std::vector<EntityId> possible;
             unsigned kinds = 0;
             for (auto candidate : candidates(local(owner,entities[e].name))) {
                 if (entities[candidate].owner != owner) continue;
-                auto p = child(entities[candidate].source,Kind::Parameters);
+                auto p = parameters_of(entities[candidate].source);
                 auto q = function_qualifiers(p);
                 if (!p || q.cv != qualifiers.cv || q.ref != qualifiers.ref) continue;
                 possible.push_back(candidate); kinds |= entities[candidate].is_static ? 1 : 2;
@@ -58,7 +67,7 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
                 if (shape) {
                     kinds = 0;
                     for (auto candidate : possible) {
-                        auto other = template_method_shape(child(entities[candidate].source,Kind::Parameters),owner);
+                        auto other = template_method_shape(parameters_of(entities[candidate].source),owner);
                         if (!other || shape == other) kinds |= entities[candidate].is_static ? 1 : 2;
                     }
                 }

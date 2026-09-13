@@ -18,6 +18,7 @@ rejections=[
  'template<class T>struct C{int n;int f();};template<class U>int C<U>::f(){return *this->n;}',
  'template<class T>struct C{int n;static int f(int);int f(long);};template<class U>int C<U>::f(int){return n;}',
  'template<class T>struct C{int n;static int f();};template<class U>int C<U>::f(){return sizeof(this);}',
+ 'int two(double n){return n;}template<class T>struct C{int n;int (*f(double))(int);static int (*f(int))(double);};template<class U>int (*C<U>::f(int))(double){++n;return two;}',
 ]
 with tempfile.TemporaryDirectory(prefix='pa14-dependent-objects-') as tmp:
  work=Path(tmp)
