@@ -5,14 +5,20 @@ Last reviewed commit: `8af3c149454e4e43e441206e6978f4d1300e079b`.
 Target: **pa14 full-stage**. Phase: **implement**; architecture remains open.
 Original entry **84/314**; continuation entry/current **314/314**. All **230
 original failures** are resolved. Coverage, references and comparisons are
-unchanged. PA15 has not started. Current implementation: `5ae726e0`.
+unchanged. PA15 has not started. Last complete evidence baseline: `5ae726e0`.
 
 ## Design/spec alignment
 
-Continuation from `5a795af4`: **verified progress**. This group separates immutable
-expression properties from concrete uses, extends that owner through retained
-call-input slices and every semantic/lowering/lifetime consumer, and resolves an
-observed compilation regression through bounded local source/context views.
+Active continuation from `167f5f43`; previous turn: **verified progress**. Trace
+typed declaration/member demand before changing scheduling. Existing body/storage
+queues already deduplicate. First close repeated out-of-class definition-bucket
+walks: source list head + concrete specialization owns a completed traversal;
+new definitions extend an immutable tail and reuse completed prior tails.
+Validate repeated overload demand, re-entrant definitions, late publication,
+nested/static members and rejection behavior. Work should follow unique requested
+heads and newly visited definition edges, with no global invalidation or output
+change. Extend into related application-state/dependency ownership after this
+base owner is established; measure the full frozen corpus and source/key scaling.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |

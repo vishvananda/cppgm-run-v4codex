@@ -117,12 +117,26 @@ bool Analyzer::instantiate_member_definition(EntityId e)
     if (!e || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
     auto owner = definition_owner(scopes[entities[e].owner].entity);
     if (!owner.specialization || dependent_type(entities[owner.specialization].type)) return false;
-    bool found = false;
-    for (auto id = definition_index.get(key(owner.path,entities[e].name)); id; id = template_definitions[id].next) {
+    ++definition_requests;
+    auto head = definition_index.get(key(owner.path,entities[e].name));
+    if (!head) return false;
+    // A published head owns an immutable definition tail. New declarations
+    // introduce a new head; completed old tails remain valid for this concrete
+    // specialization, independently of other owners or declaration insertion.
+    auto traversal = key(owner.specialization,head);
+    if (definition_traversals.get(traversal)) { ++definition_hits; return true; }
+    bool complete = true;
+    for (auto id = head; id; id = template_definitions[id].next) {
         auto k = key(owner.specialization,id);
+        if (definition_traversals.get(k)) { ++definition_hits; break; }
+        ++definition_edges;
         auto state = definition_applications.get(k);
         if (state == unsigned(FactState::Failure)) throw std::runtime_error("failed template member definition");
-        if (state) { found = true; continue; }
+        if (state) {
+            // Recursive demand can consume established declarations, but must
+            // not publish completion for a still-active definition application.
+            complete &= state == unsigned(FactState::Success); continue;
+        }
         definition_applications.put(k,unsigned(FactState::Active));
         ++template_definition_work;
         auto def = template_definitions[id];
@@ -148,7 +162,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
                 auto type = declarator(d,specifiers(specs,environment),environment);
                 declare_object(d,ast.projected(def.initializer,context),type,specs,environment,source);
             } else declaration(source,environment);
-            definition_applications.put(k,unsigned(FactState::Success)); found = true;
+            definition_applications.put(k,unsigned(FactState::Success));
         } catch (...) {
             definition_applications.put(k,unsigned(FactState::Failure));
             active_template_scope = saved_template; member_definition_environment = saved_environment;
@@ -156,7 +170,8 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         }
         active_template_scope = saved_template; member_definition_environment = saved_environment;
     }
-    return found;
+    if (complete) definition_traversals.put(traversal,1);
+    return true;
 }
 void Analyzer::demand_template_storage(EntityId e)
 {

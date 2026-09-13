@@ -587,3 +587,24 @@ blocks improve, with identical LowIR/native bytes and lower peak RSS. Both
 560-observation campaigns and all earlier measurements verify, totaling 10,514.
 The complete cost/spread review and remaining declaration/lifetime/demand boundary
 are recorded in performance.md and plan.md. No course/reference coverage changed.
+
+
+Definition-demand continuation from `167f5f43`: each concrete specialization and
+immutable source definition-list head now owns a completed traversal. Repeated
+member demand returns that fact directly; a newly published head traverses its
+new prefix and reuses an already-completed tail. Per-definition Active/Success/
+Failure states remain authoritative, and a re-entrant traversal cannot publish
+completion while an application is active. Keys include the concrete owning
+specialization and unique source-head identity, so other overload buckets, nested
+paths and later definitions do not invalidate or alias completed facts.
+Requests/hits/visited edges are observable without altering demand.
+
+The new definition-demands.cpp control covers repeated calls, late overloads,
+a previously absent member definition, nested paths, independent static storage
+and unused invalid dependent bodies. Entry/current validated LowIR and native
+bytes agree; 37 current requests visit ten edges for the same ten definition
+applications. PA14 314/314, prior 1621/1621 and all 25 native programs pass.
+The initial personal pointer comparison was ill-formed between int* and long*;
+explicit void-pointer conversion preserves the intended distinct-storage test.
+Its original source and failure log remain in the artifacts. Full source/key
+scaling, sanitizer and performance acceptance follow this coherent increment.

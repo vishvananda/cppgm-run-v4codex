@@ -419,12 +419,14 @@ private:
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
+    Index definition_traversals;
     std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
     std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
     std::vector<EntityId> storage_demand;
     std::uint32_t definition_path_count = 0;
     std::size_t storage_cursor = 0;
     std::size_t template_definition_work = 0;
+    std::size_t definition_requests = 0, definition_hits = 0, definition_edges = 0;
     ScopeId member_definition_environment = 0;
     Index template_binding_index, template_pattern_entities, template_pattern_scopes, template_bound_bodies;
     Index template_base_dependence, template_class_bindings, template_pattern_bases;
