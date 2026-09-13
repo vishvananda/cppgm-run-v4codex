@@ -38,7 +38,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (associated) {
         fn.entity = explicit_template(name,merge_lookup(binding.entity,associated),s);
         fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue; fn.ready = true;
-        expressions.set(callee,fn); facts.edit(callee).entity = fn.entity; facts.edit(callee).scope = s;
+        expressions.set(callee,fn); { auto& published = facts.edit(callee); published.entity = fn.entity; published.scope = s; }
     } else fn = expression(callee,s);
     NodeId object_node = member ? ast[designator].first : 0;
     TypeId object_type = member ? expressions[object_node].type : 0;
@@ -72,7 +72,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
         for (auto c = callee;; c = ast[c].first) {
             auto value = expressions[c]; value.entity = selected; value.form = ExpressionForm::Ordinary; value.type = ft;
-            expressions.set(c,value); facts.edit(c).entity = selected; facts.edit(c).type = call_type(selected);
+            expressions.set(c,value); { auto& published = facts.edit(c); published.entity = selected; published.type = call_type(selected); }
             if (ast[c].kind != Kind::Parenthesized) break;
         }
     } else {
@@ -97,7 +97,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     }
     // No argument application or result temporary belongs to the definition.
     store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
-    expressions.set(n,result); facts.edit(n).type = f.child; facts.edit(n).scope = s; facts.edit(n).entity = selected;
+    expressions.set(n,result); { auto& published = facts.edit(n); published.type = f.child; published.scope = s; published.entity = selected; }
     ++template_fixed_call_work;
     } catch (...) { --unevaluated_depth; throw; }
     --unevaluated_depth; return true;
@@ -117,7 +117,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         for (auto c = callee;; c = ast[c].first, pattern = ast[pattern].first) {
             expressions.inherit(c,pattern);
             expressions.set(c,expressions[pattern]); expressions.evaluated(c,!unevaluated_depth);
-            facts.edit(c).type = facts[pattern].type; facts.edit(c).entity = selected; facts.edit(c).scope = s;
+            { auto& published = facts.edit(c); published.type = facts[pattern].type; published.entity = selected; published.scope = s; }
             if (ast[c].kind != Kind::Parenthesized) break;
         }
         use_selected_function(selected,!receiver.virtual_slot);
@@ -144,7 +144,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         }
         result.arguments = expressions.argument_slice(source); result.inputs = CallInputs::Source;
     }
-    facts.edit(n).type = facts[source].type; facts.edit(n).entity = selected;
+    { auto& published = facts.edit(n); published.type = facts[source].type; published.entity = selected; }
 }
 NodeId Analyzer::call_argument(const Expression& call, unsigned i) const
 {

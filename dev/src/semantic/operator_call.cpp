@@ -139,7 +139,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     }
     record_call(result, arguments, selected_arguments);
     TypeId returned = types[entities[selected.entity].type].child;
-    facts.edit(n).entity = selected.entity; facts.edit(n).type = returned;
+    { auto& published = facts.edit(n); published.entity = selected.entity; published.type = returned; }
     result.type = value_type(returned);
     result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

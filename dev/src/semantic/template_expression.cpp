@@ -96,13 +96,13 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     if (node.kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
     if (reuse_template_field(n,s,result)) {
-        facts.edit(n).type = facts[source].type; facts.edit(n).entity = result.entity;
+        { auto& published = facts.edit(n); published.type = facts[source].type; published.entity = result.entity; }
         return true;
     }
     auto first = node.first;
     if (node.kind == Kind::Member) {
         expression(first,s); // The shared receiver edge is projected by object_fact.
-        facts.edit(n).type = facts[source].type; facts.edit(n).entity = result.entity; facts.edit(n).value = facts[source].value;
+        { auto& published = facts.edit(n); published.type = facts[source].type; published.entity = result.entity; published.value = facts[source].value; }
         return true;
     }
     bool unevaluated = node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait;
@@ -135,9 +135,10 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     }
     if (node.kind == Kind::Assignment || node.op == OP_INC || node.op == OP_DEC ||
         (node.kind == Kind::Unary && node.op == OP_AMP)) observe_scalar(first);
-    facts.edit(n).type = facts[source].type;
-    if (!template_value_dependence.get(occurrence.source)) facts.edit(n).value = facts[source].value;
-    facts.edit(n).entity = result.entity;
+    auto& published = facts.edit(n);
+    published.type = facts[source].type;
+    if (!template_value_dependence.get(occurrence.source)) published.value = facts[source].value;
+    published.entity = result.entity;
     return true;
 }
 } }

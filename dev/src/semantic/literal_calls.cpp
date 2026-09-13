@@ -26,7 +26,7 @@ Expression Analyzer::literal_call(NodeId n, ScopeId s)
     }
     if (!selected) throw std::runtime_error("no string literal operator");
     TypeId returned = types[entities[selected].type].child;
-    facts.edit(n).entity = selected; facts.edit(n).type = returned;
+    { auto& published = facts.edit(n); published.entity = selected; published.type = returned; }
     Expression result; result.type = value_type(returned); result.form = ExpressionForm::LiteralCall;
     result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

@@ -824,3 +824,14 @@ native programs pass. Three diagnostic inputs materialize 558924/1523505,
 1256342/2455650 and 663670/1727733 possible Fact records respectively. These
 counts establish sparse ownership, not a compiler latency or peak-RSS benefit;
 freeze equivalent A/B outputs and measure those costs before acceptance.
+
+
+The first frozen sparse-fact trial retains 42 observations on three unchanged,
+byte-identical LowIR inputs. Median peak RSS falls 35392/15078/13086 KiB; compiler
+latency changes +1.43%/+2.98%/-3.18%. These are diagnostics, not full-corpus
+acceptance. The next increment groups adjacent field publications through one
+stable writable Fact view, avoiding repeated sparse lookups. Review corrected
+one mechanical grouping that moved an unconditional entity assignment under a
+value condition; the initial patch/logs remain. The reviewed code again passes
+all 1935 course tests and 31 native controls. Repeat the same frozen trial before
+full sanitizer and corpus/performance acceptance.

@@ -48,7 +48,7 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         auto concrete = substitute_type(type,bindings,cache,frame);
         if (!concrete) throw std::runtime_error("invalid instantiated parameter type");
         auto occurrence = ast.projected(p,context);
-        facts.edit(occurrence).type = concrete; facts.edit(occurrence).scope = environment;
+        { auto& published = facts.edit(occurrence); published.type = concrete; published.scope = environment; }
     }
 }
 ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
@@ -98,7 +98,7 @@ NodeId Analyzer::instantiate_default(EntityId e, unsigned parameter)
     default_argument_states.put(root,unsigned(FactState::Active)); ++default_argument_work;
     try {
         expression(value,environment);
-        facts.edit(root).target = value; facts.edit(root).scope = environment;
+        { auto& published = facts.edit(root); published.target = value; published.scope = environment; }
         default_argument_states.put(root,unsigned(FactState::Success));
     } catch (...) {
         default_argument_states.put(root,unsigned(FactState::Failure)); throw;

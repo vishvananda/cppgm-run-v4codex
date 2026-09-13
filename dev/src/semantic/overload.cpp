@@ -221,7 +221,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                     return result;
                 }
                 members[entities[ctor].member_info].complete_entry = true;
-                facts.edit(n).entity = ctor; facts.edit(n).type = cast_type;
+                { auto& published = facts.edit(n); published.entity = ctor; published.type = cast_type; }
                 result.type = cast_type; result.form = ExpressionForm::Construction;
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
                 entities[temporary].type = cast_type; register_destruction(temporary);
@@ -252,7 +252,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (definitions) selected = explicit_template(ast[callee].detail,selected,s);
         fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
         expressions.set(callee,fn); expressions.ready(callee,true); expressions.evaluated(callee,!unevaluated_depth);
-        facts.edit(callee).entity = selected; facts.edit(callee).scope = s;
+        { auto& published = facts.edit(callee); published.entity = selected; published.scope = s; }
     } else fn = expression(callee, s);
     if (fn.type && types[fn.type].kind == TypeKind::Named && entities[types[fn.type].entity].class_info) {
         std::vector<NodeId> operands(1, callee); operands.insert(operands.end(), args.begin(), args.end());

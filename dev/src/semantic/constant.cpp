@@ -69,7 +69,7 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
     if (ast[n].kind == Kind::IdExpression) {
         EntityId e = resolve(ast[n].detail, s);
         if (!e) throw std::runtime_error("unknown decltype/sizeof name");
-        facts.edit(n).entity = e; facts.edit(n).type = entities[e].type;
+        { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         return entities[e].type;
     }
     Constant v = evaluate(n, s);
@@ -122,7 +122,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::IdExpression: {
         EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
-        if (!calls) { facts.edit(n).entity = e; facts.edit(n).type = entities[e].type; }
+        if (!calls) { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         return entities[e].constant;
     }
     case Kind::Sizeof: case Kind::TypeTrait: {

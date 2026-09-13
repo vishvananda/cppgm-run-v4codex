@@ -143,7 +143,7 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         if (!type) throw std::runtime_error("invalid substituted declaration type");
     }
     ++template_type_uses;
-    facts.edit(node).type = type; facts.edit(node).scope = scope;
+    { auto& published = facts.edit(node); published.type = type; published.scope = scope; }
     return type;
 }
 } }

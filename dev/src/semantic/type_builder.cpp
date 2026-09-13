@@ -95,7 +95,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         result = types.fundamental(fundamental);
     }
     result = types.qualify(result, cv);
-    facts.edit(n).type = result; facts.edit(n).scope = s;
+    { auto& published = facts.edit(n); published.type = result; published.scope = s; }
     return result;
 }
 bool Analyzer::prototype_scope_needed(NodeId parameters)
@@ -143,7 +143,7 @@ TypeId Analyzer::type_id(NodeId n, ScopeId s)
     if (definitions) if (auto type = reuse_template_type(n,s)) return type;
     NodeId specs = ast[n].first;
     TypeId t = declarator(ast[specs].next, specifiers(specs, s), s);
-    facts.edit(n).type = t; facts.edit(n).scope = s;
+    { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
 }
 TypeId Analyzer::parameter(NodeId n, ScopeId s)
@@ -152,7 +152,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     NodeId specs = ast[n].first;
     NodeId d = ast[specs].next;
     TypeId t = declarator(d, specifiers(specs, s), s);
-    facts.edit(n).type = t; facts.edit(n).scope = s;
+    { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
 }
 TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved)
@@ -250,7 +250,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         }
     }
     if (nested) base = declarator(nested, base, s,dynamic_array,name_resolved);
-    facts.edit(n).type = base; facts.edit(n).scope = s;
+    { auto& published = facts.edit(n); published.type = base; published.scope = s; }
     return base;
 }
 void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)

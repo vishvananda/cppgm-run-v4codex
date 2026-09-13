@@ -106,7 +106,7 @@ std::uint32_t Analyzer::record(ScopeId s, EntityId e, NodeId source, TypeId type
     else scopes[s].first_decl = id;
     scopes[s].last_decl = id;
     if (source) {
-        facts.edit(source).entity = e; facts.edit(source).type = type; facts.edit(source).scope = s;
+        { auto& published = facts.edit(source); published.entity = e; published.type = type; published.scope = s; }
         if (definitions) publish_template_binding(source,e);
     }
     return id;

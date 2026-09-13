@@ -224,8 +224,8 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
     auto value = expressions[n];
     value.entity = e; value.form = ExpressionForm::Ordinary; value.type = entities[e].type;
     expressions.set(n,value);
-    facts.edit(n).type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
-    facts.edit(n).entity = e;
+    { auto& published = facts.edit(n); published.type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
+    published.entity = e; }
     use_selected_function(e,direct);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
         select_function(ast[n].first, e, direct);

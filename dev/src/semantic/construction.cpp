@@ -137,7 +137,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
     }
-    facts.edit(n).entity = ctor; facts.edit(n).type = target; facts.edit(n).scope = s;
+    { auto& published = facts.edit(n); published.entity = ctor; published.type = target; published.scope = s; }
     expressions.set(n,result);
     return true;
 }

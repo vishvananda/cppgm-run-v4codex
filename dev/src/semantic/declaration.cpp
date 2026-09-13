@@ -92,7 +92,7 @@ void Analyzer::namespace_declaration(NodeId n, ScopeId s)
         bind(s, name, e);
     }
     ScopeId ns = entities[e].scope;
-    facts.edit(n).entity = e; facts.edit(n).scope = ns;
+    { auto& published = facts.edit(n); published.entity = e; published.scope = ns; }
     if (!name || child(n, Kind::Inline)) add_edge(s, ns, true);
     for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, ns);
 }
@@ -223,7 +223,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         TypeId t = declarator(d, result, s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
-            facts.edit(n).entity = e; facts.edit(n).type = entities[e].type;
+            { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         }
         if (ast[n].kind == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
@@ -290,9 +290,9 @@ void Analyzer::function_body(const Body& body)
     entities[body.entity].definition = body.source;
     entities[body.entity].body = body.node;
     entities[body.entity].scope = fs;
-    facts.edit(body.source).entity = body.entity;
-    facts.edit(body.source).type = entities[body.entity].type;
-    facts.edit(body.source).scope = fs;
+    { auto& published = facts.edit(body.source); published.entity = body.entity;
+    published.type = entities[body.entity].type;
+    published.scope = fs; }
     NodeId d = body.declarator;
     // The function suffix closest to the declarator name supplies parameters.
     NodeId params = 0;
