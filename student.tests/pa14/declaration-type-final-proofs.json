@@ -1,0 +1,218 @@
+{
+  "harness_sha256": "9e5ba05016c2fb5e55363c4b3ec96125744436a3441f54e533b7194e0118ecb8",
+  "rejection_harness_sha256": "191eafc8fcd242f9df2541c10d1eebde67e3f5e2fa28a043ae88f918a688b3bb",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/cppgm++-entry",
+      "sha256": "f254aebfbdf9534bc1f62ecc23051d183a005c32886ae9525bb6e930affe6458"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/cppgm++-query-final-release",
+      "sha256": "ed043579d0e2c321623061f3204ae19cee11e4d0c472cf5130737ce6b31e98e0"
+    }
+  ],
+  "rejections": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-0.cpp",
+      "source_sha256": "706447bf785ae19910ea9387938435cc1e19a10f49cf9910329371cb430cf988",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-0-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-0-1.log",
+          "log_sha256": "a8b1930524cec8ef763de08c1782f6d5ced0f90871236353c7f14425f3e3c520"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-1.cpp",
+      "source_sha256": "e30291cd312f46e4a3ace29f68503e2fd1a6cf8687b276364f2e7d8d977b4e9f",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-1-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-1-1.log",
+          "log_sha256": "a8b1930524cec8ef763de08c1782f6d5ced0f90871236353c7f14425f3e3c520"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-2.cpp",
+      "source_sha256": "2e60204728fb494a4bd139c4729b220ddbdccd10a7d72dacede4858cefa086df",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-2-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-2-1.log",
+          "log_sha256": "1869668c8bc5a2db135651ab7c05cfc4968a31bd23a14648517c419c457bb3d2"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-3.cpp",
+      "source_sha256": "78997b3bf8ec7140f6586816abad12ad98f8f4acea8eaede165d7fb7a95757f0",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-3-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-3-1.log",
+          "log_sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-4.cpp",
+      "source_sha256": "1c30882a53a092bb1c8c99bc55dabdad1156e2c237b36cee795db99eaef61d50",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-4-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-4-1.log",
+          "log_sha256": "a8b1930524cec8ef763de08c1782f6d5ced0f90871236353c7f14425f3e3c520"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-5.cpp",
+      "source_sha256": "3ec1eb4ff257942cc87efa18c4c01ba952fa8fc7a7a84bfe34eddbdeb35e6d0c",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-5-0.log",
+          "log_sha256": "290c1968cf2aac6fae6201c72ec7636e01af12acc403f1bcb293dfcb3cf4e2e8"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-5-1.log",
+          "log_sha256": "290c1968cf2aac6fae6201c72ec7636e01af12acc403f1bcb293dfcb3cf4e2e8"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-6.cpp",
+      "source_sha256": "db45c4d04f3e4442c92c92a480946736b160fa34980e3de03af493252976604a",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-6-0.log",
+          "log_sha256": "624a9f6e948307820d4d2ddebed8e9596e8e7eead36fa75b70d6024cdedeaa20"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-6-1.log",
+          "log_sha256": "624a9f6e948307820d4d2ddebed8e9596e8e7eead36fa75b70d6024cdedeaa20"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-7.cpp",
+      "source_sha256": "c146b11161eb92bb69201015b6695c130484b241bf20921762ab6618616f2415",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-7-0.log",
+          "log_sha256": "1869668c8bc5a2db135651ab7c05cfc4968a31bd23a14648517c419c457bb3d2"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/reject-7-1.log",
+          "log_sha256": "1869668c8bc5a2db135651ab7c05cfc4968a31bd23a14648517c419c457bb3d2"
+        }
+      ]
+    }
+  ],
+  "positives": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts.cpp",
+      "source_sha256": "93c0697696058cc82966ce87cae8278ff7d0dcb1ce3ccf15a2725e113254d988",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-0.lowir",
+          "sha256": "b47231a55c8cda98ec0a759842f5430800b4bdbaf77210338053fd5cfc47240f",
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-0",
+          "native_sha256": "18af43730e624e825d647c238870dc4ddb2d541e20a2e6edb4a531950daa3f9f",
+          "native_exit": 0
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-1.lowir",
+          "sha256": "b47231a55c8cda98ec0a759842f5430800b4bdbaf77210338053fd5cfc47240f",
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/signature-facts-1",
+          "native_sha256": "18af43730e624e825d647c238870dc4ddb2d541e20a2e6edb4a531950daa3f9f",
+          "native_exit": 0
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types.cpp",
+      "source_sha256": "f2d8cf60f12ee028a9d220e516d65633be9ff25f14a19e8d2972b0be6b887b3d",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-0.lowir",
+          "sha256": "9249c183e906032647db3b358da4e64b15d8f50ba908e606f9e5a40d88900e3e",
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-0",
+          "native_sha256": "2640edd55e343835d095fd35bf4ec39305fe156d58d4e48ce937118e92fc2ab7",
+          "native_exit": 0
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-1.lowir",
+          "sha256": "f700282031283b4ceb919d480a31c7e60e26ac426997056b50c3b535de6e95e8",
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/proofs-final/declaration-types-1",
+          "native_sha256": "9540d02f3ab31bca78684b3ff529ddf0ba640c724c4093be2f527465e056adf8",
+          "native_exit": 0
+        }
+      ]
+    }
+  ]
+}

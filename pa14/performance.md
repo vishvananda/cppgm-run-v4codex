@@ -1180,3 +1180,96 @@ context-keyed typed graph propagation; the source-only fixed index cannot own
 them safely. Whole-region projection and separate demand/failure states remain
 current-stage owners, alongside the RSS investigation. The full-stage goal
 remains active; [plan.md](plan.md) records the boundary and next work.
+
+## Declaration types, substitution frames and query contexts
+
+The continuation entry is `5b1afe54`; final implementation is `5ce59182`.
+`declaration_type_benchmark.py` was frozen at `bbb9d729` before either campaign.
+The entry SHA is `f254aebfbdf9534bc1f62ecc23051d183a005c32886ae9525bb6e930affe6458`;
+final release SHA is `ed043579d0e2c321623061f3204ae19cee11e4d0c472cf5130737ce6b31e98e0`.
+Both use g++ C++11/O3 and the same test-runner setting. Sixteen frozen inputs
+cover declaration and renamed-member instances, unused definitions, previous
+member work, ordinary calls and memory/floating-point work. Five checked native
+loops use the supplied PA8 backend. All input/output/binary/harness/backend
+hashes, flags, CPU affinity, wall/RSS/CPU/context-switch observations, warmups,
+A/A calibration and two ABBA blocks are retained in
+`declaration-type-preliminary-performance.json` and
+`declaration-type-performance.json`. All inputs and outputs were frozen before
+timing; no builds or test campaigns ran concurrently with measurements.
+
+Each campaign adds 294 observations. Together with the 7,266 inherited rows,
+**7,854 observations** are retained. The preliminary compiler temporarily
+confused body-parameter query ordinals with prototype-only identities and made
+fixed queries dependent merely because of their access scope. Reduced invalid
+parameter operations and inherited `unknown_call(1)` checking exposed these
+regressions; `5ce59182` corrects them. The full final campaign repeats the same
+sources, preserving every preliminary sample. No failing required fixture or
+comparison rule was changed.
+
+Final compiler medians use the four A and four B observations in the ABBA blocks:
+
+| Workload | A/B wall seconds | A/B peak RSS KiB | ABBA B/A blocks |
+| --- | --- | --- | --- |
+| Declaration instances 1,000 | .665247 / .649972 | 94,096 / 94,124 | .9682 / 1.0028 |
+| Declaration instances 4,000 | 2.945107 / 2.856347 | 362,070 / 362,668 | .9570 / .9874 |
+| Renamed members 1,000 | .368930 / .360169 | 61,878 / 63,922 | .9120 / .9814 |
+| Renamed members 4,000 | 1.552243 / 1.531868 | 234,724 / 239,446 | .9855 / .9892 |
+| Unused definitions 1,000 | .431308 / .457728 | 75,472 / 77,374 | 1.1492 / 1.0543 |
+| Unused definitions 4,000 | 1.753455 / 1.865442 | 285,574 / 290,204 | 1.0649 / 1.0647 |
+| Prior member instances 1,000 | .233910 / .232585 | 43,772 / 43,998 | .9987 / 1.0012 |
+| Prior repeated fields 1,000 | .058848 / .058692 | 16,680 / 16,096 | .9990 / .9924 |
+| Ordinary calls 4 | 1.805331 / 1.759348 | 305,864 / 305,796 | .9762 / .9699 |
+| Memory/floating source 1 | .371511 / .373368 | 69,706 / 69,818 | .9910 / 1.0105 |
+
+The 4,000-instance declaration workload improves in both final blocks and both
+preliminary blocks (.9536/.9737). Renamed-member improvements are smaller but
+repeat in both campaigns. Smaller workloads have noise and outliers: final
+renamed-1,000 A spans .357482–.432005 s; unused-1,000 B spans .454457–.535821 s.
+All samples remain included. Final unused-4,000 A spans 1.748919–1.763862 s and B
+1.862148–1.881573 s, showing a repeatable approximately 6.5% source-validation
+cost. Five frozen unused function-pointer rejection proofs are entry-accepted
+and final-rejected under [expr.call], [expr.ass] and [expr.add]; three existing
+access/parameter rejection controls remain rejected. Two complete personal
+programs also pass both compilers and native execution. Proof hashes and
+commands are retained by `declaration_type_evidence.py`.
+
+| Checked executable | A/B runtime seconds | Identical payload bytes |
+| --- | --- | --- |
+| Declaration/type loop | .040444 / .040846 | 428 |
+| Inherited member loop | .036932 / .036701 | 313 |
+| Calls | .478622 / .477609 | 206 |
+| Memory | .279846 / .279467 | 434 |
+| Floating point | .330091 / .330698 | 230 |
+
+All compiler outputs and native executable hashes are identical across A/B and
+both campaigns. Native differences are measurement variation, not optimization
+profit. The backend emits sectionless ELF; the established payload-after-entry
+metric is used consistently. Compiler text grows 1,265,670→1,274,054 bytes,
+**+8,384 (+0.662%)**. Hot Entity/Expression/ObjectUse remain 112/36/36 bytes;
+the new substitution frame is 20 bytes, with existing object-context/member-use
+records 8/12. `declaration-type-layout.json` freezes the probe and all transitive
+headers. Ordinary calls-4 RSS is essentially unchanged against this entry;
+it does not explain or discharge the inherited approximately +15 MiB regression
+against `33b791da`.
+
+The verifier checks exact work/storage equations at N=1,000 and 4,000. Repeated
+declarations have 30 source type-specifier facts, N frames, 6N successful
+substituted type records, 57N type uses/hits and 6N+3 substitution work. Renamed
+members have ten source facts, 3N frames, 10N records/work, 14N type uses and 9N
+hits. Unused definitions have 30N source facts, 3N normalization work, zero frames,
+zero concrete type uses and zero occurrences. Frame equality includes the
+source parameter head and parent frame; ordinal lookup also checks source
+parameter identity. Flat indexes hold complete keys; storage grows with source
+facts, frames and demanded dependent type/query/binding facts, never unrelated
+declaration products. Occurrences remain 457N/174N in the new instance corpora:
+dependent-only body construction remains unfinished current-stage work.
+
+At PA14/O0, this is required semantic ownership with shared substitution, not
+an optional optimization pass. The explicit common-correct generated-code
+growth budget remains **zero**, verified by hashes. Distinct-key work/storage
+bounds above and the larger-scale repeated compile-time benefit justify retaining
+the shared caches. Source validation and its measured cost are required by the
+handout; five invalid-body proofs substantiate the added coverage. No mandated
+numeric compiler latency/RSS/text ceiling exists here. Unsupported inherited
+self-selected diagnostic thresholds remain observations rather than exit gates;
+all measurements, correctness, required limits and coverage are preserved.

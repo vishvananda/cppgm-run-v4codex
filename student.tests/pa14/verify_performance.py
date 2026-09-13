@@ -8,8 +8,9 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json','dependent-object-final-performance.json','dependent-object-repeat-performance.json','prototype-performance.json','dependent-object-packed-performance.json','prototype-packed-performance.json','method-parameter-performance.json','prototype-methods-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json','dependent-object-final-performance.json','dependent-object-repeat-performance.json','prototype-performance.json','dependent-object-packed-performance.json','prototype-packed-performance.json','method-parameter-performance.json','prototype-methods-performance.json','declaration-type-preliminary-performance.json','declaration-type-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ declaration=filename.startswith('declaration-type-')
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
  symbolic=filename.startswith('symbolic-')
@@ -24,9 +25,9 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
  packed=filename=='dependent-object-packed-performance.json'
  repeated=filename=='dependent-object-repeat-performance.json' or packed
  prototype=filename.startswith('prototype-')
- harness=ROOT/'student.tests/pa14'/('method_parameter_benchmark.py' if methods else 'prototype_benchmark.py' if prototype else 'dependent_object_packed.py' if packed else 'dependent_object_repeat.py' if repeated else 'dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ harness=ROOT/'student.tests/pa14'/('declaration_type_benchmark.py' if declaration else 'method_parameter_benchmark.py' if methods else 'prototype_benchmark.py' if prototype else 'dependent_object_packed.py' if packed else 'dependent_object_repeat.py' if repeated else 'dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
- if repeat or views or repeated or methods: assert shared.sha(data['parent_path'])==data['parent_sha256']
+ if repeat or views or repeated or methods or declaration: assert shared.sha(data['parent_path'])==data['parent_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
@@ -49,7 +50,7 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
     native=out['native'];assert shared.sha(native['path'])==native['sha256']
     assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
   if len(work['outputs'])==2 and (not transfer or work['exact_required']): assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
-  if (objects or dependent) and len(work['outputs'])==2 and 'runtime' in work:
+  if (objects or dependent or declaration) and len(work['outputs'])==2 and 'runtime' in work:
    assert work['outputs'][0]['native']['sha256']==work['outputs'][1]['native']['sha256']
   campaigns=[work] if graph else [work['compiler']]+([work['runtime']] if 'runtime' in work else [])
   for campaign in campaigns:
@@ -64,6 +65,16 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    if common:
     pairs=[statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==0) for k in (4,8)]
     assert pairs==campaign['paired_c_over_b' if graph else 'paired_b_over_a']
+  if declaration and name.startswith('declaration-') and name.rsplit('-',1)[1].isdigit():
+   b=work['outputs'][1]['telemetry'][0];n=int(name.rsplit('-',1)[1])
+   if name.startswith('declaration-instances-'):
+    expected=[6*n+3,57*n,6*n,n,30,57*n,457*n]
+   elif name.startswith('declaration-outside-'):
+    expected=[10*n,9*n,10*n,3*n,10,14*n,174*n]
+   else:
+    expected=[3*n,0,0,0,30*n,0,0]
+   keys=('semantic_type_substitution_work','semantic_type_substitution_hits','semantic_type_substitution_records','semantic_substitution_frames','semantic_template_type_work','semantic_template_type_uses','template_occurrences')
+   assert [b[k] for k in keys]==expected,(name,b)
   if views:
    a,b=[out['telemetry'][0] for out in work['outputs']]
    for key in ('semantic_entities','semantic_scopes','semantic_object_uses','semantic_candidate_work','semantic_conversion_work','semantic_expression_work','template_occurrences'):
@@ -341,3 +352,34 @@ for row in rows:
  if 'execution' in row:
   execution=row['execution'];assert execution['exit_code']==0 and shared.sha(execution['log'])==execution['log_sha256']
 print('four final frozen reducers preserve sanitizer/native parity; nested method regression and historical source verified')
+
+declaration_layout=json.loads((ROOT/'student.tests/pa14/declaration-type-layout.json').read_text())
+for header in declaration_layout['headers']:
+ assert shared.sha(header['path'])==header['sha256']==shared.sha(header['source'])
+for kind in ('source','binary','dump'):
+ assert shared.sha(declaration_layout[kind+'_path'])==declaration_layout[kind+'_sha256']
+assert list(map(int,shared.run([declaration_layout['binary_path']]).stdout.split()))==declaration_layout['sizes']==[112,36,36,20,8,12]
+assert shared.sha(ROOT/'student.tests/pa14/declaration_layout_probe.cc')==declaration_layout['source_sha256']
+for filename in ('declaration-type-proofs.json','declaration-type-final-proofs.json'):
+ proofs=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ assert shared.sha(ROOT/'student.tests/pa14/declaration_type_evidence.py')==proofs['harness_sha256']
+ assert shared.sha(ROOT/'student.tests/pa14/check_declaration_types.py')==proofs['rejection_harness_sha256']
+ for binary in proofs['binaries']:assert shared.sha(binary['path'])==binary['sha256']
+ assert len(proofs['rejections'])==8 and len(proofs['positives'])==2
+ assert [[out['exit'] for out in row['outputs']] for row in proofs['rejections']]==[[0,1]]*5+[[1,1]]*3
+ for row in proofs['rejections']+proofs['positives']:
+  assert shared.sha(row['source_path'])==row['source_sha256']
+  for out in row['outputs']:
+   assert shared.sha(out['log_path'])==out['log_sha256']
+   if 'native_path' in out:
+    assert out['exit']==out['native_exit']==0
+    assert shared.sha(out['path'])==out['sha256'] and shared.sha(out['native_path'])==out['native_sha256']
+before=json.loads((ROOT/'student.tests/pa14/declaration-type-preliminary-performance.json').read_text())
+after=json.loads((ROOT/'student.tests/pa14/declaration-type-performance.json').read_text())
+for name,work in after['workloads'].items():
+ previous=before['workloads'][name]
+ assert work['source_sha256']==previous['source_sha256']
+ assert [out['sha256'] for out in work['outputs']]==[out['sha256'] for out in previous['outputs']]
+ if 'runtime' in work:
+  assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in previous['outputs']]
+print('declaration type frames preserve hot layouts, compiler/native outputs and five new rejection proofs')

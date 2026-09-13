@@ -409,9 +409,13 @@ C++11 [basic.scope.pdecl], [basic.scope.proto], [dcl.fct], [dcl.type.simple],
 [expr.ref], [class.access] and [temp.mem] requirements, exercised by
 `signature-facts.cpp`, `declaration-types.cpp` and eight rejection controls.
 
-Validation before the evidence campaign: 314 PA14 cases, a default 1935-case
-through report, twenty native controls and eight declaration-type rejections.
-The final post-fix checks and frozen performance/sanitizer results are pending.
+Final validation at `5ce59182` passes PA14 314/314, prior 1621/1621 and the
+default through report 1935/1935, twenty native programs, 334 release/ASan/UBSan
+parity inputs, ninety rejection controls on both compilers, two ABI controls,
+four explicit reducer parity/native checks and file audit. Two frozen campaigns
+add 588 verified observations; successful LowIR and executable hashes remain
+identical. Record layouts and exact work/storage equations also verify; see
+[performance.md](performance.md) for costs, benefits and retained outliers.
 Body parameter ordinals remain eligible for fixed-expression checking; only
 prototype objects are excluded. A source access context participates in query
 identity without itself making fixed operands dependent. This preserves

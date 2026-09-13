@@ -1,0 +1,71 @@
+{
+  "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/declaration_layout_probe.cc",
+  "source_sha256": "f5253e820b2e06f41cf5da731daee4c6072dfbd40cc8f2c85f1b4a821c595842",
+  "binary_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/probe",
+  "binary_sha256": "420648d0b2e6ab77e85e4674fa7ea8a430420571599c3bf7532cc88a538bc419",
+  "dump_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/sizes.txt",
+  "dump_sha256": "320cff6b2cd4dae07835d8ac89621ba121a8bb4144e5c630ea93f90dcfddd0ae",
+  "headers": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/semantic/template_binding.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/template_binding.h",
+      "sha256": "30ea5aa0741cbbe537e843848c60dc123a838bc6436692e2352d9bd0fb3ef99d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/semantic/model.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/semantic/model.h",
+      "sha256": "9de0d28d9ff7bfbaac06eb98b269bb201606fde1610f8c219cd5c9ed5d9e5045"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/syntax/ast.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/syntax/ast.h",
+      "sha256": "2f4ce406f967a1faa00d03c23e8c6781155746e7d3ec0add621ea6435a1ddd09"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/posttoken/token.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token.h",
+      "sha256": "3d09ef949cae144030b60c50bef5a944624037a4942f6ba634d189a1ca64ec33"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/posttoken/token_types.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/posttoken/token_types.h",
+      "sha256": "871b468fd872ed348f791f462a7c9ac080b9a70afe29763514dc3faa1d2a7dd9"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/preprocess/source.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/source.h",
+      "sha256": "19643d89fb93d777fd07609e1d2cbead69003ea5cbfa5b487a789a262d78540e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/preprocess/token_cursor.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/token_cursor.h",
+      "sha256": "b3d2a027a810e447a2c97248a302561e1488ecdb152ed95f498140d2f3dc0ec3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/preprocess/identifier_table.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/preprocess/identifier_table.h",
+      "sha256": "38508fcd71f6d38258282f3689e5ef9311bee3657d69488260ea7ee38d3a349c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include/support/id_index.h",
+      "source": "/home/vishvananda/work/private/v4codex/checkout/dev/src/support/id_index.h",
+      "sha256": "e38c022510de243c166d74d42241a499e29396875a157e61e89bcdf5788fb569"
+    }
+  ],
+  "command": [
+    "g++",
+    "-std=c++11",
+    "-I/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/include",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/declaration_layout_probe.cc",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa14-signature-facts/layout/probe"
+  ],
+  "sizes": [
+    112,
+    36,
+    36,
+    20,
+    8,
+    12
+  ]
+}

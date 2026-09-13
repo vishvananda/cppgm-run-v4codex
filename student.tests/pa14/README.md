@@ -7,10 +7,11 @@ python3 student.tests/pa14/check_functions.py
 python3 student.tests/pa14/check_fixed_objects.py
 python3 student.tests/pa14/check_dependent_objects.py
 python3 student.tests/pa14/check_object_reducers.py
+python3 student.tests/pa14/check_declaration_types.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all eighteen local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all twenty local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -20,12 +21,12 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and eighteen
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 332 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 82 explicit
+The current campaign checks 334 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 90 explicit
 binding/query/scalar/call/object rejection cases. All four `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
 remain part of `check_queries.py`.
@@ -102,3 +103,14 @@ fourteen completed observations remain preserved. `object_view_benchmark.py
 A B WORK OUT` isolates immutable conversion-call views on ten correct compiler
 inputs and two native loops. All frozen artifacts live in
 `$RALPH_ARTIFACT_DIR/pa14-object-facts/`; the verifier retains every campaign.
+
+`signature-facts.cpp` and `declaration-types.cpp` cover raw parameter types,
+canonical local/field/alias types, renamed declaration heads, cv/reference
+queries, private access, overloads and dependent using-declarations.
+`check_declaration_types.py` explicitly runs eight rejection controls, including
+five newly rejected unused function-pointer bodies. `declaration_type_benchmark.py`
+freezes sixteen inputs and five native loops before AA/ABBA measurements; its
+two campaigns preserve 588 additional observations. `declaration_type_evidence.py`
+retains positive native and negative compiler proofs. `declaration_layout_probe.cc`
+is compiled explicitly by the recorded layout command, outside the native `.cpp`
+suite. Both the proof and layout artifacts are checked by the performance verifier.
