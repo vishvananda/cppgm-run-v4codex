@@ -21,13 +21,11 @@ have been traced and validated. Copy/direct/list mode ownership has now been
 corrected across source checks, transfers, aggregate clauses and lowering.
 Remaining work, in ownership order:
 
-1. Remove the measured redundant destination temporary in copy initialization;
-   retain checks/lifetimes and repeat frozen performance evidence.
-2. Complete source default initialization and query-only call/condition/list
+1. Complete source default initialization and query-only call/condition/list
    obligations and reuse; inspect keys, temporary destruction and invalidation.
-3. Close remaining whole-stage identity, demand, storage and typed-lowering
+2. Close remaining whole-stage identity, demand, storage and typed-lowering
    questions, recording later-stage boundaries explicitly.
-4. Freeze final performance evidence, run both required gates, consolidate the
+3. Freeze final performance evidence, run both required gates, consolidate the
    final audit and commit all intended work with an empty status.
 
 No optional timing target replaces correctness or architecture. No mandated
@@ -43,10 +41,11 @@ limit, fixture, reference or comparison rule has been weakened.
 | Current body performance | [532 observations](../student.tests/pa14/body-audit-performance.md); 16,380 cumulative; all nine executable payload sizes unchanged |
 | Explicit initializer recipes and concrete list operands | [616 observations](../student.tests/pa14/initializer-performance.md); 16,996 cumulative; 67 checks, 82 controls per build; ten identical executables |
 | Personal comparator adapter | Fixed Perl sort-variable shadowing; one allowed top-level order difference; course comparator unchanged |
-| Copy/direct/list ownership | [728 observations](../student.tests/pa14/modes-performance.md), 71 checks, 75 controls per build; redundant destination metadata remains to be corrected |
+| Copy/direct/list ownership | [728 observations](../student.tests/pa14/modes-performance.md), 71 checks, 75 controls per build; diagnostic destination growth preserved |
+| Existing conversion destination ownership | [882 observations](../student.tests/pa14/destination-performance.md), 73 checks; removes KM duplicate entities/scopes; all 12 executable images identical |
 | Remaining default and query ownership | Five reduced incorrect outcomes documented in audit; work remains open |
 
 Artifacts: `$RALPH_ARTIFACT_DIR/pa14-final-audit/`. Both required gates passed
-for the mode change, with 1,266 fixture/reference hashes unchanged. The verified
-performance ledger now totals 17,724 observations. These checks
+for the destination change, with 1,266 fixture/reference hashes unchanged. The
+performance ledger now totals 18,606 observations. These checks
 do not close the remaining whole-stage defects.

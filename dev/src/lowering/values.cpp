@@ -137,6 +137,8 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
     if (c.kind == semantic::Conversion::Kind::User) return user_conversion(n,c);
     if (c.kind == semantic::Conversion::Kind::Construction) {
         auto materialized = sem.conversion_objects[c.materialization];
+        if (materialized.use != semantic::ConversionUse::Temporary || !materialized.temporary)
+            throw std::logic_error("value conversion lacks temporary storage");
         EntityId object = materialized.temporary;
         TypeId t = sem.entities[object].type;
         Value pointer = class_address(object,t), destination = class_temporary(object,t);

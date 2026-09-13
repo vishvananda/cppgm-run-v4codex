@@ -145,9 +145,11 @@ Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, N
     }
     return function.valid() ? function : constructor;
 }
-void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
+void Analyzer::prepare_user_conversion(NodeId n, Conversion& c, ConversionUse use)
 {
     if (user_conversions[c.materialization].prepared) return;
+    if (use == ConversionUse::Recipe || (use == ConversionUse::Destination && c.reference))
+        throw std::logic_error("invalid user conversion destination");
     if (deleted_transfer(c.function)) throw std::runtime_error("selected deleted conversion function");
     auto entity = user_conversions[c.materialization].object_entity;
     TypeId source = entity ? value_type(entities[entity].type) : expressions[n].type;
@@ -168,7 +170,9 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
     };
     if (second.kind == Conversion::Kind::Construction) {
         ConversionObject transfer; transfer.constructor = second.function;
-        transfer.temporary = temporary(value_type(c.target));
+        transfer.use = use;
+        if (use == ConversionUse::Temporary) transfer.temporary = temporary(value_type(c.target));
+        else destination_destructor(value_type(c.target),facts[n].scope);
         user_conversions[c.materialization].temporary = transfer.temporary;
         if (class_value(returned)) user_conversions[c.materialization].source_temporary = temporary(returned);
         Expression value; value.type = value_type(returned);
@@ -189,8 +193,10 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c)
         user_conversions[c.materialization].result.materialization = conversion_objects.size();
         conversion_objects.push_back(transfer); demand_member(second.function);
     } else if (class_value(returned)) {
-        user_conversions[c.materialization].temporary = temporary(returned);
+        if (use == ConversionUse::Temporary) user_conversions[c.materialization].temporary = temporary(returned);
+        else destination_destructor(returned,facts[n].scope);
     }
+    user_conversions[c.materialization].use = use;
     user_conversions[c.materialization].prepared = true;
 }
 } }

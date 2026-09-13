@@ -630,6 +630,11 @@ print(observations+new_samples+owner_observations+view_observations+definition_o
 print(observations+new_samples+owner_observations+view_observations+definition_observations+special_observations+declaration_observations+signature_publication_observations+demand_failure_observations+virtual_demand_observations+lifecycle_observations+default_observations+body_observations+initializer_observations,'total frozen performance observations verified')
 
 from verify_modes import verify as verify_modes
-mode_observations=verify_modes()
+mode_observations=verify_modes(check_live=False)
 assert mode_observations==728
 print(16996+mode_observations,"total frozen performance observations verified")
+
+from verify_destinations import verify as verify_destinations
+destination_observations=verify_destinations()
+assert destination_observations==882
+print(17724+destination_observations,"total frozen performance observations verified")

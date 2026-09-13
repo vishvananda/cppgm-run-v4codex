@@ -53,6 +53,12 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
     if (demand) demand_member(dtor);
     return dtor;
 }
+EntityId Analyzer::destination_destructor(TypeId t, ScopeId s)
+{
+    auto dtor = default_destructor(t,s);
+    if (dtor && members[entities[dtor].member_info].virtual_member) members[entities[dtor].member_info].base_entry = true;
+    return dtor;
+}
 void Analyzer::register_destruction(EntityId e)
 {
     auto kind = types[entities[e].type].kind;
@@ -65,9 +71,8 @@ void Analyzer::register_destruction(EntityId e)
         local_reference(n,e);
         if (reference_temporary(e) || reference_choices(e)) return;
     }
-    EntityId dtor = default_destructor(entities[e].type, entities[e].owner);
+    EntityId dtor = destination_destructor(entities[e].type, entities[e].owner);
     if (dtor) object_destructors.put(e, dtor);
-    if (dtor && members[entities[dtor].member_info].virtual_member) members[entities[dtor].member_info].base_entry = true;
     if (dtor && entities[e].kind == EntityKind::Parameter && !trivial_destructor(entities[e].type))
         members[entities[dtor].member_info].retained_root = true;
 }

@@ -311,7 +311,8 @@ struct Conversion {
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
-struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false, retained = false; };
+enum class ConversionUse : unsigned char { Recipe, Temporary, Destination };
+struct ConversionObject { EntityId constructor = 0, temporary = 0; Expression call; std::uint32_t branches = 0; bool elided = false, elision_permission = false, retained = false; ConversionUse use = ConversionUse::Recipe; };
 enum class CallFailure : unsigned char { None, NoViable, Ambiguous };
 struct CallSelection {
     EntityId entity = 0, conflicting = 0;
@@ -349,6 +350,7 @@ struct UserConversion {
     unsigned adjustment = 0;
     std::uint32_t virtual_slot = 0;
     bool prepared = false;
+    ConversionUse use = ConversionUse::Recipe;
 };
 struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
 struct ScalarConsumption { NodeId expression = 0; TypeId target = 0; std::uint32_t conversion = 0; unsigned char truth = 0; bool private_destination = false; };

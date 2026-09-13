@@ -183,6 +183,33 @@ observations and 71 passing validation groups, bringing the ledger to 17,724.
 All 11 native executables are byte-identical. It also exposes avoidable copy
 initialization metadata: 128 instances × 8 initializers add 1,024 temporary
 entities/scopes despite an existing destination, and RSS rises 806–824 KiB.
-Removing this duplication is the next ownership correction; these measurements
-are retained and do not constitute performance acceptance. Five default/query
-reproducers remain independently confirmed under the mode binary.
+Those diagnostic measurements are retained; the following correction closes
+that avoidable ownership cost. Five default/query reproducers remain confirmed.
+
+## Existing conversion destination ownership
+
+The common copy path now records Recipe/Temporary/Destination explicitly in
+conversion records without increasing their sizes. Destination preparation
+checks the same selected constructor, conversions, destructor and virtual ABI
+demands but does not allocate a second entity/scope for storage already owned
+by the initialized object. A conversion-function source prvalue still owns its
+required temporary and cleanup. Typed lowering rejects a destination record
+without a destination; ordinary value conversion requires an actual temporary.
+Source recipes remain immutable and per-use preparation remains terminal.
+
+The [destination campaign](../student.tests/pa14/destination-performance.md)
+adds 882 observations, bringing the ledger to 18,606. Both affected K=128/M=8
+shapes remove exactly 1,024 entities and scopes and reduce measured RSS in both
+campaigns. Selection and source/use budgets remain unchanged. All 12 executable
+images are identical. Compiler text grows 1,152 bytes (0.0841%); all measured
+record sizes are unchanged. Timing regressions, A/A spread and large native
+outliers remain reported, with no compiler/native speedup claim. This resolves
+the measured redundant allocations without waiving a correctness requirement
+or inventing a numerical O0 gate.
+
+The 73 validation groups pass both required gates, inherited controls and new
+destination/lifetime probes. A storage-exhausted sanitizer link is preserved;
+lossless compression and an identity-checked resume completed the remaining
+checks before timing. The [handoff](../student.tests/pa14/destination-handoff.json)
+retains five incorrect source default/query outcomes under the final binary.
+Those owners remain the next required work; the full-stage audit is open.

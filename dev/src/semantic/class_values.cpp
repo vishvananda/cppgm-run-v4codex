@@ -91,7 +91,9 @@ bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId sourc
     auto retained = selected ? 0 : retained_initialization(source,target);
     Conversion c = selected ? *selected : retained ? copy_conversion_recipe(conversions[retained]) : conversion(source,target);
     if (!c.valid()) throw std::runtime_error("invalid class value initialization");
-    apply_conversion(source,c);
+    if (c.kind == Conversion::Kind::Construction) materialize_conversion(source,c,false,ConversionUse::Destination);
+    else if (c.kind == Conversion::Kind::User) prepare_user_conversion(source,c,ConversionUse::Destination);
+    else apply_conversion(source,c);
     ValueInitialization init; init.source = source; init.conversion = conversions.size(); conversions.push_back(c);
     class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
     if (n != source) facts.edit(n).type = target;

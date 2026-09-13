@@ -280,6 +280,7 @@ private:
     bool variant_destruction_effects(TypeId t);
     Index variant_destruction_index;
     void register_destruction(EntityId e);
+    EntityId destination_destructor(TypeId t, ScopeId s);
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     Index friendships, using_access, using_functions, hidden_friends;
     bool friend_declaration(NodeId n, ScopeId s);
@@ -608,7 +609,7 @@ private:
     Conversion standard_conversion(Expression source, TypeId target, NodeId node = 0);
     Conversion conversion_function(NodeId n, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
     Conversion conversion_function_value(Expression source, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
-    void prepare_user_conversion(NodeId n, Conversion& conversion);
+    void prepare_user_conversion(NodeId n, Conversion& conversion, ConversionUse use = ConversionUse::Temporary);
     std::vector<EntityId> conversion_candidates(TypeId source);
     EntityId conversion_lookup(ScopeId owner, TypeId target);
     Index conversion_families, conversion_bindings;
@@ -618,7 +619,8 @@ private:
     std::vector<TypeId> builtin_operand_types_value(Expression source);
     Conversion converting_constructor(NodeId n, TypeId target);
     Conversion converting_constructor_value(Expression source, TypeId target, NodeId node = 0);
-    void materialize_conversion(NodeId n, Conversion& c, bool defer = false);
+    void materialize_conversion(NodeId n, Conversion& c, bool defer = false,
+        ConversionUse use = ConversionUse::Temporary);
     void record_call(Expression& owner, const std::vector<NodeId>& args, std::vector<Conversion>& selected);
     bool better(const Conversion* a, const Conversion* b, std::size_t count);
     Conversion ellipsis_conversion(NodeId n);

@@ -1057,6 +1057,10 @@ keys empty-list facts by mode. The current ownership review is in
 [audit.md](audit.md); default/query handoffs remain open.
 
 [The mode campaign](../student.tests/pa14/modes-performance.md) preserves 728
-observations and identifies redundant destination temporary metadata. Its
-correction remains required before whole-stage acceptance. No measurement,
-mandated limit, fixture or comparison rule has been removed.
+observations and identifies redundant destination temporary metadata. The
+[destination correction](../student.tests/pa14/destination-performance.md) removes
+KM duplicate entities/scopes with unchanged record sizes and 12 identical native
+executables. It adds 882 observations (18,606 cumulative) and 73 passing
+validation groups. Timing costs and noise remain disclosed without a speedup
+claim. Five source default/query defects still prevent whole-stage acceptance.
+No measurement, mandated limit, fixture or comparison rule has been removed.

@@ -34,18 +34,27 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
     result.function = viable[best].entity;
     return result;
 }
-void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool defer)
+void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool defer, ConversionUse use)
 {
     auto recipe = conversion.materialization;
-    if (recipe && conversion_objects[recipe].temporary) return;
+    if (recipe && conversion_objects[recipe].use != ConversionUse::Recipe) return;
+    if (use == ConversionUse::Recipe || (use == ConversionUse::Destination && conversion.reference))
+        throw std::logic_error("invalid conversion destination");
     EntityId ctor = conversion.function;
     auto m = entities[ctor].member_info;
     if (deleted_transfer(ctor)) throw std::runtime_error("deleted converting constructor");
     check_access(ctor, facts[n].scope, entities[ctor].owner);
     TypeId t = value_type(conversion.target);
-    EntityId object = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, facts[n].scope), 0, n);
-    entities[object].type = types.unqualified(t); register_destruction(object);
-    ConversionObject materialized; materialized.constructor = ctor; materialized.temporary = object;
+    ConversionObject materialized; materialized.constructor = ctor; materialized.use = use;
+    if (use == ConversionUse::Temporary) {
+        EntityId object = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, facts[n].scope), 0, n);
+        entities[object].type = types.unqualified(t); register_destruction(object);
+        materialized.temporary = object;
+    } else {
+        // The initialized object/subobject owns storage and lifetime. Preserve
+        // the same destructor legality and ABI demand without a duplicate object.
+        destination_destructor(types.unqualified(t),facts[n].scope);
+    }
     NodeId source = n;
     while (ast[source].kind == syntax::Kind::Parenthesized) source = ast[source].first;
     auto value = expressions[source];
