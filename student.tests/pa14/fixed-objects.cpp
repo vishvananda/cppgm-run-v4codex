@@ -42,6 +42,8 @@ template<class T>int scalar_pointer(int* p){return *p;}
 int twice(int n){return n*2;}
 struct Callback {int (*fn)(int);};
 template<class T>int callback(const Callback& c,int n){return c.fn(n);}
+struct Functor {int operator()(int n)const{return n+6;}};
+template<class T>int callable(const Functor& f,int n){return f(n);}
 int referred_value=0;
 struct References {int& member;static int data;};
 int References::data=0;
@@ -82,5 +84,7 @@ int main(){
     if(rvalue_call<int>(a,2)!=27 || rvalue_call<Tag>(b,3)!=31) return 16;
     Callback cb={twice};
     if(callback<int>(cb,3)!=6 || callback<Tag>(cb,4)!=8) return 17;
+    Functor functor;
+    if(callable<int>(functor,2)!=8 || callable<Tag>(functor,3)!=9) return 18;
     return 0;
 }

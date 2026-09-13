@@ -74,6 +74,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     for (unsigned i = 0; i < viable.size(); ++i) if (i != best && !preferred(best,i)) throw std::runtime_error("ambiguous type-query operator");
     auto selected = viable[best];
     if (selected.builtin) {
+        if (args.size() == 2) check_pointer_arithmetic(q.op,sequences[selected.offset].target,sequences[selected.offset+1].target);
         r.expression.type = builtins[selected.builtin-1].type;
         r.expression.category = builtins[selected.builtin-1].category;
     } else {

@@ -92,3 +92,9 @@ member calls and one member-value owner pass through **1935/1935**, sixteen
 native programs, fourteen new object/member rejections and the reduced
 reference/static-member reproducer. Sanitizer/performance validation is pending.
 Dependent template-owned member paths remain a distinct incomplete owner.
+
+Receiver extension: selected pointer arithmetic/subscript operations and type
+queries validate complete pointees; callable class objects route to their
+operator owner. Through 1935/1935 and twenty object rejections pass. A related
+default-argument identity control exposed shared lowered temporary storage;
+its materialization/lifetime group is in progress, with source semantics shared.

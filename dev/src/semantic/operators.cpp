@@ -58,6 +58,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         modifiable(operand);
         if ((!arithmetic(a.type) && !object_pointer(t)) || types[a.type].kind == TypeKind::Named ||
             (op == OP_DEC && fundamental(a.type, FT_BOOL))) throw std::runtime_error("invalid increment operand");
+        if (pointer(t)) size(types[t].child);
         r.type = ast[n].kind == Kind::Postfix ? types.unqualified(a.type) : a.type;
         r.category = ast[n].kind == Kind::Postfix ? ValueCategory::Prvalue : ValueCategory::Lvalue;
         TypeId promoted = pointer(t) ? t : promote_expression(operand);
@@ -83,6 +84,7 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         for (unsigned i = 1; i < candidates.size(); ++i) if (better(candidates[i].arguments,candidates[best].arguments,2)) best = i;
         for (unsigned i = 0; i < candidates.size(); ++i) if (i != best && !better(candidates[best].arguments,candidates[i].arguments,2))
             throw std::runtime_error("ambiguous builtin operator");
+        check_pointer_arithmetic(op,candidates[best].arguments[0].target,candidates[best].arguments[1].target);
         record_conversion(r,an,candidates[best].arguments[0]); record_conversion(r,bn,candidates[best].arguments[1]);
         return candidates[best].type;
     }
@@ -115,6 +117,7 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
             left = right = composite_pointer(a, b); result = types.fundamental(FT_LONG_INT);
         }
         if (result) {
+            check_pointer_arithmetic(op,left,right);
             record_conversion(r, an, conversion(an, left)); record_conversion(r, bn, conversion(bn, right));
             return result;
         }

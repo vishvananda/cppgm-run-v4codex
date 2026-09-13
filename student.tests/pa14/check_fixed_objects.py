@@ -20,6 +20,13 @@ rejections=[
  'struct V{private:int n;};template<class T>auto f(V& v)->decltype(v.n);',
  'template<class T>struct V{int get();};template<class T>int f(V<int>& v){return v.missing();}',
 
+ 'struct V;template<class T>V* f(V* p){return p+1;}',
+ 'struct V;template<class T>long f(V* p){return p-p;}',
+ 'struct V;template<class T>void f(V* p){++p;}',
+ 'struct V;template<class T>void f(V* p){p[0];}',
+ 'struct V;template<class T>auto f(V* p)->decltype(p+1);',
+ 'struct V;template<class T>auto f(V* p)->decltype(p[0]);',
+
 ]
 with tempfile.TemporaryDirectory(prefix='pa14-fixed-objects-') as directory:
  work=Path(directory)
@@ -28,7 +35,7 @@ with tempfile.TemporaryDirectory(prefix='pa14-fixed-objects-') as directory:
   r=subprocess.run([binary,'--emit-lowir','-O0','-o',work/'output',src],capture_output=True,text=True)
   assert r.returncode==1,(i,r.returncode,r.stderr)
   assert not any(x in r.stderr for x in ('AddressSanitizer','UndefinedBehaviorSanitizer','runtime error:')),(i,r.stderr)
- src=work/'unused.cpp';src.write_text('template<class T>struct Lazy{using Type=int;int bad(){return T::missing;}};using Alias=Lazy<int>;template<class U>int unused(Lazy<int>& v){Alias::Type n=0;return v.bad()+n;}int main(){return 0;}')
+ src=work/'unused.cpp';src.write_text('struct Incomplete;template<class T>bool same(Incomplete* a,Incomplete* b){return a==b;}template<class T>struct Lazy{using Type=int;int bad(){return T::missing;}};using Alias=Lazy<int>;template<class U>int unused(Lazy<int>& v){Alias::Type n=0;return v.bad()+n;}int main(){return 0;}')
  r=subprocess.run([binary,'--emit-lowir','-O0','--stats','-o',work/'output',src],capture_output=True,text=True)
  assert r.returncode==0,r.stderr
  t=json.loads(r.stderr.splitlines()[0]);assert t['template_body_transitions']==0 and t['semantic_member_demands']==0,t

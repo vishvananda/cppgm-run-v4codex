@@ -15,6 +15,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (member) binding.entity = expressions[designator].entity;
     if (binding.dependent) return false;
     bool direct = !binding.entity || function_binding(binding.entity);
+    if (!direct && class_value(expressions[designator].type)) return false; // Callable-object/operator owner.
     bool adl = direct && !member && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
     if (!binding.entity && !adl) return false;
     if (direct) {

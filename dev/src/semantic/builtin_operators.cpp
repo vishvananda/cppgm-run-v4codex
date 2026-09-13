@@ -1,5 +1,11 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
+void Analyzer::check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right)
+{
+    if (op != OP_PLUS && op != OP_MINUS && op != OP_LSQUARE) return;
+    auto type = pointer(left) ? left : pointer(right) ? right : 0;
+    if (type) size(types[type].child);
+}
 std::vector<TypeId> Analyzer::builtin_operand_types(NodeId n)
 {
     return builtin_operand_types_value(expressions[n]);

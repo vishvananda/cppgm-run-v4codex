@@ -116,6 +116,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     }
     if (selected.builtin) {
         auto builtin = builtins[selected.builtin-1];
+        if (args.size() == 2) check_pointer_arithmetic(op,builtin.arguments[0].target,builtin.arguments[1].target);
         result.type = builtin.type; result.category = builtin.category;
         for (unsigned j = 0; j < args.size(); ++j) record_conversion(result,args[j],sequences[selected.offset+j]);
         return true;

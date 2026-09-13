@@ -259,3 +259,12 @@ class receiver still needs a symbolic member-declaration path and separately
 substituted layout/access facts. Constructor/operator expressions, broader
 casts, declaration/return conversions, dependent-only projection and finer
 demand/failure states remain current-stage work.
+
+Fixed pointer arithmetic now requires a complete pointee at the selected
+builtin operation, including type queries; incomplete pointer comparisons
+remain valid. This follows N3485 [expr.sub], [expr.post.incr], [expr.pre.incr]
+and [expr.add] (`doc/n3485.txt:5677`, `5880`, `6334`, `6782`). The check runs
+after candidate selection, so it cannot reject an unselected builtin when a
+user operator wins. Six new reduced rejections cover addition, subtraction,
+increment, subscript and their query forms. Callable class objects retain the
+ordinary operator owner until that owner supplies a reusable call recipe.

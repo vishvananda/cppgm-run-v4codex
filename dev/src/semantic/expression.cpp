@@ -137,6 +137,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         TypeId left = a, right = b;
         if (!pointer(a)) std::swap(a, b);
         if (!object_pointer(a) || !integral(b) || scoped_enum(b)) throw std::runtime_error("invalid subscript");
+        size(types[a].child);
         record_conversion(r, first, conversion(first, pointer(left) ? left : promote(left)));
         record_conversion(r, second, conversion(second, pointer(right) ? right : promote(right)));
         r.type = types[a].child; r.category = ValueCategory::Lvalue; return r;
