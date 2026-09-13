@@ -22,17 +22,17 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         if (!unevaluated_depth && definitions) demand_template_storage(expressions[n].entity);
         return expressions[n];
     }
-    facts[n].scope = s;
+    facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
     if (!unevaluated_depth && definitions) demand_template_storage(result.entity);
     if (result.entity && entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class &&
         entities[result.entity].constant.valid) {
-        facts[n].value = constants.size(); constants.push_back(entities[result.entity].constant);
+        facts.edit(n).value = constants.size(); constants.push_back(entities[result.entity].constant);
     }
     class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);
-    if (!facts[n].type) facts[n].type = result.type;
+    if (!facts[n].type) facts.edit(n).type = result.type;
     return expressions[n];
 }
 Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
@@ -70,7 +70,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             throw std::runtime_error("unknown expression name: " + std::string(text.data,text.size));
         }
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
-        r.entity = e; facts[n].entity = e;
+        r.entity = e; facts.edit(n).entity = e;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));
@@ -86,7 +86,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             ScopeId use = s;
             while (use && scopes[use].kind != ScopeKind::Function) use = scopes[use].parent;
             if (use && !encloses(use, entities[e].owner)) {
-                facts[n].value = constants.size(); constants.push_back(entities[e].constant);
+                facts.edit(n).value = constants.size(); constants.push_back(entities[e].constant);
             }
         }
         if (nonstatic_field(e)) {
@@ -104,7 +104,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             if (!r.object_use) record_object(r, 0, 0, 0);
             object_uses[r.object_use].naming_scope = naming_class(name_owner(ast[n].detail, s));
         }
-        if (entities[e].member_info) facts[n].type = members[entities[e].member_info].call_type;
+        if (entities[e].member_info) facts.edit(n).type = members[entities[e].member_info].call_type;
         if (entities[e].kind != EntityKind::Enumerator) r.category = ValueCategory::Lvalue;
         return r;
     }
@@ -126,7 +126,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         // other constants. Reserve this query's identity only after that
         // dependency completes, so it cannot point at a nested query's value.
         Constant value(r.type, size(t, ast[n].op == KW_ALIGNOF));
-        facts[n].value = constants.size(); constants.push_back(value);
+        facts.edit(n).value = constants.size(); constants.push_back(value);
         return r;
     }
     case Kind::Subscript: {
@@ -178,7 +178,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
         if (!e) throw std::runtime_error("unknown member");
         r = member_value(e,types[t].cv,ast[n].op == OP_ARROW ? ValueCategory::Lvalue : object.category);
-        facts[n].entity = e;
+        facts.edit(n).entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);
         if (!function_binding(e)) check_access(e, s, naming, t);
         if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
@@ -193,7 +193,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
 {
     Expression r;
     r.type = value_type(to); r.form = ExpressionForm::Cast;
-    facts[n].type = to;
+    facts.edit(n).type = to;
     if (!operand) {
         if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) throw std::runtime_error("value-initialized reference");
         return r;
@@ -213,7 +213,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
             record_conversion(r,operand,conversion); return r;
         }
         r.type = to; r.form = ExpressionForm::Construction;
-        facts[n].entity = ctor; members[entities[ctor].member_info].complete_entry = true;
+        facts.edit(n).entity = ctor; members[entities[ctor].member_info].complete_entry = true;
         EntityId temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
         entities[temporary].type = to; register_destruction(temporary);
         record_object(r,0,0,0); object_uses[r.object_use].temporary = temporary;

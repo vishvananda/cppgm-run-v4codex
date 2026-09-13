@@ -86,7 +86,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {
             if (!type) throw std::runtime_error("type name denotes a value");
-            if (last == ast[n].last) facts[n].entity = e;
+            if (last == ast[n].last) facts.edit(n).entity = e;
             return prefix;
         }
         if (prefix && dependent_type(prefix)) continue;

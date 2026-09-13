@@ -186,7 +186,7 @@ void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
     auto plan = initializer_item(cursor, t, s);
     if (cursor && cursor != ast[n].next) throw std::runtime_error("excess initializer at object boundary");
     initializer_index.put(key(n, t), plan);
-    facts[n].type = t; facts[n].scope = s;
+    facts.edit(n).type = t; facts.edit(n).scope = s;
     auto value = expressions[n]; value.type = t; value.category = ValueCategory::Lvalue;
     expressions.set(n,value);
     expressions.ready(n,true); expressions.evaluated(n,initializers[plan].kind != InitKind::String);

@@ -9,6 +9,7 @@ EntityId Analyzer::pattern_declaration(EntityKind kind, ScopeId s, IdentifierId 
     template_pattern_entities.put(e,dependent ? 2 : 1);
     bind(s,name,e); record(s,e,source,0,kind);
     template_declaration_sources.put(ast.nodes.occurrences[source].source,e);
+    ++template_declaration_work;
     return e;
 }
 TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
@@ -189,7 +190,7 @@ void Analyzer::bind_template_body(const Body& body)
         // is being instantiated, before runtime parameter objects exist.
         signature_parameters.put(e,++ordinal);
         if (declared_type) {
-            facts[p].type = declared_type;
+            facts.edit(p).type = declared_type;
             entities[e].type = parameter_body_type(declared_type);
         }
     }

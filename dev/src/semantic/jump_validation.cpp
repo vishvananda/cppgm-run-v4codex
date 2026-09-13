@@ -115,7 +115,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         auto label = names.get(ast[j.node].text);
         if (!label) throw std::runtime_error("undefined goto label");
         if (!ancestor(labels[label].frame, j.frame)) throw std::runtime_error("goto bypasses initialization");
-        facts[j.node].target = labels[label].node;
+        facts.edit(j.node).target = labels[label].node;
         if (auto use = lifetime_index.get(j.node)) lifetime_uses[use].target = labels[label].live;
     }
     for (const Jump& j : cases)

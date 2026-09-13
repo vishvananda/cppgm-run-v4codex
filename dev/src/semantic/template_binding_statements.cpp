@@ -9,12 +9,12 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
     auto node = ast[n];
     switch (node.kind) {
     case Kind::Compound: {
-        auto block = make_scope(ScopeKind::Block,s,0,0,false); template_pattern_scopes.put(block,1); facts[n].scope = block;
+        auto block = make_scope(ScopeKind::Block,s,0,0,false); template_pattern_scopes.put(block,1); facts.edit(n).scope = block;
         for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,block);
         return;
     }
     case Kind::If: case Kind::Switch: case Kind::While: case Kind::Do: case Kind::For: {
-        auto control = make_scope(ScopeKind::Control,s,0,0,false); template_pattern_scopes.put(control,1); facts[n].scope = control;
+        auto control = make_scope(ScopeKind::Control,s,0,0,false); template_pattern_scopes.put(control,1); facts.edit(n).scope = control;
         for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,control);
         return;
     }
@@ -37,7 +37,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
             else {
                 bind_template_statement(c,s);
                 if (node.kind == Kind::Condition && ast[c].kind == Kind::ConditionDeclaration) {
-                    auto d = ast[ast[c].first].next; facts[n].entity = facts[d].entity;
+                    auto d = ast[ast[c].first].next; facts.edit(n).entity = facts[d].entity;
                 }
             }
         }

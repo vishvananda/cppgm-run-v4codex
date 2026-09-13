@@ -1,6 +1,7 @@
 #pragma once
 #include "semantic/type_query.h"
 #include "semantic/expression_store.h"
+#include "semantic/fact_store.h"
 #include "semantic/template_binding.h"
 #include "semantic/model.h"
 #include "syntax/parser.h"
@@ -20,7 +21,7 @@ public:
     std::vector<Entity> entities;
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
-    std::vector<Fact> facts;
+    FactStore facts;
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     NodeId call_argument(const Expression& call, unsigned i = 0) const;
     ObjectUse object_fact(NodeId n) const {
@@ -318,6 +319,7 @@ private:
     // facts. Separate indexes retain the complete 32-bit ID spaces.
     Index specialization_type_cache, specialization_query_cache, substitution_binding_cache;
     Index template_declaration_sources;
+    std::size_t template_declaration_work = 0, declaration_publications = 0;
     void publish_template_binding(NodeId source, EntityId concrete);
     std::size_t substitution_work = 0, substitution_hits = 0, substitution_records = 0;
     Index substitution_frame_index, template_type_contexts, substitution_frame_contexts;

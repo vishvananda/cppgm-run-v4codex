@@ -80,7 +80,7 @@ bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId sourc
     apply_conversion(source,c);
     ValueInitialization init; init.source = source; init.conversion = conversions.size(); conversions.push_back(c);
     class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
-    if (n != source) facts[n].type = target;
+    if (n != source) facts.edit(n).type = target;
     return true;
 }
 void Analyzer::record_class_return(NodeId n, ScopeId s)

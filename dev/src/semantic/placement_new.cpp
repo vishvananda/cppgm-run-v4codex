@@ -12,7 +12,7 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     NodeId type_node = child(n,Kind::TypeId), specs = ast[type_node].first, d = ast[specs].next;
     NodeId suffix = child(d,Kind::Array);
     use.type = declarator(d,specifiers(specs,s),s,suffix);
-    facts[type_node].type = use.type; facts[type_node].scope = s;
+    facts.edit(type_node).type = use.type; facts.edit(type_node).scope = s;
     if (types[use.type].kind == TypeKind::Array) {
         use.array = true; use.bound = suffix ? ast[suffix].first : 0;
         use.fixed_count = types[use.type].bound; use.type = types[use.type].child;

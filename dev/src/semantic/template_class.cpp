@@ -198,7 +198,7 @@ void Analyzer::complete_class(EntityId e)
     attach_template_context(context,substitution_frame(index,pattern.offset,pattern.count));
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
     ScopeId saved = active_template_scope; active_template_scope = 0;
-    facts[source].entity = e;
+    facts.edit(source).entity = e;
     class_type(source,environment,0,true);
     active_template_scope = saved;
     specializations[index].body = FactState::Success;

@@ -49,7 +49,9 @@ void Analyzer::publish_template_binding(NodeId source, EntityId concrete)
     auto k = key(frame,pattern);
     auto prior = substitution_binding_cache.get(k);
     if (prior && prior != concrete) throw std::logic_error("substituted declaration identity changed");
+    if (prior) return;
     substitution_binding_cache.put(k,concrete);
+    ++declaration_publications;
 }
 EntityId Analyzer::substitution_entity(std::uint32_t frame, EntityId source) const
 {
@@ -141,7 +143,7 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         if (!type) throw std::runtime_error("invalid substituted declaration type");
     }
     ++template_type_uses;
-    facts[node].type = type; facts[node].scope = scope;
+    facts.edit(node).type = type; facts.edit(node).scope = scope;
     return type;
 }
 } }

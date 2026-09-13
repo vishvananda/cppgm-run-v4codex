@@ -16,7 +16,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         if (!e || !entities[e].class_info || !entities[e].specialization ||
             ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
             throw std::runtime_error("invalid elaborated class template-id");
-        facts[n].type = entities[e].type; facts[n].entity = e; facts[n].scope = s;
+        facts.edit(n).type = entities[e].type; facts.edit(n).entity = e; facts.edit(n).scope = s;
         return entities[e].type;
     }
     bool anonymous_union = !id && key_op == KW_UNION;
@@ -77,7 +77,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             template_class_contexts.put(e,ast.nodes.occurrences[n].context);
         }
     }
-    facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
+    facts.edit(n).type = t; facts.edit(n).entity = e; facts.edit(n).scope = s;
     if (definitions) publish_template_binding(n,e);
     if (emit && !anonymous_union) {
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);
@@ -192,7 +192,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     } else if (entities[e].key != KW_ENUM || (underlying_node && entities[e].underlying != underlying))
         throw std::runtime_error("incompatible enum declaration");
     TypeId t = entities[e].type;
-    facts[n].type = t; facts[n].entity = e; facts[n].scope = s;
+    facts.edit(n).type = t; facts.edit(n).entity = e; facts.edit(n).scope = s;
     if (definitions) publish_template_binding(n,e);
     ScopeId es = entities[e].scope;
     ScopeId output_owner = owner;

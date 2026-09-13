@@ -71,14 +71,14 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
             // Class specialization declares member defaults without demanding
             // their expressions. Preserve the declaration's access environment.
             if (definitions && ast.nodes.occurrences[a].context) {
-                default_arguments[index] = a; facts[a].scope = s;
+                default_arguments[index] = a; facts.edit(a).scope = s;
                 seen = true; continue;
             }
             NodeId value = ast[a].first;
             while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
                 value = ast[value].first;
             if (definitions && entities[e].template_info) {
-                default_arguments[index] = a; facts[a].scope = head;
+                default_arguments[index] = a; facts.edit(a).scope = head;
                 seen = true; continue;
             }
             if (ast[value].kind == Kind::BracedInit) {

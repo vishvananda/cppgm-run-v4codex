@@ -53,7 +53,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         }
         if (node.detail) {
             if (definitions) {
-                result = type_name(node.detail,s); facts[c].entity = facts[node.detail].entity;
+                result = type_name(node.detail,s); facts.edit(c).entity = facts[node.detail].entity;
                 if (template_type_probe && !result) return 0;
                 continue;
             }
@@ -61,7 +61,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             if (!e || (entities[e].kind != EntityKind::Type && entities[e].kind != EntityKind::Alias))
                 throw std::runtime_error("type name is not a visible type");
             result = source_type(e);
-            facts[c].entity = e;
+            facts.edit(c).entity = e;
             continue;
         }
         switch (node.op) {
@@ -95,7 +95,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         result = types.fundamental(fundamental);
     }
     result = types.qualify(result, cv);
-    facts[n].type = result; facts[n].scope = s;
+    facts.edit(n).type = result; facts.edit(n).scope = s;
     return result;
 }
 bool Analyzer::prototype_scope_needed(NodeId parameters)
@@ -143,7 +143,7 @@ TypeId Analyzer::type_id(NodeId n, ScopeId s)
     if (definitions) if (auto type = reuse_template_type(n,s)) return type;
     NodeId specs = ast[n].first;
     TypeId t = declarator(ast[specs].next, specifiers(specs, s), s);
-    facts[n].type = t; facts[n].scope = s;
+    facts.edit(n).type = t; facts.edit(n).scope = s;
     return t;
 }
 TypeId Analyzer::parameter(NodeId n, ScopeId s)
@@ -152,7 +152,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     NodeId specs = ast[n].first;
     NodeId d = ast[specs].next;
     TypeId t = declarator(d, specifiers(specs, s), s);
-    facts[n].type = t; facts[n].scope = s;
+    facts.edit(n).type = t; facts.edit(n).scope = s;
     return t;
 }
 TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved)
@@ -246,11 +246,11 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             }
             auto qualifiers = function_qualifiers(c);
             base = types.function(base, params, variadic, qualifiers.cv, qualifiers.ref);
-            facts[c].type = base;
+            facts.edit(c).type = base;
         }
     }
     if (nested) base = declarator(nested, base, s,dynamic_array,name_resolved);
-    facts[n].type = base; facts[n].scope = s;
+    facts.edit(n).type = base; facts.edit(n).scope = s;
     return base;
 }
 void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
@@ -402,7 +402,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && !init && !function && integral(t) && spec_has(specs, KW_CONSTEXPR))
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
-        facts[ast[init].first].type = t;
+        facts.edit(ast[init].first).type = t;
     if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
     return e;
 }

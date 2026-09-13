@@ -150,7 +150,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (args.size() != 1) throw std::runtime_error("constant query arity");
             result.type = types.fundamental(FT_INT); result.form = ExpressionForm::ConstantQuery;
             Constant v(result.type, evaluate(args[0], s).valid);
-            facts[n].value = constants.size(); constants.push_back(v);
+            facts.edit(n).value = constants.size(); constants.push_back(v);
             return result;
         }
         if (!e && builtin_name && name && ids.spelling(name).equals("__builtin_unreachable")) {
@@ -207,7 +207,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) {
                 auto c = list_initialization(args_node,cast_type,s,true);
                 result.type = cast_type; result.form = ExpressionForm::ListValue;
-                record_conversion(result,args_node,c); facts[n].type = cast_type;
+                record_conversion(result,args_node,c); facts.edit(n).type = cast_type;
                 record_object(result,0,0,0);
                 object_uses[result.object_use].temporary = list_objects[conversions[result.conversions].materialization].temporary;
                 return result;
@@ -217,11 +217,11 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 if (converting_transfer(ctor,result)) {
                     auto c = result_conversion(ctor,result,cast_type);
                     result = Expression(); result.type = cast_type; result.form = ExpressionForm::Cast;
-                    record_conversion(result,args[0],c); facts[n].type = cast_type;
+                    record_conversion(result,args[0],c); facts.edit(n).type = cast_type;
                     return result;
                 }
                 members[entities[ctor].member_info].complete_entry = true;
-                facts[n].entity = ctor; facts[n].type = cast_type;
+                facts.edit(n).entity = ctor; facts.edit(n).type = cast_type;
                 result.type = cast_type; result.form = ExpressionForm::Construction;
                 EntityId temporary = make_entity(EntityKind::Variable, make_scope(ScopeKind::Block, s), 0, n);
                 entities[temporary].type = cast_type; register_destruction(temporary);
@@ -252,7 +252,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (definitions) selected = explicit_template(ast[callee].detail,selected,s);
         fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
         expressions.set(callee,fn); expressions.ready(callee,true); expressions.evaluated(callee,!unevaluated_depth);
-        facts[callee].entity = selected; facts[callee].scope = s;
+        facts.edit(callee).entity = selected; facts.edit(callee).scope = s;
     } else fn = expression(callee, s);
     if (fn.type && types[fn.type].kind == TypeKind::Named && entities[types[fn.type].entity].class_info) {
         std::vector<NodeId> operands(1, callee); operands.insert(operands.end(), args.begin(), args.end());
@@ -287,7 +287,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous overload");
         EntityId selected = choice.entity;
         if (object_type) chosen.erase(chosen.begin());
-        facts[n].entity = selected;
+        facts.edit(n).entity = selected;
         if (entities[selected].member_info && !entities[selected].is_static)
         {
             record_object(result, object_node, types.parameters[types[call_type(selected)].offset],
@@ -331,7 +331,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         record_call(result, args, chosen);
     }
     TypeId returned = types[ft].child;
-    facts[n].type = returned;
+    facts.edit(n).type = returned;
     result.type = value_type(returned);
     result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

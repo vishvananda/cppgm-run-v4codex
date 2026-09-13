@@ -807,3 +807,20 @@ successfully under the host and this compiler. Stage 314, prior 1621 and all 31
 personal native controls pass. Next reduce dense occurrence Fact storage while
 preserving these explicit publication and lifetime consumers; full evidence and
 performance acceptance follow the complete owner group.
+
+
+Fact storage now materializes records only on explicit publication. All 137
+existing mutation sites use edit(); ordinary reads of absent syntax/occurrence
+facts do not allocate. A four-byte optional index replaces the dense twenty-byte
+Fact slot, and TU-owned 1024-record slabs preserve references across recursive
+publication and index growth. The lifetime/object/declaration consumers retain
+the same identities. Record count, retained storage bytes, source declaration
+work and unique concrete publications are exposed through existing telemetry.
+
+The standalone fact-store.cc control checks absent reads, independent objects
+and queries, and references held across index/slab growth under release and
+ASan/UBSan. The complete through report passes 1935 tests and all 31 personal
+native programs pass. Three diagnostic inputs materialize 558924/1523505,
+1256342/2455650 and 663670/1727733 possible Fact records respectively. These
+counts establish sparse ownership, not a compiler latency or peak-RSS benefit;
+freeze equivalent A/B outputs and measure those costs before acceptance.

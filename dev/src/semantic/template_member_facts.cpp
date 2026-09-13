@@ -100,7 +100,7 @@ bool Analyzer::check_template_field(NodeId n, ScopeId s, EntityId field, bool ex
     check_access(field,s,entities[field].owner);
     auto result = member_value(field,context.available ? context.cv : 0,ValueCategory::Lvalue);
     result.ready = true;
-    expressions.set(n,result); facts[n].type = result.type; facts[n].entity = field; facts[n].scope = s;
+    expressions.set(n,result); facts.edit(n).type = result.type; facts.edit(n).entity = field; facts.edit(n).scope = s;
     while (scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
     auto source = ast.nodes.occurrences[n].source;
     template_field_sources.put(source,template_object_context_index.get(s));

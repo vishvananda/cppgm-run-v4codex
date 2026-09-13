@@ -69,7 +69,7 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
     if (ast[n].kind == Kind::IdExpression) {
         EntityId e = resolve(ast[n].detail, s);
         if (!e) throw std::runtime_error("unknown decltype/sizeof name");
-        facts[n].entity = e; facts[n].type = entities[e].type;
+        facts.edit(n).entity = e; facts.edit(n).type = entities[e].type;
         return entities[e].type;
     }
     Constant v = evaluate(n, s);
@@ -92,12 +92,12 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
     if (facts[n].value) return constants[facts[n].value];
     if (calls && expressions[n].form == ExpressionForm::OperatorCall) return Constant();
     Constant result = evaluate_value(n, s);
-    facts[n].scope = s;
+    facts.edit(n).scope = s;
     if (result.valid) {
-        facts[n].value = constants.size();
-        if (!calls || !expressions[n].ready) facts[n].type = result.type;
+        facts.edit(n).value = constants.size();
+        if (!calls || !expressions[n].ready) facts.edit(n).type = result.type;
         constants.push_back(result);
-    } else facts[n].value = 1; // Expected non-constant, owned by this parsed region.
+    } else facts.edit(n).value = 1; // Expected non-constant, owned by this parsed region.
     return result;
 }
 Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
@@ -122,7 +122,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::IdExpression: {
         EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
-        if (!calls) { facts[n].entity = e; facts[n].type = entities[e].type; }
+        if (!calls) { facts.edit(n).entity = e; facts.edit(n).type = entities[e].type; }
         return entities[e].constant;
     }
     case Kind::Sizeof: case Kind::TypeTrait: {

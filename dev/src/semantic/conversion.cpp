@@ -224,8 +224,8 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
     auto value = expressions[n];
     value.entity = e; value.form = ExpressionForm::Ordinary; value.type = entities[e].type;
     expressions.set(n,value);
-    facts[n].type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
-    facts[n].entity = e;
+    facts.edit(n).type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
+    facts.edit(n).entity = e;
     use_selected_function(e,direct);
     if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
         select_function(ast[n].first, e, direct);
@@ -233,7 +233,7 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
             value = expressions[n]; value.type = entities[e].member_info && !entities[e].is_static ?
                 types.member_pointer(scopes[entities[e].owner].entity, entities[e].type) : types.compound(TypeKind::Pointer, entities[e].type);
             value.category = ValueCategory::Prvalue; expressions.set(n,value);
-            facts[n].type = value.type;
+            facts.edit(n).type = value.type;
         }
     }
 }
@@ -260,7 +260,7 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
     if (c.function) select_function(n, c.function);
     if (expressions[n].entity) demand_specialization(expressions[n].entity);
     TypeId target = types.unqualified(c.target);
-    if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts[n].type = target;
+    if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts.edit(n).type = target;
 }
 void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 {
@@ -344,7 +344,7 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
     }
     if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
         if (!ast[n].first) {
-            facts[n].type = target; auto value = expressions[n]; value.type = target; value.ready = true;
+            facts.edit(n).type = target; auto value = expressions[n]; value.type = target; value.ready = true;
             expressions.set(n,value); return;
         }
         if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
@@ -352,7 +352,7 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s)
             require_conversion(ast[n].first,target,true);
         else initialize(ast[n].first, target, s);
         if (ast[n].kind == Kind::BracedInit) list_conversion(ast[n].first, target);
-        facts[n].type = target;
+        facts.edit(n).type = target;
         return;
     }
     expression(n, s);

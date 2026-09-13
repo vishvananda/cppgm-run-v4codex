@@ -109,7 +109,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         std::vector<Conversion> chosen(sequences.begin()+selected.offset+1,sequences.begin()+selected.offset+args.size());
         record_call(result,arguments,chosen);
         TypeId returned = types[selected.surrogate].child;
-        facts[n].type = returned; result.type = value_type(returned);
+        facts.edit(n).type = returned; result.type = value_type(returned);
         result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         return true;
@@ -139,7 +139,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     }
     record_call(result, arguments, selected_arguments);
     TypeId returned = types[entities[selected.entity].type].child;
-    facts[n].entity = selected.entity; facts[n].type = returned;
+    facts.edit(n).entity = selected.entity; facts.edit(n).type = returned;
     result.type = value_type(returned);
     result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

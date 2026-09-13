@@ -122,7 +122,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         auto c = result_conversion(ctor,result,target);
         ValueInitialization init; init.source = args[0]; init.conversion = conversions.size(); conversions.push_back(c);
         class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
-        facts[n].type = target; return true;
+        facts.edit(n).type = target; return true;
     }
     if (ast[list].kind == Kind::BracedInit) {
         Type f = types[entities[ctor].type];
@@ -137,7 +137,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s)
         prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
     }
-    facts[n].entity = ctor; facts[n].type = target; facts[n].scope = s;
+    facts.edit(n).entity = ctor; facts.edit(n).type = target; facts.edit(n).scope = s;
     expressions.set(n,result);
     return true;
 }

@@ -104,8 +104,8 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         auto type = bind_template_type(specs,ast[specs].next,s);
         auto e = pattern_declaration(EntityKind::Alias,s,node.text,n,dep);
         if (type) {
-            entities[e].type = types.signature(type); facts[n].type = type;
-            facts[node.first].type = type;
+            entities[e].type = types.signature(type); facts.edit(n).type = type;
+            facts.edit(node.first).type = type;
             if (!ast.nodes.occurrences[node.first].context)
                 template_type_sources.put(ast.nodes.occurrences[node.first].source,type+1);
         }
@@ -148,7 +148,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             entities[e].is_static = spec_has(specs,KW_STATIC);
             entities[e].mutable_field = spec_has(specs,KW_MUTABLE);
             if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
-            if (type) { entities[e].type = types.signature(type); facts[d].type = type; }
+            if (type) { entities[e].type = types.signature(type); facts.edit(d).type = type; }
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);

@@ -92,7 +92,7 @@ void Analyzer::namespace_declaration(NodeId n, ScopeId s)
         bind(s, name, e);
     }
     ScopeId ns = entities[e].scope;
-    facts[n].entity = e; facts[n].scope = ns;
+    facts.edit(n).entity = e; facts.edit(n).scope = ns;
     if (!name || child(n, Kind::Inline)) add_edge(s, ns, true);
     for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, ns);
 }
@@ -223,7 +223,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         TypeId t = declarator(d, result, s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
-            facts[n].entity = e; facts[n].type = entities[e].type;
+            facts.edit(n).entity = e; facts.edit(n).type = entities[e].type;
         }
         if (ast[n].kind == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
@@ -290,9 +290,9 @@ void Analyzer::function_body(const Body& body)
     entities[body.entity].definition = body.source;
     entities[body.entity].body = body.node;
     entities[body.entity].scope = fs;
-    facts[body.source].entity = body.entity;
-    facts[body.source].type = entities[body.entity].type;
-    facts[body.source].scope = fs;
+    facts.edit(body.source).entity = body.entity;
+    facts.edit(body.source).type = entities[body.entity].type;
+    facts.edit(body.source).scope = fs;
     NodeId d = body.declarator;
     // The function suffix closest to the declarator name supplies parameters.
     NodeId params = 0;
@@ -330,7 +330,7 @@ void Analyzer::statements(NodeId n, ScopeId s)
     case Kind::If: case Kind::Switch: case Kind::For: case Kind::RangeFor:
     case Kind::While: case Kind::Do: {
         ScopeId control = make_scope(ScopeKind::Block, s);
-        facts[n].scope = control;
+        facts.edit(n).scope = control;
         NodeId body = ast[n].kind == Kind::Do ? ast[n].first : ast[n].last;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             bool unbraced = ast[n].kind != Kind::If && c == body && ast[c].kind != Kind::Compound;
@@ -351,7 +351,7 @@ void Analyzer::statements(NodeId n, ScopeId s)
     }
     case Kind::Compound: {
         ScopeId bs = make_scope(ScopeKind::Block, s);
-        facts[n].scope = bs;
+        facts.edit(n).scope = bs;
         for (NodeId c = ast[n].first; c; c = ast[c].next) statements(c, bs);
         break;
     }
