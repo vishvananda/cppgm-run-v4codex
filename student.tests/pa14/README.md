@@ -8,10 +8,11 @@ python3 student.tests/pa14/check_fixed_objects.py
 python3 student.tests/pa14/check_dependent_objects.py
 python3 student.tests/pa14/check_object_reducers.py
 python3 student.tests/pa14/check_declaration_types.py
+python3 student.tests/pa14/check_demand_regions.py
 python3 student.tests/pa14/verify_performance.py
 ```
 
-`check_functions.py` compiles all twenty local `.cpp` sources with LowIR validation,
+`check_functions.py` compiles all twenty-one local `.cpp` sources with LowIR validation,
 then runs the generated programs through PA8's supplied native backend. They
 cover specialization demand/identity, compatible declarations, lazy class
 completion, calls/operators/defaults/references, static function addresses,
@@ -21,13 +22,13 @@ renamed out-of-class/nested definitions, late definitions, class defaults,
 explicit class demand, ellipsis conversions and evaluated/unevaluated storage.
 The compiler implements the LowIR itself.
 
-`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty
+`check_sanitizers.py RELEASE SANITIZED` runs all 314 course sources and twenty-one
 personal sources through both frozen compilers. It requires equal status,
 byte-identical successful LowIR and no ASan/UBSan report. Rejection parity for
 incomplete-stage inputs is a memory-safety check, not a course correctness pass.
-The current campaign checks 334 inputs with GCC's address and undefined
-behavior sanitizers, leak detection and halt-on-error enabled, plus 90 explicit
-binding/query/scalar/call/object rejection cases. All four `.t` reducers also
+The current campaign checks 335 inputs with GCC's address and undefined
+behavior sanitizers, leak detection and halt-on-error enabled, plus 102 explicit
+binding/query/scalar/call/object/default rejection cases. All six `.t` reducers also
 pass release/sanitizer output parity and native execution. The ABI controls
 remain part of `check_queries.py`.
 
@@ -114,3 +115,28 @@ two campaigns preserve 588 additional observations. `declaration_type_evidence.p
 retains positive native and negative compiler proofs. `declaration_layout_probe.cc`
 is compiled explicitly by the recorded layout command, outside the native `.cpp`
 suite. Both the proof and layout artifacts are checked by the performance verifier.
+
+`demand-regions.cpp` checks independent body, constructor-initializer and default
+argument demand, including unused dependent defaults, explicit arguments, repeated
+side effects, nested/local classes and renamed definition heads. `default-heads.t`
+reduces declaring-head lookup and defaults used before their later definitions.
+`check_demand_regions.py` runs twelve rejection controls and that reducer through
+the compiler/native backend. Initial-only default declarations follow N3485
+[dcl.fct.default]/4–6; the original permissive personal source and its correction
+are retained in the artifacts. Course fixtures and references are unchanged.
+
+`region_benchmark.py` freezes 21 compiler workloads and five checked native loops.
+Three campaigns retain 1,008 observations, including the intermediate fully-used
+body slowdown. `region_cache_benchmark.py` isolates cached source topology from
+the already-correct demand implementation with another 70 observations. The
+verifier checks all 8,932 observations, source/default work equations, complete
+AA/ABBA orders, exact common-correct LowIR/native hashes, unchanged hot records,
+current source-region layouts and six newly rejected invalid defaults. Frozen
+proofs and binaries live under `$RALPH_ARTIFACT_DIR/pa14-regions/`; historical
+layout probes retain their header snapshots, while the new current probe also
+checks the live headers. None of these artifacts are compiler inputs.
+
+`region-attributes.t` additionally checks alignment operands and packing on local
+classes inside demanded member bodies. `check_object_reducers.py` runs it with
+the earlier object/prototype reducers. The entry, final release and sanitizer
+compilers preserve identical validated LowIR and checked native output.

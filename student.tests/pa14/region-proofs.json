@@ -1,0 +1,514 @@
+{
+  "harness_sha256": "07f9f403c235b0b097ae34a5fac1cdac25a10a529c92fff727fb90d68d12413f",
+  "rejection_harness_sha256": "cc36210eb4f88dd8e8606f132f426c0385c41c29c697a1886b14dc7cb3dcf19f",
+  "rules": [
+    "N3485 [dcl.fct.default]/4-6",
+    "N3485 [temp.inst]/1-2",
+    "https://cplusplus.github.io/CWG/issues/15.html",
+    "https://cplusplus.github.io/CWG/issues/217.html"
+  ],
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+      "sha256": "ed043579d0e2c321623061f3204ae19cee11e4d0c472cf5130737ce6b31e98e0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+      "sha256": "4809031b0b8e2cd39a6751deb0a2611f24768b956b012e9ffb05136597514a57"
+    }
+  ],
+  "rejections": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0.cpp",
+      "source_sha256": "7d377ad33602dd47e5b743c4d1555fb7c46ba3215fcebd3c81f58b31261c856a",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-0-1.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1.cpp",
+      "source_sha256": "3acba6e1b6df050f490d6ea5d7807ec14c95f2f623ada2a8085fecf283c921f2",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-1-1.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2.cpp",
+      "source_sha256": "1fb9ea99629f3791224b4954f71929305ca97698d8c197098eda5e24cae22a6b",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-2-1.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3.cpp",
+      "source_sha256": "91da4475e2a1f0b0a2882dc2615ab9d98fcac0c42c96ade075cd926a68f76253",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-3-1.log",
+          "log_sha256": "ddc880c4e994373c420aabd54f6380a8e280f555a1d48ab3fcf6ae9bc2a7e9df"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4.cpp",
+      "source_sha256": "56f5ff4ebc12afc363684548c7f0b3827322272a81a39c471f16189f5e3ffa83",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-4-1.log",
+          "log_sha256": "ddc880c4e994373c420aabd54f6380a8e280f555a1d48ab3fcf6ae9bc2a7e9df"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5.cpp",
+      "source_sha256": "13684ac79589ae1e05a29d89c3b92f562b9357dc667930ced0c6ab65f900613c",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-5-1.log",
+          "log_sha256": "c4374db2e24f5bf92f8205099f028d2120f0d99296101b7c6913204593b6f501"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6.cpp",
+      "source_sha256": "5716170649f5387225fa8992b9d7f2545d292978e7d3540d44aee5e5ae36c581",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-6-1.log",
+          "log_sha256": "ab495ab169afd057931d3efa942ecf7c350a8a4b7b8c00159a748dbb760fd7d4"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7.cpp",
+      "source_sha256": "b036940434880c635401ab0bb418f632ba8b2f9c5f64fbd02a84707c32be0212",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7-0.log",
+          "log_sha256": "2913c62158808e5ce3ac1b07bdb865e5c0d85a4f6ffceae76b82c9ac223f6bab"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-7-1.log",
+          "log_sha256": "2913c62158808e5ce3ac1b07bdb865e5c0d85a4f6ffceae76b82c9ac223f6bab"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8.cpp",
+      "source_sha256": "d41778a2b7f0f5310b27f755b11023bbac155f11067aac4653376a3cacd098c4",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-8-1.log",
+          "log_sha256": "449aa629997eeee62c490fccd989dea382e5c6d0ed45e84ab4af6f52c0a83ef1"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9.cpp",
+      "source_sha256": "5f39544d3f369ca301da19139a9239b3571d508a84fee8fb74bbef42b5cc1c5c",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-9-1.log",
+          "log_sha256": "449aa629997eeee62c490fccd989dea382e5c6d0ed45e84ab4af6f52c0a83ef1"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10.cpp",
+      "source_sha256": "c90a3e0a2a4aa443e6387d6daccf99871d0059cc2c42937bf20fc8417d671ce5",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-10-1.log",
+          "log_sha256": "ab495ab169afd057931d3efa942ecf7c350a8a4b7b8c00159a748dbb760fd7d4"
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11.cpp",
+      "source_sha256": "61f15353e65907ea298650f82ab847623b0055378540bf499e9d4939a8940848",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11-0.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "binary": 1,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/reject-11-1.log",
+          "log_sha256": "449aa629997eeee62c490fccd989dea382e5c6d0ed45e84ab4af6f52c0a83ef1"
+        }
+      ]
+    }
+  ],
+  "positives": [
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions.cpp",
+      "source_sha256": "3fb8ec2c16805426366417fcb3dfcfeb66273d6d7fd17d28bb1ea33318a55302",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-0.log",
+          "log_sha256": "09b821b91c9eeb06c9fb496ccf206c425b7fd54e5d311635d1c8bbada453776b"
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions.cpp"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-1.lowir",
+          "sha256": "901bdb6c256bd20cd6c822363a786cd4fb01b5ae1acb16b4ac85b5ea060ef1c2",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/demand-regions-1",
+          "native_sha256": "9ec7d2af2fffa4a9ba208327f0647cc1c4c9258c6d166d9cd5d4fcb0bb94538e",
+          "native_exit": 0
+        }
+      ]
+    },
+    {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads.t",
+      "source_sha256": "aebd92bfa3b563206d09b6f981b4bd3e3dbdfed55b24cb389b889d8c0582f3f2",
+      "outputs": [
+        {
+          "binary": 0,
+          "exit": 1,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-entry",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-0.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads.t"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-0.log",
+          "log_sha256": "4fcc275e7f03ec0396063283ed777e92ff17da4ab2c4b8318176e4b26ebb8a76"
+        },
+        {
+          "binary": 1,
+          "exit": 0,
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/cppgm++-cached-regions-release",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads.t"
+          ],
+          "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-1.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-1.lowir",
+          "sha256": "337be3c50e5ef13fb9c247df44274663747b5c7655d49ad83a75b9608857af48",
+          "native_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-regions/proofs-cached/default-heads-1",
+          "native_sha256": "2cf2938a00e68e32e72ecab43e1ca2796101be6b4841ab3a9cd6c7bdfa211fd1",
+          "native_exit": 0
+        }
+      ]
+    }
+  ]
+}

@@ -9,91 +9,82 @@ unchanged. PA15 has not started.
 
 ## Design/spec alignment
 
-Active continuation from `ca42e706` (previous turn: verified progress). The
-Projection now separates member bodies, constructor initializers and default
-arguments from declaration completion. Default values retain their declaring
-template head and independent semantic state. Immutable source-region indexes
-retain node IDs, deferred roots and attributes once; each specialization allocates
-only occurrences for demanded regions. Cached topology removes repeated source
-walks and per-node attribute lookups. Stage/native controls pass; the final
-performance and sanitizer campaign is pending. Shared source regions retain
-roots; demanded regions establish context-owned occurrences and facts. Work
-must follow declaration syntax plus demanded regions, with no repeated traversal
-of undemanded bodies. Validate unused dependent defaults, explicit arguments,
-recursive/nested demands, context identity, course/native parity and compiler/RSS
-scaling before extending the same region ownership further.
-
-Continuation from `5b1afe54` is **verified progress**. Raw function parameter
-types now feed bodies directly, preserving cv, array/function adjustment and
-reference collapse. Canonical declaration facts extend that path to supported
-local aliases, fields and renamed out-of-line members. Immutable frames include
-specialization, declaration head and enclosing bindings; complete frame/type,
-query and binding keys avoid cross-environment reuse. Queries retain concrete
-access context, overload identity and implicit-object cv. Body and prototype
-parameter identities remain distinct for definition-time checking.
+Continuation from `ca42e706` is **verified progress**. Member bodies, constructor
+initializers and default expressions now have separate demand roots. Concrete
+defaults retain semantic active/success/failure state and the declaring template
+head, including renamed definitions and calls preceding those definitions.
+Fixed default names are checked at definition time; dependent values wait for
+an omitted argument. Later declarations cannot add template defaults contrary
+to N3485 [dcl.fct.default]/4–6. Six invalid-default controls are newly rejected.
 
 | Owner / data flow | Complexity and validation |
 | --- | --- |
-| Retained declaration types (implemented) | Source specifiers/declarators → canonical types → complete substitution frames → concrete parameter/local/field declarations. Work follows source type syntax, distinct frame/type keys and actual uses; validate renamed heads, references, queries, native execution and 1,000/4,000 scaling. |
-| Dependent typed body graph (remaining) | Local class/enum identity, value-dependent bounds, symbolic receivers, storage dependencies, constructors/operators and declaration/return conversions need typed dependencies. Replace whole-region projection; validate contexts, identities, lifetimes and source/instance scaling. |
-| Demand/failure graph (remaining) | Separate declaration/definition/layout/default/exception/body/vtable/emission states, typed reasons/reverse edges and structured expected failures. Compute once per complete key; validate recursion, negative keys and unrelated-declaration scaling. |
+| Declaration types (inherited, implemented) | Source types → immutable substitution frames → concrete declaration facts. Complete frame/type/query keys; raw body parameters preserve cv, reference collapse and declarator adjustment. Previous evidence remains in `ca42e706` and performance.md. |
+| Source regions and defaults (this group, implemented) | Parsed source root → immutable node/root/attribute ID slices → demanded source/context occurrences → body/initializer/default semantic owner. Index each demanded source region once; work/storage follow indexed source edges and concrete demand. Defaults compute once per specialization/root; declaring-head overlays contain only head parameters. Validate nested/local classes, explicit/omitted arguments, side effects, renamed heads, alignment/packing and 1,000/4,000 scaling. |
+| Dependent typed body graph (remaining) | Expressions, local class/enum identities, value-dependent bounds, receivers, storage dependencies, constructors/operators and declaration/return conversions need explicit typed dependencies. Reuse fixed nodes within used regions; validate contexts, identities, lifetimes and source/instance scaling. |
+| Demand/failure graph (remaining) | Extend separate declaration/definition/layout/default/exception/body/vtable/emission states with typed reasons, reverse dependencies and structured expected failures. Compute once per complete key; validate recursive demand, negative keys and unrelated-declaration scaling. |
 
-**Concrete boundary:** this group retains types whose source representation is
-complete and substitutes them through declaration-owned environments. Local
-class identities, value-dependent array bounds and unsupported query forms
-explicitly defer to their existing semantic owners. Completing those forms and
-dependent-only projection requires expression, declaration-identity, conversion
-and lifetime dependencies; extending a type cache alone cannot represent them.
-Whole regions still project 457N/174N occurrences in the new declaration/member
-corpora, and inherited field corpora retain 92N/130N/32N+176. These remain
-current-stage defects. No external blocker exists; PA15 has not started.
+**Concrete boundary:** this group separates regions and indexes their immutable
+source topology. A used region still projects occurrences for all its contents.
+Replacing that projection requires expression, declaration-identity, conversion
+and lifetime dependencies shared by semantic analysis and lowering. Extending a
+source-region index cannot establish those facts. These are current-stage defects,
+not later-stage exemptions; the new region/default owner is coherent and tested.
+No external blocker exists. The two remaining graph owners require a separate
+representation change across their producers and consumers.
 
 ## Performance evidence and budgets
 
-All **7,854 observations** verify: 7,266 inherited plus two frozen 294-row
-declaration campaigns. [performance.md](performance.md) retains every sample,
-A/A calibration, paired blocks, spread and all compiler/native hashes. Final
-4,000-instance declaration latency is 2.945107→2.856347 s (ABBA .9570/.9874);
-renamed members 1.552243→1.531868 s (.9855/.9892). Unused source checking costs
-1.753455→1.865442 s (1.0649/1.0647), with five newly rejected invalid function-
-pointer bodies. Compiler text is 1,274,054 bytes, +8,384 (+0.662%) from entry.
+All **8,932 observations** verify: 7,854 inherited, three frozen 336-row region
+campaigns and a 70-row isolated cache comparison. [performance.md](performance.md)
+retains every sample, A/A calibration, ABBA pairing, spread and compiler/native
+hash. Large unused-body N=4,000 latency is 4.114022→.672118 s (ratios .1635/.1640),
+peak RSS 777,150→111,708 KiB. The intermediate fully-used-body slowdown is retained
+and corrected: final 2.538970→2.393640 s (.9459/.9704). Isolating the source cache
+against the already-correct demand implementation improves both body workloads
+in both paired blocks; its used-body RSS rises **6,714 KiB**, still unexplained.
+The inherited roughly +15 MiB calls-4 RSS delta against `33b791da` also remains
+open; measurements moving both A and B together do not establish its cause.
 
-Entity/Expression/ObjectUse remain 112/36/36 bytes; immutable frames are 20 bytes.
-Repeated declarations retain 30 source type facts, N frames, 6N substituted
-records and 57N uses/hits; renamed members retain ten source facts, 3N frames,
-10N records and 14N uses. Unused definitions allocate no frames or occurrences.
-Work/storage are bounded by source facts, complete dependent keys and actual
-uses. Five native loops preserve exact executable hashes/payload sizes; the
-common-correct generated-code growth budget remains **zero**. No optional
-optimizer or native backend was added. O0 has no mandated numeric compiler
-latency/RSS/text ceiling; unsupported inherited diagnostic gates do not override
-stage-scoped acceptance. Correctness, mandated limits and coverage remain.
+Body occurrences change from `(88+11W)N` to `69N` for the small used body and
+`(65+11W)N` for the large used body. The small-body source index stays at two
+regions, 65 nodes and five roots, independent of N/W. Unused defaults fall from
+34N to 21N occurrences with zero semantic default work. Repeated defaults retain
+28 occurrences and one default computation, independent of call count. Index
+storage follows source nodes/roots/attributes; specialization storage follows
+demanded occurrences and complete semantic keys. Used-region projection remains.
 
-Calls-4 RSS is 305,864→305,796 KiB against this entry. The inherited approximately
-+15 MiB delta against `33b791da` remains unexplained; it is not attributed to
-necessary semantic work or waived as harmless. See retained earlier campaigns.
+Compiler text is 1,282,758 bytes, **+8,704 (+0.683%)** from entry; the cache itself
+adds 2,240 bytes. Entity/Expression/ObjectUse remain 112/36/36 bytes, frames 20
+and occurrences eight. Per-TU Ast grows 304→352→504 bytes. Frozen historical
+layout snapshots and a current live-header probe replace an unsupported demand
+for unchanged historical header hashes. Native hashes/payload sizes are identical
+for common-correct inputs; the generated-code growth budget remains **zero**.
+No optional optimizer or native backend was added. O0 has no mandated numeric
+compiler latency/RSS/text ceiling. Source/key work bounds and repeatable body
+savings justify the cache; all measured costs, correctness, mandated limits and
+coverage remain. Unsupported diagnostic targets are not additional exit gates.
 
 ## Handoff ledger
 
 | Coherent increment | Commit / evidence |
 | --- | --- |
-| Inherited fixed fields, receivers, prototype scopes and nested method declarators | `78bdbc3f` through `24ad2c45`, reducers `ff744067`, reviewed evidence `5b1afe54`; 7,266 observations and all former proofs preserved |
-| Raw source parameter types feed concrete function bodies | `4f0d95e1`; default through 1935/1935, nineteen native controls |
-| Canonical declaration types, immutable frames and query context/binding substitution | `d19e36b8`; source deferral regressions reduced 312→314, twenty native controls |
-| Frozen declaration/compiler/native corpus | `bbb9d729`; all outputs identical across A/B; preliminary observations retained |
-| Preserve fixed checks alongside type-only query parameters and source access contexts | `5ce59182`; eight new rejection controls pass, including two reduced ordinal regressions; fixed unknown-call binding rejection restored |
+| Inherited field/receiver/prototype ownership, declaration types, substitution frames and query contexts | `78bdbc3f` through `ca42e706`; prior proofs and 7,854 observations preserved |
+| Independent member body, initializer and default demand | `feac8cd6`, `6edb0f18`; unused dependent defaults and declaring-head identity/native proofs |
+| Frozen region compiler/native corpus | `8a672653`; three full campaigns, exact common-correct output preservation |
+| Initial declaration ownership of template defaults | `03e76021`; six new rejections, CWG 15/217 proof; incorrectly permissive personal source preserved, no course/reference change |
+| Independent proofs and layout probe | `0e2761bb`; two new native successes and frozen historical/current layouts |
+| Immutable source-region index | `e1afac7c`; stage/through/native pass, source work equations and alignment/packing parity |
+| Isolated cache comparison | `10807fc9`; both body workloads improve in both paired blocks; RSS/outlier costs disclosed |
 
-Final validation at `5ce59182`: PA14 **314/314**, prior **1621/1621**, default
-through **1935/1935**, twenty native programs, **334** release/ASan/UBSan parity
-inputs, **90** rejection controls on both compilers, two ABI controls, four
+Final validation of `e1afac7c`: PA14 **314/314**, prior **1621/1621**, default
+through **1935/1935**, 21 native programs, **335** release/ASan/UBSan parity inputs,
+**102** rejection controls on both compilers, two ABI controls, six explicit
 reducer parity/native checks, all performance evidence and file audit (three
-inherited header advisories). Earlier failed probes/logs remain preserved.
-Artifacts, command/status manifests, proofs and frozen binaries are under
-`$RALPH_ARTIFACT_DIR/pa14-signature-facts/`; raw evidence and verification are
-committed in `student.tests/pa14/`.
+inherited header advisories). Command/status manifests, earlier failed probes,
+frozen binaries and proofs are under `$RALPH_ARTIFACT_DIR/pa14-regions/`; raw
+evidence and verification are committed in `student.tests/pa14/`.
 
-This handoff completes the declaration-type, substitution-frame and query-context
-group. Extending it into the two remaining graph owners requires explicit
-expression, identity, conversion and lifetime dependencies rather than another
-type-cache extension; the concrete boundary above remains. Full-stage work and
-the inherited RSS investigation are open, with no external blocker.
+This handoff completes region/default ownership and the related source-index
+extension. Full-stage dependent-body and demand/failure graph work, plus the
+unexplained RSS observations above, remain open at the concrete boundary stated.

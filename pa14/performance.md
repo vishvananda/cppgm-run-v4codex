@@ -1273,3 +1273,120 @@ handout; five invalid-body proofs substantiate the added coverage. No mandated
 numeric compiler latency/RSS/text ceiling exists here. Unsupported inherited
 self-selected diagnostic thresholds remain observations rather than exit gates;
 all measurements, correctness, required limits and coverage are preserved.
+
+## Member body/default demand and cached source regions
+
+Continuation entry is `ca42e706` (release SHA `ed043579d0e2c321623061f3204ae19cee11e4d0c472cf5130737ce6b31e98e0`).
+The final implementation is `e1afac7c`, frozen as `cppgm++-cached-regions-release`
+(SHA `4809031b0b8e2cd39a6751deb0a2611f24768b956b012e9ffb05136597514a57`).
+All artifacts are under `$RALPH_ARTIFACT_DIR/pa14-regions/`. Three complete
+`region_benchmark.py` campaigns preserve 1,008 observations in
+`region-preliminary-performance.json`, `region-standard-performance.json` and
+`region-performance.json`. A further 70 observations in
+`region-cache-performance.json` isolate the source index from the already-correct
+region/default implementation. Together with inherited evidence, all **8,932
+observations** verify. Binaries, harnesses, inputs and correct outputs were frozen
+before each campaign; timings ran without concurrent builds/tests. Every common
+case has warmups, four A/A observations and two ABBA blocks. Entry-invalid cases
+retain the rejection and six B-only measurements rather than comparing invalid
+implementations. All observations and outliers remain in the JSON.
+
+Final ABBA compiler medians and paired block ratios:
+
+| Workload | A/B wall seconds | A/B peak RSS KiB | ABBA B/A |
+| --- | --- | --- | --- |
+| Unused large body, N=1,000 W=8 | .211428 / .160731 | 43,440 / 31,848 | .7516 / .7603 |
+| Unused large body, N=1,000 W=128 | .917265 / .164720 | 198,886 / 31,832 | .1807 / .1790 |
+| Unused large body, N=4,000 W=128 | 4.114022 / .672118 | 777,150 / 111,708 | .1635 / .1640 |
+| Used large body, N=1,000 W=8 | .294640 / .281533 | 55,658 / 52,300 | 1.0655 / .9548 |
+| Used large body, N=1,000 W=128 | 2.538970 / 2.393640 | 373,010 / 369,086 | .9459 / .9704 |
+| Unused default, N=1,000 | .065808 / .054553 | 16,686 / 14,862 | .8235 / .8266 |
+| Unused default, N=4,000 | .262532 / .208423 | 51,774 / 44,272 | .7931 / .7922 |
+| Repeated default, N=1,000 | .031143 / .031350 | 9,178 / 9,456 | .9957 / 1.0094 |
+| Repeated default, N=4,000 | .109860 / .109962 | 22,456 / 22,336 | 1.0103 / .9961 |
+| Declaration instances 1,000 | .639065 / .618153 | 94,160 / 94,170 | .9709 / .9762 |
+| Renamed members 1,000 | .353391 / .346348 | 63,974 / 64,336 | .9804 / 1.0429 |
+| Repeated fields 1,000 | .058910 / .059078 | 16,112 / 17,150 | 1.0017 / .9978 |
+| Ordinary calls 4 | 1.791887 / 1.768738 | 305,850 / 305,882 | 1.0055 / .9673 |
+| Memory/floating source 1 | .370955 / .372537 | 69,690 / 69,784 | .9999 / .7809 |
+
+The large unused-body benefit repeats across all three campaigns. Final N=4,000
+A spans 4.068877–4.118932 s and B .670610–.672517 s. The earlier standard-reviewed
+implementation slowed the fully used W=128 body: 2.457764→2.533875 s, with ratios
+1.0310/1.0422. That result motivated indexing source topology and attributes once.
+Final W=128 spans 2.432226–2.606284 s (A) and 2.340152–2.562271 s (B). Smaller
+cases retain outliers: used W=8 B reaches .346711 s; renamed-member B .391436 s;
+memory/floating A .587595 s. No claim is made from those noisy block differences.
+New valid dependent-default inputs have B-only medians .054638 s / 14,592 KiB
+(N=1,000) and .210660 s / 43,574 KiB (N=4,000); the latter spans .208794–.252064 s.
+
+The isolated cache comparison uses the standard-reviewed release as A and final
+cached release as B, with the same frozen sources and exact output preflight:
+
+| Workload | A/B wall seconds | A/B RSS KiB | ABBA B/A |
+| --- | --- | --- | --- |
+| Unused large body 4,000 | .703095 / .678476 | 111,658 / 111,108 | .9627 / .9661 |
+| Used large body 1,000 | 2.489001 / 2.432524 | 368,874 / 375,588 | .9545 / .9706 |
+| Unused default 4,000 | .213462 / .209793 | 44,400 / 44,384 | .9753 / 1.7785 |
+
+For the two body workloads the cache improves both paired blocks. Used-body A/A
+spans 2.442122–2.591564 s, ABBA A 2.470659–2.658479 s and B 2.392073–2.470063 s.
+Unused-body A/A spans .699134–.704804 s, ABBA A .701182–.707485 s and B
+.674190–.683482 s. The unused-default B outlier .547672 s is preserved; its cache
+benefit is not established. The isolated used-body peak RSS rises 6,714 KiB
+(1.82%), despite unchanged semantic work/record counts and only two source index
+records, 1,469 node IDs and five roots. The final full campaign instead has lower
+used-body RSS against entry. These observations do not establish the cause of
+the isolated RSS increase; no allocator explanation or memory benefit is claimed
+for that case. The inherited calls-4 roughly +15 MiB delta against `33b791da`
+also remains unexplained. Intermediate campaigns have both A and B around
+320,000 KiB, while preliminary/final campaigns have both around 305,000 KiB;
+all samples are preserved and the movement is not attributed to this change.
+
+| Checked executable | A/B runtime seconds | Payload bytes |
+| --- | --- | --- |
+| Region/member loop | .059201 / .059347 | 206, identical |
+| Dependent-default/side-effect loop | B-only 2.697394 | 344 |
+| Calls | .476324 / .476209 | 206, identical |
+| Memory | .278624 / .279180 | 434, identical |
+| Floating point | .330484 / .330062 | 230, identical |
+
+The B-only loop spans 2.687025–2.732336 s and checks 12 million live iterations,
+default side effects and a checksum. The isolated common loop is .059214/.059399 s
+with ratios 1.0074/.9968 and the same 206-byte executable payload. The sectionless
+backend uses the established payload-after-entry size metric. All common-correct
+LowIR and executable hashes match across every region campaign, including the
+cache comparison; B-only outputs also match across the three full campaigns.
+No runtime optimization is claimed. Compiler text grows 1,274,054→1,282,758 bytes,
+**+8,704 (+0.683%)**; the cache itself adds 2,240 bytes over the standard-reviewed
+implementation. Entity/Expression/ObjectUse stay 112/36/36 bytes, substitution
+frames 20 bytes and occurrences eight bytes. The per-TU Ast grows 304→352→504
+bytes as demand state and source indexes are added. Both historical and final
+layout probes and transitive header snapshots are preserved. Requiring unchanged
+historical header hashes would forbid the intended Ast ownership extension; the
+verifier instead retains frozen historical layouts and checks current live
+headers against the new probe. This changes no mandated layout or coverage rule.
+
+Work/storage budgets follow source identities and demanded regions. For the body
+corpus, eager occurrences were `(88+11W)N`; final occurrences are `69N` when only
+the small body is used and `(65+11W)N` when the large body is used. Both retain
+`5N` deferred roots with `N` demands. The source index has two records, five roots
+and 65 node IDs for the small-body case, independent of W and N; demanding the
+large body indexes `61+11W` nodes once. Unused defaults reduce 34N occurrences
+to 21N, with 2N deferred roots and no default analysis. Their shared index has
+one region, nineteen nodes and two roots. Repeated defaults retain 28 occurrences,
+three indexed regions, two demands and one semantic default computation,
+independent of the number of calls. Default runtime evaluation still occurs on
+every omitted argument. Flat storage and reusable traversal scratch grow with
+indexed source nodes/edges and complete demanded keys; unrequested body contents
+are neither walked nor indexed by specialization.
+
+At PA14/O0, the common-correct generated-code growth budget remains **zero**.
+There is no mandated numeric compiler latency/RSS/text ceiling. Required default
+and region semantics, repeatable body compilation savings, and bounded source
+index storage justify the compiler work and text growth; the isolated RSS cost
+and noisy cases remain disclosed. Unsupported historical diagnostic gates remain
+observations, not extra exit requirements. Correctness, mandated limits, coverage
+and all raw measurements are preserved. Dependent-only construction *within*
+used bodies and broader typed demand/failure dependencies remain current-stage
+work; this region cache does not complete those graph owners.

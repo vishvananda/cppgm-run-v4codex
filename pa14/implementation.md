@@ -424,7 +424,7 @@ calls, verified alongside the inherited binding controls.
 Whole-region projection, remaining dependent body forms and structured failure
 states are still current-stage work; these type caches do not complete them.
 
-## Declaration, body and default-argument regions (active continuation)
+## Declaration, body and default-argument regions
 
 Projection retains member body, constructor-initializer and default-argument
 roots separately from declaration contents. Each complete source/context key
@@ -455,7 +455,8 @@ twenty-one native controls and twelve new rejections. `demand-regions.cpp` is
 entry-rejected and current-accepted, covering unused dependent defaults,
 explicit constructor/member arguments, repeated default side effects,
 local/nested classes, converting constructors, renamed heads across declarations and definitions, defaults used before definitions and qualified namespace definitions.
-Final cache checks and frozen performance/sanitizer evidence remain pending.
+The source cache, frozen performance evidence and sanitizer checks are complete;
+see the final validation below.
 
 The standards review moved incorrectly permissive personal controls for defaults
 added on later template declarations into the rejection suite; their original
@@ -467,7 +468,7 @@ binding receives an explicit restriction from its declaration owner; function
 templates compare the current declaration with the canonical initial source.
 No course fixture, reference, or comparison rule changed. Current checks pass
 314 PA14 cases, 21 native programs, twelve rejection controls and the focused
-`default-heads.t` compiler/native reducer. The final evidence campaign follows.
+`default-heads.t` compiler/native reducer. All campaigns remain preserved.
 
 The AST owns a translation-unit source-region index keyed by parsed root identity.
 Each demanded source region is walked once to retain flat node-ID, deferred-root
@@ -478,3 +479,14 @@ exist before alignment operands are projected. Storage follows indexed source
 regions plus demanded occurrences; there is no per-specialization tree walk or
 per-node attribute lookup. This is a region boundary, not yet dependent-only
 projection within a used body.
+
+Final validation of the region/default group (`e1afac7c`) passes PA14 314/314,
+prior 1621/1621, default through 1935/1935, 21 native programs, 335
+release/ASan/UBSan parity inputs, 102 rejection controls on both builds, two ABI
+controls, six explicit reducer parity/native checks and file audit.
+`region-attributes.t` confirms concrete alignment operands and packing inside
+demanded local-class bodies against entry, final release and sanitizer output.
+All 8,932 performance observations verify; the corrected fully-used-body slowdown,
+isolated cache benefit and remaining RSS costs are retained in performance.md.
+Dependent-only projection inside used regions and typed demand/failure dependency
+graphs remain separate current-stage representation work.

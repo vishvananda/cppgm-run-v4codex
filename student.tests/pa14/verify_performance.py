@@ -8,8 +8,10 @@ import benchmark as shared
 observations=0
 for filename in ('preliminary-performance.json','graph-fastpath-performance.json',
                  'call-context-preliminary-performance.json','performance.json','graph-read-performance.json',
-                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json','dependent-object-final-performance.json','dependent-object-repeat-performance.json','prototype-performance.json','dependent-object-packed-performance.json','prototype-packed-performance.json','method-parameter-performance.json','prototype-methods-performance.json','declaration-type-preliminary-performance.json','declaration-type-performance.json'):
+                 'definition-performance.json','symbolic-preliminary-performance.json','symbolic-context-performance.json','symbolic-performance.json','packing-performance.json','transfer-preliminary-performance.json','transfer-deleted-performance.json','transfer-performance.json','body-preliminary-performance.json','body-repeated-performance.json','body-performance.json','call-performance.json','object-performance.json','object-repeat-preliminary-performance.json','object-repeat-performance.json','object-view-performance.json','dependent-object-performance.json','dependent-object-final-performance.json','dependent-object-repeat-performance.json','prototype-performance.json','dependent-object-packed-performance.json','prototype-packed-performance.json','method-parameter-performance.json','prototype-methods-performance.json','declaration-type-preliminary-performance.json','declaration-type-performance.json','region-preliminary-performance.json','region-standard-performance.json','region-performance.json','region-cache-performance.json'):
  data=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ regions=filename.startswith('region-')
+ region_cache=filename=='region-cache-performance.json'
  declaration=filename.startswith('declaration-type-')
  graph=filename=='graph-read-performance.json'
  definitions=filename=='definition-performance.json'
@@ -25,13 +27,13 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
  packed=filename=='dependent-object-packed-performance.json'
  repeated=filename=='dependent-object-repeat-performance.json' or packed
  prototype=filename.startswith('prototype-')
- harness=ROOT/'student.tests/pa14'/('declaration_type_benchmark.py' if declaration else 'method_parameter_benchmark.py' if methods else 'prototype_benchmark.py' if prototype else 'dependent_object_packed.py' if packed else 'dependent_object_repeat.py' if repeated else 'dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
+ harness=ROOT/'student.tests/pa14'/('region_cache_benchmark.py' if region_cache else 'region_benchmark.py' if regions else 'declaration_type_benchmark.py' if declaration else 'method_parameter_benchmark.py' if methods else 'prototype_benchmark.py' if prototype else 'dependent_object_packed.py' if packed else 'dependent_object_repeat.py' if repeated else 'dependent_object_benchmark.py' if dependent else 'object_view_benchmark.py' if views else 'object_repeat.py' if preliminary else 'object_repeat_final.py' if repeat else 'object_benchmark.py' if objects else 'call_benchmark.py' if calls else 'body_benchmark.py' if body else 'transfer_benchmark.py' if transfer else 'packing_benchmark.py' if packing else 'symbolic_benchmark.py' if symbolic else 'graph_read_benchmark.py' if graph else 'definition_benchmark.py' if definitions else 'benchmark.py')
  assert shared.sha(harness)==data['harness_sha256']
- if repeat or views or repeated or methods or declaration: assert shared.sha(data['parent_path'])==data['parent_sha256']
+ if repeat or views or repeated or methods or declaration or regions: assert shared.sha(data['parent_path'])==data['parent_sha256']
  if not graph:
   assert shared.sha(ROOT/'student.tests/pa10/benchmark.py')==data['shared_harness_sha256']
   assert shared.sha(ROOT/'reference-binaries/lowir2native')==data['backend_sha256']
-  assert len(data['workloads'])==(3 if prototype else 10 if methods or repeated else 16 if dependent else 10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
+  assert len(data['workloads'])==(4 if region_cache else 21 if regions else 3 if prototype else 10 if methods or repeated else 16 if dependent else 10 if views else 1 if preliminary else 6 if repeat else 38 if objects else 27 if calls else 19 if transfer or body else 4 if packing else 24 if symbolic else 19 if definitions else 16)
  else: assert len(data['workloads'])==4
  for binary in data['binaries']:
   assert shared.sha(binary['path'])==binary['sha256']
@@ -50,7 +52,7 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
     native=out['native'];assert shared.sha(native['path'])==native['sha256']
     assert shared.text_size(native['path'])==native['text_bytes'] and native['checked_exit']==0
   if len(work['outputs'])==2 and (not transfer or work['exact_required']): assert work['outputs'][0]['sha256']==work['outputs'][1]['sha256']
-  if (objects or dependent or declaration) and len(work['outputs'])==2 and 'runtime' in work:
+  if (objects or dependent or declaration or regions) and len(work['outputs'])==2 and 'runtime' in work:
    assert work['outputs'][0]['native']['sha256']==work['outputs'][1]['native']['sha256']
   campaigns=[work] if graph else [work['compiler']]+([work['runtime']] if 'runtime' in work else [])
   for campaign in campaigns:
@@ -65,6 +67,32 @@ for filename in ('preliminary-performance.json','graph-fastpath-performance.json
    if common:
     pairs=[statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[k:k+4] if r['binary']==0) for k in (4,8)]
     assert pairs==campaign['paired_c_over_b' if graph else 'paired_b_over_a']
+  if regions and name.startswith(('body-','default-')):
+   b=work['outputs'][-1]['telemetry'][0]
+   if name.startswith('body-'):
+    _,use,n,width=name.split('-');n=int(n);width=int(width)
+    a=work['outputs'][0]['telemetry'][0]
+    assert a['template_occurrences']==((69 if use=='run' else 65+11*width) if region_cache else 88+11*width)*n
+    assert b['template_occurrences']==(69 if use=='run' else 65+11*width)*n
+    expected=[5*n,n,0,0]
+   else:
+    n=int(name.rsplit('-',1)[1])
+    if name.startswith('default-repeated-'):
+     assert b['template_occurrences']==28
+     expected=[2,2,1,0]
+    else:
+     assert b['template_occurrences']==21*n
+     expected=[2*n,0,0,0]
+     if name.startswith('default-unused-'):assert work['outputs'][0]['telemetry'][0]['template_occurrences']==(21 if region_cache else 34)*n
+   keys=('template_deferred_regions','template_demanded_regions','template_default_argument_work','template_default_environment_work')
+   assert [b[k] for k in keys]==expected,(name,b)
+   if filename in ('region-performance.json','region-cache-performance.json'):
+    if name.startswith('body-'):
+     indexed=[2,65 if use=='run' else 61+11*width,5]
+    elif name.startswith('default-repeated-'):indexed=[3,28,2]
+    else:indexed=[1,19,2]
+    keys=('template_source_regions','template_region_nodes','template_region_roots')
+    assert [b[k] for k in keys]==indexed,(name,b)
   if declaration and name.startswith('declaration-') and name.rsplit('-',1)[1].isdigit():
    b=work['outputs'][1]['telemetry'][0];n=int(name.rsplit('-',1)[1])
    if name.startswith('declaration-instances-'):
@@ -355,7 +383,7 @@ print('four final frozen reducers preserve sanitizer/native parity; nested metho
 
 declaration_layout=json.loads((ROOT/'student.tests/pa14/declaration-type-layout.json').read_text())
 for header in declaration_layout['headers']:
- assert shared.sha(header['path'])==header['sha256']==shared.sha(header['source'])
+ assert shared.sha(header['path'])==header['sha256']
 for kind in ('source','binary','dump'):
  assert shared.sha(declaration_layout[kind+'_path'])==declaration_layout[kind+'_sha256']
 assert list(map(int,shared.run([declaration_layout['binary_path']]).stdout.split()))==declaration_layout['sizes']==[112,36,36,20,8,12]
@@ -383,3 +411,63 @@ for name,work in after['workloads'].items():
  if 'runtime' in work:
   assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in previous['outputs']]
 print('declaration type frames preserve hot layouts, compiler/native outputs and five new rejection proofs')
+
+# Historical transitive header snapshots establish their measured layouts. A
+# current probe, rather than unchanged-header hashes, establishes current sizes.
+for filename,ast_growth in (('region-initial-layout.json',48),('region-layout.json',200)):
+ layouts=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ assert len(layouts)==2
+ for row in layouts:
+  for header in row['headers']:assert shared.sha(header['path'])==header['sha256']
+  for kind in ('source','binary','dump'):assert shared.sha(row[kind+'_path'])==row[kind+'_sha256']
+  assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
+  assert row['sizes'][:5]==[112,36,36,20,8]
+ assert layouts[1]['sizes'][5]-layouts[0]['sizes'][5]==ast_growth
+ if filename=='region-layout.json':
+  for header in layouts[1]['headers']:assert shared.sha(header['source'])==header['sha256']
+ assert shared.sha(ROOT/'student.tests/pa14/region_layout_probe.cc')==layouts[1]['source_sha256']
+for filename in ('region-initial-proofs.json','region-proofs.json'):
+ proofs=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ assert shared.sha(ROOT/'student.tests/pa14/region_evidence.py')==proofs['harness_sha256']
+ assert shared.sha(ROOT/'student.tests/pa14/check_demand_regions.py')==proofs['rejection_harness_sha256']
+ for binary in proofs['binaries']:assert shared.sha(binary['path'])==binary['sha256']
+ assert len(proofs['rejections'])==12 and len(proofs['positives'])==2
+ assert sum(row['outputs'][0]['exit']==0 for row in proofs['rejections'])==6
+ for row in proofs['rejections']+proofs['positives']:
+  assert shared.sha(row['source_path'])==row['source_sha256']
+  for out in row['outputs']:
+   assert shared.sha(out['log_path'])==out['log_sha256']
+   if 'native_path' in out:
+    assert out['exit']==out['native_exit']==0
+    assert shared.sha(out['path'])==out['sha256'] and shared.sha(out['native_path'])==out['native_sha256']
+ for row in proofs['rejections']:assert row['outputs'][1]['exit']==1
+ for row in proofs['positives']:assert [out['exit'] for out in row['outputs']]==[1,0]
+first=json.loads((ROOT/'student.tests/pa14/region-preliminary-performance.json').read_text())
+for filename in ('region-standard-performance.json','region-performance.json','region-cache-performance.json'):
+ last=json.loads((ROOT/'student.tests/pa14'/filename).read_text())
+ for name,work in last['workloads'].items():
+  old=first['workloads'][name]
+  assert work['source_sha256']==old['source_sha256']
+  assert [out['sha256'] for out in work['outputs']]==[out['sha256'] for out in old['outputs']]
+  if 'runtime' in work:assert [out['native']['sha256'] for out in work['outputs']]==[out['native']['sha256'] for out in old['outputs']]
+print('region/default work equations, source/native parity, layouts and six new rejection proofs verified')
+validation=json.loads((ROOT/'student.tests/pa14/region-validation.json').read_text())
+assert [validation[k] for k in ('stage_sources','prior_tests','through_tests','personal_native','parity_sources','rejection_controls','abi_controls','reducer_controls')]==[314,1621,1935,21,335,102,2,6]
+for kind in ('release','sanitized'):
+ binary=validation[kind];assert shared.sha(binary['path'])==binary['sha256']
+for row in validation['coverage']:assert shared.sha(ROOT/row['path'])==row['sha256']
+assert sum(row['path'].endswith('.t') for row in validation['coverage'])==314
+assert len(validation['rejections'])==16 and len(validation['checks'])==9
+for row in validation['checks']+validation['rejections']:
+ assert row['exit_code']==0 and shared.sha(row['log'])==row['log_sha256']
+assert len(validation['reducers'])==5
+for row in validation['reducers']+[validation['attribute_proof']]:
+ assert shared.sha(row['source'])==row['source_sha256']
+ assert shared.sha(ROOT/'student.tests/pa14'/Path(row['source']).name)==row['source_sha256']
+ for out in row['outputs']:
+  assert out['statuses']==[0,0,0]
+  for key in ('binary','log'):assert shared.sha(out[key])==out[key+'_sha256']
+  assert shared.sha(out['path'])==out['sha256'] and shared.sha(out['native_path'])==out['native_sha256']
+  assert not any(marker in Path(out['log']).read_text() for marker in ('AddressSanitizer','UndefinedBehaviorSanitizer','runtime error:'))
+ assert len(set(out['sha256'] for out in row['outputs']))==len(set(out['native_sha256'] for out in row['outputs']))==1
+print('final region validation preserves contract coverage, 335 sanitizer parity inputs, 102 rejections and six reducer/native proofs')
