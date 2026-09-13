@@ -35,7 +35,7 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
 }
 void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
 {
-    auto add = [&](NodeId d) {
+    auto add = [&](NodeId d, bool defined) {
         if (!d) return;
         auto name = decl_name(d), member = terminal(name);
         if (ast[ast[name].last].op == OP_COMPL) {
@@ -44,10 +44,12 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
             member = ids.intern(TextView(spelling.data(),spelling.size()));
         }
         auto k = key(path,member);
-        TemplatePrototype prototype{d,s,template_prototype_index.get(k)};
+        TemplatePrototype prototype{d,s,template_prototype_index.get(k),defined};
+        template_prototype_sources.put(ast.nodes.occurrences[d].source,template_prototypes.size());
         template_prototype_index.put(k,template_prototypes.size()); template_prototypes.push_back(prototype);
     };
     for (auto c = ast[n].first; c; c = ast[c].next) {
+        if (spec_has(ast[c].first,KW_FRIEND)) continue;
         if (ast[c].kind == Kind::Class) {
             index_template_members(c,definition_path(path,terminal(ast[c].detail)),s); continue;
         }
@@ -58,8 +60,12 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
                     auto name = ast[spec].detail ? terminal(ast[spec].detail) : terminal(decl_name(ast[first].first));
                     if (name) index_template_members(spec,definition_path(path,name),s);
                 }
-            for (auto item = first; item; item = ast[item].next) add(ast[item].first);
-        } else add(ast[c].kind == Kind::Function ? ast[ast[c].first].next : child(c,Kind::Declarator));
+            for (auto item = first; item; item = ast[item].next) {
+                auto d = ast[item].first;
+                add(d,child(ast[d].next,Kind::SpecialInitializer));
+            }
+        } else add(ast[c].kind == Kind::Function ? ast[ast[c].first].next : child(c,Kind::Declarator),
+            ast[c].kind == Kind::Function || child(c,Kind::Compound) || child(child(c,Kind::Initializer),Kind::SpecialInitializer));
     }
 }
 bool Analyzer::nullary_declarator(NodeId d) const
@@ -192,26 +198,43 @@ TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId p
     auto result = substitute_type(type,bindings,cache);
     Index aliases; return template_member_aliases(result,primary,aliases);
 }
-void Analyzer::check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary)
+std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary)
 {
     auto declared = facts[d].type;
-    if (!declared || types[declared].kind != TypeKind::Function) return;
+    if (!declared || types[declared].kind != TypeKind::Function) return 0;
     auto signature = template_member_signature(declared,head,primary);
-    if (!signature) return;
+    if (!signature) return 0;
+    ++definition_signature_requests;
+    auto group = template_prototype_index.get(key(path,name));
     bool unresolved = false;
-    for (auto p = template_prototype_index.get(key(path,name)); p; p = template_prototypes[p].next) {
+    if (!template_signature_groups.get(group)) {
+        for (auto p = group; p; p = template_prototypes[p].next) {
+            ++definition_signature_work;
+            auto prototype = template_prototypes[p];
+            auto type = prototype.signature;
+            if (!type) {
+                type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary);
+                template_prototypes[p].signature = type;
+            }
+            if (!type) { unresolved = true; continue; }
+            template_signature_index.put(key(group,type),p);
+        }
+        // A source bucket is immutable once all prototype types are known.
+        // An unresolved type cannot publish a negative signature result.
+        if (!unresolved) template_signature_groups.put(group,1);
+    }
+    if (auto p = template_signature_index.get(key(group,signature))) {
         auto prototype = template_prototypes[p];
-        auto type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary);
-        if (!type) { unresolved = true; continue; }
-        if (type != signature) continue;
+        if (prototype.inline_definition) throw std::runtime_error("template member was already defined in its class");
         auto current = template_exception(d,head);
         auto previous = template_exception(prototype.declarator,prototype.environment);
         if (current >= 0 && previous >= 0 && current != previous)
             throw std::runtime_error("conflicting template member exception specifications");
-        return;
+        return p;
     }
     // Special-member and not-yet-established declaration types retain their
     // own checking owner. A complete ordinary signature must name a member.
     if (!unresolved) throw std::runtime_error("template definition does not match a declared member");
+    return 0;
 }
 } }

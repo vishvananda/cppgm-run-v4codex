@@ -635,3 +635,22 @@ current-instantiation alias chain initially exposed incomplete normalization; it
 26 native programs and file audit pass. definition-signatures.cpp covers renamed
 heads, nested aliases, array adjustment, function pointers, ref qualifiers and
 trailing decltype returns. No course fixture or reference changed.
+
+
+Matched prototypes now own their definition lists. Concrete member facts retain
+the source prototype ID when the class declaration is established; later demand
+visits that prototype's definitions plus any still-unmatched special-member
+records in source order. An indexed canonical signature table is built once per
+complete source prototype bucket. Incomplete source types cannot publish a
+negative signature result. Friend declarations are excluded from member
+prototypes, and repeated ordinary definitions are rejected at definition time.
+
+Source application state remains keyed by specialization/definition. Traversal
+results now have the distinct member/source-head owner, including a valid absent
+result. Source checking may re-enter an application before prototype selection
+is published; the checked flag prevents caching a final selection at that point.
+This requires separate application and demand indexes, replacing the preliminary
+combined state optimization. Later source publication changes only the affected
+head identity. The overload control drops six entry applications to two, with
+three source signature visits and identical validated LowIR/native output.
+PA14, prior13, all 27 native programs and twelve rejection controls pass.

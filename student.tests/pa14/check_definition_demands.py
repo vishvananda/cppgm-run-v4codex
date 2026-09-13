@@ -17,10 +17,16 @@ CASES={
 }
 def source(declaration,definition):
  return 'template<class T> struct A {'+declaration+'};\ntemplate<class T> '+definition+' { return 0; }\nint main(){return 0;}\n'
+EXTRA_CASES={
+ 'friend_not_member': 'template<class T> struct A { friend int f(int); };\ntemplate<class T> int A<T>::f(int){return 0;}\nint main(){return 0;}\n',
+ 'redefinition': 'template<class T> struct A { int f(int); };\ntemplate<class T> int A<T>::f(int){return 0;}\ntemplate<class T> int A<T>::f(int){return 1;}\nint main(){return 0;}\n',
+ 'inline_redefinition': 'template<class T> struct A { int f(int){return 0;} };\ntemplate<class T> int A<T>::f(int){return 1;}\nint main(){return 0;}\n',
+}
 if __name__=='__main__':
  with tempfile.TemporaryDirectory(prefix='pa14-definition-checks-') as tmp:
-  for name,args in CASES.items():
-   src=Path(tmp)/(name+'.cpp');src.write_text(source(*args))
+  inputs={name:source(*args) for name,args in CASES.items()};inputs.update(EXTRA_CASES)
+  for name,text in inputs.items():
+   src=Path(tmp)/(name+'.cpp');src.write_text(text)
    command=[str(BINARY),'--emit-lowir','-O0','-o',str(Path(tmp)/(name+'.lowir')),str(src)]
    result=subprocess.run(command,capture_output=True,text=True,timeout=30)
    assert result.returncode==1,(name,result.returncode,result.stderr)

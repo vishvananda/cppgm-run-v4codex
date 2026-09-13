@@ -419,6 +419,7 @@ private:
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
+    Index definition_traversals, unmatched_definitions;
     std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
     std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
     std::vector<EntityId> storage_demand;
@@ -426,6 +427,7 @@ private:
     std::size_t storage_cursor = 0;
     std::size_t template_definition_work = 0;
     std::size_t definition_requests = 0, definition_hits = 0, definition_edges = 0;
+    std::size_t definition_signature_requests = 0, definition_signature_work = 0;
     ScopeId member_definition_environment = 0;
     Index template_binding_index, template_pattern_entities, template_pattern_scopes, template_bound_bodies;
     Index template_base_dependence, template_class_bindings, template_pattern_bases;
@@ -469,11 +471,18 @@ private:
     TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary);
     TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
     ScopeId template_signature_owner(TypeId type, EntityId primary);
-    void check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
+    std::uint32_t check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
     int template_exception(NodeId d, ScopeId s);
     bool nullary_declarator(NodeId d) const;
-    Index template_prototype_index;
-    struct TemplatePrototype { NodeId declarator; ScopeId environment; std::uint32_t next; };
+    Index template_prototype_index, template_prototype_sources;
+    Index template_signature_index, template_signature_groups;
+    struct TemplatePrototype {
+        NodeId declarator; ScopeId environment; std::uint32_t next;
+        TypeId signature = 0; std::uint32_t definitions = 0;
+        bool inline_definition = false;
+        TemplatePrototype(NodeId d = 0, ScopeId s = 0, std::uint32_t n = 0, bool defined = false)
+            : declarator(d), environment(s), next(n), inline_definition(defined) {}
+    };
     std::vector<TemplatePrototype> template_prototypes = std::vector<TemplatePrototype>(1);
 
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);

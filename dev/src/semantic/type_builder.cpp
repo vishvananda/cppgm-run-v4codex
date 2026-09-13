@@ -347,6 +347,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
+        if (definitions && ast.nodes.occurrences[d].context && !members[m].prototype)
+            members[m].prototype = template_prototype_sources.get(ast.nodes.occurrences[d].source);
         if (conversion_target && !members[m].conversion_target) {
             auto info = entities[scopes[owner].entity].class_info;
             members[m].conversion_target = conversion_target;

@@ -144,6 +144,7 @@ struct Entity {
 };
 enum class DemandState : unsigned char { Dormant, Queued, Active, Complete };
 struct MemberFacts {
+    std::uint32_t prototype = 0;
     TypeId call_type = 0;
     TypeId conversion_target = 0;
     EntityId next_conversion = 0;
@@ -205,6 +206,8 @@ struct Specialization {
 struct TemplateDefinition {
     NodeId source = 0, declarator = 0, initializer = 0;
     std::uint32_t parameters = 0, count = 0, next = 0;
+    std::uint32_t selected_next = 0;
+    bool checked = false;
 };
 struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
 struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public;

@@ -3,9 +3,9 @@
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 namespace {
-// CompleteTail also records that this head's own application succeeded. This
-// derived fact shares the compact source/specialization entry with its state.
-enum class DefinitionState : unsigned char { NotStarted, Active, Applied, Failed, CompleteTail };
+// Application state belongs to specialization/source. A selected-list result
+// belongs to member/source-head and can also record a completed absent result.
+enum class DefinitionState : unsigned char { NotStarted, Active, Applied, Failed, CompleteTail, AbsentTail };
 }
 std::uint32_t Analyzer::definition_root(EntityId pattern)
 {
@@ -79,6 +79,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         ++argument;
     }
     if (argument != def.count) throw std::runtime_error("incomplete member definition owner arguments");
+    std::uint64_t definition_bucket = 0;
+    std::uint32_t retained = 0; IdentifierId definition_name = 0;
     do {
         def.declarator = d; def.initializer = item ? ast[d].next : 0;
         auto member = terminal(name);
@@ -88,11 +90,13 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
             member = ids.intern(TextView(spelling.data(),spelling.size()));
         }
         auto k = key(path,member);
+        definition_bucket = k; definition_name = member;
         if (d && !template_prototype_index.get(k)) throw std::runtime_error("out-of-class member was not declared");
         if (d) check_template_member_exception(d,path,member,s);
         else if (ast[n].kind == Kind::Class) index_template_members(n,definition_path(path,member),s);
         def.next = definition_index.get(k);
-        definition_index.put(k,template_definitions.size()); template_definitions.push_back(def);
+        retained = template_definitions.size();
+        definition_index.put(k,retained); template_definitions.push_back(def);
         item = ast[item].next;
         if (item) { d = ast[item].first; name = decl_name(d); }
     } while (item);
@@ -111,13 +115,24 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         auto parameter = template_parameters[def.parameters+j];
         bind(environment,entities[parameter].name,parameter);
     }
+    std::uint32_t prototype = 0;
     if (ast[n].kind == Kind::Class) {
         auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
         bind_template_class(n,environment,nested);
     } else {
         bind_template_declaration(n,environment,0,false);
-        if (d) check_template_member_definition(d,path,terminal(name),s,primary);
+        if (d) prototype = check_template_member_definition(d,path,definition_name,s,primary);
     }
+    if (prototype) {
+        if (template_prototypes[prototype].definitions && ast[n].kind == Kind::Function)
+            throw std::runtime_error("duplicate out-of-class template member definition");
+        template_definitions[retained].selected_next = template_prototypes[prototype].definitions;
+        template_prototypes[prototype].definitions = retained;
+    } else {
+        template_definitions[retained].selected_next = unmatched_definitions.get(definition_bucket);
+        unmatched_definitions.put(definition_bucket,retained);
+    }
+    template_definitions[retained].checked = true;
     return true;
 }
 bool Analyzer::instantiate_member_definition(EntityId e)
@@ -126,20 +141,32 @@ bool Analyzer::instantiate_member_definition(EntityId e)
     auto owner = definition_owner(scopes[entities[e].owner].entity);
     if (!owner.specialization || dependent_type(entities[owner.specialization].type)) return false;
     ++definition_requests;
-    auto head = definition_index.get(key(owner.path,entities[e].name));
+    auto bucket = key(owner.path,entities[e].name);
+    auto head = definition_index.get(bucket);
     if (!head) return false;
-    // A published head owns an immutable definition tail. New declarations
-    // introduce a new head; completed old tails remain valid for this concrete
-    // specialization, independently of other owners or declaration insertion.
-    auto traversal = key(owner.specialization,head);
-    if (definition_applications.get(traversal) == unsigned(DefinitionState::CompleteTail)) {
-        ++definition_hits; return true;
+    // Source checking can re-enter this owner before prototype selection is
+    // published. Such a request uses the existing declaration path and cannot
+    // cache a final selected-list result until source checking completes.
+    auto traversal = key(e,head);
+    if (auto known = definition_traversals.get(traversal)) {
+        ++definition_hits; return known == unsigned(DefinitionState::CompleteTail);
     }
-    bool complete = true;
-    for (auto id = head; id; id = template_definitions[id].next) {
+    auto member = entities[e].member_info;
+    auto prototype = member ? members[member].prototype : 0;
+    bool source_ready = template_definitions[head].checked;
+    bool selected = source_ready && prototype && template_prototypes[prototype].signature;
+    auto current = selected ? template_prototypes[prototype].definitions : head;
+    auto unmatched = selected ? unmatched_definitions.get(bucket) : 0;
+    bool found = current || unmatched, complete = source_ready;
+    while (current || unmatched) {
+        // Preserve source order within the two immutable lists, without
+        // visiting definitions matched to a different member declaration.
+        auto id = current > unmatched ? current : unmatched;
+        auto next = template_definitions[id].selected_next;
+        if (id == current) current = selected ? next : template_definitions[id].next;
+        else unmatched = next;
         auto k = key(owner.specialization,id);
         auto state = DefinitionState(definition_applications.get(k));
-        if (state == DefinitionState::CompleteTail) { ++definition_hits; break; }
         ++definition_edges;
         if (state == DefinitionState::Failed) throw std::runtime_error("failed template member definition");
         if (state != DefinitionState::NotStarted) {
@@ -180,8 +207,8 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         }
         active_template_scope = saved_template; member_definition_environment = saved_environment;
     }
-    if (complete) definition_applications.put(traversal,unsigned(DefinitionState::CompleteTail));
-    return true;
+    if (complete) definition_traversals.put(traversal,unsigned(found ? DefinitionState::CompleteTail : DefinitionState::AbsentTail));
+    return found;
 }
 void Analyzer::demand_template_storage(EntityId e)
 {

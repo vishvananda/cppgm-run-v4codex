@@ -135,6 +135,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_definition_requests\":" << definition_requests
         << ",\"template_definition_hits\":" << definition_hits
         << ",\"template_definition_edges\":" << definition_edges
+        << ",\"template_definition_signature_requests\":" << definition_signature_requests
+        << ",\"template_definition_signature_work\":" << definition_signature_work
         << ",\"semantic_expression_bytes\":" << sizeof(Expression)
         << ",\"semantic_type_queries\":" << type_queries.size()-1
         << ",\"semantic_type_query_work\":" << query_work
