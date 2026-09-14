@@ -1,87 +1,84 @@
-# PA16 compact plan — implementation 43
+# PA16 final plan — audit 44
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
-Last reviewed commit: `7c39a6edbfa43c226036b8a92fe236722ac85dcc`
+Last reviewed commit: `95cdc3d8ec4117d69c53a32bceddcf7de6230abb`
 
-Target: **PA16 full-stage**. Entry HEAD `c9c4ddb75c65c8de2849b49ecaf42ea83d75fdab`,
-**153/154** passing. Previous goal turn: progress (initializer storage/lifecycle
-implementation and evidence). Both review markers remain unchanged.
+Target: **PA16 full-stage**. The independent audit reviewed the complete current
+architecture, stage history and all handoffs since `7c39a6ed`. Entry was
+`241c6870`, clean. [audit.md](audit.md) records the reconstruction, reducers,
+repairs, rules, ownership and scope decisions. All PA16 exit criteria pass.
 
-## Design/spec alignment
+## Final design/spec alignment
 
-Semantic class facts own the result ABI. A user-provided empty destructor stays
-nontrivial, with caller-owned result storage. Full-expression lowering now records
-its final temporary identity and avoids reopening an EH region once that result
-is complete. Potentially throwing destruction still uses the remaining live
-suffix. One qualified [oracle correction](result-reference-correction.md) changes
-only the two factory result boundaries and their uses, with a reduced source,
-N3485/ABI/LowIR proof and pinned bundle/before-after hashes. Coverage, sources,
-exit sidecars and full comparison rules are preserved.
+Immutable buffers feed streaming interned tokens and one source graph. Integrated
+semantic construction publishes canonical types, selected conversions, layouts,
+lifetime actions and demand facts. Template occurrences share source regions and
+fixed facts through immutable substitution frames. Typed constants, object parts,
+subobject addresses and invocation storage support ordinary expressions and
+canonical template queries through the same execution engine.
 
-The constant evaluator now represents the inherited member-pointer value family
-by typed member identity: null, same-owner qualification, bool/equality,
-conditionals, zero/value initialization, object projection, constexpr member
-calls and reference/aggregate/array storage. [Ownership and data flow](member-constants.md)
-include persistent scalar-reference temporary identities and demanded template
-initializer relocations. Lowering consumes selected identities and typed data;
-no string key, grammar replay or lookup reconstruction was introduced.
+Constant validity, execution and static-image classification have distinct owners.
+A required constexpr initializer includes its conversions and lifetime obligations;
+an ordinary failed constant probe retains dynamic initialization. Evaluated
+bit-fields carry target-width values into later constructor actions and static
+data packing. Selected reference temporaries retain their proper identity before
+construction, validation and relocation emission. Only the affected storage
+version changes after a late definition; activation keys include reachable
+storage dependencies and liveness. Shared value DAGs are traversed once per query.
 
-Member operations use constant work or the required receiver path. Initializer
-semantics stay sparse; data writing follows emitted items. A demanded static
-initializer visits distinct values/edges once and uses the existing function
-worklist. Final-result cleanup removes five IR instructions and one EH region
-per affected expression. The 512-call / 1,000,000-step constexpr limits remain.
-No new implementation source file or optional optimizer was needed.
+Lowering consumes typed facts directly. Automatic constant scalar arrays retain
+separate stack objects and use one copy each from structurally interned readonly
+data. Local statics own guards and destruction records. Program-owned startup and
+shutdown coordinators combine TU actions once. Result ABI and cleanup consume
+class triviality and final temporary identities. Output text is the requested
+LowIR adapter; the supplied backend is used only for authorized validation/native
+execution. No frontend or lowering behavior is delegated.
 
-## Implementation boundary and independent review
+## Audit repairs and validation
 
-Both entry implementation groups are closed: result ABI/cleanup and the recorded
-member-pointer constant-value reducer. No known failure remains in the completed
-PA16 behavior groups or the course suite. The supported member-pointer surface
-is formation, same-owner values and applications to compatible/inherited objects.
+The audit repaired bit-field publication/packing, persistent aggregate/class
+reference temporaries (including self/subobject addresses), late-definition
+cache validity, template query calls/operators/addresses/casts, cast legality in
+required constexpr arrays and unselected query branches, and exponential
+repeated traversal of shared values.
+Two new implementation sources separate constant-query adapters and shared
+explicit conversions; both are registered in the frontend source sets. Named
+cast lookahead now preserves nested template argument boundaries.
 
-Cross-owner member-pointer casts and virtual member-pointer dispatch remain
-unimplemented in the inherited runtime subset. Extending those requires new
-selected conversion adjustments and a virtual member-pointer ABI, before the
-constant evaluator can consume such facts; they are distinct source-language
-owners, not unfinished cases in this represented value algebra. Their whole-stage
-scope must be resolved by independent audit; this records the implementation
-boundary and does not waive any requirement.
+The explicit final controls add **43 native / 10 rejection** cases. Together with
+all ten inherited suites, **289 native / 93 rejection** controls pass. Required
+file audit passes (three inherited header warnings); `make test-pa16` passes
+**154/154** and `make test-report-through-pa16` passes **2266/2266**, all 16 stages.
+Sources, fixtures, status sidecars, comparison rules and reference tools are
+unchanged from audit entry. The 25 inherited oracle revisions were independently
+reviewed against their reduced standard/contract proofs; no new revision was made.
 
-Independent review remains due for all accumulated changes since the preserved
-review marker: constant cache/lifetime completeness, template query adapters,
-ABI/lifetime policy, static relocation demand and reference proofs. Green course
-checks are evidence for this implementation handoff, not assignment certification
-or authorization to advance past that review.
+## Performance acceptance
 
-## Performance evidence
+[Final measurements](final-audit-performance.md) preserve all frozen campaigns,
+the startup-amplified DAG check, all A/A and ABBA observations, flags, inputs,
+output hashes, latency/RSS, native runtime and code/data sizes. The first campaign
+identified avoidable eager constexpr-array construction; the final code removes
+it while retaining the legality check. Shared-object traversal improves compiler
+work with identical output. Common executable bytes remain identical to entry;
+no new runtime improvement is claimed.
 
-[Result/member evidence](result-performance.md) retains **302** frozen A/A+ABBA
-and final-only observations, all input/output hashes, compiler latency/RSS,
-native runtime/code/data sizes, telemetry, outliers and producer continuations.
-The 24-million-result loop improves 319.68→192.01 ms and member-array runtime
-2,622.20→685.47 ms; common executables are identical. Compiler text grows 0.66%.
-The focused 4,000-result repeat improves in all four pairs and saves 2,780 KiB
-peak RSS. Template-storage demand scales 3.97x for 4x input, with two member
-body demands at both sizes. No general speedup is claimed.
+PA16/O0 has no mandated numerical latency, memory or text ceiling. Earlier
++15% latency, +16 MiB RSS and 5.5x scaling targets are diagnostics under
+spec.md's stage-scoped acceptance, not inherited exit gates. Historical
+observations and misses remain preserved. Existing 512-call / 1,000,000-step evaluator limits and the small-array
+expansion cap remain; correctness and course comparison are unchanged. Native
+optimization, MIR/allocation/debug and self-hosting are later-stage surfaces.
 
-[Initializer](initialization-performance.md), [storage](storage-performance.md),
-[objects](object-performance.md) and [audit](audit-performance.md) preserve earlier
-measurements. PA16/O0 has no mandated numerical latency/RSS/text ceiling;
-historical percentage/scaling targets are diagnostics under stage-scoped
-acceptance, not inherited exit gates. Required semantic costs and all growth
-remain disclosed; correctness, existing resource limits and coverage are intact.
+## Completion ledger
 
-## Handoff ledger
+All object, initializer/lifecycle and result/member handoffs since the previous
+checkpoint are reviewed in the audit ledger. No PA16 handoff remains unaudited.
+Cross-owner member-pointer conversion and virtual member-pointer ABI are inherited
+source-model extensions outside PA12's required member-pointer boundary; the
+represented same-owner value family is covered. PA17/18 template extensions are
+explicitly deferred by the PA16 handout, not unfinished constexpr work.
 
-| Increment / evidence | Result |
-| --- | --- |
-| Implementations 41–42 | Typed object/address execution, constructor/conversion facts, scalar-array readonly copies and program lifecycle ownership; through entry 153/154. Earlier proofs/evidence remain in their linked documents. |
-| `ee190270` result boundary | Final temporary cleanup correction; one narrow result-ABI oracle revision; seven native lifetime controls, including structural potentially-throwing cleanup. |
-| `048014e8` member values | Typed member constants through scalar/object/template paths; scalar-reference temporary identity and demanded relocation targets. 34 native / 6 rejection controls; the formerly pending reducer now passes. |
-| Required final checks | `make test-pa16`: **154/154**; `make test-report-through-pa15`: **2112/2112**; through PA16: **2266/2266**. File audit passes with three inherited header warnings. |
-| Explicit personal validation | All eight prior suites pass (**205 native / 77 rejection**), plus **41 native / 6 rejection** new controls. Total **246 native / 83 rejection**. |
-| Performance / evidence binding | [Checkpoint](../student.tests/pa16/result-checkpoint.json) and [verifier](../student.tests/pa16/verify_result.py) bind current code, unchanged coverage, oracle revision, checks and frozen measurements. |
-
-Handoff: implementation work for the completed behavior groups is coherent and
-validated; the independent whole-stage review above remains outstanding.
+[Final evidence](../student.tests/pa16/final-checkpoint.json) and its
+[verifier](../student.tests/pa16/verify_final.py) bind the reviewed source commit,
+protected trees, control results, required checks and preserved measurements.
