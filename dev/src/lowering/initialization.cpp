@@ -93,7 +93,7 @@ void Procedural::global(EntityId e)
         }
         else if (reference(t)) {
             auto value = sem.static_value(entity.initializer, t);
-            if (value.kind != semantic::StaticValue::Address) {
+            if (value.kind != semantic::StaticValue::Address && value.kind != semantic::StaticValue::String) {
                 Global temp;
                 temp.symbol = fresh_symbol("@__reference_" + std::to_string(p.symbols.size()+1));
                 temp.type = type(sem.types[t].child); temp.data.begin = p.data.size(); temp.data.count = 1;
