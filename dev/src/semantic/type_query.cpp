@@ -65,6 +65,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (e && (entity.kind == EntityKind::Alias || entity.kind == EntityKind::Type)) {
             if (!callee) throw std::runtime_error("type name used as value in type query");
             q.kind = QueryKind::TypeValue; q.type = entity.type;
+        } else if (entity.template_parameter) {
+            q.kind = QueryKind::TemplateValueParameter; q.entity = e; q.type = entity.type;
         } else if (auto ordinal = signature_parameters.get(e)) {
             q.kind = QueryKind::Parameter; q.type = entity.type; q.value = ordinal-1;
         } else {
@@ -80,8 +82,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             auto list = child(ast[name].last,Kind::TemplateArguments);
             std::vector<TypeId> arguments;
             for (auto a = ast[list].first; a; a = ast[a].next) {
-                if (ast[a].kind != Kind::TypeId) throw std::runtime_error("type argument required in type query");
-                auto type = type_id(a,s);
+                auto type = template_argument_node(a,s);
                 if (template_type_probe && !type) return 0;
                 arguments.push_back(type);
             }
@@ -114,9 +115,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         q.kind = QueryKind::Cast; q.op = node.op; q.type = type_id(first,s);
         auto child = expression_query(ast[first].next,s);
         if (template_type_probe) {
-            if (!q.type || !child || dependent_type(q.type) || !arithmetic(q.type)) return 0;
+            if (!q.type || !child || (!dependent_type(q.type) && !arithmetic(q.type))) return 0;
             auto type = query_fact(child).expression.type;
-            if (!type || dependent_type(type) || !arithmetic(type)) return 0;
+            if ((!type && !query_fact(child).dependent) || (type && !dependent_type(type) && !arithmetic(type))) return 0;
         }
         children.push_back(child); break;
     }
@@ -168,6 +169,12 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     auto& results = owner ? specialization_query_cache : cache;
     if (auto old = results.get(cache_key)) return old;
     auto q = type_queries[id];
+    if (q.kind == QueryKind::TemplateValueParameter) {
+        auto arg = owner ? substitution_argument(owner,q.entity) : bindings.get(q.entity);
+        if (!arg) return 0;
+        if (!value_argument(arg)) throw std::logic_error("type bound to a value parameter");
+        auto result = argument_query(arg); results.put(cache_key,result); return result;
+    }
     if (owner && q.context) q.context = substitution_scope(owner,q.context);
     if (owner && q.entity) q.entity = substitution_binding(owner,q.entity);
     if (q.type) {
@@ -177,7 +184,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     if (q.arguments) {
         auto pack = argument_packs[q.arguments]; std::vector<TypeId> args;
         for (unsigned j = 0; j < pack.count; ++j) {
-            auto type = substitute_type(argument_types[pack.offset+j],bindings,cache,owner);
+            auto type = substitute_argument(argument_types[pack.offset+j],bindings,cache,owner);
             if (!type) return 0;
             args.push_back(type);
         }
@@ -206,6 +213,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         children.push_back(query_fact(query_edges[q.offset+i])); r.dependent |= children.back().dependent;
     }
     r.dependent |= q.type && dependent_type(q.type);
+    r.dependent |= q.kind == QueryKind::TemplateValueParameter;
     // A template access context belongs to the key, but does not alone make
     // fixed operands dependent: unknown_call(1) must fail at definition time.
     if (q.entity && entities[q.entity].template_pattern) {
@@ -219,7 +227,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     if (q.arguments) {
         auto pack = argument_packs[q.arguments];
-        for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_type(argument_types[pack.offset+i]);
+        for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
     if (q.kind == QueryKind::Sizeof) x.type = types.fundamental(FT_UNSIGNED_LONG_INT);
@@ -235,7 +243,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     bool inspect = !r.dependent;
-    if (r.dependent && (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter) && q.type) inspect = true;
+    if (r.dependent && (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter || q.kind == QueryKind::TemplateValueParameter) && q.type) inspect = true;
     if (r.dependent && q.kind == QueryKind::Member && !children.empty()) {
         auto type = children[0].expression.type;
         if (q.op == OP_ARROW && pointer(type)) type = types[type].child;
@@ -255,6 +263,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     if (inspect) switch (q.kind) {
     case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
+    case QueryKind::TemplateValueParameter:
+        x.type = q.type; r.declared_type = q.type; x.entity = q.entity; break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
     case QueryKind::QualifiedValue: {
         if (!class_value(q.type)) throw std::runtime_error("value qualifier is not a class");

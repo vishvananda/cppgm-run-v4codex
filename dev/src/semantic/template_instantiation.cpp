@@ -77,9 +77,7 @@ ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
         auto parameter = declarations[d].entity;
         if (!entities[parameter].template_parameter) continue;
         if (ordinal == pack.count) throw std::logic_error("default head argument count mismatch");
-        auto alias = make_entity(EntityKind::Alias,environment,entities[parameter].name,0);
-        entities[alias].type = argument_types[pack.offset+ordinal++];
-        bind(environment,entities[alias].name,alias);
+        bind_argument(environment,parameter,argument_types[pack.offset+ordinal++]);
     }
     if (ordinal != pack.count) throw std::logic_error("incomplete default argument head");
     default_environments.put(k,environment); return environment;

@@ -34,9 +34,10 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     std::vector<abi_mangle::Id> args;
     auto pack = sem.query_arguments(q.arguments);
     for (unsigned j = 0; j < pack.count; ++j)
-        args.push_back(abi.make(Kind::TypeArgument,abi_type(sem.template_argument(pack.offset+j))));
+        args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     switch (q.kind) {
     case QueryKind::Value: result = abi.make(Kind::Value,abi_type(q.type),0,0,q.value); break;
+    case QueryKind::TemplateValueParameter: result = abi.make(Kind::ExprParameter,0,0,0,sem.template_ordinal(q.entity)); break;
     case QueryKind::Parameter: result = abi.make(Kind::ExprFunctionParameter,0,0,0,q.value); break;
     case QueryKind::Name: {
         auto entity = sem.entities[q.entity];

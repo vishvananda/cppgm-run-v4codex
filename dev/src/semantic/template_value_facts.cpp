@@ -44,7 +44,12 @@ std::uint32_t Analyzer::query_value(QueryId id)
         } else if (query.kind == QueryKind::Parenthesized) {
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {
-            value = convert(constants[query_value(query_edges[query.offset])],query.type,true);
+            auto operand = query_edges[query.offset];
+            if (query.op == TOK_INVALID) {
+                auto arg = convert_argument(value_argument_id(operand),query.type);
+                if (!arg) throw std::runtime_error("invalid implicit constant template conversion");
+                value = constants[query_value(argument_query(arg))];
+            } else value = convert(constants[query_value(operand)],query.type,true);
         } else if (query.kind == QueryKind::Conditional) {
             auto condition = constants[query_value(query_edges[query.offset])];
             if (condition.valid && !scoped_enum(condition.type))

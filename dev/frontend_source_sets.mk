@@ -84,3 +84,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_initializers
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_operator_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_initialization_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_destructor_facts
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_arguments

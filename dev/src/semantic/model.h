@@ -9,6 +9,12 @@ using syntax::NodeId;
 typedef std::uint32_t TypeId;
 typedef std::uint32_t EntityId;
 typedef std::uint32_t ScopeId;
+// Compact disjoint identities: a type argument is a TypeId; a value argument
+// tags a canonical QueryId. Constants are Value queries (type plus bits), and
+// dependent expressions retain their typed query graph until substitution.
+using ArgumentId = std::uint32_t;
+inline bool value_argument(ArgumentId a) { return (a >> 31) != 0; }
+inline std::uint32_t argument_query(ArgumentId a) { return a & 0x7fffffffU; }
 
 using Index = IdIndex;
 

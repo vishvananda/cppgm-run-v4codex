@@ -15,7 +15,17 @@ std::size_t Parser::probe_angles(std::size_t ahead)
         if (ast.telemetry) ++angle_work;
         if (in.peek(i).kind == PostTokenKind::eof || in.is(";", i) || in.is("}", i)) return ahead;
         if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
-        else if (in.is("<", i)) angle_stack.push_back(i);
+        else if (in.is("<", i)) {
+            // A relational '<' in a value argument does not add an angle
+            // level. Classify nested template heads from the indexed names;
+            // otherwise a typedef predeclaration can swallow its own name.
+            auto prior = in.peek(i-1);
+            auto binding = identifier(i-1) ? names.lookup(scope,prior.text) : Binding();
+            bool templated = template_category(binding.category) || (i >= 2 && in.is("template",i-2));
+            if (binding.category == Category::Unknown && identifier(i-1))
+                templated |= lexical_hint(prior.text) & 2;
+            if (templated) angle_stack.push_back(i);
+        }
         else if (in.is(">", i) || in.is(">>", i)) {
             unsigned pieces = in.is(">>", i) ? 2 : 1;
             while (pieces-- && !angle_stack.empty()) {
@@ -56,7 +66,8 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
         bool potential = explicit_template || template_category(binding.category);
         if (binding.category == Category::Unknown) {
             potential |= lexical_hint(token.text) & 2;
-            if (!potential && in.is("<", ahead) && identifier(ahead + 1)) potential = type_start(ahead + 1);
+            if (!potential && in.is("<", ahead) && identifier(ahead + 1) &&
+                (!qualified || !in.is("<",ahead+2))) potential = type_start(ahead + 1);
             potential |= builtin(ahead + 1) || in.is("typename", ahead + 1) ||
                          in.is("const", ahead + 1) || in.is("volatile", ahead + 1);
         }

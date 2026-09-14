@@ -108,7 +108,7 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
     if (binding.category == Category::Unknown && ast[part].text) {
         potential |= lexical_hint(ast[part].text) & 2;
         // An unresolved name with an explicit builtin type argument is unambiguous.
-        if (!potential && in.is("<") && identifier(1)) potential = type_start(1);
+        if (!potential && in.is("<") && identifier(1) && (!qualified || !in.is("<",2))) potential = type_start(1);
         potential |= builtin(1) || in.is("typename", 1) || in.is("const", 1) || in.is("volatile", 1);
     }
     if (in.is("<") && potential) ast.append(part, template_arguments());
@@ -145,7 +145,18 @@ NodeId Parser::template_arguments()
     angle_expression = 1;
     if (!in.is(">") && !in.is(">>")) {
         do {
-            NodeId arg = type_start() ? type_id() : expression(2);
+            bool type = type_start();
+            if (type) {
+                auto end = probe_type(0);
+                // Functional casts and braced construction are expressions.
+                // A decltype-qualified name is retained as a name until the
+                // semantic owner can distinguish its type/value member.
+                if (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("&",end+1) &&
+                    !in.is("&&",end+1) && !type_start(end+1) && !in.is(")",end+1))) type = false;
+                if (builtin() && in.is("(",end) && in.is(")",end+1)) type = false;
+                if (in.is("decltype") && in.is("::",in.matching(1)+1)) type = false;
+            }
+            NodeId arg = type ? type_id() : expression(2);
             if (in.eat("...")) arg = wrap(Kind::PackExpression, arg);
             ast.append(args, arg);
         } while (in.eat(","));

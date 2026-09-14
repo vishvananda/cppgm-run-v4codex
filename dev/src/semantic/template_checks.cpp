@@ -9,7 +9,7 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
         if (scopes[scope].kind != ScopeKind::Template) continue;
         for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
             auto e = declarations[d].entity;
-            if (entities[e].template_parameter && entities[e].name) parameters.put(entities[e].name,1);
+            if (entities[e].template_parameter && entities[e].name) parameters.put(entities[e].name,entities[e].kind == EntityKind::Type ? 1 : 2);
         }
     }
     struct Work { NodeId node; bool callee; };
@@ -27,7 +27,7 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
         if (node.kind == Kind::UsingDeclaration) declared = terminal(ast[node.first].detail);
         if (declared && parameters.get(declared)) throw std::runtime_error("declaration redeclares template parameter");
         if (node.kind == Kind::IdExpression && !item.callee && ast[node.detail].first == ast[node.detail].last &&
-            parameters.get(terminal(node.detail))) throw std::runtime_error("type template parameter used as a value");
+            parameters.get(terminal(node.detail)) == 1) throw std::runtime_error("type template parameter used as a value");
         if (node.detail) work.push_back({node.detail,false});
         for (auto child = node.first; child; child = ast[child].next)
             work.push_back({child,node.kind == Kind::Call && child == node.first});
@@ -95,8 +95,14 @@ ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
         if (spec.pattern != primary) return 0;
         auto args = argument_packs[spec.arguments];
         if (args.count != templates[entities[primary].template_info].count || args.count > canonical_parameters.size()) return 0;
-        for (unsigned i = 0; i < args.count; ++i)
-            if (argument_types[args.offset+i] != canonical_parameters[i]) return 0;
+        Index bindings, cache;
+        auto head = templates[entities[primary].template_info];
+        for (unsigned i = 0; i < args.count; ++i) {
+            auto p = template_parameters[head.offset+i];
+            auto arg = canonical_argument(p,i,bindings,cache);
+            if (argument_types[args.offset+i] != arg) return 0;
+            bindings.put(p,arg);
+        }
         return entities[primary].scope;
     }
     if (t.kind == TypeKind::DependentName && !t.bound) {
@@ -135,7 +141,8 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         } else {
             std::vector<TypeId> args;
             for (unsigned i = 0; i < t.count; ++i) {
-                auto value = template_member_aliases(types.parameters[t.offset+i],primary,cache);
+                auto arg = types.parameters[t.offset+i];
+                auto value = value_argument(arg) ? arg : template_member_aliases(arg,primary,cache);
                 if (!value) return 0;
                 args.push_back(value);
             }
@@ -146,7 +153,7 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         std::vector<TypeId> args; bool changed = false;
         for (unsigned i = 0; i < pack.count; ++i) {
             auto source = argument_types[pack.offset+i];
-            auto value = template_member_aliases(source,primary,cache);
+            auto value = value_argument(source) ? source : template_member_aliases(source,primary,cache);
             if (!value) return 0;
             args.push_back(value); changed |= value != source;
         }
@@ -168,17 +175,18 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
 void Analyzer::template_signature_bindings(ScopeId scope, EntityId primary, Index& bindings)
 {
     auto head = templates[entities[primary].template_info];
+    Index cache;
     for (; scope; scope = scopes[scope].parent) {
         if (auto parameters = definition_source_parameters.get(scope)) {
             for (unsigned i = 0; i < head.count; ++i)
-                bindings.put(template_parameters[parameters-1+i],canonical_parameters[i]);
+                bindings.put(template_parameters[parameters-1+i],canonical_argument(template_parameters[parameters-1+i],i,bindings,cache));
         } else if (scopes[scope].kind == ScopeKind::Template) {
             for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
                 auto parameter = declarations[d].entity;
                 if (!entities[parameter].template_parameter) continue;
                 auto ordinal = parameter_ordinals.get(parameter);
                 if (ordinal && ordinal <= head.count)
-                    bindings.put(parameter,canonical_parameters[ordinal-1]);
+                    bindings.put(parameter,canonical_argument(parameter,ordinal-1,bindings,cache));
             }
         }
     }

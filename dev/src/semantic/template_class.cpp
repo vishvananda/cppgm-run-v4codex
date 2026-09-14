@@ -63,17 +63,26 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
         if (head.offset == selected.offset) return value;
         if (!ready) {
             for (unsigned j = 0; j < head.count; ++j)
-                bindings.put(template_parameters[head.offset+j],entities[template_parameters[selected.offset+j]].type);
+                bindings.put(template_parameters[head.offset+j],parameter_argument(template_parameters[selected.offset+j]));
             ready = true;
         }
-        return substitute_type(value,bindings,cache);
+        return substitute_argument(value,bindings,cache);
     };
     for (unsigned j = 0; j < current.count; ++j) {
         auto parameter = template_parameters[current.offset+j];
+        if (previous.environment) {
+            auto old_parameter = template_parameters[previous.offset+j];
+            if (entities[old_parameter].kind != entities[parameter].kind)
+                throw std::runtime_error("template parameter kind differs across declarations");
+            if (entities[parameter].kind != EntityKind::Type &&
+                translate(entities[old_parameter].type,previous,old_bindings,old_cache,old_ready) !=
+                translate(entities[parameter].type,current,current_bindings,current_cache,current_ready))
+                throw std::runtime_error("non-type parameter type differs across declarations");
+        }
         auto init = entities[parameter].initializer;
         auto old = previous.environment ? template_default_types.get(template_parameters[previous.offset+j]) : 0;
         if (old && init) throw std::runtime_error("duplicate template default argument");
-        TypeId value = init ? translate(type_id(ast[init].first,s),current,current_bindings,current_cache,current_ready) :
+        TypeId value = init ? translate(template_argument_node(ast[init].first,s),current,current_bindings,current_cache,current_ready) :
             old ? translate(old,previous,old_bindings,old_cache,old_ready) : 0;
         if (value) template_default_types.put(template_parameters[selected.offset+j],value);
     }
@@ -99,7 +108,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Class) bind_template_class(n,s,e);
     return entities[e].type;
 }
-bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args)
+bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial)
 {
     auto t = templates[entities[pattern].template_info];
     if (args.size() > t.count) return false;
@@ -110,12 +119,21 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args)
             TypeId value = template_default_types.get(p);
             if (!value) {
                 NodeId d = entities[p].initializer;
-                if (!d) return false;
-                value = type_id(ast[d].first,t.environment);
+                if (!d) return partial;
+                value = template_argument_node(ast[d].first,t.environment);
             }
-            value = substitute_type(value,bindings,cache);
+            value = substitute_argument(value,bindings,cache);
             if (!value) return false;
             args.push_back(value);
+        }
+        if (entities[p].kind == EntityKind::Type) {
+            if (value_argument(args[j])) return false;
+        } else {
+            if (!value_argument(args[j])) return false;
+            auto target = substitute_type(entities[p].type,bindings,cache);
+            if (!target) return false;
+            args[j] = convert_argument(args[j],target);
+            if (!args[j]) return false;
         }
         bindings.put(p,args[j]);
     }
@@ -150,9 +168,7 @@ ScopeId Analyzer::specialization_environment(EntityId e)
     auto pack = argument_packs[spec.arguments];
     for (unsigned j = 0; j < pack.count; ++j) {
         auto parameter = template_parameters[pattern.offset+j];
-        auto alias = make_entity(EntityKind::Alias,environment,entities[parameter].name,0);
-        entities[alias].type = argument_types[pack.offset+j];
-        bind(environment,entities[alias].name,alias);
+        bind_argument(environment,parameter,argument_types[pack.offset+j]);
     }
     specializations[index].environment = environment;
     return environment;
@@ -166,11 +182,7 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     if (!pattern) throw std::runtime_error("template-id names a nontemplate class");
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
-        if (ast[a].kind != Kind::TypeId) {
-            if (template_type_probe) return 0;
-            throw std::runtime_error("type template argument required");
-        }
-        auto type = type_id(a,s);
+        auto type = template_argument_node(a,s);
         if (template_type_probe && !type) return 0;
         args.push_back(type);
     }
@@ -199,8 +211,7 @@ void Analyzer::complete_class(EntityId e)
     for (unsigned j = 0; j < pack.count; ++j) {
         auto parameter = template_parameters[pattern.offset+j];
         if (local(environment,entities[parameter].name)) continue;
-        auto alias = make_entity(EntityKind::Alias,environment,entities[parameter].name,0);
-        entities[alias].type = argument_types[pack.offset+j]; bind(environment,entities[alias].name,alias);
+        bind_argument(environment,parameter,argument_types[pack.offset+j]);
     }
     auto context = ast.new_context();
     auto source = ast.instantiate(pattern.body,context);

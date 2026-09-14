@@ -51,3 +51,26 @@ boundaries; PA15 adds no optional optimizer or numerical performance gate.
   to recover scratch capacity; inventory in `historical-compression.json` there.
 - Next: value argument identity/substitution. Performance and full handoff remain
   pending; this increment does not close the implementation turn.
+
+### Typed value argument increment
+
+- Added disjoint compact type/query argument identities; integral values intern
+  by unqualified type and bits. Dependent arguments retain canonical query DAGs,
+  substitute through immutable frames, and fold before specialization lookup.
+  No value is stored as a fake Type node; arguments never key on source text.
+- Extended class/function heads, non-narrowing argument conversion, dependent
+  defaults, renamed out-of-class definitions, canonical member signatures and
+  ABI arguments. Added kind/conversion candidate filters and deduction along
+  explicit base edges. Retained syntax handles functional casts, decltype member
+  arguments and relational '<' without replaying grammar.
+- Complexity: expected O(arguments + dependent query/type nodes) per new key;
+  O(arguments) normalization on reuse, cached completed queries, TU-owned flat
+  indexes and geometrically grown arrays. No optimizer or global invalidation.
+- Serial validation: 114/177 PA15, 1935/1935 earlier, file audit pass; 24 explicit
+  value argument groups and ten constant groups. Two overlapping intermediate
+  reports had shared-counter totals; superseded by `value-through4.log`.
+- Remaining implementation is distinct: pack partitions/expansion; explicit
+  specialization/refresh; broader constant execution and source obligations
+  (including unused ordinary member assertions); remaining declaration parsing
+  and aggregate LowIR contract shapes. These are required, not audit waivers.
+  Performance evidence and handoff review still pending.

@@ -11,13 +11,9 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
     for (auto d = scopes[environment].first_decl; d; d = declarations[d].next) {
         EntityId parameter = declarations[d].entity;
         if (!entities[parameter].template_parameter) continue;
-        if (count == canonical_parameters.size()) {
-            auto e = make_entity(EntityKind::Type,0,0,0);
-            entities[e].template_parameter = true; entities[e].type = types.named(e);
-            canonical_parameters.push_back(entities[e].type);
-        }
-        bindings.put(parameter,canonical_parameters[count]);
-        shape.push_back(canonical_parameters[count++]);
+        auto argument = canonical_argument(parameter,count,bindings,cache);
+        bindings.put(parameter,argument);
+        shape.push_back(argument); ++count;
     }
     TypeId normalized = substitute_type(type,bindings,cache);
     if (!normalized) throw std::runtime_error("invalid function template declaration");

@@ -50,7 +50,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         if (t.bound) {
             std::vector<abi_mangle::Id> args;
             for (unsigned j = 0; j < t.count; ++j)
-                args.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.types.parameters[t.offset+j])));
+                args.push_back(abi_argument(sem.types.parameters[t.offset+j]));
             result = abi.make(abi_mangle::Kind::Template,result,0,0,0,args);
         }
         break;

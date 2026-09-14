@@ -134,6 +134,7 @@ class Procedural {
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
     abi_mangle::Id abi_query(semantic::QueryId q);
+    abi_mangle::Id abi_argument(semantic::ArgumentId argument);
     semantic::Index abi_queries;
     abi_mangle::Id abi_function_context(EntityId e);
     abi_mangle::Id abi_entity_name(EntityId e);

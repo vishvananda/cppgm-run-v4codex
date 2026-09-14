@@ -1,5 +1,13 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
+abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
+{
+    using abi_mangle::Kind;
+    if (!semantic::value_argument(argument)) return abi.make(Kind::TypeArgument,abi_type(argument));
+    auto q = semantic::argument_query(argument);
+    auto value = abi_query(q);
+    return sem.type_query(q).kind == semantic::QueryKind::Value ? value : abi.make(Kind::ExpressionArgument,value);
+}
 abi_mangle::Id Procedural::abi_entity_name(EntityId e)
 {
     auto entity = sem.entities[e];
@@ -8,7 +16,7 @@ abi_mangle::Id Procedural::abi_entity_name(EntityId e)
     auto pack = sem.specialization_arguments(e);
     std::vector<abi_mangle::Id> arguments;
     for (unsigned j = 0; j < pack.count; ++j)
-        arguments.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.template_argument(pack.offset+j))));
+        arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     return abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);
 }
 bool Procedural::internal_scope(semantic::ScopeId s)
@@ -34,7 +42,7 @@ bool Procedural::local_abi_type(TypeId t)
         auto e = sem.entities[type.entity];
         local |= local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
-        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_type(sem.template_argument(args.offset+j));
+        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
     } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(sem.entities[type.entity].type);
     if (type.kind == TypeKind::Function)
         for (unsigned j = 0; j < type.count; ++j) local |= local_abi_type(sem.types.parameters[type.offset+j]);
@@ -74,7 +82,7 @@ void Procedural::template_function_abi(EntityId e, abi_mangle::Function& target)
     auto pack = sem.specialization_arguments(e);
     target.template_prefix = true;
     for (unsigned j = 0; j < pack.count; ++j)
-        target.arguments.push_back(abi.make(abi_mangle::Kind::TypeArgument,abi_type(sem.template_argument(pack.offset+j))));
+        target.arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     auto t = sem.types[sem.entities[sem.specialization_pattern(e)].type];
     target.result = abi_type(t.child); target.parameters.clear();
     for (unsigned j = 0; j < t.count; ++j) target.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));

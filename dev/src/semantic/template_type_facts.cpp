@@ -28,7 +28,8 @@ TypeId Analyzer::substitution_argument(std::uint32_t id, EntityId parameter) con
         auto pack = argument_packs[specializations[frame.specialization].arguments];
         // Partial explicit function arguments leave the remaining parameters
         // symbolic until deduction establishes a different specialization.
-        return ordinal <= pack.count ? argument_types[pack.offset+ordinal-1] : entities[parameter].type;
+        return ordinal <= pack.count ? argument_types[pack.offset+ordinal-1] :
+            entities[parameter].kind == EntityKind::Type ? entities[parameter].type : 0;
     }
     return 0;
 }

@@ -33,7 +33,8 @@ public:
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
-    TypeId template_argument(std::uint32_t n) const { return argument_types[n]; }
+    ArgumentId template_argument(std::uint32_t n) const { return argument_types[n]; }
+    TypeId argument_type(ArgumentId a) { return value_argument(a) ? query_fact(argument_query(a)).expression.type : a; }
     unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
     const TypeQuery& type_query(QueryId id) const { return type_queries[id]; }
     QueryId type_query_child(QueryId id, unsigned i) const { return query_edges[type_queries[id].offset+i]; }
@@ -330,10 +331,19 @@ private:
     Index object_actions, specialization_index, parameter_ordinals;
     Index template_families, template_signatures;
     std::vector<TypeId> canonical_parameters;
+    Index canonical_value_parameters;
     ScopeId active_template_scope = 0;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     Index template_default_types;
+    ArgumentId value_argument_id(QueryId query);
+    ArgumentId template_argument_node(NodeId n, ScopeId scope);
+    ArgumentId parameter_argument(EntityId parameter);
+    ArgumentId canonical_argument(EntityId parameter, unsigned ordinal, const Index& bindings, Index& cache);
+    ArgumentId substitute_argument(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame = 0);
+    bool dependent_argument(ArgumentId arg);
+    ArgumentId convert_argument(ArgumentId arg, TypeId target);
+    EntityId bind_argument(ScopeId scope, EntityId parameter, ArgumentId arg);
     std::vector<TypeQuery> type_queries = std::vector<TypeQuery>(1);
     std::vector<QueryId> query_edges, query_slots;
     std::vector<std::uint64_t> query_hashes = std::vector<std::uint64_t>(1);
@@ -370,7 +380,7 @@ private:
     TypeQueryFact query_conditional(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId dependent_decltype(NodeId n, ScopeId s);
     std::vector<TypeArguments> argument_packs;
-    std::vector<TypeId> argument_types;
+    std::vector<ArgumentId> argument_types;
     std::vector<std::uint32_t> argument_slots;
     std::vector<Specialization> specializations;
     // A complete substitution frame and source type/query identify immutable
@@ -481,7 +491,7 @@ private:
     EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);
     EntityId class_template_name(NodeId part, EntityId e, ScopeId s);
     void complete_class(EntityId e);
-    bool template_defaults(EntityId pattern, std::vector<TypeId>& args);
+    bool template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial = false);
     ScopeId specialization_environment(EntityId e);
     bool retain_template_definition(NodeId n, ScopeId s);
     void explicit_instantiation(NodeId n, ScopeId s);

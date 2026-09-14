@@ -32,7 +32,7 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
             }
         std::vector<TypeId> args;
         for (unsigned i = 0; i < head.count; ++i)
-            args.push_back(entities[template_parameters[parameters+i]].type);
+            args.push_back(parameter_argument(template_parameters[parameters+i]));
         return entities[specialize_class(e,args)].type;
     }
     auto scope = entities[e].scope, parent = entities[e].owner;
@@ -52,13 +52,9 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         if (prefix && dependent_type(prefix)) {
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
-                if (ast[a].kind != Kind::TypeId) {
-                    if (template_type_probe) return 0;
-                    throw std::runtime_error("type template argument required");
-                }
-                auto type = type_id(a,s);
+                auto type = template_argument_node(a,s);
                 if (template_type_probe && !type) return 0;
-                args.push_back(types.signature(type));
+                args.push_back(value_argument(type) ? type : types.signature(type));
             }
             prefix = types.dependent_name(prefix,ast[p].text,args,list);
             if (p == last) return prefix;

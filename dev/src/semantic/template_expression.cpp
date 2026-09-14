@@ -34,7 +34,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         // ordinary fixed-expression validation and concrete object identities.
         if (signature_parameters.get(e) && scopes[entities[e].owner].kind != ScopeKind::Function) return;
         bool object = class_value(value) || types[value].kind == TypeKind::Pointer || types[value].kind == TypeKind::Function;
-        bool value_dependent = binding.dependent && (dependent_type(type) ||
+        bool value_dependent = binding.dependent && (entities[e].template_parameter || dependent_type(type) ||
             field_fact(e).bit_field || ((types[type].cv & 1) && integral(type)));
         if (!e || value_dependent || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) ||
             !type || scopes[entities[e].owner].kind == ScopeKind::Class || (types[value].kind != TypeKind::Fundamental && !object))

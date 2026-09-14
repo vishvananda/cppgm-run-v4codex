@@ -119,6 +119,17 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     ScopeId ts = make_scope(ScopeKind::Template, s);
     NodeId params = ast[n].first;
     for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
+        if (definitions && ast[p].kind == Kind::NonTypeParameter) {
+            auto specs = ast[p].first;
+            auto d = child(p,Kind::Declarator);
+            auto type = declarator(d,specifiers(specs,ts),ts);
+            if (!dependent_type(type) && !integral(type)) throw std::runtime_error("integral template parameter required");
+            auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
+            entities[e].template_parameter = true; entities[e].type = types.unqualified(type);
+            entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
+            bind(ts,entities[e].name,e); record(ts,e,p,type,EntityKind::Parameter);
+            continue;
+        }
         if (ast[p].kind != Kind::TypeParameter) continue;
         NodeId identifier = child(p, Kind::Identifier);
         if (!identifier && !definitions) continue;

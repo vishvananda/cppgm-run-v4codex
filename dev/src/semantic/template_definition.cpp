@@ -73,8 +73,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
     if (def.count != templates[entities[primary].template_info].count) throw std::runtime_error("member template head does not match owner");
     unsigned argument = 0;
     for (auto a = ast[child(primary_part,Kind::TemplateArguments)].first; a; a = ast[a].next) {
-        if (argument >= def.count || ast[a].kind != Kind::TypeId ||
-            types.signature(type_id(a,s)) != entities[template_parameters[def.parameters+argument]].type)
+        if (argument >= def.count ||
+            template_argument_node(a,s) != parameter_argument(template_parameters[def.parameters+argument]))
             throw std::runtime_error("member definition does not name its primary template");
         ++argument;
     }
@@ -193,8 +193,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         ScopeId environment = make_scope(ScopeKind::Template,entities[e].owner);
         for (unsigned j = 0; j < def.count; ++j) {
             auto p = template_parameters[def.parameters+j];
-            auto alias = make_entity(EntityKind::Alias,environment,entities[p].name,0);
-            entities[alias].type = argument_types[pack.offset+j]; bind(environment,entities[alias].name,alias);
+            bind_argument(environment,p,argument_types[pack.offset+j]);
         }
         auto context = ast.new_context();
         auto source = ast.instantiate(def.source,context);
