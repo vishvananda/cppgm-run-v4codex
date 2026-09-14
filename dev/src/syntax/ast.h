@@ -217,7 +217,7 @@ public:
     const Node& operator[](NodeId id) const { return nodes[id]; }
     // A view projects structural edges through a context without copying syntax.
     Node view(NodeId id) const {
-        if (!nodes.occurrences[id].context) return paren_roles.empty() ? nodes[id] : source_view(id);
+        if (!nodes.occurrences[id].context && paren_roles.empty()) return nodes[id];
         return project_view(id);
     }
     Node source_view(NodeId id) const;
