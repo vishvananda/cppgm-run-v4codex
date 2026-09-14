@@ -133,11 +133,11 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (!returned || types[returned].kind == TypeKind::Array || types[returned].kind == TypeKind::Function) return 0;
         std::vector<TypeId> params;
         for (unsigned i = 0; i < p.count; ++i) {
-            std::vector<ArgumentId> expanded;
-            substitute_arguments(types.parameters[p.offset+i],bindings,cache,owner,expanded);
-            for (auto t : expanded) {
+            auto begin = params.size();
+            substitute_arguments(types.parameters[p.offset+i],bindings,cache,owner,params);
+            for (auto j = begin; j < params.size(); ++j) {
+                auto t = params[j];
                 if (!t || value_argument(t) || fundamental(t,FT_VOID)) return 0;
-                params.push_back(t);
             }
         }
         result = types.signature(types.function(returned, params, p.variadic, p.cv, p.ref));
@@ -368,27 +368,36 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
 {
     auto t = templates[entities[pattern].template_info];
     auto shape = types[entities[pattern].type];
-    bool pack = false;
-    for (unsigned j = 0; j < shape.count; ++j) pack |= types[types.parameters[shape.offset+j]].kind == TypeKind::PackExpansion;
-    if (pack && types[target].kind == TypeKind::Function) {
-        auto actual = types[target]; std::vector<Expression> values(actual.count);
-        for (unsigned j = 0; j < actual.count; ++j) values[j].type = types.parameters[actual.offset+j];
-        return deduce_function(pattern,values);
-    }
+    bool pack = shape.count && types[types.parameters[shape.offset+shape.count-1]].kind == TypeKind::PackExpansion;
     auto explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
     for (unsigned j = 0; j < explicit_args.count; ++j)
         bindings.put(template_parameters[t.offset+j],argument_types[explicit_args.offset+j]);
-    if (!deduce_type(entities[pattern].type,target,bindings)) return 0;
+    if (pack) {
+        // A target signature supplies types, not call expressions: preserve
+        // references and arrays/functions behind references during deduction.
+        auto actual = types[target];
+        auto fixed = shape.count-1;
+        if (actual.kind != TypeKind::Function || actual.count < fixed || shape.variadic != actual.variadic ||
+            !deduce_type(shape.child,actual.child,bindings)) return 0;
+        for (unsigned j = 0; j < fixed; ++j)
+            if (!deduce_type(types.parameters[shape.offset+j],types.parameters[actual.offset+j],bindings)) return 0;
+        std::vector<TypeId> tail(types.parameters.begin()+actual.offset+fixed,types.parameters.begin()+actual.offset+actual.count);
+        auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+        if (!deduce_expansion(types[types.parameters[shape.offset+fixed]].bound,tail,bindings,prefix)) return 0;
+    } else if (!deduce_type(entities[pattern].type,target,bindings)) return 0;
     std::vector<TypeId> args;
     for (unsigned j = 0; j < t.count; ++j) {
-        auto a = bindings.get(template_parameters[t.offset+j]);
+        auto parameter = template_parameters[t.offset+j];
+        auto a = bindings.get(parameter);
+        if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
         if (!a) break;
         args.push_back(a);
     }
     auto primary = t.primary ? t.primary : pattern;
     if (args.size() != t.count && !template_defaults(primary,args)) return 0;
-    return specialize(primary,args);
+    auto instance = specialize(primary,args);
+    return instance && entities[instance].type == target ? instance : 0;
 }
 EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
 {

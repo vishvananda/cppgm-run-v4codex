@@ -62,32 +62,13 @@ EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeI
     for (auto primary : candidates(local(owner,terminal(name)))) {
         if (!entities[primary].template_info || entities[primary].specialization) continue;
         ++candidate_work;
-        auto head = templates[entities[primary].template_info];
         auto f = types[entities[primary].type], target = types[type];
-        if (supplied.size() > head.count || f.count != target.count || f.variadic != target.variadic) continue;
-        Index bindings, cache;
-        bool valid = true;
-        for (unsigned j = 0; j < supplied.size(); ++j) {
-            auto p = template_parameters[head.offset+j];
-            auto arg = supplied[j];
-            if (entities[p].kind == EntityKind::Type) valid = !value_argument(arg);
-            else {
-                auto t = substitute_type(entities[p].type,bindings,cache);
-                arg = t && value_argument(arg) ? convert_argument(arg,t) : 0;
-                valid = arg != 0;
-            }
-            if (!valid) break;
-            bindings.put(p,arg);
-        }
-        if (!valid || !deduce_type(entities[primary].type,type,bindings)) continue;
-        std::vector<TypeId> args;
-        for (unsigned j = 0; j < head.count; ++j) {
-            auto arg = bindings.get(template_parameters[head.offset+j]);
-            if (!arg) break;
-            args.push_back(arg);
-        }
-        if (!template_defaults(primary,args)) continue;
-        auto instance = specialize(primary,args);
+        bool pack = f.count && types[types.parameters[f.offset+f.count-1]].kind == TypeKind::PackExpansion;
+        if (f.variadic != target.variadic || (pack ? target.count < f.count-1 : f.count != target.count)) continue;
+        // Explicit prefixes and completed specializations have distinct keys.
+        // Reuse the same typed target deduction as taking a template's address.
+        auto instance = supplied.empty() ? primary : specialize(primary,supplied,true);
+        if (instance && entities[instance].template_info) instance = deduce_target(instance,type);
         if (!instance || entities[instance].type != type) continue;
         if (selected && !template_more_specialized(instance,selected)) {
             if (template_more_specialized(selected,instance)) continue;

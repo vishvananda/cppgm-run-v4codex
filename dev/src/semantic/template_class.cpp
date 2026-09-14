@@ -72,7 +72,8 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
         auto parameter = template_parameters[current.offset+j];
         if (previous.environment) {
             auto old_parameter = template_parameters[previous.offset+j];
-            if (entities[old_parameter].kind != entities[parameter].kind)
+            if (entities[old_parameter].kind != entities[parameter].kind ||
+                entities[old_parameter].parameter_pack != entities[parameter].parameter_pack)
                 throw std::runtime_error("template parameter kind differs across declarations");
             if (entities[parameter].kind != EntityKind::Type &&
                 translate(entities[old_parameter].type,previous,old_bindings,old_cache,old_ready) !=

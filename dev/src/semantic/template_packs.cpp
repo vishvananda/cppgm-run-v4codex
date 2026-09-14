@@ -78,6 +78,10 @@ bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& a
 {
     auto list = argument_packs[expansion_parameters(pattern)];
     std::vector<std::vector<ArgumentId>> values(list.count);
+    for (unsigned j = 0; prefix_frame && j < list.count; ++j) {
+        auto prefix = unexpanded_argument(prefix_frame,argument_types[list.offset+j]);
+        if (prefix && argument_pack(prefix) && pack_arguments(prefix).count > actual.size()) return false;
+    }
     unsigned lane = 0;
     for (auto a : actual) {
         auto frame = prefix_frame;
@@ -86,7 +90,6 @@ bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& a
             auto prefix = prefix_frame ? unexpanded_argument(prefix_frame,p) : 0;
             if (prefix && argument_pack(prefix)) {
                 auto args = pack_arguments(prefix);
-                if (args.count > actual.size()) return false;
                 if (lane < args.count) fixed = argument_types[args.offset+lane];
             }
             bindings.put(p,fixed);

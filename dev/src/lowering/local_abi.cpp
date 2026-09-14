@@ -46,7 +46,11 @@ bool Procedural::local_abi_type(TypeId t)
     if (local_abi_types[t]) return local_abi_types[t] == 2;
     auto type = sem.types[t];
     bool local = local_abi_type(type.child);
-    if (type.kind == TypeKind::Named) {
+    if (type.kind == TypeKind::ArgumentPack) {
+        auto args = sem.pack_arguments(t);
+        for (unsigned j = 0; j < args.count; ++j)
+            local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
+    } else if (type.kind == TypeKind::Named) {
         auto e = sem.entities[type.entity];
         local |= local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);

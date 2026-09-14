@@ -67,7 +67,11 @@ EntityId Analyzer::associated_type_lookup(IdentifierId name, std::vector<TypeId>
         if (seen_types.get(id)) continue;
         seen_types.put(id, 1); auto type = types[id];
         if (type.kind == TypeKind::Pointer || type.kind == TypeKind::LRef || type.kind == TypeKind::RRef || type.kind == TypeKind::Array) work.push_back(type.child);
-        else if (type.kind == TypeKind::Function) {
+        else if (type.kind == TypeKind::ArgumentPack) {
+            auto pack = pack_arguments(id);
+            for (unsigned j = 0; j < pack.count; ++j)
+                if (!value_argument(argument_types[pack.offset+j])) work.push_back(argument_types[pack.offset+j]);
+        } else if (type.kind == TypeKind::Function) {
             work.push_back(type.child);
             for (unsigned j = 0; j < type.count; ++j) work.push_back(types.parameters[type.offset+j]);
         } else if (type.kind == TypeKind::Named) {

@@ -19,6 +19,23 @@ std::uint32_t IdIndex::get(std::uint64_t key) const
 }
 void IdIndex::put(std::uint64_t key, std::uint32_t value)
 {
+    if (!value) {
+        if (slots.empty()) return;
+        auto mask = slots.size()-1;
+        auto hole = mix(key) & mask;
+        while (slots[hole].value && slots[hole].key != key) hole = (hole+1)&mask;
+        if (!slots[hole].value) return;
+        // Zero removes a binding. Close only its probe cluster so clearing a
+        // pack lane cannot make a colliding, unrelated binding unreachable.
+        for (auto next = (hole+1)&mask; slots[next].value; next = (next+1)&mask) {
+            auto home = mix(slots[next].key)&mask;
+            if (((next-home)&mask) >= ((next-hole)&mask)) {
+                slots[hole] = slots[next]; hole = next;
+            }
+        }
+        slots[hole] = Slot(); --used;
+        return;
+    }
     if (slots.empty() || (used + 1) * 2 >= slots.size()) {
         std::vector<Slot> old;
         old.swap(slots);
