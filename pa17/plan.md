@@ -44,7 +44,7 @@ Increment 1 implements strict class-shape deduction (array bounds, function
 qualifiers and parameter adjustment), symbolic/repeated pack substitution,
 retained nested template heads, parameter-kind/arity matching, namespace alias
 template application and identity, and split-`>>` argument classification.
-Thirty explicit controls pass (22 native, 8 rejection). Earlier alias and
+Thirty-three explicit controls pass (23 native, 10 rejection). Earlier alias and
 pack regressions found during development were repaired. Initial related group
 is not a stopping boundary: continue default-coverage ordering and remaining
 namespace shape/argument defects before handoff.
@@ -52,10 +52,17 @@ namespace shape/argument defects before handoff.
 Increment 2 adds actual-position default coverage (separate from immutable
 candidate ordering), retained source argument substitution, recursive non-type
 pack/base dependence, array cv deduction and the declared member type in
-unparenthesized decltype. All 30 controls pass; full comparisons and frozen
+unparenthesized decltype. All 33 controls pass; full comparisons and frozen
 performance measurements are being finalized. Remaining member-owned aliases
 require enclosing substitution-frame/declaration ownership, separately from the
 completed namespace alias argument/substitution path.
 Independent review remains pending for all changes; unanswered review questions
 are separate from unfinished implementation above. Final ledger will record
 completed behavior, test delta, performance evidence and concrete remaining boundary.
+
+Increment 3 repairs all three stage regressions exposed by the failure-set
+comparison: alias entities belong to their declaring namespace/class (the
+parameter environment is separate), template-template argument uses retain
+access checks, and bare class templates outside their injected-name scope do
+not become dependent merely because their definitions contain parameters.
+PA17 is **206/343**, with **74 entry failures fixed and no new failures**.

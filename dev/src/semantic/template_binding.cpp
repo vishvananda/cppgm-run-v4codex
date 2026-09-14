@@ -41,7 +41,8 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
         if (p != last && entities[e].parameter_pack) r.qualifier_pack = e;
         auto args = child(p,Kind::TemplateArguments);
         bool class_id = args && entities[e].class_info && (entities[e].template_info || entities[e].specialization);
-        r.dependent |= entities[e].template_parameter || entities[e].template_member || (!class_id && template_pattern_entities.get(e) == 2) ||
+        r.dependent |= entities[e].template_parameter || entities[e].template_member || (!class_id && template_pattern_entities.get(e) == 2 &&
+            (!entities[e].template_info || encloses(entities[e].scope,s))) ||
             (entities[e].template_pattern && !entities[e].type &&
              (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) ||
             (entities[e].type && dependent_type(entities[e].type));

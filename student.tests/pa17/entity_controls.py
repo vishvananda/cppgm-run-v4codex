@@ -30,7 +30,11 @@ GOOD.update({
 'value_expansion': 'template<bool...>struct B{};template<class,class>struct S{static const bool n=false;};template<class T>struct S<T,T>{static const bool n=true;};template<bool...V>struct A:S<B<V...>,B<((void)V,true)...>>{};static_assert(A<true,true>::n && !A<true,false>::n && A<>::n, "value expansion");int main(){return 0;}',
 'pack_recursive_base': 'template<int...>struct B{};template<int,class>struct S;template<int N,int...V>struct S<N,B<V...>>:S<N-1,B<V...,N>>{};template<int...V>struct S<0,B<V...>>{static const int n=sizeof...(V);};static_assert(S<5,B<>>::n==5, "recursive packs");int main(){return 0;}',
 })
+GOOD['member_alias_default'] = 'template<class A,class B>struct F{using type=A;};template<template<class...>class C>struct Step{template<class V,class T,class N=C<typename V::type,T>>using Apply=N;};template<class V,template<class...>class C>struct Twice{template<class A,class B>using Apply=C<C<V,A>,B>;};using R=Twice<F<void,void>,Step<F>::template Apply>::template Apply<int,char>;int main(){return 0;}'
 BAD={
+'private_alias_template': 'template<template<class>class C>struct Use{};class Owner{template<class T>using Hidden=T;};Use<Owner::Hidden> x;',
+'private_base_template': 'template<template<class>class C>struct Use{};struct Base{template<class>struct X{};};struct Derived:private Base{};Use<Derived::X> x;',
+
 'head_arity': 'template<class,class>struct X{};template<template<class>class C>struct S{};S<X> s;',
 'head_redeclaration': 'template<template<class>class C>struct S;template<template<int>class C>struct S{};',
 'head_value_type': 'template<long>struct X{};template<template<int>class C>struct S{};S<X> s;',

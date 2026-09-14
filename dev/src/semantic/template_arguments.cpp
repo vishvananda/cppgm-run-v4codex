@@ -82,7 +82,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
             if (!child(ast[name].last,Kind::TemplateArguments)) {
                 auto binding = bind_template_name(name,scope);
                 auto e = template_entity(binding.dependent ? binding.entity : resolve(name,scope));
-                if (e) { auto injected = injected_template_type(e,scope); return injected ? injected : types.named(e); }
+                if (e) { check_access(e,scope,name_owner(name,scope)); auto injected = injected_template_type(e,scope); return injected ? injected : types.named(e); }
             }
         }
         auto type = types.signature(type_id(n,scope));
@@ -94,7 +94,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
         auto binding = bind_template_name(ast[n].detail,scope);
         auto e = binding.entity;
         if (!child(ast[ast[n].detail].last,Kind::TemplateArguments))
-            if (auto target = template_entity(e)) return types.named(target);
+            if (auto target = template_entity(e)) { check_access(target,scope,name_owner(ast[n].detail,scope)); return types.named(target); }
         if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias))
             return type_name(ast[n].detail,scope);
     }

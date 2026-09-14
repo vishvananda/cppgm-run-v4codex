@@ -79,6 +79,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         auto e = lookup(owner,ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         auto template_target = template_entity(e);
         if (list && template_target && entities[template_target].kind == EntityKind::Alias) {
+            check_access(template_target,s,owner);
             std::vector<ArgumentId> args;
             for (auto a = ast[list].first; a; a = ast[a].next)
                 append_template_argument(a,s,template_argument_node(a,s),args);

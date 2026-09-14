@@ -14,6 +14,8 @@ TypeId Analyzer::source_type(EntityId e) const
 }
 EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type)
 {
+    auto environment = s;
+    if (definitions && active_template_scope == s) s = scopes[s].parent;
     TypeId canonical = types.signature(type);
     if (scopes[s].kind == ScopeKind::Class) {
         auto previous = class_typedef_declarations.get(key(s,name));
@@ -29,6 +31,7 @@ EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, Ty
     e = make_entity(EntityKind::Alias, s, name, source);
     entities[e].type = canonical;
     bind(s, name, e);
+    if (s != environment) bind(environment,name,e);
     return e;
 }
 TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
