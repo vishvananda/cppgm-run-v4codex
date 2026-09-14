@@ -203,6 +203,7 @@ class Procedural {
     void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path);
     void global_plan(std::uint32_t plan);
     void global_bit_field(std::uint32_t plan, std::uint64_t& bytes);
+    void global_bit_field_value(EntityId field, std::uint64_t offset, std::uint64_t value, std::uint64_t& bytes);
     void global_construction(NodeId n, TypeId t);
     void global_constant_fields(const semantic::ConstantObject& fields, TypeId t);
     Value constant_operand(semantic::Constant value, TypeId t);

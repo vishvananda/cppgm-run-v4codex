@@ -140,6 +140,15 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
+    if (c.reference) if (auto temporary = sem.retained_scalar(n,c.target)) {
+        auto destination = binding(temporary);
+        if (!sem.entities[temporary].constant.valid) {
+            auto scalar = c; scalar.target = sem.entities[temporary].type;
+            scalar.reference = scalar.temporary = false;
+            store(converted(n,scalar),destination);
+        }
+        auto result = address(destination); result.type = c.target; return result;
+    }
     if (c.kind == semantic::Conversion::Kind::List) return list_conversion(c);
     if (c.kind == semantic::Conversion::Kind::User) return user_conversion(n,c);
     if (c.kind == semantic::Conversion::Kind::Construction) {

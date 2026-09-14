@@ -20,6 +20,8 @@ struct TypeQueryFact {
     Expression expression;
     TypeId declared_type = 0;
     EntityId selected = 0; // Unevaluated call/operator choice; no body demand.
+    std::uint32_t arrow = 0;
+    TypeId surrogate = 0;
     FactState state = FactState::NotStarted;
     bool dependent = false;
 };

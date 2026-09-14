@@ -67,7 +67,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     }
     if (callee.kind == QueryKind::Member) {
         auto x = query_fact(query_edges[callee.offset]).expression;
-        object = callee.op == OP_ARROW ? types[x.type].child : x.type;
+        auto pointer_type = children[0].arrow ? arrow_chains[children[0].arrow].type : x.type;
+        object = callee.op == OP_ARROW ? types[pointer_type].child : x.type;
         category = callee.op == OP_ARROW ? ValueCategory::Lvalue : x.category;
     }
     if (callee.kind == QueryKind::Name && fn.entity && function_binding(fn.entity)) {

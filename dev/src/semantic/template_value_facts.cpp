@@ -38,7 +38,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             auto type = query.type ? query.type : query_fact(query_edges[query.offset]).expression.type;
             value = query.op == KW_NOEXCEPT ? Constant(types.fundamental(FT_BOOL),query_nonthrowing(query_edges[query.offset])) :
                 Constant(types.fundamental(FT_UNSIGNED_LONG_INT),size(type,query.op == KW_ALIGNOF));
-        } else if (query.kind == QueryKind::Value && (integral(query.type) || floating_type(query.type))) {
+        } else if (query.kind == QueryKind::Value) {
             value = convert(Constant(query.type,query.value),query.type);
         } else if (query.kind == QueryKind::Name || query.kind == QueryKind::QualifiedValue) {
             if (!(types[fact.expression.type].cv & 2)) value = constant_indirect(constant_entity_value(fact.expression.entity));
@@ -48,7 +48,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {
             auto operand = query_edges[query.offset];
-            if (fact.selected) {
+            if (fact.expression.count) {
                 auto result = constant_query_conversion(operand,conversions[fact.expression.conversions]);
                 value = convert(result,query.type,true);
                 if (value.valid && query.op == TOK_INVALID) {
@@ -62,12 +62,18 @@ std::uint32_t Analyzer::query_value(QueryId id)
                 value = constants[query_value(argument_query(arg))];
             } else value = convert(constants[query_value(operand)],query.type,true);
         } else if (query.kind == QueryKind::Conditional) {
-            auto condition = constants[query_value(query_edges[query.offset])];
+            auto begin = fact.expression.conversions;
+            auto condition = constant_query_conversion(query_edges[query.offset],conversions[begin]);
             if (condition.valid && !scoped_enum(condition.type))
-                value = convert(constants[query_value(query_edges[query.offset+(constant_truth(condition) ? 1 : 2)])],fact.expression.type,true);
+                value = constant_query_conversion(query_edges[query.offset+(constant_truth(condition) ? 1 : 2)],conversions[begin+(constant_truth(condition) ? 1 : 2)]);
         } else if (!fact.selected && query.kind == QueryKind::Unary && query.op == OP_AMP && types[fact.expression.type].kind == TypeKind::MemberPointer) {
             value = Constant(fact.expression.type,fact.expression.entity);
         } else if (!fact.selected && query.kind == QueryKind::Unary) {
+            if (query.op == OP_AMP) {
+                auto address = constant_query_object(query_edges[query.offset]);
+                if (address) value = Constant(fact.expression.type,address);
+            } else if (query.op == OP_STAR) value = constant_indirect(constant_read(constant_query_object(id)));
+            else {
             value = constants[query_value(query_edges[query.offset])];
             if (value.valid && !scoped_enum(value.type)) {
                 if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!constant_truth(value));
@@ -78,6 +84,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
                     else if (query.op != OP_PLUS) value = Constant();
                 }
             } else value = Constant();
+            }
         } else if (!fact.selected && query.kind == QueryKind::Binary && query.op == OP_LSQUARE) {
             auto left = query_edges[query.offset], right = query_edges[query.offset+1];
             while (type_queries[left].kind == QueryKind::Parenthesized) left = query_edges[type_queries[left].offset];
@@ -85,6 +92,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             if (type_queries[right].kind == QueryKind::String) std::swap(left,right);
             if (type_queries[left].kind == QueryKind::String)
                 value = literal_element(type_queries[left].value,constants[query_value(right)]);
+            else value = constant_indirect(constant_read(constant_query_object(id)));
         } else if (!fact.selected && query.kind == QueryKind::Binary) {
             auto a = fact.expression.count == 2 ? constant_query_conversion(query_edges[query.offset],conversions[fact.expression.conversions]) :
                 constants[query_value(query_edges[query.offset])];
@@ -103,6 +111,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
                     } else value = binary(query.op,a,b);
                 }
             }
+        } else if (fact.selected && (query.kind == QueryKind::Unary || query.kind == QueryKind::Binary)) {
+            value = constant_query_call(id);
         } else if (query.kind == QueryKind::Call) {
             auto callee = type_queries[query_edges[query.offset]];
             if (callee.kind == QueryKind::TypeValue && (integral(callee.type) || floating_type(callee.type))) {

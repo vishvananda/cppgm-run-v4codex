@@ -3,6 +3,20 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+Constant Analyzer::constant_field_value(EntityId field, Constant value)
+{
+    auto f = field_fact(field);
+    if (!value.valid || !f.bit_field || !f.width) return value;
+    // Match the target's stored bit-field value before any later initializer
+    // or constexpr read observes it. Signed fields use the runtime sign policy.
+    if (f.width < 64) {
+        auto mask = (std::uint64_t(1) << f.width)-1;
+        value.bits &= mask;
+        if (!is_unsigned(f.storage_type) && (value.bits & (std::uint64_t(1) << (f.width-1))))
+            value.bits |= ~mask;
+    }
+    return value;
+}
 std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s)
 {
     std::uint64_t result = 0;

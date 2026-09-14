@@ -113,6 +113,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (template_type_probe && node.op == KW_THIS) return 0;
         auto value = expression(n,s); q.type = value.type;
         if (node.kind == Kind::Literal && ast.literals[node.literal].kind == LiteralKind::string && !ast.literals[node.literal].suffix) {
+            query_literal_sources.put(node.literal,n);
             q.kind = QueryKind::String; q.value = node.literal; break;
         }
         if (node.kind == Kind::Literal && ast.literals[node.literal].suffix) {
@@ -133,16 +134,16 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
     case Kind::Cast: {
-        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST) {
+        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST && node.op != KW_CONST_CAST) {
             if (template_type_probe) return 0;
             throw std::runtime_error("cast is not supported in a constant type query");
         }
         q.kind = QueryKind::Cast; q.op = node.op; q.type = type_id(first,s); q.context = s;
         auto child = expression_query(ast[first].next,s);
         if (template_type_probe) {
-            if (!q.type || !child || (!dependent_type(q.type) && !arithmetic(q.type))) return 0;
+            if (!q.type || !child) return 0;
             auto type = query_fact(child).expression.type;
-            if ((!type && !query_fact(child).dependent) || (type && !dependent_type(type) && !arithmetic(type))) return 0;
+            if (!type && !query_fact(child).dependent) return 0;
         }
         children.push_back(child); break;
     }
@@ -376,12 +377,21 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             if (!c.valid() || deleted_transfer(c.function)) throw std::runtime_error("invalid constant object conversion");
             check_access(c.function,q.context,entities[c.function].owner,children[0].expression.type);
             r.selected = c.function; x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
+        } else if (q.op != TOK_INVALID) {
+            auto c = explicit_builtin_conversion(children[0].expression,q.type,q.op,q.context);
+            x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
+            if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))
-            throw std::runtime_error("constant query cast requires arithmetic operands");
-        x.type = q.type; break;
+            throw std::runtime_error("implicit constant query cast requires arithmetic operands");
+        x.type = value_type(q.type); break;
     case QueryKind::Member: {
         auto object = children[0].expression; auto type = object.type;
-        if (q.op == OP_ARROW) { if (!pointer(type)) throw std::runtime_error("type query arrow needs pointer"); type = types[type].child; }
+        if (q.op == OP_ARROW) {
+            r.arrow = prepare_arrow(object,q.context,0,false);
+            if (r.arrow) type = arrow_chains[r.arrow].type;
+            if (!pointer(type)) throw std::runtime_error("type query arrow needs pointer");
+            type = types[type].child;
+        }
         if (!class_value(type) && !pattern_class_type(type)) throw std::runtime_error("type query member needs class");
         auto cls = types[type].entity;
         if (class_value(type)) complete_class(cls);

@@ -3,7 +3,10 @@
 namespace cppgm { namespace semantic {
 std::uint32_t Analyzer::prepare_arrow(NodeId n, ScopeId s)
 {
-    auto object = expressions[n];
+    return prepare_arrow(expressions[n],s,n,true);
+}
+std::uint32_t Analyzer::prepare_arrow(Expression object, ScopeId s, NodeId n, bool demand)
+{
     if (!class_value(object.type)) return 0;
     std::vector<ArrowStep> steps; Index seen;
     while (class_value(object.type)) {
@@ -18,7 +21,7 @@ std::uint32_t Analyzer::prepare_arrow(NodeId n, ScopeId s)
         if (seen.get(e)) throw std::runtime_error("recursive operator-> result type");
         seen.put(e,1);
         check_access(e,s,naming,object.type);
-        demand_member(e); demand_specialization(e);
+        if (demand) { demand_member(e); demand_specialization(e); }
         ArrowStep step; step.function = e; step.result = types[entities[e].type].child;
         step.adjustment = base_steps(object.type,scopes[entities[e].owner].entity);
         step.virtual_slot = members[entities[e].member_info].virtual_slot;
@@ -26,8 +29,10 @@ std::uint32_t Analyzer::prepare_arrow(NodeId n, ScopeId s)
         object.category = types[step.result].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[step.result].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         if (class_value(object.type) && object.category == ValueCategory::Prvalue) {
-            step.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
-            entities[step.temporary].type = object.type; register_destruction(step.temporary);
+            if (demand) {
+                step.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
+                entities[step.temporary].type = object.type; register_destruction(step.temporary);
+            } else default_destructor(object.type,s,false);
         }
         steps.push_back(step);
     }
@@ -38,7 +43,10 @@ std::uint32_t Analyzer::prepare_arrow(NodeId n, ScopeId s)
 }
 std::uint32_t Analyzer::constant_arrow(NodeId n, std::uint32_t id)
 {
-    auto object = constant_node_object(n);
+    return constant_arrow_value(constant_node_object(n),id);
+}
+std::uint32_t Analyzer::constant_arrow_value(std::uint32_t object, std::uint32_t id)
+{
     auto chain = arrow_chains[id];
     for (unsigned i = 0; object && i < chain.count; ++i) {
         auto step = arrow_steps[chain.first+i];

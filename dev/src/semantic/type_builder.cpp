@@ -451,6 +451,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         }
     }
     if (calls && init && !function && !member_initializer) initialize(init, canonical, definition_scope);
+    if (calls && init && !function && !alias && !member_initializer) retain_initializer_references(e);
     if (calls && !function && types[canonical].kind == TypeKind::Array &&
         (spec_has(specs,KW_CONSTEXPR) || (init && !member_initializer && !entities[e].is_static &&
             !entities[e].external_decl && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class)))

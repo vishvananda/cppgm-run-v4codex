@@ -30,7 +30,7 @@ void Procedural::reference_global(EntityId e)
 {
     auto storage = sem.static_temporary(e);
     auto add = [&](IRType type, bool aggregate, const std::string& name, bool object_data = false) {
-        Global g; g.symbol = fresh_symbol(name); g.type = type; g.structured = aggregate;
+        Global g; g.symbol = object_data ? symbols[e] : fresh_symbol(name); g.type = type; g.structured = aggregate;
         g.data.begin = p.data.size(); g.data.count = 1;
         if (object_data && sem.entities[e].constant.valid) {
             global_constant_fields(sem.constant_value_data(sem.entities[e].constant),sem.entities[e].type);

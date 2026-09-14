@@ -4,15 +4,19 @@
 namespace cppgm { namespace lowering {
 void Procedural::global_bit_field(std::uint32_t plan, std::uint64_t& bytes)
 {
-    using lowir_model::DataItem;
     auto action = sem.initializers[plan];
-    auto field = sem.field_fact(action.field);
     auto offset = sem.entities[action.field].member_offset;
     auto value = sem.static_value(action.source, action.type);
     if (value.kind != semantic::StaticValue::Integer)
         throw std::logic_error("nonconstant static bit-field");
+    global_bit_field_value(action.field,offset,value.bits,bytes);
+}
+void Procedural::global_bit_field_value(EntityId member, std::uint64_t offset, std::uint64_t value, std::uint64_t& bytes)
+{
+    using lowir_model::DataItem;
+    auto field = sem.field_fact(member);
     std::uint64_t mask = field.width == 64 ? ~std::uint64_t(0) : (std::uint64_t(1) << field.width)-1;
-    std::uint64_t packed = (value.bits & mask) << field.shift;
+    std::uint64_t packed = (value & mask) << field.shift;
     mask <<= field.shift;
     auto end = offset + (field.shift + field.width + 7)/8;
     if (bytes < end) {

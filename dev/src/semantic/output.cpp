@@ -156,6 +156,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_constant_execution_steps\":" << constant_steps
         << ",\"semantic_constant_object_work\":" << constant_object_work
         << ",\"semantic_constant_address_work\":" << constant_address_work
+        << ",\"semantic_constant_dependency_work\":" << constant_dependency_work
+        << ",\"semantic_constant_persistence_work\":" << constant_persistence_work
         << ",\"semantic_constant_execution_hits\":" << constant_hits
         << ",\"semantic_initializer_recipe_work\":" << initializer_recipe_work
         << ",\"semantic_initializer_recipe_uses\":" << initializer_recipe_uses

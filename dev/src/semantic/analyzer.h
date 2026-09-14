@@ -114,6 +114,7 @@ public:
     std::uint32_t reference_choices(EntityId e) const { return conditional_references.get(e); }
     const ReferenceStorage& static_temporary(EntityId e) const { return reference_storage[static_temporaries.get(e)]; }
     EntityId reference_scalar(EntityId e) const { return reference_scalars.get(e); }
+    EntityId retained_scalar(NodeId n, TypeId t) const { return retained_scalar_bindings.get(key(n,t)); }
     std::vector<ReferenceStorage> reference_storage = std::vector<ReferenceStorage>(1);
     const ValueInitialization& class_initialization(NodeId n, TypeId t) const;
     const ValueReturn& class_return(NodeId n) const;
@@ -191,7 +192,9 @@ private:
     NodeId reference_operand(NodeId n) const;
     void local_reference(NodeId n, EntityId reference, bool conditional = false);
     Index static_temporaries, reference_scalars;
+    Index retained_scalar_bindings;
     void static_reference(EntityId e);
+    void retain_initializer_references(EntityId e);
     void retain_reference_object(NodeId n, EntityId reference, bool conditional);
     std::vector<ValueInitialization> value_initializations = std::vector<ValueInitialization>(1);
     std::vector<ValueReturn> value_returns = std::vector<ValueReturn>(1);
@@ -239,6 +242,8 @@ private:
     Constant constant_array_element(std::uint32_t plan, Constant index);
     std::size_t constant_array_work = 0;
     void prepare_constant_array(EntityId e, bool required);
+    bool constant_expression_plan(std::uint32_t plan);
+    Index constant_expression_plans;
     bool constant_array_plan_valid(std::uint32_t plan);
     Index zero_initialization_index;
     TypeId initialized_field_type(TypeId owner, EntityId field);
@@ -257,6 +262,7 @@ private:
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);
+    Constant constant_field_value(EntityId field, Constant value);
     void bit_field_properties(EntityId field, Constant count);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);
@@ -321,6 +327,9 @@ private:
     ExpressionStore expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
     std::uint32_t prepare_arrow(NodeId node, ScopeId scope);
+    std::uint32_t prepare_arrow(Expression object, ScopeId scope, NodeId source, bool demand);
+    std::uint32_t constant_arrow_value(std::uint32_t object, std::uint32_t chain);
+    std::uint32_t constant_query_arrow(QueryId object, std::uint32_t chain);
     std::uint32_t constant_arrow(NodeId node, std::uint32_t chain);
     Index object_destructors, lifetime_index, object_lifetimes, return_counts;
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
@@ -424,17 +433,23 @@ private:
     Index evaluated_object_index, evaluated_part_index, constant_address_index, constant_entity_storage, constant_literal_storage;
     Index constant_declaration_state;
     std::size_t constant_object_work = 0, constant_address_work = 0;
+    std::size_t constant_dependency_work = 0, constant_persistence_work = 0;
     Constant evaluated_object(TypeId type, const std::vector<EvaluatedPart>& parts);
     Constant evaluated_part(Constant object, std::uint64_t selector);
     Constant constant_initialize(NodeId node, TypeId type, ScopeId scope, EntityId constructor = 0);
     Constant constant_init_plan(std::uint32_t plan, ScopeId scope);
     Constant constant_construct(EntityId constructor, const std::vector<Constant>& arguments, bool zero = false);
     Constant constant_zero(TypeId type);
-    bool constant_object_fields(Constant value, std::uint64_t offset = 0);
+    bool constant_object_fields(Constant value, std::uint64_t offset = 0, EntityId field = 0);
     Constant constant_entity_value(EntityId entity);
     void check_constant_object(EntityId entity);
     void demand_constant_relocations(Constant value);
     std::uint32_t constant_storage_address(TypeId type, Constant value, EntityId entity = 0, NodeId literal = 0, bool readable = true);
+    std::uint32_t constant_temporary_address(TypeId type, Constant value, EntityId temporary);
+    Conversion explicit_builtin_conversion(Expression value, TypeId target, ETokenType op, ScopeId scope, NodeId operand = 0);
+    Constant constant_construct_temporary(EntityId constructor, const std::vector<Constant>& args, bool zero, EntityId temporary);
+    void refresh_constant_storage(std::uint32_t storage);
+    Index query_literal_sources;
     std::uint32_t constant_subobject(std::uint32_t parent, TypeId type, std::uint64_t selector);
     std::uint64_t constant_offset(std::uint32_t address);
     std::uint32_t constant_entity_address(EntityId entity);

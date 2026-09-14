@@ -98,7 +98,7 @@ Constant Analyzer::constant_init_plan(std::uint32_t id, ScopeId s)
         for (auto c = a.first; c; c = initializers[c].next) {
             auto child = initializers[c]; EvaluatedPart p;
             p.selector = child.field ? child.field : child.index; p.count = child.count;
-            p.value = constant_init_plan(c,s); parts.push_back(p);
+            p.value = constant_field_value(child.field,constant_init_plan(c,s)); parts.push_back(p);
         }
     } else return Constant();
     return evaluated_object(a.type,parts);
@@ -120,6 +120,9 @@ Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId c
     }
     while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer ||
         ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
+        auto conversion = conversions[expressions[n].incoming];
+        if (conversion.target == t && conversion.kind == Conversion::Kind::List)
+            return constant_node_conversion(n,conversion,s);
         if (!ast[n].first) return constant_zero(t);
         n = ast[n].first;
     }
@@ -178,7 +181,7 @@ Constant Analyzer::constant_entity_value(EntityId e)
     if (value.valid) entities[e].constant = value;
     return value;
 }
-bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset)
+bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId field)
 {
     if (!v.valid) return false;
     if (class_value(v.type) || types[v.type].kind == TypeKind::Array) {
@@ -189,14 +192,16 @@ bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset)
             if (types[v.type].kind == TypeKind::Array) at += part.selector * size(part.value.type);
             else if (part.selector & 0x80000000U) at += base_steps(v.type,types[part.value.type].entity)-1;
             else at += entities[part.selector].member_offset;
+            auto member = types[v.type].kind != TypeKind::Array && !(part.selector & 0x80000000U) ? EntityId(part.selector) : 0;
+            if (member && field_fact(member).bit_field && !field_fact(member).width) continue;
             for (std::uint64_t j = 0; j < part.count; ++j)
-                if (!constant_object_fields(part.value,at+j*size(part.value.type))) return false;
+                if (!constant_object_fields(part.value,at+j*size(part.value.type),member)) return false;
         }
         return true;
     }
     auto scalar = constant_static_value(v);
     if (scalar.kind == StaticValue::Invalid) return false;
-    constant_fields.push_back({0,v.type,scalar,offset}); return true;
+    constant_fields.push_back({field,v.type,scalar,offset}); return true;
 }
 void Analyzer::demand_constant_relocations(Constant value)
 {

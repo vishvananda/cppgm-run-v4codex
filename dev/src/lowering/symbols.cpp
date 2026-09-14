@@ -262,6 +262,7 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
 }
 void Procedural::run()
 {
+    std::vector<EntityId> reference_objects;
     for (auto storage : sem.reference_storage) {
         if (!storage.reference || !sem.local_static(storage.reference) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
         auto next = local_static_references.get(storage.reference);
@@ -275,7 +276,10 @@ void Procedural::run()
         if (entity.kind == semantic::EntityKind::Variable && (entity.template_info ||
             (entity.specialization && !(entity.emission & semantic::Entity::Used)))) continue;
         if (sem.dormant_hidden_friend(e)) continue;
-        if (sem.static_temporary(e).object) { reference_global(e); continue; }
+        if (sem.static_temporary(e).object) {
+            symbols[e] = fresh_symbol("@__reference_"+std::to_string(e));
+            reference_objects.push_back(e); continue;
+        }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;
         if (entity.member_info && sem.member_fact(e).virtual_member && !entity.body && !sem.synthetic_member(e) && !sem.member_fact(e).emission_reference) continue;
         if (sem.constructor_member(e)) {
@@ -350,6 +354,9 @@ void Procedural::run()
         if (ast.literals[ast[n].literal].kind == LiteralKind::string) string_literal(n);
         else if (sem.literal_call_kind(n) == semantic::LiteralCallKind::Raw) numeric_string_literal(n);
     }
+    // All relocation identities exist before any temporary data is emitted.
+    // Preserve the established temporary-before-declaration presentation order.
+    for (auto e : reference_objects) reference_global(e);
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     emit_vtables();

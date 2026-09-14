@@ -107,7 +107,8 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
                 auto v = constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
                 if (!v.valid) { valid = false; break; }
                 if (member.delegated_constructor) { value = v; break; }
-                EvaluatedPart p; p.selector = action.field ? action.field : (0x80000000U | types[action.type].entity); p.value = v;
+                EvaluatedPart p; p.selector = action.field ? action.field : (0x80000000U | types[action.type].entity);
+                p.value = constant_field_value(action.field,v);
                 auto slot = slots.get(p.selector);
                 if (slot) parts[slot-1] = p;
                 else { slots.put(p.selector,parts.size()+1); parts.push_back(p); }
@@ -192,25 +193,6 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     }
     return execute_constant(e,args,object);
 }
-std::uint32_t Analyzer::constant_query_object(QueryId id)
-{
-    if (auto known = constant_query_receivers.get(id)) return known;
-    auto q = type_queries[id]; auto fact = query_fact(id);
-    if (q.kind == QueryKind::Parenthesized) return constant_query_object(query_edges[q.offset]);
-    if (q.kind == QueryKind::Name || q.kind == QueryKind::QualifiedValue) return constant_entity_address(fact.expression.entity);
-    if (q.kind == QueryKind::Member) {
-        if (!nonstatic_field(fact.expression.entity)) return constant_entity_address(fact.expression.entity);
-        auto parent = constant_query_object(query_edges[q.offset]);
-        auto field = fact.expression.entity;
-        parent = constant_base_address(parent,entities[scopes[entities[field].owner].entity].type);
-        return constant_subobject(parent,entities[field].type,field);
-    }
-    auto v = constants[query_value(id)];
-    if (!v.valid) return 0;
-    if (types[v.type].kind == TypeKind::LRef || types[v.type].kind == TypeKind::RRef) return v.bits;
-    auto result = constant_storage_address(v.type,v);
-    constant_query_receivers.put(id,result); return result;
-}
 std::uint32_t Analyzer::constant_node_object(NodeId n)
 {
     if (pointer(expressions[n].type)) {
@@ -220,6 +202,11 @@ std::uint32_t Analyzer::constant_node_object(NodeId n)
 }
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
+    if (c.constant_forbidden) return Constant();
+    if (c.reference) if (auto temporary = retained_scalar(n,c.target)) {
+        auto value = entities[temporary].constant;
+        return value.valid ? Constant(c.target,constant_temporary_address(value.type,value,temporary)) : Constant();
+    }
     if (c.kind == Conversion::Kind::Discarded) {
         auto value = evaluate(n,s);
         return value.valid ? Constant(types.fundamental(FT_VOID),0) : Constant();
@@ -240,8 +227,8 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
             if (!value.valid) return Constant();
             args.push_back(value);
         }
-        auto value = constant_construct(material.constructor,args);
-        return c.reference && value.valid ? Constant(c.target,constant_storage_address(value.type,value)) : value;
+        auto value = constant_construct_temporary(material.constructor,args,false,c.reference ? material.temporary : 0);
+        return c.reference && value.valid ? Constant(c.target,constant_temporary_address(value.type,value,material.temporary)) : value;
     }
     if (c.kind == Conversion::Kind::List) {
         auto object = list_objects[c.materialization]; auto plan = list_plans[object.plan];
@@ -251,10 +238,10 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         else if (plan.constructor) {
             std::vector<Constant> args;
             for (unsigned i = 0; i < object.call.argument_count; ++i) args.push_back(constant_node_conversion(call_argument(object.call,i),conversions[object.call.conversions+i],s));
-            value = constant_construct(plan.constructor,args,plan.zero);
+            value = constant_construct_temporary(plan.constructor,args,plan.zero,c.reference ? object.temporary : 0);
         } else if (object.call.argument_count) value = constant_node_conversion(call_argument(object.call),conversions[object.call.conversions],s);
         else value = constant_zero(value_type(c.target));
-        if (c.reference && value.valid) return Constant(c.target,constant_storage_address(value.type,value));
+        if (c.reference && value.valid) return Constant(c.target,constant_temporary_address(value.type,value,object.temporary));
         return value;
     }
     auto target = types[c.target];
@@ -301,57 +288,15 @@ Constant Analyzer::constant_construct(EntityId e, const std::vector<Constant>& a
     try { auto value = execute_constant(e,args,destination,zero); constant_destination = saved; return value; }
     catch (...) { constant_destination = saved; throw; }
 }
-Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
+Constant Analyzer::constant_construct_temporary(EntityId e, const std::vector<Constant>& args, bool zero, EntityId temporary)
 {
-    if (c.function && types[c.target].kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
-    if (c.kind == Conversion::Kind::User) {
-        auto object = constant_query_object(source);
-        object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);
-        if (!object || members[entities[c.function].member_info].virtual_member) return Constant();
-        return convert(execute_constant(c.function,{},object),c.target,true);
-    }
-    if (c.kind == Conversion::Kind::Construction) {
-        auto material = conversion_objects[c.materialization];
-        auto call = material.call;
-        if (call.argument_count != 1) return Constant();
-        auto v = constant_query_conversion(source,conversions[call.conversions]);
-        return v.valid ? constant_construct(material.constructor,{v}) : Constant();
-    }
-    auto t = types[c.target]; auto from = query_fact(source).expression.type;
-    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef ||
-        (t.kind == TypeKind::Pointer && (types[from].kind == TypeKind::Array || types[from].kind == TypeKind::Function))) {
-        auto address = constant_query_object(source);
-        if (t.kind == TypeKind::Pointer && types[from].kind == TypeKind::Array) address = constant_subobject(address,t.child,0);
-        if (class_value(t.child)) address = constant_base_address(address,t.child);
-        return address ? Constant(c.target,address) : Constant();
-    }
-    return convert(constants[query_value(source)],c.target,true);
-}
-Constant Analyzer::constant_query_call(QueryId id)
-{
-    auto q = type_queries[id]; auto fact = query_fact(id);
-    auto e = fact.selected;
-    if (!e || (!entities[e].constexpr_function && !synthetic_member(e))) return Constant();
-    std::uint32_t object = 0;
-    auto callee = type_queries[query_edges[q.offset]];
-    if (entities[e].member_info && !entities[e].is_static && !constructor_member(e)) {
-        if (callee.kind != QueryKind::Member || callee.op == OP_ARROW) return Constant();
-        object = constant_query_object(query_edges[callee.offset]);
-        if (!object) return Constant();
-    }
-    auto count = types[entities[e].type].count;
-    auto offset = fact.expression.count-count;
-    std::vector<Constant> args;
-    for (unsigned i = 0; i < count; ++i) {
-        auto c = conversions[fact.expression.conversions+offset+i];
-        Constant value;
-        if (i+1 < q.count) value = constant_query_conversion(query_edges[q.offset+i+1],c);
-        else { auto node = default_argument(e,i,0,DefaultReason::Recipe); value = evaluate(node,facts[node].scope); }
-        value = convert(value,c.target);
-        if (!value.valid) return Constant();
-        args.push_back(value);
-    }
-    if (constructor_member(e)) return constant_construct(e,args,q.count == 1);
-    return execute_constant(e,args,object);
+    if (!temporary || !static_temporary(temporary).object) return constant_construct(e,args,zero);
+    auto address = constant_temporary_address(entities[temporary].type,Constant(),temporary);
+    auto saved = constant_destination; constant_destination = address;
+    try {
+        auto value = constant_construct(e,args,zero); constant_destination = saved;
+        if (value.valid) constant_temporary_address(value.type,value,temporary);
+        return value;
+    } catch (...) { constant_destination = saved; throw; }
 }
 } }

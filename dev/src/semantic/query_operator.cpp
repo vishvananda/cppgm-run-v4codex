@@ -118,6 +118,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
     }
     r.selected = selected.entity;
+    r.surrogate = selected.surrogate;
     std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
     for (unsigned i = 0; i < args.size(); ++i) check_fixed_conversion(args[i],0,chosen[i],q.context);
     if (selected.entity && !selected.surrogate) {

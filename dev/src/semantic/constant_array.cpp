@@ -108,7 +108,28 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
         if (required) throw std::runtime_error("nonconstant constexpr array initializer");
         return;
     }
+    // A relocatable early-static image is broader than a C++11 constant
+    // expression (for example a target pointer/integer reinterpretation).
+    // Required constexpr arrays use the same semantic value check as classes.
+    if (required && !constant_expression_plan(plan)) throw std::runtime_error("nonconstant constexpr array initializer");
     // Volatile subobjects still need their ordinary observable stores.
     if (constant_array_plans.get(plan) == 3) constant_arrays.put(e,plan);
+}
+bool Analyzer::constant_expression_plan(std::uint32_t plan)
+{
+    auto action = initializers[plan];
+    // Literal bytes and value initialization already carry a complete proof.
+    // Do not materialize an evaluated array merely to certify these actions.
+    if (action.kind == InitKind::String || action.kind == InitKind::Value) return true;
+    if (auto known = constant_expression_plans.get(plan)) return known == 2;
+    bool valid = true;
+    if (action.kind == InitKind::Group) {
+        for (auto child = action.first; valid && child; child = initializers[child].next)
+            valid = constant_expression_plan(child);
+    } else {
+        auto value = constant_init_plan(plan,facts[action.source].scope);
+        valid = value.valid && constant_persistent(value);
+    }
+    constant_expression_plans.put(plan,valid ? 2 : 1); return valid;
 }
 } }

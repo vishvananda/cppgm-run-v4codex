@@ -22,6 +22,9 @@ std::size_t Parser::probe_angles(std::size_t ahead)
             auto prior = in.peek(i-1);
             auto binding = identifier(i-1) ? names.lookup(scope,prior.text) : Binding();
             bool templated = template_category(binding.category) || (i >= 2 && in.is("template",i-2));
+            // Named casts own an angle-delimited type-id inside value arguments.
+            templated |= prior.op == KW_STATIC_CAST || prior.op == KW_DYNAMIC_CAST ||
+                prior.op == KW_REINTERPET_CAST || prior.op == KW_CONST_CAST;
             if (binding.category == Category::Unknown && identifier(i-1))
                 templated |= lexical_hint(prior.text) & 2;
             if (templated) angle_stack.push_back(i);

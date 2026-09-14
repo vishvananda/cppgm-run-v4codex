@@ -93,6 +93,8 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_destructor_facts
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_arguments
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_objects semantic/constant_addresses semantic/constant_execution
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_queries
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_conversion
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/arrow lowering/arrow
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_statements
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_floating

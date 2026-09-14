@@ -1,6 +1,65 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+void Analyzer::retain_initializer_references(EntityId e)
+{
+    auto entity = entities[e];
+    if ((!entity.is_static && scopes[entity.owner].kind != ScopeKind::Namespace) || entity.thread_local_storage) return;
+    auto bound_plan = [&](NodeId n) {
+        while (n) {
+            auto x = expressions[n];
+            auto c = conversions[x.incoming];
+            if (c.kind != Conversion::Kind::List && x.form == ExpressionForm::ListValue) c = conversions[x.conversions];
+            if (c.kind == Conversion::Kind::List) {
+                auto object = list_objects[c.materialization];
+                if (list_plans[object.plan].aggregate) return object.initializer;
+            }
+            n = reference_operand(n);
+        }
+        return std::uint32_t(0);
+    };
+    auto kind = types[entity.type].kind;
+    auto plan = initializer_plan(entity.initializer,entity.type);
+    if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
+        // Class materializations already have a selected semantic identity.
+        // Publish the required lifetime before constexpr validation reads it.
+        retain_reference_object(entity.initializer,e,false);
+        plan = bound_plan(entity.initializer);
+    }
+    if (!plan) return;
+    std::vector<std::uint32_t> work(1,plan);
+    while (!work.empty()) {
+        auto action = initializers[work.back()]; work.pop_back();
+        if (action.kind == InitKind::Group) {
+            for (auto child = action.first; child; child = initializers[child].next) work.push_back(child);
+            continue;
+        }
+        auto type = types[action.type];
+        if (type.kind != TypeKind::LRef && type.kind != TypeKind::RRef) continue;
+        auto n = action.source;
+        while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+        if (!n) continue;
+        auto c = conversions[expressions[n].incoming];
+        if (class_value(type.child)) {
+            retain_reference_object(n,e,false);
+            if (auto nested = bound_plan(n)) work.push_back(nested);
+            continue;
+        }
+        if (expressions[n].category != ValueCategory::Prvalue && !c.temporary) continue;
+        auto k = key(n,action.type);
+        if (retained_scalar_bindings.get(k)) continue;
+        auto temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,entity.owner),0,n);
+        entities[temporary].type = type.child; entities[temporary].definition = n; entities[temporary].is_static = true;
+        ReferenceStorage storage; storage.object = temporary; storage.reference = e; storage.scalar = true;
+        static_temporaries.put(temporary,reference_storage.size()); reference_storage.push_back(storage);
+        retained_scalar_bindings.put(k,temporary);
+        // The reference owns the temporary even when its value needs dynamic
+        // initialization. Evaluate just the selected scalar conversion here.
+        c.target = type.child; c.reference = c.temporary = false;
+        auto value = constant_node_conversion(n,c,entity.owner);
+        if (value.valid && constant_persistent(value)) entities[temporary].constant = value;
+    }
+}
 NodeId Analyzer::reference_operand(NodeId n) const
 {
     auto c = conversions[expressions[n].incoming];

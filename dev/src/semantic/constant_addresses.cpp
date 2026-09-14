@@ -2,6 +2,30 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+void Analyzer::refresh_constant_storage(std::uint32_t id)
+{
+    auto& storage = constant_storage[id];
+    if (!storage.entity || storage.readable || !entities[storage.entity].constant.valid) return;
+    // A prior address can precede its declaration's initializer. Only this
+    // storage changes when that initializer publishes a completed value.
+    storage.value = entities[storage.entity].constant;
+    storage.readable = true; ++storage.version;
+}
+std::uint32_t Analyzer::constant_temporary_address(TypeId t, Constant value, EntityId temporary)
+{
+    if (!temporary || !static_temporary(temporary).object) return constant_storage_address(t,value,0,0,value.valid);
+    auto address = constant_entity_storage.get(temporary);
+    if (!address) {
+        address = constant_storage_address(t,value,temporary,0,value.valid);
+        constant_entity_storage.put(temporary,address);
+    }
+    if (value.valid) {
+        auto storage = constant_addresses[address].storage;
+        constant_storage[storage].value = value; constant_storage[storage].readable = true;
+        entities[temporary].constant = value;
+    }
+    return address;
+}
 std::uint32_t Analyzer::constant_storage_address(TypeId t, Constant value, EntityId e, NodeId literal, bool readable)
 {
     ConstantStorage storage; storage.type = t; storage.entity = e; storage.literal = literal;
@@ -65,7 +89,8 @@ std::uint32_t Analyzer::constant_entity_address(EntityId e)
 Constant Analyzer::constant_read(std::uint32_t id)
 {
     if (!id) return Constant();
-    auto a = constant_addresses[id]; auto storage = constant_storage[a.storage];
+    auto a = constant_addresses[id]; refresh_constant_storage(a.storage);
+    auto storage = constant_storage[a.storage];
     if (storage.live && types[a.type].kind == TypeKind::Function) return Constant(types.compound(TypeKind::Pointer,a.type),id);
     if (storage.builder && a.parent && !constant_addresses[a.parent].parent) {
         auto slot = storage.builder->slots.get(a.selector);
@@ -116,7 +141,10 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         return constant_address(ast[first].next,s);
     }
     if (x.category == ValueCategory::Prvalue && class_value(x.type)) {
-        auto address = constant_storage_address(x.type,Constant());
+        auto temporary = object_fact(n).temporary;
+        auto known = constant_entity_storage.get(temporary);
+        if (known && constant_storage[constant_addresses[known].storage].readable) return known;
+        auto address = constant_temporary_address(x.type,Constant(),temporary);
         auto saved = constant_destination; constant_destination = address;
         Constant value;
         try { value = (ast[n].kind == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s); }
@@ -124,6 +152,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         constant_destination = saved;
         auto storage = constant_addresses[address].storage;
         constant_storage[storage].value = value; constant_storage[storage].readable = value.valid;
+        if (value.valid && temporary && static_temporary(temporary).object) entities[temporary].constant = value;
         return value.valid ? address : 0;
     }
     if (x.form == ExpressionForm::OperatorCall) {
@@ -237,16 +266,26 @@ Constant Analyzer::constant_pointer_binary(ETokenType op, Constant a, Constant b
 bool Analyzer::constant_persistent(Constant v)
 {
     if (!v.valid) return false;
-    auto k = types[v.type].kind;
-    if (k == TypeKind::Pointer || k == TypeKind::LRef || k == TypeKind::RRef) {
-        if (!v.bits) return k == TypeKind::Pointer;
-        auto s = constant_storage[constant_addresses[v.bits].storage];
+    auto persistent_address = [&](Constant value) {
+        if (!value.bits) return types[value.type].kind == TypeKind::Pointer;
+        auto s = constant_storage[constant_addresses[value.bits].storage];
         return s.live && (s.literal || (s.entity && (entities[s.entity].is_static ||
             entities[s.entity].kind == EntityKind::Function || scopes[entities[s.entity].owner].kind == ScopeKind::Namespace)));
-    }
-    if (class_value(v.type) || k == TypeKind::Array) {
-        auto o = evaluated_objects[v.bits];
-        for (unsigned i = 0; i < o.count; ++i) if (!constant_persistent(evaluated_parts[o.first+i].value)) return false;
+    };
+    auto k = types[v.type].kind;
+    if (k == TypeKind::Pointer || k == TypeKind::LRef || k == TypeKind::RRef) return persistent_address(v);
+    if ((!class_value(v.type) && k != TypeKind::Array) || !evaluated_objects[v.bits].address_count) return true;
+    std::vector<Constant> work(1,v); Index seen;
+    while (!work.empty()) {
+        auto value = work.back(); work.pop_back();
+        auto kind = types[value.type].kind;
+        if (class_value(value.type) || kind == TypeKind::Array) {
+            if (seen.get(value.bits)) continue;
+            seen.put(value.bits,1); ++constant_persistence_work;
+            auto object = evaluated_objects[value.bits];
+            for (unsigned i = 0; i < object.address_count; ++i)
+                work.push_back(evaluated_parts[evaluated_address_parts[object.addresses+i]].value);
+        } else if (!persistent_address(value)) return false;
     }
     return true;
 }
@@ -281,12 +320,16 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
     if ((k == TypeKind::Pointer || k == TypeKind::LRef || k == TypeKind::RRef) && value.bits) {
         auto storage_id = constant_addresses[value.bits].storage;
         if (seen.get(storage_id)) return;
-        seen.put(storage_id,1); auto storage = constant_storage[storage_id];
+        seen.put(storage_id,1); ++constant_dependency_work; refresh_constant_storage(storage_id);
+        auto storage = constant_storage[storage_id];
         args.push_back(storage_id); args.push_back(storage.version);
         args.push_back(unsigned(storage.live) | (unsigned(storage.readable)<<1));
         constant_dependencies(storage.value,args,seen);
         if (storage.builder) for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
     } else if (class_value(value.type) || k == TypeKind::Array) {
+        auto object_key = key(1,value.bits);
+        if (seen.get(object_key)) return;
+        seen.put(object_key,1); ++constant_dependency_work;
         auto o = evaluated_objects[value.bits];
         for (unsigned i = 0; i < o.address_count; ++i) constant_dependencies(evaluated_parts[evaluated_address_parts[o.addresses+i]].value,args,seen);
     }

@@ -60,6 +60,10 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (!reference_target && x.category != ValueCategory::Prvalue &&
         (types[x.type].cv & 2) && types[x.type].kind != TypeKind::Array) return r;
     auto incoming = conversions[x.incoming];
+    if (reference_target) if (auto temporary = retained_scalar(n,target)) {
+        auto value = entities[temporary].constant;
+        return value.valid ? constant_static_value(Constant(target,constant_temporary_address(value.type,value,temporary))) : StaticValue();
+    }
     if (reference_target && x.category == ValueCategory::Prvalue && !class_value(x.type) &&
         (incoming.kind == Conversion::Kind::Standard || incoming.kind == Conversion::Kind::Explicit))
         return constant_static_value(convert(evaluate(n,facts[n].scope),types[target].child,true));
