@@ -3,14 +3,25 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
-Target: **PA15 full-stage**, O0 typed LowIR. Loop 33 enters at `3aff4801`,
-**166/177**, and hands off **169/177**: three existing failures fixed, eight
-remain, no coverage reduction. This is an incomplete implementation handoff,
-not the independent whole-stage audit or permission to advance to PA16.
-The preceding goal turn was progress: committed audit repairs and verified
-measurements. Preserve [the accumulated audit](audit.md), its review range,
-[historical evidence](../student.tests/pa15/checkpoint-evidence.json), and both
-markers above; this turn does not advance the reviewed marker.
+Target: **PA15 full-stage**, O0 typed LowIR. Loop 34 enters at `b8379f52`,
+**169/177**, with eight existing failures. The preceding goal turn was progress:
+its committed matching changes and verified 169/177 report establish the baseline.
+Preserve [the accumulated audit](audit.md), historical measurements and both
+markers above; implementation does not advance the reviewed marker.
+
+Loop 34 groups the remaining failures by semantic ownership:
+
+| Owner | Data flow, work and planned validation |
+|---|---|
+| Initialization/storage | Checked object/type and selected constructor facts -> typed initialization actions -> storage and LowIR. Audit value initialization of bases, aggregate cast materialization, constant array backing and member initializer reuse together. Work must follow demanded object/subobject actions, with cached type facts; validate changed fixtures plus native lifetime/storage controls. |
+| Constant execution | Selected constexpr function/conversion and checked return facts -> canonical integral value -> argument/static member binding. Preserve declaration/body/storage separation, immutable source and complete execution keys; use independent rejection and substitution controls. |
+| Ordinary body validation | Complete ordinary class -> checked bodies without forcing template member instantiation or emission. Validate unused ordinary/explicit-class assertions and dormant dependent template bodies. |
+
+Freeze the entry binary before edits. Record compiler latency/RSS and executable
+runtime/text using A/A noise and ABBA comparisons on equivalent supported inputs;
+newly accepted inputs get absolute/scaling evidence. There is no PA15/O0 numeric
+ceiling or optional optimizer. Extend related repairs while ownership is shared,
+then run required PA15, prior-through and file audit checks and commit the handoff.
 
 ## Completed owner and spec alignment
 
