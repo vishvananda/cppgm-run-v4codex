@@ -37,6 +37,10 @@ is also unnecessary and does not provide program-wide static data semantics.
 The eight PA16 reference edits replace zero storage with the computed constant
 or relocation, and remove only the now-redundant startup function. All other
 instructions, aliases, symbols and metadata remain byte-for-byte unchanged.
+A two-TU local-reference reducer also tests the removed queue against turn entry:
+the old output has duplicate singleton `init` roles and is rejected by the native
+backend; current output validates and returns 0 in both source orders.
+
 The implementation already had checked values for the seven entry failures;
 this increment additionally removes the local-reference startup exception and
 its separate lowering queue. The explicit [harness](../student.tests/pa16/initialization.py)
@@ -76,3 +80,22 @@ checks the revised oracles against the compiler without a comparator relaxation.
 The implementation routes eligible declarations through the existing typed
 plan checker and data interner. Nonconstant initializers keep ordinary execution;
 volatile stores and class construction/lifetimes retain their required actions.
+
+## Program lifecycle ownership
+
+The [two-TU lifecycle reducer](../student.tests/pa16/initialization/lifecycle_caller.cpp)
+and [second TU](../student.tests/pa16/initialization/lifecycle_second.cpp) require
+both dynamic constructors and reverse-order destructors. Before the connected
+fix, each TU introduced its own singleton role and `--validate-lowir` rejected
+the whole program. PA8's [runtime-hook contract](../pa8/lowir.md#reserved-runtime-hooks)
+permits only one `init` and one `fini` definition. N3485 3.6.2
+[basic.start.init]/2 permits the chosen sequential TU order, and 3.6.3
+[basic.start.term]/1 requires the reverse destruction relation.
+
+Program-owned typed function-ID sequences now supply one coordinator per role
+when multiple TUs participate. The existing TU bodies and their order-sensitive
+actions are preserved; no semantic graph survives just to reconstruct them.
+A single TU keeps its original output. Helpers use names distinct from legacy
+`__cppgm_init`/`__cppgm_fini` so the serialized reader cannot infer extra roles.
+Both source orders validate, roundtrip and execute; no additional oracle edit
+is needed for this implementation correction.

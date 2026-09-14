@@ -6,11 +6,14 @@ using namespace lowir_model;
 void Procedural::global_initialization()
 {
     reset_lifetime(0);
-    Function f; f.symbol = fresh_symbol("@__cppgm_init");
+    // Per-TU helpers must not retain a legacy singleton spelling when the
+    // program-level scheduler later removes their runtime role.
+    Function f; f.symbol = fresh_symbol(linkage.merge ? "@__cppgm_unit_init" : "@__cppgm_init");
     function = FunctionId(p.functions.size()+1);
     auto void_type = sem.types.fundamental(FT_VOID);
     f.signature = signature(sem.types.function(void_type, {}, false), function);
     p.functions.push_back(f);
+    linkage.initializers.push_back(function);
     auto& symbol = p.symbols[f.symbol.index-1];
     symbol.kind = Symbol::FunctionSymbol; symbol.entity = function.index;
     symbol.metadata.role = SR_INIT; symbol.metadata.binding = SBM_INTERNAL;

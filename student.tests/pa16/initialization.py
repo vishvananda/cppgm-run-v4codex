@@ -60,5 +60,25 @@ run('automatic_array_reducer',array.read_text(),copies=2,images=1)
 local=ROOT/'student.tests/pa16/initialization/local_order.cpp'
 run('local_order',local.read_text(),copies=0)
 if REFERENCE:run('local_order_reference',local.read_text(),reference=True)
+for case,files in [('local_order',['local_order_caller.cpp','local_order_definition.cpp']),('lifecycle',['lifecycle_caller.cpp','lifecycle_second.cpp'])]:
+ for reverse in [False,True]:
+  sources=[ROOT/'student.tests/pa16/initialization'/s for s in files]
+  if reverse:sources.reverse()
+  name=case+'_multitu_'+str(int(reverse));ir=WORK/(name+'.lowir');exe=ir.with_suffix('.exe')
+  r=subprocess.run([CC,'--emit-lowir','-O0','--validate-lowir','-o',ir,*sources],capture_output=True,text=True,timeout=30)
+  row=dict(name=name,source_sha256=[sha(p) for p in sources],compile_exit=r.returncode,diagnostic=r.stderr)
+  ok=r.returncode==0
+  if ok:
+   row['ir_sha256']=sha(ir)
+   text=ir.read_text()
+   assert text.count('role=init')==1 and text.count('role=fini')==(1 if case=='lifecycle' else 0)
+   parsed=subprocess.run([ROOT/'dev/lowir','-o',ir.with_suffix('.roundtrip'),ir],capture_output=True,text=True,timeout=30)
+   assert parsed.returncode==0,parsed.stderr
+   r=subprocess.run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir],capture_output=True,text=True,timeout=30)
+   row['backend_exit']=r.returncode;ok=r.returncode==0
+   if ok:
+    row['native_sha256']=sha(exe);row['native_exit']=subprocess.run([exe],capture_output=True,timeout=10).returncode
+    ok=row['native_exit']==0
+  row['passed']=ok;rows.append(row);print(name,'PASS' if ok else 'FAIL',flush=True)
 (WORK/'results.json').write_text(json.dumps(dict(compiler_sha256=sha(CC),rows=rows),indent=2)+'\n')
 assert all(r['passed'] for r in rows),[r['name'] for r in rows if not r['passed']]

@@ -47,6 +47,9 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             std::cerr << "}\n";
         }
     }
+    auto lifecycle_start = Clock::now();
+    linkage.finish_lifecycle(program);
+    lowering_ms += std::chrono::duration<double, std::milli>(Clock::now()-lifecycle_start).count();
     if (audit) lowir_model::validate(program);
     std::ofstream out(output.c_str());
     if (!out) throw std::runtime_error("cannot create LowIR output");
@@ -62,6 +65,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             << ",\"control_work\":" << control_work << ",\"discard_work\":" << discard_work
             << ",\"full_expression_work\":" << full_expression_work << ",\"full_expression_regions\":" << full_expression_regions
             << ",\"linkage_requests\":" << linkage.requests << ",\"linkage_hits\":" << linkage.hits
+            << ",\"initializer_units\":" << linkage.initializers.size() << ",\"finalizer_units\":" << linkage.finalizers.size()
             << ",\"abi_nodes\":" << linkage.abi.size() << ",\"abi_bytes\":" << linkage.abi.storage_bytes()
             << ",\"instructions\":" << program.instructions.size() << ",\"operands\":" << program.operands.size()
             << ",\"ir_pool_growths\":" << program.pool_allocations()

@@ -41,6 +41,8 @@ struct Linkage {
     std::uint64_t disambiguator = 0;
     bool merge;
     SymbolId allocation_roles[2], rtti_roles[3];
+    std::vector<FunctionId> initializers, finalizers;
+    void finish_lifecycle(lowir_model::Program& program);
     explicit Linkage(bool merge) : merge(merge) {}
 };
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.

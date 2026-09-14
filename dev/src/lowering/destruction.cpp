@@ -127,7 +127,7 @@ void Procedural::global_finalization()
             !(sem.static_temporary(e).reference && sem.local_static(sem.static_temporary(e).reference)) && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);
     if (work.empty()) return;
     reset_lifetime(0);
-    Function f; f.symbol = fresh_symbol("@__cppgm_fini");
+    Function f; f.symbol = fresh_symbol(linkage.merge ? "@__cppgm_unit_fini" : "@__cppgm_fini");
     function = FunctionId(p.functions.size()+1);
     auto void_type = sem.types.fundamental(FT_VOID);
     f.signature = signature(sem.types.function(void_type, {}, false), function);
@@ -135,6 +135,7 @@ void Procedural::global_finalization()
     auto& symbol = p.symbols[f.symbol.index-1];
     symbol.kind = Symbol::FunctionSymbol; symbol.entity = function.index;
     symbol.metadata.role = SR_FINI; symbol.metadata.binding = SBM_INTERNAL;
+    linkage.finalizers.push_back(function);
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
     for (auto it = work.rbegin(); it != work.rend(); ++it) {
