@@ -1,112 +1,104 @@
-# PA17 implementation — loop 46
+# PA17 implementation handoff — loop 46
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 
-Loop 46 entry: `4bbb712abc6047e4821f850116aa0465df1eedbd`, clean,
-207/343 (136 failures). Review markers remain unchanged. Work in progress:
-member-template declaration/signature environments, specialization body ownership,
-and explicit-instantiation demand. Owners are `template_declaration`,
-`template_instantiation`, `explicit_instantiation` and the ordinary declaration
-builder; data flows from retained heads/signatures through canonical entities and
-parent-linked substitution frames to existing body demand and typed lowering.
-Work must follow each head, signature and demanded entity; no global retry or
-grammar replay. Validate the affected required fixtures, explicit personal
-controls, all earlier PAs and file audit. Freeze entry/final binaries and measure
-compiler latency/RSS plus common executable runtime/text under spec.md's PA17/O0
-acceptance. Nested class/member source retention and out-of-class partial-owner
-attachment remain required implementation; existing review questions below are
-separate and preserved.
+Target: **PA17 full-stage**, still incomplete. Entry was clean at
+`4bbb712abc6047e4821f850116aa0465df1eedbd`, **207/343**. Current result:
+**242/343**; **35 original failures fixed**, **101 remain**, **no new failures**.
+All fixtures, references and comparison/status rules are unchanged. This is an
+implementation handoff, not independent audit acceptance or stage advancement.
 
-Loop 46 checkpoint: **241/343**, all **2266** earlier fixtures pass; **34**
-entry failures fixed with **no new failures**. Member head/class environments,
-constructor/signature/body facts, explicit specialization and instantiation
-ownership now share ordinary canonical entities and demand. Dependent qualified
-type accesses retain source-scope obligations separate from canonical type
-identity, validated per complete substitution frame (including pack lanes).
-Source-subtree summaries skip bodies; access exemptions end before demanded
-declarations. Controls: 16 native, 9 rejection and 3 LowIR ownership probes;
-the prior 34 entity controls pass. Next: finish related redeclaration/default
-and demand edges, then freeze/measure and run final handoff checks. Performance
-evidence and the old handoff sections below are historical until refreshed.
+## Completed behavior, ownership and spec alignment
 
-Target: **PA17 full-stage**, still incomplete. This is an implementation
-handoff, not independent audit acceptance. Entry was clean at **132/343**.
-Current result: **207/343**; **75 original failures fixed**, **136 remain**,
-**no new failures**. All 343 fixtures and their comparison/status contracts are
-unchanged; no reference corrections were made.
+- `template_declaration` and the ordinary declaration builder give member
+  templates canonical class-owned entities and distinct parameter environments.
+  Qualified definitions retain lexical return-type lookup and class lookup after
+  the declarator. Equivalent alias/function heads share identity; renamed heads
+  preserve dependent defaults without replacing an established alias definition.
+- `template_instantiation`, `construction` and member demand retain static/cv/ref,
+  access, constructor and initializer/body facts on selected specializations.
+  Constructor deduction uses the existing candidate engine; qualification and
+  structural template ranking preserve the implicit copy constructor. Explicit
+  member specializations own their bodies, including declarations preceding the
+  primary definition. Static-local initializer relocations demand their targets.
+- `explicit_instantiation` resolves the actual function/member entity, validates
+  namespace and operator rules, records declaration/definition state, and feeds
+  ordinary demand plus typed lowering retention metadata. Extern declarations
+  suppress non-inline members, including non-template nested classes; inline and
+  implicit members remain available. Explicit specializations make subsequent
+  instantiations inert. No blanket body instantiation or global retry was added.
+- `template_type_access` retains source-scope access obligations separately from
+  canonical type identity. Source subtree summaries exclude dormant bodies;
+  checks use complete substitution-frame/recipe keys and pack lanes, with
+  in-progress/success/failure states. `dependent_type` shares selected-member
+  identities between type substitution and access checking; only complete class
+  scopes publish cached lookup results. Explicit-instantiation naming exemptions
+  end before demanded class declarations are checked. The new source is registered.
 
-## Completed behavior and spec alignment
-
-- **Template argument identity:** `template_entities`, `template_arguments`,
-  `template_class` and `dependent_type` retain nested template parameter heads,
-  canonical head shapes, template entities and alias application by entity/typed
-  tuple. Alias entities belong to their declaring namespace/class; parameter
-  environments are separate. Matching checks kinds, arity, dependent non-type
-  types, packs, defaults and access. Namespace-qualified identities remain distinct.
-- **Structural selection:** `template_deduction` and `class_pattern_selection`
-  distinguish class patterns from call deduction, preserve array bounds/cv,
-  function qualifiers and adjusted parameters, repeated/nested/symbolic packs,
-  fixed prefixes and constant value patterns. Selection records its definition
-  and arguments once. Immutable candidate-pair ordering has its own cache;
-  omitted-default positions belong to the actual match and are computed only
-  when viable candidates compete. Crossed coverage remains ambiguous.
-- **Retained substitution:** definition-time argument facts feed immutable
-  substitution frames; only dependent facts are rebuilt. Pack lists own ellipsis
-  substitution, including empty packs and dependent constant expressions.
-  Reapplying a dependent cast preserves its canonical identity. Class/base
-  dependence includes non-type parameters and sizeof-pack expressions.
-- **Source boundary:** split `>>`, qualified function parameters, empty function
-  types, and direct-member decltype preserve their source meaning. No grammar
-  replay, rendered semantic keys, global retries, fixture dispatch or output
-  delegation was added. Existing typed semantic-to-LowIR lowering is reused.
-
-Work follows parameter/argument edges and viable candidates. Deduction and
-substitution are linear in consumed shapes; coverage sorting is O(n log n) in
-matched positions, and selection compares candidate pairs required for ordering.
-Canonical head/source facts and alias results use TU-owned flat identity indexes;
-match vectors and coverage indexes die after selection. Published source facts
-are keyed by source identity only for original occurrences; substitutions use
-complete frame identity. New sources are registered in frontend_source_sets.mk.
+Work follows head parameters, related candidates, source type obligations and
+actual storage/demand edges. Head normalization/default merging is O(head size);
+source summaries are built once, access checks scale with relevant recipes and
+lanes, and each completed owner/name lookup is indexed. These TU-owned flat
+indexes and immutable frames have TU lifetime; traversal/default scratch dies at
+operation return. No parser replay, rendered semantic keys, new owning syntax
+copies, output delegation or optional optimization was introduced. Existing
+structural argument/partial-selection work from loop 45 remains intact.
 
 ## Validation and performance
 
-`make test-pa17`: **207/343**. `make test-report-through-pa16`: **2266/2266**.
-Through PA17 reports **2473/2609**, with failures confined to PA17.
-File audit passes with three inherited header-division warnings. Explicit
-`student.tests/pa17/entity_controls.py`: **24 native / 10 rejection** controls
-pass, including every newly exposed regression. [Handoff evidence](../student.tests/pa17/handoff.json)
-and [verifier](../student.tests/pa17/verify_handoff.py) bind source/fixture hashes,
-required logs, the exact failure delta, controls and frozen measurements.
+`make test-pa17`: **242/343**. `make test-report-through-pa16`: **2266/2266**.
+`make test-report-through-pa17`: **2508/2609**, all failures in PA17. Root reports
+were run serially because concurrent invocations share report counters.
+File audit passes with the same three inherited header-division warnings.
+Explicit personal controls pass: **21 native / 13 rejection / 4 LowIR** member
+controls, plus the prior **24 native / 10 rejection** entity controls.
+[Handoff evidence](../student.tests/pa17/handoff.json) and the
+[verifier](../student.tests/pa17/verify_handoff.py) bind source/fixture integrity,
+required logs, the exact failure delta, control results and frozen measurements.
 
-[Performance evidence](entity-performance.md) records A/A and ABBA observations,
-compiler latency/RSS, native runtime/text size and identical common outputs.
-Historical campaigns remain preserved. PA17/O0 mandates no numerical latency,
-RSS or text ceiling; inherited percentage/scaling targets remain diagnostics,
-not exit gates. No optional optimization or executable-speed benefit is claimed.
-Native optimization/MIR/self-hosting remain later-stage owners.
+[Performance evidence](member-performance.md) records frozen A/B flags, hashes
+and inputs, A/A calibration, ABBA observations, compiler latency/RSS and native
+runtime/text size. Common outputs are checked for equivalence; newly supported
+member workloads are measured separately from the rejecting entry binary.
+PA17/O0 imposes no numerical latency/RSS/text ceiling and requires no optional
+optimization. Historical percentage/scaling targets remain diagnostics, not
+extra gates; measurements and evaluator limits remain preserved. Native
+optimization, MIR and self-hosting remain later-stage owners. Loop 45's
+[measurements](entity-performance.md) and
+[handoff record](../student.tests/pa17/handoff-loop45.json) remain historical.
 
-## Remaining implementation and handoff boundary
+## Remaining implementation and concrete handoff boundary
 
-The 136 failures remain required work: nested/member templates and aliases need
-source declaration retention and concrete enclosing-owner publication; partial
-owner/out-of-class definitions need correct attachment and late demand; friends,
-ADL/access/hiding, typename/template obligations, and explicit instantiation need
-their declaration/emission state. Some completed semantic cases still need LowIR
-output fixes (for example ordinary wide scalar assignment in the forward alias
-fixture). These are implementation gaps, not review questions or waived tests.
+The **101 failures** are unfinished implementation, not review questions:
+multiple template-head declarations and nested member/alias source retention;
+partial-owner and late out-of-class definition attachment; friend-template
+relationships/access/ADL; dependent typename/template obligations; remaining
+pack/variable-template interactions; and required LowIR output differences.
+In particular, nested extern-member suppression and static-local relocation
+ownership now work, but the member-coverage and static-table fixtures still have
+LowIR cleanup/representation differences. No failed fixture is waived.
 
-The next coherent group crosses nested declaration, access, substitution-frame
-and body/emission lifetimes. Extending the argument matcher cannot supply those
-missing owner facts. This handoff finishes structural argument selection and
-substitution, including the related defects found during validation; it does not
-claim all alias/member interactions or the whole assignment are complete.
+This handoff closes member-template behavior with concrete enclosing owners,
+its redeclaration/default and constructor edges, and explicit-instantiation
+selection/demand. The remaining multi-head cases need a retained declaration
+graph that pairs each head with the selected enclosing owner, including partial
+specializations, before publishing nested templates. Extending the concrete
+head overlay cannot supply those source facts. The remaining LowIR differences
+belong to cleanup, scalar/constant storage and initializer lowering. These are
+separate implementation owners beyond this completed semantic group; the
+handoff does not assert whole-stage completion.
 
 ## Review ledger
 
-`622e486a`: heads/aliases/shape deduction; `8deaa931`: retained arguments and pack
-selection; `da8594b7`: alias ownership/access regressions; `f6dbacde`: dependent
-conversion identity and demand-scoped coverage. All remain **unreviewed**.
-Independent audit must examine complete keys/source-frame reuse, structural
-ordering/coverage and enclosing access environments across this full history.
-Review markers above are preserved; implementation checks do not replace audit.
+`fabfe92e`: member ownership, constructors, explicit instantiation and access
+obligations. `ca67b17d`: defaults/alias equivalence, nested suppression, static
+relocation demand and completed selected-member lookup. `5ea7f7f6`: enforce definition-scope
+access for alias instantiation and keep naming exemptions out of access fact keys.
+All three are **unreviewed**.
+Prior `622e486a`, `8deaa931`, `da8594b7`, `f6dbacde` remain **unreviewed**.
+Independent audit must examine the full history's argument/head identities,
+structural ordering/coverage, source/frame reuse, access-recipe keys and naming
+exemption boundaries, and declaration/body/storage demand lifetimes. These are
+review obligations distinct from the 101 known implementation failures; neither
+is waived. The review markers above remain unchanged.
