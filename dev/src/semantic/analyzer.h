@@ -644,6 +644,8 @@ private:
     TypeId type_name(NodeId n, ScopeId s, NodeId last = 0);
     TypeId injected_template_type(EntityId e, ScopeId use);
     TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
+    EntityId qualified_type_member(TypeId owner, IdentifierId name);
+    Index qualified_type_members;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
     ScopeId name_owner(NodeId name, ScopeId s, bool declaration = false);
     ScopeId common_ancestor(ScopeId a, ScopeId b) const;
@@ -688,6 +690,10 @@ private:
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
     ScopeId member_template_environment(ScopeId head, ScopeId owner);
     Index member_template_environments;
+    std::uint32_t template_declaration_shape(TypeId type, ScopeId environment);
+    bool equivalent_alias_template(EntityId entity, TypeId type, ScopeId environment);
+    void merge_template_defaults(EntityId entity, ScopeId incoming, ScopeId previous = 0);
+    Index alias_declaration_shapes;
     void instantiate_function(EntityId e);
     void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);

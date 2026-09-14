@@ -50,17 +50,16 @@ void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
                     auto count = pack ? expansion_count(pack,bindings,frame) : 1;
                     bool complete = count >= 0;
                     for (int lane = 0; lane < count; ++lane) {
-                    auto environment = pack ? expansion_frame(frame,pack,lane) : frame;
-                    auto qualifier = substitute_type(use.qualifier,bindings,cache,environment);
-                    if (!qualifier || dependent_type(qualifier)) { complete = false; continue; }
-                    if (types[qualifier].kind != TypeKind::Named) throw std::runtime_error("invalid substituted type qualifier");
-                    auto cls = types[qualifier].entity; complete_class(cls);
-                    auto scope = entities[cls].scope;
-                    auto member = lookup(scope,use.name,Lookup::Ordinary,true);
-                    if (!member) throw std::runtime_error("substituted type member not found");
-                    check_access(member,substitution_scope(environment,use.scope),scope);
-                    ++template_type_access_work;
-                    template_type_access_states.put(key(environment,recipe),unsigned(FactState::Success));
+                        auto environment = pack ? expansion_frame(frame,pack,lane) : frame;
+                        auto qualifier = substitute_type(use.qualifier,bindings,cache,environment);
+                        if (!qualifier || dependent_type(qualifier)) { complete = false; continue; }
+                        if (types[qualifier].kind != TypeKind::Named) throw std::runtime_error("invalid substituted type qualifier");
+                        auto scope = entities[types[qualifier].entity].scope;
+                        auto member = qualified_type_member(qualifier,use.name);
+                        if (!member) throw std::runtime_error("substituted type member not found");
+                        check_access(member,substitution_scope(environment,use.scope),scope);
+                        ++template_type_access_work;
+                        template_type_access_states.put(key(environment,recipe),unsigned(FactState::Success));
                     }
                     template_type_access_states.put(k,unsigned(complete ? FactState::Success : FactState::NotStarted));
                 } catch (...) { template_type_access_states.put(k,unsigned(FactState::Failure)); throw; }

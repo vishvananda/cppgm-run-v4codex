@@ -2,13 +2,23 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+EntityId Analyzer::qualified_type_member(TypeId owner, IdentifierId name)
+{
+    if (types[owner].kind != TypeKind::Named) throw std::runtime_error("type qualifier is not a class");
+    auto cls = types[owner].entity;
+    auto k = key(cls,name);
+    if (auto member = qualified_type_members.get(k)) return member;
+    complete_class(cls);
+    auto member = lookup(entities[cls].scope,name,Lookup::Ordinary,true);
+    // In-progress classes can still introduce members that hide a base name.
+    // Only completed classes publish immutable selected-member facts.
+    if (member && entities[cls].complete) qualified_type_members.put(k,member);
+    return member;
+}
 TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id)
 {
     if (dependent_type(owner)) return types.dependent_name(owner,name,args,template_id);
-    if (types[owner].kind != TypeKind::Named) throw std::runtime_error("type qualifier is not a class");
-    EntityId cls = types[owner].entity;
-    complete_class(cls);
-    EntityId member = lookup(entities[cls].scope,name,Lookup::Ordinary,true);
+    EntityId member = qualified_type_member(owner,name);
     if (!member || (entities[member].kind != EntityKind::Type && entities[member].kind != EntityKind::Alias))
         throw std::runtime_error("qualified type member not found");
     if (template_id) {

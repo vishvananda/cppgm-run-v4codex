@@ -8,8 +8,16 @@ bool Analyzer::instantiation_suppressed(EntityId e) const
     if (entity.instantiation_declaration) return true;
     if (scopes[entity.owner].kind != ScopeKind::Class || entity.template_info || entity.specialization) return false;
     if (entity.member_info && members[entity.member_info].synthetic) return false;
-    auto cls = entities[scopes[entity.owner].entity];
-    return cls.instantiation_declaration && !cls.instantiation_definition;
+    // Naming a class also instantiates its non-template nested classes.
+    // A member template specialization still owns an independent demand.
+    for (auto scope = entity.owner; scopes[scope].kind == ScopeKind::Class;) {
+        auto cls = entities[scopes[scope].entity];
+        if (cls.explicit_specialization || cls.instantiation_definition) return false;
+        if (cls.instantiation_declaration) return true;
+        if (cls.specialization || cls.template_info) return false;
+        scope = cls.owner;
+    }
+    return false;
 }
 void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
 {
@@ -88,9 +96,10 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         auto ns = entities[selected].owner;
         while (scopes[ns].kind != ScopeKind::Namespace) ns = scopes[ns].parent;
         check_namespace(ns,name);
+        if (entities[selected].explicit_specialization) return;
         publish(selected);
         naming.restore();
-        if (declaration_only || entities[selected].explicit_specialization) return;
+        if (declaration_only) return;
         if (entities[selected].kind == EntityKind::Function) {
             demand_specialization(selected);
             if (entities[selected].member_info) {
@@ -109,6 +118,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
     check_namespace(owner,name);
     if ((ast[ast[source].first].op == KW_UNION) != (entities[e].key == KW_UNION))
         throw std::runtime_error("explicit instantiation class key mismatch");
+    if (entities[e].explicit_specialization) return;
     publish(e);
     naming.restore();
     if (declaration_only) return;

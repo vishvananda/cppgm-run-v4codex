@@ -41,6 +41,8 @@ for n in (1500,6000):
 for n in (1500,6000):
  source=''.join(f'struct M{i}{{int value;template<class T>int f(T) const;}};template<class U>int M{i}::f(U x)const{{return value+x;}}int g{i}(int x){{M{i} m={{{i}}};return m.f(x);}}\n' for i in range(n))
  corpus.append((f'member-qualified-{n}',source,False,False))
+ prefix='template<int N>struct Tag{typedef char type[N+1];};template<class T>using A=typename T::type;\n'
+ corpus.append((f'common-qualified-access-{n}',prefix+''.join(f'static_assert(sizeof(A<Tag<{i}>>)=={i+1}, "");\n' for i in range(n)),True,False))
 for name,source in shared.runtimes(factor=12):corpus.append(('runtime-'+name,source,True,True))
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
 result['started_utc']=time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime())

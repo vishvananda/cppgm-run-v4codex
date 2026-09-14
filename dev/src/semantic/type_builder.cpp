@@ -24,6 +24,10 @@ EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, Ty
     }
     EntityId e = local(s, name);
     if (e) {
+        if (definitions && environment == active_template_scope && entities[e].template_info) {
+            if (!equivalent_alias_template(e,canonical,environment)) throw std::runtime_error("conflicting alias template");
+            return e;
+        }
         if ((entities[e].kind != EntityKind::Alias && entities[e].kind != EntityKind::Type) ||
             entities[e].type != canonical) throw std::runtime_error("conflicting type alias");
         return e;
@@ -488,6 +492,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
     if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
         demand_class_constant_storage(t);
+    if (definitions && !unevaluated_depth && local_static(e) && static_initialization(e))
+        demand_constant_relocations(constant_initialize(init,t,definition_scope,object_constructor(e)));
     return e;
 }
 } }

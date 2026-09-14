@@ -18,11 +18,8 @@ ScopeId Analyzer::member_template_environment(ScopeId head, ScopeId owner)
     }
     member_template_environments.put(k,environment); return environment;
 }
-EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor)
+std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environment)
 {
-    ScopeId environment = active_template_scope;
-    ScopeId scope = owner == environment ? scopes[owner].parent : owner;
-    environment = member_template_environment(environment,scope);
     Index bindings, cache;
     std::vector<TypeId> shape;
     unsigned count = 0;
@@ -34,13 +31,77 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
         shape.push_back(entities[parameter].parameter_pack ? types.compound(TypeKind::PackExpansion,0,argument) : argument); ++count;
     }
     TypeId normalized = substitute_type(type,bindings,cache);
-    if (!normalized) throw std::runtime_error("invalid function template declaration");
+    if (!normalized) throw std::runtime_error("invalid template declaration shape");
     shape.push_back(normalized);
-    auto signature = intern_arguments(shape);
+    return intern_arguments(shape);
+}
+bool Analyzer::equivalent_alias_template(EntityId e, TypeId type, ScopeId environment)
+{
+    if (entities[e].kind != EntityKind::Alias || !entities[e].template_info) return false;
+    auto head = entities[e].template_info;
+    auto prior = alias_declaration_shapes.get(head);
+    if (!prior) {
+        prior = template_declaration_shape(entities[e].type,templates[head].environment);
+        alias_declaration_shapes.put(head,prior);
+    }
+    return prior == template_declaration_shape(type,environment);
+}
+void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId previous)
+{
+    auto has_defaults = [&](ScopeId scope) {
+        for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter && (entities[p].initializer || template_default_types.get(p))) return true;
+        }
+        return false;
+    };
+    if (!has_defaults(incoming) && !has_defaults(previous)) return;
+    auto selected = templates[entities[e].template_info];
+    auto parameters = [&](ScopeId s) {
+        std::vector<EntityId> result;
+        for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter) result.push_back(p);
+        }
+        return result;
+    };
+    auto current = parameters(incoming), old = parameters(previous);
+    if (current.size() != selected.count || (previous && old.size() != selected.count))
+        throw std::logic_error("template default head mismatch");
+    Index old_bindings, new_bindings, old_cache, new_cache;
+    for (unsigned j = 0; j < selected.count; ++j) {
+        auto p = template_parameters[selected.offset+j];
+        new_bindings.put(current[j],parameter_argument(p));
+        if (previous) old_bindings.put(old[j],parameter_argument(p));
+    }
+    auto value = [&](EntityId p, ScopeId scope) {
+        auto known = template_default_types.get(p);
+        if (!known && entities[p].initializer) {
+            known = template_argument_node(ast[entities[p].initializer].first,scope);
+            template_default_types.put(p,known);
+        }
+        return known;
+    };
+    for (unsigned j = 0; j < selected.count; ++j) {
+        auto before = previous ? value(old[j],previous) : 0;
+        auto after = value(current[j],incoming);
+        if (before && after && old[j] != current[j]) throw std::runtime_error("duplicate template default argument");
+        auto result = after ? substitute_argument(after,new_bindings,new_cache) :
+            before ? substitute_argument(before,old_bindings,old_cache) : 0;
+        if ((before || after) && !result) throw std::runtime_error("invalid redeclared template default");
+        if (result) template_default_types.put(template_parameters[selected.offset+j],result);
+    }
+}
+EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor)
+{
+    ScopeId environment = active_template_scope;
+    ScopeId scope = owner == environment ? scopes[owner].parent : owner;
+    environment = member_template_environment(environment,scope);
+    auto signature = template_declaration_shape(type,environment);
     auto family = template_families.get(key(scope,name));
     auto e = family ? template_signatures.get(key(family,signature)) : 0;
     if (e) {
-        auto& previous = templates[entities[e].template_info];
+        auto previous = templates[entities[e].template_info];
         bool definition = ast[source].kind == syntax::Kind::Function || ast[source].kind == syntax::Kind::SpecialDefinition;
         if (definition && previous.body) throw std::runtime_error("template function redefinition");
         if (!previous.body) {
@@ -49,10 +110,12 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
             entities[e].type = type;
             template_facts(e,environment);
         }
+        merge_template_defaults(e,environment,previous.environment);
     } else {
         e = make_entity(EntityKind::Function,scope,name,source);
         entities[e].type = type;
         template_facts(e,environment);
+        merge_template_defaults(e,environment);
         if (!family) { family = e; template_families.put(key(scope,name),family); }
         template_signatures.put(key(family,signature),e);
     }

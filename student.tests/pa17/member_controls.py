@@ -52,6 +52,19 @@ template<class T>int f(T x){return x;} template int f<Secret::Hidden>(Secret::Hi
 int main(){return f(7)-7;}''',
     'inline_namespace_instantiation': '''namespace A{inline namespace B{template<class T>int f(T x){return x;}}
 template int f(int);}int main(){return A::f(7)-7;}''',
+    'renamed_head_defaults': '''struct C{template<class T=int,class U=T>int f();};
+template<class A,class B>int C::f(){return sizeof(A)+sizeof(B);}
+int main(){C c;return c.f()-8;}''',
+    'late_default_on_defined_template': '''template<class T,class U>int f(){return sizeof(T)+sizeof(U);}
+template<class A=int,class B=A>int f();int main(){return f()-8;}''',
+    'alias_redeclaration_defaults': '''template<class T=int>using A=T;
+template<class U>using A=U;int main(){A<> x=3;A<char> y=4;return x+y-7;}''',
+    'explicit_specialization_ignores_instantiation': '''template<class T>struct C;
+template<>struct C<int>{int f();};template struct C<int>;template struct C<int>;
+int main(){return 0;}''',
+    'local_static_function_addresses': '''struct C{template<class T>static int f(){return sizeof(T);}};
+template<class T>int call(){static int(*const p)()=&C::f<T>;return p();}
+int main(){return call<char>()+call<int>()-5;}''',
 }
 harness.BAD = {
     'duplicate_member_definition': 'struct C{template<class T>int f(T){return 1;}};template<class U>int C::f(U){return 2;}',
@@ -63,6 +76,9 @@ harness.BAD = {
     'explicit_constructor_copy_init': 'struct C{template<class T>explicit C(T){}};int main(){C c=1;}',
     'unqualified_instantiation_namespace': 'namespace A{template<class T>int f(T){return 0;}}using A::f;template int f(int);',
     'instantiation_does_not_exempt_definition': 'class Secret{typedef int Hidden;};template<class T>struct C{typedef typename T::Hidden value;};template<class T>void f(typename C<T>::value){} template void f<Secret>(C<Secret>::value);',
+    'duplicate_template_default': 'template<class T=int>int f();template<class U=int>int f(){return 0;}',
+    'conflicting_alias_template': 'template<class T>using A=T*;template<class U>using A=const U*;',
+    'reference_value_ambiguity': 'int f(int);int f(const int&);int main(){return f(1);}',
 }
 LOWIR = {
     'extern_free_suppression': ('''template<class T>int suppressed(T){static_assert(sizeof(T)==1,"dormant");return 1;}
@@ -72,6 +88,9 @@ template<class T>int C<T>::dormant(){return sizeof(typename T::missing);}
 extern template struct C<int>;int main(){C<int> c;return c.dormant();}''', r'^declare function @dormant\(', r'^function @dormant\('),
     'explicit_free_root': ('''template<class T>T retained(T x){return x;}
 template int retained(int);int main(){return 0;}''', r'^function @retained\([^\n]*object_root=yes', r'^declare function @retained\('),
+    'extern_nested_member_suppression': ('''template<class T>struct C{struct Inner{int dormant();};};
+template<class T>int C<T>::Inner::dormant(){return sizeof(typename T::missing);}
+extern template struct C<int>;int main(){C<int>::Inner c;return c.dormant();}''', r'^declare function @dormant\(', r'^function @dormant\('),
 }
 if __name__ == '__main__':
     cc = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else harness.ROOT/'dev/cppgm++'

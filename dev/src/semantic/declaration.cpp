@@ -223,12 +223,9 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         EntityId e = declare_alias(s, ast[n].text, n, t);
         record(s, e, n, t, EntityKind::Alias);
         if (definitions && s == active_template_scope) {
-            template_facts(e,s);
-            for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
-                auto parameter = declarations[d].entity;
-                if (entities[parameter].template_parameter && entities[parameter].initializer)
-                    template_default_types.put(parameter,template_argument_node(ast[entities[parameter].initializer].first,s));
-            }
+            auto previous = entities[e].template_info ? templates[entities[e].template_info].environment : 0;
+            if (!previous) template_facts(e,s);
+            merge_template_defaults(e,s,previous);
         }
         break;
     }
