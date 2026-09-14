@@ -130,6 +130,13 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return Constant(types.fundamental(FT_UNSIGNED_LONG_INT), size(t, ast[n].op == KW_ALIGNOF));
     }
     case Kind::Cast: return convert(evaluate(ast[first].next, s), type_id(first, s), true);
+    case Kind::Call: {
+        // Functional scalar casts already own a checked target/conversion.
+        // Ordinary calls (including constexpr functions) are a later tier.
+        if (!calls || expressions[n].form != ExpressionForm::Cast || !integral(expressions[n].type)) return Constant();
+        auto argument = ast[ast[first].next].first;
+        return argument ? convert(evaluate(argument,s),expressions[n].type,true) : Constant(expressions[n].type,0);
+    }
     case Kind::Conditional: {
         Constant cond = evaluate(first, s);
         if (!cond.valid || scoped_enum(cond.type)) return Constant();
@@ -196,6 +203,8 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
     }
     case OP_DIV: case OP_MOD:
         if (!y) throw std::runtime_error("division by zero in constant");
+        if (!unsign && x == -(__int128(1) << (width(common)-1)) && y == -1)
+            throw std::runtime_error("signed constant quotient overflow");
         result = op == OP_DIV ? x / y : x % y; break;
     case OP_AMP: result = a.bits & b.bits; break;
     case OP_BOR: result = a.bits | b.bits; break;
@@ -210,7 +219,14 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
     case OP_LOR: result = x || y; break;
     case OP_LSHIFT: case OP_RSHIFT:
         if (y < 0 || y >= width(common) || (op == OP_LSHIFT && x < 0)) throw std::runtime_error("invalid constant shift");
-        result = op == OP_LSHIFT ? x * (__int128(1) << unsigned(y)) : x >> unsigned(y); break;
+        // [expr.shift]: signed left shift may enter the sign bit, but the
+        // product must be representable in the corresponding unsigned type.
+        // Unsigned shifting is modulo width and must not overflow host int128.
+        if (op == OP_LSHIFT && unsign) return convert(Constant(common,a.bits << unsigned(y)),common);
+        result = op == OP_LSHIFT ? x * (__int128(1) << unsigned(y)) : x >> unsigned(y);
+        if (op == OP_LSHIFT && result >= (__int128(1) << width(common)))
+            throw std::runtime_error("signed constant shift overflow");
+        break;
     default: return Constant();
     }
     if (boolean) return Constant(types.fundamental(FT_BOOL), result);

@@ -87,7 +87,7 @@ bool append_string_element(std::string& bytes, LiteralElement element, Encoding 
     return true;
 }
 
-void decode_character(PostToken& token, const IdentifierTable& identifiers, PostStats* stats)
+void decode_character(PostToken& token, const IdentifierTable& identifiers, PostStats* stats, bool multicharacter)
 {
     TextView suffix = token.source.suffix ? identifiers.spelling(token.source.suffix) : TextView();
     token.suffix = token.source.suffix;
@@ -98,6 +98,25 @@ void decode_character(PostToken& token, const IdentifierTable& identifiers, Post
     if (stats) ++stats->decoded_elements;
     if (reader.next(extra)) {
         if (stats) ++stats->decoded_elements;
+        // PA2's explicit token view requires one code point. The language
+        // frontend additionally supports ordinary multicharacter literals:
+        // pack UTF-8 execution bytes left to right, retaining the low 32 bits.
+        if (!multicharacter || reader.encoding() != Encoding::ordinary || suffix.size) return;
+        std::uint32_t packed = 0;
+        auto append = [&](LiteralElement e) {
+            std::string bytes;
+            if (!append_string_element(bytes,e,reader.encoding())) return false;
+            for (unsigned char byte : bytes) packed = (packed << 8) | byte;
+            return true;
+        };
+        if (!append(element)) return;
+        do {
+            if (!append(extra)) return;
+            if (!reader.next(extra)) break;
+            if (stats) ++stats->decoded_elements;
+        } while (true);
+        token.type = FT_INT; token.literal = LiteralKind::character; token.kind = PostTokenKind::literal;
+        for (unsigned i = 0; i < 4; ++i) token.scalar[i] = static_cast<char>(packed >> (8*i));
         return;
     }
     if (!element.valid || element.value > 0x10ffff ||

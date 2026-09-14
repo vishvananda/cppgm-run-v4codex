@@ -36,3 +36,18 @@ boundaries; PA15 adds no optional optimizer or numerical performance gate.
 - Required final evidence: `make test-pa15`, `make test-report-through-pa14`,
   `perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src`; decreasing
   original failures (or full pass), committed intended changes and clean status.
+
+### Constant evaluator increment
+
+- Fixed signed quotient/remainder and left-shift overflow (including the separate
+  unsigned modulo path); completed integral functional casts and ordinary
+  multicharacter literal decoding at the LowIR language entry. PA2's explicitly
+  narrower token-view contract stays intact. Restrict inline metadata to functions.
+- Validation: 64/177 PA15 (+8 original cases), 1935/1935 through PA14,
+  file audit pass (three inherited header warnings), ten explicit personal
+  constant/query controls via `python3 student.tests/pa15/constants.py`.
+- Raw checks: `$RALPH_ARTIFACT_DIR/pa15-value/constants-*.log`. Historical PA14
+  preflight LowIR outputs are losslessly gzip-compressed after SHA-256 verification
+  to recover scratch capacity; inventory in `historical-compression.json` there.
+- Next: value argument identity/substitution. Performance and full handoff remain
+  pending; this increment does not close the implementation turn.

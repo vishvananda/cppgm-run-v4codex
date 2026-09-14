@@ -264,8 +264,10 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
             !integral(types.parameters[f.offset+f.count-1])) throw std::runtime_error("invalid stable-prefix query signature");
         entities[e].stable_prefix = true;
     }
-    entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
-    entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
+    if (entities[e].kind == EntityKind::Function) {
+        entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
+        entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
+    }
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
 }

@@ -126,6 +126,12 @@ TypeId Analyzer::fundamental_cast_type(ETokenType op)
             case KW_INT: return types.fundamental(FT_INT);
             case KW_BOOL: return types.fundamental(FT_BOOL);
             case KW_CHAR: return types.fundamental(FT_CHAR);
+            case KW_SHORT: return types.fundamental(FT_SHORT_INT);
+            case KW_SIGNED: return types.fundamental(FT_INT);
+            case KW_UNSIGNED: return types.fundamental(FT_UNSIGNED_INT);
+            case KW_WCHAR_T: return types.fundamental(FT_WCHAR_T);
+            case KW_CHAR16_T: return types.fundamental(FT_CHAR16_T);
+            case KW_CHAR32_T: return types.fundamental(FT_CHAR32_T);
             case KW_LONG: return types.fundamental(FT_LONG_INT);
             case KW_FLOAT: return types.fundamental(FT_FLOAT);
             case KW_DOUBLE: return types.fundamental(FT_DOUBLE);

@@ -27,6 +27,6 @@ private:
 EFundamentalType encoding_type(Encoding encoding);
 void append_code_unit(std::string& bytes, std::uint32_t value, unsigned width);
 bool append_string_element(std::string& bytes, LiteralElement element, Encoding encoding);
-void decode_character(PostToken& token, const IdentifierTable& identifiers, PostStats* stats);
+void decode_character(PostToken& token, const IdentifierTable& identifiers, PostStats* stats, bool multicharacter = false);
 
 }

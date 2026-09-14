@@ -20,7 +20,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
     for (const std::string& input : inputs) {
         auto start = Clock::now();
         Preprocessor pp(input, stamp.substr(4, 7) + stamp.substr(20, 4), stamp.substr(11, 8), stats);
-        PostTokenCursor post(pp, pp.identifiers());
+        PostTokenCursor post(pp, pp.identifiers(), false, 0, true);
         syntax::Ast ast(stats);
         syntax::Cursor cursor(post, pp.identifiers(), ast);
         syntax::Parser parser(cursor, ast, pp.identifiers());
