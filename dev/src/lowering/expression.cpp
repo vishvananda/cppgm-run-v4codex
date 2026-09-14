@@ -82,7 +82,7 @@ Value Procedural::expression(NodeId n, bool location)
     case Kind::Delete: return delete_expression(n);
     case Kind::Literal: {
         auto lit = ast.literals[node.literal];
-        if (lit.kind == LiteralKind::string) return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true);
+        if (lit.kind == LiteralKind::string) { string_literal(n); return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true); }
         Operand o;
         if (lit.type == FT_FLOAT) { float v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
         else if (lit.type == FT_DOUBLE) { double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }

@@ -211,6 +211,7 @@ class Procedural {
     void global_finalization();
     void global(EntityId e);
     void string_literal(NodeId n);
+    void emit_string_literals();
     void numeric_string_literal(NodeId n);
     void literal_arguments(NodeId n);
     semantic::Index numeric_strings;

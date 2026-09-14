@@ -364,6 +364,7 @@ void Procedural::run()
     emit_aggregate_helpers();
     emit_local_static_destructors();
     global_finalization();
+    emit_string_literals();
     order_lifecycle_entries();
 }
 void Procedural::function_body(EntityId e, bool base)

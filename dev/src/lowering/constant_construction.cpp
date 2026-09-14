@@ -17,7 +17,7 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
         lowir_model::DataItem item; item.type = type(field.type);
         auto value = field.value;
         if (value.kind == semantic::StaticValue::Address) { item.kind = lowir_model::DataItem::Address; item.symbol = symbol(value.entity); item.addend = value.addend; }
-        else if (value.kind == semantic::StaticValue::String) { item.kind = lowir_model::DataItem::Address; item.symbol = strings[value.string]; }
+        else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); item.kind = lowir_model::DataItem::Address; item.symbol = strings[value.string]; item.addend = value.addend; }
         else { item.kind = lowir_model::DataItem::Scalar; item.value = value.kind == semantic::StaticValue::Floating ? Operand::floating(value.floating) : Operand::integer(value.bits); }
         p.data.push_back(item); end = offset + type(field.type).bytes();
     }
@@ -30,6 +30,7 @@ Value Procedural::constant_operand(semantic::Constant c, TypeId t)
 {
     auto v = sem.constant_static_value(c);
     if (v.kind == semantic::StaticValue::Address || v.kind == semantic::StaticValue::String) {
+        if (v.kind == semantic::StaticValue::String) string_literal(v.string);
         auto target = v.kind == semantic::StaticValue::Address ? symbol(v.entity) : strings[v.string];
         Value result(Operand::symbol(target),IRType::Ptr,t,true);
         if (!reference(c.type)) result = address(result);

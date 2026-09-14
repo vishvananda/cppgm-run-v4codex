@@ -7,6 +7,8 @@ CC=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 WORK=Path(sys.argv[2]) if len(sys.argv)>2 else Path(os.environ['RALPH_ARTIFACT_DIR'])/'pa16-object/controls'
 WORK.mkdir(parents=True,exist_ok=True)
 GOOD={
+'static_string_object': 'struct E{char const*p;constexpr E(char const*s):p(s){}};template<class T>struct Table{static constexpr E row=E("one");static constexpr E tail=E("one"+1);};template<class T>constexpr E Table<T>::row;template<class T>constexpr E Table<T>::tail;static_assert(Table<int>::row.p[1]==110, "");int main(){return Table<int>::row.p[0]==111&&Table<int>::row.p[2]==101&&Table<int>::tail.p[0]==110?0:1;}',
+
 'first_subobject_address': 'struct X{int a,b;};constexpr X x={1,2};static_assert(static_cast<void const*>(&x)==static_cast<void const*>(&x.a), "");static_assert((&x.a+1)-&x.a==1&&&x.a<&x.a+1, "");int main(){return 0;}',
 'arrow_static_effect': 'int calls;struct T{static constexpr int x=7;static constexpr int get(){return x;}};T t;struct P{T*operator->(){++calls;return &t;}};int main(){P p;int n=p->x+p->get();return n==14&&calls==2?0:1;}',
 

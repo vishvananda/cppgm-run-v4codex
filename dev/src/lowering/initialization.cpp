@@ -6,6 +6,7 @@ using syntax::Kind;
 using namespace lowir_model;
 void Procedural::string_literal(NodeId n)
 {
+    if (strings[n]) return;
     const auto lit = ast.literals[ast[n].literal];
     std::uint64_t hash = 1469598103934665603ULL ^ unsigned(lit.type);
     for (std::uint32_t j = 0; j < lit.bytes; ++j) hash = (hash ^ static_cast<unsigned char>(ast.literal_bytes[lit.offset+j])) * 1099511628211ULL;
@@ -18,27 +19,37 @@ void Procedural::string_literal(NodeId n)
         }
     }
     string_records.push_back(StringRecord{n, head}); string_index.put(hash, string_records.size()-1);
-    Global g; g.structured = true;
-    g.symbol = fresh_symbol("@__string_" + std::to_string(p.symbols.size()+1));
-    strings[n] = g.symbol;
-    g.data.begin = p.data.size(); g.data.count = lit.elements;
-    TypeId element = sem.types.fundamental(lit.type);
-    for (unsigned j = 0; j < lit.elements; ++j) {
-        DataItem d; d.kind = DataItem::Scalar; d.type = type(element);
-        std::uint64_t bits = 0;
-        std::memcpy(&bits, ast.literal_bytes.data()+lit.offset+j*fundamental_width(lit.type), fundamental_width(lit.type));
-        d.value = Operand::integer(bits); p.data.push_back(d);
+    strings[n] = fresh_symbol("@__string_" + std::to_string(p.symbols.size()+1));
+}
+void Procedural::emit_string_literals()
+{
+    // Constants can demand a literal whose source was checked only in an
+    // unevaluated context. Reserve its symbol when consumed; write its data
+    // after other globals so it cannot split a structured initializer's slice.
+    for (unsigned i = 1; i < string_records.size(); ++i) {
+        auto n = string_records[i].node;
+        const auto lit = ast.literals[ast[n].literal];
+        Global g; g.structured = true;
+        g.symbol = strings[n];
+        g.data.begin = p.data.size(); g.data.count = lit.elements;
+        TypeId element = sem.types.fundamental(lit.type);
+        for (unsigned j = 0; j < lit.elements; ++j) {
+            DataItem d; d.kind = DataItem::Scalar; d.type = type(element);
+            std::uint64_t bits = 0;
+            std::memcpy(&bits, ast.literal_bytes.data()+lit.offset+j*fundamental_width(lit.type), fundamental_width(lit.type));
+            d.value = Operand::integer(bits); p.data.push_back(d);
+        }
+        p.globals.push_back(g);
+        auto& s = p.symbols[g.symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
+        s.metadata.binding = ir_model::SBM_INTERNAL; s.metadata.storage = ir_model::GSM_READONLY;
     }
-    p.globals.push_back(g);
-    auto& s = p.symbols[g.symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
-    s.metadata.binding = ir_model::SBM_INTERNAL; s.metadata.storage = ir_model::GSM_READONLY;
 }
 DataItem Procedural::constant_data(NodeId n, TypeId t)
 {
     auto value = sem.static_value(n, t);
     DataItem d; d.type = type(t);
     if (value.kind == semantic::StaticValue::Address) { d.kind = DataItem::Address; d.symbol = symbol(value.entity); d.addend = value.addend; }
-    else if (value.kind == semantic::StaticValue::String) { d.kind = DataItem::Address; d.symbol = strings[value.string]; }
+    else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); d.kind = DataItem::Address; d.symbol = strings[value.string]; d.addend = value.addend; }
     else if (value.kind == semantic::StaticValue::Integer) { d.kind = DataItem::Scalar; d.value = Operand::integer(value.bits); }
     else if (value.kind == semantic::StaticValue::Floating) { d.kind = DataItem::Scalar; d.value = Operand::floating(value.floating); }
     else throw std::runtime_error("unsupported static initializer");
