@@ -1,11 +1,11 @@
 {
-  "kind": "incomplete implementation handoff; independent audit pending",
+  "kind": "incomplete implementation handoff; retained-head behavior group complete; independent audit pending",
   "stage_base": "21748547a9e5befaae65e4fae120a63b3f9fcafb",
-  "last_reviewed_commit": "21748547a9e5befaae65e4fae120a63b3f9fcafb",
-  "source_commit": "3bef03e042b2c474c7d793719169279d23c898a5",
-  "source_digest": "ddd1450ec9c4b12e843d9bd8d0ecc8ec8a3e82318a92dacc0664fc9e0a10615b",
-  "entry_commit": "ae5087da8794d159b16b716e3c48cf64a271414f",
-  "entry_passed": 242,
+  "last_reviewed_commit": "58789b00e19ae2aff032c8b04980b7d43265617f",
+  "source_commit": "807e0989cc2e83f7dfa8804e9bb4db471ea35af9",
+  "source_digest": "e0852a5e3084191edeec15a28653c8434cd6136f53862d3b69e770c971b3bf89",
+  "entry_commit": "df0904deaa9a21544ab4c10f3a9e68120740d982",
+  "entry_passed": 248,
   "protected_paths": [
     "AGENTS.md",
     "TESTING_AND_REFERENCES.md",
@@ -21,76 +21,75 @@
   ],
   "logs": {
     "entry": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/entry-stage.log",
-      "sha256": "d1ffb6b2bd8ea619f9f309e6b0a815f21fb07bc31e1b5523928fec9bda58b2eb",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop49/entry.log",
+      "sha256": "f5a44cd877242a7b33f569464eb2b0f5f4f7fbba075f27ca1b144705b19a78e5",
       "command": "Ralph turn-start make test-pa17",
       "exit_code": 2
     },
     "stage": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/stage-final.log",
-      "sha256": "67e9d7b91841f436b6fc73a38f41237e1232afa41420321e5c7212107f79f0ae",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop49/stage-final.log",
+      "sha256": "e17b65dbcbeb7bdf2617d6c9be6a44c8dbed84e50ba3f0c6b0337d550cbaabc1",
       "command": "make test-pa17",
       "exit_code": 2
     },
     "prior": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/prior-final.log",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop49/prior-final.log",
       "sha256": "967173723342b3c0abf5b9e26710e9ef2094f41c3a33e7d23e0831760f67bea9",
       "command": "make test-report-through-pa16",
       "exit_code": 0
     },
     "through": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/through-final.log",
-      "sha256": "e986f30d73650541e39e2943faa8ea9112de2421e962264f719eaa7e4b107624",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop49/through-final.log",
+      "sha256": "da511712f18544ae4cdf2d8ff5ceeb5397efa67c0d75fce4dae937293c1cd613",
       "command": "make test-report-through-pa17",
       "exit_code": 2
     },
     "file_audit": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/file-audit.log",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop49/file-audit.log",
       "sha256": "b40da0957f8ab5dea6cb4e3531ee3c2d1ea1f275ab22409e6f102506e18a3c04",
       "command": "perl scripts/cppgm_file_audit.pl --stage pa17 --paths dev/src",
-      "exit_code": 0
-    },
-    "stage_progress": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop47/stage-progress.log",
-      "sha256": "abf4971a400f915d8ad016711a2e9960e55d8f07c0246b478780a8cbf1a57bdf",
-      "command": "Compare original fixture failure sets and protected paths",
       "exit_code": 0
     }
   },
   "course_cases": 343,
-  "stage_passed": 248,
+  "stage_passed": 284,
   "earlier_cases": 2266,
   "controls": [
     {
-      "path": "student.tests/pa17/definition-controls-results.json",
-      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711",
-      "count": 18
+      "path": "student.tests/pa17/loop49-entity-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344",
+      "count": 34
     },
     {
-      "path": "student.tests/pa17/loop47-member-controls-results.json",
+      "path": "student.tests/pa17/loop49-member-results.json",
       "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11",
       "count": 34
     },
     {
-      "path": "student.tests/pa17/loop47-member-lowir-results.json",
-      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535",
-      "count": 4
+      "path": "student.tests/pa17/loop49-definition-results.json",
+      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711",
+      "count": 18
     },
     {
-      "path": "student.tests/pa17/loop47-entity-controls-results.json",
-      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344",
-      "count": 34
+      "path": "student.tests/pa17/loop49-audit-results.json",
+      "sha256": "9a9936107e5fd44101c7b24849ea08639910c4094f2a81fb6ad13b71ad00789a",
+      "count": 25
+    },
+    {
+      "path": "student.tests/pa17/loop49-head-results.json",
+      "sha256": "26888e4c242cfc4a8e3e2b1e32e4253eb2273ce5cedf20f1a72d8709d15e847b",
+      "count": 43
+    },
+    {
+      "path": "student.tests/pa17/loop49-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535",
+      "count": 4
     }
   ],
-  "performance": "student.tests/pa17/definition-performance.json",
+  "performance": "student.tests/pa17/head-performance.json",
   "failure_delta": {
     "entry_failures": [
       "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
-      "pa17/tests/general/100-out-of-class-nested-method-distinguishes-partial-owner.t",
-      "pa17/tests/general/100-partial-specialization-member-typedef-outdef.t",
-      "pa17/tests/general/100-partial-specialization-nested-template-id-member-outdef.t",
-      "pa17/tests/general/100-partial-static-out-of-class-dependent-return-definition.t",
-      "pa17/tests/general/100-reference-shell-out-of-class-current-specialization-iterator.t",
       "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
       "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
       "pa17/tests/general/200-variable-template-alignas-member-alias.t",
@@ -137,7 +136,6 @@
       "pa17/tests/general/300-out-of-class-nested-definitions-distinguish-partial-owner.t",
       "pa17/tests/general/300-out-of-class-nested-member-template-static-definition.t",
       "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
-      "pa17/tests/general/300-partial-owner-out-of-class-member-binding-args.t",
       "pa17/tests/general/300-qualified-friend-member-template-access.t",
       "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
       "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
@@ -205,41 +203,26 @@
       "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
       "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
       "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
-      "pa17/tests/general/300-explicit-specialization-out-of-class-member-template-owner.t",
       "pa17/tests/general/300-friend-existing-template-private-ctor-access.t",
       "pa17/tests/general/300-friend-function-template-access.t",
       "pa17/tests/general/300-friend-function-template-distinct-class-template-entities.t",
-      "pa17/tests/general/300-function-pack-template-id-deduction-decltype.t",
       "pa17/tests/general/300-function-template-local-static-per-specialization.t",
       "pa17/tests/general/300-hidden-friend-template-call-adl.t",
       "pa17/tests/general/300-local-qualified-argument-replay.t",
       "pa17/tests/general/300-member-class-explicit-specialization-owner-lookup.t",
-      "pa17/tests/general/300-member-init-nested-pack-functional-cast.t",
       "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
-      "pa17/tests/general/300-member-template-call-body-check.t",
-      "pa17/tests/general/300-member-template-class-pack-forward-before-token.t",
-      "pa17/tests/general/300-member-template-head-identity.t",
       "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
       "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
       "pa17/tests/general/300-nested-class-friend-template-namespace-scope.t",
-      "pa17/tests/general/300-nested-class-template-current-owner-lookup.t",
       "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
-      "pa17/tests/general/300-nested-template-late-member-definition-after-use.t",
       "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
       "pa17/tests/general/300-nondependent-template-base.t",
       "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
-      "pa17/tests/general/300-out-of-class-ctor-using-imported-member-template.t",
-      "pa17/tests/general/300-out-of-class-member-function-template-definition.t",
-      "pa17/tests/general/300-out-of-class-member-template-namespace-typedef.t",
-      "pa17/tests/general/300-out-of-class-member-template-unnamed-declaration-param.t",
-      "pa17/tests/general/300-out-of-class-nested-definitions-distinguish-partial-owner.t",
-      "pa17/tests/general/300-out-of-class-nested-member-template-static-definition.t",
       "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
       "pa17/tests/general/300-qualified-friend-member-template-access.t",
       "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
       "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
       "pa17/tests/general/300-sizeof-pack-in-a-partial-specialization-shape.t",
-      "pa17/tests/general/300-static-constexpr-function-template-pointer-array.t",
       "pa17/tests/general/300-template-friend-class-constructor-access.t",
       "pa17/tests/general/300-template-template-argument-in-an-explicit-specifier.t",
       "pa17/tests/general/300-unused-class-template-hidden-friend-body.t",
@@ -247,24 +230,45 @@
       "pa17/tests/general/300-variable-template-forwarding-partial-top-const.t",
       "pa17/tests/general/300-variable-template-forwarding-partial-top-cv.t",
       "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
-      "pa17/tests/general/400-alias-template-nontype-shadowed-by-inner-value.t",
-      "pa17/tests/general/400-bound-template-template-recursive-nontype-scope.t",
       "pa17/tests/general/400-dependent-owner-member-class-template-partial-specialization.t",
       "pa17/tests/general/400-empty-pack-member-alias-owner-specialization.t",
       "pa17/tests/general/400-local-value-shadows-template-relational.t",
       "pa17/tests/general/400-member-alias-template-template-dependent-replay.t",
-      "pa17/tests/general/400-pack-expanded-member-alias-source-scope.t",
-      "pa17/tests/general/400-partial-specialization-redecl-member-template-empty-pack.t",
       "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
       "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t",
       "pa17/tests/spec/300-dependent-super-member-template-chain.t",
-      "pa17/tests/spec/300-dependent-using-operator-out-of-class-member-template.t",
-      "pa17/tests/spec/300-explicit-instantiation-out-of-class-nested-member.t",
-      "pa17/tests/spec/300-explicit-member-template-definition-replaces-primary-instantiation.t",
       "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
       "pa17/tests/spec/300-friend-class-template-nested-private-typedef-access.t",
       "pa17/tests/spec/300-hidden-friend-template-call-adl.t",
       "pa17/tests/spec/300-hidden-friend-template-operator-adl.t",
+      "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+      "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
+      "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
+      "pa17/tests/spec/300-template-friend-inside-class-template.t"
+    ],
+    "fixed": [
+      "pa17/tests/general/300-explicit-specialization-out-of-class-member-template-owner.t",
+      "pa17/tests/general/300-function-pack-template-id-deduction-decltype.t",
+      "pa17/tests/general/300-member-init-nested-pack-functional-cast.t",
+      "pa17/tests/general/300-member-template-call-body-check.t",
+      "pa17/tests/general/300-member-template-class-pack-forward-before-token.t",
+      "pa17/tests/general/300-member-template-head-identity.t",
+      "pa17/tests/general/300-nested-class-template-current-owner-lookup.t",
+      "pa17/tests/general/300-nested-template-late-member-definition-after-use.t",
+      "pa17/tests/general/300-out-of-class-ctor-using-imported-member-template.t",
+      "pa17/tests/general/300-out-of-class-member-function-template-definition.t",
+      "pa17/tests/general/300-out-of-class-member-template-namespace-typedef.t",
+      "pa17/tests/general/300-out-of-class-member-template-unnamed-declaration-param.t",
+      "pa17/tests/general/300-out-of-class-nested-definitions-distinguish-partial-owner.t",
+      "pa17/tests/general/300-out-of-class-nested-member-template-static-definition.t",
+      "pa17/tests/general/300-static-constexpr-function-template-pointer-array.t",
+      "pa17/tests/general/400-alias-template-nontype-shadowed-by-inner-value.t",
+      "pa17/tests/general/400-bound-template-template-recursive-nontype-scope.t",
+      "pa17/tests/general/400-pack-expanded-member-alias-source-scope.t",
+      "pa17/tests/general/400-partial-specialization-redecl-member-template-empty-pack.t",
+      "pa17/tests/spec/300-dependent-using-operator-out-of-class-member-template.t",
+      "pa17/tests/spec/300-explicit-instantiation-out-of-class-nested-member.t",
+      "pa17/tests/spec/300-explicit-member-template-definition-replaces-primary-instantiation.t",
       "pa17/tests/spec/300-inline-nested-owner-out-of-class-member-template-definitions.t",
       "pa17/tests/spec/300-member-class-template-out-of-class.t",
       "pa17/tests/spec/300-member-template-definition-after-first-call.t",
@@ -272,27 +276,395 @@
       "pa17/tests/spec/300-member-template-trailing-return-implicit-field.t",
       "pa17/tests/spec/300-nested-member-template-definition-parameter-alias-default.t",
       "pa17/tests/spec/300-nested-owner-out-of-class-member-template-alias-parameter.t",
-      "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
       "pa17/tests/spec/300-out-of-class-member-template-dependent-default-argument.t",
       "pa17/tests/spec/300-out-of-class-member-template-owner-param-rename.t",
       "pa17/tests/spec/300-out-of-class-member-template-renamed-owner-parameters.t",
       "pa17/tests/spec/300-out-of-class-member-template-tag-dispatch-definition.t",
       "pa17/tests/spec/300-out-of-class-nested-class-member-template-constructor.t",
       "pa17/tests/spec/300-out-of-class-overloaded-member-template-definition.t",
-      "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
-      "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
-      "pa17/tests/spec/300-static-member-function-template-out-of-class.t",
-      "pa17/tests/spec/300-template-friend-inside-class-template.t"
-    ],
-    "fixed": [
-      "pa17/tests/general/100-out-of-class-nested-method-distinguishes-partial-owner.t",
-      "pa17/tests/general/100-partial-specialization-member-typedef-outdef.t",
-      "pa17/tests/general/100-partial-specialization-nested-template-id-member-outdef.t",
-      "pa17/tests/general/100-partial-static-out-of-class-dependent-return-definition.t",
-      "pa17/tests/general/100-reference-shell-out-of-class-current-specialization-iterator.t",
-      "pa17/tests/general/300-partial-owner-out-of-class-member-binding-args.t"
+      "pa17/tests/spec/300-static-member-function-template-out-of-class.t"
     ],
     "new_failures": []
   },
-  "boundary": "Completed structural primary/partial owner definition selection, nested non-template paths, aliases and selected argument frames. Multiple nested template heads require source declaration retention before demand. 95 implementation failures and all independent audit obligations remain open."
+  "personal_controls": 158,
+  "handoff_boundary": "Retained source member/nested class heads, selected-owner frame composition, late body attachment, constructor-template conversion, inner defaults and enclosing-pack callable signatures are implemented together. Remaining partial/explicit nested selection, friend/access/ADL, grammar/dependent-name obligations, argument/deduction interactions and LowIR behavior need their owning algorithms; additional head overlays do not supply those missing decisions.",
+  "independent_review_questions": [
+    "Check canonical source-head and class-identity cache validity across the cumulative stage diff, including late definitions and selected partial-owner frames. Existing controls and bounded-work observations are implementation evidence, not an independent audit."
+  ],
+  "waivers": [],
+  "remaining_groups": {
+    "lowir": {
+      "owner": "Ordinary typed LowIR storage, transfer, cleanup and emission",
+      "data_flow": "Selected declarations and lifetime/storage demands -> lowering -> validated LowIR",
+      "complexity": "Per-demand facts; lowering proportional to consumed/produced IR; no optional optimization or numeric growth waiver",
+      "validation": "Unchanged relaxed LowIR comparison, native behavior controls and prior-through report",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-nontype-argument-member-hides-namespace-template.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-alias-template-binds-forward-specialization-member.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-alias-template-template-argument-use-scope.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/200-variable-template-alignas-member-alias.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-variable-template-alignas-member-alias.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-constexpr-static-fn-template-address-pack.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-dependent-hidden-friend-static-member-definition.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-explicit-instantiation-declaration-member-coverage.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-friend-existing-template-private-ctor-access.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-friend-existing-template-private-ctor-access.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-member-template-body-deferred-past-open-class.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-namespace-function-template-hides-outer-callable-object.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-nested-member-template-prvalue-dtor-output.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/400-alias-nontype-pack-partial-base.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/400-local-value-shadows-template-relational.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/400-local-value-shadows-template-relational.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/spec/300-dependent-super-member-template-chain.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-dependent-super-member-template-chain.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-explicit-specialization-static-data-member.my.lowir.compare.diff",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.my.lowir.compare.diff",
+          "diagnostic": ""
+        }
+      ]
+    },
+    "friends": {
+      "owner": "Friend entities, member access and ADL lookup",
+      "data_flow": "Source friend declaration -> canonical class/namespace relationship -> associated lookup and access result",
+      "complexity": "Indexed declaration/namespace relationships; visit required candidates and inheritance paths",
+      "validation": "Positive/negative access and friend-identity cases, native ADL behavior, full PA17",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-dependent-friend-alias-private-constructor-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-dependent-friend-self-private-constructor-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-friend-function-template-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-friend-function-template-distinct-class-template-entities.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unknown expression name: put"
+        },
+        {
+          "path": "pa17/tests/general/300-hidden-friend-template-call-adl.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: sizeof unsupported or incomplete type"
+        },
+        {
+          "path": "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: recursive type query"
+        },
+        {
+          "path": "pa17/tests/general/300-nested-class-friend-template-namespace-scope.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-nondependent-template-base.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-qualified-friend-member-template-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: qualified definition outside enclosing scope"
+        },
+        {
+          "path": "pa17/tests/general/300-template-friend-class-constructor-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-unused-class-template-hidden-friend-body.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: no viable builtin operator"
+        },
+        {
+          "path": "pa17/tests/spec/300-friend-class-template-nested-private-typedef-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/spec/300-hidden-friend-template-call-adl.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: sizeof unsupported or incomplete type"
+        },
+        {
+          "path": "pa17/tests/spec/300-hidden-friend-template-operator-adl.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: sizeof unsupported or incomplete type"
+        },
+        {
+          "path": "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: qualified definition outside enclosing scope"
+        },
+        {
+          "path": "pa17/tests/spec/300-template-friend-inside-class-template.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        }
+      ]
+    },
+    "introducers": {
+      "owner": "Definition-time dependent-name obligations",
+      "data_flow": "Parsed typename/template introducers and current-instantiation context -> retained type/name obligation -> definition-time diagnostic",
+      "complexity": "One obligation per relevant source name; bounded lookup; no specialization-triggered source replay",
+      "validation": "Dormant definitions and renamed/nested current/noncurrent-instantiation accept/reject cases",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-dependent-member-template-missing-keyword-bad.t",
+          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
+          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
+          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
+          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "diagnostic": ""
+        },
+        {
+          "path": "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
+          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "diagnostic": ""
+        }
+      ]
+    },
+    "selection": {
+      "owner": "Alias/variable/member partial or explicit specialization selection and arguments",
+      "data_flow": "Canonical typed arguments -> candidate registry/matching -> selected owner -> substitution",
+      "complexity": "Language-required candidates; indexed typed keys and immutable tuple frames",
+      "validation": "Partial/explicit owner identity, cv and empty/value-pack controls plus unchanged course comparisons",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-member-class-explicit-specialization-owner-lookup.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: inaccessible class member"
+        },
+        {
+          "path": "pa17/tests/general/300-sizeof-pack-in-a-partial-specialization-shape.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: missing substituted query context"
+        },
+        {
+          "path": "pa17/tests/general/300-variable-template-as-a-nontype-argument.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: dependent query demanded as a concrete value"
+        },
+        {
+          "path": "pa17/tests/general/300-variable-template-forwarding-partial-top-const.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: ambiguous variable partial specialization"
+        },
+        {
+          "path": "pa17/tests/general/300-variable-template-forwarding-partial-top-cv.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: ambiguous variable partial specialization"
+        },
+        {
+          "path": "pa17/tests/general/400-dependent-owner-member-class-template-partial-specialization.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: member class template head mismatch"
+        },
+        {
+          "path": "pa17/tests/general/400-empty-pack-member-alias-owner-specialization.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: invalid class template arguments"
+        },
+        {
+          "path": "pa17/tests/general/400-member-alias-template-template-dependent-replay.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unknown expression name: value"
+        }
+      ]
+    },
+    "lookup": {
+      "owner": "Qualified grammar, dependent lookup, deduction and expression-query facts",
+      "data_flow": "Source syntax and lookup context -> candidate/query graph -> substituted callable/value result",
+      "complexity": "Source-proportional parsing; bounded associated scopes and actual query dependencies",
+      "validation": "Required parser/query/deduction fixtures, rejection controls and native source-to-LowIR execution",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: recursive type query"
+        },
+        {
+          "path": "pa17/tests/general/300-anonymous-member-injection-in-class-template.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unknown member"
+        },
+        {
+          "path": "pa17/tests/general/300-array-functional-cast-pack-call.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: scalar cast arity"
+        },
+        {
+          "path": "pa17/tests/general/300-conditional-explicit-on-a-constructor-template.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: expected type specifier"
+        },
+        {
+          "path": "pa17/tests/general/300-constructor-and-conversion-function-template-roles.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: expected type specifier"
+        },
+        {
+          "path": "pa17/tests/general/300-function-template-local-static-per-specialization.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: name qualifier has no scope"
+        },
+        {
+          "path": "pa17/tests/general/300-local-qualified-argument-replay.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: type name is not visible"
+        },
+        {
+          "path": "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unsupported expression"
+        },
+        {
+          "path": "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unknown expression name: value"
+        },
+        {
+          "path": "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: ambiguous type-query operator"
+        },
+        {
+          "path": "pa17/tests/general/300-template-template-argument-in-an-explicit-specifier.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: expected type specifier"
+        },
+        {
+          "path": "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: type name is not visible"
+        },
+        {
+          "path": "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: unresolved overload in value context"
+        },
+        {
+          "path": "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: expected type specifier"
+        }
+      ]
+    }
+  },
+  "triage_note": "Groups are implementation ownership based on current diagnostics/comparison failures; investigation can refine an owner without removing requirements.",
+  "performance_sha256": "2531fb656bbc657af0d36eed2c9e4edea3ae54e1cf425a9c08d3013327c63cfc",
+  "performance_summary": {
+    "path": "pa17/head-performance.md",
+    "sha256": "abda0b3575693850fb8df36002cc7920570ce32519f4b77253d0b16a4e572752"
+  },
+  "control_harnesses": [
+    {
+      "path": "student.tests/pa17/audit_controls.py",
+      "sha256": "7f2d47bc2c57602955434d732473fdb2a2aab53a3bbc3e661b966ce6052a1426"
+    },
+    {
+      "path": "student.tests/pa17/definition_controls.py",
+      "sha256": "a34a95fb345248297659cdf2c2064303d2133c1bc88af77678a69e7170d1d12d"
+    },
+    {
+      "path": "student.tests/pa17/entity_controls.py",
+      "sha256": "b609cccbfa1a45eed1fadaddbca5302fc38f0bb05ee62808e12f7fcef00c8504"
+    },
+    {
+      "path": "student.tests/pa17/head_controls.py",
+      "sha256": "83447322604cbe9e9f334a27d5ab6178e27c5c9fdaefa6778658a40c23100864"
+    },
+    {
+      "path": "student.tests/pa17/member_controls.py",
+      "sha256": "505491e6ef9d6891fa08936c54b9fd34dfbb89896596c94d05847d0eef3982e4"
+    }
+  ],
+  "prior_performance": {
+    "path": "student.tests/pa17/head-performance-before-pack.json",
+    "sha256": "c1fee84af906a393ff62cf7b2555900e506d1f3fcf2c1b7dde82a7d422808ce5",
+    "status": "superseded diagnostic campaign, all observations preserved"
+  }
 }

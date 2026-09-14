@@ -1,54 +1,68 @@
-# PA17 compact plan — implementation, loop 49
+# PA17 compact plan — implementation handoff, loop 49
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `58789b00e19ae2aff032c8b04980b7d43265617f`
 
-Loop 49 entry: `df0904deaa9a21544ab4c10f3a9e68120740d982`, clean,
-248/343 (95 failures). Previous turn: progress, completed checkpoint audit.
-Review markers above remain unchanged. Active implementation owner is the
-retained member-template declaration/definition graph: source heads → structural
-owner/prototype selection → composed substitution frames → declaration/body
-demand → ordinary typed LowIR. Close renamed and nested heads, overload identity,
-and late definition attachment together where this owner supports them. Work
-must track source head widths, owner depth and actual specialization demands;
-use indexed entity/source keys and immutable frames, with no grammar replay or
-global retries. Validate the unchanged course suite, all related personal
-controls, prior-through report and file audit. Freeze entry/final binaries for
-A/A+ABBA latency/RSS and checked native runtime/text evidence; PA17/O0 introduces
-no optional optimization or numerical performance exit ceiling. Remaining
-implementation and independent review questions will be recorded separately at
-handoff; the initial cluster is not a stopping boundary.
+Target: **PA17 full-stage**, incomplete. Entry was clean at
+`df0904deaa9a21544ab4c10f3a9e68120740d982`: **248/343**. Implementation through
+`807e0989cc2e83f7dfa8804e9bb4db471ea35af9` passes **284/343**: **36 original
+failures fixed**, no new failures or reduced coverage. PA1–PA16 pass
+**2266/2266**; through PA17 is **2550/2609**. File audit passes with the same
+three inherited header warnings. All **158 personal controls** pass, including
+43 new head controls and four LowIR ownership controls. Tests, references,
+comparison rules and mandated limits are unchanged; no reference correction.
 
-Target: **PA17 full-stage**, incomplete. Loop 49 now passes **284/343**:
-36 original failures fixed, no new failures or reduced coverage. PA1–PA16
-pass **2266/2266**; through PA17 is **2550/2609**. File audit passes with
-the same three inherited header warnings. All 158 personal controls pass
-(including 43 new head controls and four LowIR ownership controls).
+The completed group owns retained member/nested class template heads and their
+definitions. Source declarations retain canonical identity before layout.
+Renamed heads and overload roles select the declared prototype; definition
+requests compose immutable parameter slices with selected class argument tuples.
+Late definitions attach to earlier selections. Inner aliases/defaults, nested
+constructors, template conversion and enclosing packs consume those identities.
+Callable signatures expand enclosing packs before inner deduction; body
+parameters expand once under the final frame. Source class template-ids bind to
+their template even inside a different specialization of that class.
 
-The source graph now retains member and nested class template heads, canonical
-owner paths and prototypes, including renamed outer non-type parameters.
-Definition demand composes source-head slices with the actual selected class
-argument tuples. Aliases, defaults, constructors and bodies use the appropriate
-inner occurrence. Late definitions attach to already selected specializations.
-Receiver syntax lookup uses declared receiver scope and caches each complete
-subtree. Source declaration binding never mutates a concrete class-facts sentinel.
-Callable signatures now expand enclosing packs before inner deduction, while
-body parameters expand once under their final composed frame. No grammar
-replay, alternate IR, optional optimization or reference change.
-
-| Remaining implementation | Owner / boundary |
+| Owner and data flow | Complexity / validation |
 |---|---|
-| Friend declaration identity, access and ADL | Namespace friend publication and associated lookup relationships. |
-| Dependent `typename` / `template` obligations | Definition-time type/name classification and current-instantiation rules. |
-| Specialized member classes, alias/variable packs, dependent lookup | Partial/explicit selection, argument substitution and lookup; retained primary/nested definition heads are now shared inputs. |
-| Required LowIR differences | Storage/initialization, object transfer, cleanup and emission owners. |
+| Source binding and definition index: parsed heads → owner paths/prototypes → selected definition | Work follows source head widths, required owner depth and selected definitions. Renaming, partial owners, nested classes, three heads, duplicate/mismatch rejection and late demand controls. |
+| Substitution and body demand: typed arguments + source slices → shared frames → declarations/body → ordinary LowIR | Cache by full frame/type identity; share tuples, avoid copied visible environments and global retries. Defaults, outer/inner packs, sibling specialization and native constructor controls. |
+| Receiver syntax and constructor selection: declaration scope / argument types → member-template parse / concrete candidate | Cache completed expression subtrees; visit each receiver node once plus required name lookup. Deduce before converting-constructor ranking; preserve ordinary/template ties. |
 
-The retained-head group expanded through nested class definitions, three-head
-member definitions, partial-owner definitions, inner defaults and converting
-constructors. The remaining 59 failures require lookup/selection/obligation or
-lowering work beyond head retention and composition; they remain required and
-are not independent-audit questions. Finish measurement and the handoff ledger
-before returning control. Independent review should assess source-context and
-canonical-head cache validity across the cumulative stage diff; it does not
-waive any known remaining failure. The prior audit and measurements remain in
-[audit.md](audit.md) and [audit-performance.md](audit-performance.md).
+No grammar replay, alternate semantic tree, output delegation or optional
+optimization was introduced. PA17 continues O0 LowIR; own native backend,
+optimization profitability and self-hosting remain later-stage responsibilities.
+[Performance evidence](head-performance.md) freezes entry/final binaries and
+inputs, checks common output equality, and records A/A+ABBA compiler latency/RSS
+and native runtime/text size. New-only inputs record the entry rejection and
+final cost. All observations, including the superseded pre-pack campaign, are
+retained. PA17/O0 has no mandated numerical ceiling. Inherited +15%, +16 MiB and
+5.5× targets remain diagnostics under spec.md; historical measurements in
+[audit-performance.md](audit-performance.md) remain intact. Evaluator limits
+and existing lowering growth policies are preserved.
+
+| Remaining implementation group | Cases | Next owning decision |
+|---|---:|---|
+| Friend entities, access and ADL | 16 | Publish namespace/class relationships; consume them in access and associated lookup. |
+| Dependent `typename` / `template` obligations | 5 | Check source introducers using current/noncurrent-instantiation identity. |
+| Alias/variable/member specialization and arguments | 8 | Complete partial/explicit candidate selection, cv and empty/value-pack substitution. |
+| Qualified grammar, lookup, deduction and queries | 14 | Resolve syntax and dependent candidates/query dependencies at their required point. |
+| Required LowIR differences | 16 | Complete storage/initialization, transfer, cleanup and emission behavior. |
+
+The group expanded through nested class definitions, three-head definitions,
+partial-owner definitions, inner defaults, converting constructors and enclosing
+pack signatures. Further fixes require the algorithms above: for example a
+nested member-class partial must register/select its partial argument pattern;
+additional definition-head overlays cannot make that selection. These **59
+failures remain required implementation**, not independent-audit questions.
+The exact cases, current diagnostics, owner/data-flow/complexity/validation
+records are in [handoff evidence](../student.tests/pa17/handoff.json).
+
+| Handoff ledger | State / evidence |
+|---|---|
+| Loop 49 retained-head behavior group | Complete implementation increment; four commits after entry, followed by this evidence record. Required reports and 158 controls are bound to source/binary hashes. |
+| Remaining implementation | 59 failures above, no waiver. No stage advancement. |
+| Independent review | Pending: assess canonical-head, source-context and class-identity cache validity across the cumulative stage diff, including late and partial-owner definitions. Existing controls support implementation; they do not replace audit. |
+
+Reproduce the evidence check with `python3 student.tests/pa17/verify_handoff.py`.
+The prior checkpoint audit remains in [audit.md](audit.md). Review markers above
+are preserved; this handoff returns control to Ralph and does not certify PA17.

@@ -33,6 +33,10 @@ def verify():
     assert set(delta['entry_failures'])==entry and set(delta['final_failures'])==final
     assert set(delta['fixed'])==entry-final and not delta['new_failures'] and final<entry
     assert len(list((ROOT/'pa17/tests').glob('*/*.t')))==e['course_cases']==343
+    grouped=[r['path'] for g in e['remaining_groups'].values() for r in g['failures']]
+    assert len(grouped)==len(set(grouped)) and set(grouped)==final
+    assert all(g['status']=='unfinished implementation' for g in e['remaining_groups'].values())
+    assert not e['waivers'] and e['handoff_boundary'] and e['independent_review_questions']
     assert e['logs']['file_audit']['exit_code']==0 and 'File audit passed for pa17' in logs['file_audit']
     for report in e['controls']:
         path=ROOT/report['path'];assert sha(path)==report['sha256']
@@ -40,6 +44,9 @@ def verify():
         for r in rows:
             if r.get('expected')=='native':assert r['compiler_exit']==r['backend_exit']==r['native_exit']==0
             if r.get('expected')=='reject':assert r['compiler_exit']!=0
+    for artifact in e['control_harnesses']+[e['performance_summary'],e['prior_performance']]:
+        assert sha(ROOT/artifact['path'])==artifact['sha256']
+    assert sha(ROOT/e['performance'])==e['performance_sha256']
     perf=json.loads((ROOT/e['performance']).read_text())
     assert perf['source_commit']==e['source_commit'] and not perf['source_diff'] and perf['finished_utc']
     assert perf['binaries'][1]['sha256']==sha(ROOT/'dev/cppgm++')
