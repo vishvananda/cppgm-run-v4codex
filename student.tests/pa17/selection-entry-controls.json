@@ -1,0 +1,240 @@
+[
+  {
+    "name": "variable_cv_exact",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous variable partial specialization\n",
+    "passed": false
+  },
+  {
+    "name": "variable_fixed_cv",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "variable_pack_forward",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: dependent query demanded as a concrete value\n",
+    "passed": false
+  },
+  {
+    "name": "variable_value_pack",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type bound to a value parameter\n",
+    "passed": false
+  },
+  {
+    "name": "variable_order",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous variable partial specialization\n",
+    "passed": false
+  },
+  {
+    "name": "variable_repeated_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "value_argument_chain",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: dependent query demanded as a concrete value\n",
+    "passed": false
+  },
+  {
+    "name": "member_alias_template_identity",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "member_partial_owner",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member class template head mismatch\n",
+    "passed": false
+  },
+  {
+    "name": "variable_cv_array",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "pack_query_partial",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: missing substituted query context\n",
+    "passed": false
+  },
+  {
+    "name": "qualified_alias_completion",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: value\n",
+    "passed": false
+  },
+  {
+    "name": "member_partial_body",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member class template head mismatch\n",
+    "passed": false
+  },
+  {
+    "name": "pack_size_alias_head",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": false
+  },
+  {
+    "name": "variable_nondeduced_size",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "variable_source_order",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous variable partial specialization\n",
+    "passed": false
+  },
+  {
+    "name": "member_partial_renamed_alias",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_explicit_value_query",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_explicit_type_query",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "member_explicit_query",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_non_template_decltype",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "volatile_boolean_condition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "variable_ambiguity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous variable partial specialization\n",
+    "passed": true
+  },
+  {
+    "name": "variable_unrelated_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": true
+  },
+  {
+    "name": "variable_repeated_mismatch",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": true
+  },
+  {
+    "name": "variable_partial_duplicate_unused",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "variable_partial_equivalent_primary",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "variable_partial_nondeducible",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "variable_partial_default",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "member_partial_duplicate_unused",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member class template redefinition\n",
+    "passed": true
+  },
+  {
+    "name": "partial_pack_size_duplicate",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": true
+  }
+]

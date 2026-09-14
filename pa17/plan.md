@@ -1,81 +1,64 @@
-# PA17 compact plan — implementation, loop 53
+# PA17 compact plan — implementation handoff, loop 53
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30`
 
-Loop 53 entry: `65b02f17e93fda608d1b0a404e37000488d238b3`, clean;
-306/343 (37 failures). Previous goal turn classified as progress: the checkpoint
-audit supplied verified ownership findings and controls. Preserve both markers.
-Active owner: canonical partial matching/ordering and argument substitution,
-including cv/value/empty packs, dependent aliases and member partial owners.
-Flow: source argument facts → canonical tuple → relevant candidate edges →
-selected head and immutable substitution frames → ordinary demand/LowIR.
-Use exact pattern matching and pairwise ordering cached by immutable entity
-identity; visit only the primary's candidates. Validate related course cases,
-personal identity/rejection/native controls, frozen A/B latency/RSS and checked
-runtime/text, then required stage/prior reports and file audit. Extend related
-query and declaration-owner fixes while this data flow supports them.
-Implementation increment: **315/343**, nine original failures resolved and no
-new failures. All seven selection cases close, together with qualified static
-callee queries and constant-boolean LowIR. New controls: 31/31. Required prior
-report and final performance evidence are being refreshed before handoff.
+Target: **PA17 full-stage**, still incomplete. Entry `65b02f17` was clean at
+306/343 (37 failures). Code `0a720134` passes **315/343**: nine original failures
+resolved, no new failures, all 343 course inputs unchanged. PA1–PA16 pass
+**2266/2266**; through PA17 is **2581/2609**. File audit passes with the same
+three inherited header-division warnings. **344/344 personal controls** pass
+(313 inherited, 31 new); entry fails 19 of the new controls. No reference,
+fixture, comparison-rule or bundle correction was used.
 
-Target: **PA17 full-stage**, implementation incomplete. The accumulated review
-covers `58789b00..c43e8eb6`: all three accepted handoffs, their interactions and
-two audit fixes (**15 commits; 44 combined implementation paths, 45 touched**).
-Entry `b34c1be9` and reviewed code both pass **306/343**, with exactly the same
-**37 failures**. PA1–PA16 pass **2266/2266**; through PA17 is **2572/2609**.
-The file audit passes with three inherited header-division warnings. All
-**313 personal controls** pass: 261 inherited and 52 audit controls. Entry fails
-17 of the new controls. Course tests, references, comparison and coverage are
-unchanged; no reference correction or waiver was used.
-
-[Audit findings](audit.md) and the [complete range](../student.tests/pa17/checkpoint52-range.json)
-cover member-head/class identity, friend ownership/access/demand, current
-instantiation, source ambiguity publication and access versus lookup context.
-The audit fixed missing ordinary-friend use demand, dormant fixed qualified
-friend binding, forbidden out-of-class template defaults, and repeated/misowned
-source parameter-name checks. Evaluated function expressions share the existing
-selected-function demand owner; conversion consumers keep their recorded facts.
-The second fix closes discarded/boolean/void/comma uses and removes the initial
-extra checks from general conversions.
-
-| Owner / data flow | Bound and evidence |
+| Completed owner / data flow | Design, bound and validation |
 |---|---|
-| Source heads and canonical specialization selection → member declaration → parent-linked substitution frames | Compact entity/argument/source keys; relevant head/owner edges only. Renamed, nested, pack, partial, default, access and late-definition controls pass. |
-| Friend binding and grants → selected function use → indexed body queue | Fixed references checked at definition; dependent recipes retained. Each ordinary friend body shares active/success/failure states across runtime and constant demand. |
-| Source introducers and declaration interpretation → shared source/projected views | One source ambiguity interpretation before fact/region publication; no grammar replay or subtree clone. Current/noncurrent types, calls and parenthesized declarations retain behavior. |
-| Lexical parameter-name checks → completed source obligation | Each nested template is checked under its complete head; projected declarations reuse the source check. Counters and shadowing controls verify the corrected boundary. |
-| Selected entities, conversions, constants and lifetimes → typed LowIR → explicit supplied-backend validation | Ordinary entity-indexed emission; no semantic reconstruction or internal text transport. Own native backend and self-hosting remain later-stage work. |
+| Class/variable partial declarations → canonical arguments → selected pattern | Shared exact cv/value/pack matching and ordering; primary-indexed candidates, immutable pair cache, O(C) winner comparisons. Variable duplicate/default/nondeducible/equivalent-primary checks occur at declaration. All seven previous selection cases and identity/order/rejection controls pass. |
+| Symbolic pack queries and alias/template arguments → parent-linked substitution frames | Preserve symbolic sizeof-pack cardinality, rename its parameter identity, expand argument lists at their owner, and distinguish a member alias entity from applying its body. Missing dependent alias members return an empty candidate-probe result. Empty/value/repeated packs and conditional partial matches execute. |
+| Out-of-class member partial → selected head and enclosing lexical environment → ordinary demand | Partial heads register separately from the primary. Source outer aliases survive member rebinding; selected class environments retain the defining lexical parent. Renamed types, constants and member bodies execute; duplicate definitions reject. |
+| Qualified callable lookup → candidate family/query → concrete alias | Qualified lookup completes alias target classes. A concrete overload family does not inherit candidate-signature dependence; explicit qualified/member arguments and ordinary function decltype are retained. Static-member non-type query control passes. |
+| Recorded boolean constant → typed LowIR condition | O(1) direct jump selection without evaluating a new expression, cloning syntax or scanning IR. Required constant-member comparisons pass; ordinary expression, volatile and cleanup paths remain subject to existing checks. |
 
-[Performance evidence](checkpoint52-performance.md) reports frozen checkpoint
-and cumulative A/B inputs/binaries, A/A and ABBA observations, compiler
-latency/RSS, checked native runtime/text and source-work counters. Intermediate
-campaigns and earlier [head](head-performance.md), [friend](friend-performance.md),
-[name](name-performance.md) and [audit](audit-performance.md) measurements are
-preserved. PA17/O0 has no mandated numerical ceiling. Inherited +15%, +16 MiB
-and 5.5× values remain diagnostic targets under spec.md §9. Existing evaluator
-limits and lowering work/growth fallbacks are unchanged; no optional optimizer,
-ABI/debug relaxation or new exit gate was added.
+[Performance evidence](selection-performance.md) contains frozen A/B compilation
+latency/RSS, A/A and ABBA observations, checked runtime/text, scaling and the
+[source-to-LowIR-to-ELF trace](../student.tests/pa17/selection-trace.json).
+Common compiler paired changes range −1.87% to +1.54%; peak RSS changes range
+−76 to +208 KiB. New workloads scale 3.83–4.30× for 4× input. Compiler text grows
+3,008 bytes (0.170%). Required boolean lowering saves 12 native bytes but its
+runtime rises 2.66%; this cost is disclosed, with no speedup claim. PA17/O0 has
+no mandated numerical ceiling; inherited +15%, +16 MiB and 5.5× targets remain
+diagnostic under spec.md §9. All historical measurements, existing evaluator
+limits and lowering work/growth fallbacks remain intact.
 
-| Remaining implementation group | Cases | Owning work |
+| Remaining implementation group | Cases | Next owning work |
 |---|---:|---|
-| Specialization entities and arguments | 7 | Alias/variable/member partial or explicit selection, cv and empty/value packs. |
-| Qualified lookup and expression queries | 14 | Candidate/query failure states, dependent candidates and remaining syntax. |
-| Required LowIR behavior | 16 | Storage/initialization, transfers, cleanup and emission. |
+| Qualified lookup, candidate queries and remaining syntax | 12 | Recursive/ambiguous candidate query states, current-instantiation inherited/local type lookup, anonymous injection, array casts, explicit specifiers, lambda/qualified-pack calls. |
+| Required LowIR storage, initialization, transfer and cleanup | 16 | Static member/local storage, alignment, construction/assignment, destruction and emission order. The local-static fixture now compiles but still differs in required LowIR. |
 
-All **37 failures remain required implementation**, not review questions or
-performance waivers. Exact cases remain in the
-[audit evidence](../student.tests/pa17/checkpoint52-evidence.json), preserving
-[loop 51's handoff](../student.tests/pa17/handoff.json). Do not advance to PA18.
-Avoidable handoff fragmentation separated member heads, friend demand and source
-checks across three checkpoints. Close each remaining broad owner with its
-substitution, demand and lowering interactions before another handoff.
+All **28 failures are unfinished implementation**, not independent-review
+questions. Exact cases, current diagnostics and ownership/data flow are in the
+[handoff ledger](../student.tests/pa17/selection-handoff.json). Do not advance to
+PA18. Handoff boundary: the seven-case selection/argument group is closed,
+extended through qualified callee queries, source declaration diagnostics,
+renamed member bodies and required condition lowering. Further failures require
+candidate failure/recursion scheduling, source current-instantiation/inherited
+lookup or storage/lifetime lowering changes; they no longer arise from this
+owner's argument matching or substitution. Extending those distinct owners
+without their own semantic analysis and controls would not be a coherent
+continuation of the completed group.
 
-| Loop / phase | Disposition and evidence |
+Independent review remains required for this increment and its interactions:
+canonical partial/query keys and negative-result validity; retained member-head
+and lexical-owner publication; and constant-fact lowering/performance costs.
+These questions are separate from the 28 implementation failures and waive none.
+The prior [checkpoint audit](audit.md), its markers and all historical handoffs
+remain preserved; this turn does not certify the full assignment.
+
+| Loop / phase | Handoff ledger |
 |---|---|
-| 52 / checkpointAudit | Previous turn was progress (301→306). Full accumulated review and ownership fixes complete through `c43e8eb6`; earlier tests and file audit pass; same 37 PA17 failures; 313 controls pass. Three broad implementation groups remain. |
+| 52 / checkpointAudit | Progress: accumulated review plus ownership fixes complete through `c43e8eb6`; 306/343 and 313 controls. Review findings and measurements remain preserved. |
+| 53 / implement | Previous turn classified as progress from verified audit findings. `0a720134` closes and extends partial/argument ownership: 306→315, 344 controls, prior/file checks pass, stage-scoped performance recorded. Remaining implementation: 28 cases; independent review pending. |
 
-Run `python3 student.tests/pa17/verify_checkpoint52.py` to verify current evidence.
-The records commit changes only audit records; the marker names the reviewed
-code tip. Earlier handoff verifiers describe their frozen historical tips.
+Run `python3 student.tests/pa17/verify_selection.py` to verify this handoff.
+The records commit changes only evidence and this plan, leaving the reviewed
+marker unchanged. Historical verifiers describe their own frozen code tips.
