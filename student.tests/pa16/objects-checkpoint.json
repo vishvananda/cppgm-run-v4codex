@@ -1,0 +1,91 @@
+{
+  "entry_commit": "caac2cda243e4ab71d6f5aca48159f88b9b8da3b",
+  "implementation_commit": "f1497ca228f4ff4194f9aa1a49b849993165bba2",
+  "implementation_sha256": "047836fe0e08e7dc312ed8ff670d262af5c49f2bdbf0f24f974e7f9af8e7be5b",
+  "contract_files": 9108,
+  "contract_sha256": "a7adb4618fa9fa3421595e22945b2f056629d6d6a790bc4e5bfd713ea60b23f0",
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa16-object",
+  "compiler_sha256": "07d000c2d4443a6091609916a7b80cfbfad531a7019cd974cbe84016035f5de8",
+  "remaining_failures": [
+    "pa16/tests/general/300-constexpr-base-copy-constructor-init.t",
+    "pa16/tests/general/300-constexpr-object-reference-binding.t",
+    "pa16/tests/general/300-static-constexpr-member-string-pointer-initialization.t",
+    "pa16/tests/general/400-constexpr-dependent-nonliteral-result-instantiation.t",
+    "pa16/tests/general/400-constexpr-overloaded-unary-member-operator.t",
+    "pa16/tests/general/400-constexpr-reference-parameter-address-identity.t",
+    "pa16/tests/general/400-constexpr-reference-static-object-alias.t",
+    "pa16/tests/spec/400-constexpr-function-and-constructor.t"
+  ],
+  "checks": {
+    "stageTests": {
+      "exit_code": 2,
+      "passed": 146,
+      "total": 154
+    },
+    "priorThroughTests": {
+      "exit_code": 0,
+      "passed": 2112,
+      "total": 2112
+    },
+    "throughReport": {
+      "exit_code": 2,
+      "passed": 2258,
+      "total": 2266
+    },
+    "fileAudit": {
+      "exit_code": 0
+    },
+    "stageProgress": {
+      "resolved_existing_failures": 54,
+      "new_output_mismatches": 1,
+      "net_failure_reduction": 53,
+      "coverage_unchanged": true
+    },
+    "personal": {
+      "native": 173,
+      "rejections": 75
+    }
+  },
+  "artifacts": {
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/entry-tests.log": "b2e2954335482ae2c5c0dac9de19aeec081e07400866f730564f73636e957845",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/stage-final.log": "04f931c0008646c8a6bb252cd42916467f4e64468e3c9c7625bb16d85bad5106",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/prior-final.log": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/through-final.log": "582232e5dfa6d1cd26534236fd7b0b0b98dea9bdd4455b3ff865cd60c224961c",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/file-audit-final.log": "abbc0b19c03c522f1d1a52698772f0f70c5f72f3c55e024183371bc62b6cde1c",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/controls/results.json": "73c920580ff4556446f7dcdd29566a0a77b929f1c65124a0ca2a10c0ffa4b4b7",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/entry-cppgm": "7f3b39ee21c6e4f9ac3f8e361bb9843c6b98e4ff9935800c1233d642131a46f1",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/final-cppgm": "20d74289b04652485422030929e965dce30d80defa024908b9e5da26c6edfda8",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/scalar-fast-cppgm": "b63d19b1b461fda7e994a1e45ff6eecec675da316c635e39ec04f11b1be0d23b",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/performance.json": "948aeed455a57800b11e390a982b7a7c6d93dcbc2108fe79e619baa3fe46e27b",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/scalar-fast-performance.json": "a24166c078e85de0f5625046e7e00dc9daf292a87c659b0184e4be129f5fa891",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/scalar-fast-control.json": "7c0a43cd08d6004854db6da8412f09aace4cba7e0b2ad0dedbe4d930b7348359",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/benchmark-preflight-1.log": "6d65195589333023bd452914c26fd3446bb0a1b4b71424ddf92d353787d9c450",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/objects-validated.log": "5bb8ba0602ecd303c77fb402ad79167424d7f5e9d3a6633b58a908b7cec660ae",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/scalar_execution-validated.log": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/floating-validated.log": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/noexcept-validated.log": "4c5a53d4cc247adb3d4c550718f629bb3280b0b1bb20c8ddfbe667012b7279ae",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/storage-validated.log": "9da046f263c918aa7b0eaa61f346f67c4c20df693e1960dd6bbfbbcd353f1f5a",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/validity-validated.log": "913e5b1d5cda45d99f0dbc815301f0ff13ab453c99fc799f3c91efc21a5644d5",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/audit_controls-validated.log": "e9516553514a70396edbd6abc7624b6981a606e318a3cf1b3ea0542028215389",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/literal-demand-cppgm": "07d000c2d4443a6091609916a7b80cfbfad531a7019cd974cbe84016035f5de8",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa16-object/literal-demand-performance.json": "e48ff8bba3f77b1651155a2f6c98ab8658950cf6f30504f55ea5c80c3be560b7"
+  },
+  "harnesses": {
+    "student.tests/pa16/verify_objects.py": "8095e33a7bec462a347cb4fb3fadb428e505688a83caf9ed1c1704d3c39b8470",
+    "student.tests/pa16/objects.py": "af50d4f9b5a049341c51967076255f2fe827f8cc3d0a4b55c7e49269ef89ff4b",
+    "student.tests/pa16/scalar_execution.py": "c97cc0ffddd41121bd202dc9e0145dfb369e8251e4836823b12575602ced6516",
+    "student.tests/pa16/floating.py": "6b0fb6f890cafeeb73ef3fb9bc531c515d0e309181e4106e7d1f1e904016029f",
+    "student.tests/pa16/noexcept.py": "9a060618607186cfeb4b6930eae86d2dc220af86d8d59876b75c75b3ea6877fa",
+    "student.tests/pa16/storage.py": "7e3350f0a52e478d958ff6c0b01d1ef72e3b4c2577da49f7dd98f30ec4cb0ace",
+    "student.tests/pa16/validity.py": "2c43737f4032cd257f3c0b8c08401ee625fae6cfc1f31cffce258da8a49ddcaa",
+    "student.tests/pa16/audit_controls.py": "0581fdcd1f7a706b394e2142f04eb75b31272aedabaa25bb7a326911a479bdf3",
+    "student.tests/pa16/objects_benchmark.py": "af2407ae683a27c1b079a15fa556f7259c17a248d0c3b603994c9a42df5cd77b",
+    "student.tests/pa16/objects_noise.py": "e582c00b598f6fe2c20a1076725c561a553531f4d98ae1173b839d3d206fb006",
+    "student.tests/pa16/objects/conversions.cpp": "f67734e996b351b3a6efcb3e5e2ecf86388bf755541d67801ddf0db2418daa7c",
+    "student.tests/pa10/benchmark.py": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a"
+  },
+  "scope": "Incomplete implementation handoff; eight unchanged LowIR comparisons remain; no stage certification or advancement.",
+  "new_output_mismatches": [
+    "pa16/tests/general/300-static-constexpr-member-string-pointer-initialization.t"
+  ]
+}
