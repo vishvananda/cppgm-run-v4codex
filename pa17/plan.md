@@ -1,7 +1,18 @@
-# PA17 compact plan — implementation handoff, loop 50
+# PA17 compact plan — implementation, loop 51
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `58789b00e19ae2aff032c8b04980b7d43265617f`
+
+Loop 51 entry: `0fe13f160c921db3ca68bfefc857b3a6be40cf3f`, **301/343**.
+Active group: source dependent-name obligations and current-instantiation
+identity. Owner: retained type/name binding; source introducers and canonical
+qualifier identity feed definition-time checks, then ordinary substitution.
+Work is proportional to name parts and lexical owner edges, once per source
+obligation. Validate dormant and demanded forms, current/noncurrent owners,
+out-of-class return/parameter boundaries, and member template expressions.
+Measure frozen entry/final compiler latency/RSS and common native runtime/text
+with A/A and ABBA. Remaining implementation and independent review below stay
+required; historical handoff is preserved in `handoff-loop50.json`.
 
 Target: **PA17 full-stage**, incomplete. Clean entry was
 `d3ef5e5d5adc89baf13f9697e5c38b165bba0dcc`: **284/343**. Implementation through

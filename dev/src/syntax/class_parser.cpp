@@ -28,6 +28,8 @@ NodeId Parser::class_specifier()
     // keeps terminal lookup, independent of declaration order [basic.scope].
     auto terminal_category = previous.category == Category::Value || previous.category == Category::TemplateValue ? previous.category : category;
     names.bind(owner, final_name(n), terminal_category, child);
+    if (template_declaration && owner == saved_scope)
+        names.bind(names.parent(owner),final_name(n),terminal_category,child);
     names.bind(child, final_name(n), category, child);
     if (template_declaration && owner != saved_scope) {
         names.definition_parent(child,saved_scope); names.import(child,owner);

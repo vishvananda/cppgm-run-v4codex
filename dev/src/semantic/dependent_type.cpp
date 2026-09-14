@@ -33,11 +33,6 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
     if (entities[e].class_info && entities[e].template_info) {
         if (!encloses(entities[e].scope,use)) return 0;
         auto head = templates[entities[e].template_info];
-        if (head.primary) {
-            auto pattern = argument_packs[head.explicit_arguments];
-            std::vector<ArgumentId> args(argument_types.begin()+pattern.offset,argument_types.begin()+pattern.offset+pattern.count);
-            return entities[specialize_class(head.primary,args)].type;
-        }
         auto parameters = head.offset;
         // An out-of-class source overlay owns a parameter slice, independent
         // of the spelling and identity of the primary's original head.
@@ -46,12 +41,33 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
                 auto defined = template_definition_heads[source];
                 if (defined.pattern == e) { parameters = defined.parameters; break; }
             }
+        // The entity fixes head width and partial shape; the immutable
+        // parameter slice distinguishes every renamed source environment.
+        auto identity = key(e,parameters);
+        if (auto type = injected_type_facts.get(identity)) return type;
         std::vector<TypeId> args;
+        if (head.primary) {
+            auto pattern = argument_packs[head.explicit_arguments];
+            Index bindings, cache;
+            if (parameters != head.offset) for (unsigned j = 0; j < head.count; ++j) {
+                auto p = template_parameters[parameters+j]; auto arg = parameter_argument(p);
+                // This is a source-head renaming. The retained expansion
+                // already owns its ellipsis; the binding is its scalar pattern.
+                bindings.put(template_parameters[head.offset+j],arg);
+            }
+            for (unsigned j = 0; j < pattern.count; ++j) {
+                auto arg = argument_types[pattern.offset+j];
+                args.push_back(parameters == head.offset ? arg : substitute_argument(arg,bindings,cache));
+            }
+            auto type = entities[specialize_class(head.primary,args)].type;
+            injected_type_facts.put(identity,type); return type;
+        }
         for (unsigned i = 0; i < head.count; ++i) {
             auto parameter = template_parameters[parameters+i]; auto arg = parameter_argument(parameter);
             args.push_back(entities[parameter].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
         }
-        return entities[specialize_class(e,args)].type;
+        auto type = entities[specialize_class(e,args)].type;
+        injected_type_facts.put(identity,type); return type;
     }
     auto scope = entities[e].scope, parent = entities[e].owner;
     if (!entities[e].template_pattern || !entities[e].name || !scope ||
@@ -59,7 +75,55 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
     auto owner = injected_template_type(scopes[parent].entity,use);
     return owner ? types.dependent_name(owner,entities[e].name,{},false) : 0;
 }
-TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
+ScopeId Analyzer::current_instantiation_scope(TypeId type, ScopeId use)
+{
+    for (auto scope = use; scope; scope = scopes[scope].parent) {
+        if (scopes[scope].kind != ScopeKind::Class) continue;
+        auto entity = scopes[scope].entity;
+        if (types.unqualified(type) == entities[entity].type ||
+            types.unqualified(type) == injected_template_type(entity,use)) return scope;
+    }
+    return 0;
+}
+void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId scope)
+{
+    if (ast.nodes.occurrences[declaration].context) return;
+    auto kind = ast[declaration].kind;
+    if (kind != Kind::SimpleDeclaration && kind != Kind::Function) return;
+    auto items = child(declaration,Kind::InitDeclarators);
+    auto item = ast[items].first;
+    do {
+        auto d = kind == Kind::Function ? ast[ast[declaration].first].next : ast[item].first;
+        auto params = child(d,Kind::Parameters), p = ast[params].first;
+        auto specs = ast[p].first, spec = ast[specs].first, name = ast[spec].detail;
+        if (p && !ast[p].next && ast[p].kind == Kind::Parameter && !ast[specs].next &&
+            spec && !ast[spec].next && !(ast[spec].flags & 1) && name &&
+            ast[name].first != ast[name].last) {
+            auto previous = ast[name].first;
+            while (ast[previous].next != ast[name].last) previous = ast[previous].next;
+            auto binding = bind_template_name(name,scope,previous);
+            if (binding.dependent) {
+                auto type = type_name(name,scope,previous);
+                auto current = current_instantiation_scope(type,scope);
+                auto member = current ? lookup(current,terminal(name),Lookup::Ordinary,true) : 0;
+                bool known_type = member && (entities[member].kind == EntityKind::Type || entities[member].kind == EntityKind::Alias);
+                if (dependent_type(type) && !known_type) {
+                    if (kind == Kind::Function || ast[d].next || ast[params].next || spec_has(ast[declaration].first,KW_TYPEDEF))
+                        throw std::runtime_error("dependent name does not declare a parameter type");
+                    // Resolve this single parsed ambiguity before publishing
+                    // semantic facts. Reuse its name and delimiter wrappers;
+                    // neither grammar nor a specialization is parsed again.
+                    auto before = ast[d].first;
+                    while (before && ast[before].next != params) before = ast[before].next;
+                    if (!before) throw std::logic_error("parenthesized declaration has no declarator-id");
+                    ast.resolve_paren_initializer(item,d,params,before);
+                }
+            }
+        }
+        item = ast[item].next;
+    } while (item);
+}
+TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typename)
 {
     if (!last) last = ast[n].last;
     ScopeId owner = ast[n].op == OP_COLON2 ? global : s;
@@ -68,6 +132,18 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
     for (auto p = ast[n].first; p; p = ast[p].next) {
         auto list = child(p,Kind::TemplateArguments);
         if (prefix && dependent_type(prefix)) {
+            auto current = current_instantiation_scope(prefix,s);
+            // Known members of the current instantiation are looked up at the
+            // definition. Other dependent qualifiers retain a substitution path.
+            if (current && lookup(current,ast[p].text,Lookup::Ordinary,true)) {
+                owner = current; qualified = true; prefix = 0;
+            }
+        }
+        if (prefix && dependent_type(prefix)) {
+            if (!ast.nodes.occurrences[n].context) {
+                if (list && !(ast[p].flags & 1)) throw std::runtime_error("dependent member template requires template");
+                if (p == last && require_typename) throw std::runtime_error("dependent qualified type requires typename");
+            }
             retain_type_access(p,prefix,s);
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
@@ -111,7 +187,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         // Member class identities have symbolic current-instantiation types.
         // Nonterminal injected names still use the bound source class scope
         // so fixed qualified aliases keep their definition-time type facts.
-        if (entities[e].class_info && entities[e].template_info && (template_type_probe || encloses(entities[e].scope,s)))
+        if (entities[e].class_info && entities[e].template_info && encloses(entities[e].scope,s))
             prefix = p == last ? injected_template_type(e,s) : 0;
         else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {

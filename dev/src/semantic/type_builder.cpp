@@ -62,7 +62,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         }
         if (node.detail) {
             if (definitions) {
-                result = type_name(node.detail,s); facts.edit(c).entity = facts[node.detail].entity;
+                result = type_name(node.detail,s,0,!(node.flags & 1)); facts.edit(c).entity = facts[node.detail].entity;
                 if (template_type_probe && !result) return 0;
                 continue;
             }
@@ -240,7 +240,12 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 params.push_back(parameter(p, parameter_scope));
                 if (template_type_probe && !params.back()) return 0;
                 NodeId d = ast[ast[p].first].next;
-                if (definitions && child(d,Kind::ParameterPack)) params.back() = types.compound(TypeKind::PackExpansion,0,params.back());
+                if (definitions && child(d,Kind::ParameterPack)) {
+                    // An unnamed nondependent parameter followed by ... is
+                    // the comma-optional C varargs form, not a pack expansion.
+                    if (!decl_name(d) && !argument_packs[expansion_parameters(params.back())].count) variadic = true;
+                    else params.back() = types.compound(TypeKind::PackExpansion,0,params.back());
+                }
                 else if (child(d,Kind::ParameterPack)) variadic = true;
                 auto id = terminal(decl_name(d));
                 if (parameter_scope != s && id) {

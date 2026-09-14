@@ -611,6 +611,7 @@ private:
     ScopeId substitution_scope(std::uint32_t frame, ScopeId source) const;
     bool pattern_scope(ScopeId scope) const;
     Index template_type_sources, template_signature_sources;
+    Index injected_type_facts;
     bool template_type_probe = false;
     std::size_t template_type_work = 0, template_type_uses = 0;
     std::size_t template_signature_work = 0, template_signature_uses = 0, parameter_publications = 0;
@@ -649,7 +650,9 @@ private:
     EntityId declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, TypeId conversion = 0);
     EntityId declare_alias(ScopeId s, IdentifierId name, NodeId source, TypeId type);
     TypeId source_type(EntityId e) const;
-    TypeId type_name(NodeId n, ScopeId s, NodeId last = 0);
+    ScopeId current_instantiation_scope(TypeId type, ScopeId use);
+    void resolve_parenthesized_declaration(NodeId declaration, ScopeId scope);
+    TypeId type_name(NodeId n, ScopeId s, NodeId last = 0, bool require_typename = false);
     TypeId injected_template_type(EntityId e, ScopeId use);
     TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
     EntityId qualified_type_member(TypeId owner, IdentifierId name);

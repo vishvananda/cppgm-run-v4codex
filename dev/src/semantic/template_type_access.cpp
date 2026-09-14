@@ -5,7 +5,8 @@ void Analyzer::retain_type_access(NodeId part, TypeId qualifier, ScopeId scope)
 {
     auto occurrence = ast.nodes.occurrences[part];
     if (occurrence.context || template_type_access_sources.get(occurrence.source)) return;
-    TemplateTypeAccess use; use.qualifier = qualifier; use.name = ast[part].text; use.scope = scope;
+    TemplateTypeAccess use; use.qualifier = qualifier; use.name = ast[part].text;
+    use.scope = access_override ? access_override : scope;
     template_type_access_sources.put(occurrence.source,template_type_accesses.size());
     template_type_accesses.push_back(use);
 }

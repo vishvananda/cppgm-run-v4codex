@@ -1,6 +1,32 @@
 #include "syntax/ast.h"
 #include <stdexcept>
 namespace cppgm { namespace syntax {
+void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId before)
+{
+    if (nodes.occurrences[d].context || paren_roles.get(nodes.occurrences[d].source))
+        throw std::logic_error("declaration ambiguity resolved after publication");
+    auto p = nodes[params].first, specs = nodes[p].first;
+    auto name = nodes[nodes[specs].first].detail;
+    auto index = paren_resolutions.size(); paren_resolutions.push_back({params,before,name});
+    NodeId roles[] = {item,d,before,params,p,specs};
+    for (unsigned j = 0; j < 6; ++j) paren_roles.put(nodes.occurrences[roles[j]].source,index*8+j);
+}
+Node Ast::source_view(NodeId id) const
+{
+    Node result = nodes[id];
+    if (auto role = paren_roles.get(nodes.occurrences[id].source)) {
+        auto r = paren_resolutions[role/8];
+        switch (role%8) {
+        case 0: result.last = r.parameters; break;
+        case 1: result.last = r.before; result.next = r.parameters; break;
+        case 2: result.next = 0; break;
+        case 3: result.kind = Kind::Initializer; break;
+        case 4: result.kind = Kind::ParenInitializer; break;
+        case 5: result.kind = Kind::IdExpression; result.detail = r.name; result.first = result.last = 0; break;
+        }
+    }
+    return result;
+}
 NodeId Ast::projected(NodeId source, std::uint32_t context) const
 {
     if (!source || !context) return source;
@@ -9,7 +35,7 @@ NodeId Ast::projected(NodeId source, std::uint32_t context) const
 }
 Node Ast::project_view(NodeId id) const
 {
-    Node result = nodes[id];
+    Node result = paren_roles.empty() ? nodes[id] : source_view(id);
     auto context = nodes.occurrences[id].context;
     if (context) {
         result.first = projected(result.first,context); result.last = projected(result.last,context);
@@ -35,7 +61,7 @@ std::uint32_t Ast::source_region(NodeId root)
     if (auto known = source_region_index.get(key)) return known-1;
     SourceRegion region{std::uint32_t(region_nodes.size()),0,
         std::uint32_t(region_roots.size()),0,std::uint32_t(region_metadata.size()),0};
-    // Source topology is immutable after parsing. This cache retains IDs and
+    // Source topology is immutable after source ambiguity resolution. This cache retains IDs and
     // attribute references, never a second syntax tree or semantic decisions.
     auto& work = projection_work; work.clear(); work.push_back(root);
     IdIndex seen;
@@ -47,17 +73,17 @@ std::uint32_t Ast::source_region(NodeId root)
         auto source = work[i];
         if (!source || seen.get(source)) continue;
         seen.put(source,1); region_nodes.push_back(source);
-        auto node = nodes[source];
+        auto node = source_view(source);
         if (node.detail) work.push_back(node.detail);
         bool function = node.kind == Kind::Function || node.kind == Kind::SpecialDefinition;
         if (function || node.kind == Kind::Parameter) {
-            for (auto c = node.first; c; c = nodes[c].next) {
-                auto kind = nodes[c].kind;
+            for (auto c = node.first; c; c = source_view(c).next) {
+                auto kind = source_view(c).kind;
                 bool body = function && (kind == Kind::Compound || kind == Kind::FunctionTry || kind == Kind::CtorInitializer);
                 if (body || kind == Kind::DefaultArgument) defer(c);
                 else work.push_back(c);
             }
-        } else for (auto c = node.first; c; c = nodes[c].next) work.push_back(c);
+        } else for (auto c = node.first; c; c = source_view(c).next) work.push_back(c);
         auto packing = class_packing.get(source), alignment = alignment_owners.get(source);
         if (packing || alignment) region_metadata.push_back({source,packing,alignment});
         for (auto a = alignment; a; a = alignments[a].next) work.push_back(alignments[a].operand);

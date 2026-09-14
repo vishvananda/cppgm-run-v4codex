@@ -103,6 +103,19 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         }
     }
     if (!primary) return false;
+    // The leading return/object type precedes the qualified declarator and
+    // therefore does not inherit its class scope. Its retained type fact is
+    // reused when the declarator and body bind in their member environment.
+    if (ast[n].kind == Kind::Function || ast[n].kind == Kind::SimpleDeclaration) {
+        // Member access applies to the whole definition, independently of
+        // the point where its qualified declarator changes type-name lookup.
+        struct Access {
+            ScopeId& value; ScopeId prior;
+            Access(ScopeId& v, ScopeId owner) : value(v), prior(v) { value = owner; }
+            ~Access() { value = prior; }
+        } access(access_override,binding_owner);
+        bind_template_type(ast[n].first,0,s);
+    }
     if (!encloses(scopes[owner_head].parent,entities[primary].owner)) throw std::runtime_error("template member outside enclosing namespace");
     if (source_heads.size() < head_patterns.size() || source_heads.size() > head_patterns.size()+1)
         throw std::runtime_error("template definition has unmatched heads");

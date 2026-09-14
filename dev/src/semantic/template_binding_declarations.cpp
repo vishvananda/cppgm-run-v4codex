@@ -106,6 +106,7 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
 }
 void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred, bool defaults_allowed)
 {
+    resolve_parenthesized_declaration(n,s);
     auto node = ast[n];
     if (scopes[s].kind == ScopeKind::Class && friend_declaration(n,s)) return;
     if (node.kind == Kind::Template) {

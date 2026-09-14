@@ -67,7 +67,30 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
             }
         }
         if (p == last) break;
-        if (r.dependent) { r.entity = 0; break; }
+        if (r.dependent) {
+            if (!ast.nodes.occurrences[n].context) {
+                NodeId previous = p, prefix_part = 0, missing = 0;
+                for (auto next = ast[p].next; next; previous = next, next = ast[next].next) {
+                    if (child(next,Kind::TemplateArguments) && !(ast[next].flags & 1)) {
+                        prefix_part = previous; missing = next;
+                    }
+                    if (next == last) break;
+                }
+                if (missing) {
+                    // One qualifier traversal also checks introducers on any
+                    // earlier dependent member template-ids in this name.
+                    auto type = type_name(n,s,prefix_part);
+                    if (dependent_type(type)) {
+                        auto current = current_instantiation_scope(type,s);
+                        auto member = current ? lookup(current,ast[missing].text,Lookup::Ordinary,true) : 0;
+                        bool known = false;
+                        for (auto candidate : candidates(member)) known |= entities[candidate].template_info != 0;
+                        if (!known) throw std::runtime_error("dependent qualified template requires template");
+                    }
+                }
+            }
+            r.entity = 0; break;
+        }
         auto cls = entities[e].class_info ? e : entities[e].kind == EntityKind::Alias ? types[entities[e].type].entity : 0;
         if (cls && entities[cls].class_info) complete_class(cls);
         owner = target(e); qualified = true;
@@ -153,6 +176,31 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
             current = ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;
         }
         auto object = template_object_context(s);
+        if (dependent && !ast.nodes.occurrences[n].context) {
+            auto part = ast[name].last;
+            if (child(part,Kind::TemplateArguments) && !(ast[part].flags & 1)) {
+                TypeId type = 0;
+                if (part != ast[name].first) {
+                    auto previous = ast[name].first;
+                    while (ast[previous].next != part) previous = ast[previous].next;
+                    auto qualifier = bind_template_name(name,s,previous);
+                    if (qualifier.entity || qualifier.dependent) type = type_name(name,s,previous);
+                    else throw std::runtime_error("unknown dependent qualifier requires template");
+                } else if (current && object.owner) type = injected_template_type(object.owner,s);
+                if (!type) {
+                    auto query = expression_query(node.first,s);
+                    type = value_type(query_fact(query).expression.type);
+                    if (node.op == OP_ARROW && types[type].kind == TypeKind::Pointer) type = types[type].child;
+                }
+                if (dependent_type(type)) {
+                    auto owner = current_instantiation_scope(type,s);
+                    auto member = owner ? lookup(owner,ast[part].text,Lookup::Ordinary,true) : 0;
+                    bool known = false;
+                    for (auto candidate : candidates(member)) known |= entities[candidate].template_info != 0;
+                    if (!known) throw std::runtime_error("dependent member template requires template");
+                }
+            }
+        }
         if (current && object.owner && ast[name].first == ast[name].last && !child(ast[name].last,Kind::TemplateArguments)) {
             auto field = lookup(entities[object.owner].scope,terminal(name),Lookup::Ordinary,true);
             if (check_template_field(n,s,field,true)) return false;

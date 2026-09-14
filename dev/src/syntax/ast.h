@@ -217,9 +217,16 @@ public:
     const Node& operator[](NodeId id) const { return nodes[id]; }
     // A view projects structural edges through a context without copying syntax.
     Node view(NodeId id) const {
-        if (!nodes.occurrences[id].context) return nodes[id];
+        if (!nodes.occurrences[id].context) return paren_roles.empty() ? nodes[id] : source_view(id);
         return project_view(id);
     }
+    Node source_view(NodeId id) const;
+    void resolve_paren_initializer(NodeId item, NodeId declarator, NodeId parameters, NodeId before);
+    // A source ambiguity has one monotonic interpretation before semantic
+    // publication. Retain the parsed name/delimiters, with no cloned subtree.
+    struct ParenResolution { NodeId parameters, before, name; };
+    std::vector<ParenResolution> paren_resolutions = std::vector<ParenResolution>(1);
+    IdIndex paren_roles;
     Node project_view(NodeId id) const;
     void expanded_children(NodeId parent, const std::vector<NodeId>& children);
     IdIndex expanded_first, expanded_last, expanded_next;
@@ -268,6 +275,8 @@ public:
     bool pending_region(NodeId root) const { return tree.pending_region(root); }
     void expanded_children(NodeId parent, const std::vector<NodeId>& children) { tree.expanded_children(parent,children); }
     bool children_expanded(NodeId parent) const { return tree.expanded_first.get(parent) != 0; }
+    void resolve_paren_initializer(NodeId item, NodeId declarator, NodeId parameters, NodeId before)
+        { tree.resolve_paren_initializer(item,declarator,parameters,before); }
     std::uint32_t new_context() { return tree.new_context(); }
     bool& telemetry;
     NodePool& nodes;

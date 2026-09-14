@@ -231,6 +231,7 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
 }
 void Analyzer::simple(NodeId n, ScopeId s)
 {
+    if (definitions) resolve_parenthesized_declaration(n,s);
     NodeId specs = ast[n].first;
     NodeId list = child(n, Kind::InitDeclarators);
     IdentifierId anonymous_name = list ? terminal(decl_name(ast[ast[list].first].first)) : 0;

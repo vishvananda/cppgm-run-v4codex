@@ -108,6 +108,15 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
         if (binding.dependent && (ast[ast[name].last].flags & 1) && !child(ast[name].last,Kind::TemplateArguments))
             return type_name(name,scope);
         auto e = binding.entity;
+        if (e && entities[e].template_pattern && entities[e].kind == EntityKind::Variable &&
+            (types[entities[e].type].cv & 1) && integral(entities[e].type)) {
+            auto init = entities[e].initializer;
+            while (ast[init].kind == Kind::Initializer) init = ast[init].first;
+            // [temp.dep.type] permits chains initialized by the parameter
+            // itself. Expressions containing that parameter remain distinct.
+            if (ast[init].kind == Kind::IdExpression)
+                return convert_argument(template_argument_node(init,entities[e].owner),entities[e].type);
+        }
         if (!child(ast[ast[n].detail].last,Kind::TemplateArguments))
             if (auto target = template_entity(e)) { check_access(target,scope,name_owner(ast[n].detail,scope)); return types.named(target); }
         if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias))
