@@ -98,17 +98,25 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     auto args = input;
     if (!template_defaults(e,args)) throw std::runtime_error("invalid alias template arguments");
     auto k = key(e,intern_arguments(args));
-    if (auto type = alias_specializations.get(k)) return type;
-    auto head = templates[entities[e].template_info];
-    Index bindings, cache; std::uint32_t frame = 0;
-    for (unsigned j = 0; j < head.count; ++j) {
-        auto p = template_parameters[head.offset+j]; bindings.put(p,args[j]);
-        frame = argument_frame(frame,p,args[j]);
+    auto id = alias_specializations.get(k);
+    if (!id) {
+        id = alias_facts.size(); alias_facts.push_back(TemplateAliasFact());
+        alias_specializations.put(k,id);
     }
+    auto state = alias_facts[id].state;
+    if (state == FactState::Success) return alias_facts[id].type;
+    if (state == FactState::Failure) throw std::runtime_error("failed alias specialization");
+    if (state == FactState::Active) throw std::runtime_error("recursive alias specialization");
+    alias_facts[id].state = FactState::Active;
+    try {
+    auto head = templates[entities[e].template_info];
+    Index bindings, cache;
+    auto frame = substitution_frame(0,head.offset,head.count,0,intern_arguments(args));
     auto type = substitute_type(entities[e].type,bindings,cache,frame);
     check_substituted_type_access(entities[e].source,frame);
     if (!type) throw std::runtime_error("invalid alias substitution");
-    alias_specializations.put(k,type);
+    alias_facts[id].type = type; alias_facts[id].state = FactState::Success;
     return type;
+    } catch (...) { alias_facts[id].state = FactState::Failure; throw; }
 }
 } }

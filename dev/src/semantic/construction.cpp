@@ -54,7 +54,10 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     auto preferred = [&](std::size_t a, std::size_t b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         if (better(x,y,args.size())) return true;
-        if (better(y,x,args.size())) return false;
+        // A template tie-break is available only when no argument conversion
+        // is worse. Crossed conversion advantages do not constitute a tie.
+        for (std::size_t i = 0; i < args.size(); ++i)
+            if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
         return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb);
     };

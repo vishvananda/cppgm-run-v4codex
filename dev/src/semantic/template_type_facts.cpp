@@ -4,17 +4,13 @@ namespace cppgm { namespace semantic {
 std::uint32_t Analyzer::substitution_frame(std::uint32_t specialization,
     std::uint32_t parameters, std::uint32_t count, std::uint32_t parent, std::uint32_t arguments)
 {
-    // The flat index partitions by specialization/head. The short chain keeps
-    // parent identity in equality, including different enclosing overlays.
-    auto k = key(specialization,parameters+1);
-    auto first = substitution_frame_index.get(k);
-    for (auto id = first; id; id = substitution_frames[id].next) {
-        auto f = substitution_frames[id];
-        if (f.parent == parent && f.count == count && f.arguments == arguments) return id;
-    }
+    // Every environment input participates in the flat key. Different parent
+    // frames and selected tuples must not form an unbounded collision chain.
+    auto k = intern_arguments({specialization,parameters,count,parent,arguments});
+    if (auto id = substitution_frame_index.get(k)) return id;
     TemplateSubstitutionFrame frame;
     frame.specialization = specialization; frame.parameters = parameters;
-    frame.count = count; frame.parent = parent; frame.next = first; frame.arguments = arguments;
+    frame.count = count; frame.parent = parent; frame.arguments = arguments;
     auto id = substitution_frames.size(); substitution_frames.push_back(frame);
     substitution_frame_index.put(k,id); return id;
 }

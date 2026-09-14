@@ -263,10 +263,11 @@ void Analyzer::complete_class(EntityId e)
     // The names in an explicit-instantiation declarator are exempt from
     // access checking; declarations demanded while resolving them are not.
     struct AccessContext {
-        bool& flag; bool saved;
-        AccessContext(bool& f) : flag(f), saved(f) { flag = false; }
-        ~AccessContext() { flag = saved; }
-    } access(explicit_instantiation_naming);
+        bool& flag; bool saved; ScopeId& context; ScopeId saved_context;
+        AccessContext(bool& f, ScopeId& c) : flag(f), saved(f), context(c), saved_context(c)
+            { flag = false; context = 0; }
+        ~AccessContext() { flag = saved; context = saved_context; }
+    } access(explicit_instantiation_naming,access_override);
     if (!e) return;
     auto index = entities[e].specialization;
     if (index && specializations[index].body == FactState::Failure)

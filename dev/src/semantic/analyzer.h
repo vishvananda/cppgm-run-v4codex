@@ -501,6 +501,7 @@ private:
     TypeId apply_type_template(EntityId entity, const std::vector<ArgumentId>& arguments);
     TypeId specialize_alias(EntityId entity, const std::vector<ArgumentId>& arguments);
     Index alias_specializations, template_argument_sources, template_head_shapes;
+    std::vector<TemplateAliasFact> alias_facts = std::vector<TemplateAliasFact>(1);
 
     ScopeId active_template_scope = 0;
     NodeId explicit_specialization_source = 0;

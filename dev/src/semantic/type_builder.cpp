@@ -24,6 +24,8 @@ EntityId Analyzer::declare_alias(ScopeId s, IdentifierId name, NodeId source, Ty
     }
     EntityId e = local(s, name);
     if (e) {
+        if (definitions && (environment == active_template_scope) != (entities[e].template_info != 0))
+            throw std::runtime_error("alias template conflicts with nontemplate declaration");
         if (definitions && environment == active_template_scope && entities[e].template_info) {
             if (!equivalent_alias_template(e,canonical,environment)) throw std::runtime_error("conflicting alias template");
             return e;

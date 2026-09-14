@@ -75,8 +75,7 @@ bool Analyzer::match_class_pattern(EntityId pattern, std::uint32_t arguments, st
     // Call deduction permits conversions/base matches. A class pattern must
     // reproduce the exact canonical argument tuple, including cv and values.
     std::uint32_t frame = 0;
-    if (packs) for (unsigned j = 0; j < head.count; ++j)
-        frame = argument_frame(frame,template_parameters[head.offset+j],deduced[j]);
+    if (packs) frame = substitution_frame(0,head.offset,head.count,0,intern_arguments(deduced));
     for (unsigned j = 0; j < source.count; ++j)
         if (substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;
     return true;

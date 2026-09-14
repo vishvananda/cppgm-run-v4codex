@@ -57,14 +57,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         if (!special && (!item || ast[item].next)) throw std::runtime_error("explicit instantiation requires one declarator");
         auto d = special ? child(source,Kind::Declarator) : ast[item].first, name = decl_name(d);
         auto owner = name_owner(name,s,true);
-        auto saved_access = access_override;
-        // [temp.explicit]: the names in an explicit instantiation are exempt
-        // from normal access checking. Member types still use their owner.
-        if (scopes[owner].kind == ScopeKind::Class) access_override = owner;
-        TypeId type;
-        try { type = types.signature(declarator(d,special ? types.fundamental(FT_VOID) : specifiers(ast[source].first,s),s)); }
-        catch (...) { access_override = saved_access; throw; }
-        access_override = saved_access;
+        auto type = types.signature(declarator(d,special ? types.fundamental(FT_VOID) : specifiers(ast[source].first,s),s));
         EntityId selected = 0;
         if (types[type].kind == TypeKind::Function) {
             auto list = child(ast[name].last,Kind::TemplateArguments);

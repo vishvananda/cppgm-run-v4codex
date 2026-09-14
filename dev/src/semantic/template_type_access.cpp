@@ -31,10 +31,11 @@ void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
     // Recipes belong to the template definition, even when the specialization
     // is first demanded by an exempt explicit-instantiation declarator.
     struct DefinitionAccess {
-        bool& flag; bool saved;
-        DefinitionAccess(bool& f) : flag(f), saved(f) { flag = false; }
-        ~DefinitionAccess() { flag = saved; }
-    } access(explicit_instantiation_naming);
+        bool& flag; bool saved; ScopeId& context; ScopeId saved_context;
+        DefinitionAccess(bool& f, ScopeId& c) : flag(f), saved(f), context(c), saved_context(c)
+            { flag = false; context = 0; }
+        ~DefinitionAccess() { flag = saved; context = saved_context; }
+    } access(explicit_instantiation_naming,access_override);
     std::vector<NodeId> work(1,node);
     for (std::size_t j = 0; j < work.size(); ++j) {
         auto n = work[j]; auto source = ast.nodes.occurrences[n].source;
