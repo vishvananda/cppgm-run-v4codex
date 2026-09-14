@@ -1,0 +1,708 @@
+{
+  "entry_commit": "c9c4ddb75c65c8de2849b49ecaf42ea83d75fdab",
+  "implementation_commit": "048014e89bf2f838e48f7978bec5fd42faa87c9e",
+  "implementation_tree": [
+    248,
+    "ad41286011ec81380bc4d2e33d41c33ec117bb3a85b2381657e9df28aa9a4bbb"
+  ],
+  "compiler_sha256": "9a998e62dfa5cb6f594d41eef6c8fe7b99201d4166f292303e5c5d3479f87637",
+  "entry_passing": 153,
+  "entry_total": 154,
+  "final_passing": 154,
+  "final_total": 154,
+  "performance_observations": 302,
+  "artifacts": {
+    "spec.md": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3",
+    "pa16/README.md": "717249d476f4085cd567f02a6ca51f083b1f10d8f4a5c180c2f38cce8e9fe5be",
+    "pa16/member-constants.md": "8b0819746a97d8aff3bbc12ed60a25ac5492f185b1f5df63864ee22df4875bd4",
+    "pa16/result-reference-correction.md": "0297e93f4349050c2b24271b0bc5bf69ea1cb5fd80bf5bf009700bb1789dabff",
+    "pa16/result-performance.md": "062d4565dd1f0acdcf7475dcea7b4d0740f45152d9e6f9cb3fa88d8bb6d05b84",
+    "student.tests/pa16/result-reference-revision.json": "515def4ce90411f443aaca449bf42f4022f2d3bfee8711f5035386c403a13c14",
+    "student.tests/pa16/result-performance.json": "6e8fd6af0342cf05381644c79556e3d67728891a59cd4021eefe44ec4e2dee18",
+    "student.tests/pa16/result_benchmark.py": "d6dba4fb620522f56e8f567e13c4abf32db01aa01efda2bb2afac2bd5d423088",
+    "student.tests/pa16/result_lifetimes.py": "0e8ab2730dbfbabc477100431fdc7713363509e1b1ccc8543dd6730931c48ebd",
+    "student.tests/pa16/member_constants.py": "ba148addb7e919a6494e709d69f34b7aec752acdd131673159b9c91bbc5240d1",
+    "student.tests/pa16/verify_result.py": "7d1b4c34e0eeabba22775bd6560a0a0c1f82f1901668de0169726372c388e836"
+  },
+  "checks": [
+    {
+      "name": "stageTests",
+      "command": "make test-pa16",
+      "log": "/tmp/pa16-loop43/stage-required.log",
+      "sha256": "84a1f898cf7079c7628ec65f4b511dc46469beccc18acb90205c76df7da2e2c3",
+      "exit_code": 0,
+      "success": "ALL TESTS PASSED SUCCESSFULLY! (154 / 154)"
+    },
+    {
+      "name": "priorThroughTests",
+      "command": "make test-report-through-pa15",
+      "log": "/tmp/pa16-loop43/prior-required.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f",
+      "exit_code": 0,
+      "success": "ALL TESTS PASSED SUCCESSFULLY! (2112 / 2112)"
+    },
+    {
+      "name": "throughStage",
+      "command": "make test-report-through-pa16",
+      "log": "/tmp/pa16-loop43/through-validated.log",
+      "sha256": "967173723342b3c0abf5b9e26710e9ef2094f41c3a33e7d23e0831760f67bea9",
+      "exit_code": 0,
+      "success": "ALL TESTS PASSED SUCCESSFULLY! (2266 / 2266)"
+    },
+    {
+      "name": "fileAudit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa16 --paths dev/src",
+      "log": "/tmp/pa16-loop43/file-audit.log",
+      "sha256": "abbc0b19c03c522f1d1a52698772f0f70c5f72f3c55e024183371bc62b6cde1c",
+      "exit_code": 0,
+      "success": "File audit passed for pa16 with 3 warning(s)."
+    }
+  ],
+  "controls": [
+    {
+      "name": "scalar_execution",
+      "command": [
+        "python3",
+        "student.tests/pa16/scalar_execution.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/scalar_execution"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/scalar_execution.log",
+      "sha256": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506"
+    },
+    {
+      "name": "floating",
+      "command": [
+        "python3",
+        "student.tests/pa16/floating.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/floating"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/floating.log",
+      "sha256": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c"
+    },
+    {
+      "name": "noexcept",
+      "command": [
+        "python3",
+        "student.tests/pa16/noexcept.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/noexcept"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/noexcept.log",
+      "sha256": "4c5a53d4cc247adb3d4c550718f629bb3280b0b1bb20c8ddfbe667012b7279ae"
+    },
+    {
+      "name": "storage",
+      "command": [
+        "python3",
+        "student.tests/pa16/storage.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/storage"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/storage.log",
+      "sha256": "9da046f263c918aa7b0eaa61f346f67c4c20df693e1960dd6bbfbbcd353f1f5a"
+    },
+    {
+      "name": "validity",
+      "command": [
+        "python3",
+        "student.tests/pa16/validity.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/validity"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/validity.log",
+      "sha256": "913e5b1d5cda45d99f0dbc815301f0ff13ab453c99fc799f3c91efc21a5644d5"
+    },
+    {
+      "name": "audit_controls",
+      "command": [
+        "python3",
+        "student.tests/pa16/audit_controls.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/audit_controls"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/audit_controls.log",
+      "sha256": "e9516553514a70396edbd6abc7624b6981a606e318a3cf1b3ea0542028215389"
+    },
+    {
+      "name": "objects",
+      "command": [
+        "python3",
+        "student.tests/pa16/objects.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/objects"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/objects.log",
+      "sha256": "5bb8ba0602ecd303c77fb402ad79167424d7f5e9d3a6633b58a908b7cec660ae"
+    },
+    {
+      "name": "initialization",
+      "command": [
+        "python3",
+        "student.tests/pa16/initialization.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/initialization"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/initialization.log",
+      "sha256": "cd1724096290c956bab960ca3f348bd1f5958a11ef192ef9a417cbdedf4e6ac5"
+    },
+    {
+      "name": "member_constants",
+      "command": [
+        "python3",
+        "student.tests/pa16/member_constants.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/members-validated"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/members-validated.log",
+      "sha256": "8812669bd8f80f98778ff80aa09396c0b285b0a3a3277dd57d171a54cf3dd7e7"
+    },
+    {
+      "name": "result_lifetimes",
+      "command": [
+        "python3",
+        "student.tests/pa16/result_lifetimes.py",
+        "dev/cppgm++",
+        "/tmp/pa16-loop43/results-final"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/pa16-loop43/results-final.log",
+      "sha256": "3bed9f1b35f708f05258f9c8b08a4c3844d38bd6883c3652f5644d4d9718fcaf"
+    }
+  ],
+  "new_control_results": [
+    {
+      "compiler_sha256": "9a998e62dfa5cb6f594d41eef6c8fe7b99201d4166f292303e5c5d3479f87637",
+      "rows": [
+        {
+          "name": "pending_array",
+          "source": "// Historical implementation-42 reducer: C++11 [expr.const], [expr.unary.op].\n// Expected: compile successfully and return 0. Implementation 43 covers this\n// explicitly in student.tests/pa16/member_constants.py.\nstruct X { int a, b; };\nconstexpr int X::*members[] = {&X::a, &X::b};\nint main() { X x = {2, 7}; return x.*members[1] - 7; }\n",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "68d926796f2d6002e359abf52d90fe40b012d45c8601db0a5e2cb64389108cf9",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_projection",
+          "source": "struct X{int a,b;};constexpr X x={2,7};constexpr int X::*p=&X::b;static_assert(x.*p==7,\"dot\");static_assert((&x)->*p==7,\"arrow\");constexpr int const&q=x.*p;static_assert(&q==&x.b,\"identity\");int main(){return q-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "264ec473ad1ecd46f647c427a62e7153b48899ff521526ed49cb0e4042286609",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_call",
+          "source": "struct X{int n;};constexpr int read(X const&x,int X::*p){return x.*p;}constexpr X x={9};static_assert(read(x,&X::n)==9,\"\");int main(){return read(x,&X::n)-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "a5137ba8fe237d4e03823b640e945cc580e64c178debca67ff3ca2e0752cefdc",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_bool_null",
+          "source": "struct X{int a,b;};constexpr int X::*a=&X::a;constexpr int X::*b=&X::b;constexpr int X::*z=nullptr;static_assert(a&&b&&!z&&a!=b&&a==&X::a&&z==nullptr,\"\");int main(){return a&&b&&!z&&a!=b&&z==nullptr?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "52a13727ce050ebaba43b3f17b18b58de31fac9dc4898faa6eac6d586698ffc1",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_omitted",
+          "source": "struct X{int a,b;};constexpr int X::*p[40]={&X::a,&X::b};static_assert(p[39]==nullptr&&p[0]!=nullptr,\"\");int main(){int X::*q[40]={&X::a,&X::b};X x={3,7};return x.*q[1]==7&&q[39]==nullptr?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "df904eeb47bb8fe911b885a260976c8ec5d9d52079a344625bc7d4d6fb5030bc",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_distinct",
+          "source": "struct X{int a,b;};int main(){int X::*p[]={&X::a,&X::b};int X::*q[]={&X::a,&X::b};p[0]=&X::b;X x={3,7};return x.*q[0]==3&&x.*p[0]==7?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "38b18846bc0513569d5e92c347bf86e2ea4f85ade11c1c8ad853acc943f8fd1a",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_nested",
+          "source": "struct X{int a,b;};struct P{int X::*p[2];};constexpr P p={{&X::b}};constexpr X x={2,7};static_assert(x.*p.p[0]==7&&p.p[1]==nullptr,\"\");int main(){return x.*p.p[0]-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "53206f28501888b6dc4bb64a3b0f39de1d6319c8d472a43a32f16f4235afbcd0",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_base_receiver",
+          "source": "struct B{int n;constexpr B(int n):n(n){}};struct P{int pad;constexpr P():pad(4){}};struct D:P,B{constexpr D():P(),B(7){}};constexpr D d;constexpr int B::*p=&B::n;static_assert(d.*p==7,\"\");int main(){return d.*p-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "2ac99732d2e4249f6b63a6a8d5dbeea83a2f4fba197cc4eddb84fff4bca38bae",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_union_equal",
+          "source": "union U{int a,b;};constexpr int U::*a=&U::a;constexpr int U::*b=&U::b;static_assert(a==b,\"\");int main(){return a==b?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "ddc813b2ebad5d4c2a651a12d8257ce23380cef1d2aaa73964f07389553c47f9",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "data_qualification",
+          "source": "struct X{int n;};constexpr const int X::*p=&X::n;constexpr X x={8};static_assert(x.*p==8,\"\");int main(){return x.*p-8;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "f541dca96cd231d1b554b40f7c11c97af5b99fed6e1e95ed76747efad575ff83",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_call",
+          "source": "struct X{int n;constexpr int f(int k)const{return n+k;}constexpr int g(int k)const{return n-k;}};constexpr X x={7};constexpr int(X::*p)(int)const=&X::f;static_assert((x.*p)(3)==10,\"\");static_assert(((&x)->*p)(2)==9,\"\");int main(){return (x.*p)(3)-10;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "4c9aa41a45563eacfbb935ae29d1967c7ba7e5b5ab89d93e842afa51042bb54f",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_parameter",
+          "source": "struct X{int n;constexpr int f(int k)const{return n+k;}};constexpr int call(X const&x,int(X::*p)(int)const,int n){return (x.*p)(n);}constexpr X x={7};static_assert(call(x,&X::f,3)==10,\"\");int main(){return call(x,&X::f,3)-10;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "61b247e899fc8cf4d38db2136aa384e13ef50cb73a67c184d77b3718cd071feb",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_array",
+          "source": "struct X{int n;constexpr int f(int k)const{return n+k;}constexpr int g(int k)const{return n-k;}};constexpr int(X::*p[12])(int)const={&X::f,&X::g};constexpr X x={7};static_assert((x.*p[0])(3)==10&&(x.*p[1])(2)==5&&!p[11],\"\");int main(){int(X::*q[12])(int)const={&X::f,&X::g};return (x.*q[1])(2)==5&&!q[11]?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "6c209dd7c0fd4e0b78149e57f11ddee733b48acee70d68aa05e4a890364f5f63",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_equality",
+          "source": "struct X{int f()const{return 1;}int g()const{return 2;}};constexpr int(X::*f)()const=&X::f;constexpr int(X::*g)()const=&X::g;constexpr int(X::*z)()const=nullptr;static_assert(f!=g&&f==&X::f&&f&&g&&!z,\"\");int main(){return f!=g&&f==&X::f&&f&&g&&!z&&z==nullptr?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "f6afe1b9a10e158bf6acf719e1ec75002ab5b0cebfed46e5bf59008c82b16082",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_overload",
+          "source": "struct X{constexpr int f(int k)const{return k+1;}constexpr int f()const{return 2;}};constexpr int(X::*p)(int)const=&X::f;constexpr X x={};static_assert((x.*p)(3)==4,\"\");int main(){return (x.*p)(3)-4;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "13e96ce28154e7338601ca86eccea0fc2d991121c127da4f3985401d87074aff",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_nested",
+          "source": "struct X{constexpr int f()const{return 9;}};struct P{int(X::*p)()const;};constexpr P p={&X::f};constexpr X x={};static_assert((x.*p.p)()==9,\"\");int main(){return (x.*p.p)()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "e69584599590157b27a65a9405ae9568f2ee4c92c0815d7cbef4d54e87db94f5",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_local_static",
+          "source": "struct X{int f()const{return 9;}};int call(){static int(X::*p)()const=&X::f;X x;return (x.*p)();}int main(){return call()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "7893eb025477e1db1d4dd030247a1f6a86442f0e8a4a26c0917e54a77701d16f",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "zero_namespace",
+          "source": "struct X{int n;int f()const{return n;}};int X::*p;int(X::*q)()const;int main(){return p==nullptr&&q==nullptr?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "c2a8d864180ca367538471211702ae27dc06d1741f1e61094d3bab36ea7dfd78",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "value_init",
+          "source": "struct X{int n;int f()const{return n;}};typedef int X::*P;typedef int(X::*F)()const;constexpr P p=P();constexpr F f=F();static_assert(!p&&!f, \"\");int main(){P q{};F g{};return !q&&!g&&!P()&&!F()?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "919c44dec684e7abc67f806adf339a5ec29e612c0e4286d8215efcbda913d25f",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "conditions",
+          "source": "struct X{int n;int f()const{return n;}};int main(){int X::*p=&X::n;int(X::*f)()const=&X::f;int n=0;if(p)++n;if(f)++n;if(int X::*q=&X::n)++n;return n==3&&(p?true:false)&&(f?true:false)?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "8de26cd0ae3a2dc512f8e5d5179ab8a9a27238780bb94534c1b0a443a28372d1",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "conditional_null",
+          "source": "struct X{int n;};constexpr int X::*pick(bool b){return b?&X::n:nullptr;}static_assert(pick(true)&&!pick(false), \"\");int main(){X x={7};return x.*pick(true)-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "65894e6a92e53619f4c4409ab007abd9d13dc7affc841b6a4818693cae5b0b40",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "reference_parameter",
+          "source": "struct X{int a,b;};constexpr int read(X const&x,int X::*const&p){return x.*p;}constexpr X x={2,7};constexpr int X::*p=&X::b;static_assert(read(x,p)==7, \"\");int main(){return read(x,p)-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "4249729554ee5f70af99547b79fae7837196ded55e161a5828828b1ffd074e4f",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "memoization",
+          "source": "struct X{int a,b;};constexpr int read(X const&x,int X::*p){return x.*p;}constexpr X x={2,7};static_assert(read(x,&X::a)+read(x,&X::b)==9, \"\");int main(){return 0;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "e0de6bf4d151b27d818a10ffadd76a7499c21700a7101edc7b4c5229aac7bca8",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "local_mutation",
+          "source": "struct X{int a,b;};constexpr int read(){X x={2,7};int X::*p=&X::a;int a=x.*p;p=&X::b;return a+x.*p;}static_assert(read()==9, \"\");int main(){return read()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "961b34df703196054a799e0762d5e24c250f082d665de0ae64d5d1cc772ffd2e",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "array_local_constexpr",
+          "source": "struct X{int a,b;};constexpr int read(int i){constexpr int X::*p[]={&X::a,&X::b};X x={2,7};return x.*p[i];}static_assert(read(0)+read(1)==9, \"\");int main(){return read(0)+read(1)-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "5744e87917b7169876e96bcde50ac1398035e41e23b3ac7ca7df54a1b49e4108",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "computed_template_arg",
+          "source": "struct X{int n;};constexpr int read(X const&x,int X::*p){return x.*p;}constexpr X x={7};constexpr int X::*p=&X::n;template<int N>struct A{char data[N];};static_assert(sizeof(A<read(x,p)>)==7, \"\");int main(){return 0;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "6548b19735e9b172fd68e8f74565ba64f6a0d04023308b5c0c810210a59f2b99",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "static_template_members",
+          "source": "struct X{int a,b;};template<class T>struct P{static constexpr int X::*p[2]={&X::a,&X::b};};template<class T>constexpr int X::*P<T>::p[2];constexpr X x={2,7};static_assert(x.*P<int>::p[1]==7, \"\");int main(){return x.*P<int>::p[1]-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "a633f25fbf65f75ef540a77abd788f0a992cca8e09d5be7a71b748bf6a59dc11",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_reference",
+          "source": "struct X{constexpr int f()const{return 9;}};typedef int(X::*F)()const;constexpr F const&r=&X::f;constexpr X x={};static_assert((x.*r)()==9, \"\");int main(){return (x.*r)()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "4a06a8744afa7f9cfea893d7dfec9c0a9b77b6800b8efb639a74986e73c2ab26",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_return",
+          "source": "struct X{constexpr int f()const{return 9;}};typedef int(X::*F)()const;constexpr F get(){return &X::f;}constexpr X x={};static_assert((x.*get())()==9, \"\");int main(){return (x.*get())()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "362d06b215c29a0a0e043f62fd03ff1f40cad74359d89502b90a179409593fd1",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "user_conversion",
+          "source": "struct X{int n;};typedef int X::*P;struct Y{constexpr operator P()const{return &X::n;}};constexpr P p=Y();constexpr X x={7};static_assert(x.*p==7, \"\");int main(){return x.*p-7;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "4074326d0799b272b8f099749dd1e69961f07fd4c8ea9e6ce0fc39332442407a",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "function_template_members",
+          "source": "struct X{constexpr int f()const{return 9;}};template<class T>struct P{static constexpr int(X::*p[2])()const={&X::f};};template<class T>constexpr int(X::*P<T>::p[2])()const;constexpr X x={};static_assert((x.*P<int>::p[0])()==9&&!P<int>::p[1], \"\");int main(){return (x.*P<int>::p[0])()-9;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "9d6ab81198ddb969947e80da7c5ef480072ae5762211079023c813589c4d2181",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "computed_template_address",
+          "source": "struct X{int n;};constexpr int read(X const&x,int X::*p){return x.*p;}constexpr X x={7};template<int N>struct A{char data[N];};static_assert(sizeof(A<read(x,&X::n)>)==7, \"\");int main(){return 0;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "97e850fdc3c30eb294d06ae7617ca6b8bb130cb9b4f63f0bd2c1520804832795",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "scalar_reference_storage",
+          "source": "constexpr int const&r=7;constexpr int const&s=7;constexpr int const&alias=r;static_assert(&r!=&s&&&alias==&r&&r+s==14, \"\");int main(){return &r!=&s&&&alias==&r&&r+s==14?0:1;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "51b8167d141615a7eccce9935e225f94be4fc4b12295233490b1b8c8c971032b",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "unused_template_storage",
+          "source": "struct X{constexpr int f()const;};template<class T>struct P{static constexpr int(X::*p[2])()const={&X::f};};int main(){return 0;}",
+          "compile_exit": 0,
+          "stderr": "",
+          "expected": true,
+          "lowir_sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4",
+          "backend_exit": 0,
+          "backend_stderr": "",
+          "native_exit": 0,
+          "passed": true
+        },
+        {
+          "name": "null_projection",
+          "source": "struct X{int n;};constexpr X x={3};constexpr int X::*p=nullptr;static_assert(x.*p==0,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        },
+        {
+          "name": "null_call",
+          "source": "struct X{constexpr int f()const{return 1;}};constexpr X x={};constexpr int(X::*p)()const=nullptr;static_assert((x.*p)()==0,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        },
+        {
+          "name": "nonconstexpr_call",
+          "source": "struct X{int f()const{return 1;}};constexpr X x={};constexpr int(X::*p)()const=&X::f;static_assert((x.*p)()==1,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        },
+        {
+          "name": "mutable_read",
+          "source": "struct X{mutable int n;};constexpr X x={3};constexpr int X::*p=&X::n;static_assert(x.*p==3,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        },
+        {
+          "name": "volatile_read",
+          "source": "struct X{volatile int n;};X x={3};constexpr int volatile X::*p=&X::n;static_assert(x.*p==3,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        },
+        {
+          "name": "inactive_union",
+          "source": "union U{int a;double b;};constexpr U u={3};constexpr double U::*p=&U::b;static_assert(u.*p==0,\"\");",
+          "compile_exit": 1,
+          "stderr": "ERROR: static assertion is not a true integral constant\n",
+          "expected": false,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "compiler_sha256": "9a998e62dfa5cb6f594d41eef6c8fe7b99201d4166f292303e5c5d3479f87637",
+      "rows": [
+        {
+          "name": "empty_template",
+          "source": "// N3485: 12.4 [class.dtor]/5; Itanium ABI 3.1.3.1.\ntemplate<class T>struct G{G(){}~G(){}};template<class T>constexpr G<T>make(T){return G<T>();}int main(){make(1);}\n",
+          "source_sha256": "628214c685f826c075ab9a255ba4ffd467a1a4531465ab00975de00848c21f63",
+          "lowir_sha256": "9b242d61fac1b5edc59400d0e2a668d3007ed9866a0a859a0083e6988c30ddd4",
+          "native_exit": 0,
+          "eh_regions": 1
+        },
+        {
+          "name": "final_noexcept",
+          "source": "int c,d;struct X{X(){++c;}~X(){++d;}};X f(){return X();}int main(){f();(f());return c==2&&d==2?0:1;}",
+          "source_sha256": "2879c27a1d514f8f591dec1e5612f48e99ead76f2af9ccf980fce11f73d3a36d",
+          "lowir_sha256": "2c9d0364588c31ebc17127668d70e4e2fdbdedf44cd15acd12221c9e1c661258",
+          "native_exit": 0,
+          "eh_regions": 2
+        },
+        {
+          "name": "argument_prefix",
+          "source": "int alive;struct X{X(){++alive;}~X(){--alive;}};X f(X const&){return X();}int main(){f(X());return alive;}",
+          "source_sha256": "f7d610dbb6ce7a3bc6f239d36c6231b6d122b18db30b9eb103c9e58682191f12",
+          "lowir_sha256": "869f86979943eb25e868ace7ab96dbe72ea85fb9948146de0749fdce94c35228",
+          "native_exit": 0,
+          "eh_regions": 2
+        },
+        {
+          "name": "comma_results",
+          "source": "int alive;struct X{X(){++alive;}~X(){--alive;}};X f(){return X();}int main(){(f(),f());return alive;}",
+          "source_sha256": "506ff793db5d7a72c764c69167f0995951e69f3dd176887b7e9006e50694bf30",
+          "lowir_sha256": "a78ac5ab1b566181a8066ced31160b4aa76a6a37847f827e18370e4c6e7b6dc2",
+          "native_exit": 0,
+          "eh_regions": 3
+        },
+        {
+          "name": "conditional_results",
+          "source": "int alive;struct X{X(){++alive;}~X(){--alive;}};X f(){return X();}int main(){volatile int b=1;b?f():f();b=0;b?f():f();return alive;}",
+          "source_sha256": "952f335bb3bdb519cf36a880f90da8736a39e7b05c1b8dbe4150d206c6674fcd",
+          "lowir_sha256": "6c27ae474f2a9ee7919f00c7602804d7c04f9b57be96d155c496fd7304c7ee43",
+          "native_exit": 0,
+          "eh_regions": 4
+        },
+        {
+          "name": "nonempty_result",
+          "source": "int alive;struct X{int n;X(int n):n(n){++alive;}~X(){--alive;}};X f(int n){return X(n);}int main(){int v=f(7).n;return v==7&&alive==0?0:1;}",
+          "source_sha256": "ef06706522c7eeb462645d6afc10c7b1b5dd2fd2c3888fa6ef5e11a4f5d1adcb",
+          "lowir_sha256": "071c578f370c0ff3ee6aba64dbb08de20335511c3bf739d4006dc47920f43830",
+          "native_exit": 0,
+          "eh_regions": 2
+        },
+        {
+          "name": "potentially_throwing",
+          "source": "int alive;struct X{X(){++alive;}~X()noexcept(false){--alive;}};X f(X const&){return X();}int main(){f(X());return alive;}",
+          "source_sha256": "cb7300d2c89644e09c8608d8c71b451873a1c291bb6fc942d77682c1d66017da",
+          "lowir_sha256": "cf6c720424fc255e9415a17ef76a413c43ff0c6162d0647909256943c949bdc7",
+          "native_exit": 0,
+          "eh_regions": 3
+        }
+      ]
+    }
+  ],
+  "handoff": "Completed result-lifetime/ABI and represented member-pointer constant-value groups. Full independent stage audit remains required. Inherited cross-owner/virtual member-pointer source extensions are explicitly outside this implementation boundary, not waived."
+}

@@ -10,9 +10,9 @@ binds old/new oracle hashes and the unchanged source. The bundle is unchanged.
 
 [N3485](../doc/n3485.txt), 12.4 [class.dtor]/5, makes a destructor trivial only
 if it is not user-provided and satisfies the remaining conditions. An empty
-body does not make this destructor trivial. 12.2 [class.temporary]/3 permits
-the additional register-passing temporary only for a class with trivial copy
-constructor **and destructor**. The dependent constexpr declaration is allowed
+body does not make this destructor trivial. 12.2 [class.temporary]/3 requires
+destruction of a nontrivial temporary at the end of its full expression,
+including exceptional completion. The dependent constexpr declaration is allowed
 by the PA16 assignment boundary; instantiation does not reapply literal-type
 declaration checks.
 
