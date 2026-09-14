@@ -148,6 +148,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     }
     case Kind::Unary: case Kind::Postfix: case Kind::Binary: case Kind::Subscript:
         q.kind = node.kind == Kind::Unary || node.kind == Kind::Postfix ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
+        if (node.kind == Kind::Unary && node.op == OP_AMP && ast[first].kind == Kind::IdExpression)
+            q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
         q.name = operator_name(q.op); q.context = s;
         while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)

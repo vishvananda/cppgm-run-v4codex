@@ -45,7 +45,10 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
 StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
 {
     StaticValue r;
-    if (!n) { r.kind = StaticValue::Integer; return r; }
+    if (!n) {
+        if (types[target].kind == TypeKind::MemberPointer) return constant_static_value(constant_zero(target));
+        r.kind = StaticValue::Integer; return r;
+    }
     NodeId first = ast[n].first;
     auto kind = ast[n].kind;
     if (kind == Kind::Initializer || kind == Kind::Parenthesized || kind == Kind::ParenInitializer || kind == Kind::BracedInit)
@@ -62,6 +65,11 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         return constant_static_value(convert(evaluate(n,facts[n].scope),types[target].child,true));
     if ((reference_target || pointer(target)) && !(x.form == ExpressionForm::Cast && ast[n].op == KW_REINTERPET_CAST)) {
         Conversion c; c.target = target; c.reference = reference_target;
+        if (incoming.target == target) c = incoming;
+        return constant_static_value(constant_node_conversion(n,c,facts[n].scope));
+    }
+    if (types[target].kind == TypeKind::MemberPointer) {
+        Conversion c; c.target = target;
         if (incoming.target == target) c = incoming;
         return constant_static_value(constant_node_conversion(n,c,facts[n].scope));
     }

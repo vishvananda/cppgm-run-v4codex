@@ -10,6 +10,9 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         named |= types[c.expression.type].kind == TypeKind::Named;
         class_operand |= class_value(c.expression.type) || pattern_class_type(c.expression.type);
     }
+    if (q.op == OP_AMP && q.value && args.size() == 1 && args[0].form == ExpressionForm::Overload) {
+        TypeQueryFact result; result.expression = args[0]; return result;
+    }
     auto object = args[0].type;
     ScopeId naming = 0; EntityId family = q.entity;
     if (class_value(object) || pattern_class_type(object)) {
@@ -75,7 +78,13 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     if (viable.empty()) {
         if (q.op == OP_COMMA) { r.expression = args[1]; return r; }
         if (q.op == OP_AMP && args.size() == 1 && args[0].category != ValueCategory::Prvalue && !field_fact(args[0].entity).bit_field) {
-            r.expression.type = types.compound(TypeKind::Pointer,args[0].type); return r;
+            auto member = args[0].entity;
+            if (q.value && member && nonstatic_field(member)) {
+                check_access(member,q.context,entities[member].owner);
+                r.expression.type = types.member_pointer(scopes[entities[member].owner].entity,entities[member].type);
+                r.expression.entity = member;
+            } else r.expression.type = types.compound(TypeKind::Pointer,args[0].type);
+            return r;
         }
         bool equality = q.op == OP_EQ || q.op == OP_NE;
         bool compare = equality || q.op == OP_LT || q.op == OP_GT || q.op == OP_LE || q.op == OP_GE;
@@ -191,8 +200,8 @@ Expression Analyzer::conditional_value(Expression b, Expression c, std::vector<C
         auto left = decay(b.type), right = decay(c.type);
         if (left == right) result.type = left;
         else if (pointer(left) && pointer(right)) result.type = composite_pointer(left,right);
-        else if (pointer(left) && c.null_pointer_constant) result.type = left;
-        else if (pointer(right) && b.null_pointer_constant) result.type = right;
+        else if ((pointer(left) || types[left].kind == TypeKind::MemberPointer) && c.null_pointer_constant) result.type = left;
+        else if ((pointer(right) || types[right].kind == TypeKind::MemberPointer) && b.null_pointer_constant) result.type = right;
         else result.type = arithmetic_type(left,right);
     }
     if (!result.type) throw std::runtime_error("incompatible conditional operands");

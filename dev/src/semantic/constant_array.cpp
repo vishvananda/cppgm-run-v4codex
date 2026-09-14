@@ -78,7 +78,7 @@ bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
             valid = value.kind == StaticValue::Integer && !value.bits;
     }
     else if (action.kind == InitKind::Value)
-        valid = !class_value(action.type) && types[action.type].kind != TypeKind::MemberPointer &&
+        valid = !class_value(action.type) &&
             !value_constructor(action.type);
     else if (action.kind == InitKind::Group) {
         valid = true;

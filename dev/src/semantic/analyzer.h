@@ -433,6 +433,7 @@ private:
     bool constant_object_fields(Constant value, std::uint64_t offset = 0);
     Constant constant_entity_value(EntityId entity);
     void check_constant_object(EntityId entity);
+    void demand_constant_relocations(Constant value);
     std::uint32_t constant_storage_address(TypeId type, Constant value, EntityId entity = 0, NodeId literal = 0, bool readable = true);
     std::uint32_t constant_subobject(std::uint32_t parent, TypeId type, std::uint64_t selector);
     std::uint64_t constant_offset(std::uint32_t address);

@@ -154,6 +154,13 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Unary && ast[n].op == OP_STAR) {
         auto v = constant_indirect(evaluate(first,s)); return v.valid && pointer(v.type) ? v.bits : 0;
     }
+    if (ast[n].kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)) {
+        auto member = evaluate(ast[first].next,s);
+        if (!member.valid || !member.bits || types[member.type].kind != TypeKind::MemberPointer || !nonstatic_field(member.bits)) return 0;
+        auto base = constant_node_object(first);
+        base = constant_base_address(base,entities[types[member.type].entity].type);
+        return constant_subobject(base,entities[member.bits].type,member.bits);
+    }
     if (ast[n].kind == Kind::Subscript) {
         auto base = first, index = ast[first].next;
         if (!pointer(decay(expressions[base].type))) std::swap(base,index);
@@ -254,6 +261,12 @@ StaticValue Analyzer::constant_static_value(Constant v)
         auto a = constant_addresses[v.bits]; auto storage = constant_storage[a.storage];
         r.kind = storage.literal ? StaticValue::String : StaticValue::Address; r.entity = storage.entity; r.string = storage.literal;
         r.addend = constant_offset(v.bits);
+    } else if (k == TypeKind::MemberPointer) {
+        if (types[types[v.type].child].kind == TypeKind::Function) {
+            r.kind = StaticValue::MemberFunction; r.entity = v.bits;
+        } else {
+            r.kind = StaticValue::Integer; r.bits = v.bits ? entities[v.bits].member_offset : ~std::uint64_t(0);
+        }
     } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }
     return r;

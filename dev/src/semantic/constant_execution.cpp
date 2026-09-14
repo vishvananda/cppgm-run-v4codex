@@ -157,6 +157,12 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         auto second = constant_node_conversion(call_argument(call,1),conversions[call.conversions+1],s);
         return second.valid ? first : Constant();
     }
+    auto member_pointer = object_uses[call.object_use].member_pointer;
+    if (member_pointer) {
+        auto value = evaluate(member_pointer,s);
+        if (!value.valid || !value.bits || types[value.type].kind != TypeKind::MemberPointer) return Constant();
+        e = value.bits;
+    }
     if (!e || entities[e].kind != EntityKind::Function) {
         auto use = object_uses[call.object_use];
         auto callee = ast[n].first;
@@ -170,7 +176,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     std::uint32_t object = 0;
     if (entities[e].member_info && !entities[e].is_static) {
         auto use = object_uses[call.object_use];
-        if (use.virtual_slot || use.member_pointer) return Constant();
+        if (use.virtual_slot || members[entities[e].member_info].virtual_member) return Constant();
         if (use.node) {
             object = constant_arrow(use.node,use.arrow);
         } else if (active_constant) object = constant_activations[active_constant].object;
@@ -218,7 +224,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto value = evaluate(n,s);
         return value.valid ? Constant(types.fundamental(FT_VOID),0) : Constant();
     }
-    if (ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target)))
+    if (ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target) || types[c.target].kind == TypeKind::MemberPointer))
         return convert(Constant(types.fundamental(FT_INT),0),c.target,true);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_node_object(n);
@@ -252,6 +258,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return value;
     }
     auto target = types[c.target];
+    if (c.function && target.kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
     if (fundamental(c.target,FT_BOOL) && (types[expressions[n].type].kind == TypeKind::Array || types[expressions[n].type].kind == TypeKind::Function)) {
         auto address = constant_address(n,s);
         return address ? Constant(c.target,1) : Constant();
@@ -296,6 +303,7 @@ Constant Analyzer::constant_construct(EntityId e, const std::vector<Constant>& a
 }
 Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 {
+    if (c.function && types[c.target].kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_query_object(source);
         object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);

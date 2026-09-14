@@ -44,6 +44,14 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
         if (!v.valid) return v;
         if (!integral(v.type) && !floating_type(v.type) && types.unqualified(v.type) == types.unqualified(to)) { v.type = to; return v; }
         if (fundamental(to,FT_VOID)) return Constant(to,0);
+        if (types[v.type].kind == TypeKind::MemberPointer) {
+            if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
+            if (target.kind == TypeKind::MemberPointer && types[v.type].entity == target.entity &&
+                types.unqualified(types[v.type].child) == types.unqualified(target.child)) return Constant(to,v.bits);
+            return Constant();
+        }
+        if (target.kind == TypeKind::MemberPointer)
+            return (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) && !v.bits ? Constant(to,0) : Constant();
         if (pointer(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
             if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
             if (target.kind == TypeKind::Pointer) {
@@ -207,7 +215,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return convert(evaluate(ast[first].next, s), type_id(first, s), true);
     case Kind::Call: {
         if (calls && expressions[n].form != ExpressionForm::Cast) return constant_indirect(constant_call_result(n,s));
-        if (!calls || expressions[n].form != ExpressionForm::Cast || (!integral(expressions[n].type) && !floating_type(expressions[n].type))) return Constant();
+        if (!calls || expressions[n].form != ExpressionForm::Cast || (!integral(expressions[n].type) && !floating_type(expressions[n].type) && types[expressions[n].type].kind != TypeKind::MemberPointer)) return Constant();
         auto argument = ast[ast[first].next].first;
         if (argument && expressions[n].count) return constant_node_conversion(argument,conversions[expressions[n].conversions],s);
         return argument ? convert(evaluate(argument,s),expressions[n].type,true) : convert(Constant(types.fundamental(FT_INT),0),expressions[n].type,true);
@@ -226,6 +234,8 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::Unary: {
         if (ast[n].op == OP_INC || ast[n].op == OP_DEC) return constant_mutation(n,s);
         if (ast[n].op == OP_AMP) {
+            if (types[expressions[n].type].kind == TypeKind::MemberPointer)
+                return Constant(expressions[n].type,expressions[first].entity);
             auto a = constant_address(first,s); return a ? Constant(expressions[n].type,a) : Constant();
         }
         if (ast[n].op == OP_STAR) return constant_indirect(constant_read(constant_address(n,s)));
@@ -239,6 +249,8 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return Constant();
     }
     case Kind::Binary: {
+        if (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)
+            return constant_indirect(constant_read(constant_address(n,s)));
         auto cx = calls ? expressions[n] : Expression();
         Constant a = calls && cx.count == 2 ? constant_node_conversion(first,conversions[cx.conversions],s) : evaluate(first, s);
         if (!a.valid) return Constant();
@@ -263,6 +275,17 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
 Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
 {
     if (!a.valid || !b.valid) return Constant();
+    if (types[a.type].kind == TypeKind::MemberPointer && types[b.type].kind == TypeKind::MemberPointer) {
+        if (op != OP_EQ && op != OP_NE) return Constant();
+        // Members of the same union compare equal; virtual function equality
+        // is unspecified and is not a core constant expression in C++11.
+        if (a.bits && b.bits && (members[entities[a.bits].member_info].virtual_member ||
+            members[entities[b.bits].member_info].virtual_member)) return Constant();
+        bool same = a.bits == b.bits;
+        if (a.bits && b.bits && nonstatic_field(a.bits) && nonstatic_field(b.bits) &&
+            entities[a.bits].owner == entities[b.bits].owner && entities[scopes[entities[a.bits].owner].entity].key == KW_UNION) same = true;
+        return Constant(types.fundamental(FT_BOOL),op == OP_EQ ? same : !same);
+    }
     if (floating_type(a.type) || floating_type(b.type)) return floating_binary(op,a,b,converted);
     if (pointer(a.type) || pointer(b.type) || fundamental(a.type,FT_NULLPTR_T) || fundamental(b.type,FT_NULLPTR_T)) return constant_pointer_binary(op,a,b);
     if (!integral(a.type) || !integral(b.type)) return Constant();

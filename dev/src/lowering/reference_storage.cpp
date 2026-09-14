@@ -29,16 +29,20 @@ void Procedural::destroy_reference_choices(EntityId e)
 void Procedural::reference_global(EntityId e)
 {
     auto storage = sem.static_temporary(e);
-    auto add = [&](IRType type, bool aggregate, const std::string& name) {
+    auto add = [&](IRType type, bool aggregate, const std::string& name, bool object_data = false) {
         Global g; g.symbol = fresh_symbol(name); g.type = type; g.structured = aggregate;
         g.data.begin = p.data.size(); g.data.count = 1;
-        DataItem zero; zero.zero_bytes = type.bytes(); p.data.push_back(zero); p.globals.push_back(g);
+        if (object_data && sem.entities[e].constant.valid) {
+            global_constant_fields(sem.constant_value_data(sem.entities[e].constant),sem.entities[e].type);
+            g.data.count = p.data.size()-g.data.begin;
+        } else { DataItem zero; zero.zero_bytes = type.bytes(); p.data.push_back(zero); }
+        p.globals.push_back(g);
         auto& symbol = p.symbols[g.symbol.index-1]; symbol.kind = Symbol::GlobalSymbol; symbol.entity = p.globals.size();
         symbol.metadata.binding = ir_model::SBM_INTERNAL;
         return g.symbol;
     };
     TypeId t = sem.entities[e].type;
-    symbols[e] = add(type(t),sem.class_value(t) || sem.types[t].kind == TypeKind::Array,"@__reference_"+std::to_string(e));
+    symbols[e] = add(type(t),type(t).kind() == IRType::Object,"@__reference_"+std::to_string(e),true);
     if (storage.conditional && sem.destructor_needed(sem.object_destructor(e)))
         reference_guards.put(e,add(IRType::I64,false,"@__reference_live_"+std::to_string(e)).index);
 }

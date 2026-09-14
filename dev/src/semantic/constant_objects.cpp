@@ -148,7 +148,29 @@ Constant Analyzer::constant_entity_value(EntityId e)
         constant_destination = address;
     }
     Constant value;
-    try { value = constant_initialize(entity.initializer,t,entity.owner,object_constructor(e)); }
+    auto source = entity.initializer;
+    while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::Parenthesized ||
+        ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::ParenArguments) source = ast[source].first;
+    bool static_scalar_temporary = reference && !class_value(types[t].child) &&
+        (entity.is_static || scopes[entity.owner].kind == ScopeKind::Namespace) &&
+        expressions[source].category == ValueCategory::Prvalue;
+    try {
+        if (static_scalar_temporary) {
+            auto conversion = conversions[expressions[source].incoming];
+            conversion.target = types[t].child; conversion.reference = conversion.temporary = false;
+            auto scalar = constant_node_conversion(source,conversion,entity.owner);
+            if (scalar.valid && constant_persistent(scalar)) {
+                auto temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,entity.owner),0,source);
+                entities[temporary].type = types[t].child; entities[temporary].constant = scalar;
+                entities[temporary].is_static = true; entities[temporary].definition = source;
+                ReferenceStorage retained; retained.object = temporary; retained.reference = e; retained.scalar = true;
+                static_temporaries.put(temporary,reference_storage.size()); reference_storage.push_back(retained);
+                auto storage = constant_storage_address(types[t].child,scalar,temporary,0,true);
+                constant_entity_storage.put(temporary,storage);
+                value = Constant(t,storage);
+            }
+        } else value = constant_initialize(entity.initializer,t,entity.owner,object_constructor(e));
+    }
     catch (...) { constant_destination = saved_destination; throw; }
     constant_destination = saved_destination;
     if (address) { auto storage = constant_addresses[address].storage; constant_storage[storage].value = value; constant_storage[storage].readable = value.valid; }
@@ -175,6 +197,24 @@ bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset)
     auto scalar = constant_static_value(v);
     if (scalar.kind == StaticValue::Invalid) return false;
     constant_fields.push_back({0,v.type,scalar,offset}); return true;
+}
+void Analyzer::demand_constant_relocations(Constant value)
+{
+    std::vector<Constant> work(1,value); Index seen;
+    while (!work.empty()) {
+        auto v = work.back(); work.pop_back();
+        if (!v.valid || seen.get(key(v.type,v.bits))) continue;
+        seen.put(key(v.type,v.bits),1);
+        auto kind = types[v.type].kind;
+        if (class_value(v.type) || kind == TypeKind::Array) {
+            auto object = evaluated_objects[v.bits];
+            for (unsigned i = 0; i < object.count; ++i) work.push_back(evaluated_parts[object.first+i].value);
+        } else if (kind == TypeKind::MemberPointer && v.bits && types[types[v.type].child].kind == TypeKind::Function) {
+            use_selected_function(v.bits,true);
+        } else if (kind == TypeKind::Pointer && v.bits && types[types[v.type].child].kind == TypeKind::Function) {
+            use_selected_function(constant_storage[constant_addresses[v.bits].storage].entity,true);
+        }
+    }
 }
 void Analyzer::check_constant_object(EntityId e)
 {

@@ -23,7 +23,7 @@ TypeId Analyzer::condition_target(Expression value, bool is_switch)
     }
     if (is_switch) {
         if (!integral(t)) throw std::runtime_error("switch requires integral or enum condition");
-    } else if (scoped_enum(t) || (!arithmetic(t) && !pointer(decay(t)) && !fundamental(t, FT_NULLPTR_T)))
+    } else if (scoped_enum(t) || (!arithmetic(t) && !pointer(decay(t)) && types[decay(t)].kind != TypeKind::MemberPointer && !fundamental(t, FT_NULLPTR_T)))
         throw std::runtime_error("invalid boolean condition");
     return is_switch ? promote(t) : types.fundamental(FT_BOOL);
 }

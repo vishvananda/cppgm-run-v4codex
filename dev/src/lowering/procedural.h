@@ -271,6 +271,9 @@ class Procedural {
     SignatureId virtual_signature(EntityId e);
     std::vector<SignatureId> virtual_signatures;
     Value member_pointer_value(EntityId member, TypeId type);
+    void member_pointer_data(const semantic::StaticValue& value);
+    Value member_pointer_equal(Value left, Value right, bool equal);
+    Value truth_operand(Value value);
     Value member_pointer_address(Value value);
     Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);
     void zero_object(TypeId type, Value object);

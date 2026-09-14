@@ -65,6 +65,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
             auto condition = constants[query_value(query_edges[query.offset])];
             if (condition.valid && !scoped_enum(condition.type))
                 value = convert(constants[query_value(query_edges[query.offset+(constant_truth(condition) ? 1 : 2)])],fact.expression.type,true);
+        } else if (!fact.selected && query.kind == QueryKind::Unary && query.op == OP_AMP && types[fact.expression.type].kind == TypeKind::MemberPointer) {
+            value = Constant(fact.expression.type,fact.expression.entity);
         } else if (!fact.selected && query.kind == QueryKind::Unary) {
             value = constants[query_value(query_edges[query.offset])];
             if (value.valid && !scoped_enum(value.type)) {

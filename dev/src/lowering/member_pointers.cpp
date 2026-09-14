@@ -14,6 +14,35 @@ Value Procedural::member_pointer_value(EntityId member, TypeId target)
     emit(Opcode::Store,IRType::I64,{Operand::integer(0),adjustment.operand});
     storage.address = false; return storage;
 }
+Value Procedural::truth_operand(Value value)
+{
+    return sem.types[value.type].kind == TypeKind::MemberPointer ? convert(value,sem.types.fundamental(FT_BOOL)) : value;
+}
+void Procedural::member_pointer_data(const semantic::StaticValue& value)
+{
+    lowir_model::DataItem item; item.type = IRType::Ptr;
+    item.kind = value.entity ? lowir_model::DataItem::Address : lowir_model::DataItem::Scalar;
+    if (value.entity) item.symbol = symbol(value.entity);
+    else item.value = Operand::integer(0);
+    p.data.push_back(item);
+    item = lowir_model::DataItem(); item.kind = lowir_model::DataItem::Scalar;
+    item.type = IRType::I64; item.value = Operand::integer(0); p.data.push_back(item);
+}
+Value Procedural::member_pointer_equal(Value left, Value right, bool equal)
+{
+    auto a = member_pointer_address(left), b = member_pointer_address(right);
+    auto af = emit(Opcode::Load,IRType::Ptr,{a.operand}), bf = emit(Opcode::Load,IRType::Ptr,{b.operand});
+    auto same = emit(Opcode::Compare,IRType::Ptr,{af.operand,bf.operand},Operation::Eq);
+    auto null = emit(Opcode::Compare,IRType::Ptr,{af.operand,Operand::integer(0)},Operation::Eq);
+    a = emit(Opcode::Index,IRType::I8,{a.operand,Operand::integer(8)});
+    b = emit(Opcode::Index,IRType::I8,{b.operand,Operand::integer(8)});
+    a = emit(Opcode::Load,IRType::I64,{a.operand}); b = emit(Opcode::Load,IRType::I64,{b.operand});
+    auto adjustment = emit(Opcode::Compare,IRType::I64,{a.operand,b.operand},Operation::Eq);
+    auto allowed = emit(Opcode::Binary,IRType::I64,{null.operand,adjustment.operand},Operation::Or);
+    auto result = emit(Opcode::Binary,IRType::I64,{same.operand,allowed.operand},Operation::And);
+    if (!equal) result = emit(Opcode::Compare,IRType::I64,{result.operand,Operand::integer(0)},Operation::Eq);
+    return result;
+}
 Value Procedural::member_pointer_address(Value value)
 {
     if (value.address || value.operand.kind == Operand::Slot || value.operand.kind == Operand::Symbol) {

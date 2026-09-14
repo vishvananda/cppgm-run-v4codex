@@ -269,6 +269,9 @@ void Analyzer::demand_template_storage(EntityId e)
     if (!definition_owner(scopes[entities[e].owner].entity).specialization) return;
     storage_requested.put(e,1); storage_demand.push_back(e);
     instantiate_member_definition(e);
+    // A shared constant initializer can be evaluated while its class is still
+    // unevaluated. Actual storage demand owns the required relocation targets.
+    demand_constant_relocations(constant_entity_value(e));
 }
 void Analyzer::demand_class_constant_storage(TypeId type)
 {

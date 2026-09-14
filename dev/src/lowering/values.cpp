@@ -114,6 +114,8 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
         return address(v);
     }
     TypeId from = v.type;
+    if (sem.types[to].kind == TypeKind::MemberPointer && (!from || sem.types[from].kind != TypeKind::MemberPointer))
+        return member_pointer_value(0,to);
     v = load(v);
     IRType target = type(to);
     if (from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_NULLPTR_T && target == IRType::I64)
@@ -121,7 +123,12 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
     if (target == IRType::Void) { v.type = to; v.ir = target; return v; }
     bool from_bool = from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_BOOL;
     if (sem.types[to].kind == TypeKind::Fundamental && sem.types[to].fundamental == FT_BOOL && !from_bool) {
-        v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
+        Operand zero = v.ir.floating() ? Operand::floating(0) : Operand::integer(0);
+        if (sem.types[from].kind == TypeKind::MemberPointer) {
+            if (v.ir.kind() == IRType::Object) v = emit(Opcode::Load,IRType::Ptr,{member_pointer_address(v).operand});
+            else zero = Operand::integer(~std::uint64_t(0));
+        }
+        v = emit(Opcode::Compare, v.ir, {v.operand, zero}, Operation::Ne);
     }
     bool unsign = from && sem.unsigned_type(from);
     if (target == IRType::Ptr && v.operand.literal()) {

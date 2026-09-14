@@ -63,6 +63,9 @@ void Procedural::global_data(NodeId n, TypeId t)
     if (auto plan = sem.initializer_plan(n, t)) { global_plan(plan); return; }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto array = sem.types[t];
+    if (array.kind == TypeKind::MemberPointer && sem.types[array.child].kind == TypeKind::Function) {
+        member_pointer_data(sem.static_value(n,t)); return;
+    }
     if ((array.kind == TypeKind::Named && sem.entities[array.entity].class_info) || array.kind == TypeKind::Array) {
         if (n) throw std::logic_error("missing static aggregate initializer plan");
         DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
@@ -83,7 +86,7 @@ void Procedural::global(EntityId e)
         if (g.declaration) return;
         if (!p.globals[prior.entity-1].declaration) throw std::runtime_error("multiple global definitions");
     }
-    g.structured = sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
+    g.structured = (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
         bool local = sem.local_static(e);
@@ -97,7 +100,7 @@ void Procedural::global(EntityId e)
             DataItem zero; zero.zero_bytes = g.structured ? sem.object_size(t) : g.type.bytes(); p.data.push_back(zero);
         }
         else if (reference(t)) {
-            auto value = sem.static_value(entity.initializer, t);
+            auto value = entity.constant.valid ? sem.constant_static_value(entity.constant) : sem.static_value(entity.initializer, t);
             if (value.kind != semantic::StaticValue::Address && value.kind != semantic::StaticValue::String) {
                 Global temp;
                 temp.symbol = fresh_symbol("@__reference_" + std::to_string(p.symbols.size()+1));
@@ -106,7 +109,13 @@ void Procedural::global(EntityId e)
                 auto& sym = p.symbols[temp.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size(); sym.metadata.binding = ir_model::SBM_INTERNAL;
                 g.data.begin = p.data.size(); g.data.count = 1;
                 DataItem d; d.kind = DataItem::Address; d.type = IRType::Ptr; d.symbol = temp.symbol; p.data.push_back(d);
-            } else { g.data.begin = p.data.size(); p.data.push_back(constant_data(entity.initializer, t)); g.data.count = 1; }
+            } else {
+                g.data.begin = p.data.size(); g.data.count = 1;
+                if (entity.constant.valid && value.kind == semantic::StaticValue::Address) {
+                    DataItem d; d.kind = DataItem::Address; d.type = IRType::Ptr;
+                    d.symbol = symbol(value.entity); d.addend = value.addend; p.data.push_back(d);
+                } else p.data.push_back(constant_data(entity.initializer, t));
+            }
         } else {
             g.data.begin = p.data.size();
             if (auto cls = sem.static_vptr(e)) {
@@ -130,6 +139,7 @@ void Procedural::global(EntityId e)
                 DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
                 d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant)) : Operand::integer(entity.constant.bits); p.data.push_back(d);
             }
+            else if (!entity.initializer && sem.types[t].kind == TypeKind::MemberPointer) global_data(0,t);
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
             else global_data(entity.initializer, t);
             g.data.count = p.data.size() - g.data.begin;

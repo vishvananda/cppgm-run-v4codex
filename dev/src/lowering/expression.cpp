@@ -28,7 +28,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     if (fact.form == semantic::ExpressionForm::Cast) {
         NodeId operand = node.kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
-        if (!operand) return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
+        if (!operand) return initialization_value(0,fact.type);
         TypeId target = sem.facts[n].type;
         if (reference(target)) {
             auto c = sem.conversion_fact(fact.conversions);
@@ -191,6 +191,7 @@ Value Procedural::unary(NodeId n)
         dest.cached = true; dest.stored = value.operand; return dest;
     }
     Value v = op == OP_LNOT && sem.conversion_fact(fact.conversions).kind != semantic::Conversion::Kind::User ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
+    if (op == OP_LNOT) v = truth_operand(v);
     if (op == OP_LNOT) v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Eq);
     else if (op != OP_PLUS) v = emit(Opcode::Unary, v.ir, {v.operand}, op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
     v.type = fact.type; return v;
@@ -257,6 +258,9 @@ Value Procedural::binary(NodeId n, bool location)
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 {
     Value v;
+    if ((op == OP_EQ || op == OP_NE) && sem.types[a.type].kind == TypeKind::MemberPointer && a.ir.kind() == IRType::Object) {
+        v = member_pointer_equal(a,b,op == OP_EQ); v.type = result; return v;
+    }
     if ((op == OP_PLUS || op == OP_MINUS) && (a.ir == IRType::Ptr || b.ir == IRType::Ptr)) {
         if (a.ir != IRType::Ptr) std::swap(a, b);
         TypeId pointer_type = a.type;
