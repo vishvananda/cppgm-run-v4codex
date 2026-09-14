@@ -34,6 +34,8 @@ public:
     EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
     ArgumentId template_argument(std::uint32_t n) const { return argument_types[n]; }
+    bool argument_pack(ArgumentId a) const { return !value_argument(a) && types[a].kind == TypeKind::ArgumentPack; }
+    TypeArguments pack_arguments(ArgumentId a) const { return argument_packs[types[a].bound]; }
     TypeId argument_type(ArgumentId a) { return value_argument(a) ? query_fact(argument_query(a)).expression.type : a; }
     unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
     const TypeQuery& type_query(QueryId id) const { return type_queries[id]; }
@@ -404,6 +406,26 @@ private:
     std::uint32_t substitution_frame(std::uint32_t specialization, std::uint32_t parameters,
         std::uint32_t count, std::uint32_t parent = 0);
     TypeId substitution_argument(std::uint32_t frame, EntityId parameter) const;
+    ArgumentId make_argument_pack(const std::vector<ArgumentId>& args);
+    std::uint32_t expansion_parameters(ArgumentId pattern);
+    ArgumentId unexpanded_argument(std::uint32_t frame, EntityId parameter) const;
+    std::uint32_t argument_frame(std::uint32_t parent, EntityId parameter, ArgumentId arg);
+    TypeQueryFact query_new(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
+    Index argument_frame_index;
+    std::uint32_t expansion_context(std::uint32_t frame);
+    void bind_function_packs(NodeId parameters, ScopeId scope);
+    void append_template_argument(NodeId node, ScopeId scope, ArgumentId arg, std::vector<ArgumentId>& out);
+    std::uint32_t source_expansion_parameters(NodeId root);
+    ScopeId expansion_scope(std::uint32_t frame, ScopeId parent);
+    void expand_expression_list(NodeId list, ScopeId scope);
+    Index source_expansion_index, expansion_scope_index, expanded_expression_lists, pack_size_entities, expansion_scope_frames;
+    ScopeId expanded_scope(NodeId node, ScopeId parent);
+    bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings);
+    std::uint32_t expansion_frame(std::uint32_t parent, std::uint32_t parameters, unsigned lane);
+    int expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame);
+    void substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame, std::vector<ArgumentId>& out);
+    Index expansion_parameter_index, expansion_frame_index, entity_pack_arguments;
+    std::size_t expansion_work = 0, expansion_lanes = 0;
     void attach_template_context(std::uint32_t context, std::uint32_t frame);
     EntityId substitution_entity(std::uint32_t frame, EntityId source) const;
     EntityId substitution_binding(std::uint32_t frame, EntityId source);

@@ -143,12 +143,14 @@ void Analyzer::destructor_actions(EntityId e)
             if (dtor) work.push_back({field, entities[field].type, dtor});
         }
         std::reverse(work.begin(), work.end());
+        auto base_begin = work.size();
         for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
             TypeId base = entities[bases[b].base].type;
             EntityId dtor = default_destructor(base, entities[e].scope);
             members[entities[dtor].member_info].base_entry = true;
             work.push_back({0, base, dtor});
         }
+        std::reverse(work.begin()+base_begin,work.end());
     }
     // Small empty bodies may share their prepared single-base suffix with D0.
     // Otherwise D0 calls D1 once: linear cleanup work, with no body cloning.

@@ -220,6 +220,8 @@ public:
         return project_view(id);
     }
     Node project_view(NodeId id) const;
+    void expanded_children(NodeId parent, const std::vector<NodeId>& children);
+    IdIndex expanded_first, expanded_last, expanded_next;
     NodeId instantiate(NodeId root, std::uint32_t context);
     NodeId projected(NodeId source, std::uint32_t context) const;
     bool pending_region(NodeId root) const { return deferred_occurrences.get(root) > 1; }
@@ -263,6 +265,7 @@ public:
     NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
     NodeId projected(NodeId source, std::uint32_t context) const { return tree.projected(source,context); }
     bool pending_region(NodeId root) const { return tree.pending_region(root); }
+    void expanded_children(NodeId parent, const std::vector<NodeId>& children) { tree.expanded_children(parent,children); }
     std::uint32_t new_context() { return tree.new_context(); }
     bool& telemetry;
     NodePool& nodes;

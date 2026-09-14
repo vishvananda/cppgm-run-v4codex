@@ -40,6 +40,24 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
+    case Kind::PackExpression:
+        q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
+    case Kind::New: {
+        q.kind = QueryKind::New; q.context = s;
+        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+            q.context = scopes[q.context].parent;
+        q.type = type_id(child(n,Kind::TypeId),s); q.value = child(n,Kind::Global) != 0;
+        TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
+        std::vector<QueryId> args(1,intern_query(type,{}));
+        auto init = child(n,Kind::Initializer);
+        auto list = ast[init].first;
+        for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
+        TypeQuery call; call.kind = QueryKind::Call; call.context = q.context;
+        children.push_back(intern_query(call,args));
+        auto placement = ast[child(n,Kind::Placement)].first;
+        for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+        break;
+    }
     case Kind::IdExpression: {
         auto name = node.detail;
         if (callee && (fundamental_cast_type(node.op) || ast[name].kind == Kind::TypeId)) {
@@ -144,6 +162,18 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         q.kind = QueryKind::Member; q.op = node.op; q.context = s;
         q.name = terminal(ast[ast[first].next].detail);
         children.push_back(expression_query(first,s)); break;
+    case Kind::SizeofPack: {
+        auto occurrence = ast.nodes.occurrences[n];
+        auto e = occurrence.context ? pack_size_entities.get(occurrence.source) : 0;
+        if (!e) e = lookup(s,node.text);
+        if (!e || !entities[e].parameter_pack) throw std::runtime_error("sizeof... requires a pack");
+        if (!occurrence.context) pack_size_entities.put(occurrence.source,e);
+        auto pack = entity_pack_arguments.get(e);
+        if (!pack && occurrence.context) pack = unexpanded_argument(template_type_contexts.get(occurrence.context),e);
+        if (pack) { q.type = types.fundamental(FT_UNSIGNED_LONG_INT); q.value = pack_arguments(pack).count; }
+        else { q.kind = QueryKind::SizeofPack; q.entity = e; }
+        break;
+    }
     case Kind::Sizeof: case Kind::TypeTrait:
         q.kind = QueryKind::Sizeof; q.op = node.op;
         if (ast[first].kind == Kind::TypeId) {
@@ -169,6 +199,18 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     auto& results = owner ? specialization_query_cache : cache;
     if (auto old = results.get(cache_key)) return old;
     auto q = type_queries[id];
+    if (q.kind == QueryKind::SizeofPack) {
+        auto frame = owner;
+        while (frame && substitution_frames[frame].expansion) frame = substitution_frames[frame].parent;
+        auto arg = frame ? substitution_argument(frame,q.entity) : bindings.get(q.entity);
+        int count = -1;
+        if (arg && argument_pack(arg)) count = pack_arguments(arg).count;
+        else if (!entities[q.entity].template_parameter)
+            count = expansion_count(expansion_parameters(entities[q.entity].type),bindings,frame);
+        if (count < 0) return id;
+        TypeQuery value; value.type = types.fundamental(FT_UNSIGNED_LONG_INT); value.value = count;
+        auto result = intern_query(value,{}); results.put(cache_key,result); return result;
+    }
     if (q.kind == QueryKind::TemplateValueParameter) {
         auto arg = owner ? substitution_argument(owner,q.entity) : bindings.get(q.entity);
         if (!arg) return 0;
@@ -192,7 +234,21 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     }
     std::vector<QueryId> children;
     for (unsigned i = 0; i < q.count; ++i) {
-        auto child = substitute_query(query_edges[q.offset+i],bindings,cache,owner);
+        auto source = query_edges[q.offset+i]; auto child_query = type_queries[source];
+        if (child_query.kind == QueryKind::Expansion) {
+            auto pattern = query_edges[child_query.offset];
+            auto params = expansion_parameters(0x80000000U|pattern);
+            auto count = expansion_count(params,bindings,owner);
+            if (count >= 0 && owner) {
+                for (int j = 0; j < count; ++j) {
+                    auto child = substitute_query(pattern,bindings,cache,expansion_frame(owner,params,j));
+                    if (!child) return 0;
+                    children.push_back(child);
+                }
+                continue;
+            }
+        }
+        auto child = substitute_query(source,bindings,cache,owner);
         if (!child) return 0;
         children.push_back(child);
     }
@@ -213,7 +269,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         children.push_back(query_fact(query_edges[q.offset+i])); r.dependent |= children.back().dependent;
     }
     r.dependent |= q.type && dependent_type(q.type);
-    r.dependent |= q.kind == QueryKind::TemplateValueParameter;
+    r.dependent |= q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion;
     // A template access context belongs to the key, but does not alone make
     // fixed operands dependent: unknown_call(1) must fail at definition time.
     if (q.entity && entities[q.entity].template_pattern) {
@@ -230,7 +286,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
-    if (q.kind == QueryKind::Sizeof) x.type = types.fundamental(FT_UNSIGNED_LONG_INT);
+    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack) x.type = types.fundamental(FT_UNSIGNED_LONG_INT);
     // Layout changes the value of sizeof, not its type. Fixed arithmetic
     // operands still impose definition-time obligations, including operands
     // that a later constant evaluation will short-circuit.
@@ -262,6 +318,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
     case QueryKind::TemplateValueParameter:
         x.type = q.type; r.declared_type = q.type; x.entity = q.entity; break;

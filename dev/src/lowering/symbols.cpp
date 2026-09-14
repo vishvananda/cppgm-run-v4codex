@@ -43,6 +43,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         else result = abi_entity_name(t.entity);
         break;
     }
+    case TypeKind::PackExpansion: result = abi.make(abi_mangle::Kind::Pack,abi_type(t.bound)); break;
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
     case TypeKind::Decltype: result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity)); break;
     case TypeKind::DependentName: {
@@ -78,7 +79,7 @@ bool Procedural::separate_base(EntityId id) const
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
     if (sem.member_fact(id).virtual_member && sem.destructor_member(id)) return true;
     if (sem.member_fact(id).polymorphic_base_entry && !sem.synthetic_member(id)) return true;
-    if (e.template_member && !sem.synthetic_member(id)) return true;
+    if (e.template_member && !sem.synthetic_member(id)) return sem.member_fact(id).complete_entry;
     return sem.member_fact(id).complete_entry || (e.body && !e.inline_function);
 }
 SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
@@ -86,7 +87,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     auto e = sem.entities[id];
     bool external = e.member_info && !e.body && !sem.synthetic_member(id);
     bool separate = separate_base(id);
-    bool base_only = e.member_info && (external || sem.member_fact(id).inherited_constructor) &&
+    bool base_only = e.member_info && (external || e.template_member || sem.member_fact(id).inherited_constructor) &&
         sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
     base = base && separate;
     if (deleting) return deleting_symbol(id);

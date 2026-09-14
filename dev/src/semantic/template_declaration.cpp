@@ -13,7 +13,7 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
         if (!entities[parameter].template_parameter) continue;
         auto argument = canonical_argument(parameter,count,bindings,cache);
         bindings.put(parameter,argument);
-        shape.push_back(argument); ++count;
+        shape.push_back(entities[parameter].parameter_pack ? types.compound(TypeKind::PackExpansion,0,argument) : argument); ++count;
     }
     TypeId normalized = substitute_type(type,bindings,cache);
     if (!normalized) throw std::runtime_error("invalid function template declaration");

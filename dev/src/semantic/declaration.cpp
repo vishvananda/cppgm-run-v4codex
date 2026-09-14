@@ -135,7 +135,8 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
             auto type = declarator(d,specifiers(specs,ts),ts);
             if (!dependent_type(type) && !integral(type)) throw std::runtime_error("integral template parameter required");
             auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
-            entities[e].template_parameter = true; entities[e].type = types.unqualified(type);
+            entities[e].template_parameter = true;
+            entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0; entities[e].type = types.unqualified(type);
             entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
             bind(ts,entities[e].name,e); record(ts,e,p,type,EntityKind::Parameter);
             continue;
@@ -147,6 +148,7 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         EntityId e = make_entity(EntityKind::Type, ts, name, p);
         entities[e].key = child(p, Kind::TemplateTemplate) ? KW_TEMPLATE : KW_TYPENAME;
         entities[e].template_parameter = true;
+            entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0;
         entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
         entities[e].type = types.named(e);
         bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
@@ -372,9 +374,11 @@ void Analyzer::function_body(const Body& body)
         IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
         entities[e].type = parameter_body_type(t);
-        bind(fs, name, e); record(fs, e, p, t, EntityKind::Parameter);
+        if (!ast.nodes.occurrences[p].context || !child(ast[ast[p].first].next,Kind::ParameterPack)) bind(fs,name,e);
+        record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }
+    bind_function_packs(params,fs);
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
     if (calls) finish_class_returns(body.entity);

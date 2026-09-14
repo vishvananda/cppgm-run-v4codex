@@ -142,6 +142,7 @@ TypeId Analyzer::fundamental_cast_type(ETokenType op)
 Expression Analyzer::call_expression(NodeId n, ScopeId s)
 {
     NodeId callee = ast[n].first, args_node = ast[callee].next;
+    expand_expression_list(args_node,s);
     std::vector<NodeId> args;
     for (NodeId a = ast[args_node].first; a; a = ast[a].next) { expression(a, s); args.push_back(a); }
     Expression result;

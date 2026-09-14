@@ -21,9 +21,15 @@ std::uint32_t Analyzer::substitution_frame(std::uint32_t specialization,
 TypeId Analyzer::substitution_argument(std::uint32_t id, EntityId parameter) const
 {
     auto ordinal = parameter_ordinals.get(parameter);
-    if (!ordinal) return 0;
     for (; id; id = substitution_frames[id].parent) {
         auto frame = substitution_frames[id];
+        if (frame.overlay) {
+            auto args = argument_packs[frame.overlay];
+            for (unsigned j = 0; j < args.count; j += 2)
+                if (argument_types[args.offset+j] == parameter) return argument_types[args.offset+j+1];
+            continue;
+        }
+        if (!ordinal) continue;
         if (ordinal > frame.count || template_parameters[frame.parameters+ordinal-1] != parameter) continue;
         auto pack = argument_packs[specializations[frame.specialization].arguments];
         // Partial explicit function arguments leave the remaining parameters
@@ -70,6 +76,15 @@ bool Analyzer::pattern_scope(ScopeId scope) const
 EntityId Analyzer::substitution_binding(std::uint32_t frame, EntityId source)
 {
     if (!source || !entities[source].template_pattern) return source;
+    if (entities[source].parameter_pack) {
+        for (auto id = frame; id; id = substitution_frames[id].parent) {
+            auto f = substitution_frames[id];
+            if (!f.overlay) continue;
+            auto args = argument_packs[f.overlay];
+            for (unsigned j = 0; j < args.count; j += 2)
+                if (argument_types[args.offset+j] == source) return argument_types[args.offset+j+1];
+        }
+    }
     auto k = key(frame,source);
     if (auto known = substitution_binding_cache.get(k)) return known;
     auto entity = entities[source];
@@ -81,6 +96,7 @@ EntityId Analyzer::substitution_binding(std::uint32_t frame, EntityId source)
 }
 ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
 {
+    while (substitution_frames[frame].overlay) frame = substitution_frames[frame].parent;
     auto spec = specializations[substitution_frames[frame].specialization];
     for (auto scope = source; scope; scope = scopes[scope].parent) {
         auto e = scopes[scope].entity;

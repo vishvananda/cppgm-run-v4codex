@@ -3,6 +3,14 @@ namespace cppgm { namespace lowering {
 abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
 {
     using abi_mangle::Kind;
+    if (sem.argument_pack(argument)) {
+        std::vector<abi_mangle::Id> args; auto pack = sem.pack_arguments(argument);
+        for (unsigned j = 0; j < pack.count; ++j) args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
+        return abi.make(Kind::ArgumentPack,0,0,0,0,args);
+    }
+    if (!semantic::value_argument(argument) && sem.types[argument].kind == TypeKind::PackExpansion &&
+        semantic::value_argument(sem.types[argument].bound))
+        return abi.make(Kind::ExpressionArgument,abi.make(Kind::ExprPack,abi_query(semantic::argument_query(sem.types[argument].bound))));
     if (!semantic::value_argument(argument)) return abi.make(Kind::TypeArgument,abi_type(argument));
     auto q = semantic::argument_query(argument);
     auto value = abi_query(q);

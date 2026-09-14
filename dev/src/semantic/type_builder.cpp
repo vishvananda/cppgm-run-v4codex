@@ -228,7 +228,8 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 params.push_back(parameter(p, parameter_scope));
                 if (template_type_probe && !params.back()) return 0;
                 NodeId d = ast[ast[p].first].next;
-                if (child(d, Kind::ParameterPack)) variadic = true;
+                if (definitions && child(d,Kind::ParameterPack)) params.back() = types.compound(TypeKind::PackExpansion,0,params.back());
+                else if (child(d,Kind::ParameterPack)) variadic = true;
                 auto id = terminal(decl_name(d));
                 if (parameter_scope != s && id) {
                     auto e = make_entity(EntityKind::Parameter,parameter_scope,id,p);
@@ -306,6 +307,11 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         EntityId e = declare_alias(owner, id, d, t);
         record(owner, e, d, t, kind);
         return e;
+    }
+    if (calls && init) {
+        auto source = init;
+        while (ast[source].kind == Kind::Initializer) source = ast[source].first;
+        expand_expression_list(source,s);
     }
     if (calls && types[t].kind == TypeKind::Array && !types[t].bound && init) {
         NodeId list = ast[init].first;

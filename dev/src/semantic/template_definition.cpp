@@ -73,8 +73,10 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
     if (def.count != templates[entities[primary].template_info].count) throw std::runtime_error("member template head does not match owner");
     unsigned argument = 0;
     for (auto a = ast[child(primary_part,Kind::TemplateArguments)].first; a; a = ast[a].next) {
-        if (argument >= def.count ||
-            template_argument_node(a,s) != parameter_argument(template_parameters[def.parameters+argument]))
+        auto expected = argument < def.count ? parameter_argument(template_parameters[def.parameters+argument]) : 0;
+        if (argument < def.count && entities[template_parameters[def.parameters+argument]].parameter_pack)
+            expected = types.compound(TypeKind::PackExpansion,0,expected);
+        if (argument >= def.count || template_argument_node(a,s) != expected)
             throw std::runtime_error("member definition does not name its primary template");
         ++argument;
     }

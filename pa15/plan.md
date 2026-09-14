@@ -3,6 +3,24 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 
+Active implementation entry: `19225b3deef4a85e5690c2d72fb7857f5a06721c`,
+128/177 (49 failures). Previous turn: verified implementation progress.
+Pack work: canonical argument slices own per-parameter partition identity;
+substitution owns expansion lanes and retained source-list occurrences; ordinary
+call/signature facts feed lowering. Work must follow consumed arguments and
+produced list elements, with TU-owned flat indexes and no grammar replay.
+Validate signature/call, empty/lockstep/nested and partition reuse controls,
+then extend to declaration/base/initializer consumers. Freeze entry/final
+binaries and use A/A + ABBA latency/RSS, native runtime/text and work counters.
+Artifacts: `$RALPH_ARTIFACT_DIR/pa15-packs/`. This is implementation work;
+the independent review questions and original review markers remain open.
+
+Pack increment: **162/177**, prior **1935/1935**, file audit pass. Canonical
+partitions, dependent list occurrences, nested/lockstep expansion, signatures,
+calls, braces, bases, constructor lists and new-expression default queries are
+implemented; 15 native + 4 rejection personal controls pass. Remaining pack
+cluster work: literal-call construction; performance/telemetry still pending.
+
 Target: **PA15 full-stage**, O0 typed LowIR. Implementation remains incomplete;
 this handoff completes the canonical explicit-selection and constant-variable
 query/storage group. Independent whole-stage review remains pending.

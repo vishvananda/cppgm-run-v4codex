@@ -31,8 +31,10 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
                 parameters = source-1; break;
             }
         std::vector<TypeId> args;
-        for (unsigned i = 0; i < head.count; ++i)
-            args.push_back(parameter_argument(template_parameters[parameters+i]));
+        for (unsigned i = 0; i < head.count; ++i) {
+            auto parameter = template_parameters[parameters+i]; auto arg = parameter_argument(parameter);
+            args.push_back(entities[parameter].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
+        }
         return entities[specialize_class(e,args)].type;
     }
     auto scope = entities[e].scope, parent = entities[e].owner;

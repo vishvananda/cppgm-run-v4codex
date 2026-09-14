@@ -46,7 +46,7 @@ struct UnavailableSemanticFact : std::exception {
     const char* what() const noexcept override { return "semantic prerequisite unavailable"; }
 };
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {
@@ -157,6 +157,7 @@ struct Entity {
     EntityKind kind = EntityKind::Variable;
     ETokenType key = TOK_INVALID;
     bool complete = false, scoped = false, template_parameter = false, is_static = false;
+    bool parameter_pack = false;
     FactState body_state = FactState::NotStarted;
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;

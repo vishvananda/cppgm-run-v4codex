@@ -43,7 +43,12 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray ||
+    bool dependent = t.kind == TypeKind::PackExpansion;
+    if (t.kind == TypeKind::ArgumentPack) {
+        auto args = argument_packs[t.bound];
+        for (unsigned j = 0; j < args.count; ++j) dependent |= dependent_argument(argument_types[args.offset+j]);
+    }
+    dependent |= t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray ||
         (t.kind == TypeKind::Named && (entities[t.entity].template_parameter || entities[t.entity].template_pattern));
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pack = specialization_arguments(t.entity);
@@ -66,7 +71,16 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     ++substitution_work;
     Type p = types[pattern];
     TypeId result = pattern;
-    if (p.kind == TypeKind::DependentArray) {
+    if (p.kind == TypeKind::ArgumentPack) {
+        auto args = argument_packs[p.bound]; std::vector<ArgumentId> values;
+        for (unsigned j = 0; j < args.count; ++j)
+            substitute_arguments(argument_types[args.offset+j],bindings,cache,owner,values);
+        result = make_argument_pack(values);
+    } else if (p.kind == TypeKind::PackExpansion) {
+        auto arg = substitute_argument(p.bound,bindings,cache,owner);
+        if (!arg) return 0;
+        result = types.compound(TypeKind::PackExpansion,0,arg);
+    } else if (p.kind == TypeKind::DependentArray) {
         auto child = substitute_type(p.child,bindings,cache,owner);
         auto query = substitute_query(p.bound,bindings,cache,owner);
         if (!child || !query) return 0;
@@ -119,9 +133,12 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (!returned || types[returned].kind == TypeKind::Array || types[returned].kind == TypeKind::Function) return 0;
         std::vector<TypeId> params;
         for (unsigned i = 0; i < p.count; ++i) {
-            TypeId t = substitute_type(types.parameters[p.offset + i], bindings, cache,owner);
-            if (!t || fundamental(t, FT_VOID)) return 0;
-            params.push_back(t);
+            std::vector<ArgumentId> expanded;
+            substitute_arguments(types.parameters[p.offset+i],bindings,cache,owner,expanded);
+            for (auto t : expanded) {
+                if (!t || value_argument(t) || fundamental(t,FT_VOID)) return 0;
+                params.push_back(t);
+            }
         }
         result = types.signature(types.function(returned, params, p.variadic, p.cv, p.ref));
     } else if (p.child) {
@@ -142,7 +159,6 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
 {
     TemplateFunction t = templates[entities[pattern].template_info];
     auto args = input;
-    if (args.size() > t.count) return 0;
     if (definitions && !template_defaults(pattern,args,true)) return 0;
     bool partial = args.size() < t.count;
     if (partial && !definitions) return 0;
@@ -173,6 +189,16 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
 }
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
 {
+    if (value_argument(pattern) || value_argument(actual)) {
+        if (!value_argument(pattern) || !value_argument(actual)) return false;
+        auto q = type_queries[argument_query(pattern)];
+        if (q.kind == QueryKind::TemplateValueParameter) {
+            auto previous = bindings.get(q.entity);
+            if (previous && previous != actual) return false;
+            bindings.put(q.entity,actual); return true;
+        }
+        return pattern == actual || dependent_argument(pattern);
+    }
     Type p = types[pattern], a = types[actual];
     if (p.kind == TypeKind::DependentArray)
         return (a.kind == TypeKind::Array || a.kind == TypeKind::DependentArray) && deduce_type(p.child,a.child,bindings);
@@ -206,7 +232,17 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
         auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
         if (x.count != y.count) return false;
         for (unsigned j = 0; j < x.count; ++j)
-            if (value_argument(argument_types[x.offset+j]) || value_argument(argument_types[y.offset+j])) {
+            if (argument_pack(argument_types[x.offset+j]) && argument_pack(argument_types[y.offset+j])) {
+                auto px = pack_arguments(argument_types[x.offset+j]), py = pack_arguments(argument_types[y.offset+j]);
+                if (px.count == 1 && !value_argument(argument_types[px.offset]) && types[argument_types[px.offset]].kind == TypeKind::PackExpansion) {
+                    std::vector<TypeId> actual(argument_types.begin()+py.offset,argument_types.begin()+py.offset+py.count);
+                    if (!deduce_expansion(types[argument_types[px.offset]].bound,actual,bindings)) return false;
+                } else {
+                    if (px.count != py.count) return false;
+                    for (unsigned k = 0; k < px.count; ++k)
+                        if (!deduce_type(argument_types[px.offset+k],argument_types[py.offset+k],bindings)) return false;
+                }
+            } else if (value_argument(argument_types[x.offset+j]) || value_argument(argument_types[y.offset+j])) {
                 if (argument_types[x.offset+j] != argument_types[y.offset+j] && !dependent_argument(argument_types[x.offset+j])) return false;
             } else if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],bindings)) return false;
         return true;
@@ -223,8 +259,10 @@ template<class Arguments>
 EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& args)
 {
     Type f = types[entities[pattern].type];
-    if ((!f.variadic && args.size() > f.count) ||
-        (args.size() < f.count && (!entities[pattern].defaults || !default_arguments[entities[pattern].defaults+args.size()]))) return 0;
+    bool pack_tail = f.count && types[types.parameters[f.offset+f.count-1]].kind == TypeKind::PackExpansion;
+    auto minimum = f.count - unsigned(pack_tail);
+    if ((!f.variadic && !pack_tail && args.size() > f.count) ||
+        (args.size() < minimum && (!entities[pattern].defaults || !default_arguments[entities[pattern].defaults+args.size()]))) return 0;
     TemplateFunction t = templates[entities[pattern].template_info];
     TypeArguments explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
@@ -232,6 +270,21 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
         bindings.put(template_parameters[t.offset+i],argument_types[explicit_args.offset+i]);
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
         TypeId p = types.parameters[f.offset+i], a = args[i].type;
+        if (types[p].kind == TypeKind::PackExpansion) {
+            auto element = types[p].bound;
+            std::vector<TypeId> actual;
+            for (unsigned j = i; j < args.size(); ++j) {
+                auto type = args[j].type, param = types[element];
+                if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
+                    entities[types[param.child].entity].template_parameter && !types[param.child].cv && args[j].category == ValueCategory::Lvalue)
+                    type = types.compound(TypeKind::LRef,type);
+                if (param.kind != TypeKind::LRef && param.kind != TypeKind::RRef) type = decay(type);
+                actual.push_back(type);
+            }
+            if (types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef) element = types[element].child;
+            if (!deduce_expansion(element,actual,bindings)) return 0;
+            break;
+        }
         if (!dependent_type(p)) continue;
         if (args[i].form == ExpressionForm::Overload) {
             auto kind = types[p].kind;
@@ -270,7 +323,9 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     }
     std::vector<TypeId> arguments;
     for (unsigned i = 0; i < t.count; ++i) {
-        TypeId a = bindings.get(template_parameters[t.offset+i]);
+        auto parameter = template_parameters[t.offset+i];
+        TypeId a = bindings.get(parameter);
+        if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
         if (!a) break;
         arguments.push_back(a);
     }
@@ -320,7 +375,7 @@ EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
     if (!list) return binding;
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
-        args.push_back(template_argument_node(a,s));
+        append_template_argument(a,s,template_argument_node(a,s),args);
     }
     EntityId result = 0;
     for (EntityId e : candidates(binding)) {

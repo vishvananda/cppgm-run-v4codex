@@ -111,10 +111,37 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
 bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial)
 {
     auto t = templates[entities[pattern].template_info];
-    if (args.size() > t.count) return false;
-    Index bindings, cache;
+    bool packs = false;
+    for (unsigned j = 0; j < t.count; ++j) packs |= entities[template_parameters[t.offset+j]].parameter_pack;
+    if (!packs && args.size() > t.count) return false;
+    Index bindings, cache; std::uint32_t frame = 0;
     for (unsigned j = 0; j < t.count; ++j) {
         auto p = template_parameters[t.offset+j];
+        if (entities[p].parameter_pack) {
+            if (partial && j == args.size()) return true;
+            std::vector<ArgumentId> elements;
+            if (j < args.size() && argument_pack(args[j])) {
+                auto slice = pack_arguments(args[j]);
+                elements.assign(argument_types.begin()+slice.offset,argument_types.begin()+slice.offset+slice.count);
+            } else {
+                elements.assign(args.begin()+std::min<std::size_t>(j,args.size()),args.end());
+                args.resize(j+1);
+            }
+            for (auto& value : elements) {
+                // An expansion retains its own source parameter until the
+                // enclosing specialization supplies concrete pack boundaries.
+                if (!value_argument(value) && types[value].kind == TypeKind::PackExpansion) continue;
+                if (entities[p].kind == EntityKind::Type) { if (value_argument(value)) return false; }
+                else {
+                    auto target = substitute_type(entities[p].type,bindings,cache);
+                    value = target ? convert_argument(value,target) : 0;
+                    if (!value) return false;
+                }
+            }
+            if (j == args.size()) args.push_back(0);
+            args[j] = make_argument_pack(elements); bindings.put(p,args[j]);
+            frame = argument_frame(frame,p,args[j]); continue;
+        }
         if (j == args.size()) {
             TypeId value = template_default_types.get(p);
             if (!value) {
@@ -122,7 +149,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
                 if (!d) return partial;
                 value = template_argument_node(ast[d].first,t.environment);
             }
-            value = substitute_argument(value,bindings,cache);
+            value = substitute_argument(value,bindings,cache,frame);
             if (!value) return false;
             args.push_back(value);
         }
@@ -135,7 +162,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             args[j] = convert_argument(args[j],target);
             if (!args[j]) return false;
         }
-        bindings.put(p,args[j]);
+        bindings.put(p,args[j]); if (packs) frame = argument_frame(frame,p,args[j]);
     }
     return true;
 }
@@ -184,7 +211,7 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
         auto type = template_argument_node(a,s);
         if (template_type_probe && !type) return 0;
-        args.push_back(type);
+        append_template_argument(a,s,type,args);
     }
     return specialize_class(pattern,args);
 }

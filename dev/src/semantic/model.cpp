@@ -104,7 +104,8 @@ TypeId Types::adjusted(TypeId id)
     if (adjustments.size() <= id) adjustments.resize(id + 1);
     if (adjustments[id]) return adjustments[id];
     Type t = records[id];
-    TypeId result = t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray ? compound(TypeKind::Pointer, signature(t.child)) :
+    TypeId result = t.kind == TypeKind::PackExpansion ? compound(TypeKind::PackExpansion,0,adjusted(t.bound)) :
+        t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray ? compound(TypeKind::Pointer, signature(t.child)) :
         t.kind == TypeKind::Function ? compound(TypeKind::Pointer, signature(id)) : unqualified(signature(id));
     adjustments[id] = result;
     return result;

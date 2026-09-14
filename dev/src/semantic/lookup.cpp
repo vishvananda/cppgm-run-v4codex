@@ -302,10 +302,12 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
 {
     if (!n) return 0;
-    if (definitions && mode == Lookup::Ordinary && ast.nodes.occurrences[n].context) {
+    if (definitions && (mode == Lookup::Ordinary || mode == Lookup::Qualifier) && ast.nodes.occurrences[n].context) {
         auto id = template_binding_index.get(ast.nodes.occurrences[n].source);
         if (id) {
             auto binding = template_bindings[id]; auto e = binding.entity;
+            if (e && entities[e].template_info && entities[e].class_info && child(ast[n].last,syntax::Kind::TemplateArguments))
+                return class_template_name(ast[n].last,e,s);
             if (e && !binding.dependent && !entities[e].template_pattern && !entities[e].template_parameter) return e;
         }
     }

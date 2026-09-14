@@ -82,7 +82,7 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
         auto kind = ast[n].kind;
         if (dependent && template_body_values) {
             template_value_dependence.put(ast.nodes.occurrences[n].source,1);
-            if (kind == Kind::Sizeof || kind == Kind::TypeTrait) bind_template_size(n,s);
+            if (kind == Kind::Sizeof || kind == Kind::SizeofPack || kind == Kind::TypeTrait) bind_template_size(n,s);
         }
         // Value dependence alone does not change scalar operand types or the
         // selected built-in conversions. Each checker still requires complete
@@ -156,6 +156,12 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         return dependent;
     }
     if (node.kind == Kind::Name) return bind_template_name(n,s).dependent;
+    if (node.kind == Kind::SizeofPack) {
+        auto e = lookup(s,node.text);
+        if (!e || !entities[e].parameter_pack) throw std::runtime_error("sizeof... requires a parameter pack");
+        pack_size_entities.put(ast.nodes.occurrences[n].source,e);
+        return true;
+    }
     if (node.kind == Kind::Identifier) return false; // A declaration's own name.
     if (node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait) {
         ++unevaluated_depth; bool dependent = false;
@@ -211,6 +217,7 @@ void Analyzer::bind_template_body(const Body& body)
         auto declared_type = facts[p].type;
         if (!declared_type) declared_type = bind_template_type(specs,decl,fs);
         auto e = pattern_declaration(EntityKind::Parameter,fs,terminal(decl_name(decl)),p,dependent);
+        entities[e].parameter_pack = child(decl,Kind::ParameterPack) != 0;
         // Type queries can refer to an earlier parameter while the signature
         // is being instantiated, before runtime parameter objects exist.
         signature_parameters.put(e,++ordinal);
@@ -224,6 +231,12 @@ void Analyzer::bind_template_body(const Body& body)
         ValueBinding(bool& value) : mode(value), prior(value) { mode = true; }
         ~ValueBinding() { mode = prior; }
     } value_binding(template_body_values);
+    auto ctor_initializers = child(body.source,Kind::CtorInitializer);
+    for (auto item = ast[ctor_initializers].first; item; item = ast[item].next) {
+        auto id = child(item,Kind::MemInitializerId);
+        bind_template_expression(ast[id].detail,fs);
+        bind_template_expression(ast[id].next,fs);
+    }
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);
     template_bound_bodies.put(source,unsigned(FactState::Success));

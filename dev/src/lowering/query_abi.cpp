@@ -59,6 +59,9 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         result = callee.kind == QueryKind::TypeValue ? abi.make(Kind::Conversion,abi_type(callee.type),0,0,0,args) :
             abi.make(Kind::Call,child(0),0,0,0,args); break;
     }
+    case QueryKind::Expansion: result = abi.make(Kind::ExprPack,child(0)); break;
+    case QueryKind::New: throw std::logic_error("new-expression ABI query is not yet represented");
+    case QueryKind::SizeofPack: throw std::logic_error("sizeof-pack ABI query not yet lowered");
     case QueryKind::Sizeof:
         result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
             abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_ALIGNOF ? "az" : "sz")); break;

@@ -101,8 +101,10 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         attach_scope(cs, owner);
         if (calls) {
             NodeId list = child(n, Kind::Bases);
+            expand_expression_list(list,owner);
+            std::uint32_t tail = 0;
             for (NodeId b = ast[list].first; b; b = ast[b].next) {
-                EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, owner, Lookup::Qualifier);
+                EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, expanded_scope(b,owner), Lookup::Qualifier);
                 if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
                 if (definitions && base && entities[base].class_info) complete_class(base);
                 if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
@@ -112,8 +114,10 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                 class_facts[info].aggregate = false;
                 NodeId access = child(b, Kind::Access);
                 Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
-                bases.push_back({base, class_facts[info].first_base, level});
-                class_facts[info].first_base = bases.size() - 1;
+                bases.push_back({base,0,level});
+                auto relation = bases.size()-1;
+                if (tail) bases[tail].next = relation; else class_facts[info].first_base = relation;
+                tail = relation;
                 add_edge(cs, entities[base].scope);
             }
         }

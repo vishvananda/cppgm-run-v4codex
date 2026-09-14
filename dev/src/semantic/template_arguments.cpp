@@ -41,7 +41,13 @@ ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, co
 }
 ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
 {
-    if (ast[n].kind == Kind::TypeId) return type_id(n,scope);
+    if (ast[n].kind == Kind::PackExpression)
+        return types.compound(TypeKind::PackExpansion,0,template_argument_node(ast[n].first,scope));
+    if (ast[n].kind == Kind::TypeId) {
+        auto type = type_id(n,scope);
+        auto d = ast[ast[n].first].next;
+        return child(d,Kind::ParameterPack) ? types.compound(TypeKind::PackExpansion,0,type) : type;
+    }
     // A dependent class alias may not have been recognizable to the parser.
     if (ast[n].kind == Kind::IdExpression) {
         auto binding = bind_template_name(ast[n].detail,scope);
@@ -86,6 +92,11 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
 EntityId Analyzer::bind_argument(ScopeId scope, EntityId parameter, ArgumentId arg)
 {
     auto e = make_entity(value_argument(arg) ? EntityKind::Enumerator : EntityKind::Alias,scope,entities[parameter].name,0);
+    if (argument_pack(arg)) {
+        entity_pack_arguments.put(e,arg); entities[e].parameter_pack = true;
+        entities[e].type = entities[parameter].type;
+        bind(scope,entities[e].name,e); return e;
+    }
     entities[e].type = argument_type(arg);
     if (value_argument(arg) && !dependent_argument(arg)) entities[e].constant = constants[query_value(argument_query(arg))];
     bind(scope,entities[e].name,e);

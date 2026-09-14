@@ -44,7 +44,7 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
-    if (definitions && decltype_form && active_template_scope) return dependent_decltype(n,s);
+    if (definitions && decltype_form && (active_template_scope || scopes[s].kind == ScopeKind::Template)) return dependent_decltype(n,s);
     if (calls) {
         if (decltype_form) ++unevaluated_depth;
         Expression e = expression(n, s);
@@ -125,6 +125,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (!calls) { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         return entities[e].constant;
     }
+    case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression_type(first, s);
         return Constant(types.fundamental(FT_UNSIGNED_LONG_INT), size(t, ast[n].op == KW_ALIGNOF));

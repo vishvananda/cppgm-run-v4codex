@@ -15,7 +15,17 @@ Node Ast::project_view(NodeId id) const
         result.first = projected(result.first,context); result.last = projected(result.last,context);
         result.next = projected(result.next,context); result.detail = projected(result.detail,context);
     }
+    if (auto first = expanded_first.get(id)) result.first = first-1;
+    if (auto last = expanded_last.get(id)) result.last = last-1;
+    if (auto next = expanded_next.get(id)) result.next = next-1;
     return result;
+}
+void Ast::expanded_children(NodeId parent, const std::vector<NodeId>& children)
+{
+    expanded_first.put(parent,children.empty() ? 1 : children.front()+1);
+    expanded_last.put(parent,children.empty() ? 1 : children.back()+1);
+    for (unsigned j = 0; j < children.size(); ++j)
+        expanded_next.put(children[j],j+1 == children.size() ? 1 : children[j+1]+1);
 }
 std::uint32_t Ast::source_region(NodeId root)
 {

@@ -62,6 +62,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/occurrence semantic/template_instantiat
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_declaration
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_specialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_variable
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_packs semantic/template_pack_expansion semantic/query_new
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition

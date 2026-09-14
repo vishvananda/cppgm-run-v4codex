@@ -88,6 +88,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         return id;
     }
     NodeId source = cursor;
+    expand_expression_list(source,s);
     bool aggregate = aggregate_type(t);
     bool braced = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::ParenInitializer;
     NodeId inner = braced ? ast[source].first : source;

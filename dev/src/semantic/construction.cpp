@@ -185,9 +185,10 @@ void Analyzer::constructor_actions(EntityId e)
     Index explicit_initializers;
     NodeId list = child(members[m].source, Kind::CtorInitializer);
     demand_region(list);
+    expand_expression_list(list,scope);
     for (NodeId n = ast[list].first; n; n = ast[n].next) {
         NodeId id = child(n, Kind::MemInitializerId);
-        EntityId field = resolve(ast[id].detail, entities[e].owner);
+        EntityId field = resolve(ast[id].detail, expanded_scope(n,entities[e].owner));
         if (!field) throw std::runtime_error("unknown constructor initializer");
         if (entities[field].kind == EntityKind::Alias) field = types[entities[field].type].entity;
         if (field == cls) {

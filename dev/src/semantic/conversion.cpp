@@ -338,6 +338,10 @@ Conversion Analyzer::boolean_conversion_value(Expression source, NodeId n)
 }
 void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
+    s = expanded_scope(n,s);
+    auto source = n;
+    while (ast[source].kind == Kind::Initializer) source = ast[source].first;
+    expand_expression_list(source,s);
     if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
     if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s, mode)) return;
     if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s, mode); return; }

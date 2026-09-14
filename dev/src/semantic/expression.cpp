@@ -22,6 +22,10 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(expressions[n].entity);
         return expressions[n];
     }
+    if (ast.nodes.occurrences[n].context) {
+        auto frame = template_type_contexts.get(ast.nodes.occurrences[n].context);
+        if (frame && substitution_frames[frame].overlay) s = expansion_scope(frame,s);
+    }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
     if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(result.entity);
@@ -43,6 +47,12 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     ++expression_work;
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
+    case Kind::SizeofPack: {
+        auto query = expression_query(n,s);
+        r.type = types.fundamental(FT_UNSIGNED_LONG_INT);
+        if (!query_fact(query).dependent) facts.edit(n).value = query_value(query);
+        return r;
+    }
     case Kind::New: return placement_new(n, s);
     case Kind::Delete: return delete_expression(n,s);
     case Kind::Literal: {
