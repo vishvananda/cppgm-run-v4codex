@@ -1,74 +1,64 @@
-# PA15 implementation handoff
+# PA15 checkpoint plan
 
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
-Last reviewed commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
+Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
-Target: **PA15 full-stage**, O0 typed LowIR. Implementation handoff only;
-whole-stage completion and independent review remain pending.
-Entry `19225b3d`: **128/177**; handoff: **166/177**, **11 failures**.
-**38 original failures resolved**, no previously passing fixture regressed,
-and coverage remains 177. All cluster-200 pack/literal fixtures now pass.
+Target: **PA15 full-stage**, O0 typed LowIR. The accumulated checkpoint audit is
+complete; implementation remains **166/177**, with the same **11 failures** as
+entry `db0686a3`. This does not authorize advancing to PA16.
 
-## Design and spec alignment
+The first review covers every commit from the stage base through `538cfcb0`
+(13 handoff commits and three audit commits), including combined source changes
+and their interactions. [Audit](audit.md) records the complete range, findings,
+architecture trace and ledger. [Verified evidence](../student.tests/pa15/checkpoint-evidence.json)
+pins the exact failing set, fixture trees, reviewed sources and check artifacts.
 
-| Owner | Data flow, complexity and validation |
+## Reviewed ownership and fixes
+
+Canonical typed arguments retain per-parameter pack boundaries and immutable
+substitution frames. Explicit function specializations and function-address
+selection now share typed signature deduction, retaining references, return
+types and explicit prefixes. ADL and local ABI traversal visit pack elements;
+class redeclarations preserve parameter-pack kind. Clearing a deduction binding
+repairs its hash probe cluster without invalidating unrelated entries.
+
+Signature substitution publishes expanded-list topology once. Scalar signature
+and body consumers bypass pack expansion and its temporary vectors/scans;
+empty packs retain their explicit empty-list fact. Source occurrences stay
+shared, completion/body/storage facts stay separately demanded, and lowering
+consumes typed semantic facts. The audit adds 11 native and 7 rejection controls
+plus a collision/removal control for the shared index.
+
+## Remaining required implementation
+
+| Broad group | Remaining obligations |
 |---|---|
-| Canonical packs and deduction | One interned argument slice per template parameter preserves empty and nonempty pack partitions. Explicit pack prefixes have a separate partial-selection index; completed specializations use complete arguments. Deduction consumes actual arguments, then signature substitution expands parameter types. Native controls exercise explicit-prefix extension, function targets and 64 equal-flattened partitions reused twice. |
-| Expansion and source occurrences | Cached source/typed-pattern pack discovery feeds immutable substitution frames, keyed by parent, parameter identities, bindings and lane. Nested expansions retain their own packs; lockstep lengths are checked. Source syntax stays shared; only changed child lists receive occurrence edges. Work follows source regions and produced lanes, without grammar replay or unrelated Cartesian scans. Empty, repeated, nested and unequal-length controls cover identity and rejection. |
-| Ordinary declaration/body consumers | Parameter, argument, brace, base and constructor lists consume those occurrences and typed facts. Complete/base constructor demand and reverse base destruction use existing lifetime/ABI owners. Native array, reference, multiple-base and constructor/destructor order controls validate execution. |
-| Unevaluated/default queries | Retained new-expression, expansion and sizeof-pack queries preserve allocation/constructor operands and complete pack sizes. Substitution checks signatures without demanding execution; default arguments retain their declaring environment. Placement-new defaults and sizeof inside nested expansion are exercised. |
-| Literal and output owners | Phase 7 retains spelling and decoded numeric values; semantic selection chooses cooked/raw/character-pack calls and ordinary conversions. Lowering uses normal call/result/lifetime facts. Typed call operands preserve f80 through the LowIR writer. Immutable string code units support checked integral subscripts. Native raw/cooked precedence, overflow, reference/class results, wide strings and floating controls pass. |
-| Lifetime and telemetry | New caches are flat and TU-owned with complete semantic keys; no process cache or textual phase transport. Counters observe existing source traversal, expansion lanes, frames and body transitions. Scalar parameter lists retain source edges and skip unused expansion indexes. |
+| Dependent matching and aliases | Four fixtures: dependent bool traits, dependent typename, alias-parameter overloads, and type-equivalent defaults. Establish selected-pattern and dependent alias facts; handout exclusions do not waive checked fixtures. |
+| Constant objects and initialization/storage | Six fixtures: aggregate braced casts, dependent conversion operators, constexpr locals after qualified types, static constexpr reference replay/call initializers, and stale function initialization output. Keep constant execution, initializer recipes and storage demand separate. |
+| Ordinary source validation | One fixture: unused ordinary member `static_assert`. Validate ordinary bodies independently of emission, including explicit-class members; do not eagerly instantiate unrelated template bodies. |
 
-## Remaining implementation and handoff boundary
+Keep each group open through its dependent consumers and rejection controls.
+The three earlier handoffs had useful broad ownership boundaries, but splitting
+selection from packs without testing their composition missed pack specialization,
+ADL and target-signature bugs. Separate scalar performance follow-ups also left
+redundant work in the same parameter owner. Avoid another handoff until related
+consumers and their interactions have been checked; use no progress quota.
 
-| Required group | Remaining fixture stems / missing owner |
-|---|---|
-| Class partial matching and dependent aliases | `dependent-bool-trait-nontype-argument`, `dependent-typename`, `function-template-dependent-alias-parameter-overloads`, `type-equivalence-default-argument`: selected-pattern substitution and dependent alias candidate facts. |
-| Constant objects, initialization and storage | `aggregate-functional-braced-cast`, `nontype-conversion-operator-dependent-template-id`, `qualified-type-before-constexpr-local`, `reference-static-constexpr-member-replay`, `static-constexpr-member-call-initializer`, `stale-function-template-instantiation-lookup`: constant execution/binding and initializer/storage contracts; the stale-function mismatch is in initialization/LowIR, not function selection. |
-| Ordinary source obligations | `unused-member-function-static-assert-bad`: ordinary member validation must be independent of emission demand, including explicit-class member bodies. Eager lowering would violate that boundary. |
+## Validation and stage-scoped acceptance
 
-The pack/literal group was extended through declarations, nested scopes,
-constructors/destructors, default new queries, literal result lifetimes,
-string-element constants and explicit-prefix deduction. Its contract fixtures
-and personal execution/rejection controls pass. Further changes need class
-partial-pattern matching, constant-object execution/storage, or an ordinary-body
-validation owner; changing pack partitions or literal selection cannot establish
-those facts. This is the concrete implementation boundary, not a progress quota.
-All remaining groups are required; none is reclassified as an audit question.
+`make test-pa15`: **166/177**, exit 2, identical 11 entry failures.
+`make test-report-through-pa14`: **1935/1935**, exit 0.
+`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src`: **pass**, the same
+three inherited header warnings. All existing personal suites and the new audit
+controls pass. Fixture coverage, references, bundle, comparison rules and
+attribution are unchanged.
 
-Independent review remains open for whole-stage correctness/spec conformance,
-complete keys, source sharing, demand/invalidation boundaries and performance.
-Neither review marker advances. No reference, fixture, bundle, harness or
-comparison rule changed.
-
-## Validation, performance and ledger
-
-Required checks: `make test-pa15` **166/177**, exit 2 with strict reduction;
-`make test-report-through-pa14` **1935/1935 pass**; file audit **pass** with the
-same three inherited header warnings. Personal suites explicitly run:
-**27 native + 8 rejection pack/literal controls**, **24 native + 13 rejection
-specialization controls**, **26 value** and **10 constant** groups.
-
-[Performance evidence](../student.tests/pa15/pack-performance.md) records frozen
-A/A and ABBA latency/RSS, native runtime/text, output parity and linear work
-scaling. The first campaign exposed avoidable scalar-list overhead; the final
-campaign follows its removal. All observations remain in
-`$RALPH_ARTIFACT_DIR/pa15-packs/`. PA15/O0 supplies no numerical cost ceiling or
-optional optimization in this increment. Historical self-selected diagnostic
-gates do not override stage-scoped acceptance; correctness, complexity and
-coverage remain mandatory. Later native optimization/self-hosting limits retain
-their own stages. Prior [scalar](../student.tests/pa15/performance.md) and
-[specialization](../student.tests/pa15/specialization-performance.md) evidence is preserved.
-
-| Increment | Commit | PA15 |
-|---|---|---:|
-| Canonical packs and typed list expansion | `53f1afa9` | 162/177 |
-| Literal calls, string constants and explicit pack prefixes | `768e31f0` | 166/177 |
-| Remove unnecessary scalar-list expansion edges | `992b1170` | 166/177 |
-
-[Handoff ledger](../student.tests/pa15/pack-handoff.json) lists the exact original
-failures, resolved/remaining sets, unchanged fixture trees, check hashes and
-performance artifacts. [Verifier](../student.tests/pa15/verify_packs.py) checks
-those artifacts, counter scaling and preserved review markers. This returns
-control for Ralph's scheduled review; it does not certify the whole assignment.
+[Performance](audit-performance.md) preserves 2,380 invocations across 11 frozen
+campaigns, including A/A, ABBA, compiler latency/RSS, runtime/text and counters.
+Measured compiler tip `034e3b91` has exactly the reviewed tip's `dev` tree.
+The avoidable scalar work was removed. PA15/O0 mandates correctness and bounded
+work/lifetimes, with no numerical latency/RSS/text ceiling or optional optimizer.
+Historical self-selected targets remain diagnostic; all measurements and actual
+requirements remain intact. Native optimization, allocation and self-hosting
+keep their later-stage ownership. Finish all remaining PA15 fixtures and the
+root through report before advancing.
