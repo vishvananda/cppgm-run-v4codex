@@ -31,6 +31,21 @@ GOOD={
  'unused_body': 'template<class T>struct A{void f()noexcept(sizeof(T)>0){typename T::missing x;}};static_assert(noexcept(((A<int>*)0)->f()),"");',
  'redeclaration': 'void f()noexcept(sizeof(int)>0);void f()noexcept(true);static_assert(noexcept(f()),"");',
  'direct_specialized': 'template<class T>void f()noexcept;static_assert(noexcept(f<int>()),"");',
+ 'contextual_conversion': 'struct A{constexpr A(){}constexpr explicit operator bool()const{return true;}};void f()noexcept(A());static_assert(noexcept(f()),"");',
+ 'contextual_false': 'struct A{constexpr A(){}constexpr explicit operator bool()const{return false;}};void f()noexcept(A());static_assert(!noexcept(f()),"");',
+ 'aggregate_omitted_ctor': 'struct A{A();};struct B{A a;};static_assert(!noexcept(B{}),"");',
+ 'aggregate_safe_ctor': 'struct A{A()noexcept;};struct B{A a;};static_assert(noexcept(B{}),"");',
+ 'nested_aggregate_omitted': 'struct A{A();};struct B{A a[2];};struct C{B b;};static_assert(!noexcept(C{}),"");',
+ 'nsdmi_conversion': 'struct A{A()noexcept;operator int();};struct B{int n=A();B()=default;};static_assert(!noexcept(B()),"");',
+ 'nsdmi_aggregate': 'struct A{A();};struct B{A a;};struct C{B b{};C()=default;};static_assert(!noexcept(C()),"");',
+ 'placement_allocation': 'void*operator new(unsigned long,void*)noexcept;struct A{A()noexcept;~A()noexcept(false);};static_assert(noexcept(new ((void*)0) A()),"");',
+ 'placement_throwing_ctor': 'void*operator new(unsigned long,void*)noexcept;struct A{A();};static_assert(!noexcept(new ((void*)0) A()),"");',
+ 'delete_safe': 'struct A{~A()noexcept;};static_assert(noexcept(delete (A*)0),"");',
+ 'delete_throwing': 'struct A{~A()noexcept(false);};static_assert(!noexcept(delete (A*)0),"");',
+ 'dependent_allocation': 'void*operator new(unsigned long,void*)noexcept;struct A{A()noexcept;~A()noexcept(false);};template<class T>constexpr bool f(){return noexcept(new ((void*)0) T());}static_assert(f<A>(),"");',
+ 'inherited_ctor': 'struct A{A(int)noexcept;};struct B:A{using A::A;};static_assert(noexcept(B(1)),"");',
+ 'inherited_ctor_member': 'struct A{A(int)noexcept;};struct M{M();};struct B:A{using A::A;M m;};static_assert(!noexcept(B(1)),"");',
+ 'inherited_deferred_ctor': 'template<class T>struct A{A(int)noexcept(sizeof(T)>0);};struct B:A<int>{using A<int>::A;};static_assert(noexcept(B(1)),"");',
 }
 BAD={'invalid_operand':'static_assert(noexcept(unknown()),"");',
  'nonconstant_spec':'int f();void g()noexcept(f());',
@@ -38,6 +53,8 @@ BAD={'invalid_operand':'static_assert(noexcept(unknown()),"");',
 BAD.update({'conflicting_deferred':'struct A{void f()noexcept(sizeof(int)>0);};void A::f()noexcept(false){}',
  'invalid_unused_member_spec':'struct A{void f()noexcept(unknown());};',
  'prototype_runtime_value':'void f(int x)noexcept(x);'})
+BAD.update({'nonconstexpr_conversion_receiver':'struct A{A(){}constexpr explicit operator bool()const{return true;}};void f()noexcept(A());',
+ 'effectful_conversion_receiver':'int x;struct A{constexpr A(){++x;}constexpr explicit operator bool()const{return true;}};void f()noexcept(A());'})
 failed=[]
 with tempfile.TemporaryDirectory(prefix='pa16-noexcept-') as td:
  for name,source in {**GOOD,**BAD}.items():

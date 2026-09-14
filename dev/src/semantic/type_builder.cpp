@@ -150,6 +150,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
 {
     if (facts[n].type) return facts[n].type;
     NodeId specs = ast[n].first;
+    if (calls && spec_has(specs,KW_CONSTEXPR)) throw std::runtime_error("constexpr parameter declaration");
     NodeId d = ast[specs].next;
     TypeId t = declarator(d, specifiers(specs, s), s);
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
@@ -266,8 +267,14 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
         entities[e].stable_prefix = true;
     }
     if (entities[e].kind == EntityKind::Function) {
-        entities[e].constexpr_function |= spec_has(specs,KW_CONSTEXPR) ||
+        bool constant = spec_has(specs,KW_CONSTEXPR) ||
             spec_has(child(source,Kind::MemberSpecifiers),KW_CONSTEXPR);
+        if (calls && !entities[e].specialization && !entities[e].template_member) {
+            auto known = constexpr_declarations.get(e);
+            if (known && known != (constant ? 2U : 1U)) throw std::runtime_error("inconsistent constexpr declaration");
+            constexpr_declarations.put(e,constant ? 2 : 1);
+        }
+        entities[e].constexpr_function |= constant;
         entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
         entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE) || entities[e].constexpr_function;
     }
@@ -290,6 +297,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     bool alias = spec_has(specs, KW_TYPEDEF);
     bool function = types[t].kind == TypeKind::Function;
+    if (calls && spec_has(specs,KW_CONSTEXPR) && (alias || (!function && owner == s && scopes[owner].kind == ScopeKind::Class && !spec_has(specs,KW_STATIC))))
+        throw std::runtime_error("invalid constexpr declaration specifier");
     bool block_extern = !alias && !function && spec_has(specs,KW_EXTERN) &&
         owner == s && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class;
     if (block_extern) {

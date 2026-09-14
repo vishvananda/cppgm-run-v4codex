@@ -77,8 +77,8 @@ bool Analyzer::constexpr_constructor(EntityId e)
     auto cls = scopes[entities[e].owner].entity;
     require_destructor_class(cls);
     constexpr_constructor_facts.put(e,unsigned(BooleanFact::Active));
-    // Classification selects only required subobject declarations. It must not
-    // request their bodies, emission, layout or construction action plans.
+    // Classification selects required subobject declarations, reusing transfer
+    // facts where needed. It never requests member bodies or emission.
     ++unevaluated_depth;
     try {
         ++constexpr_validity_work;
@@ -96,8 +96,11 @@ bool Analyzer::constexpr_constructor(EntityId e)
         };
         bool valid = true;
         auto info = entities[cls].class_info;
-        for (auto b = class_facts[info].first_base; b; b = bases[b].next)
-            valid &= check(entities[bases[b].base].type,false);
+        for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+            auto inherited = member.inherited_constructor;
+            bool inherited_base = inherited && bases[b].base == scopes[entities[inherited].owner].entity;
+            valid &= inherited_base ? constexpr_constructor(inherited) : check(entities[bases[b].base].type,false);
+        }
         for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
             auto field = declarations[d].entity;
             if (nonstatic_field(field) && entities[field].owner == entities[cls].scope) {
@@ -180,7 +183,12 @@ void Analyzer::check_constexpr_class(EntityId cls)
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         auto e = declarations[d].entity;
         if (entities[e].kind != EntityKind::Function || entities[e].owner != entities[cls].scope || !entities[e].constexpr_function) continue;
-        check_constexpr_signature(e);
+        if (definition_owner(cls).specialization) continue;
+        // Return/parameter literal requirements apply to definitions. The
+        // nonstatic member's owner is constrained even on a declaration.
+        if (!constructor_member(e) && !entities[e].is_static && !literal_type(entities[cls].type))
+            throw std::runtime_error("constexpr member requires a literal class");
+        if (members[entities[e].member_info].synthetic || members[entities[e].member_info].deleted) check_constexpr_signature(e);
         if (members[entities[e].member_info].synthetic) check_constexpr_constructor(e);
     }
 }

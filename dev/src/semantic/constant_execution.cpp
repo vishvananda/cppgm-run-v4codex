@@ -130,9 +130,23 @@ bool Analyzer::constant_receiver_type(TypeId type)
 {
     if (!class_value(type)) return false;
     auto cls = types[type].entity;
-    return class_facts[entities[cls].class_info].aggregate &&
-        !class_facts[entities[cls].class_info].first_base && empty_class(type) &&
+    return !class_facts[entities[cls].class_info].first_base && empty_class(type) &&
         !polymorphic(cls) && trivial_destructor(type) && !(types[type].cv & 2);
+}
+bool Analyzer::constant_empty_construction(EntityId ctor)
+{
+    if (!constructor_member(ctor) || types[entities[ctor].type].count) return false;
+    auto member = members[entities[ctor].member_info];
+    if (member.synthetic) return constexpr_constructor(ctor);
+    if (!entities[ctor].constexpr_function) return false;
+    // The existing receiver domain has no subobject state. Admit a source
+    // constructor only after checking its definition and proving it performs
+    // no initialization or body work; stateful construction needs object values.
+    constant_body(ctor);
+    member = members[entities[ctor].member_info];
+    if (entities[ctor].body_state != FactState::Success || member.action_count) return false;
+    auto body = entities[ctor].body;
+    return ast[body].kind == Kind::Compound && !ast[body].first;
 }
 std::uint32_t Analyzer::constant_query_object(QueryId id)
 {
@@ -142,10 +156,8 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
     if (q.kind != QueryKind::Call || q.count != 1) return 0;
     auto fact = query_fact(id); auto type = fact.expression.type;
     if (!class_value(type) || !fact.selected || !constructor_member(fact.selected)) return 0;
-    // The PA15 object subset is stateless literal temporaries with implicit
-    // construction. Nonempty objects/constructor execution belong to PA16.
     std::uint32_t result = 0;
-    if (members[entities[fact.selected].member_info].synthetic && constant_receiver_type(type)) {
+    if (constant_receiver_type(type) && constant_empty_construction(fact.selected)) {
         result = constant_receivers.size(); constant_receivers.push_back({type,0,id});
     }
     constant_query_receivers.put(id,result+1); return result;
@@ -157,7 +169,8 @@ std::uint32_t Analyzer::constant_node_object(NodeId n)
     auto x = expressions[n];
     std::uint32_t result = 0;
     if (ast[n].kind == Kind::Call && !ast[ast[ast[n].first].next].first &&
-        (x.form == ExpressionForm::Construction || x.form == ExpressionForm::ListValue) && constant_receiver_type(x.type)) {
+        (x.form == ExpressionForm::Construction || x.form == ExpressionForm::ListValue) && constant_receiver_type(x.type) &&
+        (x.form == ExpressionForm::ListValue ? aggregate_type(x.type) : constant_empty_construction(facts[n].entity))) {
         result = constant_receivers.size(); constant_receivers.push_back({x.type,n,0});
     }
     constant_node_receivers.put(n,result+1); return result;

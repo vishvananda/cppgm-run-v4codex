@@ -27,6 +27,9 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     if (!pointer(result) || !fundamental(types[result].child,FT_VOID))
         throw std::runtime_error("allocation function must return void pointer");
     TypeQueryFact fact; fact.expression.type = types.compound(TypeKind::Pointer,allocated);
-    fact.selected = choice.entity; return fact;
+    fact.selected = choice.entity;
+    fact.expression.conversions = this->conversions.size(); fact.expression.count = conversions.size();
+    this->conversions.insert(this->conversions.end(),conversions.begin(),conversions.end());
+    return fact;
 }
 } }

@@ -178,7 +178,8 @@ private:
     void check_constexpr_constructor(EntityId function);
     void check_constexpr_class(EntityId cls);
     TypeId constexpr_member_type(TypeId type, NodeId specs, NodeId source, NodeId declarator, ScopeId owner);
-    Index literal_type_facts, constexpr_constructor_facts, constexpr_signature_facts;
+    Index literal_type_facts, constexpr_constructor_facts, constexpr_signature_facts, constexpr_declarations;
+    bool constant_empty_construction(EntityId constructor);
     std::size_t constexpr_validity_work = 0;
     Index class_initializer_index, class_return_index, function_return_index;
     Index reference_temporaries;
@@ -326,10 +327,12 @@ private:
     bool implicit_destructor_nonthrowing(EntityId cls);
     bool type_destructor_nonthrowing(TypeId type);
     bool expression_nonthrowing(NodeId node);
-    bool query_nonthrowing(QueryId query);
+    bool query_nonthrowing(QueryId query, bool temporary = true);
     bool conversion_nonthrowing(const Conversion& conversion);
+    bool initializer_nonthrowing(std::uint32_t plan);
+    bool list_nonthrowing(std::uint32_t plan);
     bool default_constructor_nonthrowing(EntityId function);
-    Index expression_exception_facts, query_exception_facts, default_exception_facts;
+    Index expression_exception_facts, query_exception_facts, default_exception_facts, list_exception_facts, initializer_exception_facts;
     std::size_t exception_work = 0;
     void require_destructor_class(EntityId cls);
     bool variant_destruction_effects(TypeId t);

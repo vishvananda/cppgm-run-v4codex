@@ -243,6 +243,8 @@ bool Analyzer::variant_destruction_effects(TypeId t)
 bool Analyzer::function_nonthrowing(EntityId e)
 {
     if (!e) return false;
+    if (constructor_member(e) && members[entities[e].member_info].inherited_constructor)
+        return default_constructor_nonthrowing(e);
     demand_exception_specification(e);
     auto spec = entities[e].exception_spec & 3;
     if (spec) return spec == 1 || spec == 3;

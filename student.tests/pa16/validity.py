@@ -27,6 +27,8 @@ GOOD = {
  'constexpr_deleted': 'struct A{int x;constexpr A()=delete;};',
  'nonliteral_ctor_owner': 'struct A{int x;constexpr A():x(3){}~A(){}};',
  'unnamed_bitfield': 'struct A{int:2;int x;constexpr A():x(3){}};',
+ 'forward_result': 'struct A;struct B{static constexpr A f();};struct A{int x;};constexpr A B::f(){return A{1};}',
+ 'forward_parameter': 'struct A;struct B{static constexpr int f(A);};struct A{int x;};constexpr int B::f(A){return 1;}',
 }
 BAD = {
  'void': 'constexpr void f(){}',
@@ -53,6 +55,11 @@ BAD = {
  'mutate_implicit_const': 'struct A{int x;constexpr int f(){return ++x;}};',
  'fixed_template_return': 'struct A{A();};template<class T>constexpr A f(){return A();}',
  'fixed_template_parameter': 'struct A{A();};template<class T>constexpr int f(A){return 1;}',
+ 'nonstatic_constexpr': 'struct A{constexpr int x=1;};',
+ 'parameter_specifier': 'int f(constexpr int x){return x;}',
+ 'typedef_specifier': 'constexpr typedef int I;',
+ 'removed_constexpr': 'constexpr int f();int f(){return 1;}',
+ 'added_constexpr': 'int f();constexpr int f(){return 1;}',
 }
 failed=[]
 with tempfile.TemporaryDirectory(prefix='pa16-validity-') as td:
