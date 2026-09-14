@@ -1,0 +1,357 @@
+{
+  "stage": "pa16",
+  "goal": "Ralph loop 37 implementation handoff",
+  "stage_base": "438d56b164600f4fa19d25dcb5f09a76e2a79776",
+  "last_reviewed_commit": "438d56b164600f4fa19d25dcb5f09a76e2a79776",
+  "implementation_commit": "7484f22b934b646c3880c3d46a51d62a7b2e094d",
+  "boundary": "Completed arithmetic by-value execution and immutable scalar array projections. Object/reference/lifetime, declaration validity, noexcept, and storage/lowering groups remain implementation. Independent whole-stage review remains pending.",
+  "checks": {
+    "priorThroughTests": {
+      "command": "make test-report-through-pa15",
+      "exit_code": 0,
+      "passed": 2112,
+      "total": 2112
+    },
+    "stageTests": {
+      "command": "make test-pa16",
+      "exit_code": 2,
+      "passed": 63,
+      "total": 154
+    },
+    "stageProgress": {
+      "passed": true,
+      "baseline_failed": 109,
+      "current_failed": 91,
+      "fixed": 18,
+      "new_failures": 0
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa16 --paths dev/src",
+      "exit_code": 0,
+      "inherited_warnings": 3
+    }
+  },
+  "compiler_sha256": "a6e376110c306c5a5b4cf73dfc027fac34966367ef4c155a93a7770577059543",
+  "source_files": [
+    {
+      "path": "dev/frontend_source_sets.mk",
+      "sha256": "2e6ce5642888b85995dc6a960716418844f513f0f6bb419d7460adc651c0c59f"
+    },
+    {
+      "path": "dev/src/lowering/expression.cpp",
+      "sha256": "2fe9a70f10835ca4e054cef20f1b68eb24b5093c9582d3e282c54b7256b27b09"
+    },
+    {
+      "path": "dev/src/lowering/initialization.cpp",
+      "sha256": "9929b00edf38257e19c66f3c692739d4c913d899719ae19ba5fbb939d82882a7"
+    },
+    {
+      "path": "dev/src/semantic/analyzer.h",
+      "sha256": "05093bad0cad65e6070418482d63a5a7d5fa8a9774645d6de8108be00896e8c6"
+    },
+    {
+      "path": "dev/src/semantic/constant.cpp",
+      "sha256": "0fbbcfc97be9ae73c3cec811135fd902018be6cb2fe8bfb6a4f03eacb835dd3d"
+    },
+    {
+      "path": "dev/src/semantic/constant_array.cpp",
+      "sha256": "1ca14680823afd6c8546d28ebea481821959004c43c5b1c2df48ed8175de0c43"
+    },
+    {
+      "path": "dev/src/semantic/constant_execution.cpp",
+      "sha256": "c6742570e41183db6e9d689098d4f3b7f248d4f96e9a4d2a6c987d49b0a45276"
+    },
+    {
+      "path": "dev/src/semantic/constant_floating.cpp",
+      "sha256": "102f8a017c596b457b0b3e6c5ec11e8e4a973fd2ab072c1c1ab5ade01adbbe34"
+    },
+    {
+      "path": "dev/src/semantic/constant_statements.cpp",
+      "sha256": "4592a4d53a7d57c1fdad35a90e541689368880d0027fc8d66ba369854a9e2860"
+    },
+    {
+      "path": "dev/src/semantic/declaration.cpp",
+      "sha256": "b3206f8747a75e014193cbca91e9638f5ba2282f29951451c531bf3ec1157ef6"
+    },
+    {
+      "path": "dev/src/semantic/destruction.cpp",
+      "sha256": "8a8953db93326bfb6aca39295433d741e8196b73bf590bc86e752b7b44e537c6"
+    },
+    {
+      "path": "dev/src/semantic/lookup.cpp",
+      "sha256": "7604f325f94093e13bf840b6a692f9b9a49f16a48c26a6468d036fe5b79bef62"
+    },
+    {
+      "path": "dev/src/semantic/output.cpp",
+      "sha256": "61dc096131f7a8e2351791b7d98a1ef51942754e7531dc01c40437111457cb0a"
+    },
+    {
+      "path": "dev/src/semantic/static_initializer.cpp",
+      "sha256": "7ade7d68fddde02c16d3fd635a70e92b3b14c5d7ce11110d853c918443a16c4e"
+    },
+    {
+      "path": "dev/src/semantic/template_checks.cpp",
+      "sha256": "006506a464fdba2fc3901d212c7f1ef695317b7a8e33bcee3e0ff96f529a1f79"
+    },
+    {
+      "path": "dev/src/semantic/template_value_facts.cpp",
+      "sha256": "d9e2ff601d57b490027ca1482f6f2f407e07b05a00b12699a29efa4be462c6d4"
+    },
+    {
+      "path": "dev/src/semantic/type_builder.cpp",
+      "sha256": "02c834422db348bd8276d3f189e993485793299a51827808cd13d3576dd39815"
+    },
+    {
+      "path": "dev/src/syntax/class_parser.cpp",
+      "sha256": "ac33ce07f9d654ffdb295a9b58f8b67ad264d77932116ae06a08f3651220d12d"
+    },
+    {
+      "path": "dev/src/syntax/names.cpp",
+      "sha256": "54f7e2783da3b87a1b4ff3f7447cb580cad98fb836c4f19dea7c27e4d5511575"
+    },
+    {
+      "path": "dev/src/syntax/prediction.cpp",
+      "sha256": "dfaa8f19ae218f47e03e51284faa9608c4c42ef2253a8009ae668551f6c871bc"
+    },
+    {
+      "path": "student.tests/pa16/scalar_execution.py",
+      "sha256": "c97cc0ffddd41121bd202dc9e0145dfb369e8251e4836823b12575602ced6516"
+    },
+    {
+      "path": "student.tests/pa16/floating.py",
+      "sha256": "6b0fb6f890cafeeb73ef3fb9bc531c515d0e309181e4106e7d1f1e904016029f"
+    },
+    {
+      "path": "student.tests/pa16/benchmark.py",
+      "sha256": "32b2e12a0ffc123b43c62827ebce6a079eb96df0f480352f49208ee63ea8b688"
+    },
+    {
+      "path": "student.tests/pa16/verify.py",
+      "sha256": "c40d53969b91f88848ae73fc39f15eeecf728d096a6b28ec5ac8f5a324c35f16"
+    },
+    {
+      "path": "student.tests/pa10/benchmark.py",
+      "sha256": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a"
+    },
+    {
+      "path": "pa16/plan.md",
+      "sha256": "757f22596716f8c0b53a3aca065dacd224d3e39faf3f41ad38dfd21309b960da"
+    },
+    {
+      "path": "pa16/performance.md",
+      "sha256": "655d04651d48fc193358590d00692cb00e6d9ab2140ccd700a920ac6cdb3c6f8"
+    }
+  ],
+  "logs": {
+    "baseline": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/baseline.log",
+      "sha256": "656ac91bf0a664aace1f49ea43029223e177c3262fc376f87995749f104a013e"
+    },
+    "stage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/stage-serial.log",
+      "sha256": "da8b0112cffc0cedbf1c92711507ac8a8d86c6be1713526451c0808b0d7be262"
+    },
+    "prior": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-serial.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f"
+    },
+    "audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/audit-handoff.log",
+      "sha256": "abbc0b19c03c522f1d1a52698772f0f70c5f72f3c55e024183371bc62b6cde1c"
+    },
+    "through16": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/through16.log",
+      "sha256": "5e482382a0d29e3710896f438b23dc9859a18a53d3e5e0559a3411270c75f7e4"
+    },
+    "scalar": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/scalar-handoff.log",
+      "sha256": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506"
+    },
+    "floating": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/floating-handoff.log",
+      "sha256": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c"
+    },
+    "prior_execution": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-execution-handoff.log",
+      "sha256": "dcb9eb937ac99b88b02f981fbeacf881b930e627e93d7c0b18eed8c86b70c130"
+    },
+    "prior_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-audit-handoff.log",
+      "sha256": "e531d8ef50a44349e1454e4d34c85a8d6bada68544b6e5b6b99e361866f86b3b"
+    }
+  },
+  "fixed_tests": [
+    "pa16/tests/general/100-constexpr-do-while.t",
+    "pa16/tests/general/100-constexpr-for-condition-declaration.t",
+    "pa16/tests/general/100-constexpr-for-loop.t",
+    "pa16/tests/general/100-constexpr-if-condition-declaration.t",
+    "pa16/tests/general/100-constexpr-local-and-if.t",
+    "pa16/tests/general/100-constexpr-while-break-continue.t",
+    "pa16/tests/general/100-constexpr-while-loop.t",
+    "pa16/tests/general/200-constexpr-floating-global-from-function-call.t",
+    "pa16/tests/general/200-constexpr-floating-local-if.t",
+    "pa16/tests/general/200-constexpr-floating-static-assert-function-call.t",
+    "pa16/tests/general/200-floating-initializer-target-rounding.t",
+    "pa16/tests/general/200-qualified-function-call-coexists-with-later-tag.t",
+    "pa16/tests/general/200-unsigned-integral-to-long-double-constant-conversion.t",
+    "pa16/tests/general/300-nonconstant-constexpr-call-dynamic-init.t",
+    "pa16/tests/general/300-static-constexpr-floating-member-lookup.t",
+    "pa16/tests/general/400-constexpr-floating-suffix-literals.t",
+    "pa16/tests/general/500-static-constant-definition-reinitializer-bad.t",
+    "pa16/tests/spec/200-mixed-integral-float-comparison.t"
+  ],
+  "remaining_failures": [
+    "pa16/tests/general/100-constexpr-function-pointer-reference-call.t",
+    "pa16/tests/general/100-constexpr-reference-unknown-value.t",
+    "pa16/tests/general/100-inline-namespace-aggregate-member-value.t",
+    "pa16/tests/general/100-noexcept-in-suppressed-specialization.t",
+    "pa16/tests/general/100-recursive-dependent-noexcept-deferred.t",
+    "pa16/tests/general/200-constexpr-base-subobject-crtp-roundtrip.t",
+    "pa16/tests/general/200-constexpr-callable-parameter-shadows-function.t",
+    "pa16/tests/general/200-constexpr-copy-empty-static-reference.t",
+    "pa16/tests/general/200-constexpr-overloaded-assignment-reference.t",
+    "pa16/tests/general/200-defaulted-constructor-noexcept-default-argument.t",
+    "pa16/tests/general/200-noexcept-defaulted-constructor-static-assert.t",
+    "pa16/tests/general/200-noexcept-static-assert-function-call.t",
+    "pa16/tests/general/200-noexcept-user-provided-constructor-static-assert.t",
+    "pa16/tests/general/300-bad-constexpr-aggregate-runtime-member.t",
+    "pa16/tests/general/300-class-template-static-reference-dynamic-initialization.t",
+    "pa16/tests/general/300-constexpr-aggregate-array.t",
+    "pa16/tests/general/300-constexpr-base-copy-constructor-init.t",
+    "pa16/tests/general/300-constexpr-class-base-pack-constructor.t",
+    "pa16/tests/general/300-constexpr-constructor-instantiating-initializer.t",
+    "pa16/tests/general/300-constexpr-constructor.t",
+    "pa16/tests/general/300-constexpr-defaulted-constructor.t",
+    "pa16/tests/general/300-constexpr-delegating-constructor-use.t",
+    "pa16/tests/general/300-constexpr-hidden-friend-converting-argument.t",
+    "pa16/tests/general/300-constexpr-member-implicit-const.t",
+    "pa16/tests/general/300-constexpr-noexcept-owned-facts.t",
+    "pa16/tests/general/300-constexpr-object-reference-binding.t",
+    "pa16/tests/general/300-constexpr-protected-base-constructor.t",
+    "pa16/tests/general/300-constexpr-recursive-arrow-member-call.t",
+    "pa16/tests/general/300-constexpr-repeated-base-subobject-call-key.t",
+    "pa16/tests/general/300-constexpr-template-aggregate-subscript-member.t",
+    "pa16/tests/general/300-destructor-noexcept-completed-class.t",
+    "pa16/tests/general/300-dynamic-local-static-scalar-array-init.t",
+    "pa16/tests/general/300-function-local-static-array-guard.t",
+    "pa16/tests/general/300-function-local-static-scalar-first-use.t",
+    "pa16/tests/general/300-function-local-static-scalar.t",
+    "pa16/tests/general/300-function-noexcept-array-reference-return.t",
+    "pa16/tests/general/300-local-static-class-factory-call-init.t",
+    "pa16/tests/general/300-local-static-class-reference-call-init.t",
+    "pa16/tests/general/300-local-static-constant-reference-initialization.t",
+    "pa16/tests/general/300-local-static-constant-scalar-initialization.t",
+    "pa16/tests/general/300-local-static-declaration-identity.t",
+    "pa16/tests/general/300-nested-function-template-local-static-array.t",
+    "pa16/tests/general/300-static-constexpr-call-demand.t",
+    "pa16/tests/general/300-static-constexpr-pointer-member-lvalue-to-rvalue.t",
+    "pa16/tests/general/400-automatic-constexpr-array-template.t",
+    "pa16/tests/general/400-constexpr-class-bool-conversion.t",
+    "pa16/tests/general/400-constexpr-dependent-nonliteral-result-instantiation.t",
+    "pa16/tests/general/400-constexpr-derived-this-base-reference.t",
+    "pa16/tests/general/400-constexpr-function-aggregate-member-nttp.t",
+    "pa16/tests/general/400-constexpr-implicit-default-init.t",
+    "pa16/tests/general/400-constexpr-local-default-object-member-call.t",
+    "pa16/tests/general/400-constexpr-method.t",
+    "pa16/tests/general/400-constexpr-mutable-static-object-address.t",
+    "pa16/tests/general/400-constexpr-noexcept-decltype-static-assert.t",
+    "pa16/tests/general/400-constexpr-overloaded-unary-member-operator.t",
+    "pa16/tests/general/400-constexpr-pointer-truthiness.t",
+    "pa16/tests/general/400-constexpr-polymorphic-global-vptr-init.t",
+    "pa16/tests/general/400-constexpr-reference-parameter-address-identity.t",
+    "pa16/tests/general/400-constexpr-reference-parameter-temporary-address-bad.t",
+    "pa16/tests/general/400-constexpr-reference-static-object-alias.t",
+    "pa16/tests/general/400-constexpr-return-operator-conversion.t",
+    "pa16/tests/general/400-constexpr-static-array-pointer-loop-increment.t",
+    "pa16/tests/general/400-constexpr-subobject-pointer-identity.t",
+    "pa16/tests/general/400-constexpr-temporary-functor-member-call.t",
+    "pa16/tests/general/400-constexpr-validation.t",
+    "pa16/tests/general/400-dependent-class-prvalue-default-bool-nttp.t",
+    "pa16/tests/general/400-local-static-dynamic-destructor.t",
+    "pa16/tests/general/400-local-static-local-class-array-init.t",
+    "pa16/tests/general/400-own-static-constexpr-member-call-nttp.t",
+    "pa16/tests/general/400-pack-expanded-static-constexpr-array-member.t",
+    "pa16/tests/general/400-template-constexpr-conversion-static-member.t",
+    "pa16/tests/general/400-typedef-qualified-static-constexpr-call-nttp.t",
+    "pa16/tests/general/500-constexpr-member-owner-nonliteral-bad.t",
+    "pa16/tests/general/500-constexpr-second-base-nonliteral-bad.t",
+    "pa16/tests/general/500-constexpr-variable-nonliteral-bad.t",
+    "pa16/tests/spec/100-constexpr-signed-widening-comparison.t",
+    "pa16/tests/spec/300-constexpr-callable-object-and-arrow.t",
+    "pa16/tests/spec/300-constexpr-const-by-value-template-parameter.t",
+    "pa16/tests/spec/300-constexpr-contextual-bool-operators.t",
+    "pa16/tests/spec/300-constexpr-forwarded-user-conversion-in-member-initializer.t",
+    "pa16/tests/spec/300-constexpr-function-template-operator-call.t",
+    "pa16/tests/spec/300-constexpr-overloaded-logical-operators.t",
+    "pa16/tests/spec/300-constexpr-pointer-member-call-null-conditional.t",
+    "pa16/tests/spec/300-static-constexpr-constructor-class-array-member.t",
+    "pa16/tests/spec/400-constexpr-function-and-constructor.t",
+    "pa16/tests/spec/400-constexpr-pointer-beyond-one-past-bad.t",
+    "pa16/tests/spec/400-constexpr-reference-parameter-conversion-constructor.t",
+    "pa16/tests/spec/500-constexpr-class-parameter-nonliteral-bad.t",
+    "pa16/tests/spec/500-constexpr-constructor-uninitialized-member-bad.t",
+    "pa16/tests/spec/500-constexpr-void-function-bad.t",
+    "pa16/tests/spec/500-out-of-class-constexpr-constructor-uninitialized-member-bad.t"
+  ],
+  "campaigns": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/performance.json",
+      "sha256": "03230746cf8e48e89f2d67d34660f6a7a3455b66f4cd5b8078b8114bacafbc99"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/performance-final.json",
+      "sha256": "16ed25daf100978e8857ce38cbaccf48eaaaf26f73560fe2e749f4ab9e350085"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/performance-handoff.json",
+      "sha256": "0d230c4296a8a11dc23f8f47859368560a963e8aa20ab5576125080943dc01b2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/performance-serial.json",
+      "sha256": "273bc8cc4142a35ecff9efbc8cf82301eafca16c470cde2de898aa5b08932b2c"
+    }
+  ],
+  "primary_campaign": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/performance-serial.json",
+  "evidence_files": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-current.log",
+      "sha256": "33cad37a567f43c7c26b4247be2bfca03c9271ba411b9bd643c493e772ca8ec5"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-handoff.log",
+      "sha256": "ab81f0e8593ef1b4cd9c710c8df5d32b2cb05ddd5d542367a180d7f5640e5180"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/stage-handoff.log",
+      "sha256": "330e3a5897fa19dd87f181195ee79c0b25076d9fe0310d6716d51be4c6dc7c9e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/current-stage.log",
+      "sha256": "da8b0112cffc0cedbf1c92711507ac8a8d86c6be1713526451c0808b0d7be262"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/prior-final.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/personal-statements-final.log",
+      "sha256": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/personal-floating-final.log",
+      "sha256": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-scalar/build-handoff.log",
+      "sha256": "f80821b9e5ae4e74d8d899dc3ba14840d73630b3630910604b43a4323413b7df"
+    }
+  ],
+  "discarded_report_totals": "Concurrent root reports share .test_counts. The 982/982 and 418/509 totals were not accepted; serial rechecks restored the exact full coverage totals.",
+  "references": "No source, reference, status, coverage, comparison, contract or bundle change.",
+  "personal": {
+    "native": 40,
+    "rejection": 23,
+    "prior_native": 41,
+    "prior_rejection": 29
+  }
+}
