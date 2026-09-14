@@ -134,7 +134,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
     case Kind::Cast: {
-        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST && node.op != KW_CONST_CAST) {
+        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST &&
+            node.op != KW_CONST_CAST && node.op != KW_REINTERPET_CAST) {
             if (template_type_probe) return 0;
             throw std::runtime_error("cast is not supported in a constant type query");
         }

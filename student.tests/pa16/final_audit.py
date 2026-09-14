@@ -7,6 +7,8 @@ CC = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 WORK = Path(sys.argv[2]) if len(sys.argv)>2 else Path(os.environ['RALPH_ARTIFACT_DIR'])/'pa16-final-audit/controls'
 WORK.mkdir(parents=True,exist_ok=True)
 GOOD = {
+ 'query_reinterpret_noexcept': 'template<class T>constexpr bool f()noexcept(noexcept(reinterpret_cast<T*>(0))){return true;}static_assert(noexcept(f<int>()), "");int main(){return 0;}',
+ 'query_reinterpret_unselected': 'template<int N>struct A{char a[N];};static_assert(sizeof(A<true?7:(reinterpret_cast<int*>(0)==nullptr)>)==7, "");int main(){return 0;}',
  'query_nested_cast': 'constexpr int n=7;constexpr int const*p=&n;template<int N>struct A{char a[N];};static_assert(sizeof(A<*static_cast<int const*>(const_cast<int*>(p))>)==7, "");int main(){return 0;}',
  'query_pointer_cast': 'struct X{int n;constexpr int f()const{return n;}};constexpr X x={7};constexpr X const*p=&x;template<int N>struct A{char a[N];};static_assert(sizeof(A<static_cast<X const*>(p)->f()>)==7, "");int main(){return 0;}',
  'query_reference_cast': 'struct X{int n;};constexpr X x={7};template<int N>struct A{char a[N];};static_assert(sizeof(A<static_cast<X const&>(x).n>)==7, "");int main(){return 0;}',
@@ -50,6 +52,7 @@ GOOD = {
  'construction_mutable_read': 'struct X{mutable int n;int m;constexpr X(int x):n(x),m(n){}};constexpr X x(7);static_assert(x.m==7, "");int main(){return x.m-7;}',
 }
 BAD = {
+ 'query_reinterpret_required': 'template<int N>struct A{char a[N];};A<reinterpret_cast<int*>(0)==nullptr> x;',
  'query_void_pointer_cast': 'constexpr int n=7;constexpr void const*p=&n;template<int N>struct A{char a[N];};A<*static_cast<int const*>(p)> x;',
  'reinterpret_array': 'int n;constexpr char const*p[]={reinterpret_cast<char const*>(&n)};',
  'void_pointer_cast': 'constexpr int n=7;constexpr void const*p=&n;constexpr int const*q=static_cast<int const*>(p);',
