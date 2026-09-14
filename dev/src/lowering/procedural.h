@@ -124,6 +124,7 @@ class Procedural {
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
     struct FullExpression { bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
+        EntityId result_temporary = 0;
         bool scalar_terminal = false, scalar_unreachable = false; } full_expression;
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);

@@ -34,7 +34,9 @@ void Procedural::activate_temporary(EntityId e)
     state.location = object_addresses[e];
     state.depth = lifetime_state(live).depth + 1;
     temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
-    if (reopen) open_expression_region();
+    // The full-expression result has no remaining evaluation after activation.
+    // Its cleanup calls establish their own live suffix if they can throw.
+    if (reopen && e != full_expression.result_temporary) open_expression_region();
 }
 SlotId Procedural::source_slot(EntityId e)
 {

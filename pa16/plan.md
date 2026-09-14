@@ -1,11 +1,24 @@
-# PA16 compact plan — implementation 42
+# PA16 compact plan — implementation 43 (in progress)
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
 Last reviewed commit: `7c39a6edbfa43c226036b8a92fe236722ac85dcc`
 
-Target: **PA16 full-stage**. Entry HEAD `fe4dbd88712f3b87c478084e1b48887315c13e10`,
-**146/154** passing. Previous goal turn: progress (object/address implementation
-and native/performance evidence). Both review markers remain unchanged.
+Target: **PA16 full-stage**. Entry HEAD `c9c4ddb75c65c8de2849b49ecaf42ea83d75fdab`,
+**153/154** passing. Previous goal turn: progress (initializer storage and
+program lifecycle implementation with validated evidence). Both review markers
+remain unchanged.
+
+Current group: result ABI / full-expression cleanup. Semantic class facts own
+the return convention; lowering consumes that convention and the selected
+destructor's exception fact. Resolve the last oracle mismatch with a reduced
+standard/contract proof if needed; avoid eagerly building cleanup suffixes for
+completed results with no remaining throwing work. Work must stay O(emitted
+calls/lifetime edges), with no new optimizer or semantic reconstruction. Validate
+native object identity and destruction order, throwing cleanup, prior suites,
+and frozen A/A+ABBA compiler latency/RSS and executable runtime/size. Then extend
+the represented constant-value algebra to member pointers where the existing
+conversion/object-path facts support it. Unfinished work remains distinct from
+independent review below.
 
 ## Design/spec alignment
 

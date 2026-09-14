@@ -1,0 +1,9 @@
+{
+  "path": "pa16/tests/general/400-constexpr-dependent-nonliteral-result-instantiation.ref",
+  "old_sha256": "afacd63251238393025ca1df2f4be07fe06733379ffa40f7a01a016955f5483a",
+  "new_sha256": "be727d09dcd19d98fd81f62ef6b32a1b142562ab2bd9c042761648d571682633",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "source_sha256": "3d5eb33998e9c411a8b6d3ed2eec468b00608de50cd1a56ed6bce0b54e52e84b",
+  "proof": "pa16/result-reference-correction.md"
+}

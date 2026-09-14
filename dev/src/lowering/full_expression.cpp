@@ -44,6 +44,14 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
 {
     if (full_expression.enabled) throw std::logic_error("nested full-expression owner");
     full_expression.enabled = cleanup_expression(n,omit_result);
+    if (full_expression.enabled && !omit_result) {
+        auto result = n;
+        while (ast[result].kind == Kind::Parenthesized || ast[result].kind == Kind::Initializer || ast[result].kind == Kind::ParenInitializer)
+            result = ast[result].first;
+        auto incoming = sem.expression_fact(result).incoming;
+        if (!incoming || sem.conversion_fact(incoming).kind == semantic::Conversion::Kind::Discarded)
+            full_expression.result_temporary = sem.object_fact(result).temporary;
+    }
     if (full_expression.enabled) guard_expression(n);
 }
 void Procedural::guard_expression(NodeId n, bool storage_ready)
