@@ -49,7 +49,7 @@ void Analyzer::finish()
         try {
         if (definitions) instantiate_member_definition(e);
         MemberFacts f = members[m];
-        if (f.body && !entities[e].definition)
+        if (f.body && !entities[e].definition && !instantiation_suppressed(e))
             function_body({f.body, f.declarator, f.body_environment ? f.body_environment : entities[e].owner, e, f.source});
         if (members[m].synthetic && transfer_member(e)) {
             prepare_transfer(e);
@@ -277,6 +277,8 @@ void Analyzer::declaration(NodeId n, ScopeId s)
 void Analyzer::schedule_body(const Body& body)
 {
     if (calls && entities[body.entity].template_info) {
+        if (class_depth && scopes[entities[body.entity].owner].kind == ScopeKind::Class)
+            entities[body.entity].inline_function = true;
         TemplateFunction& t = templates[entities[body.entity].template_info];
         t.body = body.node; t.declarator = body.declarator; t.source = body.source;
         if (definitions) bind_template_body(body);

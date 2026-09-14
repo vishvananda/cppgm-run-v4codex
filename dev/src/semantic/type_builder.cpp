@@ -167,7 +167,9 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     NodeId name = decl_name(n);
     if (name && !name_resolved) {
         auto owner = name_owner(name,s,true);
-        if (!(definitions && scopes[s].kind == ScopeKind::Template &&
+        if (definitions && s == active_template_scope && scopes[owner].kind == ScopeKind::Class)
+            s = member_template_environment(s,owner);
+        else if (!(definitions && scopes[s].kind == ScopeKind::Template &&
             (scopes[owner].kind == ScopeKind::Namespace || scopes[s].parent == owner))) s = owner;
     }
     NodeId nested = 0;
@@ -291,6 +293,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
     ScopeId owner = name_owner(name, s, true);
+    if (definitions && owner == active_template_scope && scopes[scopes[owner].parent].kind == ScopeKind::Class)
+        owner = scopes[owner].parent;
     ScopeId definition_scope = member_definition_environment == s ? s : owner;
     ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
     if (!encloses(enclosing, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
@@ -353,7 +357,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
         throw std::runtime_error("ref qualifier requires ordinary nonstatic member");
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
-    if (source == explicit_specialization_source && scopes[owner].kind == ScopeKind::Class) {
+    bool specialized_template = false;
+    if (source == explicit_specialization_source && function)
+        for (auto candidate : candidates(e)) specialized_template |= entities[candidate].template_info != 0;
+    if (source == explicit_specialization_source && scopes[owner].kind == ScopeKind::Class && !specialized_template) {
         auto cls = scopes[owner].entity;
         if (!entities[cls].specialization || entities[cls].explicit_specialization)
             throw std::runtime_error("member specialization requires an implicit class specialization");
@@ -371,7 +378,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (!e || !entities[e].template_info) throw std::runtime_error("variable specialization requires a primary");
         e = variable_template_name(ast[name].last,e,s,false);
         if (entities[e].type != canonical) throw std::runtime_error("specialized variable type mismatch");
-    } else if (source == explicit_specialization_source && function && scopes[owner].kind != ScopeKind::Class) {
+    } else if (source == explicit_specialization_source && function && (scopes[owner].kind != ScopeKind::Class || specialized_template)) {
         e = declare_function_specialization(name,s,canonical);
     } else if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);

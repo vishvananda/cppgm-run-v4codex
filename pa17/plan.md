@@ -1,7 +1,34 @@
-# PA17 implementation handoff — loop 45
+# PA17 implementation — loop 46
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
+
+Loop 46 entry: `4bbb712abc6047e4821f850116aa0465df1eedbd`, clean,
+207/343 (136 failures). Review markers remain unchanged. Work in progress:
+member-template declaration/signature environments, specialization body ownership,
+and explicit-instantiation demand. Owners are `template_declaration`,
+`template_instantiation`, `explicit_instantiation` and the ordinary declaration
+builder; data flows from retained heads/signatures through canonical entities and
+parent-linked substitution frames to existing body demand and typed lowering.
+Work must follow each head, signature and demanded entity; no global retry or
+grammar replay. Validate the affected required fixtures, explicit personal
+controls, all earlier PAs and file audit. Freeze entry/final binaries and measure
+compiler latency/RSS plus common executable runtime/text under spec.md's PA17/O0
+acceptance. Nested class/member source retention and out-of-class partial-owner
+attachment remain required implementation; existing review questions below are
+separate and preserved.
+
+Loop 46 checkpoint: **241/343**, all **2266** earlier fixtures pass; **34**
+entry failures fixed with **no new failures**. Member head/class environments,
+constructor/signature/body facts, explicit specialization and instantiation
+ownership now share ordinary canonical entities and demand. Dependent qualified
+type accesses retain source-scope obligations separate from canonical type
+identity, validated per complete substitution frame (including pack lanes).
+Source-subtree summaries skip bodies; access exemptions end before demanded
+declarations. Controls: 16 native, 9 rejection and 3 LowIR ownership probes;
+the prior 34 entity controls pass. Next: finish related redeclaration/default
+and demand edges, then freeze/measure and run final handoff checks. Performance
+evidence and the old handoff sections below are historical until refreshed.
 
 Target: **PA17 full-stage**, still incomplete. This is an implementation
 handoff, not independent audit acceptance. Entry was clean at **132/343**.

@@ -119,7 +119,7 @@ TemplateMemberUse Analyzer::template_field_use(EntityId field, ScopeId s, Entity
     auto function = scopes[scope].entity;
     auto cls = scopes[entities[function].owner].entity;
     if (!pattern && entities[field].template_pattern) pattern = scopes[entities[field].owner].entity;
-    if (!cls || (pattern && template_class_patterns.get(cls) != pattern))
+    if (!cls || (pattern && cls != pattern && template_class_patterns.get(cls) != pattern && !class_derives(cls,pattern)))
         throw std::logic_error("missing concrete template object owner");
     if (!object_type && !unevaluated_depth) throw std::logic_error("template field use lacks its object");
     auto key = this->key(field,object_type ? object_type : entities[cls].type);

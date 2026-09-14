@@ -106,6 +106,7 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
         frame = argument_frame(frame,p,args[j]);
     }
     auto type = substitute_type(entities[e].type,bindings,cache,frame);
+    check_substituted_type_access(entities[e].source,frame);
     if (!type) throw std::runtime_error("invalid alias substitution");
     alias_specializations.put(k,type);
     return type;

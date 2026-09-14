@@ -133,6 +133,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_type_substitution_records\":" << substitution_records
         << ",\"semantic_substitution_frames\":" << substitution_frames.size()-1
         << ",\"semantic_template_type_work\":" << template_type_work
+        << ",\"semantic_template_type_access_work\":" << template_type_access_work
         << ",\"semantic_template_type_uses\":" << template_type_uses
         << ",\"semantic_template_signature_work\":" << template_signature_work
         << ",\"semantic_template_signature_uses\":" << template_signature_uses

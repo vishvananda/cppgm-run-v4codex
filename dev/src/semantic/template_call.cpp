@@ -205,17 +205,30 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         }
     }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
+    if (!partial) check_substituted_type_access(entities[pattern].source,frame);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].type = type; entities[e].specialization = index;
     entities[e].constexpr_function = entities[pattern].constexpr_function;
+    entities[e].inline_function = entities[pattern].inline_function;
+    entities[e].is_static = entities[pattern].is_static;
+    entities[e].access = entities[pattern].access;
+    entities[e].key = entities[pattern].key;
     if (auto suffix = literal_functions.get(pattern)) literal_functions.put(e,suffix);
     entities[e].defaults = entities[pattern].defaults;
     if (partial) {
         t.primary = pattern; t.explicit_arguments = pack;
         entities[e].template_info = templates.size(); templates.push_back(t);
     }
-    if (scopes[entities[e].owner].kind == ScopeKind::Class) member_facts(e);
+    if (scopes[entities[e].owner].kind == ScopeKind::Class) {
+        member_facts(e);
+        auto source = members[entities[pattern].member_info];
+        auto& member = members[entities[e].member_info];
+        member.constructor = source.constructor;
+        member.explicit_constructor = source.explicit_constructor;
+        member.deleted = source.deleted;
+        member.conversion_target = source.conversion_target ? types[type].child : 0;
+    }
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;
     return e;
     } catch (...) {
@@ -394,8 +407,20 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b)
         return types.function(types.fundamental(FT_VOID),parameters,t.variadic,t.cv,t.ref);
     };
     auto x = shape(a), y = shape(b);
+    auto transformed = [&](TypeId signature) {
+        auto t = types[signature]; std::vector<TypeId> params;
+        for (unsigned j = 0; j < t.count; ++j) {
+            auto p = types.parameters[t.offset+j];
+            bool pack = types[p].kind == TypeKind::PackExpansion;
+            if (pack) p = types[p].bound;
+            p = types.unqualified(value_type(p));
+            params.push_back(pack ? types.compound(TypeKind::PackExpansion,0,p) : p);
+        }
+        return types.function(t.child,params,t.variadic,t.cv,t.ref);
+    };
+    auto tx = transformed(x), ty = transformed(y);
     Index xy, yx;
-    bool accepts_a = deduce_type(y,x,yx), accepts_b = deduce_type(x,y,xy);
+    bool accepts_a = deduce_type(ty,tx,yx), accepts_b = deduce_type(tx,ty,xy);
     if (!accepts_a || !accepts_b) return accepts_a && !accepts_b;
     // [temp.deduct.partial]/9: when both transformed reference parameters
     // deduce, the more cv-qualified referred-to type is more specialized.

@@ -144,7 +144,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
 }
 bool Analyzer::instantiate_member_definition(EntityId e)
 {
-    if (!e || entities[e].explicit_specialization || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
+    if (!e || entities[e].explicit_specialization || instantiation_suppressed(e) || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
     auto owner = definition_owner(scopes[entities[e].owner].entity);
     if (!owner.specialization || dependent_type(entities[owner.specialization].type)) return false;
     ++definition_requests;

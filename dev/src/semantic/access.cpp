@@ -43,6 +43,7 @@ void Analyzer::check_base_access(TypeId from, TypeId to, ScopeId context)
 }
 void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId context)
 {
+    if (explicit_instantiation_naming) return;
     if (access_override) context = access_override;
     for (EntityId current = cls; current && current != target;) {
         auto edge = access_base(current);
@@ -64,6 +65,7 @@ void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId c
 }
 void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
+    if (explicit_instantiation_naming) return;
     if (!calls || !e || entities[e].kind == EntityKind::Overload || scopes[entities[e].owner].kind != ScopeKind::Class) return;
     if (access_override) context = access_override;
     EntityId owner = scopes[entities[e].owner].entity;

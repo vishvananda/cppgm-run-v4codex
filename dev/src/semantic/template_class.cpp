@@ -260,6 +260,13 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
 }
 void Analyzer::complete_class(EntityId e)
 {
+    // The names in an explicit-instantiation declarator are exempt from
+    // access checking; declarations demanded while resolving them are not.
+    struct AccessContext {
+        bool& flag; bool saved;
+        AccessContext(bool& f) : flag(f), saved(f) { flag = false; }
+        ~AccessContext() { flag = saved; }
+    } access(explicit_instantiation_naming);
     if (!e) return;
     auto index = entities[e].specialization;
     if (index && specializations[index].body == FactState::Failure)

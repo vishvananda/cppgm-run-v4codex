@@ -110,9 +110,10 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // In particular a root C++ variable's ABI spelling is the bare source name.
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
+    metadata.object_root = e.instantiation_definition;
     metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
-    if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
+    if (e.member_info) metadata.object_root |= base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
         metadata.object_root |= sem.member_fact(id).retained_root;
         if (local_abi_scope(e.owner)) { metadata.object_root = true; metadata.binding = SBM_INTERNAL; }

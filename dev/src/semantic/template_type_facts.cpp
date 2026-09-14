@@ -169,6 +169,7 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
     if (known <= 1) return 0;
     auto type = known-1;
     auto frame = template_type_contexts.get(occurrence.context);
+    check_substituted_type_access(node,frame);
     if (dependent_type(type)) {
         if (!frame) return 0;
         Index bindings, cache;

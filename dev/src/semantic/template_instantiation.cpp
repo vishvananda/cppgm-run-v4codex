@@ -10,7 +10,7 @@ void Analyzer::demand_region(NodeId root)
 }
 void Analyzer::instantiate_function(EntityId e)
 {
-    if (entities[e].explicit_specialization) return;
+    if (entities[e].explicit_specialization || instantiation_suppressed(e)) return;
     auto index = entities[e].specialization;
     if (index && specializations[index].body == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].source);
@@ -31,6 +31,10 @@ void Analyzer::instantiate_function(EntityId e)
     auto frame = substitution_frame(index,pattern.offset,pattern.count);
     attach_template_context(context,frame);
     instantiate_parameters(pattern.declarator,context,frame,environment);
+    if (auto m = entities[e].member_info) {
+        members[m].source = source; members[m].declarator = declarator;
+        members[m].body = body; members[m].body_environment = environment;
+    }
     function_body({body,declarator,environment,e,source});
     specializations[index].body = FactState::Success;
     } catch (...) {
@@ -55,6 +59,7 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         auto occurrence = ast.projected(p,context);
         if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
         auto type = facts[p].type;
+        check_substituted_type_access(p,frame);
         if (child(ast[ast[p].first].next,syntax::Kind::ParameterPack)) {
             if (!has_pack) {
                 // Ordinary parameter lists retain their projected source edges;

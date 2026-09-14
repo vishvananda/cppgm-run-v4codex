@@ -26,6 +26,10 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     for (EntityId e : candidates(binding)) {
         if (!direct && members[entities[e].member_info].explicit_constructor) continue;
         ++candidate_work;
+        if (entities[e].template_info) {
+            e = values ? deduce_function(e,*values) : deduce_function(e,args);
+            if (!e) continue;
+        }
         Type f = types[entities[e].type];
         if ((!f.variadic && args.size() > f.count) || (args.size() < f.count &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults + args.size()]))) continue;
@@ -47,11 +51,18 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         if (valid) viable.push_back({e, begin}); else sequences.resize(begin);
     }
     if (viable.empty()) { if (probe) return 0; throw std::runtime_error("no viable constructor"); }
+    auto preferred = [&](std::size_t a, std::size_t b) {
+        auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
+        if (better(x,y,args.size())) return true;
+        if (better(y,x,args.size())) return false;
+        auto ea = viable[a].entity, eb = viable[b].entity;
+        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb);
+    };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i)
-        if (better(sequences.data()+viable[i].offset, sequences.data()+viable[best].offset, args.size())) best = i;
+        if (preferred(i,best)) best = i;
     for (std::size_t i = 0; i < viable.size(); ++i)
-        if (i != best && !better(sequences.data()+viable[best].offset, sequences.data()+viable[i].offset, args.size())) {
+        if (i != best && !preferred(best,i)) {
             if (probe) { if (result) result->form = ExpressionForm::Overload; return 0; }
             throw std::runtime_error("ambiguous constructor");
         }

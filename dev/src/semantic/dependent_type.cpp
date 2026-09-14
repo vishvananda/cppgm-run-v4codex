@@ -57,6 +57,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
     for (auto p = ast[n].first; p; p = ast[p].next) {
         auto list = child(p,Kind::TemplateArguments);
         if (prefix && dependent_type(prefix)) {
+            retain_type_access(p,prefix,s);
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
                 auto type = template_argument_node(a,s);

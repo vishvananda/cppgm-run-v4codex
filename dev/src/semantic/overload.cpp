@@ -24,8 +24,9 @@ std::vector<EntityId> Analyzer::candidates(EntityId e)
 EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor, TypeId conversion)
 {
     if (definitions && active_template_scope &&
-        (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace))
-        return declare_template_function(owner,name,source,type);
+        (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace ||
+         (source && scopes[owner].kind == ScopeKind::Class)))
+        return declare_template_function(owner,name,source,type,constructor);
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);
@@ -95,7 +96,7 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
             if (derived_from(bt, at) || (fundamental(at, FT_VOID) && types[bt].kind == TypeKind::Named)) return false;
             if (derived_from(at, bt) || (fundamental(bt, FT_VOID) && types[at].kind == TypeKind::Named)) { strict = true; continue; }
         }
-        if (at != bt && similar_type(at, bt)) {
+        if (a[i].reference == b[i].reference && at != bt && similar_type(at, bt)) {
             bool ab = qualification(at, bt, added), ba = qualification(bt, at, added);
             if (ba && !ab) return false;
             if (ab && !ba) { strict = true; continue; }

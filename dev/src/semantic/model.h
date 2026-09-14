@@ -172,6 +172,7 @@ struct Entity {
     bool array_allocation = false;
     bool mutable_field = false;
     bool template_member = false, template_pattern = false, explicit_specialization = false;
+    bool instantiation_declaration = false, instantiation_definition = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     enum Emission : unsigned char { HiddenFriend = 1, Used = 2 };
     unsigned char emission = 0;

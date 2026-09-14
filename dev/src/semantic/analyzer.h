@@ -685,7 +685,9 @@ private:
     bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
     void template_facts(EntityId e, ScopeId environment = 0);
-    EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type);
+    EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
+    ScopeId member_template_environment(ScopeId head, ScopeId owner);
+    Index member_template_environments;
     void instantiate_function(EntityId e);
     void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);
@@ -701,6 +703,14 @@ private:
     ScopeId specialization_environment(EntityId e);
     bool retain_template_definition(NodeId n, ScopeId s);
     void explicit_instantiation(NodeId n, ScopeId s);
+    bool instantiation_suppressed(EntityId entity) const;
+    bool explicit_instantiation_naming = false;
+    void retain_type_access(NodeId part, TypeId qualifier, ScopeId scope);
+    bool type_access_subtree(NodeId node);
+    void check_substituted_type_access(NodeId node, std::uint32_t frame);
+    Index template_type_access_sources, template_type_access_subtrees, template_type_access_states;
+    std::vector<TemplateTypeAccess> template_type_accesses = std::vector<TemplateTypeAccess>(1);
+    std::size_t template_type_access_work = 0;
     std::uint32_t definition_root(EntityId pattern);
     std::uint32_t definition_path(std::uint32_t parent, IdentifierId name);
     TemplateDefinitionOwner definition_owner(EntityId cls);
