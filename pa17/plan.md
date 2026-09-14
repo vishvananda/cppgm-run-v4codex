@@ -1,68 +1,85 @@
-# PA17 implementation plan
+# PA17 implementation handoff — loop 45
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 
-Target: **PA17 full-stage**. Entry: clean, 132/343 required tests passing
-(211 failures); prior through PA16 passes. Review markers remain fixed during
-implementation. No PA17 implementation has yet been independently reviewed.
+Target: **PA17 full-stage**, still incomplete. This is an implementation
+handoff, not independent audit acceptance. Entry was clean at **132/343**.
+Current result: **207/343**; **75 original failures fixed**, **136 remain**,
+**no new failures**. All 343 fixtures and their comparison/status contracts are
+unchanged; no reference corrections were made.
 
-## Design and work groups
+## Completed behavior and spec alignment
 
-- **Specialization shapes and template-template entities (active):** semantic
-  template arguments, type substitution and class-pattern selection own canonical
-  identities. Parsed declarations feed typed parameter/argument facts, then
-  per-primary candidates and the selected definition/environment. Work follows
-  argument edges and eligible candidates; pair ordering is cached by immutable
-  candidate IDs. Cover arrays, function/cv shapes, packs, nested template heads,
-  parameter matching and alias substitution together where these share ownership.
-- **Member/friend declaration ownership (unfinished):** retained member heads,
-  out-of-class definition attachment, concrete owners, ADL/access/hiding.
-- **Explicit instantiation and specialization demand (unfinished):** declaration
-  versus definition, suppressed emission, late definition/selected owner.
-- **Dependent syntax and remaining integration (unfinished):** definition-time
-  typename/template checks, current instantiation, nested/base/alias cases.
+- **Template argument identity:** `template_entities`, `template_arguments`,
+  `template_class` and `dependent_type` retain nested template parameter heads,
+  canonical head shapes, template entities and alias application by entity/typed
+  tuple. Alias entities belong to their declaring namespace/class; parameter
+  environments are separate. Matching checks kinds, arity, dependent non-type
+  types, packs, defaults and access. Namespace-qualified identities remain distinct.
+- **Structural selection:** `template_deduction` and `class_pattern_selection`
+  distinguish class patterns from call deduction, preserve array bounds/cv,
+  function qualifiers and adjusted parameters, repeated/nested/symbolic packs,
+  fixed prefixes and constant value patterns. Selection records its definition
+  and arguments once. Immutable candidate-pair ordering has its own cache;
+  omitted-default positions belong to the actual match and are computed only
+  when viable candidates compete. Crossed coverage remains ambiguous.
+- **Retained substitution:** definition-time argument facts feed immutable
+  substitution frames; only dependent facts are rebuilt. Pack lists own ellipsis
+  substitution, including empty packs and dependent constant expressions.
+  Reapplying a dependent cast preserves its canonical identity. Class/base
+  dependence includes non-type parameters and sizeof-pack expressions.
+- **Source boundary:** split `>>`, qualified function parameters, empty function
+  types, and direct-member decltype preserve their source meaning. No grammar
+  replay, rendered semantic keys, global retries, fixture dispatch or output
+  delegation was added. Existing typed semantic-to-LowIR lowering is reused.
 
-Use shared source regions and canonical semantic facts; no grammar replay,
-textual semantic keys, broad retry scans or output delegation. Later PA18
-substitution/SFINAE and PA24 native optimization remain distinct owners.
+Work follows parameter/argument edges and viable candidates. Deduction and
+substitution are linear in consumed shapes; coverage sorting is O(n log n) in
+matched positions, and selection compares candidate pairs required for ordering.
+Canonical head/source facts and alias results use TU-owned flat identity indexes;
+match vectors and coverage indexes die after selection. Published source facts
+are keyed by source identity only for original occurrences; substitutions use
+complete frame identity. New sources are registered in frontend_source_sets.mk.
 
 ## Validation and performance
 
-Run focused controls explicitly from `student.tests/pa17`, then required PA17,
-prior through PA16 and source file audit. Preserve all 343 course cases, status
-oracles and comparison rules. Freeze entry/final compiler binaries and inputs;
-A/A and ABBA observations record compiler wall time/RSS and native runtime/text
-size through the supplied validation backend. PA17/O0 has no mandated numerical
-performance ceiling; inherited diagnostic targets are not exit gates. Investigate
-avoidable regressions; document necessary semantic costs without claiming
-optimization benefit from newly accepted inputs.
+`make test-pa17`: **207/343**. `make test-report-through-pa16`: **2266/2266**.
+Through PA17 reports **2473/2609**, with failures confined to PA17.
+File audit passes with three inherited header-division warnings. Explicit
+`student.tests/pa17/entity_controls.py`: **24 native / 10 rejection** controls
+pass, including every newly exposed regression. [Handoff evidence](../student.tests/pa17/handoff.json)
+and [verifier](../student.tests/pa17/verify_handoff.py) bind source/fixture hashes,
+required logs, the exact failure delta, controls and frozen measurements.
 
-## Handoff ledger
+[Performance evidence](entity-performance.md) records A/A and ABBA observations,
+compiler latency/RSS, native runtime/text size and identical common outputs.
+Historical campaigns remain preserved. PA17/O0 mandates no numerical latency,
+RSS or text ceiling; inherited percentage/scaling targets remain diagnostics,
+not exit gates. No optional optimization or executable-speed benefit is claimed.
+Native optimization/MIR/self-hosting remain later-stage owners.
 
-Increment 1 implements strict class-shape deduction (array bounds, function
-qualifiers and parameter adjustment), symbolic/repeated pack substitution,
-retained nested template heads, parameter-kind/arity matching, namespace alias
-template application and identity, and split-`>>` argument classification.
-Thirty-three explicit controls pass (23 native, 10 rejection). Earlier alias and
-pack regressions found during development were repaired. Initial related group
-is not a stopping boundary: continue default-coverage ordering and remaining
-namespace shape/argument defects before handoff.
+## Remaining implementation and handoff boundary
 
-Increment 2 adds actual-position default coverage (separate from immutable
-candidate ordering), retained source argument substitution, recursive non-type
-pack/base dependence, array cv deduction and the declared member type in
-unparenthesized decltype. All 33 controls pass; full comparisons and frozen
-performance measurements are being finalized. Remaining member-owned aliases
-require enclosing substitution-frame/declaration ownership, separately from the
-completed namespace alias argument/substitution path.
-Independent review remains pending for all changes; unanswered review questions
-are separate from unfinished implementation above. Final ledger will record
-completed behavior, test delta, performance evidence and concrete remaining boundary.
+The 136 failures remain required work: nested/member templates and aliases need
+source declaration retention and concrete enclosing-owner publication; partial
+owner/out-of-class definitions need correct attachment and late demand; friends,
+ADL/access/hiding, typename/template obligations, and explicit instantiation need
+their declaration/emission state. Some completed semantic cases still need LowIR
+output fixes (for example ordinary wide scalar assignment in the forward alias
+fixture). These are implementation gaps, not review questions or waived tests.
 
-Increment 3 repairs all three stage regressions exposed by the failure-set
-comparison: alias entities belong to their declaring namespace/class (the
-parameter environment is separate), template-template argument uses retain
-access checks, and bare class templates outside their injected-name scope do
-not become dependent merely because their definitions contain parameters.
-PA17 is **206/343**, with **74 entry failures fixed and no new failures**.
+The next coherent group crosses nested declaration, access, substitution-frame
+and body/emission lifetimes. Extending the argument matcher cannot supply those
+missing owner facts. This handoff finishes structural argument selection and
+substitution, including the related defects found during validation; it does not
+claim all alias/member interactions or the whole assignment are complete.
+
+## Review ledger
+
+`622e486a`: heads/aliases/shape deduction; `8deaa931`: retained arguments and pack
+selection; `da8594b7`: alias ownership/access regressions; `f6dbacde`: dependent
+conversion identity and demand-scoped coverage. All remain **unreviewed**.
+Independent audit must examine complete keys/source-frame reuse, structural
+ordering/coverage and enclosing access environments across this full history.
+Review markers above are preserved; implementation checks do not replace audit.
