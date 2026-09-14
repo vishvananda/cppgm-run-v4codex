@@ -19,12 +19,17 @@ TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vect
 {
     if (dependent_type(owner)) return types.dependent_name(owner,name,args,template_id);
     EntityId member = qualified_type_member(owner,name);
-    if (!member || (entities[member].kind != EntityKind::Type && entities[member].kind != EntityKind::Alias))
+    if (!member || (entities[member].kind != EntityKind::Type && entities[member].kind != EntityKind::Alias)) {
+        if (template_type_probe) return 0;
         throw std::runtime_error("qualified type member not found");
+    }
     if (template_id) {
         if (!entities[member].template_info) throw std::runtime_error("member is not a class template");
         return apply_type_template(member,args);
     }
+    // A dependent template-template argument names the member template entity,
+    // whereas a template-id applies its alias body to an argument tuple.
+    if (entities[member].template_info) return types.named(member);
     return source_type(member);
 }
 TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)

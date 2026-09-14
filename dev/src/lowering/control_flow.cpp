@@ -81,6 +81,14 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
     if (ast[n].kind == Kind::KeywordLiteral && (ast[n].op == KW_TRUE || ast[n].op == KW_FALSE)) {
         jump(ast[n].op == KW_TRUE ? yes : no); return;
     }
+    // Semantic constant names carry the same boolean fact as a literal.
+    // Consume that fact directly; this does not evaluate or rescan expressions.
+    if (ast[n].kind == Kind::IdExpression && sem.facts[n].value &&
+        sem.types[sem.types.unqualified(sem.expression_fact(n).type)].fundamental == FT_BOOL &&
+        !(sem.types[sem.expression_fact(n).type].cv & 2)) {
+        auto value = sem.constant_fact(n);
+        if (value.valid) { jump(value.bits ? yes : no); return; }
+    }
     if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
         BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
         condition(ast[n].first, land ? rhs : yes, land ? no : rhs);

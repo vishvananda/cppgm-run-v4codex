@@ -183,7 +183,12 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     std::uint32_t prototype = 0;
     if (ast[n].kind == Kind::Class) {
         auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
-        if (member_template) {
+        const bool partial = member_template && child(ast[name].last,Kind::TemplateArguments);
+        if (partial) {
+            auto type = declare_class_partial(n,environment,nested);
+            nested = types[type].entity;
+            template_source_heads.put(ast.nodes.occurrences[member_template].source,entities[nested].template_info);
+        } else if (member_template) {
             if (!nested || !entities[nested].template_info) throw std::runtime_error("member class template was not declared");
             auto old = templates[entities[nested].template_info];
             if (old.body) throw std::runtime_error("member class template redefinition");
@@ -196,7 +201,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
             merge_template_defaults(nested,environment,old.environment);
             template_source_heads.put(ast.nodes.occurrences[member_template].source,index);
         }
-        bind_template_class(n,environment,nested);
+        if (!partial) bind_template_class(n,environment,nested);
     } else {
         bind_template_declaration(n,environment,0,false);
         if (member_template) {

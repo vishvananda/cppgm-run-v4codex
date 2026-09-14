@@ -1,7 +1,24 @@
-# PA17 compact plan — checkpoint audit, loop 52
+# PA17 compact plan — implementation, loop 53
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30`
+
+Loop 53 entry: `65b02f17e93fda608d1b0a404e37000488d238b3`, clean;
+306/343 (37 failures). Previous goal turn classified as progress: the checkpoint
+audit supplied verified ownership findings and controls. Preserve both markers.
+Active owner: canonical partial matching/ordering and argument substitution,
+including cv/value/empty packs, dependent aliases and member partial owners.
+Flow: source argument facts → canonical tuple → relevant candidate edges →
+selected head and immutable substitution frames → ordinary demand/LowIR.
+Use exact pattern matching and pairwise ordering cached by immutable entity
+identity; visit only the primary's candidates. Validate related course cases,
+personal identity/rejection/native controls, frozen A/B latency/RSS and checked
+runtime/text, then required stage/prior reports and file audit. Extend related
+query and declaration-owner fixes while this data flow supports them.
+Implementation increment: **315/343**, nine original failures resolved and no
+new failures. All seven selection cases close, together with qualified static
+callee queries and constant-boolean LowIR. New controls: 31/31. Required prior
+report and final performance evidence are being refreshed before handoff.
 
 Target: **PA17 full-stage**, implementation incomplete. The accumulated review
 covers `58789b00..c43e8eb6`: all three accepted handoffs, their interactions and

@@ -4,6 +4,10 @@ namespace cppgm { namespace semantic {
 ScopeId Analyzer::member_template_environment(ScopeId head, ScopeId owner)
 {
     if (scopes[head].parent == owner || scopes[owner].kind != ScopeKind::Class) return head;
+    // A retained out-of-class definition already has its renamed enclosing
+    // heads over this class. Keep that lexical overlay for initializers/bodies.
+    if (member_definition_environment && encloses(member_definition_environment,head) &&
+        scopes[member_definition_environment].parent == owner) return head;
     auto k = key(head,owner);
     if (auto previous = member_template_environments.get(k)) return previous;
     // The return type preceding the qualified declarator uses the lexical

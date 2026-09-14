@@ -73,6 +73,12 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             q.kind = QueryKind::QualifiedValue; q.type = owner; q.name = terminal(name); q.context = s;
             while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
                 q.context = scopes[q.context].parent;
+            if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
+                std::vector<ArgumentId> args;
+                for (auto a = ast[list].first; a; a = ast[a].next)
+                    append_template_argument(a,s,template_argument_node(a,s),args);
+                q.arguments = intern_arguments(args);
+            }
             break;
         }
         auto e = resolve(name,s);
@@ -173,10 +179,18 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         children.push_back(expression_query(first,s,true));
         for (auto a = ast[ast[first].next].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
         break;
-    case Kind::Member:
+    case Kind::Member: {
         q.kind = QueryKind::Member; q.op = node.op; q.context = s;
-        q.name = terminal(ast[ast[first].next].detail);
+        auto name = ast[ast[first].next].detail;
+        q.name = terminal(name);
+        if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
+            std::vector<ArgumentId> args;
+            for (auto a = ast[list].first; a; a = ast[a].next)
+                append_template_argument(a,s,template_argument_node(a,s),args);
+            q.arguments = intern_arguments(args);
+        }
         children.push_back(expression_query(first,s)); break;
+    }
     case Kind::SizeofPack: {
         auto occurrence = ast.nodes.occurrences[n];
         auto e = occurrence.context ? pack_size_entities.get(occurrence.source) : 0;
@@ -217,10 +231,33 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     if (q.kind == QueryKind::SizeofPack) {
         auto frame = owner;
         while (frame && substitution_frames[frame].expansion) frame = substitution_frames[frame].parent;
-        auto arg = frame ? substitution_argument(frame,q.entity) : bindings.get(q.entity);
+        auto arg = q.arguments ? substitute_argument(argument_types[argument_packs[q.arguments].offset],bindings,cache,frame) :
+            frame ? substitution_argument(frame,q.entity) : bindings.get(q.entity);
         int count = -1;
-        if (arg && argument_pack(arg)) count = pack_arguments(arg).count;
-        else if (!entities[q.entity].template_parameter)
+        if (arg && !argument_pack(arg))
+            arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});
+        if (arg) {
+            auto pack = pack_arguments(arg); count = pack.count;
+            for (unsigned j = 0; j < pack.count; ++j) {
+                auto element = argument_types[pack.offset+j];
+                if (!value_argument(element) && types[element].kind == TypeKind::PackExpansion) {
+                    count = -1; break;
+                }
+            }
+            if (count < 0) {
+                TypeQuery symbolic; symbolic.kind = QueryKind::SizeofPack;
+                if (pack.count == 1) {
+                    auto element = types[argument_types[pack.offset]].bound;
+                    if (value_argument(element)) {
+                        auto query = type_queries[argument_query(element)];
+                        if (query.kind == QueryKind::TemplateValueParameter) symbolic.entity = query.entity;
+                    } else if (types[element].kind == TypeKind::Named && entities[types[element].entity].template_parameter)
+                        symbolic.entity = types[element].entity;
+                }
+                if (!symbolic.entity) symbolic.arguments = intern_arguments({arg});
+                auto result = intern_query(symbolic,{}); results.put(cache_key,result); return result;
+            }
+        } else if (q.entity && !entities[q.entity].template_parameter)
             count = expansion_count(expansion_parameters(entities[q.entity].type),bindings,frame);
         if (count < 0) return id;
         TypeQuery value; value.type = types.fundamental(FT_UNSIGNED_LONG_INT); value.value = count;
@@ -240,11 +277,9 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     }
     if (q.arguments) {
         auto pack = argument_packs[q.arguments]; std::vector<TypeId> args;
-        for (unsigned j = 0; j < pack.count; ++j) {
-            auto type = substitute_argument(argument_types[pack.offset+j],bindings,cache,owner);
-            if (!type) return 0;
-            args.push_back(type);
-        }
+        for (unsigned j = 0; j < pack.count; ++j)
+            substitute_arguments(argument_types[pack.offset+j],bindings,cache,owner,args);
+        for (auto arg : args) if (!arg) return 0;
         q.arguments = intern_arguments(args);
     }
     std::vector<QueryId> children;
@@ -353,7 +388,12 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         x.type = value_type(entities[entity].type); x.entity = entity;
         r.declared_type = entities[entity].type;
         if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
-        if (function_binding(entity)) x.form = ExpressionForm::Overload;
+        if (function_binding(entity)) {
+            // A template overload family is a concrete lookup result. Its
+            // dependent candidate signatures do not make the callee dependent.
+            x.form = ExpressionForm::Overload; x.type = 0;
+            if (entities[entity].kind != EntityKind::Function || entities[entity].template_info) r.declared_type = 0;
+        }
         break;
     }
     case QueryKind::Parameter: case QueryKind::Name:

@@ -116,7 +116,10 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     }
     auto state = alias_facts[id].state;
     if (state == FactState::Success) return alias_facts[id].type;
-    if (state == FactState::Failure) throw std::runtime_error("failed alias specialization");
+    if (state == FactState::Failure) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("failed alias specialization");
+    }
     if (state == FactState::Active) throw std::runtime_error("recursive alias specialization");
     alias_facts[id].state = FactState::Active;
     try {
@@ -126,7 +129,11 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     auto frame = substitution_frame(0,head.offset,head.count,parent,intern_arguments(args));
     auto type = substitute_type(entities[e].type,bindings,cache,frame);
     check_substituted_type_access(entities[e].source,frame);
-    if (!type) throw std::runtime_error("invalid alias substitution");
+    if (!type) {
+        alias_facts[id].state = FactState::Failure;
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid alias substitution");
+    }
     alias_facts[id].type = type; alias_facts[id].state = FactState::Success;
     return type;
     } catch (...) { alias_facts[id].state = FactState::Failure; throw; }

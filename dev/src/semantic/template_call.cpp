@@ -108,11 +108,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         auto qualifier = substitute_type(p.child,bindings,cache,owner);
         if (!qualifier) return 0;
         std::vector<TypeId> args;
-        for (unsigned j = 0; j < p.count; ++j) {
-            auto arg = substitute_argument(types.parameters[p.offset+j],bindings,cache,owner);
-            if (!arg) return 0;
-            args.push_back(arg);
-        }
+        for (unsigned j = 0; j < p.count; ++j)
+            substitute_arguments(types.parameters[p.offset+j],bindings,cache,owner,args);
+        for (auto arg : args) if (!arg) return 0;
         result = types.qualify(qualified_type(qualifier,p.entity,args,p.bound),p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);

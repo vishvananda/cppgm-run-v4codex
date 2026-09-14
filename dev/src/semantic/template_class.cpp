@@ -215,7 +215,7 @@ ScopeId Analyzer::specialization_environment(EntityId e)
     auto spec = specializations[index];
     auto selected = spec.definition_pattern ? spec.definition_pattern : spec.pattern;
     auto pattern = templates[entities[selected].template_info];
-    auto parent = entities[e].kind == EntityKind::Function ? scopes[pattern.environment].parent : entities[selected].owner;
+    auto parent = scopes[pattern.environment].parent;
     auto environment = make_scope(ScopeKind::Template,parent);
     auto pack = argument_packs[spec.definition_arguments ? spec.definition_arguments : spec.arguments];
     for (unsigned j = 0; j < pack.count; ++j) {
@@ -293,7 +293,7 @@ void Analyzer::complete_class(EntityId e)
     auto saved_defaults = declaration_defaults.size();
     try {
     instantiate_member_definition(specializations[index].pattern);
-    select_class_pattern(index);
+    select_partial_pattern(index);
     auto spec = specializations[index];
     auto pattern = templates[entities[spec.definition_pattern ? spec.definition_pattern : spec.pattern].template_info];
     if (!pattern.body) { specializations[index].body = FactState::NotStarted; return; }

@@ -38,18 +38,7 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
         head.primary = primary; head.explicit_arguments = intern_arguments(args);
         head.source = n; head.body = ast[n].kind == Kind::Class ? n : 0;
     }
-    std::vector<ArgumentId> self;
-    if (!match_class_pattern(e,intern_arguments(args),self))
-        throw std::runtime_error("class partial specialization has nondeducible parameters");
-    auto primary_head = templates[entities[primary].template_info];
-    std::vector<ArgumentId> generic, equivalent;
-    for (unsigned j = 0; j < primary_head.count; ++j) {
-        auto p = template_parameters[primary_head.offset+j];
-        auto arg = parameter_argument(p);
-        generic.push_back(entities[p].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
-    }
-    if (match_class_pattern(e,intern_arguments(generic),equivalent))
-        throw std::runtime_error("partial specialization does not specialize the primary");
+    validate_partial_pattern(e);
     bind(s,entities[e].name,e); record(s,e,n,entities[e].type,EntityKind::Type);
     if (ast[n].kind == Kind::Class) {
         index_template_members(n,definition_root(e),s);
@@ -57,7 +46,26 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
     }
     return entities[e].type;
 }
-bool Analyzer::match_class_pattern(EntityId pattern, std::uint32_t arguments, std::vector<ArgumentId>& deduced)
+void Analyzer::validate_partial_pattern(EntityId e)
+{
+    auto head = templates[entities[e].template_info];
+    for (unsigned j = 0; j < head.count; ++j)
+        if (entities[template_parameters[head.offset+j]].initializer)
+            throw std::runtime_error("default argument in partial specialization head");
+    std::vector<ArgumentId> self;
+    if (!match_partial_pattern(e,head.explicit_arguments,self))
+        throw std::runtime_error("partial specialization has nondeducible parameters");
+    auto primary_head = templates[entities[head.primary].template_info];
+    std::vector<ArgumentId> generic, equivalent;
+    for (unsigned j = 0; j < primary_head.count; ++j) {
+        auto p = template_parameters[primary_head.offset+j];
+        auto arg = parameter_argument(p);
+        generic.push_back(entities[p].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
+    }
+    if (match_partial_pattern(e,intern_arguments(generic),equivalent))
+        throw std::runtime_error("partial specialization does not specialize the primary");
+}
+bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, std::vector<ArgumentId>& deduced)
 {
     auto head = templates[entities[pattern].template_info];
     auto source = argument_packs[head.explicit_arguments], actual = argument_packs[arguments];
@@ -74,13 +82,19 @@ bool Analyzer::match_class_pattern(EntityId pattern, std::uint32_t arguments, st
     }
     // Call deduction permits conversions/base matches. A class pattern must
     // reproduce the exact canonical argument tuple, including cv and values.
-    std::uint32_t frame = 0;
-    if (packs) frame = substitution_frame(0,head.offset,head.count,0,intern_arguments(deduced));
+    auto parent = head.parent_frame ? head.parent_frame : template_lexical_frame(scopes[head.environment].parent);
+    auto frame = packs || parent ? substitution_frame(0,head.offset,head.count,parent,intern_arguments(deduced)) : 0;
+    struct Probe {
+        bool& value; bool prior;
+        Probe(bool& v) : value(v), prior(v) { value = true; }
+        ~Probe() { value = prior; }
+    } probe(template_type_probe);
     for (unsigned j = 0; j < source.count; ++j)
-        if (substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;
+        if (argument_types[source.offset+j] != argument_types[actual.offset+j] &&
+            substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;
     return true;
 }
-void Analyzer::select_class_pattern(std::uint32_t index)
+void Analyzer::select_partial_pattern(std::uint32_t index)
 {
     auto spec = specializations[index];
     if (spec.definition_pattern) return;
@@ -142,10 +156,14 @@ void Analyzer::select_class_pattern(std::uint32_t index)
         return result;
     };
     std::vector<Candidate> matches;
-    for (auto p = class_partial_heads.get(spec.pattern); p; p = class_partial_next.get(p)) {
-        ++candidate_work;
+    const bool variable = entities[spec.pattern].kind == EntityKind::Variable;
+    const auto& heads = variable ? variable_partial_heads : class_partial_heads;
+    const auto& next = variable ? variable_partial_next : class_partial_next;
+    for (auto p = heads.get(spec.pattern); p; p = next.get(p)) {
+        if (variable) ++variable_candidates;
+        else ++candidate_work;
         std::vector<ArgumentId> args;
-        if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args),{}});
+        if (match_partial_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args),{}});
     }
     // Coverage only participates when selection has competing viable patterns.
     // The common single-match path needs no positions, traversal or sorting.
@@ -159,8 +177,8 @@ void Analyzer::select_class_pattern(std::uint32_t index)
         if (auto known = class_partial_ordering.get(identity)) { ++class_ordering_hits; return known == 2; }
         ++class_ordering_work;
         std::vector<ArgumentId> ab, ba;
-        bool result = match_class_pattern(b,templates[entities[a].template_info].explicit_arguments,ba) &&
-            !match_class_pattern(a,templates[entities[b].template_info].explicit_arguments,ab);
+        bool result = match_partial_pattern(b,templates[entities[a].template_info].explicit_arguments,ba) &&
+            !match_partial_pattern(a,templates[entities[b].template_info].explicit_arguments,ab);
         // Ordering depends on immutable candidate shapes, not the actual
         // specialization. Renamed redeclarations preserve that identity.
         class_partial_ordering.put(identity,result ? 2 : 1);
@@ -171,7 +189,7 @@ void Analyzer::select_class_pattern(std::uint32_t index)
         if (more(matches[j],matches[best])) best = j;
     for (unsigned j = 0; j < matches.size(); ++j)
         if (j != best && !more(matches[best],matches[j]))
-            throw std::runtime_error("ambiguous class partial specialization");
+            throw std::runtime_error("ambiguous partial specialization");
     auto selected = matches.empty() ? Candidate{spec.pattern,spec.arguments,{}} : matches[best];
     specializations[index].definition_pattern = selected.entity;
     specializations[index].definition_arguments = selected.arguments;

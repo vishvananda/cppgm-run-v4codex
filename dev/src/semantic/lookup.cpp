@@ -297,7 +297,11 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
         }
         EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
         if (definitions) e = class_template_name(p,e,context);
-        if (definitions && e && entities[e].class_info) complete_class(e);
+        if (definitions && e) {
+            auto type = entities[e].kind == EntityKind::Alias ? source_type(e) : entities[e].type;
+            auto cls = entities[e].class_info ? e : types[type].kind == TypeKind::Named ? types[type].entity : 0;
+            if (cls && entities[cls].class_info) complete_class(cls);
+        }
         if (calls && e && !declaration) check_access(e, context, s);
         s = target(e);
         if (!s) throw std::runtime_error("name qualifier has no scope");

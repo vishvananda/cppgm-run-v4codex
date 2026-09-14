@@ -520,8 +520,9 @@ private:
     Index class_partial_ordering;
     std::size_t class_ordering_work = 0, class_ordering_hits = 0;
     TypeId declare_class_partial(NodeId source, ScopeId scope, EntityId primary);
-    void select_class_pattern(std::uint32_t specialization);
-    bool match_class_pattern(EntityId pattern, std::uint32_t arguments, std::vector<ArgumentId>& deduced);
+    void validate_partial_pattern(EntityId pattern);
+    void select_partial_pattern(std::uint32_t specialization);
+    bool match_partial_pattern(EntityId pattern, std::uint32_t arguments, std::vector<ArgumentId>& deduced);
     std::size_t explicit_selections = 0, variable_initializers = 0, variable_reuses = 0, variable_candidates = 0;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
