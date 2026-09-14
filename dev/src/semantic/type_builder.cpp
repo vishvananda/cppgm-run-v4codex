@@ -451,8 +451,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         }
     }
     if (calls && init && !function && !member_initializer) initialize(init, canonical, definition_scope);
-    if (calls && !function && spec_has(specs,KW_CONSTEXPR) && types[canonical].kind == TypeKind::Array)
-        prepare_constant_array(e);
+    if (calls && !function && types[canonical].kind == TypeKind::Array &&
+        (spec_has(specs,KW_CONSTEXPR) || (init && !member_initializer && !entities[e].is_static &&
+            !entities[e].external_decl && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class)))
+        prepare_constant_array(e,spec_has(specs,KW_CONSTEXPR));
     if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
     if (init && !alias && !function && (!calls || (types[t].kind != TypeKind::LRef && types[t].kind != TypeKind::RRef)) && (integral(t) || floating_type(value_type(t))) && !member_initializer) {
         Constant v = calls ? convert(constant_initialize(init,t,definition_scope),t) : convert(evaluate(init, definition_scope),t);

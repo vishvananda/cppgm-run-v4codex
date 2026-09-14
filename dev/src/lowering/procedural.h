@@ -70,7 +70,7 @@ class Procedural {
     std::vector<unsigned char> discard_accesses;
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
-    std::vector<EntityId> definitions, global_initializers, static_reference_initializers;
+    std::vector<EntityId> definitions, global_initializers;
     struct LocalStatic { EntityId object; SymbolId guard, destructor; bool dynamic; };
     std::vector<LocalStatic> local_statics = std::vector<LocalStatic>(1);
     semantic::Index local_static_index, local_static_references;

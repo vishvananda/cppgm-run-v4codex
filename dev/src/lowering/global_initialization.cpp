@@ -16,12 +16,6 @@ void Procedural::global_initialization()
     symbol.metadata.role = SR_INIT; symbol.metadata.binding = SBM_INTERNAL;
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
-    for (EntityId e : static_reference_initializers) {
-        auto value = sem.static_value(sem.entities[e].initializer,sem.entities[e].type);
-        auto pointer = emit(Opcode::Addr,IRType(),{Operand::symbol(this->symbol(value.entity))});
-        if (value.addend) pointer = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(value.addend)});
-        emit(Opcode::Store,IRType::Ptr,{pointer.operand,Operand::symbol(symbols[e])});
-    }
     for (EntityId e : global_initializers) {
         initialized_units = semantic::Index();
         auto entity = sem.entities[e];

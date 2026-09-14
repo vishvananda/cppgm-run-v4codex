@@ -2,7 +2,7 @@ global @payload [binding=internal, object=_Z7payload] = {
   i32 7
 }
 global @adapted [binding=internal, object=_Z7adapted] = {
-  zero 4
+  i32 7
 }
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
@@ -34,17 +34,6 @@ function @Adapted__Adapted(%this : ptr [object_bytes=4], %p : obj<4x4>) -> void 
     %t3 = index i8 %t2, 0
     %t4 = addr $p
     copyobj 4x4 %t4, %t3
-    return void
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  slot $argobj__1 : obj<4x4>
-
-  block ^entry:
-    %t1 = addr @adapted
-    %t2 = addr $argobj__1
-    %t3 = addr @payload
-    copyobj 4x4 %t3, %t2
-    call void @Adapted__Adapted(%t1, $argobj__1)
     return void
 }
 alias object _ZN7PayloadC2Ei = @Payload__Payload

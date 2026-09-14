@@ -1,3 +1,10 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i8 0
+  i8 0
+  i8 0
+  i8 0
+}
+
 function @Text__take(%this : ptr [object_bytes=1], %out : ptr, %n : i64, %pos : i64) -> i32 [binding=strong, object=_ZN4Text4takeEPcmm] {
   slot $this : ptr
   slot $out : ptr
@@ -26,13 +33,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
     %t1 = addr $text
     %t2 = addr $out
-    store i8 0, %t2
-    %t3 = index i8 %t2, 1
-    store i8 0, %t3
-    %t4 = index i8 %t2, 2
-    store i8 0, %t4
-    %t5 = index i8 %t2, 3
-    store i8 0, %t5
+    copyobj 4x1 @__constant_array_0, %t2
     %t6 = addr $text
     %t7 = addr $out
     %t8 = convert sext i64 i32 3

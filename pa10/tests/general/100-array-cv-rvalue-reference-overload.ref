@@ -1,3 +1,14 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i32 1
+  i32 2
+  i32 3
+}
+global @__constant_array_1 [storage=readonly, binding=internal] = {
+  i32 4
+  i32 5
+  i32 6
+}
+
 function @select_array(%__param0 : ptr [pass=by_address, object_bytes=12]) -> i32 [binding=strong, object=_Z12select_arrayRA3_Ki] {
   slot $__param0 : ptr
 
@@ -18,17 +29,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $values
-    store i32 1, %t1
-    %t2 = index i8 %t1, 4
-    store i32 2, %t2
-    %t3 = index i8 %t1, 8
-    store i32 3, %t3
+    copyobj 12x4 @__constant_array_0, %t1
     %t4 = addr $const_values
-    store i32 4, %t4
-    %t5 = index i8 %t4, 4
-    store i32 5, %t5
-    %t6 = index i8 %t4, 8
-    store i32 6, %t6
+    copyobj 12x4 @__constant_array_1, %t4
     %t7 = addr $values
     %t8 = call i32 @select_array(%t7)
     %t9 = cmp ne i32 %t8, 1

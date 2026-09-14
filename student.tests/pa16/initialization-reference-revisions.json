@@ -1,0 +1,352 @@
+[
+  {
+    "path": "pa16/tests/general/300-constexpr-base-copy-constructor-init.ref",
+    "before_sha256": "723cd8b82fa6591062354ed1d453cd22eb3a0c0991c1a7bec5635e030a29907f",
+    "after_sha256": "313124eeeded5724f7b3994ad4bd1932b2394e759ec56fa7e227583eb7dbb1fd",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/300-constexpr-object-reference-binding.ref",
+    "before_sha256": "b5ccc3ff4269be93b80e5bf5750ccdf1187f20a68ce5115ce92cfd7d9bde6a66",
+    "after_sha256": "12d2ecad2aede0fe28eb7451c5b63acf7c309eae218b548c31c9473eb162a8f0",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/300-static-constexpr-member-string-pointer-initialization.ref",
+    "before_sha256": "899b8c4632c085a25cd91a442d37e2a733d6ed4ced195a2d4711180298d26107",
+    "after_sha256": "3e4a9554b5eba66691c71eb9b3171d7d06765c8e37c6ef859f76e53dcad281a4",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/400-constexpr-overloaded-unary-member-operator.ref",
+    "before_sha256": "247b41d92668d9e9eb4a892fc9df727aaff81e5d9f6b68baccc376e7a22ef208",
+    "after_sha256": "df4ac10f047d0319c8bc1bf24fea77c3e32e80f7b2f8bbe595f2bdc7ddfa7bd7",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/400-constexpr-reference-parameter-address-identity.ref",
+    "before_sha256": "b74b51c8fcb5cac3252012714543f533d4d08f7eb9f7c48d7277f0f33e0f2477",
+    "after_sha256": "938c52c3b52317828442f91957bea2007d58d0b9aa216695e883cf6ea488d4ba",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/400-constexpr-reference-static-object-alias.ref",
+    "before_sha256": "ca68d430dd1e20c59a68c1de85d7ab935dfd1da7d7b87be2f815e0514877f2a0",
+    "after_sha256": "86e9a45ff5a6f3b0501b8fd35d1e2dab97bc14e2494a498ac92a794bba8b7648",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/spec/400-constexpr-function-and-constructor.ref",
+    "before_sha256": "3fd502fe80a19f500c06eac8b743ef2f8935135e354b13cba9b73b511b8116aa",
+    "after_sha256": "5599a16c6e2d3903893e0c7cbd90f11dd3025946efb9f1fef4047160f87497ef",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa16/tests/general/300-local-static-constant-reference-initialization.ref",
+    "before_sha256": "14e52332754ed186d684e8af94436a44777d8b10318d636003e31058afd23891",
+    "after_sha256": "18db442ac935a204e56f54ee3c1ee11a6eb1d7f052edffb6031de3fc33c818a1",
+    "kind": "static-initialization"
+  },
+  {
+    "path": "pa10/tests/general/100-array-cv-rvalue-reference-overload.ref",
+    "before_sha256": "32a928862d3414150b781fe219a7b94dd50d706a5a09f3a43c662ea98b97efe7",
+    "after_sha256": "800ee14a1e560840a6da1e099e87fe8e3a778768f5be4f80922031c4a1f76995",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 12,
+        "alignment": 4,
+        "data": [
+          "i32 1",
+          "i32 2",
+          "i32 3"
+        ]
+      },
+      {
+        "slot": "const_values",
+        "bytes": 12,
+        "alignment": 4,
+        "data": [
+          "i32 4",
+          "i32 5",
+          "i32 6"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/100-unary-plus-array-decay.ref",
+    "before_sha256": "981dcc2d5a319f214f603e1c0bdd8605f73b2cfd6b6480c3be51032378ff8ff0",
+    "after_sha256": "12a8b4386790ffd998cb7453f192dd2fa8f51a2c07bdef0cf72f0e067636674b",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "a",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 3",
+          "i32 4"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-conditional-array-decay-subscript.ref",
+    "before_sha256": "e6e2486f8b0fbc19b7349d49316cc0b0e73245dbc921307242da21e4c2079555",
+    "after_sha256": "e69acd011f121946f81dbb3983e7f821b940bd76ee99ae105f673dd0c5b2a9a4",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "a",
+        "bytes": 4,
+        "alignment": 4,
+        "data": [
+          "i32 7"
+        ]
+      },
+      {
+        "slot": "b",
+        "bytes": 4,
+        "alignment": 4,
+        "data": [
+          "i32 3"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-const-cast-reference-array-subscript.ref",
+    "before_sha256": "8eb03f5f9c6a77b77b8781eeae53aee0998e6e9c99a6c99dc69b4a0b54810d87",
+    "after_sha256": "f3b785c095b4da6210261c4d6ed1e470def10d76264e6cf8116c3041ae884eed",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "data",
+        "bytes": 2,
+        "alignment": 1,
+        "data": [
+          "i8 1",
+          "i8 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-const-cast-reference-similar-pointer.ref",
+    "before_sha256": "66e125e5b7cfdcf9c2ce10d5aa9985655b75b346fc27fe41e008dc50b892122b",
+    "after_sha256": "592d6075e0e2c2745e09e881e1264f79740cfca735a6f630419ae50d603da5ba",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "text",
+        "bytes": 2,
+        "alignment": 1,
+        "data": [
+          "i8 120",
+          "i8 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-inferred-local-array-bound.ref",
+    "before_sha256": "9abaf13c3534910fbbb91452dcf9d025abcf57c3e9a2ff4e4c64af5db3ed62dd",
+    "after_sha256": "fc29157a5da654aa1c8ce3886eca04cdef5b1005cef2e42133716d56ecf34b82",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 1",
+          "i32 2"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-local-direct-init-array-subscript.ref",
+    "before_sha256": "cf2b9ef78789da7b621863437ad47bf44c4e20fe68cc343b554b3c46ace88ef5",
+    "after_sha256": "e6607460da30ac4ba74923068d9b3fdfbcf91b2d1860d50b9e677895f1c88d47",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 1",
+          "i32 2"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa10/tests/general/200-partial-local-array-zero-initialization.ref",
+    "before_sha256": "358f35eb3da35569d79ec069b8afd01abc6f678bdc7d374a7ec97b446f48506c",
+    "after_sha256": "8054137812d92f1c3c0139c6428548946f9f5efbd167f1931f4ec25477644b09",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 12,
+        "alignment": 4,
+        "data": [
+          "i32 4",
+          "i32 0",
+          "i32 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa11/tests/general/200-out-of-class-member-default-argument.ref",
+    "before_sha256": "dac020f6baf7945b782201157d364195e5046d5dfa17e024f5538b6841a44885",
+    "after_sha256": "dd4882cf09935bd0a01f8a2fdd212f0ae69dda9a15efaa6755aaf65cc70cc79f",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "out",
+        "bytes": 4,
+        "alignment": 1,
+        "data": [
+          "i8 0",
+          "i8 0",
+          "i8 0",
+          "i8 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa11/tests/general/300-discarded-comma-reference-result-no-copy.ref",
+    "before_sha256": "cae1112a7514e825e4d8a8402e5bf2285df3353d6221ce6fc57f4c631af8b7cd",
+    "after_sha256": "0eb959cf0d0ed5277c9b2c7fbd7580a7bcad3f38246939ad88d875df8e5fc081",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 1",
+          "i32 2"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa12/tests/general/400-class-conversion-array-subscript.ref",
+    "before_sha256": "35e44a31c6d904a3c02888aeca54f571c8b00ca9d0e8581d03bb2e01b3684cf3",
+    "after_sha256": "85d624ed24be428e44ef57444e565e82ce21f51e27ac3dc6abcfc3673650be8a",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 0",
+          "i32 7"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa12/tests/general/400-class-pointer-conversion-builtin-arithmetic.ref",
+    "before_sha256": "5e04b27f5ace8c2edd70db79b0919943cb07fd17a13df5ff86cef27b403dec08",
+    "after_sha256": "76cbca7c4baad1018a2c89d4e46820442d022e27fafa6210bfeacb240f08613e",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 8,
+        "alignment": 4,
+        "data": [
+          "i32 1",
+          "i32 2"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa12/tests/general/400-pointer-arithmetic-class-conversion.ref",
+    "before_sha256": "96624da1fa7350b9e08271f1d9f8869d1bb992ba8c8088145373a4d74067776b",
+    "after_sha256": "1cce892ded98682d50b35101784026598e226d0e4421d7128bb4097ee67ed272",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 16,
+        "alignment": 4,
+        "data": [
+          "i32 2",
+          "i32 3",
+          "i32 5",
+          "i32 7"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa14/tests/general/100-class-template-member-plus-calls-later-plus-assign.ref",
+    "before_sha256": "8268c2e4db8ec8bc4c4035642dbd6dfea0889af61932dd2e010bc2ad5b393ac2",
+    "after_sha256": "3e74d6dd766cc166d971c9a5f45c00706696d1d7d1faa7a7f4e482dc9a64f933",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 32,
+        "alignment": 4,
+        "data": [
+          "i32 0",
+          "i32 0",
+          "i32 0",
+          "i32 0",
+          "i32 0",
+          "i32 0",
+          "i32 0",
+          "i32 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa15/tests/general/200-pack-expansion-array-unknown-bound.ref",
+    "before_sha256": "d8667095c89e743e8ab02890f493d8427f79213d7c2f14c2ebeeb8d7faef88b7",
+    "after_sha256": "6886ad01e8796c44cf4abf768d7179f3cd56550ca302621389a37704f17d7f55",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "values",
+        "bytes": 12,
+        "alignment": 4,
+        "data": [
+          "i32 0",
+          "i32 1",
+          "i32 0"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "pa15/tests/spec/100-qualified-function-template-call.ref",
+    "before_sha256": "45b20799a9aaacb9dce7353de312eac19b39e875c05f0fbf18af7363f6835a97",
+    "after_sha256": "27801dcdf2c76281657701af8255889ba17692a1fd4b2888dd451188315d150e",
+    "kind": "automatic-array-contract",
+    "arrays": [
+      {
+        "slot": "text",
+        "bytes": 4,
+        "alignment": 2,
+        "data": [
+          "u16 120",
+          "u16 0"
+        ]
+      }
+    ]
+  }
+]

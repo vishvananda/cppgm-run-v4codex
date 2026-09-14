@@ -1,3 +1,8 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i32 1
+  i32 2
+}
+
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $values : obj<8x4>
   slot $it : obj<8x8>
@@ -6,9 +11,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $values
-    store i32 1, %t1
-    %t2 = index i8 %t1, 4
-    store i32 2, %t2
+    copyobj 8x4 @__constant_array_0, %t1
     %t3 = addr $it
     %t4 = addr $values
     call void @Iter__Iter(%t3, %t4)

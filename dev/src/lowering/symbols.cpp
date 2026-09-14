@@ -359,7 +359,7 @@ void Procedural::run()
     }
     emit_deleting_entries();
     emit_allocation_adapters();
-    if (!global_initializers.empty() || !static_reference_initializers.empty()) global_initialization();
+    if (!global_initializers.empty()) global_initialization();
     emit_tls_initializers();
     emit_aggregate_helpers();
     emit_local_static_destructors();

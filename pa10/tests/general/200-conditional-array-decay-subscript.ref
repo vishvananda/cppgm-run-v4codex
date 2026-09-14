@@ -1,3 +1,10 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i32 7
+}
+global @__constant_array_1 [storage=readonly, binding=internal] = {
+  i32 3
+}
+
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $a : obj<4x4>
   slot $b : obj<4x4>
@@ -5,9 +12,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $a
-    store i32 7, %t1
+    copyobj 4x4 @__constant_array_0, %t1
     %t2 = addr $b
-    store i32 3, %t2
+    copyobj 4x4 @__constant_array_1, %t2
     branch 0, ^condaddr_then_1, ^condaddr_else_2
 
   block ^condaddr_then_1:

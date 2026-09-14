@@ -5,7 +5,7 @@ global @__strlit__1 [storage=readonly, binding=internal] = {
   i8 0
 }
 global @__cppgm_class_template_identity_0_0_0__row [binding=weak, object=_ZN5tableIiE3rowE] = {
-  zero 8
+  ptr addr @__strlit__1
 }
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
@@ -44,13 +44,6 @@ function @entry__entry(%this : ptr [object_bytes=8], %value : ptr) -> void [bind
     %t2 = load ptr $this
     %t3 = index i8 [projection=field] %t2, 0
     store ptr %t1, %t3
-    return void
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @__cppgm_class_template_identity_0_0_0__row
-    %t2 = addr @__strlit__1
-    call void @entry__entry(%t1, %t2)
     return void
 }
 alias object _ZN5entryC2EPKc = @entry__entry

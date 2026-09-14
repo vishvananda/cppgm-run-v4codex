@@ -1,3 +1,10 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i32 2
+  i32 3
+  i32 5
+  i32 7
+}
+
 function @read_at(%first : ptr, %n : obj<4x4>) -> i32 [binding=strong, object=_Z7read_atPi6offset] {
   slot $first : ptr
   slot $n : obj<4x4>
@@ -63,13 +70,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $values
-    store i32 2, %t1
-    %t2 = index i8 %t1, 4
-    store i32 3, %t2
-    %t3 = index i8 %t1, 8
-    store i32 5, %t3
-    %t4 = index i8 %t1, 12
-    store i32 7, %t4
+    copyobj 16x4 @__constant_array_0, %t1
     %t5 = addr $one
     call void @offset__offset(%t5, 1)
     %t6 = addr $two

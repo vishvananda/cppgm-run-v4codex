@@ -96,13 +96,6 @@ void Procedural::global(EntityId e)
             g.data.begin = p.data.size(); g.data.count = 1;
             DataItem zero; zero.zero_bytes = g.structured ? sem.object_size(t) : g.type.bytes(); p.data.push_back(zero);
         }
-        else if (local && reference(t) && sem.static_value(entity.initializer,t).kind == semantic::StaticValue::Address) {
-            // The PA16 LowIR contract materializes constant reference bindings
-            // in the startup function, ahead of all dynamic initializers.
-            static_reference_initializers.push_back(e);
-            g.data.begin = p.data.size(); g.data.count = 1;
-            DataItem zero; zero.zero_bytes = 8; p.data.push_back(zero);
-        }
         else if (reference(t)) {
             auto value = sem.static_value(entity.initializer, t);
             if (value.kind != semantic::StaticValue::Address && value.kind != semantic::StaticValue::String) {

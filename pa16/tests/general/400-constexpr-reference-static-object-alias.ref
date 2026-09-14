@@ -1,6 +1,6 @@
 global @object : i32 [binding=strong, object=_Z6object] = zero
-global @reference : ptr [binding=strong, object=_Z9reference] = zero
-global @second : ptr [binding=strong, object=_Z6second] = zero
+global @reference : ptr [binding=strong, object=_Z9reference] = addr @object
+global @second : ptr [binding=strong, object=_Z6second] = addr @object
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $cond__1 : i32
@@ -57,12 +57,4 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^cond_end_3:
     %t14 = load i32 $cond__1
     return i32 %t14
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @object
-    store ptr %t1, @reference
-    %t2 = load ptr @reference
-    store ptr %t2, @second
-    return void
 }

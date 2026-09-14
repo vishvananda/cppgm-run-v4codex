@@ -1,90 +1,69 @@
-# PA16 compact plan — implementation 41
+# PA16 compact plan — implementation 42
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
 Last reviewed commit: `7c39a6edbfa43c226036b8a92fe236722ac85dcc`
 
-Target: **PA16 full-stage**. Turn entry: `caac2cda243e4ab71d6f5aca48159f88b9b8da3b`,
-93/154 passing. Implementation tip: `f1497ca2`, **146/154** passing: 54 prior
-failures resolved and one new output mismatch, a net reduction of 53 failures. Both review markers are preserved.
+Target: **PA16 full-stage**. Entry HEAD `fe4dbd88712f3b87c478084e1b48887315c13e10`,
+**146/154** passing. Previous goal turn: progress (object/address implementation
+and native/performance evidence). Both review markers remain unchanged.
 
 ## Design/spec alignment
 
-Owner: the TU semantic constant evaluator, extended through declarations,
-template queries and typed lowering. Canonical aggregate payloads are separate
-from storage/subobject identity. Selected initializer/conversion/constructor
-plans feed execution; frames own bindings/lifetimes; declarations publish checked
-values and relocation facts. Constructor builders support ordered field reads
-and self addresses. Call keys include referenced storage versions/liveness.
-Arrow selection records feed evaluation, runtime calls, exceptions and cleanup.
-Consumed constant values demand literal symbols; literal data is emitted in a
-separate slice after other globals, retaining pointer addends.
-Class completeness precedes destructor/ABI demand. Explicitly defaulted helpers
-retain their established runtime policy; implicit trivial base copies use their
-existing representation facts.
+Owner/data flow: declaration checking publishes an initializer plan; the TU
+semantic constant checker classifies its persistent value and volatility once;
+lowering consumes that plan as typed readonly data with size/alignment, scalar
+payloads, symbol identities and addends. One distinct automatic slot receives
+one copy. The existing interner shares only data images, never object identity.
+Ordinary automatic scalar arrays now use this path whenever their complete
+initializer is known. Nonconstant, volatile and class-lifetime paths keep their
+selected execution. Constant local references use static relocation data; the
+special startup binding queue has been removed.
 
-Complexity: object interning is proportional to initializer parts; omitted array
-ranges remain sparse. Field/path lookup is indexed, array projection logarithmic,
-address offsets cached. Dependency traversal visits address-containing children.
-Calls retain the 512-depth / 1,000,000-step resource policy. No source replay,
-fake frontend nodes, serialized semantic keys or reference-backed implementation.
-[Object evidence](object-performance.md) records data flow, costs and validation.
+Complexity: classification is O(explicit initializer actions), memoized by plan
+identity. Omitted array ranges stay sparse. Hash/equality work follows emitted
+data items; images and indexes release with the lowering TU. No new source
+replay, semantic string keys, broad invalidation or optional optimizer. Existing
+512-call / 1,000,000-step constexpr limits remain. Typed object/address execution,
+constructor/conversion selection and indexed subobject paths from implementation
+41 remain unchanged; see [object evidence](object-performance.md).
 
 ## Remaining implementation groups
 
-| Owner | Unfinished requirement / validation |
+| Owner | Unfinished requirement / next evidence |
 | --- | --- |
-| Static initialization and O0 emission | Seven unchanged comparisons expect zero storage plus startup initialization where checked constants now emit static data/relocations: base-copy constructor, object reference binding, static string member, unary operator result, reference-parameter identity, static-object alias, function-and-constructor. Reconcile output policy with mandatory constant initialization; rerun these fixtures and prior-through. |
-| Class-result ABI and cleanup emission | Dependent nonliteral-result instantiation now has one valid destructor identity, but its indirect result and cleanup structure differ from the empty-class reference. Establish the inherited ABI/output contract; preserve native lifetime behavior and earlier class-value fixtures. |
-| Automatic scalar-array initialization | The README requires readonly data plus one copy for every fully constant nonvolatile trivial scalar array. Sixteen PA10–15 oracles still require stores under identical flags. The [existing conflict evidence](storage-performance.md) remains open; no coverage or comparator change is authorized by semantic equivalence alone. |
+| Class-result ABI and full-expression emission | One course failure: `400-constexpr-dependent-nonliteral-result-instantiation`. The compiler uses a caller-owned indirect result for a nontrivial empty class; the oracle uses a direct result. The compiler also retains extra EH regions when activating returned temporaries. The destructor already has `unwind=no`; this is not missing exception metadata. Resolve the boundary and cleanup policy together across PA12/16; do not replace unrelated correct oracle instructions. |
+| Constant evaluator member-pointer values | A newly recorded [reducer](../student.tests/pa16/initialization/member_pointer_pending.cpp) is valid C++11 but rejected as a nonconstant constexpr array initializer. The scalar storage path cannot classify this until the evaluator represents member-pointer constants and their conversions/projections. This is unfinished implementation, not an excluded test or an audit waiver. |
 
-The static string-member fixture is the one newly mismatching case: its pointer
-now appears as static relocation data instead of a startup constructor call. The
-new native string-object control verifies pointer contents and constant reads.
-This output mismatch still counts as a failure. All 154 course tests and their
-references are unchanged.
-
-These are unfinished requirements, not waived audit questions. No reference has
-been revised. N3485 [basic.start.init]/2 requires static initialization before
-dynamic initialization, but that alone does not prove each exact fixture's
-startup-form LowIR incorrect: a startup sequence can implement static
-initialization. Any correction still needs the user's reduced-proof protocol.
+The seven original static-initialization mismatches are resolved. The eight PA16
+and sixteen PA10–15 oracle revisions have [reduced standard/contract proofs](reference-corrections.md).
+Original source inputs, status sidecars, coverage and complete comparison rules
+are preserved. The automatic-array change resolves the previously documented
+store/copy conflict; earlier historical plans no longer describe it as blocked.
 
 ## Performance acceptance
 
-[Object performance](object-performance.md) preserves **804** new frozen A/A,
-ABBA and follow-up observations covering compiler latency/RSS and runtime/text.
-All common LowIR and four runtime executable pairs are byte-identical. A measured
-scalar fast path improves compiler latency 2.6–3.2% over the first implementation;
-final scalar templates cost about 6–8% over turn entry. Large runtime-function
-compiler medians are near entry; timing spikes and new-correct-only scaling are
-reported without discarding observations. Compiler text grows 56,320 bytes.
-No runtime speedup is claimed. Historical unsupported percentage/RSS/scaling
-gates remain diagnostic under the stage-scoped spec; resource limits, correctness
-and coverage remain mandatory. [Audit evidence](audit-performance.md) preserves
-3,512 earlier observations and the prior checkpoint review.
+Frozen entry/current compiler and runtime measurements are pending for this
+increment. [Storage](storage-performance.md), [objects](object-performance.md) and
+[audit](audit-performance.md) retain all earlier observations. PA16/O0 has no
+mandated numeric latency/RSS/text ceiling. Historical percentage/RSS/scaling
+targets remain diagnostic under the stage-scoped spec, not inherited exit gates.
+Correctness, work/resource limits and coverage remain mandatory. No optional
+optimization or runtime speedup is claimed by the new declaration admission rule.
 
 ## Handoff ledger
 
 | Checkpoint | Result |
 | --- | --- |
-| `5048b92b` | Typed constexpr objects, subobject addresses, invocation storage, constructors/conversions and native controls. |
-| `a707845c` | Dependent array queries, selected recursive arrows, complete lifetime/ABI demand, pointer identities; extended related controls. |
-| `135242c1` | Scalar conversion cost repair; frozen compiler/runtime evidence and noise follow-up. |
-| `f1497ca2` | Demand string symbols from consumed constant values; defer literal data to preserve global slices and string addends; native static-string control. |
-| Current validation | PA16 **146/154** (exit 2); prior-through **2112/2112** (exit 0); through PA16 **2258/2266** (only the eight listed mismatches); file audit passes with three inherited header warnings; **173 native / 75 rejection** personal controls pass. |
+| Implementation 41, through `f1497ca2` | Typed objects, addresses, constructor/conversion execution, pointer/literal identity; 146/154 course tests; 173 native / 75 rejection controls. Historical evidence remains in `object-performance.md` and `audit.md`. |
+| Initialization increment (working) | Ordinary automatic scalar-array data/copies; static relocation for local references; 24 narrowly edited oracles with proofs and before/after hashes. Explicit controls: 28 native, 2 rejection, seven observed reference startup failures. |
+| Through report after corrections | **2265/2266**, with all **2112/2112** prior tests and **153/154** PA16 tests passing. Final required commands, file audit and performance verification pending. |
 
-Implementation handoff boundary: the connected object/address execution group
-now accepts and validates every successful PA16 input, rejects required invalid
-inputs, and has native cross-owner controls. Remaining course failures require a
-separate, consistent O0 initialization/ABI policy spanning earlier-stage storage
-contracts. More evaluator patches cannot settle those output comparisons;
-rewriting goldens now would lack the required proof. This is an incomplete
-implementation handoff, not assignment certification or permission to advance.
-
-Independent review remains due for the accumulated change since the preserved
-review marker, including cache/lifetime completeness, query adapters and ABI
-policy. That review does not substitute for the unfinished implementation above.
-The [checkpoint](../student.tests/pa16/objects-checkpoint.json) and
-[verifier](../student.tests/pa16/verify_objects.py) bind the code, unchanged course
-fixtures, raw measurements and checks. Earlier review history remains in
-[audit.md](audit.md); historical plans do not add performance exit gates.
+Handoff boundary under validation: persistent initializer classification and
+storage emission are coherent for the represented constant-value families.
+Further storage rewrites cannot resolve either the separate result-lifetime ABI
+contract or the missing member-pointer value algebra. Both remain required
+implementation, with concrete reproducers/comparisons above. This is an
+incomplete implementation handoff, not assignment certification or advancement.
+Independent review is still due for the accumulated changes since the preserved
+review marker, including constant cache/lifetime completeness, query adapters,
+ABI policy and these reference proofs. Review does not replace unfinished work.

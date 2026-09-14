@@ -1,4 +1,4 @@
-global @__local_static__read__decl0__reference : ptr [binding=internal] = zero
+global @__local_static__read__decl0__reference : ptr [binding=internal] = addr @source
 global @source : i32 [binding=strong, object=_Z6source] = 5
 
 function @read() -> i32 [binding=strong, object=_Z4readv] {
@@ -26,10 +26,4 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^cond_end_3:
     %t3 = load i32 $cond__1
     return i32 %t3
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @source
-    store ptr %t1, @__local_static__read__decl0__reference
-    return void
 }

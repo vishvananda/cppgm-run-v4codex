@@ -238,7 +238,7 @@ private:
     std::uint32_t constant_array_projection(NodeId source, ScopeId scope);
     Constant constant_array_element(std::uint32_t plan, Constant index);
     std::size_t constant_array_work = 0;
-    void prepare_constant_array(EntityId e);
+    void prepare_constant_array(EntityId e, bool required);
     bool constant_array_plan_valid(std::uint32_t plan);
     Index zero_initialization_index;
     TypeId initialized_field_type(TypeId owner, EntityId field);

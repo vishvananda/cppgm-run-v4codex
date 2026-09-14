@@ -1,5 +1,5 @@
 global @stored : i32 [storage=readonly, binding=internal, object=_Z6stored] = 5
-global @address : ptr [binding=internal, object=_Z7address] = zero
+global @address : ptr [binding=internal, object=_Z7address] = addr @stored
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
@@ -12,11 +12,4 @@ function @address_of(%value : ptr [pass=by_address, object_bytes=4]) -> ptr [bin
     store ptr %value, $value
     %t1 = load ptr $value
     return ptr %t1
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @stored
-    %t2 = call ptr @address_of(%t1)
-    store ptr %t2, @address
-    return void
 }

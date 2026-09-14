@@ -1,3 +1,8 @@
+global @__constant_array_0 [storage=readonly, binding=internal] = {
+  i8 120
+  i8 0
+}
+
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $text : obj<2x1>
   slot $value : ptr
@@ -6,9 +11,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $text
-    store i8 120, %t1
-    %t2 = index i8 %t1, 1
-    store i8 0, %t2
+    copyobj 2x1 @__constant_array_0, %t1
     %t3 = addr $text
     store ptr %t3, $value
     %t4 = addr $value

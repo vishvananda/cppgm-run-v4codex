@@ -90,15 +90,24 @@ bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
     if (valid && class_value(action.type)) valid = trivial_destructor(action.type);
     constant_array_plans.put(plan,valid ? (copyable ? 3 : 2) : 1); return valid;
 }
-void Analyzer::prepare_constant_array(EntityId e)
+void Analyzer::prepare_constant_array(EntityId e, bool required)
 {
     // A declaration owns one checked initializer plan. Repeated omitted array
     // elements share one action; neither validation nor classification expands
     // the bound. Only the explicit LowIR data writer visits emitted elements.
     if (constant_arrays.get(e)) return;
+    if (!required) {
+        TypeId leaf = entities[e].type;
+        while (types[leaf].kind == TypeKind::Array) leaf = types[leaf].child;
+        // The automatic-data rule covers trivial scalar arrays. Class arrays
+        // keep their selected construction and lifetime actions.
+        if (class_value(leaf) || (types[leaf].cv & 2)) return;
+    }
     auto plan = initializer_plan(entities[e].initializer,entities[e].type);
-    if (!entities[e].initializer || !constant_array_plan_valid(plan))
-        throw std::runtime_error("nonconstant constexpr array initializer");
+    if (!entities[e].initializer || !constant_array_plan_valid(plan)) {
+        if (required) throw std::runtime_error("nonconstant constexpr array initializer");
+        return;
+    }
     // Volatile subobjects still need their ordinary observable stores.
     if (constant_array_plans.get(plan) == 3) constant_arrays.put(e,plan);
 }
