@@ -20,6 +20,17 @@ result=dict(profile=profile,cpu=cpu,platform=platform.platform(),flags=['--emit-
  text_metric='compiler .text; sectionless supplied-backend payload after entry, no static data',workloads={})
 corpus=[]
 for n in [1000,4000]:
+ if profile in ('matching','matching-reuse'):
+  common=profile=='matching-reuse'
+  source='template<class A,class B>struct C{static const int value=0;};template<class T>struct C<T,T>{static const int value=1;};\n'
+  source+=''.join(f'struct Tag{i}{{}};static_assert(C<Tag{i},Tag{i}>::value==1,"selected");static_assert(C<Tag{i},int>::value==0,"primary");static_assert(C<Tag{i},Tag{i}>::value==1,"reused");\n' for i in range(n))+'int main(){return 0;}'
+  corpus.append((f'class-patterns-{n}',source,common,False))
+  source='template<class T>struct C{static const int value=0;};template<class T>struct C<T*>{static const int value=1;};template<class T>struct C<const T*>{static const int value=2;};\n'
+  source+=''.join(f'struct Tag{i}{{}};static_assert(C<const Tag{i}*>::value==2,"ordered");\n' for i in range(n))+'int main(){return 0;}'
+  corpus.append((f'ordered-patterns-{n}',source,common,False))
+  source='template<class T>struct P{typedef void* type;};template<class T>struct I{typedef int type;};template<class T>long f(void(*)(T),typename P<T>::type){return 4;}template<class T>char f(void(*)(T),typename I<T>::type){return 7;}\n'
+  source+=''.join(f'struct Tag{i}{{}};int run{i}(){{return f((void(*)(Tag{i}))0,1);}}\n' for i in range(n))
+  corpus.append((f'alias-overloads-{n}',source,common,False))
  if profile=='stage':
   source='template<class T>int f(int n){return n+sizeof(T);}\n'+''.join(f'struct Tag{i}{{}};int run{i}(int n){{return f<Tag{i}>(n);}}\n' for i in range(n))
   corpus.append((f'types-{n}',source,True,False))
@@ -44,6 +55,10 @@ for n in [1000,4000]:
 if profile=='stage':
  corpus.append(('constants',''.join(f'static_assert((({i}&255)+7)=={(i&255)+7},"value");\n' for i in range(12000))+'int main(){return 0;}',True,False))
 for name,source in shared.runtimes(factor=10):corpus.append(('runtime-'+name,source,True,True))
+if profile in ('matching','matching-reuse'):
+ source=dict(shared.runtimes(factor=10))['calls'].replace('int main()',
+  'template<class A,class B>struct Forward{};template<class T>struct Forward<T,T>{static int call(int n){return step(n);}};int main()').replace('s+step(i)','s+Forward<int,int>::call(i)')
+ corpus.append(('runtime-class-pattern',source,profile=='matching-reuse',True))
 if profile=='checkpoint':
  source=dict(shared.runtimes(factor=10))['calls'].replace('int main()','template<class...T>int forward(T...t){return step(t...);}int main()').replace('s+step(i)','s+forward(i)')
  corpus.append(('runtime-pack',source,True,True))

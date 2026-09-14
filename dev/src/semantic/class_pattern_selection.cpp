@@ -103,9 +103,16 @@ void Analyzer::select_class_pattern(std::uint32_t index)
         if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args)});
     }
     auto more = [&](EntityId a, EntityId b) {
+        auto identity = key(a,b);
+        if (auto known = class_partial_ordering.get(identity)) { ++class_ordering_hits; return known == 2; }
+        ++class_ordering_work;
         std::vector<ArgumentId> ab, ba;
-        return match_class_pattern(b,templates[entities[a].template_info].explicit_arguments,ba) &&
+        bool result = match_class_pattern(b,templates[entities[a].template_info].explicit_arguments,ba) &&
             !match_class_pattern(a,templates[entities[b].template_info].explicit_arguments,ab);
+        // Ordering depends on immutable candidate shapes, not the actual
+        // specialization. Renamed redeclarations preserve that identity.
+        class_partial_ordering.put(identity,result ? 2 : 1);
+        return result;
     };
     unsigned best = 0;
     for (unsigned j = 1; j < matches.size(); ++j)
@@ -116,17 +123,5 @@ void Analyzer::select_class_pattern(std::uint32_t index)
     auto selected = matches.empty() ? Candidate{spec.pattern,spec.arguments} : matches[best];
     specializations[index].definition_pattern = selected.entity;
     specializations[index].definition_arguments = selected.arguments;
-    if (selected.entity == spec.pattern) return;
-    auto environment = make_scope(ScopeKind::Template,entities[selected.entity].owner);
-    auto head = templates[entities[selected.entity].template_info];
-    auto args = argument_packs[selected.arguments];
-    for (unsigned j = 0; j < head.count; ++j)
-        bind_argument(environment,template_parameters[head.offset+j],argument_types[args.offset+j]);
-    bind(environment,entities[spec.entity].name,spec.entity);
-    specializations[index].environment = environment;
-    auto scope = entities[spec.entity].scope;
-    scopes[scope].parent = environment; scopes[scope].depth = scopes[environment].depth+1;
-    auto jump = scopes[environment].jump, grand = scopes[jump].jump;
-    scopes[scope].jump = scopes[environment].depth-scopes[jump].depth == scopes[jump].depth-scopes[grand].depth ? grand : environment;
 }
 } }

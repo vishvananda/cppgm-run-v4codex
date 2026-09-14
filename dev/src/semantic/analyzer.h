@@ -347,6 +347,8 @@ private:
     EntityId specialize_variable(EntityId primary, const std::vector<TypeId>& arguments, bool initialize = true);
     Index variable_template_queries, variable_partial_heads, variable_partial_next;
     Index class_partial_heads, class_partial_next, class_partial_signatures;
+    Index class_partial_ordering;
+    std::size_t class_ordering_work = 0, class_ordering_hits = 0;
     TypeId declare_class_partial(NodeId source, ScopeId scope, EntityId primary);
     void select_class_pattern(std::uint32_t specialization);
     bool match_class_pattern(EntityId pattern, std::uint32_t arguments, std::vector<ArgumentId>& deduced);

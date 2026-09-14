@@ -182,9 +182,10 @@ EntityId Analyzer::specialize_class(EntityId pattern, const std::vector<TypeId>&
     spec.declaration = FactState::Success;
     auto index = specializations.size(); specializations.push_back(spec);
     specialization_index.put(key(pattern,pack),index); entities[e].specialization = index;
-    ScopeId environment = specialization_environment(e);
-    entities[e].scope = make_scope(ScopeKind::Class,environment,source.name,e,false);
-    bind(environment,source.name,e); bind(entities[e].scope,source.name,e);
+    // Declaration identity needs no parameter bindings. Selection at class
+    // completion establishes exactly one environment for the chosen head.
+    entities[e].scope = make_scope(ScopeKind::Class,source.owner,source.name,e,false);
+    bind(entities[e].scope,source.name,e);
     return e;
 }
 ScopeId Analyzer::specialization_environment(EntityId e)
@@ -192,14 +193,22 @@ ScopeId Analyzer::specialization_environment(EntityId e)
     auto index = entities[e].specialization;
     if (specializations[index].environment) return specializations[index].environment;
     auto spec = specializations[index];
-    auto pattern = templates[entities[spec.pattern].template_info];
-    auto environment = make_scope(ScopeKind::Template,entities[spec.pattern].owner);
-    auto pack = argument_packs[spec.arguments];
+    auto selected = spec.definition_pattern ? spec.definition_pattern : spec.pattern;
+    auto pattern = templates[entities[selected].template_info];
+    auto environment = make_scope(ScopeKind::Template,entities[selected].owner);
+    auto pack = argument_packs[spec.definition_arguments ? spec.definition_arguments : spec.arguments];
     for (unsigned j = 0; j < pack.count; ++j) {
         auto parameter = template_parameters[pattern.offset+j];
         bind_argument(environment,parameter,argument_types[pack.offset+j]);
     }
     specializations[index].environment = environment;
+    if (entities[e].class_info) {
+        bind(environment,entities[e].name,e);
+        auto scope = entities[e].scope;
+        scopes[scope].parent = environment; scopes[scope].depth = scopes[environment].depth+1;
+        auto jump = scopes[environment].jump, grand = scopes[jump].jump;
+        scopes[scope].jump = scopes[environment].depth-scopes[jump].depth == scopes[jump].depth-scopes[grand].depth ? grand : environment;
+    }
     return environment;
 }
 EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)

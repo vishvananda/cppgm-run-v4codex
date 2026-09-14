@@ -5,6 +5,20 @@ import subprocess, tempfile, sys
 ROOT = Path(__file__).resolve().parents[2]
 CC = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT/'dev/cppgm++'
 GOOD = {
+ 'injected_identity': '''template<class T>struct C{};
+template<class T>struct C<T*>{typedef C self;};
+int main(){C<int*> c;C<int*>::self* p=&c;return p!=&c;}''',
+ 'repeated_value_parameter': '''template<int A,int B>struct C{static const int value=0;};
+template<int N>struct C<N,N>{static const int value=N;};
+static_assert(C<7,7>::value==7,"value");
+static_assert(C<7,8>::value==0,"mismatch");int main(){return 0;}''',
+ 'primary_then_partial': '''template<class T>struct C{static const int value=1;};
+C<int>*p;static_assert(C<int>::value==1,"primary");
+template<class T>struct C<T*>{static const int value=2;};
+static_assert(C<char*>::value==2,"partial");int main(){return 0;}''',
+ 'partial_pack_member': '''template<class...T>struct C{};
+template<class T,class...U>struct C<T*,U...>{int f(){return sizeof...(U);}};
+int main(){C<int*,char,long> c;return c.f()-2;}''',
  'canonical_alias_defaults': '''template<class T,class U=int>struct P{};
 template<class A,class B>struct Equal{static const bool value=false;};
 template<class T>struct Equal<T,T>{static const bool value=true;};
