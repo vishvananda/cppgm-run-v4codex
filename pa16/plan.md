@@ -1,12 +1,23 @@
-# PA16 implementation — loop 38
+# PA16 implementation — loop 39 (in progress)
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
 Last reviewed commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
 
-Target: **PA16 full-stage**. Entry `cc842756`: **63/154, 91 failures**,
-clean. Previous turn: progress (validated scalar handoff). Validated handoff
-result: **78/154, 76 failures**, 15 entry failures fixed, no lost passes.
+Target: **PA16 full-stage**. Loop 39 entry `c2ccf2d5`: **78/154, 76 failures**,
+clean. Previous turn: progress (validated storage handoff). Review markers above
+remain the original stage entry; neither is advanced during implementation.
 Independent stage review remains pending; implementation handoff is not advancement.
+
+Current work: declaration-owned constexpr validity and completed-class literal
+facts, then related constructor/destructor exception facts where the same
+ownership supports progress. Data flow: canonical declaration/type and completed
+base/member edges -> memoized validity -> definition/variable diagnostics;
+no member-body instantiation merely to classify a class. Aim for O(visited
+declarations + required subobject edges), with TU-owned flat fact indexes and
+explicit incomplete/active states. Validate rejection and positive/dependent
+controls, required stage/prior/file checks, frozen A/B compiler latency/RSS and
+equivalent native runtime/text. Entry binary/log frozen in
+`$RALPH_ARTIFACT_DIR/pa16-loop39/`.
 
 ## Design and completed behavior
 
