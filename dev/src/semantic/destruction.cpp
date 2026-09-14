@@ -240,44 +240,18 @@ bool Analyzer::variant_destruction_effects(TypeId t)
         variant_destruction_index.put(cls, static_cast<unsigned>(BooleanFact::Failure)); throw;
     }
 }
-void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
-{
-    unsigned char spec = 0;
-    for (NodeId c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind != Kind::FunctionQualifier || ast[c].op != KW_NOEXCEPT) continue;
-        if (!ast[c].first) spec = 1;
-        else {
-            Constant value = evaluate(ast[c].first, s);
-            if (!value.valid) throw std::runtime_error("nonconstant noexcept specification");
-            spec = constant_truth(value) ? 3 : 2;
-        }
-    }
-    auto old = entities[e].exception_spec;
-    if (!spec && entities[e].key == KW_DELETE) spec = 1;
-    unsigned previous = old & 3;
-    bool destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
-    bool prior_throwing = previous == 0 || previous == 2;
-    bool current_throwing = spec == 0 || spec == 2;
-    if (old & 128) {
-        if (destructor && (previous || spec) && (!previous || !spec)) {
-            auto cls = scopes[entities[e].owner].entity;
-            require_destructor_class(cls);
-            bool implicit_throwing = !implicit_destructor_nonthrowing(cls);
-            if (!previous) prior_throwing = implicit_throwing;
-            if (!spec) current_throwing = implicit_throwing;
-        }
-        if (prior_throwing != current_throwing)
-            throw std::runtime_error("conflicting exception specifications");
-    }
-    entities[e].exception_spec = 128 | (spec ? spec : destructor ? previous : 0);
-}
 bool Analyzer::function_nonthrowing(EntityId e)
 {
+    if (!e) return false;
+    demand_exception_specification(e);
     auto spec = entities[e].exception_spec & 3;
     if (spec) return spec == 1 || spec == 3;
     if (transfer_member(e) && members[entities[e].member_info].synthetic) {
         prepare_transfer(e); return members[entities[e].member_info].transfer_noexcept;
     }
+    if (constructor_member(e) && members[entities[e].member_info].synthetic &&
+        !members[entities[e].member_info].defaulted_late && !members[entities[e].member_info].inherited_constructor)
+        return default_constructor_nonthrowing(e);
     if (!destructor_member(e)) return false;
     auto m = entities[e].member_info;
     if (members[m].exception_state == FactState::Success) return members[m].nonthrowing;

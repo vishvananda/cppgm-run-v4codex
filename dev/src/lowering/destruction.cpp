@@ -25,7 +25,11 @@ void Procedural::destroy_object(EntityId object, EntityId dtor)
 }
 void Procedural::constructor_cleanup(semantic::SubobjectAction action)
 {
-    if (sem.function_nonthrowing(active_function) || sem.trivial_destructor(action.type)) return;
+    // O0 retains the structural partial-construction cleanup for implicit
+    // defaults. Its exception fact need not force an optional cleanup rewrite.
+    auto member = sem.member_fact(active_function);
+    bool structural_default = member.synthetic && member.constructor && member.transfer == semantic::TransferKind::None;
+    if ((!structural_default && sem.function_nonthrowing(active_function)) || sem.trivial_destructor(action.type)) return;
     BlockId handler = block(); constructed_subobjects.push_back({action, handler});
     emit(Opcode::EhCleanup, IRType(), {Operand::label(handler)});
 }

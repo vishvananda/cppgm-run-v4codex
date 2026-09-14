@@ -86,7 +86,7 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
     if (calls && !expressions[n].ready) {
         switch (ast[n].kind) {
         case Kind::Literal: case Kind::KeywordLiteral: case Kind::IdExpression: case Kind::Parenthesized:
-        case Kind::Call: case Kind::Unary: case Kind::Binary: case Kind::Conditional: case Kind::Cast: case Kind::Sizeof:
+        case Kind::Call: case Kind::Unary: case Kind::Binary: case Kind::Conditional: case Kind::Cast: case Kind::Sizeof: case Kind::TypeTrait:
             expression(n, s); break;
         default: break;
         }
@@ -164,6 +164,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     }
     case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {
+        if (ast[n].op == KW_NOEXCEPT) return constants[facts[n].value];
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression_type(first, s);
         return Constant(types.fundamental(FT_UNSIGNED_LONG_INT), size(t, ast[n].op == KW_ALIGNOF));
     }

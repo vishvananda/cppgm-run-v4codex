@@ -269,7 +269,7 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
         entities[e].constexpr_function |= spec_has(specs,KW_CONSTEXPR) ||
             spec_has(child(source,Kind::MemberSpecifiers),KW_CONSTEXPR);
         entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
-        entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
+        entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE) || entities[e].constexpr_function;
     }
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
     entities[e].external_decl |= spec_has(specs, KW_EXTERN);
@@ -325,6 +325,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
             t = types.compound(TypeKind::Array, types[t].child, count);
         }
     }
+    if (calls && function) t = constexpr_member_type(t,specs,source,d,owner);
     TypeId canonical = types.signature(t);
     if (definitions && !function && active_template_scope == s)
         return declare_variable_template(d,init,canonical,s,source);
@@ -421,6 +422,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
     }
     if (calls) virtual_declaration(e, d, init, specs, source, s);
+    if (calls && !function && spec_has(specs,KW_CONSTEXPR) && !literal_type(canonical))
+        throw std::runtime_error("constexpr variable requires a literal type");
     record(block_extern ? s : owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
     if (calls && init && !function && scopes[s].kind == ScopeKind::Class && entities[e].is_static &&

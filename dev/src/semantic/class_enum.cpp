@@ -88,6 +88,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         if (entities[e].complete) throw std::runtime_error("class redefinition");
         std::size_t deferred_begin = bodies.size();
         auto defaults_begin = declaration_defaults.size();
+        auto exceptions_begin = declaration_exceptions.size();
         ++class_depth;
         ScopeId cs = entities[e].scope;
         if (member_definition_environment && s == member_definition_environment) {
@@ -125,6 +126,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         if (calls) { inherited_constructors(e); complete_virtuals(e); }
         entities[e].complete = true;
         entities[e].definition = n;
+        if (calls) check_constexpr_class(e);
         if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);
         if (!--class_depth) {
             // Defaults are complete-class contexts, including names introduced
@@ -144,6 +146,9 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                 function_body(body);
             }
             bodies.resize(deferred_begin);
+            auto exceptions_end = declaration_exceptions.size();
+            for (auto i = exceptions_begin; i < exceptions_end; ++i) demand_exception_specification(declaration_exceptions[i]);
+            declaration_exceptions.resize(exceptions_begin);
         }
         if (anonymous_union) {
             if (calls) {

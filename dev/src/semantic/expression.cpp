@@ -131,6 +131,12 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         ++unevaluated_depth;
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression(first, s).type;
         --unevaluated_depth;
+        if (ast[n].op == KW_NOEXCEPT) {
+            r.type = types.fundamental(FT_BOOL);
+            Constant value(r.type,expression_nonthrowing(first));
+            facts.edit(n).value = constants.size(); constants.push_back(value);
+            return r;
+        }
         if (!t) throw std::runtime_error("sizeof unresolved overload");
         r.type = types.fundamental(FT_UNSIGNED_LONG_INT);
         // Layout can instantiate a class whose bounds/enumerators publish

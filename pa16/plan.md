@@ -19,6 +19,15 @@ controls, required stage/prior/file checks, frozen A/B compiler latency/RSS and
 equivalent native runtime/text. Entry binary/log frozen in
 `$RALPH_ARTIFACT_DIR/pa16-loop39/`.
 
+Loop 39 working checkpoint: **92/154**, 14 entry failures fixed, no lost passes;
+PA1–15 **2112/2112** and file audit pass. Explicit controls: 22 validity native /
+24 rejection, 26 exception native / 6 rejection, plus all inherited PA16 scalar,
+floating and storage controls. Completed-type facts and exception effects use
+TU-owned flat indexes; dependent exception facts have separate contextual state,
+and class completion drains only its own source obligations. Further work checks
+declaration edge cases and contextual bool on empty constexpr construction.
+Performance measurements and the final handoff audit are still pending.
+
 ## Design and completed behavior
 
 | Owner | Data flow, complexity and lifetime | Validation |

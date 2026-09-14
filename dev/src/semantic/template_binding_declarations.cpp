@@ -210,8 +210,11 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (node.kind == Kind::BitField) field_metadata(e).bit_field = true;
             if (type) {
                 if (kind == EntityKind::Variable && spec_has(specs,KW_CONSTEXPR)) type = types.qualify(type,1);
+                if (function) type = constexpr_member_type(type,specs,n,d,s);
                 entities[e].type = types.signature(type); facts.edit(d).type = type;
+                if (function) template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
             }
+            if (function) declaration_attributes(e,specs,n);
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (function && type) bind_pattern_member(e,n,d);
             if (body) {

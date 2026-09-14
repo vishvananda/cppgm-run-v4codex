@@ -350,6 +350,7 @@ void Analyzer::function_body(const Body& body)
     };
     try {
     demand_region(body.node);
+    if (calls) check_constexpr_signature(body.entity);
     if (definitions) {
         auto type = types[entities[body.entity].type];
         if (class_value(type.child)) complete_class(types[type.child].entity);
@@ -390,6 +391,7 @@ void Analyzer::function_body(const Body& body)
     }
     if (expanded_parameters) bind_function_packs(params,fs);
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
+    if (calls) check_constexpr_constructor(body.entity);
     statements(body.node, fs);
     if (calls) finish_class_returns(body.entity);
     if (calls && (constructor_member(body.entity) || destructor_member(body.entity)))

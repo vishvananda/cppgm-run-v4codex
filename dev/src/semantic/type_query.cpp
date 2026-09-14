@@ -297,7 +297,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
-    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack) x.type = types.fundamental(FT_UNSIGNED_LONG_INT);
+    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
+        x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
     // Layout changes the value of sizeof, not its type. Fixed arithmetic
     // operands still impose definition-time obligations, including operands
     // that a later constant evaluation will short-circuit.
@@ -394,8 +395,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;
     case QueryKind::Call: r = query_call(q,children); break;
     case QueryKind::Sizeof:
-        size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
-        x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
+        if (q.op != KW_NOEXCEPT) size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
+        x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;
     }
     r.dependent |= r.expression.type && dependent_type(r.expression.type);
     r.state = FactState::Success; query_facts[id] = r; return r;

@@ -200,6 +200,7 @@ void Analyzer::bind_template_body(const Body& body)
         }
     } control(*this,types[entities[body.entity].type].child);
     try {
+    check_constexpr_signature(body.entity);
     auto owner = entities[body.entity].template_info ? templates[entities[body.entity].template_info].environment : body.owner;
     auto fs = make_scope(ScopeKind::Function,owner,entities[body.entity].name,body.entity,false);
     template_pattern_scopes.put(fs,1);

@@ -349,6 +349,16 @@ struct DefaultArgumentFact {
     FactState state = FactState::NotStarted, demand = FactState::NotStarted;
     unsigned char reasons = 0;
 };
+struct ExceptionSpecificationFact {
+    NodeId expression = 0, declarator = 0;
+    ScopeId scope = 0;
+    std::uint32_t previous = 0;
+    EntityId pattern = 0;
+    FactState state = FactState::NotStarted;
+    unsigned char specification = 0;
+    unsigned char prior_specification = 0;
+    bool destructor = false;
+};
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     EntityId constructor = 0; Expression call;
