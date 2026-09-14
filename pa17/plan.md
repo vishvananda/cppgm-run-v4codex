@@ -1,7 +1,23 @@
-# PA17 compact plan — checkpoint audited, loop 48
+# PA17 compact plan — implementation, loop 49
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `58789b00e19ae2aff032c8b04980b7d43265617f`
+
+Loop 49 entry: `df0904deaa9a21544ab4c10f3a9e68120740d982`, clean,
+248/343 (95 failures). Previous turn: progress, completed checkpoint audit.
+Review markers above remain unchanged. Active implementation owner is the
+retained member-template declaration/definition graph: source heads → structural
+owner/prototype selection → composed substitution frames → declaration/body
+demand → ordinary typed LowIR. Close renamed and nested heads, overload identity,
+and late definition attachment together where this owner supports them. Work
+must track source head widths, owner depth and actual specialization demands;
+use indexed entity/source keys and immutable frames, with no grammar replay or
+global retries. Validate the unchanged course suite, all related personal
+controls, prior-through report and file audit. Freeze entry/final binaries for
+A/A+ABBA latency/RSS and checked native runtime/text evidence; PA17/O0 introduces
+no optional optimization or numerical performance exit ceiling. Remaining
+implementation and independent review questions will be recorded separately at
+handoff; the initial cluster is not a stopping boundary.
 
 Target: **PA17 full-stage**, incomplete. The first checkpoint audit covers the
 entire stage-base→reviewed-tip range: thirteen accumulated commits through
