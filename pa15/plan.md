@@ -3,76 +3,85 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
-Target: **PA15 full-stage**, O0 typed LowIR. Loop 33 starts at `3aff4801`,
-**166/177**, with the same **11 failures** as the completed checkpoint audit.
-The previous goal turn produced verified audit evidence and repairs (progress).
-This implementation turn does not authorize advancing to PA16.
+Target: **PA15 full-stage**, O0 typed LowIR. Loop 33 enters at `3aff4801`,
+**166/177**, and hands off **169/177**: three existing failures fixed, eight
+remain, no coverage reduction. This is an incomplete implementation handoff,
+not the independent whole-stage audit or permission to advance to PA16.
+The preceding goal turn was progress: committed audit repairs and verified
+measurements. Preserve [the accumulated audit](audit.md), its review range,
+[historical evidence](../student.tests/pa15/checkpoint-evidence.json), and both
+markers above; this turn does not advance the reviewed marker.
 
-The first review covers every commit from the stage base through `538cfcb0`
-(13 handoff commits and three audit commits), including combined source changes
-and their interactions. [Audit](audit.md) records the complete range, findings,
-architecture trace and ledger. [Verified evidence](../student.tests/pa15/checkpoint-evidence.json)
-pins the exact failing set, fixture trees, reviewed sources and check artifacts.
+## Completed owner and spec alignment
 
-## Reviewed ownership and fixes
+Class-pattern selection now belongs to the primary template's indexed family.
+Canonical primary/argument identity survives selection; separate definition and
+argument facts drive the selected head's sole environment and retained body.
+Argument deduction requires exact substitution back to the actual tuple,
+including cv, repeated values and pack boundaries. Pair ordering has a TU-owned
+flat cache keyed by the two immutable declaration identities. Redeclaration
+renaming preserves its shape; insertion cannot invalidate unrelated pairs.
+Selection runs once at concrete completion, after late visible declarations;
+explicit specializations retain their existing separate selection path.
 
-Canonical typed arguments retain per-parameter pack boundaries and immutable
-substitution frames. Explicit function specializations and function-address
-selection now share typed signature deduction, retaining references, return
-types and explicit prefixes. ADL and local ABI traversal visit pack elements;
-class redeclarations preserve parameter-pack kind. Clearing a deduction binding
-repairs its hash probe cluster without invalidating unrelated entries.
+Dependent nested template-ids retain their typed argument list. Qualified alias
+lookup consumes selected declarations, while abstract pointer/reference casts
+use bounded parser lookahead without replay. The shared semantic/source graph,
+immutable substitution frames, separate member-body demand and direct typed
+LowIR remain intact. No output, reference, bundle or comparison rule changed.
 
-Signature substitution publishes expanded-list topology once. Scalar signature
-and body consumers bypass pack expansion and its temporary vectors/scans;
-empty packs retain their explicit empty-list fact. Source occurrences stay
-shared, completion/body/storage facts stay separately demanded, and lowering
-consumes typed semantic facts. The audit adds 11 native and 7 rejection controls
-plus a collision/removal control for the shared index.
+Per completion, work follows this family's C candidates and their argument
+shapes: O(C) matching/ordering comparisons, local candidate scratch, no registry
+scan. Ordering computes each encountered pair once; storage follows visited
+pairs and demanded class facts, released with the TU. Class declarations do not
+allocate a discarded primary environment before selecting a partial definition.
+Scalar/no-partial paths do no candidate or ordering work. Pack lanes use existing
+expansion frames; unrelated member bodies remain dormant.
 
 ## Remaining required implementation
 
-| Broad group | Remaining obligations |
+| Owner | Unfinished work and boundary |
 |---|---|
-| Dependent matching and aliases | Four fixtures: dependent bool traits, dependent typename, alias-parameter overloads, and type-equivalent defaults. Establish selected-pattern and dependent alias facts; handout exclusions do not waive checked fixtures. |
-| Constant objects and initialization/storage | Six fixtures: aggregate braced casts, dependent conversion operators, constexpr locals after qualified types, static constexpr reference replay/call initializers, and stale function initialization output. Keep constant execution, initializer recipes and storage demand separate. |
-| Ordinary source validation | One fixture: unused ordinary member `static_assert`. Validate ordinary bodies independently of emission, including explicit-class members; do not eagerly instantiate unrelated template bodies. |
+| Constant execution, initialization and storage | Seven fixtures: constant-object bool conversion, aggregate braced casts, dependent conversion-operator static storage, constexpr local array backing, static constexpr member replay, constexpr call initializers, and stale function initialization output. Constant execution must consume checked bodies/conversions; initializers and storage/emission remain separate facts. |
+| Ordinary body validation | One fixture: unused ordinary member `static_assert`. Check ordinary and explicit-class member bodies independently of emission; do not instantiate unrelated template member bodies. |
 
-Keep each group open through its dependent consumers and rejection controls.
-Loop 33 sequence: dependent matching and alias consumers, constant objects and
-their storage/lowering consumers, then ordinary body validation. Class-pattern
-selection belongs to the primary's indexed candidate family; deduction produces
-typed bindings consumed by the selected definition. Dependent aliases retain
-typed qualified-name queries. Constant execution consumes checked expression
-facts, while storage and emission remain separately demanded. Ordinary body
-validation belongs to declaration completion, not emission demand. Work must
-track family candidates, dependent nodes and emitted actions, with TU-owned
-facts and local scratch; no global rescans or source replay. Validate each group
-with existing failing fixtures plus explicitly run personal/native/rejection
-controls, then required root checks. Freeze A/B binaries and inputs for A/A and
-ABBA compiler latency/RSS and executable runtime/text evidence; no optional
-optimizer or unsupported numerical performance gate is introduced.
-The three earlier handoffs had useful broad ownership boundaries, but splitting
-selection from packs without testing their composition missed pack specialization,
-ADL and target-signature bugs. Separate scalar performance follow-ups also left
-redundant work in the same parameter owner. Avoid another handoff until related
-consumers and their interactions have been checked; use no progress quota.
+The dependent-bool fixture's type matching is not its remaining failure: it
+requires evaluating `B{}` through a constexpr conversion into the non-type bool
+parameter. Its scalar member-binding counterpart works. Extending matching or
+forcing layout cannot provide that execution fact. Likewise, ordinary-body
+checking needs validation versus emission dependencies, not another class-pattern
+lookup. These are concrete distinct owners: carrying them into this increment
+would require a constant execution model and a body-demand redesign rather than
+further fixes supported by the completed matching work. They remain required
+implementation, not review uncertainties. The turn extended beyond the first
+three fixtures through nested arguments, packs, member demand, ordering reuse,
+cv/value conflicts, late visibility, injected identity and environment ownership.
 
-## Validation and stage-scoped acceptance
+Independent review remains outstanding for the combined stage changes and
+whole-stage spec compliance, including selection/constant-storage interactions
+once the unfinished owners are implemented. The new controls and self-review
+are evidence for this handoff, not a waiver of that audit.
 
-`make test-pa15`: **166/177**, exit 2, identical 11 entry failures.
+## Validation, performance and handoff ledger
+
+`make test-pa15`: **169/177**, exit 2; failures **11 -> 8**.
 `make test-report-through-pa14`: **1935/1935**, exit 0.
-`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src`: **pass**, the same
-three inherited header warnings. All existing personal suites and the new audit
-controls pass. Fixture coverage, references, bundle, comparison rules and
-attribution are unchanged.
+File audit: **pass**, the same three inherited header warnings. Personal suites:
+15 matching native + 7 rejection controls; 27 pack native + 8 rejections;
+24 specialization native + 13 rejections; 26 value groups; 10 constant groups;
+11 checkpoint native + 7 rejections; hash-index collision/removal control.
+All run explicitly. The PA15 handout's LowIR validator runs in required tests;
+there is no additional current-stage native/debug gate.
 
-[Performance](audit-performance.md) preserves 2,380 invocations across 11 frozen
-campaigns, including A/A, ABBA, compiler latency/RSS, runtime/text and counters.
-Measured compiler tip `034e3b91` has exactly the reviewed tip's `dev` tree.
-The avoidable scalar work was removed. PA15/O0 mandates correctness and bounded
-work/lifetimes, with no numerical latency/RSS/text ceiling or optional optimizer.
-Historical self-selected targets remain diagnostic; all measurements and actual
-requirements remain intact. Native optimization, allocation and self-hosting
-keep their later-stage ownership. Finish all remaining PA15 fixtures and the
-root through report before advancing.
+[Loop 33 evidence](matching-performance.md) preserves the preliminary and final
+frozen A/A/ABBA compiler latency/RSS and runtime/text campaigns, input/output
+hashes, counter scaling and the acceptance rationale. PA15/O0 mandates correct,
+bounded semantic work and lifetimes; it has no numerical latency/RSS/text ceiling
+and introduces no optional optimizer. Later native optimization and self-hosting
+retain their owning stages. Historical diagnostic targets and measurements in
+[audit performance](audit-performance.md) remain preserved.
+
+| Handoff | Implementation / review boundary | Evidence |
+|---|---|---|
+| Checkpoint 32 | Reviewed base through `538cfcb0`; matching, constants/storage and ordinary validation unfinished | 166/177; prior 1935/1935; [audit](audit.md) |
+| Loop 33 | `9dea2f0a` plan, `57f0cd95` matching/parser, `3c356866` ordering/environment ownership; independent review marker unchanged | 169/177; prior 1935/1935; file audit pass; [verified handoff](../student.tests/pa15/matching-handoff.json); constant/storage and ordinary-body owners remain |

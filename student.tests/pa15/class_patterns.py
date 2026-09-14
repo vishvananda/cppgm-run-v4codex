@@ -5,6 +5,11 @@ import subprocess, tempfile, sys
 ROOT = Path(__file__).resolve().parents[2]
 CC = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT/'dev/cppgm++'
 GOOD = {
+ 'dependent_bool_binding': '''template<class T,T V>struct Integral{static const T value=V;};
+template<bool B>struct Box{static const bool value=B;};
+template<class B>struct Use{typedef Box<bool(B::value)> type;};
+static_assert(Use<Integral<bool,true>>::type::value,"true");
+static_assert(!Use<Integral<bool,false>>::type::value,"false");int main(){return 0;}''',
  'injected_identity': '''template<class T>struct C{};
 template<class T>struct C<T*>{typedef C self;};
 int main(){C<int*> c;C<int*>::self* p=&c;return p!=&c;}''',

@@ -1,0 +1,213 @@
+{
+  "status": "validated incomplete implementation handoff; independent audit remains",
+  "stage_base_commit": "8000f3c8ef4647d57f2c0775192585f14cab33d8",
+  "last_reviewed_commit": "538cfcb00441f57c0629f6d27fddbad723539479",
+  "entry_commit": "3aff48010edc11ad4e4ab4981c57b85b553b672c",
+  "implementation_commit": "3c356866820406a542d6b706b915fa304a9c1a4c",
+  "dev_tree": "263832569166e8a8ff99b3bebe806ce6e7f90089",
+  "binary_sha256": "5d0c9d35394ea6b1e320bae62c47fde7113b026c882b5aaab81a56c48d242038",
+  "checks": {
+    "entry": {
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/entry-tests.log",
+      "exit": 2,
+      "command": "Ralph turn-entry PA15 report"
+    },
+    "prior": {
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/prior-exit.log",
+      "exit": 0,
+      "command": "make test-report-through-pa14"
+    },
+    "stage": {
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/stage-exit.log",
+      "exit": 2,
+      "command": "make test-pa15"
+    },
+    "file_audit": {
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/file-audit-exit.log",
+      "exit": 0,
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src"
+    },
+    "class_patterns": {
+      "command": "python3 student.tests/pa15/class_patterns.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/class-patterns-exit.log"
+    },
+    "packs": {
+      "command": "python3 student.tests/pa15/packs.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/packs-exit.log"
+    },
+    "specializations": {
+      "command": "python3 student.tests/pa15/specializations.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/specializations-exit.log"
+    },
+    "values": {
+      "command": "python3 student.tests/pa15/value_arguments.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/values-exit.log"
+    },
+    "constants": {
+      "command": "python3 student.tests/pa15/constants.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/constants-exit.log"
+    },
+    "checkpoint": {
+      "command": "python3 student.tests/pa15/checkpoint_audit.py",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/checkpoint-exit.log"
+    },
+    "index": {
+      "command": "g++ -std=c++11 -O2 -Idev/src student.tests/pa15/index_erase.cpp dev/src/support/id_index.cpp -o ARTIFACT_DIR/index-erase; ARTIFACT_DIR/index-erase",
+      "exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/index-exit.log"
+    }
+  },
+  "entry_failures": [
+    "pa15/tests/general/100-aggregate-functional-braced-cast.t",
+    "pa15/tests/general/100-dependent-bool-trait-nontype-argument.t",
+    "pa15/tests/general/100-dependent-typename.t",
+    "pa15/tests/general/100-function-template-dependent-alias-parameter-overloads.t",
+    "pa15/tests/general/100-nontype-conversion-operator-dependent-template-id.t",
+    "pa15/tests/general/100-qualified-type-before-constexpr-local.t",
+    "pa15/tests/general/100-reference-static-constexpr-member-replay.t",
+    "pa15/tests/general/100-static-constexpr-member-call-initializer.t",
+    "pa15/tests/general/400-stale-function-template-instantiation-lookup.t",
+    "pa15/tests/spec/100-type-equivalence-default-argument.t",
+    "pa15/tests/spec/100-unused-member-function-static-assert-bad.t"
+  ],
+  "remaining_failures": [
+    "pa15/tests/general/100-aggregate-functional-braced-cast.t",
+    "pa15/tests/general/100-dependent-bool-trait-nontype-argument.t",
+    "pa15/tests/general/100-nontype-conversion-operator-dependent-template-id.t",
+    "pa15/tests/general/100-qualified-type-before-constexpr-local.t",
+    "pa15/tests/general/100-reference-static-constexpr-member-replay.t",
+    "pa15/tests/general/100-static-constexpr-member-call-initializer.t",
+    "pa15/tests/general/400-stale-function-template-instantiation-lookup.t",
+    "pa15/tests/spec/100-unused-member-function-static-assert-bad.t"
+  ],
+  "fixtures": {
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa10/tests": "7f658d1aa2f6c7638b3c102958f966f1d6448006",
+    "pa11/tests": "961b4ab7ed62b1fa72398057b01f4158d356f18a",
+    "pa12/tests": "19d6a21bf23737b67f0b396f4ab6ef693efa9970",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa14/tests": "d94f017d7124027c242584c42772c845d25deccc",
+    "pa15/tests": "cc3a00ce498419f5d067ef9ec47f12c839af7534",
+    "scripts": "ed4bd8a4ac5ba7038912ee6ac8bd6dcae3d36782",
+    "reference-binaries": "df62b63d88bad7300b4ff522d8b2d75350a63d91",
+    "pa15/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa15/README.md": "a394a424d8b1139734b2c60fdae3df104f077c85",
+    "spec.md": "e10b5f28d976e181b0cd97cdec55ed3415812cd5"
+  },
+  "campaigns": [
+    "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance.json",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-final.json",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-reuse.json",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-noise.json"
+  ],
+  "measured_invocations": 658,
+  "reference_changes": [],
+  "artifacts": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/entry-tests.log",
+      "sha256": "a6a74e1ba048fa7ed931eef1d9aec5b344e58c1484f5fa5ed6b9775935b2d2ef"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/prior-exit.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/stage-exit.log",
+      "sha256": "3067bf74bc90d50680aac3686623ed7309d09648edaaad6532e27f94e26699a8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/file-audit-exit.log",
+      "sha256": "b59169eefa5d6ec564ba1050b16752603ed4ab7eaeb363c57d104dcd3d2d8fc0"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/class-patterns-exit.log",
+      "sha256": "1923f2bf3d9b1daf69c8a02b2283670de21c5ba28b8889926b8a6628751c8013"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/packs-exit.log",
+      "sha256": "877333e8ee3e9c501f714e7475769d313dd4691b7969f32b979e41ebcbf90993"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/specializations-exit.log",
+      "sha256": "e3ba7b6aac760089179fef26ea74a767680d40940032cb70bf46aea2eb566d18"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/values-exit.log",
+      "sha256": "f8c05f73e04dc359824048d2fa37964864321f12ac127c7f735f60807c196918"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/constants-exit.log",
+      "sha256": "070649fba7f51ed2f28fa424c53972e7951ff69f7e9b87b8920229d7db2866c4"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/checkpoint-exit.log",
+      "sha256": "0dfaa25d4b5c49f082c3f924e78cb56003266d6aeae225b8687bf7d310764cd3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/index-exit.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance.json",
+      "sha256": "7b0538eaf0b6016feb67fe0e1c2e63ab0ddf5da5d67449a3a6c23a833dd8f870"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-final.json",
+      "sha256": "f1c3fae68f830b6318bb59c8e601c5a9adfb7a64a2e6b1e1fc8afea0c43deb65"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-reuse.json",
+      "sha256": "6da53b4a5b1db429a75c4551f3faee9464a3a4f3cf56a4a235f86afc8037893f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-noise.json",
+      "sha256": "89dba6acfebe9e1bd6be637f00d9ff272b17b0be98d93d2a95aafc8bfe5c5ccb"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/before",
+      "sha256": "49ef12166b09ab7a704b956c7dff91cbd5a1c3c74635ebf47509a19317842797"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/after",
+      "sha256": "b895d4f89b7e77e6a6b7f27d592ba266730e7d8921b1ef09fbddb8311b716865"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/final",
+      "sha256": "5d0c9d35394ea6b1e320bae62c47fde7113b026c882b5aaab81a56c48d242038"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-preliminary.py",
+      "sha256": "97c4dff37acfc6bc12757182f31f91a903d100bad3f7b8e30628febd9d479206"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-final.py",
+      "sha256": "e36deaf5b51eaf028cb5d8e59671b601dda85c0e1b2102100babe5b5d063e5e2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa10/benchmark.py",
+      "sha256": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/class_patterns.py",
+      "sha256": "4b5619650adce251f7d289c8fc0bb62b9f7b984083d531b68eec77c618ce718c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/audit_benchmark.py",
+      "sha256": "e36deaf5b51eaf028cb5d8e59671b601dda85c0e1b2102100babe5b5d063e5e2"
+    }
+  ]
+}
