@@ -133,6 +133,15 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
             select_explicit_specialization(e,source);
             previous.body = 0;
         }
+        if (definition && previous.body && spec_has(ast[source].first,KW_FRIEND) &&
+            ast.nodes.occurrences[source].context && !ast.nodes.occurrences[previous.source].context &&
+            ast.nodes.occurrences[source].source == ast.nodes.occurrences[previous.source].source &&
+            pattern_scope(previous.environment)) {
+            // The source definition is a retained recipe. Its first concrete
+            // enclosing class publishes the actual namespace definition.
+            // A second class producing the same signature is a redefinition.
+            previous.body = 0;
+        }
         if (definition && previous.body) throw std::runtime_error("template function redefinition");
         if (!previous.body) {
             // Redeclarations may rename parameters. Keep each head immutable;

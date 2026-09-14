@@ -53,9 +53,9 @@ EntityId Analyzer::declare_class_specialization(NodeId n, ScopeId s)
     }
     return e;
 }
-EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeId type)
+EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeId type, ScopeId declared_owner)
 {
-    auto owner = name_owner(name,s);
+    auto owner = declared_owner ? declared_owner : name_owner(name,s);
     auto list = child(ast[name].last,Kind::TemplateArguments);
     std::vector<TypeId> supplied;
     for (auto a = ast[list].first; a; a = ast[a].next) supplied.push_back(template_argument_node(a,s));

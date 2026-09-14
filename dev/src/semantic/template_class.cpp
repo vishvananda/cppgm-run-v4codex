@@ -31,14 +31,14 @@ bool Analyzer::dependent_template_syntax(NodeId root, ScopeId s)
     }
     return false;
 }
-TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
+TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owner)
 {
     NodeId name = ast[n].detail;
-    ScopeId owner = name_owner(name,s);
+    ScopeId owner = friend_owner ? friend_owner : name_owner(name,s);
     if (owner == s) owner = scopes[s].parent;
     bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
         scopes[member_definition_environment].parent == owner;
-    if (!encloses(scopes[s].parent,owner) && !retained_member) throw std::runtime_error("class template outside enclosing scope");
+    if (!friend_owner && !encloses(scopes[s].parent,owner) && !retained_member) throw std::runtime_error("class template outside enclosing scope");
     s = member_template_environment(s,owner);
     auto id = terminal(name);
     EntityId e = local(owner,id,Lookup::Tag);
@@ -50,7 +50,8 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
         entities[e].type = types.named(e);
         entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
         entities[e].scope = make_scope(ScopeKind::Class,s,id,e,false);
-        bind(owner,id,e);
+        if (friend_owner) tags.put(key(owner,id),e);
+        else bind(owner,id,e);
     }
     auto previous_index = entities[e].template_info;
     auto previous = previous_index ? templates[previous_index] : TemplateFunction();
@@ -109,7 +110,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     auto bases_node = child(n,Kind::Bases);
     for (auto b = ast[bases_node].first; b; b = ast[b].next) {
         if (dependent_template_syntax(ast[child(b,Kind::BaseName)].detail,s)) continue;
-        auto base = resolve(ast[child(b,Kind::BaseName)].detail,s,Lookup::Qualifier);
+        auto base = resolve(ast[child(b,Kind::BaseName)].detail,entities[e].scope,Lookup::Qualifier);
         if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
         if (base && dependent_type(entities[base].type)) continue;
         if (base && entities[base].class_info) complete_class(base);
@@ -213,7 +214,8 @@ ScopeId Analyzer::specialization_environment(EntityId e)
     auto spec = specializations[index];
     auto selected = spec.definition_pattern ? spec.definition_pattern : spec.pattern;
     auto pattern = templates[entities[selected].template_info];
-    auto environment = make_scope(ScopeKind::Template,entities[selected].owner);
+    auto parent = entities[e].kind == EntityKind::Function ? scopes[pattern.environment].parent : entities[selected].owner;
+    auto environment = make_scope(ScopeKind::Template,parent);
     auto pack = argument_packs[spec.definition_arguments ? spec.definition_arguments : spec.arguments];
     for (unsigned j = 0; j < pack.count; ++j) {
         auto parameter = template_parameters[pattern.offset+j];

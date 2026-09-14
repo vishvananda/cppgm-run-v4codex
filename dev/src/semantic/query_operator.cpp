@@ -24,10 +24,16 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         family = merge_lookup(family,associated_type_lookup(q.name,std::move(argument_types)));
     struct Candidate { EntityId entity; unsigned offset, builtin; TypeId surrogate; };
     std::vector<Candidate> viable; std::vector<Conversion> sequences;
-    for (auto e : candidates(family)) {
+    Index concrete_candidates;
+    auto declarations = candidates(family);
+    for (auto e : declarations) {
         ++candidate_work;
         if (entities[e].template_info) e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static);
         if (!e) continue;
+        if (declarations.size() > 1) {
+            if (concrete_candidates.get(e)) continue;
+            concrete_candidates.put(e,1);
+        }
         bool member = entities[e].member_info && !entities[e].is_static;
         auto f = types[entities[e].type];
         auto supplied = args.size()-member;

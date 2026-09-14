@@ -1,7 +1,20 @@
-# PA17 compact plan — implementation handoff, loop 49
+# PA17 compact plan — implementation in progress, loop 50
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `58789b00e19ae2aff032c8b04980b7d43265617f`
+
+Loop 50 entry: `d3ef5e5d5adc89baf13f9697e5c38b165bba0dcc`, clean,
+284/343 (59 failures). The previous turn produced a validated retained-head
+increment (progress); these remaining failures are implementation work.
+Current group: friend declarations and specialization access/ADL. Owner:
+semantic friend/entity graph. Data flow: retained class/head → canonical
+namespace or member template → explicit friendship edge → specialization
+access and associated lookup → ordinary demand/LowIR. Work must follow head
+width, lexical/associated edges and demanded bodies, with no global retries.
+Validate positive and negative friendship, hidden lookup, specialization
+isolation and deferred body controls, required course reports, file audit and
+frozen entry/final latency/RSS and executable observations. The loop 49 record
+below remains historical until this increment's validated handoff.
 
 Target: **PA17 full-stage**, incomplete. Entry was clean at
 `df0904deaa9a21544ab4c10f3a9e68120740d982`: **248/343**. Implementation through

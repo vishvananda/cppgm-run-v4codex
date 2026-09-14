@@ -42,6 +42,9 @@ void Analyzer::finish()
             instantiate_function(specialization_demand[specialization_cursor++]);
             continue;
         }
+        if (friend_definition_cursor < friend_definition_demand.size()) {
+            instantiate_friend_body(friend_definition_demand[friend_definition_cursor++]); continue;
+        }
         if (demand_cursor == demand_queue.size()) break;
         EntityId e = demand_queue[demand_cursor++];
         std::uint32_t m = entities[e].member_info;
@@ -159,13 +162,30 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     auto saved_explicit = explicit_specialization_source;
     if (explicit_specialization_source == n) explicit_specialization_source = ast[params].next;
     if (definitions) check_template_parameters(ast[params].next,ts);
-    if (!definitions || !retain_template_definition(ast[params].next,ts)) declaration(ast[params].next, ts);
+    bool friend_template = calls && scopes[s].kind == ScopeKind::Class &&
+        friend_declaration(ast[params].next,ts);
+    if (!friend_template && (!definitions || !retain_template_definition(ast[params].next,ts))) declaration(ast[params].next, ts);
     active_template_scope = saved;
     explicit_specialization_source = saved_explicit;
     auto decl = ast[params].next;
     auto declarator = ast[decl].kind == Kind::Function ? ast[ast[decl].first].next :
         ast[decl].kind == Kind::SimpleDeclaration ? ast[ast[child(decl,Kind::InitDeclarators)].first].first : child(decl,Kind::Declarator);
     auto declared = facts[declarator ? declarator : decl].entity;
+    if (friend_template) {
+        // A friend head is an independent lexical declaration even when it
+        // refers to an existing template with differently named parameters.
+        if (!ast.nodes.occurrences[n].context)
+            template_source_heads.put(ast.nodes.occurrences[n].source,retain_template_head(ts));
+        else if (declared && declarator && entities[declared].template_info) {
+            auto index = entities[declared].template_info;
+            if (templates[index].source == decl && templates[index].body) {
+                templates[index].source_parameters = templates[source_head].offset;
+                templates[index].source_count = templates[source_head].count;
+                templates[index].parent_frame = enclosing_frame;
+            }
+        }
+        return;
+    }
     if (declared && entities[declared].template_info) {
         auto index = entities[declared].template_info;
         auto declaration_source = ast.nodes.occurrences[declarator ? declarator : decl].source;
@@ -225,8 +245,9 @@ void Analyzer::simple(NodeId n, ScopeId s)
         NodeId d = ast[specs].next;
         TypeId t = declarator(d, base, s);
         EntityId e = declare_object(d, 0, t, specs, s, n);
+        access_override = saved_access;
         schedule_body({ast[d].next, d, entities[e].owner, e, n});
-        access_override = saved_access; return;
+        return;
     }
     for (NodeId item = ast[list].first; item; item = ast[item].next) {
         NodeId d = ast[item].first;
@@ -346,6 +367,7 @@ void Analyzer::schedule_body(const Body& body)
         TemplateFunction& t = templates[entities[body.entity].template_info];
         t.body = body.node; t.declarator = body.declarator; t.source = body.source;
         if (definitions && template_source_deferred) { template_source_deferred->push_back(body); return; }
+        if (definitions && class_depth) { bodies.push_back(body); return; }
         if (definitions) bind_template_body(body);
         return;
     }

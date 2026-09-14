@@ -5,12 +5,16 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::template_facts(EntityId e, ScopeId environment)
 {
-    TemplateFunction t; t.environment = environment ? environment : entities[e].owner; t.offset = template_parameters.size();
+    entities[e].template_info = retain_template_head(environment ? environment : entities[e].owner);
+}
+std::uint32_t Analyzer::retain_template_head(ScopeId environment)
+{
+    TemplateFunction t; t.environment = environment; t.offset = template_parameters.size();
     for (std::uint32_t d = scopes[t.environment].first_decl; d; d = declarations[d].next) {
         EntityId p = declarations[d].entity;
         if (entities[p].template_parameter) { parameter_ordinals.put(p,t.count+1); template_parameters.push_back(p); ++t.count; }
     }
-    entities[e].template_info = templates.size(); templates.push_back(t);
+    auto id = templates.size(); templates.push_back(t); return id;
 }
 std::uint32_t Analyzer::intern_arguments(const std::vector<TypeId>& args)
 {

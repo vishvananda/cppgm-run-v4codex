@@ -96,6 +96,7 @@ void Analyzer::require_member_body(EntityId e)
     if (unevaluated_depth) return;
     if (entities[e].body_state == FactState::Failure || entities[e].lifetime_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].definition);
+    demand_friend_body(e);
     if (definitions) instantiate_member_definition(e);
     auto m = entities[e].member_info;
     if (m && members[m].demand == DemandState::Failed)

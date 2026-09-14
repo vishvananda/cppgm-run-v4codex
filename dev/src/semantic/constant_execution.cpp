@@ -13,6 +13,7 @@ std::uint32_t Analyzer::constant_body(EntityId e)
     auto saved = active_constant; active_constant = 0;
     try {
         if (entities[e].specialization) instantiate_function(e);
+        instantiate_friend_body(e);
         if (entities[e].member_info && !entities[e].definition) {
             instantiate_member_definition(e);
             auto m = members[entities[e].member_info];

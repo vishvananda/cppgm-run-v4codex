@@ -34,6 +34,11 @@ bool Analyzer::privileged(ScopeId context, EntityId cls) const
         auto scope = scopes[context];
         if (scope.kind == ScopeKind::Class && scope.entity == cls) return true;
         if (scope.entity && friendships.get(key(cls, scope.entity))) return true;
+        // A friend template grants access to each specialization, including
+        // explicitly specialized definitions. The grant belongs to its
+        // canonical declaration; it is not copied to every instantiation.
+        if (scope.entity && entities[scope.entity].specialization &&
+            friendships.get(key(cls,specializations[entities[scope.entity].specialization].pattern))) return true;
     }
     return false;
 }

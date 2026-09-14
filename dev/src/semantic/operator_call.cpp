@@ -23,12 +23,18 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     struct Candidate { EntityId entity; std::size_t offset; bool member; unsigned builtin; TypeId surrogate; };
     std::vector<Candidate> viable;
     std::vector<Conversion> sequences;
-    for (EntityId e : candidates(family)) {
+    Index concrete_candidates;
+    auto declarations = candidates(family);
+    for (EntityId e : declarations) {
         ++candidate_work;
         if (entities[e].template_info) {
             if (!definitions) continue;
             e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static);
             if (!e) continue;
+        }
+        if (declarations.size() > 1) {
+            if (concrete_candidates.get(e)) continue;
+            concrete_candidates.put(e,1);
         }
         bool member = entities[e].member_info && !entities[e].is_static;
         Type f = types[entities[e].type];

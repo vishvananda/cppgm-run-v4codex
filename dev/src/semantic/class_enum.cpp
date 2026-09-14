@@ -143,7 +143,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             std::size_t end = bodies.size();
             for (std::size_t i = deferred_begin; i < end; ++i) {
                 Body body = bodies[i];
-                if (entities[body.entity].body_state != FactState::Success) function_body(body);
+                if (entities[body.entity].template_info) bind_template_body(body);
+                else if (entities[body.entity].body_state != FactState::Success) function_body(body);
             }
             bodies.resize(deferred_begin);
             auto exceptions_end = declaration_exceptions.size();

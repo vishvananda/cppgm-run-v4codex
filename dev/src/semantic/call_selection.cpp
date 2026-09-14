@@ -9,7 +9,9 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
     auto count = nodes ? nodes->size() : values.size();
     struct Candidate { EntityId entity; unsigned offset; };
     std::vector<Candidate> viable; std::vector<Conversion> sequences;
-    for (auto e : candidates(family)) {
+    Index concrete_candidates;
+    auto declarations = candidates(family);
+    for (auto e : declarations) {
         ++candidate_work;
         if (entities[e].template_info) {
             if (explicit_arguments) {
@@ -20,6 +22,10 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
             if (e && entities[e].template_info) e = nodes ? deduce_function(e,*nodes) : deduce_function(e,values);
         } else if (explicit_arguments) continue;
         if (!e) continue;
+        if (declarations.size() > 1) {
+            if (concrete_candidates.get(e)) continue;
+            concrete_candidates.put(e,1);
+        }
         auto f = types[entities[e].type];
         if ((!f.variadic && count > f.count) || (count < f.count &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults+count]))) continue;

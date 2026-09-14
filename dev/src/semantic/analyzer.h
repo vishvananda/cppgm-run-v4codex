@@ -362,6 +362,8 @@ private:
     std::vector<EntityId> declaration_exceptions;
     Index friendships, using_access, using_functions, hidden_friends;
     bool friend_declaration(NodeId n, ScopeId s);
+    void demand_friend_body(EntityId e);
+    void instantiate_friend_body(EntityId e);
     EntityId associated_lookup(IdentifierId name, const std::vector<NodeId>& args);
     EntityId associated_type_lookup(IdentifierId name, std::vector<TypeId> work);
     ScopeId access_override = 0;
@@ -507,7 +509,7 @@ private:
     ScopeId active_template_scope = 0;
     NodeId explicit_specialization_source = 0;
     EntityId declare_class_specialization(NodeId source, ScopeId scope);
-    EntityId declare_function_specialization(NodeId name, ScopeId scope, TypeId type);
+    EntityId declare_function_specialization(NodeId name, ScopeId scope, TypeId type, ScopeId declared_owner = 0);
     void select_explicit_specialization(EntityId entity, NodeId source);
     EntityId declare_variable_template(NodeId declarator, NodeId init, TypeId type, ScopeId scope, NodeId source);
     EntityId variable_template_name(NodeId part, EntityId entity, ScopeId scope, bool initialize = true);
@@ -631,6 +633,10 @@ private:
     struct DeferredDefault { EntityId function; unsigned parameter; };
     std::vector<DeferredDefault> declaration_defaults;
     std::vector<Body> bodies;
+    std::vector<Body> friend_definitions;
+    Index friend_definition_index, friend_definition_queued;
+    std::vector<EntityId> friend_definition_demand;
+    std::size_t friend_definition_cursor = 0;
     unsigned class_depth = 0;
     enum class Lookup { Ordinary, Tag, Namespace, Qualifier };
     std::uint64_t key(ScopeId s, IdentifierId n) const;
@@ -689,6 +695,7 @@ private:
     bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
     void template_facts(EntityId e, ScopeId environment = 0);
+    std::uint32_t retain_template_head(ScopeId environment);
     Index template_source_heads;
     Index template_lexical_frames;
     std::uint32_t template_lexical_frame(ScopeId scope);
@@ -706,7 +713,7 @@ private:
     bool template_more_specialized(EntityId a, EntityId b);
     NodeId instantiate_default(EntityId e, NodeId source);
     void validate_list_plan(std::uint32_t id);
-    TypeId declare_class_template(NodeId n, ScopeId s);
+    TypeId declare_class_template(NodeId n, ScopeId s, ScopeId friend_owner = 0);
     bool dependent_template_syntax(NodeId n, ScopeId s);
     EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);
     EntityId class_template_name(NodeId part, EntityId e, ScopeId s);
