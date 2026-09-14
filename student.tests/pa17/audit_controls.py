@@ -7,6 +7,12 @@ import entity_controls as harness
 # N3485 13.3.3 [over.match.best]/1-2 requires a no-worse conversion for
 # every argument before either the non-template or partial-order tie-break.
 harness.GOOD = {
+    'nested_head_outer_type': '''template<class T,template<T>class C>struct A;
+template<class U,template<U>class D>struct A{};template<int>struct I{};
+int main(){A<int,I>a;return sizeof(a)-1;}''',
+    'nested_head_distinct_depth': '''template<class T,template<class U,U>class C>struct A;
+template<class X,template<class Y,Y>class D>struct A{};
+template<class V,V>struct B{};int main(){A<int,B>a;return sizeof(a)-1;}''',
     'constructor_equal_conversions': '''struct C{int n;C(int):n(1){}
 template<class T>C(T):n(2){}};int main(){C c(1);return c.n-1;}''',
     'constructor_template_better_conversion': '''struct C{int n;C(long):n(1){}
@@ -38,6 +44,12 @@ template<class U>int A<U*>::f(){return sizeof(U);}
 int main(){A<int*>a;A<char*>b;return a.f()+a.f()+b.f()-9;}''',
 }
 harness.BAD = {
+    'nested_head_outer_parameter_identity': '''template<class T,class U,template<T>class C>struct A;
+template<class T,class U,template<U>class C>struct A{};''',
+    'nested_head_outer_vs_inner_identity': '''template<class T,template<class U,T>class C>struct A;
+template<class X,template<class Y,Y>class D>struct A{};''',
+    'nested_head_actual_value_type': '''template<class T,template<T>class C>struct A{};
+template<long>struct L{};A<int,L>a;''',
     'crossed_constructor_conversions': '''struct C{C(int,long){}
 template<class T>C(long,T){}};int main(){C c(1,1);}''',
     'crossed_constructor_reverse_order': '''struct C{template<class T>C(long,T){}

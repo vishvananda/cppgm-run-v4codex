@@ -23,15 +23,17 @@ ArgumentId Analyzer::parameter_argument(EntityId parameter)
     q.entity = parameter; q.type = entities[parameter].type;
     return value_argument_id(intern_query(q,{}));
 }
-ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, const Index& bindings, Index& cache)
+ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, Index& bindings, Index& cache, unsigned depth)
 {
     while (canonical_parameters.size() <= ordinal) {
         auto e = make_entity(EntityKind::Type,0,0,0);
         entities[e].template_parameter = true; entities[e].type = types.named(e);
         canonical_parameters.push_back(entities[e].type);
     }
+    auto position = depth ? intern_arguments({depth,ordinal+1}) : ordinal+1;
     if (entities[parameter].key == KW_TEMPLATE) {
-        auto shape = template_head_shape(parameter); auto identity = key(shape,ordinal+1);
+        auto shape = template_head_shape(parameter,bindings,cache,depth+1);
+        auto identity = key(shape,intern_arguments({depth,ordinal+1}));
         auto e = canonical_template_parameters.get(identity);
         if (!e) {
             e = make_entity(EntityKind::Type,0,0,0);
@@ -42,9 +44,19 @@ ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, co
         }
         return entities[e].type;
     }
-    if (entities[parameter].kind == EntityKind::Type) return canonical_parameters[ordinal];
+    if (entities[parameter].kind == EntityKind::Type) {
+        if (!depth) return canonical_parameters[ordinal];
+        auto e = canonical_nested_parameters.get(position);
+        if (!e) {
+            e = make_entity(EntityKind::Type,0,0,0);
+            entities[e].template_parameter = true; entities[e].type = types.named(e);
+            canonical_nested_parameters.put(position,e);
+        }
+        return entities[e].type;
+    }
     auto type = substitute_type(entities[parameter].type,bindings,cache);
-    auto k = key(type,ordinal+1);
+    if (!type) throw std::runtime_error("missing template parameter type environment");
+    auto k = key(type,intern_arguments({depth,ordinal+1}));
     auto e = canonical_value_parameters.get(k);
     if (!e) {
         e = make_entity(EntityKind::Parameter,0,0,0);

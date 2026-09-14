@@ -493,10 +493,11 @@ private:
     Index object_actions, specialization_index, explicit_pack_index, parameter_ordinals;
     Index template_families, template_signatures;
     std::vector<TypeId> canonical_parameters;
-    Index canonical_value_parameters, canonical_template_parameters;
+    Index canonical_value_parameters, canonical_template_parameters, canonical_nested_parameters;
     void declare_template_parameters(NodeId parameters, ScopeId scope);
     std::uint32_t template_head_shape(EntityId entity);
-    bool template_compatible(EntityId parameter, EntityId argument);
+    std::uint32_t template_head_shape(EntityId entity, Index& bindings, Index& cache, unsigned depth);
+    bool template_compatible(EntityId parameter, EntityId argument, Index& bindings, unsigned depth = 1);
     EntityId template_entity(EntityId entity) const;
     TypeId apply_type_template(EntityId entity, const std::vector<ArgumentId>& arguments);
     TypeId specialize_alias(EntityId entity, const std::vector<ArgumentId>& arguments);
@@ -526,7 +527,7 @@ private:
     ArgumentId template_argument_node(NodeId n, ScopeId scope);
     ArgumentId template_argument_node_impl(NodeId n, ScopeId scope);
     ArgumentId parameter_argument(EntityId parameter);
-    ArgumentId canonical_argument(EntityId parameter, unsigned ordinal, const Index& bindings, Index& cache);
+    ArgumentId canonical_argument(EntityId parameter, unsigned ordinal, Index& bindings, Index& cache, unsigned depth = 0);
     ArgumentId substitute_argument(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame = 0);
     bool dependent_argument(ArgumentId arg);
     ArgumentId convert_argument(ArgumentId arg, TypeId target);

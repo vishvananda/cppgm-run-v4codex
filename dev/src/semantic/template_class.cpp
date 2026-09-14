@@ -143,7 +143,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
                 if (entities[p].kind == EntityKind::Type) {
                     if (value_argument(value)) return false;
                     auto target = types[value].kind == TypeKind::Named ? template_entity(types[value].entity) : 0;
-                    if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target) : target != 0) return false;
+                    if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target,bindings) : target != 0) return false;
                 }
                 else {
                     auto target = substitute_type(entities[p].type,bindings,cache);
@@ -169,7 +169,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
         if (entities[p].kind == EntityKind::Type) {
             if (value_argument(args[j])) return false;
             auto target = types[args[j]].kind == TypeKind::Named ? template_entity(types[args[j]].entity) : 0;
-            if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target) : target != 0) return false;
+            if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target,bindings) : target != 0) return false;
         } else {
             if (!value_argument(args[j])) return false;
             auto target = substitute_type(entities[p].type,bindings,cache);

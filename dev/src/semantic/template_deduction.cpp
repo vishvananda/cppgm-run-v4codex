@@ -51,7 +51,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     }
     if (p.kind == TypeKind::DependentName || p.kind == TypeKind::Decltype) return true; // non-deduced context
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
-        if (entities[p.entity].key == KW_TEMPLATE && (a.kind != TypeKind::Named || !template_compatible(p.entity,a.entity))) return false;
+        if (entities[p.entity].key == KW_TEMPLATE && (a.kind != TypeKind::Named || !template_compatible(p.entity,a.entity,bindings))) return false;
         TypeId old = bindings.get(p.entity);
         auto element = actual;
         while (types[element].kind == TypeKind::Array || types[element].kind == TypeKind::DependentArray) element = types[element].child;

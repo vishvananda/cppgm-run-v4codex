@@ -40,15 +40,23 @@ std::uint32_t Analyzer::template_head_shape(EntityId e)
 {
     auto index = entities[e].template_info;
     if (auto shape = template_head_shapes.get(index)) return shape;
-    auto head = templates[index];
-    Index bindings, cache; std::vector<ArgumentId> shape;
+    Index bindings, cache;
+    auto shape = template_head_shape(e,bindings,cache,0);
+    template_head_shapes.put(index,shape); return shape;
+}
+std::uint32_t Analyzer::template_head_shape(EntityId e, Index& bindings, Index& cache, unsigned depth)
+{
+    auto head = templates[entities[e].template_info];
+    std::vector<ArgumentId> shape;
+    // This scratch map grows over the head graph. Nested heads retain their
+    // enclosing bindings; depth distinguishes their own parameter ordinals.
     for (unsigned j = 0; j < head.count; ++j) {
         auto parameter = template_parameters[head.offset+j];
-        auto arg = canonical_argument(parameter,j,bindings,cache);
+        auto arg = canonical_argument(parameter,j,bindings,cache,depth);
         bindings.put(parameter,arg);
         shape.push_back(entities[parameter].parameter_pack ? types.compound(TypeKind::PackExpansion,0,arg) : arg);
     }
-    auto result = intern_arguments(shape); template_head_shapes.put(index,result); return result;
+    return intern_arguments(shape);
 }
 EntityId Analyzer::template_entity(EntityId e) const
 {
@@ -60,11 +68,11 @@ EntityId Analyzer::template_entity(EntityId e) const
     }
     return 0;
 }
-bool Analyzer::template_compatible(EntityId parameter, EntityId argument)
+bool Analyzer::template_compatible(EntityId parameter, EntityId argument, Index& bindings, unsigned depth)
 {
     if (!template_entity(argument)) return false;
     auto p = templates[entities[parameter].template_info], a = templates[entities[argument].template_info];
-    Index pb, ab, pc, ac;
+    Index cache;
     unsigned i = 0, j = 0;
     for (; i < p.count; ++i) {
         auto pe = template_parameters[p.offset+i];
@@ -74,12 +82,15 @@ bool Analyzer::template_compatible(EntityId parameter, EntityId argument)
             auto ae = template_parameters[a.offset+j];
             if (entities[pe].kind != entities[ae].kind ||
                 (entities[pe].key == KW_TEMPLATE) != (entities[ae].key == KW_TEMPLATE)) return false;
-            if (entities[pe].key == KW_TEMPLATE && !template_compatible(pe,ae)) return false;
-            if (entities[pe].kind != EntityKind::Type &&
-                substitute_type(entities[pe].type,pb,pc) != substitute_type(entities[ae].type,ab,ac)) return false;
+            if (entities[pe].key == KW_TEMPLATE && !template_compatible(pe,ae,bindings,depth+1)) return false;
+            if (entities[pe].kind != EntityKind::Type) {
+                auto pt = substitute_type(entities[pe].type,bindings,cache);
+                auto at = substitute_type(entities[ae].type,bindings,cache);
+                if (!pt || !at || pt != at) return false;
+            }
             if (entities[ae].parameter_pack && !pack) return false;
-            auto canonical = canonical_argument(pe,i,pb,pc);
-            pb.put(pe,canonical); ab.put(ae,canonical); ++j;
+            auto canonical = canonical_argument(pe,i,bindings,cache,depth);
+            bindings.put(pe,canonical); bindings.put(ae,canonical); ++j;
         } while (pack && j < a.count);
     }
     // Course fixtures also accept an omitted trailing defaulted parameter.
