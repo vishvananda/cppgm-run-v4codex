@@ -367,6 +367,9 @@ void Analyzer::function_body(const Body& body)
         NodeId nested = child(d, Kind::NestedDeclarator);
         d = nested ? ast[nested].first : 0;
     }
+    // Signature substitution already records whether the list was expanded,
+    // including an empty pack. Scalar lists need no pack-binding scans.
+    bool expanded_parameters = ast.children_expanded(params);
     for (NodeId p = ast[params].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
         TypeId t = facts[p].type;
@@ -374,11 +377,11 @@ void Analyzer::function_body(const Body& body)
         IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
         entities[e].type = parameter_body_type(t);
-        if (!ast.nodes.occurrences[p].context || !child(ast[ast[p].first].next,Kind::ParameterPack)) bind(fs,name,e);
+        if (!expanded_parameters || !child(ast[ast[p].first].next,Kind::ParameterPack)) bind(fs,name,e);
         record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }
-    bind_function_packs(params,fs);
+    if (expanded_parameters) bind_function_packs(params,fs);
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     statements(body.node, fs);
     if (calls) finish_class_returns(body.entity);

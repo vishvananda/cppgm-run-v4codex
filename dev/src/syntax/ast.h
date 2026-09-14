@@ -267,6 +267,7 @@ public:
     NodeId projected(NodeId source, std::uint32_t context) const { return tree.projected(source,context); }
     bool pending_region(NodeId root) const { return tree.pending_region(root); }
     void expanded_children(NodeId parent, const std::vector<NodeId>& children) { tree.expanded_children(parent,children); }
+    bool children_expanded(NodeId parent) const { return tree.expanded_first.get(parent) != 0; }
     std::uint32_t new_context() { return tree.new_context(); }
     bool& telemetry;
     NodePool& nodes;

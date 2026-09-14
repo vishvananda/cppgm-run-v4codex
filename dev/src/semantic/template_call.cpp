@@ -133,8 +133,15 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (!returned || types[returned].kind == TypeKind::Array || types[returned].kind == TypeKind::Function) return 0;
         std::vector<TypeId> params;
         for (unsigned i = 0; i < p.count; ++i) {
+            auto parameter = types.parameters[p.offset+i];
+            if (types[parameter].kind != TypeKind::PackExpansion) {
+                auto t = substitute_type(parameter,bindings,cache,owner);
+                if (!t || fundamental(t,FT_VOID)) return 0;
+                params.push_back(t);
+                continue;
+            }
             auto begin = params.size();
-            substitute_arguments(types.parameters[p.offset+i],bindings,cache,owner,params);
+            substitute_arguments(parameter,bindings,cache,owner,params);
             for (auto j = begin; j < params.size(); ++j) {
                 auto t = params[j];
                 if (!t || value_argument(t) || fundamental(t,FT_VOID)) return 0;
