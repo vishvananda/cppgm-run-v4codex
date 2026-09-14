@@ -4,95 +4,90 @@ Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
 Target: **PA15 full-stage**, O0 typed LowIR. Loop 34 enters at `b8379f52`,
-**169/177**, with eight existing failures. The preceding goal turn was progress:
-its committed matching changes and verified 169/177 report establish the baseline.
-Preserve [the accumulated audit](audit.md), historical measurements and both
-markers above; implementation does not advance the reviewed marker.
+**169/177**, and implements **173/177**: three existing failures fixed in code,
+one proven reference defect corrected, four failures remain. No input, exit
+expectation, comparison rule or fixture coverage was removed. The preceding
+goal turn was progress, evidenced by its committed matching changes and report.
+This is an incomplete implementation handoff, not a whole-stage audit or approval
+to advance. Preserve [the accumulated audit](audit.md) and both markers above.
 
-Loop 34 groups the remaining failures by semantic ownership:
+## Completed owners and spec alignment
 
-| Owner | Data flow, work and planned validation |
+Initialization requires class completion before reading aggregate/constructor
+properties. The same prerequisite protects omitted aggregate elements. Derived
+value initialization now includes the base and consumes the existing cached zero
+plan, including ABI-specific member-pointer representations and volatile stores.
+No member bodies are instantiated merely to classify a class as an aggregate.
+
+Retained body queries now model builtin prefix/postfix increment and decrement,
+including cv, categories, pointer completeness and invalid enum/const/bool cases.
+The existing selected candidate/conversion facts own these results; postfix's
+integer operand is part of its canonical query key. The replay fixture was an
+increment-query rejection, not stale static constexpr storage.
+
+Constexpr array declarations validate their typed initializer plan once. Scalar
+constants, static-duration addresses, nested aggregates, strings and repeated
+omitted elements use existing static-value/type facts. Failed scalar constant facts,
+temporary/automatic/thread addresses and nonliteral elements are rejected.
+Volatile subobjects retain observable stores. Each qualifying local object has
+at most one readonly backing image per TU. **O0 backing budget: 32 bytes/object**;
+larger arrays retain direct initialization after measured copy regressions.
+The LowIR validator treats symbol values as addresses and checks declared storage
+types at load/store operations. Text remains an explicit adapter, not a phase
+transport. [The aggregate reference correction](reference-corrections.md) includes
+a nontrivial-copy reducer, C++11 proof, bundle revision and original/revised hashes.
+
+Work is O(initializer actions + emitted data/instructions + required candidates).
+An omitted run is one action, not a bound-sized validation loop. TU-owned flat
+indexes key plan classification by immutable action ID and backing by object ID;
+failed classification is retained, with no global invalidation or retry. Backing
+data is bounded by 32 times the number of qualifying objects. Existing source
+regions, canonical types, substitution frames and direct typed lowering are reused;
+all new maps and backing records release with the TU. No optimizer was introduced.
+
+## Remaining required implementation and boundary
+
+| Owner | Required unfinished behavior |
 |---|---|
-| Initialization/storage | Checked object/type and selected constructor facts -> typed initialization actions -> storage and LowIR. Audit value initialization of bases, aggregate cast materialization, constant array backing and member initializer reuse together. Work must follow demanded object/subobject actions, with cached type facts; validate changed fixtures plus native lifetime/storage controls. |
-| Constant execution | Selected constexpr function/conversion and checked return facts -> canonical integral value -> argument/static member binding. Preserve declaration/body/storage separation, immutable source and complete execution keys; use independent rejection and substitution controls. |
-| Ordinary body validation | Complete ordinary class -> checked bodies without forcing template member instantiation or emission. Validate unused ordinary/explicit-class assertions and dormant dependent template bodies. |
+| Constant execution | Two fixtures: constexpr conversion of a constant object into a bool template argument; constexpr function call in a static member initializer. Execution must consume checked bodies and selected conversions with complete activation/environment keys. |
+| Member storage demand | One fixture: publish the defined static constant required by the concrete class-object output. Storage/definition demand must remain separate from dormant nonvirtual member bodies. |
+| Ordinary body validation | One fixture: reject a false static assertion in an unused ordinary member. Check ordinary and explicit-class bodies independently of emission, retaining dependent template-body laziness. |
 
-Freeze the entry binary before edits. Record compiler latency/RSS and executable
-runtime/text using A/A noise and ABBA comparisons on equivalent supported inputs;
-newly accepted inputs get absolute/scaling evidence. There is no PA15/O0 numeric
-ceiling or optional optimizer. Extend related repairs while ownership is shared,
-then run required PA15, prior-through and file audit checks and commit the handoff.
+The initializer/type-completion, array storage and retained-update-query group is
+complete, including nested/omitted/volatile/address/lifetime controls and the
+reference reducer. Further repairs require execution frames or body-validation,
+storage and emission dependency facts. Initialization actions contain neither;
+forcing dormant bodies or evaluating unchecked syntax would violate the spec.
+These are concrete separate owners, not additional matching/initializer cases
+that can be completed with the same visitor. They remain implementation duties.
 
-## Completed owner and spec alignment
-
-Class-pattern selection now belongs to the primary template's indexed family.
-Canonical primary/argument identity survives selection; separate definition and
-argument facts drive the selected head's sole environment and retained body.
-Argument deduction requires exact substitution back to the actual tuple,
-including cv, repeated values and pack boundaries. Pair ordering has a TU-owned
-flat cache keyed by the two immutable declaration identities. Redeclaration
-renaming preserves its shape; insertion cannot invalidate unrelated pairs.
-Selection runs once at concrete completion, after late visible declarations;
-explicit specializations retain their existing separate selection path.
-
-Dependent nested template-ids retain their typed argument list. Qualified alias
-lookup consumes selected declarations, while abstract pointer/reference casts
-use bounded parser lookahead without replay. The shared semantic/source graph,
-immutable substitution frames, separate member-body demand and direct typed
-LowIR remain intact. No output, reference, bundle or comparison rule changed.
-
-Per completion, work follows this family's C candidates and their argument
-shapes: O(C) matching/ordering comparisons, local candidate scratch, no registry
-scan. Ordering computes each encountered pair once; storage follows visited
-pairs and demanded class facts, released with the TU. Class declarations do not
-allocate a discarded primary environment before selecting a partial definition.
-Scalar/no-partial paths do no candidate or ordering work. Pack lanes use existing
-expansion frames; unrelated member bodies remain dormant.
-
-## Remaining required implementation
-
-| Owner | Unfinished work and boundary |
-|---|---|
-| Constant execution, initialization and storage | Seven fixtures: constant-object bool conversion, aggregate braced casts, dependent conversion-operator static storage, constexpr local array backing, static constexpr member replay, constexpr call initializers, and stale function initialization output. Constant execution must consume checked bodies/conversions; initializers and storage/emission remain separate facts. |
-| Ordinary body validation | One fixture: unused ordinary member `static_assert`. Check ordinary and explicit-class member bodies independently of emission; do not instantiate unrelated template member bodies. |
-
-The dependent-bool fixture's type matching is not its remaining failure: it
-requires evaluating `B{}` through a constexpr conversion into the non-type bool
-parameter. Its scalar member-binding counterpart works. Extending matching or
-forcing layout cannot provide that execution fact. Likewise, ordinary-body
-checking needs validation versus emission dependencies, not another class-pattern
-lookup. These are concrete distinct owners: carrying them into this increment
-would require a constant execution model and a body-demand redesign rather than
-further fixes supported by the completed matching work. They remain required
-implementation, not review uncertainties. The turn extended beyond the first
-three fixtures through nested arguments, packs, member demand, ordering reuse,
-cv/value conflicts, late visibility, injected identity and environment ownership.
-
-Independent review remains outstanding for the combined stage changes and
-whole-stage spec compliance, including selection/constant-storage interactions
-once the unfinished owners are implemented. The new controls and self-review
-are evidence for this handoff, not a waiver of that audit.
+Independent review remains outstanding for the combined stage changes after
+`538cfcb0`, including constant/storage interactions and whole-stage architecture.
+The implementation checks and reference proof do not waive that review or any
+remaining fixture. No new independent architecture investigation was opened.
 
 ## Validation, performance and handoff ledger
 
-`make test-pa15`: **169/177**, exit 2; failures **11 -> 8**.
-`make test-report-through-pa14`: **1935/1935**, exit 0.
-File audit: **pass**, the same three inherited header warnings. Personal suites:
-15 matching native + 7 rejection controls; 27 pack native + 8 rejections;
-24 specialization native + 13 rejections; 26 value groups; 10 constant groups;
-11 checkpoint native + 7 rejections; hash-index collision/removal control.
-All run explicitly. The PA15 handout's LowIR validator runs in required tests;
-there is no additional current-stage native/debug gate.
+Required reports: PA15 **173/177** (exit 2; failures **8 -> 4**), prior PA1–PA14
+**1935/1935** (exit 0), file audit pass with three inherited header warnings.
+Personal initialization controls: **23 native + 13 rejection + 3 LowIR**. Also run
+explicitly: 26 value groups, 10 constant groups, 24 specialization native + 13
+rejections, 27 pack native + 8 rejections, 15 matching native + 7 rejections,
+11 checkpoint native + 7 rejections. Root reports run sequentially because their
+shared count sink mixes concurrent invocations; the mixed observations are kept
+in scratch and are not used as coverage evidence. No PA15 native/debug gate is
+added; its required LowIR validator remains active.
 
-[Loop 33 evidence](matching-performance.md) preserves the preliminary and final
-frozen A/A/ABBA compiler latency/RSS and runtime/text campaigns, input/output
-hashes, counter scaling and the acceptance rationale. PA15/O0 mandates correct,
-bounded semantic work and lifetimes; it has no numerical latency/RSS/text ceiling
-and introduces no optional optimizer. Later native optimization and self-hosting
-retain their owning stages. Historical diagnostic targets and measurements in
-[audit performance](audit-performance.md) remain preserved.
+[Initialization performance](initialization-performance.md) records all preliminary,
+address-validation and final frozen A/A/ABBA latency/RSS/runtime/text observations,
+scaling counters, budgets and the measured reason for the 32-byte backing limit.
+PA15/O0 has no mandated numeric latency/RSS/text ceiling. Historical measurements
+and diagnostic targets in [matching evidence](matching-performance.md),
+[audit performance](audit-performance.md) and prior handoff artifacts are retained.
+Native backend optimization and self-hosting remain later-stage responsibilities.
 
-| Handoff | Implementation / review boundary | Evidence |
+| Handoff | Implementation / independent review boundary | Evidence |
 |---|---|---|
-| Checkpoint 32 | Reviewed base through `538cfcb0`; matching, constants/storage and ordinary validation unfinished | 166/177; prior 1935/1935; [audit](audit.md) |
-| Loop 33 | `9dea2f0a` plan, `57f0cd95` matching/parser, `3c356866` ordering/environment ownership; independent review marker unchanged | 169/177; prior 1935/1935; file audit pass; [verified handoff](../student.tests/pa15/matching-handoff.json); constant/storage and ordinary-body owners remain |
+| Checkpoint 32 | Reviewed through `538cfcb0`; matching, constants/storage and ordinary validation unfinished | 166/177; prior 1935/1935; [audit](audit.md) |
+| Loop 33 | Matching/parser and ordering/environment ownership; reviewed marker unchanged | 169/177; [matching handoff](../student.tests/pa15/matching-handoff.json) |
+| Loop 34 | `1aa393c9` initialization/query/array facts; `11e75a50` proven reference correction; `3b2475f8` storage-duration checks; `4f4bea42` measured O0 backing bound; four implementation failures and independent review remain | 173/177; prior 1935/1935; [verified handoff](../student.tests/pa15/initialization-handoff.json) |

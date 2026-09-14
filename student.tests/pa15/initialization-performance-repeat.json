@@ -1,0 +1,323 @@
+{
+  "reason": "arrays-4000 final campaign has B/A pairs 0.995 and 1.184 with near-equal medians; repeat the same frozen compiler workload to distinguish a repeatable regression from stalls",
+  "campaign_sha256": "29042011b06852573d9d31eccfb56e7634c1350eaaa7b858dfdb9970815d3271",
+  "harness_sha256": "c5c7d150c1c0c977ffa320601f090a40fc83eb13e598c135db8bd5e7be89ade4",
+  "timing_scope": "subprocess only; usage parsing and output SHA verification excluded",
+  "cpu": 31,
+  "binaries": [
+    {
+      "path": "/tmp/pa15-loop34/entry",
+      "sha256": "5d0c9d35394ea6b1e320bae62c47fde7113b026c882b5aaab81a56c48d242038",
+      "text_bytes": 1506694
+    },
+    {
+      "path": "/tmp/pa15-loop34/bounded-final",
+      "sha256": "18c12778447657434d9684c7ab124360a907bd5db2b00e16c5efa99f89f00011",
+      "text_bytes": 1512070
+    }
+  ],
+  "workloads": {
+    "arrays-4000": {
+      "source_sha256": "4548a0ab5db737645dee05932bfdea7f9b777ae1ce88d9eab758b6ca3dcf46a4",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.550376079,
+          "rss_kib": 79396,
+          "user_s": 0.45,
+          "system_s": 0.08,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.526694608,
+          "rss_kib": 84240,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.520757759,
+          "rss_kib": 79164,
+          "user_s": 0.42,
+          "system_s": 0.09,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.520115551,
+          "rss_kib": 79336,
+          "user_s": 0.45,
+          "system_s": 0.06,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.516314567,
+          "rss_kib": 79136,
+          "user_s": 0.42,
+          "system_s": 0.08,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.521472609,
+          "rss_kib": 79396,
+          "user_s": 0.44,
+          "system_s": 0.06,
+          "involuntary": 9,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.528308205,
+          "rss_kib": 79288,
+          "user_s": 0.43,
+          "system_s": 0.08,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.559738043,
+          "rss_kib": 84216,
+          "user_s": 0.45,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.62547288,
+          "rss_kib": 84324,
+          "user_s": 0.43,
+          "system_s": 0.08,
+          "involuntary": 2,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.562998918,
+          "rss_kib": 79272,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.521449352,
+          "rss_kib": 79140,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.517975763,
+          "rss_kib": 84040,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.525537541,
+          "rss_kib": 84208,
+          "user_s": 0.45,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.521973267,
+          "rss_kib": 79400,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.0860470879561923,
+        1.0000869110927335
+      ]
+    },
+    "wide-signatures-4000": {
+      "source_sha256": "737b39bd22f5d743c33326b60af12c391c0d09995e46f95f60b6910d4fbc643f",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.897281618,
+          "rss_kib": 178520,
+          "user_s": 0.69,
+          "system_s": 0.19,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.893260096,
+          "rss_kib": 178492,
+          "user_s": 0.69,
+          "system_s": 0.19,
+          "involuntary": 2,
+          "voluntary": 2,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.901924889,
+          "rss_kib": 178516,
+          "user_s": 0.71,
+          "system_s": 0.18,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.890896845,
+          "rss_kib": 178308,
+          "user_s": 0.71,
+          "system_s": 0.17,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.895929433,
+          "rss_kib": 178564,
+          "user_s": 0.69,
+          "system_s": 0.2,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.96505837,
+          "rss_kib": 178504,
+          "user_s": 0.78,
+          "system_s": 0.17,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.903553507,
+          "rss_kib": 178516,
+          "user_s": 0.71,
+          "system_s": 0.18,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.896219671,
+          "rss_kib": 178488,
+          "user_s": 0.7,
+          "system_s": 0.18,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 1.054055874,
+          "rss_kib": 178340,
+          "user_s": 0.72,
+          "system_s": 0.16,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.889434736,
+          "rss_kib": 178564,
+          "user_s": 0.7,
+          "system_s": 0.18,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.886872914,
+          "rss_kib": 178596,
+          "user_s": 0.7,
+          "system_s": 0.17,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.893983566,
+          "rss_kib": 178560,
+          "user_s": 0.71,
+          "system_s": 0.17,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.892398601,
+          "rss_kib": 178492,
+          "user_s": 0.69,
+          "system_s": 0.19,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.901322537,
+          "rss_kib": 178296,
+          "user_s": 0.71,
+          "system_s": 0.18,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.0877235545821702,
+        0.9989859699067091
+      ]
+    }
+  }
+}

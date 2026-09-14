@@ -1,0 +1,322 @@
+{
+  "reason": "arrays-4000 final campaign has B/A pairs 0.995 and 1.184 with near-equal medians; repeat the same frozen compiler workload to distinguish a repeatable regression from stalls",
+  "campaign_sha256": "29042011b06852573d9d31eccfb56e7634c1350eaaa7b858dfdb9970815d3271",
+  "harness_sha256": "72bc9832cab8922df3427afe7faf2afa12f258db5842c13f4e82211395cb5d8e",
+  "cpu": 31,
+  "binaries": [
+    {
+      "path": "/tmp/pa15-loop34/entry",
+      "sha256": "5d0c9d35394ea6b1e320bae62c47fde7113b026c882b5aaab81a56c48d242038",
+      "text_bytes": 1506694
+    },
+    {
+      "path": "/tmp/pa15-loop34/bounded-final",
+      "sha256": "18c12778447657434d9684c7ab124360a907bd5db2b00e16c5efa99f89f00011",
+      "text_bytes": 1512070
+    }
+  ],
+  "workloads": {
+    "arrays-4000": {
+      "source_sha256": "4548a0ab5db737645dee05932bfdea7f9b777ae1ce88d9eab758b6ca3dcf46a4",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.551985597,
+          "rss_kib": 79396,
+          "user_s": 0.44,
+          "system_s": 0.08,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.544381513,
+          "rss_kib": 84040,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.544665471,
+          "rss_kib": 79108,
+          "user_s": 0.44,
+          "system_s": 0.07,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.537089877,
+          "rss_kib": 79328,
+          "user_s": 0.43,
+          "system_s": 0.08,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.543448673,
+          "rss_kib": 79272,
+          "user_s": 0.43,
+          "system_s": 0.08,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.540321175,
+          "rss_kib": 79320,
+          "user_s": 0.42,
+          "system_s": 0.09,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.533276958,
+          "rss_kib": 79132,
+          "user_s": 0.42,
+          "system_s": 0.08,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.541481459,
+          "rss_kib": 84288,
+          "user_s": 0.45,
+          "system_s": 0.06,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.538858004,
+          "rss_kib": 84128,
+          "user_s": 0.45,
+          "system_s": 0.06,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.542019943,
+          "rss_kib": 79396,
+          "user_s": 0.44,
+          "system_s": 0.06,
+          "involuntary": 0,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.574848788,
+          "rss_kib": 79212,
+          "user_s": 0.45,
+          "system_s": 0.07,
+          "involuntary": 4,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.550029014,
+          "rss_kib": 84068,
+          "user_s": 0.45,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.543706289,
+          "rss_kib": 84324,
+          "user_s": 0.45,
+          "system_s": 0.07,
+          "involuntary": 1,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.538074966,
+          "rss_kib": 79316,
+          "user_s": 0.43,
+          "system_s": 0.08,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.0046894601810072,
+        0.9827585214790912
+      ]
+    },
+    "wide-signatures-4000": {
+      "source_sha256": "737b39bd22f5d743c33326b60af12c391c0d09995e46f95f60b6910d4fbc643f",
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.932863307,
+          "rss_kib": 178596,
+          "user_s": 0.7,
+          "system_s": 0.17,
+          "involuntary": 7,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.922241129,
+          "rss_kib": 178460,
+          "user_s": 0.69,
+          "system_s": 0.18,
+          "involuntary": 5,
+          "voluntary": 1,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.92644315,
+          "rss_kib": 178332,
+          "user_s": 0.7,
+          "system_s": 0.17,
+          "involuntary": 3,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.939235931,
+          "rss_kib": 178392,
+          "user_s": 0.7,
+          "system_s": 0.18,
+          "involuntary": 3,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.925577352,
+          "rss_kib": 178556,
+          "user_s": 0.72,
+          "system_s": 0.15,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.937002593,
+          "rss_kib": 178344,
+          "user_s": 0.69,
+          "system_s": 0.2,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.935859205,
+          "rss_kib": 178324,
+          "user_s": 0.69,
+          "system_s": 0.19,
+          "involuntary": 2,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.938894928,
+          "rss_kib": 178292,
+          "user_s": 0.71,
+          "system_s": 0.18,
+          "involuntary": 3,
+          "voluntary": 1,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 2.40756508,
+          "rss_kib": 178484,
+          "user_s": 0.71,
+          "system_s": 0.19,
+          "involuntary": 1,
+          "voluntary": 6,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.932438365,
+          "rss_kib": 178456,
+          "user_s": 0.71,
+          "system_s": 0.17,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.923290831,
+          "rss_kib": 178752,
+          "user_s": 0.69,
+          "system_s": 0.18,
+          "involuntary": 2,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.933546537,
+          "rss_kib": 178512,
+          "user_s": 0.7,
+          "system_s": 0.18,
+          "involuntary": 1,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.929608559,
+          "rss_kib": 178352,
+          "user_s": 0.7,
+          "system_s": 0.17,
+          "involuntary": 6,
+          "voluntary": 3,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.931144474,
+          "rss_kib": 178480,
+          "user_s": 0.7,
+          "system_s": 0.18,
+          "involuntary": 1,
+          "voluntary": 2,
+          "checked_exit": 0
+        }
+      ],
+      "paired_b_over_a": [
+        1.7911814807959097,
+        1.0047021273680938
+      ]
+    }
+  }
+}
