@@ -193,6 +193,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].type = type; entities[e].specialization = index;
+    entities[e].constexpr_function = entities[pattern].constexpr_function;
     if (auto suffix = literal_functions.get(pattern)) literal_functions.put(e,suffix);
     entities[e].defaults = entities[pattern].defaults;
     if (partial) {

@@ -52,6 +52,14 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             result.expression.conversions = conversions.size(); result.expression.count = chosen.size();
             conversions.insert(conversions.end(),chosen.begin(),chosen.end()); return result;
         } else {
+            if (integral(constructed) && args.size() == 1 && class_value(args[0].type)) {
+                auto c = conversion_function_value(args[0],constructed,true);
+                if (!c.valid() || deleted_transfer(c.function)) throw std::runtime_error("invalid scalar constant conversion");
+                check_access(c.function,q.context,entities[c.function].owner,args[0].type);
+                TypeQueryFact result; result.expression.type = constructed; result.selected = c.function;
+                result.expression.conversions = conversions.size(); result.expression.count = 1;
+                conversions.push_back(c); return result;
+            }
             if (args.size() > 1 || (!args.empty() && !standard_conversion(args[0],constructed).valid()))
                 throw std::runtime_error("invalid scalar type-query construction");
             TypeQueryFact result; result.expression.type = constructed; return result;

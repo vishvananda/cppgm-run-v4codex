@@ -334,6 +334,39 @@ private:
     IdentifierId constant_builtin = 0, abort_builtin = 0;
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
+    struct ConstantBody {
+        EntityId function = 0;
+        NodeId result = 0;
+        std::uint32_t parameters = 0, count = 0;
+        bool valid = false;
+    };
+    struct ConstantActivation {
+        std::uint32_t body = 0, arguments = 0;
+        std::uint32_t object = 0;
+        Constant result;
+        FactState state = FactState::Active;
+    };
+    struct ConstantReceiver { TypeId type; NodeId node; QueryId query; };
+    Index constant_node_receivers, constant_query_receivers;
+    std::vector<ConstantReceiver> constant_receivers = std::vector<ConstantReceiver>(1);
+    Index constant_body_index, constant_parameter_ordinals, constant_activation_index, constant_execution_values;
+    std::vector<ConstantBody> constant_bodies = std::vector<ConstantBody>(1);
+    std::vector<ConstantActivation> constant_activations = std::vector<ConstantActivation>(1);
+    std::vector<EntityId> constant_parameters;
+    std::uint32_t active_constant = 0;
+    unsigned constant_depth = 0;
+    bool constant_limited = false, constant_unavailable = false;
+    std::size_t constant_steps = 0, constant_remaining = 0, constant_hits = 0;
+    std::uint32_t constant_body(EntityId function);
+    Constant execute_constant(EntityId function, const std::vector<Constant>& arguments, std::uint32_t object = 0);
+    Constant execute_constant_node(NodeId node, ScopeId scope);
+    Constant constant_call(NodeId node, ScopeId scope);
+    Constant constant_query_call(QueryId query);
+    Constant constant_query_conversion(QueryId source, Conversion conversion);
+    std::uint32_t constant_query_object(QueryId source);
+    std::uint32_t constant_node_object(NodeId source);
+    bool constant_receiver_type(TypeId type);
+    Constant constant_node_conversion(NodeId source, Conversion conversion, ScopeId scope);
     std::vector<ClassFacts> class_facts;
     std::vector<MemberFacts> members;
     std::vector<BaseRelation> bases;
@@ -545,6 +578,8 @@ private:
     TemplateDefinitionOwner definition_owner(EntityId cls);
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
+    void demand_class_constant_storage(TypeId type);
+    Index class_constant_storage;
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
     Index definition_traversals, unmatched_definitions;
     Index definition_source_parameters;

@@ -270,4 +270,24 @@ void Analyzer::demand_template_storage(EntityId e)
     storage_requested.put(e,1); storage_demand.push_back(e);
     instantiate_member_definition(e);
 }
+void Analyzer::demand_class_constant_storage(TypeId type)
+{
+    while (types[type].kind == TypeKind::Array) type = types[type].child;
+    if (!class_value(type)) return;
+    auto cls = types[type].entity;
+    if (!definition_owner(cls).specialization || class_constant_storage.get(cls)) return;
+    complete_class(cls);
+    if (!entities[cls].complete) return;
+    class_constant_storage.put(cls,1);
+    // PA15's concrete namespace object output retains visible definitions of
+    // this class's static constants. Storage is a separate demand from layout
+    // and from dormant member functions. Visit only this owner's declarations
+    // once, and use the definition index for each qualifying member.
+    for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
+        auto e = declarations[d].entity;
+        if (entities[e].owner == entities[cls].scope && entities[e].kind == EntityKind::Variable &&
+            entities[e].is_static && entities[e].constant.valid)
+            demand_template_storage(e);
+    }
+}
 } }

@@ -3,6 +3,22 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
+Loop 35 entry: `d705aafc4845cca2ad645b8c7ea45194936c9180`, clean,
+173/177; implementation now **177/177**, through PA15 **2112/2112**, and 24
+native + 18 rejection execution controls pass. Performance and final evidence
+are still pending in this working checkpoint. Previous turn: progress (committed initialization work and verified
+reports). Implement the remaining three owners together: checked constant-call
+execution (selected call/conversion -> immutable activation -> integral result),
+static member definition/storage (concrete class -> indexed member definition ->
+storage demand), and ordinary body validation (complete-class queue -> checked
+body, independent of emission). Retain template-body laziness and source parsing
+once. Work must track demanded bodies/activation expressions and indexed edges;
+cache keys include function, arguments and object/environment facts. Validate all
+four existing failures, personal positive/rejection/native controls, stage and
+prior reports, file audit, and frozen compiler/runtime measurements. Constant
+execution extends only the fixture-required subset; general PA16 execution stays
+with its owning stage. Independent whole-stage review remains outstanding.
+
 Target: **PA15 full-stage**, O0 typed LowIR. Loop 34 enters at `b8379f52`,
 **169/177**, and implements **173/177**: three existing failures fixed in code,
 one proven reference defect corrected, four failures remain. No input, exit

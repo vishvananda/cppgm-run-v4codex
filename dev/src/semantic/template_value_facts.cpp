@@ -45,7 +45,15 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {
             auto operand = query_edges[query.offset];
-            if (query.op == TOK_INVALID) {
+            if (fact.selected) {
+                auto result = constant_query_conversion(operand,conversions[fact.expression.conversions]);
+                value = convert(result,query.type,true);
+                if (value.valid && query.op == TOK_INVALID) {
+                    __int128 before = is_unsigned(result.type) ? __int128(result.bits) : __int128(static_cast<std::int64_t>(result.bits));
+                    __int128 after = is_unsigned(value.type) ? __int128(value.bits) : __int128(static_cast<std::int64_t>(value.bits));
+                    if (before != after) value = Constant();
+                }
+            } else if (query.op == TOK_INVALID) {
                 auto arg = convert_argument(value_argument_id(operand),query.type);
                 if (!arg) throw std::runtime_error("invalid implicit constant template conversion");
                 value = constants[query_value(argument_query(arg))];
@@ -92,8 +100,10 @@ std::uint32_t Analyzer::query_value(QueryId id)
             auto callee = type_queries[query_edges[query.offset]];
             if (callee.kind == QueryKind::TypeValue && integral(callee.type)) {
                 if (query.count == 1) value = Constant(callee.type,0);
-                if (query.count == 2) value = convert(constants[query_value(query_edges[query.offset+1])],callee.type,true);
-            }
+                if (query.count == 2) value = convert(fact.selected ?
+                    constant_query_conversion(query_edges[query.offset+1],conversions[fact.expression.conversions]) :
+                    constants[query_value(query_edges[query.offset+1])],callee.type,true);
+            } else value = constant_query_call(id);
         }
         auto constant = value.valid ? constants.size() : 1;
         if (value.valid) constants.push_back(value);

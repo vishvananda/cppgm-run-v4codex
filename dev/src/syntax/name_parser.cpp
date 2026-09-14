@@ -154,6 +154,7 @@ NodeId Parser::template_arguments()
                 if (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("&",end+1) &&
                     !in.is("&&",end+1) && !type_start(end+1) && !in.is(")",end+1))) type = false;
                 if (builtin() && in.is("(",end) && in.is(")",end+1)) type = false;
+                if (in.is("(",end) && type_start(end+1) && in.is("{",probe_type(end+1))) type = false;
                 if (in.is("decltype") && in.is("::",in.matching(1)+1)) type = false;
             }
             NodeId arg = type ? type_id() : expression(2);

@@ -266,6 +266,8 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
         entities[e].stable_prefix = true;
     }
     if (entities[e].kind == EntityKind::Function) {
+        entities[e].constexpr_function |= spec_has(specs,KW_CONSTEXPR) ||
+            spec_has(child(source,Kind::MemberSpecifiers),KW_CONSTEXPR);
         entities[e].inline_function |= spec_has(specs, KW_INLINE) || spec_has(specs, KW_CONSTEXPR);
         entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE);
     }
@@ -450,6 +452,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts.edit(ast[init].first).type = t;
     if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
+    if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
+        demand_class_constant_storage(t);
     return e;
 }
 } }

@@ -79,6 +79,7 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 Constant Analyzer::evaluate(NodeId n, ScopeId s)
 {
     if (!n) return Constant();
+    if (active_constant) return execute_constant_node(n,s);
     if (definitions && !ast.nodes.occurrences[n].context &&
         template_value_dependence.get(ast.nodes.occurrences[n].source)) return Constant();
     if (calls && !expressions[n].ready) {
@@ -122,6 +123,17 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::IdExpression: {
         EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
+        if (active_constant && entities[e].kind == EntityKind::Parameter) {
+            auto activation = constant_activations[active_constant];
+            auto body = constant_bodies[activation.body];
+            auto ordinal = constant_parameter_ordinals.get(e);
+            if (!ordinal || entities[e].owner != entities[body.function].scope) return Constant();
+            auto args = argument_packs[activation.arguments];
+            return constants[query_value(argument_query(argument_types[args.offset+ordinal]))];
+        }
+        if (active_constant && entities[e].kind == EntityKind::Variable && !entities[e].constant.valid &&
+            (types[entities[e].type].cv & 1) && !entities[e].definition)
+            constant_unavailable = true;
         if (!calls) { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         return entities[e].constant;
     }
@@ -140,12 +152,14 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression_type(first, s);
         return Constant(types.fundamental(FT_UNSIGNED_LONG_INT), size(t, ast[n].op == KW_ALIGNOF));
     }
-    case Kind::Cast: return convert(evaluate(ast[first].next, s), type_id(first, s), true);
+    case Kind::Cast:
+        if (calls && expressions[n].count) return constant_node_conversion(ast[first].next,conversions[expressions[n].conversions],s);
+        return convert(evaluate(ast[first].next, s), type_id(first, s), true);
     case Kind::Call: {
-        // Functional scalar casts already own a checked target/conversion.
-        // Ordinary calls (including constexpr functions) are a later tier.
+        if (calls && expressions[n].form != ExpressionForm::Cast) return constant_call(n,s);
         if (!calls || expressions[n].form != ExpressionForm::Cast || !integral(expressions[n].type)) return Constant();
         auto argument = ast[ast[first].next].first;
+        if (argument && expressions[n].count) return constant_node_conversion(argument,conversions[expressions[n].conversions],s);
         return argument ? convert(evaluate(argument,s),expressions[n].type,true) : Constant(expressions[n].type,0);
     }
     case Kind::Conditional: {

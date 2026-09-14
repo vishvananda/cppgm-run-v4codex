@@ -15,6 +15,7 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
         ++explicit_selections;
         entities[e].template_member = false;
         entities[e].inline_function = false;
+        entities[e].constexpr_function = false;
         entities[e].source = source;
         if (entities[e].kind == EntityKind::Variable) {
             entities[e].initializer = 0; entities[e].constant = Constant();

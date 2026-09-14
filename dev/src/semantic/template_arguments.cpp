@@ -5,7 +5,9 @@ using syntax::Kind;
 ArgumentId Analyzer::value_argument_id(QueryId query)
 {
     if (!query) return 0;
-    if (!query_fact(query).dependent) {
+    // A class expression retains its typed construction query until the
+    // non-type parameter supplies the target of its user-defined conversion.
+    if (!query_fact(query).dependent && !class_value(query_fact(query).expression.type)) {
         auto value = constants[query_value(query)];
         if (!value.valid || !integral(value.type)) throw std::runtime_error("integral constant template argument required");
         TypeQuery q; q.type = types.unqualified(value.type); q.value = value.bits;
@@ -78,6 +80,13 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
         // non-narrowing obligation until both type and value are concrete.
         q.op = TOK_INVALID;
         return value_argument_id(intern_query(q,{query}));
+    }
+    if (class_value(source_type)) {
+        TypeQuery q; q.kind = QueryKind::Cast; q.type = target;
+        q.op = TOK_INVALID; q.context = type_queries[query].context;
+        auto converted = intern_query(q,{query});
+        if (!constants[query_value(converted)].valid) return 0;
+        return value_argument_id(converted);
     }
     auto value = constants[query_value(query)];
     if (!value.valid || !integral(target)) return 0;

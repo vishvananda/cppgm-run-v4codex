@@ -310,7 +310,13 @@ void Analyzer::schedule_body(const Body& body)
         }
         if (class_depth) {
             members[m].in_class_body = true;
-            entities[body.entity].inline_function = true; return;
+            entities[body.entity].inline_function = true;
+            // Ordinary and explicitly specialized classes are checked in their
+            // complete-class context even when no code is requested. Implicit
+            // class-template members retain their separate body demand.
+            if (definitions && !definition_owner(scopes[entities[body.entity].owner].entity).specialization)
+                bodies.push_back(body);
+            return;
         }
         if (!entities[body.entity].inline_function && (members[m].constructor || members[m].destructor))
             members[m].base_entry = true;
