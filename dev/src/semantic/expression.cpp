@@ -15,11 +15,21 @@ Expression Analyzer::value_fact(const Expression& source) const
     if (source.form == ExpressionForm::BoundMember) { result.form = source.form; result.object_use = source.object_use; }
     return result;
 }
+void Analyzer::demand_function_expression(const Expression& value)
+{
+    // A uniquely named free function is odr-used in every evaluated context,
+    // including a discarded expression. Overload selection and nonstatic
+    // member use retain their own call/address demand decisions.
+    if (!definitions || unevaluated_depth || !value.entity || types[value.type].kind != TypeKind::Function ||
+        value.form == ExpressionForm::Overload || entities[value.entity].member_info) return;
+    use_selected_function(value.entity,true);
+}
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
     if (expressions[n].ready) {
         if (!unevaluated_depth) expressions.evaluated(n,true);
         if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(expressions[n].entity);
+        demand_function_expression(expressions[n]);
         return expressions[n];
     }
     if (ast.nodes.occurrences[n].context) {
@@ -28,6 +38,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
+    demand_function_expression(result);
     if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(result.entity);
     if (ast[n].kind == Kind::IdExpression && result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
         (entities[result.entity].kind == EntityKind::Variable && entities[result.entity].specialization)) &&

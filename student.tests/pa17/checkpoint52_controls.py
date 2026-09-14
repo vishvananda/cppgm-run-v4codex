@@ -33,6 +33,12 @@ harness.BAD = {
  'member_template_duplicate_default': 'template<class T>struct A{template<class U=int>int f(U);};template<class X>template<class Y=int>int A<X>::f(Y){return 0;}',
 }
 harness.GOOD.update({
+ 'ordinary_friend_discarded': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int main(){f;return 0;}',
+ 'ordinary_friend_discarded_comma': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int main(){(f,0);return 0;}',
+ 'ordinary_friend_discarded_instantiation': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);template<class U>void g(){f;}int main(){g<char>();return 0;}',
+ 'ordinary_friend_boolean': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int main(){bool b=f;return b?0:1;}',
+ 'ordinary_friend_void_cast': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int main(){(void)f;return 0;}',
+ 'ordinary_friend_conditional': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int main(){true?f:f;return 0;}',
  'ordinary_friend_decay_demand': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int(*p)(A<int>)=f;int main(){return p(a)-4;}',
  'ordinary_friend_reference_demand': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int(&p)(A<int>)=f;int main(){return p(a)-4;}',
  'ordinary_friend_operand_decay': 'template<class T>struct A{friend int f(A){return sizeof(T);}};A<int>a;int f(A<int>);int g(int(*p)(A<int>)){return p(a);}int main(){return g(f)-4;}',
@@ -45,6 +51,8 @@ harness.GOOD.update({
  'nested_source_parameter_names': 'template<class T>struct A{template<class U>struct B{template<class V>int f(){int n=sizeof(T)+sizeof(U)+sizeof(V);return n;}};};int main(){A<char>::B<int>b;return b.f<char>()-6;}',
 })
 harness.BAD.update({
+ 'ordinary_friend_invalid_discard': 'template<class T>struct A{friend int f(A){return T::missing;}};A<int>a;int f(A<int>);int main(){f;return 0;}',
+ 'ordinary_friend_invalid_discard_instantiation': 'template<class T>struct A{friend int f(A){return T::missing;}};A<int>a;int f(A<int>);template<class U>void g(){f;}int main(){g<char>();return 0;}',
  'fixed_template_id_friend_absent': 'template<class T>struct A{friend int f<int>(int);};',
  'fixed_template_id_friend_mismatch': 'template<class U>int f(U*);template<class T>struct A{friend int f<int>(int);};',
  'qualified_friend_undeducible_head': 'namespace N{template<class U>int f(int);}template<class T>struct A{friend int N::f(int);};',

@@ -363,6 +363,7 @@ private:
     Index friendships, using_access, using_functions, hidden_friends;
     bool friend_declaration(NodeId n, ScopeId s);
     void demand_friend_body(EntityId e);
+    void demand_function_expression(const Expression& value);
     void instantiate_friend_body(EntityId e);
     EntityId associated_lookup(IdentifierId name, const std::vector<NodeId>& args);
     EntityId associated_type_lookup(IdentifierId name, std::vector<TypeId> work);

@@ -55,9 +55,24 @@ if mode=='checkpoint':
  source='template<class T>struct A{friend int step(A,int x){return (x*17+3)&1023;}};int step(A<int>,int);'
  source+=f'int main(){{A<int>a;int(*p)(A<int>,int)=&step;volatile int n={n};int s=0;for(int i=0;i<n;++i)s=(s+p(a,i))&65535;return s=={expected}?0:1;}}'
  corpus.append(('friend-address-runtime',source,False,True))
+previous={}
+if OUT.exists():
+ previous=json.loads(OUT.read_text())
+ assert not previous.get('finished_utc'), 'completed campaigns are immutable; choose another output'
+ assert previous['binaries']==result['binaries'] and previous['mode']==mode
+ assert previous['source_commit']==result['source_commit'] and not previous['source_diff']
+ result['resumed_observations_from_sha256']=shared.sha(OUT)
+ result['previous_harness_sha256']=previous['harness_sha256']
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
-result['started_utc']=time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime())
+result['started_utc']=previous.get('started_utc',time.strftime('%Y-%m-%d %H:%M:%S',time.gmtime()))
 for name,source,common,native in corpus:
+ old=previous.get('workloads',{}).get(name)
+ if old and 'compiler' in old and (not native or 'runtime' in old):
+  assert old['source']==source and old['comparison']==('exact' if common else 'entry-rejected')
+  for out in old['outputs']:
+   assert shared.sha(out['path'])==out['sha256']
+   if native:assert shared.sha(out['native']['path'])==out['native']['sha256']
+  result['workloads'][name]=old;save();print(name,'preserved',flush=True);continue
  src=WORK/(name+'.cpp');src.write_text(source)
  item=dict(source=source,source_sha256=shared.sha(src),comparison='exact' if common else 'entry-rejected',outputs=[]);result['workloads'][name]=item
  commands={};executables={}
@@ -71,8 +86,8 @@ for name,source,common,native in corpus:
   assert item['outputs'][0]['sha256']==item['outputs'][1]['sha256'],name
   if native:assert item['outputs'][0]['native']['sha256']==item['outputs'][1]['native']['sha256'],name
  else:
-  r=subprocess.run([A,'--emit-lowir','-O0','-o',WORK/(name+'-entry.lowir'),src],capture_output=True,text=True,timeout=30)
-  assert r.returncode!=0;item['entry_behavior']=dict(compile_exit=r.returncode,stderr=r.stderr)
+  r=subprocess.run([A,'--emit-lowir','-O0','--validate-lowir','-o',WORK/(name+'-entry.lowir'),src],capture_output=True,text=True,timeout=30)
+  assert r.returncode!=0;item['entry_behavior']=dict(compile_exit=r.returncode,stderr=r.stderr,validation=True)
  save();print(name,'preflight',flush=True)
  item['compiler']=measure(commands)
  if native:item['runtime']=measure(executables)
