@@ -59,7 +59,9 @@ def campaign(record, current=False):
     for b in c['binaries']: checked(b)
     checked(c['backend'])
     if current:
-        assert c['implementation_commit']==tip and not c['source_diff']
+        # Audit-tool-only commits may follow the measured implementation.
+        # The production tree and frozen compiler must still match exactly.
+        assert not git('diff',c['implementation_commit'],tip,'--','dev') and not c['source_diff']
         assert c['binaries'][1]['sha256']==report['compiler']['sha256']
     count=0
     for name,w in c['workloads'].items():
@@ -91,7 +93,11 @@ for old in report['historical']:
     h=json.loads(checked(old).read_text())
     for source in h['source_files']:
         assert hashlib.sha256(historical_source(old['commit'],source['path'])).hexdigest()==source['sha256']
-    for entry in list(h['logs'].values())+h.get('evidence_files',[])+h.get('retained_evidence',[]): checked(entry)
+    for entry in list(h['logs'].values())+h.get('evidence_files',[])+h.get('retained_evidence',[]):
+        path=entry['path']
+        if not Path(path).is_absolute() and git('ls-tree',old['commit'],'--',path):
+            assert hashlib.sha256(historical_source(old['commit'],path)).hexdigest()==entry['sha256'],path
+        else: checked(entry)
     for c in h['campaigns']: campaign(c)
     if 'noise' in h: checked(h['noise'])
 for path in ['pa16/plan.md','pa16/audit.md']:
@@ -102,4 +108,3 @@ assert not git('diff','--check')
 print(f'PASS: full range/source provenance; 154 unchanged fixtures, {len(current)} failures with no lost passes; '
       f'prior 2112/2112; through 2205/2266; file audit; 148 native/66 rejection controls; '
       f'{observations} current observations and historical evidence; reviewed code markers')
-
