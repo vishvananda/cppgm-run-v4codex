@@ -57,7 +57,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         return retain_template_definition(ast[params].next,inner,owner_head ? owner_head : s,
             member_template ? member_template : n);
     }
-    if (!owner_head) owner_head = s;
+    if (owner_head) check_template_parameters(n,s);
+    else owner_head = s;
     NodeId d = child(n,Kind::Declarator), item = 0;
     if (ast[n].kind == Kind::Function) d = ast[ast[n].first].next;
     if (ast[n].kind == Kind::SimpleDeclaration) { item = ast[child(n,Kind::InitDeclarators)].first; d = ast[item].first; }
@@ -103,6 +104,14 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         }
     }
     if (!primary) return false;
+    // [temp.param]/9 forbids defaults on every head of an out-of-class
+    // definition of a class-template member, even before it is demanded.
+    for (auto scope : source_heads)
+        for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter && entities[p].initializer)
+                throw std::runtime_error("template default on out-of-class member definition");
+        }
     // The leading return/object type precedes the qualified declarator and
     // therefore does not inherit its class scope. Its retained type fact is
     // reused when the declarator and body bind in their member environment.

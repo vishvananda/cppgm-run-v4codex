@@ -55,7 +55,9 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         bool qualified = ast[name].first != ast[name].last || ast[name].op == OP_COLON2;
         ScopeId owner = qualified ? name_owner(name, s) : ns;
         EntityId function = 0;
-        if (source_pattern && !templated) {
+        bool fixed_reference = (qualified || child(ast[name].last,Kind::TemplateArguments)) &&
+            !dependent_type(type) && !dependent_template_syntax(name,s);
+        if (source_pattern && !templated && !fixed_reference) {
             // A non-template friend of a class template is a source pattern
             // for an ordinary namespace function. It is not a function
             // template over the enclosing class's parameters.
@@ -84,7 +86,8 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
             } else {
                 EntityId found = lookup(owner, terminal(name), Lookup::Ordinary, true);
                 if (function_binding(found)) for (EntityId candidate : candidates(found))
-                    if (entities[candidate].type == type) function = candidate;
+                    if (!entities[candidate].template_info && entities[candidate].type == type) function = candidate;
+                if (!function) function = declare_function_specialization(name,s,type,owner);
             }
             if (!function) throw std::runtime_error("qualified friend must match a declared function");
         } else function = declare_function(owner, terminal(name), n, type, true);

@@ -4,6 +4,12 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::check_template_parameters(NodeId n, ScopeId s)
 {
+    // This checks source spellings against lexical template parameters.
+    // Substitution cannot change those spellings. Nested templates own their
+    // own check after their complete head is declared, including retained
+    // out-of-class heads; projected declarations reuse that source check.
+    if (ast.nodes.occurrences[n].context) { ++template_parameter_check_reuses; return; }
+    if (ast[n].kind == Kind::Template) return;
     Index parameters;
     for (auto scope = s; scope; scope = scopes[scope].parent) {
         if (scopes[scope].kind != ScopeKind::Template) continue;
@@ -16,8 +22,9 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
     std::vector<Work> work(1,Work{n,false}); Index seen;
     for (std::size_t i = 0; i < work.size(); ++i) {
         auto item = work[i]; auto node = ast[item.node];
-        if (!item.node || seen.get(item.node)) continue;
+        if (!item.node || node.kind == Kind::Template || seen.get(item.node)) continue;
         seen.put(item.node,1);
+        ++template_parameter_check_work;
         IdentifierId declared = 0;
         NodeId name = 0;
         if (node.kind == Kind::Declarator) name = decl_name(item.node);

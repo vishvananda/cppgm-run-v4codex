@@ -34,7 +34,8 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         observe_scalar(operand);
         if (field_fact(a.entity).bit_field) throw std::runtime_error("address of bit-field");
         if (a.form == ExpressionForm::Overload) return a;
-        if (a.entity) demand_specialization(a.entity);
+        if (a.entity && types[a.type].kind == TypeKind::Function) use_selected_function(a.entity,true);
+        else if (a.entity) demand_specialization(a.entity);
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
         if (a.entity && !entities[a.entity].is_static && (entities[a.entity].member_info || (qualified_address && nonstatic_field(a.entity)))) {
             if (!qualified_address) throw std::runtime_error("member pointer requires a qualified member name");

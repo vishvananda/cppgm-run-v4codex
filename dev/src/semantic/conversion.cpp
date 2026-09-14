@@ -261,7 +261,9 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
         check_base_access(from, to, facts[n].scope);
     }
     if (c.function) select_function(n, c.function);
-    if (expressions[n].entity) demand_specialization(expressions[n].entity);
+    if (expressions[n].entity && types[expressions[n].type].kind == TypeKind::Function)
+        use_selected_function(expressions[n].entity,true);
+    else if (expressions[n].entity) demand_specialization(expressions[n].entity);
     TypeId target = types.unqualified(c.target);
     if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts.edit(n).type = target;
 }
@@ -306,7 +308,9 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
             check_base_access(from, to, facts[n].scope);
         }
         if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User && c.kind != Conversion::Kind::List) select_function(n, c.function);
-        if (expressions[n].entity) demand_specialization(expressions[n].entity);
+        if (expressions[n].entity && types[expressions[n].type].kind == TypeKind::Function)
+            use_selected_function(expressions[n].entity,true);
+        else if (expressions[n].entity) demand_specialization(expressions[n].entity);
         expressions.incoming(n,conversions.size());
     }
     conversions.push_back(c);

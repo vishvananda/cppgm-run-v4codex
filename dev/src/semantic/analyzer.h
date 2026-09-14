@@ -801,6 +801,7 @@ private:
     void bind_template_statement(NodeId n, ScopeId s);
     ScopeId bind_template_class(NodeId n, ScopeId parent, EntityId entity = 0, std::vector<Body>* deferred = 0);
     void check_template_parameters(NodeId n, ScopeId s);
+    std::size_t template_parameter_check_work = 0, template_parameter_check_reuses = 0;
     void index_template_members(NodeId n, std::uint32_t path, ScopeId s);
     TypeId template_member_signature(TypeId type, ScopeId head, EntityId primary, ScopeId owner);
     void template_signature_bindings(ScopeId scope, EntityId primary, Index& bindings);

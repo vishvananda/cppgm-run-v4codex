@@ -182,6 +182,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_type_queries\":" << type_queries.size()-1
         << ",\"semantic_type_query_work\":" << query_work
         << ",\"semantic_template_binding_work\":" << template_binding_work
+        << ",\"semantic_template_parameter_check_work\":" << template_parameter_check_work
+        << ",\"semantic_template_parameter_check_reuses\":" << template_parameter_check_reuses
         << ",\"semantic_template_bindings\":" << template_bindings.size()-1
         << ",\"semantic_template_fixed_expressions\":" << template_fixed_work
         << ",\"semantic_template_fixed_uses\":" << template_fixed_uses
