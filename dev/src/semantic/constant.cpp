@@ -36,19 +36,24 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
         if (class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
         return v.bits ? Constant(to,v.bits) : Constant();
     }
-    v = constant_indirect(v);
-    if (!v.valid) return v;
-    if (!integral(v.type) && !floating_type(v.type) && types.unqualified(v.type) == types.unqualified(to)) { v.type = to; return v; }
-    if (fundamental(to,FT_VOID)) return Constant(to,0);
-    if (pointer(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
-        if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
-        if (target.kind == TypeKind::Pointer) {
-            if (v.bits && class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
-            return Constant(to,v.bits);
+    auto source = types[v.type];
+    bool scalar = source.kind == TypeKind::Fundamental && target.kind == TypeKind::Fundamental &&
+        source.fundamental <= FT_LONG_DOUBLE && target.fundamental <= FT_LONG_DOUBLE;
+    if (!scalar) {
+        v = constant_indirect(v);
+        if (!v.valid) return v;
+        if (!integral(v.type) && !floating_type(v.type) && types.unqualified(v.type) == types.unqualified(to)) { v.type = to; return v; }
+        if (fundamental(to,FT_VOID)) return Constant(to,0);
+        if (pointer(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
+            if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
+            if (target.kind == TypeKind::Pointer) {
+                if (v.bits && class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
+                return Constant(to,v.bits);
+            }
+            return Constant();
         }
-        return Constant();
+        if (target.kind == TypeKind::Pointer) return integral(v.type) && !v.bits ? Constant(to,0) : Constant();
     }
-    if (target.kind == TypeKind::Pointer) return integral(v.type) && !v.bits ? Constant(to,0) : Constant();
     if (floating_type(v.type) || floating_type(to)) return floating_conversion(v,to);
     if (!integral(v.type) || !integral(to)) return Constant();
     if (!explicit_cast && (scoped_enum(v.type) || scoped_enum(to)) && types.unqualified(to) != types.unqualified(v.type))

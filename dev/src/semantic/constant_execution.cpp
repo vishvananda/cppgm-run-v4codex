@@ -49,7 +49,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     if (entities[e].member_info && !entities[e].is_static && !object && !constructor_member(e)) return Constant();
     // The activation key contains typed values and the receiver path, plus
     // snapshots of mutable or retired storage reachable through addresses.
-    std::vector<ArgumentId> key_args(1,object);
+    std::vector<ArgumentId> key_args; key_args.reserve(args.size()+2); key_args.push_back(object);
     key_args.push_back(zero);
     Index dependencies;
     if (object) constant_dependencies(Constant(types.compound(TypeKind::LRef,constant_addresses[object].type),object),key_args,dependencies);
