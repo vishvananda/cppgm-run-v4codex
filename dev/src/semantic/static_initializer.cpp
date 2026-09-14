@@ -57,7 +57,16 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (!reference_target && x.category != ValueCategory::Prvalue &&
         (types[x.type].cv & 2) && types[x.type].kind != TypeKind::Array) return r;
     auto incoming = conversions[x.incoming];
-    if (incoming.kind == Conversion::Kind::User || incoming.kind == Conversion::Kind::Construction) return r;
+    if (reference_target && x.category == ValueCategory::Prvalue && !class_value(x.type) &&
+        (incoming.kind == Conversion::Kind::Standard || incoming.kind == Conversion::Kind::Explicit))
+        return constant_static_value(convert(evaluate(n,facts[n].scope),types[target].child,true));
+    if ((reference_target || pointer(target)) && !(x.form == ExpressionForm::Cast && ast[n].op == KW_REINTERPET_CAST)) {
+        Conversion c; c.target = target; c.reference = reference_target;
+        if (incoming.target == target) c = incoming;
+        return constant_static_value(constant_node_conversion(n,c,facts[n].scope));
+    }
+    if (incoming.kind == Conversion::Kind::User) return constant_static_value(constant_node_conversion(n,incoming,facts[n].scope));
+    if (incoming.kind == Conversion::Kind::Construction) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;
     if (!reference_target && (integral(target) || floating_type(target)) &&
         (integral(x.type) || floating_type(x.type))) {
@@ -135,7 +144,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         Constant c = evaluate(n, facts[n].scope);
         if (c.valid) {
             if (floating_type(c.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(c); }
-            else { r.kind = StaticValue::Integer; r.bits = c.bits; }
+            else return constant_static_value(c);
         }
     }
     return r;

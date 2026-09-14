@@ -9,11 +9,9 @@ bool Analyzer::constant_step()
 }
 bool Analyzer::constant_local(EntityId e, ScopeId s)
 {
-    if (!e || !constant_frame || entities[e].is_static || entities[e].external_decl ||
-        (!integral(entities[e].type) && !floating_type(entities[e].type)) || types[entities[e].type].kind == TypeKind::LRef ||
-        types[entities[e].type].kind == TypeKind::RRef || (types[entities[e].type].cv & 2)) return false;
+    if (!e || !constant_frame || entities[e].is_static || entities[e].external_decl || (types[entities[e].type].cv & 2)) return false;
     auto init = entities[e].initializer;
-    if (!init) return false;
+    constant_frame->locals.push_back(e);
     auto slot = constant_frame->bindings.get(e);
     if (!slot) {
         slot = constant_frame->values.size(); constant_frame->values.push_back(Constant());
@@ -22,13 +20,11 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
     // A loop declaration begins a new lifetime; its initializer cannot read
     // the value left by the previous iteration (including self-initialization).
     constant_frame->values[slot] = Constant();
-    auto n = init;
-    while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::BracedInit) {
-        if (!ast[n].first) { constant_frame->values[slot] = convert(Constant(types.fundamental(FT_INT),0),entities[e].type); return true; }
-        n = ast[n].first;
+    if (auto address = constant_frame->addresses.get(e)) {
+        constant_storage[constant_addresses[address].storage].live = false;
+        constant_frame->addresses.put(e,0);
     }
-    auto c = conversions[expressions[n].incoming];
-    auto value = c.target ? constant_node_conversion(n,c,s) : convert(evaluate(n,s),entities[e].type);
+    auto value = constant_initialize(init,entities[e].type,s,object_constructor(e));
     constant_frame->values[slot] = value;
     return value.valid;
 }
@@ -51,12 +47,25 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
     if (facts[n].scope) s = facts[n].scope;
     auto first = ast[n].first;
     switch (ast[n].kind) {
-    case Kind::Compound: case Kind::Then: case Kind::Else:
+    case Kind::Compound: case Kind::Then: case Kind::Else: {
+        struct Scope {
+            Analyzer& sem; ConstantFrame& frame; std::size_t begin;
+            Scope(Analyzer& s):sem(s),frame(*s.constant_frame),begin(frame.locals.size()){}
+            ~Scope(){
+                for (auto i = begin; i < frame.locals.size(); ++i) {
+                    auto e = frame.locals[i];
+                    if (auto address = frame.addresses.get(e)) sem.constant_storage[sem.constant_addresses[address].storage].live = false;
+                    frame.bindings.put(e,0); frame.addresses.put(e,0);
+                }
+                frame.locals.resize(begin);
+            }
+        } scope(*this);
         for (auto c = first; c; c = ast[c].next) {
             auto result = execute_constant_statement(c,s);
             if (result.flow != ConstantFlow::Next) return result;
         }
         return next;
+    }
     case Kind::SimpleDeclaration: {
         if (spec_has(first,KW_TYPEDEF)) return next;
         auto list = ast[first].next;
@@ -65,6 +74,13 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
         return next;
     }
     case Kind::Return: {
+        auto f = constant_bodies[constant_activations[active_constant].body].function;
+        auto ret = types[entities[f].type].child;
+        if (class_value(ret)) {
+            auto record = class_return(n);
+            auto value = record.source ? constant_node_conversion(record.source,conversions[record.conversion],s) : constant_initialize(first,ret,s);
+            return {value.valid ? ConstantFlow::Return : ConstantFlow::Failure,value};
+        }
         auto c = conversions[expressions[first].incoming];
         auto value = c.target ? constant_node_conversion(first,c,s) :
             ast[first].kind == Kind::BracedInit && !ast[first].first ? evaluate(first,s) : Constant();
@@ -148,11 +164,14 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
         }
         auto left = convert(old,conversions[x.conversions].target,true);
         auto right = source ? constant_node_conversion(source,conversions[x.conversions+1],s) :
-            convert(Constant(types.fundamental(FT_INT),1),left.type,true);
+            Constant(types.fundamental(FT_INT),1);
         value = convert(binary(binary_op,left,right,true),entities[e].type,true);
     }
     if (!value.valid) return value;
     constant_frame->values[slot] = value;
+    if (auto address = constant_frame->addresses.get(e)) {
+        auto storage = constant_addresses[address].storage; constant_storage[storage].value = value; ++constant_storage[storage].version;
+    }
     return ast[n].kind == Kind::Postfix ? old : value;
 }
 } }

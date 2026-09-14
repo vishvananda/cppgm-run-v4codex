@@ -254,6 +254,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::BitField: if (calls) bit_field_declaration(n, s); break;
     case Kind::Template: template_declaration(n, s); break;
     case Kind::StaticAssert: {
+        struct Unevaluated { unsigned& depth; Unevaluated(unsigned& d):depth(d){++depth;} ~Unevaluated(){--depth;} } guard(unevaluated_depth);
         Constant v = evaluate(ast[n].first, s);
         if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) throw std::runtime_error("static assertion is not a true integral constant");
         break;

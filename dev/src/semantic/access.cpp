@@ -18,10 +18,13 @@ std::uint32_t Analyzer::access_base(EntityId entity) const
 }
 bool Analyzer::class_derives(EntityId derived, EntityId base) const
 {
-    for (EntityId current = derived; current;) {
+    std::vector<EntityId> work(1,derived); Index seen;
+    for (unsigned i = 0; i < work.size(); ++i) {
+        auto current = work[i];
         if (current == base) return true;
-        auto edge = access_base(current);
-        current = edge ? bases[edge].base : 0;
+        if (seen.get(current)) continue;
+        seen.put(current,1);
+        for (auto edge = access_base(current); edge; edge = bases[edge].next) work.push_back(bases[edge].base);
     }
     return false;
 }
@@ -43,6 +46,7 @@ void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId c
     if (access_override) context = access_override;
     for (EntityId current = cls; current && current != target;) {
         auto edge = access_base(current);
+        while (edge && !class_derives(bases[edge].base,target)) edge = bases[edge].next;
         if (!edge) throw std::runtime_error("unrelated base conversion");
         Access level = bases[edge].access;
         bool allowed = level == Access::Public || privileged(context, current);

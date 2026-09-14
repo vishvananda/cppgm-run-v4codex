@@ -271,6 +271,7 @@ void Procedural::run()
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         if (entity.template_pattern) continue;
+        if (entity.kind == semantic::EntityKind::Function && entity.specialization && !entity.explicit_specialization && !(entity.emission & semantic::Entity::Used)) continue;
         if (entity.kind == semantic::EntityKind::Variable && (entity.template_info ||
             (entity.specialization && !(entity.emission & semantic::Entity::Used)))) continue;
         if (sem.dormant_hidden_friend(e)) continue;

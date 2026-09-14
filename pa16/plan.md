@@ -1,9 +1,42 @@
-# PA16 compact plan — checkpoint audit 40
+# PA16 compact plan — implementation 41
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
 Last reviewed commit: `7c39a6edbfa43c226036b8a92fe236722ac85dcc`
 
-Target: **PA16 full-stage**. The accumulated checkpoint audit is complete;
+Target: **PA16 full-stage**. Implementation entry: `caac2cda243e4ab71d6f5aca48159f88b9b8da3b`,
+93/154 passing, 61 failures. Both review markers above are preserved.
+
+## Active connected group
+
+Owner: the shared semantic constant evaluator. Add compact TU-owned typed
+object values and storage/subobject identities; execution frames own local
+bindings. Parsed initializer plans, selected conversions and constructor actions
+feed evaluation; declarations publish checked values for queries and lowering.
+Calls key completed results by function, converted arguments and receiver path.
+Projection uses indexed field/base identities and bounded array ranges; work
+tracks consumed initializer actions and executed expressions under the existing
+512-call / 1,000,000-step bounds. No textual semantic keys or grammar replay.
+
+Implement constructors, aggregates, references/pointers, member/operator calls,
+conversions and their declaration/storage obligations together. Validate with
+unchanged course fixtures, explicit personal cross-owner/native/rejection controls,
+prior-through and file audit. Freeze entry/final binaries and inputs for A/A plus
+ABBA compiler latency/RSS and executable runtime/text evidence; new-correct cases
+have no speedup comparison against rejected entry programs.
+
+Implementation ledger (not an audit waiver): typed object/address execution now
+passes **135/154** unchanged PA16 fixtures, prior-through **2112/2112**, file audit
+and **17 native / 8 rejection** personal object controls. Existing scalar/storage/
+validity controls and final frozen performance remain to rerun. Six semantic
+failures remain in recursive arrow/builtin calls, pack-array queries, subobject
+projection and const template parameter resolution; emission identity and static
+initialization presentation also remain. Required constant initialization exposes
+old dynamic-init references: prove/document each correction before changing any
+oracle. Constructor-local field reads, self addresses, scope lifetimes and mutable
+reference-call keys now have explicit personal controls. This is an implementation
+increment, not the handoff boundary.
+
+The accumulated checkpoint audit is complete;
 stage implementation is still **93/154, 61 failures**. Entry `57bac58d` had the
 same 61 failures. No passing fixture was lost; all 154 fixtures are unchanged.
 This turn made progress: reviewed three handoffs, repaired three defects,

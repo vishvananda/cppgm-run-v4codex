@@ -8,7 +8,7 @@ void Procedural::transfer_array(const semantic::TransferAction& action, Value so
     TypeId leaf = action.type;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
     std::vector<InitProjection> path;
-    if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type), action.field != 0, action.field});
+    if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0, action.field});
     auto one = [&](Operand index) {
         Value dst = array_element(target, member_root, path, index, sem.object_size(leaf));
         Value src = array_element(source, member_root, path, index, sem.object_size(leaf));
@@ -54,7 +54,7 @@ void Procedural::transfer_body(EntityId e)
     auto project = [&](SlotId slot, const semantic::TransferAction& action) {
         Value root = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        return emit(i, {root.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type))});
+        return emit(i, {root.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type))});
     };
     for (unsigned j = 0; j < m.transfer_count; ++j) {
         auto action = sem.transfers[m.transfer_begin+j];

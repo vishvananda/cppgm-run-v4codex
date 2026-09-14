@@ -10,7 +10,7 @@ bool Analyzer::constant_initializer(NodeId n, TypeId t, bool local)
             !constructor_needed(facts[source].entity);
     }
     if (auto plan = initializer_plan(n, t)) return constant_plan(plan,local);
-    if (n && constructor_member(facts[n].entity)) return false;
+    if (n && constructor_member(facts[n].entity)) return entities[facts[n].entity].constexpr_function && constant_construction(n,t).valid;
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto target = types[t];
     if (!n && value_constructor(t)) return false;
@@ -55,6 +55,7 @@ bool Analyzer::static_initialization(EntityId e)
     bool constant = !entity.initializer || constant_initializer(entity.initializer,t,local_static(e));
     if (!entity.initializer && class_value(t)) constant = (local_static(e) || empty_value(t)) && !constructor_needed(object_constructor(e));
     if (!entity.initializer && types[t].kind == TypeKind::Array) constant = !constructor_needed(object_constructor(e));
+    if (entity.constant.valid && class_value(t)) constant = constant_value_data(entity.constant).valid;
     if (static_vptr(e)) constant = true;
     static_initialization_facts.put(e,constant ? 2 : 1); return constant;
 }

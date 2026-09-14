@@ -29,7 +29,26 @@ unsigned Analyzer::width(TypeId id) const
 Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
 {
     if (!v.valid || !v.type || !to) return Constant();
-    if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) to = types[to].child;
+    if (!calls && (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef)) to = types[to].child;
+    auto target = types[to];
+    if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
+        if (types[v.type].kind != TypeKind::LRef && types[v.type].kind != TypeKind::RRef) return Constant();
+        if (class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
+        return v.bits ? Constant(to,v.bits) : Constant();
+    }
+    v = constant_indirect(v);
+    if (!v.valid) return v;
+    if (!integral(v.type) && !floating_type(v.type) && types.unqualified(v.type) == types.unqualified(to)) { v.type = to; return v; }
+    if (fundamental(to,FT_VOID)) return Constant(to,0);
+    if (pointer(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
+        if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
+        if (target.kind == TypeKind::Pointer) {
+            if (v.bits && class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
+            return Constant(to,v.bits);
+        }
+        return Constant();
+    }
+    if (target.kind == TypeKind::Pointer) return integral(v.type) && !v.bits ? Constant(to,0) : Constant();
     if (floating_type(v.type) || floating_type(to)) return floating_conversion(v,to);
     if (!integral(v.type) || !integral(to)) return Constant();
     if (!explicit_cast && (scoped_enum(v.type) || scoped_enum(to)) && types.unqualified(to) != types.unqualified(v.type))
@@ -86,13 +105,13 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
     if (calls && !expressions[n].ready) {
         switch (ast[n].kind) {
         case Kind::Literal: case Kind::KeywordLiteral: case Kind::IdExpression: case Kind::Parenthesized:
-        case Kind::Call: case Kind::Unary: case Kind::Binary: case Kind::Conditional: case Kind::Cast: case Kind::Sizeof: case Kind::TypeTrait:
+        case Kind::Member: case Kind::Subscript: case Kind::Call: case Kind::Unary: case Kind::Binary: case Kind::Conditional: case Kind::Cast: case Kind::Sizeof: case Kind::TypeTrait:
             expression(n, s); break;
         default: break;
         }
     }
     if (facts[n].value) return constants[facts[n].value];
-    if (calls && expressions[n].form == ExpressionForm::OperatorCall) return Constant();
+    if (calls && expressions[n].form == ExpressionForm::OperatorCall) return constant_indirect(constant_call(n,s));
     Constant result = evaluate_value(n, s);
     facts.edit(n).scope = s;
     if (result.valid) {
@@ -110,6 +129,9 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     if (calls && expressions[n].category != ValueCategory::Prvalue && (types[expressions[n].type].cv & 2))
         return Constant();
     NodeId first = ast[n].first;
+    if (calls && expressions[n].ready && (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer) &&
+        (class_value(expressions[n].type) || types[expressions[n].type].kind == TypeKind::Array))
+        return constant_initialize(n,expressions[n].type,s);
     switch (ast[n].kind) {
     case Kind::Initializer: case Kind::Parenthesized: case Kind::BracedInit: case Kind::ParenInitializer:
         if (!first && (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer))
@@ -131,6 +153,9 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return convert(Constant(t, bits), t);
     }
     case Kind::KeywordLiteral:
+        if (ast[n].op == KW_NULLPTR) return Constant(types.fundamental(FT_NULLPTR_T),0);
+        if (ast[n].op == KW_THIS) return active_constant && constant_activations[active_constant].object ?
+            Constant(expressions[n].type,constant_activations[active_constant].object) : Constant();
         if (ast[n].op == KW_TRUE || ast[n].op == KW_FALSE)
             return Constant(types.fundamental(FT_BOOL), ast[n].op == KW_TRUE);
         return Constant();
@@ -138,16 +163,20 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
         if (active_constant && constant_frame) {
-            if (auto slot = constant_frame->bindings.get(e)) return constant_frame->values[slot];
+            if (auto slot = constant_frame->bindings.get(e)) return constant_indirect(constant_frame->values[slot]);
             if (entities[e].kind == EntityKind::Parameter) return Constant();
         }
         if (active_constant && entities[e].kind == EntityKind::Variable && !entities[e].constant.valid &&
             (types[entities[e].type].cv & 1) && !entities[e].definition)
             constant_unavailable = true;
         if (!calls) { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
-        return entities[e].constant;
+        if (calls && nonstatic_field(e)) return constant_indirect(constant_read(constant_address(n,s)));
+        if (calls && types[entities[e].type].kind == TypeKind::Function) return Constant(types.compound(TypeKind::Pointer,entities[e].type),constant_entity_address(e));
+        return calls ? constant_indirect(constant_entity_value(e)) : entities[e].constant;
     }
+    case Kind::Member: return constant_indirect(constant_read(constant_address(n,s)));
     case Kind::Subscript: {
+        if (calls) return constant_indirect(constant_read(constant_address(n,s)));
         auto literal = first, index = ast[first].next;
         if (calls && (types[expressions[literal].type].kind == TypeKind::Array || types[expressions[index].type].kind == TypeKind::Array)) {
             if (types[expressions[literal].type].kind != TypeKind::Array) std::swap(literal,index);
@@ -172,24 +201,30 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (calls && expressions[n].count) return constant_node_conversion(ast[first].next,conversions[expressions[n].conversions],s);
         return convert(evaluate(ast[first].next, s), type_id(first, s), true);
     case Kind::Call: {
-        if (calls && expressions[n].form != ExpressionForm::Cast) return constant_call(n,s);
+        if (calls && expressions[n].form != ExpressionForm::Cast) return constant_indirect(constant_call_result(n,s));
         if (!calls || expressions[n].form != ExpressionForm::Cast || (!integral(expressions[n].type) && !floating_type(expressions[n].type))) return Constant();
         auto argument = ast[ast[first].next].first;
         if (argument && expressions[n].count) return constant_node_conversion(argument,conversions[expressions[n].conversions],s);
         return argument ? convert(evaluate(argument,s),expressions[n].type,true) : convert(Constant(types.fundamental(FT_INT),0),expressions[n].type,true);
     }
     case Kind::Conditional: {
-        Constant cond = evaluate(first, s);
+        auto cx = calls ? expressions[n] : Expression();
+        Constant cond = calls && cx.count ? constant_node_conversion(first,conversions[cx.conversions],s) : evaluate(first, s);
         if (!cond.valid || scoped_enum(cond.type)) return Constant();
         NodeId yes = ast[first].next;
-        Constant result = evaluate(constant_truth(cond) ? yes : ast[yes].next, s);
+        auto branch = constant_truth(cond) ? yes : ast[yes].next;
+        Constant result = calls && cx.count == 3 ? constant_node_conversion(branch,conversions[cx.conversions+(branch == yes ? 1 : 2)],s) : evaluate(branch,s);
         return calls ? convert(result, expressions[n].type) : result;
     }
     case Kind::Assignment: case Kind::Postfix:
         return constant_mutation(n,s);
     case Kind::Unary: {
         if (ast[n].op == OP_INC || ast[n].op == OP_DEC) return constant_mutation(n,s);
-        Constant v = evaluate(first, s);
+        if (ast[n].op == OP_AMP) {
+            auto a = constant_address(first,s); return a ? Constant(expressions[n].type,a) : Constant();
+        }
+        if (ast[n].op == OP_STAR) return constant_indirect(constant_read(constant_address(n,s)));
+        Constant v = calls && expressions[n].count ? constant_node_conversion(first,conversions[expressions[n].conversions],s) : evaluate(first, s);
         if (!v.valid || scoped_enum(v.type)) return Constant();
         if (ast[n].op == OP_LNOT) return Constant(types.fundamental(FT_BOOL), !constant_truth(v));
         v = convert(v, calls ? expressions[n].type : promote(v.type));
@@ -199,14 +234,15 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return Constant();
     }
     case Kind::Binary: {
-        Constant a = evaluate(first, s);
+        auto cx = calls ? expressions[n] : Expression();
+        Constant a = calls && cx.count == 2 ? constant_node_conversion(first,conversions[cx.conversions],s) : evaluate(first, s);
         if (!a.valid) return Constant();
         ETokenType op = ast[n].op;
         if (op == OP_COMMA) return evaluate(ast[first].next, s);
         if ((op == OP_LAND || op == OP_LOR) && scoped_enum(a.type)) return Constant();
         if (op == OP_LAND && !constant_truth(a)) return Constant(types.fundamental(FT_BOOL), 0);
         if (op == OP_LOR && constant_truth(a)) return Constant(types.fundamental(FT_BOOL), 1);
-        Constant b = evaluate(ast[first].next, s);
+        Constant b = calls && cx.count == 2 ? constant_node_conversion(ast[first].next,conversions[cx.conversions+1],s) : evaluate(ast[first].next, s);
         if (calls) {
             if (expressions[n].count != 2) throw std::logic_error("missing binary operand conversions");
             std::uint32_t begin = expressions[n].conversions;
@@ -223,6 +259,7 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
 {
     if (!a.valid || !b.valid) return Constant();
     if (floating_type(a.type) || floating_type(b.type)) return floating_binary(op,a,b,converted);
+    if (pointer(a.type) || pointer(b.type) || fundamental(a.type,FT_NULLPTR_T) || fundamental(b.type,FT_NULLPTR_T)) return constant_pointer_binary(op,a,b);
     if (!integral(a.type) || !integral(b.type)) return Constant();
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     if (scoped_enum(a.type) || scoped_enum(b.type)) {

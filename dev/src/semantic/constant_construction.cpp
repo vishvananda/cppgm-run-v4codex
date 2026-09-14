@@ -1,6 +1,16 @@
 #include "semantic/analyzer.h"
 
 namespace cppgm { namespace semantic {
+const ConstantObject& Analyzer::constant_value_data(Constant value)
+{
+    auto k = key(value.type,value.bits);
+    if (auto known = constant_value_objects.get(k)) return object_constants[known];
+    ConstantObject result; result.first = constant_fields.size(); result.valid = constant_object_fields(value);
+    if (!result.valid) constant_fields.resize(result.first);
+    else result.count = constant_fields.size()-result.first;
+    auto id = object_constants.size(); object_constants.push_back(result); constant_value_objects.put(k,id);
+    return object_constants[id];
+}
 void Analyzer::prepare_static_vptrs()
 {
     // Static storage already supplies zero-initialization. A demanded implicit
@@ -65,7 +75,10 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
     if (auto known = constant_objects.get(k)) return object_constants[known];
     ConstantObject result; result.first = constant_fields.size();
     EntityId ctor = facts[n].entity;
-    if (constructor_member(ctor)) {
+    if (constructor_member(ctor) && entities[ctor].constexpr_function) {
+        auto value = constant_initialize(n,t,facts[n].scope);
+        result.valid = constant_object_fields(value);
+    } else if (constructor_member(ctor)) {
         auto summary = constructor_constants[constant_constructor(ctor)];
         auto call = expressions[n]; result.valid = summary.valid;
         // Even unused constructor arguments must be evaluated. The early
@@ -88,7 +101,7 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
             }
             StaticValue value = static_value(source, action.type);
             result.valid = value.kind != StaticValue::Invalid;
-            if (result.valid) constant_fields.push_back({action.field, action.type, value});
+            if (result.valid) constant_fields.push_back({action.field, action.type, value,entities[action.field].member_offset});
         }
     }
     if (!result.valid) constant_fields.resize(result.first);

@@ -31,7 +31,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         }
         EntityId dtor = object_destructor(e);
         EntityId temporary = reference_temporary(e);
-        bool destruction = reference_choices(e) || destructor_needed(dtor) || parameter_cleanup(e) || temporary_cleanup(temporary) ||
+        bool destruction = reference_choices(e) || (!trivial_destructor(entities[e].type) && destructor_needed(dtor)) || parameter_cleanup(e) || temporary_cleanup(temporary) ||
             (types[entities[e].type].kind == TypeKind::Array && !trivial_destructor(entities[e].type));
         if (destruction) {
             LifetimeState state; state.object = temporary ? temporary : e; state.destructor = dtor; state.tail = live; state.depth = lifetimes[live].depth + 1;

@@ -263,7 +263,7 @@ struct TemplateDefinition {
     bool checked = false;
 };
 struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
-struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public;
+struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public; std::uint64_t offset = 0;
     BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public) : base(b), next(n), access(a) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
@@ -407,7 +407,7 @@ struct StaticValue {
     NodeId string = 0;
     std::int64_t addend = 0;
 };
-struct ConstantField { EntityId field; TypeId type; StaticValue value; };
+struct ConstantField { EntityId field; TypeId type; StaticValue value; std::uint64_t offset; };
 struct ConstantObject { std::uint32_t first = 0, count = 0; bool valid = false; };
 struct ConstructorConstantAction { EntityId field; TypeId type; NodeId source; std::uint32_t argument; };
 struct Fact { NodeId target = 0; TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };

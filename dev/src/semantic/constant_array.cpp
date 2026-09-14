@@ -57,7 +57,11 @@ bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
     auto action = initializers[plan];
     bool valid = false;
     bool copyable = !(types[action.type].cv & 2);
-    if (action.kind == InitKind::String) valid = true;
+    if (action.kind == InitKind::Constructor) {
+        auto value = constant_initialize(action.source,action.type,facts[action.source].scope);
+        valid = value.valid && constant_persistent(value);
+    }
+    else if (action.kind == InitKind::String) valid = true;
     else if (action.kind == InitKind::Scalar) {
         auto value = static_value(action.source,action.type);
         auto kind = types[action.type].kind;

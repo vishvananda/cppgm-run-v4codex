@@ -38,15 +38,14 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
 unsigned Analyzer::base_steps(TypeId from, EntityId to)
 {
     EntityId e = types[from].entity;
-    unsigned count = 0, offset = 0;
-    while (e && e != to) {
-        auto b = class_facts[entities[e].class_info].first_base;
-        if (!b) return 0;
-        size(entities[e].type);
-        offset += class_facts[entities[e].class_info].base_offset;
-        e = bases[b].base; ++count;
+    if (e == to) return 0;
+    size(from);
+    for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next) {
+        auto edge = bases[b];
+        if (edge.base == to) return edge.offset+1;
+        if (class_derives(edge.base,to)) return edge.offset+base_steps(entities[edge.base].type,to);
     }
-    return count ? offset + 1 : 0;
+    return 0;
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {

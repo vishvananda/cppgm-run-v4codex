@@ -48,6 +48,7 @@ public:
     NodeId default_argument_value(EntityId e, unsigned parameter) const;
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
+    StaticValue constant_static_value(Constant value);
     bool local_static(EntityId e) const;
     bool constant_initializer(NodeId n, TypeId target, bool local = false);
     bool constant_plan(std::uint32_t plan, bool local = false);
@@ -70,7 +71,7 @@ public:
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
     bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
-    std::uint64_t base_offset(TypeId t) { size(t); return class_facts[entities[types[t].entity].class_info].base_offset; }
+    std::uint64_t base_offset(TypeId t, TypeId base = 0) { size(t); return base ? base_steps(t,types[base].entity)-1 : class_facts[entities[types[t].entity].class_info].base_offset; }
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
@@ -138,6 +139,7 @@ public:
     const PlacementNew& placement_fact(NodeId n) const { return placements[placement_index.get(n)]; }
     const DeleteExpression& delete_fact(NodeId n) const { return deletions[delete_index.get(n)]; }
     const ConstantObject& constant_construction(NodeId n, TypeId t);
+    const ConstantObject& constant_value_data(Constant value);
     std::vector<ConstantField> constant_fields;
 private:
     FactState completion_state = FactState::NotStarted;
@@ -208,7 +210,7 @@ private:
     std::vector<unsigned char> scalar_transfer_nodes;
     std::uint64_t scalar_transfer_work = 0;
     Index anonymous_objects;
-    Index constant_constructors, constant_objects;
+    Index constant_constructors, constant_objects, constant_value_objects;
     Index static_vptr_objects;
     void prepare_static_vptrs();
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
@@ -398,9 +400,47 @@ private:
     // activations retain values, never their local environments.
     struct ConstantFrame {
         Index bindings;
+        Index addresses;
+        std::vector<std::uint32_t> storage;
+        std::vector<EntityId> locals;
         std::vector<Constant> values = std::vector<Constant>(1);
     };
     ConstantFrame* constant_frame = 0;
+    // Immutable aggregate payloads share typed child ranges. Storage identity
+    // is separate: copies share values, never addresses or lifetimes.
+    struct EvaluatedPart { std::uint64_t selector = 0, count = 1; Constant value; };
+    struct EvaluatedObject { TypeId type = 0; std::uint32_t first = 0, count = 0, next = 0; };
+    struct ConstantBuilder { Index slots; std::vector<EvaluatedPart> parts; };
+    std::uint32_t constant_destination = 0;
+    struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; std::uint32_t version = 0; bool live = true, readable = false; };
+    struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0; };
+    std::vector<EvaluatedObject> evaluated_objects = std::vector<EvaluatedObject>(1);
+    std::vector<EvaluatedPart> evaluated_parts;
+    std::vector<ConstantStorage> constant_storage = std::vector<ConstantStorage>(1);
+    std::vector<ConstantAddress> constant_addresses = std::vector<ConstantAddress>(1);
+    Index evaluated_object_index, evaluated_part_index, constant_address_index, constant_entity_storage, constant_literal_storage;
+    Index constant_declaration_state;
+    std::size_t constant_object_work = 0, constant_address_work = 0;
+    Constant evaluated_object(TypeId type, const std::vector<EvaluatedPart>& parts);
+    Constant evaluated_part(Constant object, std::uint64_t selector);
+    Constant constant_initialize(NodeId node, TypeId type, ScopeId scope, EntityId constructor = 0);
+    Constant constant_init_plan(std::uint32_t plan, ScopeId scope);
+    Constant constant_construct(EntityId constructor, const std::vector<Constant>& arguments, bool zero = false);
+    Constant constant_zero(TypeId type);
+    bool constant_object_fields(Constant value, std::uint64_t offset = 0);
+    Constant constant_entity_value(EntityId entity);
+    void check_constant_object(EntityId entity);
+    std::uint32_t constant_storage_address(TypeId type, Constant value, EntityId entity = 0, NodeId literal = 0, bool readable = true);
+    std::uint32_t constant_subobject(std::uint32_t parent, TypeId type, std::uint64_t selector);
+    std::uint32_t constant_entity_address(EntityId entity);
+    std::uint32_t constant_address(NodeId node, ScopeId scope);
+    std::uint32_t constant_base_address(std::uint32_t address, TypeId type);
+    Constant constant_read(std::uint32_t address);
+    Constant constant_indirect(Constant value);
+    void constant_dependencies(Constant value, std::vector<ArgumentId>& arguments, Index& seen);
+    Constant constant_pointer_binary(ETokenType op, Constant left, Constant right);
+    bool constant_persistent(Constant value);
+    Constant constant_call_result(NodeId node, ScopeId scope);
     enum class ConstantFlow : unsigned char { Next, Return, Break, Continue, Failure };
     struct ConstantStatement { ConstantFlow flow; Constant value; };
     Index constant_node_receivers, constant_query_receivers;
@@ -414,7 +454,7 @@ private:
     bool constant_limited = false, constant_unavailable = false;
     std::size_t constant_steps = 0, constant_remaining = 0, constant_hits = 0;
     std::uint32_t constant_body(EntityId function);
-    Constant execute_constant(EntityId function, const std::vector<Constant>& arguments, std::uint32_t object = 0);
+    Constant execute_constant(EntityId function, const std::vector<Constant>& arguments, std::uint32_t object = 0, bool zero = false);
     Constant execute_constant_node(NodeId node, ScopeId scope);
     ConstantStatement execute_constant_statement(NodeId node, ScopeId scope);
     Constant execute_constant_condition(NodeId node, ScopeId scope);

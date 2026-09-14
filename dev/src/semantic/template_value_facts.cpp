@@ -41,7 +41,9 @@ std::uint32_t Analyzer::query_value(QueryId id)
         } else if (query.kind == QueryKind::Value && (integral(query.type) || floating_type(query.type))) {
             value = convert(Constant(query.type,query.value),query.type);
         } else if (query.kind == QueryKind::Name || query.kind == QueryKind::QualifiedValue) {
-            if (!(types[fact.expression.type].cv & 2)) value = entities[fact.expression.entity].constant;
+            if (!(types[fact.expression.type].cv & 2)) value = constant_indirect(constant_entity_value(fact.expression.entity));
+        } else if (query.kind == QueryKind::Member) {
+            value = constant_indirect(constant_read(constant_query_object(id)));
         } else if (query.kind == QueryKind::Parenthesized) {
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {

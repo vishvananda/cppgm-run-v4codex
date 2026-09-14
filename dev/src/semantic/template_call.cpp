@@ -446,6 +446,7 @@ void Analyzer::demand_specialization(EntityId e)
     std::uint32_t i = entities[e].specialization;
     if (!i || specializations[i].emission_demanded) return;
     specializations[i].emission_demanded = true;
+    entities[e].emission |= Entity::Used;
     specialization_demand.push_back(e);
 }
 } }

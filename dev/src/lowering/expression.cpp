@@ -97,8 +97,11 @@ Value Procedural::expression(NodeId n, bool location)
         return Value(node.op == KW_NULLPTR ? Operand::null() : Operand::integer(node.op == KW_TRUE),
         node.op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
+        if (sem.entities[fact.entity].constant.valid && reference(sem.entities[fact.entity].constant.type))
+            return constant_operand(sem.entities[fact.entity].constant,fact.type);
         if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
-            auto c = sem.constant_fact(n); return Value((type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits)), type(fact.type), fact.type);
+            auto c = sem.constant_fact(n);
+            if (type(c.type).scalar() && !sem.class_value(c.type)) return constant_operand(c,fact.type);
         }
         if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
             auto c = sem.entities[fact.entity].constant;
@@ -133,7 +136,7 @@ Value Procedural::expression(NodeId n, bool location)
         auto member = sem.entities[fact.entity];
         if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && member.constant.valid && !location)) {
             discard(a, false);
-            return Value((type(member.constant.type).floating() ? Operand::floating(sem.floating_value(member.constant)) : Operand::integer(member.constant.bits)), type(fact.type), fact.type);
+            return constant_operand(member.constant,fact.type);
         }
         if (member.is_static) { discard(a, false); return binding(fact.entity); }
         Value base = node.op == OP_ARROW ? load(expression(a)) : address(expression(a, true));

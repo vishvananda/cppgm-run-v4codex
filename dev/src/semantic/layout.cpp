@@ -62,8 +62,9 @@ void Analyzer::class_layout(EntityId e)
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         TypeId base = entities[bases[b].base].type;
         auto bytes = size(base);
-        class_facts[info].base_offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
-        if (!class_facts[entities[types[base].entity].class_info].empty) cursor = class_facts[info].base_offset*8;
+        bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
+        if (b == class_facts[info].first_base) class_facts[info].base_offset = bases[b].offset;
+        if (!class_facts[entities[types[base].entity].class_info].empty) cursor = bases[b].offset*8;
         if (!class_facts[entities[types[base].entity].class_info].empty) {
             if (bytes > std::numeric_limits<std::uint64_t>::max()/8) throw std::runtime_error("base layout overflow");
             cursor = layout_add(cursor, bytes*8); class_facts[info].empty = false;
