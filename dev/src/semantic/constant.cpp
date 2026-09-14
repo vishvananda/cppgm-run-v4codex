@@ -110,7 +110,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::Literal: {
         const syntax::LiteralValue& literal = ast.literals[ast[n].literal];
         TypeId t = types.fundamental(literal.type);
-        if (!integral(t) || literal.kind == LiteralKind::string) return Constant();
+        if (literal.suffix || !integral(t) || literal.kind == LiteralKind::string) return Constant();
         std::uint64_t bits = 0;
         std::memcpy(&bits, literal.scalar.data(), fundamental_width(literal.type));
         return convert(Constant(t, bits), t);
@@ -124,6 +124,16 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (!e) return Constant();
         if (!calls) { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         return entities[e].constant;
+    }
+    case Kind::Subscript: {
+        auto literal = first, index = ast[first].next;
+        while (ast[literal].kind == Kind::Parenthesized) literal = ast[literal].first;
+        if (ast[literal].kind != Kind::Literal || ast.literals[ast[literal].literal].kind != LiteralKind::string) {
+            literal = ast[first].next; index = first;
+            while (ast[literal].kind == Kind::Parenthesized) literal = ast[literal].first;
+        }
+        if (ast[literal].kind != Kind::Literal) return Constant();
+        return literal_element(ast[literal].literal,evaluate(index,s));
     }
     case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {

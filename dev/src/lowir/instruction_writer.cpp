@@ -9,15 +9,29 @@ void Writer::instruction(const Instruction& i)
         for (unsigned j = first; j < i.operands.count; ++j) { if (j != first) out_ << ", "; arg(j, t); }
     };
     switch (i.opcode) {
-    case Opcode::Call:
+    case Opcode::Call: {
         out_ << ' '; type(i.type); out_ << ' '; arg(0); out_ << '(';
-        all(1, Type()); out_ << ')';
+        // Float immediates require the recorded parameter type to preserve
+        // their width through the explicit text adapter (notably x87 f80).
+        auto signature_id = i.signature;
+        const auto& callee = p_.operands[i.operands.begin];
+        if (callee.kind == Operand::Symbol) {
+            const auto& symbol = p_.symbols[callee.ref-1];
+            if (symbol.kind == Symbol::FunctionSymbol) signature_id = p_.functions[symbol.entity-1].signature;
+        }
+        const auto* call = signature_id ? &p_.signatures[signature_id.index-1] : nullptr;
+        for (unsigned j = 1; j < i.operands.count; ++j) {
+            if (j != 1) out_ << ", ";
+            arg(j,call && j <= call->parameters.count ? p_.parameters[call->parameters.begin+j-1].type : Type());
+        }
+        out_ << ')';
         if (i.copy_elision) out_ << " [elision=copy]";
         if (i.signature) {
             out_ << " as "; const Signature& s = p_.signatures[i.signature.index-1];
             signature(s); metadata(0, &s.boundary);
         }
         break;
+    }
     case Opcode::Phi:
         out_ << ' '; type(i.type); out_ << " [";
         for (unsigned j = 0; j < i.operands.count; j += 2) {

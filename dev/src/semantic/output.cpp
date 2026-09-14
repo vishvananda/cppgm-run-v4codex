@@ -186,6 +186,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_default_dependencies\":" << default_dependencies.size()
         << ",\"template_default_dependency_work\":" << default_dependency_work
         << ",\"template_default_demands\":" << default_demand_work
+        << ",\"semantic_pack_expansion_work\":" << expansion_work
+        << ",\"semantic_pack_expansion_lanes\":" << expansion_lanes
+        << ",\"semantic_substitution_frames\":" << substitution_frames.size()-1
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1
         << ",\"semantic_object_uses\":" << object_uses.size() - 1
         << ",\"semantic_expression_facts\":" << expressions.fact_count()

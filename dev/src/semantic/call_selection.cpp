@@ -15,7 +15,7 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
             if (explicit_arguments) {
                 auto pack = argument_packs[explicit_arguments];
                 std::vector<TypeId> arguments(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count);
-                e = specialize(e,arguments);
+                e = specialize(e,arguments,true);
             }
             if (e && entities[e].template_info) e = nodes ? deduce_function(e,*nodes) : deduce_function(e,values);
         } else if (explicit_arguments) continue;

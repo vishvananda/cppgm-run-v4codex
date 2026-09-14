@@ -65,6 +65,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::Sizeof:
         result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
             abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_ALIGNOF ? "az" : "sz")); break;
+    case QueryKind::String: throw std::logic_error("string literal is not a type-dependent ABI expression");
     case QueryKind::TypeValue: throw std::logic_error("type-query type used as ABI expression");
     }
     abi_queries.put(id,result); return result;

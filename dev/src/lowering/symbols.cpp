@@ -328,9 +328,11 @@ void Procedural::run()
     }
     // Reserve source/native identities before allocating generated string or
     // TLS names. Native adapters may also publish the ordinary LowIR spelling.
-    for (NodeId n = 1; n < ast.nodes.size(); ++n)
-        if (ast[n].kind == syntax::Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string && sem.expression_fact(n).evaluated)
-            string_literal(n);
+    for (NodeId n = 1; n < ast.nodes.size(); ++n) {
+        if (ast[n].kind != syntax::Kind::Literal || !sem.expression_fact(n).evaluated) continue;
+        if (ast.literals[ast[n].literal].kind == LiteralKind::string) string_literal(n);
+        else if (sem.literal_call_kind(n) == semantic::LiteralCallKind::Raw) numeric_string_literal(n);
+    }
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     emit_vtables();

@@ -155,26 +155,38 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     else cache.put(pattern, result);
     return result;
 }
-EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input)
+EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input, bool explicit_head)
 {
     TemplateFunction t = templates[entities[pattern].template_info];
     auto args = input;
     if (definitions && !template_defaults(pattern,args,true)) return 0;
-    bool partial = args.size() < t.count;
+    bool pack_prefix = false;
+    if (explicit_head) for (unsigned j = 0; j < t.count; ++j)
+        pack_prefix |= entities[template_parameters[t.offset+j]].parameter_pack;
+    bool partial = pack_prefix || args.size() < t.count;
     if (partial && !definitions) return 0;
     std::uint32_t pack = intern_arguments(args);
-    std::uint32_t previous = specialization_index.get(key(pattern, pack));
+    auto& index_owner = pack_prefix ? explicit_pack_index : specialization_index;
+    std::uint32_t previous = index_owner.get(key(pattern, pack));
     if (previous) return specializations[previous].entity;
     Specialization spec; spec.pattern = pattern; spec.arguments = pack; spec.declaration = FactState::Active;
     std::uint32_t index = specializations.size(); specializations.push_back(spec);
-    specialization_index.put(key(pattern, pack), index);
+    index_owner.put(key(pattern, pack), index);
     try {
     Index bindings, cache;
     auto frame = dependent_type(entities[pattern].type) ? substitution_frame(index,t.offset,t.count) : 0;
+    if (pack_prefix) {
+        frame = 0;
+        for (unsigned j = 0; j < t.count; ++j) {
+            auto p = template_parameters[t.offset+j];
+            bindings.put(p,j < args.size() && !entities[p].parameter_pack ? args[j] : parameter_argument(p));
+        }
+    }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].type = type; entities[e].specialization = index;
+    if (auto suffix = literal_functions.get(pattern)) literal_functions.put(e,suffix);
     entities[e].defaults = entities[pattern].defaults;
     if (partial) {
         t.primary = pattern; t.explicit_arguments = pack;
@@ -282,7 +294,8 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
                 actual.push_back(type);
             }
             if (types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef) element = types[element].child;
-            if (!deduce_expansion(element,actual,bindings)) return 0;
+            auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+            if (!deduce_expansion(element,actual,bindings,prefix)) return 0;
             break;
         }
         if (!dependent_type(p)) continue;
@@ -354,6 +367,14 @@ EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<Expressio
 EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
 {
     auto t = templates[entities[pattern].template_info];
+    auto shape = types[entities[pattern].type];
+    bool pack = false;
+    for (unsigned j = 0; j < shape.count; ++j) pack |= types[types.parameters[shape.offset+j]].kind == TypeKind::PackExpansion;
+    if (pack && types[target].kind == TypeKind::Function) {
+        auto actual = types[target]; std::vector<Expression> values(actual.count);
+        for (unsigned j = 0; j < actual.count; ++j) values[j].type = types.parameters[actual.offset+j];
+        return deduce_function(pattern,values);
+    }
     auto explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
     for (unsigned j = 0; j < explicit_args.count; ++j)
@@ -380,7 +401,7 @@ EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
     EntityId result = 0;
     for (EntityId e : candidates(binding)) {
         if (!entities[e].template_info) continue;
-        EntityId instance = specialize(e, args);
+        EntityId instance = specialize(e, args,true);
         if (instance) result = merge_lookup(result, instance);
     }
     if (!result) throw std::runtime_error("invalid explicit function template arguments");

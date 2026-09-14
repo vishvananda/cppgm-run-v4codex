@@ -167,3 +167,22 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
     store(value, location);
 }
 } }
+
+namespace cppgm { namespace lowering {
+void Procedural::numeric_string_literal(NodeId n)
+{
+    auto prefix = ast.literals[ast[n].literal].prefix;
+    if (auto old = numeric_strings.get(prefix)) { strings[n] = lowir_model::SymbolId(old); return; }
+    auto text = identifiers.spelling(prefix);
+    lowir_model::Global g; g.structured = true;
+    g.symbol = fresh_symbol("@__string_"+std::to_string(p.symbols.size()+1));
+    g.data.begin = p.data.size(); g.data.count = text.size+1;
+    for (unsigned j = 0; j <= text.size; ++j) {
+        lowir_model::DataItem d; d.kind = lowir_model::DataItem::Scalar; d.type = IRType::I8;
+        d.value = lowir_model::Operand::integer(j < text.size ? static_cast<unsigned char>(text.data[j]) : 0); p.data.push_back(d);
+    }
+    strings[n] = g.symbol; numeric_strings.put(prefix,g.symbol.index); p.globals.push_back(g);
+    auto& symbol = p.symbols[g.symbol.index-1]; symbol.kind = lowir_model::Symbol::GlobalSymbol; symbol.entity = p.globals.size();
+    symbol.metadata.binding = ir_model::SBM_INTERNAL; symbol.metadata.storage = ir_model::GSM_READONLY;
+}
+} }

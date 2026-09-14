@@ -5,6 +5,8 @@ import subprocess, tempfile, sys
 ROOT=Path(__file__).resolve().parents[2]
 CC=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 CASES={
+ 'explicit_pack_prefix': """template<class...T>int f(T...){return sizeof...(T);}
+ int main(){int(*p)(int,char)=f<int,char>;return f<int>(1)+f(1)+f<int>(2.5,'a')+f<int,char>(1,'a')+p(1,'a')-8;}""",
  'empty_and_prefix': '''template<class... T>int count(int n,T...){return n+sizeof...(T);}
 int main(){return count(7)+count(5,1,'a',2L)-15;}''',
  'explicit_values': '''template<unsigned... N>int count(){return sizeof...(N);}
@@ -50,7 +52,48 @@ int main(){return C<>::f(4)+C<int,char>::f(1,2,'a')-7;}''',
 void use(L<5>,L<8>){};template<int... N>void f(L<N>...t){use(make<N+1>()...);}
 int main(){f<4,7>(L<4>(),L<7>());return 0;}''',
 }
+CASES.update({
+ 'base_lifetime_order': """int trace;template<int I>struct B{B(){trace=trace*10+I;}~B(){trace=trace*10+I;}};
+ template<int...I>struct D:B<I>...{D():B<I>()...{}};
+ int main(){{D<1,2> d;if(trace!=12)return 1;}return trace!=1221;}""",
+ 'placement_default': """typedef unsigned long size_t;void* operator new(size_t,void* p){return p;}
+ template<class T>T&& declval();struct B{int x;B():x(7){}};
+ template<class T,class... A,class=decltype(::new(declval<void*>()) T(declval<A>()...))>
+ T* make(T* p,A&&...a){return ::new((void*)p) T(static_cast<A&&>(a)...);}
+ int main(){char data[sizeof(B)];B* b=make((B*)data);return b->x-7;}""",
+ 'literal_elements': r'''static_assert(L"ab"[2]==0 && u"cd"[1]==100 && U"ef"[0]==101,"units");
+ template<int I>struct C{static const int v=L"abc"[I];};
+ static_assert(C<1>::v==98 && 1["ab"]=='b',"queries");int main(){return 0;}''',
+ 'literal_cooked': """int operator""_c(unsigned long long n){return (int)n;}
+ template<char...C>int operator""_c(){return 99;}
+ int main(){return 035_c+0x10_c-45;}""",
+ 'literal_float': """long double operator""_f(long double n){return n*2;}
+ int main(){return 1.25_f==2.5L?0:1;}""",
+ 'literal_char': """int operator""_c(char c){return c-'a';}
+ int main(){return 'd'_c-3;}""",
+ 'literal_raw': """int operator""_r(const char* p){return p[0]=='0'&&p[1]=='x'&&p[2]=='f'&&p[3]==0?0:1;}
+ int main(){return 0xf_r;}""",
+ 'literal_template': """template<char...C>int operator""_n(){return sizeof...(C);}
+ int main(){return 0X007_n+1.2e3_n+99999999999999999999999999_n-36;}""",
+ 'literal_reference': """int n;int& operator""_r(unsigned long long){return n;}
+ int main(){1_r=7;return n-7;}""",
+ 'literal_object': """struct B{int x;B(int v):x(v){}};
+ B operator""_b(unsigned long long n){return B(n);}
+ int main(){B b=4_b;return b.x-4;}""",
+})
+# Equal flattened arguments with 64 distinct boundaries, each used twice.
+source='template<class...>struct L{};template<class...A,class...B>int partition(L<A...>,B...){return sizeof...(A)*100+sizeof...(B);}'
+source+='int main(){int sum=0;'
+for n in range(64):
+ args=','.join(['int']*n); tail=','.join(['0']*(64-n))
+ source+=f'sum+=partition(L<{args}>(),{tail});sum+=partition(L<{args}>(),{tail});'
+source+=f'return sum-{2*sum(n*100+64-n for n in range(64))};'+'}'
+CASES['partition_growth']=source
 BAD={
+ 'literal_not_constant': 'int operator""_x(unsigned long long n){return n+7;}static_assert(2_x==2,"not constant");',
+ 'literal_bounds': 'static_assert(L"ab"[3]==0,"past end");',
+ 'literal_ambiguous': 'int operator""_x(const char*);template<char...C>int operator""_x();int main(){return 2_x;}',
+ 'literal_cooked_overflow': 'int operator""_x(unsigned long long);int main(){return 999999999999999999999_x;}',
  'unequal_lengths': '''template<class...>struct L{};int sum(int,int);template<class... U,class... T>int f(L<U...>,T...t){return sum((sizeof(U)+t)...);}int main(){return f(L<int>(),1,2);}''',
  'sizeof_nonpack': '''template<class T>int f(){return sizeof...(T);}int main(){return f<int>();}''',
  'nonintegral_pack': '''template<int... N>struct C{};C<int> bad;''',

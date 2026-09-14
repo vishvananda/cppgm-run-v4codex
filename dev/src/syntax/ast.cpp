@@ -42,7 +42,7 @@ NodeId Ast::take_first(NodeId parent)
 std::uint32_t Ast::save_literal(const PostToken& token, IdentifierId prefix)
 {
     LiteralValue value;
-    value.kind = token.literal;
+    value.kind = token.literal; value.cooked_valid = token.cooked_valid;
     value.type = token.type;
     value.suffix = token.suffix;
     value.prefix = prefix;

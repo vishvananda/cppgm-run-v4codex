@@ -74,13 +74,29 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
     }
     auto id = intern_arguments(result); expansion_parameter_index.put(pattern,id); return id;
 }
-bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings)
+bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame)
 {
     auto list = argument_packs[expansion_parameters(pattern)];
     std::vector<std::vector<ArgumentId>> values(list.count);
+    unsigned lane = 0;
     for (auto a : actual) {
-        for (unsigned j = 0; j < list.count; ++j) bindings.put(argument_types[list.offset+j],0);
-        if (!deduce_type(pattern,a,bindings)) return false;
+        auto frame = prefix_frame;
+        for (unsigned j = 0; j < list.count; ++j) {
+            auto p = argument_types[list.offset+j]; ArgumentId fixed = 0;
+            auto prefix = prefix_frame ? unexpanded_argument(prefix_frame,p) : 0;
+            if (prefix && argument_pack(prefix)) {
+                auto args = pack_arguments(prefix);
+                if (args.count > actual.size()) return false;
+                if (lane < args.count) fixed = argument_types[args.offset+lane];
+            }
+            bindings.put(p,fixed);
+            if (prefix_frame) frame = argument_frame(frame,p,fixed ? fixed : parameter_argument(p));
+        }
+        Index empty, cache;
+        auto element = frame ? substitute_argument(pattern,empty,cache,frame) : pattern;
+        if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings))) return false;
+        if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings)) return false;
+        ++lane;
         for (unsigned j = 0; j < list.count; ++j) {
             auto value = bindings.get(argument_types[list.offset+j]);
             if (!value) return false;

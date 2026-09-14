@@ -23,6 +23,7 @@ public:
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
     FactStore facts;
+    LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     NodeId call_argument(const Expression& call, unsigned i = 0) const;
     ObjectUse object_fact(NodeId n) const {
@@ -201,9 +202,11 @@ private:
     std::vector<PlacementNew> placements = std::vector<PlacementNew>(1);
     Index placement_index;
     Expression placement_new(NodeId n, ScopeId s);
-    Index literal_functions, literal_names;
+    Index literal_functions, literal_names, literal_call_kinds;
     IdentifierId literal_name(IdentifierId suffix);
     Expression literal_call(NodeId n, ScopeId s);
+    Expression numeric_literal_call(NodeId n, ScopeId s);
+    Constant literal_element(std::uint32_t literal, Constant index);
     Index initializer_work_index;
     Index initializer_index, zero_value_index, value_contexts;
     Index zero_initialization_index;
@@ -330,7 +333,7 @@ private:
     std::vector<MemberFacts> members;
     std::vector<BaseRelation> bases;
     std::vector<ObjectAction> actions;
-    Index object_actions, specialization_index, parameter_ordinals;
+    Index object_actions, specialization_index, explicit_pack_index, parameter_ordinals;
     Index template_families, template_signatures;
     std::vector<TypeId> canonical_parameters;
     Index canonical_value_parameters;
@@ -420,7 +423,7 @@ private:
     void expand_expression_list(NodeId list, ScopeId scope);
     Index source_expansion_index, expansion_scope_index, expanded_expression_lists, pack_size_entities, expansion_scope_frames;
     ScopeId expanded_scope(NodeId node, ScopeId parent);
-    bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings);
+    bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame = 0);
     std::uint32_t expansion_frame(std::uint32_t parent, std::uint32_t parameters, unsigned lane);
     int expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame);
     void substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame, std::vector<ArgumentId>& out);
@@ -605,7 +608,7 @@ private:
     std::vector<TemplatePrototype> template_prototypes = std::vector<TemplatePrototype>(1);
 
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
-    EntityId specialize(EntityId pattern, const std::vector<TypeId>& args);
+    EntityId specialize(EntityId pattern, const std::vector<TypeId>& args, bool explicit_head = false);
     bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);

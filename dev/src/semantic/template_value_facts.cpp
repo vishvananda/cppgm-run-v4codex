@@ -65,6 +65,13 @@ std::uint32_t Analyzer::query_value(QueryId id)
                     else if (query.op != OP_PLUS) value = Constant();
                 }
             } else value = Constant();
+        } else if (!fact.selected && query.kind == QueryKind::Binary && query.op == OP_LSQUARE) {
+            auto left = query_edges[query.offset], right = query_edges[query.offset+1];
+            while (type_queries[left].kind == QueryKind::Parenthesized) left = query_edges[type_queries[left].offset];
+            while (type_queries[right].kind == QueryKind::Parenthesized) right = query_edges[type_queries[right].offset];
+            if (type_queries[right].kind == QueryKind::String) std::swap(left,right);
+            if (type_queries[left].kind == QueryKind::String)
+                value = literal_element(type_queries[left].value,constants[query_value(right)]);
         } else if (!fact.selected && query.kind == QueryKind::Binary) {
             auto a = constants[query_value(query_edges[query.offset])];
             if (a.valid) {

@@ -197,6 +197,9 @@ class Procedural {
     void global_finalization();
     void global(EntityId e);
     void string_literal(NodeId n);
+    void numeric_string_literal(NodeId n);
+    void literal_arguments(NodeId n);
+    semantic::Index numeric_strings;
     void global_data(NodeId n, TypeId t);
     lowir_model::DataItem constant_data(NodeId n, TypeId t);
     IRType type(TypeId t);

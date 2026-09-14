@@ -18,6 +18,7 @@ inline std::uint32_t argument_query(ArgumentId a) { return a & 0x7fffffffU; }
 
 using Index = IdIndex;
 
+enum class LiteralCallKind : unsigned char { String, Scalar, Pack, Raw };
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
 enum class PatternMemberKind : unsigned char { Constructors, Destructor, PureVirtual };
 enum class PatternPropertyKind : unsigned char { DefaultInitialization, Destruction };

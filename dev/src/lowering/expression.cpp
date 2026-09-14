@@ -19,14 +19,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     if (fact.form == semantic::ExpressionForm::OperatorCall) return call(n);
     if (fact.form >= semantic::ExpressionForm::FloatFinite && fact.form <= semantic::ExpressionForm::FloatClassify) return floating_builtin(n);
-    if (fact.form == semantic::ExpressionForm::LiteralCall) {
-        Value string = emit(Opcode::Addr, IRType(), {Operand::symbol(strings[n])});
-        auto lit = ast.literals[node.literal];
-        Instruction widen(Opcode::Convert, IRType::I64); widen.source_type = IRType::I32; widen.operation = Operation::Sext;
-        Value length = emit(widen, {Operand::integer(lit.elements-1)});
-        Operand arguments[] = {Operand::symbol(symbol(sem.facts[n].entity)), string.operand, length.operand};
-        Value v = guarded_call(Instruction(Opcode::Call, type(fact.type)), arguments, 3); v.type = fact.type; return v;
-    }
+    if (fact.form == semantic::ExpressionForm::LiteralCall) return call(n);
     if (fact.form == semantic::ExpressionForm::Construction) {
         EntityId e = sem.object_fact(n).temporary;
         Value pointer = class_address(e,fact.type);
@@ -339,6 +332,7 @@ Value Procedural::call(NodeId n, Value destination)
         Value object = expression(object_use.node);
         if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
     }
+    if (fact.form == semantic::ExpressionForm::LiteralCall) literal_arguments(n);
     // The course's indirect-call fixtures evaluate arguments before fetching
     // the callee; C++11 leaves their relative evaluation order unspecified.
     for (unsigned j = 0; j < fact.argument_count; ++j) {

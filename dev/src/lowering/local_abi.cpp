@@ -74,6 +74,10 @@ abi_mangle::Id Procedural::abi_function_context(EntityId e)
     function.name = abi.name(abi_scope(entity.owner),spelling(entity.name));
     function.category = entity.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
     function.terminal = operator_terminal(e); function.qualifiers = t.cv;
+    if (auto suffix = sem.literal_suffix(e)) {
+        function.terminal = abi_mangle::ABI_TERMINAL_LITERAL;
+        function.literal_suffix = abi.string(spelling(suffix));
+    }
     if (t.ref != semantic::RefQualifier::None) function.qualifiers |= t.ref == semantic::RefQualifier::Lvalue ? 4 : 8;
     function.variadic = t.variadic; function.c_linkage = entity.c_linkage;
     for (unsigned j = 0; j < t.count; ++j) function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));

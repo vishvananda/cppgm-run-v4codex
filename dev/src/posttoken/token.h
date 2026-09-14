@@ -17,6 +17,7 @@ struct PostToken {
     ETokenType simple = TOK_INVALID;
     IdentifierId identifier = 0, suffix = 0;
     LiteralKind literal = LiteralKind::integer;
+    bool cooked_valid = true;
     EFundamentalType type = FT_INT;
     std::array<char, 16> scalar = {{0}};
     TextView data; // array code units; scalar bytes are inline above

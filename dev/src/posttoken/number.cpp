@@ -154,6 +154,16 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
     token.prefix = TextView(s.data, p);
     if (valid_ud_suffix(suffix)) {
         token.suffix = identifiers.intern(suffix);
+        // Retain both forms once: literal templates need the source characters,
+        // while cooked operators consume the phase-7 numeric value. Overflow
+        // only rejects a later cooked call; raw/template operators can use it.
+        if (floating) floating_value(token,token.prefix,TextView("L",1));
+        else {
+            integer_value(token,TextView(s.data+digit_begin,p-digit_begin),TextView(),base);
+            if (token.kind != PostTokenKind::literal)
+                integer_value(token,TextView(s.data+digit_begin,p-digit_begin),TextView("ULL",3),base);
+        }
+        token.cooked_valid = token.kind == PostTokenKind::literal;
         token.kind = PostTokenKind::user_literal;
     } else if (floating) floating_value(token, token.prefix, suffix);
     else integer_value(token, TextView(s.data + digit_begin, p - digit_begin), suffix, base);

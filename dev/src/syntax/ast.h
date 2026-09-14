@@ -179,6 +179,7 @@ struct ClassRegion { std::size_t begin, end; };
 
 struct LiteralValue {
     LiteralKind kind;
+    bool cooked_valid = true;
     EFundamentalType type;
     IdentifierId suffix, prefix;
     std::array<char, 16> scalar;

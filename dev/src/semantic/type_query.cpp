@@ -112,6 +112,13 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     case Kind::Literal: case Kind::KeywordLiteral: {
         if (template_type_probe && node.op == KW_THIS) return 0;
         auto value = expression(n,s); q.type = value.type;
+        if (node.kind == Kind::Literal && ast.literals[node.literal].kind == LiteralKind::string && !ast.literals[node.literal].suffix) {
+            q.kind = QueryKind::String; q.value = node.literal; break;
+        }
+        if (node.kind == Kind::Literal && ast.literals[node.literal].suffix) {
+            if (template_type_probe) return 0;
+            throw std::runtime_error("literal operator call is not an integral constant query");
+        }
         auto constant = evaluate(n,s); q.value = constant.valid ? constant.bits : 0;
         q.null_pointer_constant = node.kind == Kind::Literal && constant.valid && !constant.bits && integral(q.type) &&
             ast.literals[node.literal].kind != LiteralKind::character;
@@ -319,6 +326,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     if (inspect) switch (q.kind) {
     case QueryKind::New: r = query_new(q,children); break;
+    case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
     case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
     case QueryKind::TemplateValueParameter:
         x.type = q.type; r.declared_type = q.type; x.entity = q.entity; break;
