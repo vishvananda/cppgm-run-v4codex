@@ -19,6 +19,9 @@ static_assert(C<int>::value==7,"head"); int main(){return 0;}'''),
 template<bool N>struct C{static const bool value=N;};
 template<class T>struct D{typedef C<bool(T::value)> type;};
 static_assert(D<S>::type::value,"cast");int main(){return 0;}'''),
+ 'enum_type': (True, '''enum class E{a=3};template<E N>struct C{static const E value=N;};
+static_assert(C<E::a>::value==E::a,"enum identity");int main(){return 0;}'''),
+ 'enum_conversion': (False, 'enum class E{a=3};template<int N>struct C{};C<E::a> c;'),
  'canonical': (True, '''template<int N> int f() { return N; }
 int main() { return f<3>() + f<1+2>() + f<static_cast<int>(3L)>(); }'''),
  'defaults': (True, common+'''template<class T, T V, T W=V+1> struct D { int a[W]; };
