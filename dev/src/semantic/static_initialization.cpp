@@ -24,6 +24,7 @@ bool Analyzer::constant_plan(std::uint32_t plan, bool local)
 {
     auto k = key(plan,local);
     if (auto known = static_plan_facts.get(k)) return known == 2;
+    ++static_plan_work;
     auto action = initializers[plan];
     bool valid = false;
     if (action.kind == InitKind::Constructor) valid =
@@ -49,6 +50,7 @@ bool Analyzer::static_initialization(EntityId e)
     // Queried after declaration checking. The immutable initializer, selected
     // constructor and completed layout are owned by this declaration.
     if (auto known = static_initialization_facts.get(e)) return known == 2;
+    ++static_initialization_work;
     auto entity = entities[e]; auto t = entity.type;
     bool constant = !entity.initializer || constant_initializer(entity.initializer,t,local_static(e));
     if (!entity.initializer && class_value(t)) constant = (local_static(e) || empty_value(t)) && !constructor_needed(object_constructor(e));

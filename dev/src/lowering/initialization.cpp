@@ -77,9 +77,10 @@ void Procedural::global(EntityId e)
         bool local = sem.local_static(e);
         bool dynamic = !sem.static_initialization(e);
         if (dynamic) {
-            if (local) {}
-            else if (entity.thread_local_storage) prepare_tls(e);
-            else global_initializers.push_back(e);
+            if (!local) {
+                if (entity.thread_local_storage) prepare_tls(e);
+                else global_initializers.push_back(e);
+            }
             g.data.begin = p.data.size(); g.data.count = 1;
             DataItem zero; zero.zero_bytes = g.structured ? sem.object_size(t) : g.type.bytes(); p.data.push_back(zero);
         }

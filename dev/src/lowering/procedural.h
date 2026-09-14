@@ -287,6 +287,9 @@ public:
             + virtual_signatures.capacity()*sizeof(SignatureId) + deleting_entries.capacity()*sizeof(EntityId);
     }
     std::size_t deleting_entry_count() const { return deleting_entries.size(); }
+    std::size_t local_static_count() const { return local_statics.size()-1; }
+    std::size_t constant_data_count() const { return constant_data_records.size()-1; }
+    std::size_t constant_data_work = 0, constant_data_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);

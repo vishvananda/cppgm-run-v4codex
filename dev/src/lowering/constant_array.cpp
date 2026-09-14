@@ -36,14 +36,14 @@ void Procedural::initialize_constant_array(EntityId e, Value location)
         lowir_model::Range data; data.begin = p.data.size(); global_plan(sem.constant_array_plan(e));
         data.count = p.data.size()-data.begin;
         auto hash = mix(mix(1469598103934665603ULL,bytes),alignment);
-        for (unsigned i = 0; i < data.count; ++i) hash = mix(hash,item_hash(p.data[data.begin+i]));
+        for (unsigned i = 0; i < data.count; ++i) { ++constant_data_work; hash = mix(hash,item_hash(p.data[data.begin+i])); }
         auto head = constant_data_index.get(hash);
         for (auto id = head; id; id = constant_data_records[id].next) {
             auto other = constant_data_records[id];
             if (other.bytes != bytes || other.alignment != alignment || other.data.count != data.count) continue;
             bool equal = true;
-            for (unsigned i = 0; equal && i < data.count; ++i) equal = item_equal(p.data[data.begin+i],p.data[other.data.begin+i]);
-            if (equal) { source = other.symbol; p.data.resize(data.begin); break; }
+            for (unsigned i = 0; equal && i < data.count; ++i) { ++constant_data_work; equal = item_equal(p.data[data.begin+i],p.data[other.data.begin+i]); }
+            if (equal) { ++constant_data_hits; source = other.symbol; p.data.resize(data.begin); break; }
         }
         if (!source) {
             lowir_model::Global g; g.structured = true; g.data = data;

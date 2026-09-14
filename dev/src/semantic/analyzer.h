@@ -217,6 +217,7 @@ private:
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
     Index static_initialization_facts, static_plan_facts;
+    std::size_t static_initialization_work = 0, static_plan_work = 0;
     struct ConstantArrayIndex { std::uint32_t first = 0, count = 0; };
     Index constant_array_indices;
     std::vector<ConstantArrayIndex> constant_array_ranges = std::vector<ConstantArrayIndex>(1);
