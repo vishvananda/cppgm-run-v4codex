@@ -157,8 +157,11 @@ void Analyzer::select_class_pattern(std::uint32_t index)
     for (auto p = class_partial_heads.get(spec.pattern); p; p = class_partial_next.get(p)) {
         ++candidate_work;
         std::vector<ArgumentId> args;
-        if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args),coverage(p)});
+        if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args),{}});
     }
+    // Coverage only participates when selection has competing viable patterns.
+    // The common single-match path needs no positions, traversal or sorting.
+    if (matches.size() > 1) for (auto& candidate : matches) candidate.coverage = coverage(candidate.entity);
     auto more = [&](const Candidate& x, const Candidate& y) {
         const auto& xc = x.coverage; const auto& yc = y.coverage;
         if (xc.applications == yc.applications && xc.omissions != yc.omissions)

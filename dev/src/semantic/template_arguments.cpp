@@ -113,7 +113,9 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
 {
     if (!value_argument(arg)) return 0;
     auto query = argument_query(arg);
-    auto source_type = query_fact(query).expression.type;
+    // A cast owns its result type even while dependence defers its expression
+    // fact. Reapplying the same conversion must preserve canonical identity.
+    auto source_type = type_queries[query].kind == QueryKind::Cast ? type_queries[query].type : query_fact(query).expression.type;
     if (source_type && types.unqualified(source_type) == types.unqualified(target)) return arg;
     if (dependent_type(target) || query_fact(query).dependent) {
         TypeQuery q; q.kind = QueryKind::Cast; q.type = target;

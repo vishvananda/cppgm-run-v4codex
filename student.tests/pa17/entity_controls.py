@@ -22,6 +22,8 @@ GOOD={
 'array_bound_call': '''template<class T,unsigned long N>int count(T(&)[N]){return N;}int main(){int a[7];return count(a)-7;}''',
 }
 GOOD.update({
+'converted_value_pack': 'template<class T,T V>struct C{};template<class...>struct A{static const bool v=false;};template<class...T>struct A<C<T,true>...>{static const bool v=true;};static_assert(A<>::v && A<C<bool,true>,C<int,1>>::v && !A<C<int,0>>::v, "converted constants");int main(){return 0;}',
+
 'decltype_alias_member': 'template<class T>using Id=T;struct X{int n;};template<class,class>struct S{static const bool v=false;};template<class T>struct S<T,T>{static const bool v=true;};static_assert(S<Id<decltype(((X*)0)->n)>,int>::v && S<Id<decltype((((X*)0)->n))>,int&>::v, "decltype categories");int main(){Id<decltype(((X*)0)->n)> x=0;return x;}',
 
 'array_cv': 'template<class>struct A{static const int n=0;};template<class T>struct A<T const>{static const int n=1;};static_assert(A<int const[3][4]>::n==1 && A<int[3]>::n==0, "array cv");int main(){return 0;}',
