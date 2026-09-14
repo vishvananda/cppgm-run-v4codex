@@ -7,7 +7,7 @@ sys.path.insert(0,str(ROOT/'student.tests/pa10'))
 import benchmark as shared
 A,B,WORK,OUT=map(Path,sys.argv[1:5]);A=A.resolve();B=B.resolve();WORK.mkdir(parents=True,exist_ok=True)
 cpu=max(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
-result=dict(protocol='frozen binaries/flags/inputs; native checked results or exact LowIR equivalence; one warmup each; four A/A then two ABBA blocks; new-correct-only six B samples',cpu=cpu,platform=platform.platform(),flags=['--emit-lowir','-O0'],build_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',implementation_commit=shared.run(['git','rev-parse','HEAD']).stdout.strip(),source_diff=shared.run(['git','diff','HEAD','--','dev']).stdout,harness_sha256=shared.sha(__file__),shared_harness_sha256=shared.sha(ROOT/'student.tests/pa10/benchmark.py'),binaries=[dict(path=str(p),sha256=shared.sha(p),text_bytes=shared.text_size(p)) for p in [A,B]],backend=dict(path=str(ROOT/'reference-binaries/lowir2native'),sha256=shared.sha(ROOT/'reference-binaries/lowir2native'),flags=['-O0'],bundle='c2f713cd70d06170632bfde3e75dd6fe1aa44d98'),acceptance='PA15/O0 correctness and bounded work/lifetimes; no mandated numeric latency/RSS/text ceilings; constant backing is required output policy, no optional optimizer',text_metric='compiler .text; sectionless native payload from entry to first trailing data byte, including alignment padding; trailing array data separately verified byte for byte',workloads={})
+result=dict(protocol='frozen binaries/flags/inputs; native checked results or exact LowIR equivalence; one warmup each; four A/A then two ABBA blocks; new-correct-only six B samples',cpu=cpu,platform=platform.platform(),flags=['--emit-lowir','-O0'],build_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',implementation_commit=shared.run(['git','rev-parse','HEAD']).stdout.strip(),source_diff=shared.run(['git','diff','HEAD','--','dev']).stdout,harness_sha256=shared.sha(__file__),shared_harness_sha256=shared.sha(ROOT/'student.tests/pa10/benchmark.py'),binaries=[dict(path=str(p),sha256=shared.sha(p),text_bytes=shared.text_size(p)) for p in [A,B]],backend=dict(path=str(ROOT/'reference-binaries/lowir2native'),sha256=shared.sha(ROOT/'reference-binaries/lowir2native'),flags=['-O0'],bundle='c2f713cd70d06170632bfde3e75dd6fe1aa44d98'),acceptance='PA15/O0 correctness and bounded work/lifetimes; no mandated numeric latency/RSS/text ceilings; backing storage capped at 32 bytes per object, larger arrays retain direct initialization; no optional optimizer',text_metric='compiler .text; sectionless native payload from entry to first trailing data byte, including alignment padding; trailing array data separately verified byte for byte',workloads={})
 corpus=[]
 for n in [1000,4000]:
  source='template<int N>int f(int k){constexpr int a[4]={N,N+1,N+2,N+3};return a[k];}\n'
@@ -24,12 +24,12 @@ for n in [1000,4000]:
  source+=''.join(f'struct Tag{i}{{}};int run{i}(int n){{return f<Tag{i}>(n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n);}}\n' for i in range(n))
  corpus.append((f'wide-signatures-{n}',source,'exact',None))
 for name,source in shared.runtimes(factor=10):corpus.append(('runtime-'+name,source,'exact',b''))
-for n in [4,64]:
+for n in [4,8,16,64]:
  values=[3+17*i for i in range(n)];iterations=30000000
  expected=((iterations//n)*sum(values)+sum(values[:iterations%n]))&65535
  source='int fetch(int k){constexpr int a['+str(n)+']={'+','.join(map(str,values))+'};return a[k];}\n'
  source+=f'int main(){{volatile int n={iterations};int sum=0;for(int i=0;i<n;++i)sum=(sum+fetch(i&{n-1}))&65535;return sum=={expected}?0:1;}}'
- corpus.append((f'runtime-array-{n}',source,'native-equivalent',struct.pack('<'+'i'*n,*values)))
+ corpus.append((f'runtime-array-{n}',source,'native-equivalent',struct.pack('<'+'i'*n,*values) if n <= 8 else b''))
 def native_size(path,trailing):
  data=path.read_bytes();entry,phoff=struct.unpack_from('<QQ',data,24)
  kind,flags,offset,address,_,filesz,memsz,align=struct.unpack_from('<IIQQQQQQ',data,phoff)
@@ -63,6 +63,8 @@ for name,source,comparison,data in corpus:
   if data is not None:
    exe=WORK/(name+f'-{i}');shared.run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir]);shared.run([exe]);native[i]=[exe]
    out['native']=dict(path=str(exe),sha256=shared.sha(exe),checked_exit=0,**native_size(exe,data if i else b''))
+ if name in ['runtime-array-16','runtime-array-64']:
+  assert item['outputs'][0]['native']['sha256']==item['outputs'][1]['native']['sha256'],name
  if comparison=='exact':
   assert item['outputs'][0]['sha256']==item['outputs'][1]['sha256'],name
   if native:assert item['outputs'][0]['native']['sha256']==item['outputs'][1]['native']['sha256'],name

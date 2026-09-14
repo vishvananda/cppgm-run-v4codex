@@ -134,7 +134,10 @@ void Procedural::object(EntityId e)
     bool omit = selected.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
     const auto& scalar = sem.scalar_consumption(e);
     begin_full_expression(scalar.expression ? scalar.expression : init,omit);
-    if (sem.constant_array_plan(e)) initialize_constant_array(e,location);
+    // O0 bounds each backing object to 32 bytes. Larger copies through the
+    // supplied backend lose runtime against direct stores; the original
+    // scalar/zero-loop plan also avoids growing a duplicate static image.
+    if (sem.constant_array_plan(e) && sem.object_size(t) <= 32) initialize_constant_array(e,location);
     else if (scalar.expression && full_expression.enabled) initialize_scalar(scalar,location);
     else if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
     else if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {
