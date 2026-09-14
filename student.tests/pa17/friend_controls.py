@@ -41,6 +41,9 @@ harness.BAD = {
  'duplicate_friend_body': 'struct A{template<class T>friend int f(T,A&){return 1;}template<class U>friend int f(U,A&){return 2;}};',
 }
 harness.GOOD.update({
+ 'class_template_access_stable': 'struct A{template<class>struct B{};private:int n;};int main(){return sizeof(A::B<int>)-1;}',
+ 'class_specialization_access_stable': 'struct A{template<class>struct B;private:struct Base{};};template<class T>struct A::B{Base*x;};template<>struct A::B<void>{Base*x;};int main(){return sizeof(A::B<void>)-sizeof(void*);}',
+ 'variable_template_access_stable': 'struct A{template<class T>static constexpr int n=sizeof(T);private:int x;};int main(){return A::n<int>-4;}',
  'operator_specialization_identity': 'template<class T>struct A;template<class T>int operator+(int,A<T>const&);template<class T>struct A{private:int n;friend int operator+<>(int,A const&);public:A():n(sizeof(T)) {}};template<class T>int operator+(int x,A<T>const&a){return a.n+x;}int main(){A<char>a;A<int>b;return (2+a)+(3+b)-10;}',
  'operator_query_identity': 'template<class T>struct A;template<class T>int operator+(int,A<T>const&);template<class T>struct A{friend int operator+<>(int,A const&);};template<class T>int operator+(int x,A<T>const&a){return sizeof(T)+x;}template<class T>auto f(T const&t)->decltype(1+t){return 1+t;}int main(){A<int>a;return f(a)-5;}',
  'friend_template_enclosing_body': 'template<class T>struct A{template<class U>friend int f(U){return sizeof(T);}};A<int>a;template<class U>int f(U);int main(){return f(0)-4;}',
@@ -48,6 +51,8 @@ harness.GOOD.update({
  'qualified_class_template': 'namespace N{template<class>struct F;}class A{int n;template<class T>friend struct N::F;public:A():n(7){}};namespace N{template<class>struct F{static int f(A&a){return a.n;}};}int main(){A a;return N::F<int>::f(a)-7;}',
 })
 harness.BAD.update({
+ 'private_class_template_stable': 'class A{template<class>struct B{};public:int n;};A::B<int>b;',
+ 'private_variable_template_stable': 'class A{template<class T>static constexpr int n=sizeof(T);public:int x;};int main(){return A::n<int>;}',
  'friend_class_hidden': 'class A{template<class>friend struct F;};F<int>*f;',
  'qualified_class_absent': 'namespace N{}class A{template<class>friend struct N::F;};',
  'friend_partial_declaration': 'template<class>struct F;class A{template<class T>friend struct F<T*>;};',

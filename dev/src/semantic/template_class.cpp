@@ -195,6 +195,7 @@ EntityId Analyzer::specialize_class(EntityId pattern, const std::vector<TypeId>&
     auto source = entities[pattern];
     EntityId e = make_entity(EntityKind::Type,source.owner,source.name,source.source);
     entities[e].template_pattern = false; // Canonical argument identity, not a source declaration binding.
+    entities[e].access = source.access;
     entities[e].key = source.key; entities[e].type = types.named(e);
     entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
     Specialization spec; spec.pattern = pattern; spec.entity = e; spec.arguments = pack;

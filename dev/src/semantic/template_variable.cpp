@@ -8,7 +8,9 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
 {
     auto name = decl_name(d), id = terminal(name);
     auto owner = scopes[s].parent;
-    if (scopes[owner].kind != ScopeKind::Namespace || !init || !(types[type].cv & 1) ||
+    bool member = scopes[owner].kind == ScopeKind::Class;
+    if ((scopes[owner].kind != ScopeKind::Namespace && !member) ||
+        (member && !spec_has(ast[source].first,KW_STATIC)) || !init || !(types[type].cv & 1) ||
         (!dependent_type(type) && !integral(type))) throw std::runtime_error("constant variable template required");
     auto list = child(ast[name].last,Kind::TemplateArguments);
     auto primary = local(owner,id);
@@ -16,6 +18,7 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
         throw std::runtime_error("conflicting variable template");
     if (list && !primary) throw std::runtime_error("variable partial specialization without primary");
     auto e = make_entity(EntityKind::Variable,owner,id,source);
+    entities[e].is_static = member;
     entities[e].type = type; template_facts(e,s);
     auto head = templates[entities[e].template_info];
     for (unsigned j = 0; j < head.count; ++j) {
@@ -56,6 +59,8 @@ EntityId Analyzer::specialize_variable(EntityId primary, const std::vector<TypeI
     if (!index) {
         Specialization spec; spec.pattern = primary; spec.arguments = pack;
         spec.entity = make_entity(EntityKind::Variable,entities[primary].owner,entities[primary].name,entities[primary].source);
+        entities[spec.entity].access = entities[primary].access;
+        entities[spec.entity].is_static = entities[primary].is_static;
         spec.declaration = FactState::Success;
         index = specializations.size(); specializations.push_back(spec);
         specialization_index.put(key(primary,pack),index); entities[spec.entity].specialization = index;
