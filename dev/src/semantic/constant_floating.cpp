@@ -55,6 +55,9 @@ Constant Analyzer::floating_binary(ETokenType op, Constant a, Constant b, bool c
     a = convert(a,common,true); b = convert(b,common,true);
     if (!a.valid || !b.valid) return Constant();
     auto x = floating_value(a), y = floating_value(b);
+    // C++11 [expr]/12 permits excess precision for the operation. Use the
+    // Linux x86-64 x87 model, then materialize the destination precision;
+    // do not claim this is a single IEEE rounding for double arithmetic.
     bool result;
     switch (op) {
     case OP_PLUS: return floating_constant(common,x+y);

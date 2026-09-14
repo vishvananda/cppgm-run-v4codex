@@ -454,10 +454,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         prepare_constant_array(e);
     if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
     if (init && !alias && !function && (integral(t) || floating_type(value_type(t))) && !member_initializer) {
-        Constant v = evaluate(init, definition_scope);
+        Constant v = convert(evaluate(init, definition_scope),t);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {
-            v = convert(v, t);
             // A reference may preserve an address constant while reads through
             // its volatile-qualified referent are never constant values.
             if (!(types[v.type].cv & 2) && (!floating_type(v.type) || spec_has(specs,KW_CONSTEXPR)) &&

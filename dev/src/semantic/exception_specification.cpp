@@ -61,7 +61,11 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
             if (fact.pattern) {
                 auto index = entities[e].specialization;
                 auto head = templates[entities[fact.pattern].template_info];
-                auto context = ast.new_context();
+                // Exception, default and body demands project disjoint regions
+                // into the specialization's one declaration context. A private
+                // context here would give the same substitution frame two owners.
+                auto context = specializations[index].context;
+                if (!context) specializations[index].context = context = ast.new_context();
                 node = ast.instantiate(node,context);
                 auto frame = substitution_frame(index,head.offset,head.count);
                 attach_template_context(context,frame);

@@ -144,7 +144,8 @@ bool Analyzer::constant_empty_construction(EntityId ctor)
     // no initialization or body work; stateful construction needs object values.
     constant_body(ctor);
     member = members[entities[ctor].member_info];
-    if (entities[ctor].body_state != FactState::Success || member.action_count) return false;
+    if (entities[ctor].body_state != FactState::Success) { constant_unavailable = true; return false; }
+    if (member.action_count) return false;
     auto body = entities[ctor].body;
     return ast[body].kind == Kind::Compound && !ast[body].first;
 }
@@ -160,7 +161,8 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
     if (constant_receiver_type(type) && constant_empty_construction(fact.selected)) {
         result = constant_receivers.size(); constant_receivers.push_back({type,0,id});
     }
-    constant_query_receivers.put(id,result+1); return result;
+    if (result || !constant_unavailable) constant_query_receivers.put(id,result+1);
+    return result;
 }
 std::uint32_t Analyzer::constant_node_object(NodeId n)
 {
@@ -173,7 +175,8 @@ std::uint32_t Analyzer::constant_node_object(NodeId n)
         (x.form == ExpressionForm::ListValue ? aggregate_type(x.type) : constant_empty_construction(facts[n].entity))) {
         result = constant_receivers.size(); constant_receivers.push_back({x.type,n,0});
     }
-    constant_node_receivers.put(n,result+1); return result;
+    if (result || !constant_unavailable) constant_node_receivers.put(n,result+1);
+    return result;
 }
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
