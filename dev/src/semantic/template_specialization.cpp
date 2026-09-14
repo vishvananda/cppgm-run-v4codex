@@ -16,6 +16,9 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
         entities[e].template_member = false;
         entities[e].inline_function = false;
         entities[e].source = source;
+        if (entities[e].kind == EntityKind::Variable) {
+            entities[e].initializer = 0; entities[e].constant = Constant();
+        }
         if (auto m = entities[e].member_info) {
             // Class completion can retain a primary inline body without
             // demanding it. The selected explicit body owns a different fact.

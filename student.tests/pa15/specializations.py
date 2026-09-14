@@ -42,6 +42,8 @@ template<>int f<int>(int*){return 7;}int main(){int x;return f(&x)+f(x)-8;}''',
 template<>int C<int>::f(){return 9;}int main(){C<int> c;return c.f()-9;}''',
  'member_static': '''template<class T>struct C{static int n;};template<class T>int C<T>::n=2;
 template<>int C<int>::n=7;int main(){return C<int>::n+C<char>::n-9;}''',
+ 'member_forward': '''template<class T>struct C{static int n;};template<class T>int C<T>::n=2;
+template<>int C<int>::n;int use(){return C<int>::n;}template<>int C<int>::n=9;int main(){return use()-9;}''',
  'member_destructor': '''int count;template<class T>struct C{~C();};template<class T>C<T>::~C(){count+=1;}
 template<>C<int>::~C(){count+=3;}int main(){{C<int> a;C<char> b;}return count-4;}''',
  'variable_identity': '''template<class T>constexpr int v=sizeof(T);
@@ -57,6 +59,8 @@ int main(){const int* a=&v<int>;const int* b=&v<char>;return *a+*b-11;}''',
 static_assert(v<> == 7,"defaults");int main(){return 0;}''',
 }
 BAD={
+ 'duplicate_variable': 'template<class T>constexpr int v=0;template<>constexpr int v<int> = 1;template<>constexpr int v<int> = 2;',
+ 'duplicate_static_member': 'template<class T>struct C{static int n;};template<>int C<int>::n=1;template<>int C<int>::n=2;',
  'missing_member': 'template<class T>struct C{};template<>int C<int>::f(){return 0;}',
  'wrong_member_signature': 'template<class T>struct C{int f(int);};template<>int C<int>::f(char){return 0;}',
  'ordinary_member': 'struct C{int f();};template<>int C::f(){return 0;}',

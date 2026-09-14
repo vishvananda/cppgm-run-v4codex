@@ -369,7 +369,11 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor) class_facts[entities[cls].class_info].constructor = e;
         else if (!block_extern) bind(owner, id, e);
     }
-    if (source == explicit_specialization_source) select_explicit_specialization(e,source);
+    if (source == explicit_specialization_source) {
+        if (!function && entities[e].explicit_specialization && entities[e].definition && init)
+            throw std::runtime_error("variable specialization redefinition");
+        select_explicit_specialization(e,source);
+    }
     if (block_extern) { block_extern_entities.put(key(owner,id),e); bind(s,id,e); }
     else if (hidden_external) bind(owner,id,e);
     entities[e].is_static |= spec_has(specs, KW_STATIC);
@@ -378,7 +382,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
     declaration_attributes(e,specs,source);
-    if (!function && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
+    bool specialized_member_declaration = source == explicit_specialization_source && !init && scopes[owner].kind == ScopeKind::Class;
+    if (!function && !specialized_member_declaration && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
