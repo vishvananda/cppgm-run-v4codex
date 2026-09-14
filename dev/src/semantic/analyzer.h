@@ -341,6 +341,7 @@ private:
     EntityId variable_template_name(NodeId part, EntityId entity, ScopeId scope, bool initialize = true);
     EntityId specialize_variable(EntityId primary, const std::vector<TypeId>& arguments, bool initialize = true);
     Index variable_template_queries, variable_partial_heads, variable_partial_next;
+    std::size_t explicit_selections = 0, variable_initializers = 0, variable_reuses = 0, variable_candidates = 0;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     Index template_default_types;

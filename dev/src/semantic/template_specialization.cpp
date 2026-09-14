@@ -12,6 +12,7 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
             (spec && specializations[spec].body != FactState::NotStarted))
             throw std::runtime_error("specialization after instantiation");
         entities[e].explicit_specialization = true;
+        ++explicit_selections;
         entities[e].template_member = false;
         entities[e].inline_function = false;
         entities[e].source = source;
@@ -57,6 +58,7 @@ EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeI
     EntityId selected = 0;
     for (auto primary : candidates(local(owner,terminal(name)))) {
         if (!entities[primary].template_info || entities[primary].specialization) continue;
+        ++candidate_work;
         auto head = templates[entities[primary].template_info];
         auto f = types[entities[primary].type], target = types[type];
         if (supplied.size() > head.count || f.count != target.count || f.variadic != target.variadic) continue;

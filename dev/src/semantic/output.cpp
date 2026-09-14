@@ -151,6 +151,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_default_initialization_work\":" << default_initialization_work
         << ",\"semantic_default_initialization_uses\":" << default_initialization_uses
         << ",\"template_class_completions\":" << template_completions
+        << ",\"explicit_specialization_selections\":" << explicit_selections
+        << ",\"variable_template_initializers\":" << variable_initializers
+        << ",\"variable_template_reuses\":" << variable_reuses
+        << ",\"variable_template_candidates\":" << variable_candidates
         << ",\"template_definition_applications\":" << template_definition_work
         << ",\"template_definition_direct_applications\":" << definition_direct_work
         << ",\"template_definition_requests\":" << definition_requests

@@ -64,14 +64,17 @@ EntityId Analyzer::specialize_variable(EntityId primary, const std::vector<TypeI
         entities[spec.entity].type = substitute_type(entities[primary].type,bindings,cache);
     }
     auto e = specializations[index].entity;
+    if (initialize && specializations[index].body == FactState::Success) ++variable_reuses;
     if (!initialize || entities[e].explicit_specialization || specializations[index].body == FactState::Success) return e;
     if (specializations[index].body != FactState::NotStarted) throw std::runtime_error("recursive or failed variable initializer");
     specializations[index].body = FactState::Active;
+    ++variable_initializers;
     try {
         auto selected = primary; Index bindings, cache;
         auto head = templates[entities[primary].template_info];
         for (unsigned j = 0; j < head.count; ++j) bindings.put(template_parameters[head.offset+j],args[j]);
         for (auto p = variable_partial_heads.get(primary); p; p = variable_partial_next.get(p)) {
+            ++variable_candidates;
             auto candidate = templates[entities[p].template_info];
             auto pattern = argument_packs[candidate.explicit_arguments]; Index trial;
             bool match = pattern.count == args.size();
