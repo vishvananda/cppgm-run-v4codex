@@ -46,6 +46,11 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (kind == Kind::Initializer || kind == Kind::Parenthesized || kind == Kind::ParenInitializer || kind == Kind::BracedInit)
         return static_value(first, target);
     Expression x = expressions[n];
+    bool reference_target = types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef;
+    // Forming an address (including array decay) does not read the object.
+    // Following a reference initializer to obtain a scalar value does.
+    if (!reference_target && x.category != ValueCategory::Prvalue &&
+        (types[x.type].cv & 2) && types[x.type].kind != TypeKind::Array) return r;
     auto incoming = conversions[x.incoming];
     if (incoming.kind == Conversion::Kind::User || incoming.kind == Conversion::Kind::Construction) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;

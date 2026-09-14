@@ -443,7 +443,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {
             v = convert(v, t);
-            if (types[t].cv == 1 || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
+            // A reference may preserve an address constant while reads through
+            // its volatile-qualified referent are never constant values.
+            if (!(types[v.type].cv & 2) &&
+                (types[t].cv == 1 || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef))
                 entities[e].constant = v;
         }
     }
