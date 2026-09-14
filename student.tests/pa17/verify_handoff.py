@@ -28,7 +28,7 @@ def verify():
     assert f'TEST SUMMARY: {e["stage_passed"]+e["earlier_cases"]} / {e["course_cases"]+e["earlier_cases"]} TESTS PASSED' in logs['through']
     entry,final=failures(logs['entry']),failures(logs['stage'])
     assert failures(logs['through'])==final and all(p.startswith('pa17/') for p in final)
-    assert len(entry)==136 and len(final)==e['course_cases']-e['stage_passed']
+    assert len(entry)==e['course_cases']-e['entry_passed'] and len(final)==e['course_cases']-e['stage_passed']
     delta=e['failure_delta']
     assert set(delta['entry_failures'])==entry and set(delta['final_failures'])==final
     assert set(delta['fixed'])==entry-final and not delta['new_failures'] and final<entry

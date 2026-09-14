@@ -37,6 +37,17 @@ int main(){A<int*>a;return a.f()-7;}""",
 'partial_namespace_owner': """namespace N{template<class T>struct A;template<class T>struct A<T*>{int f();};}
 template<class U>int N::A<U*>::f(){return 7;}int main(){N::A<int*>a;return a.f()-7;}""",
 }
+harness.GOOD.update({
+'partial_constructor_destructor': """int count=0;template<class T>struct A;template<class T>struct A<T*>{T n;A(T);~A();};
+template<class U>A<U*>::A(U x):n(x){count+=n;}template<class U>A<U*>::~A(){count-=n;}
+int main(){{A<int*>a(7);if(count!=7)return 1;}return count;}""",
+'partial_copy_assignment': """template<class T>struct A;template<class T>struct A<T*>{T n;A&operator=(const A&);};
+template<class U>A<U*>&A<U*>::operator=(const A&x){n=x.n;return *this;}
+int main(){A<int*>a={1},b={7};a=b;return a.n-7;}""",
+'partial_explicit_instantiation': """template<class T>struct A;template<class T>struct A<T*>{int f();};
+template<class U>int A<U*>::f(){return sizeof(U)+3;}extern template struct A<int*>;
+template struct A<int*>;int main(){A<int*>a;return a.f()-7;}""",
+})
 harness.BAD = {
 'undeclared_partial_owner':'template<class T>struct A{int f();};template<class T>int A<T*>::f(){return 1;}',
 'partial_duplicate_body':'template<class T>struct A;template<class T>struct A<T*>{int f();};template<class U>int A<U*>::f(){return 1;}template<class V>int A<V*>::f(){return 2;}',
