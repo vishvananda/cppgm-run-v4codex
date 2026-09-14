@@ -2,7 +2,7 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 std::uint32_t Analyzer::substitution_frame(std::uint32_t specialization,
-    std::uint32_t parameters, std::uint32_t count, std::uint32_t parent)
+    std::uint32_t parameters, std::uint32_t count, std::uint32_t parent, std::uint32_t arguments)
 {
     // The flat index partitions by specialization/head. The short chain keeps
     // parent identity in equality, including different enclosing overlays.
@@ -10,11 +10,11 @@ std::uint32_t Analyzer::substitution_frame(std::uint32_t specialization,
     auto first = substitution_frame_index.get(k);
     for (auto id = first; id; id = substitution_frames[id].next) {
         auto f = substitution_frames[id];
-        if (f.parent == parent && f.count == count) return id;
+        if (f.parent == parent && f.count == count && f.arguments == arguments) return id;
     }
     TemplateSubstitutionFrame frame;
     frame.specialization = specialization; frame.parameters = parameters;
-    frame.count = count; frame.parent = parent; frame.next = first;
+    frame.count = count; frame.parent = parent; frame.next = first; frame.arguments = arguments;
     auto id = substitution_frames.size(); substitution_frames.push_back(frame);
     substitution_frame_index.put(k,id); return id;
 }
@@ -34,7 +34,7 @@ TypeId Analyzer::substitution_argument(std::uint32_t id, EntityId parameter) con
         auto spec = specializations[frame.specialization];
         bool selected = spec.definition_pattern &&
             frame.parameters == templates[entities[spec.definition_pattern].template_info].offset;
-        auto pack = argument_packs[selected ? spec.definition_arguments : spec.arguments];
+        auto pack = argument_packs[frame.arguments ? frame.arguments : selected ? spec.definition_arguments : spec.arguments];
         // Partial explicit function arguments leave the remaining parameters
         // symbolic until deduction establishes a different specialization.
         return ordinal <= pack.count ? argument_types[pack.offset+ordinal-1] :

@@ -205,11 +205,9 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto source_frame = [&](std::uint32_t parameters, std::uint32_t parent) {
             if (selection.definition_pattern == selection.pattern || !selection.definition_pattern)
                 return substitution_frame(specialization,parameters,def.count,parent);
-            // Renamed partial-owner heads bind the selected pattern's deduced
-            // arguments, not the primary template's argument tuple.
-            for (unsigned j = 0; j < def.count; ++j)
-                parent = argument_frame(parent,template_parameters[parameters+j],argument_types[pack.offset+j]);
-            return parent;
+            // A selected tuple plus a retained parameter slice gives O(1)
+            // ordinal lookup even for a wide partial-owner head.
+            return substitution_frame(specialization,parameters,def.count,parent,selection.definition_arguments);
         };
         for (auto p = parents.rbegin(); p != parents.rend(); ++p) parent = source_frame(*p,parent);
         auto frame = source_frame(def.parameters,parent);

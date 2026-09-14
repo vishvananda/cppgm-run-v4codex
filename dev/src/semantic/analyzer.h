@@ -579,7 +579,7 @@ private:
     Index substitution_frame_index, template_type_contexts, substitution_frame_contexts;
     std::vector<TemplateSubstitutionFrame> substitution_frames = std::vector<TemplateSubstitutionFrame>(1);
     std::uint32_t substitution_frame(std::uint32_t specialization, std::uint32_t parameters,
-        std::uint32_t count, std::uint32_t parent = 0);
+        std::uint32_t count, std::uint32_t parent = 0, std::uint32_t arguments = 0);
     TypeId substitution_argument(std::uint32_t frame, EntityId parameter) const;
     ArgumentId make_argument_pack(const std::vector<ArgumentId>& args);
     std::uint32_t expansion_parameters(ArgumentId pattern);

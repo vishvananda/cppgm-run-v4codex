@@ -20,6 +20,7 @@ struct TemplateMemberUse { EntityId entity = 0; std::uint32_t object = 0; TypeId
 struct TemplateSubstitutionFrame {
     std::uint32_t specialization = 0, parameters = 0, count = 0, parent = 0, next = 0;
     bool expansion = false, symbolic = false;
+    std::uint32_t arguments = 0; // Explicit selected-owner tuple for a renamed declaration head.
     std::uint32_t overlay = 0; // immutable (parameter, argument) pairs for one expansion lane
 };
 } }
