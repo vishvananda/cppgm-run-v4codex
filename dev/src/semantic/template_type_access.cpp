@@ -27,7 +27,14 @@ bool Analyzer::type_access_subtree(NodeId node)
 }
 void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
 {
-    if (!frame || explicit_instantiation_naming || template_type_accesses.size() == 1 || !type_access_subtree(node)) return;
+    if (!frame || template_type_accesses.size() == 1 || !type_access_subtree(node)) return;
+    // Recipes belong to the template definition, even when the specialization
+    // is first demanded by an exempt explicit-instantiation declarator.
+    struct DefinitionAccess {
+        bool& flag; bool saved;
+        DefinitionAccess(bool& f) : flag(f), saved(f) { flag = false; }
+        ~DefinitionAccess() { flag = saved; }
+    } access(explicit_instantiation_naming);
     std::vector<NodeId> work(1,node);
     for (std::size_t j = 0; j < work.size(); ++j) {
         auto n = work[j]; auto source = ast.nodes.occurrences[n].source;

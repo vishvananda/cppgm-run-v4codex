@@ -76,6 +76,7 @@ harness.BAD = {
     'explicit_constructor_copy_init': 'struct C{template<class T>explicit C(T){}};int main(){C c=1;}',
     'unqualified_instantiation_namespace': 'namespace A{template<class T>int f(T){return 0;}}using A::f;template int f(int);',
     'instantiation_does_not_exempt_definition': 'class Secret{typedef int Hidden;};template<class T>struct C{typedef typename T::Hidden value;};template<class T>void f(typename C<T>::value){} template void f<Secret>(C<Secret>::value);',
+    'instantiation_does_not_exempt_alias': 'class Secret{typedef int Hidden;};template<class T>using A=typename T::Hidden;template<class T>void f(A<T>){}template void f<Secret>(A<Secret>);',
     'duplicate_template_default': 'template<class T=int>int f();template<class U=int>int f(){return 0;}',
     'conflicting_alias_template': 'template<class T>using A=T*;template<class U>using A=const U*;',
     'reference_value_ambiguity': 'int f(int);int f(const int&);int main(){return f(1);}',
