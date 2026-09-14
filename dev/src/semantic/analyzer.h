@@ -333,6 +333,14 @@ private:
     std::vector<TypeId> canonical_parameters;
     Index canonical_value_parameters;
     ScopeId active_template_scope = 0;
+    NodeId explicit_specialization_source = 0;
+    EntityId declare_class_specialization(NodeId source, ScopeId scope);
+    EntityId declare_function_specialization(NodeId name, ScopeId scope, TypeId type);
+    void select_explicit_specialization(EntityId entity, NodeId source);
+    EntityId declare_variable_template(NodeId declarator, NodeId init, TypeId type, ScopeId scope, NodeId source);
+    EntityId variable_template_name(NodeId part, EntityId entity, ScopeId scope, bool initialize = true);
+    EntityId specialize_variable(EntityId primary, const std::vector<TypeId>& arguments, bool initialize = true);
+    Index variable_template_queries, variable_partial_heads, variable_partial_next;
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     Index template_default_types;

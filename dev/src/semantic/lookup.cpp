@@ -328,6 +328,7 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
     }
     EntityId result = lookup(owner, terminal(n), mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
     if (definitions) result = class_template_name(ast[n].last,result,s);
+    if (definitions) result = variable_template_name(ast[n].last,result,s);
     if (calls && result && !function_binding(result)) check_access(result, s, owner);
     return result;
 }

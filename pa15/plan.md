@@ -28,6 +28,15 @@ stages, file audit and frozen A/A+ABBA compiler/native evidence. Packs/partition
 and broader constant execution remain implementation work. Whole-stage independent
 review remains pending; neither original review marker is advanced.
 
+Selection increment validated at **128/177** (14 entry failures resolved; no
+regressions). Added 23 executed native controls and 11 rejection controls.
+Extended scope includes fixture-required constant variable templates, with
+primary/explicit/reference-pattern selection and typed initializer queries;
+address observation demands concrete storage. Primary inline member bodies are
+replaced before checking; pointer conversions demand only the relevant class.
+File audit passes with the same three inherited header warnings. Final earlier
+stage rerun and performance campaign are pending.
+
 ## Design and spec alignment
 
 | Owner | Completed data flow and complexity |

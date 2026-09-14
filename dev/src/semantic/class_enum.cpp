@@ -6,12 +6,13 @@ using syntax::Kind;
 TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bool emit, bool static_union)
 {
     if (facts[n].type) return facts[n].type;
+    if (n == explicit_specialization_source) facts.edit(n).entity = declare_class_specialization(n,s);
     if (definitions && active_template_scope == s) return declare_class_template(n,s);
     NodeId name = ast[n].detail;
     IdentifierId id = name ? terminal(name) : anonymous_name;
     ETokenType key_op = ast[ast[n].first].op;
     bool definition = ast[n].kind == Kind::Class;
-    if (definitions && !definition && name && child(ast[name].last,Kind::TemplateArguments)) {
+    if (definitions && !definition && name && child(ast[name].last,Kind::TemplateArguments) && n != explicit_specialization_source) {
         auto e = resolve(name,s,Lookup::Qualifier);
         if (!e || !entities[e].class_info || !entities[e].specialization ||
             ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
@@ -32,10 +33,10 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
     EntityId instance = facts[n].entity;
-    ScopeId owner = instance ? s : name_owner(name, s);
+    ScopeId owner = instance ? (entities[instance].explicit_specialization ? entities[instance].owner : s) : name_owner(name, s);
     ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
     if (definition && !instance && !encloses(enclosing, owner)) throw std::runtime_error("class definition outside enclosing scope");
-    EntityId e = !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
+    EntityId e = instance ? instance : !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].class_info = class_facts.size();

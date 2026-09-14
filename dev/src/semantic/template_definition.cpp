@@ -21,7 +21,7 @@ std::uint32_t Analyzer::definition_path(std::uint32_t parent, IdentifierId name)
 }
 TemplateDefinitionOwner Analyzer::definition_owner(EntityId cls)
 {
-    if (!cls || !entities[cls].class_info) return TemplateDefinitionOwner();
+    if (!cls || !entities[cls].class_info || entities[cls].explicit_specialization) return TemplateDefinitionOwner();
     if (auto id = definition_owner_index.get(cls)) return definition_owners[id];
     TemplateDefinitionOwner result;
     if (entities[cls].specialization) {
@@ -142,7 +142,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
 }
 bool Analyzer::instantiate_member_definition(EntityId e)
 {
-    if (!e || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
+    if (!e || entities[e].explicit_specialization || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
     auto owner = definition_owner(scopes[entities[e].owner].entity);
     if (!owner.specialization || dependent_type(entities[owner.specialization].type)) return false;
     ++definition_requests;

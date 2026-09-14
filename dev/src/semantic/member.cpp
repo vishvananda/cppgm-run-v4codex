@@ -135,6 +135,7 @@ bool Analyzer::derived_from(TypeId from, TypeId to)
     if (types[from].kind != TypeKind::Named || types[to].kind != TypeKind::Named) return false;
     EntityId source = types[from].entity, target = types[to].entity;
     if (source == target) return false;
+    if (definitions) complete_class(source);
     std::vector<EntityId> work(1, source);
     Index seen;
     while (!work.empty()) {

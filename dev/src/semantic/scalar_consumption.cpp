@@ -19,6 +19,7 @@ void Analyzer::observe_scalar(NodeId n)
 {
     if (unevaluated_depth) return;
     EntityId e = expressions[n].entity;
+    if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) entities[e].emission |= Entity::Used;
     if (private_scalar(e)) { scalar_observations.put(e,1); ++scalar_observation_count; }
 }
 bool Analyzer::direct_class_call(NodeId n)

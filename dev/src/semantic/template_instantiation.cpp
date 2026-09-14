@@ -10,6 +10,7 @@ void Analyzer::demand_region(NodeId root)
 }
 void Analyzer::instantiate_function(EntityId e)
 {
+    if (entities[e].explicit_specialization) return;
     auto index = entities[e].specialization;
     if (index && specializations[index].body == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].source);

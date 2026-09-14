@@ -58,6 +58,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
             }
             if (!r.dependent && !entities[e].template_pattern) {
                 r.entity = e = class_template_name(p,e,s);
+                r.entity = e = variable_template_name(p,e,s);
                 r.dependent |= entities[e].type && dependent_type(entities[e].type);
             }
         }

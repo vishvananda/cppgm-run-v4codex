@@ -116,8 +116,18 @@ void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 }
 void Analyzer::template_declaration(NodeId n, ScopeId s)
 {
-    ScopeId ts = make_scope(ScopeKind::Template, s);
     NodeId params = ast[n].first;
+    if (definitions && !ast[ast[params].first].first) {
+        auto saved = explicit_specialization_source;
+        auto saved_template = active_template_scope;
+        explicit_specialization_source = ast[params].next;
+        active_template_scope = 0;
+        declaration(ast[params].next,s);
+        explicit_specialization_source = saved;
+        active_template_scope = saved_template;
+        return;
+    }
+    ScopeId ts = make_scope(ScopeKind::Template, s);
     for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
         if (definitions && ast[p].kind == Kind::NonTypeParameter) {
             auto specs = ast[p].first;
@@ -149,6 +159,7 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     // parameters themselves are not exported.
     for (std::uint32_t d = scopes[ts].first_decl; d; d = declarations[d].next) {
         EntityId e = declarations[d].entity;
+        if (entities[e].kind == EntityKind::Variable && entities[e].template_info && templates[entities[e].template_info].primary) continue;
         if (!entities[e].template_parameter) bind(s, entities[e].name, e);
     }
 }

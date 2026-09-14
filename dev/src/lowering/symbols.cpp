@@ -99,7 +99,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // In particular a root C++ variable's ABI spelling is the bare source name.
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
-    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || e.specialization || e.template_member) ? SBM_WEAK : SBM_STRONG;
+    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
     if (e.member_info) metadata.object_root = base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
@@ -110,7 +110,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
     else if (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
     abi_mangle::Target target;
-    auto aname = abi.name(abi_scope(e.owner), name);
+    auto aname = e.kind == semantic::EntityKind::Variable && e.specialization ? abi_entity_name(id) : abi.name(abi_scope(e.owner), name);
     if (e.kind == semantic::EntityKind::Function) {
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;
@@ -254,6 +254,8 @@ void Procedural::run()
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         if (entity.template_pattern) continue;
+        if (entity.kind == semantic::EntityKind::Variable && (entity.template_info ||
+            (entity.specialization && !(entity.emission & semantic::Entity::Used)))) continue;
         if (sem.dormant_hidden_friend(e)) continue;
         if (sem.static_temporary(e).object) { reference_global(e); continue; }
         bool member = sem.scopes[entity.owner].kind == semantic::ScopeKind::Class;

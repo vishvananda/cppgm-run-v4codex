@@ -104,6 +104,10 @@ void Procedural::global(EntityId e)
                 item.symbol = vtable_symbol(cls); item.addend = 16; p.data.push_back(item);
                 if (sem.object_size(t) > 8) { DataItem zero; zero.zero_bytes = sem.object_size(t)-8; p.data.push_back(zero); }
             }
+            else if (!entity.initializer && entity.constant.valid) {
+                DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
+                d.value = Operand::integer(entity.constant.bits); p.data.push_back(d);
+            }
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
             else global_data(entity.initializer, t);
             g.data.count = p.data.size() - g.data.begin;

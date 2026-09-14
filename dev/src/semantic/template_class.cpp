@@ -195,6 +195,7 @@ void Analyzer::complete_class(EntityId e)
     if (index && specializations[index].body == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::ClassDefinition,e,entities[e].source);
     if (entities[e].complete) return;
+    if (entities[e].explicit_specialization) return;
     if (!entities[e].specialization) { instantiate_member_definition(e); return; }
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
     auto pattern = templates[entities[specializations[index].pattern].template_info];

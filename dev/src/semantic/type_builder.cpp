@@ -318,6 +318,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         }
     }
     TypeId canonical = types.signature(t);
+    if (definitions && !function && active_template_scope == s)
+        return declare_variable_template(d,init,canonical,s,source);
     bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
         scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast[ast[name].last].op != OP_COMPL;
     TypeId conversion_target = calls && ast[ast[name].last].op == KW_OPERATOR && ast[ast[name].last].detail ? types[canonical].child : 0;
@@ -329,11 +331,27 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
         throw std::runtime_error("ref qualifier requires ordinary nonstatic member");
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
+    if (source == explicit_specialization_source && scopes[owner].kind == ScopeKind::Class) {
+        auto cls = scopes[owner].entity;
+        if (!entities[cls].specialization || entities[cls].explicit_specialization)
+            throw std::runtime_error("member specialization requires an implicit class specialization");
+        bool match = false;
+        for (auto member : candidates(e))
+            match |= entities[member].owner == owner && entities[member].kind == kind &&
+                (function ? entities[member].type == canonical : entities[member].is_static);
+        if (!match) throw std::runtime_error("specialized member has no matching declaration");
+    }
     bool hidden_external = false;
     if (!e && kind == EntityKind::Variable && scopes[owner].kind == ScopeKind::Namespace) {
         e = block_extern_entities.get(key(owner,id)); hidden_external = e != 0;
     }
-    if (constructor) {
+    if (source == explicit_specialization_source && !function && scopes[owner].kind != ScopeKind::Class) {
+        if (!e || !entities[e].template_info) throw std::runtime_error("variable specialization requires a primary");
+        e = variable_template_name(ast[name].last,e,s,false);
+        if (entities[e].type != canonical) throw std::runtime_error("specialized variable type mismatch");
+    } else if (source == explicit_specialization_source && function && scopes[owner].kind != ScopeKind::Class) {
+        e = declare_function_specialization(name,s,canonical);
+    } else if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);
         class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
         e = selected;
@@ -351,6 +369,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor) class_facts[entities[cls].class_info].constructor = e;
         else if (!block_extern) bind(owner, id, e);
     }
+    if (source == explicit_specialization_source) select_explicit_specialization(e,source);
     if (block_extern) { block_extern_entities.put(key(owner,id),e); bind(s,id,e); }
     else if (hidden_external) bind(owner,id,e);
     entities[e].is_static |= spec_has(specs, KW_STATIC);

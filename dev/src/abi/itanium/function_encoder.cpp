@@ -95,12 +95,14 @@ void Encoder::external(Id id) {
     isolated.output += "_Z";
     if (n.kind == Kind::FunctionEntity) isolated.function(entity_function(g, id));
     else if (n.kind == Kind::VariableEntity) {
-        const Node name = g[n.a];
+        const Node complete = g[n.a];
+        const Node name = complete.kind == Kind::Template ? g[complete.a] : complete;
         bool nest = isolated.nested(n.a);
         if (nest) isolated.output += 'N';
         if (name.a) isolated.prefix(name.a);
         if (n.b) isolated.output += 'L';
         isolated.source(name.b);
+        if (complete.kind == Kind::Template) isolated.args(complete);
         if (nest) isolated.output += 'E';
     } else throw std::runtime_error("invalid external ABI entity");
 }

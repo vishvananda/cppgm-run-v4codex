@@ -282,6 +282,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         break;
     }
     case QueryKind::Parameter: case QueryKind::Name:
+        if (!r.dependent && q.entity && entities[q.entity].kind == EntityKind::Variable && entities[q.entity].template_info && q.arguments) {
+            auto pack = argument_packs[q.arguments];
+            q.entity = specialize_variable(q.entity,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count));
+            q.type = entities[q.entity].type;
+        }
         x.type = value_type(q.type); r.declared_type = q.type;
         x.category = ValueCategory::Lvalue; x.entity = q.entity;
         if (q.entity && nonstatic_field(q.entity))

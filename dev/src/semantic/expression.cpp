@@ -25,7 +25,8 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
     if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(result.entity);
-    if (result.entity && entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class &&
+    if (result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
+        (entities[result.entity].kind == EntityKind::Variable && entities[result.entity].specialization)) &&
         entities[result.entity].constant.valid) {
         facts.edit(n).value = constants.size(); constants.push_back(entities[result.entity].constant);
     }
