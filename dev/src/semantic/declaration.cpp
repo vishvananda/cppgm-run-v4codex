@@ -129,10 +129,61 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     }
     ScopeId ts = make_scope(ScopeKind::Template, s);
     declare_template_parameters(params,ts);
+    auto source_head = template_source_heads.get(ast.nodes.occurrences[n].source);
+    auto enclosing_frame = template_type_contexts.get(ast.nodes.occurrences[n].context);
+    if (source_head && enclosing_frame) {
+        auto source = templates[source_head];
+        std::vector<ArgumentId> arguments;
+        for (auto d = scopes[ts].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter) {
+                auto arg = parameter_argument(p);
+                arguments.push_back(entities[p].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
+            }
+        }
+        auto frame = substitution_frame(0,source.offset,source.count,enclosing_frame,intern_arguments(arguments));
+        auto context = ast.new_context();
+        n = ast.instantiate(n,context); params = ast[n].first;
+        attach_template_context(context,frame);
+        facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
+    }
     ScopeId saved = active_template_scope; active_template_scope = ts;
+    auto saved_explicit = explicit_specialization_source;
+    if (explicit_specialization_source == n) explicit_specialization_source = ast[params].next;
     if (definitions) check_template_parameters(ast[params].next,ts);
     if (!definitions || !retain_template_definition(ast[params].next,ts)) declaration(ast[params].next, ts);
     active_template_scope = saved;
+    explicit_specialization_source = saved_explicit;
+    auto decl = ast[params].next;
+    auto declarator = ast[decl].kind == Kind::Function ? ast[ast[decl].first].next :
+        ast[decl].kind == Kind::SimpleDeclaration ? ast[ast[child(decl,Kind::InitDeclarators)].first].first : child(decl,Kind::Declarator);
+    auto declared = facts[declarator ? declarator : decl].entity;
+    if (declared && entities[declared].template_info) {
+        auto index = entities[declared].template_info;
+        auto declaration_source = ast.nodes.occurrences[declarator ? declarator : decl].source;
+        if (!ast.nodes.occurrences[n].context && pattern_scope(s)) {
+            entities[declared].template_pattern = true;
+            entities[declared].template_member = true;
+            template_pattern_entities.put(declared,2);
+            template_declaration_sources.put(declaration_source,declared);
+        }
+        if (source_head && enclosing_frame) {
+            templates[index].source_parameters = templates[source_head].offset;
+            templates[index].source_count = templates[source_head].count;
+            templates[index].parent_frame = enclosing_frame;
+            auto pattern = template_declaration_sources.get(declaration_source);
+            if (pattern) {
+                auto k = key(enclosing_frame,pattern);
+                auto prior = substitution_binding_cache.get(k);
+                if (prior && prior != declared) throw std::logic_error("member template declaration identity changed");
+                if (!prior) { substitution_binding_cache.put(k,declared); ++declaration_publications; }
+            }
+        } else if (!ast.nodes.occurrences[n].context)
+            template_source_heads.put(ast.nodes.occurrences[n].source,index);
+        if (!ast.nodes.occurrences[n].context && declarator)
+            if (auto p = template_prototype_sources.get(ast.nodes.occurrences[declarator].source))
+                template_prototypes[p].environment = ts;
+    }
     // A template's declarations are visible outside its parameter environment;
     // parameters themselves are not exported.
     for (std::uint32_t d = scopes[ts].first_decl; d; d = declarations[d].next) {
@@ -278,6 +329,7 @@ void Analyzer::schedule_body(const Body& body)
             entities[body.entity].inline_function = true;
         TemplateFunction& t = templates[entities[body.entity].template_info];
         t.body = body.node; t.declarator = body.declarator; t.source = body.source;
+        if (definitions && template_source_deferred) { template_source_deferred->push_back(body); return; }
         if (definitions) bind_template_body(body);
         return;
     }

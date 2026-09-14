@@ -68,7 +68,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
         if (names.local(binding_owner,final_name(name)).category == Category::TemplateValue)
             category = Category::TemplateValue;
     }
-    bind_declarator(decl, category, owner);
+    bind_declarator(decl, category, owner, type_scope(specs));
     if (alias && declarator_name(decl)) names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
     if (is_function && (in.is("{") || in.is("try"))) {
         scope = facts.function_scope;
@@ -102,7 +102,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
             if (!in.eat(",")) break;
             decl = declarator();
             if (!decl) throw std::runtime_error("expected declarator after comma");
-            bind_declarator(decl, category, owner);
+            bind_declarator(decl, category, owner, type_scope(specs));
             if (alias && declarator_name(decl))
                 names.bind(owner, final_name(declarator_name(decl)), category, type_scope(specs));
         } while (true);

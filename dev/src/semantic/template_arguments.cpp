@@ -103,7 +103,10 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
     }
     // A dependent class alias may not have been recognizable to the parser.
     if (ast[n].kind == Kind::IdExpression) {
-        auto binding = bind_template_name(ast[n].detail,scope);
+        auto name = ast[n].detail;
+        auto binding = bind_template_name(name,scope);
+        if (binding.dependent && (ast[ast[name].last].flags & 1) && !child(ast[name].last,Kind::TemplateArguments))
+            return type_name(name,scope);
         auto e = binding.entity;
         if (!child(ast[ast[n].detail].last,Kind::TemplateArguments))
             if (auto target = template_entity(e)) { check_access(target,scope,name_owner(ast[n].detail,scope)); return types.named(target); }

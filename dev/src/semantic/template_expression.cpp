@@ -43,6 +43,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
     }
     case Kind::Cast: {
         auto target = type_id(first,s);
+        if (dependent_type(target)) return;
         first = ast[first].next;
         if (!first) return;
         if (!fixed(first)) return;

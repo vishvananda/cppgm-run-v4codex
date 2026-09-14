@@ -67,9 +67,11 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
     {
         struct ClassBinding {
             ScopeId& active; ScopeId prior;
-            ClassBinding(ScopeId& a, ScopeId current) : active(a), prior(a) { active = current; }
-            ~ClassBinding() { active = prior; }
-        } binding(active_template_class,cs);
+            std::vector<Body>*& deferred; std::vector<Body>* previous;
+            ClassBinding(ScopeId& a, ScopeId current, std::vector<Body>*& d, std::vector<Body>* value)
+                : active(a), prior(a), deferred(d), previous(d) { active = current; deferred = value; }
+            ~ClassBinding() { active = prior; deferred = previous; }
+        } binding(active_template_class,cs,template_source_deferred,deferred ? deferred : &bodies);
         bool aggregate = !child(n,Kind::Bases);
         auto access = entities[entity].key == KW_CLASS ? Access::Private : Access::Public;
         for (auto c = ast[n].first; c; c = ast[c].next) {
@@ -106,6 +108,10 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
 void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>* deferred, bool defaults_allowed)
 {
     auto node = ast[n];
+    if (node.kind == Kind::Template) {
+        template_declaration(n,s);
+        return;
+    }
     if (node.kind == Kind::Class || node.kind == Kind::ClassForward) {
         auto cs = bind_template_class(n,s,0,deferred);
         if (!node.detail) for (auto d = scopes[cs].first_decl; d; d = declarations[d].next)

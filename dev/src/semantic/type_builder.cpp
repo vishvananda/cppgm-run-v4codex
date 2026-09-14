@@ -303,7 +303,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         owner = scopes[owner].parent;
     ScopeId definition_scope = member_definition_environment == s ? s : owner;
     ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
-    if (!encloses(enclosing, owner)) throw std::runtime_error("qualified definition outside enclosing scope");
+    bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
+        scopes[member_definition_environment].parent == owner;
+    if (!encloses(enclosing, owner) && !retained_member) throw std::runtime_error("qualified definition outside enclosing scope");
     if (destructor && scopes[owner].kind == ScopeKind::Class) {
         TextView text = ids.spelling(scopes[owner].name);
         std::string label = "~" + std::string(text.data, text.size);
@@ -384,7 +386,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (!e || !entities[e].template_info) throw std::runtime_error("variable specialization requires a primary");
         e = variable_template_name(ast[name].last,e,s,false);
         if (entities[e].type != canonical) throw std::runtime_error("specialized variable type mismatch");
-    } else if (source == explicit_specialization_source && function && (scopes[owner].kind != ScopeKind::Class || specialized_template)) {
+    } else if (source == explicit_specialization_source && !active_template_scope && function && (scopes[owner].kind != ScopeKind::Class || specialized_template)) {
         e = declare_function_specialization(name,s,canonical);
     } else if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);

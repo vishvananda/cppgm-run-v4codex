@@ -689,6 +689,10 @@ private:
     bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
     void template_facts(EntityId e, ScopeId environment = 0);
+    Index template_source_heads;
+    Index template_lexical_frames;
+    std::uint32_t template_lexical_frame(ScopeId scope);
+    std::vector<Body>* template_source_deferred = 0;
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
     ScopeId member_template_environment(ScopeId head, ScopeId owner);
     Index member_template_environments;
@@ -711,7 +715,7 @@ private:
     ScopeId specialization_environment(EntityId e);
     std::uint32_t template_owner_shape(ScopeId scope, const std::vector<ArgumentId>& arguments);
     EntityId template_definition_pattern(EntityId primary, NodeId part, ScopeId scope);
-    bool retain_template_definition(NodeId n, ScopeId s);
+    bool retain_template_definition(NodeId n, ScopeId s, ScopeId owner_head = 0, NodeId member_template = 0);
     void explicit_instantiation(NodeId n, ScopeId s);
     bool instantiation_suppressed(EntityId entity) const;
     bool explicit_instantiation_naming = false;

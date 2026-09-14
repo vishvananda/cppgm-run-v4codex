@@ -45,8 +45,11 @@ void Analyzer::attach_scope(ScopeId s, ScopeId parent)
 EntityId Analyzer::make_entity(EntityKind k, ScopeId s, IdentifierId name, NodeId source)
 {
     Entity e; if (calls && source) e.access = declaration_access(s); e.kind = k; e.owner = s; e.name = name; e.source = source;
-    if (definitions && scopes[s].kind == ScopeKind::Class)
+    if (definitions && scopes[s].kind == ScopeKind::Class) {
         e.template_member = definition_owner(scopes[s].entity).specialization != 0;
+        if (source && !ast.nodes.occurrences[source].context && pattern_scope(s))
+            e.template_member = e.template_pattern = true;
+    }
     entities.push_back(e); return entities.size() - 1;
 }
 void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)

@@ -16,6 +16,7 @@ void Analyzer::instantiate_function(EntityId e)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].source);
     if (!index || specializations[index].body != FactState::NotStarted) return;
     auto spec = specializations[index];
+    instantiate_member_definition(spec.pattern);
     auto pattern = templates[entities[spec.pattern].template_info];
     if (!pattern.body) return;
     specializations[index].body = FactState::Active; ++template_bodies;
@@ -28,7 +29,10 @@ void Analyzer::instantiate_function(EntityId e)
     ScopeId environment = specialization_environment(e);
     specializations[index].context = context;
     specializations[index].environment = environment;
-    auto frame = substitution_frame(index,pattern.offset,pattern.count);
+    auto parent = pattern.parent_frame;
+    if (pattern.source_count)
+        parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
+    auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
     attach_template_context(context,frame);
     instantiate_parameters(pattern.declarator,context,frame,environment);
     if (auto m = entities[e].member_info) {

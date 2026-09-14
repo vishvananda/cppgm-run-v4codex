@@ -110,7 +110,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         // Member class identities have symbolic current-instantiation types.
         // Nonterminal injected names still use the bound source class scope
         // so fixed qualified aliases keep their definition-time type facts.
-        if (template_type_probe && entities[e].class_info && entities[e].template_info)
+        if (entities[e].class_info && entities[e].template_info && (template_type_probe || encloses(entities[e].scope,s)))
             prefix = p == last ? injected_template_type(e,s) : 0;
         else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {

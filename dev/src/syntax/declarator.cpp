@@ -184,7 +184,7 @@ NodeId Parser::parameter(Kind kind)
         (!ast[ast[decl].first].first || ast[ast[ast[decl].first].first].kind == Kind::ParameterPack))
         ast[decl].kind = Kind::AbstractDeclarator;
     ast.append(result, decl);
-    bind_declarator(decl, Category::Value, scope);
+    bind_declarator(decl, Category::Value, scope, type_scope(ast[result].first));
     if (in.is("=")) ast.append(result, wrap(Kind::DefaultArgument, initializer()));
     return result;
 }
@@ -269,12 +269,12 @@ NodeId Parser::declarator_name(NodeId decl) const
     return 0;
 }
 
-void Parser::bind_declarator(NodeId decl, Category category, ScopeId owner)
+void Parser::bind_declarator(NodeId decl, Category category, ScopeId owner, ScopeId type)
 {
     if (!decl) return;
     NodeId n = declarator_name(decl);
     if (n) names.bind(ast[n].first != ast[n].last || ast[n].op == OP_COLON2 ? qualified_owner(n) : owner,
-                      final_name(n), category);
+                      final_name(n), category, type);
 }
 
 } }

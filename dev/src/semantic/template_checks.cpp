@@ -48,7 +48,9 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
         template_prototype_sources.put(ast.nodes.occurrences[d].source,template_prototypes.size());
         template_prototype_index.put(k,template_prototypes.size()); template_prototypes.push_back(prototype);
     };
-    for (auto c = ast[n].first; c; c = ast[c].next) {
+    for (auto entry = ast[n].first; entry; entry = ast[entry].next) {
+        auto c = entry;
+        while (ast[c].kind == Kind::Template) c = ast[ast[c].first].next;
         if (spec_has(ast[c].first,KW_FRIEND)) continue;
         if (ast[c].kind == Kind::Class) {
             index_template_members(c,definition_path(path,terminal(ast[c].detail)),s); continue;
@@ -187,18 +189,25 @@ void Analyzer::template_signature_bindings(ScopeId scope, EntityId primary, Inde
 {
     auto head = templates[entities[primary].template_info];
     Index cache;
-    for (; scope; scope = scopes[scope].parent) {
+    std::vector<ScopeId> heads;
+    for (; scope; scope = scopes[scope].parent)
+        if (scopes[scope].kind == ScopeKind::Template) heads.push_back(scope);
+    unsigned depth = 0;
+    for (auto at = heads.rbegin(); at != heads.rend(); ++at) {
+        scope = *at;
         if (auto parameters = definition_source_parameters.get(scope)) {
+            depth = 0;
             for (unsigned i = 0; i < head.count; ++i)
                 bindings.put(template_parameters[parameters-1+i],canonical_argument(template_parameters[parameters-1+i],i,bindings,cache));
+            depth = 1;
         } else if (scopes[scope].kind == ScopeKind::Template) {
+            unsigned ordinal = 0;
             for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
                 auto parameter = declarations[d].entity;
                 if (!entities[parameter].template_parameter) continue;
-                auto ordinal = parameter_ordinals.get(parameter);
-                if (ordinal && ordinal <= head.count)
-                    bindings.put(parameter,canonical_argument(parameter,ordinal-1,bindings,cache));
+                bindings.put(parameter,canonical_argument(parameter,ordinal++,bindings,cache,depth));
             }
+            if (ordinal) ++depth;
         }
     }
 }
@@ -221,7 +230,20 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
 {
     auto declared = facts[d].type;
     if (!declared || types[declared].kind != TypeKind::Function) return 0;
-    auto signature = template_member_signature(declared,head,primary,facts[d].scope);
+    auto signature_of = [&](NodeId node, ScopeId environment) {
+        auto type = template_member_signature(facts[node].type,environment,primary,facts[node].scope);
+        if (!type) return std::uint32_t(0);
+        auto e = facts[node].entity;
+        std::uint32_t shape = 0;
+        if (entities[e].template_info) {
+            Index bindings, cache;
+            template_signature_bindings(environment,primary,bindings);
+            template_signature_bindings(facts[node].scope,primary,bindings);
+            shape = template_head_shape(e,bindings,cache,1);
+        }
+        return intern_arguments({type,shape});
+    };
+    auto signature = signature_of(d,head);
     if (!signature) return 0;
     ++definition_signature_requests;
     auto group = template_prototype_index.get(key(path,name));
@@ -232,7 +254,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
             auto prototype = template_prototypes[p];
             auto type = prototype.signature;
             if (!type) {
-                type = template_member_signature(facts[prototype.declarator].type,prototype.environment,primary,facts[prototype.declarator].scope);
+                type = signature_of(prototype.declarator,prototype.environment);
                 template_prototypes[p].signature = type;
             }
             if (!type) { unresolved = true; continue; }

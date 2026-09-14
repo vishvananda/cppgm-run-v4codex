@@ -197,6 +197,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (ast[part].op == KW_OPERATOR && ast[part].detail)
             e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
         if (!e) throw std::runtime_error("unknown member");
+        if (definitions && function_binding(e)) e = explicit_template(name,e,s);
         r = member_value(e,types[t].cv,ast[n].op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         facts.edit(n).entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);

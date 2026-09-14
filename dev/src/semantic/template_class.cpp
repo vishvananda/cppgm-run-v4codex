@@ -36,7 +36,10 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     NodeId name = ast[n].detail;
     ScopeId owner = name_owner(name,s);
     if (owner == s) owner = scopes[s].parent;
-    if (!encloses(scopes[s].parent,owner)) throw std::runtime_error("class template outside enclosing scope");
+    bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
+        scopes[member_definition_environment].parent == owner;
+    if (!encloses(scopes[s].parent,owner) && !retained_member) throw std::runtime_error("class template outside enclosing scope");
+    s = member_template_environment(s,owner);
     auto id = terminal(name);
     EntityId e = local(owner,id,Lookup::Tag);
     if (child(ast[name].last,Kind::TemplateArguments)) return declare_class_partial(n,s,e);
@@ -169,7 +172,8 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
         if (entities[p].kind == EntityKind::Type) {
             if (value_argument(args[j])) return false;
             auto target = types[args[j]].kind == TypeKind::Named ? template_entity(types[args[j]].entity) : 0;
-            if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target,bindings) : target != 0) return false;
+            bool dependent_template = types[args[j]].kind == TypeKind::DependentName;
+            if (entities[p].key == KW_TEMPLATE ? !dependent_template && (!target || !template_compatible(p,target,bindings)) : target != 0) return false;
         } else {
             if (!value_argument(args[j])) return false;
             auto target = substitute_type(entities[p].type,bindings,cache);
@@ -227,6 +231,8 @@ ScopeId Analyzer::specialization_environment(EntityId e)
 EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
 {
     auto context = ast.nodes.occurrences[part].context;
+    if (context && e && entities[e].template_pattern && entities[e].template_info)
+        e = substitution_binding(template_type_contexts.get(context),e);
     if (context && e && entities[e].template_parameter) {
         auto value = substitution_argument(template_type_contexts.get(context),e);
         if (value && !value_argument(value) && types[value].kind == TypeKind::Named) e = types[value].entity;
@@ -282,6 +288,7 @@ void Analyzer::complete_class(EntityId e)
     auto saved_bodies = bodies.size();
     auto saved_defaults = declaration_defaults.size();
     try {
+    instantiate_member_definition(specializations[index].pattern);
     select_class_pattern(index);
     auto spec = specializations[index];
     auto pattern = templates[entities[spec.definition_pattern ? spec.definition_pattern : spec.pattern].template_info];
@@ -298,7 +305,11 @@ void Analyzer::complete_class(EntityId e)
     auto context = ast.new_context();
     auto source = ast.instantiate(pattern.body,context);
     specializations[index].context = context;
-    attach_template_context(context,substitution_frame(index,pattern.offset,pattern.count));
+    auto parent = pattern.parent_frame;
+    if (pattern.source_count)
+        parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent,
+            spec.definition_arguments ? spec.definition_arguments : spec.arguments);
+    attach_template_context(context,substitution_frame(index,pattern.offset,pattern.count,parent));
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
     active_template_scope = 0;
     facts.edit(source).entity = e;

@@ -88,7 +88,8 @@ private:
     bool nested_declarator_ahead();
     bool declaration_ahead();
     NodeId initializer();
-    void bind_declarator(NodeId declarator, Category category, ScopeId owner);
+    void bind_declarator(NodeId declarator, Category category, ScopeId owner, ScopeId type = 0);
+    ScopeId expression_scope(NodeId node);
     NodeId declarator_name(NodeId declarator) const;
 
     NodeId expression(int minimum = 1);

@@ -96,11 +96,13 @@ EntityId Analyzer::substitution_binding(std::uint32_t frame, EntityId source)
 ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
 {
     while (substitution_frames[frame].overlay) frame = substitution_frames[frame].parent;
-    auto spec = specializations[substitution_frames[frame].specialization];
     for (auto scope = source; scope; scope = scopes[scope].parent) {
         auto e = scopes[scope].entity;
         if (!e) continue;
-        if ((e == spec.pattern || e == spec.definition_pattern) && entities[spec.entity].scope) return entities[spec.entity].scope;
+        for (auto f = frame; f; f = substitution_frames[f].parent) {
+            auto spec = specializations[substitution_frames[f].specialization];
+            if ((e == spec.pattern || e == spec.definition_pattern) && entities[spec.entity].scope) return entities[spec.entity].scope;
+        }
         if (!entities[e].template_pattern) continue;
         auto concrete = substitution_entity(frame,e);
         if (!concrete) continue;

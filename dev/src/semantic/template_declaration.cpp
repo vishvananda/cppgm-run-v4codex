@@ -22,6 +22,16 @@ std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environm
 {
     Index bindings, cache;
     std::vector<TypeId> shape;
+    // A nested declaration's owner already fixes enclosing parameter identity.
+    // Normalize only this head; outer parameters are free variables of its
+    // source signature, not failed substitutions.
+    for (auto s = scopes[environment].parent; s; s = scopes[s].parent) {
+        if (scopes[s].kind != ScopeKind::Template) continue;
+        for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter) bindings.put(p,parameter_argument(p));
+        }
+    }
     unsigned count = 0;
     for (auto d = scopes[environment].first_decl; d; d = declarations[d].next) {
         EntityId parameter = declarations[d].entity;
@@ -69,6 +79,15 @@ void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId pre
     if (current.size() != selected.count || (previous && old.size() != selected.count))
         throw std::logic_error("template default head mismatch");
     Index old_bindings, new_bindings, old_cache, new_cache;
+    for (auto s = scopes[incoming].parent; s; s = scopes[s].parent) {
+        if (scopes[s].kind != ScopeKind::Template) continue;
+        for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter) {
+                auto arg = parameter_argument(p); old_bindings.put(p,arg); new_bindings.put(p,arg);
+            }
+        }
+    }
     for (unsigned j = 0; j < selected.count; ++j) {
         auto p = template_parameters[selected.offset+j];
         new_bindings.put(current[j],parameter_argument(p));
@@ -103,6 +122,12 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
     if (e) {
         auto previous = templates[entities[e].template_info];
         bool definition = ast[source].kind == syntax::Kind::Function || ast[source].kind == syntax::Kind::SpecialDefinition;
+        if (source == explicit_specialization_source && scopes[scope].kind == ScopeKind::Class &&
+            entities[scopes[scope].entity].specialization && !entities[scopes[scope].entity].explicit_specialization &&
+            !entities[e].explicit_specialization) {
+            select_explicit_specialization(e,source);
+            previous.body = 0;
+        }
         if (definition && previous.body) throw std::runtime_error("template function redefinition");
         if (!previous.body) {
             // Redeclarations may rename parameters. Keep each head immutable;

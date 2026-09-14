@@ -35,8 +35,17 @@ TemplateDefinitionOwner Analyzer::definition_owner(EntityId cls)
     definition_owner_index.put(cls,definition_owners.size()); definition_owners.push_back(result);
     return result;
 }
-bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
+bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_head, NodeId member_template)
 {
+    if (ast.nodes.occurrences[n].context) return false;
+    if (ast[n].kind == Kind::Template) {
+        auto params = ast[n].first;
+        auto inner = make_scope(ScopeKind::Template,s);
+        declare_template_parameters(params,inner);
+        return retain_template_definition(ast[params].next,inner,owner_head ? owner_head : s,
+            member_template ? member_template : n);
+    }
+    if (!owner_head) owner_head = s;
     NodeId d = child(n,Kind::Declarator), item = 0;
     if (ast[n].kind == Kind::Function) d = ast[ast[n].first].next;
     if (ast[n].kind == Kind::SimpleDeclaration) { item = ast[child(n,Kind::InitDeclarators)].first; d = ast[item].first; }
@@ -56,7 +65,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         }
         auto e = lookup(owner,ast[p].text,Lookup::Qualifier,qualified);
         if (e && entities[e].class_info && entities[e].template_info && child(p,Kind::TemplateArguments)) {
-            primary = template_definition_pattern(e,p,s); primary_part = p;
+            if (!dependent_template_syntax(child(p,Kind::TemplateArguments),s)) return false;
+            primary = template_definition_pattern(e,p,owner_head); primary_part = p;
             path = definition_root(primary); previous = ast[p].text;
         } else {
             owner = target(e); qualified = true;
@@ -64,9 +74,9 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         }
     }
     if (!primary) return false;
-    if (!encloses(scopes[s].parent,entities[primary].owner)) throw std::runtime_error("template member outside enclosing namespace");
-    TemplateDefinition def; def.source = n; def.parameters = template_parameters.size();
-    for (auto p = scopes[s].first_decl; p; p = declarations[p].next) {
+    if (!encloses(scopes[owner_head].parent,entities[primary].owner)) throw std::runtime_error("template member outside enclosing namespace");
+    TemplateDefinition def; def.source = n; def.member_template = member_template; def.parameters = template_parameters.size();
+    for (auto p = scopes[owner_head].first_decl; p; p = declarations[p].next) {
         auto e = declarations[p].entity;
         if (entities[e].template_parameter) {
             parameter_ordinals.put(e,def.count+1); template_parameters.push_back(e); ++def.count;
@@ -108,13 +118,39 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         auto parameter = template_parameters[def.parameters+j];
         bind(environment,entities[parameter].name,parameter);
     }
+    if (member_template) {
+        auto inner = make_scope(ScopeKind::Template,environment);
+        for (auto p = scopes[s].first_decl; p; p = declarations[p].next) {
+            auto parameter = declarations[p].entity;
+            if (!entities[parameter].template_parameter) continue;
+            bind(inner,entities[parameter].name,parameter);
+            record(inner,parameter,0,entities[parameter].type,entities[parameter].kind);
+        }
+        environment = inner;
+    }
     std::uint32_t prototype = 0;
     if (ast[n].kind == Kind::Class) {
         auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
+        if (member_template) {
+            if (!nested || !entities[nested].template_info) throw std::runtime_error("member class template was not declared");
+            auto old = templates[entities[nested].template_info];
+            if (old.body) throw std::runtime_error("member class template redefinition");
+            template_facts(nested,environment);
+            auto index = entities[nested].template_info;
+            if (templates[index].count != old.count) throw std::runtime_error("member class template head mismatch");
+            templates[index].body = n; templates[index].source = n;
+            template_source_heads.put(ast.nodes.occurrences[member_template].source,index);
+        }
         bind_template_class(n,environment,nested);
     } else {
         bind_template_declaration(n,environment,0,false);
-        if (d) prototype = check_template_member_definition(d,path,definition_name,s,primary);
+        if (member_template) {
+            auto e = facts[d].entity;
+            template_facts(e,environment);
+            auto index = entities[e].template_info;
+            template_source_heads.put(ast.nodes.occurrences[member_template].source,index);
+        }
+        if (d) prototype = check_template_member_definition(d,path,definition_name,owner_head,primary);
     }
     if (prototype) {
         auto special = child(def.initializer ? def.initializer : child(n,Kind::Initializer),Kind::SpecialInitializer);
@@ -135,6 +171,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
 }
 bool Analyzer::instantiate_member_definition(EntityId e)
 {
+    if (e && entities[e].kind == EntityKind::Function && entities[e].specialization && !entities[e].explicit_specialization)
+        e = specializations[entities[e].specialization].pattern;
     if (!e || entities[e].explicit_specialization || instantiation_suppressed(e) || scopes[entities[e].owner].kind != ScopeKind::Class) return false;
     auto owner = definition_owner(scopes[entities[e].owner].entity);
     if (!owner.specialization || dependent_type(entities[owner.specialization].type)) return false;
@@ -190,7 +228,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
             bind_argument(environment,p,argument_types[pack.offset+j]);
         }
         auto context = ast.new_context();
-        auto source = ast.instantiate(def.source,context);
+        auto source = ast.instantiate(def.member_template ? def.member_template : def.source,context);
         auto specialization = entities[owner.specialization].specialization;
         auto head = templates[entities[selection.definition_pattern ? selection.definition_pattern : selection.pattern].template_info];
         auto parent = substitution_frame(specialization,head.offset,head.count);
@@ -214,7 +252,9 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         active_template_scope = 0; member_definition_environment = environment;
-            if (matched && entities[e].kind == EntityKind::Function) {
+            if (def.member_template) {
+                declaration(source,environment);
+            } else if (matched && entities[e].kind == EntityKind::Function) {
                 ++definition_direct_work;
                 // The checked source signature selected this concrete member.
                 // Apply body/defaulted facts through the existing lifetime and

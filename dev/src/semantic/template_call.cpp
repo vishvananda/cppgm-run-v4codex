@@ -53,6 +53,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pattern = specialization_pattern(t.entity);
         dependent |= entities[pattern].template_parameter;
+        dependent |= entities[pattern].template_pattern;
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_argument(argument_types[pack.offset+j]);
     }
@@ -117,6 +118,12 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         // Local declaration identity is an input to substitution, independently
         // of whether the declaration's members use template parameters.
         if (!owner) return pattern;
+        if (entities[p.entity].template_info && !substitution_entity(owner,p.entity)) {
+            bool concrete_owner = false;
+            for (auto frame = owner; frame; frame = substitution_frames[frame].parent)
+                concrete_owner |= substitution_frames[frame].specialization != 0;
+            if (!concrete_owner) return pattern;
+        }
         auto entity = substitution_binding(owner,p.entity);
         result = types.qualify(entities[entity].type,p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].specialization) {
@@ -129,6 +136,15 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             args.push_back(value);
         }
         auto pattern = spec.pattern;
+        if (owner && entities[pattern].template_pattern) {
+            auto concrete = substitution_entity(owner,pattern);
+            if (concrete) pattern = concrete;
+            else {
+                for (auto frame = owner; frame; frame = substitution_frames[frame].parent)
+                    if (substitution_frames[frame].specialization)
+                        throw std::logic_error("missing enclosing template declaration binding");
+            }
+        }
         if (entities[pattern].template_parameter) {
             auto target = owner ? substitution_argument(owner,pattern) : bindings.get(pattern);
             if (!target || value_argument(target) || types[target].kind != TypeKind::Named) return 0;

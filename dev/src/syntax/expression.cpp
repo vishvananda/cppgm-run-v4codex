@@ -68,6 +68,20 @@ NodeId Parser::arguments(Kind kind, const char* close)
     return result;
 }
 
+ScopeId Parser::expression_scope(NodeId node)
+{
+    auto n = ast[node];
+    if (n.kind == Kind::IdExpression) return name_binding(n.detail).target;
+    if (n.kind == Kind::Parenthesized || n.kind == Kind::Call || n.kind == Kind::Unary || n.kind == Kind::Subscript)
+        return expression_scope(n.first);
+    if (n.kind == Kind::Member) {
+        auto owner = expression_scope(n.first);
+        auto name = ast[ast[n.first].next].detail;
+        if (owner) return names.qualified(owner,final_name(name)).target;
+    }
+    return 0;
+}
+
 NodeId Parser::postfix(NodeId base)
 {
     for (;;) {
@@ -91,7 +105,9 @@ NodeId Parser::postfix(NodeId base)
             ast.append(result, base);
             bool saved_member = member_name;
             member_name = true;
-            NodeId member = name();
+            auto receiver = expression_scope(base);
+            bool known_template = receiver && template_category(names.qualified(receiver,in.peek().text).category);
+            NodeId member = name(known_template);
             member_name = saved_member;
             ast.append(result, named(Kind::Identifier, member));
         } else if (in.is("++") || in.is("--")) {

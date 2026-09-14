@@ -247,6 +247,7 @@ struct TemplateFunction {
     ScopeId environment = 0;
     std::uint32_t offset = 0, count = 0;
     NodeId body = 0, declarator = 0, source = 0;
+    std::uint32_t source_parameters = 0, source_count = 0, parent_frame = 0;
 };
 struct Specialization {
     EntityId pattern = 0, entity = 0;
@@ -262,6 +263,7 @@ struct TemplateDefinition {
     NodeId source = 0, declarator = 0, initializer = 0;
     std::uint32_t parameters = 0, count = 0, next = 0;
     std::uint32_t selected_next = 0;
+    NodeId member_template = 0;
     bool checked = false;
 };
 struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
