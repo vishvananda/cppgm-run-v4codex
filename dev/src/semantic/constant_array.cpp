@@ -1,6 +1,54 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+std::uint32_t Analyzer::constant_array_child(std::uint32_t plan, Constant index)
+{
+    if (!plan || !index.valid || !integral(index.type)) return 0;
+    auto action = initializers[plan]; auto type = types[action.type];
+    if (type.kind != TypeKind::Array || index.bits >= type.bound || action.kind != InitKind::Group) return 0;
+    auto range_id = constant_array_indices.get(plan);
+    if (!range_id) {
+        ConstantArrayIndex range; range.first = constant_array_children.size();
+        for (auto child = action.first; child; child = initializers[child].next) constant_array_children.push_back(child);
+        range.count = constant_array_children.size()-range.first;
+        range_id = constant_array_ranges.size(); constant_array_ranges.push_back(range); constant_array_indices.put(plan,range_id);
+    }
+    auto range = constant_array_ranges[range_id];
+    auto begin = constant_array_children.begin()+range.first, end = begin+range.count;
+    auto found = std::upper_bound(begin,end,index.bits,[&](std::uint64_t at,std::uint32_t child){ return at < initializers[child].index; });
+    if (found == begin) return 0;
+    auto child = *--found;
+    return index.bits-initializers[child].index < initializers[child].count ? child : 0;
+}
+std::uint32_t Analyzer::constant_array_projection(NodeId n, ScopeId s)
+{
+    using syntax::Kind;
+    if (ast[n].kind == Kind::Parenthesized) return constant_array_projection(ast[n].first,s);
+    if (ast[n].kind == Kind::IdExpression) return constant_arrays.get(expressions[n].entity);
+    if (ast[n].kind != Kind::Subscript) return 0;
+    auto base = ast[n].first, index = ast[base].next;
+    if (types[expressions[base].type].kind != TypeKind::Array) std::swap(base,index);
+    return constant_array_child(constant_array_projection(base,s),evaluate(index,s));
+}
+Constant Analyzer::constant_array_element(std::uint32_t plan, Constant index)
+{
+    if (!plan || !index.valid || !integral(index.type) || index.bits >= types[initializers[plan].type].bound) return Constant();
+    auto action = initializers[plan];
+    if (action.kind == InitKind::String) {
+        auto literal = ast[action.source].literal;
+        if (index.bits < ast.literals[literal].elements) return literal_element(literal,index);
+        return convert(Constant(types.fundamental(FT_INT),0),types[action.type].child);
+    }
+    auto child = constant_array_child(plan,index);
+    if (!child) return Constant();
+    action = initializers[child];
+    if (action.kind == InitKind::Value) return convert(Constant(types.fundamental(FT_INT),0),action.type,true);
+    if (action.kind != InitKind::Scalar) return Constant();
+    auto value = static_value(action.source,action.type);
+    if (value.kind == StaticValue::Floating) return floating_constant(action.type,value.floating);
+    return value.kind == StaticValue::Integer ? Constant(action.type,value.bits) : Constant();
+}
 bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
 {
     if (!plan) return false;

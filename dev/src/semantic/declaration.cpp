@@ -255,7 +255,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::Template: template_declaration(n, s); break;
     case Kind::StaticAssert: {
         Constant v = evaluate(ast[n].first, s);
-        if (!v.valid || scoped_enum(v.type) || !v.bits) throw std::runtime_error("static assertion is not a true integral constant");
+        if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) throw std::runtime_error("static assertion is not a true integral constant");
         break;
     }
     case Kind::SpecialMember: case Kind::SpecialDefinition: {

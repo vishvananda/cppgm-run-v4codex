@@ -24,7 +24,10 @@ NodeId Parser::class_specifier()
         previous = names.local(names.parent(owner),final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);
     auto category = template_declaration || previous.category == Category::TemplateType ? Category::TemplateType : Category::Type;
-    names.bind(owner, final_name(n), category, child);
+    // Tags remain available as qualifiers while an existing ordinary value
+    // keeps terminal lookup, independent of declaration order [basic.scope].
+    auto terminal_category = previous.category == Category::Value || previous.category == Category::TemplateValue ? previous.category : category;
+    names.bind(owner, final_name(n), terminal_category, child);
     names.bind(child, final_name(n), category, child);
     if (template_declaration && owner != saved_scope) {
         names.definition_parent(child,saved_scope); names.import(child,owner);
@@ -93,7 +96,8 @@ NodeId Parser::enum_specifier()
     if (owner == unknown_scope) owner = scope;
     Binding previous = names.local(owner, ast[result].text);
     ScopeId child = previous.target ? previous.target : names.enter(owner);
-    names.bind(owner, ast[result].text, Category::Type, child);
+    auto category = previous.category == Category::Value || previous.category == Category::TemplateValue ? previous.category : Category::Type;
+    names.bind(owner, ast[result].text, category, child);
     scope = owner;
     if (in.eat(":")) ast.append(result, type_id());
     if (!in.eat("{")) { scope = saved_scope; return result; }

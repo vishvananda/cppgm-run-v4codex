@@ -92,7 +92,9 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
     else if (old && old != id && (function_binding(old) || function_binding(id)) &&
              entities[old].kind != EntityKind::Type && k != EntityKind::Type)
         throw std::runtime_error("function and ordinary binding conflict");
-    ordinary.put(key(s, n), id);
+    bool hidden_tag = k == EntityKind::Type && old &&
+        (function_binding(old) || entities[old].kind == EntityKind::Variable || entities[old].kind == EntityKind::Enumerator);
+    if (!hidden_tag) ordinary.put(key(s, n), id);
     if ((entities[id].template_pattern && (k == EntityKind::Type || k == EntityKind::Alias)) || target(id) || (definitions && (k == EntityKind::Type || k == EntityKind::Alias) && dependent_type(entities[id].type)))
         qualifiers.put(key(s, n), id);
     if (k == EntityKind::Type) tags.put(key(s, n), id);

@@ -25,32 +25,17 @@ std::uint32_t Analyzer::constant_body(EntityId e)
     if (entities[e].body_state != FactState::Success) return 0;
     require_body_facts(e);
     ConstantBody result; result.function = e; result.parameters = constant_parameters.size();
-    result.valid = integral(types[entities[e].type].child) && !types[entities[e].type].variadic;
+    result.valid = (integral(types[entities[e].type].child) || floating_type(types[entities[e].type].child)) && !types[entities[e].type].variadic;
     for (auto d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
         auto parameter = declarations[d].entity;
         if (entities[parameter].kind != EntityKind::Parameter) continue;
-        result.valid &= integral(entities[parameter].type) &&
+        result.valid &= (integral(entities[parameter].type) || floating_type(entities[parameter].type)) &&
             types[entities[parameter].type].kind != TypeKind::LRef && types[entities[parameter].type].kind != TypeKind::RRef;
-        constant_parameter_ordinals.put(parameter,++result.count);
+        ++result.count;
         constant_parameters.push_back(parameter);
     }
-    auto body = entities[e].body;
-    result.valid &= ast[body].kind == Kind::Compound;
-    for (auto n = ast[body].first; n; n = ast[n].next) {
-        switch (ast[n].kind) {
-        case Kind::Return:
-            if (result.result) result.valid = false;
-            result.result = ast[n].first; break;
-        case Kind::Alias: case Kind::UsingDeclaration: case Kind::UsingDirective:
-        case Kind::StaticAssert: case Kind::EmptyDeclaration: case Kind::Class:
-        case Kind::ClassForward: case Kind::Enum: break;
-        case Kind::SimpleDeclaration:
-            if (!spec_has(ast[n].first,KW_TYPEDEF)) result.valid = false;
-            break;
-        default: result.valid = false; break;
-        }
-    }
-    result.valid &= result.result != 0;
+    result.statement = entities[e].body;
+    result.valid &= ast[result.statement].kind == Kind::Compound;
     auto id = constant_bodies.size(); constant_bodies.push_back(result); constant_body_index.put(e,id);
     return id;
 }
@@ -83,14 +68,21 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     ConstantActivation activation; activation.body = body_id; activation.arguments = pack; activation.object = object;
     if (!id) { id = constant_activations.size(); constant_activations.push_back(activation); constant_activation_index.put(key_value,id); }
     else constant_activations[id] = activation;
-    auto saved = active_constant; active_constant = id; ++constant_depth;
+    ConstantFrame frame;
+    for (unsigned i = 0; i < args.size(); ++i) {
+        auto parameter = constant_parameters[body.parameters+i];
+        frame.bindings.put(parameter,frame.values.size());
+        frame.values.push_back(convert(args[i],entities[parameter].type));
+    }
+    auto saved = active_constant; auto saved_frame = constant_frame;
+    active_constant = id; constant_frame = &frame; ++constant_depth;
     Constant value;
     try {
-        auto conversion = conversions[expressions[body.result].incoming];
-        value = conversion.target ? constant_node_conversion(body.result,conversion,entities[e].scope) : Constant();
+        auto result = execute_constant_statement(body.statement,entities[e].scope);
+        if (result.flow == ConstantFlow::Return) value = result.value;
     } catch (...) {
         constant_activations[id].state = FactState::Failure;
-        active_constant = saved; --constant_depth; throw;
+        active_constant = saved; constant_frame = saved_frame; --constant_depth; throw;
     }
     constant_activations[id].result = value;
     // Exhaustion and not-yet-defined constants are unavailable prerequisites,
@@ -98,25 +90,18 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     // or definition may succeed; completed independent values remain reusable.
     constant_activations[id].state = value.valid ? FactState::Success :
         (constant_limited || constant_unavailable) ? FactState::NotStarted : FactState::Failure;
-    active_constant = saved; --constant_depth;
+    active_constant = saved; constant_frame = saved_frame; --constant_depth;
     return value;
 }
 Constant Analyzer::execute_constant_node(NodeId n, ScopeId s)
 {
-    auto k = key(active_constant,n);
-    if (auto old = constant_execution_values.get(k)) return constants[old];
-    if (!constant_remaining) { constant_limited = true; return Constant(); }
-    --constant_remaining; ++constant_steps;
-    // Expression facts carry type, binding and conversions, while values of
-    // body parameters belong only to this activation. Never publish them into
-    // the source node's context-free constant cache.
-    Constant value;
-    if (expressions[n].form == ExpressionForm::ConstantQuery && facts[n].value) value = constants[facts[n].value];
-    else if (expressions[n].form != ExpressionForm::OperatorCall) value = evaluate_value(n,s);
-    auto id = value.valid ? constants.size() : 1;
-    if (value.valid) constants.push_back(value);
-    if (value.valid || (!constant_limited && !constant_unavailable)) constant_execution_values.put(k,id);
-    return value;
+    if (!constant_step()) return Constant();
+    // Values are recomputed on each executed visit: locals and parameters can
+    // change within an activation. Only immutable semantic query facts bypass
+    // execution. Completed calls remain memoized by their complete input key.
+    if (expressions[n].form == ExpressionForm::ConstantQuery && facts[n].value) return constants[facts[n].value];
+    if (expressions[n].form == ExpressionForm::OperatorCall) return Constant();
+    return evaluate_value(n,s);
 }
 Constant Analyzer::constant_call(NodeId n, ScopeId s)
 {

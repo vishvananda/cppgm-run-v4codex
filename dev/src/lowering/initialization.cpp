@@ -106,7 +106,7 @@ void Procedural::global(EntityId e)
             }
             else if (!entity.initializer && entity.constant.valid) {
                 DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
-                d.value = Operand::integer(entity.constant.bits); p.data.push_back(d);
+                d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant)) : Operand::integer(entity.constant.bits); p.data.push_back(d);
             }
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
             else global_data(entity.initializer, t);

@@ -249,7 +249,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
         else {
             Constant value = evaluate(ast[c].first, s);
             if (!value.valid) throw std::runtime_error("nonconstant noexcept specification");
-            spec = value.bits ? 3 : 2;
+            spec = constant_truth(value) ? 3 : 2;
         }
     }
     auto old = entities[e].exception_spec;

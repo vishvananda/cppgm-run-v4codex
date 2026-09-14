@@ -83,7 +83,7 @@ int Analyzer::template_exception(NodeId d, ScopeId s)
         }
         auto value = evaluate(ast[c].first,s);
         if (!value.valid) throw std::runtime_error("nonconstant template exception specification");
-        return value.bits != 0;
+        return constant_truth(value);
     }
     return ast[ast[decl_name(d)].last].op == OP_COMPL ? -1 : 0;
 }

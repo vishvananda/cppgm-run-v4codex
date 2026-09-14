@@ -74,7 +74,7 @@ Value Procedural::expression(NodeId n, bool location)
     if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) {
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
-        Value v = emit(Opcode::Const, type(c.type), {Operand::integer(c.bits)}); v.type = c.type; return v;
+        Value v = emit(Opcode::Const, type(c.type), {(type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits))}); v.type = c.type; return v;
     }
     switch (node.kind) {
     case Kind::New: return placement_new(n);
@@ -97,11 +97,11 @@ Value Procedural::expression(NodeId n, bool location)
         node.op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
         if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
-            auto c = sem.constant_fact(n); return Value(Operand::integer(c.bits), type(fact.type), fact.type);
+            auto c = sem.constant_fact(n); return Value((type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits)), type(fact.type), fact.type);
         }
         if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
             auto c = sem.entities[fact.entity].constant;
-            return Value(Operand::integer(c.bits), type(fact.type), fact.type);
+            return Value((type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits)), type(fact.type), fact.type);
         }
         if (sem.nonstatic_field(fact.entity)) {
             if (sem.injected_storage(fact.entity)) { Value v = binding(fact.entity); v.type = fact.type; return v; }
@@ -132,7 +132,7 @@ Value Procedural::expression(NodeId n, bool location)
         auto member = sem.entities[fact.entity];
         if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && member.constant.valid && !location)) {
             discard(a, false);
-            return Value(Operand::integer(member.constant.bits), type(fact.type), fact.type);
+            return Value((type(member.constant.type).floating() ? Operand::floating(sem.floating_value(member.constant)) : Operand::integer(member.constant.bits)), type(fact.type), fact.type);
         }
         if (member.is_static) { discard(a, false); return binding(fact.entity); }
         Value base = node.op == OP_ARROW ? load(expression(a)) : address(expression(a, true));

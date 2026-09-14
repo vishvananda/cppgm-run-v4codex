@@ -49,6 +49,7 @@ public:
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
     std::size_t static_requests = 0, static_hits = 0;
+    long double floating_value(Constant value) const;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
@@ -211,6 +212,13 @@ private:
     Index initializer_work_index;
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
+    struct ConstantArrayIndex { std::uint32_t first = 0, count = 0; };
+    Index constant_array_indices;
+    std::vector<ConstantArrayIndex> constant_array_ranges = std::vector<ConstantArrayIndex>(1);
+    std::vector<std::uint32_t> constant_array_children;
+    std::uint32_t constant_array_child(std::uint32_t plan, Constant index);
+    std::uint32_t constant_array_projection(NodeId source, ScopeId scope);
+    Constant constant_array_element(std::uint32_t plan, Constant index);
     std::size_t constant_array_work = 0;
     void prepare_constant_array(EntityId e);
     bool constant_array_plan_valid(std::uint32_t plan);
@@ -334,9 +342,19 @@ private:
     IdentifierId constant_builtin = 0, abort_builtin = 0;
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
+    // Floating payloads are interned separately; common constants and entity
+    // records retain their compact size. Identity excludes x87 padding bytes.
+    struct FloatingConstant { long double value; std::uint64_t significand; std::uint16_t exponent; std::uint32_t next; };
+    std::vector<FloatingConstant> floating_constants = std::vector<FloatingConstant>(1);
+    Index floating_constant_index;
+    bool floating_type(TypeId type) const;
+    Constant floating_constant(TypeId type, long double value);
+    Constant floating_conversion(Constant value, TypeId target);
+    Constant floating_binary(ETokenType op, Constant left, Constant right, bool converted);
+    bool constant_truth(Constant value) const;
     struct ConstantBody {
         EntityId function = 0;
-        NodeId result = 0;
+        NodeId statement = 0;
         std::uint32_t parameters = 0, count = 0;
         bool valid = false;
     };
@@ -347,9 +365,18 @@ private:
         FactState state = FactState::Active;
     };
     struct ConstantReceiver { TypeId type; NodeId node; QueryId query; };
+    // Mutable execution storage lives only as long as one call. Completed
+    // activations retain values, never their local environments.
+    struct ConstantFrame {
+        Index bindings;
+        std::vector<Constant> values = std::vector<Constant>(1);
+    };
+    ConstantFrame* constant_frame = 0;
+    enum class ConstantFlow : unsigned char { Next, Return, Break, Continue, Failure };
+    struct ConstantStatement { ConstantFlow flow; Constant value; };
     Index constant_node_receivers, constant_query_receivers;
     std::vector<ConstantReceiver> constant_receivers = std::vector<ConstantReceiver>(1);
-    Index constant_body_index, constant_parameter_ordinals, constant_activation_index, constant_execution_values;
+    Index constant_body_index, constant_activation_index;
     std::vector<ConstantBody> constant_bodies = std::vector<ConstantBody>(1);
     std::vector<ConstantActivation> constant_activations = std::vector<ConstantActivation>(1);
     std::vector<EntityId> constant_parameters;
@@ -360,6 +387,11 @@ private:
     std::uint32_t constant_body(EntityId function);
     Constant execute_constant(EntityId function, const std::vector<Constant>& arguments, std::uint32_t object = 0);
     Constant execute_constant_node(NodeId node, ScopeId scope);
+    ConstantStatement execute_constant_statement(NodeId node, ScopeId scope);
+    Constant execute_constant_condition(NodeId node, ScopeId scope);
+    bool constant_local(EntityId entity, ScopeId scope);
+    Constant constant_mutation(NodeId node, ScopeId scope);
+    bool constant_step();
     Constant constant_call(NodeId node, ScopeId scope);
     Constant constant_query_call(QueryId query);
     Constant constant_query_conversion(QueryId source, Conversion conversion);

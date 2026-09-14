@@ -391,6 +391,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function) declare_operator(e, name);
     declaration_attributes(e,specs,source);
     bool specialized_member_declaration = source == explicit_specialization_source && !init && scopes[owner].kind == ScopeKind::Class;
+    if (calls && init && !function && entities[e].is_static && scopes[owner].kind == ScopeKind::Class &&
+        entities[e].initializer && source != explicit_specialization_source)
+        throw std::runtime_error("static member initializer specified twice");
     if (!function && !specialized_member_declaration && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
@@ -438,19 +441,19 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && !function && spec_has(specs,KW_CONSTEXPR) && types[canonical].kind == TypeKind::Array)
         prepare_constant_array(e);
     if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
-    if (init && !alias && !function && integral(t) && !member_initializer) {
+    if (init && !alias && !function && (integral(t) || floating_type(value_type(t))) && !member_initializer) {
         Constant v = evaluate(init, definition_scope);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
         if (v.valid) {
             v = convert(v, t);
             // A reference may preserve an address constant while reads through
             // its volatile-qualified referent are never constant values.
-            if (!(types[v.type].cv & 2) &&
+            if (!(types[v.type].cv & 2) && (!floating_type(v.type) || spec_has(specs,KW_CONSTEXPR)) &&
                 (types[t].cv == 1 || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef))
                 entities[e].constant = v;
         }
     }
-    if (calls && !init && !function && integral(t) && spec_has(specs, KW_CONSTEXPR))
+    if (calls && !entities[e].initializer && !function && (integral(t) || floating_type(value_type(t))) && spec_has(specs, KW_CONSTEXPR))
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts.edit(ast[init].first).type = t;

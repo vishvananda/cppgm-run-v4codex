@@ -26,8 +26,13 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
         result.bits = result.kind == StaticValue::Floating ? result.floating != 0 : 1;
         result.kind = StaticValue::Integer;
     } else if (result.kind == StaticValue::Floating && integral(scalar)) {
-        result.bits = is_unsigned(scalar) ? std::uint64_t(result.floating) : std::uint64_t(std::int64_t(result.floating));
-        result.kind = StaticValue::Integer;
+        auto value = convert(floating_constant(types.fundamental(FT_LONG_DOUBLE),result.floating),scalar,true);
+        result.bits = value.bits; result.kind = value.valid ? StaticValue::Integer : StaticValue::Invalid;
+    }
+    if (result.kind == StaticValue::Floating && floating_type(scalar)) {
+        auto value = floating_constant(scalar,result.floating);
+        if (value.valid) result.floating = floating_value(value);
+        else result.kind = StaticValue::Invalid;
     }
     if (result.kind == StaticValue::Integer && integral(scalar)) {
         Constant c = convert(Constant(types.fundamental(FT_UNSIGNED_LONG_LONG_INT), result.bits), scalar, true);
@@ -54,6 +59,14 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     auto incoming = conversions[x.incoming];
     if (incoming.kind == Conversion::Kind::User || incoming.kind == Conversion::Kind::Construction) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;
+    if (!reference_target && (integral(target) || floating_type(target)) &&
+        (integral(x.type) || floating_type(x.type))) {
+        auto value = convert(evaluate(n,facts[n].scope),target,true);
+        if (!value.valid) return r;
+        if (floating_type(value.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(value); }
+        else { r.kind = StaticValue::Integer; r.bits = value.bits; }
+        return r;
+    }
     if (kind == Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string) {
         r.kind = StaticValue::String; r.string = n; return r;
     }
@@ -103,7 +116,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         Constant c = evaluate(first, facts[first].scope);
         if (!c.valid) return r;
         NodeId yes = ast[first].next;
-        return static_value(c.bits ? yes : ast[yes].next, target);
+        return static_value(constant_truth(c) ? yes : ast[yes].next, target);
     }
     if (x.form == ExpressionForm::Cast) {
         NodeId operand = kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
@@ -116,7 +129,10 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         else std::memcpy(&r.floating, literal.scalar.data(), sizeof r.floating);
     } else {
         Constant c = evaluate(n, facts[n].scope);
-        if (c.valid) { r.kind = StaticValue::Integer; r.bits = c.bits; }
+        if (c.valid) {
+            if (floating_type(c.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(c); }
+            else { r.kind = StaticValue::Integer; r.bits = c.bits; }
+        }
     }
     return r;
 }

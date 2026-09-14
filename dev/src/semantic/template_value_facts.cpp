@@ -37,7 +37,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
         if (query.kind == QueryKind::Sizeof) {
             auto type = query.type ? query.type : query_fact(query_edges[query.offset]).expression.type;
             value = Constant(types.fundamental(FT_UNSIGNED_LONG_INT),size(type,query.op == KW_ALIGNOF));
-        } else if (query.kind == QueryKind::Value && integral(query.type)) {
+        } else if (query.kind == QueryKind::Value && (integral(query.type) || floating_type(query.type))) {
             value = convert(Constant(query.type,query.value),query.type);
         } else if (query.kind == QueryKind::Name || query.kind == QueryKind::QualifiedValue) {
             if (!(types[fact.expression.type].cv & 2)) value = entities[fact.expression.entity].constant;
@@ -61,14 +61,14 @@ std::uint32_t Analyzer::query_value(QueryId id)
         } else if (query.kind == QueryKind::Conditional) {
             auto condition = constants[query_value(query_edges[query.offset])];
             if (condition.valid && !scoped_enum(condition.type))
-                value = convert(constants[query_value(query_edges[query.offset+(condition.bits ? 1 : 2)])],fact.expression.type,true);
+                value = convert(constants[query_value(query_edges[query.offset+(constant_truth(condition) ? 1 : 2)])],fact.expression.type,true);
         } else if (!fact.selected && query.kind == QueryKind::Unary) {
             value = constants[query_value(query_edges[query.offset])];
             if (value.valid && !scoped_enum(value.type)) {
-                if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!value.bits);
+                if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!constant_truth(value));
                 else {
                     value = convert(value,fact.expression.type,true);
-                    if (query.op == OP_MINUS) value = binary(OP_MINUS,Constant(value.type,0),value,true);
+                    if (query.op == OP_MINUS) value = floating_type(value.type) ? floating_constant(value.type,-floating_value(value)) : binary(OP_MINUS,Constant(value.type,0),value,true);
                     else if (query.op == OP_COMPL) value = convert(Constant(value.type,~value.bits),value.type);
                     else if (query.op != OP_PLUS) value = Constant();
                 }
@@ -83,8 +83,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
         } else if (!fact.selected && query.kind == QueryKind::Binary) {
             auto a = constants[query_value(query_edges[query.offset])];
             if (a.valid) {
-                if (query.op == OP_LAND && !a.bits) value = Constant(types.fundamental(FT_BOOL),0);
-                else if (query.op == OP_LOR && a.bits) value = Constant(types.fundamental(FT_BOOL),1);
+                if (query.op == OP_LAND && !constant_truth(a)) value = Constant(types.fundamental(FT_BOOL),0);
+                else if (query.op == OP_LOR && constant_truth(a)) value = Constant(types.fundamental(FT_BOOL),1);
                 else {
                     auto b = constants[query_value(query_edges[query.offset+1])];
                     if (query.op == OP_COMMA) value = b;
@@ -98,8 +98,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
             }
         } else if (query.kind == QueryKind::Call) {
             auto callee = type_queries[query_edges[query.offset]];
-            if (callee.kind == QueryKind::TypeValue && integral(callee.type)) {
-                if (query.count == 1) value = Constant(callee.type,0);
+            if (callee.kind == QueryKind::TypeValue && (integral(callee.type) || floating_type(callee.type))) {
+                if (query.count == 1) value = convert(Constant(types.fundamental(FT_INT),0),callee.type,true);
                 if (query.count == 2) value = convert(fact.selected ?
                     constant_query_conversion(query_edges[query.offset+1],conversions[fact.expression.conversions]) :
                     constants[query_value(query_edges[query.offset+1])],callee.type,true);

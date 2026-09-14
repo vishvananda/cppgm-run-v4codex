@@ -149,7 +149,7 @@ void Names::bind(ScopeId scope, IdentifierId name, Category category, ScopeId ta
     entry.owner = scope;
     entry.name = name;
     entry.category = category;
-    entry.target = target;
+    if (target || (category != Category::Value && category != Category::TemplateValue)) entry.target = target;
 }
 
 void Names::import(ScopeId scope, ScopeId target, bool directive)
