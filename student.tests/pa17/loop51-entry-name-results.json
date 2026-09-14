@@ -1,0 +1,493 @@
+[
+  {
+    "name": "qualified_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_primary",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_rooted",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "current_alias",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_partial",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_partial_renamed_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_partial_pack_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_nested",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_base",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "dependent_base_explicit",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_type_parameter_alias",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_value_parameter",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_value_alias",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "noncurrent_explicit",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "return_parameter_boundary",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "trailing_return",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "member_template_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "template_template_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_member_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "dependent_dot",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "dependent_arrow",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_receiver",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_this",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_receiver",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "dependent_base_member_call",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "current_qualified_member_call",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_call",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "pack_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "base_type_context",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "elaborated_type_context",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "elaborated_parameter_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "direct_initializer_value",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "direct_initializer_specialized_value",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": false
+  },
+  {
+    "name": "direct_initializer_current_function",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "varargs_shape",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: n\n",
+    "passed": false
+  },
+  {
+    "name": "dormant_type",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dormant_member_template_type",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "type_missing_template",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "noncurrent_body",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "noncurrent_partial",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "value_expression_not_current",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "value_alias_expression_not_current",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "pack_expression",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "leading_return",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "leading_return_member_template",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dependent_base_unknown",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "dependent_dot_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dependent_arrow_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dependent_qualified_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dependent_qualified_chain_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "dependent_base_member_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "noncurrent_receiver_missing",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "typename_does_not_override_value",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": true
+  },
+  {
+    "name": "dependent_direct_initializer_type",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid implicit conversion\n",
+    "passed": true
+  },
+  {
+    "name": "dependent_function_pointer_parameter",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": true
+  }
+]

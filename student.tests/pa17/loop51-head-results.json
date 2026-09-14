@@ -1,0 +1,399 @@
+[
+  {
+    "name": "renamed_two_heads",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "head_roles",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "outer_inner_distinct",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_selected_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_nested_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_constructor",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_member_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "head_default_scope",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inline_nested_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inline_member_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "forward_member_name",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "variable_dependent_head",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "pack_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "outer_pack_before_token",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "pack_outer",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "dormant_member_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "extern_member_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "private_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "explicit_member_owner",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_class_template_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_nested_class_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "captured_class_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "body_cast_target",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_three_heads",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "captured_value_head",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_alias_signature",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_class_default",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "converting_template_tie",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_guard_default",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inner_typed_parameter",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "converting_member_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_value_pack_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "duplicate_renamed_definition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: duplicate out-of-class template member definition\n",
+    "passed": true
+  },
+  {
+    "name": "wrong_head_kind",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition does not match a declared member\n",
+    "passed": true
+  },
+  {
+    "name": "wrong_head_count",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition does not match a declared member\n",
+    "passed": true
+  },
+  {
+    "name": "crossed_signature",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition does not match a declared member\n",
+    "passed": true
+  },
+  {
+    "name": "already_inline",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template member was already defined in its class\n",
+    "passed": true
+  },
+  {
+    "name": "wrong_namespace",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "duplicate_explicit_owner",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template function redefinition\n",
+    "passed": true
+  },
+  {
+    "name": "nested_class_wrong_kind",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member class template head mismatch\n",
+    "passed": true
+  },
+  {
+    "name": "nested_class_duplicate",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member class template redefinition\n",
+    "passed": true
+  },
+  {
+    "name": "nested_missing_head",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: missing enclosing template head\n",
+    "passed": true
+  },
+  {
+    "name": "nested_extra_head",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition has unmatched heads\n",
+    "passed": true
+  }
+]

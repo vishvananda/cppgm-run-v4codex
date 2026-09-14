@@ -43,9 +43,22 @@ def verify():
         rows=json.loads(path.read_text());assert len(rows)==report['count'] and all(r['passed'] for r in rows)
         for r in rows:
             if r.get('expected')=='native':assert r['compiler_exit']==r['backend_exit']==r['native_exit']==0
-            if r.get('expected')=='reject':assert r['compiler_exit']!=0
+            if r.get('expected')=='reject':assert r['compiler_exit']>0
     for artifact in e['control_harnesses']+[e['performance_summary'],e['prior_performance']]:
         assert sha(ROOT/artifact['path'])==artifact['sha256']
+    for artifact in e.get('additional_evidence',[]):
+        assert sha(ROOT/artifact['path'])==artifact['sha256']
+    if e.get('entry_control_comparison'):
+        report=e['entry_control_comparison'];path=ROOT/report['path']
+        assert sha(path)==report['sha256']
+        rows=json.loads(path.read_text())
+        assert len(rows)==report['count'] and sum(not r['passed'] for r in rows)==report['entry_failures']
+        assert report['final_failures']==0
+    previous=e.get('previous_handoff')
+    if previous:
+        assert sha(ROOT/previous['path'])==previous['sha256']
+        old=json.loads((ROOT/previous['path']).read_text())
+        assert set(old['independent_review_questions'])<=set(e['independent_review_questions'])
     assert sha(ROOT/e['performance'])==e['performance_sha256']
     perf=json.loads((ROOT/e['performance']).read_text())
     assert perf['source_commit']==e['source_commit'] and not perf['source_diff'] and perf['finished_utc']

@@ -1,11 +1,11 @@
 {
-  "kind": "incomplete implementation handoff; friend/access behavior group complete; independent audit pending",
+  "kind": "incomplete implementation handoff; source-name behavior group complete; independent audit pending",
   "stage_base": "21748547a9e5befaae65e4fae120a63b3f9fcafb",
   "last_reviewed_commit": "58789b00e19ae2aff032c8b04980b7d43265617f",
-  "source_commit": "a8cc241e67cec028d8e56cd65fe600876968c9ca",
-  "source_digest": "c64f42c187b74f146afdbaf1e7b8cf48ba203b3936df47943417f0ba633bb86e",
-  "entry_commit": "d3ef5e5d5adc89baf13f9697e5c38b165bba0dcc",
-  "entry_passed": 284,
+  "source_commit": "6afed48ec5ff231ef85df0d8c5b7980f50ef6500",
+  "source_digest": "ce867458243cd4bb1ca2945a9b8f04e7e023f5db9622af40abe86c4682812d4c",
+  "entry_commit": "0fe13f160c921db3ca68bfefc857b3a6be40cf3f",
+  "entry_passed": 301,
   "protected_paths": [
     "AGENTS.md",
     "TESTING_AND_REFERENCES.md",
@@ -21,140 +21,84 @@
   ],
   "logs": {
     "entry": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop50/entry.log",
-      "sha256": "1c62e1d982b1f799a90f58cafb7e608d31d5451695fb71a5ca633ac669b38409",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop51/entry.log",
+      "sha256": "ebbf5f085b82e8e79000874fa1290be7cf9d7bc926ffb13424ff9fa46d0ef90e",
       "command": "Ralph turn-start make test-pa17",
       "exit_code": 2
     },
     "stage": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop50/stage-final.log",
-      "sha256": "87d6c89cb238a27ff28dcca444a51a7fc160cbc1fb0b5c788333df9d60da3933",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop51/stage-final.log",
+      "sha256": "d2bcc8504a4172c82981a3d63ad809264a6f238e09473a91028f31ac5076e56e",
       "command": "make test-pa17",
       "exit_code": 2
     },
     "prior": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop50/prior-final.log",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop51/prior-final.log",
       "sha256": "967173723342b3c0abf5b9e26710e9ef2094f41c3a33e7d23e0831760f67bea9",
       "command": "n=17; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
       "exit_code": 0
     },
     "through": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop50/through-final.log",
-      "sha256": "3f63eae078305c8e4e0353326a1bf99d9cc867af77648c5203190694684c2939",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop51/through-final.log",
+      "sha256": "a7018435ef5fc68322eafae3d2100cf010d4e39ec3b8b5fabae2cddf07ed3a79",
       "command": "make test-report-through-pa17",
       "exit_code": 2
     },
     "file_audit": {
-      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop50/file-audit.log",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa17-loop51/file-audit.log",
       "sha256": "b40da0957f8ab5dea6cb4e3531ee3c2d1ea1f275ab22409e6f102506e18a3c04",
       "command": "perl scripts/cppgm_file_audit.pl --stage pa17 --paths dev/src",
       "exit_code": 0
     }
   },
   "course_cases": 343,
-  "stage_passed": 301,
+  "stage_passed": 306,
   "earlier_cases": 2266,
   "controls": [
     {
-      "path": "student.tests/pa17/loop50-entity-results.json",
+      "path": "student.tests/pa17/loop51-entity-results.json",
       "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344",
       "count": 34
     },
     {
-      "path": "student.tests/pa17/loop50-member-results.json",
+      "path": "student.tests/pa17/loop51-member-results.json",
       "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11",
       "count": 34
     },
     {
-      "path": "student.tests/pa17/loop50-definition-results.json",
+      "path": "student.tests/pa17/loop51-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535",
+      "count": 4
+    },
+    {
+      "path": "student.tests/pa17/loop51-definition-results.json",
       "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711",
       "count": 18
     },
     {
-      "path": "student.tests/pa17/loop50-audit-results.json",
+      "path": "student.tests/pa17/loop51-audit-results.json",
       "sha256": "9a9936107e5fd44101c7b24849ea08639910c4094f2a81fb6ad13b71ad00789a",
       "count": 25
     },
     {
-      "path": "student.tests/pa17/loop50-head-results.json",
+      "path": "student.tests/pa17/loop51-head-results.json",
       "sha256": "26888e4c242cfc4a8e3e2b1e32e4253eb2273ce5cedf20f1a72d8709d15e847b",
       "count": 43
     },
     {
-      "path": "student.tests/pa17/loop50-friend-results.json",
+      "path": "student.tests/pa17/loop51-friend-results.json",
       "sha256": "66eb979eb5466590c9cecfba6a0fbf740cf492b3aeca6db8239de402d6bf409a",
       "count": 47
     },
     {
-      "path": "student.tests/pa17/loop50-member-lowir-results.json",
-      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535",
-      "count": 4
+      "path": "student.tests/pa17/loop51-name-results.json",
+      "sha256": "ed032d87420fea494acb078ec7ff38fd68a0c1c1e9321c3c766f1357987cb356",
+      "count": 56
     }
   ],
-  "performance": "student.tests/pa17/friend-performance.json",
+  "performance": "student.tests/pa17/name-performance.json",
   "failure_delta": {
     "entry_failures": [
-      "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
-      "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
-      "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
-      "pa17/tests/general/200-variable-template-alignas-member-alias.t",
-      "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
-      "pa17/tests/general/300-anonymous-member-injection-in-class-template.t",
-      "pa17/tests/general/300-array-functional-cast-pack-call.t",
-      "pa17/tests/general/300-conditional-explicit-on-a-constructor-template.t",
-      "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
-      "pa17/tests/general/300-constructor-and-conversion-function-template-roles.t",
-      "pa17/tests/general/300-dependent-friend-alias-private-constructor-access.t",
-      "pa17/tests/general/300-dependent-friend-self-private-constructor-access.t",
-      "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
-      "pa17/tests/general/300-dependent-member-template-missing-keyword-bad.t",
-      "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
-      "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
-      "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
-      "pa17/tests/general/300-friend-existing-template-private-ctor-access.t",
-      "pa17/tests/general/300-friend-function-template-access.t",
-      "pa17/tests/general/300-friend-function-template-distinct-class-template-entities.t",
-      "pa17/tests/general/300-function-template-local-static-per-specialization.t",
-      "pa17/tests/general/300-hidden-friend-template-call-adl.t",
-      "pa17/tests/general/300-local-qualified-argument-replay.t",
-      "pa17/tests/general/300-member-class-explicit-specialization-owner-lookup.t",
-      "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
-      "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
-      "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
-      "pa17/tests/general/300-nested-class-friend-template-namespace-scope.t",
-      "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
-      "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
-      "pa17/tests/general/300-nondependent-template-base.t",
-      "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
-      "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
-      "pa17/tests/general/300-qualified-friend-member-template-access.t",
-      "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
-      "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
-      "pa17/tests/general/300-sizeof-pack-in-a-partial-specialization-shape.t",
-      "pa17/tests/general/300-template-friend-class-constructor-access.t",
-      "pa17/tests/general/300-template-template-argument-in-an-explicit-specifier.t",
-      "pa17/tests/general/300-unused-class-template-hidden-friend-body.t",
-      "pa17/tests/general/300-variable-template-as-a-nontype-argument.t",
-      "pa17/tests/general/300-variable-template-forwarding-partial-top-const.t",
-      "pa17/tests/general/300-variable-template-forwarding-partial-top-cv.t",
-      "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
-      "pa17/tests/general/400-dependent-owner-member-class-template-partial-specialization.t",
-      "pa17/tests/general/400-empty-pack-member-alias-owner-specialization.t",
-      "pa17/tests/general/400-local-value-shadows-template-relational.t",
-      "pa17/tests/general/400-member-alias-template-template-dependent-replay.t",
-      "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
-      "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t",
-      "pa17/tests/spec/300-dependent-super-member-template-chain.t",
-      "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
-      "pa17/tests/spec/300-friend-class-template-nested-private-typedef-access.t",
-      "pa17/tests/spec/300-hidden-friend-template-call-adl.t",
-      "pa17/tests/spec/300-hidden-friend-template-operator-adl.t",
-      "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
-      "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
-      "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
-      "pa17/tests/spec/300-template-friend-inside-class-template.t"
-    ],
-    "final_failures": [
       "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
       "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
       "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
@@ -198,32 +142,60 @@
       "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
       "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t"
     ],
+    "final_failures": [
+      "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
+      "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
+      "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
+      "pa17/tests/general/200-variable-template-alignas-member-alias.t",
+      "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
+      "pa17/tests/general/300-anonymous-member-injection-in-class-template.t",
+      "pa17/tests/general/300-array-functional-cast-pack-call.t",
+      "pa17/tests/general/300-conditional-explicit-on-a-constructor-template.t",
+      "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
+      "pa17/tests/general/300-constructor-and-conversion-function-template-roles.t",
+      "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
+      "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
+      "pa17/tests/general/300-function-template-local-static-per-specialization.t",
+      "pa17/tests/general/300-local-qualified-argument-replay.t",
+      "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
+      "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
+      "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+      "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
+      "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
+      "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
+      "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
+      "pa17/tests/general/300-sizeof-pack-in-a-partial-specialization-shape.t",
+      "pa17/tests/general/300-template-template-argument-in-an-explicit-specifier.t",
+      "pa17/tests/general/300-variable-template-as-a-nontype-argument.t",
+      "pa17/tests/general/300-variable-template-forwarding-partial-top-const.t",
+      "pa17/tests/general/300-variable-template-forwarding-partial-top-cv.t",
+      "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
+      "pa17/tests/general/400-dependent-owner-member-class-template-partial-specialization.t",
+      "pa17/tests/general/400-empty-pack-member-alias-owner-specialization.t",
+      "pa17/tests/general/400-local-value-shadows-template-relational.t",
+      "pa17/tests/general/400-member-alias-template-template-dependent-replay.t",
+      "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
+      "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t",
+      "pa17/tests/spec/300-dependent-super-member-template-chain.t",
+      "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
+      "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+      "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t"
+    ],
     "fixed": [
-      "pa17/tests/general/300-dependent-friend-alias-private-constructor-access.t",
-      "pa17/tests/general/300-dependent-friend-self-private-constructor-access.t",
-      "pa17/tests/general/300-friend-existing-template-private-ctor-access.t",
-      "pa17/tests/general/300-friend-function-template-access.t",
-      "pa17/tests/general/300-friend-function-template-distinct-class-template-entities.t",
-      "pa17/tests/general/300-hidden-friend-template-call-adl.t",
-      "pa17/tests/general/300-member-class-explicit-specialization-owner-lookup.t",
-      "pa17/tests/general/300-nested-class-friend-template-namespace-scope.t",
-      "pa17/tests/general/300-nondependent-template-base.t",
-      "pa17/tests/general/300-qualified-friend-member-template-access.t",
-      "pa17/tests/general/300-template-friend-class-constructor-access.t",
-      "pa17/tests/general/300-unused-class-template-hidden-friend-body.t",
-      "pa17/tests/spec/300-friend-class-template-nested-private-typedef-access.t",
-      "pa17/tests/spec/300-hidden-friend-template-call-adl.t",
-      "pa17/tests/spec/300-hidden-friend-template-operator-adl.t",
-      "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
-      "pa17/tests/spec/300-template-friend-inside-class-template.t"
+      "pa17/tests/general/300-dependent-member-template-missing-keyword-bad.t",
+      "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
+      "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
+      "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
+      "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t"
     ],
     "new_failures": []
   },
-  "personal_controls": 205,
-  "handoff_boundary": "Friend class/function templates, qualified member and namespace friendships, friend-selected function specializations, ordinary class-template friend bodies and constexpr demand, concrete candidate deduplication, and stable member-template access are implemented together. The remaining reentrant ADL case fails in recursive type-query substitution; remaining hidden-friend LowIR differences are static storage and empty-object zero-initialization. These require query failure-state and storage/value-action algorithms, not additional friend edges or head overlays. Remaining dependent-name obligations, partial selection, grammar, deduction and lowering still require implementation.",
+  "personal_controls": 261,
+  "handoff_boundary": "The completed source-name group covers typename/template obligations, current primary/partial/nested/alias identity, renamed ordinary and pack heads, non-type parameter equivalence, dependent/fixed/current member receivers and qualified chains, leading-return versus declarator scope with member access, rooted class categories, varargs and single-parse parenthesized declaration interpretation. All five required introducer failures and every added/inherited control pass. The rooted static-member fixture now compiles but differs in storage initialization. The remaining 37 failures require selection/substitution, query failure-state/candidate handling, or LowIR storage/initialization/transfer/cleanup algorithms; more introducer checks, source identities or parsed-name interpretation cannot supply these facts. No remaining case is waived or designated only as a review question.",
   "independent_review_questions": [
     "Check canonical source-head and class-identity cache validity across the cumulative stage diff, including late definitions and selected partial-owner frames. Existing controls and bounded-work observations are implementation evidence, not an independent audit.",
-    "Review friend lexical heads, namespace/qualified identity, source versus instantiated ordinary-friend definition ownership, access edges and separate demand states over the cumulative stage diff. This implementation handoff does not resolve or waive independent audit."
+    "Review friend lexical heads, namespace/qualified identity, source versus instantiated ordinary-friend definition ownership, access edges and separate demand states over the cumulative stage diff. This implementation handoff does not resolve or waive independent audit.",
+    "Review current-instantiation cache keys across renamed/partial heads, parameter-alias equivalence, source ambiguity resolution before region/fact publication and later projection, and independent access versus lookup contexts over the cumulative stage diff. This implementation evidence does not replace the scheduled independent audit."
   ],
   "waivers": [],
   "remaining_groups": {
@@ -323,43 +295,10 @@
           "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.my.lowir.compare.diff",
           "diagnostic": "",
           "compiler_exit": 0
-        }
-      ]
-    },
-    "introducers": {
-      "owner": "Definition-time dependent-name obligations",
-      "data_flow": "Parsed typename/template introducers and current-instantiation context -> retained type/name obligation -> definition-time diagnostic",
-      "complexity": "One obligation per relevant source name; bounded lookup; no specialization-triggered source replay",
-      "validation": "Dormant definitions and renamed/nested current/noncurrent-instantiation accept/reject cases",
-      "status": "unfinished implementation",
-      "failures": [
-        {
-          "path": "pa17/tests/general/300-dependent-member-template-missing-keyword-bad.t",
-          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
-          "diagnostic": "",
-          "compiler_exit": 0
         },
         {
-          "path": "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
-          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
-          "diagnostic": "",
-          "compiler_exit": 0
-        },
-        {
-          "path": "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
-          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
-          "diagnostic": "",
-          "compiler_exit": 0
-        },
-        {
-          "path": "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
-          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
-          "diagnostic": "",
-          "compiler_exit": 0
-        },
-        {
-          "path": "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
-          "check": "tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)",
+          "path": "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
+          "check": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-rooted-qualified-static-data-member-template-definition.my.lowir.compare.diff",
           "diagnostic": "",
           "compiler_exit": 0
         }
@@ -466,6 +405,12 @@
           "compiler_exit": 1
         },
         {
+          "path": "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+          "diagnostic": "ERROR: recursive type query",
+          "compiler_exit": 1
+        },
+        {
           "path": "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
           "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
           "diagnostic": "ERROR: unsupported expression",
@@ -500,27 +445,15 @@
           "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
           "diagnostic": "ERROR: unresolved overload in value context",
           "compiler_exit": 1
-        },
-        {
-          "path": "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
-          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
-          "diagnostic": "ERROR: expected type specifier",
-          "compiler_exit": 1
-        },
-        {
-          "path": "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
-          "check": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
-          "diagnostic": "ERROR: recursive type query",
-          "compiler_exit": 1
         }
       ]
     }
   },
   "triage_note": "Groups are implementation ownership based on current diagnostics/comparison failures; investigation can refine an owner without removing requirements.",
-  "performance_sha256": "8308750460c67d234811bb9c7c1d7349de3e034449f961e44ee929ec97ba584a",
+  "performance_sha256": "dd86d2f24300b0006a3d9602470b15e604de2283e25878e46cbc135f3d1d68a5",
   "performance_summary": {
-    "path": "pa17/friend-performance.md",
-    "sha256": "b5cfede5949b43305ef6579869252a93653ef030454cb9734d7d2f17e78a5232"
+    "path": "pa17/name-performance.md",
+    "sha256": "eff9f073b64a2be4b46edc9d2ba7e2a1297c71b7f61d4c3b99a365958569bf03"
   },
   "control_harnesses": [
     {
@@ -546,27 +479,65 @@
     {
       "path": "student.tests/pa17/member_controls.py",
       "sha256": "505491e6ef9d6891fa08936c54b9fd34dfbb89896596c94d05847d0eef3982e4"
+    },
+    {
+      "path": "student.tests/pa17/name_controls.py",
+      "sha256": "4a6f327426e749b95a75b238f5361a63a9e40da8305eda3bf456ead3f726e6de"
     }
   ],
   "prior_performance": {
-    "path": "student.tests/pa17/head-performance.json",
-    "sha256": "2531fb656bbc657af0d36eed2c9e4edea3ae54e1cf425a9c08d3013327c63cfc",
-    "status": "previous retained-head implementation campaign; preserved unchanged"
+    "path": "student.tests/pa17/name-performance-before-prefilter.json",
+    "sha256": "e9cb71e613685368cc67d4f6997bb9cd322529fde32396a7cd0163e397e47610"
   },
   "previous_handoff": {
-    "path": "student.tests/pa17/handoff-loop49.json",
-    "sha256": "a27af58455bcc9d6aa72970f786e795ad29940152ecd8549fd4dfee344f80afe"
+    "path": "student.tests/pa17/handoff-loop50.json",
+    "sha256": "8763b05f75c6225c26810f780cf793412e611217f363cf7f9d7c060b5f3de2ae"
   },
   "completed_group": {
-    "owner": "semantic friend/entity graph, lexical access, body demand, and call-local candidate identity",
-    "data_flow": "source class and independent head -> canonical namespace/qualified declaration -> friendship edge and selected specialization -> access and required body -> direct typed LowIR",
-    "complexity": "Work follows source head/signature width, lexical/associated edges and actual candidate/demand counts. TU-owned flat indexes; no global retries, grammar replay, or conversion repetition for duplicate concrete candidates.",
-    "validation": "47 new native/rejection friend/access controls, all 158 inherited controls, course fixtures and reports, file audit and frozen compiler/native observations",
-    "commits": [
-      "4b821120",
-      "a8cc241e"
-    ],
-    "status": "complete implementation behavior group; independent audit pending"
+    "owner": "Retained source-name/type binding and declaration interpretation",
+    "data_flow": "Parsed introducers, qualifier and receiver type identities -> source scope and current-instantiation checks -> immutable retained type/access/interpretation facts -> substitution -> ordinary typed LowIR",
+    "complexity": "Expected O(1) completed injected-type/view lookup; name parts, lexical owner edges and relevant indexed candidates per obligation; head/partial shape computed once per class/source-parameter slice; O(ambiguous declarations) interpretation storage; no grammar replay or global invalidation",
+    "validation": "Five original failure fixes; 56 new controls (36 native, 20 rejection), 205 inherited controls; frozen A/A+ABBA compiler and native evidence; root required reports and file audit"
   },
-  "required_checks_scope": "PA17 handoff: no stage-specific debug or native-backend gate; preserve earlier dump modes via through report. PA17 remains O0 LowIR. Root report commands are serialized because their counters are shared."
+  "required_checks_scope": "PA17 handoff: no stage-specific debug or native-backend gate; preserve earlier dump modes via through report. PA17 remains O0 LowIR. Root report commands are serialized because their counters are shared.",
+  "entry_control_comparison": {
+    "path": "student.tests/pa17/loop51-entry-name-results.json",
+    "sha256": "62c48536abc0f367b9d0368e1cff849437812d2c2910dc1745dec7c1baf10ebf",
+    "entry_failures": 19,
+    "final_failures": 0,
+    "count": 56
+  },
+  "ledger": [
+    {
+      "loop": 50,
+      "classification": "progress",
+      "evidence": "Friend/access implementation and validated handoff preserved in handoff-loop50.json; review markers unchanged"
+    },
+    {
+      "loop": 51,
+      "classification": "progress",
+      "implementation_commits": [
+        "3ce88dd7",
+        "d7f0055d",
+        "6afed48e"
+      ],
+      "stage": "306/343; five original failures fixed, none introduced",
+      "boundary": "The completed source-name group covers typename/template obligations, current primary/partial/nested/alias identity, renamed ordinary and pack heads, non-type parameter equivalence, dependent/fixed/current member receivers and qualified chains, leading-return versus declarator scope with member access, rooted class categories, varargs and single-parse parenthesized declaration interpretation. All five required introducer failures and every added/inherited control pass. The rooted static-member fixture now compiles but differs in storage initialization. The remaining 37 failures require selection/substitution, query failure-state/candidate handling, or LowIR storage/initialization/transfer/cleanup algorithms; more introducer checks, source identities or parsed-name interpretation cannot supply these facts. No remaining case is waived or designated only as a review question.",
+      "independent_review": "pending; cumulative prior questions preserved"
+    }
+  ],
+  "additional_evidence": [
+    {
+      "path": "pa17/name-implementation.md",
+      "sha256": "a4a8ad65436b068e5e002a42a2fa7a510360ce4ed3f1864008aaf2f7ed0dec1d"
+    },
+    {
+      "path": "student.tests/pa17/name-performance-before-shared-view.json",
+      "sha256": "6fae92001a86954e6a9e61a00f1411fda19f56210656963cfaab54a635c6c870"
+    },
+    {
+      "path": "student.tests/pa17/name_benchmark.py",
+      "sha256": "8ebbe17f0241acd1654cac661fdc84539406127cde1861194fe25d8e69410dee"
+    }
+  ]
 }

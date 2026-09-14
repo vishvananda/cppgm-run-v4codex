@@ -1,0 +1,303 @@
+[
+  {
+    "name": "qualified_head",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "cv_ref_overloads",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "static_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "reference_field",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "constructor_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "constructor_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_member_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "specialized_member_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "explicit_function_deduction",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "explicit_unused_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "extern_then_definition_after_call",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "extern_inline_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "explicit_ctor",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "class_member_emission",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "private_instantiation_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inline_namespace_instantiation",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "renamed_head_defaults",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "late_default_on_defined_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "alias_redeclaration_defaults",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "explicit_specialization_ignores_instantiation",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "local_static_function_addresses",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "duplicate_member_definition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template function redefinition\n",
+    "passed": true
+  },
+  {
+    "name": "private_member_call",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "explicit_builtin_operator",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: operator needs a class or enum operand\n",
+    "passed": true
+  },
+  {
+    "name": "duplicate_explicit_definition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: duplicate explicit instantiation definition\n",
+    "passed": true
+  },
+  {
+    "name": "extern_after_definition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: explicit instantiation declaration follows definition\n",
+    "passed": true
+  },
+  {
+    "name": "no_matching_instantiation",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: explicit instantiation has no matching entity\n",
+    "passed": true
+  },
+  {
+    "name": "explicit_constructor_copy_init",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class value initialization\n",
+    "passed": true
+  },
+  {
+    "name": "unqualified_instantiation_namespace",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unqualified instantiation outside template namespace\n",
+    "passed": true
+  },
+  {
+    "name": "instantiation_does_not_exempt_definition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "instantiation_does_not_exempt_alias",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "duplicate_template_default",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: duplicate template default argument\n",
+    "passed": true
+  },
+  {
+    "name": "conflicting_alias_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: conflicting alias template\n",
+    "passed": true
+  },
+  {
+    "name": "reference_value_ambiguity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous overload\n",
+    "passed": true
+  }
+]
