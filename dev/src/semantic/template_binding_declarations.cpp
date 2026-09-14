@@ -33,12 +33,9 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
     template_pattern_scopes.put(cs,1); template_class_bindings.put(source,cs);
     if (ast[n].kind == Kind::ClassForward && template_pattern_aggregates.get(entity)) return cs;
     entities[entity].key = ast[ast[n].first].op;
-    // A local pattern owns a type identity even when its layout and concrete
-    // declaration differ in each enclosing function specialization.
-    if (!entities[entity].type) for (auto scope = parent; scope; scope = scopes[scope].parent)
-        if (scopes[scope].kind == ScopeKind::Function) {
-            entities[entity].type = types.named(entity); break;
-        }
+    // Source class identity is required in nested member signatures before
+    // layout or any enclosing specialization exists.
+    if (!entities[entity].type) entities[entity].type = types.named(entity);
     bind(cs,entities[entity].name,entity);
     auto list = child(n,Kind::Bases);
     for (auto b = ast[list].first; b; b = ast[b].next) {
@@ -80,9 +77,11 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
             auto last = scopes[cs].last_decl;
             bind_template_declaration(c,cs,deferred ? deferred : &bodies);
             if (spec_has(ast[c].first,KW_VIRTUAL) || spec_has(child(c,Kind::MemberSpecifiers),KW_VIRTUAL)) aggregate = false;
-            if (ast[c].kind == Kind::SpecialMember || ast[c].kind == Kind::SpecialDefinition) {
-                auto d = child(c,Kind::Declarator), name = decl_name(d);
-                auto special = child(child(c,Kind::Initializer),Kind::SpecialInitializer);
+            auto constructor_source = c;
+            while (ast[constructor_source].kind == Kind::Template) constructor_source = ast[ast[constructor_source].first].next;
+            if (ast[constructor_source].kind == Kind::SpecialMember || ast[constructor_source].kind == Kind::SpecialDefinition) {
+                auto d = child(constructor_source,Kind::Declarator), name = decl_name(d);
+                auto special = child(child(constructor_source,Kind::Initializer),Kind::SpecialInitializer);
                 if (terminal(name) == entities[entity].name && ast[ast[name].last].op != OP_COMPL && !special)
                     aggregate = false;
             }

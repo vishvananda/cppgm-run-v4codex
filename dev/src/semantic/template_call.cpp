@@ -224,6 +224,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     if (!partial) check_substituted_type_access(entities[pattern].source,frame);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
+    entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;
     entities[e].constexpr_function = entities[pattern].constexpr_function;
     entities[e].inline_function = entities[pattern].inline_function;

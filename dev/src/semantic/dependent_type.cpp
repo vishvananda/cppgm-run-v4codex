@@ -42,8 +42,9 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
         // An out-of-class source overlay owns a parameter slice, independent
         // of the spelling and identity of the primary's original head.
         for (auto scope = use; scope; scope = scopes[scope].parent)
-            if (auto source = definition_source_parameters.get(scope)) {
-                parameters = source-1; break;
+            if (auto source = definition_source_heads.get(scope)) {
+                auto defined = template_definition_heads[source];
+                if (defined.pattern == e) { parameters = defined.parameters; break; }
             }
         std::vector<TypeId> args;
         for (unsigned i = 0; i < head.count; ++i) {

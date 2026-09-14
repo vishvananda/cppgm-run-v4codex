@@ -70,16 +70,22 @@ NodeId Parser::arguments(Kind kind, const char* close)
 
 ScopeId Parser::expression_scope(NodeId node)
 {
+    // The receiver subtree is complete before postfix lookup. Cache even an
+    // unknown result so a chain of calls/members visits each node once.
+    if (node >= expression_scopes.size()) expression_scopes.resize(node+1);
+    if (expression_scopes[node]) return expression_scopes[node]-1;
     auto n = ast[node];
-    if (n.kind == Kind::IdExpression) return name_binding(n.detail).target;
-    if (n.kind == Kind::Parenthesized || n.kind == Kind::Call || n.kind == Kind::Unary || n.kind == Kind::Subscript)
-        return expression_scope(n.first);
-    if (n.kind == Kind::Member) {
+    ScopeId result = 0;
+    if (n.kind == Kind::IdExpression) result = name_binding(n.detail).target;
+    else if (n.kind == Kind::Parenthesized || n.kind == Kind::Call || n.kind == Kind::Unary || n.kind == Kind::Subscript)
+        result = expression_scope(n.first);
+    else if (n.kind == Kind::Member) {
         auto owner = expression_scope(n.first);
         auto name = ast[ast[n.first].next].detail;
-        if (owner) return names.qualified(owner,final_name(name)).target;
+        if (owner) result = names.qualified(owner,final_name(name)).target;
     }
-    return 0;
+    expression_scopes[node] = result+1;
+    return result;
 }
 
 NodeId Parser::postfix(NodeId base)

@@ -364,7 +364,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function && types[t].ref != RefQualifier::None &&
         (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
         throw std::runtime_error("ref qualifier requires ordinary nonstatic member");
-    EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
+    bool source_constructor = constructor && !entities[cls].class_info && entities[cls].template_pattern;
+    EntityId e = constructor ? source_constructor ? template_pattern_members.get(key(cls,unsigned(PatternMemberKind::Constructors))) :
+        class_facts[entities[cls].class_info].constructor : local(owner, id);
     bool specialized_template = false;
     if (source == explicit_specialization_source && function)
         for (auto candidate : candidates(e)) specialized_template |= entities[candidate].template_info != 0;
@@ -390,7 +392,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         e = declare_function_specialization(name,s,canonical);
     } else if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);
-        class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
+        if (source_constructor) template_pattern_members.put(key(cls,unsigned(PatternMemberKind::Constructors)),merge_lookup(e,selected));
+        else class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
         e = selected;
     }
     else if (function) e = declare_function(owner, id, source, canonical, false, conversion_target);
@@ -447,7 +450,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;
         classify_transfer(e, special, s);
-        if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
+        if (constructor && !special && !source_constructor) class_facts[entities[cls].class_info].aggregate = false;
     }
     if (calls) virtual_declaration(e, d, init, specs, source, s);
     if (calls && !function && spec_has(specs,KW_CONSTEXPR) && !literal_type(canonical))

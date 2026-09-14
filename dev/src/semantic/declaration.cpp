@@ -146,6 +146,14 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         n = ast.instantiate(n,context); params = ast[n].first;
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
+        // Defaults belong to this inner head occurrence. Keeping an initializer
+        // in the enclosing context would bind references to earlier inner
+        // parameters to their source declarations instead of this head.
+        for (auto d = scopes[ts].first_decl; d; d = declarations[d].next) {
+            auto p = declarations[d].entity;
+            if (entities[p].template_parameter && entities[p].initializer)
+                entities[p].initializer = ast.projected(entities[p].initializer,context);
+        }
     }
     ScopeId saved = active_template_scope; active_template_scope = ts;
     auto saved_explicit = explicit_specialization_source;

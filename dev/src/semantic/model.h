@@ -264,7 +264,12 @@ struct TemplateDefinition {
     std::uint32_t parameters = 0, count = 0, next = 0;
     std::uint32_t selected_next = 0;
     NodeId member_template = 0;
+    std::uint32_t heads = 0, head_count = 0;
     bool checked = false;
+};
+struct TemplateDefinitionHead {
+    EntityId pattern = 0;
+    std::uint32_t parameters = 0, count = 0, depth = 0;
 };
 struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
 struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public; std::uint64_t offset = 0;

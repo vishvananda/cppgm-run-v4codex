@@ -23,6 +23,23 @@ harness.GOOD = {
 'private_definition': '''template<class T>class A{typedef T R;public:template<class U>R f(U);};template<class X>template<class Y>typename A<X>::R A<X>::f(Y y){return y;}int main(){A<int>a;return a.f(7)-7;}''',
 'explicit_member_owner': '''template<class T>struct A{template<class U>int f(U){return 1;}};A<int>a;template<>template<class U>int A<int>::f(U){return 2;}int main(){A<char>b;return a.f(0)+b.f(0)-3;}''',
 }
+harness.GOOD.update({
+'late_class_template_definition': """template<class T>struct A{template<class U>struct B;};template<class X>template<class Y>struct A<X>::B{static int f(){return sizeof(X)*10+sizeof(Y);}};int main(){return A<char>::B<int>::f()-14;}""",
+'late_nested_class_member': """template<class T>struct A{template<class U>struct B;};template<class X>template<class Y>struct A<X>::B{int f();};int g(){A<char>::B<int>b;return b.f();}template<class X>template<class Y>int A<X>::B<Y>::f(){return sizeof(X)*10+sizeof(Y);}int main(){return g()-14;}""",
+'captured_class_argument': """template<class T>struct A{template<class U>struct B{typedef T type;};typedef B<int> C;};int main(){A<char>::C::type x=0;static_assert(sizeof(x)==1,"");return x;}""",
+'body_cast_target': """template<class T>struct A{template<class U>static U const* cast(void const*p){return static_cast<U const*>(p);}};int main(){int i=7;return *A<char>::cast<int>(&i)-7;}""",
+'nested_three_heads': """template<class T>struct A{template<class U>struct B{template<class V>int f(V);};};template<class X>template<class Y>template<class Z>int A<X>::B<Y>::f(Z z){return sizeof(X)*100+sizeof(Y)*10+sizeof(Z)+z;}int main(){A<char>::B<int>b;return b.f(char(3))-144;}""",
+'captured_value_head': """template<class T>struct A{template<T N>struct B;};template<class X>template<X M>struct A<X>::B{int f();};template<class X>template<X M>int A<X>::B<M>::f(){return sizeof(X)+M;}int main(){A<int>::B<3>b;return b.f()-7;}""",
+'nested_alias_signature': """template<class T>struct A{template<class U>struct B{typedef U R;R f();};};template<class X>template<class Y>typename A<X>::template B<Y>::R A<X>::B<Y>::f(){return 7;}int main(){A<int>::B<char>b;return b.f()-7;}""",
+'nested_class_default': """template<class T>struct A{template<class U=T>struct B;};template<class X>template<class Y>struct A<X>::B{int f(){return sizeof(Y);}};int main(){A<char>::B<>b;return b.f()-1;}""",
+})
+harness.GOOD.update({
+ 'converting_template_tie': 'struct A{int n;A(int):n(1){}template<class T>A(T):n(2){}};A f(){return 0;}int main(){return f().n-1;}',
+ 'nested_guard_default': 'template<bool>struct E;template<>struct E<true>{typedef void type;};template<class T>struct A{template<bool M>struct B{int n;B():n(1){}template<bool O=M,class G=typename E<!O>::type>B(B<true>const&b,G * = nullptr):n(b.n){}};};A<int>::B<false> f(A<int>::B<true> const&b){return b;}int main(){A<int>::B<true>b;return f(b).n-1;}',
+'inner_typed_parameter': 'template<class T>struct A{template<class U,U N>int f(){return N+sizeof(T);}};int main(){A<char>a;return a.f<int,6>()-7;}',
+'converting_member_template': 'template<class T>struct A{int n;template<class U>A(U x):n(x+sizeof(T)){};};A<char> f(){return 6;}int main(){return f().n-7;}',
+'nested_value_pack_definition': 'template<class T>struct A{template<T...N>struct B{int f();};};template<class X>template<X...M>int A<X>::B<M...>::f(){return sizeof...(M);}int main(){A<unsigned long>::B<1,2,3>b;return b.f()-3;}',
+})
 harness.BAD = {
 'duplicate_renamed_definition': 'template<class T>struct A{template<class U>int f(U);};template<class T>template<class U>int A<T>::f(U){return 1;}template<class X>template<class Y>int A<X>::f(Y){return 2;}',
 'wrong_head_kind': 'template<class T>struct A{template<class U>int f();};template<class T>template<int N>int A<T>::f(){return 1;}',
@@ -32,6 +49,12 @@ harness.BAD = {
 'wrong_namespace': 'namespace N{template<class T>struct A{template<class U>int f(U);};}namespace M{template<class T>template<class U>int N::A<T>::f(U){return 1;}',
 'duplicate_explicit_owner': 'template<class T>struct A{template<class U>int f(U){return 1;}};template<>template<class U>int A<int>::f(U){return 2;}template<>template<class V>int A<int>::f(V){return 3;}',
 }
+harness.BAD.update({
+'nested_class_wrong_kind': 'template<class T>struct A{template<class U>struct B;};template<class X>template<int N>struct A<X>::B{};',
+'nested_class_duplicate': 'template<class T>struct A{template<class U>struct B;};template<class X>template<class Y>struct A<X>::B{};template<class P>template<class Q>struct A<P>::B{};',
+'nested_missing_head': 'template<class T>struct A{template<class U>struct B{int f();};};template<class T>int A<T>::B<int>::f(){return 1;}',
+'nested_extra_head': 'template<class T>struct A{int f();};template<class T>template<class U>template<class V>int A<T>::f(){return 1;}',
+})
 if __name__=='__main__':
  cc=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else harness.ROOT/'dev/cppgm++'
  work=Path(sys.argv[2]) if len(sys.argv)>2 else Path('/tmp/pa17-head-controls')

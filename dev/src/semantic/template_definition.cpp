@@ -1,5 +1,6 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
+#include <algorithm>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 namespace {
@@ -10,7 +11,14 @@ enum class DefinitionState : unsigned char { NotStarted, Active, Applied, Failed
 std::uint32_t Analyzer::definition_root(EntityId pattern)
 {
     auto id = definition_roots.get(pattern);
-    if (!id) { id = ++definition_path_count; definition_roots.put(pattern,id); }
+    if (!id) {
+        auto scope = entities[pattern].owner;
+        bool partial = entities[pattern].template_info && templates[entities[pattern].template_info].primary;
+        if (scopes[scope].kind == ScopeKind::Class && !partial)
+            id = definition_path(definition_root(scopes[scope].entity),entities[pattern].name);
+        else id = ++definition_path_count;
+        definition_roots.put(pattern,id);
+    }
     return id;
 }
 std::uint32_t Analyzer::definition_path(std::uint32_t parent, IdentifierId name)
@@ -26,7 +34,11 @@ TemplateDefinitionOwner Analyzer::definition_owner(EntityId cls)
     TemplateDefinitionOwner result;
     if (entities[cls].specialization) {
         auto spec = specializations[entities[cls].specialization];
-        result.specialization = cls; result.path = definition_root(spec.definition_pattern ? spec.definition_pattern : spec.pattern);
+        result.specialization = cls;
+        auto enclosing = scopes[entities[cls].owner].kind == ScopeKind::Class ?
+            definition_owner(scopes[entities[cls].owner].entity) : TemplateDefinitionOwner();
+        result.path = enclosing.specialization ? definition_path(enclosing.path,entities[cls].name) :
+            definition_root(spec.definition_pattern ? spec.definition_pattern : spec.pattern);
     } else if (scopes[entities[cls].owner].kind == ScopeKind::Class) {
         result = definition_owner(scopes[entities[cls].owner].entity);
         if (result.specialization) result.path = definition_path(result.path,entities[cls].name);
@@ -55,18 +67,35 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     ScopeId owner = ast[name].op == OP_COLON2 ? global : scopes[s].parent;
     bool qualified = ast[name].op == OP_COLON2;
     EntityId primary = 0;
-    NodeId primary_part = 0;
+    std::vector<ScopeId> source_heads;
+    for (auto scope = s;; scope = scopes[scope].parent) {
+        source_heads.push_back(scope); if (scope == owner_head) break;
+    }
+    std::reverse(source_heads.begin(),source_heads.end());
+    std::vector<EntityId> head_patterns;
+    ScopeId binding_owner = 0;
     std::uint32_t path = 0;
     IdentifierId previous = 0;
     for (auto p = ast[name].first; p && p != ast[name].last; p = ast[p].next) {
         if (primary) {
-            if (ast[p].text != previous) path = definition_path(path,ast[p].text);
+            if (ast[p].text == previous) continue;
+            auto nested = lookup(binding_owner,ast[p].text,Lookup::Qualifier,true);
+            if (!nested) throw std::runtime_error("unknown nested definition owner");
+            if (entities[nested].template_info && child(p,Kind::TemplateArguments)) {
+                if (head_patterns.size() == source_heads.size()) throw std::runtime_error("missing enclosing template head");
+                nested = template_definition_pattern(nested,p,source_heads[head_patterns.size()]);
+                head_patterns.push_back(nested);
+            }
+            binding_owner = target(nested);
+            if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
+            path = definition_path(path,ast[p].text);
             previous = ast[p].text; continue;
         }
         auto e = lookup(owner,ast[p].text,Lookup::Qualifier,qualified);
         if (e && entities[e].class_info && entities[e].template_info && child(p,Kind::TemplateArguments)) {
             if (!dependent_template_syntax(child(p,Kind::TemplateArguments),s)) return false;
-            primary = template_definition_pattern(e,p,owner_head); primary_part = p;
+            primary = template_definition_pattern(e,p,owner_head);
+            head_patterns.push_back(primary); binding_owner = entities[primary].scope;
             path = definition_root(primary); previous = ast[p].text;
         } else {
             owner = target(e); qualified = true;
@@ -75,13 +104,16 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     }
     if (!primary) return false;
     if (!encloses(scopes[owner_head].parent,entities[primary].owner)) throw std::runtime_error("template member outside enclosing namespace");
-    TemplateDefinition def; def.source = n; def.member_template = member_template; def.parameters = template_parameters.size();
-    for (auto p = scopes[owner_head].first_decl; p; p = declarations[p].next) {
-        auto e = declarations[p].entity;
-        if (entities[e].template_parameter) {
-            parameter_ordinals.put(e,def.count+1); template_parameters.push_back(e); ++def.count;
-        }
-    }
+    if (source_heads.size() < head_patterns.size() || source_heads.size() > head_patterns.size()+1)
+        throw std::runtime_error("template definition has unmatched heads");
+    if (source_heads.size() == head_patterns.size()) member_template = 0;
+    else for (unsigned j = 1; j < head_patterns.size(); ++j)
+        member_template = ast[ast[member_template].first].next;
+    TemplateDefinition def; def.source = n; def.member_template = member_template;
+    def.heads = template_definition_heads.size(); def.head_count = head_patterns.size();
+    for (unsigned j = 0; j < def.head_count; ++j) retain_definition_head(source_heads[j],head_patterns[j],j);
+    def.parameters = template_definition_heads[def.heads].parameters;
+    def.count = template_definition_heads[def.heads].count;
     std::uint64_t definition_bucket = 0;
     std::uint32_t retained = 0; IdentifierId definition_name = 0;
     do {
@@ -102,21 +134,19 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         item = ast[item].next;
         if (item) { d = ast[item].first; name = decl_name(d); }
     } while (item);
-    // Definition-time lookup sees this head's parameters over the owning
-    // pattern class. The overlay contains only the declared parameters.
-    ScopeId binding_owner = entities[primary].scope;
-    IdentifierId previous_name = ast[primary_part].text;
-    for (auto p = ast[primary_part].next; p && p != ast[name].last; p = ast[p].next) {
-        if (ast[p].text == previous_name) continue;
-        auto nested = lookup(binding_owner,ast[p].text,Lookup::Qualifier,true);
-        binding_owner = target(nested); previous_name = ast[p].text;
-        if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
-    }
-    auto environment = make_scope(ScopeKind::Template,binding_owner,0,0,false);
-    definition_source_parameters.put(environment,def.parameters+1);
-    for (unsigned j = 0; j < def.count; ++j) {
-        auto parameter = template_parameters[def.parameters+j];
-        bind(environment,entities[parameter].name,parameter);
+    // Each source head is a distinct immutable overlay over the selected
+    // lexical class owner. Inner and enclosing ordinals never share identity.
+    ScopeId environment = binding_owner;
+    for (unsigned j = 0; j < def.head_count; ++j) {
+        auto id = def.heads+j; auto head = template_definition_heads[id];
+        environment = make_scope(ScopeKind::Template,environment,0,0,false);
+        definition_source_heads.put(environment,id);
+        definition_source_parameters.put(environment,head.parameters+1);
+        for (unsigned i = 0; i < head.count; ++i) {
+            auto parameter = template_parameters[head.parameters+i];
+            bind(environment,entities[parameter].name,parameter);
+            record(environment,parameter,0,entities[parameter].type,entities[parameter].kind);
+        }
     }
     if (member_template) {
         auto inner = make_scope(ScopeKind::Template,environment);
@@ -135,10 +165,13 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
             if (!nested || !entities[nested].template_info) throw std::runtime_error("member class template was not declared");
             auto old = templates[entities[nested].template_info];
             if (old.body) throw std::runtime_error("member class template redefinition");
+            if (template_owner_shape(old.environment,{}) != template_owner_shape(environment,{}))
+                throw std::runtime_error("member class template head mismatch");
             template_facts(nested,environment);
             auto index = entities[nested].template_info;
             if (templates[index].count != old.count) throw std::runtime_error("member class template head mismatch");
             templates[index].body = n; templates[index].source = n;
+            merge_template_defaults(nested,environment,old.environment);
             template_source_heads.put(ast.nodes.occurrences[member_template].source,index);
         }
         bind_template_class(n,environment,nested);
@@ -220,35 +253,10 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto saved_defaults = declaration_defaults.size();
         try {
         auto def = template_definitions[id];
-        auto selection = specializations[entities[owner.specialization].specialization];
-        auto pack = argument_packs[selection.definition_arguments ? selection.definition_arguments : selection.arguments];
         ScopeId environment = make_scope(ScopeKind::Template,entities[e].owner);
-        for (unsigned j = 0; j < def.count; ++j) {
-            auto p = template_parameters[def.parameters+j];
-            bind_argument(environment,p,argument_types[pack.offset+j]);
-        }
         auto context = ast.new_context();
         auto source = ast.instantiate(def.member_template ? def.member_template : def.source,context);
-        auto specialization = entities[owner.specialization].specialization;
-        auto head = templates[entities[selection.definition_pattern ? selection.definition_pattern : selection.pattern].template_info];
-        auto parent = substitution_frame(specialization,head.offset,head.count);
-        // A nested class definition can introduce aliases under another head.
-        // Preserve those source parameter identities in parent-linked frames.
-        std::vector<std::uint32_t> parents;
-        for (auto scope = facts[def.declarator].scope; scope; scope = scopes[scope].parent) {
-            auto parameters = definition_source_parameters.get(scope);
-            if (parameters && parameters-1 != def.parameters && parameters-1 != head.offset)
-                parents.push_back(parameters-1);
-        }
-        auto source_frame = [&](std::uint32_t parameters, std::uint32_t parent) {
-            if (selection.definition_pattern == selection.pattern || !selection.definition_pattern)
-                return substitution_frame(specialization,parameters,def.count,parent);
-            // A selected tuple plus a retained parameter slice gives O(1)
-            // ordinal lookup even for a wide partial-owner head.
-            return substitution_frame(specialization,parameters,def.count,parent,selection.definition_arguments);
-        };
-        for (auto p = parents.rbegin(); p != parents.rend(); ++p) parent = source_frame(*p,parent);
-        auto frame = source_frame(def.parameters,parent);
+        auto frame = definition_frame(def,owner.specialization,environment);
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         active_template_scope = 0; member_definition_environment = environment;

@@ -736,6 +736,10 @@ private:
     Index definition_traversals, unmatched_definitions;
     Index definition_source_parameters;
     std::vector<TemplateDefinition> template_definitions = std::vector<TemplateDefinition>(1);
+    std::vector<TemplateDefinitionHead> template_definition_heads = std::vector<TemplateDefinitionHead>(1);
+    Index definition_source_heads;
+    std::uint32_t retain_definition_head(ScopeId scope, EntityId pattern, unsigned depth);
+    std::uint32_t definition_frame(const TemplateDefinition& definition, EntityId owner, ScopeId environment);
     std::vector<TemplateDefinitionOwner> definition_owners = std::vector<TemplateDefinitionOwner>(2);
     std::vector<EntityId> storage_demand;
     std::uint32_t definition_path_count = 0;

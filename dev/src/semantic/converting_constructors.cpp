@@ -16,6 +16,10 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
     for (EntityId e : candidates(class_facts[entities[cls].class_info].constructor)) {
         if (!e) continue;
         ++candidate_work;
+        if (entities[e].template_info) {
+            e = deduce_function(e,std::vector<Expression>{source});
+            if (!e) continue;
+        }
         auto m = members[entities[e].member_info];
         Type f = types[entities[e].type];
         if (m.explicit_constructor || (!f.count && !f.variadic) || (f.count > 1 &&
@@ -25,11 +29,18 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
         if (argument.valid()) viable.push_back({e, argument});
     }
     if (viable.empty()) return result;
+    auto preferred = [&](std::size_t a, std::size_t b) {
+        auto x = &viable[a].argument, y = &viable[b].argument;
+        if (better(x,y,1)) return true;
+        if (better(y,x,1)) return false;
+        auto ea = viable[a].entity, eb = viable[b].entity;
+        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb);
+    };
     std::size_t best = 0;
     for (std::size_t j = 1; j < viable.size(); ++j)
-        if (better(&viable[j].argument, &viable[best].argument, 1)) best = j;
+        if (preferred(j,best)) best = j;
     for (std::size_t j = 0; j < viable.size(); ++j)
-        if (j != best && !better(&viable[best].argument, &viable[j].argument, 1)) {
+        if (j != best && !preferred(best,j)) {
             result.ambiguous = true; return result;
         }
     result.kind = Conversion::Kind::Construction; result.rank = 5;
