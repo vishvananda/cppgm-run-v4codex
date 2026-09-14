@@ -49,12 +49,20 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         d = nested ? ast[nested].first : 0;
     }
     std::vector<NodeId> expanded;
+    bool has_pack = false;
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind != syntax::Kind::Parameter) continue;
         auto occurrence = ast.projected(p,context);
         if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
         auto type = facts[p].type;
         if (child(ast[ast[p].first].next,syntax::Kind::ParameterPack)) {
+            if (!has_pack) {
+                // Ordinary parameter lists retain their projected source edges;
+                // allocate an override only when a pack changes the topology.
+                for (auto q = ast[parameters].first; q != p; q = ast[q].next)
+                    if (ast[q].kind == syntax::Kind::Parameter) expanded.push_back(ast.projected(q,context));
+                has_pack = true;
+            }
             auto params = expansion_parameters(type);
             auto count = expansion_count(params,bindings,frame);
             if (count < 0) throw std::runtime_error("unbound function parameter pack");
@@ -69,7 +77,7 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
             }
             continue;
         }
-        expanded.push_back(occurrence);
+        if (has_pack) expanded.push_back(occurrence);
         if (facts[occurrence].type) continue;
         if (!type) throw std::logic_error("missing retained template parameter type");
         auto concrete = substitute_type(type,bindings,cache,frame);
@@ -77,7 +85,7 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         { auto& published = facts.edit(occurrence); published.type = concrete; published.scope = environment; }
         ++parameter_publications;
     }
-    ast.expanded_children(ast.projected(parameters,context),expanded);
+    if (has_pack) ast.expanded_children(ast.projected(parameters,context),expanded);
 }
 ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
 {

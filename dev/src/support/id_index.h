@@ -8,6 +8,7 @@ class IdIndex {
     std::vector<Slot> slots;
     std::size_t used = 0;
 public:
+    bool empty() const { return used == 0; }
     std::uint32_t get(std::uint64_t key) const;
     void put(std::uint64_t key, std::uint32_t value);
 };

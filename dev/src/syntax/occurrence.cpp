@@ -15,9 +15,11 @@ Node Ast::project_view(NodeId id) const
         result.first = projected(result.first,context); result.last = projected(result.last,context);
         result.next = projected(result.next,context); result.detail = projected(result.detail,context);
     }
-    if (auto first = expanded_first.get(id)) result.first = first-1;
-    if (auto last = expanded_last.get(id)) result.last = last-1;
-    if (auto next = expanded_next.get(id)) result.next = next-1;
+    if (!expanded_first.empty()) {
+        if (auto first = expanded_first.get(id)) result.first = first-1;
+        if (auto last = expanded_last.get(id)) result.last = last-1;
+        if (auto next = expanded_next.get(id)) result.next = next-1;
+    }
     return result;
 }
 void Ast::expanded_children(NodeId parent, const std::vector<NodeId>& children)
