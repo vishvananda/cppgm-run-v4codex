@@ -1,0 +1,658 @@
+{
+  "review_start": "438d56b164600f4fa19d25dcb5f09a76e2a79776",
+  "entry_commit": "57bac58da0ddc3a62627749d5f111387697f1999",
+  "code_tip": "7c39a6edbfa43c226036b8a92fe236722ac85dcc",
+  "reviewed_commits": [
+    "d7594d638616fc9af5de0fb68a6756577602a3e4",
+    "482c6b4448cfee68c954eb15f1d978a36bc3ad14",
+    "7484f22b934b646c3880c3d46a51d62a7b2e094d",
+    "cc8427563857dcea2dfcf2496240b5a27b996cfc",
+    "4aab464e439af36abfdc186b18f64714e7306459",
+    "66f123ab27754276bfb4000df0d08185c8750793",
+    "e85d39a990c764e89442c0c23f1fcfc33f98da7a",
+    "c2ccf2d59dc97f7b8401a687a6a693292b44a8e4",
+    "65c09c3b5c1080758e3c0eeb1efdaef9c958f5c6",
+    "3ff1c1dbd28c051c70a024cf0d5f594367156515",
+    "3a83696403d7668c0d86882a2e3e17a8636f8479",
+    "57bac58da0ddc3a62627749d5f111387697f1999",
+    "83536144d20f292d019959838d7dc23af5cf519b",
+    "7c39a6edbfa43c226036b8a92fe236722ac85dcc"
+  ],
+  "source_files": [
+    {
+      "path": "dev/frontend_source_sets.mk",
+      "sha256": "afc60d20781948f8c37607dde9195f13a1174f3889e38bb435da6d917675c0f6"
+    },
+    {
+      "path": "dev/src/lowering/constant_array.cpp",
+      "sha256": "53b699cf3201ca5ed7eb48ba967097936eaf5733da36a63795b74a9b86f11dc6"
+    },
+    {
+      "path": "dev/src/lowering/destruction.cpp",
+      "sha256": "e0948225e2435e9a28831a710ce3cb59d828542298aaf8374830adc8177be669"
+    },
+    {
+      "path": "dev/src/lowering/driver.cpp",
+      "sha256": "761d94664de0b28e9017d16b0808448fd5c02493975f54af344770956fd56a12"
+    },
+    {
+      "path": "dev/src/lowering/expression.cpp",
+      "sha256": "67178fc3abb70ccfdb8ac8e82fd49943843f8cdc9c98e75d303c5c941d3de65e"
+    },
+    {
+      "path": "dev/src/lowering/global_initialization.cpp",
+      "sha256": "19ca38327bf26cbff524fd497031ace37837b35fdcc0b7f0d019ddd40fbd5bc9"
+    },
+    {
+      "path": "dev/src/lowering/initialization.cpp",
+      "sha256": "b81d443f6e4380632d74401aafca8dd5a50763ff09c73c91fb032a11965215dd"
+    },
+    {
+      "path": "dev/src/lowering/initializer_plan.cpp",
+      "sha256": "93f7cdc566918cfce05896bc98f373fdb74ae8a35461457d9b6075f8a9dcf866"
+    },
+    {
+      "path": "dev/src/lowering/local_static.cpp",
+      "sha256": "4efbfabca787a88ac1c9f652e27bef980815a0d34bbc7332dd0a34206266263f"
+    },
+    {
+      "path": "dev/src/lowering/procedural.h",
+      "sha256": "381ff52d81b26f53ede9248122514d885ca75dba278758d7b673abef535905c7"
+    },
+    {
+      "path": "dev/src/lowering/symbols.cpp",
+      "sha256": "683f83513acd0883e7010261acbcc8293fa5104f47d26cba25cc52ba2e68c45c"
+    },
+    {
+      "path": "dev/src/semantic/analyzer.h",
+      "sha256": "037160e0b38a2fc057fc212664ef31ce0319338bcf2021e7b73f5167eeddbdd3"
+    },
+    {
+      "path": "dev/src/semantic/class_enum.cpp",
+      "sha256": "ef76f6e7cc7dd1cf54f6b1021e2d2621b639ccacb34bd627506b938e72ab031c"
+    },
+    {
+      "path": "dev/src/semantic/constant.cpp",
+      "sha256": "b940d9600631b1cede9558337e6fe0277b81e5a89e5489fb8a9799691acd03ba"
+    },
+    {
+      "path": "dev/src/semantic/constant_array.cpp",
+      "sha256": "1ca14680823afd6c8546d28ebea481821959004c43c5b1c2df48ed8175de0c43"
+    },
+    {
+      "path": "dev/src/semantic/constant_execution.cpp",
+      "sha256": "2ba28518cdca5486482ecced027cce158981d5405ce422b0fb9d90a6d7923ecb"
+    },
+    {
+      "path": "dev/src/semantic/constant_floating.cpp",
+      "sha256": "d3b34b5c7af44a51d155e8fc4374c886f65d3c280ed0a02453094b4b746e4726"
+    },
+    {
+      "path": "dev/src/semantic/constant_statements.cpp",
+      "sha256": "4592a4d53a7d57c1fdad35a90e541689368880d0027fc8d66ba369854a9e2860"
+    },
+    {
+      "path": "dev/src/semantic/constexpr_validity.cpp",
+      "sha256": "bbf1aed2b0e4065b1ecf6c2ddf1dd2291287ca5b26092cef2a4c91a4cba1c571"
+    },
+    {
+      "path": "dev/src/semantic/declaration.cpp",
+      "sha256": "357c98c63dd5fd6112bfefac51a2fa232039813331b92d76e6a3abc2aa0dbd0b"
+    },
+    {
+      "path": "dev/src/semantic/destruction.cpp",
+      "sha256": "277aa65b35940cf9465b0f1f120e0ad54ad66d8e2b8897e1dae9b155d1fee47e"
+    },
+    {
+      "path": "dev/src/semantic/exception_expression.cpp",
+      "sha256": "78c23ad9a64c3d198b21acadf96926b52eb1bd728092f2235a99658db0a25e68"
+    },
+    {
+      "path": "dev/src/semantic/exception_specification.cpp",
+      "sha256": "0a6ca54e3f832a44f29349da8c0d62388ebffab0e2c4fa8a504319b723dc5359"
+    },
+    {
+      "path": "dev/src/semantic/expression.cpp",
+      "sha256": "e6b7fab1274299f255077d297a1266a5a15a5ade11dcfe65054d7c95007da8bc"
+    },
+    {
+      "path": "dev/src/semantic/lookup.cpp",
+      "sha256": "7604f325f94093e13bf840b6a692f9b9a49f16a48c26a6468d036fe5b79bef62"
+    },
+    {
+      "path": "dev/src/semantic/model.h",
+      "sha256": "c13055a622e25a5ff2d71fa696ff64afc8d1723e4becf065fca04bd1d9e54bd3"
+    },
+    {
+      "path": "dev/src/semantic/output.cpp",
+      "sha256": "62c61a3054fad892e58d30ad310f28b101d7eb5063de64cb3b265fefdddf4e00"
+    },
+    {
+      "path": "dev/src/semantic/query_new.cpp",
+      "sha256": "dd1be8e7ccf135b3b1be50ca6563cfcb07835a9cd6f4d8ba39dad6652a89b94f"
+    },
+    {
+      "path": "dev/src/semantic/static_initialization.cpp",
+      "sha256": "c764c9657c3d7470ead741bf897e842a848b338e71b0a0daeeb5598c6e92f5c6"
+    },
+    {
+      "path": "dev/src/semantic/static_initializer.cpp",
+      "sha256": "a4c40fdcf55ecc7131b160d5729432eefcc2427e9ba0b59682da17f52ffeadc1"
+    },
+    {
+      "path": "dev/src/semantic/template_binding.cpp",
+      "sha256": "2975f19a072a86ae620ba5c67fd267790c7d17fddcef35d1f7198e0a1afd9f88"
+    },
+    {
+      "path": "dev/src/semantic/template_binding_declarations.cpp",
+      "sha256": "8f57e9a877821986fb91e31c7925df4416072b9c9767dca63fc9f7cb0c661eee"
+    },
+    {
+      "path": "dev/src/semantic/template_checks.cpp",
+      "sha256": "006506a464fdba2fc3901d212c7f1ef695317b7a8e33bcee3e0ff96f529a1f79"
+    },
+    {
+      "path": "dev/src/semantic/template_value_facts.cpp",
+      "sha256": "b47caea3afbd52870ce10a465511dd47c6bc2bfeec9156ab1312b636e788b3bb"
+    },
+    {
+      "path": "dev/src/semantic/type_builder.cpp",
+      "sha256": "33b3c642e42ad97ed126e45d4260bae40df960e60b65bf02ebd8ad0aadbb7259"
+    },
+    {
+      "path": "dev/src/semantic/type_query.cpp",
+      "sha256": "0f868c9453b6a09e9b4669b0fa4e4d46c9eb3e9b3957eb29fbdbcaa1ef81e7ad"
+    },
+    {
+      "path": "dev/src/syntax/class_parser.cpp",
+      "sha256": "ac33ce07f9d654ffdb295a9b58f8b67ad264d77932116ae06a08f3651220d12d"
+    },
+    {
+      "path": "dev/src/syntax/names.cpp",
+      "sha256": "54f7e2783da3b87a1b4ff3f7447cb580cad98fb836c4f19dea7c27e4d5511575"
+    },
+    {
+      "path": "dev/src/syntax/prediction.cpp",
+      "sha256": "dfaa8f19ae218f47e03e51284faa9608c4c42ef2253a8009ae668551f6c871bc"
+    }
+  ],
+  "compiler": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/reviewed-cppgm++",
+    "sha256": "7f3b39ee21c6e4f9ac3f8e361bb9843c6b98e4ff9935800c1233d642131a46f1"
+  },
+  "logs": {
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/entry-stage.log",
+      "sha256": "b2e2954335482ae2c5c0dac9de19aeec081e07400866f730564f73636e957845"
+    },
+    "stage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/stage-final.log",
+      "sha256": "c5702d74a8c4257be02a1dc90aa7ad997b58c5d0f5e74439d9ca926d3dbb45c7"
+    },
+    "prior": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/prior-final.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f"
+    },
+    "through": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/through-final.log",
+      "sha256": "adc66e65f3d2a4a1f1e4324798ce7c4eddbbd74dfe6bf79ec1d02817da4cd407"
+    },
+    "file_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/file-audit-final.log",
+      "sha256": "abbc0b19c03c522f1d1a52698772f0f70c5f72f3c55e024183371bc62b6cde1c"
+    },
+    "controls": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls-final.log",
+      "sha256": "e9516553514a70396edbd6abc7624b6981a606e318a3cf1b3ea0542028215389"
+    },
+    "scalar_execution": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/scalar_execution-final.log",
+      "sha256": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506"
+    },
+    "floating": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/floating-final.log",
+      "sha256": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c"
+    },
+    "storage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/storage-final.log",
+      "sha256": "9da046f263c918aa7b0eaa61f346f67c4c20df693e1960dd6bbfbbcd353f1f5a"
+    },
+    "noexcept": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/noexcept-final.log",
+      "sha256": "4c5a53d4cc247adb3d4c550718f629bb3280b0b1bb20c8ddfbe667012b7279ae"
+    },
+    "validity": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/validity-final.log",
+      "sha256": "913e5b1d5cda45d99f0dbc815301f0ff13ab453c99fc799f3c91efc21a5644d5"
+    }
+  },
+  "checks": {
+    "priorThroughTests": {
+      "command": "n=16; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "passed": 2112,
+      "total": 2112
+    },
+    "stageTests": {
+      "command": "make test-pa16",
+      "exit_code": 2,
+      "passed": 93,
+      "total": 154
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa16 --paths dev/src",
+      "exit_code": 0
+    },
+    "stageProgressPreserved": {
+      "passed": true,
+      "entry_failures": 61,
+      "current_failures": 61,
+      "new_failures": 0,
+      "coverage_unchanged": true
+    },
+    "through": {
+      "command": "make test-report-through-pa16",
+      "exit_code": 2,
+      "passed": 2205,
+      "total": 2266
+    }
+  },
+  "remaining_failures": [
+    "pa16/tests/general/100-constexpr-function-pointer-reference-call.t",
+    "pa16/tests/general/100-constexpr-reference-unknown-value.t",
+    "pa16/tests/general/100-inline-namespace-aggregate-member-value.t",
+    "pa16/tests/general/200-constexpr-base-subobject-crtp-roundtrip.t",
+    "pa16/tests/general/200-constexpr-callable-parameter-shadows-function.t",
+    "pa16/tests/general/200-constexpr-copy-empty-static-reference.t",
+    "pa16/tests/general/200-constexpr-overloaded-assignment-reference.t",
+    "pa16/tests/general/300-bad-constexpr-aggregate-runtime-member.t",
+    "pa16/tests/general/300-constexpr-aggregate-array.t",
+    "pa16/tests/general/300-constexpr-base-copy-constructor-init.t",
+    "pa16/tests/general/300-constexpr-class-base-pack-constructor.t",
+    "pa16/tests/general/300-constexpr-constructor-instantiating-initializer.t",
+    "pa16/tests/general/300-constexpr-constructor.t",
+    "pa16/tests/general/300-constexpr-defaulted-constructor.t",
+    "pa16/tests/general/300-constexpr-delegating-constructor-use.t",
+    "pa16/tests/general/300-constexpr-hidden-friend-converting-argument.t",
+    "pa16/tests/general/300-constexpr-member-implicit-const.t",
+    "pa16/tests/general/300-constexpr-object-reference-binding.t",
+    "pa16/tests/general/300-constexpr-protected-base-constructor.t",
+    "pa16/tests/general/300-constexpr-recursive-arrow-member-call.t",
+    "pa16/tests/general/300-constexpr-repeated-base-subobject-call-key.t",
+    "pa16/tests/general/300-constexpr-template-aggregate-subscript-member.t",
+    "pa16/tests/general/300-static-constexpr-call-demand.t",
+    "pa16/tests/general/300-static-constexpr-pointer-member-lvalue-to-rvalue.t",
+    "pa16/tests/general/400-constexpr-class-bool-conversion.t",
+    "pa16/tests/general/400-constexpr-dependent-nonliteral-result-instantiation.t",
+    "pa16/tests/general/400-constexpr-derived-this-base-reference.t",
+    "pa16/tests/general/400-constexpr-function-aggregate-member-nttp.t",
+    "pa16/tests/general/400-constexpr-implicit-default-init.t",
+    "pa16/tests/general/400-constexpr-local-default-object-member-call.t",
+    "pa16/tests/general/400-constexpr-method.t",
+    "pa16/tests/general/400-constexpr-mutable-static-object-address.t",
+    "pa16/tests/general/400-constexpr-noexcept-decltype-static-assert.t",
+    "pa16/tests/general/400-constexpr-overloaded-unary-member-operator.t",
+    "pa16/tests/general/400-constexpr-pointer-truthiness.t",
+    "pa16/tests/general/400-constexpr-polymorphic-global-vptr-init.t",
+    "pa16/tests/general/400-constexpr-reference-parameter-address-identity.t",
+    "pa16/tests/general/400-constexpr-reference-parameter-temporary-address-bad.t",
+    "pa16/tests/general/400-constexpr-reference-static-object-alias.t",
+    "pa16/tests/general/400-constexpr-return-operator-conversion.t",
+    "pa16/tests/general/400-constexpr-static-array-pointer-loop-increment.t",
+    "pa16/tests/general/400-constexpr-subobject-pointer-identity.t",
+    "pa16/tests/general/400-constexpr-temporary-functor-member-call.t",
+    "pa16/tests/general/400-constexpr-validation.t",
+    "pa16/tests/general/400-dependent-class-prvalue-default-bool-nttp.t",
+    "pa16/tests/general/400-own-static-constexpr-member-call-nttp.t",
+    "pa16/tests/general/400-pack-expanded-static-constexpr-array-member.t",
+    "pa16/tests/general/400-template-constexpr-conversion-static-member.t",
+    "pa16/tests/general/400-typedef-qualified-static-constexpr-call-nttp.t",
+    "pa16/tests/spec/100-constexpr-signed-widening-comparison.t",
+    "pa16/tests/spec/300-constexpr-callable-object-and-arrow.t",
+    "pa16/tests/spec/300-constexpr-const-by-value-template-parameter.t",
+    "pa16/tests/spec/300-constexpr-contextual-bool-operators.t",
+    "pa16/tests/spec/300-constexpr-forwarded-user-conversion-in-member-initializer.t",
+    "pa16/tests/spec/300-constexpr-function-template-operator-call.t",
+    "pa16/tests/spec/300-constexpr-overloaded-logical-operators.t",
+    "pa16/tests/spec/300-constexpr-pointer-member-call-null-conditional.t",
+    "pa16/tests/spec/300-static-constexpr-constructor-class-array-member.t",
+    "pa16/tests/spec/400-constexpr-function-and-constructor.t",
+    "pa16/tests/spec/400-constexpr-pointer-beyond-one-past-bad.t",
+    "pa16/tests/spec/400-constexpr-reference-parameter-conversion-constructor.t"
+  ],
+  "campaigns": [
+    {
+      "path": "student.tests/pa16/audit-accumulated-performance.json",
+      "sha256": "a11b659ed5aca669de0f5d92675bb6b07e1da4880c237df75a2c14c3a60d9f74"
+    },
+    {
+      "path": "student.tests/pa16/audit-accumulated-repeat.json",
+      "sha256": "6ffdb68e2d51c1c06f98398ea2df81e5f4d7315ce697cac6c347559c0b7f418c"
+    },
+    {
+      "path": "student.tests/pa16/audit-checkpoint-performance.json",
+      "sha256": "79d7c5ff82e952e339a2e9b67d4b39b2a94f5286fea1be1f4456b6dabacae896"
+    }
+  ],
+  "observations": 854,
+  "historical": [
+    {
+      "path": "student.tests/pa16/handoff.json",
+      "sha256": "cc9b999b64f042a21b31a819606cd3601331e044800ee2778008353d738367b1",
+      "commit": "cc8427563857dcea2dfcf2496240b5a27b996cfc"
+    },
+    {
+      "path": "student.tests/pa16/storage-handoff.json",
+      "sha256": "af4e99966cbe52c1ff475961c33a6af927429efedde5fdaeb27a9755f323036a",
+      "commit": "c2ccf2d59dc97f7b8401a687a6a693292b44a8e4"
+    },
+    {
+      "path": "student.tests/pa16/validity-handoff.json",
+      "sha256": "e40dab104bda0b706a72b216140836d65e8386093f87e2765ffc071a3a0c0d08",
+      "commit": "57bac58da0ddc3a62627749d5f111387697f1999"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "pa16/audit.md",
+      "sha256": "39f8660808c2a3b46b46b5ee35bcde8adb0f6833410aea8a1d31fe693cf3f672"
+    },
+    {
+      "path": "pa16/audit-performance.md",
+      "sha256": "2bd277d19adcf8498f2949ee7672c5faa11e57a098e40ae5572734bafab583e8"
+    },
+    {
+      "path": "pa16/performance.md",
+      "sha256": "5ece4eac0e911ae8ca5d0a106ef4bb52c5f0f20fc345d23ba6f3f931bfb88cd5"
+    },
+    {
+      "path": "pa16/storage-performance.md",
+      "sha256": "e7368f81fd71ef32e97fc5ba5eaff15bb8159f7799bf72e86016850f52a05aa6"
+    },
+    {
+      "path": "pa16/validity-performance.md",
+      "sha256": "9132636fffdd05a9d4b126671ac9893f45a61de0bd44fe302a237345a89dab5f"
+    },
+    {
+      "path": "student.tests/pa16/audit_controls.py",
+      "sha256": "0581fdcd1f7a706b394e2142f04eb75b31272aedabaa25bb7a326911a479bdf3"
+    },
+    {
+      "path": "student.tests/pa16/audit_benchmark.py",
+      "sha256": "514779f5764443c23fcdca22404a3c11d7f1351a8a36d6c994a296dac3e2c153"
+    },
+    {
+      "path": "student.tests/pa16/verify_audit.py",
+      "sha256": "95878770a09264d446f7f292aaa59fd8e061b2c7586c789e3c02415f18d844d3"
+    },
+    {
+      "path": "student.tests/pa16/storage_benchmark.py",
+      "sha256": "4562787321ac386b1c88b8fd9c562198896f8de012ccaa5ea0111bb55496627a"
+    },
+    {
+      "path": "student.tests/pa16/storage-noise.json",
+      "sha256": "89b3a3f0157edcdf1f6a0354ebb58827dd88ca2f6c1ce44d0438c6f82664c90e"
+    },
+    {
+      "path": "student.tests/pa10/benchmark.py",
+      "sha256": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/entry-cppgm++",
+      "sha256": "fd480b5bf68618f12691828b2bc6e921bca2b2092682efe796b5c2989a30d3d5"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/entry-probes.json",
+      "sha256": "cc7af20190ea0145b3265b42238becd33cdf1c70d828bf6b61fe88e73e292995"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/entry-demand-probes.json",
+      "sha256": "e1af4841b72c767a61cc3bf7a95b053c52ea26d0d9baa6cea2af0cd35bfa9c0b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/entry-conversion-probes.json",
+      "sha256": "0ad28fc332363fee4d2650f675270519612261a47875f3899cf92347aab17e1e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/rounding-trial-results.json",
+      "sha256": "37621485cb00ee193e169b0b9648e450717bc8c04d703c489afbc989dc206cf7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/rounding-trial-controls.log",
+      "sha256": "489f2548e2be5a8a5a004633e1a8567e6d5712cc667c75b0a92e497de32e79ac"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/commit-review.txt",
+      "sha256": "d87d469103f66296ae2f15749e08272fde6025d59303ed2b9387b38ff4d5bc01"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/build-final.log",
+      "sha256": "f89ba24506b9033e2d16e346e5fb3b5ff73f85b183cd6a2f84eddd5307d242c2"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/round-code.bin",
+      "sha256": "0e3ac47625bb18a577e87f5658a8f517225cf7f8dc1a06bb424421b4ccdced6a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/results.json",
+      "sha256": "c7c92001bedccfb85eadd544e5223b8824d6f97ee515f17bca051dbd655377e1"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/implicit_float_overflow.cpp",
+      "sha256": "b16a232c56644c8ad90271bceb1d960cef2074b36297b61a32c3eba2ed63186d"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_effectful_ctor.cpp",
+      "sha256": "4ffe794817b5c2f5e57555e903585fef9a1f1e83151c2201f831400a08a6835c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/long_double_operations.cpp",
+      "sha256": "af3c4ceea46c158558a98691e7597fc03ddb18f287a1e9b8aa35f6c484255217"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/depth_boundary.cpp",
+      "sha256": "90225a52fd543b74a0113602aa9f1ca0e6162c6e66136cb2a793e1bd13ab6b99"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/source_to_native.cpp",
+      "sha256": "9ce43464a0b18d7b1017f95f7635956d2c93ba477d5d0c1831b01d3df04196c3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/omitted_exception.cpp",
+      "sha256": "632327963ff02f54cc3a0e4e0452f928dc165fa61bf5a5e577d2af3676a856a3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_multiple.cpp",
+      "sha256": "7bb399c08d277605d54fe2beee4c029ef9510ef31f77294748d7e91cd0912874"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_round.cpp",
+      "sha256": "045ba56095f382ec5829dcbf2aa921118058057ed4615fb62492d07e96f3d8b7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/implicit_unsigned_negative.cpp",
+      "sha256": "dacf3a60d0886d050614de676850e4c67ac6c4e30d382d9470747de6e9ed6e25"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_ctor.cpp",
+      "sha256": "3ba8d50a9863108d576b9e21047ef9951b497b490f62ff7d6845f12ed3ff2152"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/default_spec_body.cpp",
+      "sha256": "b634133de360bb3dab61eec2888f69c72fd9161e64795689c66ee6d41efa335f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_default_body.cpp",
+      "sha256": "442123742efb095c14d520eebc14913510db719ae7e8193fa7ca539566c9940a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/implicit_int_overflow.cpp",
+      "sha256": "3353d72daf81b17d14bab5ce8786f02f665d0f5ff032a94559c5cae9952278a7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/array_strings.cpp",
+      "sha256": "af79644472119edefbe7462739e07b5b2b0d13ea3b7e66727125521d7b7aa8d1"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_then_body.cpp",
+      "sha256": "14b66b33cd60b08af8a20649b5a895b78a7ea71d45476245efaf117d0c9db9fc"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_scalar.cpp",
+      "sha256": "d5e18a6b6c2a6f17fadeb85c65668e7690c139ca1b2f6c715c86bd851a611350"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_template.cpp",
+      "sha256": "c7fd0c3fb44b95ba91bba92cf2440140e653880780937517fadf0be453cb422c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/missing_empty_ctor.cpp",
+      "sha256": "7da25d40ef3f87f2f327c96c3fdf383136b2f624a975f0d16c0baec95419d391"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/float_operations.cpp",
+      "sha256": "5591ae518ae6e7792d8ed6c3703fe71d2b00643e8971a92d402949f0571ae6a1"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/depth_exhaustion.cpp",
+      "sha256": "dd398b0f213efe54c997aa5f5700eb31e2cda9d5568fd25319a67a021fe3363f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/body_then_spec.cpp",
+      "sha256": "41444b5c9d0d76144aceb7cbce80a97e215d6057abebb10d5f29d7deb8a09b7b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_subtract.cpp",
+      "sha256": "b4ca53fc17f4472945aa4ca288f290824c3228cfcb1e714b4e80085e14240d9a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_round.lowir",
+      "sha256": "4fe361d590b197ce224e563ddcdd51cc0866d3ac2d871fe29e3f4341c51e2c1c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_multiple.lowir",
+      "sha256": "8bb5d3731576e7d5b41fe1b75ebc4352778c56107172813aac1ab6d35d4eb305"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/default_spec_body.lowir",
+      "sha256": "2429d9f62c4a8e574de367c0c90f70d6688c8578d32ce4624bc5e7d3e9db2d64"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_ctor.lowir",
+      "sha256": "630633fb9d99d554ed8853a960d128e7b0824e66d8d0a2b6ae468646e0f43868"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/long_double_operations.lowir",
+      "sha256": "e6fdd72a45455500ba8e3a4a5100b426732d749189077cbf85bab8ea2644c856"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_template.lowir",
+      "sha256": "84621d94e499ddfbf336ba0a1cafc1d8f34f6894e01cefdb38c98733ecdb7c45"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/depth_boundary.lowir",
+      "sha256": "ad60bb65403ccdbabbcf8e46afbb719d1c03e0864014c478188cd249653da507"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/body_then_spec.lowir",
+      "sha256": "d7597a9e82eab9f6886dae389a9bdb6ea12c690e1a17f98b24c7715ae57a861a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_default_body.lowir",
+      "sha256": "2429d9f62c4a8e574de367c0c90f70d6688c8578d32ce4624bc5e7d3e9db2d64"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_then_body.lowir",
+      "sha256": "d7597a9e82eab9f6886dae389a9bdb6ea12c690e1a17f98b24c7715ae57a861a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_scalar.lowir",
+      "sha256": "7a045ef5f9c004fb0cb25ee612b7123b163fce2e3ac249a2d471487df37cd7cb"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/float_operations.lowir",
+      "sha256": "afd5dfb8d3fbc3e27acaea50f420d519a7fa02c590716b3146931cc9a4d901e9"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/omitted_exception.lowir",
+      "sha256": "5c05f0e5104058ab7255de98d1265c10cff9df535e7283aeb66d52b36c03a856"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/array_strings.lowir",
+      "sha256": "185d9f6edbcd498b72dc9fbdd8ef8f7ee7e21ed014bd6d04cb79278400b0c29e"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_subtract.lowir",
+      "sha256": "e1dd871ec6544fd3988f0f06807b26b4fd0529b0eb8c8da75b15f5deb0cec762"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/source_to_native.lowir",
+      "sha256": "b8ea721a6c311c789495c2262d212768ab0341c95b29f2a67ab192a4fa01132b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/depth_boundary.exe",
+      "sha256": "31b93f59e2c0e7f464e4d0a216507fb884e662d0dca4ac4b8c1a35e4621655b6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/array_strings.exe",
+      "sha256": "662498e88119b8442e6dc7b8dbad3f1ec597bd346f4e3a99551766f54329c63b"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/long_double_operations.exe",
+      "sha256": "5176e716af025bd38fdb0011eb21b48e733448b7ce3868a90419fde6a83826c3"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/source_to_native.exe",
+      "sha256": "2eb9783e5b4b1f0bed6d95a367a65850c308804ae10b6614d2eb068e4b5b89e7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_template.exe",
+      "sha256": "4e0058ec670a8186000519712c651c9d70846536a01eae25bb59ca4cb3ad8d51"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/default_spec_body.exe",
+      "sha256": "fbddbe032718d9abfe349ace734d2faf1c906e5c6124775b67b6bb0dc599ee48"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_scalar.exe",
+      "sha256": "b1ca62a62c7cae3461af773a87df692bbf37a1df7bc2c3d9386ec64f97bd2ee4"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/body_then_spec.exe",
+      "sha256": "089b5587836e13644fb6ffde409ecc42de7bb481c189351e33322d9d48b5055c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_default_body.exe",
+      "sha256": "fbddbe032718d9abfe349ace734d2faf1c906e5c6124775b67b6bb0dc599ee48"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_round.exe",
+      "sha256": "91bb38c904452edabd19b3dfd1d5ee2ba0885f4a2a2c26613d51f377cc475803"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/omitted_exception.exe",
+      "sha256": "c432fc02b67b7f9a06ac179b1198e07b46d95596ad7a0434a759d978b502c9ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/late_empty_ctor.exe",
+      "sha256": "4e0058ec670a8186000519712c651c9d70846536a01eae25bb59ca4cb3ad8d51"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/double_subtract.exe",
+      "sha256": "c2b27fa1eb4d8b5c514b21ef6872f1e090e0242822b47f62a5dc0b73fbe18f10"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_then_body.exe",
+      "sha256": "089b5587836e13644fb6ffde409ecc42de7bb481c189351e33322d9d48b5055c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/float_operations.exe",
+      "sha256": "65eb2c063353e86d50e5424908569e383bd11e03f6a9820b1d7ce86815a52f10"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-audit/controls/spec_multiple.exe",
+      "sha256": "266133439529317fb01a9686ad0e25b08d11c29c7ecb9aef417ba63d589bd14f"
+    }
+  ],
+  "measured_implementation_commit": "83536144d20f292d019959838d7dc23af5cf519b"
+}

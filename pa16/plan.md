@@ -1,98 +1,63 @@
-# PA16 implementation — loop 39
+# PA16 compact plan — checkpoint audit 40
 
 Stage base commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
-Last reviewed commit: `438d56b164600f4fa19d25dcb5f09a76e2a79776`
+Last reviewed commit: `7c39a6edbfa43c226036b8a92fe236722ac85dcc`
 
-Target: **PA16 full-stage**. Entry `c2ccf2d5`: **78/154, 76 failures**, clean.
-Previous turn: progress (validated storage handoff). Current handoff:
-**93/154, 61 failures**; **15 entry failures fixed, no lost passes**.
-The implementation handoff ends here; whole-stage implementation and independent
-review remain open. Neither review marker has advanced.
+Target: **PA16 full-stage**. The accumulated checkpoint audit is complete;
+stage implementation is still **93/154, 61 failures**. Entry `57bac58d` had the
+same 61 failures. No passing fixture was lost; all 154 fixtures are unchanged.
+This turn made progress: reviewed three handoffs, repaired three defects,
+validated the result and froze performance evidence.
 
-## Design/spec alignment and completed groups
+## Reviewed implementation
 
-| Owner | Data flow, identity, complexity and lifetime | Validation |
-|---|---|---|
-| `semantic/exception_specification` | Declaration + retained environment -> demand-specific contextual-bool value -> memoized exception fact. Function EntityId owns source/redeclaration chain; a specialization gets its own fact and substitution context. Source class completion drains its queue interval. No unrelated body demand or global retry. | Direct/deferred specs, recursive class completion, suppressed specialization, redeclaration, defaults, prototype names, inherited constructors. |
-| `semantic/exception_expression` | Selected calls/conversions, temporary lifetime facts and typed initializer/list plans -> expression/query exception effect. Flat TU indexes; query key includes whether construction materializes a temporary (allocation does not destroy the allocated object). Each actual edge is visited once per complete key; scratch is local. | Calls, indirect calls, operators, user conversions, omitted aggregate/array members, defaulted/inherited constructors, default arguments, temporaries, new/delete and dependent queries. |
-| `semantic/constexpr_validity` + type formation | Canonical type/class edges -> structural literal suitability and signature/constructor coverage checks. EntityId caches, bounded by actual declarations and subobjects. Implicit member const enters the canonical function type; template source constraints are not reapplied to concrete runtime specializations. Initializer *contents* remain evaluator work below. | Literal return/parameter/owner rejection, all base/member types, missing constructor initialization, union selection, declaration-only forward types, specifier/redeclaration rules, static/out-of-class and template cv controls. |
-| `constant_execution` receiver extension | Checked nullary constexpr constructor with no subobject or body work -> existing stateless receiver identity. Stateful constructors are not represented by that receiver domain. Existing activation limits and scalar keys remain. | True/false contextual conversion; rejects nonconstexpr/effectful construction. |
+The review covers every commit from the stage base through the code tip above,
+all 39 changed implementation paths and their interactions. [audit.md](audit.md)
+records the commit groups, ownership traces, proofs and one checkpoint ledger row.
+Scalar execution uses temporary frames and canonical completed-call keys;
+floating payloads and immutable array ranges have TU owners. Static initialization
+is a declaration fact; lowering consumes typed initializer plans, persistent
+storage/lifetime records and structurally interned readonly data. Literal-type and
+exception facts use declaration/query identity and precise completion demand.
 
-Inherited scalar execution, target floating values, array ranges, persistent local
-storage/lifetimes and structural constant-data interning remain in the cumulative
-pipeline. See [scalar evidence](performance.md) and [storage evidence](storage-performance.md).
-All new sources are registered in `dev/frontend_source_sets.mk`. Production uses
-the shared typed graph/LowIR; no fixture/reference/comparator changes or delegation.
-At O0, implicit default constructors retain conservative structural cleanup even
-when their exception fact is nonthrowing; no optional cleanup rewrite is required.
+The fixes share specialization context across exception/default/body demand,
+leave unavailable constructor probes retryable, and validate implicit conversions
+before accepting constexpr initializers. The x87 arithmetic policy is retained;
+C++11 permits its excess precision.
 
-## Remaining implementation / concrete handoff boundary
+## Remaining implementation
 
-- **Object/address execution:** persistent and activation-local object roots,
-  subobject paths and bounds, lifetimes, class/array values, constructor/base/member
-  execution, reference/callable values and conversions. `Constant` still carries a
-  scalar payload; general calls need object/alias/lifetime inputs in their keys.
-- **Initializer and declaration completion:** evaluating full constructor and
-  default-member initializer contents, literal-type initializer obligations, and
-  class-valued constexpr variable rejection. Structural validity above does not
-  certify these remaining expression obligations. Dependent nonliteral runtime
-  results also still expose duplicate destructor emission/aliases.
-- **Storage depending on those values:** class/static-pointer constants, member
-  projections, address-producing calls and demanded static definitions.
-- **Exception specifications needing object evaluation:** the remaining
-  `400-constexpr-noexcept-decltype-static-assert` failure requires class-valued
-  `complete_or_unbounded` evaluation in a dependent class assertion. It is an
-  evaluator implementation gap, not an unanswered exception-effect query.
-- **Ordinary automatic constant arrays:** README requires a copy, while 16 PA10–15
-  fixtures compare element stores under identical flags. Prior storage trial was
-  reverted after required earlier comparisons failed. Reducer:
-  `int f(){int a[2]={1,2};return a[0];}`. Both forms have correct C++ behavior;
-  the allowed miscompilation-reference exception is unproven. Preserve the
-  [recorded conflict/evidence](storage-performance.md); this requirement is unwaived.
+- **Object, address and lifetime evaluation:** general class/array values,
+  subobject identity/bounds, constructors/base/member initializers, references,
+  callables, conversions and complete invocation keys. Finish the connected
+  initializer/declaration obligations, including rejecting invalid class-valued
+  constexpr initializers.
+- **Publication and lowering of those facts:** class/static-pointer constants,
+  member projections, demanded static definitions, dependent runtime result
+  destruction/ABI emission and object-dependent exception specifications.
+- **Ordinary automatic constant arrays:** the README requires a readonly copy,
+  while 16 PA10–15 fixtures require stores under identical flags. Both forms
+  preserve C++ behavior; a wrong-reference proof is absent. Keep this full-stage
+  obligation and the [conflict evidence](storage-performance.md) open without
+  weakening coverage or comparison rules.
 
-The completed exception group consumes declaration, initializer and lifetime facts;
-further linked failures require establishing general object-valued evaluation,
-not extending effect traversal. Doing that needs a new value domain and complete
-call/lifetime identities across constructors, references and storage, rather than
-more stateless receiver cases. Structural declaration work is an intentional
-related increment, with its unfinished initializer-content obligations listed above.
+Avoid more narrow handoffs inside the object/initializer/lifetime group.
+The earlier scalar/storage/validity split missed exception-to-body ownership;
+future controls should exercise those owners together through storage/emission.
 
-## Performance and required validation
+## Acceptance and validation
 
-[Loop 39 performance](validity-performance.md): two frozen campaigns, **476**
-observations with A/A and ABBA, all samples retained. Compiler text +23,360 bytes
-(1.50%); class-heavy compilation +2–5% paired time with essentially unchanged RSS.
-Common generated LowIR/native binaries are identical. Work counters scale 4x for
-4x source; 4,000 dependent specs demand zero bodies. The repeated campaign does
-not reproduce the initial isolated 1.605 default-query timing ratio. No runtime
-speedup is claimed. PA16/O0 has no mandated numeric latency/RSS/text ceiling;
-historical self-selected diagnostics do not override stage-scoped acceptance.
+[Audit performance](audit-performance.md): **854** new frozen observations,
+plus **2,658** preserved historical observations. All four performance dimensions
+are covered at PA16/O0; no optional optimizer was added. Historical +15% latency,
++16 MiB RSS, 5.5x scaling and earlier text targets are diagnostic, not exit gates.
+The 512-call and 1,000,000-step evaluator resource bounds remain unchanged.
+Native optimization, encoding and self-hosting retain their later-stage owners.
 
-`make test-pa16`: **93/154**, exit 2 for unfinished implementation.
-Exact prior-through command: **2112/2112**, exit 0.
-`make test-report-through-pa16`: **2205/2266**, only PA16 failures, exit 2.
-File audit passes (three inherited header warnings). Final root reports ran
-sequentially because they share `.test_counts`; exploratory overlapping report
-counts are not handoff evidence. Personal controls: **24 native/29 rejection
-validity**, **41 native/8 rejection exception**, **40 native/23 rejection
-scalar/floating**, **27 native storage**. The [manifest](../student.tests/pa16/validity-handoff.json)
-and [verifier](../student.tests/pa16/verify_validity.py) bind source/binary, unchanged
-coverage, logs, all current measurements and retained historical evidence.
-
-## Handoff ledger / independent review
-
-| Increment | Disposition |
-|---|---|
-| `d7594d63`, `482c6b44`, `7484f22b`, `cc842756` | Loop 37 scalar group and performance evidence; review pending. |
-| `4aab464e`, `66f123ab`, `e85d39a9`, `c2ccf2d5` | Loop 38 storage/interner/lifetimes and validated evidence; review pending. |
-| `65c09c3b` | Loop 39 entry and owner/data-flow plan; original markers preserved. |
-| `3ff1c1db` | Structural constexpr validity and deferred exception expressions. |
-| `3a836964` | Declaration edge cases, stateless contextual conversion, complete initializer/allocation/temporary exception edges and explicit controls. |
-| Loop 39 evidence handoff | Required checks, reduction 76 -> 61, source/binary and performance provenance recorded; independent audit pending. |
-
-Independent review must retrace accumulated scalar activation identity/target
-floating semantics, array ranges, static classification/lifetime callbacks,
-constant-data interning, and new exception contexts/redeclaration/lifetime keys,
-structural validity boundaries and stage-scoped performance evidence. These are
-review obligations, separate from the unfinished implementation and contract
-conflict above. Neither category is waived by this handoff.
+Fresh `make test-pa16`: **93/154**, exit 2; exact prior-through command:
+**2112/2112**, exit 0; through PA16: **2205/2266**, only the same 61 failures.
+File audit passes with three inherited header warnings. Personal controls:
+**148 native / 66 rejection**, all pass. The [record](../student.tests/pa16/audit-checkpoint.json)
+and [verifier](../student.tests/pa16/verify_audit.py) bind code, unchanged contract,
+logs, binaries and accumulated evidence. PA17 advancement still requires
+completing PA16 and passing its full through report.
