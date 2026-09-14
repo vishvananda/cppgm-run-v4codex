@@ -142,7 +142,9 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts)
             if (parsed.first_operator == TOK_INVALID) parsed.first_operator = OP_LSQUARE;
         } else if (!new_type && parameter_clause_ahead()) {
             ScopeId parameter_scope;
-            ast.append(result, parameters(parameter_scope));
+            auto clause = parameters(parameter_scope);
+            ast.append(result, clause);
+            ast[result].flags |= ast[clause].flags & 1;
             ScopeId saved = scope;
             scope = parameter_scope;
             function_suffix(result);
@@ -207,6 +209,13 @@ NodeId Parser::parameters(ScopeId& parameter_scope)
         } while (in.eat(","));
     }
     in.require(")");
+    auto p = ast[result].first;
+    if (p && !ast[p].next && ast[p].kind == Kind::Parameter) {
+        auto specs = ast[p].first, spec = ast[specs].first, name = ast[spec].detail;
+        if (!ast[specs].next && spec && !ast[spec].next && !(ast[spec].flags & 1) &&
+            ast[spec].kind == Kind::DeclSpecifier && name && ast[name].first != ast[name].last)
+            ast[result].flags |= 1; // A sole qualified name may be a direct initializer.
+    }
     angle_expression = saved;
     scope = saved_scope;
     return result;

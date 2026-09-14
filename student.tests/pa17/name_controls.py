@@ -36,6 +36,7 @@ harness.GOOD = {
  'pack_type': 'template<unsigned long N>struct P{typedef int type;};template<class...T>int f(){typename P<sizeof...(T)>::type n=7;return n;}int main(){return f<int,char>()-7;}',
  'base_type_context': 'struct P{struct Base{int n;};};template<class T>struct A:T::Base{};int main(){A<P>a;a.n=7;return a.n-7;}',
  'elaborated_type_context': 'struct P{struct B{int n;};};template<class T>int f(){struct T::B b={7};return b.n;}int main(){return f<P>()-7;}',
+ 'elaborated_parameter_type': 'struct P{struct B{int n;};};template<class T>struct A{int f(struct T::B);};int main(){return sizeof(A<P>)-1;}',
  'direct_initializer_value': 'template<class T>struct A{static const int n=7;};template<class T>int f(){int n(A<T>::n);return n;}int main(){return f<int>()-7;}',
  'direct_initializer_specialized_value': 'template<class T>struct A{typedef int type;};template<class T>int f(){int n(A<T>::type);return n;}template<>struct A<int>{static const int type=7;};int main(){return f<int>()-7;}',
  'direct_initializer_current_function': 'template<class T>struct A{typedef T type;int f(A<T>::type);};template<class T>int A<T>::f(T n){return n;}int main(){A<int>a;return a.f(7)-7;}',
@@ -61,6 +62,7 @@ harness.BAD = {
  'noncurrent_receiver_missing': 'template<class T>struct A{template<class U>int f(U n){return n;}};template<class T>int g(A<T>&a){return a.f<int>(7);}',
  'typename_does_not_override_value': 'struct P{static int type;};template<class T>void f(){typename T::type n;}int main(){f<P>();}',
  'dependent_direct_initializer_type': 'template<class T>struct A{typedef int type;};template<class T>int f(){int n(A<T>::type);return n;}int main(){return f<int>();}',
+ 'dependent_function_pointer_parameter': 'template<class T>struct A{typedef int type;};template<class T>void f(){int (*n)(A<T>::type);}template<>struct A<int>{static const int type=7;};int main(){f<int>();}',
 }
 if __name__ == '__main__':
  cc=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else harness.ROOT/'dev/cppgm++'

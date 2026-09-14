@@ -73,6 +73,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     if (is_function && (in.is("{") || in.is("try"))) {
         scope = facts.function_scope;
         NodeId result = wrap(Kind::Function, specs);
+        ast[result].flags |= ast[decl].flags & 1;
         ast.append(result, decl);
         bool saved_template = template_declaration;
         template_declaration = false;
@@ -97,6 +98,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
         NodeId list = make(Kind::InitDeclarators);
         do {
             NodeId item = wrap(Kind::InitDeclarator, decl);
+            ast[result].flags |= ast[decl].flags & 1;
             ast.append(item, initializer());
             ast.append(list, item);
             if (!in.eat(",")) break;

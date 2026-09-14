@@ -89,7 +89,7 @@ void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId sco
 {
     if (ast.nodes.occurrences[declaration].context) return;
     auto kind = ast[declaration].kind;
-    if (kind != Kind::SimpleDeclaration && kind != Kind::Function) return;
+    if ((kind != Kind::SimpleDeclaration && kind != Kind::Function) || !(ast[declaration].flags & 1)) return;
     auto items = child(declaration,Kind::InitDeclarators);
     auto item = ast[items].first;
     do {
@@ -97,7 +97,7 @@ void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId sco
         auto params = child(d,Kind::Parameters), p = ast[params].first;
         auto specs = ast[p].first, spec = ast[specs].first, name = ast[spec].detail;
         if (p && !ast[p].next && ast[p].kind == Kind::Parameter && !ast[specs].next &&
-            spec && !ast[spec].next && !(ast[spec].flags & 1) && name &&
+            spec && ast[spec].kind == Kind::DeclSpecifier && !ast[spec].next && !(ast[spec].flags & 1) && name &&
             ast[name].first != ast[name].last) {
             auto previous = ast[name].first;
             while (ast[previous].next != ast[name].last) previous = ast[previous].next;
@@ -116,6 +116,8 @@ void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId sco
                     auto before = ast[d].first;
                     while (before && ast[before].next != params) before = ast[before].next;
                     if (!before) throw std::logic_error("parenthesized declaration has no declarator-id");
+                    if (ast[before].kind != Kind::Identifier)
+                        throw std::runtime_error("dependent name does not declare a pointed-to function parameter type");
                     ast.resolve_paren_initializer(item,d,params,before);
                 }
             }
