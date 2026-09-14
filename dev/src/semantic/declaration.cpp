@@ -161,7 +161,8 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     // parameters themselves are not exported.
     for (std::uint32_t d = scopes[ts].first_decl; d; d = declarations[d].next) {
         EntityId e = declarations[d].entity;
-        if (entities[e].kind == EntityKind::Variable && entities[e].template_info && templates[entities[e].template_info].primary) continue;
+        if ((entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Type) &&
+            entities[e].template_info && templates[entities[e].template_info].primary) continue;
         if (!entities[e].template_parameter) bind(s, entities[e].name, e);
     }
 }

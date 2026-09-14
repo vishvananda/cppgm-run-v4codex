@@ -53,7 +53,7 @@ ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
         auto binding = bind_template_name(ast[n].detail,scope);
         auto e = binding.entity;
         if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias))
-            return source_type(e);
+            return type_name(ast[n].detail,scope);
     }
     return value_argument_id(expression_query(n,scope));
 }

@@ -219,6 +219,20 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
         return pattern == actual || dependent_argument(pattern);
     }
     Type p = types[pattern], a = types[actual];
+    if (p.kind == TypeKind::ArgumentPack) {
+        if (a.kind != TypeKind::ArgumentPack) return false;
+        auto x = argument_packs[p.bound], y = argument_packs[a.bound];
+        unsigned fixed = x.count;
+        bool expansion = fixed && !value_argument(argument_types[x.offset+fixed-1]) &&
+            types[argument_types[x.offset+fixed-1]].kind == TypeKind::PackExpansion;
+        if (expansion) --fixed;
+        if (y.count < fixed || (!expansion && x.count != y.count)) return false;
+        for (unsigned j = 0; j < fixed; ++j)
+            if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],bindings)) return false;
+        if (!expansion) return true;
+        std::vector<ArgumentId> tail(argument_types.begin()+y.offset+fixed,argument_types.begin()+y.offset+y.count);
+        return deduce_expansion(types[argument_types[x.offset+fixed]].bound,tail,bindings);
+    }
     if (p.kind == TypeKind::DependentArray)
         return (a.kind == TypeKind::Array || a.kind == TypeKind::DependentArray) && deduce_type(p.child,a.child,bindings);
     if (p.kind == TypeKind::DependentName || p.kind == TypeKind::Decltype) return true; // non-deduced context

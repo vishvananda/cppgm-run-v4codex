@@ -23,6 +23,11 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
     if (entities[e].class_info && entities[e].template_info) {
         if (!encloses(entities[e].scope,use)) return 0;
         auto head = templates[entities[e].template_info];
+        if (head.primary) {
+            auto pattern = argument_packs[head.explicit_arguments];
+            std::vector<ArgumentId> args(argument_types.begin()+pattern.offset,argument_types.begin()+pattern.offset+pattern.count);
+            return entities[specialize_class(head.primary,args)].type;
+        }
         auto parameters = head.offset;
         // An out-of-class source overlay owns a parameter slice, independent
         // of the spelling and identity of the primary's original head.

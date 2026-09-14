@@ -248,6 +248,8 @@ struct TemplateFunction {
 struct Specialization {
     EntityId pattern = 0, entity = 0;
     std::uint32_t arguments = 0;
+    EntityId definition_pattern = 0;
+    std::uint32_t definition_arguments = 0;
     FactState declaration = FactState::NotStarted, body = FactState::NotStarted;
     ScopeId environment = 0;
     std::uint32_t context = 0;

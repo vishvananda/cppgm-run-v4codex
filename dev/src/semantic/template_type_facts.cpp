@@ -31,7 +31,10 @@ TypeId Analyzer::substitution_argument(std::uint32_t id, EntityId parameter) con
         }
         if (!ordinal) continue;
         if (ordinal > frame.count || template_parameters[frame.parameters+ordinal-1] != parameter) continue;
-        auto pack = argument_packs[specializations[frame.specialization].arguments];
+        auto spec = specializations[frame.specialization];
+        bool selected = spec.definition_pattern &&
+            frame.parameters == templates[entities[spec.definition_pattern].template_info].offset;
+        auto pack = argument_packs[selected ? spec.definition_arguments : spec.arguments];
         // Partial explicit function arguments leave the remaining parameters
         // symbolic until deduction establishes a different specialization.
         return ordinal <= pack.count ? argument_types[pack.offset+ordinal-1] :
@@ -101,7 +104,7 @@ ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
     for (auto scope = source; scope; scope = scopes[scope].parent) {
         auto e = scopes[scope].entity;
         if (!e) continue;
-        if (e == spec.pattern && entities[spec.entity].scope) return entities[spec.entity].scope;
+        if ((e == spec.pattern || e == spec.definition_pattern) && entities[spec.entity].scope) return entities[spec.entity].scope;
         if (!entities[e].template_pattern) continue;
         auto concrete = substitution_entity(frame,e);
         if (!concrete) continue;

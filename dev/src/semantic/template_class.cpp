@@ -37,6 +37,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     if (!encloses(scopes[s].parent,owner)) throw std::runtime_error("class template outside enclosing scope");
     auto id = terminal(name);
     EntityId e = local(owner,id,Lookup::Tag);
+    if (child(ast[name].last,Kind::TemplateArguments)) return declare_class_partial(n,s,e);
     if (e && !entities[e].template_info) throw std::runtime_error("conflicting class template declaration");
     if (!e) {
         e = make_entity(EntityKind::Type,owner,id,n);
@@ -207,6 +208,7 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     auto list = child(part,Kind::TemplateArguments);
     if (!list) return e;
     EntityId pattern = entities[e].template_info ? e : entities[e].specialization ? specialization_pattern(e) : 0;
+    if (pattern && templates[entities[pattern].template_info].primary) pattern = templates[entities[pattern].template_info].primary;
     if (!pattern) throw std::runtime_error("template-id names a nontemplate class");
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
@@ -226,17 +228,20 @@ void Analyzer::complete_class(EntityId e)
     if (entities[e].explicit_specialization) return;
     if (!entities[e].specialization) { instantiate_member_definition(e); return; }
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
-    auto pattern = templates[entities[specializations[index].pattern].template_info];
-    if (!pattern.body) return;
-    specializations[index].body = FactState::Active; ++template_completions;
+    specializations[index].body = FactState::Active;
     ScopeId saved = active_template_scope;
     auto saved_depth = class_depth;
     auto saved_bodies = bodies.size();
     auto saved_defaults = declaration_defaults.size();
     try {
+    select_class_pattern(index);
+    auto spec = specializations[index];
+    auto pattern = templates[entities[spec.definition_pattern ? spec.definition_pattern : spec.pattern].template_info];
+    if (!pattern.body) { specializations[index].body = FactState::NotStarted; return; }
+    ++template_completions;
     auto environment = specialization_environment(e);
     // An earlier forward declaration may have used different parameter names.
-    auto pack = argument_packs[specializations[index].arguments];
+    auto pack = argument_packs[spec.definition_arguments ? spec.definition_arguments : spec.arguments];
     for (unsigned j = 0; j < pack.count; ++j) {
         auto parameter = template_parameters[pattern.offset+j];
         if (local(environment,entities[parameter].name)) continue;
