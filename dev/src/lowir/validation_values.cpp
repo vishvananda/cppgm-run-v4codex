@@ -25,7 +25,9 @@ Type Validator::value_type(const Operand& o) const
         const Symbol& s = p_.symbols.at(o.ref-1);
         if (s.kind == Symbol::FunctionSymbol) return Type::Ptr;
         require(s.kind == Symbol::GlobalSymbol, "undefined symbol");
-        return p_.globals.at(s.entity-1).type;
+        // A symbol operand denotes its address. Its declared storage type is
+        // checked by storage() for load/store, not the type of this value.
+        return Type::Ptr;
     }
     case Operand::Integer: return Type::I64;
     case Operand::Floating: return Type::F80;

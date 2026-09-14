@@ -433,6 +433,8 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         }
     }
     if (calls && init && !function && !member_initializer) initialize(init, canonical, definition_scope);
+    if (calls && !function && spec_has(specs,KW_CONSTEXPR) && types[canonical].kind == TypeKind::Array)
+        prepare_constant_array(e);
     if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
     if (init && !alias && !function && integral(t) && !member_initializer) {
         Constant v = evaluate(init, definition_scope);

@@ -58,6 +58,8 @@ class Procedural {
     std::vector<SlotId> objects;
     std::vector<lowir_model::ValueId> object_addresses;
     semantic::Index string_index;
+    semantic::Index constant_arrays;
+    void initialize_constant_array(EntityId e, Value location);
     struct StringRecord { NodeId node; std::uint32_t next; };
     std::vector<StringRecord> string_records = std::vector<StringRecord>(1);
     std::vector<BlockId> labels;

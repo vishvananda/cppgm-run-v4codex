@@ -57,6 +57,20 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
         TypeId boolean = types.fundamental(FT_BOOL); add(boolean,boolean,boolean); return;
     }
     auto left = builtin_operand_types_value(args[0]);
+    if (op == OP_INC || op == OP_DEC) {
+        for (TypeId t : left) {
+            if (types[t].kind != TypeKind::Named && (arithmetic(t) || object_pointer(t)) &&
+                !(op == OP_DEC && fundamental(t,FT_BOOL))) {
+                if (object_pointer(t)) size(types[t].child);
+                auto target = class_value(args[0].type) ? t : args[0].type;
+                if (!(types[target].cv & 1))
+                    add(types.compound(TypeKind::LRef,target),types.fundamental(FT_INT),
+                        args.size() == 1 ? target : types.unqualified(target),
+                        args.size() == 1 ? ValueCategory::Lvalue : ValueCategory::Prvalue);
+            }
+        }
+        return;
+    }
     if (args.size() == 1) {
         for (TypeId t : left) {
             if (op == OP_STAR && pointer(t) && !fundamental(types[t].child,FT_VOID)) add(t,0,types[t].child,ValueCategory::Lvalue);

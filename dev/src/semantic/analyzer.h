@@ -126,6 +126,7 @@ public:
     std::vector<ZeroPart> zero_parts;
     bool empty_value(TypeId t);
     bool initializer_work(std::uint32_t plan);
+    std::uint32_t constant_array_plan(EntityId e) const { return constant_arrays.get(e); }
     std::vector<ConversionObject> conversion_objects = std::vector<ConversionObject>(1);
     std::vector<UserConversion> user_conversions = std::vector<UserConversion>(1);
     IdentifierId literal_suffix(EntityId e) const { return literal_functions.get(e); }
@@ -209,6 +210,10 @@ private:
     Constant literal_element(std::uint32_t literal, Constant index);
     Index initializer_work_index;
     Index initializer_index, zero_value_index, value_contexts;
+    Index constant_arrays, constant_array_plans;
+    std::size_t constant_array_work = 0;
+    void prepare_constant_array(EntityId e);
+    bool constant_array_plan_valid(std::uint32_t plan);
     Index zero_initialization_index;
     TypeId initialized_field_type(TypeId owner, EntityId field);
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);

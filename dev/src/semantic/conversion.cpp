@@ -343,7 +343,10 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode
     while (ast[source].kind == Kind::Initializer) source = ast[source].first;
     expand_expression_list(source,s);
     if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
-    if (types[target].kind == TypeKind::Named && entities[types[target].entity].class_info && class_initialize(n, target, s, mode)) return;
+    if (class_value(target)) {
+        complete_class(types[target].entity);
+        if (class_initialize(n, target, s, mode)) return;
+    }
     if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s, mode); return; }
     if (ast[n].kind == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
         expression(n,s); require_conversion(n,target); return;

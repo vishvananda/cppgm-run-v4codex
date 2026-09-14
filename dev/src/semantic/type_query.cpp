@@ -146,8 +146,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         }
         children.push_back(child); break;
     }
-    case Kind::Unary: case Kind::Binary: case Kind::Subscript:
-        q.kind = node.kind == Kind::Unary ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
+    case Kind::Unary: case Kind::Postfix: case Kind::Binary: case Kind::Subscript:
+        q.kind = node.kind == Kind::Unary || node.kind == Kind::Postfix ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
         q.name = operator_name(q.op); q.context = s;
         while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
@@ -157,6 +157,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             if (function_binding(ordinary)) q.entity = ordinary;
         }
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
+        if (node.kind == Kind::Postfix) {
+            TypeQuery zero; zero.type = types.fundamental(FT_INT);
+            children.push_back(intern_query(zero,{}));
+        }
         break;
     case Kind::Call:
         q.kind = QueryKind::Call; q.context = s;

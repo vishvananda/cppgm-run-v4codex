@@ -146,6 +146,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_body_lifetime_checks\":" << body_lifetime_checks
         << ",\"semantic_statement_conversion_work\":" << statement_conversion_work
         << ",\"semantic_statement_conversion_uses\":" << statement_conversion_uses
+        << ",\"semantic_constant_array_work\":" << constant_array_work
         << ",\"semantic_initializer_recipe_work\":" << initializer_recipe_work
         << ",\"semantic_initializer_recipe_uses\":" << initializer_recipe_uses
         << ",\"semantic_default_initialization_work\":" << default_initialization_work

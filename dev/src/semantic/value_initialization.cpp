@@ -4,6 +4,7 @@
 namespace cppgm { namespace semantic {
 void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
 {
+    if (class_value(t)) complete_class(types[t].entity);
     // Access is contextual; the immutable action shape is shared by type.
     if (access_override) s = access_override;
     auto context = key(t, s);
