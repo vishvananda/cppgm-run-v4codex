@@ -1,0 +1,272 @@
+{
+  "review_start": "58789b00e19ae2aff032c8b04980b7d43265617f",
+  "entry_commit": "b34c1be930cba5e9181f76aa5dd68c7d4d72bcb5",
+  "code_commit": "c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30",
+  "commits": [
+    {
+      "commit": "df0904deaa9a21544ab4c10f3a9e68120740d982",
+      "subject": "Record PA17 loop 48 accumulated checkpoint audit and evidence",
+      "paths": [
+        "pa17/audit-performance.md",
+        "pa17/audit.md",
+        "pa17/plan.md",
+        "student.tests/pa17/audit-base-performance.json",
+        "student.tests/pa17/audit-controls-results.json",
+        "student.tests/pa17/audit-evidence.json",
+        "student.tests/pa17/audit-performance.json",
+        "student.tests/pa17/audit-trace.json"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "9bba16a6f7a450ab4cbd445c2288b1f80265b86d",
+      "subject": "Record PA17 loop 49 member definition ownership plan",
+      "paths": [
+        "pa17/plan.md"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "6a8454d8f5906e516ef5a6a3cde2cb727ab6b175",
+      "subject": "Retain and compose member template heads through source binding and demand",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/dependent_type.cpp",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/lookup.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/template_arguments.cpp",
+        "dev/src/semantic/template_binding_declarations.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_checks.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/template_declaration.cpp",
+        "dev/src/semantic/template_definition.cpp",
+        "dev/src/semantic/template_entities.cpp",
+        "dev/src/semantic/template_expression.cpp",
+        "dev/src/semantic/template_instantiation.cpp",
+        "dev/src/semantic/template_lexical_frame.cpp",
+        "dev/src/semantic/template_type_facts.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/syntax/declaration.cpp",
+        "dev/src/syntax/declarator.cpp",
+        "dev/src/syntax/expression.cpp",
+        "dev/src/syntax/parser.h",
+        "student.tests/pa17/head_controls.py"
+      ],
+      "implementation_patch_sha256": "c4c91f187526ebeb8db2447043f517f7d1924827336df9bd515a3928ea5818d3"
+    },
+    {
+      "commit": "3811277b83e1d802b44aec653f021e75624a3ce1",
+      "subject": "Compose nested class definition heads and specialize converting constructors",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/converting_constructors.cpp",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/dependent_type.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/template_binding_declarations.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_checks.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/template_definition.cpp",
+        "dev/src/semantic/template_definition_environment.cpp",
+        "dev/src/semantic/template_definition_owner.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/syntax/expression.cpp",
+        "dev/src/syntax/parser.h",
+        "pa17/plan.md",
+        "student.tests/pa17/head_benchmark.py",
+        "student.tests/pa17/head_controls.py"
+      ],
+      "implementation_patch_sha256": "c91c0009117f8bc3244cde10761af16b5fd264bf96a937a61c08015b2d22bb5a"
+    },
+    {
+      "commit": "807e0989cc2e83f7dfa8804e9bb4db471ea35af9",
+      "subject": "Retain member signatures through enclosing pack substitution",
+      "paths": [
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_declaration.cpp",
+        "dev/src/semantic/template_instantiation.cpp",
+        "dev/src/semantic/template_type_facts.cpp",
+        "pa17/plan.md",
+        "student.tests/pa17/head_controls.py"
+      ],
+      "implementation_patch_sha256": "1091962bd790df73de390354806bbc2349cfaf1692876c21da8af5c24c8ab02e"
+    },
+    {
+      "commit": "d3ef5e5d5adc89baf13f9697e5c38b165bba0dcc",
+      "subject": "Record PA17 retained-head handoff and frozen performance evidence",
+      "paths": [
+        "pa17/head-performance.md",
+        "pa17/plan.md",
+        "student.tests/pa17/handoff-loop47.json",
+        "student.tests/pa17/handoff.json",
+        "student.tests/pa17/head-performance-before-pack.json",
+        "student.tests/pa17/head-performance.json",
+        "student.tests/pa17/loop49-audit-results.json",
+        "student.tests/pa17/loop49-definition-results.json",
+        "student.tests/pa17/loop49-entity-results.json",
+        "student.tests/pa17/loop49-head-results.json",
+        "student.tests/pa17/loop49-member-lowir-results.json",
+        "student.tests/pa17/loop49-member-results.json",
+        "student.tests/pa17/verify_handoff.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "4b82112098e7b873bbc75d147188705746b7cad9",
+      "subject": "Model friend templates and specialization access with deferred ordinary friend bodies",
+      "paths": [
+        "dev/src/semantic/access.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/call_selection.cpp",
+        "dev/src/semantic/class_enum.cpp",
+        "dev/src/semantic/constant_execution.cpp",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/friends.cpp",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/operator_call.cpp",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/template_binding_declarations.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/template_declaration.cpp",
+        "dev/src/semantic/template_specialization.cpp",
+        "pa17/plan.md",
+        "student.tests/pa17/friend_controls.py"
+      ],
+      "implementation_patch_sha256": "76c800ee79976986ecf3b82c59c2b215aaf15aa26d3b1a098366ddc65320c4f3"
+    },
+    {
+      "commit": "a8cc241e67cec028d8e56cd65fe600876968c9ca",
+      "subject": "Preserve declared access and static identity on member template specializations",
+      "paths": [
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/template_variable.cpp",
+        "student.tests/pa17/friend_controls.py"
+      ],
+      "implementation_patch_sha256": "6157d15b68e42c089ef6a8756981b1afd2d89fc3ba94fb5b66835ced139e4e60"
+    },
+    {
+      "commit": "0fe13f160c921db3ca68bfefc857b3a6be40cf3f",
+      "subject": "Record PA17 friend access handoff and frozen compiler runtime evidence",
+      "paths": [
+        "pa17/friend-performance.md",
+        "pa17/plan.md",
+        "student.tests/pa17/friend-performance.json",
+        "student.tests/pa17/friend_benchmark.py",
+        "student.tests/pa17/handoff-loop49.json",
+        "student.tests/pa17/handoff.json",
+        "student.tests/pa17/loop50-audit-results.json",
+        "student.tests/pa17/loop50-definition-results.json",
+        "student.tests/pa17/loop50-entity-results.json",
+        "student.tests/pa17/loop50-friend-results.json",
+        "student.tests/pa17/loop50-head-results.json",
+        "student.tests/pa17/loop50-member-lowir-results.json",
+        "student.tests/pa17/loop50-member-results.json"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "3ce88dd7254e3d057cb6636abc4f536406faa272",
+      "subject": "Check dependent names against source specialization identity",
+      "paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/dependent_type.cpp",
+        "dev/src/semantic/template_arguments.cpp",
+        "dev/src/semantic/template_binding.cpp",
+        "dev/src/semantic/template_binding_declarations.cpp",
+        "dev/src/semantic/template_definition.cpp",
+        "dev/src/semantic/template_type_access.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/syntax/ast.h",
+        "dev/src/syntax/class_parser.cpp",
+        "dev/src/syntax/occurrence.cpp",
+        "pa17/plan.md",
+        "student.tests/pa17/handoff-loop50.json",
+        "student.tests/pa17/name_controls.py"
+      ],
+      "implementation_patch_sha256": "278841147eaf0542eb357c28f10ea21949874fc6400e5278dd9b95386b427c39"
+    },
+    {
+      "commit": "d7f0055d8737e51922d79c3fa7a55dc77c25b5ef",
+      "subject": "Limit declaration ambiguity checks to parsed qualified-name operands",
+      "paths": [
+        "dev/src/semantic/dependent_type.cpp",
+        "dev/src/syntax/declaration.cpp",
+        "dev/src/syntax/declarator.cpp",
+        "student.tests/pa17/name-performance-before-prefilter.json",
+        "student.tests/pa17/name_benchmark.py",
+        "student.tests/pa17/name_controls.py"
+      ],
+      "implementation_patch_sha256": "f1f0b16be5324fdd1250636d64401972bcd60a698dc84f8f747ed97b6aa70f35"
+    },
+    {
+      "commit": "6afed48ec5ff231ef85df0d8c5b7980f50ef6500",
+      "subject": "Share AST view fallback for source declaration interpretations",
+      "paths": [
+        "dev/src/syntax/ast.h",
+        "student.tests/pa17/name-performance-before-shared-view.json"
+      ],
+      "implementation_patch_sha256": "ea8c1ce7272066b3337c29c51c9e76d13fe746b13dedbeb1e4bb4c391a2d0bf1"
+    },
+    {
+      "commit": "b34c1be930cba5e9181f76aa5dd68c7d4d72bcb5",
+      "subject": "Record validated PA17 source-name implementation handoff",
+      "paths": [
+        "pa17/name-implementation.md",
+        "pa17/name-performance.md",
+        "pa17/plan.md",
+        "student.tests/pa17/handoff.json",
+        "student.tests/pa17/loop51-audit-results.json",
+        "student.tests/pa17/loop51-definition-results.json",
+        "student.tests/pa17/loop51-entity-results.json",
+        "student.tests/pa17/loop51-entry-name-results.json",
+        "student.tests/pa17/loop51-friend-results.json",
+        "student.tests/pa17/loop51-head-results.json",
+        "student.tests/pa17/loop51-member-lowir-results.json",
+        "student.tests/pa17/loop51-member-results.json",
+        "student.tests/pa17/loop51-name-results.json",
+        "student.tests/pa17/name-performance.json",
+        "student.tests/pa17/verify_handoff.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "1b137ed18028c1308758b9469a7070765b148e03",
+      "subject": "Fix PA17 audit friend demand and source-owned template checks",
+      "paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/friends.cpp",
+        "dev/src/semantic/operators.cpp",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/template_checks.cpp",
+        "dev/src/semantic/template_definition.cpp",
+        "student.tests/pa17/checkpoint52_benchmark.py",
+        "student.tests/pa17/checkpoint52_controls.py"
+      ],
+      "implementation_patch_sha256": "368685cb13d7f6a9883e84657e5a67ff80242d1870ef0c6fe3a778f25231daaa"
+    },
+    {
+      "commit": "c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30",
+      "subject": "Own ordinary friend demand at evaluated function expressions",
+      "paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/expression.cpp",
+        "student.tests/pa17/checkpoint52_benchmark.py",
+        "student.tests/pa17/checkpoint52_controls.py",
+        "student.tests/pa17/verify_checkpoint52.py"
+      ],
+      "implementation_patch_sha256": "8b7a66f9dc065d035961676b2fe34941be984985ed82cd20f1a219183e48ba12"
+    }
+  ]
+}
