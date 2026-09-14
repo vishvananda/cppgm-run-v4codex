@@ -1,0 +1,504 @@
+{
+  "entry_commit": "7f401fa8",
+  "timing_started_only_after_final_validation": true,
+  "notes": [
+    "Development root failures remain in the ordered source-obligations-*-through.log files; final 79-check validation supersedes them without dropping evidence.",
+    "Initial frozen release 343e8be8 and sanitizer 6890cc23 passed 77 groups but did not prove default recipe reuse. Entity::source selected the whole declaration instead of the declarator; final source passes the declarator to default_initialize and asserts M/KM work/use counts.",
+    "Initial 242-control harness reused one filename for invalid and valid list returns. The proof verifier detected the overwritten source hash. Initial harness, manifest and failed proof remain; final harness rejects duplicate names and reran both complete 242-control groups with unique sources.",
+    "Initial layout helper wrote the destination manifest path. The exact destination manifest was restored from 7f401fa8. The initial new result and helper remain under source-initial names; final layout uses its distinct path.",
+    "First preflight rejected zero default recipe uses before timing. Second preflight rejected a new defaulted operator call unsupported by A. The common runtime input uses explicit argument v(2), with the same checked operations, and all 47 compiler/14 native equivalent preflights pass before timing.",
+    "Additional true/false conditional branch, lvalue, class construction and cleanup controls ran on final release and sanitizer. All five frozen destination handoffs now reject under both final binaries.",
+    "Completed untimed inspection executables alone were losslessly gzip archived to respect the shared 20 GiB ceiling; compiler binaries, timed native images, inputs, observations and logs remain pinned. Manifests retain original/archive hashes and decompression checks. No compression overlapped timing.",
+    "A compression attempt refused a lifecycle proof-pinned executable before mutation; the successful retry selected only completed untimed probes not required at their original path by historical proof manifests.",
+    "Initial validation and layout are preserved evidence, not final acceptance. No source-obligation timing samples preceded the final frozen campaign or were discarded."
+  ],
+  "files": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-actions-after-properties.log",
+      "sha256": "0ef605333b85430652cc7db0b36841bcc02fe699fbb3dfe85c700561316bdc4f",
+      "bytes": 100
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-braced-construction-build.log",
+      "sha256": "66183e6ca35ad890043a4fb12f1d67750fc8df524c191b7bacd39be5a9f282bd",
+      "bytes": 400
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-cast-build.log",
+      "sha256": "94ab685d55475ff719ee85809353bb75fb25d6f03e16851bef15ce0594fffc42",
+      "bytes": 22380
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-cast-construction-build.log",
+      "sha256": "8b6895b19a0bd99128b6a3112140997b3bfa0de47875e75f6e586b73c6a6ca01",
+      "bytes": 22437
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-compression.log",
+      "sha256": "47aa8ba65e194f119a7bc85f90e9d506d6795877156f5b360226be537e4a67e5",
+      "bytes": 793
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-conditional-build.log",
+      "sha256": "ac2541eea4ca2232e9f776c6aa303a3573aef11d13824f8750fcc8ad630ace4a",
+      "bytes": 22380
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-conditional-conversion-build.log",
+      "sha256": "6f6cbb166243eaac74a237ba86c60cbe2a5379c1cfc2ef3457322f365341f689",
+      "bytes": 22437
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-conditional-cv-build.log",
+      "sha256": "ebe7c4c7917b727cf580c91ec758ffde8c8e764fb8d23323fea152d48904a460",
+      "bytes": 391
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-conditional-release.log",
+      "sha256": "8c61c3249ddd13321542485d4807eefd674885d805887c0630b46d650d35bb7a",
+      "bytes": 52
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-conditional-sanitized.log",
+      "sha256": "8c61c3249ddd13321542485d4807eefd674885d805887c0630b46d650d35bb7a",
+      "bytes": 52
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-eighth.log",
+      "sha256": "c1ac3b46804fde6f7fd6bae66101ee1058232d1c15633c0fc99dd4fa33cdbcc6",
+      "bytes": 5810
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-eleventh.log",
+      "sha256": "d79257747a0d1f9ca045e249f04bc960fbd7974958d84781ff76121c6a94018f",
+      "bytes": 6915
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-fifth.log",
+      "sha256": "685c54f27ad57f491c604860f4e31f0551255245590615487c10d806bb3854fc",
+      "bytes": 3813
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-fourth.log",
+      "sha256": "685c54f27ad57f491c604860f4e31f0551255245590615487c10d806bb3854fc",
+      "bytes": 3813
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-initial.log",
+      "sha256": "0956dcd151da2d96bf66805a7438647e4911d3a691b8de9de961b4fbbf1e59e1",
+      "bytes": 2274
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-ninth.log",
+      "sha256": "650b8dd96835b043d3a58bf800570bf337dd53d9fb5428324e36e3af5287eb34",
+      "bytes": 6674
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-second.log",
+      "sha256": "6af02e240f952cc074443269bfae4f786296b278476ffeb0231b55af96e77583",
+      "bytes": 4359
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-seventh.log",
+      "sha256": "f928d01f512edfdda11e47fdc5d724368afa3cf09e7fe823b2cf30cb3ffbc82e",
+      "bytes": 5668
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-sixth.log",
+      "sha256": "f928d01f512edfdda11e47fdc5d724368afa3cf09e7fe823b2cf30cb3ffbc82e",
+      "bytes": 5668
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-tenth.log",
+      "sha256": "cf8bc51ce6450743fa573a8c3f5b02af868682f4dfc517b42aa09f29e59d92f7",
+      "bytes": 6404
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-third.log",
+      "sha256": "ad7657344364ae711956f912cd8e852969220d7dd0fae70df858135aaf0c8fed",
+      "bytes": 4632
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth.log",
+      "sha256": "b0f9dd72124d0a1f600d3370f20f38690ffd84d71ddf14df70a16377c22100cc",
+      "bytes": 6994
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-twelfth.log",
+      "sha256": "181aa9d4665e42ca7f46a48fb3d9d446a2e02740a4a569c5e3adea3abfd6d5a9",
+      "bytes": 6986
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-declaration-boundary-build.log",
+      "sha256": "4c6f7f736bca153f96cc66affd14d51e48b32992345c1733199ecb682cc9c47d",
+      "bytes": 22437
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-declarator-reuse-build.log",
+      "sha256": "90e03bfb9704a0373f7e79a2486aca7f673aea139241d8c9670596bb06484fbb",
+      "bytes": 22437
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-default-build.log",
+      "sha256": "910773e108e7bc63d4eee51ffa4f25cb30cd758e47a64a98aece6c86ba98e039",
+      "bytes": 22510
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-default-corrections-build.log",
+      "sha256": "46c17af4869491ab68b0a85457f02eb808bcb09ccadc3a135fcda9f5eab3f58f",
+      "bytes": 22510
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-default-inspect.json",
+      "sha256": "9d1c52d177ec59a42ff7468f878128bf65d068d19063a35f544ac82d6f54f349",
+      "bytes": 4770
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-default-reuse-check.json",
+      "sha256": "d012e82083221725d9345eab4111c707fee5a2bbfd589975e8af9a6c9cb3e72d",
+      "bytes": 4770
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-destructor-build.log",
+      "sha256": "c0fe9d7ebf3b3b6055db41adeb4fa39fbe77bfe8968aa1c235e51a3979267194",
+      "bytes": 22567
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-extern-build.log",
+      "sha256": "2e8cea1b40399ed824b0f6f9a58b9b589777a1e8c96f0dc86a91a915b9ee0e00",
+      "bytes": 22380
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-extra-compression.log",
+      "sha256": "b12f8bfa7e1efd62f7496b749356eb14e1e86bdf34863344ace7b809315158c5",
+      "bytes": 507
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-fixed-pointer-build.log",
+      "sha256": "29abb9ff642d074ef8eddf1119d9cb34f9bed0d7ffea566a94bbb6ac18bcea11",
+      "bytes": 445
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-for-build.log",
+      "sha256": "76b12ab83d8f0f0e4b53d3ee187a617f4498f6ce13e477d35e866604d8f7dcbc",
+      "bytes": 404
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-forward-tag-build.log",
+      "sha256": "660ffb3e14d07fef6dd65cff03ef2f3f7284a8be90b06da4f22eb204d6d3bcfe",
+      "bytes": 1480
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-forward-terminal-build.log",
+      "sha256": "1fff04cbbe00736a3c6bfef79d5be530491adb9d52b70682c57824f806bff4bb",
+      "bytes": 22113
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-frozen-default_destructor_facts.cpp",
+      "sha256": "df244bd6628620e85e48e63748f808134f19b551fd445670ff3489d0d9a79254",
+      "bytes": 4261
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-frozen-default_initialization_facts.cpp",
+      "sha256": "57a9ca21b7837d126d01fc13fc518f0f0d521528164a21f7a6f038266bd16f53",
+      "bytes": 11548
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-frozen-template_operator_facts.cpp",
+      "sha256": "8c5146312154d3185719f46cb1b5817e35b1cdd1b2be43f42facac6253f23c07",
+      "bytes": 9394
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-historical-verification.log",
+      "sha256": "dff790d2a6e2d8597241ccbf80dc6a842abc51331c985684a915ff5f5b372677",
+      "bytes": 5756
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-inherited-complete.log",
+      "sha256": "2d3a95afc51fe077973742ac3eca460ac8bad3632a17112db3b679db6c370eeb",
+      "bytes": 1007
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-check_source_obligations.py",
+      "sha256": "7ce85e901877ed6a654a3f1a42e9ec46c50aa9214dc3157d1ec87f1600a4b935",
+      "bytes": 12239
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-layout.json",
+      "sha256": "807c3c57ad629b14a32f97f381abe444f1870bcdb9ac9ef11b1e83b5faa19609",
+      "bytes": 24152
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-source-obligations.cc",
+      "sha256": "8d7b112bb17dd714f2aba6b956846eca8850c1b59f255daa04021158e05e08d2",
+      "bytes": 2269
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-source_obligations_benchmark.py",
+      "sha256": "bb8f36ea0cdde0435f7a96c00da19f49b1bb600238f6347cbe39c9ac0afd8d78",
+      "bytes": 6657
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-source_obligations_layout.py",
+      "sha256": "38f767b14526ab5288fec99c8380d12048aedfd2207ed9c4c0e474b5f4c1f9d9",
+      "bytes": 3145
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-source_obligations_proofs.py",
+      "sha256": "0ddb383667f9771bb7144de168fd342343c6a1750f510b33fafe546a290e3f73",
+      "bytes": 3774
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-source_obligations_validation.py",
+      "sha256": "ff3e5f26126de199758b50e85dd3bcf6e86f849972c8a8dcf6020a6a75515a4a",
+      "bytes": 6800
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-validation.json",
+      "sha256": "f61b90b791cbfe831b3211b8ccc929c09062e8ac4e6691d1c4cbdd77cf7c17c0",
+      "bytes": 399010
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-local-properties-build.log",
+      "sha256": "9b3f9f6a53cde799287e236891289ba1d4d690b3458dd9a73f73c01d37a22bf5",
+      "bytes": 22380
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-local-query-build.log",
+      "sha256": "9d61795d8d14da0a29370b9815a6a5414eaff13acf7934e44de3466b933a8c73",
+      "bytes": 477
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-native-after-forward.log",
+      "sha256": "d054c877941054330144157d53646dd866b042f657e2ad3d64284d325b07a7bf",
+      "bytes": 1393
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-native-after-pointer.log",
+      "sha256": "2d07d9b00348d937f6d8e649756c33231f8d1a7e20b69346a74b39e88fec2931",
+      "bytes": 958
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-build.log",
+      "sha256": "82edaff3620fb60f7b0c8a38a0a3e85a2b90b861ce005015d8eaae5540eb61ef",
+      "bytes": 546
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-cppgm++",
+      "sha256": "343e8be80d38dd7cb8611fe8f1a8e4decf0d5a7dbfbbf2e681df73b732837d74",
+      "bytes": 1818544
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-cppgm++-asan",
+      "sha256": "6890cc23e99568e89efb12ba92453620af283a0e818318c508062ca81132143b",
+      "bytes": 97299784
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-eighth-through.log",
+      "sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900",
+      "bytes": 572
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-entry.json",
+      "sha256": "62f27b02ba274e80b75fecf550c7734b9a6c4346542fe897974f900ced4c9100",
+      "bytes": 132446
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-entry.log",
+      "sha256": "9901f0ffd3e3b6d4885da074eb33d1747d110be48dfccb74137faea05598d6ac",
+      "bytes": 365
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-equivalent-preflight.json",
+      "sha256": "4e83ec0062eb0be91df1c35e6dbd7011fc9ea1ce1a850b5482613910ffb41e85",
+      "bytes": 774902
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-equivalent-preflight.log",
+      "sha256": "77ca0eaef0a51dbd86912fdc67ebc47ab08b7a94183ceb8103b5c6c51cfe25c0",
+      "bytes": 1451
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-fifth-through.log",
+      "sha256": "992e67df076721f8b94c6c57c2065f0340a1f9a61aa4f0567224a2c6892eee03",
+      "bytes": 960
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry.log",
+      "sha256": "da7f61dcead9ca22972cdf4d1f01f21d8465d8f3d0edcb5c2f088bd1d9b504e6",
+      "bytes": 56
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-layout.log",
+      "sha256": "87227195b942ce85b563e6955093e3bc27ef6744ee71b6a4afa6a79447131575",
+      "bytes": 180
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-preflight.log",
+      "sha256": "cbc0ddd5c8aa907c75112c5bcd4600f4126075f86bdd6bc2047eccf5faeb8dc8",
+      "bytes": 2185
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-sanitizer-build.log",
+      "sha256": "1878144a9c3ba076708a65961228556c06ba681a0dbb2bf3d917d2c36e2f2283",
+      "bytes": 26787
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-validation.log",
+      "sha256": "c60d26818521257ca01ab317d45c31bdb1d6d42e87483b723511412ad17277fa",
+      "bytes": 2373
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-first-through.log",
+      "sha256": "d4987e521591b469c1c6fe0c6daa99a8d0f8862c6837ecc4d7e8d5f45f8e6836",
+      "bytes": 1738
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-fourth-through.log",
+      "sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900",
+      "bytes": 572
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-freeze.patch",
+      "sha256": "861ea3713ae8dff1592038fdc27bc42832fd7f69e694a7aee1f053a7ac361323",
+      "bytes": 89563
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-layout.log",
+      "sha256": "87227195b942ce85b563e6955093e3bc27ef6744ee71b6a4afa6a79447131575",
+      "bytes": 180
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-noise.log",
+      "sha256": "9f4e0b6fc29b9b15d641c89b67d034b455b0fc22e0a6648dfc0cc94e8096c491",
+      "bytes": 1013
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-performance.log",
+      "sha256": "64611100b01e2ada35c01f8111486076eef2b4625cd86ab4891e062b254fc93f",
+      "bytes": 2855
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-preflight.log",
+      "sha256": "4e6a2c8141418ae074b769d5bfa47e29b3914313a373f1dee72426ce9788c623",
+      "bytes": 1378
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-sanitizer-build.log",
+      "sha256": "6c18b6eb1f50d61cf524f9169354d29fcd60e6ce6b27ea25c7082440a4263ad3",
+      "bytes": 27181
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-second-through.log",
+      "sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900",
+      "bytes": 572
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-seventh-through.log",
+      "sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900",
+      "bytes": 572
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-sixth-through.log",
+      "sha256": "2154ec26baa74358545594768af9ac40939ac8b47ae07c4d95de060cf157f249",
+      "bytes": 959
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-third-through.log",
+      "sha256": "cf30b387ab0d30e450f3c79fc787649d35f3a793dbee32027e1bc863aca73f09",
+      "bytes": 1996
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-validation.log",
+      "sha256": "1aff6185cbb0ce238033f80bfc0a8e73acde425584946a6b082ae18a161b89ac",
+      "bytes": 2305
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-operators-build.log",
+      "sha256": "155e9885f9d60dc4f19728f8f1610094c6b1195a8ff05d555c5fcd170d9dcfbb",
+      "bytes": 23932
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-partial-query-build.log",
+      "sha256": "f8dd068353a3f0067c0db0cba4a7a13b759c2d9e4922b27428394ad6d16c7da9",
+      "bytes": 554
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-pattern-base-build.log",
+      "sha256": "8a1196a4e2c47ec681d9737a136ca87fce7730a3cb8ade86d26a9671064ab52c",
+      "bytes": 22437
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-pattern-build.log",
+      "sha256": "9ee65a242ff8ba1d3221a0f019327da933b5983453325ad98ee0d76a8f239c20",
+      "bytes": 22380
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-prior-compression-second.log",
+      "sha256": "741f3809e8d3e8559d287b76c32f4ca3fc6a86904ba0b41d1c4c3a4796610bdd",
+      "bytes": 758
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-prior-compression.log",
+      "sha256": "177a6927b0901555514d2e5c240ae733f7e8d261c8fc81357d88c35341ea0856",
+      "bytes": 267
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-property-development.log",
+      "sha256": "0d334c30f9eca055558855704a28130393404d978579d6dcc413f6c8b2c0fb36",
+      "bytes": 96
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-property-reuse-development.log",
+      "sha256": "0d334c30f9eca055558855704a28130393404d978579d6dcc413f6c8b2c0fb36",
+      "bytes": 96
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-query-build.log",
+      "sha256": "ef0eb676a59e9655e257af3b5634dbcaddbf1eb240819cce4b8b9d465a3686aa",
+      "bytes": 22319
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-query-completion-build.log",
+      "sha256": "9d61795d8d14da0a29370b9815a6a5414eaff13acf7934e44de3466b933a8c73",
+      "bytes": 477
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-recipe-counters-build.log",
+      "sha256": "66183e6ca35ad890043a4fb12f1d67750fc8df524c191b7bacd39be5a9f282bd",
+      "bytes": 400
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-statement-build.log",
+      "sha256": "1308e6432f0c0db9d0dfa7ba845e1a6679806c0af572001bf7ca285474718b97",
+      "bytes": 384
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-typed-properties-build.log",
+      "sha256": "a05a82e81459c3197bc6ebaa774e6883cb9fb6590ccc95e5899079da3e526abd",
+      "bytes": 22567
+    }
+  ],
+  "archive_manifests": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-compressed-action-probes.json",
+      "sha256": "7d9f0c69bb94318d1b0081dca20f32210f86ab7c122a7d4424ff14286954dddd",
+      "bytes": 3285
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-compressed-prior-actions.json",
+      "sha256": "57e0e99ae10d7a6da31ecab4378ebfe4d53d02cc0efdeb08b6d18e6cc6da46eb",
+      "bytes": 3215
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-compressed-extra-probes.json",
+      "sha256": "da081d4a8188b95df316c6ca2e1b47edbdedd0c3370bc2ba710c3a00dfe2b84e",
+      "bytes": 2127
+    }
+  ],
+  "initial_validation": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-initial-validation.json",
+    "sha256": "f61b90b791cbfe831b3211b8ccc929c09062e8ac4e6691d1c4cbdd77cf7c17c0",
+    "bytes": 399010
+  }
+}

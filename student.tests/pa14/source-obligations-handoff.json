@@ -1,0 +1,226 @@
+{
+  "prior_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa14/destination-handoff.json",
+  "prior_sha256": "3e8c7aa4e7bdc079b6402ac64e85feaacab0b056a838f0ace53a43543db32e56",
+  "checks": [
+    {
+      "name": "reference",
+      "label": "release",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/reference.cpp",
+      "source_sha256": "2389a6ce719262908cf982a0e70d4799d046a1f45eef3b97bcbb9ab4ff343f56",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-reference.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/reference.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-reference.log",
+      "log_sha256": "2f62177847f995b2505842c666a89bb3b6a13225e1423d6c45d5bc641df3ec2e"
+    },
+    {
+      "name": "default-constructor",
+      "label": "release",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/default-constructor.cpp",
+      "source_sha256": "1ffad16850e95c88df6c17f91e8802c839a0b21b6457e3b33125991125d6e0bd",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-default-constructor.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/default-constructor.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-default-constructor.log",
+      "log_sha256": "272b70a4d4f807b1cc1455056862a88ffe77728649a74f1ab1854fddfd15c557"
+    },
+    {
+      "name": "callable-statement",
+      "label": "release",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/callable-statement.cpp",
+      "source_sha256": "66de284cc1c86be775d0ad48cbc6173bb04e2b8dfa1b3e6f60ed99e6ec5fe6b4",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-callable-statement.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/callable-statement.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-callable-statement.log",
+      "log_sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+    },
+    {
+      "name": "query-list-return",
+      "label": "release",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/query-list-return.cpp",
+      "source_sha256": "9ce26613f55320e6d4d102fe83153d30dc618d3932c14f36330b51e2a8625070",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-query-list-return.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/query-list-return.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-query-list-return.log",
+      "log_sha256": "65a0d4c1f00d77cb49671d3b98a028f45a6b6f8f3761688f459607436bdac901"
+    },
+    {
+      "name": "variable-callable",
+      "label": "release",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/variable-callable.cpp",
+      "source_sha256": "31e36174ce0ee6675c8e6a18018d7dd33ebf29301819a2d7757626ae78415d8c",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-variable-callable.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/variable-callable.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/release-variable-callable.log",
+      "log_sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+    },
+    {
+      "name": "reference",
+      "label": "sanitized",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "sha256": "ece11f82c03b742d797cdf42d908eae699cfce4a3bdd730eba151fd36908fd4d"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/reference.cpp",
+      "source_sha256": "2389a6ce719262908cf982a0e70d4799d046a1f45eef3b97bcbb9ab4ff343f56",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-reference.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/reference.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-reference.log",
+      "log_sha256": "2f62177847f995b2505842c666a89bb3b6a13225e1423d6c45d5bc641df3ec2e"
+    },
+    {
+      "name": "default-constructor",
+      "label": "sanitized",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "sha256": "ece11f82c03b742d797cdf42d908eae699cfce4a3bdd730eba151fd36908fd4d"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/default-constructor.cpp",
+      "source_sha256": "1ffad16850e95c88df6c17f91e8802c839a0b21b6457e3b33125991125d6e0bd",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-default-constructor.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/default-constructor.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-default-constructor.log",
+      "log_sha256": "272b70a4d4f807b1cc1455056862a88ffe77728649a74f1ab1854fddfd15c557"
+    },
+    {
+      "name": "callable-statement",
+      "label": "sanitized",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "sha256": "ece11f82c03b742d797cdf42d908eae699cfce4a3bdd730eba151fd36908fd4d"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/callable-statement.cpp",
+      "source_sha256": "66de284cc1c86be775d0ad48cbc6173bb04e2b8dfa1b3e6f60ed99e6ec5fe6b4",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-callable-statement.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/callable-statement.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-callable-statement.log",
+      "log_sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+    },
+    {
+      "name": "query-list-return",
+      "label": "sanitized",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "sha256": "ece11f82c03b742d797cdf42d908eae699cfce4a3bdd730eba151fd36908fd4d"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/query-list-return.cpp",
+      "source_sha256": "9ce26613f55320e6d4d102fe83153d30dc618d3932c14f36330b51e2a8625070",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-query-list-return.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/query-list-return.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-query-list-return.log",
+      "log_sha256": "65a0d4c1f00d77cb49671d3b98a028f45a6b6f8f3761688f459607436bdac901"
+    },
+    {
+      "name": "variable-callable",
+      "label": "sanitized",
+      "binary": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "sha256": "ece11f82c03b742d797cdf42d908eae699cfce4a3bdd730eba151fd36908fd4d"
+      },
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/variable-callable.cpp",
+      "source_sha256": "31e36174ce0ee6675c8e6a18018d7dd33ebf29301819a2d7757626ae78415d8c",
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-cppgm++-asan",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-variable-callable.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-remaining/variable-callable.cpp"
+      ],
+      "exit_code": 1,
+      "required_exit": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-closed-handoff/sanitized-variable-callable.log",
+      "log_sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+    }
+  ]
+}

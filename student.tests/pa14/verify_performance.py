@@ -620,7 +620,7 @@ print(observations+new_samples+owner_observations+view_observations+definition_o
 from verify_defaults import verify as verify_defaults
 from verify_body_audit import verify as verify_body_audit
 from verify_initializers import verify as verify_initializers
-# The mode campaign owns live identities. Earlier source hashes are checked
+# The source-obligation campaign owns live identities. Earlier source hashes are checked
 # against their committed revisions; all prior frozen evidence remains.
 initializer_observations=verify_initializers(check_live=False)
 body_observations=verify_body_audit(check_live=False)
@@ -635,6 +635,11 @@ assert mode_observations==728
 print(16996+mode_observations,"total frozen performance observations verified")
 
 from verify_destinations import verify as verify_destinations
-destination_observations=verify_destinations()
+destination_observations=verify_destinations(check_live=False)
 assert destination_observations==882
 print(17724+destination_observations,"total frozen performance observations verified")
+
+from verify_source_obligations import verify as verify_source_obligations
+source_observations=verify_source_obligations()
+assert source_observations==1120
+print(18606+source_observations,"total frozen performance observations verified")

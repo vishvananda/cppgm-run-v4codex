@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Verify mode legality, bounded cache ownership and all frozen AA/ABBA observations."""
 from pathlib import Path
-import json
+import hashlib,json,subprocess
 from verify_special_signatures import ROOT,document,checked,shared
 from verify_declaration_facts import binary,campaign
 
-def verify():
+def verify(check_live=True):
  v=document('destination-validation.json')
  assert shared.sha(ROOT/'student.tests/pa14/destination_audit_validation.py')==v['harness_sha256']
- assert shared.sha(ROOT/'dev/cppgm++')==v['binaries'][1]['sha256']
+ if check_live:assert shared.sha(ROOT/'dev/cppgm++')==v['binaries'][1]['sha256']
  assert len(v['checks'])==73 and len(v['coverage'])==1266
  recovery=v['recovery']
  for field in ['harness','prior_manifest']:binary(recovery[field])
@@ -21,7 +21,13 @@ def verify():
  assert len(recovery['reused'])+len(recovery['rerun'])==73
  for row in v['checks']:
   if row['name'] in reused:assert row==reused[row['name']]
- for row in v['binaries']+v['sources']+v['coverage']:binary(row)
+ for row in v['binaries']+v['coverage']:binary(row)
+ for row in v['sources']:
+  if check_live:binary(row)
+  else:
+   path=Path(row['path']).relative_to(ROOT)
+   frozen=subprocess.run(['git','show','7f401fa8:'+str(path)],cwd=ROOT,check=True,stdout=subprocess.PIPE).stdout
+   assert hashlib.sha256(frozen).hexdigest()==row['sha256']
  for row in v['checks']:checked(row)
  logs={r['name']:Path(r['log']).read_text() for r in v['checks']}
  assert 'ALL TESTS PASSED SUCCESSFULLY! (1935 / 1935)' in logs['through']
@@ -56,7 +62,7 @@ def verify():
   assert row['build_exit']==0 and len(row['headers'])==24
   for h in row['headers']:
    assert shared.sha(h['path'])==h['sha256']
-   if row['label']=='current':assert shared.sha(h['source'])==h['sha256']
+   if check_live and row['label']=='current':assert shared.sha(h['source'])==h['sha256']
   for k in ['binary','dump']:assert shared.sha(row[k+'_path'])==row[k+'_sha256']
   assert list(map(int,shared.run([row['binary_path']]).stdout.split()))==row['sizes']
  a,b=[r['sizes'] for r in layout['layouts']]

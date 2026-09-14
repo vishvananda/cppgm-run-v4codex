@@ -1,0 +1,3866 @@
+{
+  "entry_commit": "7f401fa8",
+  "entry": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/destination-final-cppgm++",
+    "sha256": "cd924522f01a357ba41c67ff7f349324be297e55b98f82dac12e86220cc3044c"
+  },
+  "controls": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/checks.json",
+    "sha256": "5fd7d95c13dd52b23f35743cc74bdf30df2af8bedcfaaa046c26641fb36f321e"
+  },
+  "harness_sha256": "77394527d3355a3611464bf21319f9e27f83bfc6ee2a673d1cc234300dd6f129",
+  "standard": {
+    "path": "/home/vishvananda/work/private/v4codex/checkout/doc/n3485.txt",
+    "sha256": "a46755160cd2946a9c6fd0adf45efd40c18bf2fde66ba2b0eb931826b2188d03"
+  },
+  "handout": {
+    "path": "/home/vishvananda/work/private/v4codex/checkout/pa14/README.md",
+    "sha256": "fcda2d96aa942a739c2b5258c4afe5e366a3b0bd27dc2fcda135d1ca76054e54"
+  },
+  "spec": {
+    "path": "/home/vishvananda/work/private/v4codex/checkout/spec.md",
+    "sha256": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3"
+  },
+  "clauses": {
+    "definition_time": "PA14 Assignment Boundary explicitly requires definition-time checks of unused supported bodies; N3485 [temp.res]/8 describes non-dependent semantic constraints.",
+    "default_initialization": "N3485 [dcl.init]/7,9,12; [class.ctor]/5-6: default initialization, deleted default constructors and their subobject requirements.",
+    "destruction": "N3485 [class.dtor]/5 and [class.temporary]/1: deleted defaulted destructors and temporary semantic constraints.",
+    "decltype": "N3485 [expr.call]/11 exempts the decltype operand function-call result from result completeness/abstractness/temporary creation; functional construction remains a conversion under [expr.type.conv].",
+    "casts_calls_lists": "N3485 [expr.type.conv], [expr.static.cast], [over.match.ctor], [over.match.call], [over.match.oper], [dcl.init.list]/7: selected functions must be usable; list narrowing is rejected.",
+    "conditional": "N3485 [expr.cond]/1,3-6: contextually convert the condition, perform directional matches and builtin overload resolution, preserve the resulting category and evaluate only the selected branch.",
+    "declarations": "N3485 [stmt.ambig]/1, [basic.scope.block], [basic.link]/6: declaration preference, local declaration identity, and block extern linkage.",
+    "const_classes": "The unchanged course fixtures accept const empty/fully initialized classes. This follows the const-default-constructible correction recorded in CWG253 (https://cplusplus.github.io/CWG/issues/253.html), rather than claiming that N3485 literal wording already includes that correction."
+  },
+  "reference_policy": "No reference, fixture, comparison rule or bundle changed; compiler agreement is not the language proof.",
+  "checks": [
+    {
+      "name": "unused-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-reference.cpp",
+        "sha256": "2389a6ce719262908cf982a0e70d4799d046a1f45eef3b97bcbb9ab4ff343f56"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-reference.cpp",
+        "sha256": "016a3cc2aa20bf85de4387899ea84d7bd3316c0b32a9e472c88df34d67d7ef42"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-reference.log",
+        "sha256": "50a4743b4ea371d51151c3dbdfca0943373e1ec65a927772e50740fe239e8d99"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-reference.cpp",
+        "sha256": "1e5f3b7d6d3812ed4f83e7489c6b429ff6801142c8bf481db1209d8a6ccdb34f"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-reference.cpp",
+        "sha256": "0a0d3906afd92ae6df33a11b14cd50c57866a24e67c1c5ea9cec04e435fa796f"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-rvalue-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-rvalue-reference.cpp",
+        "sha256": "62ab97126e1a1c213f0c7f7fc01c6be8190dbf61a9829d4b788608654f4e4a06"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-rvalue-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-rvalue-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-rvalue-reference.cpp",
+        "sha256": "de19c3c8d3b5aa001c648ca42e9b43a1541b15eb87cf01796e9add7ebea00d33"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-rvalue-reference.log",
+        "sha256": "50a4743b4ea371d51151c3dbdfca0943373e1ec65a927772e50740fe239e8d99"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-rvalue-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-rvalue-reference.cpp",
+        "sha256": "8445a82db1a9c674839466e1bbdc59d59d4705d5e1b01b64a19e536d78a38dfa"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-rvalue-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-rvalue-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-rvalue-reference.cpp",
+        "sha256": "d718cb6192482dde44f733e2f77b9aa594d9c1b06392fc576d1cdf46d1e81081"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-rvalue-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-const-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-const-scalar.cpp",
+        "sha256": "4ef8fd40cafe36e0dcd8b677bee2bc81d8fa13e3159ffcc6ff67683f308e53ba"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-const-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-const-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-const-scalar.cpp",
+        "sha256": "275a3b78b3d8acbedf58582a30b61161a25b97d3257115f35333de664b4fd1fa"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-const-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-const-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-const-scalar.cpp",
+        "sha256": "fc6a02b2348099e05425064dbfa9e5d1ac2b40f5a1d085b289a6f529ab68349e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-const-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-const-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-const-scalar.cpp",
+        "sha256": "3c63cee5fe80b693a25c261c904050262e70094183afcf63561c5deae687a3f0"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-const-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-const-array",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-const-array.cpp",
+        "sha256": "45aaf62aa8c7066d32948fdfb2c5c3577e3cb43cf2608bfa80205c59c62efdeb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-const-array.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-const-array",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-const-array.cpp",
+        "sha256": "86ee5946cd3f6168b846eec528c0b33bb6de0598a85a0298aa81e1fee24d7698"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-const-array.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-const-array",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-const-array.cpp",
+        "sha256": "5ea35814a758eb72ecfd6dfa7f7346de581121fd27aa00b21edb7b3dda4bb075"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-const-array.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-const-array",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-const-array.cpp",
+        "sha256": "ad7da1daec34871342ccd903322adedf25c54ef5b7dbdf0b1752f6c130850b3b"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-const-array.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-const-indeterminate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-const-indeterminate.cpp",
+        "sha256": "539d52103ae113b29e1acd0f37c129675dc45fb918397033b67e9d0bd78b63b0"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-const-indeterminate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-const-indeterminate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-const-indeterminate.cpp",
+        "sha256": "b0405adfdc0efcc0a97883b65abaaea9afa178b7055404f1ddf9b1f7fd1ea3ae"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-const-indeterminate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-const-indeterminate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-const-indeterminate.cpp",
+        "sha256": "6ea08c3d3af6cb0ad733889ceca5d50f6cd5e91ffa82d9d4ab14aa1df21c448c"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-const-indeterminate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-const-indeterminate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-const-indeterminate.cpp",
+        "sha256": "ec66add8318dc685b49c501cd0b593514abc6fccf3e175268b1e0c9631947d99"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-const-indeterminate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-default.cpp",
+        "sha256": "1ffad16850e95c88df6c17f91e8802c839a0b21b6457e3b33125991125d6e0bd"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-default.cpp",
+        "sha256": "32d2c3ea5c401b1f64c2af83e06dbe29184518976adf27bdf0a07d904766f3eb"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-default.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-default.cpp",
+        "sha256": "4df4a2cffe151b30e160a5e0a4529eff3fe17939302fccc11f95969eed6072de"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-default.cpp",
+        "sha256": "ab426dc40b5ad002935f9b9f1d7f50e160069772b5d826543f200d21f01a6e32"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-private-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-private-default.cpp",
+        "sha256": "ea43f622f2cdf3dc8e8f5b7681ccb1f4e9e81f7301fd9516623ef694a99c0593"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-private-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-private-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-private-default.cpp",
+        "sha256": "03c1656fcb351b0536caf7c13982ceea34441dff9fd4f91122a46ce4b87784c1"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-private-default.log",
+        "sha256": "290c1968cf2aac6fae6201c72ec7636e01af12acc403f1bcb293dfcb3cf4e2e8"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-private-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-private-default.cpp",
+        "sha256": "4089a205cd5da24d5da2ab092da6046cd0c016eb1fa0e0105587f2c013099a34"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-private-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-private-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-private-default.cpp",
+        "sha256": "da5594e02400fdb3aba8f4840234983bb7d57c4d9c4b282e4fbed2b9be54e02b"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-private-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-ambiguous-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-ambiguous-default.cpp",
+        "sha256": "d08f725b206d2f5503ac855b780f2a5aef8b956e76e486f85ac2828d831b7798"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-ambiguous-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-ambiguous-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-ambiguous-default.cpp",
+        "sha256": "e8002e1e7ed6d546ce1a97d9f0608a8889305c2ff1819445dc154596d40308fe"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-ambiguous-default.log",
+        "sha256": "23ef8bd27145004a7c110c3ec4c985b311c1575b883d94781dc4fd034a90e82e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-ambiguous-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-ambiguous-default.cpp",
+        "sha256": "e81adf58c94d46db38200c5d3a5ba41743891ba4bb9f3d675e58c1338786c9dc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-ambiguous-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-ambiguous-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-ambiguous-default.cpp",
+        "sha256": "7381aa36f9e7bbd3c722ded58a98c9eede1fa711976030fc8dc5db84562f31c7"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-ambiguous-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-array-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-array-default.cpp",
+        "sha256": "dcca6898ebfbd21e675c1a9580b77157d701c902bb15e6464c0d9656ab913371"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-array-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-array-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-array-default.cpp",
+        "sha256": "a9e8513f671f519252ad1504349269c25563712f47dc8d0723309ac98214888c"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-array-default.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-array-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-array-default.cpp",
+        "sha256": "23c164387ceb9b928eddad963fc0b938bcb44019b4268db161b7b3adc16d3c15"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-array-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-array-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-array-default.cpp",
+        "sha256": "e7cd0999a53044c68d41434b326aeaf7b5bc43ce669e2c8789d2f08bd808a3fc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-array-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-implicit-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-implicit-reference.cpp",
+        "sha256": "5a812f6aa4e81a6d2d332bf3566bb0660ddde8551afa65702e025d598b130543"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-implicit-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-implicit-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-implicit-reference.cpp",
+        "sha256": "b16cae19af3379137c9e90375fabbd6fd44ea042710abe1b1ad9002ba290ca29"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-implicit-reference.log",
+        "sha256": "5de8a64830c898b6d0a37bbef1e05ccf6e95710189e651b87f1589d93f87b556"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-implicit-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-implicit-reference.cpp",
+        "sha256": "06ace2acdb9e41ae5a13b5827cdbd5e7fa01f0b2d138702b0d1dade0d06ef7bb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-implicit-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-implicit-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-implicit-reference.cpp",
+        "sha256": "7765e134d0c4f71a9c82f9571bb6a4822ec57b1007a0d9513a975723eaad77b2"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-implicit-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-implicit-const",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-implicit-const.cpp",
+        "sha256": "5e8ee72cb595c23e34b388f18138a82d13a22516c647dda9801a37447e836b86"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-implicit-const.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-implicit-const",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-implicit-const.cpp",
+        "sha256": "5b609eaafd8578da67e31640a4b51502b55e7624773596ff32eaf728ca90a43d"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-implicit-const.log",
+        "sha256": "5de8a64830c898b6d0a37bbef1e05ccf6e95710189e651b87f1589d93f87b556"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-implicit-const",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-implicit-const.cpp",
+        "sha256": "d7584345ea7acaed3e9f065d6e93a663165ab6769859e3f184cec47b5cdbcbf8"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-implicit-const.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-implicit-const",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-implicit-const.cpp",
+        "sha256": "4f46197c64b70f37078ec7afe16c67f9b7b824d7df46ca3d8dcea9ef8e91d8d4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-implicit-const.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-base-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-base-default.cpp",
+        "sha256": "8d47e3d4fae787eb4a405f09ee64b326a5d7849a17c62eef861d00a50bb367d6"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-base-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-base-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-base-default.cpp",
+        "sha256": "9e72364a2ff5ce3cedd969e0348aecaeaaa2dd9d14478726f35ad1e88bdd66d9"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-base-default.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-base-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-base-default.cpp",
+        "sha256": "9bc522f1ec334071853ced6a627dd7c6d0e066e79bcc7e3d8da5443101079f2a"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-base-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-base-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-base-default.cpp",
+        "sha256": "b03ac8bba4576f65bb88bf6e2579bff50fc883d4776d796e78eb11a8666d2b31"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-base-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-member-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-member-default.cpp",
+        "sha256": "3b580aa99a3ca6130f14fb1661b91bb89f64d4c0b7b9b6c51cc42d039dbf3b82"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-member-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-member-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-member-default.cpp",
+        "sha256": "7b0d152de4b2aeeedcd81687e906dd445e68062d56fcc448f0833ec069b0f7be"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-member-default.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-member-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-member-default.cpp",
+        "sha256": "0a5d99f27632ff39ff645a0b1127768a49a20ba72b55dc91190ab59e9dbf5b82"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-member-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-member-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-member-default.cpp",
+        "sha256": "5995474b3a0fe065612d1259c0d0c5ef99845fa4b8779bd7263c171dbc7fe802"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-member-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-dtor.cpp",
+        "sha256": "b299d03b0a41f09feda32a9b1a9dca4aca256206db619e9352e5fbb492260305"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-dtor.cpp",
+        "sha256": "95eea45aefba0ab137498878210157736cf68ddd9f5e2493e94bf4433792e8ca"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-dtor.log",
+        "sha256": "855f3145c085c4a4844ce87eaa35f74b733b58fa744dc2e2a722386e69345eac"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-dtor.cpp",
+        "sha256": "6855d4e1d8e4a4b7f5c1b9999ff34dfa64c31a2df7d44d4226ecc87017eb2e5d"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-dtor.cpp",
+        "sha256": "a8677260c93b0e8a3fc12b942a6455ec731e713ec82a9677703bb08dbd0a7b02"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-call.cpp",
+        "sha256": "66de284cc1c86be775d0ad48cbc6173bb04e2b8dfa1b3e6f60ed99e6ec5fe6b4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-call.cpp",
+        "sha256": "bb8c493d542d026d7b2cdaff42d7a76d031e630a6b908a9dc7d7f2800d65f74c"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-call.log",
+        "sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-call.cpp",
+        "sha256": "3ef2688378e618eadbc44279ce124985bb9b8c5d0856123f3e15b0b51e2e1b8b"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-call.cpp",
+        "sha256": "48f9eb8d6efac47d9e3a40ea6996c8fcb2d9ac4058a7b4cadea6f034a02eb3e8"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-call-init",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-call-init.cpp",
+        "sha256": "81ad48e7bd96577a4fdc03d40adebe0a54284040809a9c866859604948f369a1"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-call-init.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-call-init",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-call-init.cpp",
+        "sha256": "0fde326f25ba7b92c026f94ef99a00ea599c3ce6329122109eb24e96c1473388"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-call-init.log",
+        "sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-call-init",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-call-init.cpp",
+        "sha256": "8d7f1a33bc91103e56535e865ab8beb2fa8a5ddc1160fbb332438fc08779b666"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-call-init.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-call-init",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-call-init.cpp",
+        "sha256": "c4a1a43b2ed2ff4c5254ec26b5dd60b902ca4eae61a00321503693fa052450bb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-call-init.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-construction.cpp",
+        "sha256": "1ab06dd0edf52dedea7a7af4b23741bf7a2304cc7ccea17f8cfc36f6f8d7f1d8"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-construction.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-construction.cpp",
+        "sha256": "fe699a422ae407e2adb82ef66c28cfb69826cfba5ee7bb61b0ca9dd2ba6373b3"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-construction.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-deleted-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-construction.cpp",
+        "sha256": "ce17c74a687b00262fc90fa894d170adbba24cdf9df8e25c797678f6b27fe768"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-construction.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-construction.cpp",
+        "sha256": "bf76de9974830b7151cbb23bc4287a597f8421d815bbd30ea70e1b93ef3130fc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-construction.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-operator",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-operator.cpp",
+        "sha256": "9a74e90e3743cf0ead1d6790332f9addce8946de6488847793703e0250b435cd"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-operator.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-operator",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-operator.cpp",
+        "sha256": "af33a74efcbe5a98fa2b1493cf9115d031b3d63b8da1ffd0b610ad6126de26e3"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-operator.log",
+        "sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-operator",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-operator.cpp",
+        "sha256": "fa7efffd6927dd53189e9e7a538a825bc7e61812f6a375fe09367005c3706706"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-operator.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-operator",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-operator.cpp",
+        "sha256": "67776facb5a0e0983451503f407eb81e89a95bf8c26f5055437bee288986573c"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-operator.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-argument.cpp",
+        "sha256": "8ab0276f6e91a2e8dcd4b41b8e6876c3093f55a26a49bc20b7fdf240f6d9f787"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-argument.cpp",
+        "sha256": "858eb6f30a44dcd24cd79adbd7ea2b34392c7cad7a926b240b902eac5c6a5287"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-argument.log",
+        "sha256": "fa5342d8f39599144ca1470a657fb597538852f0b0d00663093594956f71076b"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-argument.cpp",
+        "sha256": "74423b0019cef959eab5c274403b91be4799d866acd8e1abf1c21cd364762588"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-argument.cpp",
+        "sha256": "2f3e0bcee6f89d4d3f2c299cc871ebe3692ca9d4fe92aa1632ac96668ebac9f5"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-conversion.cpp",
+        "sha256": "179236e7d5f65c0bda8e79f663b6ef5e52a19e1e8eda775a79589cbf1a8f4fe3"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-conversion.cpp",
+        "sha256": "35b8bd7bec31d87947dfb1d0713a2a8dc5c4744235f90929c56e90c2d56ea821"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-conversion.log",
+        "sha256": "ecf478dc90aa4b3d1681f8181c2c31e939c415e54bcea6bd1e79acb2c0ba1890"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-conversion.cpp",
+        "sha256": "50a41634f1f049cb5022c2ca8a1d6e71feee073a6530788a3c8f1ea343fb2bd6"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-conversion.cpp",
+        "sha256": "c5c0fb12010287925e84226564d6780853d047f802897acf68d79c1ba21ca55f"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-type-query-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-type-query-default.cpp",
+        "sha256": "ea78904e2bcdd44eb8df5b90447ab8d31f1363b7088768b0f3fe92aa3f2c15d4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-type-query-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-type-query-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-type-query-default.cpp",
+        "sha256": "92c0a65a401e6fd9361b6e5e2da04809604e7d3a1dd1a9981d3645277f3d3f6d"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-type-query-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-type-query-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-type-query-default.cpp",
+        "sha256": "214895b3630858e11295bff95ed98f2583a440edb943aa344fbf9f07cd70ab48"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-type-query-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-type-query-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-type-query-default.cpp",
+        "sha256": "dded4ac7df046e5f4b4fca4e355b3ccf21d182024e913df5030c659fa4f6c04f"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-type-query-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-type-query-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-type-query-call.cpp",
+        "sha256": "73954f0e8aea69d8a59295b5faddb590d3ca22d1a3171bfa19aeb00855448429"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-type-query-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-type-query-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-type-query-call.cpp",
+        "sha256": "42677cf1f2757187615579a36903ebeede34f8b8d5c869f8481f6a23ad83d9ab"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-type-query-call.log",
+        "sha256": "0dd9480fe8c22f6da30b7cbbb5a679a1802435638b76f4cfc3977df4cc50d6e2"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-type-query-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-type-query-call.cpp",
+        "sha256": "d32f34dc03fc82f885f755135eb89739953f7ca4984ee1c31bcfd75a605a65a4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-type-query-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-type-query-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-type-query-call.cpp",
+        "sha256": "cd960b49f720a8f6a6f63f2d509d57a39c20098f77b1334f7078aed7a0a40974"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-type-query-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-type-query-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-type-query-conversion.cpp",
+        "sha256": "629d86381879a4c5456267600d37e8d21a4ef2281d5fbdf452ccc7a26e41e67e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-type-query-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-type-query-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-type-query-conversion.cpp",
+        "sha256": "d41e6fb86cddda3dad0d627c877b531db6eae566985a8d364c10e0b6560c39bc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-type-query-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-type-query-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-type-query-conversion.cpp",
+        "sha256": "d4cc330b901211d9f0d649585c7ed155aad58a99f61a6d917494e1c7fd5df510"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-type-query-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-type-query-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-type-query-conversion.cpp",
+        "sha256": "945b06818b5a9e560e9212de643b9e3be61f1ff255f80f19f023e5add05ac1bc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-type-query-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-reference.cpp",
+        "sha256": "c48e157bb11348f32fdc4dbd20120a2862b6ea39008124d645910034ed1ba469"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-reference.cpp",
+        "sha256": "5abbac77f89007bc0492730c2cfe1cd7734ea142ebaedaab76cd2bbd39b1438a"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-reference.log",
+        "sha256": "5de8a64830c898b6d0a37bbef1e05ccf6e95710189e651b87f1589d93f87b556"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-reference.cpp",
+        "sha256": "9af01fd43854efff70e527ba51272f4698950e2047a7d7c8d1780c3e2010d2fd"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-reference",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-reference.cpp",
+        "sha256": "065b8a8e968d1a4155f825f78f8dc455c77490a366544e37de0cba972cb72fe2"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-reference.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-private",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-private.cpp",
+        "sha256": "5d31f1f58e2de9662e027f022abb20dd53abe43e4bbde0f6f4a99057eb39e7be"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-private.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-private",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-private.cpp",
+        "sha256": "9a4ea462e754df5eaf8f634c1cc504325f5fd94acbbbf37117bb5c8c84753f01"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-private.log",
+        "sha256": "290c1968cf2aac6fae6201c72ec7636e01af12acc403f1bcb293dfcb3cf4e2e8"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-private",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-private.cpp",
+        "sha256": "c2131a586d2197ef19ae362f2de1c8e9d7948c7f253519bb107c7bd0e3e607cd"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-private.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-private",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-private.cpp",
+        "sha256": "0efef51457429b25d4e87d80462b993f58c16332a6b3bedd5edf0f0452b46adb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-private.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-deleted",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-deleted.cpp",
+        "sha256": "3ebd36800030185a6a91dd6f00e204a7acc15ab71ef393a156f8b5cec62f2ff7"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-deleted.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-deleted",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-deleted.cpp",
+        "sha256": "573b89abf1e2f07e6fef0a6c181c4dc16e600950cea6d15cdb9990bd147a4942"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-deleted.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-deleted",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-deleted.cpp",
+        "sha256": "7c68e20d2c1ca5124d2cc9941f4c77672a05b0c6ab490f7df434f8ff691a1a3a"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-deleted.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-deleted",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-deleted.cpp",
+        "sha256": "abdca413654179c7d76c992fbcb79c7ef9bd600393097a7ee9627bd41a46e389"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-deleted.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-no-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-no-default.cpp",
+        "sha256": "bdab134e40cd543959677609e97f43fa9fd662f4e30dae9ef99b52f5166db7dc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-no-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-no-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-no-default.cpp",
+        "sha256": "f929b38354a1a653f410944fab0beda0d92ef861f5cb4e10f3655c8d1a5c65cd"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-no-default.log",
+        "sha256": "b914bac6867c0891d2923dac19454139dc7d9124be6495c78998ddb09e0cdf59"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-no-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-no-default.cpp",
+        "sha256": "60198f0b8605ebadddb58d3a65f6327d46e4bfd50cb33e45d1c43f7a01141a24"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-no-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-no-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-no-default.cpp",
+        "sha256": "27f33141d63c093d0c6b2b4b4d68bc36ca5c25095febf07772234fe7d6a1ba84"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-no-default.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-ambiguous",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-ambiguous.cpp",
+        "sha256": "c7f0c0c58c9ed4f127944551ed1369624fc95e268a33cfae6dde0bd01edc20e4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-ambiguous.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-ambiguous",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-ambiguous.cpp",
+        "sha256": "619fa8728070f9dca30de80303cb9e9100756f95b8d79f7fac949a68a5545422"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-ambiguous.log",
+        "sha256": "23ef8bd27145004a7c110c3ec4c985b311c1575b883d94781dc4fd034a90e82e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-ambiguous",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-ambiguous.cpp",
+        "sha256": "69078c91fb3038d24d8fb5380420fcf65f4029817368f3d367f6c14b661c4ecb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-ambiguous.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-ambiguous",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-ambiguous.cpp",
+        "sha256": "076f482be379f5626f54068a723370e7986d0908592c52cc53c605fb5c811a66"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-ambiguous.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-dtor.cpp",
+        "sha256": "d867716f2f9897a98b2d12ea9ada6bb108c89293606c2a8589705c1a762bb044"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-dtor.cpp",
+        "sha256": "fd52b92c460c4d49b784bc9d918b16e0e66e3978a2b97d9d6d18d25a026952cc"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-dtor.log",
+        "sha256": "855f3145c085c4a4844ce87eaa35f74b733b58fa744dc2e2a722386e69345eac"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-dtor.cpp",
+        "sha256": "9dcc67d1479a5bdd45b4325ec76f4ebeb147a980d8bf91bb485f6ee8e0287a27"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-dtor.cpp",
+        "sha256": "04b84d8bf49de75f3ebc2f4fab674291695b2a5be7d7eb5cb3874fbe97125906"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-const-field",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-const-field.cpp",
+        "sha256": "658a30e317a3773835b1d47eeed8271c422125c0f236e37da5ffa6e00c13508c"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-const-field.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-const-field",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-const-field.cpp",
+        "sha256": "7ac3defde5d0b4ca88dc0adffbbcab85c2ded3e4770c80a99d5602b5693f4962"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-const-field.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-local-const-field",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-const-field.cpp",
+        "sha256": "ceba9f7355d863aa64d39fc1776997a9b493d7ccb7e1f0f522821ae1d0fe131d"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-const-field.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-const-field",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-const-field.cpp",
+        "sha256": "94ef115af331d1bf8c64bc4264cc4d88ea31c1db623bef0805ed3745677790bf"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-const-field.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-pure",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-pure.cpp",
+        "sha256": "541cde47d0fb279015304107839ed2b35df120dd7c06abd368a5588ca440025e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-pure.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-pure",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-pure.cpp",
+        "sha256": "ae0817130197081326faa0e63d908bf24f8fbf59225d8cbdc19e2bfbc7217a44"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-pure.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-local-pure",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-pure.cpp",
+        "sha256": "60bca7661901ca252f681d9145b771248d511436b290b82356e9975973dcd6bc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-pure.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-pure",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-pure.cpp",
+        "sha256": "82c4a36c603d86f393894dcc673a7c70a569465f119b3dc50842296f59e6f9a9"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-pure.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-deleted-call.cpp",
+        "sha256": "6d099e1e6e45678ae0310e878e3b9877ad1430c28cb71ac651808ccc1719e76c"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-deleted-call.cpp",
+        "sha256": "a8a733ff82f2f3c2e3fdc69bb2af8bb182839d53dddd2302dcd96ede7146454b"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-deleted-call.log",
+        "sha256": "9e8a02a16a668b227188989e235f4c0c7f271f3192a5b06eaf579ca4c387298e"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-deleted-call.cpp",
+        "sha256": "3fcc5ab99a3a88bb71cbcb166a49b25bc95aaa4cf341c1efee74304d4d4a094b"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-deleted-call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-deleted-call.cpp",
+        "sha256": "b4b9a9537e2c1867730e530af6449a06c76a0a38190c77a4084484aceea1d0ec"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-deleted-call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-deleted-method",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-deleted-method.cpp",
+        "sha256": "81a2fd344b8f9581325f5294c9756cce0b0e0af9772ef92547c7070b11daff38"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-deleted-method.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-deleted-method",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-deleted-method.cpp",
+        "sha256": "dbce3db58a7679fe5ac1ceef62345e79a032ee5d262d9d7036f9dd75977c460e"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-deleted-method.log",
+        "sha256": "d57c2617e9bdb7f67b5dd35fecb1f10ca988c3e72328c7d6ef0b6afb1eec1b75"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-deleted-method",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-deleted-method.cpp",
+        "sha256": "7ae6a717c4a15a9994dd01da2375a8e264b53774d5ba8468409094f773e78be9"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-deleted-method.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-deleted-method",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-deleted-method.cpp",
+        "sha256": "84a7eb1498375e086eff7aa524edf7de076e43f08eb0b4d6eecabb0e59206712"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-deleted-method.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-local-default-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-local-default-argument.cpp",
+        "sha256": "0e0f31f6275efc1ad25feed4c608951a9597955d001e27fc65493a8196abe5cb"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-local-default-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-local-default-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-local-default-argument.cpp",
+        "sha256": "d5ab7fbbcc22bf20d30e46a40ca2b05d9dbbf3647b9cea274f0b10c30d9d9055"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-local-default-argument.log",
+        "sha256": "65a0d4c1f00d77cb49671d3b98a028f45a6b6f8f3761688f459607436bdac901"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-local-default-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-local-default-argument.cpp",
+        "sha256": "3abba88abbc4fc23b77884473cd176bbb51ac839c30068171913eebaf4b22623"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-local-default-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-local-default-argument",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-local-default-argument.cpp",
+        "sha256": "a11054bcfd3843e92e1e5e35ac3ffd126d4f7e1d3aeb672d33f24a1ad9011389"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-local-default-argument.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-static-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-static-cast.cpp",
+        "sha256": "cf70f47cd0ff11b4a7ea99984b71ae927eca924b128816e8fed450fd0a3ca6ad"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-static-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-static-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-static-cast.cpp",
+        "sha256": "2ab3979622539a6d6e36f8a7fa80a5cb834ac96031469e053a80351e2041382d"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-static-cast.log",
+        "sha256": "ecf478dc90aa4b3d1681f8181c2c31e939c415e54bcea6bd1e79acb2c0ba1890"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-static-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-static-cast.cpp",
+        "sha256": "a15d3c08d6da357c46ece7c45d88c8e006e44d2cfe8119e15e1449f2765cb465"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-static-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-static-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-static-cast.cpp",
+        "sha256": "1557556cd1bb8734578d857cdb8d74f00c3c43f2ab79a323d94e4b913a625b2a"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-static-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-functional-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-functional-cast.cpp",
+        "sha256": "21d518200621bb36495bc41b995ef23bc88eeaf0c5f3edeee961fa47c86dc198"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-functional-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-functional-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-functional-cast.cpp",
+        "sha256": "7c78d1db293ed4ae02128532c00f6ee1ee28a7e004b0f09a948c22a258d4d9ec"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-functional-cast.log",
+        "sha256": "ecf478dc90aa4b3d1681f8181c2c31e939c415e54bcea6bd1e79acb2c0ba1890"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-functional-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-functional-cast.cpp",
+        "sha256": "a71aaa30a238f7250c370f56d6a6a0732ab8e5a940aaca4aa43db78a6f2a9def"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-functional-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-functional-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-functional-cast.cpp",
+        "sha256": "611a65065c303af63879b0512a4802513062e48e7e9606f1ff751ad7afc826fd"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-functional-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-duplicate-variable",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-duplicate-variable.cpp",
+        "sha256": "dbedffc3b38fa1e83a99c49fb1e774f65b4401860a8b6d5c187e23143a030094"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-duplicate-variable.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-duplicate-variable",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-duplicate-variable.cpp",
+        "sha256": "e1f05bdd4dece7738d79f06486eba5aa04e1cc4c8b8e9397cf7df26cbf4351a1"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-duplicate-variable.log",
+        "sha256": "022dd6ac28c5fc8df6ef7ea871b67bb1f260cf84a6f37aecae612b00e8ddaa4a"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-duplicate-variable",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-duplicate-variable.cpp",
+        "sha256": "3911959831428a648ff859da7d73952ad0a3b42da648fbdb8d2c067fe718a928"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-duplicate-variable.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-duplicate-variable",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-duplicate-variable.cpp",
+        "sha256": "a1b2cb39cbbee1a475f1885e5f582772b87a7aa70793b95fc34ce7334f15b613"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-duplicate-variable.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-cast-declaration",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-cast-declaration.cpp",
+        "sha256": "13a0cc9a9d5bbed46b651c09f9b7a9cd38d399b1a915d417a2f23bb9e8419e68"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-cast-declaration.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-cast-declaration",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-cast-declaration.cpp",
+        "sha256": "d1b6d277f886c0237a457554286d24904f53c95a9eadbf932d5c4c413f136c75"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-cast-declaration.log",
+        "sha256": "022dd6ac28c5fc8df6ef7ea871b67bb1f260cf84a6f37aecae612b00e8ddaa4a"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-cast-declaration",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-cast-declaration.cpp",
+        "sha256": "5ada4076e1f78dea2ea85f93e1e1693c5ac649ab07c89b7eef6aa4fecc75cf78"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-cast-declaration.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-cast-declaration",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-cast-declaration.cpp",
+        "sha256": "ed0f27d22fce3b22934b81c37430cd903fc69733cb50074e82bd105f8d42431e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-cast-declaration.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-implicit-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-implicit-deleted-dtor.cpp",
+        "sha256": "a972ac2963c7958db244bbf7e12a758838816592114f3a41c41ea4381243949d"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-implicit-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-implicit-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-implicit-deleted-dtor.cpp",
+        "sha256": "2c094d18f5a5f3bb2f0ca4d80f0aa28b1100ceef076ec43c6d416d5cb264db43"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-implicit-deleted-dtor.log",
+        "sha256": "855f3145c085c4a4844ce87eaa35f74b733b58fa744dc2e2a722386e69345eac"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-implicit-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-implicit-deleted-dtor.cpp",
+        "sha256": "1386f44a6ea4f8e6c31e0667cc275690abd2fa9ad86999551277482a9dd5cb34"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-implicit-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-implicit-deleted-dtor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-implicit-deleted-dtor.cpp",
+        "sha256": "364fa9a1ebb1ed4fb1b5db0da4fe4ec79193fa7ab0534172efb5b28a4520e485"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-implicit-deleted-dtor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-conditional-deleted-bool",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-conditional-deleted-bool.cpp",
+        "sha256": "d9fa5e4bcef09ce4f6fd4bb29287e08fc5c68c1699d4baaa2752297f4ce48cec"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-conditional-deleted-bool.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-conditional-deleted-bool",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-conditional-deleted-bool.cpp",
+        "sha256": "3b6c9a472b707de9702bbdefc428e752081fc5e74d215c9cb4a4165e89ad1319"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-conditional-deleted-bool.log",
+        "sha256": "ecf478dc90aa4b3d1681f8181c2c31e939c415e54bcea6bd1e79acb2c0ba1890"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-conditional-deleted-bool",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-conditional-deleted-bool.cpp",
+        "sha256": "3f9f07502ed37273da3b4828b031b042c8d0c3566a5d9e188422bb7ddee62c78"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-conditional-deleted-bool.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-conditional-deleted-bool",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-conditional-deleted-bool.cpp",
+        "sha256": "68af652ed083a3b0584e1b79c685cfb2e1b8aa758b68f34c419bb54c79278583"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-conditional-deleted-bool.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-keyword-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-keyword-cast.cpp",
+        "sha256": "86c1f1ba8d86dc7572181b364054e13c9e3c8817e81b3aa45cd730d068d92851"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-keyword-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-keyword-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-keyword-cast.cpp",
+        "sha256": "b8facdd4ce42cb63faff9ee65135afa893b34346435d1538587b6b2d54b2ddf3"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-keyword-cast.log",
+        "sha256": "ecf478dc90aa4b3d1681f8181c2c31e939c415e54bcea6bd1e79acb2c0ba1890"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-keyword-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-keyword-cast.cpp",
+        "sha256": "e796fe3474a4ea25675d4342ddc8492d5c9d292778f34293d295ad1ac332665f"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-keyword-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-keyword-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-keyword-cast.cpp",
+        "sha256": "44a55df40b52dd1342625f2cb5f67628d2f61946b58bc68674e5587ec596b9b2"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-keyword-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-class-cast.cpp",
+        "sha256": "b74331198f078d33231dd5ca3aac4968a699c7cae0178f37c0a7172e95e0ccb6"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-class-cast.cpp",
+        "sha256": "27f1495963ed1d9b35fe6f3a26f4bf05e4554d585de6518c6332dd5481264e5c"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-class-cast.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-class-cast.cpp",
+        "sha256": "148a463f4122816f8cf87e54c578ac7207e2547d1816992934d8727b2eb207a9"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-class-cast.cpp",
+        "sha256": "106f9aef26ed92dc99247f041933306cdef532c7757cbfb38de2a521f05a52ae"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-deleted-cstyle-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-deleted-cstyle-class-cast.cpp",
+        "sha256": "310455cc473e7dbe71c64b320af9cde0d163716f423917b3c89703f873a694d4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-deleted-cstyle-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-deleted-cstyle-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-deleted-cstyle-class-cast.cpp",
+        "sha256": "75dbf165f873516c762d2f071a2864202347b44a11bdd466c137545b56d6036b"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-deleted-cstyle-class-cast.log",
+        "sha256": "5eab2a48f1d02a98fd0077a6e11478c99e8d3b66a067267741729d24b37b31be"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-deleted-cstyle-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-deleted-cstyle-class-cast.cpp",
+        "sha256": "59186a451ac9220bd10d5003dd7fe94edc5b754b6768149a0d10aafe69bb1423"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-deleted-cstyle-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-deleted-cstyle-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-deleted-cstyle-class-cast.cpp",
+        "sha256": "f67b6468ab0a6c064d836543ed1f0d7f1798984a225af5fc845f8f6b0f6481b4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-deleted-cstyle-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-conditional-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-conditional-deleted-conversion.cpp",
+        "sha256": "80fd598ec9affa9f95a15211534bf617e49292b3a1611e2366e32a6af1c2a1d5"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-conditional-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-conditional-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-conditional-deleted-conversion.cpp",
+        "sha256": "72777705bc23ea6f6efb1aee3de320b5cdead79b28f8bf33ca78a0805bc5e8ad"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-conditional-deleted-conversion.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-conditional-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-conditional-deleted-conversion.cpp",
+        "sha256": "345b6551bfb3aab5d83aaef75478a9228517194429b920637556d050e3ed2787"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-conditional-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-conditional-deleted-conversion",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-conditional-deleted-conversion.cpp",
+        "sha256": "5b3b5655c99ca727bace9f0c9944a8d3df4be95b97ab4312d9efe8050f0b069e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-conditional-deleted-conversion.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-conditional-both-directions",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-conditional-both-directions.cpp",
+        "sha256": "e8a5aee5359e02dbca3f40c718646182492b227a11350435c0515ed2b40ffee1"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-conditional-both-directions.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-conditional-both-directions",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-conditional-both-directions.cpp",
+        "sha256": "9ea7b51cd1277574ab2fe613d1c8ff05f9f7b6e860eccea2e9f5f2495ef86d92"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-conditional-both-directions.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-conditional-both-directions",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-conditional-both-directions.cpp",
+        "sha256": "334d405ed712a36d7108c100c434cd6b145fdf6b2b4a6694398684f97998a3bc"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-conditional-both-directions.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-conditional-both-directions",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-conditional-both-directions.cpp",
+        "sha256": "6fb796d5c6bf846fa95cebae06772686396955152e409b4ba90bf0efd7710234"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-conditional-both-directions.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-conditional-ambiguous-match",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-conditional-ambiguous-match.cpp",
+        "sha256": "115d4bda1785533b669a3f9f6d64194fbb4514a10d0f549ccf36f5f4207d9158"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-conditional-ambiguous-match.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-conditional-ambiguous-match",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-conditional-ambiguous-match.cpp",
+        "sha256": "605c7b61f6c4b4905bdd9e3511ad051b0f6fb33331b696af021cc5a60c1160fd"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-conditional-ambiguous-match.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-conditional-ambiguous-match",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-conditional-ambiguous-match.cpp",
+        "sha256": "bc6299a2d84952ea0d2c6e32c01dd10acd2beebc0d0a518c91c1feb54879c213"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-conditional-ambiguous-match.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-conditional-ambiguous-match",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-conditional-ambiguous-match.cpp",
+        "sha256": "df1be369f0547998370a81e97a3c47a776873d03907e9e2447cc38ba9ddc81f2"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-conditional-ambiguous-match.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-braced-constructor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-braced-constructor.cpp",
+        "sha256": "77af84f9d3b0ca503ba2744c8d2765291a16342012855b67692baf8497624e19"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-braced-constructor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-braced-constructor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-braced-constructor.cpp",
+        "sha256": "affe247c4b4a03dfe8e26cc4ed56ccaa6c6feebe93c9f8387276fbc49e5e040f"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-braced-constructor.log",
+        "sha256": "02f2c45eafdf0e48ec0705ca9a251ffbe03856982539bbfa3c2949854d991783"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-braced-constructor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-braced-constructor.cpp",
+        "sha256": "d0340cfff2e3d1816ed8cfa5b0e83afb2d1a1986f43dd939ca0b3ad42617f961"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-braced-constructor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-braced-constructor",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-braced-constructor.cpp",
+        "sha256": "609a9c613dda507f244dead4c4e44e88ed0b5b1cf54de82b85c76daaf78e229e"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-braced-constructor.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-braced-narrowing",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-braced-narrowing.cpp",
+        "sha256": "6108ec1fbb67b52a977a8a241f872a4869c86c0c7ab4fa8258caee6c49df21b8"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-braced-narrowing.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-braced-narrowing",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-braced-narrowing.cpp",
+        "sha256": "43af13457094d769a8670512459ebbfeb17e38476df6525e83c3dbf38654ce93"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-braced-narrowing.log",
+        "sha256": "07b6f41b5908ea1e6f83e74b883e42f8e7037f6c353f27123b98dd1a8f188a1c"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-braced-narrowing",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-braced-narrowing.cpp",
+        "sha256": "4ed52f0faf7a16a476b4084ffdefc223de111b5fdcacbd559f22d34772b8ddfa"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-braced-narrowing.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-braced-narrowing",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-braced-narrowing.cpp",
+        "sha256": "6d50b9b0fcfe8c531803e9e52ab1afa68083cad6c95687e702914e332c185ce6"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-braced-narrowing.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-braced-aggregate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-braced-aggregate.cpp",
+        "sha256": "a2f37c14cc75ed43004f6e5f958710a34fd90199cdf5d5159ee35b77e5facc07"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-braced-aggregate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-braced-aggregate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-braced-aggregate.cpp",
+        "sha256": "be5232c8dc2f1c9461cb9c735b248502a269aa78eda817215679f8d3ed9ad4c6"
+      },
+      "required_exit": 1,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-braced-aggregate.log",
+        "sha256": "02f2c45eafdf0e48ec0705ca9a251ffbe03856982539bbfa3c2949854d991783"
+      },
+      "incorrect": false
+    },
+    {
+      "name": "member-braced-aggregate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-braced-aggregate.cpp",
+        "sha256": "3712c05d227efb1e0e77537822b77875bfc4e7ffa80ff1830a623837866394f4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-braced-aggregate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-braced-aggregate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-braced-aggregate.cpp",
+        "sha256": "fb66371b892fc09383aca5510b16d5b2366036eb5eb7edfc82ce679b3a546364"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-braced-aggregate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "unused-braced-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-braced-scalar.cpp",
+        "sha256": "68f1cab119be97f7e3972724a0f5e1dacdc804dea001a17318f8464075480561"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-braced-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "used-braced-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/used-braced-scalar.cpp",
+        "sha256": "5bc58b60c08d7fd04e60c9fbd5fbb0f6e75d172554244c5fb9addcae347c7256"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/used-braced-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "member-braced-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/member-braced-scalar.cpp",
+        "sha256": "75711a84793eb842fec72a2d2114d00428475ca870c6bd0f2cc71a4205ebb7b4"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/member-braced-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "qualified-braced-scalar",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/qualified-braced-scalar.cpp",
+        "sha256": "99582d9479250904c1ddb92d0ec1422f46bc84feebc66c6f4d3ca0788fb58a93"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/qualified-braced-scalar.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "invalid-list-return",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/invalid-list-return.cpp",
+        "sha256": "9ce26613f55320e6d4d102fe83153d30dc618d3932c14f36330b51e2a8625070"
+      },
+      "required_exit": 1,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/invalid-list-return.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "call",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/call.cpp",
+        "sha256": "ad071b4e9874c0ec7b0d5d2fa47560f1e0e104fa1157bb6bb52cc57dd32018d1"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/call.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/call-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/call",
+          "sha256": "c1989f4ffcea9e2c8e3b31aee766c83f72c422ba2245637b7006c37a0e434156"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "builtin",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/builtin.cpp",
+        "sha256": "6954a5196f48ce57e2df64db1310457e36727ba65627d411b20f50c45ffe96ab"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/builtin.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/builtin-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/builtin",
+          "sha256": "284c5ef1a5bcc98b58e52440d0644fa6b151d7b1d732d9a1f661e3c6e7c790e3"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "surrogate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/surrogate.cpp",
+        "sha256": "04426a6fc459aa0f87cc4fc08c96a89e09769ed0061f9fb0df4e167b22357f1a"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/surrogate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/surrogate-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/surrogate",
+          "sha256": "2109d9983e56d77b6a4cca3a2aa665d453520ef83cf6ee69c2c7d4ef91d92040"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "prvalue-surrogate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/prvalue-surrogate.cpp",
+        "sha256": "0880433ee37d87816437d757b88bc7bcac7d19ba5255bc4815897d3d8cbeaeb7"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/prvalue-surrogate.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/prvalue-surrogate-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/prvalue-surrogate",
+          "sha256": "40ddbb29d9c31ca7e0174b3f7ee38cfe5b9370332eb683c57fbab5a36764303a"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "list-return",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/list-return.cpp",
+        "sha256": "334969c3070e71d76765385365bc83a51150d37277ee0f2df3fea8c39cccf64b"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/list-return.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/list-return-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/list-return",
+          "sha256": "82b7db3474f8c7ae98e04087357ceea7e451f998f3f599210f80c2463a2264cd"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "operator-default",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/operator-default.cpp",
+        "sha256": "46ed02f2c3346408ba0b361fc175fd47141ae4c31cabec5433b0a3b30d5cb312"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/operator-default.log",
+        "sha256": "3b64418bfb218ba23afc43a3840f693e7f8f5686ad94d0b97fd57e5fb1d7038c"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "operator-default-cleanup",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/operator-default-cleanup.cpp",
+        "sha256": "b3b8796b3d63e42790d175c760fa3f0db762fc6d899732290455217ceb57d16d"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/operator-default-cleanup.log",
+        "sha256": "3b64418bfb218ba23afc43a3840f693e7f8f5686ad94d0b97fd57e5fb1d7038c"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "constructor-default-cleanup",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/constructor-default-cleanup.cpp",
+        "sha256": "5e2267761f414a70f66ea29492f935f7005c25b50b64c955d8e519a4da8287a9"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/constructor-default-cleanup.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/constructor-default-cleanup-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/constructor-default-cleanup",
+          "sha256": "25c13487b5874507f142cf46e7bb269a4bc88c80d7ff60fdbc0ab8f458aee6ba"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "const-provided",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/const-provided.cpp",
+        "sha256": "1c7d251b5b9d18ac5f5468006368c2cc501340ec7b86e5246d346c1aa3345eed"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-provided.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-provided-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-provided",
+          "sha256": "f307960d92cd3d6343c566c44d57c9c2c3552043c81b606ee4899a45a5c590ef"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "const-empty",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/const-empty.cpp",
+        "sha256": "babf6451b58416ca3cd3c6f766bdeb6d518aa68a9efa99fcfb432385a68de17c"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-empty.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-empty-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-empty",
+          "sha256": "21372fc48f1ebc747d6430bdc817f74329bfdf6a1fc0b94a02e5d69e8beff975"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "const-initialized",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/const-initialized.cpp",
+        "sha256": "f80228efc6ce3b9f63c6e90b95cf6f9da07aa95a3bf426f00dba36588f46075a"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-initialized.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-initialized-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-initialized",
+          "sha256": "6038e1b72aa48bf83ce275bc4b841a894f055f6dc301bd2d9803a2a97a3b53ff"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "condition",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/condition.cpp",
+        "sha256": "d61711c518e88c7eed4e894a3f33611f29ce1285bea9603b60ab641b2c1e8063"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition",
+          "sha256": "bc215082085c5ba8cd38d125903c407046d9d9bc656ef4eec50fb3c4862ed1c0"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "condition-declaration",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/condition-declaration.cpp",
+        "sha256": "2b319b1a532ea3b68dfba09700ce4b82eb4a5edf49749134f42344f91e7cadff"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition-declaration.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition-declaration-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/condition-declaration",
+          "sha256": "6a3076d76b127811c42ff8a4d05b7950ebe71d06da1139906ff165b63971c3eb"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "switch",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/switch.cpp",
+        "sha256": "3d56f09a0b70b1a330ae5d9f3231ff79f7aa84a6ec98769f1699c3994ae81b3b"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/switch.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/switch-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/switch",
+          "sha256": "3a40a4eddc5a04922c34aa7c271b9873502fc0c707782033c038d2ff11a9d084"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "local-initialized",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-initialized.cpp",
+        "sha256": "225526a2fbf9e8eb248f9e97153e7da51423c1189529ace289d9064dac6cb704"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-initialized.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-initialized-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-initialized",
+          "sha256": "b46c5d86f1eede7934f4655294e2844a396776f10c911721762b2a8298dcfedc"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "const-mutable",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/const-mutable.cpp",
+        "sha256": "c9d841d131c4aaf152b2bade586fd796717dfc6529d3ec84c6917399220a8323"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-mutable.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-mutable-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/const-mutable",
+          "sha256": "21372fc48f1ebc747d6430bdc817f74329bfdf6a1fc0b94a02e5d69e8beff975"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "local-abstract-base",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-abstract-base.cpp",
+        "sha256": "be5f6d9cddaf4be2920fa5bced6e5b773c01e2a6961da0b8e3c5197cb948a6dd"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-abstract-base.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 1,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-abstract-base-native.log",
+          "sha256": "10bfee6729a64d5e0ccbc2f21b147ca11c95dc255e872222c71285f398ce4d0a"
+        }
+      }
+    },
+    {
+      "name": "local-concrete-base",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-concrete-base.cpp",
+        "sha256": "89a206f5b8a4f264dc0067f9d5e3a617e1e07e55697937688c4b96a0349bc04c"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-concrete-base.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-concrete-base-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-concrete-base",
+          "sha256": "7ec9727d816ca138bf5ffdee9a53420ad7524e6995af68d23669b7b2230f3a6d"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "static-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/static-cast.cpp",
+        "sha256": "5b8fd2ceefc875d0e44a584692941b6dfcc4b15dfd13e580d69f3555edc53da0"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/static-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/static-cast-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/static-cast",
+          "sha256": "43d6f184ac70f9eba8064f619894e242bb916ff4e7d5368d1112cd4968f74962"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "functional-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/functional-cast.cpp",
+        "sha256": "27be533e6507efd4187ba93f5272e33c19caac9da15dfc1b1351cc6ff58a0768"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/functional-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/functional-cast-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/functional-cast",
+          "sha256": "43d6f184ac70f9eba8064f619894e242bb916ff4e7d5368d1112cd4968f74962"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "conditional",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/conditional.cpp",
+        "sha256": "4c94eed152d90f690e3f411baa9d190290c01addb15fcb8e31fef85855825899"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/conditional.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "keyword-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/keyword-cast.cpp",
+        "sha256": "a2350437668290ec94b2b2ce800b83611a3182f4f71456665fd4f4318d30154c"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/keyword-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/keyword-cast-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/keyword-cast",
+          "sha256": "43d6f184ac70f9eba8064f619894e242bb916ff4e7d5368d1112cd4968f74962"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/class-cast.cpp",
+        "sha256": "aae11998701ddf25d5fb6b7a6fa6d7a1efca774a1daa274dd024652d7afda5f5"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/class-cast-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/class-cast",
+          "sha256": "920824026caa6a39462cc77be56c5b037a7b323e59bd8780ac1ab2cba7b8f72f"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "braced-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/braced-construction.cpp",
+        "sha256": "8296939d684d416bc5601e19b961ecef4cd62576ffb47fedf5ff04e029f64cbc"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/braced-construction.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/braced-construction-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/braced-construction",
+          "sha256": "920824026caa6a39462cc77be56c5b037a7b323e59bd8780ac1ab2cba7b8f72f"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "braced-aggregate",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/braced-aggregate.cpp",
+        "sha256": "b55848d0df008d711b14664dc9bef76c90be27d9b62d244e985b5ec39000bbf0"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/braced-aggregate.log",
+        "sha256": "a64a376742d2c3fce786b38a0f4340702c6c6cd9ae6fe4cf171c42e709db9311"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "cstyle-class-cast",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/cstyle-class-cast.cpp",
+        "sha256": "6162d96822d04382a987e000565178f9643f4265f140d13a08ed15c40c1e8727"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/cstyle-class-cast.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/cstyle-class-cast-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/cstyle-class-cast",
+          "sha256": "920824026caa6a39462cc77be56c5b037a7b323e59bd8780ac1ab2cba7b8f72f"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "conditional-ref",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/conditional-ref.cpp",
+        "sha256": "def99a03118155ec23fae6024ac5a4d7e36bbe925b16f2977fa8af2cfb2da156"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/conditional-ref.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "conditional-distinct",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/conditional-distinct.cpp",
+        "sha256": "041ef3eb8906e89c07f4dcbb3a76a83c8dbf86755ae43a0a8eb7f8dbe889da38"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/conditional-distinct.log",
+        "sha256": "e64c0747f2c57f87e27203425dbfb10e1012b738471b0477f3b138e233a92492"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "local-base",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-base.cpp",
+        "sha256": "5ea614146813a3bd27c8c1f50c2feeebf50140703b3dcc7d590f752f6cd6370c"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-base.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-base-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-base",
+          "sha256": "5359511bcab021e71a5faab9c8972865739557064482565b12860a842255a4d2"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "local-dependent-base",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-dependent-base.cpp",
+        "sha256": "17ab95ee90103807ceb4e1e74db11b20aa8ccdd631ffe1d2a5fab347deda33c6"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent-base.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent-base-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent-base",
+          "sha256": "aa0d33708e21acdff92aaad33d35d2852870c6b911fc48593e26eaf55df778ce"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "local-dependent",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-dependent.cpp",
+        "sha256": "26b6b0d4c77c5d6435d87e4b4833ec0ef01b0cefd5203e379e31ecc3f99a1e5b"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-dependent",
+          "sha256": "d0e2944028c7134129f47ea94849f7b5f1ad057f68d0af85220fb84711bd5bc9"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "decltype-result",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/decltype-result.cpp",
+        "sha256": "cc802270aae186f2753bb79ebec5f30a83810e2f882b5675a6ead00998da436f"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/decltype-result.log",
+        "sha256": "855f3145c085c4a4844ce87eaa35f74b733b58fa744dc2e2a722386e69345eac"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "decltype-incomplete",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/decltype-incomplete.cpp",
+        "sha256": "7b277d09240f98a118fe52fe4e9e33ed7ef1cfd8043fb22961edaedca781e577"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/decltype-incomplete.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/decltype-incomplete-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/decltype-incomplete",
+          "sha256": "430d80e78cd114930a1b7607ef70235fdffe9e721786ea2a70a6d319486fa514"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "unused-dependent-body",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/unused-dependent-body.cpp",
+        "sha256": "da33d4143bcef84cf61c08cafb4f84a2c70956d82eab9c7f827b33eb697bb98e"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-dependent-body.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-dependent-body-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/unused-dependent-body",
+          "sha256": "a26a4ea41cf01d3e17c128bf2f9cdea78a2a273717e4ae09e3f11003eafaf163"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "extern",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/extern.cpp",
+        "sha256": "57bde0801dc7aa38678741d8447cda34a531da41a56c51e347d1ce14a9668df0"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern.log",
+        "sha256": "96b98f9e8d888bbf02fbacca6187c64a8c5bfc804201dfc31bab9d83f0974d6f"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "alias",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/alias.cpp",
+        "sha256": "74ed78bcfe7874c8cc41eff2a4b72a1ce08476a9ddb9f8e10b9bad4fd19056c3"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/alias.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/alias-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/alias",
+          "sha256": "a26a4ea41cf01d3e17c128bf2f9cdea78a2a273717e4ae09e3f11003eafaf163"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "extern-identity",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/extern-identity.cpp",
+        "sha256": "602f8cd4140609d4b075fdacde3eb54a648787d37c1031271c3565f5834852b8"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-identity.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-identity-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-identity",
+          "sha256": "c4b1eba5a09a6268561a91dc7144a1fc32756d0fa07003d6be53295941a676cf"
+        },
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "extern-before-definition",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/extern-before-definition.cpp",
+        "sha256": "3322f625146e3dbf7ec81edb1762f425f22a8dc248364712b937f31eff3492e1"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-before-definition.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": true,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-before-definition-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/extern-before-definition",
+          "sha256": "c4b1eba5a09a6268561a91dc7144a1fc32756d0fa07003d6be53295941a676cf"
+        },
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "standalone-construction",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/standalone-construction.cpp",
+        "sha256": "d88263fe7b382d69faedfc942d7934af01133fccdd9b8ecfb63ab3ebbf9d0c4e"
+      },
+      "required_exit": 0,
+      "entry_exit": 1,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/standalone-construction.log",
+        "sha256": "1fedd9b4636e289c727af91d684539d4b5762b6bfad417635dc0befaeef20c32"
+      },
+      "incorrect": true
+    },
+    {
+      "name": "dependent-initializer-fixed-pointer",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/dependent-initializer-fixed-pointer.cpp",
+        "sha256": "d65d0933326533b8cfb24558ceb3c230cc8aa3bb4b92b8fb6d9a611d1c81cab9"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/dependent-initializer-fixed-pointer.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/dependent-initializer-fixed-pointer-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/dependent-initializer-fixed-pointer",
+          "sha256": "8df132a3612a676447dff7451c54d24013eaa148cd33a594c1ee5a45ca52e35b"
+        },
+        "exit_code": 0
+      }
+    },
+    {
+      "name": "local-forward-definition",
+      "source": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-controls-thirteenth/local-forward-definition.cpp",
+        "sha256": "d40dcc31f4a3c2e1b54591e3076d72db2e02206d2c1378868bd7f161b334845f"
+      },
+      "required_exit": 0,
+      "entry_exit": 0,
+      "log": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-forward-definition.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "incorrect": false,
+      "backend": {
+        "exit_code": 0,
+        "log": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-forward-definition-native.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "native": {
+        "binary": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-obligations-final-entry/local-forward-definition",
+          "sha256": "ca32339a56cf2e51b3c724e224cd05951e0dd2055b62e48fde695a6ee7dc17a8"
+        },
+        "exit_code": 0
+      }
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # PA14 checkpoint performance review
 
+Final status: **PA14 full-stage audit complete**. The authoritative final design,
+acceptance, validation and handoff closure are in [audit.md](audit.md) and
+[plan.md](plan.md). [Final source-obligation evidence](../student.tests/pa14/source-obligations-performance.md)
+adds 1,120 observations, bringing the verified ledger to **19,726**. Both required
+gates pass: **1935/1935 tests, 14/14 stages**. All fixture/reference hashes remain
+unchanged. Sections below are chronological evidence for their named revisions;
+earlier open findings and checkpoint-only limitations are superseded by the
+final ownership review, not deleted from the record.
+
+
 Earlier sections preserve the 222/314, 281/314 and 297/314 checkpoint evidence.
 The final section records the 314/314 object-transfer/lifetime implementation.
 Each campaign states its own equivalent-output checks. An implementation with
@@ -3061,3 +3071,38 @@ executables. It adds 882 observations (18,606 cumulative) and 73 passing
 validation groups. Timing costs and noise remain disclosed without a speedup
 claim. Five source default/query defects still prevent whole-stage acceptance.
 No measurement, mandated limit, fixture or comparison rule has been removed.
+
+
+## Final source obligations: stage acceptance
+
+The [final main/repeat report](../student.tests/pa14/source-obligations-performance.md)
+preserves all 1,120 observations and supplies every compiler/native wall, RSS,
+calibration, paired ratio, range and text result. The cumulative verifier now
+checks **19,726 observations**. The equivalent-correct comparison starts at
+`7f401fa8`; final release SHA-256 is
+`f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115`.
+No measurement overlaps agent builds, tests, verification or archiving.
+
+Fixed-operator source recipes scale as 2M and concrete uses as 2KM, default
+recipes as M and uses as KM. At K=128/M=8 operator candidate work falls
+2,184→152; all four paired compiler changes are about −5%, exceeding the
+observed 0.87%/1.07% A/A ranges. This is a workload-specific compiler benefit.
+No native speedup or general corpus improvement is claimed. All 14 executable
+text sizes are unchanged, 12 whole images are equal, and the other two have
+equal course-canonical LowIR with a changed declaration/emission order.
+Compiler text grows 53,952 bytes (3.94%), MemberFacts four bytes and Analyzer
+208 bytes; all other measured records retain their sizes. Demand RSS increases
+686/738 KiB across the campaigns, while other RSS changes reverse sign; the
+precise allocation/high-water attribution is unisolated. Large wall outliers
+and native variation remain in the report, without filtering or attribution to
+the semantic correction merely because a median moved.
+
+The final [audit](audit.md) applies stage-scoped acceptance to all inherited
+plans: no mandated numeric PA14 latency/RSS/text cap exists; old zero-overhead,
+zero-occurrence and historical-live-layout goals remain diagnostics. Required
+semantic costs are documented, avoidable repeated selection and destination
+storage were removed, and all actual language/coverage/comparison/work bounds
+remain. No optional executable optimizer or speculative growth pass was added.
+No source-obligation timing was performed on the preliminary failed preflights.
+Both required gates and all 79 validation groups pass, and all previous PA14
+handoffs are closed with their original sources retained.

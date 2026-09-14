@@ -1,0 +1,46 @@
+{
+  "source_commit": "d359539c2fd3a82f12c77ccc20efc211bbe96161",
+  "binary": {
+    "path": "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+    "sha256": "f971551f64fd4cffe0f4effb5f5391ed818845c05a56ef26cb106e26c0baf115"
+  },
+  "checks": [
+    {
+      "name": "file-audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa14",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "seconds": 2.1565804481506348,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-final-file-audit.log",
+      "log_sha256": "23c6cd474ab7064fd8079a2574cf07b61ae8435ef14e4c1d56f2bd9ce0e27de8"
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa14"
+      ],
+      "exit_code": 0,
+      "seconds": 9.190914630889893,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-final-through.log",
+      "log_sha256": "885ce5b42ab3670cab30e3a469a9e80242c1c944f3de9c1872523bea3a3fa900"
+    }
+  ],
+  "verification": {
+    "command": [
+      "python3",
+      "student.tests/pa14/verify_performance.py"
+    ],
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa14-final-audit/source-cumulative-verification.log",
+    "log_sha256": "19fea916081d6387703ace2a13a702be8a54c7eb1aec070e8761aaaa1aec1cc9",
+    "observations": 19726
+  },
+  "verifier_sha256": "dd9d00653289f5edfd4069a8912c7b3a7f1db8d896fcadf6ce3a14904d2d23b8"
+}

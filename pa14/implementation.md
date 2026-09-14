@@ -1,5 +1,15 @@
 # PA14 implementation ownership
 
+Final status: **PA14 full-stage audit complete**. The authoritative final design,
+acceptance, validation and handoff closure are in [audit.md](audit.md) and
+[plan.md](plan.md). [Final source-obligation evidence](../student.tests/pa14/source-obligations-performance.md)
+adds 1,120 observations, bringing the verified ledger to **19,726**. Both required
+gates pass: **1935/1935 tests, 14/14 stages**. All fixture/reference hashes remain
+unchanged. Sections below are chronological evidence for their named revisions;
+earlier open findings and checkpoint-only limitations are superseded by the
+final ownership review, not deleted from the record.
+
+
 Current contract result: **314/314**, zero course failures; prior assignments **1621/1621**.
 The transfer continuation resolved **all 17 of its entry failures**, with no lost passes.
 The following body-fact continuations preserve 314/314 and share fixed scalar,
@@ -1064,3 +1074,47 @@ executables. It adds 882 observations (18,606 cumulative) and 73 passing
 validation groups. Timing costs and noise remain disclosed without a speedup
 claim. Five source default/query defects still prevent whole-stage acceptance.
 No measurement, mandated limit, fixture or comparison rule has been removed.
+
+
+## Final source-obligation ownership and audit closure
+
+The final continuation separates source declaration properties from runtime
+actions, and fixed selection recipes from concrete object/lifetime uses.
+`default_initialization_facts.cpp` owns default constructor usability/triviality,
+const-default properties, fixed source default recipes and known local-pattern
+members. `default_destructor_facts.cpp` owns defaulted subobject destruction
+properties. Both preserve narrow terminal failure and unavailable-prerequisite
+states. Virtual completion requests destructor declaration identity without
+forcing class usability or body/actions. Concrete default initialization uses the
+exact declarator occurrence to retrieve its source selection; synthetic storage
+uses the ordinary property path when no source declarator exists.
+
+`template_operator_facts.cpp` shares ordinary operator/callable/surrogate,
+cast, construction and conditional selection. Source recipes retain typed
+operand lists and conversions without creating runtime objects; concrete
+occurrences demand bodies and own argument conversions/materialization/cleanup.
+Class casts use the constructor recipe owner, and braced values share the list
+object's temporary. The common conditional routine preserves directional
+conversion ranking, ambiguity, cv/ref category and selected conversion functions.
+Fixed runtime variable types stay known even with dependent initializers;
+const integral values and dependent bit-field widths remain value dependent.
+`decltype` exempts only the designated function-call result, not construction.
+
+Local class forward/definition identities, known bases/members/default flags and
+unresolved dependent-base facts remain separate from concrete nominal class
+completion. Block extern declarations have namespace storage identities with
+separate lexical bindings. Declaration lookahead handles standalone functional
+construction and for-initializers without abandoned ASTs. Static definitions
+preserve in-class initializers and anonymous-union storage respects active-variant
+ownership. The final [audit](audit.md) traces these consumers end to end and
+closes every preceding handoff; PA15 and later native/optimization work were not
+started.
+
+[Validation](../student.tests/pa14/source-obligations-validation.json) has 79 passing
+groups, 242 source controls and four branch programs per build, terminal property
+and finish probes, 349 entry and sanitizer parity cases, 35 existing native
+programs and both required gates. The [entry proof](../student.tests/pa14/source-obligations-proofs.json)
+records 171 incorrect outcomes fixed across their full ownership paths, with
+C++ rule citations and no reference changes. The [journal](../student.tests/pa14/source-obligations-journal.json)
+retains initial failed runs and the corrected source-file collision/default
+recipe key; final evidence was recollected under the corrected frozen binaries.
