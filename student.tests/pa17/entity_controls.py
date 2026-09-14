@@ -21,6 +21,15 @@ GOOD={
 'cv_nested_alias': '''template<class T>struct B{};template<class T>using A=B<T>;template<class>struct S{static const int n=0;};template<class T>struct S<const A<T>>{static const int n=1;};static_assert(S<const B<char>>::n==1 && S<B<char>>::n==0, "nested cv");int main(){return 0;}''',
 'array_bound_call': '''template<class T,unsigned long N>int count(T(&)[N]){return N;}int main(){int a[7];return count(a)-7;}''',
 }
+GOOD.update({
+'decltype_alias_member': 'template<class T>using Id=T;struct X{int n;};template<class,class>struct S{static const bool v=false;};template<class T>struct S<T,T>{static const bool v=true;};static_assert(S<Id<decltype(((X*)0)->n)>,int>::v && S<Id<decltype((((X*)0)->n))>,int&>::v, "decltype categories");int main(){Id<decltype(((X*)0)->n)> x=0;return x;}',
+
+'array_cv': 'template<class>struct A{static const int n=0;};template<class T>struct A<T const>{static const int n=1;};static_assert(A<int const[3][4]>::n==1 && A<int[3]>::n==0, "array cv");int main(){return 0;}',
+'default_coverage': 'template<class T,class U=void,class V=void>struct B{};template<class>struct S;template<template<class,class...>class C,class T,class...U>struct S<C<T,U...>>{static const int n=1;};template<template<class>class C,class T>struct S<C<T>>{static const int n=2;};static_assert(S<B<int>>::n==1, "complete coverage");int main(){return 0;}',
+'default_vs_generic': 'template<class T,class U=void>struct B{};template<class>struct S;template<class T>struct S<T*>{static const int n=1;};template<template<class>class C,class T>struct S<C<T>*>{static const int n=2;};static_assert(S<B<int>*>::n==2, "specific template-id");int main(){return 0;}',
+'value_expansion': 'template<bool...>struct B{};template<class,class>struct S{static const bool n=false;};template<class T>struct S<T,T>{static const bool n=true;};template<bool...V>struct A:S<B<V...>,B<((void)V,true)...>>{};static_assert(A<true,true>::n && !A<true,false>::n && A<>::n, "value expansion");int main(){return 0;}',
+'pack_recursive_base': 'template<int...>struct B{};template<int,class>struct S;template<int N,int...V>struct S<N,B<V...>>:S<N-1,B<V...,N>>{};template<int...V>struct S<0,B<V...>>{static const int n=sizeof...(V);};static_assert(S<5,B<>>::n==5, "recursive packs");int main(){return 0;}',
+})
 BAD={
 'head_arity': 'template<class,class>struct X{};template<template<class>class C>struct S{};S<X> s;',
 'head_redeclaration': 'template<template<class>class C>struct S;template<template<int>class C>struct S{};',

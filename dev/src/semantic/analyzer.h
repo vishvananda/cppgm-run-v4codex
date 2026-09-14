@@ -500,7 +500,7 @@ private:
     EntityId template_entity(EntityId entity) const;
     TypeId apply_type_template(EntityId entity, const std::vector<ArgumentId>& arguments);
     TypeId specialize_alias(EntityId entity, const std::vector<ArgumentId>& arguments);
-    Index alias_specializations;
+    Index alias_specializations, template_argument_sources, template_head_shapes;
 
     ScopeId active_template_scope = 0;
     NodeId explicit_specialization_source = 0;
@@ -523,6 +523,7 @@ private:
     Index template_default_types;
     ArgumentId value_argument_id(QueryId query);
     ArgumentId template_argument_node(NodeId n, ScopeId scope);
+    ArgumentId template_argument_node_impl(NodeId n, ScopeId scope);
     ArgumentId parameter_argument(EntityId parameter);
     ArgumentId canonical_argument(EntityId parameter, unsigned ordinal, const Index& bindings, Index& cache);
     ArgumentId substitute_argument(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame = 0);

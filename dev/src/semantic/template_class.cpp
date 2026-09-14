@@ -20,9 +20,11 @@ bool Analyzer::dependent_template_syntax(NodeId root, ScopeId s)
                 if (auto args = child(part,Kind::TemplateArguments)) work.push_back(args);
             continue;
         }
+        if (node.kind == Kind::SizeofPack) return true;
         if (node.kind == Kind::Name && node.first) {
             auto e = lookup(node.op == OP_COLON2 ? global : s,ast[node.first].text);
-            if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias) && dependent_type(entities[e].type)) return true;
+            if (e && (entities[e].template_parameter ||
+                ((entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias) && dependent_type(entities[e].type)))) return true;
         }
         if (node.detail) work.push_back(node.detail);
         for (auto child = node.first; child; child = ast[child].next) work.push_back(child);

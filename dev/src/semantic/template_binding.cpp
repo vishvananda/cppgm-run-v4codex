@@ -57,6 +57,8 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
                 }
                 r.dependent |= bind_template_expression(a,s);
             }
+            if (r.dependent && entities[e].template_info)
+                for (auto a = ast[args].first; a; a = ast[a].next) template_argument_node(a,s);
             if (!r.dependent && !entities[e].template_pattern) {
                 r.entity = e = class_template_name(p,e,s);
                 r.entity = e = variable_template_name(p,e,s);

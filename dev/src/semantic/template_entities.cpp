@@ -38,7 +38,9 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts)
 }
 std::uint32_t Analyzer::template_head_shape(EntityId e)
 {
-    auto head = templates[entities[e].template_info];
+    auto index = entities[e].template_info;
+    if (auto shape = template_head_shapes.get(index)) return shape;
+    auto head = templates[index];
     Index bindings, cache; std::vector<ArgumentId> shape;
     for (unsigned j = 0; j < head.count; ++j) {
         auto parameter = template_parameters[head.offset+j];
@@ -46,7 +48,7 @@ std::uint32_t Analyzer::template_head_shape(EntityId e)
         bindings.put(parameter,arg);
         shape.push_back(entities[parameter].parameter_pack ? types.compound(TypeKind::PackExpansion,0,arg) : arg);
     }
-    return intern_arguments(shape);
+    auto result = intern_arguments(shape); template_head_shapes.put(index,result); return result;
 }
 EntityId Analyzer::template_entity(EntityId e) const
 {

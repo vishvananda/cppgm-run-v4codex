@@ -53,9 +53,18 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         if (entities[p.entity].key == KW_TEMPLATE && (a.kind != TypeKind::Named || !template_compatible(p.entity,a.entity))) return false;
         TypeId old = bindings.get(p.entity);
-        if (kind == DeductionKind::ClassPattern && ((p.cv & a.cv) != p.cv ||
+        auto element = actual;
+        while (types[element].kind == TypeKind::Array || types[element].kind == TypeKind::DependentArray) element = types[element].child;
+        auto cv = types[element].cv;
+        if (kind == DeductionKind::ClassPattern && ((p.cv & cv) != p.cv ||
             (p.cv && (a.kind == TypeKind::Function || a.kind == TypeKind::LRef || a.kind == TypeKind::RRef)))) return false;
-        TypeId value = a.kind == TypeKind::Function ? actual : types.qualify(types.unqualified(actual), a.cv & ~p.cv);
+        TypeId value = actual;
+        if (p.cv && a.kind != TypeKind::Function) {
+            value = types.qualify(types.unqualified(element),cv & ~p.cv);
+            std::vector<Type> arrays;
+            for (auto t = actual; t != element; t = types[t].child) arrays.push_back(types[t]);
+            for (auto t = arrays.rbegin(); t != arrays.rend(); ++t) value = types.compound(t->kind,value,t->bound);
+        }
         if (old && old != value) return false;
         bindings.put(p.entity, value); return true;
     }

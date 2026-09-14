@@ -1,5 +1,6 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
+#include <algorithm>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
@@ -95,14 +96,74 @@ void Analyzer::select_class_pattern(std::uint32_t index)
 {
     auto spec = specializations[index];
     if (spec.definition_pattern) return;
-    struct Candidate { EntityId entity; std::uint32_t arguments; };
+    struct Coverage { std::vector<unsigned> omissions, applications; };
+    struct Candidate { EntityId entity; std::uint32_t arguments; Coverage coverage; };
+    // The course's relaxed template-template matching permits omitted defaults.
+    // Retain which actual argument positions were covered. Coverage is a fact
+    // of this match, never a context-free candidate-ordering cache entry.
+    Index paths; unsigned path_count = 0;
+    auto path = [&](unsigned parent, unsigned ordinal) {
+        auto k = key(parent,ordinal); auto id = paths.get(k);
+        if (!id) { id = ++path_count; paths.put(k,id); }
+        return id;
+    };
+    auto flatten = [&](std::uint32_t id) {
+        std::vector<ArgumentId> out; auto pack = argument_packs[id];
+        for (unsigned j = 0; j < pack.count; ++j) {
+            auto arg = argument_types[pack.offset+j];
+            if (argument_pack(arg)) {
+                auto a = pack_arguments(arg);
+                out.insert(out.end(),argument_types.begin()+a.offset,argument_types.begin()+a.offset+a.count);
+            } else out.push_back(arg);
+        }
+        return out;
+    };
+    auto coverage = [&](EntityId entity) {
+        struct Pair { ArgumentId pattern, actual; unsigned path; };
+        std::vector<Pair> work;
+        Coverage result;
+        auto sequence = [&](const std::vector<ArgumentId>& x, const std::vector<ArgumentId>& y, unsigned parent) {
+            auto fixed = x.size();
+            bool pack = fixed && !value_argument(x.back()) && types[x.back()].kind == TypeKind::PackExpansion;
+            if (pack) --fixed;
+            for (unsigned j = 0; j < y.size(); ++j) {
+                auto position = path(parent,j+1);
+                if (j < fixed) work.push_back({x[j],y[j],position});
+                else if (pack) work.push_back({types[x.back()].bound,y[j],position});
+                else result.omissions.push_back(position);
+            }
+        };
+        sequence(flatten(templates[entities[entity].template_info].explicit_arguments),flatten(spec.arguments),0);
+        for (unsigned j = 0; j < work.size(); ++j) {
+            auto pair = work[j];
+            if (value_argument(pair.pattern) || value_argument(pair.actual)) continue;
+            auto p = types[pair.pattern], a = types[pair.actual];
+            if (p.kind == TypeKind::Named && a.kind == TypeKind::Named &&
+                entities[p.entity].specialization && entities[a.entity].specialization) {
+                if (entities[specialization_pattern(p.entity)].template_parameter) result.applications.push_back(pair.path);
+                sequence(flatten(specializations[entities[p.entity].specialization].arguments),
+                    flatten(specializations[entities[a.entity].specialization].arguments),pair.path);
+            } else if (p.kind == TypeKind::Function && a.kind == TypeKind::Function) {
+                sequence(std::vector<ArgumentId>(types.parameters.begin()+p.offset,types.parameters.begin()+p.offset+p.count),
+                    std::vector<ArgumentId>(types.parameters.begin()+a.offset,types.parameters.begin()+a.offset+a.count),pair.path);
+            }
+            if (p.child && a.child) work.push_back({p.child,a.child,path(pair.path,0)});
+        }
+        std::sort(result.omissions.begin(),result.omissions.end());
+        std::sort(result.applications.begin(),result.applications.end());
+        return result;
+    };
     std::vector<Candidate> matches;
     for (auto p = class_partial_heads.get(spec.pattern); p; p = class_partial_next.get(p)) {
         ++candidate_work;
         std::vector<ArgumentId> args;
-        if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args)});
+        if (match_class_pattern(p,spec.arguments,args)) matches.push_back({p,intern_arguments(args),coverage(p)});
     }
-    auto more = [&](EntityId a, EntityId b) {
+    auto more = [&](const Candidate& x, const Candidate& y) {
+        const auto& xc = x.coverage; const auto& yc = y.coverage;
+        if (xc.applications == yc.applications && xc.omissions != yc.omissions)
+            return std::includes(yc.omissions.begin(),yc.omissions.end(),xc.omissions.begin(),xc.omissions.end());
+        auto a = x.entity, b = y.entity;
         auto identity = key(a,b);
         if (auto known = class_partial_ordering.get(identity)) { ++class_ordering_hits; return known == 2; }
         ++class_ordering_work;
@@ -116,11 +177,11 @@ void Analyzer::select_class_pattern(std::uint32_t index)
     };
     unsigned best = 0;
     for (unsigned j = 1; j < matches.size(); ++j)
-        if (more(matches[j].entity,matches[best].entity)) best = j;
+        if (more(matches[j],matches[best])) best = j;
     for (unsigned j = 0; j < matches.size(); ++j)
-        if (j != best && !more(matches[best].entity,matches[j].entity))
+        if (j != best && !more(matches[best],matches[j]))
             throw std::runtime_error("ambiguous class partial specialization");
-    auto selected = matches.empty() ? Candidate{spec.pattern,spec.arguments} : matches[best];
+    auto selected = matches.empty() ? Candidate{spec.pattern,spec.arguments,{}} : matches[best];
     specializations[index].definition_pattern = selected.entity;
     specializations[index].definition_arguments = selected.arguments;
 }

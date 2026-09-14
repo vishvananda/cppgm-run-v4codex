@@ -82,7 +82,7 @@ TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
         if (decltype_form) ++unevaluated_depth;
         Expression e = expression(n, s);
         if (decltype_form) --unevaluated_depth;
-        if (decltype_form && ast[n].kind == Kind::IdExpression && e.entity) return entities[e.entity].type;
+        if (decltype_form && (ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && e.entity) return entities[e.entity].type;
         if (decltype_form && e.category != ValueCategory::Prvalue)
             return types.compound(e.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef, e.type);
         return e.type;

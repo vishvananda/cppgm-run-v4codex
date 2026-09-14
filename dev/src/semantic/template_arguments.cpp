@@ -55,6 +55,24 @@ ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, co
 }
 ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
 {
+    auto occurrence = ast.nodes.occurrences[n];
+    auto arg = template_argument_sources.get(occurrence.source);
+    if (!arg) {
+        arg = template_argument_node_impl(n,scope);
+        if (!occurrence.context && arg) template_argument_sources.put(occurrence.source,arg);
+        return arg;
+    }
+    // An ellipsis is substituted by the argument-list owner, which knows the
+    // pack boundaries. Scalar/type arguments consume this retained fact once.
+    if (occurrence.context && dependent_argument(arg) &&
+        (value_argument(arg) || types[arg].kind != TypeKind::PackExpansion)) {
+        Index bindings, cache;
+        return substitute_argument(arg,bindings,cache,template_type_contexts.get(occurrence.context));
+    }
+    return arg;
+}
+ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
+{
     if (ast[n].kind == Kind::PackExpression)
         return types.compound(TypeKind::PackExpansion,0,template_argument_node(ast[n].first,scope));
     if (ast[n].kind == Kind::TypeId) {
