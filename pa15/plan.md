@@ -1,86 +1,74 @@
-# PA15 implementation handoff
+# PA15 final plan and handoff
 
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
-Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
+Last reviewed commit: `dff6a92ba5af15cd21e60c82d98bf62aaf7a3d3e`
 
-Target: **PA15 full-stage**, O0 typed LowIR. Loop 35 enters at `d705aafc`,
-**173/177**, and completes **177/177** at `5452ad74`. All four original failures
-are resolved without changing fixtures, references, coverage or comparison rules.
-The previous goal turn was progress (committed initialization changes and verified
-reports). This completes the implementation handoff; independent whole-stage
-review remains pending. Preserve [the accumulated audit](audit.md) and both markers.
+Target: **PA15 full-stage**. Loop 36 independently reviewed the accumulated
+implementation and every handoff after checkpoint `538cfcb0`. Implementation and
+final audit are complete: **177/177 PA15; 2112/2112 through PA15; 15/15 stages**.
+The previous turn was progress: completed implementation and frozen evidence.
+No PA15 implementation or unaudited handoff remains. PA16 has not been started.
 
-## Design and semantic ownership
+## Final Spec Alignment
 
-| Owner | Data flow and completed behavior | Work / validation |
-|---|---|---|
-| Constant execution | Selected call/conversion -> checked body and lifetime facts -> immutable activation -> integral result. A frame includes body identity, canonical scalar arguments and typed receiver identity; function identity includes its specialization environment. Source-node constant caches never receive parameter-dependent results. | One checked body per function, one evaluation per complete activation/node key. Scalar/default/nested/recursive calls, function templates, stateless literal conversions, direct/functional casts, return/argument conversions and short circuiting tested. |
-| Ordinary body validation | Class completion drains its own ordinary/explicit-class body interval. Checking is separate from the existing member-emission demand. Implicit class-template bodies remain lazy. Earlier semantic dump scheduling stays in its owning mode. | One check per required body, no global retries. Unused false assertions, bad returns/jumps and explicit classes reject; complete-class lookup and unused dependent templates succeed. |
-| Static member storage | A defined namespace class object requests its own class's static constant storage through indexed definition edges. Later definitions satisfy the existing storage queue. Class completion does not instantiate unrelated nonvirtual bodies. | One class declaration walk per requested concrete class; per-member definition/storage requests deduplicated. Repeated objects, separate specializations and late definitions tested. |
+The production path retains immutable sources, streaming interned tokens and
+one parsed source graph with attached canonical semantic facts. Templates retain
+source regions and share fixed facts; dependent occurrences use compact
+parent-linked substitution frames and complete pack boundaries. Indexed lookup,
+selected declarations/conversions, per-fact demand states and typed ABI identities
+feed direct typed LowIR. Text is the requested output adapter. Flat indexes,
+slabs and vectors have TU/function owners; no external compiler implements output.
 
-Constant evaluation supports the fixture-required extension: C++11 single-return
-integral functions and stateless literal temporaries with implicit construction.
-Nonempty object execution, reference/pointer activation values and general PA16
-constant evaluation keep their later-stage owner; none of the PA15 fixtures is
-excluded. Overload resolution, access, deletion, conversion and construction are
-checked by existing semantic owners. Execution consumes those facts, including
-AST receiver records directly; it does not reconstruct calls through syntax or
-names. Functional-cast prediction recognizes a braced object operand without
-parsing a source region twice.
+The audit traces explicit and demanded templates, partial-pattern selection,
+constant activations, initialization, storage and vtable/body demand through their
+actual source owners. [The audit](audit.md) records those traces, the limits and
+the distinction between ordinary body validation and emission. Fixture-required
+matching, variable constants and limited constant calls remain implemented even
+where the broad README lists their general forms as later-stage features.
 
-Execution is bounded by **512 active calls and 1,000,000 expression visits/root**.
-Successful and expected-failure facts are memoized. Exhausted budgets and missing
-constant definitions remain pending so a later shallower call or newly available
-definition cannot inherit a false rejection. Completed independent values remain
-reusable. Flat indexes and growing vectors are TU-owned and release with the
-frontend. No new optimizer, textual phase transport, process-global cache or
-per-node owning pointer is introduced. Compiler text grows by 16,000 bytes (1.06%).
+The final repair rejects volatile value reads in AST and query constant contexts,
+prevents publishing a volatile reference's initializer as a reusable value, and
+preserves volatile loads in namespace/local-static initialization. Address
+formation, array decay, `sizeof`, unselected branches and ordinary runtime reads
+remain valid. The new [reducers](../student.tests/pa15/final_audit.py) provide
+17 native and 11 rejection controls; ten expose failures in frozen audit entry.
 
-Earlier completed groups remain intact: canonical value/pack arguments and
-specializations, retained matching and aliases, complete-class initialization,
-base/omitted zero plans, retained increment/decrement queries, and constexpr array
-validation/storage. The measured **32-byte/object** O0 array-backing budget stays
-in force. The prior [reference correction](reference-corrections.md), reducer,
-standard proof, bundle revision and original/revised hashes are preserved.
+## Performance and acceptance
 
-## Remaining work and review boundary
+[Final performance](final-performance.md) records **24 frozen campaigns / 4774
+invocations**, including all preliminary/noisy observations. New final campaigns
+cover compiler latency/peak RSS, native runtime/text and owner work scaling.
+Constant calls retain 512 active calls and 1,000,000 expression visits per root;
+unavailable prerequisites do not become permanent activation failures. Array
+backing remains limited to 32 bytes/object, with conservative direct stores/zero
+loops beyond that. No new optimizer or growth search was added.
 
-**Required PA15 implementation: no known unfinished behavior group; 177/177.**
-Independent audit must review the combined changes after `538cfcb0`, including
-constant execution/cache availability, body checking versus emission, storage
-edges and whole-stage architecture/performance. Passing implementation checks
-neither resolves those review questions nor authorizes advancement. No review
-marker is advanced and no requirement is waived.
+PA15/O0 has no mandated numerical latency/RSS/text ceiling. Historical diagnostic
+budgets, including PA14's local 64-KiB compiler-text target, do not become an
+accumulated PA15 exit gate. Measurements, language/complexity limits and coverage
+remain intact. Native selection/allocation/ELF, higher optimization levels and
+self-hosting keep their later-stage owners; supplied-backend controls establish
+executable behavior at this stage's LowIR boundary.
 
-## Validation and performance
+## Validation and ledger
 
-Fresh required checks: `make test-pa15` **177/177**, prior-through-PA14
-**1935/1935**, root-through-PA15 **2112/2112**, all exit 0. File audit passes with
-three inherited header-ownership warnings. No PA15 native/debug gate is omitted:
-its required LowIR validator is active; native controls use the supplied backend.
-Root reports run sequentially to preserve their shared count sink.
+Fresh `make test-pa15`, `make test-report-through-pa15` and
+`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src` pass. File audit has
+three inherited header-ownership warnings. All nine personal suites pass,
+including LowIR address controls and native volatile-load checks. The actual
+root summary is 2112/2112; the incoming 2136 count is not substituted for it.
+The final [evidence verifier](../student.tests/pa15/verify_final.py) checks frozen
+hashes, sampling order, parity, counters, fixtures, current source and logs.
 
-Explicit personal controls: **24 native + 18 rejection** execution/body/storage;
-26 value groups; 10 constant groups; 24 specialization native + 13 rejection;
-27 pack native + 8 rejection; 15 matching native + 7 rejection; 23 initialization
-native + 13 rejection + 3 LowIR; 11 checkpoint native + 7 rejection.
+| Handoff | Final review disposition |
+|---|---|
+| Checkpoint 32, through `538cfcb0` | Independently retraced source/token/semantic/pack/lowering owners; original 11 failures subsequently resolved. Historical audit/evidence preserved in git and checkpoint JSON. |
+| Loop 33, `57f0cd95` / `3c356866` | Matching, dependent aliases, selected environments and immutable pair-ordering cache reviewed; no remaining handoff. |
+| Loop 34, `1aa393c9` / `3b2475f8` / `4f4bea42` | Initialization, static addresses, volatile stores, backing profitability and one proven reference correction reviewed; no remaining handoff. |
+| Loop 35, `5452ad74` | Constant execution, body validation and static storage reviewed; volatile read defect repaired in `dff6a92b`. |
+| Loop 36, `dff6a92b` | Full-stage architecture, correctness, self-containment, performance and required exits verified; final documentation/evidence consolidated. |
 
-[Execution performance](execution-performance.md) retains all **224** frozen
-A/A/ABBA and B-only observations, compiler latency/peak RSS, native runtime/text,
-work scaling and the noisy dormant-body observation. Common LowIR and executable
-bytes are identical. At 4,000 ordinary/template cases, paired compiler ratios
-are 0.983–0.999 / 0.989–1.014. Checking 4,000 dormant bodies adds about 22.1 ms and
-5,004 KiB; this is required validation work. Scalar evaluation has N activations,
-5N visits and N memo hits; storage checks zero unrelated member bodies.
-PA15/O0 has no mandated numeric latency/RSS/text ceiling and introduces no optional
-transform requiring a speedup. Native optimization and self-hosting retain their
-later owners. Preserve [initialization](initialization-performance.md),
-[matching](matching-performance.md) and [audit](audit-performance.md) measurements;
-inherited diagnostic targets do not override stage-scoped acceptance.
-
-| Handoff | Implementation / independent review boundary | Evidence |
-|---|---|---|
-| Checkpoint 32 | Reviewed through `538cfcb0`; matching, constants/storage and ordinary validation unfinished | 166/177; prior 1935/1935; [audit](audit.md) |
-| Loop 33 | Matching/parser and ordering/environment ownership; reviewed marker unchanged | 169/177; [matching handoff](../student.tests/pa15/matching-handoff.json) |
-| Loop 34 | Initialization/query/array facts, reference correction and measured backing limit; four implementation failures remain | 173/177; prior 1935/1935; [initialization handoff](../student.tests/pa15/initialization-handoff.json) |
-| Loop 35 | `5452ad74` checked constant execution and complete storage/body demand; full-stage independent audit pending | 177/177; prior 1935/1935; through 2112/2112; [verified handoff](../student.tests/pa15/execution-handoff.json) |
+The only fixture change across PA15 is the documented
+[aggregate-array reference correction](reference-corrections.md). Its source,
+status, comparison rules and pinned bundle are preserved; the reducer was rerun
+independently. No new reference correction was needed in this audit.

@@ -1,202 +1,183 @@
-# PA15 accumulated checkpoint audit
+# PA15 final whole-stage audit — loop 36
 
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
-Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
+Last reviewed commit: `dff6a92ba5af15cd21e60c82d98bf62aaf7a3d3e`
 
-Reviewed range: `8000f3c8..538cfcb0`, inclusive of all changes after the base.
-Audit entry: `db0686a3b17c87aa9d8dbd82e30346c034fc89b2`. Both original markers
-still named the stage base, so this first audit covers all three accepted
-handoffs, not just the pack handoff. The preceding handoff was progress: its
-committed changes and freshly reproduced 166/177 report establish that state.
+Audit entry: `d97445d4`. Result: **PA15 full-stage complete**, with one
+cross-owner correctness repair. The fresh course report passes all 15 stages;
+no implementation failure, timeout, self-containment defect or unaudited PA15
+handoff remains. This review reconstructed the source pipeline and semantic
+owners; checkpoint conclusions were evidence to verify, not substitutes for
+source review. The prior checkpoint record remains in git at `3aff4801` and in
+[checkpoint-evidence.json](../student.tests/pa15/checkpoint-evidence.json).
 
-Disposition: **checkpoint audit complete; full-stage implementation incomplete**.
-The same 11 of 177 fixtures fail. No earlier test regresses, coverage is intact,
-and the discovered defects in the accumulated implementation paths are fixed.
-This records a review boundary, not a claim that PA15 passes or permission to
-advance. The remaining required work is grouped below and in [the plan](plan.md).
+## Final Spec Alignment and architecture
 
-## Commit and combined-change review
-
-| Commit | Reviewed contribution and interactions |
+| Spec surface | Actual ownership and reviewed data flow |
 |---|---|
-| `053af5e3` | Entry plan, original 56/177 baseline and owner boundaries; markers correctly retained. |
-| `cdbfeb8a` | Constant quotient/remainder and shift limits, scalar casts, language-mode multicharacters and function-only inline metadata; checked both ordinary and query evaluators and preserved PA2 token mode. |
-| `01b543ed` | Canonical type/value arguments, default/head substitution, lookup and typed ABI arguments; checked renamed heads, narrowing, enum identity and constant storage consumers. |
-| `d3475a79` | Value handoff, frozen scalar evidence and preserved fixtures; historical verification is a snapshot, not a current-binary gate. |
-| `6c8e2259` | Selection plan and its broader constant/source obligations; no unsupported numerical exit gate introduced. |
-| `767e0797` | Explicit class/function/member/variable selection, source scope, primary demand exclusion, linkage and storage. Reviewed selection versus later pack keys and body demand. |
-| `93dd5e29` | Selection/initializer counters and frozen controls; counters observe existing transitions and do not request work. |
-| `113b6907` | Specialized static declarations versus definitions, initializer reset and duplicate rejection; checked forward declarations, later definitions and retained primary definitions. |
-| `19225b3d` | Specialization handoff and all preliminary/noisy/repeat measurements; earlier unresolved owners remain required. |
-| `53f1afa9` | Pack partitions, expansion frames, retained source lists, sizeof queries, bases and lifetime ordering; exposed missing traversal and signature-selection interactions. |
-| `768e31f0` | Cooked/raw/character-pack literals, string constants, explicit prefixes and f80 writer operands; found target deduction reused call-expression rules. |
-| `992b1170` | Unchanged scalar occurrence edges and empty-index fast path; useful repair, but per-parameter vectors and body pack scans remained. |
-| `db0686a3` | Pack handoff and 166/177 baseline; all original failure sets and evidence retained. |
-| `e211b3f8` | Audit repairs to pack traversal, typed specialization/target matching, head kinds and hash removal, with source/native and index reducers. |
-| `034e3b91` | Removes scalar expansion dispatch and redundant pack scans by consuming the existing expanded-list fact. |
-| `538cfcb0` | Frozen cumulative/checkpoint benchmark and independent evidence verifier, including historic hashes and current progress/coverage checks. |
+| §§1,8: sources and parser | `preprocess/source.h` retains immutable bytes/file IDs. `PPTokenCursor` borrows spelling; identifiers enter the TU intern table. `PostTokenCursor` holds one PP lookahead and literal scratch. `syntax::Cursor` discards consumed ring entries; deferred class lookahead is delimiter-indexed. `Parser::translation_unit` calls `Analyzer::consume` for each parsed declaration. |
+| §§1,2,4: graph and instantiation | `syntax/ast.h` stores source nodes once. `occurrence.cpp` caches source-region IDs, projects occurrence edges and defers bodies/defaults. It does not copy or reparse template grammar. `FactStore` uses 1024-record slabs; `ExpressionStore` shares fixed properties while uses retain bindings, receivers and incoming conversions. |
+| §§2–4: identity and lookup | Types, entities, scopes, queries and argument slices have compact IDs. Value arguments encode canonical type/bits; pack arguments preserve nested boundaries. `template_call.cpp` separates explicit prefixes from completed specialization keys. `lookup.cpp` visits lexical and indexed using/base edges; candidates are filtered by arity/shape, then required candidates are checked. Rendered names and ABI text are presentation, not equality keys. |
+| §§4,5: facts and invalidation | `template_type_facts.cpp` keys substitution by pattern/head, specialization, parent and lane; overlays contain changed bindings. Specialization declaration/body, layout, defaults, definitions, vtables and emission have distinct states/queues. `finish()` advances queue cursors; it does not restart every pending entity. Definition traversal keys include the member and selected definition head, permitting later definitions without clearing unrelated caches. |
+| §§3–5: selection | `template_specialization.cpp` publishes an explicit selection on the existing incomplete canonical entity; a completed primary is not silently reinterpreted. `class_pattern_selection.cpp` searches the primary's candidate list, verifies the exact substituted argument tuple and caches ordering by both immutable pattern IDs. Selection creates only the selected environment; two linear passes identify/verify the winner. |
+| §§6,8,10: lowering and ownership | `lowering/driver.cpp` constructs `lowir_model::Program` directly from semantic facts. `Procedural` consumes recorded call/conversion, initializer/lifetime, layout and ABI facts. `symbols.cpp` keys cross-TU linkage by typed ABI entities. TU frontend state releases after lowering; function scratch resets per function; output IR/minimal linkage remain through writing. No production parser/writer roundtrip, host/reference invocation, per-node shared ownership or mutable process-global cache occurs in these owners. |
 
-The combined review includes **every changed `dev` file**, registration in
-`dev/frontend_source_sets.mk`, all new personal controls and all evidence/scripts.
-[Machine-readable evidence](../student.tests/pa15/checkpoint-evidence.json) lists
-exact commits, source paths, source-tree identity, binary hash and artifact hashes.
-The measured implementation is `034e3b91`; `538cfcb0` adds only audit tooling and
-has the identical compiler tree. No compiler or tooling code is changed in the
-subsequent records commit.
+The source audit includes accumulated literal handling, signature substitution,
+pack expansion, index removal, partial matching, initialization, constant calls
+and body/storage changes, not only the final patch. New implementation sources
+are registered in `dev/frontend_source_sets.mk`; the final repair adds none.
+The file audit's three inherited header warnings are advisory ownership findings;
+they do not hide per-node allocation or a missing stage implementation.
 
-## Findings and repairs
+### Representative declarations and demands
 
-1. **Pack traversal stopped at its container.** `associated_type_lookup` omitted
-   the namespaces of type arguments within packs. `pack_adl` was rejected before
-   the fix and now executes successfully; the non-type enum companion verifies
-   that non-type arguments do not add associated namespaces. The corresponding
-   local ABI type visitor now descends pack elements as well. This follows
-   N3485 3.4.2 [basic.lookup.argdep]; no unrelated namespace scan was added.
-2. **Selection and packs had incompatible signature paths.** Fixed arity filters
-   rejected explicit and deduced pack specializations. Function-pointer matching
-   constructed expression records and applied call decay, losing reference and
-   return-type deductions. Selection now uses the ordinary canonical prefix and
-   completed-specialization indexes with a typed target-signature matcher.
-   Explicit value/type packs, omitted arguments, empty packs, reference targets
-   and deduced return types execute correctly. See N3485 14.8.2.2
-   [temp.deduct.funcaddr], 14.8.2.5 [temp.deduct.type], 14.8.2.6
-   [temp.deduct.decl] and 14.7.3 [temp.expl.spec].
-3. **An empty target could discard an explicit pack prefix during the repair.**
-   Prefix length checking lived inside the per-argument loop. It now runs before
-   that loop, including when the target has no parameters. Short-prefix and
-   wrong-reference/return rejection companions pass; no invalid target is
-   accepted to enable a positive control.
-4. **Class head matching omitted pack kind.** Scalar/pack redeclarations with
-   otherwise identical kinds and counts were accepted. Parameter-pack kind is
-   now part of the existing head compatibility check. Both directions reject.
-5. **Clearing bindings broke the shared hash index.** `deduce_expansion` resets
-   bindings with zero, but `IdIndex::put` left an empty probe-chain hole. The
-   reducer lost key 81 when clearing key 6. Zero now removes the binding and
-   shifts only its affected cluster, with no allocation or global invalidation.
-   The explicit index control checks every surviving key through interleaved
-   replacements, removals, growth and final empty state. This repairs semantic
-   cache correctness, not merely a fixture output.
-6. **Scalar parameters paid unnecessary pack costs.** Each substituted scalar
-   allocated a temporary expansion vector, dispatched through the expansion
-   helper, and each function body scanned scalar lists twice for pack bindings.
-   Scalar substitution now appends directly; body binding consumes the published
-   expanded-list identity, including explicit empty packs. No new cache, token
-   replay, source copy or output transformation was introduced. Frozen repeats
-   verify the affected cost reduction and disclose all other measurements.
-7. **Historical evidence scripts pin old live-state assumptions.** Their binary
-   and old-marker assertions are appropriate to the recorded handoffs, not the
-   current tip. They remain unchanged. The independent checkpoint verifier
-   verifies all their frozen artifacts and sequences, plus the current code,
-   marker, failure-set and fixture-tree identities. This preserves evidence
-   without making an old binary or unadvanced marker a permanent exit gate.
+`template<> constexpr int f<2,3>()` in the final controls travels from interned
+source tokens to a parsed explicit declaration, canonical integral argument pack,
+selected function entity and checked constant body. `C<f<2,3>()>` requests that
+selected call, converts its integral result to the parameter type, then uses the
+canonical value argument as the class key. The explicit function remains strong;
+ordinary primary instantiations use the existing weak emission policy. Selected
+body/linkage facts feed typed LowIR and its explicit text output.
 
-[Reducers](../student.tests/pa15/checkpoint_audit.py) supply 11 native and seven
-rejection cases; nine fail against the frozen audit-entry compiler and all pass
-now. [Index reducer](../student.tests/pa15/index_erase.cpp) independently exposed
-the hash corruption. Source rules are available in [N3485](../doc/n3485.txt).
-There are **no reference corrections**: no fixture, reference, bundle revision,
-comparison rule or required behavior was altered, so no reference exception or
-compiler-agreement proof is being used.
+For demanded `sum<1,2,3>()`, the source body is retained once. Its complete value
+pack identifies the specialization; `template_pack_expansion.cpp` discovers the
+source expansion's parameters once and creates lane frames for `N...`. Expanded
+initializer edges refer to occurrences in those frames. Initialization establishes
+one typed array plan; constant validation visits plan actions. The local array
+keeps its own address identity while lowering can copy a legal small readonly
+backing into that storage. The loop and call remain executable. The native
+control checks the sum and a second specialization, through the supplied backend.
 
-## Architecture and optimization trace
+For `C<int,char>` with a virtual `f()`, class completion creates its signature,
+layout and vtable demands; the vtable requests the selected body even without a
+source direct call. Its unrelated nonvirtual invalid dependent body stays dormant.
+For `C<const Tag*>`, candidate matching selects the more specialized const-pointer
+pattern; immutable pair ordering is computed twice for 4000 requests, with 7998
+hits. Dependent aliases retain their typed template arguments through both lookup
+and overload conversion. These are language-required computations, not optimizer
+searches. Source and output order are independent of demand identity.
 
-A representative nontrivial declaration is the explicit `forward<int>` definition
-in the frozen selected-pack runtime control. `emit_lowir` owns a preprocessor,
-post-token cursor, parser and semantic analyzer for each translation unit. Source
-buffers and interned identifiers remain owned there; parser callbacks build the
-shared semantic/source graph. Explicit arguments become typed canonical values
-or types and interned pack slices. Selection publishes the same complete entity
-used by subsequent calls; explicit definitions do not demand primary bodies.
-The emitter consumes its signature, selected body, conversions and linkage to
-construct typed LowIR, then the text writer serves the PA15 output contract.
+Ordinary and explicit-class member bodies are checked in the enclosing complete-
+class queue interval regardless of emission. Implicit class-template bodies remain
+demanded separately. Namespace objects request their concrete class's visible
+static constant definitions once through indexed definition/storage edges. Late
+definitions satisfy those requests; storage does not instantiate unrelated bodies.
 
-For the demanded `forward(T... t)` template, the retained source signature/body
-is parsed once. Complete pack boundaries identify each specialization; incomplete
-explicit prefixes have a separate index. Substitution frames are immutable,
-parent-linked and keyed by their full bindings, parent and expansion lane.
-Source/typed pack discovery is cached at its pattern owner. Only dependent facts
-and changed occurrence-list edges are produced. The body consumes published
-parameter identities and expanded lists. Nested ellipses select the appropriate
-whole pack; a lane does not replace an unrelated pack's size or environment.
+### Constant fact, legality and final instructions
 
-Source regions, immutable queries, declaration/layout/initializer/body facts and
-emission have distinct owners. Active/success/failure states prevent duplicate
-recursive work. Late explicit declarations update an uncompleted selected entity;
-they neither reinterpret a completed primary nor retry all specializations.
-Expected candidate mismatches return compact failure; final invalid declarations
-still diagnose normally. Existing reverse default/definition/vtable edges remain
-precise. The hash removal repair preserves unrelated bindings instead of clearing
-a cache. Hot identity comparisons use flat indexes, never rendered types/names.
+`constant_execution.cpp` establishes a checked body independently of emission.
+Activations use body identity, canonical scalar argument IDs and typed receiver
+identity; specialized body identity includes its environment. Expression values
+are keyed by activation/node and never published as parameter-dependent source
+constants. Active/success/failure states prevent duplicate recursive work. Missing
+definitions and exhausted evaluation budgets remain unavailable rather than
+permanent activation failures. Controls cover retry after a definition and a deep
+request followed by a shallow request. Body checking runs with activation values
+suspended, preserving definition-time semantics.
 
-The audit also follows constant argument `N` through canonical type/bits, checked
-integral conversion/evaluation, semantic constant facts and typed LowIR constants.
-Signed overflow, invalid shifts and narrowing reject; short-circuit evaluation
-retains its defined operand semantics. Unknown values do not acquire constant
-promises. Raw numeric spelling is retained only for the language-required raw
-literal operand, not as a semantic key or phase transport. Cooked long-double
-calls carry the selected operand type through the text adapter. Literal calls
-use ordinary call/lifetime facts, including reference and class results.
+The final volatile repair traces a negative fact end to end. A volatile parameter
+or referent retains its cv-qualified expression type even after scalar argument
+canonicalization. AST evaluation refuses its lvalue-to-rvalue conversion; typed
+name/value queries do likewise. Reference declarations do not publish their
+initializer as a constant readable through a volatile glvalue. Static initializer
+classification distinguishes forming an address from reading through that address.
+The latter remains a dynamic initializer. Lowering consumes the existing type and
+emits `load volatile i32`, including in namespace and local-static initializers.
+The supplied backend executes these programs. Unselected conditional branches,
+`sizeof`, address formation and volatile-array decay do not falsely acquire reads.
 
-At O0 these are required semantic construction steps, **not optional optimization
-passes**. There is no inlining/unrolling/fixed-point search or code-growth policy
-to justify. Work is bounded by source, candidates, dependent nodes, actual pack
-lanes and produced IR; scalar bypasses remove work without changing the IR. The
-conservative behavior for an unavailable required fact is rejection, never an
-invented constant or textual recovery. Later O1–O3 profitability, invalidation,
-allocator, spill, encoding and self-hosting budgets keep their owning stages.
+This is a legality repair, not an optional optimization. It introduces no analysis
+cache or invalidation, no semantic lookup in lowering, and constant work per
+existing evaluation/initializer visit. The source-fact publication fix prevents
+stale reusable values rather than clearing all constants after a declaration.
 
-TU-owned flat records/arenas release with the frontend after typed lowering;
-argument and candidate vectors are local scratch. The LowIR program and minimal
-linkage/ABI facts survive to the requested output. No new per-node owning pointer,
-process-global cache, duplicate syntax/semantic graph or production text roundtrip
-appears in the reviewed changes. Native ELF checks consume the student's LowIR
-through the **supplied backend**, as permitted for these controls; PA15 does not
-own ELF encoding. Common controls have identical executable bytes, and runtime
-checks cover loops, calls, memory and floating point. This cannot certify a
-student allocator/encoder that is not introduced until later stages.
+## Findings and changes
 
-The frozen counters corroborate the trace at N=1,000 and 4,000: nested packs have
-nine source regions, 18 discovery visits, 7N lanes, 13N+11 frames and 3N body
-transitions; target signatures have three source regions, one discovery visit,
-2N lanes and N body transitions. Reused values have N bodies; defaults have N
-class completions and zero member bodies; explicit classes have N selections
-and zero primary completions. Explicit value-pack selection has distinct prefix
-and completed records (2N records, N selections), not duplicate work for one key.
-These measurements supplement source review; they do not prove the unfinished
-constant-object or ordinary-body groups correct.
+1. **Volatile constant reads and lost initialization effects — fixed in
+   `dff6a92b`.** Frozen entry accepted eight invalid constant-expression reducers
+   and omitted volatile loads in two dynamic-initializer controls. The repair
+   spans `constant.cpp`, `template_value_facts.cpp`, `type_builder.cpp` and
+   `static_initializer.cpp`. The governing rule is N3485 5.19 [expr.const]/2,
+   [non-volatile glvalue requirements](../doc/n3485.txt:7222); this is semantic
+   proof, not compiler agreement. Seventeen native and eleven rejection controls
+   now pass. Required fixtures were not changed.
+2. **Stale audit records and verifier scope — consolidated.** The old audit
+   ended at 166/177 and the plan at an unaudited 177/177 handoff. The checkpoint
+   measurement-only verifier also compared historical harness hashes to the
+   later edited working file. `verify_final.py` resolves exact retained git/file
+   contents by hash and verifies historical campaigns without imposing their
+   old live-binary/marker assertions on a corrected final compiler. Original
+   verifiers, handoffs, preliminary observations and measurements are preserved.
+3. **Inherited reference correction — independently confirmed.** The only
+   changed fixture is `100-aggregate-functional-braced-cast.ref`. Its
+   [reducer and C++11 proof](reference-corrections.md) demonstrate that a raw
+   relocation of nontrivial array elements bypasses required construction and
+   breaks their self-pointers. The fresh reducer returns 0 for student output
+   and 1 for pinned reference output. Source/status, full comparison rules,
+   coverage and bundle revision `c2f713cd70d06170632bfde3e75dd6fe1aa44d98` are
+   unchanged. There is no new reference correction in loop 36.
 
-## Validation, performance and remaining work
+## Performance, work and growth acceptance
 
-Fresh required checks at the final compiler source:
-`make test-pa15` **166/177**, exit **2**;
-`make test-report-through-pa14` **1935/1935**, exit **0**;
-`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src` **pass** with the
-same three inherited header-ownership warnings. The precise stage failure set is
-identical to entry. All earlier fixture trees, all 177 PA15 cases and the harness
-are unchanged. No current-stage debug/inspection gate is omitted: the handout
-requires LowIR validation, not the later debug/native suites. Personal successful
-native controls additionally request `--validate-lowir`.
+[Final performance](final-performance.md) verifies all four dimensions against
+frozen binaries, flags and sources: compiler wall time/peak RSS, checked native
+runtime and executable text. It preserves **4774 invocations in 24 campaigns**,
+including 644 new final observations/warmups. A/A calibration precedes two ABBA
+blocks. Repeats retain the original observations; small startup-dominated compiler
+samples support no latency claim. Identical native bytes support parity, not a
+runtime speedup inferred from timing noise or fewer IR nodes.
 
-Explicitly run personal suites: 27 pack/literal native + 8 rejections; 24 selection
-native + 13 rejections; 26 value groups; 10 constant groups; 11 audit native + 7
-rejections; the index collision/removal control. [Performance](audit-performance.md)
-reports all four dimensions, frozen A/A/ABBA observations, spreads, parity,
-work scaling, compiler text and stage-scoped acceptance. All 2,380 invocations
-across 11 campaigns are hash-verified, including preliminary and noisy results.
+Required constant execution has 512 active calls and 1,000,000 expression visits
+per root. Caches retain only demanded TU facts. Pack work follows actual lanes,
+dependent nodes and produced IR, without a fixed partition cap. Matching/order
+work follows candidates and compared pairs. Ordinary lowering remains linear or
+near-linear in consumed/produced facts; no global fixed-point scan, inlining,
+unrolling or higher-level growth policy is added. Telemetry observes existing
+work in separate, untimed `--stats --validate-lowir` runs.
 
-Three broad implementation groups remain: **dependent matching/aliases** (four
-fixtures), **constant objects/initialization/storage** (six), and **ordinary body
-validation independent of emission** (one). Their exact names are in the evidence
-JSON and their owner requirements in the plan. Checked fixtures remain required
-even where they exercise handout-excluded general language. None was relabeled
-an optional test or an audit uncertainty to hide incomplete behavior.
+Small-array backing is a bounded lowering policy: static storage addresses only,
+trivial destruction, no volatile subobject copies, at most 32 bytes per backing
+object. Each entity emits once, so the whole pipeline adds at most 32 bytes times
+the number of eligible demanded objects. Larger or noncopyable plans use ordinary
+stores/zero loops. Earlier unbounded backing regressed large-array runtime despite
+smaller text; its measurements are preserved and that policy was removed. The
+retained eight-element case shows measured benefit, while the four-element
+contract form's small runtime cost is explicitly disclosed. No mandated comparison
+or language behavior was weakened for performance.
 
-The handoffs should have tested selection, packs, ADL and signature targets
-together when pack identities were added. The scalar-list performance repairs
-also belong to that same parameter owner. Keep further work broadly grouped
-through related consumers, with positive/rejection/native controls, rather than
-creating additional handoffs at arbitrary passing-test counts.
+Spec §9's stage-scoped acceptance applies to inherited plans too. PA15/O0 has no
+numerical latency, RSS or code-size exit ceiling. PA14's local 64-KiB diagnostic
+compiler-text budget is not an accumulated-stage gate; its operation-specific
+allocation/target-growth constraints and historical measurements remain intact.
+Required semantic costs are reported, and no unprofitable optional transform is
+being excused as correctness work. Native MIR allocation/spills/direct ELF,
+O1–O3 budgets and self-hosting have no PA15 production surface; their later owners
+remain explicit rather than fabricated measurements or extra exit gates.
 
-| Audit | Reviewed range | Findings / evidence | Progress and remaining work |
-|---|---|---|---|
-| 2026-09-14 checkpoint 32 | `8000f3c8..538cfcb0` (16 commits) | Pack traversal/selection/target/head fixes; probe-chain removal; scalar owner cost repair; 2,380 verified invocations and complete source/fixture ledger | 166/177, identical 11 failures; prior 1935/1935; file audit pass; matching/aliases, constant objects/storage, ordinary source validation remain |
+## Validation and audit ledger
+
+Fresh checks at the reviewed code: `make test-pa15` **177/177**, root
+`make test-report-through-pa15` **2112/2112**, and file audit **pass** with three
+inherited header warnings, all exit zero. The root command covers all 15 stages;
+its actual count supersedes the incoming 2136 status claim. No earlier fixture,
+handout, test/comparison script or coverage rule was changed. LowIR validation is
+active; PA15 requires no later-stage debug/inspection/native compiler gate.
+
+All nine explicit personal suites pass: constants (10 groups), values (26),
+specializations (24 native/13 rejection), packs (27/8), matching (15/7),
+initialization (23/13 plus three LowIR controls), execution (24/18), checkpoint
+(11/7), and final audit (17/11). The fresh reference reducer and source/fixture
+hash checks supplement those tests. [Final evidence](../student.tests/pa15/final-evidence.json)
+records reviewed commits/files, code tree/binary, campaign hashes and current logs.
+
+| Review boundary | Disposition in this final audit |
+|---|---|
+| Checkpoint 32, `8000f3c8..538cfcb0` | Independently retraced accumulated canonical value/pack/literal/ABI and lowering paths; original failures closed by later owners. |
+| Loop 33, through `b8379f52` | Matching/alias parser facts, exact class selection, ordering reuse and selected environments reviewed. |
+| Loop 34, through `d705aafc` | Initialization/layout/zero plans, retained update queries, array addresses, volatile stores, reference proof and backing budgets reviewed. |
+| Loop 35, through `d97445d4` | Constant execution and its caches, ordinary validation versus emission, static definition/storage edges reviewed. |
+| Loop 36, through `dff6a92b` | Volatile owner repair, representative cross-feature controls, whole-stage benchmarks, preserved historical evidence and fresh required exits complete. |
+
+No PA15 handoff or required implementation group remains unaudited. The next
+assignment may extend these owners; this audit makes no claim to implement its
+additional language or backend requirements.

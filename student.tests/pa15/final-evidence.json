@@ -1,0 +1,392 @@
+{
+  "stage": "pa15 full-stage",
+  "stage_base_commit": "8000f3c8ef4647d57f2c0775192585f14cab33d8",
+  "audit_entry_commit": "d97445d4854c86ab52d56e9f7e3ad38086f50fdf",
+  "last_reviewed_commit": "dff6a92ba5af15cd21e60c82d98bf62aaf7a3d3e",
+  "source_tree": "6f70962e8db15ffc4a256cf218624526f2c5ea5d",
+  "reviewed_commits": [
+    "053af5e3f2776502210e9b0f93a1e2093fda187f",
+    "cdbfeb8a99336e013055af5a41a4f6769c3a9f32",
+    "01b543ede944a9b7d067267588a9ed0eb6dbd9e0",
+    "d3475a79395f05b05873e940531726bcbbe8fc7a",
+    "6c8e22593d250221f940d81b32cb73d146532172",
+    "767e0797d99a4e1c18985ad3e51d573f78688ea2",
+    "93dd5e292150b542442b3db59fa5390b45276165",
+    "113b6907c39eece430dc68d5c4be276c78f84f04",
+    "19225b3deef4a85e5690c2d72fb7857f5a06721c",
+    "53f1afa982f3b74694e1c119f49eec8e64b47951",
+    "768e31f0abcc89e58f4e530731d51a60bbfb613f",
+    "992b1170b99d7cecacaed01efa058bbb98193cc9",
+    "db0686a3b17c87aa9d8dbd82e30346c034fc89b2",
+    "e211b3f891787c8c04f4820c10f6d028eabfe314",
+    "034e3b9117bc18df79317abcfebe1eac9eba7cea",
+    "538cfcb00441f57c0629f6d27fddbad723539479",
+    "3aff48010edc11ad4e4ab4981c57b85b553b672c",
+    "9dea2f0ad50183499a7fd07cbd7dbd637e2f86ba",
+    "57f0cd9585928e1b0a3ea5f27498cebebc4d3901",
+    "3c356866820406a542d6b706b915fa304a9c1a4c",
+    "b8379f52f55da98614f5a03d499d34a062ca8fe0",
+    "9d6a2283e081fa2c30eef6d445a3b67a7032abaf",
+    "1aa393c9d223e8e8cdf180713f484f470f06e185",
+    "11e75a5018529ace175012f7bc00f457eb8cd855",
+    "3b2475f8e969995ec40d0244f92f36c86e02cf7e",
+    "faeaebfed904b161fd69cfb3bcb22e02b0b89634",
+    "4f4bea42e7d5ca28810fb4fb40fb29a58066d12b",
+    "d705aafc4845cca2ad645b8c7ea45194936c9180",
+    "5452ad74713e4eccde755da666affd21ac142c5a",
+    "d97445d4854c86ab52d56e9f7e3ad38086f50fdf",
+    "dff6a92ba5af15cd21e60c82d98bf62aaf7a3d3e"
+  ],
+  "reviewed_source_files": [
+    "dev/frontend_source_sets.mk",
+    "dev/src/abi/itanium/function_encoder.cpp",
+    "dev/src/lowering/constant_array.cpp",
+    "dev/src/lowering/driver.cpp",
+    "dev/src/lowering/expression.cpp",
+    "dev/src/lowering/initialization.cpp",
+    "dev/src/lowering/literal_calls.cpp",
+    "dev/src/lowering/local_abi.cpp",
+    "dev/src/lowering/procedural.h",
+    "dev/src/lowering/query_abi.cpp",
+    "dev/src/lowering/symbols.cpp",
+    "dev/src/lowir/instruction_writer.cpp",
+    "dev/src/lowir/validation_values.cpp",
+    "dev/src/posttoken/cursor.cpp",
+    "dev/src/posttoken/cursor.h",
+    "dev/src/posttoken/literal.cpp",
+    "dev/src/posttoken/literal.h",
+    "dev/src/posttoken/number.cpp",
+    "dev/src/posttoken/token.h",
+    "dev/src/semantic/analyzer.h",
+    "dev/src/semantic/builtin_operators.cpp",
+    "dev/src/semantic/call_selection.cpp",
+    "dev/src/semantic/class_enum.cpp",
+    "dev/src/semantic/class_pattern_selection.cpp",
+    "dev/src/semantic/constant.cpp",
+    "dev/src/semantic/constant_array.cpp",
+    "dev/src/semantic/constant_execution.cpp",
+    "dev/src/semantic/construction.cpp",
+    "dev/src/semantic/conversion.cpp",
+    "dev/src/semantic/declaration.cpp",
+    "dev/src/semantic/dependent_type.cpp",
+    "dev/src/semantic/destruction.cpp",
+    "dev/src/semantic/expression.cpp",
+    "dev/src/semantic/friends.cpp",
+    "dev/src/semantic/initializers.cpp",
+    "dev/src/semantic/literal_calls.cpp",
+    "dev/src/semantic/literal_constants.cpp",
+    "dev/src/semantic/lookup.cpp",
+    "dev/src/semantic/member.cpp",
+    "dev/src/semantic/model.cpp",
+    "dev/src/semantic/model.h",
+    "dev/src/semantic/numeric_literal_calls.cpp",
+    "dev/src/semantic/output.cpp",
+    "dev/src/semantic/overload.cpp",
+    "dev/src/semantic/query_call.cpp",
+    "dev/src/semantic/query_new.cpp",
+    "dev/src/semantic/scalar_consumption.cpp",
+    "dev/src/semantic/static_initializer.cpp",
+    "dev/src/semantic/template_arguments.cpp",
+    "dev/src/semantic/template_binding.cpp",
+    "dev/src/semantic/template_binding.h",
+    "dev/src/semantic/template_call.cpp",
+    "dev/src/semantic/template_checks.cpp",
+    "dev/src/semantic/template_class.cpp",
+    "dev/src/semantic/template_declaration.cpp",
+    "dev/src/semantic/template_definition.cpp",
+    "dev/src/semantic/template_expression.cpp",
+    "dev/src/semantic/template_instantiation.cpp",
+    "dev/src/semantic/template_pack_expansion.cpp",
+    "dev/src/semantic/template_packs.cpp",
+    "dev/src/semantic/template_specialization.cpp",
+    "dev/src/semantic/template_type_facts.cpp",
+    "dev/src/semantic/template_value_facts.cpp",
+    "dev/src/semantic/template_variable.cpp",
+    "dev/src/semantic/type_builder.cpp",
+    "dev/src/semantic/type_query.cpp",
+    "dev/src/semantic/type_query.h",
+    "dev/src/semantic/value_initialization.cpp",
+    "dev/src/support/id_index.cpp",
+    "dev/src/support/id_index.h",
+    "dev/src/syntax/ast.cpp",
+    "dev/src/syntax/ast.h",
+    "dev/src/syntax/expression.cpp",
+    "dev/src/syntax/name_parser.cpp",
+    "dev/src/syntax/occurrence.cpp",
+    "dev/src/syntax/prediction.cpp"
+  ],
+  "checks": {
+    "through": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-through.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f",
+      "result": "ALL TESTS PASSED SUCCESSFULLY! (2112 / 2112)",
+      "exit_code": 0
+    },
+    "file-audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-file-audit.log",
+      "sha256": "b59169eefa5d6ec564ba1050b16752603ed4ab7eaeb363c57d104dcd3d2d8fc0",
+      "result": "File audit passed for pa15 with 3 warning(s).",
+      "exit_code": 0
+    },
+    "constants": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-constants.log",
+      "sha256": "070649fba7f51ed2f28fa424c53972e7951ff69f7e9b87b8920229d7db2866c4",
+      "result": "10 constant groups passed",
+      "exit_code": 0
+    },
+    "value_arguments": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-value_arguments.log",
+      "sha256": "f8c05f73e04dc359824048d2fa37964864321f12ac127c7f735f60807c196918",
+      "result": "26 value argument groups passed",
+      "exit_code": 0
+    },
+    "specializations": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-specializations.log",
+      "sha256": "e3ba7b6aac760089179fef26ea74a767680d40940032cb70bf46aea2eb566d18",
+      "result": "24 native controls; 13 rejection controls passed",
+      "exit_code": 0
+    },
+    "packs": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-packs.log",
+      "sha256": "877333e8ee3e9c501f714e7475769d313dd4691b7969f32b979e41ebcbf90993",
+      "result": "27 native controls; 8 rejections passed",
+      "exit_code": 0
+    },
+    "class_patterns": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-class_patterns.log",
+      "sha256": "1923f2bf3d9b1daf69c8a02b2283670de21c5ba28b8889926b8a6628751c8013",
+      "result": "15 native and 7 rejection class-pattern controls passed",
+      "exit_code": 0
+    },
+    "initialization": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-initialization.log",
+      "sha256": "3a01274b12d3c4f1cc7453904c2d6431a8b31e931860678575bcf59c7bad3d74",
+      "result": "3 global-address LowIR controls passed",
+      "exit_code": 0
+    },
+    "execution": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-execution.log",
+      "sha256": "8ad005569bf06993d6c0445b906c48cd6bb6fd889a53fb71c6f3991f5b1000e2",
+      "result": "24 native and 18 rejection controls passed",
+      "exit_code": 0
+    },
+    "checkpoint_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-checkpoint_audit.log",
+      "sha256": "0dfaa25d4b5c49f082c3f924e78cb56003266d6aeae225b8687bf7d310764cd3",
+      "result": "11 native and 7 rejection audit controls passed",
+      "exit_code": 0
+    },
+    "final_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final-final_audit.log",
+      "sha256": "e531d8ef50a44349e1454e4d34c85a8d6bada68544b6e5b6b99e361866f86b3b",
+      "result": "17 native and 11 rejection final-audit controls passed",
+      "exit_code": 0
+    },
+    "stage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/volatile-stage.log",
+      "sha256": "8413d1f4f6327b80a4f635315e4f411efc5b0cd5b6303e45bd865cdff795297c",
+      "result": "177/177",
+      "exit_code": 0
+    }
+  },
+  "performance_campaigns": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/performance-preliminary.json",
+      "sha256": "d456569714f78e2add02cddc847854d368e0f47f4c6fe3fda69dfcbf42b3eef3",
+      "invocations": 168,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-value/benchmark-preliminary.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/performance.json",
+      "sha256": "eb0f8082a0ed010393ac37732818d801c012c02470ed1448d1c90de29c08cde0",
+      "invocations": 168,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization-performance-preliminary.json",
+      "sha256": "3a3ef0d54ecac0541bb425ce3cfd3b2e31b12f2fd0a89d9a003a1b9db06cc92d",
+      "invocations": 252,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization-performance-noise.json",
+      "sha256": "05bda5a24b036f0e6e709d5df17cf665bc9b6411141a49cf1afc39c4463e8e1c",
+      "invocations": 252,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization-performance.json",
+      "sha256": "895be73c77669c34189566f60332bfa693644b43ac7539d67de2563425e911b4",
+      "invocations": 252,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/specialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-packs/performance.json",
+      "sha256": "e1459b05c7464ca527f52b562638678794378058439dc2a65ae18a5ffc4d5bec",
+      "invocations": 196,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/pack_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-packs/performance-final.json",
+      "sha256": "045f802a6139647cf0ebad579b1dc8c639516334c917cc78443042bd4e4c4975",
+      "invocations": 196,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/pack_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-audit/stage-performance.json",
+      "sha256": "d26645a1c79255cfd315b8d8012bf879f054741038f4452a59cd92436ae9ca2a",
+      "invocations": 154,
+      "harness": "git:956a8ae98314894ba9e78ce1553997e5448f5f1f student.tests/pa15/audit_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-audit/checkpoint-performance.json",
+      "sha256": "298765725cdd55e9ff34831b95146c442cab3e5e4e075522239805ae9d449b28",
+      "invocations": 294,
+      "harness": "git:956a8ae98314894ba9e78ce1553997e5448f5f1f student.tests/pa15/audit_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-audit/checkpoint-repeat-performance.json",
+      "sha256": "0676048084cfaa70fadef88fec92c3607aee567101949f304dba5bd71efab19e",
+      "invocations": 294,
+      "harness": "git:956a8ae98314894ba9e78ce1553997e5448f5f1f student.tests/pa15/audit_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-audit/stage-repeat-performance.json",
+      "sha256": "7601ce1f09a03b0badd67dd8fb58b2218b0fc3b27f31f5f40242599b0f5a62d9",
+      "invocations": 154,
+      "harness": "git:956a8ae98314894ba9e78ce1553997e5448f5f1f student.tests/pa15/audit_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance.json",
+      "sha256": "7b0538eaf0b6016feb67fe0e1c2e63ab0ddf5da5d67449a3a6c23a833dd8f870",
+      "invocations": 154,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-preliminary.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-final.json",
+      "sha256": "f1c3fae68f830b6318bb59c8e601c5a9adfb7a64a2e6b1e1fc8afea0c43deb65",
+      "invocations": 168,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-final.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-reuse.json",
+      "sha256": "6da53b4a5b1db429a75c4551f3faee9464a3a4f3cf56a4a235f86afc8037893f",
+      "invocations": 224,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-final.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-noise.json",
+      "sha256": "89dba6acfebe9e1bd6be637f00d9ff272b17b0be98d93d2a95aafc8bfe5c5ccb",
+      "invocations": 112,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-final.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization-performance-preliminary.json",
+      "sha256": "a381e63d0bcfa0e86ef23b201cc19229f616b6b8a03601b28901110a1824df3f",
+      "invocations": 252,
+      "harness": "git:d6a0e60a8cd70e98c0acc7ae25aecf4fd8188a7c student.tests/pa15/initialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization-performance-address.json",
+      "sha256": "6fba0b8832787ac63a9db56ddcb90ea85fb57c339b008b00c5574d44aa486f09",
+      "invocations": 252,
+      "harness": "git:d6a0e60a8cd70e98c0acc7ae25aecf4fd8188a7c student.tests/pa15/initialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization-performance.json",
+      "sha256": "29042011b06852573d9d31eccfb56e7634c1350eaaa7b858dfdb9970815d3271",
+      "invocations": 308,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization-performance-repeat.json",
+      "sha256": "b4861f8d99df0d1edff9ccd118f70f203875ee3064e4e55ae298ba463bb955ec",
+      "invocations": 28,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization_repeat.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization-performance-repeat-instrumented.json",
+      "sha256": "a9ee9a83721f67ed0ad7bbc843f2f785eae01eb348a02f70b5ebe617f002658b",
+      "invocations": 28,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/initialization_repeat_instrumented.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/execution-performance.json",
+      "sha256": "af3bf67c4ab3ec4de112d708ef732dc35e8dbab147de644ecf2927e4a3254e0b",
+      "invocations": 224,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/execution_benchmark.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/stage-performance.json",
+      "sha256": "ae30e8bea5f0096cfb5f2946448acb7104469141807bce39374a6177d4f02ba6",
+      "invocations": 154,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-loop33/performance-harness-final.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/owner-performance.json",
+      "sha256": "3c90899d4ee6d6f0d84d26fdc75df409cd344ab13868567c2cf1e38f9e76826a",
+      "invocations": 420,
+      "harness": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/final_benchmark-original.py"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-final-audit/owner-repeat-performance.json",
+      "sha256": "8863629e394a58c32c9d74c1fe636e47d610f4ac0cdd2acdfd091a7d47db82a5",
+      "invocations": 70,
+      "harness": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa15/final_benchmark.py"
+    }
+  ],
+  "performance_invocations": 4774,
+  "reference_corrections": [
+    {
+      "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+      "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+      "fixture": "pa15/tests/general/100-aggregate-functional-braced-cast.t",
+      "source_sha256": "63a59072d6630af271a150f4468828380fdd76b69cadc1a35b95b4cfabf46839",
+      "original_ref_sha256": "5aaa6bf2f97443436cc64c9108e605eb4fc4a5a87fb1928b92c67a95cfefa387",
+      "reducer": "student.tests/pa15/aggregate_relocation.cpp",
+      "reducer_sha256": "89b609d455da56588d13fd45b68ab634cdcdb7d37f6d49bceb014d24937f73cf",
+      "reference_native_exit": 1,
+      "student_native_exit": 0,
+      "student_lowir_sha256": "f57d981c14f4c24afc65df18595572c45ea6de9b4a673ff62ff613016badc5e0",
+      "student_executable_sha256": "6dcb42d245f94d09c960198fa5a142a469a4600b744413cf0ccfe89094c66c41",
+      "reference_lowir_sha256": "f417bc16ae1fffc1b17b21a235d1d448d6168cabbe2eebc115b36b6bd029bc7e",
+      "reference_executable_sha256": "57c01c933391ad00e796a44345ccb453592c0b18851dc639e9bf873ddbd65b95",
+      "corrected_ref_sha256": "fbc04067a94a03758c86b62d71f3a704ef5c2e6c3cfc380cfa8d4341dad8ed42"
+    }
+  ],
+  "reference_recheck": [
+    {
+      "compiler": "student",
+      "native_exit": 0,
+      "lowir_sha256": "75ad7ee5bc3d314ab791b5ac9befc1d2bef683a21161a40517c74a15a82ea63d",
+      "native_sha256": "bcfa2ef921f5e0af61482753de8f6af1a7babd0187c752ec51a94876421766e6"
+    },
+    {
+      "compiler": "reference",
+      "native_exit": 1,
+      "lowir_sha256": "f417bc16ae1fffc1b17b21a235d1d448d6168cabbe2eebc115b36b6bd029bc7e",
+      "native_sha256": "57c01c933391ad00e796a44345ccb453592c0b18851dc639e9bf873ddbd65b95"
+    }
+  ],
+  "binary_sha256": "bf32d09de557e00965ca3bb81df35e1cfe01947bd1f03ae39344df55584e125a",
+  "verifier_sha256": "0303566fc3d74482de8b04fd31f39418f2736ef2a7df3a74b68f019c32c2cffe",
+  "fixture_trees": {
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa10/tests": "7f658d1aa2f6c7638b3c102958f966f1d6448006",
+    "pa11/tests": "961b4ab7ed62b1fa72398057b01f4158d356f18a",
+    "pa12/tests": "19d6a21bf23737b67f0b396f4ab6ef693efa9970",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa14/tests": "d94f017d7124027c242584c42772c845d25deccc",
+    "pa15/tests": "329a1c70d21f2fe980ef7c83620a57607ccd18b2"
+  },
+  "required_remaining": [],
+  "status": "full-stage audit complete; all 15 stages pass"
+}
