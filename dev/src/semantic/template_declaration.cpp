@@ -29,7 +29,10 @@ std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environm
         if (scopes[s].kind != ScopeKind::Template) continue;
         for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
             auto p = declarations[d].entity;
-            if (entities[p].template_parameter) bindings.put(p,parameter_argument(p));
+            if (entities[p].template_parameter) {
+                auto arg = parameter_argument(p);
+                bindings.put(p,entities[p].parameter_pack ? make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)}) : arg);
+            }
         }
     }
     unsigned count = 0;
@@ -84,7 +87,9 @@ void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId pre
         for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
             auto p = declarations[d].entity;
             if (entities[p].template_parameter) {
-                auto arg = parameter_argument(p); old_bindings.put(p,arg); new_bindings.put(p,arg);
+                auto arg = parameter_argument(p);
+                if (entities[p].parameter_pack) arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});
+                old_bindings.put(p,arg); new_bindings.put(p,arg);
             }
         }
     }

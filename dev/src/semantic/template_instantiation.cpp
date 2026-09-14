@@ -34,7 +34,8 @@ void Analyzer::instantiate_function(EntityId e)
         parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
     auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
     attach_template_context(context,frame);
-    instantiate_parameters(pattern.declarator,context,frame,environment);
+    auto signature = template_signature_sources.get(ast.nodes.occurrences[pattern.declarator].source);
+    instantiate_parameters(signature ? signature : pattern.declarator,context,frame,environment);
     if (auto m = entities[e].member_info) {
         members[m].source = source; members[m].declarator = declarator;
         members[m].body = body; members[m].body_environment = environment;

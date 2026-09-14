@@ -138,7 +138,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         auto pattern = spec.pattern;
         if (owner && entities[pattern].template_pattern) {
             auto concrete = substitution_entity(owner,pattern);
-            if (concrete) pattern = concrete;
+            // Inside B<U>, the source class declaration binds to the current
+            // specialization. A B<V> template-id still applies its template.
+            if (concrete) pattern = entities[concrete].specialization ? specialization_pattern(concrete) : concrete;
             else {
                 for (auto frame = owner; frame; frame = substitution_frames[frame].parent)
                     if (substitution_frames[frame].specialization)

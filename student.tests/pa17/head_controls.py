@@ -17,6 +17,7 @@ harness.GOOD = {
 'forward_member_name': '''template<class T>struct A{template<class U>int f(U x){return g(x);}template<class U>int g(U x){return x+sizeof(T);}};int main(){A<char>a;return a.f(3)-4;}''',
 'variable_dependent_head': '''template<class T>struct A{template<T N>int f();};template<class X>template<X M>int A<X>::f(){return M;}int main(){A<int>a;return a.f<7>()-7;}''',
 'pack_member': '''template<class T>struct A{template<class...U>int f(U...);};template<class X>template<class...Y>int A<X>::f(Y...){return sizeof(X)+sizeof...(Y);}int main(){A<char>a;return a.f()+a.f(1,2,3)-5;}''',
+ 'outer_pack_before_token': 'int combine(int x,char y){return x+y;}template<class...T>struct A{template<class U>int f(T...t,U u){return combine(t...)+u;}};int main(){A<int,char>a;return a.f(2,char(3),4)-9;}',
 'pack_outer': '''template<class...T>struct A{template<class U>int f(U);};template<class...X>template<class Y>int A<X...>::f(Y y){return sizeof...(X)+y;}int main(){A<>a;A<int,char>b;return a.f(1)+b.f(2)-5;}''',
 'dormant_member_body': '''template<class T>struct A{template<class U>int good(U);template<class U>int bad(U);};template<class T>template<class U>int A<T>::good(U x){return x;}template<class T>template<class U>int A<T>::bad(U){return sizeof(typename U::missing);}int main(){A<int>a;return a.good(7)-7;}''',
 'extern_member_template': '''template<class T>struct A{template<class U>int f(U);};template<class X>template<class Y>int A<X>::f(Y y){return sizeof(X)+y;}extern template struct A<int>;int main(){A<int>a;return a.f(3)-7;}''',

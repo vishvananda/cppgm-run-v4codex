@@ -174,6 +174,14 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
             entities[declared].template_member = true;
             template_pattern_entities.put(declared,2);
             template_declaration_sources.put(declaration_source,declared);
+            if (declarator && entities[declared].kind == EntityKind::Function) {
+                // The source callable signature includes enclosing pack
+                // expansions. Reuse it under the composed frame before
+                // forming the concrete member-template overload identity.
+                if (!template_signature_sources.get(declaration_source)) ++template_signature_work;
+                template_signature_sources.put(declaration_source,declarator);
+                template_type_sources.put(declaration_source,facts[declarator].type+1);
+            }
         }
         if (source_head && enclosing_frame) {
             templates[index].source_parameters = templates[source_head].offset;

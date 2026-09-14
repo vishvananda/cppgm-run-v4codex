@@ -19,11 +19,11 @@ no optional optimization or numerical performance exit ceiling. Remaining
 implementation and independent review questions will be recorded separately at
 handoff; the initial cluster is not a stopping boundary.
 
-Target: **PA17 full-stage**, incomplete. Loop 49 now passes **282/343**:
-34 original failures fixed, no new failures or reduced coverage. PA1–PA16
-pass **2266/2266**; through PA17 is **2548/2609**. File audit passes with
-the same three inherited header warnings. All 157 personal controls pass
-(including 42 new head controls and four LowIR ownership controls).
+Target: **PA17 full-stage**, incomplete. Loop 49 now passes **284/343**:
+36 original failures fixed, no new failures or reduced coverage. PA1–PA16
+pass **2266/2266**; through PA17 is **2550/2609**. File audit passes with
+the same three inherited header warnings. All 158 personal controls pass
+(including 43 new head controls and four LowIR ownership controls).
 
 The source graph now retains member and nested class template heads, canonical
 owner paths and prototypes, including renamed outer non-type parameters.
@@ -32,7 +32,9 @@ argument tuples. Aliases, defaults, constructors and bodies use the appropriate
 inner occurrence. Late definitions attach to already selected specializations.
 Receiver syntax lookup uses declared receiver scope and caches each complete
 subtree. Source declaration binding never mutates a concrete class-facts sentinel.
-No grammar replay, alternate IR, optional optimization or reference change.
+Callable signatures now expand enclosing packs before inner deduction, while
+body parameters expand once under their final composed frame. No grammar
+replay, alternate IR, optional optimization or reference change.
 
 | Remaining implementation | Owner / boundary |
 |---|---|
@@ -43,7 +45,7 @@ No grammar replay, alternate IR, optional optimization or reference change.
 
 The retained-head group expanded through nested class definitions, three-head
 member definitions, partial-owner definitions, inner defaults and converting
-constructors. The remaining 61 failures require lookup/selection/obligation or
+constructors. The remaining 59 failures require lookup/selection/obligation or
 lowering work beyond head retention and composition; they remain required and
 are not independent-audit questions. Finish measurement and the handoff ledger
 before returning control. Independent review should assess source-context and

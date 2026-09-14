@@ -185,7 +185,10 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         // construction has interleaved earlier specialization occurrences.
         auto source = template_signature_sources.get(occurrence.source);
         if (!source) throw std::logic_error("missing source signature declaration");
-        instantiate_parameters(source,occurrence.context,frame,scope);
+        // A member-template declaration still owns its raw source parameters.
+        // Its callable type expands enclosing packs now; the demanded body
+        // expands parameter declarations once under the final composed frame.
+        if (!active_template_scope) instantiate_parameters(source,occurrence.context,frame,scope);
         ++template_signature_uses;
     }
     ++template_type_uses;
