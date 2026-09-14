@@ -1,0 +1,6901 @@
+{
+  "protocol": "one warmup batch per binary; four A/A batches then four ABBA blocks; retain each invocation; batch tiny startup-dominated source 32 times",
+  "campaign_sha256": "815a32b9d519dbd9dd810340b24ca4b41daa9c790515a47313242a4a3c1ebcdb",
+  "harness_sha256": "c7365a409ff1220cbd1a2d850a31a7803a38b69b14c51c7648361ab00b5fb13d",
+  "cpu": 31,
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-storage/entry",
+      "sha256": "a6e376110c306c5a5b4cf73dfc027fac34966367ef4c155a93a7770577059543",
+      "text_bytes": 1544838
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-storage/final-reference",
+      "sha256": "78e76c1f3b0b14f047977543766782766c6bc6db3a7ec77646aa5d29cda065b3",
+      "text_bytes": 1555206
+    }
+  ],
+  "workloads": {
+    "memory-float-4000": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-storage/campaign-reference/memory-float-4000.cpp",
+      "source_sha256": "f14f92ed0c903bc4494b681d24b5822b2b6f983700ad90058aa3c73a9c451356",
+      "repeats": 1,
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.411974873,
+          "rss_kib": 70636,
+          "invocations": [
+            {
+              "wall_s": 0.411974873,
+              "rss_kib": 70636,
+              "user_s": 0.31,
+              "system_s": 0.09,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.413004008,
+          "rss_kib": 70664,
+          "invocations": [
+            {
+              "wall_s": 0.413004008,
+              "rss_kib": 70664,
+              "user_s": 0.31,
+              "system_s": 0.08,
+              "involuntary": 8,
+              "voluntary": 2,
+              "checked_exit": 0
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.409805269,
+          "rss_kib": 70644,
+          "invocations": [
+            {
+              "wall_s": 0.409805269,
+              "rss_kib": 70644,
+              "user_s": 0.32,
+              "system_s": 0.07,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.397658548,
+          "rss_kib": 70644,
+          "invocations": [
+            {
+              "wall_s": 0.397658548,
+              "rss_kib": 70644,
+              "user_s": 0.3,
+              "system_s": 0.08,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.401193189,
+          "rss_kib": 70628,
+          "invocations": [
+            {
+              "wall_s": 0.401193189,
+              "rss_kib": 70628,
+              "user_s": 0.31,
+              "system_s": 0.08,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.399966671,
+          "rss_kib": 70388,
+          "invocations": [
+            {
+              "wall_s": 0.399966671,
+              "rss_kib": 70388,
+              "user_s": 0.32,
+              "system_s": 0.06,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.403724123,
+          "rss_kib": 70512,
+          "invocations": [
+            {
+              "wall_s": 0.403724123,
+              "rss_kib": 70512,
+              "user_s": 0.31,
+              "system_s": 0.08,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.404424662,
+          "rss_kib": 70640,
+          "invocations": [
+            {
+              "wall_s": 0.404424662,
+              "rss_kib": 70640,
+              "user_s": 0.33,
+              "system_s": 0.06,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.398758559,
+          "rss_kib": 70668,
+          "invocations": [
+            {
+              "wall_s": 0.398758559,
+              "rss_kib": 70668,
+              "user_s": 0.32,
+              "system_s": 0.06,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.400677655,
+          "rss_kib": 70676,
+          "invocations": [
+            {
+              "wall_s": 0.400677655,
+              "rss_kib": 70676,
+              "user_s": 0.33,
+              "system_s": 0.06,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.403395576,
+          "rss_kib": 70516,
+          "invocations": [
+            {
+              "wall_s": 0.403395576,
+              "rss_kib": 70516,
+              "user_s": 0.32,
+              "system_s": 0.07,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.411603569,
+          "rss_kib": 70488,
+          "invocations": [
+            {
+              "wall_s": 0.411603569,
+              "rss_kib": 70488,
+              "user_s": 0.32,
+              "system_s": 0.08,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.55321449,
+          "rss_kib": 70640,
+          "invocations": [
+            {
+              "wall_s": 0.55321449,
+              "rss_kib": 70640,
+              "user_s": 0.33,
+              "system_s": 0.06,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.400929336,
+          "rss_kib": 70612,
+          "invocations": [
+            {
+              "wall_s": 0.400929336,
+              "rss_kib": 70612,
+              "user_s": 0.32,
+              "system_s": 0.07,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.40192043,
+          "rss_kib": 70564,
+          "invocations": [
+            {
+              "wall_s": 0.40192043,
+              "rss_kib": 70564,
+              "user_s": 0.32,
+              "system_s": 0.06,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.407929692,
+          "rss_kib": 70456,
+          "invocations": [
+            {
+              "wall_s": 0.407929692,
+              "rss_kib": 70456,
+              "user_s": 0.34,
+              "system_s": 0.06,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.399015005,
+          "rss_kib": 70732,
+          "invocations": [
+            {
+              "wall_s": 0.399015005,
+              "rss_kib": 70732,
+              "user_s": 0.32,
+              "system_s": 0.07,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.401133376,
+          "rss_kib": 70480,
+          "invocations": [
+            {
+              "wall_s": 0.401133376,
+              "rss_kib": 70480,
+              "user_s": 0.32,
+              "system_s": 0.06,
+              "involuntary": 3,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.398476508,
+          "rss_kib": 70640,
+          "invocations": [
+            {
+              "wall_s": 0.398476508,
+              "rss_kib": 70640,
+              "user_s": 0.31,
+              "system_s": 0.07,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.400839277,
+          "rss_kib": 70636,
+          "invocations": [
+            {
+              "wall_s": 0.400839277,
+              "rss_kib": 70636,
+              "user_s": 0.31,
+              "system_s": 0.08,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.404664724,
+          "rss_kib": 70668,
+          "invocations": [
+            {
+              "wall_s": 0.404664724,
+              "rss_kib": 70668,
+              "user_s": 0.32,
+              "system_s": 0.07,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.394831301,
+          "rss_kib": 70444,
+          "invocations": [
+            {
+              "wall_s": 0.394831301,
+              "rss_kib": 70444,
+              "user_s": 0.31,
+              "system_s": 0.07,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        }
+      ],
+      "aa_range_s": [
+        0.397658548,
+        0.409805269
+      ],
+      "paired_b_over_a": [
+        0.998485138853087,
+        1.1995377049815907,
+        1.0048451186843639,
+        1.015373845891387
+      ]
+    },
+    "runtime-floating": {
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-storage/campaign-reference/runtime-floating.cpp",
+      "source_sha256": "df8f8e18ba6a31f375d56a716b7ba27fabdfd587a79fc7c3b106b9e171cd859b",
+      "repeats": 32,
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.179704497,
+          "rss_kib": 5832,
+          "invocations": [
+            {
+              "wall_s": 0.006407929,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005770365,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005732932,
+              "rss_kib": 5696,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00557709,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005543158,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005533649,
+              "rss_kib": 5664,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005527704,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005540977,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00549456,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005505078,
+              "rss_kib": 5752,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005477886,
+              "rss_kib": 5832,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005547798,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005510777,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005514577,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005575163,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005555101,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00550247,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005593467,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005727409,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005871877,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005758822,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005439223,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005368058,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005488987,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005449261,
+              "rss_kib": 5540,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005408324,
+              "rss_kib": 5456,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005449893,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005440929,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005755801,
+              "rss_kib": 5760,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005927095,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00583901,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005869127,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.17911412300000001,
+          "rss_kib": 5808,
+          "invocations": [
+            {
+              "wall_s": 0.005702193,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005915418,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005741265,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005687441,
+              "rss_kib": 5576,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005737889,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006004359,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005628866,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0055135,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00557064,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00549223,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005604394,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005598332,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005447807,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005371113,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005580735,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005742865,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005802494,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005764656,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005745265,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005597833,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005560014,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005522574,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005605655,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00548774,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005559958,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005612406,
+              "rss_kib": 5648,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005553157,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00540248,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005374968,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005383424,
+              "rss_kib": 5692,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005459047,
+              "rss_kib": 5772,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005343405,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.177612371,
+          "rss_kib": 5828,
+          "invocations": [
+            {
+              "wall_s": 0.005371541,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005425999,
+              "rss_kib": 5688,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005388385,
+              "rss_kib": 5828,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005310729,
+              "rss_kib": 5740,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005340497,
+              "rss_kib": 5488,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005455081,
+              "rss_kib": 5828,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005391973,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005338216,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386953,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005536771,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005711876,
+              "rss_kib": 5644,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005507391,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005732063,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005395346,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005353974,
+              "rss_kib": 5796,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005632431,
+              "rss_kib": 5752,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005636209,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005522889,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00562251,
+              "rss_kib": 5720,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00567229,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005633122,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005622816,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005615511,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005660996,
+              "rss_kib": 5728,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005646274,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005593024,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005554465,
+              "rss_kib": 5608,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005678724,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005602117,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005805866,
+              "rss_kib": 5688,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005785046,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005681286,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.404217508,
+          "rss_kib": 5832,
+          "invocations": [
+            {
+              "wall_s": 0.005715821,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005575084,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005568131,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.233285122,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 2,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006008904,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005765187,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005784629,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005664976,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005601382,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005533454,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005467515,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005388861,
+              "rss_kib": 5540,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005345472,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005363538,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005394182,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005385019,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005367306,
+              "rss_kib": 5600,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005448942,
+              "rss_kib": 5832,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005410392,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0054405,
+              "rss_kib": 5648,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005436529,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005394901,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0054209,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005453447,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00548746,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005846896,
+              "rss_kib": 5720,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005452275,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005398417,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00547243,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005357795,
+              "rss_kib": 5796,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005480556,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005501485,
+              "rss_kib": 5828,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.17587135,
+          "rss_kib": 5832,
+          "invocations": [
+            {
+              "wall_s": 0.005688743,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005593073,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005546135,
+              "rss_kib": 5832,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005585465,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005710898,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005553135,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0055769,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005526405,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005511029,
+              "rss_kib": 5728,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005395957,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005448736,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005385904,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005426758,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005346397,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005470553,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005414491,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005447809,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005507564,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005489195,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005389486,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005492041,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005389658,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005383753,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005443666,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005427128,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005472495,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005404211,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006133514,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005638315,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00538825,
+              "rss_kib": 5776,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005352638,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005331048,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.176605758,
+          "rss_kib": 5808,
+          "invocations": [
+            {
+              "wall_s": 0.005535497,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005438201,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00529633,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005437558,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005408227,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005558954,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005355279,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00541029,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00541827,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005403806,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005360659,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005364991,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00554311,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005520138,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005493783,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005446681,
+              "rss_kib": 5576,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005399956,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005414691,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005422653,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005433999,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005620415,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005634727,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005594657,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005543277,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005474735,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005679754,
+              "rss_kib": 5536,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005731343,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005706535,
+              "rss_kib": 5516,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00577794,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005720139,
+              "rss_kib": 5776,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005709134,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005750029,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.176821736,
+          "rss_kib": 5784,
+          "invocations": [
+            {
+              "wall_s": 0.005844428,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005715351,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005502004,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005481304,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005401053,
+              "rss_kib": 5628,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005583452,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005632146,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005540554,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005416567,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005371174,
+              "rss_kib": 5612,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005523488,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005483962,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005462754,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005384534,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005430434,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005628276,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005522336,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005518851,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005393266,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005376558,
+              "rss_kib": 5564,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005290919,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005412947,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005287389,
+              "rss_kib": 5664,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005976076,
+              "rss_kib": 5668,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005710997,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005739735,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005593826,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005538922,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00561832,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005487841,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005446771,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005505501,
+              "rss_kib": 5696,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.182934746,
+          "rss_kib": 5820,
+          "invocations": [
+            {
+              "wall_s": 0.005917406,
+              "rss_kib": 5820,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006124151,
+              "rss_kib": 5448,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005825124,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006047665,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005738646,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005549884,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00563933,
+              "rss_kib": 5544,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005696773,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005821271,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005774075,
+              "rss_kib": 5668,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005726993,
+              "rss_kib": 5820,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005703955,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005715274,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005769234,
+              "rss_kib": 5740,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00574395,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005659744,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005762409,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005761599,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005723244,
+              "rss_kib": 5464,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005587621,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005597007,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005694447,
+              "rss_kib": 5544,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005552905,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005586266,
+              "rss_kib": 5624,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005709931,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006056855,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005863083,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005701336,
+              "rss_kib": 5736,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005550717,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005489985,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005411211,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005432655,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.174984425,
+          "rss_kib": 5820,
+          "invocations": [
+            {
+              "wall_s": 0.005521206,
+              "rss_kib": 5544,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005517162,
+              "rss_kib": 5752,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005532985,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005471697,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005525872,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005577073,
+              "rss_kib": 5820,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005577875,
+              "rss_kib": 5576,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005472628,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005494839,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005453083,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005510868,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005504508,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005402418,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005365473,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005413409,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005472945,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00542378,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005418883,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005419795,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005429617,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005435947,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005430551,
+              "rss_kib": 5464,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005389721,
+              "rss_kib": 5820,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005531147,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005548181,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005465436,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005475432,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005555072,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005451327,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005397432,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005426182,
+              "rss_kib": 5704,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005371881,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.176925803,
+          "rss_kib": 5832,
+          "invocations": [
+            {
+              "wall_s": 0.005708805,
+              "rss_kib": 5604,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005697403,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006026159,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005731299,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005653365,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005752834,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005681037,
+              "rss_kib": 5664,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005760267,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00568345,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005559043,
+              "rss_kib": 5732,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005520807,
+              "rss_kib": 5728,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005443596,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005514179,
+              "rss_kib": 5832,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005476807,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005544663,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005497679,
+              "rss_kib": 5728,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005515713,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005460094,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00547302,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005447602,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005408733,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386744,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005439368,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005485591,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005442192,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005431119,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00535069,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005356477,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005359954,
+              "rss_kib": 5752,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005424483,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005363735,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005328895,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.177551351,
+          "rss_kib": 5824,
+          "invocations": [
+            {
+              "wall_s": 0.005404695,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005382006,
+              "rss_kib": 5532,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005283463,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005303316,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00542826,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005368261,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00538661,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005515512,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005453876,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005453027,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005455775,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005580747,
+              "rss_kib": 5488,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005492486,
+              "rss_kib": 5660,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005554088,
+              "rss_kib": 5824,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005361888,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005483051,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005524333,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00601336,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0058805,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005939953,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005820068,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005726414,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005404391,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005411007,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005460885,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005409578,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005372189,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005421952,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005684914,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005809757,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005828442,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005936547,
+              "rss_kib": 5512,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.176235311,
+          "rss_kib": 5784,
+          "invocations": [
+            {
+              "wall_s": 0.005698621,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005931317,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005826541,
+              "rss_kib": 5624,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005474685,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005508963,
+              "rss_kib": 5716,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00535276,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005385174,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005413199,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005397619,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005450133,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005435457,
+              "rss_kib": 5608,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005434002,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005411974,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005477794,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005370337,
+              "rss_kib": 5624,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005401111,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005304097,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005452793,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005454479,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005489417,
+              "rss_kib": 5568,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005442194,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005444992,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00537128,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005470999,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005594661,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005932741,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00554921,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005511767,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005428419,
+              "rss_kib": 5720,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00553075,
+              "rss_kib": 5748,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005676315,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00561151,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.178762339,
+          "rss_kib": 5804,
+          "invocations": [
+            {
+              "wall_s": 0.005610556,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005471027,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00538043,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005375285,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005367514,
+              "rss_kib": 5760,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005402647,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005399635,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005454663,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005553551,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005628753,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005681185,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005717006,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005686319,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005566168,
+              "rss_kib": 5540,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00567114,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005915007,
+              "rss_kib": 5592,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006077102,
+              "rss_kib": 5748,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005845026,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005823825,
+              "rss_kib": 5696,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005790888,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005736205,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005597199,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005559488,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005512611,
+              "rss_kib": 5624,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005662289,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005509286,
+              "rss_kib": 5496,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005446779,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005486667,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005468306,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005496572,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005413773,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005455437,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.179705473,
+          "rss_kib": 5848,
+          "invocations": [
+            {
+              "wall_s": 0.005604329,
+              "rss_kib": 5660,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005550914,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005475071,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005519656,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005491162,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005395539,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005478372,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005487401,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005749722,
+              "rss_kib": 5848,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005667263,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005598939,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005534185,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005549066,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005403906,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005480103,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005555558,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005625836,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005773981,
+              "rss_kib": 5732,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005884909,
+              "rss_kib": 5696,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00568715,
+              "rss_kib": 5644,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005632667,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005655578,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005779334,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006061147,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005803457,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005546456,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005522864,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005648543,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00569433,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005573272,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005619096,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005655667,
+              "rss_kib": 5612,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.184101207,
+          "rss_kib": 5808,
+          "invocations": [
+            {
+              "wall_s": 0.005854842,
+              "rss_kib": 5732,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005785485,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005780462,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005741975,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005708276,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005727053,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005808955,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005761111,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005703413,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005718854,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005770479,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005779685,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005683379,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005735213,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005690457,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005612207,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005738256,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005726579,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005631959,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005635571,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005776927,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.006015828,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005878866,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005874759,
+              "rss_kib": 5636,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005820761,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005845846,
+              "rss_kib": 5740,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005715345,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005756679,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005748932,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005636376,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005737356,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005699321,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.179938872,
+          "rss_kib": 5844,
+          "invocations": [
+            {
+              "wall_s": 0.005810427,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005677157,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005548314,
+              "rss_kib": 5812,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005577109,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005527926,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005669831,
+              "rss_kib": 5576,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005557192,
+              "rss_kib": 5780,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005613249,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005553989,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005624775,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005856748,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005792362,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005581492,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005550498,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005584361,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005651097,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005552672,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005572496,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005666486,
+              "rss_kib": 5572,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005602725,
+              "rss_kib": 5688,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00557838,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005632191,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005650443,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005560823,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005788862,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005663035,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005593763,
+              "rss_kib": 5544,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005526242,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005693725,
+              "rss_kib": 5844,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005571124,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005617951,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005491427,
+              "rss_kib": 5704,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.181158833,
+          "rss_kib": 5804,
+          "invocations": [
+            {
+              "wall_s": 0.005738469,
+              "rss_kib": 5752,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005679661,
+              "rss_kib": 5668,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005634748,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005559799,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005629564,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005557631,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005699156,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005601415,
+              "rss_kib": 5624,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005601309,
+              "rss_kib": 5544,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005628477,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005637818,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005583956,
+              "rss_kib": 5644,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005608906,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005778031,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005834446,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005747059,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005744098,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005933241,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005763358,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005702887,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005612736,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005682315,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005578566,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005609674,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005644928,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005631051,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005619399,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005591753,
+              "rss_kib": 5560,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005656296,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005616919,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005628,
+              "rss_kib": 5732,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005623167,
+              "rss_kib": 5520,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.182094193,
+          "rss_kib": 5808,
+          "invocations": [
+            {
+              "wall_s": 0.005739462,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005542479,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005645603,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005655264,
+              "rss_kib": 5432,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005665634,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005586776,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005742332,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005745795,
+              "rss_kib": 5644,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005691072,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005692091,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005698038,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005676024,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005674983,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005663919,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005665098,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005682134,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005699472,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005702659,
+              "rss_kib": 5632,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005577618,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0056569,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005691046,
+              "rss_kib": 5516,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005597677,
+              "rss_kib": 5644,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005717672,
+              "rss_kib": 5784,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005646694,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005588494,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005580369,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005962716,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00571681,
+              "rss_kib": 5764,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005697559,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005852746,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005814923,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005824134,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.178949931,
+          "rss_kib": 5796,
+          "invocations": [
+            {
+              "wall_s": 0.005829393,
+              "rss_kib": 5488,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005743538,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00559073,
+              "rss_kib": 5648,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005560772,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005702247,
+              "rss_kib": 5776,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005646045,
+              "rss_kib": 5572,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005514427,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005622562,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00572122,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005610116,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005522778,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00562428,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005547549,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005489059,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005496433,
+              "rss_kib": 5524,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005517577,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005542376,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005601651,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005686929,
+              "rss_kib": 5696,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005635849,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005939985,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005647864,
+              "rss_kib": 5740,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005416259,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005378339,
+              "rss_kib": 5668,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00545929,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386634,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005531167,
+              "rss_kib": 5796,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005447838,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005572384,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005542596,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005709765,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005712279,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.174019686,
+          "rss_kib": 5836,
+          "invocations": [
+            {
+              "wall_s": 0.005672767,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005540813,
+              "rss_kib": 5496,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005483537,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386808,
+              "rss_kib": 5756,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005388658,
+              "rss_kib": 5464,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005425856,
+              "rss_kib": 5664,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00530554,
+              "rss_kib": 5576,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005485547,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005366549,
+              "rss_kib": 5656,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00545375,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005403984,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005414043,
+              "rss_kib": 5640,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005559936,
+              "rss_kib": 5496,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005496431,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005476364,
+              "rss_kib": 5516,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005387887,
+              "rss_kib": 5620,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005406933,
+              "rss_kib": 5836,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005465339,
+              "rss_kib": 5580,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005410946,
+              "rss_kib": 5760,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005445275,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005392366,
+              "rss_kib": 5536,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005400545,
+              "rss_kib": 5572,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005456753,
+              "rss_kib": 5772,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005440435,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005401159,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005484117,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005502364,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005402519,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005418071,
+              "rss_kib": 5680,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005397274,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005394721,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005352399,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.173121278,
+          "rss_kib": 5724,
+          "invocations": [
+            {
+              "wall_s": 0.005637056,
+              "rss_kib": 5516,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005512254,
+              "rss_kib": 5724,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005511141,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005551424,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005534734,
+              "rss_kib": 5632,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005508435,
+              "rss_kib": 5584,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005550059,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005594526,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005402732,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005333516,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005428271,
+              "rss_kib": 5496,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005317275,
+              "rss_kib": 5512,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386994,
+              "rss_kib": 5572,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005321408,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005385074,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005416115,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005416742,
+              "rss_kib": 5668,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005279536,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005288886,
+              "rss_kib": 5536,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005386723,
+              "rss_kib": 5552,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005320918,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005403403,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00528724,
+              "rss_kib": 5616,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.0054311,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005346144,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005530289,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005330812,
+              "rss_kib": 5556,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00532858,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005380433,
+              "rss_kib": 5704,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00533681,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005368149,
+              "rss_kib": 5708,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005294499,
+              "rss_kib": 5712,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.17313755,
+          "rss_kib": 5808,
+          "invocations": [
+            {
+              "wall_s": 0.005495246,
+              "rss_kib": 5700,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005512129,
+              "rss_kib": 5788,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005507632,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005416154,
+              "rss_kib": 5804,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005370421,
+              "rss_kib": 5792,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005456321,
+              "rss_kib": 5780,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005348565,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005481718,
+              "rss_kib": 5744,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00541242,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00545033,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 1,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005410164,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005371866,
+              "rss_kib": 5612,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005317677,
+              "rss_kib": 5588,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005373927,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005346366,
+              "rss_kib": 5572,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005306968,
+              "rss_kib": 5492,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00540146,
+              "rss_kib": 5648,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005373464,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.00546103,
+              "rss_kib": 5652,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005324314,
+              "rss_kib": 5548,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005382959,
+              "rss_kib": 5740,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005318884,
+              "rss_kib": 5800,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005330599,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005310181,
+              "rss_kib": 5672,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005450163,
+              "rss_kib": 5732,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005465922,
+              "rss_kib": 5808,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005414088,
+              "rss_kib": 5484,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005530688,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005462248,
+              "rss_kib": 5528,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005420395,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005490493,
+              "rss_kib": 5684,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            },
+            {
+              "wall_s": 0.005422758,
+              "rss_kib": 5768,
+              "user_s": 0.0,
+              "system_s": 0.0,
+              "involuntary": 0,
+              "voluntary": 1,
+              "checked_exit": 0
+            }
+          ]
+        }
+      ],
+      "aa_range_s": [
+        0.17587135,
+        0.404217508
+      ],
+      "paired_b_over_a": [
+        1.0117926813336786,
+        0.9936763307283949,
+        0.9860793035630705,
+        0.985950886450291
+      ]
+    }
+  },
+  "finished_utc": "2026-09-14 05:26:31"
+}

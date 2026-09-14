@@ -1,5 +1,11 @@
 # PA16 scalar handoff performance
 
+This is the preserved **loop 37** record for the `cc842756` snapshot. Current
+storage work and the replacement of its 32-byte constexpr-array cutoff are
+recorded in [storage-performance.md](storage-performance.md). The current
+[storage verifier](../student.tests/pa16/verify_storage.py) also verifies this
+historical manifest against that snapshot and its frozen artifacts.
+
 Implementation: `7484f22b934b646c3880c3d46a51d62a7b2e094d`.
 Frozen entry compiler SHA-256: `bf32d09de557e00965ca3bb81df35e1cfe01947bd1f03ae39344df55584e125a`.
 Frozen handoff compiler: `a6e376110c306c5a5b4cf73dfc027fac34966367ef4c155a93a7770577059543`.
