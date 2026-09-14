@@ -1,0 +1,38 @@
+[
+  {
+    "name": "extern_free_suppression",
+    "source": "template<class T>int suppressed(T){static_assert(sizeof(T)==1,\"dormant\");return 1;}\nextern template int suppressed(int);int main(){return suppressed(0);}",
+    "required": "^declare function @suppressed\\(",
+    "forbidden": "^function @suppressed\\(",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true
+  },
+  {
+    "name": "extern_member_suppression",
+    "source": "template<class T>struct C{int dormant();};\ntemplate<class T>int C<T>::dormant(){return sizeof(typename T::missing);}\nextern template struct C<int>;int main(){C<int> c;return c.dormant();}",
+    "required": "^declare function @dormant\\(",
+    "forbidden": "^function @dormant\\(",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true
+  },
+  {
+    "name": "explicit_free_root",
+    "source": "template<class T>T retained(T x){return x;}\ntemplate int retained(int);int main(){return 0;}",
+    "required": "^function @retained\\([^\\n]*object_root=yes",
+    "forbidden": "^declare function @retained\\(",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true
+  },
+  {
+    "name": "extern_nested_member_suppression",
+    "source": "template<class T>struct C{struct Inner{int dormant();};};\ntemplate<class T>int C<T>::Inner::dormant(){return sizeof(typename T::missing);}\nextern template struct C<int>;int main(){C<int>::Inner c;return c.dormant();}",
+    "required": "^declare function @dormant\\(",
+    "forbidden": "^function @dormant\\(",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true
+  }
+]

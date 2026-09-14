@@ -1,0 +1,167 @@
+[
+  {
+    "name": "partial_deduced_tuple",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_alias_signature",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nested_owner_separation",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_static_storage",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_late_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_overloaded_members",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_value_owner",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_pack_owner",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_unused_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_namespace_owner",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_constructor_destructor",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_copy_assignment",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "partial_explicit_instantiation",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "undeclared_partial_owner",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member definition does not name a declared template owner\n",
+    "passed": true
+  },
+  {
+    "name": "partial_duplicate_body",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: duplicate out-of-class template member definition\n",
+    "passed": true
+  },
+  {
+    "name": "partial_wrong_signature",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition does not match a declared member\n",
+    "passed": true
+  },
+  {
+    "name": "partial_wrong_namespace",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template member outside enclosing namespace\n",
+    "passed": true
+  },
+  {
+    "name": "partial_missing_parameter",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member definition does not name a declared template owner\n",
+    "passed": true
+  }
+]

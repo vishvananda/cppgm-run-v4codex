@@ -1,0 +1,269 @@
+[
+  {
+    "name": "nested_head_outer_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,template<T>class C>struct A;\ntemplate<class U,template<U>class D>struct A{};template<int>struct I{};\nint main(){A<int,I>a;return sizeof(a)-1;}",
+    "source_sha256": "f1506a073e24c0eb88097b176380c78c4222180583ffb773cb97994cfc873f42"
+  },
+  {
+    "name": "nested_head_distinct_depth",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,template<class U,U>class C>struct A;\ntemplate<class X,template<class Y,Y>class D>struct A{};\ntemplate<class V,V>struct B{};int main(){A<int,B>a;return sizeof(a)-1;}",
+    "source_sha256": "33a1a77b3c823c850e043ebb404ce633161913e3123bc2d3dd1564877133535c"
+  },
+  {
+    "name": "constructor_equal_conversions",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct C{int n;C(int):n(1){}\ntemplate<class T>C(T):n(2){}};int main(){C c(1);return c.n-1;}",
+    "source_sha256": "035e73b9976a665f4d2acb5eabafc879ac225cd527eff614d5ef225bddcd2507"
+  },
+  {
+    "name": "constructor_template_better_conversion",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct C{int n;C(long):n(1){}\ntemplate<class T>C(T):n(2){}};int main(){C c(1);return c.n-2;}",
+    "source_sha256": "ac7b90ac7acf5cd60e269e0248de0773b44eb0864171d1d862f1a9ab369c21d4"
+  },
+  {
+    "name": "constructor_nontemplate_better_conversions",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct C{int n;C(int,int):n(1){}\ntemplate<class T>C(long,T):n(2){}};int main(){C c(1,1);return c.n-1;}",
+    "source_sha256": "5ab8f8a7c9bbca82dc790fecabe4317c2cc03c6d78a62198d1b0ed59f8aa31da"
+  },
+  {
+    "name": "ordinary_alias_redeclaration",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "using A=int;using A=int;int main(){A n=0;return n;}",
+    "source_sha256": "26fac91dc76c303cc75bccbdea5dbe7ae7edea4eccd9c98048b69791b6305133"
+  },
+  {
+    "name": "template_alias_redeclaration",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>using A=T*;\ntemplate<class U>using A=U*;int main(){int n=0;A<int> p=&n;return *p;}",
+    "source_sha256": "6300f9e17b4530850c71191af3bae28f04ff7d887744edb11ca38a076a8e0a4a"
+  },
+  {
+    "name": "alias_access_from_own_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class Secret{typedef int Hidden;\ntemplate<class T>using A=typename T::Hidden;\npublic:int f(){A<Secret> n=7;return n;}};int main(){Secret s;return s.f()-7;}",
+    "source_sha256": "e7ecc95a3985a08ca194d7dacc50b00b76bf584c9a77f66de434675746555687"
+  },
+  {
+    "name": "explicit_private_member_names",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class Secret{typedef int Hidden;\npublic:template<class T>void f(T);};template<class T>void Secret::f(T){}\ntemplate void Secret::f<Secret::Hidden>(Secret::Hidden);int main(){return 0;}",
+    "source_sha256": "a9c47d03579c65d01bafafe761bb3acb9de8601e99c9360e29f7bc4a6659d5b9"
+  },
+  {
+    "name": "qualified_member_own_context",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class Secret{typedef int Hidden;\npublic:void f(Hidden);};void Secret::f(Hidden){}int main(){Secret s;s.f(1);return 0;}",
+    "source_sha256": "091ce0aa4d87ea37b073227f77d91de07666d0c91bf390ef65782547684002bc"
+  },
+  {
+    "name": "alias_tuple_signature",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class R,class T,class U>using F=R(T,U);\nint f(char a,long b){return a+b;}int main(){F<int,char,long>*p=f;return p(3,4)-7;}",
+    "source_sha256": "302a4c50e3fd90adb9f27ff2f9509ae5de21ce5f639978013d3c088304e47119"
+  },
+  {
+    "name": "alias_tuple_empty_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class R,class...T>using F=R(T...);\nint f(){return 7;}int main(){F<int>*p=f;return p()-7;}",
+    "source_sha256": "4d5fdc1387b7f4ec63c4a8d1f831d5450c5bc204e40e7dbfd3c287405023795f"
+  },
+  {
+    "name": "selected_owner_tuple_and_access",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class X,class Y>struct Pair{};\ntemplate<class T>struct A;template<class X,class Y>struct A<Pair<X,Y>>{\ntypedef X value;static value f(Y);};template<class R,class S>\ntypename A<Pair<R,S>>::value A<Pair<R,S>>::f(S n){return sizeof(R)+n;}\nint main(){return A<Pair<int,char>>::f(3)+A<Pair<char,int>>::f(2)-10;}",
+    "source_sha256": "92352c61d1a0e1f43e6d3bcf61b18f8e70a27240036e48f3188aebbf20395206"
+  },
+  {
+    "name": "partial_repeated_use",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct A;template<class T>struct A<T*>{int f();};\ntemplate<class U>int A<U*>::f(){return sizeof(U);}\nint main(){A<int*>a;A<char*>b;return a.f()+a.f()+b.f()-9;}",
+    "source_sha256": "e486a8485cb57c9d3f89ed7daf0436471ad09a4f6c72915b800e6e9c1886c7b0"
+  },
+  {
+    "name": "nested_head_outer_parameter_identity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template head shape differs across declarations\n",
+    "passed": true,
+    "source": "template<class T,class U,template<T>class C>struct A;\ntemplate<class T,class U,template<U>class C>struct A{};",
+    "source_sha256": "f525d2023740766f8d14b9939a7750763b3650a91061538d424d3288eb942330"
+  },
+  {
+    "name": "nested_head_outer_vs_inner_identity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template head shape differs across declarations\n",
+    "passed": true,
+    "source": "template<class T,template<class U,T>class C>struct A;\ntemplate<class X,template<class Y,Y>class D>struct A{};",
+    "source_sha256": "517c0e4632a87bf864176d179e1e62ed0fff17d32c2c9e8c61699bd866df6fb2"
+  },
+  {
+    "name": "nested_head_actual_value_type",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": true,
+    "source": "template<class T,template<T>class C>struct A{};\ntemplate<long>struct L{};A<int,L>a;",
+    "source_sha256": "9d5dcab513a372fd0c03214e9c4d65bfcb23377ed8604e4edf1d1c3337bc426d"
+  },
+  {
+    "name": "crossed_constructor_conversions",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous constructor\n",
+    "passed": true,
+    "source": "struct C{C(int,long){}\ntemplate<class T>C(long,T){}};int main(){C c(1,1);}",
+    "source_sha256": "dd90730676b46901f9407c4a654ef42dccf8806abc76c6972fde720f68eb0d4d"
+  },
+  {
+    "name": "crossed_constructor_reverse_order",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous constructor\n",
+    "passed": true,
+    "source": "struct C{template<class T>C(long,T){}\nC(int,long){}};int main(){C c(1,1);}",
+    "source_sha256": "2266052df38b6841a3c0723b9d81ace8a531b14fea2b488591073fd658e0a617"
+  },
+  {
+    "name": "alias_template_then_alias",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: alias template conflicts with nontemplate declaration\n",
+    "passed": true,
+    "source": "template<class T>using A=int;using A=int;",
+    "source_sha256": "e011f3cafadb041d20ed52710be12629e876121d71562233d027ffa92eadea9c"
+  },
+  {
+    "name": "alias_then_alias_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: alias template conflicts with nontemplate declaration\n",
+    "passed": true,
+    "source": "using A=int;template<class T>using A=int;",
+    "source_sha256": "6a2ed91c97269dafccccc81ba80b3838d647f0478fd70eca8df8a94c7eb8d4e7"
+  },
+  {
+    "name": "explicit_member_does_not_privilege_alias",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true,
+    "source": "class Secret{typedef int Hidden;\npublic:template<class T>void f(T);};template<class T>using A=typename T::Hidden;\ntemplate<class T>void Secret::f(T){}template void Secret::f<int>(A<Secret>);",
+    "source_sha256": "fa5db6b8ad6106771550d79fba88eebc53d65152621bfc4c0c0a8b53d28206f8"
+  },
+  {
+    "name": "qualified_member_does_not_privilege_alias",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true,
+    "source": "class Secret{typedef int Hidden;\npublic:void f(int);};template<class T>using A=typename T::Hidden;\nvoid Secret::f(A<Secret>){}",
+    "source_sha256": "f5881e15964bc61d2017d60347d9170d23e534b35be5b7626ec415f159312c33"
+  },
+  {
+    "name": "qualified_member_does_not_privilege_class",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true,
+    "source": "class Secret{typedef int Hidden;\npublic:void f(int);};template<class T>struct C{typedef typename T::Hidden type;};\nvoid Secret::f(C<Secret>::type){}",
+    "source_sha256": "6f82a6fe416dfc9c5ee11c8414093a91612c34479dd380cfc01b1e1233b15d56"
+  },
+  {
+    "name": "recursive_alias_demand",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": true,
+    "source": "template<class T>struct B;\ntemplate<class T>using A=typename B<T>::type;\ntemplate<class T>struct B{typedef A<T> type;};A<int> x;",
+    "source_sha256": "c4765fc8c7b8bf7342425c20c09e09366cf0673795752c630c5245a3567142d8"
+  }
+]

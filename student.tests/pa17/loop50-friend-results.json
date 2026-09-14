@@ -1,0 +1,415 @@
+[
+  {
+    "name": "class_all_specializations",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "function_all_specializations",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "friend_class_nested",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "private_base",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_renamed_head",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "class_template_friend_function",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "typename_friend",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "nonclass_friend_ignored",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_template_fixed_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_template_later_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_template_operator",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_outer_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "ordinary_friend_two_specializations",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "ordinary_dormant_friend",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "ordinary_constexpr_friend",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "ordinary_friend_chain",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_function_redeclaration",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "hidden_template_redeclaration",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "namespace_identity",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "class_template_access_stable",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "class_specialization_access_stable",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "variable_template_access_stable",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "operator_specialization_identity",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "operator_query_identity",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "friend_template_enclosing_body",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "friend_existing_specialization",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "qualified_class_template",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "unrelated_function",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "friend_not_transitive",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "friend_not_inherited",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "single_specialization",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "hidden_template_unqualified",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: f\n",
+    "passed": true
+  },
+  {
+    "name": "hidden_template_qualified",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: f\n",
+    "passed": true
+  },
+  {
+    "name": "friend_is_not_member",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": true
+  },
+  {
+    "name": "qualified_absent",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified friend must match a declared function\n",
+    "passed": true
+  },
+  {
+    "name": "qualified_wrong_signature",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified friend must match a declared function\n",
+    "passed": true
+  },
+  {
+    "name": "qualified_wrong_head",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified friend must match a declared function\n",
+    "passed": true
+  },
+  {
+    "name": "ordinary_demanded_invalid",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": true
+  },
+  {
+    "name": "dependent_friend_isolation",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "duplicate_friend_body",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template function redefinition\n",
+    "passed": true
+  },
+  {
+    "name": "private_class_template_stable",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "private_variable_template_stable",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true
+  },
+  {
+    "name": "friend_class_hidden",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "qualified_class_absent",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified friend class template was not declared\n",
+    "passed": true
+  },
+  {
+    "name": "friend_partial_declaration",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: friend declaration cannot declare a partial specialization\n",
+    "passed": true
+  },
+  {
+    "name": "friend_template_body_redefinition",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template function redefinition\n",
+    "passed": true
+  }
+]
