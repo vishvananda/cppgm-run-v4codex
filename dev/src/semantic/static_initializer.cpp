@@ -76,8 +76,12 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
             Type t = types[entities[e].type];
             bool ref = types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef;
             if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef)
-                return static_value(entities[e].initializer, target);
+                return entities[e].initializer ? static_value(entities[e].initializer,target) : r;
             if (ref || t.kind == TypeKind::Array || t.kind == TypeKind::Function) {
+                // Static data cannot name activation storage or a field without
+                // its enclosing object. Those addresses require execution.
+                if (entities[e].kind != EntityKind::Function && !entities[e].is_static &&
+                    scopes[entities[e].owner].kind != ScopeKind::Namespace) return r;
                 r.kind = StaticValue::Address; r.entity = e; return r;
             }
         }

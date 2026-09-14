@@ -74,17 +74,21 @@ void Procedural::global(EntityId e)
     g.structured = sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
-        bool class_object = sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info;
-        bool dynamic = entity.initializer && !constant_initializer(entity.initializer, t);
-        if (class_object && !entity.initializer) dynamic = !sem.empty_value(t) || sem.constructor_needed(sem.object_constructor(e));
-        if (!entity.initializer && sem.types[t].kind == TypeKind::Array)
-            dynamic = sem.constructor_needed(sem.object_constructor(e));
-        if (sem.static_vptr(e)) dynamic = false;
+        bool local = sem.local_static(e);
+        bool dynamic = !sem.static_initialization(e);
         if (dynamic) {
-            if (entity.thread_local_storage) prepare_tls(e);
+            if (local) {}
+            else if (entity.thread_local_storage) prepare_tls(e);
             else global_initializers.push_back(e);
             g.data.begin = p.data.size(); g.data.count = 1;
             DataItem zero; zero.zero_bytes = g.structured ? sem.object_size(t) : g.type.bytes(); p.data.push_back(zero);
+        }
+        else if (local && reference(t) && sem.static_value(entity.initializer,t).kind == semantic::StaticValue::Address) {
+            // The PA16 LowIR contract materializes constant reference bindings
+            // in the startup function, ahead of all dynamic initializers.
+            static_reference_initializers.push_back(e);
+            g.data.begin = p.data.size(); g.data.count = 1;
+            DataItem zero; zero.zero_bytes = 8; p.data.push_back(zero);
         }
         else if (reference(t)) {
             auto value = sem.static_value(entity.initializer, t);
@@ -116,10 +120,12 @@ void Procedural::global(EntityId e)
     if (prior.kind == Symbol::GlobalSymbol) { p.globals[prior.entity-1] = g; return; }
     p.globals.push_back(g);
     auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
+    if (sem.local_static(e)) prepare_local_static(e,!sem.static_initialization(e));
 }
 void Procedural::object(EntityId e)
 {
     if (sem.entities[e].external_decl && sem.scopes[sem.entities[e].owner].kind == semantic::ScopeKind::Namespace) return;
+    if (sem.local_static(e)) { initialize_local_static(e); return; }
     initialized_units = semantic::Index();
     TypeId t = sem.entities[e].type;
     auto lifetime = sem.object_lifetime(e);
@@ -134,10 +140,7 @@ void Procedural::object(EntityId e)
     bool omit = selected.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
     const auto& scalar = sem.scalar_consumption(e);
     begin_full_expression(scalar.expression ? scalar.expression : init,omit);
-    // O0 bounds each backing object to 32 bytes. Larger copies through the
-    // supplied backend lose runtime against direct stores; the original
-    // scalar/zero-loop plan also avoids growing a duplicate static image.
-    if (sem.constant_array_plan(e) && sem.object_size(t) <= 32) initialize_constant_array(e,location);
+    if (sem.constant_array_plan(e)) initialize_constant_array(e,location);
     else if (scalar.expression && full_expression.enabled) initialize_scalar(scalar,location);
     else if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
     else if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {

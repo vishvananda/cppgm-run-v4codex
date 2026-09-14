@@ -3,24 +3,6 @@
 namespace cppgm { namespace lowering {
 using syntax::Kind;
 using namespace lowir_model;
-bool Procedural::constant_initializer(NodeId n, TypeId t)
-{
-    if (NodeId source = sem.class_initialization(n,t).source) {
-        auto value = sem.expression_fact(source);
-        return sem.empty_value(t) && value.form == semantic::ExpressionForm::Construction && !value.argument_count &&
-            !sem.constructor_needed(sem.facts[source].entity);
-    }
-    if (auto plan = sem.initializer_plan(n, t)) return constant_plan(plan);
-    if (n && sem.constructor_member(sem.facts[n].entity)) return false;
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
-    auto target = sem.types[t];
-    if (!n && sem.value_constructor(t)) return false;
-    if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array) {
-        if (n) throw std::logic_error("missing static aggregate initializer plan");
-        return true; // Uninitialized static storage is zero-initialized.
-    }
-    return sem.static_value(n, t).kind != semantic::StaticValue::Invalid;
-}
 void Procedural::global_initialization()
 {
     reset_lifetime(0);
@@ -34,6 +16,12 @@ void Procedural::global_initialization()
     symbol.metadata.role = SR_INIT; symbol.metadata.binding = SBM_INTERNAL;
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
+    for (EntityId e : static_reference_initializers) {
+        auto value = sem.static_value(sem.entities[e].initializer,sem.entities[e].type);
+        auto pointer = emit(Opcode::Addr,IRType(),{Operand::symbol(this->symbol(value.entity))});
+        if (value.addend) pointer = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(value.addend)});
+        emit(Opcode::Store,IRType::Ptr,{pointer.operand,Operand::symbol(symbols[e])});
+    }
     for (EntityId e : global_initializers) {
         initialized_units = semantic::Index();
         auto entity = sem.entities[e];

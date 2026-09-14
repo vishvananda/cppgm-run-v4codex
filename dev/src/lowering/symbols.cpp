@@ -92,6 +92,16 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     base = base && separate;
     if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
+    if (sem.local_static(id)) {
+        // A local declaration has no namespace variable ABI name. Distinct
+        // lexical declarations and specializations already have distinct IDs.
+        auto sid = fresh_symbol("@__local_static_"+std::to_string(id));
+        symbols[id] = sid;
+        auto& metadata = p.symbols[sid.index-1].metadata;
+        metadata.binding = SBM_INTERNAL;
+        if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
+        return sid;
+    }
     bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
         sem.scopes[e.owner].kind != semantic::ScopeKind::Class && sem.types[e.type].cv & 1 && !e.external_decl);
     internal |= internal_scope(e.owner);
@@ -252,6 +262,12 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
 }
 void Procedural::run()
 {
+    for (auto storage : sem.reference_storage) {
+        if (!storage.reference || !sem.local_static(storage.reference) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
+        auto next = local_static_references.get(storage.reference);
+        local_static_references.put(storage.reference,local_static_reference_objects.size());
+        local_static_reference_objects.push_back({storage.object,next});
+    }
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         if (entity.template_pattern) continue;
@@ -265,7 +281,7 @@ void Procedural::run()
             auto m = sem.member_fact(e);
             if (m.array_entry && !m.complete_entry && !m.base_entry && !m.retained_root) continue;
         }
-        if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member) continue;
+        if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member && !sem.local_static(e)) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
         if (member && entity.kind == semantic::EntityKind::Function && sem.member_fact(e).in_class_body && !sem.member_demanded(e)) continue;
         if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
@@ -342,9 +358,10 @@ void Procedural::run()
     }
     emit_deleting_entries();
     emit_allocation_adapters();
-    if (!global_initializers.empty()) global_initialization();
+    if (!global_initializers.empty() || !static_reference_initializers.empty()) global_initialization();
     emit_tls_initializers();
     emit_aggregate_helpers();
+    emit_local_static_destructors();
     global_finalization();
     order_lifecycle_entries();
 }

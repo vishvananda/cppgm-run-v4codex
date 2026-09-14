@@ -48,6 +48,10 @@ public:
     NodeId default_argument_value(EntityId e, unsigned parameter) const;
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
+    bool local_static(EntityId e) const;
+    bool constant_initializer(NodeId n, TypeId target, bool local = false);
+    bool constant_plan(std::uint32_t plan, bool local = false);
+    bool static_initialization(EntityId e);
     std::size_t static_requests = 0, static_hits = 0;
     long double floating_value(Constant value) const;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
@@ -212,6 +216,7 @@ private:
     Index initializer_work_index;
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
+    Index static_initialization_facts, static_plan_facts;
     struct ConstantArrayIndex { std::uint32_t first = 0, count = 0; };
     Index constant_array_indices;
     std::vector<ConstantArrayIndex> constant_array_ranges = std::vector<ConstantArrayIndex>(1);

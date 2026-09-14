@@ -119,7 +119,8 @@ void Procedural::global_finalization()
     std::vector<EntityId> work;
     for (EntityId e = 1; e < sem.entities.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable &&
-            sem.entities[e].definition && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);
+            sem.entities[e].definition && !sem.local_static(e) &&
+            !(sem.static_temporary(e).reference && sem.local_static(sem.static_temporary(e).reference)) && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);
     if (work.empty()) return;
     reset_lifetime(0);
     Function f; f.symbol = fresh_symbol("@__cppgm_fini");
