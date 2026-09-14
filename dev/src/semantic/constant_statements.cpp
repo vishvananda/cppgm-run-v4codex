@@ -66,7 +66,8 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
     }
     case Kind::Return: {
         auto c = conversions[expressions[first].incoming];
-        auto value = c.target ? constant_node_conversion(first,c,s) : Constant();
+        auto value = c.target ? constant_node_conversion(first,c,s) :
+            ast[first].kind == Kind::BracedInit && !ast[first].first ? evaluate(first,s) : Constant();
         return {value.valid ? ConstantFlow::Return : ConstantFlow::Failure,value};
     }
     case Kind::If: {

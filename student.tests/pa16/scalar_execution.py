@@ -59,6 +59,10 @@ GOOD.update({
  'nested_forward_class': 'class B{int n;public:struct D;};struct B::D:B{int f(){return n=0;}};int main(){B::D d;return d.f();}',
  'nested_template_definition': 'template<class... T>struct A{struct B;};template<class... U>struct A<U...>::B{static_assert(sizeof...(U)==2, "");};int main(){return sizeof(A<int,long>::B)==1?0:1;}',
 })
+GOOD.update({
+ 'empty_scalar_initializers': 'constexpr int x{};constexpr int f(){return {};}static_assert(x==0 && f()==0, "");int main(){return f();}',
+ 'empty_argument': 'constexpr int f(int x){return x+2;}static_assert(f({})==2, "");int main(){return f({})-2;}',
+})
 failed=[]
 with tempfile.TemporaryDirectory(prefix='pa16-scalar-') as td:
  for name,source in {**GOOD,**BAD}.items():

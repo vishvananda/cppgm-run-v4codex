@@ -164,6 +164,8 @@ std::uint32_t Analyzer::constant_node_object(NodeId n)
 }
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
+    if (ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target)))
+        return convert(Constant(types.fundamental(FT_INT),0),c.target,true);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_node_object(n);
         if (!object || members[entities[c.function].member_info].virtual_member) return Constant();

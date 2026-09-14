@@ -67,6 +67,9 @@ BAD.update({
  'nonconstexpr_array': 'int a[]={1,2};static_assert(a[0]==1, "");',
  'duplicate_initializer': 'struct A{static constexpr double a=1.5;};constexpr double A::a=2.5;',
 })
+GOOD.update({
+ 'empty_floating_initializers': 'constexpr double x{};constexpr float f(){return {};}static_assert(x==0 && f()==0, "");int main(){return f()==0?0:1;}',
+})
 failed=[]
 with tempfile.TemporaryDirectory(prefix='pa16-scalar-') as td:
  for name,source in {**GOOD,**BAD}.items():

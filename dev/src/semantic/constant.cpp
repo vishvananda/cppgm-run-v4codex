@@ -28,7 +28,7 @@ unsigned Analyzer::width(TypeId id) const
 }
 Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
 {
-    if (!v.valid) return v;
+    if (!v.valid || !v.type || !to) return Constant();
     if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) to = types[to].child;
     if (floating_type(v.type) || floating_type(to)) return floating_conversion(v,to);
     if (!integral(v.type) || !integral(to)) return Constant();
@@ -112,6 +112,8 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
     case Kind::Initializer: case Kind::Parenthesized: case Kind::BracedInit: case Kind::ParenInitializer:
+        if (!first && (ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer))
+            return convert(Constant(types.fundamental(FT_INT),0),facts[n].type,true);
         return evaluate(first, s);
     case Kind::Literal: {
         const syntax::LiteralValue& literal = ast.literals[ast[n].literal];
