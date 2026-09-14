@@ -8,6 +8,26 @@ implementation handoff; whole-stage implementation and independent review remain
 required. Entry **56/177**, handoff **114/177**: 58 original failures resolved,
 63 remain, no previously passing case regressed. Coverage stays 177 fixtures.
 
+## Active implementation increment
+
+Entry commit: `d3475a79395f05b05873e940531726bcbbe8fc7a`; verified entry
+114/177 (63 failures), unchanged fixture coverage. Prior turn: progress, with
+validated scalar argument facts and committed evidence.
+
+Owner: explicit specialization selection. Canonical primary/argument keys select
+one declaration identity before definition/layout/body demand; ordinary member
+and function consumers use that identity. Complete definitions do not inherit
+primary bodies. Late declarations update only the selected incomplete entity,
+without global cache invalidation or retries. Selection is expected O(arguments +
+required overload candidates); completion follows the selected source and demand.
+
+Sequence: class/function definitions and linkage; extend static member,
+destructor, default visibility and specialized base consumers while shared
+selection facts support them; run focused controls, the full stage, earlier
+stages, file audit and frozen A/A+ABBA compiler/native evidence. Packs/partitions
+and broader constant execution remain implementation work. Whole-stage independent
+review remains pending; neither original review marker is advanced.
+
 ## Design and spec alignment
 
 | Owner | Completed data flow and complexity |
