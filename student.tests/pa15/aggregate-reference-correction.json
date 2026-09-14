@@ -1,0 +1,16 @@
+{
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "fixture": "pa15/tests/general/100-aggregate-functional-braced-cast.t",
+  "source_sha256": "63a59072d6630af271a150f4468828380fdd76b69cadc1a35b95b4cfabf46839",
+  "original_ref_sha256": "5aaa6bf2f97443436cc64c9108e605eb4fc4a5a87fb1928b92c67a95cfefa387",
+  "reducer": "student.tests/pa15/aggregate_relocation.cpp",
+  "reducer_sha256": "89b609d455da56588d13fd45b68ab634cdcdb7d37f6d49bceb014d24937f73cf",
+  "reference_native_exit": 1,
+  "student_native_exit": 0,
+  "student_lowir_sha256": "f57d981c14f4c24afc65df18595572c45ea6de9b4a673ff62ff613016badc5e0",
+  "student_executable_sha256": "6dcb42d245f94d09c960198fa5a142a469a4600b744413cf0ccfe89094c66c41",
+  "reference_lowir_sha256": "f417bc16ae1fffc1b17b21a235d1d448d6168cabbe2eebc115b36b6bd029bc7e",
+  "reference_executable_sha256": "57c01c933391ad00e796a44345ccb453592c0b18851dc639e9bf873ddbd65b95",
+  "corrected_ref_sha256": "fbc04067a94a03758c86b62d71f3a704ef5c2e6c3cfc380cfa8d4341dad8ed42"
+}
