@@ -3,9 +3,10 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `538cfcb00441f57c0629f6d27fddbad723539479`
 
-Target: **PA15 full-stage**, O0 typed LowIR. The accumulated checkpoint audit is
-complete; implementation remains **166/177**, with the same **11 failures** as
-entry `db0686a3`. This does not authorize advancing to PA16.
+Target: **PA15 full-stage**, O0 typed LowIR. Loop 33 starts at `3aff4801`,
+**166/177**, with the same **11 failures** as the completed checkpoint audit.
+The previous goal turn produced verified audit evidence and repairs (progress).
+This implementation turn does not authorize advancing to PA16.
 
 The first review covers every commit from the stage base through `538cfcb0`
 (13 handoff commits and three audit commits), including combined source changes
@@ -38,6 +39,19 @@ plus a collision/removal control for the shared index.
 | Ordinary source validation | One fixture: unused ordinary member `static_assert`. Validate ordinary bodies independently of emission, including explicit-class members; do not eagerly instantiate unrelated template bodies. |
 
 Keep each group open through its dependent consumers and rejection controls.
+Loop 33 sequence: dependent matching and alias consumers, constant objects and
+their storage/lowering consumers, then ordinary body validation. Class-pattern
+selection belongs to the primary's indexed candidate family; deduction produces
+typed bindings consumed by the selected definition. Dependent aliases retain
+typed qualified-name queries. Constant execution consumes checked expression
+facts, while storage and emission remain separately demanded. Ordinary body
+validation belongs to declaration completion, not emission demand. Work must
+track family candidates, dependent nodes and emitted actions, with TU-owned
+facts and local scratch; no global rescans or source replay. Validate each group
+with existing failing fixtures plus explicitly run personal/native/rejection
+controls, then required root checks. Freeze A/B binaries and inputs for A/A and
+ABBA compiler latency/RSS and executable runtime/text evidence; no optional
+optimizer or unsupported numerical performance gate is introduced.
 The three earlier handoffs had useful broad ownership boundaries, but splitting
 selection from packs without testing their composition missed pack specialization,
 ADL and target-signature bugs. Separate scalar performance follow-ups also left
