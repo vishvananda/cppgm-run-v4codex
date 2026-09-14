@@ -14,24 +14,13 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
     for (auto a = ast[list].first; a; a = ast[a].next)
         append_template_argument(a,s,template_argument_node(a,s),args);
     if (!template_defaults(primary,args)) throw std::runtime_error("invalid class partial arguments");
-    Index bindings, cache; std::vector<ArgumentId> signature;
-    unsigned count = 0;
-    for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
-        auto p = declarations[d].entity;
-        if (!entities[p].template_parameter) continue;
-        if (entities[p].initializer) throw std::runtime_error("default argument in partial specialization head");
-        auto arg = canonical_argument(p,count++,bindings,cache);
-        bindings.put(p,arg);
-        signature.push_back(entities[p].parameter_pack ? types.compound(TypeKind::PackExpansion,0,arg) : arg);
-    }
-    auto head_shape = intern_arguments(signature); signature.clear();
     bool dependent = false;
-    for (auto arg : args) {
-        dependent |= dependent_argument(arg);
-        signature.push_back(substitute_argument(arg,bindings,cache));
-    }
+    for (auto arg : args) dependent |= dependent_argument(arg);
     if (!dependent) throw std::runtime_error("class partial specialization requires dependent arguments");
-    auto identity = key(primary,intern_arguments({head_shape,intern_arguments(signature)}));
+    for (auto d = scopes[s].first_decl; d; d = declarations[d].next)
+        if (entities[declarations[d].entity].template_parameter && entities[declarations[d].entity].initializer)
+            throw std::runtime_error("default argument in partial specialization head");
+    auto identity = key(primary,template_owner_shape(s,args));
     auto e = class_partial_signatures.get(identity);
     if (e && ast[n].kind == Kind::Class && templates[entities[e].template_info].body)
         throw std::runtime_error("class partial specialization redefinition");

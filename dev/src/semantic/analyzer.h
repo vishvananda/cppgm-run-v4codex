@@ -707,6 +707,8 @@ private:
     void complete_class(EntityId e);
     bool template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial = false);
     ScopeId specialization_environment(EntityId e);
+    std::uint32_t template_owner_shape(ScopeId scope, const std::vector<ArgumentId>& arguments);
+    EntityId template_definition_pattern(EntityId primary, NodeId part, ScopeId scope);
     bool retain_template_definition(NodeId n, ScopeId s);
     void explicit_instantiation(NodeId n, ScopeId s);
     bool instantiation_suppressed(EntityId entity) const;

@@ -92,16 +92,27 @@ ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
     auto t = types[type];
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto spec = specializations[entities[t.entity].specialization];
-        if (spec.pattern != primary) return 0;
-        auto args = argument_packs[spec.arguments];
-        if (args.count != templates[entities[primary].template_info].count || args.count > canonical_parameters.size()) return 0;
-        Index bindings, cache;
         auto head = templates[entities[primary].template_info];
-        for (unsigned i = 0; i < args.count; ++i) {
+        if (spec.pattern != (head.primary ? head.primary : primary)) return 0;
+        auto args = argument_packs[spec.arguments];
+        Index bindings, cache;
+        for (unsigned i = 0; i < head.count; ++i) {
             auto p = template_parameters[head.offset+i];
-            auto arg = canonical_argument(p,i,bindings,cache);
-            if (argument_types[args.offset+i] != arg) return 0;
-            bindings.put(p,arg);
+            bindings.put(p,canonical_argument(p,i,bindings,cache));
+        }
+        if (head.primary) {
+            auto pattern = argument_packs[head.explicit_arguments];
+            if (args.count != pattern.count) return 0;
+            for (unsigned i = 0; i < args.count; ++i)
+                if (argument_types[args.offset+i] != substitute_argument(argument_types[pattern.offset+i],bindings,cache)) return 0;
+        } else {
+            if (args.count != head.count) return 0;
+            for (unsigned i = 0; i < args.count; ++i) {
+                auto p = template_parameters[head.offset+i];
+                auto arg = bindings.get(p);
+                if (entities[p].parameter_pack) arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});
+                if (argument_types[args.offset+i] != arg) return 0;
+            }
         }
         return entities[primary].scope;
     }

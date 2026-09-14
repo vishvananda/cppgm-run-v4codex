@@ -1,9 +1,23 @@
-# PA17 implementation handoff — loop 46
+# PA17 implementation — loop 47
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 
-Target: **PA17 full-stage**, still incomplete. Entry was clean at
+Target: **PA17 full-stage**, still incomplete.
+
+Loop 47 entry: clean `ae5087da8794d159b16b716e3c48cf64a271414f`, **242/343**,
+**101 failures**. Active group: retained out-of-class definition owners. Semantic
+ownership: `template_definition` selects the canonical primary/partial owner;
+`template_checks` normalizes signatures; source head frames feed ordinary member
+demand. Extend to related nested/multiple-head definitions where those same facts
+suffice. Match indexed structural owner shapes, with work proportional to the
+head/argument graph and actually demanded definitions; do not replay parsing or
+scan unrelated specializations. Validate required fixture deltas, explicit native
+and rejection controls, earlier stages, file audit, frozen A/B latency/RSS and
+runtime/text measurements. Prior handoff and review obligations below remain
+historical evidence until refreshed.
+
+Previous handoff: Entry was clean at
 `4bbb712abc6047e4821f850116aa0465df1eedbd`, **207/343**. Current result:
 **242/343**; **35 original failures fixed**, **101 remain**, **no new failures**.
 All fixtures, references and comparison/status rules are unchanged. This is an

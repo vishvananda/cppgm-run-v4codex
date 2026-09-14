@@ -25,7 +25,8 @@ TemplateDefinitionOwner Analyzer::definition_owner(EntityId cls)
     if (auto id = definition_owner_index.get(cls)) return definition_owners[id];
     TemplateDefinitionOwner result;
     if (entities[cls].specialization) {
-        result.specialization = cls; result.path = definition_root(specialization_pattern(cls));
+        auto spec = specializations[entities[cls].specialization];
+        result.specialization = cls; result.path = definition_root(spec.definition_pattern ? spec.definition_pattern : spec.pattern);
     } else if (scopes[entities[cls].owner].kind == ScopeKind::Class) {
         result = definition_owner(scopes[entities[cls].owner].entity);
         if (result.specialization) result.path = definition_path(result.path,entities[cls].name);
@@ -55,7 +56,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
         }
         auto e = lookup(owner,ast[p].text,Lookup::Qualifier,qualified);
         if (e && entities[e].class_info && entities[e].template_info && child(p,Kind::TemplateArguments)) {
-            primary = e; primary_part = p; path = definition_root(e); previous = ast[p].text;
+            primary = template_definition_pattern(e,p,s); primary_part = p;
+            path = definition_root(primary); previous = ast[p].text;
         } else {
             owner = target(e); qualified = true;
             if (!owner) return false;
@@ -70,17 +72,6 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s)
             parameter_ordinals.put(e,def.count+1); template_parameters.push_back(e); ++def.count;
         }
     }
-    if (def.count != templates[entities[primary].template_info].count) throw std::runtime_error("member template head does not match owner");
-    unsigned argument = 0;
-    for (auto a = ast[child(primary_part,Kind::TemplateArguments)].first; a; a = ast[a].next) {
-        auto expected = argument < def.count ? parameter_argument(template_parameters[def.parameters+argument]) : 0;
-        if (argument < def.count && entities[template_parameters[def.parameters+argument]].parameter_pack)
-            expected = types.compound(TypeKind::PackExpansion,0,expected);
-        if (argument >= def.count || template_argument_node(a,s) != expected)
-            throw std::runtime_error("member definition does not name its primary template");
-        ++argument;
-    }
-    if (argument != def.count) throw std::runtime_error("incomplete member definition owner arguments");
     std::uint64_t definition_bucket = 0;
     std::uint32_t retained = 0; IdentifierId definition_name = 0;
     do {
@@ -191,7 +182,8 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto saved_defaults = declaration_defaults.size();
         try {
         auto def = template_definitions[id];
-        auto pack = specialization_arguments(owner.specialization);
+        auto selection = specializations[entities[owner.specialization].specialization];
+        auto pack = argument_packs[selection.definition_arguments ? selection.definition_arguments : selection.arguments];
         ScopeId environment = make_scope(ScopeKind::Template,entities[e].owner);
         for (unsigned j = 0; j < def.count; ++j) {
             auto p = template_parameters[def.parameters+j];
@@ -200,7 +192,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
         auto context = ast.new_context();
         auto source = ast.instantiate(def.source,context);
         auto specialization = entities[owner.specialization].specialization;
-        auto head = templates[entities[specializations[specialization].pattern].template_info];
+        auto head = templates[entities[selection.definition_pattern ? selection.definition_pattern : selection.pattern].template_info];
         auto parent = substitution_frame(specialization,head.offset,head.count);
         // A nested class definition can introduce aliases under another head.
         // Preserve those source parameter identities in parent-linked frames.
@@ -210,9 +202,17 @@ bool Analyzer::instantiate_member_definition(EntityId e)
             if (parameters && parameters-1 != def.parameters && parameters-1 != head.offset)
                 parents.push_back(parameters-1);
         }
-        for (auto p = parents.rbegin(); p != parents.rend(); ++p)
-            parent = substitution_frame(specialization,*p,def.count,parent);
-        auto frame = substitution_frame(specialization,def.parameters,def.count,parent);
+        auto source_frame = [&](std::uint32_t parameters, std::uint32_t parent) {
+            if (selection.definition_pattern == selection.pattern || !selection.definition_pattern)
+                return substitution_frame(specialization,parameters,def.count,parent);
+            // Renamed partial-owner heads bind the selected pattern's deduced
+            // arguments, not the primary template's argument tuple.
+            for (unsigned j = 0; j < def.count; ++j)
+                parent = argument_frame(parent,template_parameters[parameters+j],argument_types[pack.offset+j]);
+            return parent;
+        };
+        for (auto p = parents.rbegin(); p != parents.rend(); ++p) parent = source_frame(*p,parent);
+        auto frame = source_frame(def.parameters,parent);
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         active_template_scope = 0; member_definition_environment = environment;
