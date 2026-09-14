@@ -171,6 +171,7 @@ void Parser::predeclare_class()
             i = p;
         }
         if (i && identifier(i) && !in.is("::", i - 1) &&
+            !in.is("class",i-1) && !in.is("struct",i-1) && !in.is("union",i-1) && !in.is("enum",i-1) &&
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
             (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1)))
             names.bind(scope, in.peek(i).text, Category::Value);

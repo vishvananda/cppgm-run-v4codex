@@ -35,7 +35,7 @@ owned by later stages.
 
 Scalar implementation checkpoint: **63/154**, down from 109 to **91 failures**;
 18 existing failures fixed, none added. Personal scalar/floating suites: 35 native
-and 23 rejection controls. Frozen performance and final handoff checks pending.
+and 23 rejection controls (plus two nested-definition regression controls). Frozen performance and final handoff checks pending.
 The implementation includes bounded mutable scalar frames, target-rounded floating
 values, indexed constexpr array reads, nonthrowing arithmetic probes, static member
 initializer validity and declaration-order-independent ordinary/tag lookup.
@@ -44,3 +44,9 @@ independent architecture/correctness/performance review remains pending and is
 distinct from the unfinished groups above. Preserve both review markers until
 independent review. Record final commands, counts, evidence and any concrete
 incomplete-handoff boundary here before returning control.
+
+Checkpoint follow-up: preserving ordinary/tag lookup exposed a predeclaration
+lookahead bug: `struct Nested;` was first marked as a type and then overwritten
+as a value. Excluding tag names from the value-declarator hint fixes all seven
+nested-class regressions. Fresh through-PA15 returns to **2112/2112**. Preliminary
+performance is preserved separately from final corrected-binary measurements.

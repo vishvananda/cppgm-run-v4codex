@@ -55,6 +55,10 @@ GOOD.update({
  'enum_then_value': 'enum item { one=1 };int item=3;static_assert(item::one==1, "");int main(){return item-3;}',
  'value_then_enum': 'int item=3;enum item { one=1 };static_assert(item::one==1, "");int main(){return item-3;}',
 })
+GOOD.update({
+ 'nested_forward_class': 'class B{int n;public:struct D;};struct B::D:B{int f(){return n=0;}};int main(){B::D d;return d.f();}',
+ 'nested_template_definition': 'template<class... T>struct A{struct B;};template<class... U>struct A<U...>::B{static_assert(sizeof...(U)==2, "");};int main(){return sizeof(A<int,long>::B)==1?0:1;}',
+})
 failed=[]
 with tempfile.TemporaryDirectory(prefix='pa16-scalar-') as td:
  for name,source in {**GOOD,**BAD}.items():
