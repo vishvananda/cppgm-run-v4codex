@@ -1,0 +1,138 @@
+{
+  "entry_commit": "d705aafc4845cca2ad645b8c7ea45194936c9180",
+  "implementation_commit": "5452ad74713e4eccde755da666affd21ac142c5a",
+  "review_markers": {
+    "Stage base commit": "8000f3c8ef4647d57f2c0775192585f14cab33d8",
+    "Last reviewed commit": "538cfcb00441f57c0629f6d27fddbad723539479"
+  },
+  "entry_stage_log": {
+    "path": "/tmp/pa15-loop35/entry-stage.log",
+    "sha256": "8401414f163f6ee1ce0793ea07c8ba27c3544b50a05caf02cbf09f4ba0591ef5"
+  },
+  "stage": {
+    "entry_passed": 173,
+    "current_passed": 177,
+    "total": 177,
+    "entry_failures": 4,
+    "current_failures": 0,
+    "resolved_original_failures": [
+      "pa15/tests/general/100-dependent-bool-trait-nontype-argument.t",
+      "pa15/tests/general/100-nontype-conversion-operator-dependent-template-id.t",
+      "pa15/tests/general/100-static-constexpr-member-call-initializer.t",
+      "pa15/tests/spec/100-unused-member-function-static-assert-bad.t"
+    ]
+  },
+  "stageProgress": {
+    "exit_code": 0,
+    "reason": "All four original failures resolved; no coverage or comparison changes; earlier stages pass"
+  },
+  "prior": {
+    "passed": 1935,
+    "total": 1935,
+    "exit_code": 0
+  },
+  "through": {
+    "passed": 2112,
+    "total": 2112,
+    "exit_code": 0,
+    "path": "/tmp/pa15-loop35/through-final.log",
+    "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f"
+  },
+  "file_audit": {
+    "exit_code": 0,
+    "inherited_warnings": 3
+  },
+  "required_checks": {
+    "stageTests": {
+      "command": "make test-pa15",
+      "exit_code": 0,
+      "path": "/tmp/pa15-loop35/stageTests.log",
+      "sha256": "8413d1f4f6327b80a4f635315e4f411efc5b0cd5b6303e45bd865cdff795297c"
+    },
+    "priorThroughTests": {
+      "command": "n=15; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "path": "/tmp/pa15-loop35/priorThroughTests.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src",
+      "exit_code": 0,
+      "path": "/tmp/pa15-loop35/fileAudit.log",
+      "sha256": "b59169eefa5d6ec564ba1050b16752603ed4ab7eaeb363c57d104dcd3d2d8fc0"
+    }
+  },
+  "personal_controls": {
+    "execution": {
+      "result": "24 native and 18 rejection controls passed",
+      "path": "/tmp/pa15-loop35/personal-execution.log",
+      "sha256": "8ad005569bf06993d6c0445b906c48cd6bb6fd889a53fb71c6f3991f5b1000e2",
+      "script_sha256": "a6161608d914aa5acd1c375511e04fad85a3f2a61ff0550492b4e80bc3b3448a"
+    },
+    "value_arguments": {
+      "result": "26 value argument groups passed",
+      "path": "/tmp/pa15-loop35/personal-value_arguments.log",
+      "sha256": "f8c05f73e04dc359824048d2fa37964864321f12ac127c7f735f60807c196918",
+      "script_sha256": "2f5e032737cd25670b190c666b4744e3bd4776a421eb987879c1b980c5db7fe1"
+    },
+    "constants": {
+      "result": "10 constant groups passed",
+      "path": "/tmp/pa15-loop35/personal-constants.log",
+      "sha256": "070649fba7f51ed2f28fa424c53972e7951ff69f7e9b87b8920229d7db2866c4",
+      "script_sha256": "26110ddc03524bebd37def1675f3d4eec02e3c95906413823f4660a1bef02359"
+    },
+    "specializations": {
+      "result": "24 native controls; 13 rejection controls passed",
+      "path": "/tmp/pa15-loop35/personal-specializations.log",
+      "sha256": "e3ba7b6aac760089179fef26ea74a767680d40940032cb70bf46aea2eb566d18",
+      "script_sha256": "647dc01c67ab5a3527d8473bde8f4c9370baf4d2d520211d269807264ea8da16"
+    },
+    "packs": {
+      "result": "27 native controls; 8 rejections passed",
+      "path": "/tmp/pa15-loop35/personal-packs.log",
+      "sha256": "877333e8ee3e9c501f714e7475769d313dd4691b7969f32b979e41ebcbf90993",
+      "script_sha256": "e81bc58cde60ed4d7f2f0acfd908fa40df4917d3a6fbfb51e68bc7ce74760386"
+    },
+    "class_patterns": {
+      "result": "15 native and 7 rejection class-pattern controls passed",
+      "path": "/tmp/pa15-loop35/personal-class_patterns.log",
+      "sha256": "1923f2bf3d9b1daf69c8a02b2283670de21c5ba28b8889926b8a6628751c8013",
+      "script_sha256": "4b5619650adce251f7d289c8fc0bb62b9f7b984083d531b68eec77c618ce718c"
+    },
+    "initialization": {
+      "result": "23 native and 13 rejection controls passed",
+      "path": "/tmp/pa15-loop35/personal-initialization.log",
+      "sha256": "3a01274b12d3c4f1cc7453904c2d6431a8b31e931860678575bcf59c7bad3d74",
+      "script_sha256": "36dec54e9b116cd4614d5a622f1050da416e4a57920181fc4b5a63c6c9d75a4c"
+    },
+    "checkpoint_audit": {
+      "result": "11 native and 7 rejection audit controls passed",
+      "path": "/tmp/pa15-loop35/personal-checkpoint_audit.log",
+      "sha256": "0dfaa25d4b5c49f082c3f924e78cb56003266d6aeae225b8687bf7d310764cd3",
+      "script_sha256": "76598cc1d08a6dd9437bd1d8e97c3af65da3efe9e7d479ab280c2e807d17f6b4"
+    }
+  },
+  "fixture_trees": {
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa10/tests": "7f658d1aa2f6c7638b3c102958f966f1d6448006",
+    "pa11/tests": "961b4ab7ed62b1fa72398057b01f4158d356f18a",
+    "pa12/tests": "19d6a21bf23737b67f0b396f4ab6ef693efa9970",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa14/tests": "d94f017d7124027c242584c42772c845d25deccc",
+    "pa15/tests": "329a1c70d21f2fe980ef7c83620a57607ccd18b2"
+  },
+  "performance_observations_including_warmups": 224,
+  "performance_sha256": "af3bf67c4ab3ec4de112d708ef732dc35e8dbab147de644ecf2927e4a3254e0b",
+  "source_tree": "658e1f2749b0a6dc5ca589e5b2ea1fa320054dfb",
+  "binary_sha256": "ca7cae7261ae98bc840cb15591a22b565e9286388991bbd1ec84dea9a68d26af",
+  "remaining_required_implementation": [],
+  "independent_review": "Full-stage audit pending for all changes after 538cfcb00441f57c0629f6d27fddbad723539479; markers preserved; implementation handoff does not authorize advancement"
+}
