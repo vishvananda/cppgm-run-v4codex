@@ -94,7 +94,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     result.type = value_type(f.child);
     result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[f.child].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
-    if (class_value(result.type) && result.category == ValueCategory::Prvalue) {
+    if (!decltype_call_result(n) && class_value(result.type) && result.category == ValueCategory::Prvalue) {
         complete_class(types[result.type].entity); reject_abstract(result.type);
         default_destructor(result.type,s,false);
     }

@@ -52,7 +52,10 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
         if (prefix && dependent_type(prefix)) {
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
-                if (ast[a].kind != Kind::TypeId) throw std::runtime_error("type template argument required");
+                if (ast[a].kind != Kind::TypeId) {
+                    if (template_type_probe) return 0;
+                    throw std::runtime_error("type template argument required");
+                }
                 auto type = type_id(a,s);
                 if (template_type_probe && !type) return 0;
                 args.push_back(types.signature(type));

@@ -4,6 +4,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 EntityId Analyzer::pattern_declaration(EntityKind kind, ScopeId s, IdentifierId name, NodeId source, bool dependent)
 {
+    if (kind == EntityKind::Parameter && name && local(s,name)) throw std::runtime_error("duplicate source parameter");
     auto e = make_entity(kind,s,name,source);
     entities[e].template_pattern = true;
     template_pattern_entities.put(e,dependent ? 2 : 1);
@@ -85,7 +86,7 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
         // Value dependence alone does not change scalar operand types or the
         // selected built-in conversions. Each checker still requires complete
         // fixed operand facts before publishing its source semantic decision.
-        bool scalar = kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional ||
+        bool scalar = kind == Kind::IdExpression || kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional ||
             kind == Kind::Unary || kind == Kind::Postfix || kind == Kind::Parenthesized || kind == Kind::Subscript ||
             kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast;
         if (!dependent || (template_body_values && scalar)) check_fixed_expression(n,s);
@@ -97,6 +98,14 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (!n) return false;
     ++template_binding_work;
     auto node = ast[n];
+    if (node.kind == Kind::Decltype) {
+        struct Operand {
+            NodeId& active; NodeId prior;
+            Operand(NodeId& a, NodeId n) : active(a), prior(a) { active = n; }
+            ~Operand() { active = prior; }
+        } operand(template_decltype_operand,node.first);
+        return bind_template_expression(node.first,s);
+    }
     if (node.kind == Kind::IdExpression) {
         auto name = node.detail;
         if (callee && fundamental_cast_type(node.op)) return false;

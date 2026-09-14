@@ -102,7 +102,9 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
     };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i) if (preferred(viable[i],viable[best])) best = i;
-    for (std::size_t i = 0; i < viable.size(); ++i) if (i != best && !preferred(viable[best],viable[i])) return result;
+    for (std::size_t i = 0; i < viable.size(); ++i) if (i != best && !preferred(viable[best],viable[i])) {
+        result.ambiguous = true; return result;
+    }
     auto selected = viable[best];
     UserConversion sequence; sequence.object = selected.object; sequence.result = selected.second; sequence.object_entity = object_entity;
     sequence.adjustment = base_steps(source.type,scopes[entities[selected.function].owner].entity);
@@ -141,7 +143,10 @@ Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, N
         auto object = user_conversions[function.materialization].object;
         if (better(&argument,&object,1)) return constructor;
         if (better(&object,&argument,1)) return function;
-        return result;
+        result.ambiguous = true; return result;
+    }
+    if (!function.valid() && !constructor.valid() && (function.ambiguous || constructor.ambiguous)) {
+        result.ambiguous = true; return result;
     }
     return function.valid() ? function : constructor;
 }

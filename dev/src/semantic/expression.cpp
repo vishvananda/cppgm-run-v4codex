@@ -189,7 +189,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     default: throw std::runtime_error("unsupported expression");
     }
 }
-Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand)
+Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand, bool recipe)
 {
     Expression r;
     r.type = value_type(to); r.form = ExpressionForm::Cast;
@@ -199,6 +199,11 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         return r;
     }
     Expression x = expression(operand, s);
+    auto publish = [&](Conversion c) {
+        if (!recipe) { record_conversion(r,operand,c); return; }
+        check_fixed_conversion(x,operand,c,s);
+        store_call(r,{operand},{c}); r.inputs = CallInputs::Source;
+    };
     Type target = types[to];
     ETokenType op = ast[n].op;
     bool cstyle = op == OP_LPAREN || ast[n].kind == Kind::Call;
@@ -206,17 +211,16 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     bool cv_cast = op == KW_CONST_CAST;
     Conversion c; c.target = to; c.rank = 2; c.kind = Conversion::Kind::Explicit;
     if (!cv_cast && op != KW_REINTERPET_CAST && class_value(to)) {
+        if (recipe) throw std::logic_error("class cast needs a constructor recipe");
         EntityId ctor = choose_constructor(to,{operand},&r,s);
         if (converting_transfer(ctor,r)) {
             auto conversion = result_conversion(ctor,r,to);
             r = Expression(); r.type = to; r.form = ExpressionForm::Cast;
-            record_conversion(r,operand,conversion); return r;
+            publish(conversion); return r;
         }
         r.type = to; r.form = ExpressionForm::Construction;
         facts.edit(n).entity = ctor; members[entities[ctor].member_info].complete_entry = true;
-        EntityId temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
-        entities[temporary].type = to; register_destruction(temporary);
-        record_object(r,0,0,0); object_uses[r.object_use].temporary = temporary;
+        record_object(r,0,0,0);
         return r;
     }
     if (!cv_cast && op != KW_REINTERPET_CAST && !fundamental(to,FT_VOID)) {
@@ -226,7 +230,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         bool related = ref && (types.unqualified(x.type) == types.unqualified(target.child) || derived_from(x.type,target.child) || derived_from(target.child,x.type));
         if (ref && !related && !selected.valid()) selected = conversion(operand,to);
         if (selected.valid() && (selected.kind == Conversion::Kind::User || (ref && !related))) {
-            record_conversion(r,operand,selected);
+            publish(selected);
             if (ref) r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
             return r;
         }
@@ -252,25 +256,25 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         if (cv_cast && (x.category == ValueCategory::Prvalue || types[x.type].kind == TypeKind::Function))
             throw std::runtime_error("invalid const reference cast");
         r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
-        c.reference = true; record_conversion(r, operand, c);
+        c.reference = true; publish(c);
         return r;
     }
     if (fundamental(to, FT_VOID) && !cv_cast && op != KW_REINTERPET_CAST) {
         if (x.form == ExpressionForm::Overload) throw std::runtime_error("discarded unresolved overload");
-        c.kind = Conversion::Kind::Discarded; record_conversion(r, operand, c); return r;
+        c.kind = Conversion::Kind::Discarded; publish(c); return r;
     }
     if (!cv_cast && op != KW_REINTERPET_CAST) {
         Conversion standard = fundamental(to, FT_BOOL) ? boolean_conversion(operand) : conversion(operand, to);
         if (standard.valid()) {
             if ((cstyle && standard.derived) || (arithmetic(x.type) && arithmetic(to))) standard.kind = Conversion::Kind::Explicit;
-            record_conversion(r, operand, standard); return r;
+            publish(standard); return r;
         }
     }
     TypeId from = decay(x.type);
     if (cv_cast) {
         if (!pointer(from) || !pointer(to) || types[types[from].child].kind == TypeKind::Function || !similar_type(from, to))
             throw std::runtime_error("invalid const cast");
-        record_conversion(r, operand, c); return r;
+        publish(c); return r;
     }
     bool enum_cast = (integral(from) && integral(to)) || (arithmetic(from) && integral(to));
     bool pointer_cast = false;
@@ -287,7 +291,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     bool integer_pointer = reinterpret && ((pointer(from) && integral(to) && width(to) >= 64) || (integral(from) && pointer(to)));
     if ((enum_cast && op != KW_REINTERPET_CAST) || pointer_cast || integer_pointer ||
         (op == KW_REINTERPET_CAST && integral(from) && from == types.unqualified(to))) {
-        record_conversion(r, operand, c); return r;
+        publish(c); return r;
     }
     throw std::runtime_error("invalid explicit cast");
 }

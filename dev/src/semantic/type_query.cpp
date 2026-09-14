@@ -197,6 +197,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     if (query_facts[id].state == FactState::Failure) throw std::runtime_error("failed type query");
     if (query_facts[id].state == FactState::Active) throw std::runtime_error("recursive type query");
     query_facts[id].state = FactState::Active;
+    struct QueryScope { unsigned& depth; QueryScope(unsigned& d) : depth(d) { ++depth; } ~QueryScope() { --depth; } } guard(unevaluated_depth);
     try {
     ++query_work;
     auto q = type_queries[id]; TypeQueryFact r;
@@ -207,7 +208,15 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     r.dependent |= q.type && dependent_type(q.type);
     // A template access context belongs to the key, but does not alone make
     // fixed operands dependent: unknown_call(1) must fail at definition time.
-    r.dependent |= q.entity && entities[q.entity].template_pattern;
+    if (q.entity && entities[q.entity].template_pattern) {
+        auto entity = entities[q.entity];
+        // Runtime object identity does not make its fixed callable type or
+        // overload choice dependent. Constants and dependent bit-field widths
+        // still require substitution before value-sensitive queries complete.
+        bool value_dependent = template_pattern_entities.get(q.entity) == 2 &&
+            (field_fact(q.entity).bit_field || (types[q.type].cv & 1 && integral(q.type)));
+        r.dependent |= !q.type || (entity.kind != EntityKind::Variable && entity.kind != EntityKind::Parameter) || value_dependent;
+    }
     if (q.arguments) {
         auto pack = argument_packs[q.arguments];
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_type(argument_types[pack.offset+i]);
@@ -225,7 +234,26 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             r.dependent = true;
         }
     }
-    if (!r.dependent) switch (q.kind) {
+    bool inspect = !r.dependent;
+    if (r.dependent && (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter) && q.type) inspect = true;
+    if (r.dependent && q.kind == QueryKind::Member && !children.empty()) {
+        auto type = children[0].expression.type;
+        if (q.op == OP_ARROW && pointer(type)) type = types[type].child;
+        inspect = pattern_class_type(type);
+    }
+    if (r.dependent && q.kind == QueryKind::Call && !children.empty()) {
+        auto fn = children[0].expression;
+        auto family = fn.form == ExpressionForm::Overload ? fn.entity : pattern_class_type(fn.type) ?
+            lookup(entities[types[fn.type].entity].scope,operator_name(OP_LPAREN),Lookup::Ordinary,true) : 0;
+        inspect = family != 0;
+        for (unsigned i = 1; inspect && i < children.size(); ++i) inspect &= !children[i].dependent;
+        for (auto e : candidates(family)) {
+            auto f = types[entities[e].type];
+            if (entities[e].template_info || f.kind != TypeKind::Function) { inspect = false; break; }
+            for (unsigned i = 0; i < f.count; ++i) inspect &= !dependent_type(types.parameters[f.offset+i]);
+        }
+    }
+    if (inspect) switch (q.kind) {
     case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
     case QueryKind::QualifiedValue: {
@@ -261,10 +289,14 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Member: {
         auto object = children[0].expression; auto type = object.type;
         if (q.op == OP_ARROW) { if (!pointer(type)) throw std::runtime_error("type query arrow needs pointer"); type = types[type].child; }
-        if (!class_value(type)) throw std::runtime_error("type query member needs class");
-        auto cls = types[type].entity; complete_class(cls);
+        if (!class_value(type) && !pattern_class_type(type)) throw std::runtime_error("type query member needs class");
+        auto cls = types[type].entity;
+        if (class_value(type)) complete_class(cls);
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
-        if (!e) throw std::runtime_error("type query member not found");
+        if (!e) {
+            if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; break; }
+            throw std::runtime_error("type query member not found");
+        }
         x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         if (function_binding(e)) { x.form = ExpressionForm::Overload; x.type = 0; }
         else { check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type; }
@@ -276,6 +308,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
         x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
     }
+    r.dependent |= r.expression.type && dependent_type(r.expression.type);
     r.state = FactState::Success; query_facts[id] = r; return r;
     } catch (...) { query_facts[id].state = FactState::Failure; throw; }
 }

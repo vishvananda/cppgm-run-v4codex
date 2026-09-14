@@ -46,7 +46,9 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (!loop_depth) throw std::runtime_error("continue outside loop");
         return;
     case Kind::ExpressionStatement: case Kind::Iteration:
-        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        for (auto c = node.first; c; c = ast[c].next) {
+            bind_template_expression(c,s); template_statement_value(c,s);
+        }
         return;
     case Kind::Case: {
         if (!switch_depth) throw std::runtime_error("case outside switch");
@@ -68,7 +70,13 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (switches.back().has_default) throw std::runtime_error("duplicate default label");
         switches.back().has_default = true;
         bind_template_statement(node.first,s); return;
-    case Kind::Label: case Kind::Condition: case Kind::ForInit:
+    case Kind::ForInit:
+        for (auto c = node.first; c; c = ast[c].next) {
+            if (ast[c].kind == Kind::SimpleDeclaration) bind_template_declaration(c,s);
+            else { bind_template_expression(c,s); template_statement_value(c,s); }
+        }
+        return;
+    case Kind::Label: case Kind::Condition:
         for (auto c = node.first; c; c = ast[c].next) {
             if (node.kind == Kind::Condition && ast[c].kind != Kind::ConditionDeclaration) bind_template_expression(c,s);
             else {

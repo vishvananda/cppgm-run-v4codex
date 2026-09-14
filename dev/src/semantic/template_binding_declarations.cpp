@@ -7,6 +7,17 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
     auto source = ast.nodes.occurrences[n].source;
     if (auto scope = template_class_bindings.get(source)) return scope;
     auto name = ast[n].detail;
+    if (!entity && terminal(name)) {
+        auto old = local(parent,terminal(name),Lookup::Tag);
+        if (old && entities[old].kind == EntityKind::Type && entities[old].template_pattern &&
+            entities[old].owner == parent && entities[old].key != KW_ENUM) {
+            if (ast[n].kind != Kind::ClassForward && template_pattern_aggregates.get(old) != 3)
+                throw std::runtime_error("duplicate source class definition");
+            entity = old;
+            record(parent,entity,n,entities[entity].type,EntityKind::Type);
+            template_declaration_sources.put(source,entity);
+        }
+    }
     if (!entity) entity = pattern_declaration(EntityKind::Type,parent,terminal(name),n,true);
     template_pattern_entities.put(entity,2);
     auto cs = entities[entity].scope;
@@ -20,6 +31,7 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         scopes[cs].jump = scopes[parent].depth-scopes[jump].depth == scopes[jump].depth-scopes[grand].depth ? grand : parent;
     }
     template_pattern_scopes.put(cs,1); template_class_bindings.put(source,cs);
+    if (ast[n].kind == Kind::ClassForward && template_pattern_aggregates.get(entity)) return cs;
     entities[entity].key = ast[ast[n].first].op;
     // A local pattern owns a type identity even when its layout and concrete
     // declaration differ in each enclosing function specialization.
@@ -33,9 +45,12 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         auto name = ast[child(b,Kind::BaseName)].detail;
         auto binding = bind_template_name(name,parent);
         template_base_dependence.put(ast.nodes.occurrences[b].source,binding.dependent ? 2 : 1);
-        if (binding.dependent) continue;
         auto base = binding.entity;
         if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
+        if (binding.dependent && !pattern_class_type(entities[base].type)) {
+            template_pattern_open_bases.put(entity,1); continue;
+        }
+        if (template_pattern_open_bases.get(base)) template_pattern_open_bases.put(entity,1);
         if (base && entities[base].class_info) complete_class(base);
         if (!base || !target(base)) throw std::runtime_error("invalid fixed pattern base");
         auto access = child(b,Kind::Access);
@@ -179,6 +194,14 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (type) function = types[type].kind == TypeKind::Function;
             auto kind = spec_has(specs,KW_TYPEDEF) ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
             auto id = special && ast[ast[name].last].op != KW_OPERATOR ? 0 : terminal(name);
+            if (id && kind == EntityKind::Variable) {
+                auto previous = local(s,id);
+                if (!previous && scopes[s].kind == ScopeKind::Block && scopes[scopes[s].parent].kind == ScopeKind::Function)
+                    previous = local(scopes[s].parent,id);
+                if (previous && entities[previous].kind != EntityKind::Type &&
+                    !(spec_has(specs,KW_EXTERN) && entities[previous].external_decl))
+                    throw std::runtime_error("duplicate source variable declaration");
+            }
             auto e = pattern_declaration(kind,s,id,d,dep);
             entities[e].initializer = init;
             entities[e].is_static = spec_has(specs,KW_STATIC);
@@ -190,12 +213,16 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
                 entities[e].type = types.signature(type); facts.edit(d).type = type;
             }
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
+            if (function && type) bind_pattern_member(e,n,d);
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init) {
                 if (kind == EntityKind::Variable)
                     bind_template_initializer(e,s);
                 else if (bind_template_expression(init,s)) template_pattern_entities.put(e,2);
+            } else if (kind == EntityKind::Variable && scopes[s].kind != ScopeKind::Class && !entities[e].external_decl &&
+                ast[name].first == ast[name].last) {
+                bind_template_initializer(e,s);
             }
             return e;
         };
@@ -210,6 +237,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             for (auto c = node.first; c; c = ast[c].next) if (ast[c].kind == Kind::BitFieldDeclarator) {
                 auto d = ast[c].first; auto field = bind_decl(d,0,0);
                 auto dependent_width = bind_template_expression(ast[d].next,s);
+                if (dependent_width) template_pattern_entities.put(field,2);
                 if (entities[field].type && !dependent_type(entities[field].type) && !dependent_width) {
                     auto count = evaluate(ast[d].next,s);
                     if (count.valid) bit_field_properties(field,count);

@@ -70,6 +70,13 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
     bool equality = op == OP_EQ || op == OP_NE;
     bool comparison = equality || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     for (TypeId a : left) for (TypeId b : right) {
+        if (op == OP_QMARK) {
+            TypeId common = arithmetic(a) && arithmetic(b) ? arithmetic_type(a,b) :
+                pointer(a) && pointer(b) ? composite_pointer(a,b) :
+                pointer(a) && null(1) ? a : pointer(b) && null(0) ? b : 0;
+            if (common) add(common,common,common);
+            continue;
+        }
         bool ap = object_pointer(a), bp = object_pointer(b);
         if (op == OP_LSQUARE) {
             if (ap && integral(b) && !scoped_enum(b)) add(a,promote(b),types[a].child,ValueCategory::Lvalue);

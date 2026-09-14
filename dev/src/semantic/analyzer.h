@@ -242,10 +242,25 @@ private:
     Index template_initializer_bindings;
     std::size_t template_initializer_binding_work = 0, template_initializer_binding_queued = 0;
     void bind_template_initializer(EntityId entity, ScopeId scope);
+    void bind_template_default_initialization(EntityId entity, ScopeId scope);
+    bool check_default_constructor(EntityId constructor);
+    void check_default_destructor(EntityId destructor);
+    void check_default_destruction(TypeId type, ScopeId scope, bool variant = false);
+    void check_pattern_destruction(EntityId cls, ScopeId scope);
+    EntityId check_default_initialization(TypeId type, ScopeId scope);
+    void prepare_default_call(EntityId constructor);
+    Index template_default_constructors;
+    std::size_t default_initialization_work = 0, default_initialization_uses = 0;
+    Index block_extern_entities;
+    Index template_pattern_members, template_pattern_property_states, template_pattern_open_bases;
+    void bind_pattern_member(EntityId entity, NodeId declaration, NodeId declarator);
+    bool pattern_class_type(TypeId type) const;
+    void check_pattern_default_initialization(TypeId type, ScopeId scope, bool base = false);
     void check_template_initialization(NodeId n, TypeId target, ScopeId scope,
         InitializationMode mode = InitializationMode::Direct);
     bool check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId scope);
-    bool check_template_constructor(NodeId n, TypeId target, ScopeId scope, InitializationMode mode);
+    bool check_template_constructor(NodeId n, TypeId target, ScopeId scope, InitializationMode mode,
+        const std::vector<NodeId>* operands = nullptr);
     bool reuse_template_constructor(NodeId n, TypeId target, const std::vector<NodeId>& args,
         Expression& result, ScopeId scope, EntityId& selected);
     std::uint32_t retained_initialization(NodeId n, TypeId target);
@@ -272,6 +287,7 @@ private:
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
     std::vector<EntityId> jump_bodies;
     void finish_body(EntityId e);
+    EntityId destructor_declaration(TypeId type);
     EntityId default_destructor(TypeId t, ScopeId s = 0, bool demand = true);
     void destructor_actions(EntityId e);
     bool implicit_destructor_nonthrowing(EntityId cls);
@@ -328,6 +344,8 @@ private:
     Index query_value_index, template_value_queries, template_value_dependence;
     std::vector<QueryValue> query_values = std::vector<QueryValue>(1);
     bool template_body_values = false;
+    NodeId template_decltype_operand = 0;
+    bool decltype_call_result(NodeId node) const;
     std::size_t query_value_work = 0, template_value_work = 0, template_value_uses = 0;
     std::uint32_t query_value(QueryId id);
     bool bind_template_size(NodeId node, ScopeId scope);
@@ -348,7 +366,7 @@ private:
         const std::vector<NodeId>* nodes, TypeId object, ValueCategory category,
         ScopeId naming, std::uint32_t explicit_arguments, std::vector<Conversion>& selected);
     TypeQueryFact query_operator(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
-    Expression conditional_value(Expression left, Expression right);
+    Expression conditional_value(Expression left, Expression right, std::vector<Conversion>& selected);
     TypeQueryFact query_conditional(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId dependent_decltype(NodeId n, ScopeId s);
     std::vector<TypeArguments> argument_packs;
@@ -419,7 +437,7 @@ private:
     IdentifierId operator_name(ETokenType op, bool array = false);
     ETokenType operator_token(NodeId name) const;
     void declare_operator(EntityId e, NodeId name);
-    bool operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result);
+    bool operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result, bool recipe = false);
     NodeId decl_name(NodeId d) const;
     NodeId child(NodeId n, syntax::Kind k) const;
     bool spec_has(NodeId n, ETokenType op) const;
@@ -494,6 +512,12 @@ private:
     void check_fixed_expression(NodeId n, ScopeId s);
     bool reuse_fixed_expression(NodeId n, ScopeId s, Expression& result);
     bool check_fixed_call(NodeId n, ScopeId s);
+    bool check_fixed_operator(NodeId n, ScopeId s);
+    bool check_fixed_construction(NodeId n, ScopeId s);
+    bool check_fixed_cast(NodeId n, ScopeId s, TypeId target, NodeId operand);
+    void reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expression& result);
+    void reuse_fixed_construction(NodeId n, NodeId source, ScopeId s, Expression& result);
+    Index template_operator_expressions;
     bool check_fixed_member(NodeId n, ScopeId s);
     bool check_template_field(NodeId n, ScopeId s, EntityId field, bool explicit_object = false);
     void bind_template_object_context(ScopeId function, NodeId parameters);
@@ -563,7 +587,7 @@ private:
     void inherited_constructors(EntityId cls);
     bool base_initialization = false;
     bool class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode);
-    void default_initialize(EntityId object);
+    void default_initialize(EntityId object, NodeId declarator = 0);
     bool derived_from(TypeId from, TypeId to);
     void write_function(std::ostream& out, EntityId e, NodeId body, ScopeId scope, unsigned depth, bool definition = true) const;
     void write_object(std::ostream& out, EntityId e, NodeId init, unsigned depth) const;
@@ -590,7 +614,7 @@ private:
     Expression call_expression(NodeId n, ScopeId s);
     Expression unary_expression(NodeId n, ScopeId s);
     Expression binary_expression(NodeId n, ScopeId s);
-    Expression cast_expression(NodeId n, ScopeId s, TypeId target, NodeId operand);
+    Expression cast_expression(NodeId n, ScopeId s, TypeId target, NodeId operand, bool recipe = false);
     TypeId value_type(TypeId t);
     TypeId decay(TypeId t);
     TypeId promote_expression(NodeId n);

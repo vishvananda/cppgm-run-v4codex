@@ -151,11 +151,10 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
         b.null_pointer_constant = null_constant(bn); c.null_pointer_constant = null_constant(cn);
-        auto value = conditional_value(b,c);
+        std::vector<Conversion> selected;
+        auto value = conditional_value(b,c,selected);
         r.type = value.type; r.category = value.category; r.entity = value.entity;
-        auto target = r.category == ValueCategory::Prvalue ? r.type :
-            types.compound(r.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,r.type);
-        record_conversion(r,bn,conversion(bn,target)); record_conversion(r,cn,conversion(cn,target));
+        record_conversion(r,bn,selected[0]); record_conversion(r,cn,selected[1]);
         return r;
     }
     if (op == OP_COMMA) {

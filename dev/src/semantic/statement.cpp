@@ -40,9 +40,15 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
     } else t = expression(c, s).type;
     Expression value; value.type = t;
     value.category = facts[n].entity ? ValueCategory::Lvalue : expressions[c].category;
-    auto target = condition_target(value,is_switch);
+    auto occurrence = ast.nodes.occurrences[n];
+    auto retained = occurrence.context ? template_statement_conversions.get(occurrence.source) : 0;
+    auto target = retained ? conversions[retained].target : condition_target(value,is_switch);
+    if (retained) ++statement_conversion_uses;
     if (class_value(value_type(t))) {
-        Conversion conversion = conversion_function(facts[n].entity ? n : c,target,!is_switch,false,facts[n].entity);
+        Conversion conversion = retained ? copy_conversion_recipe(conversions[retained]) :
+            conversion_function(facts[n].entity ? n : c,target,!is_switch,false,facts[n].entity);
+        if (retained && facts[n].entity && conversion.kind == Conversion::Kind::User)
+            user_conversions[conversion.materialization].object_entity = facts[n].entity;
         Expression result; result.type = target; result.ready = true;
         record_conversion(result,facts[n].entity ? n : c,conversion);
         facts.edit(n).type = target; expressions.set(n,result);
@@ -53,7 +59,8 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
     if (is_switch) switches.back().type = facts[n].type;
     Expression result; result.type = facts[n].type; result.ready = true;
     if (ast[c].kind != Kind::ConditionDeclaration)
-        record_conversion(result, c, is_switch ? conversion(c, result.type) : boolean_conversion(c));
+        record_conversion(result, c, retained ? copy_conversion_recipe(conversions[retained]) :
+            is_switch ? conversion(c, result.type) : boolean_conversion(c));
     else {
         NodeId d = ast[ast[c].first].next;
         facts.edit(n).entity = facts[d].entity;

@@ -285,6 +285,12 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     bool alias = spec_has(specs, KW_TYPEDEF);
     bool function = types[t].kind == TypeKind::Function;
+    bool block_extern = !alias && !function && spec_has(specs,KW_EXTERN) &&
+        owner == s && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class;
+    if (block_extern) {
+        if (init) throw std::runtime_error("block extern declaration has initializer");
+        while (scopes[owner].kind != ScopeKind::Namespace) owner = scopes[owner].parent;
+    }
     if (!alias && !function && spec_has(specs, KW_CONSTEXPR)) t = types.qualify(t, 1);
     if (!alias && !function) {
         if (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID)
@@ -321,6 +327,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         (scopes[owner].kind != ScopeKind::Class || spec_has(specs, KW_STATIC) || constructor || destructor))
         throw std::runtime_error("ref qualifier requires ordinary nonstatic member");
     EntityId e = constructor ? class_facts[entities[cls].class_info].constructor : local(owner, id);
+    bool hidden_external = false;
+    if (!e && kind == EntityKind::Variable && scopes[owner].kind == ScopeKind::Namespace) {
+        e = block_extern_entities.get(key(owner,id)); hidden_external = e != 0;
+    }
     if (constructor) {
         EntityId selected = declare_function(owner, id, source, canonical, true);
         class_facts[entities[cls].class_info].constructor = merge_lookup(e, selected);
@@ -337,8 +347,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         e = make_entity(kind, owner, id, source);
         entities[e].type = canonical;
         if (constructor) class_facts[entities[cls].class_info].constructor = e;
-        else bind(owner, id, e);
+        else if (!block_extern) bind(owner, id, e);
     }
+    if (block_extern) { block_extern_entities.put(key(owner,id),e); bind(s,id,e); }
+    else if (hidden_external) bind(owner,id,e);
     entities[e].is_static |= spec_has(specs, KW_STATIC);
     if (calls && function && entities[e].is_static && types[t].ref != RefQualifier::None)
         throw std::runtime_error("static member cannot be ref qualified");
@@ -372,7 +384,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor && !special) class_facts[entities[cls].class_info].aggregate = false;
     }
     if (calls) virtual_declaration(e, d, init, specs, source, s);
-    record(owner, e, d, t, kind);
+    record(block_extern ? s : owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
     if (calls && init && !function && scopes[s].kind == ScopeKind::Class && entities[e].is_static &&
         !spec_has(specs, KW_CONSTEXPR) && (!(types[t].cv & 1) || !integral(t)))
@@ -389,7 +401,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         }
     }
     if (calls && init && !function && !member_initializer) initialize(init, canonical, definition_scope);
-    if (calls && !init && !function && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e);
+    if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
     if (init && !alias && !function && integral(t) && !member_initializer) {
         Constant v = evaluate(init, definition_scope);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");

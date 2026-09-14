@@ -29,7 +29,9 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
     for (std::size_t j = 1; j < viable.size(); ++j)
         if (better(&viable[j].argument, &viable[best].argument, 1)) best = j;
     for (std::size_t j = 0; j < viable.size(); ++j)
-        if (j != best && !better(&viable[best].argument, &viable[j].argument, 1)) return result;
+        if (j != best && !better(&viable[best].argument, &viable[j].argument, 1)) {
+            result.ambiguous = true; return result;
+        }
     result.kind = Conversion::Kind::Construction; result.rank = 5;
     result.function = viable[best].entity;
     return result;

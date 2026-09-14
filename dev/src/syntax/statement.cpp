@@ -78,7 +78,7 @@ NodeId Parser::for_statement()
     scope = names.enter(scope);
     NodeId result = make(Kind::For);
     NodeId init = make(Kind::ForInit);
-    if (declaration_start()) ast.append(init, simple_declaration(false));
+    if (declaration_start() && declaration_ahead()) ast.append(init, simple_declaration(false));
     else if (!in.is(";")) ast.append(init, expression());
     if (in.eat(":")) {
         ast[result].kind = Kind::RangeFor;
@@ -194,8 +194,11 @@ bool Parser::declaration_ahead()
     std::size_t prefix = probe_type(0);
     if (in.is("{", prefix)) return false;
     if (!in.is("(", prefix)) return true;
-    if (in.is("typename") && !identifier(prefix+1) && !in.is("*",prefix+1) &&
-        !in.is("&",prefix+1) && !in.is("&&",prefix+1) && !in.is("(",prefix+1)) return false;
+    // A parenthesized declarator needs a declarator-id or pointer/nesting
+    // prefix. Empty parentheses and expression-only operands construct a
+    // value; they cannot declare an unnamed function in a statement.
+    if (!identifier(prefix+1) && !in.is("*",prefix+1) && !in.is("&",prefix+1) &&
+        !in.is("&&",prefix+1) && !in.is("(",prefix+1) && !in.is("::",prefix+1)) return false;
     // Only this shared type/parenthesis prefix requires declaration preference.
     // Scan its balanced suffix without constructing or abandoning any AST.
     unsigned depth = 0;

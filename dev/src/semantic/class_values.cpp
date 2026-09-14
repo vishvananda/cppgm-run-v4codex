@@ -54,7 +54,7 @@ void Analyzer::prepare_function_boundaries()
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {
     if (result.category != ValueCategory::Prvalue || !class_value(result.type)) return;
-    if (ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall && result.form != ExpressionForm::Cast) return;
+    if (ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::Construction && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall && result.form != ExpressionForm::Cast) return;
     if (!result.object_use) record_object(result,0,0,0);
     else if (object_uses[result.object_use].source_owned) {
         auto use = project_object_use(object_uses[result.object_use],n);

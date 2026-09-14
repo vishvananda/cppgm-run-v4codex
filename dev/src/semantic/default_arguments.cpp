@@ -57,7 +57,10 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         signature_parameters.put(e,++ordinal); bind(scope,name,e);
         // Fixed names are definition-time obligations. Dependent calls/types
         // retain their bindings without demanding a concrete default value.
-        bind_template_expression(child(p,Kind::DefaultArgument),scope);
+        auto argument = child(p,Kind::DefaultArgument);
+        bool dependent = bind_template_expression(argument,scope);
+        if (argument && !dependent && type && !dependent_type(type))
+            check_template_initialization(ast[argument].first,types.adjusted(type),scope,InitializationMode::Copy);
     }
     template_default_bindings.put(source,unsigned(SourceBindingState::Complete));
     } catch (...) {
@@ -80,9 +83,13 @@ void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
     template_initializer_bindings.put(e,unsigned(SourceBindingState::Active));
     ++template_initializer_binding_work;
     try {
+        if (!entities[e].initializer) {
+            bind_template_default_initialization(e,scope);
+            template_initializer_bindings.put(e,unsigned(SourceBindingState::Complete)); return;
+        }
         bool dependent = bind_template_expression(entities[e].initializer,scope);
         if (dependent) template_pattern_entities.put(e,2);
-        else if (entities[e].type)
+        if (entities[e].type)
             check_template_initialization(entities[e].initializer,entities[e].type,scope);
         auto type = entities[e].type;
         if (!dependent && type && integral(type) && types[type].cv == 1) {
@@ -127,7 +134,7 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
             default_arguments[index] = a; facts.edit(a).scope = head ? head : s;
             // A member of a local class in a function specialization is also
             // a templated entity, though its class has no specialization ID.
-            if (head || (definitions && (entities[e].template_member ||
+            if (head || (definitions && (entities[e].template_pattern || entities[e].template_member ||
                     (scopes[s].kind == ScopeKind::Class && ast.nodes.occurrences[a].context)))) {
                 seen = true; continue;
             }

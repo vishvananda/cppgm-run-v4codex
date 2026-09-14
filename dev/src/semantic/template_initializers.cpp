@@ -37,15 +37,19 @@ std::uint32_t Analyzer::retained_initialization(NodeId n, TypeId target)
     if (!id || conversions[id].target != target) return 0;
     ++initializer_recipe_uses; return id;
 }
-bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
+bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, InitializationMode mode,
+    const std::vector<NodeId>* operands)
 {
     auto list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
     bool copy = mode == InitializationMode::Copy;
-    bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer ||
+    bool grouped = operands || ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer ||
         ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
     std::vector<NodeId> args;
     std::vector<Expression> values;
-    for (auto a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) {
+    std::vector<NodeId> source_operands;
+    if (operands) source_operands = *operands;
+    else for (auto a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) source_operands.push_back(a);
+    for (auto a : source_operands) {
         if (ast[a].kind == Kind::BracedInit && fixed_initializer_operands(a)) expression(a,s);
         auto value = template_statement_value(a,s);
         if (!value.type && value.form != ExpressionForm::InitializerList && value.form != ExpressionForm::Overload) return false;
@@ -65,6 +69,7 @@ bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, In
     Expression result;
     auto ctor = choose_constructor(target,args,&result,s,!copy || ast[list].kind == Kind::BracedInit,true,&values);
     if (!ctor || deleted_transfer(ctor)) throw std::runtime_error("invalid fixed initializer constructor");
+    check_default_constructor(ctor);
     auto access = ctor;
     while (members[entities[access].member_info].inherited_constructor)
         access = members[entities[access].member_info].inherited_constructor;

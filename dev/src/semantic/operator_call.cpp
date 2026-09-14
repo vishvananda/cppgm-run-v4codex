@@ -1,7 +1,7 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
-bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result)
+bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result, bool recipe)
 {
     bool named = false;
     for (NodeId a : args) named |= types[expressions[a].type].kind == TypeKind::Named;
@@ -34,7 +34,10 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         Type f = types[entities[e].type];
         if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
             members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
-        if (args.size() != f.count + member) continue;
+        auto supplied = args.size()-member;
+        if (op == OP_LPAREN ? ((!f.variadic && supplied > f.count) ||
+            (supplied < f.count && (!entities[e].defaults || !default_arguments[entities[e].defaults+supplied]))) :
+            supplied != f.count) continue;
         if (!class_operand && !member) {
             bool exact_enum = false;
             for (unsigned j = 0; j < f.count; ++j) {
@@ -52,8 +55,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
             if (member && !i) {
                 c = object_conversion(e, object, expressions[args[0]].category, naming);
             } else {
-                TypeId wanted = types.parameters[f.offset+i-member];
-                if (args[i]) c = conversion(args[i], wanted);
+                TypeId wanted = i-member < f.count ? types.parameters[f.offset+i-member] : 0;
+                if (args[i]) c = wanted ? conversion(args[i], wanted) : ellipsis_conversion(args[i]);
                 else if (fundamental(wanted, FT_INT)) { c.rank = 0; c.target = wanted; }
             }
             valid = c.valid(); sequences.push_back(c);
@@ -101,13 +104,23 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         if (i != best && !better_candidate(best,i))
             throw std::runtime_error("ambiguous operator overload");
     Candidate selected = viable[best];
+    auto publish_call = [&](const std::vector<NodeId>& arguments, std::vector<Conversion>& chosen) {
+        if (!recipe) { record_call(result,arguments,chosen); return; }
+        auto supplied = args.size()-(selected.surrogate ? 1 : selected.member);
+        for (unsigned i = 0; i < supplied; ++i)
+            check_fixed_conversion(expressions[arguments[i]],arguments[i],chosen[i],s);
+        store_call(result,arguments,chosen); result.inputs = CallInputs::Source;
+    };
     if (selected.surrogate) {
-        Conversion callee = sequences[selected.offset]; apply_conversion(args[0],callee);
-        record_object(result,0,0,0);
+        Conversion callee = sequences[selected.offset];
+        if (recipe) check_fixed_conversion(expressions[args[0]],args[0],callee,s);
+        else apply_conversion(args[0],callee);
+        record_object(result,recipe ? args[0] : 0,0,0);
+        object_uses[result.object_use].source_owned = recipe;
         object_uses[result.object_use].callee_conversion = conversions.size(); conversions.push_back(callee);
         std::vector<NodeId> arguments(args.begin()+1,args.end());
         std::vector<Conversion> chosen(sequences.begin()+selected.offset+1,sequences.begin()+selected.offset+args.size());
-        record_call(result,arguments,chosen);
+        publish_call(arguments,chosen);
         TypeId returned = types[selected.surrogate].child;
         facts.edit(n).type = returned; result.type = value_type(returned);
         result.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
@@ -118,18 +131,21 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         auto builtin = builtins[selected.builtin-1];
         if (args.size() == 2) check_pointer_arithmetic(op,builtin.arguments[0].target,builtin.arguments[1].target);
         result.type = builtin.type; result.category = builtin.category;
-        for (unsigned j = 0; j < args.size(); ++j) record_conversion(result,args[j],sequences[selected.offset+j]);
+        if (recipe) {
+            std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
+            publish_call(args,chosen);
+        } else for (unsigned j = 0; j < args.size(); ++j) record_conversion(result,args[j],sequences[selected.offset+j]);
         return true;
     }
     if (deleted_transfer(selected.entity))
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
-    demand_member(selected.entity);
-    demand_specialization(selected.entity);
+    if (!recipe) { demand_member(selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
             base_steps(object, scopes[entities[selected.entity].owner].entity));
         object_uses[result.object_use].virtual_slot = members[entities[selected.entity].member_info].virtual_slot;
+        object_uses[result.object_use].source_owned = recipe;
     }
     result.form = ExpressionForm::OperatorCall;
     std::vector<NodeId> arguments;
@@ -137,7 +153,13 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     for (std::size_t i = selected.member; i < args.size(); ++i) {
         selected_arguments.push_back(sequences[selected.offset+i]); arguments.push_back(args[i]);
     }
-    record_call(result, arguments, selected_arguments);
+    auto function = types[entities[selected.entity].type];
+    for (unsigned i = arguments.size(); i < function.count; ++i) {
+        Conversion c;
+        arguments.push_back(default_argument(selected.entity,i,&c,recipe ? DefaultReason::Recipe : DefaultReason::Argument));
+        selected_arguments.push_back(c);
+    }
+    publish_call(arguments, selected_arguments);
     TypeId returned = types[entities[selected.entity].type].child;
     { auto& published = facts.edit(n); published.entity = selected.entity; published.type = returned; }
     result.type = value_type(returned);

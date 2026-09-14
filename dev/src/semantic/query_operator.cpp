@@ -8,12 +8,13 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     for (auto c : children) {
         args.push_back(c.expression); argument_types.push_back(c.expression.type);
         named |= types[c.expression.type].kind == TypeKind::Named;
-        class_operand |= class_value(c.expression.type);
+        class_operand |= class_value(c.expression.type) || pattern_class_type(c.expression.type);
     }
     auto object = args[0].type;
     ScopeId naming = 0; EntityId family = q.entity;
-    if (class_value(object)) {
-        complete_class(types[object].entity); naming = entities[types[object].entity].scope;
+    if (class_value(object) || pattern_class_type(object)) {
+        if (class_value(object)) complete_class(types[object].entity);
+        naming = entities[types[object].entity].scope;
         family = merge_lookup(family,lookup(naming,q.name,Lookup::Ordinary,true));
     }
     if (named && q.op != OP_LPAREN && q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW)
@@ -26,7 +27,10 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         if (!e) continue;
         bool member = entities[e].member_info && !entities[e].is_static;
         auto f = types[entities[e].type];
-        if (args.size() != f.count+member) continue;
+        auto supplied = args.size()-member;
+        if (q.op == OP_LPAREN ? ((!f.variadic && supplied > f.count) ||
+            (supplied < f.count && (!entities[e].defaults || !default_arguments[entities[e].defaults+supplied]))) :
+            supplied != f.count) continue;
         if (!class_operand && !member) {
             bool exact_enum = false;
             for (unsigned i = 0; i < f.count; ++i) {
@@ -38,7 +42,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         unsigned begin = sequences.size(); bool valid = true;
         for (unsigned i = 0; valid && i < args.size(); ++i) {
             auto c = member && !i ? object_conversion(e,object,args[0].category,naming) :
-                conversion_value(args[i],types.parameters[f.offset+i-member]);
+                i-member < f.count ? conversion_value(args[i],types.parameters[f.offset+i-member]) : ellipsis_conversion_value(args[i]);
             valid = c.valid(); sequences.push_back(c);
         }
         if (valid) viable.push_back({e,begin,0,0}); else sequences.resize(begin);
@@ -105,48 +109,125 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
     }
     r.selected = selected.entity;
-    r.expression.conversions = conversions.size(); r.expression.count = args.size();
-    conversions.insert(conversions.end(),sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
+    std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
+    for (unsigned i = 0; i < args.size(); ++i) check_fixed_conversion(args[i],0,chosen[i],q.context);
+    if (selected.entity && !selected.surrogate) {
+        auto f = types[entities[selected.entity].type];
+        bool member = entities[selected.entity].member_info && !entities[selected.entity].is_static;
+        for (unsigned i = args.size()-member; i < f.count; ++i) {
+            Conversion c; default_argument(selected.entity,i,&c,DefaultReason::Recipe); chosen.push_back(c);
+        }
+        for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
+    }
+    r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
+    conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     return r;
 }
-Expression Analyzer::conditional_value(Expression b, Expression c)
+Expression Analyzer::conditional_value(Expression b, Expression c, std::vector<Conversion>& selected)
 {
     Expression result; TypeId common = 0;
+    Expression original[2] = {b,c};
+    Conversion matched[2];
+    if (b.type != c.type && (class_value(b.type) || class_value(c.type))) {
+        auto match = [&](Expression from, Expression to) {
+            Conversion conversion;
+            if (to.category != ValueCategory::Prvalue) {
+                auto ref = types.compound(to.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,to.type);
+                conversion = conversion_value(from,ref);
+                bool direct = conversion.valid() && !conversion.temporary;
+                if (direct && conversion.kind != Conversion::Kind::User && to.category == ValueCategory::Lvalue)
+                    direct = from.category == ValueCategory::Lvalue;
+                if (direct && conversion.kind == Conversion::Kind::User) {
+                    auto returned = types[entities[conversion.function].type].child;
+                    direct = types[returned].kind == TypeKind::LRef ||
+                        (to.category != ValueCategory::Lvalue && types[returned].kind == TypeKind::RRef);
+                    direct &= !user_conversions[conversion.materialization].result.temporary;
+                }
+                if (direct) return conversion;
+            }
+            if (class_value(from.type) && class_value(to.type) &&
+                (types.unqualified(from.type) == types.unqualified(to.type) ||
+                 derived_from(from.type,to.type) || derived_from(to.type,from.type)) &&
+                ((types[from.type].cv & ~types[to.type].cv) ||
+                 (types.unqualified(from.type) != types.unqualified(to.type) && !derived_from(from.type,to.type))))
+                return Conversion();
+            auto target = class_value(from.type) && class_value(to.type) &&
+                (types.unqualified(from.type) == types.unqualified(to.type) || derived_from(from.type,to.type)) ?
+                to.type : decay(to.type);
+            return conversion_value(from,target);
+        };
+        matched[0] = match(b,c); matched[1] = match(c,b);
+        if (matched[0].ambiguous || matched[1].ambiguous || (matched[0].valid() && matched[1].valid()))
+            throw std::runtime_error("ambiguous conditional conversion");
+        for (unsigned i = 0; i < 2; ++i) if (matched[i].valid()) {
+            auto& value = i ? c : b;
+            auto target = matched[i].target;
+            value.type = value_type(target); value.entity = 0;
+            value.category = types[target].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+                types[target].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+        }
+    }
     if (class_value(b.type) && types.unqualified(b.type) == types.unqualified(c.type))
         common = types.qualify(types.unqualified(b.type),types[b.type].cv | types[c.type].cv);
     else if (!(types[b.type].cv & ~types[c.type].cv) && derived_from(b.type,c.type)) common = c.type;
     else if (!(types[c.type].cv & ~types[b.type].cv) && derived_from(c.type,b.type)) common = b.type;
     if ((b.type == c.type || common) && b.category == c.category && b.category != ValueCategory::Prvalue) {
         result.type = common ? common : b.type; result.category = b.category;
-        result.entity = b.entity == c.entity ? b.entity : 0; return result;
+        result.entity = b.entity == c.entity ? b.entity : 0;
+    } else if (b.type != c.type && (class_value(b.type) || class_value(c.type))) {
+        std::vector<BuiltinOperator> candidates;
+        builtin_operators_values(OP_QMARK,{b,c},candidates);
+        if (candidates.empty()) throw std::runtime_error("incompatible conditional operands");
+        unsigned best = 0;
+        for (unsigned i = 1; i < candidates.size(); ++i)
+            if (better(candidates[i].arguments,candidates[best].arguments,2)) best = i;
+        for (unsigned i = 0; i < candidates.size(); ++i)
+            if (i != best && !better(candidates[best].arguments,candidates[i].arguments,2))
+                throw std::runtime_error("ambiguous conditional operands");
+        result.type = candidates[best].type;
+        selected.assign(candidates[best].arguments,candidates[best].arguments+2);
+        return result;
+    } else {
+        auto left = decay(b.type), right = decay(c.type);
+        if (left == right) result.type = left;
+        else if (pointer(left) && pointer(right)) result.type = composite_pointer(left,right);
+        else if (pointer(left) && c.null_pointer_constant) result.type = left;
+        else if (pointer(right) && b.null_pointer_constant) result.type = right;
+        else result.type = arithmetic_type(left,right);
     }
-    auto left = decay(b.type), right = decay(c.type);
-    if (left == right) result.type = left;
-    else if (pointer(left) && pointer(right)) result.type = composite_pointer(left,right);
-    else if (pointer(left) && c.null_pointer_constant) result.type = left;
-    else if (pointer(right) && b.null_pointer_constant) result.type = right;
-    else result.type = arithmetic_type(left,right);
     if (!result.type) throw std::runtime_error("incompatible conditional operands");
+    auto target = result.category == ValueCategory::Prvalue ? result.type :
+        types.compound(result.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,result.type);
+    for (unsigned i = 0; i < 2; ++i) {
+        auto conversion = matched[i];
+        if (conversion.valid() && !conversion.reference &&
+            types.unqualified(conversion.target) == types.unqualified(target)) conversion.target = target;
+        if (conversion.valid() && conversion.kind == Conversion::Kind::User && conversion.target != target) {
+            // Preserve the conversion function chosen by the directional match;
+            // only its final standard conversion changes when a glvalue decays.
+            auto returned = types[entities[conversion.function].type].child;
+            Expression value; value.type = value_type(returned);
+            value.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+                types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+            user_conversions[conversion.materialization].result = standard_conversion(value,target);
+            conversion.target = target; conversion.reference = result.category != ValueCategory::Prvalue;
+        }
+        if (!conversion.valid() || conversion.target != target) conversion = conversion_value(original[i],target);
+        selected.push_back(conversion);
+    }
     return result;
 }
 TypeQueryFact Analyzer::query_conditional(const TypeQuery& query, const std::vector<TypeQueryFact>& children)
 {
     auto condition = boolean_conversion_value(children[0].expression);
-    if (!condition.valid()) throw std::runtime_error("invalid query condition");
-    TypeQueryFact result; result.expression = conditional_value(children[1].expression,children[2].expression);
+    check_fixed_conversion(children[0].expression,0,condition,query.context);
+    std::vector<Conversion> branches;
+    TypeQueryFact result; result.expression = conditional_value(children[1].expression,children[2].expression,branches);
     auto& value = result.expression;
-    auto target = value.category == ValueCategory::Prvalue ? value.type :
-        types.compound(value.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,value.type);
     std::vector<Conversion> selected(1,condition);
     for (unsigned i = 1; i < 3; ++i) {
-        auto conversion = conversion_value(children[i].expression,target);
-        if (!conversion.valid()) throw std::runtime_error("invalid query branch conversion");
-        if (conversion.derived && conversion.kind != Conversion::Kind::Explicit) {
-            auto from = children[i].expression.type, to = types[target].child;
-            if (pointer(from)) from = types[from].child;
-            if (pointer(to)) to = types[to].child;
-            check_base_access(from,to,query.context);
-        }
+        auto conversion = branches[i-1];
+        check_fixed_conversion(children[i].expression,0,conversion,query.context);
         selected.push_back(conversion);
     }
     value.conversions = conversions.size(); value.count = selected.size();

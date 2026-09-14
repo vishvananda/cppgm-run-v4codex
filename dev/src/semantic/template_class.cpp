@@ -166,7 +166,10 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     if (!pattern) throw std::runtime_error("template-id names a nontemplate class");
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
-        if (ast[a].kind != Kind::TypeId) throw std::runtime_error("type template argument required");
+        if (ast[a].kind != Kind::TypeId) {
+            if (template_type_probe) return 0;
+            throw std::runtime_error("type template argument required");
+        }
         auto type = type_id(a,s);
         if (template_type_probe && !type) return 0;
         args.push_back(type);

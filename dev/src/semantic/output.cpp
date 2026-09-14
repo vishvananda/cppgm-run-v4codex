@@ -148,6 +148,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_statement_conversion_uses\":" << statement_conversion_uses
         << ",\"semantic_initializer_recipe_work\":" << initializer_recipe_work
         << ",\"semantic_initializer_recipe_uses\":" << initializer_recipe_uses
+        << ",\"semantic_default_initialization_work\":" << default_initialization_work
+        << ",\"semantic_default_initialization_uses\":" << default_initialization_uses
         << ",\"template_class_completions\":" << template_completions
         << ",\"template_definition_applications\":" << template_definition_work
         << ",\"template_definition_direct_applications\":" << definition_direct_work

@@ -33,7 +33,7 @@ void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
         facts.edit(n).entity = entity;
         value.type = value_type(entities[entity].type); value.category = ValueCategory::Lvalue;
     } else {
-        if (bind_template_expression(c,s)) return;
+        bind_template_expression(c,s);
         value = template_statement_value(c,s);
     }
     if (!value.type || dependent_type(value.type)) return;
@@ -43,19 +43,23 @@ void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
     try {
         auto conversion = is_switch ? conversion_value(value,target) : boolean_conversion_value(value);
         check_fixed_conversion(value,0,conversion,s);
+        template_statement_conversions.put(ast.nodes.occurrences[n].source,conversions.size());
+        conversions.push_back(conversion); ++statement_conversion_work;
     } catch (...) { --unevaluated_depth; throw; }
     --unevaluated_depth;
 }
 void Analyzer::bind_template_return(NodeId n, ScopeId s)
 {
     auto c = ast[n].first;
-    bool dependent = c && bind_template_expression(c,s);
+    if (c) bind_template_expression(c,s);
     if (!return_type || dependent_type(return_type)) return;
     if (!c) {
         if (!fundamental(return_type,FT_VOID)) throw std::runtime_error("missing return value");
         return;
     }
-    if (dependent) return;
+    if (ast[c].kind == Kind::BracedInit && !fixed_initializer_operands(c)) {
+        check_template_initialization(c,return_type,s,InitializationMode::Copy); return;
+    }
     if (ast[c].kind == Kind::BracedInit && fixed_initializer_operands(c)) {
         ++unevaluated_depth;
         try {

@@ -66,7 +66,7 @@ void Analyzer::complete_virtuals(EntityId cls)
         seen.put(e,1); methods.push_back(e);
     }
     if (base && type_destructor(entities[base].type) && members[entities[type_destructor(entities[base].type)].member_info].virtual_member && !class_facts[info].destructor) {
-        EntityId dtor = default_destructor(entities[cls].type, entities[cls].scope, false);
+        EntityId dtor = destructor_declaration(entities[cls].type);
         members[entities[dtor].member_info].virtual_signature = types.function(types.fundamental(FT_VOID), {}, false);
         methods.push_back(dtor);
     }

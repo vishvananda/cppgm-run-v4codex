@@ -115,6 +115,7 @@ void Procedural::global(EntityId e)
 }
 void Procedural::object(EntityId e)
 {
+    if (sem.entities[e].external_decl && sem.scopes[sem.entities[e].owner].kind == semantic::ScopeKind::Namespace) return;
     initialized_units = semantic::Index();
     TypeId t = sem.entities[e].type;
     auto lifetime = sem.object_lifetime(e);

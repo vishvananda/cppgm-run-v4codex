@@ -15,7 +15,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         template_fixed_expressions.put(source,n); ++template_fixed_work;
         return;
     case Kind::Call:
-        if (!check_fixed_call(n,s)) return;
+        if (!check_fixed_construction(n,s) && !check_fixed_operator(n,s) && !check_fixed_call(n,s)) return;
         template_fixed_expressions.put(source,n); ++template_fixed_work;
         return;
     case Kind::Literal:
@@ -34,7 +34,9 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         // ordinary fixed-expression validation and concrete object identities.
         if (signature_parameters.get(e) && scopes[entities[e].owner].kind != ScopeKind::Function) return;
         bool object = class_value(value) || types[value].kind == TypeKind::Pointer || types[value].kind == TypeKind::Function;
-        if (!e || binding.dependent || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) ||
+        bool value_dependent = binding.dependent && (dependent_type(type) ||
+            field_fact(e).bit_field || ((types[type].cv & 1) && integral(type)));
+        if (!e || value_dependent || (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) ||
             !type || scopes[entities[e].owner].kind == ScopeKind::Class || (types[value].kind != TypeKind::Fundamental && !object))
             return;
         break;
@@ -45,6 +47,9 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         if (!first) return;
         if (!fixed(first)) return;
         auto source_type = expressions[fixed(first)].type;
+        if ((class_value(source_type) || class_value(target)) && check_fixed_cast(n,s,target,first)) {
+            template_fixed_expressions.put(source,n); ++template_fixed_work; return;
+        }
         auto kind = types[target].kind;
         bool reference = kind == TypeKind::LRef || kind == TypeKind::RRef;
         bool related = reference && (types.unqualified(source_type) == types.unqualified(types[target].child) ||
@@ -68,6 +73,9 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     case Kind::Unary: case Kind::Postfix:
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: case Kind::Subscript:
+        if (check_fixed_operator(n,s)) {
+            template_fixed_expressions.put(source,n); ++template_fixed_work; return;
+        }
         for (auto c = first; c; c = ast[c].next)
             if (!fixed(c) || class_value(expressions[fixed(c)].type)) return;
         break;
@@ -91,6 +99,12 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     expressions.inherit(n,source);
     ++template_fixed_uses;
     if (reuse_template_value(n,s,result)) return true;
+    if (template_operator_expressions.get(occurrence.source)) {
+        reuse_fixed_operator(n,source,s,result); return true;
+    }
+    if (expressions[source].form == ExpressionForm::Construction) {
+        reuse_fixed_construction(n,source,s,result); return true;
+    }
     // Source topology and this occurrence context stay fixed during this visit.
     auto node = ast[n];
     if (node.kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }

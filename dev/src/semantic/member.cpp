@@ -105,12 +105,20 @@ void Analyzer::require_member_body(EntityId e)
     members[m].demand = DemandState::Queued;
     demand_queue.push_back(e);
 }
-void Analyzer::default_initialize(EntityId object)
+void Analyzer::default_initialize(EntityId object, NodeId declarator)
 {
     TypeId t = entities[object].type;
     while (types[t].kind == TypeKind::Array) t = types[t].child;
-    if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return;
-    EntityId ctor = default_constructor(t, entities[object].owner);
+    // The source recipe belongs to this declarator. Entity::source names the
+    // whole declaration and can contain several independently initialized objects.
+    auto occurrence = ast.nodes.occurrences[declarator];
+    auto source = occurrence.context ? template_declaration_sources.get(occurrence.source) : 0;
+    auto ctor = template_default_constructors.get(source);
+    if (ctor && types.unqualified(t) == entities[scopes[entities[ctor].owner].entity].type) {
+        ++default_initialization_uses;
+    } else ctor = check_default_initialization(t,entities[object].owner);
+    if (!ctor) return;
+    prepare_default_call(ctor);
     members[entities[ctor].member_info].source_demand = true;
     members[entities[ctor].member_info].complete_entry = true;
     if (scopes[entities[object].owner].kind == ScopeKind::Namespace) {

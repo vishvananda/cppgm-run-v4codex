@@ -30,7 +30,7 @@ bool Analyzer::destructor_member(EntityId e) const
 {
     return e && entities[e].member_info && members[entities[e].member_info].destructor;
 }
-EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
+EntityId Analyzer::destructor_declaration(TypeId t)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
@@ -48,7 +48,14 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
         members[entities[dtor].member_info].destructor = true;
         class_facts[c].destructor = dtor;
     }
+    return dtor;
+}
+EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
+{
+    auto dtor = destructor_declaration(t);
+    if (!dtor) return 0;
     if (members[entities[dtor].member_info].deleted) throw std::runtime_error("deleted destructor");
+    check_default_destructor(dtor);
     check_access(dtor, s, entities[dtor].owner);
     if (demand) demand_member(dtor);
     return dtor;
@@ -114,6 +121,7 @@ void Analyzer::destructor_actions(EntityId e)
     members[m].actions_state = FactState::Active;
     try {
     EntityId cls = scopes[entities[e].owner].entity;
+    check_default_destructor(e);
     if (!entities[e].scope) entities[e].scope = make_scope(ScopeKind::Function, entities[e].owner, entities[e].name, e);
     size(entities[cls].type);
     std::vector<DestructionAction> work;
@@ -158,6 +166,8 @@ bool Analyzer::destructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
+    if (members[m].destructor_properties == FactState::Failure)
+        throw FailedSemanticFact(SemanticFact::DefaultDestructorProperties,e,entities[e].source);
     if (members[m].actions_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
     if (!members[m].synthetic && (!members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;

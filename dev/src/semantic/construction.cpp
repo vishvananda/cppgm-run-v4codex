@@ -57,6 +57,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         }
     EntityId selected = viable[best].entity;
     if (!probe && deleted_transfer(selected)) throw std::runtime_error("deleted constructor");
+    if (!probe) check_default_constructor(selected);
     EntityId access = selected;
     while (members[entities[access].member_info].inherited_constructor)
         access = members[entities[access].member_info].inherited_constructor;
@@ -102,7 +103,7 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
         members[m].synthetic = members[m].constructor = true;
         class_facts[c].implicit_constructor = ctor;
     }
-    if (demand) demand_member(ctor);
+    if (demand) { check_default_constructor(ctor); demand_member(ctor); }
     return ctor;
 }
 bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
@@ -222,6 +223,13 @@ void Analyzer::constructor_actions(EntityId e)
     }
     auto add = [&](EntityId field, TypeId type, NodeId initial) {
         EntityId ctor = 0;
+        if (!initial && field && class_value(type)) {
+            auto info = entities[types[type].entity].class_info;
+            // An anonymous union with no chosen variant has no subobject to
+            // initialize in a user-provided enclosing constructor. Defaulted
+            // enclosing constructors check variant deletion separately.
+            if (class_facts[info].storage == field && !class_facts[info].variant_initializer) return;
+        }
         default_destructor(type, scope);
         bool saved_base = base_initialization;
         base_initialization = !field;
@@ -279,6 +287,8 @@ bool Analyzer::constructor_needed(EntityId e)
 {
     if (!e) return false;
     auto m = entities[e].member_info;
+    if (members[m].default_properties == BooleanFact::Failure)
+        throw FailedSemanticFact(SemanticFact::DefaultConstructorProperties,e,entities[e].source);
     if (members[m].actions_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::ConstructorActions,e,members[m].source);
     if (transfer_member(e) && members[m].synthetic) {

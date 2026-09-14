@@ -13,11 +13,13 @@ typedef std::uint32_t ScopeId;
 using Index = IdIndex;
 
 enum class FactState : unsigned char { NotStarted, Active, Success, Failure };
+enum class PatternMemberKind : unsigned char { Constructors, Destructor, PureVirtual };
+enum class PatternPropertyKind : unsigned char { DefaultInitialization, Destruction };
 enum class InitializationMode : unsigned char { Direct, Copy };
 // Boolean success has two outcomes, while active and failed remain distinct.
 // This compact encoding does not confuse a pending query with a false value.
 enum class BooleanFact : unsigned char { NotStarted, Active, False, True, Failure };
-enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage, DefaultArgument, ListConversion, DefaultDemand, DefaultBinding, InitializerBinding, ListInitialization };
+enum class SemanticFact : unsigned char { None, ClassDefinition, FunctionDefinition, ClassLayout, MemberBody, TranslationUnit, MemberDefinition, Vtable, DestructorTriviality, DestructorException, ConstructorActions, DestructorActions, ConstructorEffects, DestructorEffects, Transfer, CopyStorage, DefaultArgument, ListConversion, DefaultDemand, DefaultBinding, InitializerBinding, ListInitialization, DefaultConstructorProperties, DefaultDestructorProperties };
 // A cached rejection names its narrow producer without owning diagnostic text.
 // The initial request reports the original error; subsequent demands cannot
 // reinterpret partial publication as recursion or successful completion.
@@ -194,6 +196,9 @@ struct MemberFacts {
     std::uint32_t action_begin = 0, action_count = 0;
     std::uint32_t default_conversions = 0;
     BooleanFact constructor_effects = BooleanFact::NotStarted, destructor_effects = BooleanFact::NotStarted;
+    BooleanFact default_properties = BooleanFact::NotStarted;
+    FactState destructor_properties = FactState::NotStarted;
+    bool const_default = false;
     FactState exception_state = FactState::NotStarted;
     bool nonthrowing = false;
     std::uint32_t destruction_begin = 0, destruction_count = 0;
@@ -305,7 +310,7 @@ struct Conversion {
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
     bool reference = false, temporary = false, derived = false, empty_copy = false, fold_widen = false, implicit_move = false;
-    bool preserve_widen = false;
+    bool preserve_widen = false, ambiguous = false;
     unsigned char preference = 0;
     enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List };
     Kind kind = Kind::Standard;
