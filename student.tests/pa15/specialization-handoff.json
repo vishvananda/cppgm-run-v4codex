@@ -1,0 +1,148 @@
+{
+  "stage_base_commit": "8000f3c8ef4647d57f2c0775192585f14cab33d8",
+  "last_reviewed_commit": "8000f3c8ef4647d57f2c0775192585f14cab33d8",
+  "entry_commit": "d3475a79395f05b05873e940531726bcbbe8fc7a",
+  "implementation_commit": "113b6907c39eece430dc68d5c4be276c78f84f04",
+  "stage": {
+    "entry_passed": 114,
+    "current_passed": 128,
+    "total": 177,
+    "entry_failures": 63,
+    "current_failures": 49,
+    "resolved_original_failures": [
+      "pa15/tests/general/100-variable-template-id-expression.t",
+      "pa15/tests/general/300-class-explicit-specialization.t",
+      "pa15/tests/general/300-decltype-delete-type-template-arg.t",
+      "pa15/tests/general/300-explicit-specialization-destructor-exception-specification.t",
+      "pa15/tests/general/300-function-explicit-specialization.t",
+      "pa15/tests/general/300-qualified-static-array-member-sizeof.t",
+      "pa15/tests/general/300-specialization-builtin-type-spacing.t",
+      "pa15/tests/general/300-template-parameter-class-member-object.t",
+      "pa15/tests/general/400-stale-class-specialization-default-argument-refresh.t",
+      "pa15/tests/spec/300-class-explicit-specialization-simple.t",
+      "pa15/tests/spec/300-function-explicit-specialization-parameter-name.t",
+      "pa15/tests/spec/300-function-explicit-specialization-simple.t",
+      "pa15/tests/spec/300-inline-explicit-function-specialization-weak.t",
+      "pa15/tests/spec/300-transitive-specialized-base-overload-conversion.t"
+    ],
+    "remaining_implementation_failures": [
+      "pa15/tests/general/100-aggregate-functional-braced-cast.t",
+      "pa15/tests/general/100-dependent-bool-trait-nontype-argument.t",
+      "pa15/tests/general/100-dependent-typename.t",
+      "pa15/tests/general/100-function-template-dependent-alias-parameter-overloads.t",
+      "pa15/tests/general/100-nontype-conversion-operator-dependent-template-id.t",
+      "pa15/tests/general/100-qualified-type-before-constexpr-local.t",
+      "pa15/tests/general/100-reference-static-constexpr-member-replay.t",
+      "pa15/tests/general/100-static-constexpr-member-call-initializer.t",
+      "pa15/tests/general/100-wide-string-literal-static-assert.t",
+      "pa15/tests/general/200-braced-constructor-function-pack.t",
+      "pa15/tests/general/200-defaulted-decltype-empty-pack-instantiation.t",
+      "pa15/tests/general/200-defaulted-decltype-pointer-placement-new.t",
+      "pa15/tests/general/200-empty-base-pack-expansion-sizeof.t",
+      "pa15/tests/general/200-explicit-template-argument-pack-expands-fixed-parameters.t",
+      "pa15/tests/general/200-function-template-leading-fixed-and-pack-call.t",
+      "pa15/tests/general/200-function-template-named-pack-call.t",
+      "pa15/tests/general/200-function-template-pack-call.t",
+      "pa15/tests/general/200-function-template-pack-forward-call.t",
+      "pa15/tests/general/200-function-template-pack-ref-return.t",
+      "pa15/tests/general/200-inline-dependent-pack-result-type.t",
+      "pa15/tests/general/200-instantiated-function-fixed-prefix-pack-tail.t",
+      "pa15/tests/general/200-lockstep-base-pack-initializer.t",
+      "pa15/tests/general/200-member-init-covarying-type-index-pack.t",
+      "pa15/tests/general/200-namespace-qualified-type-pack-base-inherited-nttp.t",
+      "pa15/tests/general/200-nested-call-pack-expansion-independent-packs.t",
+      "pa15/tests/general/200-nested-call-pack-expansion-same-pack.t",
+      "pa15/tests/general/200-out-of-class-nested-owner-pack-static-assert.t",
+      "pa15/tests/general/200-out-of-class-owner-parameter-pack-rename.t",
+      "pa15/tests/general/200-pack-expanded-base-instantiation.t",
+      "pa15/tests/general/200-pack-expanded-dependent-bool-nontype.t",
+      "pa15/tests/general/200-pack-expanded-explicit-nontype-expression-call.t",
+      "pa15/tests/general/200-pack-expansion-aggregate-brace-init.t",
+      "pa15/tests/general/200-pack-expansion-array-unknown-bound.t",
+      "pa15/tests/general/200-qualified-namespace-function-template-pack-definition.t",
+      "pa15/tests/general/200-sizeof-function-parameter-pack.t",
+      "pa15/tests/general/200-sizeof-pack-preserved-during-expansion.t",
+      "pa15/tests/general/200-template-parameter-pack-collection.t",
+      "pa15/tests/general/200-user-defined-cooked-integer-literal.t",
+      "pa15/tests/general/200-user-defined-integer-literal-overload-set.t",
+      "pa15/tests/general/200-user-defined-integer-literal-template.t",
+      "pa15/tests/general/300-many-function-template-pack-partitions.t",
+      "pa15/tests/general/400-stale-function-template-instantiation-lookup.t",
+      "pa15/tests/spec/100-type-equivalence-default-argument.t",
+      "pa15/tests/spec/100-unused-member-function-static-assert-bad.t",
+      "pa15/tests/spec/200-call-pack-expansion-template-type-pack-only.t",
+      "pa15/tests/spec/200-function-style-local-init-nested-pack-expansion.t",
+      "pa15/tests/spec/200-function-template-leading-fixed-and-pack-call.t",
+      "pa15/tests/spec/200-function-template-pack-call.t",
+      "pa15/tests/spec/200-function-template-pack-forward-call.t"
+    ]
+  },
+  "prior": {
+    "passed": 1935,
+    "total": 1935,
+    "exit_code": 0
+  },
+  "file_audit": {
+    "exit_code": 0,
+    "inherited_warnings": 3
+  },
+  "stage_check_exit_code": 2,
+  "progress_check": "14 entry failures resolved; no regressions; unchanged coverage and comparison",
+  "personal_controls": {
+    "native": 24,
+    "rejections": 13,
+    "values": 26,
+    "constants": 10
+  },
+  "fixture_trees": {
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa10/tests": "7f658d1aa2f6c7638b3c102958f966f1d6448006",
+    "pa11/tests": "961b4ab7ed62b1fa72398057b01f4158d356f18a",
+    "pa12/tests": "19d6a21bf23737b67f0b396f4ab6ef693efa9970",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa14/tests": "d94f017d7124027c242584c42772c845d25deccc",
+    "pa15/tests": "cc3a00ce498419f5d067ef9ec47f12c839af7534"
+  },
+  "performance_observations_including_warmups": 756,
+  "binary_sha256": "adc91c63e03fdd36d04b568dfc35118984f24eb97dc4eeec1b7861906af1a04a",
+  "checks": {
+    "entry-stage.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/entry-stage.log",
+      "sha256": "beaf67f4caf554e5b8d20bf2dc2500ffbd207adaaa75ed6846f52db9db401e4e"
+    },
+    "final-stage.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-stage.log",
+      "sha256": "ccfff4bc16756905b6bdcae945fc76063564702cad3d8b2b73e823878e9a2a6f"
+    },
+    "final-prior.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-prior.log",
+      "sha256": "32638e5875c67c58ff0a769153f4ae97ba4eae439c25a4ac570f7cf598f5401c"
+    },
+    "final-file-audit.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-file-audit.log",
+      "sha256": "b59169eefa5d6ec564ba1050b16752603ed4ab7eaeb363c57d104dcd3d2d8fc0"
+    },
+    "final-personal-specializations.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-personal-specializations.log",
+      "sha256": "e3ba7b6aac760089179fef26ea74a767680d40940032cb70bf46aea2eb566d18"
+    },
+    "final-personal-values.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-personal-values.log",
+      "sha256": "f8c05f73e04dc359824048d2fa37964864321f12ac127c7f735f60807c196918"
+    },
+    "final-personal-constants.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa15-specialization/final-personal-constants.log",
+      "sha256": "070649fba7f51ed2f28fa424c53972e7951ff69f7e9b87b8920229d7db2866c4"
+    }
+  },
+  "handoff_boundary": "Canonical explicit selection and constant variable query/storage facts complete; packs, broader substitution, execution and body-obligation/initialization owners remain implementation work.",
+  "independent_review": "pending: whole-stage correctness, architecture and performance; original markers unchanged"
+}

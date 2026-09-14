@@ -3,94 +3,70 @@
 Stage base commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 Last reviewed commit: `8000f3c8ef4647d57f2c0775192585f14cab33d8`
 
-Target: **PA15 full-stage**, O0 typed LowIR. This is a validated incomplete
-implementation handoff; whole-stage implementation and independent review remain
-required. Entry **56/177**, handoff **114/177**: 58 original failures resolved,
-63 remain, no previously passing case regressed. Coverage stays 177 fixtures.
+Target: **PA15 full-stage**, O0 typed LowIR. Implementation remains incomplete;
+this handoff completes the canonical explicit-selection and constant-variable
+query/storage group. Independent whole-stage review remains pending.
 
-## Active implementation increment
-
-Entry commit: `d3475a79395f05b05873e940531726bcbbe8fc7a`; verified entry
-114/177 (63 failures), unchanged fixture coverage. Prior turn: progress, with
-validated scalar argument facts and committed evidence.
-
-Owner: explicit specialization selection. Canonical primary/argument keys select
-one declaration identity before definition/layout/body demand; ordinary member
-and function consumers use that identity. Complete definitions do not inherit
-primary bodies. Late declarations update only the selected incomplete entity,
-without global cache invalidation or retries. Selection is expected O(arguments +
-required overload candidates); completion follows the selected source and demand.
-
-Sequence: class/function definitions and linkage; extend static member,
-destructor, default visibility and specialized base consumers while shared
-selection facts support them; run focused controls, the full stage, earlier
-stages, file audit and frozen A/A+ABBA compiler/native evidence. Packs/partitions
-and broader constant execution remain implementation work. Whole-stage independent
-review remains pending; neither original review marker is advanced.
-
-Selection increment validated at **128/177** (14 entry failures resolved; no
-regressions). Added 23 executed native controls and 11 rejection controls.
-Extended scope includes fixture-required constant variable templates, with
-primary/explicit/reference-pattern selection and typed initializer queries;
-address observation demands concrete storage. Primary inline member bodies are
-replaced before checking; pointer conversions demand only the relevant class.
-File audit passes with the same three inherited header warnings. Final earlier
-stage rerun and performance campaign are pending.
+Turn entry `d3475a79`: **114/177**. Handoff: **128/177**, **49 failures**.
+Fourteen original failures resolved, no previously passing fixture regressed,
+coverage unchanged at 177. The preceding goal turn made verified implementation
+progress; its scalar-value evidence is preserved.
 
 ## Design and spec alignment
 
-| Owner | Completed data flow and complexity |
+| Owner | Data flow, identity and work |
 |---|---|
-| Constant/query facts | Shared signed quotient/remainder and shift checks; integral functional casts; ordinary multicharacter literals at the language entry; function-only inline metadata. Parsed source -> typed expression/query -> cached constant. PA2 retains its explicit one-code-point view. |
-| Template argument identities | Disjoint compact TypeId/QueryId arguments; concrete values canonicalize by unqualified type and bits, dependent values retain query DAGs. No fake Type nodes or text keys. Expected O(arguments + new dependent nodes), O(arguments) reuse normalization. |
-| Heads, defaults, signatures | Integral parameters, dependent parameter types, class/function defaults, renamed out-of-class heads, non-narrowing/kind filtering, canonical member signatures. Immutable frame -> substituted query/type -> ordinary declaration/body; existing flat indexes and TU lifetimes. |
-| Lookup, source and ABI consumers | Qualified value/type arguments, functional casts and relational angle classification without grammar replay; type deduction follows explicit base edges; lowering consumes concrete argument identities for ABI. Source bodies and class completion remain separately demanded. |
+| Explicit selection | Primary EntityId + canonical argument slice selects the existing declaration before body/layout demand. Early aliases and forward references retain identity. Completed primary definitions cannot be replaced; no global invalidation or retry. Expected O(arguments), plus the required function overload candidates. |
+| Explicit source definitions | An explicit class gets its own lexical environment, independent of primary parameter names. A function specialization uses its own parsed signature/body and parameter names; primary defaults and ABI identity remain attached to the selected entity. Source parsing and primary body instantiation stay distinct. |
+| Members and consumers | Undemanded primary inline member bodies yield to explicit definitions before checking. Static declarations/definitions, destructor exception boundaries, virtual members and transitive pointer conversions use ordinary typed facts. Linkage distinguishes explicit definitions from implicit instantiations and inline declarations. |
+| Constant variable extension | Fixture-required integral constant variable templates retain initializer queries; canonical primary/argument identity owns one computed value and object. Simple reference-pattern partials use the primary's candidate list. Work follows parameters, relevant partial candidates and new query nodes. Address/reference observation records storage demand; lowering consumes constant/object facts and typed ABI arguments. |
+| Lifetimes and counters | New indexes use the existing flat TU-owned storage; temporary substitution bindings are local. No grammar replay, name-string keys or textual phase transport. Selection, initializer transition/reuse and candidate counters observe existing work. |
 
-[Personal controls](../student.tests/pa15/value_arguments.py) exercise 26 value
-groups: equivalence, defaults, enum identity, narrowing and wrong-kind rejection,
-renamed heads, source scope, member aliases and prvalue rules. Ten additional
-[constant controls](../student.tests/pa15/constants.py) cover both evaluator paths.
+The prior scalar argument, query, default and signature group remains documented
+in [its handoff](../student.tests/pa15/handoff.json) and
+[performance evidence](../student.tests/pa15/performance.md).
 
 ## Remaining implementation and boundary
 
-| Required group | Owner/data flow still to implement |
+| Group | Missing owner/facts |
 |---|---|
-| Packs and partitions | Explicit pack boundaries in specialization keys; lockstep and nested expansion of retained patterns into declarations, calls, bases and initializers; sizeof... and literal packs. Work must follow produced elements. |
-| Explicit specialization/refresh | Indexed primary/argument selection and narrow reverse dependencies; replace stale primary facts without global retry. Includes inheritance, static members and virtual/lifetime effects. |
-| Broader constant and source obligations | Required fixture cases for constant function/conversion execution, string element evaluation, variable templates and unused ordinary member assertions. Need execution/binding and declaration-obligation owners beyond scalar query folding. Handout out-of-scope language does not waive checked fixtures. |
-| Other declaration/query/LowIR cases | Remaining function-pointer parsing, static-member query/operator forms and aggregate contract shapes. Exact pending fixture list is retained in the handoff record. |
+| Packs, partitions and literals | 36 cluster-200 failures plus the many-partition case. Need pack boundaries in keys, retained list-expansion contexts, lockstep/nested expansion, sizeof... and literal-call construction. Scalar argument selection cannot produce these declaration/call/base/initializer lists. |
+| Broader substitution and constant queries | Class partial matching and dependent alias overload cases; constant object conversions/calls, string-element evaluation and a nested static-member query case. Need selected-pattern substitutions and constant execution/binding facts beyond the completed scalar query owner. |
+| Ordinary source obligations | Unused ordinary member assertions remain unchecked, including the inherited obligation for ordinary explicit-class member bodies. Need validation independent of body emission demand; eagerly lowering every inline body would violate the demand boundary. This is unfinished implementation, not an audit waiver. |
+| Initializer and storage contracts | Aggregate functional/constexpr initialization, an undemanded static constant definition, and the stale-function fixture's initialization/comparison shapes still differ. The stale-function failure is now an initializer/LowIR mismatch, not function selection. |
 
-The coherent completed group is scalar integral argument identity, normalization,
-substitution and its consumers. Related member/default/signature/base cases were
-extended before stopping. The next groups need different missing facts: pack
-partition/expansion identity, specialization-selection dependencies, constant
-execution frames, and early body-obligation scheduling. Extending scalar query
-folding alone cannot supply them; continuing here would open another incomplete
-semantic owner. These are implementation work, not questions waived to audit.
+The exact 49 failures are in [the current ledger](../student.tests/pa15/specialization-handoff.json).
+Related selection work was extended through member bodies, arrays, destructor and
+virtual consumers, defaults, canonical value queries, storage and redeclarations.
+The next work needs list-expansion, execution or source-obligation owners; changing
+selection tables further cannot establish those missing facts. Those groups remain
+required for the full stage. No reference, fixture, bundle or comparison rule changed.
 
-Independent review remains open for whole-stage spec conformance, complete keys,
-source/instance sharing, demand and invalidation boundaries, and performance
-acceptance. The review markers above are intentionally unchanged.
+Independent review questions remain open: whole-stage correctness and spec
+conformance, complete specialization keys, source sharing, demand/invalidation
+boundaries and performance acceptance. Neither review marker is advanced.
 
-## Evidence and ledger
+## Validation, performance and ledger
+
+Required checks: `make test-pa15` **128/177**, exit 2, with strict failure
+reduction; `make test-report-through-pa14` **1935/1935 pass**;
+`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src` **pass**, the same
+three inherited header warnings. Personal controls explicitly run: **24 native
+outcomes + 13 rejections**, plus **26 value** and **10 constant** groups.
+
+[Current performance](../student.tests/pa15/specialization-performance.md) retains
+frozen A/A and ABBA observations, compiler latency/RSS/text, native runtime/text,
+output parity and work scaling. PA15/O0 introduces no optional optimization or
+numerical exit gate; later native optimization/self-hosting limits keep their
+owning stages. Raw checks and binaries: `$RALPH_ARTIFACT_DIR/pa15-specialization/`.
 
 | Increment | Commit | PA15 |
 |---|---|---:|
-| Entry plan | `053af5e3` | 56/177 |
-| Constant operators/casts | `cdbfeb8a` | 64/177 |
-| Typed value arguments and related consumers | `01b543ed` | 114/177 |
+| Prior constants and value arguments | `cdbfeb8a`, `01b543ed` | 114/177 |
+| Selection/member/variable-query implementation | `767e0797` | 128/177 |
+| Selection and query telemetry/benchmark | `93dd5e29` | 128/177 |
+| Specialized declaration/definition distinction | `113b6907` | 128/177 |
 
-Required final checks: `make test-report-through-pa14` **1935/1935 pass**;
-`make test-pa15` **114/177**, exit 2, with strict original-failure reduction;
-`perl scripts/cppgm_file_audit.pl --stage pa15 --paths dev/src` **pass**, three
-inherited header warnings. Personal controls run explicitly. No fixture,
-reference, bundle, harness or comparison rule changed. Two overlapping interim
-reports had shared counters; final commands ran serially.
-
-[Handoff proof](../student.tests/pa15/handoff.json) records exact failures, fixture
-tree identities and command hashes. [Performance](../student.tests/pa15/performance.md)
-retains 336 observations, A/A and ABBA, compiler latency/RSS/text, native runtime
-and text, exact common output parity and linear source/key counters. No optional
-optimizer or new numerical gate. Raw evidence: `$RALPH_ARTIFACT_DIR/pa15-value/`.
-Historical PA14 preflight LowIR was losslessly gzip-compressed after hash checks
-to recover scratch capacity; `historical-compression.json` records every file.
+[Verification script](../student.tests/pa15/verify_specializations.py) checks frozen
+hashes, original failures, fixture trees, counters and preserved review markers.
+This implementation handoff does not certify the assignment or close its audit.
