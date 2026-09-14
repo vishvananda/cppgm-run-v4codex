@@ -38,6 +38,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
         auto e = lookup(owner,full && p == last ? terminal(n) : ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
+        if (p != last && entities[e].parameter_pack) r.qualifier_pack = e;
         auto args = child(p,Kind::TemplateArguments);
         bool class_id = args && entities[e].class_info && (entities[e].template_info || entities[e].specialization);
         r.dependent |= entities[e].template_parameter || entities[e].template_member || (!class_id && template_pattern_entities.get(e) == 2) ||
@@ -130,7 +131,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
             auto id = terminal(name);
             if (!binding.entity && !binding.dependent &&
                 (!dependent || ast[name].first != ast[name].last || ast[name].op == OP_COLON2) &&
-                id != constant_builtin && id != abort_builtin)
+                id != constant_builtin && id != abort_builtin && id != expect_builtin)
                 query_fact(expression_query(n,s));
         }
         return dependent;

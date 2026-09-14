@@ -7,7 +7,16 @@ CC=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'dev/cppgm++'
 WORK=Path(sys.argv[2]) if len(sys.argv)>2 else Path(os.environ['RALPH_ARTIFACT_DIR'])/'pa16-object/controls'
 WORK.mkdir(parents=True,exist_ok=True)
 GOOD={
+'first_subobject_address': 'struct X{int a,b;};constexpr X x={1,2};static_assert(static_cast<void const*>(&x)==static_cast<void const*>(&x.a), "");static_assert((&x.a+1)-&x.a==1&&&x.a<&x.a+1, "");int main(){return 0;}',
+'arrow_static_effect': 'int calls;struct T{static constexpr int x=7;static constexpr int get(){return x;}};T t;struct P{T*operator->(){++calls;return &t;}};int main(){P p;int n=p->x+p->get();return n==14&&calls==2?0:1;}',
+
+'self_temporary': 'struct S{S const*p;constexpr S():p(this){}constexpr bool own()const{return p==this;}};static_assert(S().p!=S().p&&S().own(), "");int main(){return 0;}',
+'arrow_chain': 'struct T{int x;constexpr int get()const{return x;}};struct I{T t;constexpr T const*operator->()const noexcept{return &t;}};struct O{I i;constexpr I const&operator->()const noexcept{return i;}};constexpr O o={{{7}}};static_assert(o->get()==7&&noexcept(o->x), "");int main(){return o->get()-7;}',
+'arrow_temporary_cleanup': 'int alive;struct T{int x;};T t={7};struct I{I(){++alive;}~I(){--alive;}T*operator->(){return &t;}};struct O{I operator->(){return I();}};int main(){O o;int n=o->x;return n==7&&alive==0?0:1;}',
+'query_arrays': 'typedef decltype(sizeof(0)) size_t;constexpr int sum(int const*p,int const*q){return p==q?0:*p+sum(p+1,q);}template<int...N>struct A{static constexpr int data[]={N...};typedef char check[sum(data,data+sizeof...(N))];};static_assert(sizeof(A<2,3>::check)==5&&sizeof(A<4,5>::check)==9, "");int main(){return 0;}',
+
 'cache_mutation': 'constexpr int read(int const&x){return x;}constexpr int f(){int x=1;int a=read(x);x=2;return a+read(x);}static_assert(f()==3, "");int main(){return f()-3;}',
+'self_local': 'struct S{S const*p;constexpr S():p(this){}};constexpr bool f(){S s;return s.p==&s;}static_assert(f(), "");int main(){return f()?0:1;}',
 'self_address': 'struct S{S const*p;constexpr S():p(this){}};constexpr S s;static_assert(s.p==&s, "");int main(){return s.p==&s?0:1;}',
 'known_receiver': 'struct P{constexpr int f()const{return 1;}};P p;static_assert(p.f()==1, "");int main(){return p.f()-1;}',
 
@@ -27,6 +36,8 @@ GOOD={
 'operator_conversion': (ROOT/'student.tests/pa16/objects/conversions.cpp').read_text(),
 }
 BAD={
+'bad_static_arrow': 'struct T{static constexpr int x=7;};T t;struct P{T*operator->(){return &t;}};static_assert(P()->x==7, "");',
+
 'bad_member': 'int g();struct P{int x,y;};constexpr P p={1,g()};',
 'bad_temporary': 'constexpr int const*f(int const&x){return &x;}constexpr int const*p=f(9);',
 'bad_read': 'int x=7;constexpr int f(int const&x){return x;}static_assert(f(x)==7, "");',

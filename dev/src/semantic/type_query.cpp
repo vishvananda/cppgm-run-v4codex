@@ -290,6 +290,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         // still require substitution before value-sensitive queries complete.
         bool value_dependent = template_pattern_entities.get(q.entity) == 2 &&
             (field_fact(q.entity).bit_field || (types[q.type].cv & 1 && integral(q.type)));
+        value_dependent |= entity.kind == EntityKind::Variable && entity.is_static;
         r.dependent |= !q.type || (entity.kind != EntityKind::Variable && entity.kind != EntityKind::Parameter) || value_dependent;
     }
     if (q.arguments) {

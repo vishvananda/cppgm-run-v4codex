@@ -177,6 +177,12 @@ Value Procedural::logical(NodeId n)
     Value lhs = first_conversion.kind == semantic::Conversion::Kind::User ? converted(a,first_conversion) : load(expression(a));
     if (lhs.operand.kind == Operand::Integer && (land ? !lhs.operand.data.integer : bool(lhs.operand.data.integer)))
         return Value(Operand::integer(!land), IRType::I64, sem.expression_fact(n).type);
+    if (lhs.operand.kind == Operand::Integer) {
+        Value rhs = second_conversion.kind == semantic::Conversion::Kind::User ? converted(b,second_conversion) : load(expression(b));
+        IRType comparison = rhs.ir.floating() || rhs.ir == IRType::Ptr ? rhs.ir : IRType(IRType::I64);
+        auto result = emit(Opcode::Compare,comparison,{rhs.operand,rhs.ir.floating() ? Operand::floating(0) : Operand::integer(0)},Operation::Ne);
+        result.type = fact.type; return result;
+    }
     SlotId slot = builder->add_slot(0, IRType::I64);
     BlockId rhs = block(), short_path = block(), end = block();
     if (lhs.ir.floating()) lhs = emit(Opcode::Compare, lhs.ir, {lhs.operand, Operand::floating(0)}, Operation::Ne);

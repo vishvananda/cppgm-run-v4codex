@@ -47,8 +47,8 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     auto body = constant_bodies[body_id];
     if (!body.valid || body.count != args.size()) return Constant();
     if (entities[e].member_info && !entities[e].is_static && !object && !constructor_member(e)) return Constant();
-    // Slot zero is the receiver identity; the remaining slots are scalar
-    // value identities. This private activation pack never enters deduction.
+    // The activation key contains typed values and the receiver path, plus
+    // snapshots of mutable or retired storage reachable through addresses.
     std::vector<ArgumentId> key_args(1,object);
     key_args.push_back(zero);
     Index dependencies;
@@ -111,6 +111,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
                 auto slot = slots.get(p.selector);
                 if (slot) parts[slot-1] = p;
                 else { slots.put(p.selector,parts.size()+1); parts.push_back(p); }
+                ++constant_storage[storage].version;
             }
             if (valid && !member.delegated_constructor) value = evaluated_object(t,parts);
             constant_storage[storage].value = value;
@@ -151,6 +152,11 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
 {
     auto e = facts[n].entity;
     auto call = expressions[n];
+    if (call.form == ExpressionForm::Expect) {
+        auto first = constant_node_conversion(call_argument(call,0),conversions[call.conversions],s);
+        auto second = constant_node_conversion(call_argument(call,1),conversions[call.conversions+1],s);
+        return second.valid ? first : Constant();
+    }
     if (!e || entities[e].kind != EntityKind::Function) {
         auto use = object_uses[call.object_use];
         auto callee = ast[n].first;
@@ -159,12 +165,14 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         e = constant_storage[constant_addresses[v.bits].storage].entity;
     }
     if (!e || entities[e].kind != EntityKind::Function || !entities[e].constexpr_function) return Constant();
+    if (entities[e].is_static && object_uses[call.object_use].node &&
+        !constant_arrow(object_uses[call.object_use].node,object_uses[call.object_use].arrow)) return Constant();
     std::uint32_t object = 0;
     if (entities[e].member_info && !entities[e].is_static) {
         auto use = object_uses[call.object_use];
         if (use.virtual_slot || use.member_pointer) return Constant();
         if (use.node) {
-            object = constant_node_object(use.node);
+            object = constant_arrow(use.node,use.arrow);
         } else if (active_constant) object = constant_activations[active_constant].object;
         object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
         if (!object) return Constant();
@@ -177,29 +185,6 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         args.push_back(value);
     }
     return execute_constant(e,args,object);
-}
-bool Analyzer::constant_receiver_type(TypeId type)
-{
-    if (!class_value(type)) return false;
-    auto cls = types[type].entity;
-    return !class_facts[entities[cls].class_info].first_base && empty_class(type) &&
-        !polymorphic(cls) && trivial_destructor(type) && !(types[type].cv & 2);
-}
-bool Analyzer::constant_empty_construction(EntityId ctor)
-{
-    if (!constructor_member(ctor) || types[entities[ctor].type].count) return false;
-    auto member = members[entities[ctor].member_info];
-    if (member.synthetic) return constexpr_constructor(ctor);
-    if (!entities[ctor].constexpr_function) return false;
-    // The existing receiver domain has no subobject state. Admit a source
-    // constructor only after checking its definition and proving it performs
-    // no initialization or body work; stateful construction needs object values.
-    constant_body(ctor);
-    member = members[entities[ctor].member_info];
-    if (entities[ctor].body_state != FactState::Success) { constant_unavailable = true; return false; }
-    if (member.action_count) return false;
-    auto body = entities[ctor].body;
-    return ast[body].kind == Kind::Compound && !ast[body].first;
 }
 std::uint32_t Analyzer::constant_query_object(QueryId id)
 {
@@ -267,6 +252,10 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return value;
     }
     auto target = types[c.target];
+    if (fundamental(c.target,FT_BOOL) && (types[expressions[n].type].kind == TypeKind::Array || types[expressions[n].type].kind == TypeKind::Function)) {
+        auto address = constant_address(n,s);
+        return address ? Constant(c.target,1) : Constant();
+    }
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef || c.reference) {
         auto address = constant_address(n,s);
         if (address && class_value(target.child)) address = constant_base_address(address,target.child);
@@ -300,6 +289,7 @@ Constant Analyzer::constant_construct(EntityId e, const std::vector<Constant>& a
     if (!constexpr_constructor(e) && !(zero && member.synthetic)) return Constant();
     auto destination = constant_destination;
     if (destination && types.unqualified(constant_addresses[destination].type) != entities[scopes[entities[e].owner].entity].type) destination = 0;
+    if (!destination) destination = constant_storage_address(entities[scopes[entities[e].owner].entity].type,Constant());
     auto saved = constant_destination; constant_destination = 0;
     try { auto value = execute_constant(e,args,destination,zero); constant_destination = saved; return value; }
     catch (...) { constant_destination = saved; throw; }

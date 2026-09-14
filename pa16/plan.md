@@ -24,17 +24,16 @@ prior-through and file audit. Freeze entry/final binaries and inputs for A/A plu
 ABBA compiler latency/RSS and executable runtime/text evidence; new-correct cases
 have no speedup comparison against rejected entry programs.
 
-Implementation ledger (not an audit waiver): typed object/address execution now
-passes **135/154** unchanged PA16 fixtures, prior-through **2112/2112**, file audit
-and **17 native / 8 rejection** personal object controls. Existing scalar/storage/
-validity controls and final frozen performance remain to rerun. Six semantic
-failures remain in recursive arrow/builtin calls, pack-array queries, subobject
-projection and const template parameter resolution; emission identity and static
-initialization presentation also remain. Required constant initialization exposes
-old dynamic-init references: prove/document each correction before changing any
-oracle. Constructor-local field reads, self addresses, scope lifetimes and mutable
-reference-call keys now have explicit personal controls. This is an implementation
-increment, not the handoff boundary.
+Implementation ledger (not an audit waiver): typed object/address execution,
+recursive arrows and dependent constant array queries now pass **146/154**
+unchanged PA16 fixtures. All earlier tests pass (**2112/2112**). Static initialization
+and nonliteral class-result LowIR comparisons remain (8); no oracle was revised.
+The explicit scalar/floating/exception/storage/validity/audit controls pass
+(**148 native / 66 rejection**); expanded object controls and final frozen
+performance are being checked. This increment also records arrow selections for
+runtime lowering/cleanup, preserves reference cache dependencies and gives each
+materialized constructor result its own identity. See the eventual handoff ledger
+for final evidence and the remaining output-policy boundary.
 
 The accumulated checkpoint audit is complete;
 stage implementation is still **93/154, 61 failures**. Entry `57bac58d` had the

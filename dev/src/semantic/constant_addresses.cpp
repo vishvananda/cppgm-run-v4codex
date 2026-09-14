@@ -22,6 +22,18 @@ std::uint32_t Analyzer::constant_subobject(std::uint32_t parent, TypeId t, std::
     auto id = constant_addresses.size(); constant_addresses.push_back(a); constant_address_index.put(h,id);
     ++constant_address_work; return id;
 }
+std::uint64_t Analyzer::constant_offset(std::uint32_t id)
+{
+    auto a = constant_addresses[id];
+    if (!a.parent || a.located) return a.offset;
+    auto parent = constant_addresses[a.parent];
+    auto offset = constant_offset(a.parent);
+    if (types[parent.type].kind == TypeKind::Array) offset += a.selector * size(a.type);
+    else if (a.selector == ~std::uint64_t(0)) offset += size(a.type);
+    else if (a.selector & 0x80000000U) offset += base_steps(parent.type,types[a.type].entity)-1;
+    else { size(parent.type); offset += entities[a.selector].member_offset; }
+    constant_addresses[id].offset = offset; constant_addresses[id].located = true; return offset;
+}
 std::uint32_t Analyzer::constant_entity_address(EntityId e)
 {
     if (!e) return 0;
@@ -99,6 +111,21 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
 {
     auto x = expressions[n]; auto first = ast[n].first;
     if (ast[n].kind == Kind::Parenthesized) return constant_address(first,s);
+    if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA && x.form != ExpressionForm::OperatorCall) {
+        if (!evaluate(first,s).valid) return 0;
+        return constant_address(ast[first].next,s);
+    }
+    if (x.category == ValueCategory::Prvalue && class_value(x.type)) {
+        auto address = constant_storage_address(x.type,Constant());
+        auto saved = constant_destination; constant_destination = address;
+        Constant value;
+        try { value = (ast[n].kind == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s); }
+        catch (...) { constant_destination = saved; throw; }
+        constant_destination = saved;
+        auto storage = constant_addresses[address].storage;
+        constant_storage[storage].value = value; constant_storage[storage].readable = value.valid;
+        return value.valid ? address : 0;
+    }
     if (x.form == ExpressionForm::OperatorCall) {
         auto value = constant_call(n,s);
         if (!value.valid) return 0;
@@ -112,7 +139,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::IdExpression && !nonstatic_field(x.entity)) return constant_entity_address(x.entity);
     if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && nonstatic_field(x.entity)) {
         auto use = object_uses[x.object_use];
-        auto base = use.node ? constant_node_object(use.node) : active_constant ? constant_activations[active_constant].object : 0;
+        auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;
         if (!base) return 0;
         base = constant_base_address(base,entities[scopes[entities[x.entity].owner].entity].type);
         auto result = constant_subobject(base,entities[x.entity].type,x.entity);
@@ -120,7 +147,10 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) { auto v = constant_read(result); return v.valid ? v.bits : 0; }
         return result;
     }
-    if (ast[n].kind == Kind::Member && x.entity && entities[x.entity].is_static) return constant_entity_address(x.entity);
+    if (ast[n].kind == Kind::Member && x.entity && entities[x.entity].is_static) {
+        if (!constant_arrow(first,object_uses[x.object_use].arrow)) return 0;
+        return constant_entity_address(x.entity);
+    }
     if (ast[n].kind == Kind::Unary && ast[n].op == OP_STAR) {
         auto v = constant_indirect(evaluate(first,s)); return v.valid && pointer(v.type) ? v.bits : 0;
     }
@@ -174,9 +204,25 @@ Constant Analyzer::constant_pointer_binary(ETokenType op, Constant a, Constant b
     }
     bool ap = pointer(a.type) || fundamental(a.type,FT_NULLPTR_T), bp = pointer(b.type) || fundamental(b.type,FT_NULLPTR_T);
     if (!ap || !bp) return Constant();
-    if (op == OP_EQ || op == OP_NE) return Constant(types.fundamental(FT_BOOL),op == OP_EQ ? a.bits == b.bits : a.bits != b.bits);
+    if (op == OP_EQ || op == OP_NE) {
+        bool same = a.bits == b.bits;
+        if (!same && a.bits && b.bits && constant_addresses[a.bits].storage == constant_addresses[b.bits].storage)
+            same = constant_offset(a.bits) == constant_offset(b.bits);
+        return Constant(types.fundamental(FT_BOOL),op == OP_EQ ? same : !same);
+    }
     if (!a.bits || !b.bits) return Constant();
     auto x = constant_addresses[a.bits], y = constant_addresses[b.bits];
+    if (x.storage == y.storage) {
+        auto owner = [&](std::uint32_t id) {
+            auto p = constant_addresses[id];
+            return p.selector == ~std::uint64_t(0) ? p.parent : id;
+        };
+        if (owner(a.bits) == owner(b.bits)) {
+            auto left = x.selector == ~std::uint64_t(0), right = y.selector == ~std::uint64_t(0);
+            if (op == OP_MINUS) return Constant(types.fundamental(FT_LONG_INT),std::int64_t(left)-std::int64_t(right));
+            return binary(op,Constant(types.fundamental(FT_INT),left),Constant(types.fundamental(FT_INT),right));
+        }
+    }
     if (x.parent != y.parent || x.storage != y.storage || !x.parent || types[constant_addresses[x.parent].type].kind != TypeKind::Array) return Constant();
     if (op == OP_MINUS) return Constant(types.fundamental(FT_LONG_INT),x.selector-y.selector);
     return binary(op,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),x.selector),Constant(types.fundamental(FT_UNSIGNED_LONG_INT),y.selector));
@@ -207,14 +253,7 @@ StaticValue Analyzer::constant_static_value(Constant v)
         if (!v.bits) { r.kind = StaticValue::Integer; return r; }
         auto a = constant_addresses[v.bits]; auto storage = constant_storage[a.storage];
         r.kind = storage.literal ? StaticValue::String : StaticValue::Address; r.entity = storage.entity; r.string = storage.literal;
-        while (a.parent) {
-            auto parent = constant_addresses[a.parent];
-            if (types[parent.type].kind == TypeKind::Array) r.addend += a.selector * size(a.type);
-            else if (a.selector == ~std::uint64_t(0)) r.addend += size(a.type);
-            else if (a.selector & 0x80000000U) r.addend += base_steps(parent.type,types[a.type].entity) - 1;
-            else r.addend += entities[a.selector].member_offset;
-            a = parent;
-        }
+        r.addend = constant_offset(v.bits);
     } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }
     return r;
@@ -233,9 +272,10 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
         args.push_back(storage_id); args.push_back(storage.version);
         args.push_back(unsigned(storage.live) | (unsigned(storage.readable)<<1));
         constant_dependencies(storage.value,args,seen);
+        if (storage.builder) for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
     } else if (class_value(value.type) || k == TypeKind::Array) {
         auto o = evaluated_objects[value.bits];
-        for (unsigned i = 0; i < o.count; ++i) constant_dependencies(evaluated_parts[o.first+i].value,args,seen);
+        for (unsigned i = 0; i < o.address_count; ++i) constant_dependencies(evaluated_parts[evaluated_address_parts[o.addresses+i]].value,args,seen);
     }
 }
 } }

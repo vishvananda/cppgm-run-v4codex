@@ -23,6 +23,8 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     ++full_expression_work;
     auto temporary = sem.object_fact(n).temporary;
     bool needed = !omit_result && !sem.object_lifetime(temporary) && sem.temporary_cleanup(temporary);
+    auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
+    for (unsigned j = 0; j < arrow.count; ++j) needed |= sem.temporary_cleanup(sem.arrow_steps[arrow.first+j].temporary);
     auto expression = sem.expression_fact(n);
     auto incoming = expression.incoming;
     if (incoming && !omit_result) {

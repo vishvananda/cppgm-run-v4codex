@@ -110,7 +110,18 @@ void Procedural::global(EntityId e)
                 item.symbol = vtable_symbol(cls); item.addend = 16; p.data.push_back(item);
                 if (sem.object_size(t) > 8) { DataItem zero; zero.zero_bytes = sem.object_size(t)-8; p.data.push_back(zero); }
             }
-            else if (g.structured && entity.constant.valid) global_constant_fields(sem.constant_value_data(entity.constant),t);
+            else if (g.structured && entity.constant.valid) {
+                auto ctor = sem.object_constructor(e);
+                if (!ctor) {
+                    auto source = sem.class_initialization(entity.initializer,t).source;
+                    if (!source) source = entity.initializer;
+                    while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::Parenthesized) source = ast[source].first;
+                    ctor = sem.facts[source].entity;
+                }
+                if (sem.constructor_member(ctor) && sem.synthetic_member(ctor) && !sem.transfer_member(ctor) && !sem.constructor_needed(ctor)) {
+                    DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
+                } else global_constant_fields(sem.constant_value_data(entity.constant),t);
+            }
             else if (!entity.initializer && entity.constant.valid) {
                 DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
                 d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant)) : Operand::integer(entity.constant.bits); p.data.push_back(d);

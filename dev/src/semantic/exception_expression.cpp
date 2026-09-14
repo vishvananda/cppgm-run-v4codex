@@ -71,6 +71,12 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     // and validity have already been checked by semantic construction.
     if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
     bool result = node.kind != Kind::Throw;
+    auto arrow = arrow_chains[object_fact(n).arrow];
+    for (unsigned j = 0; j < arrow.count; ++j) {
+        auto step = arrow_steps[arrow.first+j];
+        result &= function_nonthrowing(step.function);
+        if (step.temporary) result &= type_destructor_nonthrowing(step.result);
+    }
     if (node.kind == Kind::New) {
         auto use = placement_fact(n);
         result &= function_nonthrowing(use.allocation);
@@ -96,7 +102,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     bool call = (node.kind == Kind::Call && x.form != ExpressionForm::Cast &&
         x.form != ExpressionForm::ListValue && x.form != ExpressionForm::PseudoDestructor) ||
         x.form == ExpressionForm::OperatorCall || (callee && constructor_member(callee));
-    if (call) result &= callee && function_nonthrowing(callee);
+    if (call && x.form != ExpressionForm::Expect) result &= callee && function_nonthrowing(callee);
     if (object_fact(n).temporary && class_value(x.type)) result &= type_destructor_nonthrowing(x.type);
     if (x.incoming) result &= conversion_nonthrowing(conversions[x.incoming]);
     for (unsigned i = 0; i < x.count; ++i) result &= conversion_nonthrowing(conversions[x.conversions+i]);

@@ -212,6 +212,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
     if (value_argument(pattern) || value_argument(actual)) {
         if (!value_argument(pattern) || !value_argument(actual)) return false;
         auto q = type_queries[argument_query(pattern)];
+        while (q.kind == QueryKind::Cast && q.op == TOK_INVALID) q = type_queries[query_edges[q.offset]];
         if (q.kind == QueryKind::TemplateValueParameter) {
             auto previous = bindings.get(q.entity);
             if (previous && previous != actual) return false;
@@ -277,7 +278,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings)
                         if (!deduce_type(argument_types[px.offset+k],argument_types[py.offset+k],bindings)) return false;
                 }
             } else if (value_argument(argument_types[x.offset+j]) || value_argument(argument_types[y.offset+j])) {
-                if (argument_types[x.offset+j] != argument_types[y.offset+j] && !dependent_argument(argument_types[x.offset+j])) return false;
+                if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],bindings)) return false;
             } else if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],bindings)) return false;
         return true;
     }
@@ -462,6 +463,21 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b)
     };
     auto x = shape(a), y = shape(b);
     Index xy, yx;
-    return deduce_type(y,x,yx) && !deduce_type(x,y,xy);
+    bool accepts_a = deduce_type(y,x,yx), accepts_b = deduce_type(x,y,xy);
+    if (!accepts_a || !accepts_b) return accepts_a && !accepts_b;
+    // [temp.deduct.partial]/9: when both transformed reference parameters
+    // deduce, the more cv-qualified referred-to type is more specialized.
+    auto left = types[x], right = types[y]; bool stricter = false;
+    if (left.count != right.count) return false;
+    for (unsigned i = 0; i < left.count; ++i) {
+        auto p = types[types.parameters[left.offset+i]], q = types[types.parameters[right.offset+i]];
+        bool pr = p.kind == TypeKind::LRef || p.kind == TypeKind::RRef;
+        bool qr = q.kind == TypeKind::LRef || q.kind == TypeKind::RRef;
+        if (!pr || !qr) continue;
+        auto pcv = types[p.child].cv, qcv = types[q.child].cv;
+        if (qcv & ~pcv) return false;
+        stricter |= pcv != qcv;
+    }
+    return stricter;
 }
 } }

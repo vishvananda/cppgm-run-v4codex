@@ -9,7 +9,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
         zero_object(sem.entities[cls].type,object);
     }
-    if (sem.direct_transfer(ctor)) {
+    if (sem.direct_transfer(ctor) || (sem.trivial_transfer(ctor) && !sem.entities[ctor].source && !sem.member_fact(ctor).retained_root)) {
         TypeId target = sem.entities[sem.scopes[sem.entities[ctor].owner].entity].type;
         auto fact = sem.expression_fact(init);
         if (sem.empty_class(target)) {

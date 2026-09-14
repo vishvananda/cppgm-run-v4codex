@@ -290,7 +290,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect };
 enum class CallInputs : unsigned char { Concrete, Source, Context };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
@@ -311,9 +311,16 @@ struct Expression {
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0;
+    std::uint32_t arrow = 0;
     std::uint32_t virtual_slot = 0;
     unsigned adjustment = 0; std::uint32_t callee_conversion = 0;
     bool value_initialize = false, source_owned = false; };
+struct ArrowStep {
+    EntityId function = 0, temporary = 0;
+    TypeId result = 0;
+    unsigned adjustment = 0, virtual_slot = 0;
+};
+struct ArrowChain { std::uint32_t first = 0, count = 0; TypeId type = 0; };
 struct Conversion {
     TypeId target = 0;
     std::uint32_t adjustment = 0; // Zero: no projection; otherwise byte offset + 1.

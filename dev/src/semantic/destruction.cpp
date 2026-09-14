@@ -35,6 +35,7 @@ EntityId Analyzer::destructor_declaration(TypeId t)
     while (types[t].kind == TypeKind::Array) t = types[t].child;
     if (types[t].kind != TypeKind::Named || !entities[types[t].entity].class_info) return 0;
     EntityId cls = types[t].entity;
+    complete_class(cls);
     auto c = entities[cls].class_info;
     EntityId dtor = class_facts[c].destructor;
     if (!dtor) {

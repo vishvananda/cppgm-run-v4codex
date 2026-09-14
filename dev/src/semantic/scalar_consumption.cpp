@@ -48,6 +48,7 @@ unsigned char Analyzer::scalar_truth(NodeId n)
     };
     Constant value = literal(n);
     EntityId object = expressions[n].entity;
+    if (!value.valid && ast[n].kind == Kind::IdExpression && object) value = entities[object].constant;
     if (!value.valid && private_scalar(object) && integral(entities[object].type)) {
         NodeId source = entities[object].initializer;
         while (source && (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer ||

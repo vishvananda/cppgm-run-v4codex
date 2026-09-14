@@ -84,12 +84,14 @@ std::uint32_t Analyzer::query_value(QueryId id)
             if (type_queries[left].kind == QueryKind::String)
                 value = literal_element(type_queries[left].value,constants[query_value(right)]);
         } else if (!fact.selected && query.kind == QueryKind::Binary) {
-            auto a = constants[query_value(query_edges[query.offset])];
+            auto a = fact.expression.count == 2 ? constant_query_conversion(query_edges[query.offset],conversions[fact.expression.conversions]) :
+                constants[query_value(query_edges[query.offset])];
             if (a.valid) {
                 if (query.op == OP_LAND && !constant_truth(a)) value = Constant(types.fundamental(FT_BOOL),0);
                 else if (query.op == OP_LOR && constant_truth(a)) value = Constant(types.fundamental(FT_BOOL),1);
                 else {
-                    auto b = constants[query_value(query_edges[query.offset+1])];
+                    auto b = fact.expression.count == 2 ? constant_query_conversion(query_edges[query.offset+1],conversions[fact.expression.conversions+1]) :
+                        constants[query_value(query_edges[query.offset+1])];
                     if (query.op == OP_COMMA) value = b;
                     else if (fact.expression.count == 2) {
                         auto begin = fact.expression.conversions;

@@ -24,6 +24,13 @@ void Analyzer::prepare_static_vptrs()
         EntityId cls = types[object.type].entity;
         if (ctor.synthetic && ctor.transfer == TransferKind::None && !ctor.inherited_constructor &&
             !ctor.delegated_constructor && !ctor.action_count && polymorphic(cls)) static_vptr_objects.put(action.object,cls);
+        else if (entities[action.constructor].constexpr_function && polymorphic(cls) && size(object.type) == 8) {
+            auto value = constant_construct(action.constructor,{});
+            if (value.valid) {
+                auto data = constant_value_data(value);
+                if (data.valid && !data.count) static_vptr_objects.put(action.object,cls);
+            }
+        }
     }
 }
 std::uint32_t Analyzer::constant_constructor(EntityId ctor)

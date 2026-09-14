@@ -26,6 +26,13 @@ Constant Analyzer::evaluated_object(TypeId t, const std::vector<EvaluatedPart>& 
         if (same) return Constant(t,i);
     }
     EvaluatedObject v; v.type = t; v.first = evaluated_parts.size(); v.count = parts.size(); v.next = evaluated_object_index.get(h);
+    v.addresses = evaluated_address_parts.size();
+    for (unsigned i = 0; i < parts.size(); ++i) {
+        auto value = parts[i].value; auto k = types[value.type].kind;
+        bool address = (k == TypeKind::Pointer || k == TypeKind::LRef || k == TypeKind::RRef) && value.bits;
+        if (class_value(value.type) || k == TypeKind::Array) address = evaluated_objects[value.bits].address_count;
+        if (address) { evaluated_address_parts.push_back(v.first+i); ++v.address_count; }
+    }
     auto id = evaluated_objects.size(); evaluated_objects.push_back(v);
     evaluated_parts.insert(evaluated_parts.end(),parts.begin(),parts.end());
     evaluated_object_index.put(h,id);

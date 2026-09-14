@@ -1,0 +1,55 @@
+#include "semantic/analyzer.h"
+#include <stdexcept>
+namespace cppgm { namespace semantic {
+std::uint32_t Analyzer::prepare_arrow(NodeId n, ScopeId s)
+{
+    auto object = expressions[n];
+    if (!class_value(object.type)) return 0;
+    std::vector<ArrowStep> steps; Index seen;
+    while (class_value(object.type)) {
+        auto cls = types[object.type].entity;
+        size(object.type);
+        auto naming = entities[cls].scope;
+        auto family = lookup(naming,operator_name(OP_ARROW),Lookup::Ordinary,true);
+        std::vector<Conversion> chosen;
+        auto selection = select_call(family,{},nullptr,object.type,object.category,naming,0,chosen);
+        if (selection.failure != CallFailure::None) throw std::runtime_error("no unique operator->");
+        auto e = selection.entity;
+        if (seen.get(e)) throw std::runtime_error("recursive operator-> result type");
+        seen.put(e,1);
+        check_access(e,s,naming,object.type);
+        demand_member(e); demand_specialization(e);
+        ArrowStep step; step.function = e; step.result = types[entities[e].type].child;
+        step.adjustment = base_steps(object.type,scopes[entities[e].owner].entity);
+        step.virtual_slot = members[entities[e].member_info].virtual_slot;
+        object.type = value_type(step.result);
+        object.category = types[step.result].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+            types[step.result].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+        if (class_value(object.type) && object.category == ValueCategory::Prvalue) {
+            step.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,s),0,n);
+            entities[step.temporary].type = object.type; register_destruction(step.temporary);
+        }
+        steps.push_back(step);
+    }
+    if (!pointer(object.type)) throw std::runtime_error("operator-> must end in a pointer");
+    ArrowChain chain; chain.first = arrow_steps.size(); chain.count = steps.size(); chain.type = object.type;
+    auto id = arrow_chains.size(); arrow_chains.push_back(chain);
+    arrow_steps.insert(arrow_steps.end(),steps.begin(),steps.end()); return id;
+}
+std::uint32_t Analyzer::constant_arrow(NodeId n, std::uint32_t id)
+{
+    auto object = constant_node_object(n);
+    auto chain = arrow_chains[id];
+    for (unsigned i = 0; object && i < chain.count; ++i) {
+        auto step = arrow_steps[chain.first+i];
+        if (step.virtual_slot) return 0;
+        object = constant_base_address(object,entities[scopes[entities[step.function].owner].entity].type);
+        auto value = execute_constant(step.function,{},object);
+        if (!value.valid) return 0;
+        auto kind = types[value.type].kind;
+        object = kind == TypeKind::Pointer || kind == TypeKind::LRef || kind == TypeKind::RRef ? value.bits :
+            constant_storage_address(value.type,value);
+    }
+    return object;
+}
+} }

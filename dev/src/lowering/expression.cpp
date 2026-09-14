@@ -135,11 +135,16 @@ Value Procedural::expression(NodeId n, bool location)
     case Kind::Member: {
         auto member = sem.entities[fact.entity];
         if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && member.constant.valid && !location)) {
-            discard(a, false);
+            if (sem.object_fact(n).arrow) arrow_object(a,sem.object_fact(n).arrow);
+            else discard(a, false);
             return constant_operand(member.constant,fact.type);
         }
-        if (member.is_static) { discard(a, false); return binding(fact.entity); }
-        Value base = node.op == OP_ARROW ? load(expression(a)) : address(expression(a, true));
+        if (member.is_static) {
+            if (sem.object_fact(n).arrow) arrow_object(a,sem.object_fact(n).arrow);
+            else discard(a, false);
+            return binding(fact.entity);
+        }
+        Value base = node.op == OP_ARROW ? arrow_object(a,sem.object_fact(n).arrow) : address(expression(a, true));
         Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
@@ -312,6 +317,11 @@ Value Procedural::call(NodeId n, Value destination)
     }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     if (fact.form == semantic::ExpressionForm::Abort) return abort_call();
+    if (fact.form == semantic::ExpressionForm::Expect) {
+        auto value = converted(sem.call_argument(fact,0),sem.conversion_fact(fact.conversions));
+        converted(sem.call_argument(fact,1),sem.conversion_fact(fact.conversions+1));
+        return value;
+    }
     bool class_result = sem.class_value(sem.facts[n].type);
     SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && unwind_expression(n) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();
     bool indirect_result = sem.indirect_value(sem.facts[n].type);
@@ -328,13 +338,19 @@ Value Procedural::call(NodeId n, Value destination)
     } else if (object_use.type) {
         Value object;
         if (object_use.node) {
-            object = expression(object_use.node, true);
-            object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
+            if (object_use.arrow) object = arrow_object(object_use.node,object_use.arrow);
+            else {
+                object = expression(object_use.node, true);
+                object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
+            }
         } else object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         call_work.push_back(base_projection(object, sem.object_fact(n).adjustment).operand);
     } else if (object_use.node) {
-        Value object = expression(object_use.node);
-        if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
+        if (object_use.arrow) arrow_object(object_use.node,object_use.arrow);
+        else {
+            Value object = expression(object_use.node);
+            if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
+        }
     }
     if (fact.form == semantic::ExpressionForm::LiteralCall) literal_arguments(n);
     // The course's indirect-call fixtures evaluate arguments before fetching

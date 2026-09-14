@@ -153,6 +153,17 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             global_allocation(operator_token(detail),array_operator(detail));
         EntityId e = detail && ast[detail].kind == Kind::Name && !ast[ast[detail].first].detail ? resolve(detail, s) : 0;
         bool builtin_name = ast[detail].kind == Kind::Name && ast[detail].first == ast[detail].last;
+        if (!e && builtin_name && name == expect_builtin) {
+            if (args.size() != 2) throw std::runtime_error("expect takes two arguments");
+            result.type = types.fundamental(FT_LONG_INT); result.form = ExpressionForm::Expect;
+            std::vector<Conversion> chosen;
+            for (auto arg : args) {
+                auto c = conversion(arg,result.type);
+                if (!c.valid()) throw std::runtime_error("invalid expect operand");
+                chosen.push_back(c);
+            }
+            record_call(result,args,chosen); return result;
+        }
         if (!e && builtin_name && name == constant_builtin) {
             if (args.size() != 1) throw std::runtime_error("constant query arity");
             result.type = types.fundamental(FT_INT); result.form = ExpressionForm::ConstantQuery;
@@ -280,7 +291,10 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         object_node = ast[designator].first;
         object_type = expressions[object_node].type;
         if (ast[designator].op != OP_ARROW) object_category = expressions[object_node].category;
-        if (ast[designator].op == OP_ARROW) object_type = types[object_type].child;
+        if (ast[designator].op == OP_ARROW) {
+            auto arrow = object_uses[fn.object_use].arrow;
+            object_type = types[arrow ? arrow_chains[arrow].type : object_type].child;
+        }
     } else {
         TypeId implicit = implicit_object_type(s);
         if (implicit) object_type = types[implicit].child;
@@ -307,6 +321,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         }
         ft = entities[selected].type;
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);
+        if (result.object_use) object_uses[result.object_use].arrow = object_uses[fn.object_use].arrow;
         Type selected_type = types[ft];
         for (unsigned j = 0; j < selected_type.count; ++j) reject_abstract(types.parameters[selected_type.offset+j]);
         for (std::size_t i = args.size(); i < selected_type.count; ++i) {

@@ -31,6 +31,8 @@ public:
         return use.source_owned ? project_object_use(use,n) : use;
     }
     ObjectUse project_object_use(ObjectUse use, NodeId n) const;
+    std::vector<ArrowStep> arrow_steps;
+    std::vector<ArrowChain> arrow_chains = std::vector<ArrowChain>(1);
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
     EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
@@ -181,7 +183,6 @@ private:
     void check_constexpr_class(EntityId cls);
     TypeId constexpr_member_type(TypeId type, NodeId specs, NodeId source, NodeId declarator, ScopeId owner);
     Index literal_type_facts, constexpr_constructor_facts, constexpr_signature_facts, constexpr_declarations;
-    bool constant_empty_construction(EntityId constructor);
     std::size_t constexpr_validity_work = 0;
     Index class_initializer_index, class_return_index, function_return_index;
     Index reference_temporaries;
@@ -319,6 +320,8 @@ private:
     void demand_region(NodeId root);
     ExpressionStore expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
+    std::uint32_t prepare_arrow(NodeId node, ScopeId scope);
+    std::uint32_t constant_arrow(NodeId node, std::uint32_t chain);
     Index object_destructors, lifetime_index, object_lifetimes, return_counts;
     std::vector<LifetimeUse> lifetime_uses = std::vector<LifetimeUse>(1);
     std::vector<EntityId> jump_bodies;
@@ -370,7 +373,7 @@ private:
     unsigned unevaluated_depth = 0;
     struct SwitchContext { TypeId type = 0; bool has_default = false; Index labels; };
     std::vector<SwitchContext> switches;
-    IdentifierId constant_builtin = 0, abort_builtin = 0;
+    IdentifierId constant_builtin = 0, abort_builtin = 0, expect_builtin = 0;
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
     // Floating payloads are interned separately; common constants and entity
@@ -395,7 +398,6 @@ private:
         Constant result;
         FactState state = FactState::Active;
     };
-    struct ConstantReceiver { TypeId type; NodeId node; QueryId query; };
     // Mutable execution storage lives only as long as one call. Completed
     // activations retain values, never their local environments.
     struct ConstantFrame {
@@ -409,13 +411,14 @@ private:
     // Immutable aggregate payloads share typed child ranges. Storage identity
     // is separate: copies share values, never addresses or lifetimes.
     struct EvaluatedPart { std::uint64_t selector = 0, count = 1; Constant value; };
-    struct EvaluatedObject { TypeId type = 0; std::uint32_t first = 0, count = 0, next = 0; };
+    struct EvaluatedObject { TypeId type = 0; std::uint32_t first = 0, count = 0, next = 0, addresses = 0, address_count = 0; };
     struct ConstantBuilder { Index slots; std::vector<EvaluatedPart> parts; };
     std::uint32_t constant_destination = 0;
     struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; std::uint32_t version = 0; bool live = true, readable = false; };
-    struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0; };
+    struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0, offset = 0; bool located = false; };
     std::vector<EvaluatedObject> evaluated_objects = std::vector<EvaluatedObject>(1);
     std::vector<EvaluatedPart> evaluated_parts;
+    std::vector<std::uint32_t> evaluated_address_parts;
     std::vector<ConstantStorage> constant_storage = std::vector<ConstantStorage>(1);
     std::vector<ConstantAddress> constant_addresses = std::vector<ConstantAddress>(1);
     Index evaluated_object_index, evaluated_part_index, constant_address_index, constant_entity_storage, constant_literal_storage;
@@ -432,6 +435,7 @@ private:
     void check_constant_object(EntityId entity);
     std::uint32_t constant_storage_address(TypeId type, Constant value, EntityId entity = 0, NodeId literal = 0, bool readable = true);
     std::uint32_t constant_subobject(std::uint32_t parent, TypeId type, std::uint64_t selector);
+    std::uint64_t constant_offset(std::uint32_t address);
     std::uint32_t constant_entity_address(EntityId entity);
     std::uint32_t constant_address(NodeId node, ScopeId scope);
     std::uint32_t constant_base_address(std::uint32_t address, TypeId type);
@@ -443,8 +447,7 @@ private:
     Constant constant_call_result(NodeId node, ScopeId scope);
     enum class ConstantFlow : unsigned char { Next, Return, Break, Continue, Failure };
     struct ConstantStatement { ConstantFlow flow; Constant value; };
-    Index constant_node_receivers, constant_query_receivers;
-    std::vector<ConstantReceiver> constant_receivers = std::vector<ConstantReceiver>(1);
+    Index constant_query_receivers;
     Index constant_body_index, constant_activation_index;
     std::vector<ConstantBody> constant_bodies = std::vector<ConstantBody>(1);
     std::vector<ConstantActivation> constant_activations = std::vector<ConstantActivation>(1);
@@ -466,7 +469,6 @@ private:
     Constant constant_query_conversion(QueryId source, Conversion conversion);
     std::uint32_t constant_query_object(QueryId source);
     std::uint32_t constant_node_object(NodeId source);
-    bool constant_receiver_type(TypeId type);
     Constant constant_node_conversion(NodeId source, Conversion conversion, ScopeId scope);
     std::vector<ClassFacts> class_facts;
     std::vector<MemberFacts> members;

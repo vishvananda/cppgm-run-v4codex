@@ -7,6 +7,7 @@ namespace cppgm { namespace semantic {
 struct TemplateBinding {
     EntityId entity = 0;
     ScopeId scope = 0;
+    EntityId qualifier_pack = 0;
     bool dependent = false;
 };
 // Declaration/type identity is shared; a concrete owning class supplies layout.

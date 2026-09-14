@@ -24,7 +24,21 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
         constant_storage[constant_addresses[address].storage].live = false;
         constant_frame->addresses.put(e,0);
     }
-    auto value = constant_initialize(init,entities[e].type,s,object_constructor(e));
+    auto saved_destination = constant_destination;
+    auto type = entities[e].type; std::uint32_t address = 0;
+    if (class_value(type) || types[type].kind == TypeKind::Array) {
+        address = constant_storage_address(type,Constant());
+        constant_frame->addresses.put(e,address); constant_frame->storage.push_back(constant_addresses[address].storage);
+        constant_destination = address;
+    }
+    Constant value;
+    try { value = constant_initialize(init,type,s,object_constructor(e)); }
+    catch (...) { constant_destination = saved_destination; throw; }
+    constant_destination = saved_destination;
+    if (address) {
+        auto storage = constant_addresses[address].storage;
+        constant_storage[storage].value = value; constant_storage[storage].readable = value.valid;
+    }
     constant_frame->values[slot] = value;
     return value.valid;
 }

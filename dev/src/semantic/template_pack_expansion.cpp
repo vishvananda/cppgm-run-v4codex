@@ -23,7 +23,7 @@ std::uint32_t Analyzer::source_expansion_parameters(NodeId root)
         if (node.kind == Kind::PackExpression || node.kind == Kind::SizeofPack) continue;
         if (node.kind == Kind::Name) {
             auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[n].source)];
-            auto e = binding.entity;
+            auto e = binding.qualifier_pack ? binding.qualifier_pack : binding.entity;
             if (e && entities[e].parameter_pack && !parameters.get(e)) { parameters.put(e,1); params.push_back(e); }
         }
         if (node.detail) work.push_back(node.detail);
