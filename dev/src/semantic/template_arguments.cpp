@@ -30,6 +30,18 @@ ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, co
         entities[e].template_parameter = true; entities[e].type = types.named(e);
         canonical_parameters.push_back(entities[e].type);
     }
+    if (entities[parameter].key == KW_TEMPLATE) {
+        auto shape = template_head_shape(parameter); auto identity = key(shape,ordinal+1);
+        auto e = canonical_template_parameters.get(identity);
+        if (!e) {
+            e = make_entity(EntityKind::Type,0,0,0);
+            entities[e].template_parameter = true; entities[e].key = KW_TEMPLATE;
+            entities[e].type = types.named(e); entities[e].template_info = entities[parameter].template_info;
+            entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
+            canonical_template_parameters.put(identity,e);
+        }
+        return entities[e].type;
+    }
     if (entities[parameter].kind == EntityKind::Type) return canonical_parameters[ordinal];
     auto type = substitute_type(entities[parameter].type,bindings,cache);
     auto k = key(type,ordinal+1);
@@ -46,7 +58,16 @@ ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
     if (ast[n].kind == Kind::PackExpression)
         return types.compound(TypeKind::PackExpansion,0,template_argument_node(ast[n].first,scope));
     if (ast[n].kind == Kind::TypeId) {
-        auto type = type_id(n,scope);
+        auto specs = ast[n].first, spec = ast[specs].first;
+        if (!ast[spec].next && !ast[specs].next && ast[spec].detail) {
+            auto name = ast[spec].detail;
+            if (!child(ast[name].last,Kind::TemplateArguments)) {
+                auto binding = bind_template_name(name,scope);
+                auto e = template_entity(binding.dependent ? binding.entity : resolve(name,scope));
+                if (e) { auto injected = injected_template_type(e,scope); return injected ? injected : types.named(e); }
+            }
+        }
+        auto type = types.signature(type_id(n,scope));
         auto d = ast[ast[n].first].next;
         return child(d,Kind::ParameterPack) ? types.compound(TypeKind::PackExpansion,0,type) : type;
     }
@@ -54,6 +75,8 @@ ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
     if (ast[n].kind == Kind::IdExpression) {
         auto binding = bind_template_name(ast[n].detail,scope);
         auto e = binding.entity;
+        if (!child(ast[ast[n].detail].last,Kind::TemplateArguments))
+            if (auto target = template_entity(e)) return types.named(target);
         if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias))
             return type_name(ast[n].detail,scope);
     }

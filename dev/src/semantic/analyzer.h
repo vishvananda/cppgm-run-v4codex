@@ -493,7 +493,15 @@ private:
     Index object_actions, specialization_index, explicit_pack_index, parameter_ordinals;
     Index template_families, template_signatures;
     std::vector<TypeId> canonical_parameters;
-    Index canonical_value_parameters;
+    Index canonical_value_parameters, canonical_template_parameters;
+    void declare_template_parameters(NodeId parameters, ScopeId scope);
+    std::uint32_t template_head_shape(EntityId entity);
+    bool template_compatible(EntityId parameter, EntityId argument);
+    EntityId template_entity(EntityId entity) const;
+    TypeId apply_type_template(EntityId entity, const std::vector<ArgumentId>& arguments);
+    TypeId specialize_alias(EntityId entity, const std::vector<ArgumentId>& arguments);
+    Index alias_specializations;
+
     ScopeId active_template_scope = 0;
     NodeId explicit_specialization_source = 0;
     EntityId declare_class_specialization(NodeId source, ScopeId scope);
@@ -586,7 +594,7 @@ private:
     void expand_expression_list(NodeId list, ScopeId scope);
     Index source_expansion_index, expansion_scope_index, expanded_expression_lists, pack_size_entities, expansion_scope_frames;
     ScopeId expanded_scope(NodeId node, ScopeId parent);
-    bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame = 0);
+    bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame = 0, DeductionKind kind = DeductionKind::Call);
     std::uint32_t expansion_frame(std::uint32_t parent, std::uint32_t parameters, unsigned lane);
     int expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame);
     void substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame, std::vector<ArgumentId>& out);
@@ -776,7 +784,8 @@ private:
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args, bool explicit_head = false);
     bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner = 0);
-    bool deduce_type(TypeId pattern, TypeId actual, Index& bindings);
+    bool deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind = DeductionKind::Call);
+    bool deduce_sequence(const std::vector<ArgumentId>& pattern, const std::vector<ArgumentId>& actual, Index& bindings, DeductionKind kind);
     EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin = 0);
     EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args, unsigned begin = 0);
     template<class Arguments> EntityId deduce_function_values(EntityId pattern, const Arguments& args);

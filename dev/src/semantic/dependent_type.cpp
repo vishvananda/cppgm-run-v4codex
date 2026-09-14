@@ -13,7 +13,7 @@ TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vect
         throw std::runtime_error("qualified type member not found");
     if (template_id) {
         if (!entities[member].template_info) throw std::runtime_error("member is not a class template");
-        member = specialize_class(member,args);
+        return apply_type_template(member,args);
     }
     return source_type(member);
 }
@@ -77,6 +77,17 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last)
             owner = entities[types[prefix].entity].scope; qualified = true; continue;
         }
         auto e = lookup(owner,ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto template_target = template_entity(e);
+        if (list && template_target && entities[template_target].kind == EntityKind::Alias) {
+            std::vector<ArgumentId> args;
+            for (auto a = ast[list].first; a; a = ast[a].next)
+                append_template_argument(a,s,template_argument_node(a,s),args);
+            prefix = specialize_alias(template_target,args);
+            if (p == last) return prefix;
+            if (dependent_type(prefix)) continue;
+            if (types[prefix].kind != TypeKind::Named) throw std::runtime_error("alias qualifier is not a class");
+            complete_class(types[prefix].entity); owner = entities[types[prefix].entity].scope; qualified = true; continue;
+        }
         auto instance = class_template_name(p,e,s);
         if (template_type_probe && e && !instance) return 0;
         e = instance;

@@ -62,7 +62,7 @@ bool Parser::nested_declarator_ahead()
 {
     if (!in.is("(")) return false;
     return in.is("*", 1) || in.is("&", 1) || in.is("&&", 1) || in.is("[", 1) || in.is("(", 1) ||
-           (identifier(1) && (!type_start(1) || in.is("::", 2)));
+           (identifier(1) && (!type_start(1) || (in.is("::",probe_name(1).end) && in.is("*",probe_name(1).end+1))));
 }
 
 bool Parser::parameter_clause_ahead()

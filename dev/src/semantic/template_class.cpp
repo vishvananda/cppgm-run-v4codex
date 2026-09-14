@@ -54,6 +54,11 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s)
     auto index = entities[e].template_info;
     if (previous.environment && previous.count != templates[index].count) throw std::runtime_error("different template parameter count");
     auto current = templates[index];
+    if (previous_index) {
+        entities[e].template_info = previous_index; auto old_shape = template_head_shape(e);
+        entities[e].template_info = index;
+        if (old_shape != template_head_shape(e)) throw std::runtime_error("template head shape differs across declarations");
+    }
     // A later declaration adds defaults to the canonical head without replacing
     // the definition's parameter environment or reinterpreting its source names.
     if (previous.body) { index = previous_index; entities[e].template_info = index; }
@@ -133,7 +138,11 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
                 // An expansion retains its own source parameter until the
                 // enclosing specialization supplies concrete pack boundaries.
                 if (!value_argument(value) && types[value].kind == TypeKind::PackExpansion) continue;
-                if (entities[p].kind == EntityKind::Type) { if (value_argument(value)) return false; }
+                if (entities[p].kind == EntityKind::Type) {
+                    if (value_argument(value)) return false;
+                    auto target = types[value].kind == TypeKind::Named ? template_entity(types[value].entity) : 0;
+                    if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target) : target != 0) return false;
+                }
                 else {
                     auto target = substitute_type(entities[p].type,bindings,cache);
                     value = target ? convert_argument(value,target) : 0;
@@ -157,6 +166,8 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
         }
         if (entities[p].kind == EntityKind::Type) {
             if (value_argument(args[j])) return false;
+            auto target = types[args[j]].kind == TypeKind::Named ? template_entity(types[args[j]].entity) : 0;
+            if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target) : target != 0) return false;
         } else {
             if (!value_argument(args[j])) return false;
             auto target = substitute_type(entities[p].type,bindings,cache);
@@ -213,15 +224,33 @@ ScopeId Analyzer::specialization_environment(EntityId e)
 }
 EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
 {
-    if (!e || !entities[e].class_info) return e;
+    auto context = ast.nodes.occurrences[part].context;
+    if (context && e && entities[e].template_parameter) {
+        auto value = substitution_argument(template_type_contexts.get(context),e);
+        if (value && !value_argument(value) && types[value].kind == TypeKind::Named) e = types[value].entity;
+    }
+    if (auto target = template_entity(e)) e = target;
     auto list = child(part,Kind::TemplateArguments);
-    if (!list) return e;
+    if (!list || !e) return e;
+    if (entities[e].template_info && entities[e].kind == EntityKind::Alias) {
+        std::vector<ArgumentId> args;
+        for (auto a = ast[list].first; a; a = ast[a].next)
+            append_template_argument(a,s,template_argument_node(a,s),args);
+        auto type = specialize_alias(e,args);
+        return types[type].kind == TypeKind::Named ? types[type].entity : e;
+    }
+    if (!entities[e].class_info) return e;
     EntityId pattern = entities[e].template_info ? e : entities[e].specialization ? specialization_pattern(e) : 0;
     if (pattern && templates[entities[pattern].template_info].primary) pattern = templates[entities[pattern].template_info].primary;
     if (!pattern) throw std::runtime_error("template-id names a nontemplate class");
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
         auto type = template_argument_node(a,s);
+        auto context = ast.nodes.occurrences[a].context;
+        if (context && !value_argument(type) && types[type].kind == TypeKind::Function && dependent_argument(type)) {
+            Index bindings, cache;
+            type = substitute_argument(type,bindings,cache,template_type_contexts.get(context));
+        }
         if (template_type_probe && !type) return 0;
         append_template_argument(a,s,type,args);
     }

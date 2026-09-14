@@ -54,6 +54,8 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
             if (t.kind == TypeKind::Named) {
                 if (entities[t.entity].template_parameter) parameter = t.entity;
                 else if (entities[t.entity].specialization) {
+                    auto primary = specialization_pattern(t.entity);
+                    if (entities[primary].template_parameter) work.push_back(entities[primary].type);
                     auto args = specialization_arguments(t.entity);
                     for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
                 }
@@ -74,16 +76,20 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
     }
     auto id = intern_arguments(result); expansion_parameter_index.put(pattern,id); return id;
 }
-bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame)
+bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame, DeductionKind kind)
 {
     auto list = argument_packs[expansion_parameters(pattern)];
     std::vector<std::vector<ArgumentId>> values(list.count);
+    std::vector<ArgumentId> previous;
+    for (unsigned j = 0; j < list.count; ++j) previous.push_back(bindings.get(argument_types[list.offset+j]));
     for (unsigned j = 0; prefix_frame && j < list.count; ++j) {
         auto prefix = unexpanded_argument(prefix_frame,argument_types[list.offset+j]);
         if (prefix && argument_pack(prefix) && pack_arguments(prefix).count > actual.size()) return false;
     }
     unsigned lane = 0;
     for (auto a : actual) {
+        bool symbolic = !value_argument(a) && types[a].kind == TypeKind::PackExpansion;
+        if (symbolic) a = types[a].bound;
         auto frame = prefix_frame;
         for (unsigned j = 0; j < list.count; ++j) {
             auto p = argument_types[list.offset+j]; ArgumentId fixed = 0;
@@ -97,17 +103,20 @@ bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& a
         }
         Index empty, cache;
         auto element = frame ? substitute_argument(pattern,empty,cache,frame) : pattern;
-        if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings))) return false;
-        if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings)) return false;
+        if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings,kind))) return false;
+        if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings,kind)) return false;
         ++lane;
         for (unsigned j = 0; j < list.count; ++j) {
             auto value = bindings.get(argument_types[list.offset+j]);
             if (!value) return false;
-            values[j].push_back(value);
+            values[j].push_back(symbolic ? types.compound(TypeKind::PackExpansion,0,value) : value);
         }
     }
-    for (unsigned j = 0; j < list.count; ++j)
-        bindings.put(argument_types[list.offset+j],make_argument_pack(values[j]));
+    for (unsigned j = 0; j < list.count; ++j) {
+        auto value = make_argument_pack(values[j]);
+        if (previous[j] && previous[j] != value) return false;
+        bindings.put(argument_types[list.offset+j],value);
+    }
     return true;
 }
 ArgumentId Analyzer::unexpanded_argument(std::uint32_t frame, EntityId parameter) const
@@ -146,20 +155,24 @@ std::uint32_t Analyzer::expansion_context(std::uint32_t frame)
 }
 std::uint32_t Analyzer::expansion_frame(std::uint32_t parent, std::uint32_t parameters, unsigned lane)
 {
-    auto list = argument_packs[parameters]; std::vector<ArgumentId> overlay;
+    auto list = argument_packs[parameters]; std::vector<ArgumentId> overlay; bool symbolic = false;
     for (unsigned i = 0; i < list.count; ++i) {
         auto parameter = argument_types[list.offset+i];
         auto arg = unexpanded_argument(parent,parameter);
         if (!argument_pack(arg)) throw std::logic_error("expansion lacks pack arguments");
         auto args = pack_arguments(arg);
         if (lane >= args.count) throw std::logic_error("pack expansion lane out of bounds");
-        overlay.push_back(parameter); overlay.push_back(argument_types[args.offset+lane]);
+        auto value = argument_types[args.offset+lane];
+        if (!value_argument(value) && types[value].kind == TypeKind::PackExpansion) {
+            symbolic = true; value = types[value].bound;
+        }
+        overlay.push_back(parameter); overlay.push_back(value);
     }
     auto pack = intern_arguments(overlay);
-    auto identity = intern_arguments({pack,parameters,lane});
+    auto identity = intern_arguments({pack,parameters,lane,symbolic ? 1u : 0u});
     auto k = key(parent,identity);
     if (auto old = expansion_frame_index.get(k)) return old;
-    TemplateSubstitutionFrame f; f.parent = parent; f.overlay = pack; f.expansion = true;
+    TemplateSubstitutionFrame f; f.parent = parent; f.overlay = pack; f.expansion = true; f.symbolic = symbolic;
     auto id = substitution_frames.size(); substitution_frames.push_back(f);
     expansion_frame_index.put(k,id); ++expansion_lanes; return id;
 }
@@ -171,8 +184,11 @@ void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index
         auto params = expansion_parameters(pattern);
         auto count = expansion_count(params,bindings,frame);
         if (count >= 0 && frame) {
-            for (int j = 0; j < count; ++j)
-                out.push_back(substitute_argument(pattern,bindings,cache,expansion_frame(frame,params,j)));
+            for (int j = 0; j < count; ++j) {
+                auto lane = expansion_frame(frame,params,j);
+                auto value = substitute_argument(pattern,bindings,cache,lane);
+                out.push_back(substitution_frames[lane].symbolic ? types.compound(TypeKind::PackExpansion,0,value) : value);
+            }
             return;
         }
     }

@@ -66,7 +66,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_specialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_variable
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_packs semantic/template_pack_expansion semantic/query_new
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_pattern_selection
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_pattern_selection semantic/template_deduction
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_binding semantic/template_binding_declarations semantic/template_binding_statements semantic/template_checks
@@ -91,7 +91,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_operator_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_initialization_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_destructor_facts
 
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_arguments
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_arguments semantic/template_entities
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_objects semantic/constant_addresses semantic/constant_execution
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_queries
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_conversion

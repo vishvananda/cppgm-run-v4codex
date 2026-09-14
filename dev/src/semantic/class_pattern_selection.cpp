@@ -74,7 +74,7 @@ bool Analyzer::match_class_pattern(EntityId pattern, std::uint32_t arguments, st
     if (source.count != actual.count) return false;
     Index bindings, cache;
     for (unsigned j = 0; j < source.count; ++j)
-        if (!deduce_type(argument_types[source.offset+j],argument_types[actual.offset+j],bindings)) return false;
+        if (!deduce_type(argument_types[source.offset+j],argument_types[actual.offset+j],bindings,DeductionKind::ClassPattern)) return false;
     bool packs = false;
     for (unsigned j = 0; j < head.count; ++j) {
         auto value = bindings.get(template_parameters[head.offset+j]);

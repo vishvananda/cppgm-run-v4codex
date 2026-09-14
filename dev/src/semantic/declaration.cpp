@@ -128,31 +128,7 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         return;
     }
     ScopeId ts = make_scope(ScopeKind::Template, s);
-    for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
-        if (definitions && ast[p].kind == Kind::NonTypeParameter) {
-            auto specs = ast[p].first;
-            auto d = child(p,Kind::Declarator);
-            auto type = declarator(d,specifiers(specs,ts),ts);
-            if (!dependent_type(type) && !integral(type)) throw std::runtime_error("integral template parameter required");
-            auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
-            entities[e].template_parameter = true;
-            entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0; entities[e].type = types.unqualified(type);
-            entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
-            bind(ts,entities[e].name,e); record(ts,e,p,type,EntityKind::Parameter);
-            continue;
-        }
-        if (ast[p].kind != Kind::TypeParameter) continue;
-        NodeId identifier = child(p, Kind::Identifier);
-        if (!identifier && !definitions) continue;
-        IdentifierId name = ast[identifier].text;
-        EntityId e = make_entity(EntityKind::Type, ts, name, p);
-        entities[e].key = child(p, Kind::TemplateTemplate) ? KW_TEMPLATE : KW_TYPENAME;
-        entities[e].template_parameter = true;
-            entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0;
-        entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
-        entities[e].type = types.named(e);
-        bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
-    }
+    declare_template_parameters(params,ts);
     ScopeId saved = active_template_scope; active_template_scope = ts;
     if (definitions) check_template_parameters(ast[params].next,ts);
     if (!definitions || !retain_template_definition(ast[params].next,ts)) declaration(ast[params].next, ts);
@@ -246,6 +222,14 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         TypeId t = type_id(ast[n].first, s);
         EntityId e = declare_alias(s, ast[n].text, n, t);
         record(s, e, n, t, EntityKind::Alias);
+        if (definitions && s == active_template_scope) {
+            template_facts(e,s);
+            for (auto d = scopes[s].first_decl; d; d = declarations[d].next) {
+                auto parameter = declarations[d].entity;
+                if (entities[parameter].template_parameter && entities[parameter].initializer)
+                    template_default_types.put(parameter,template_argument_node(ast[entities[parameter].initializer].first,s));
+            }
+        }
         break;
     }
     case Kind::SimpleDeclaration: case Kind::Function: simple(n, s); break;

@@ -40,7 +40,14 @@ optimization benefit from newly accepted inputs.
 
 ## Handoff ledger
 
-Implementation in progress. Initial related group is not a stopping boundary.
+Increment 1 implements strict class-shape deduction (array bounds, function
+qualifiers and parameter adjustment), symbolic/repeated pack substitution,
+retained nested template heads, parameter-kind/arity matching, namespace alias
+template application and identity, and split-`>>` argument classification.
+Twenty-four explicit controls pass (16 native, 8 rejection). Earlier alias and
+pack regressions found during development were repaired. Initial related group
+is not a stopping boundary: continue default-coverage ordering and remaining
+namespace shape/argument defects before handoff.
 Independent review remains pending for all changes; unanswered review questions
 are separate from unfinished implementation above. Final ledger will record
 completed behavior, test delta, performance evidence and concrete remaining boundary.

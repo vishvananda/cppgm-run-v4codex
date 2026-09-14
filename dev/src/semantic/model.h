@@ -48,6 +48,7 @@ struct UnavailableSemanticFact : std::exception {
 };
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion };
+enum class DeductionKind : unsigned char { Call, ClassPattern };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {
