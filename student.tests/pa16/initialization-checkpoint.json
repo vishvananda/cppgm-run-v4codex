@@ -1,0 +1,171 @@
+{
+  "entry_commit": "fe4dbd88712f3b87c478084e1b48887315c13e10",
+  "implementation_commit": "fc309df7",
+  "implementation_tree": [
+    248,
+    "6117ab5c69b212b9fa78214d12cdc331310298f73d2d55a008eaa8cf0f49e9a3"
+  ],
+  "course_tree": [
+    9108,
+    "16714934266699224702497ddba0d988205e0fc1426c669d4b336deae0673cd1"
+  ],
+  "compiler_sha256": "938f41216b190519ecb497def8b5b960f12257af73f8872375c534dc6de1047d",
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42",
+  "performance_sha256": "df6e606b73ba6383ea49798383a2fddfa73fa68ff62aadbecc463d945da86c08",
+  "performance_artifacts": {
+    "student.tests/pa16/initialization-performance.json": "df6e606b73ba6383ea49798383a2fddfa73fa68ff62aadbecc463d945da86c08",
+    "student.tests/pa16/initialization-performance-initial.json": "c122d7550f97db69dd60213a3746a2563b3dfab9291a352362614edc78f9868b",
+    "student.tests/pa16/initialization-noise.json": "1be60876759f9eeb3ab3ddd0005f4b7ba52b1f0b91f2875304caf45830d52666",
+    "student.tests/pa16/lifecycle-performance.json": "c376a02a593eac3b7c351b52c6f2a2555a213d53980aae03558af4f6ce596989"
+  },
+  "checks": {
+    "stageTests": {
+      "command": "make test-pa16",
+      "exit_code": 2,
+      "passed": 153,
+      "total": 154,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/stage.log"
+    },
+    "priorThroughTests": {
+      "command": "make test-report-through-pa15",
+      "exit_code": 0,
+      "passed": 2112,
+      "total": 2112,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/prior-through.log"
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa16 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/file-audit.log"
+    },
+    "throughReport": {
+      "command": "make test-report-through-pa16",
+      "exit_code": 2,
+      "passed": 2265,
+      "total": 2266,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/through-array.log"
+    },
+    "stageProgress": {
+      "baseline_failures": 8,
+      "current_failures": 1,
+      "resolved_entry_failures": 7,
+      "new_failures": 0,
+      "coverage_preserved": true,
+      "passed": true
+    },
+    "personal": {
+      "inherited_native": 173,
+      "inherited_rejections": 75,
+      "new_native": 32,
+      "new_rejections": 2,
+      "reference_failures_observed": 7,
+      "pending_implementation_reducers": 1
+    }
+  },
+  "remaining_course_failures": [
+    "pa16/tests/general/400-constexpr-dependent-nonliteral-result-instantiation.t"
+  ],
+  "controls": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/controls.json",
+  "pending_evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/pending.json",
+  "harnesses": {
+    "student.tests/pa16/initialization.py": "69db2396befe1177c06a73ddd7eb1d06bd5e3e24a3eaec83b7b395c5c505ebd7",
+    "student.tests/pa16/initialization_benchmark.py": "43a4e7a78e86c8ff511c95f7b4859de1721b0f53cfe0e377fea849de55164237",
+    "student.tests/pa16/initialization_noise.py": "70df2614c22d667af1c9a6326926ec408b8ff67b80aefdeb51a353612610f74f",
+    "student.tests/pa16/lifecycle_benchmark.py": "fd7978f5cc42d6787e9c626c5d2618f8368836dc65be4639a623d6aec111e562",
+    "student.tests/pa16/verify_initialization.py": "641ad135ffcd0b6b0a8f1ddfa20dae454b64750628bcd3e46583d9aac0169ac5",
+    "student.tests/pa16/initialization-reference-revisions.json": "e81a22e2df83ac557970f6ac0e4d3f183535e29d219de572d5b6474452bfa249",
+    "student.tests/pa16/initialization/lifecycle_caller.cpp": "3900ebaa613c832f9a21d4e4cc7085369e66ff88c4c9780d3eb8f41ea02038d3",
+    "student.tests/pa16/initialization/automatic_array.cpp": "d2653e169ce432a6ef94c7c1baba4605dc4963b155b436a51fa4da97757e4ac3",
+    "student.tests/pa16/initialization/order_string.cpp": "77a4675d9fa183154efca499c9397c5dd06453320172ceaf9f8b486806e66b61",
+    "student.tests/pa16/initialization/order_base.cpp": "3141640e6ed176e1b8ee7a89bb855cd51635e848b09aa14a2b2367c9c69ae15c",
+    "student.tests/pa16/initialization/order_unary.cpp": "38df3c24fc508a2946f2fe51d84f24a4556388d6f584d6ea1720b2e06e893dfb",
+    "student.tests/pa16/initialization/member_pointer_pending.cpp": "07ea519dd1728b90e73e1eb95cc557b0a71472afbfb3b82aa5160755aa973cf3",
+    "student.tests/pa16/initialization/order_pointer.cpp": "8081e8905e29cf11579deb633576a6ae39f918e9a4cf708460e77af87cb5d86e",
+    "student.tests/pa16/initialization/local_order_caller.cpp": "7e987d2e50ac3f68e5c6a7faf2c0aad02d2c220b2ff6c8003735e420a751da50",
+    "student.tests/pa16/initialization/local_order_definition.cpp": "64e2b08764421346e2414e9a2bb75098c310f1380c352574bd0249cc156be820",
+    "student.tests/pa16/initialization/lifecycle_second.cpp": "fff302d0dbca15be9f2d76231df945481f8da40f04b39a589c3f7113453c2f19",
+    "student.tests/pa16/initialization/order_ref.cpp": "8a0873c0c99930ca0d71a5d5a71d332bda5a53962253a0a9dd2392cfc24857e9",
+    "student.tests/pa16/initialization/empty_result.cpp": "628214c685f826c075ab9a255ba4ffd467a1a4531465ab00975de00848c21f63",
+    "student.tests/pa16/initialization/order_point.cpp": "ed746c3eeb52c295eb07d2c81c44289c5c2cb723af11dfef36408ed6f49f7cda",
+    "student.tests/pa16/initialization/local_order.cpp": "762504ac0540fe7a8c637fe3d405d47865fb297d378782ea98e6c7d6956de5fe"
+  },
+  "artifacts": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/audit-controls.json",
+      "sha256": "6631dd742cbc7114934eb55865d6cccd37fd97843ee6ee12c594d3a8b050fc3a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/audit-controls.log",
+      "sha256": "e9516553514a70396edbd6abc7624b6981a606e318a3cf1b3ea0542028215389"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/controls.json",
+      "sha256": "1c7b34114cd3ac5fdff266f1450ca6fcc123a809113e5985ddbe24abeba11c4c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/controls.log",
+      "sha256": "10d2cf61c153d9e68fbdf00f8e77937b801bf2f49508b4847810a87e48c4c915"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/entry-stage.log",
+      "sha256": "0c98d67d0d08541ba0798050bfa09e1831ad2f6fdade7a5e4c96ddb3a79fb5e4"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/file-audit.log",
+      "sha256": "abbc0b19c03c522f1d1a52698772f0f70c5f72f3c55e024183371bc62b6cde1c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/floating.log",
+      "sha256": "f73e6f51816d6d16471fd22392bbf61644daf8a06360ac91504e6a6774e9151c"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/multitu.json",
+      "sha256": "03c2d148a0497c2e2066d1e67e40a077c8435b67369ff14aa8f7b1c36ff0a6c6"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/noexcept.log",
+      "sha256": "4c5a53d4cc247adb3d4c550718f629bb3280b0b1bb20c8ddfbe667012b7279ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/objects.json",
+      "sha256": "73c920580ff4556446f7dcdd29566a0a77b929f1c65124a0ca2a10c0ffa4b4b7"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/objects.log",
+      "sha256": "5bb8ba0602ecd303c77fb402ad79167424d7f5e9d3a6633b58a908b7cec660ae"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/pending.json",
+      "sha256": "642d46053f3e848b20e5f840ede7490c15091a29f33370b6bfa0361a8ac7465a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/prior-through.log",
+      "sha256": "00b887d8c6e9571111d9612599b83c80a45458edca7bc75881239a3db789250f"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/scalar.log",
+      "sha256": "16647795542048e2544c39afe25c66cbdba9578a3ae1bc4a88cca0a830efe506"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/stage-progress.json",
+      "sha256": "36895abe092af3ca54366c9b3fd7c13159a91d01e90592abb9a445031d4b6e12"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/stage.log",
+      "sha256": "c15c1306fb1bd226c38081e9f69f62edaf82eb05b0f0d3178fa3538a43d02c13"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/storage.log",
+      "sha256": "9da046f263c918aa7b0eaa61f346f67c4c20df693e1960dd6bbfbbcd353f1f5a"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/through-array.log",
+      "sha256": "4f11255ad8a8d253ca0086aac78143f69d9fffe9d7f6e31af24411c39cc4a2e8"
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa16-initialization-42/validity.log",
+      "sha256": "913e5b1d5cda45d99f0dbc815301f0ff13ab453c99fc799f3c91efc21a5644d5"
+    }
+  ],
+  "scope": "Incomplete implementation handoff: persistent initializer classification and storage completed for represented constant-value families; class-result ABI/cleanup comparison and member-pointer value algebra remain required. Review markers preserved; independent review not waived."
+}

@@ -1,0 +1,1683 @@
+{
+  "protocol": "frozen inputs/binaries/flags; entry must reject duplicate singleton roles; one B warmup then six B observations per compiler/runtime phase; no comparison with invalid entry",
+  "cpu": 31,
+  "flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "implementation_commit": "fc309df7489f3e65e6b5d808255bb54fe4db4be1",
+  "harness_sha256": "fd7978f5cc42d6787e9c626c5d2618f8368836dc65be4639a623d6aec111e562",
+  "binaries": [
+    {
+      "path": "/tmp/pa16-loop42/entry",
+      "sha256": "07d000c2d4443a6091609916a7b80cfbfad531a7019cd974cbe84016035f5de8",
+      "text_bytes": 1634950
+    },
+    {
+      "path": "/tmp/pa16-loop42/final-lifecycle",
+      "sha256": "938f41216b190519ecb497def8b5b960f12257af73f8872375c534dc6de1047d",
+      "text_bytes": 1641990
+    }
+  ],
+  "backend": {
+    "path": "/home/vishvananda/work/private/v4codex/checkout/reference-binaries/lowir2native",
+    "sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+    "flags": [
+      "-O0"
+    ]
+  },
+  "acceptance": "PA16 required singleton role correctness. O(TU hooks) coordinator calls/storage, at most two coordinator functions; no optional optimizer or mandated numeric latency ceiling.",
+  "workloads": {
+    "64": {
+      "sources": [
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit0.cpp",
+          "sha256": "94e58cd848f4f9839fa2f42342fb0dc8a2cdf5b43fb5a2de8e5107f0caf25361"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit1.cpp",
+          "sha256": "0641aaf07d3dcf949d9a6d177d9606df8b9b5041e5409830b7387e7997205c7a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit2.cpp",
+          "sha256": "261cb90cdec84e3f118fd1c0fc6003965d9bf29abd934cf8cc9acfaf3bfcb944"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit3.cpp",
+          "sha256": "46024aa851b2f95e8d3e1897d73d4bc0310f9a0f6675cdc44248b84d051a93f7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit4.cpp",
+          "sha256": "6d808879642fc25bc93730fb9dc822294f3df930a3f5ecf7c115699badb8ba4c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit5.cpp",
+          "sha256": "d63cd4ff3227e42cf05604e0e95d456f71f607eaa0dd11b3aff3101ca687b4a2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit6.cpp",
+          "sha256": "a13231fbb8263f0ed0eab0887a388e4b8688e3ce99d45f29dfc39be513b1f4ea"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit7.cpp",
+          "sha256": "e2392ee2521f4832a579f50650a93a59e5850393858c767e8cf8c142a04abcc7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit8.cpp",
+          "sha256": "5bcc33df30e59ac5772f48a70986c06c049e8808fb237f58d0d3dc242af4fa86"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit9.cpp",
+          "sha256": "31f1ba180039b6a17f747ef64c291a57310a00dc42f1960014c6a43294228ef6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit10.cpp",
+          "sha256": "a872b5278f7a85215f6dafced003f54ade5df9204e365535648e65df2a8b20f4"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit11.cpp",
+          "sha256": "3e0a52166738681fb936833dfe51abe24974a3af0fa62d97194162987e8ba8a5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit12.cpp",
+          "sha256": "b32548fafe7e28513afb998fee29ba6ad16d370c1c648a34452c9bbcd63d6803"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit13.cpp",
+          "sha256": "8dc117391364533e83e07f0006394195c8d3a0cb352b7348202ca1a3a78ab381"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit14.cpp",
+          "sha256": "030254e6b944d20dce7e871feb0397ddcfc856d82a01dbbb2d7c2ace05ad94ca"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit15.cpp",
+          "sha256": "6bc35fef4d466e7176899800b2916657d6eeda6505d3259284973e74abf0ca1d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit16.cpp",
+          "sha256": "66a779149a02421502fe07a8ab69c96ded655dc08c0a57a769e325e5b9adb0f2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit17.cpp",
+          "sha256": "a86997a890ecdaa3e5dde5cc2269be2b71e1608f8e3dbe6bc025bd0e1590a93b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit18.cpp",
+          "sha256": "aed93bce829be03bfccf38f8ce0d543c0cc800ba2b03123a64c8471b444b862a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit19.cpp",
+          "sha256": "26924129683fcf3621e9e9893a68a9607e3888b12abc2960ed9ef08de8659b19"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit20.cpp",
+          "sha256": "f697da3980d2fda5da953a15a7af92490c0d7210d36bf5387bef1793d768fdd5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit21.cpp",
+          "sha256": "5bfa6a5b41a9885b6dda3b1c74a561a207e5b763ed82d7e2ca05f5c3a76bba89"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit22.cpp",
+          "sha256": "41282e24408c5342aa882b0be1ba56ce6956bec9739f08964f96fa815ab0f5d1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit23.cpp",
+          "sha256": "1d56df554fcd0b02afbdf16e77c154e45a758e432de6f8d2e055b6187bb34bf8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit24.cpp",
+          "sha256": "29188997e4807746c7cc799372c7add068dc24f9c2ab11348b8b2bc4e3f81e7d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit25.cpp",
+          "sha256": "8f68e1bd5ed705e726e6b2f088e15cf97894187cef2cc36bcf335ea67797324b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit26.cpp",
+          "sha256": "b2b6bf4081727e029d68fc51818366e15f7494a2a6ea5868cde8fd6d75114cd0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit27.cpp",
+          "sha256": "f0adcfa3a39e532bb6707ff5e300209815373b3ac5a902d821a7fc0a703d7a9f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit28.cpp",
+          "sha256": "bd3d3b8e3f5c31ea7cd96c42ae85e06282c4ecc845c32f8b464995387c63a957"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit29.cpp",
+          "sha256": "6db0416eda7030075ccc49ce58c888f0fe91a20e0720d50efebbdbc25ab52eed"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit30.cpp",
+          "sha256": "d5c639c24c7349581fb250c621da25f6df0aca6f92b20d534df7d38e5198a091"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit31.cpp",
+          "sha256": "118fcb7eafd476a712efda594fb1607d4b9803fe8d77bdc78fa65c08b1ef112e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit32.cpp",
+          "sha256": "24b16d29abe16b55f97edd4e1dadde23b96db86283df4e8e475f305aafb2af95"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit33.cpp",
+          "sha256": "af510e33f8bdf3d57d3a7954610a7d87be0a9522178d686f0b84e3b060257ff0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit34.cpp",
+          "sha256": "d0d58d7976a70db4fbc7121f1fb4b87ff55c383a61241bca8b1c31a57dabcce7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit35.cpp",
+          "sha256": "67c159576a5e2ed3f2bcf74899dff4799b64eec430a09091f6fe62b527df8066"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit36.cpp",
+          "sha256": "ac3cc5be667b7b68e9f5016d80b804439000876dac22ace44fe49462498b050c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit37.cpp",
+          "sha256": "2c0d0d01e87431aa3b84c75a278144e801da9769e5c56db2e13c841bd39e41f1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit38.cpp",
+          "sha256": "626ac38a19a9a748fe7dfc1a1a9822445612c216ade98e537b4e0d44407c572d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit39.cpp",
+          "sha256": "2f9ca6d934012900271ae9763bd28999973a96170bde76fd40449371fac78862"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit40.cpp",
+          "sha256": "d8eb464caf8ac5b294db712752a13b31e2437fd7f47baf55a800a781ba5b83ff"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit41.cpp",
+          "sha256": "aa0c4795d15075becb25172cabc36f0e54d0d10d57ea1c654f77d3f4ffb2f65a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit42.cpp",
+          "sha256": "576f5f6f8fb4b4b2af50eb6c80fd0780c0d8ee4fc5f108558a970543e1c09751"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit43.cpp",
+          "sha256": "40a3ffeb7a71963a5fa1653dead2fb5d4391eb80e6dd92272b8247e472f46f25"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit44.cpp",
+          "sha256": "d550dc4787b2374346a0ae1c774bf04ad68f44247ac94c5181009830393523a3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit45.cpp",
+          "sha256": "47073d095f5fb2b186eded41564e9252c27498260b9b73c4fd78df9bce9c671c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit46.cpp",
+          "sha256": "b8e604c55aa9da9ea8de601dad4fd84592cf4d72ce8f3cb98ba318260f2f319e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit47.cpp",
+          "sha256": "5e069ffa6aa4d00711634e6ff28c40a29929fef9058d3b290e40454a90a558a2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit48.cpp",
+          "sha256": "a7036c969c10eb0eba43ac4dfa493834bbdab2ebebac725bfe6a05a3dcfc9823"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit49.cpp",
+          "sha256": "b91bcada8d593bc071795468a47c9009a35602b5abb973842963965521429f07"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit50.cpp",
+          "sha256": "67e151e7276863ac438f1a778389396b9c36a85e59f158bfb1a2552f6e8ec070"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit51.cpp",
+          "sha256": "fd7d3d3eb797f45087056d7fab2fac75c195b1e8cd5e10fda00ed42908318cc1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit52.cpp",
+          "sha256": "156628524dd348b5f9ac0edb991c744c8e2ee6a14c78838ae75159fd4f7098d4"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit53.cpp",
+          "sha256": "6e99fcb1cd7850419b3a1992bd17fb48ae2f05a4bb93c47158c5e8d6705a39a8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit54.cpp",
+          "sha256": "bbb0531ced7506fd83d7b4c2bfe55c98e3f021296625543b44dcb40439d3ab31"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit55.cpp",
+          "sha256": "3bfe2f877ef0c0905d5d9f98fd317c8e83f06721aa6f603373332c9ac8e290bc"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit56.cpp",
+          "sha256": "4046492f9f1f6af0004b55fd5e52c5272936ba42a4bd38142a98b5a6a0b25a22"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit57.cpp",
+          "sha256": "95b711445e821da1b1c508068f18433437acc3b88d52b5ebccd4e6ffbe0b6f8b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit58.cpp",
+          "sha256": "b4c07e55d28c96cf8874018ae4bd9921de006e6cbb5d1aea39b22d48a9488054"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit59.cpp",
+          "sha256": "2206fc836fdcd75e3ca0e2d0b4fe16d8ae2e703ca38c6283cf4e0ebec8409fb6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit60.cpp",
+          "sha256": "3368c50b95cba0827ba3e285da880b472ff6fe74fcaee379b373ac699856204b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit61.cpp",
+          "sha256": "e060bfd812cc50223c344f4ee49e42ffb2e140ed53c11d84d1c43ecd04f44ca0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit62.cpp",
+          "sha256": "044991a860e198c6759ac34f89bf5456a2f04e8175f77ba16de052cc4bb82d4a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/unit63.cpp",
+          "sha256": "c7a5272f1452d5678139194d294feacb4fd01b8f7336ac92267d04b757f8be65"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/64/main.cpp",
+          "sha256": "c963d88b378e8d0a2ca62c1e9e92e50dbbf4afb0a9102463b20007ab5ab13a35"
+        }
+      ],
+      "entry_exit": 1,
+      "entry_diagnostic": "ERROR: duplicate singleton role\n",
+      "output": {
+        "path": "/tmp/pa16-loop42/lifecycle-performance/64/program.lowir",
+        "sha256": "0e7203ed15cf0c61d319467a9cdc2dccd050081e8c0591751c5563d3696e312c",
+        "bytes": 33450,
+        "telemetry": {
+          "frontend_ms": 6.97343,
+          "lowering_ms": 1.92099,
+          "write_ms": 0.387522,
+          "peak_rss_kib": 21104,
+          "nodes": 3109,
+          "static_requests": 64,
+          "static_hits": 0,
+          "control_work": 202,
+          "discard_work": 0,
+          "full_expression_work": 287,
+          "full_expression_regions": 0,
+          "linkage_requests": 193,
+          "linkage_hits": 64,
+          "initializer_units": 64,
+          "finalizer_units": 0,
+          "abi_nodes": 194,
+          "abi_bytes": 23784,
+          "instructions": 615,
+          "operands": 765,
+          "ir_pool_growths": 99,
+          "ir_capacity_bytes": 169184
+        }
+      },
+      "native": {
+        "path": "/tmp/pa16-loop42/lifecycle-performance/64/program",
+        "sha256": "ef4489fea8654d290cbfc8cca2f7e1ea2fa2c5dfe46178d98dd7b82a1eaeaa2e",
+        "code_and_alignment_bytes": 3940,
+        "global_data_bytes": 256,
+        "payload_bytes": 4196,
+        "file_bytes": 4316,
+        "checked_exit": 0
+      },
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.012378376,
+            "rss_kib": 5804,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.012200818,
+            "rss_kib": 6060,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.012790631,
+            "rss_kib": 6116,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.012279938,
+            "rss_kib": 5984,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.012255042,
+            "rss_kib": 5908,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.012340996,
+            "rss_kib": 5888,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.012413297,
+            "rss_kib": 5872,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.281197076,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.282400816,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.281431186,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.28162232,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.281312957,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.280744799,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.281320514,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ]
+      }
+    },
+    "256": {
+      "sources": [
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit0.cpp",
+          "sha256": "94e58cd848f4f9839fa2f42342fb0dc8a2cdf5b43fb5a2de8e5107f0caf25361"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit1.cpp",
+          "sha256": "0641aaf07d3dcf949d9a6d177d9606df8b9b5041e5409830b7387e7997205c7a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit2.cpp",
+          "sha256": "261cb90cdec84e3f118fd1c0fc6003965d9bf29abd934cf8cc9acfaf3bfcb944"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit3.cpp",
+          "sha256": "46024aa851b2f95e8d3e1897d73d4bc0310f9a0f6675cdc44248b84d051a93f7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit4.cpp",
+          "sha256": "6d808879642fc25bc93730fb9dc822294f3df930a3f5ecf7c115699badb8ba4c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit5.cpp",
+          "sha256": "d63cd4ff3227e42cf05604e0e95d456f71f607eaa0dd11b3aff3101ca687b4a2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit6.cpp",
+          "sha256": "a13231fbb8263f0ed0eab0887a388e4b8688e3ce99d45f29dfc39be513b1f4ea"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit7.cpp",
+          "sha256": "e2392ee2521f4832a579f50650a93a59e5850393858c767e8cf8c142a04abcc7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit8.cpp",
+          "sha256": "5bcc33df30e59ac5772f48a70986c06c049e8808fb237f58d0d3dc242af4fa86"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit9.cpp",
+          "sha256": "31f1ba180039b6a17f747ef64c291a57310a00dc42f1960014c6a43294228ef6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit10.cpp",
+          "sha256": "a872b5278f7a85215f6dafced003f54ade5df9204e365535648e65df2a8b20f4"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit11.cpp",
+          "sha256": "3e0a52166738681fb936833dfe51abe24974a3af0fa62d97194162987e8ba8a5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit12.cpp",
+          "sha256": "b32548fafe7e28513afb998fee29ba6ad16d370c1c648a34452c9bbcd63d6803"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit13.cpp",
+          "sha256": "8dc117391364533e83e07f0006394195c8d3a0cb352b7348202ca1a3a78ab381"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit14.cpp",
+          "sha256": "030254e6b944d20dce7e871feb0397ddcfc856d82a01dbbb2d7c2ace05ad94ca"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit15.cpp",
+          "sha256": "6bc35fef4d466e7176899800b2916657d6eeda6505d3259284973e74abf0ca1d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit16.cpp",
+          "sha256": "66a779149a02421502fe07a8ab69c96ded655dc08c0a57a769e325e5b9adb0f2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit17.cpp",
+          "sha256": "a86997a890ecdaa3e5dde5cc2269be2b71e1608f8e3dbe6bc025bd0e1590a93b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit18.cpp",
+          "sha256": "aed93bce829be03bfccf38f8ce0d543c0cc800ba2b03123a64c8471b444b862a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit19.cpp",
+          "sha256": "26924129683fcf3621e9e9893a68a9607e3888b12abc2960ed9ef08de8659b19"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit20.cpp",
+          "sha256": "f697da3980d2fda5da953a15a7af92490c0d7210d36bf5387bef1793d768fdd5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit21.cpp",
+          "sha256": "5bfa6a5b41a9885b6dda3b1c74a561a207e5b763ed82d7e2ca05f5c3a76bba89"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit22.cpp",
+          "sha256": "41282e24408c5342aa882b0be1ba56ce6956bec9739f08964f96fa815ab0f5d1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit23.cpp",
+          "sha256": "1d56df554fcd0b02afbdf16e77c154e45a758e432de6f8d2e055b6187bb34bf8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit24.cpp",
+          "sha256": "29188997e4807746c7cc799372c7add068dc24f9c2ab11348b8b2bc4e3f81e7d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit25.cpp",
+          "sha256": "8f68e1bd5ed705e726e6b2f088e15cf97894187cef2cc36bcf335ea67797324b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit26.cpp",
+          "sha256": "b2b6bf4081727e029d68fc51818366e15f7494a2a6ea5868cde8fd6d75114cd0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit27.cpp",
+          "sha256": "f0adcfa3a39e532bb6707ff5e300209815373b3ac5a902d821a7fc0a703d7a9f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit28.cpp",
+          "sha256": "bd3d3b8e3f5c31ea7cd96c42ae85e06282c4ecc845c32f8b464995387c63a957"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit29.cpp",
+          "sha256": "6db0416eda7030075ccc49ce58c888f0fe91a20e0720d50efebbdbc25ab52eed"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit30.cpp",
+          "sha256": "d5c639c24c7349581fb250c621da25f6df0aca6f92b20d534df7d38e5198a091"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit31.cpp",
+          "sha256": "118fcb7eafd476a712efda594fb1607d4b9803fe8d77bdc78fa65c08b1ef112e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit32.cpp",
+          "sha256": "24b16d29abe16b55f97edd4e1dadde23b96db86283df4e8e475f305aafb2af95"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit33.cpp",
+          "sha256": "af510e33f8bdf3d57d3a7954610a7d87be0a9522178d686f0b84e3b060257ff0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit34.cpp",
+          "sha256": "d0d58d7976a70db4fbc7121f1fb4b87ff55c383a61241bca8b1c31a57dabcce7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit35.cpp",
+          "sha256": "67c159576a5e2ed3f2bcf74899dff4799b64eec430a09091f6fe62b527df8066"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit36.cpp",
+          "sha256": "ac3cc5be667b7b68e9f5016d80b804439000876dac22ace44fe49462498b050c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit37.cpp",
+          "sha256": "2c0d0d01e87431aa3b84c75a278144e801da9769e5c56db2e13c841bd39e41f1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit38.cpp",
+          "sha256": "626ac38a19a9a748fe7dfc1a1a9822445612c216ade98e537b4e0d44407c572d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit39.cpp",
+          "sha256": "2f9ca6d934012900271ae9763bd28999973a96170bde76fd40449371fac78862"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit40.cpp",
+          "sha256": "d8eb464caf8ac5b294db712752a13b31e2437fd7f47baf55a800a781ba5b83ff"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit41.cpp",
+          "sha256": "aa0c4795d15075becb25172cabc36f0e54d0d10d57ea1c654f77d3f4ffb2f65a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit42.cpp",
+          "sha256": "576f5f6f8fb4b4b2af50eb6c80fd0780c0d8ee4fc5f108558a970543e1c09751"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit43.cpp",
+          "sha256": "40a3ffeb7a71963a5fa1653dead2fb5d4391eb80e6dd92272b8247e472f46f25"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit44.cpp",
+          "sha256": "d550dc4787b2374346a0ae1c774bf04ad68f44247ac94c5181009830393523a3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit45.cpp",
+          "sha256": "47073d095f5fb2b186eded41564e9252c27498260b9b73c4fd78df9bce9c671c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit46.cpp",
+          "sha256": "b8e604c55aa9da9ea8de601dad4fd84592cf4d72ce8f3cb98ba318260f2f319e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit47.cpp",
+          "sha256": "5e069ffa6aa4d00711634e6ff28c40a29929fef9058d3b290e40454a90a558a2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit48.cpp",
+          "sha256": "a7036c969c10eb0eba43ac4dfa493834bbdab2ebebac725bfe6a05a3dcfc9823"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit49.cpp",
+          "sha256": "b91bcada8d593bc071795468a47c9009a35602b5abb973842963965521429f07"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit50.cpp",
+          "sha256": "67e151e7276863ac438f1a778389396b9c36a85e59f158bfb1a2552f6e8ec070"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit51.cpp",
+          "sha256": "fd7d3d3eb797f45087056d7fab2fac75c195b1e8cd5e10fda00ed42908318cc1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit52.cpp",
+          "sha256": "156628524dd348b5f9ac0edb991c744c8e2ee6a14c78838ae75159fd4f7098d4"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit53.cpp",
+          "sha256": "6e99fcb1cd7850419b3a1992bd17fb48ae2f05a4bb93c47158c5e8d6705a39a8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit54.cpp",
+          "sha256": "bbb0531ced7506fd83d7b4c2bfe55c98e3f021296625543b44dcb40439d3ab31"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit55.cpp",
+          "sha256": "3bfe2f877ef0c0905d5d9f98fd317c8e83f06721aa6f603373332c9ac8e290bc"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit56.cpp",
+          "sha256": "4046492f9f1f6af0004b55fd5e52c5272936ba42a4bd38142a98b5a6a0b25a22"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit57.cpp",
+          "sha256": "95b711445e821da1b1c508068f18433437acc3b88d52b5ebccd4e6ffbe0b6f8b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit58.cpp",
+          "sha256": "b4c07e55d28c96cf8874018ae4bd9921de006e6cbb5d1aea39b22d48a9488054"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit59.cpp",
+          "sha256": "2206fc836fdcd75e3ca0e2d0b4fe16d8ae2e703ca38c6283cf4e0ebec8409fb6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit60.cpp",
+          "sha256": "3368c50b95cba0827ba3e285da880b472ff6fe74fcaee379b373ac699856204b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit61.cpp",
+          "sha256": "e060bfd812cc50223c344f4ee49e42ffb2e140ed53c11d84d1c43ecd04f44ca0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit62.cpp",
+          "sha256": "044991a860e198c6759ac34f89bf5456a2f04e8175f77ba16de052cc4bb82d4a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit63.cpp",
+          "sha256": "c7a5272f1452d5678139194d294feacb4fd01b8f7336ac92267d04b757f8be65"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit64.cpp",
+          "sha256": "baabcbd1b04fbc414a3a7e2f5ccf53a3ad6eedca59285e3a7645951e4c384a41"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit65.cpp",
+          "sha256": "b1be0d271b33a7200f1c737826c38c6808e1610790037296a3658157dc37d463"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit66.cpp",
+          "sha256": "84a427867263afe6cb63bfbf20ca1a4692931180e6ed37920cb6ef6e67261b7b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit67.cpp",
+          "sha256": "3c2e12e6fa01cf30effaba7250012435c8ac74ec40714d1f60f006a5d42ccbf0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit68.cpp",
+          "sha256": "7bf02b7897f4bf1e980a925fe939a4d07258ad7f69b05397917eeb749d9f2e66"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit69.cpp",
+          "sha256": "98aa51be1fb71ac13cdfc47fcc009eb12d81ae4e3be5cabaedf826547787ed96"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit70.cpp",
+          "sha256": "34190893273befb7647d88bca1934a5dc8f5680363e2bbdc53f5f75464e96e2a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit71.cpp",
+          "sha256": "931f47b99afd1c8de6d12a5f3113ed13da91792b781f5dda258603c3420b7dd7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit72.cpp",
+          "sha256": "aea9f30e5e6473e014b1ab15c1419eec87f7fce354034abb99a8727fac756bb6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit73.cpp",
+          "sha256": "3c2d039e0feac98497d33a94f43d418a03b1efec0028dfc7e969324a9aff888c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit74.cpp",
+          "sha256": "a0fff271fc8269e87b0bc3bd2ffd91e50471298314d7c73a23d3cf7f321db320"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit75.cpp",
+          "sha256": "359e61603a5f98670ab510b121906de933a0f10a4df6ce9c4ef6203cdadff9f5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit76.cpp",
+          "sha256": "8465778349b1abd7a5acfe58f805011d2c1cb5a6ea92d65b4d58b865ba73200b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit77.cpp",
+          "sha256": "92d307ce9a6074f6709cc913767e9eef73b5ef5eb115e7ddaae992373e904586"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit78.cpp",
+          "sha256": "39ac818696d9f3894eae57cca7cdc69691b984ddfb861d11b749fa666d962ccb"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit79.cpp",
+          "sha256": "512d83b82cf1a0086df8cb465dac61082ec536cbf259e7c5efea09336a5f56ed"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit80.cpp",
+          "sha256": "8122e0e3851ce6927da60924be0007a601d761878212f2f23979acbbc5085da1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit81.cpp",
+          "sha256": "90d6f744ec0e57c5d6a05d9097832d086ffc27c612ba344e720fe7b7060ae921"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit82.cpp",
+          "sha256": "ea108dee19830168286adecd570b3e47e271d64999b9abc7570309f4553fb111"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit83.cpp",
+          "sha256": "31d9bf29f51710a564f558addb054f5f9ab332799814990efbaf4ac77866a801"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit84.cpp",
+          "sha256": "139ba0e7e8f283255fab8a811ff0cefa23bda2fd461a3213b7af046020c18af8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit85.cpp",
+          "sha256": "03c5aa61160e67784ea2fdeb034ccc170a4cbf2d707b4fc1fc5fa7e7c27aa346"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit86.cpp",
+          "sha256": "799e1b3a149ac6561c43a80a5506a5899f1e359c18f2be7ea142c6bb1c0a87d6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit87.cpp",
+          "sha256": "9a0a5abc74b903ed950ca88cb85a778ab3d21d027f3b89e25ab3f8dffad5e534"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit88.cpp",
+          "sha256": "9a847bc92c7b1a8c75cd075244ebad21bebf6e2b5516fc8cb3056d3e587687ed"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit89.cpp",
+          "sha256": "1338c741843a3e8a5c1e66f055d15801d2441a7dfe66206e362198db497e99fa"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit90.cpp",
+          "sha256": "8c4d529ff2c32ea17b170c0ac7cbd63d779691101001646e3385d56ebfd0d2b3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit91.cpp",
+          "sha256": "312acbc3d54b46ac6399d0002d758bc183d573a31200abcb3d86f7e5a5fbdfa6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit92.cpp",
+          "sha256": "7e09ee9f1e9841c6482e69eb38240867bdd5b40c33dbc4241bf4e55a195fff92"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit93.cpp",
+          "sha256": "4f3ddcd245480ce1e42b5719821f4bcb458dbd8b8bf60956129d71acdc04e7b9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit94.cpp",
+          "sha256": "699639bdc78ad54ac5d67e025519b284954d637b831b8fcbd38dc061c0750443"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit95.cpp",
+          "sha256": "53b72448b8a7ac30310f591cc84b3f4f4b8b6fb2a85b332b18ea39103f900699"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit96.cpp",
+          "sha256": "408838b7671ed7ff26c3092affc99ad6926c7cdb500a852720cf8adac4af28b6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit97.cpp",
+          "sha256": "f0eef2dadd03fd7f67ecf83d05c1ce131a4c3e6ff2185f6ca6669522ad142647"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit98.cpp",
+          "sha256": "1f83d94736bc751e882893d188d9a53a05db765202d4cd67b9813951b52a77b5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit99.cpp",
+          "sha256": "0440832797b2d77c2f2ac4b06ade51b2d0044c51133e784e6a8bed2ec2f31ac9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit100.cpp",
+          "sha256": "cb93c16a3a48da4356293f2d4d52ab73c617570e95ca7ce5065d12da6463a33d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit101.cpp",
+          "sha256": "e1dcd56ac4427109004dc9fdf1b6b9e6a633a187284aeb99470839eee28618a0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit102.cpp",
+          "sha256": "a9b1e0461cf0fd50f8f9f50d19cac3fbc576b7d784c1148ee7b7fbe371424d2d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit103.cpp",
+          "sha256": "6b94f569dfda17c2f80002a5df7e23fdd192ca6b649af7762b35b8f027c22217"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit104.cpp",
+          "sha256": "e3b8af83328388a46e39cda3020fb835b97d2d445a0596e9b5df63e16a63ec32"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit105.cpp",
+          "sha256": "107f61899438b7ce1708ecba98efe81f1c2d3ea59c2aef23585e0b0a66c7e2da"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit106.cpp",
+          "sha256": "99f67314a16ad797e6deb3cd863cc7e9581d2227d5192c55e7b8cbf5e3bd227e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit107.cpp",
+          "sha256": "839f2ec15ec70609902f8b36b3b04f7cbab2c98454228a284599d3cd91054237"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit108.cpp",
+          "sha256": "7b0ef438a4a6e408b5d2d7022b71a0d81647771f5d11ef41d9fae5d058c667aa"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit109.cpp",
+          "sha256": "789ae2109a67187fe27519c9f5c527fa0e7dc9b59c79985d44a5d075fd455ed0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit110.cpp",
+          "sha256": "b869adcc3fe608bb5fc387618a31d3cb4b1de9afc41601d134cf9811f6935025"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit111.cpp",
+          "sha256": "3d0bed5ebe4165157aeb68f5aaef922f1642dc37dfbe0ca2868ec188f100e0b2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit112.cpp",
+          "sha256": "7ad403f0f22bb970c2fbdab6a0ab432f1679962d298fcef31d5f06be04244f8c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit113.cpp",
+          "sha256": "661de425b1b0e446dfcadf627fd5bc3e93dcb9bc1e974f5da7b16e1dacd9404f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit114.cpp",
+          "sha256": "50e21f46f0cf9b60c69ce645dce7251ffa39450e9cedf3a49dca5e45e913120b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit115.cpp",
+          "sha256": "14171d9b7171b4bd855edbd607c93606a58d2e1a31678998f97eaedc01655355"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit116.cpp",
+          "sha256": "c04b303d8b54bbd856a13c794c1993c596ade260fb91fe861767549324c70191"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit117.cpp",
+          "sha256": "e93ca5111be65d9fa22d019e955105c9d1036365ce36ff24bc98898e6b931271"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit118.cpp",
+          "sha256": "e6477ac0cb5efab43cc731b9cff4cf7c69627e97494678fa46025e5570413a51"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit119.cpp",
+          "sha256": "e51849c6194bd801574eb873e13ad8da5519f68e2a29abfee9bbbab1448f0063"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit120.cpp",
+          "sha256": "4bb34bf676e19ee5db174e70f90b4f4eb2b5b6a25e862a5fd14bfc706159620b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit121.cpp",
+          "sha256": "84736280963744dd31fbac77208f9b7ae549370befc59600d38a7ca51ffb6bc5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit122.cpp",
+          "sha256": "9d1fe954e585ea4a62b549cd1da6631bcbfe8ea995c04a06533552cc6be1f144"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit123.cpp",
+          "sha256": "02964453b78935c081d5333e3251cb0eafa04665328c57ee3dbbbdde2ad507e0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit124.cpp",
+          "sha256": "5fe27f80b07173ed4220d4394996601112b17895a10b332ea8650ff514bab371"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit125.cpp",
+          "sha256": "722a451a82cae7624e4a53aff324e1269abbd15b3169994c78e5e5fb9a133179"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit126.cpp",
+          "sha256": "9944cbc1fe03e39df80c514a3e521ab6fc7dfc07e44d581df40579a193ea8351"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit127.cpp",
+          "sha256": "216ebd868f7750961cad1d59f2fe844c2480f24dea41b333b850997ea352e502"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit128.cpp",
+          "sha256": "1cc9d2c5248e94c92e1fa42589c5dd4611cb4bda1336e1a6bdcdd4afbc2ebd39"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit129.cpp",
+          "sha256": "fe4498a7c1f45667f2131da21444ad66b59924985cb13b9fad7e169119312533"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit130.cpp",
+          "sha256": "10a62193e47677ad381fec7875c1b2b78b81e7866e9f8651f86ec96876f7533f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit131.cpp",
+          "sha256": "0d4d24b9a742cb496b5cbf2e3f7ea376e5923301c9578dbc7a456c7e11257172"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit132.cpp",
+          "sha256": "3e210ecddde81acdf1e76f5b8a81082fb0741c656ead8fc5c7c6b09b8c0952c7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit133.cpp",
+          "sha256": "67d64cfed4a897972f744e554a17f827906c43f259420d5c8050f36b323a7a79"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit134.cpp",
+          "sha256": "dbad8c6d1b755e9622722b6f76d33a12e1816f0ef7c8dc210cc79f9fe8c6d456"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit135.cpp",
+          "sha256": "e31dc2e841b42835b3d53a8f2d0f3d4509daeded8a496a4781f961c30a36bbce"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit136.cpp",
+          "sha256": "60ceaf3fd3f82ec10c932b16d9ce24801f0422ff48e413c125a909c59a827b1c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit137.cpp",
+          "sha256": "02564ea16b0c61c01fe8f4b7cd5c43e1d9fa3a282bd66bc92f9c157c013fece1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit138.cpp",
+          "sha256": "2e7414d6335062e932afbe7db13e7f06a874248037d13850ed0276fa933825cb"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit139.cpp",
+          "sha256": "bd3de53a0f62c15eb69555a27f63732729f308504d42933669c8dfb003b2d180"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit140.cpp",
+          "sha256": "4305a084af8b03fa90c5e5db540194e0091616f585cc7419469910cb32e90287"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit141.cpp",
+          "sha256": "9885ca5475113e9e588e44f51406e6a6cfd2b0b4f9a964a7a41660faacc0c9a3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit142.cpp",
+          "sha256": "c6a5fb1cf2be6d471b16deec422441d31a06e4587f21e2a8066e7a6ba8675e01"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit143.cpp",
+          "sha256": "ece42989a3e61f7f17a98fc5575c4bb1b6784e953d2740148c6112b075a7834d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit144.cpp",
+          "sha256": "fc617fb74c140260fd7105938fa1597e9fef1587aa531f9e1500ce9dffec5bb5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit145.cpp",
+          "sha256": "fe74e51e39e8e49ce8de31434c2fef38b83a1a6150b0c9e5363cb4fe609c7f09"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit146.cpp",
+          "sha256": "13df485b2c2c7edb11a5e2bfe329b60152e59ecb3dc116178917244acf256bdb"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit147.cpp",
+          "sha256": "08d32016a24a4fa43e48a560a3d83c26e261ed0bf349f00038031b800779ac95"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit148.cpp",
+          "sha256": "1698e4196a3d6616a707787ecd49c851f94841231071dece9fe0d51bf27978c0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit149.cpp",
+          "sha256": "a3a2cfc88fabaaec32302a3f002c5f6e443b9869f843805c94f93299ae3b329c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit150.cpp",
+          "sha256": "262e84ac9c69acb347d6494189cb9344d6023409f3cc876055378f60ad5ffb41"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit151.cpp",
+          "sha256": "91178abb844bd1be3a49cc02178765f26cea8ad239a2c7b9710f37302bc2de8f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit152.cpp",
+          "sha256": "8866b2a561c41334a984d07c36bc567420bd6783f678797d2ba035636a3418f1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit153.cpp",
+          "sha256": "acd41fa45cf0ae113d66021ad906dadf6a1315bd37d01cbe952a54faef651118"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit154.cpp",
+          "sha256": "7f8ad0e86d44c2ac5891f4bcd827130e15585884b8462a9f8814d949d598520d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit155.cpp",
+          "sha256": "bb07efc551dc851e1d3b384381c7710294250737d20af9c53bf43844fbbe34e8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit156.cpp",
+          "sha256": "7fbd358bf5a6221a63d2e8008298db4608310ba2e0b24494bd4117c62931669c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit157.cpp",
+          "sha256": "a9af7565b3ed1e6193ce7482276cc806dbb039971a520c8b1d319207b55fbe55"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit158.cpp",
+          "sha256": "bd1a7e4af975e463d196c0857b65daaa1db93b3459c05716f34e3bfe1e4b69b1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit159.cpp",
+          "sha256": "5abf1658991a1274e17673ae012972c055eec798b50396c75eb02b53758e09ab"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit160.cpp",
+          "sha256": "2bb11dee0b9a449a4d2774eab953561a65ac72583bb75175e795cb314f5cefd2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit161.cpp",
+          "sha256": "dff672d5f11180d902752efff6968ad7ceede6f5e3b848e599d6655f450982b1"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit162.cpp",
+          "sha256": "ca830cff73a7a5a4b6040feb82b40a3ee2fd0d63e3e27ac1906ec3a98525038a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit163.cpp",
+          "sha256": "8db14f5621897d480495b81bf98277c1aceb6d7c2db6e6a1be716d460ff2dc98"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit164.cpp",
+          "sha256": "d85f517d6526412e8ecdd7ddb9c7929ceb695218398066c3d274cbbe63057c88"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit165.cpp",
+          "sha256": "6afd74e523bb6f380a2d4c640543675d9a72206efc4f72fd17fddef6dbef4bb9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit166.cpp",
+          "sha256": "6171d7e4bc73d6558fd5b68bbd50c38c02c0ad21bebe6cf132317045ecc42381"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit167.cpp",
+          "sha256": "84f8d61b7bbd89b53e1d6dd92695584a53e05899e88cd752e4d37758bdb7bc60"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit168.cpp",
+          "sha256": "71c43b24efc706d23e7609f210b4933a081b554daef07bddc876c5e3e34c8602"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit169.cpp",
+          "sha256": "7752ee20c0d1af4a98632c236785b985ca3e881327ec6b03cbfdd6cc07053f06"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit170.cpp",
+          "sha256": "350c9ea466151bdae5aff8d1ccef69004608c70be87187223a9aed94842d9ab9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit171.cpp",
+          "sha256": "6c0121d32991bec53e1de9f0f42d9080b82e2e3222c3b52618f3fc06d4cd839a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit172.cpp",
+          "sha256": "cf4e6fc5b6bd984d31ec8f641017d19f12a62ec77c41e654c6bb369b7ba55920"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit173.cpp",
+          "sha256": "f7d2347eb8749f5f6bc88c8d9c4dbb2298a72247c5768081e6d6b00ef111a9e7"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit174.cpp",
+          "sha256": "fceef3619e8e9a01038bc13fe671b60853353e0bab674c32b6627526f618c3f3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit175.cpp",
+          "sha256": "6f3c5f894b87d3a72715f5362f4b9887d726510e99c099989e606c72f126c674"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit176.cpp",
+          "sha256": "728a6ac5b022fc9a024722ee267ac0b4b2aa1e9e1971581a97184c58c18a456e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit177.cpp",
+          "sha256": "328728d53e669ee50e7f4839c72b29c5b702facf097d249a0b94888e23d321ec"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit178.cpp",
+          "sha256": "a94652b33cea5f04e164c6fec9521b37d4b00bca0d7640accdca874ad7165e40"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit179.cpp",
+          "sha256": "d4321d7a6796a5f83d8c669b273c95379f84f425b5d5e98e6a8cb413abb69f22"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit180.cpp",
+          "sha256": "bcc8df0353f96eb5d1f4d0e85e2758bc8fbc567eeb64d2f84158d5b4e96629db"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit181.cpp",
+          "sha256": "dc086979b20140d50c7085c50e086cb3b623ffa049560932349515e37447f816"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit182.cpp",
+          "sha256": "8c03cc3d718d815bacfb381272c4b4644e27d77ff0ac64fefd023e1b8355ea66"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit183.cpp",
+          "sha256": "0c9f6c9cb682808b1c3c88f196b23ceb61149783fe52741b4190badeac66d432"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit184.cpp",
+          "sha256": "ad911f8fdb7b56caca8c4416f568193900e799aea765ee5c5635d0dbad20bdf5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit185.cpp",
+          "sha256": "cd1e9987137857d2c510e7ed6878b1983c5a6b9d59035d4e1fd835bc735bf568"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit186.cpp",
+          "sha256": "ea3183c5d634f27368085763cf39129b7b50121b2b143273d035da72e5e07a2a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit187.cpp",
+          "sha256": "974c96ac54c07be9b7eef92eaa67b7b0bf5d72c33ec5a9762f279a620b102e47"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit188.cpp",
+          "sha256": "0da13fb454982df8d2c3cbfda1ab3678c09b84258ff8834cd44cf0af1d5d89aa"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit189.cpp",
+          "sha256": "038ceb3664824361cd27fe8d80cee0e55f4b6a6a6bcd949f46cd7e8565cb7b90"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit190.cpp",
+          "sha256": "8025856e19878265eb5513a905595ccf98d629a12172bfbf62d76c1f1f225f9a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit191.cpp",
+          "sha256": "db52c4efd8240b8c518cee44b87e511552532366b6b83e5ee2718c7a55926b19"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit192.cpp",
+          "sha256": "15b30cc8a9669fc8a8e1a6043d7a7afa30c2d4f79b2fe22307dce4e0949d0b20"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit193.cpp",
+          "sha256": "8d4cb1495932d3dca8f170759e44a84a46bcd32d1e58ccb2aa9f57f9abb2d2d2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit194.cpp",
+          "sha256": "cec7d2954b9c3124b56e79d34a0b0d5f00aa26dfa7b6488f5deecfa608cf1fba"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit195.cpp",
+          "sha256": "b7c9c91854884221a9c3d9131a82bb8e18043da4d47c49b9a60600071fdb9616"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit196.cpp",
+          "sha256": "1db5ec16c5ca16d00c0c48614b4751567dafd23e4c5757b2d46fabd9ac7007eb"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit197.cpp",
+          "sha256": "87ad98f065e8ece5d52f354b178959fed2cdec3a4fa3d55d54fda6cd7cae1430"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit198.cpp",
+          "sha256": "e884634521bdcce5b1364f5b8dced5812e9cdc4e389d42d886bebd3df1de5d1b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit199.cpp",
+          "sha256": "f5780a360deafaaf6a09e000511ad7a4312866b0d62d473b1b304eeff14b4e3a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit200.cpp",
+          "sha256": "923e993eb84c24b1492dc13b95fe854a4b332ae654b86e640410679201332454"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit201.cpp",
+          "sha256": "6bc740410bc68dce16ea840748fdcea015d5d943c7d87c635bf459f11b55253d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit202.cpp",
+          "sha256": "d5736ef24ab6c085fa5826a127701baca6706aac70909f8ac3f4d6fbc09033bd"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit203.cpp",
+          "sha256": "52f02889b9912f596e25c87490cbf5cf3e6213d6ca5287377b0806da6a5c0418"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit204.cpp",
+          "sha256": "927600a2646fbd16f90155425a09f31c4712634220d0daa8a08b20ea9b76e75f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit205.cpp",
+          "sha256": "eca2eb7b8451fa43949f6ab0ef1489b346e1bae547d2039c6e65add93a7805c5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit206.cpp",
+          "sha256": "369a6c84f1da3cba80da7d4ac790b6c290d0eda75d197d0aa3b24839daa1a5e5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit207.cpp",
+          "sha256": "ec31d1b49725fec3b99145012a7dd628792bd52dde801698d3e153935acab180"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit208.cpp",
+          "sha256": "3dd56ae25694488bbc30de85aa8ca367aeebc5af3b0b3e27615e6310f04dc6d4"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit209.cpp",
+          "sha256": "c900f3b2ec2127c2a93666da70249686d454ca3136fc7cb8507ccc9e0e853946"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit210.cpp",
+          "sha256": "24b5eb28c5a56fc695405c5850bb7bd768f102a61b5d6b53e281db22b7a774d8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit211.cpp",
+          "sha256": "9ea8a33d09203c1a326f20d19406e7666b97446958c15c792087c839474b947c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit212.cpp",
+          "sha256": "229ffd29005cc2252080fc61e402347f8fc40bd707f1b69d3c845c874c9ebbee"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit213.cpp",
+          "sha256": "58fa4a3e1cf8db3c4a7e113faac17d281ebc104d7657e3e6d6a694d075f1bc3e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit214.cpp",
+          "sha256": "cf8b6950d25c0d7b69bfeca074ada3073dce609cca15f72d1e83f3b683351c69"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit215.cpp",
+          "sha256": "81e0386e5325d74566ca8ea442491eb262cacad33f728482c306698ebc3fecd2"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit216.cpp",
+          "sha256": "b42fb8475c4d8f5714d554606a25b0786c356a09f308e63f6cc4b28a130eb4ff"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit217.cpp",
+          "sha256": "5891688781778716fb2dcee56dfdfe9e43e7d2670a5340d1f2237c2f65913044"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit218.cpp",
+          "sha256": "e2d71bd13c1dc86b09910251c3ea70d1d6aa3d420eab7d385a7454b31e5b1261"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit219.cpp",
+          "sha256": "c7b50192243984b0803ddd32183643a2578ba33d3269fd224ff4f0354ce1e644"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit220.cpp",
+          "sha256": "d4c37810caaed2d62785851d3647238713dfaa2b38d43cfa3a4d24184a9c3128"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit221.cpp",
+          "sha256": "a3d5b19f54747e858bd201bc5b064d3ba19980d8fa4743990f22d5b5aa35efa0"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit222.cpp",
+          "sha256": "2f4418e3b4811f2fda3c6dc97e3b28649fce746ce45a6d1eba68cb1a5ec5ba53"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit223.cpp",
+          "sha256": "a91eac31402ad966772c129883653db8c89b9eb8ae364d8baf283a796b2ae7f3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit224.cpp",
+          "sha256": "19175ca9a96df5cac33f3a429770a383d9c8b373c5941d7fc3d7a825f64a0deb"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit225.cpp",
+          "sha256": "64980ffd6f68a8c10bde50c6f83cc67404a4fc32367fd83e7a993b1fc95f83db"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit226.cpp",
+          "sha256": "7a2374180e7ca5eb1c9ef23614762ca3a073f4cd4b45d71742c9e8a01f87d2ba"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit227.cpp",
+          "sha256": "55099d26f66803bedd27f1bba251454297ff5ab1470d1c63e13e9266c590125b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit228.cpp",
+          "sha256": "f1c933436b0385d1ffd249689495169cdeff1d6bb23f3c5f004dfc296885f0e6"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit229.cpp",
+          "sha256": "4fcb550a843f62b6171723f3bd4d019cf0aefd50accb5dc41ca78fb7204f7ca9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit230.cpp",
+          "sha256": "5dcca1e2bbd13e0967dc8e3d8fe424c236e41971671b1dabe3a60dc223e654f8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit231.cpp",
+          "sha256": "7354bbef2e1c567b00edf5a3740105b7af6a307196b2f0abba640e371cbba842"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit232.cpp",
+          "sha256": "d5ce8eb8406c2ebb2c94998365808524af30506bbffa5151605d3eb237fc3671"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit233.cpp",
+          "sha256": "062807d21c277b783429323c17837475eb2be6b3b2540a0842a42eaf69394a7a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit234.cpp",
+          "sha256": "8436155533f4b1a796fb1e8c4bc01e21fc01bdc6f3dcbe150101dcd58692f729"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit235.cpp",
+          "sha256": "096329f700d79d578d8bb946b4c76310114a19e0432ec84bc8e046a74b42870c"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit236.cpp",
+          "sha256": "b16104eeca9964280854c569942e20c3a2f3fa0eed11772badf708ecc91b067a"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit237.cpp",
+          "sha256": "0d90f6a50d412973481c0b254017cc6f11931ed32fad21ece87f9c4a19dfb7b9"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit238.cpp",
+          "sha256": "f033d97eafeb4156a6543e3f36f8ebb6913b5a929aebe6694c0d0fd57e8d75ba"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit239.cpp",
+          "sha256": "f723a9613f2a45190860cfde1fabfb0d3bdda3706e6aa0ca889f21cbe14f1924"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit240.cpp",
+          "sha256": "3f900b9458d976d112389b72c15881551ca95ddf1f2c11354f291744aaf9479b"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit241.cpp",
+          "sha256": "cf4fb7c2f254af8f2726cb7303246bb458bf8f7df427f1703a6454c61eb1b51d"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit242.cpp",
+          "sha256": "0c044679478a614fcbc5449c568f29618e6ef10c9e89955b736700ed76203ef3"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit243.cpp",
+          "sha256": "15019802148a6da8c75dd39df7a383b98cfebe53572cb8c6c89b8956ec1d9ead"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit244.cpp",
+          "sha256": "1e6cfb44bb27fbde7178a79664dc05e0b7ccc94c468d78034f6a62608247588e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit245.cpp",
+          "sha256": "df89def6dd41d355aa6804831d0fb0ed5d49035af2fc82a15cda0ea437fd2598"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit246.cpp",
+          "sha256": "2aecb46eacfa4f786ca36defe2f97b40f1972bc091e38576a87dd4999578c247"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit247.cpp",
+          "sha256": "2592ecdc90d1b47454f7b2f95403c5339fe957f7746efea15ec7c0eb06418ea5"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit248.cpp",
+          "sha256": "f7e1c68fa622668182c34935e507cc9569ff478f69aebeeccddaac6f4afcdb5f"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit249.cpp",
+          "sha256": "f42c903feb2cc332d90d8577afe3c0159b27d53989b73be2ab0e744572798836"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit250.cpp",
+          "sha256": "313ea18fa45491f6b417c88d0011285f76e170661d17d3be34062c07b5d94a80"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit251.cpp",
+          "sha256": "ba7b67ad9522fdd15c61d49cf72042c38f3145f7edf00b6e40eab9d3c399276e"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit252.cpp",
+          "sha256": "580fa6c5629f821239a65c29e1f1ead1c091a304f161700c8ab74a9f9abc8689"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit253.cpp",
+          "sha256": "d99c38133c9b9483fc97492495b0b27cb354a0ae659c6745c208ccbaa9e6c4e8"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit254.cpp",
+          "sha256": "af4f6ac2bc52fc776a3855b3571b1a8e38d02f7371f7c6b5a661cc42252c7530"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/unit255.cpp",
+          "sha256": "34ba0964ea3909618cd6c575aa631cba4b494317c1177d3a42bdf6fcb65c47ab"
+        },
+        {
+          "path": "/tmp/pa16-loop42/lifecycle-performance/256/main.cpp",
+          "sha256": "8fe28ce1d198d79a3de8d05de531f22571a8832ae695e7c099a3fcedfc82f7a4"
+        }
+      ],
+      "entry_exit": 1,
+      "entry_diagnostic": "ERROR: duplicate singleton role\n",
+      "output": {
+        "path": "/tmp/pa16-loop42/lifecycle-performance/256/program.lowir",
+        "sha256": "fc3db57a1218347212614f13489a0e2ebdda94229e393bbbecf09b9a83a0236d",
+        "bytes": 132440,
+        "telemetry": {
+          "frontend_ms": 20.8538,
+          "lowering_ms": 6.05338,
+          "write_ms": 1.30288,
+          "peak_rss_kib": 21904,
+          "nodes": 12133,
+          "static_requests": 256,
+          "static_hits": 0,
+          "control_work": 778,
+          "discard_work": 0,
+          "full_expression_work": 1055,
+          "full_expression_regions": 0,
+          "linkage_requests": 769,
+          "linkage_hits": 256,
+          "initializer_units": 256,
+          "finalizer_units": 0,
+          "abi_nodes": 770,
+          "abi_bytes": 95132,
+          "instructions": 2343,
+          "operands": 2877,
+          "ir_pool_growths": 119,
+          "ir_capacity_bytes": 676064
+        }
+      },
+      "native": {
+        "path": "/tmp/pa16-loop42/lifecycle-performance/256/program",
+        "sha256": "a54edde07be2d4eda1bcb780e29d71e960e5099176f803e52f8b2b97c31a1173",
+        "code_and_alignment_bytes": 15076,
+        "global_data_bytes": 1024,
+        "payload_bytes": 16100,
+        "file_bytes": 16220,
+        "checked_exit": 0
+      },
+      "compiler": {
+        "warmups": [
+          {
+            "wall_s": 0.029936395,
+            "rss_kib": 7332,
+            "user_s": 0.01,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.029084294,
+            "rss_kib": 7164,
+            "user_s": 0.01,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.02900401,
+            "rss_kib": 7136,
+            "user_s": 0.02,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.029592177,
+            "rss_kib": 7320,
+            "user_s": 0.01,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.029768752,
+            "rss_kib": 7264,
+            "user_s": 0.02,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.029590813,
+            "rss_kib": 7324,
+            "user_s": 0.01,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.030223388,
+            "rss_kib": 7260,
+            "user_s": 0.02,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ]
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "wall_s": 0.281810295,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "wall_s": 0.283165969,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.281481213,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.282803715,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.287018444,
+            "rss_kib": 256,
+            "user_s": 0.28,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.283506578,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "wall_s": 0.28133801,
+            "rss_kib": 256,
+            "user_s": 0.27,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ]
+      }
+    }
+  },
+  "observations": 28
+}

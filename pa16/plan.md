@@ -47,27 +47,29 @@ store/copy conflict; earlier historical plans no longer describe it as blocked.
 
 ## Performance acceptance
 
-[Initializer evidence](initialization-performance.md) retains **364** initial frozen A/A
-and ABBA observations for the storage increment. Final lifecycle-inclusive
-measurement and required-check refresh are in progress. Common LowIR/executables are identical;
-large common compiler timings remain near entry. Sharing arrays saves 10,196 KiB
-at 4,000 functions. Affected runtime pairs improve for strings, 2- and 40-element
-arrays; 8-element arrays are near noise. Compiler text is unchanged and all
-code/data growth is disclosed. No avoidable common regression is evidenced.
+[Initializer evidence](initialization-performance.md) preserves **1,482** frozen
+observations: two 364-sample A/A+ABBA campaigns, 726 noise-repeat invocations and
+28 new-correct-only lifecycle samples. Common LowIR/executables are identical.
+Final array sharing saves 9,932 KiB at 4,000 functions; affected string, 2- and
+40-element runtimes improve in paired blocks. The 4,000-array copy case costs
+about 1.7% compiler time for required classification; all code/data growth and
+noise remain disclosed. Compiler text grows 7,040 bytes (0.43%). Multi-TU work
+scales linearly by hook count, with no semantic graph retention.
+
 [Storage](storage-performance.md), [objects](object-performance.md) and
 [audit](audit-performance.md) retain all earlier observations. PA16/O0 has no
 mandated numeric latency/RSS/text ceiling. Historical percentage/RSS/scaling
 targets remain diagnostic under the stage-scoped spec, not inherited exit gates.
 Correctness, work/resource limits and coverage remain mandatory. No optional
-optimizer is introduced; runtime differences apply to the measured workloads.
+optimizer is introduced; runtime differences apply to measured workloads.
 
 ## Handoff ledger
 
 | Checkpoint | Result |
 | --- | --- |
 | Implementation 41, through `f1497ca2` | Typed objects, addresses, constructor/conversion execution, pointer/literal identity; 146/154 course tests; 173 native / 75 rejection controls. Historical evidence remains in `object-performance.md` and `audit.md`. |
-| `9e967c33` initialization increment | Ordinary automatic scalar-array data/copies; static relocation for local references; 24 narrowly edited oracles with proofs and before/after hashes. Explicit controls: 32 native, 2 rejection, seven observed reference startup failures. |
-| Program lifecycle increment | Found and fixed duplicate singleton roles when multiple TUs need initialization/finalization. Both source orders pass typed validation, LowIR roundtrip and native constructor/destructor LIFO checks. |
+| `9e967c33` initialization increment | Ordinary automatic scalar-array data/copies; static relocation for local references; 24 narrowly edited oracles with proofs and before/after hashes. Explicit controls: 28 native, 2 rejection, seven observed reference startup failures. |
+| `fc309df7` program lifecycle increment | Found and fixed duplicate singleton roles when multiple TUs need initialization/finalization. Both source orders pass typed validation, LowIR roundtrip and native constructor/destructor LIFO checks. |
 | Through report after corrections | **2265/2266**, with all **2112/2112** prior tests and **153/154** PA16 tests passing. Required `make test-pa16` exits 2 with that sole comparison; `make test-report-through-pa15` exits 0; file audit exits 0 with three inherited header warnings. **205 native / 77 rejection** personal controls pass; the separate pending member-pointer reducer still fails and is not included in those passing counts. |
 
 Implementation handoff boundary: persistent initializer classification and
