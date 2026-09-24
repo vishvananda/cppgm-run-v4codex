@@ -131,7 +131,8 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
         for (auto arg : args) fixed += value_argument(arg) || types[arg].kind != TypeKind::PackExpansion;
         if (fixed > t.count) return false;
     }
-    Index bindings, cache; std::uint32_t frame = 0;
+    Index bindings, cache;
+    std::uint32_t frame = t.parent_frame ? t.parent_frame : template_lexical_frame(scopes[t.environment].parent);
     for (unsigned j = 0; j < t.count; ++j) {
         auto p = template_parameters[t.offset+j];
         // Until its length is known, an expansion at a fixed head position
@@ -161,7 +162,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
                     if (entities[p].key == KW_TEMPLATE ? !target || !template_compatible(p,target,bindings) : target != 0) return false;
                 }
                 else {
-                    auto target = substitute_type(entities[p].type,bindings,cache);
+                    auto target = substitute_type(entities[p].type,bindings,cache,frame);
                     value = target ? convert_argument(value,target) : 0;
                     if (!value) return false;
                 }
@@ -189,12 +190,12 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             if (entities[p].key == KW_TEMPLATE ? !dependent_template && (!target || !template_compatible(p,target,bindings)) : target != 0) return false;
         } else {
             if (!value_argument(args[j])) return false;
-            auto target = substitute_type(entities[p].type,bindings,cache);
+            auto target = substitute_type(entities[p].type,bindings,cache,frame);
             if (!target) return false;
             args[j] = convert_argument(args[j],target);
             if (!args[j]) return false;
         }
-        bindings.put(p,args[j]); if (packs) frame = argument_frame(frame,p,args[j]);
+        bindings.put(p,args[j]); if (packs || frame) frame = argument_frame(frame,p,args[j]);
     }
     return true;
 }

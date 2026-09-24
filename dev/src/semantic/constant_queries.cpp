@@ -12,6 +12,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
 {
     if (auto known = constant_query_receivers.get(id)) return known;
     auto q = type_queries[id]; auto fact = query_fact(id);
+    if (q.kind == QueryKind::Value && types[q.type].kind == TypeKind::LRef) return q.value;
     if (q.kind == QueryKind::Parenthesized) return constant_query_object(query_edges[q.offset]);
     if (q.kind == QueryKind::String) {
         auto literal = std::uint32_t(q.value);

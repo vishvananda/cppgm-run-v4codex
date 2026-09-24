@@ -26,10 +26,17 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
                 type = substitute_type(entities[template_parameters[source.offset+ordinal]].type,bindings,cache,frame);
                 if (!type) throw std::runtime_error("invalid member template parameter type");
             } else type = declarator(d,specifiers(specs,ts),ts);
-            if (!dependent_type(type) && !integral(type)) throw std::runtime_error("integral template parameter required");
+            if (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::Function) type = decay(type);
+            if (types[type].kind == TypeKind::RRef || (!dependent_type(type) && !integral(type) && !pointer(type) &&
+                types[type].kind != TypeKind::LRef && !fundamental(type,FT_NULLPTR_T)))
+                throw std::runtime_error("invalid non-type template parameter type");
             auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
             entities[e].template_parameter = true;
-            entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0; entities[e].type = types.unqualified(type);
+            bool pack = child(p,Kind::ParameterPack) != 0;
+            for (auto decl = d; decl; decl = ast[child(decl,Kind::NestedDeclarator)].first)
+                pack |= child(decl,Kind::ParameterPack) != 0;
+            entities[e].parameter_pack = pack;
+            entities[e].type = types.unqualified(type);
             entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
             bind(ts,entities[e].name,e); record(ts,e,p,type,EntityKind::Parameter);
             bind_parameter(e);

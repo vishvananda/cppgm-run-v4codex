@@ -569,6 +569,7 @@ private:
     ArgumentId substitute_argument(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame = 0);
     bool dependent_argument(ArgumentId arg);
     ArgumentId convert_argument(ArgumentId arg, TypeId target);
+    ArgumentId address_template_argument(QueryId query, TypeId target);
     EntityId bind_argument(ScopeId scope, EntityId parameter, ArgumentId arg);
     std::vector<TypeQuery> type_queries = std::vector<TypeQuery>(1);
     std::vector<QueryId> query_edges, query_slots;

@@ -323,6 +323,16 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         if (!child) return 0;
         children.push_back(child);
     }
+    // A completed implicit address argument is a canonical value, not another
+    // conversion recipe. Signature/value consumers share this single result
+    // instead of selecting an overload and validating linkage a second time.
+    if (q.kind == QueryKind::Cast && q.op == TOK_INVALID && !dependent_type(q.type) &&
+        (pointer(q.type) || types[q.type].kind == TypeKind::LRef || fundamental(q.type,FT_NULLPTR_T)) &&
+        !query_fact(children[0]).dependent) {
+        auto arg = convert_argument(value_argument_id(children[0]),q.type);
+        if (!arg) return 0;
+        auto result = argument_query(arg); results.put(cache_key,result); return result;
+    }
     auto result = intern_query(q,children); results.put(cache_key,result); return result;
 }
 TypeQueryFact Analyzer::query_fact(QueryId id)
@@ -410,9 +420,14 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     if (inspect) switch (q.kind) {
     case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
-    case QueryKind::Value: x.type = q.type; x.null_pointer_constant = q.null_pointer_constant; break;
+    case QueryKind::Value:
+        x.type = value_type(q.type); x.null_pointer_constant = q.null_pointer_constant;
+        if (types[q.type].kind == TypeKind::LRef) x.category = ValueCategory::Lvalue;
+        r.declared_type = q.type; break;
     case QueryKind::TemplateValueParameter:
-        x.type = q.type; r.declared_type = q.type; x.entity = q.entity; break;
+        x.type = value_type(q.type); r.declared_type = q.type; x.entity = q.entity;
+        if (types[q.type].kind == TypeKind::LRef) x.category = ValueCategory::Lvalue;
+        break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
     case QueryKind::QualifiedValue: {
         if (!class_value(q.type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }

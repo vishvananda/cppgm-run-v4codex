@@ -109,7 +109,7 @@ Value Procedural::expression(NodeId n, bool location)
         }
         if (sem.entities[fact.entity].kind == semantic::EntityKind::Enumerator) {
             auto c = sem.entities[fact.entity].constant;
-            return Value((type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits)), type(fact.type), fact.type);
+            return constant_operand(c,fact.type);
         }
         if (sem.nonstatic_field(fact.entity)) {
             auto storage = sem.injected_storage(fact.entity);

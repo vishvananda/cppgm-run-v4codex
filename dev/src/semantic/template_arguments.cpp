@@ -7,9 +7,11 @@ ArgumentId Analyzer::value_argument_id(QueryId query)
     if (!query) return 0;
     auto fact = query_fact(query);
     if (fact.state == FactState::Failure) return 0;
-    // A class expression retains its typed construction query until the
-    // non-type parameter supplies the target of its user-defined conversion.
-    if (!fact.dependent && !class_value(fact.expression.type)) {
+    // Keep object/function identity and value category until the parameter
+    // supplies its target. Reading an lvalue here would lose reference NTTPs;
+    // an overload set similarly needs its target function signature first.
+    if (!fact.dependent && fact.expression.category == ValueCategory::Prvalue &&
+        integral(fact.expression.type) && types[type_queries[query].type].kind != TypeKind::LRef) {
         auto value = constants[query_value(query)];
         if (!value.valid || !integral(value.type)) {
             if (immediate_query_probe) return 0;
@@ -146,7 +148,8 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
     // A cast owns its result type even while dependence defers its expression
     // fact. Reapplying the same conversion must preserve canonical identity.
     auto source_type = type_queries[query].kind == QueryKind::Cast ? type_queries[query].type : query_fact(query).expression.type;
-    if (source_type && types.unqualified(source_type) == types.unqualified(target)) return arg;
+    if (source_type && types.unqualified(source_type) == types.unqualified(target) &&
+        (type_queries[query].kind == QueryKind::Value || query_fact(query).dependent)) return arg;
     if (dependent_type(target) || query_fact(query).dependent) {
         TypeQuery q; q.kind = QueryKind::Cast; q.type = target;
         // An implicit conversion has its own query opcode, retaining the
@@ -154,6 +157,8 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
         q.op = TOK_INVALID;
         return value_argument_id(intern_query(q,{query}));
     }
+    if (pointer(target) || types[target].kind == TypeKind::LRef || fundamental(target,FT_NULLPTR_T))
+        return address_template_argument(query,target);
     if (class_value(source_type)) {
         TypeQuery q; q.kind = QueryKind::Cast; q.type = target;
         q.op = TOK_INVALID; q.context = type_queries[query].context;
@@ -161,7 +166,7 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
         if (!constants[query_value(converted)].valid) return 0;
         return value_argument_id(converted);
     }
-    auto value = constants[query_value(query)];
+    auto value = constant_indirect(constants[query_value(query)]);
     if (!value.valid || !integral(target)) return 0;
     if ((scoped_enum(value.type) || scoped_enum(target)) && types.unqualified(value.type) != types.unqualified(target)) return 0;
     auto converted = convert(value,types.unqualified(target));
@@ -180,6 +185,8 @@ EntityId Analyzer::bind_argument(ScopeId scope, EntityId parameter, ArgumentId a
         bind(scope,entities[e].name,e); return e;
     }
     entities[e].type = argument_type(arg);
+    if (value_argument(arg) && type_queries[argument_query(arg)].kind == QueryKind::Value)
+        entities[e].type = type_queries[argument_query(arg)].type;
     if (value_argument(arg) && !dependent_argument(arg)) entities[e].constant = constants[query_value(argument_query(arg))];
     bind(scope,entities[e].name,e);
     return e;

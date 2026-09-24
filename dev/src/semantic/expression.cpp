@@ -17,6 +17,15 @@ Expression Analyzer::value_fact(const Expression& source) const
 }
 void Analyzer::demand_function_expression(const Expression& value)
 {
+    if (definitions && value.entity && entities[value.entity].kind == EntityKind::Enumerator &&
+        (!unevaluated_depth || unevaluated_depth == body_evaluation_depth)) {
+        auto constant = entities[value.entity].constant;
+        if (constant.valid && constant.bits && (pointer(constant.type) || types[constant.type].kind == TypeKind::LRef)) {
+            auto target = constant_storage[constant_addresses[constant.bits].storage].entity;
+            if (target && entities[target].kind == EntityKind::Function) use_selected_function(target,true);
+            else if (target && !unevaluated_depth) demand_template_storage(target);
+        }
+    }
     // A uniquely named free function is odr-used in every evaluated context,
     // including a discarded expression. Overload selection and nonstatic
     // member use retain their own call/address demand decisions.
@@ -139,14 +148,14 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
                     r.type = types.qualify(r.type, types[types[object].child].cv & (entities[e].mutable_field ? 2 : 3));
             } else if (!unevaluated_depth && !class_facts[entities[scopes[entities[e].owner].entity].class_info].storage) throw std::runtime_error("field requires object");
         }
-        if (entities[e].kind == EntityKind::Enumerator && !entities[types[r.type].entity].complete)
+        if (entities[e].kind == EntityKind::Enumerator && types[entities[e].type].kind != TypeKind::LRef && !entities[types[r.type].entity].complete)
             r.type = entities[e].constant.type;
         if (function_binding(e) && scopes[entities[e].owner].kind == ScopeKind::Class) {
             if (!r.object_use) record_object(r, 0, 0, 0);
             object_uses[r.object_use].naming_scope = naming_class(name_owner(ast[n].detail, s));
         }
         if (entities[e].member_info) facts.edit(n).type = members[entities[e].member_info].call_type;
-        if (entities[e].kind != EntityKind::Enumerator) r.category = ValueCategory::Lvalue;
+        if (entities[e].kind != EntityKind::Enumerator || types[entities[e].type].kind == TypeKind::LRef) r.category = ValueCategory::Lvalue;
         return r;
     }
     case Kind::BracedInit:

@@ -45,3 +45,17 @@ Next validation: focused required fixtures and explicit personal controls,
 `make test-pa18`, `make test-report-through-pa17`, and the PA18 file audit.
 Run root report targets sequentially because they share `.test_counts`.
 **Do not advance to PA19 until `make test-report-through-pa18` passes.**
+
+Loop 67 implementation entry: `06211ad0438df250952a414eef409d657b0ff5b0`,
+**327/420** (93 failures). Previous goal turn classified **progress**: audit 66
+changed prerequisite validity and established authoritative validation evidence.
+Current group: pointer/reference/function NTTP identity and target conversion.
+Owner/data flow: retained typed argument query → parameter-directed conversion
+and C++11 address validation → canonical constant storage/entity identity →
+substitution frame → ordinary expression/demand/typed ABI and LowIR consumers.
+Work is proportional to the argument expression and required overload candidates;
+canonical query/storage lookups are O(1) average, TU-owned, with local conversion
+scratch. Validate nulls, qualification, linkage, array/function decay, static
+members, overload sets, nested forwarding, rejection/SFINAE and emission. Extend
+related conversion/identity defects before handoff; independent review remains
+separate from unfinished implementation. Frozen entry: `/tmp/pa18-loop67/entry`.

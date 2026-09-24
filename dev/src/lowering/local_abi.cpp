@@ -13,6 +13,15 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
         return abi.make(Kind::ExpressionArgument,abi.make(Kind::ExprPack,abi_query(semantic::argument_query(sem.types[argument].bound))));
     if (!semantic::value_argument(argument)) return abi.make(Kind::TypeArgument,abi_type(argument));
     auto q = semantic::argument_query(argument);
+    auto query = sem.type_query(q);
+    if (query.kind == semantic::QueryKind::Value && query.value &&
+        (sem.types[query.type].kind == TypeKind::Pointer || sem.types[query.type].kind == TypeKind::LRef)) {
+        auto address = sem.constant_static_value(semantic::Constant(query.type,query.value));
+        auto e = address.entity;
+        auto entity = sem.entities[e].kind == semantic::EntityKind::Function ? abi_function_context(e) :
+            abi.make(Kind::VariableEntity,abi_entity_name(e));
+        return abi.make(Kind::EntityArgument,entity);
+    }
     auto value = abi_query(q);
     return sem.type_query(q).kind == semantic::QueryKind::Value ? value : abi.make(Kind::ExpressionArgument,value);
 }
