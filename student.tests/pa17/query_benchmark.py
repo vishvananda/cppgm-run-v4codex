@@ -42,6 +42,10 @@ for n in (1500,6000):
  source='template<int I>struct X{};template<int I,class T=int>int f(X<I>){return I+sizeof(T);};\n'
  source+=''.join(f'int f{i}(){{return f(X<{i}>());}}\n' for i in range(n))+'int main(){return f0()!=4;}'
  corpus.append((f'common-candidate-defaults-{n}',source,'exact',False))
+for n in (1500,6000):
+ source='template<int I>struct X{};template<int I>int f(X<I>){return I+4;};\n'
+ source+=''.join(f'int f{i}(){{return f(X<{i}>());}}\n' for i in range(n))+'int main(){return f0()!=4;}'
+ corpus.append((f'common-candidate-deduced-{n}',source,'exact',False))
 for n in (200,800):
  source=query_controls.RECURSIVE+'struct sink{int n;};template<int I>struct token{int n;friend sink&operator<<(sink&s,token const&t){s.n+=t.n;return s;}};\n'
  source+=''.join(f'int f{i}(int v){{sink s;s.n=0;token<{i}>t={{v}};s<<t;return s.n;}}\n' for i in range(n))+'int main(){return f0(7)!=7;}'

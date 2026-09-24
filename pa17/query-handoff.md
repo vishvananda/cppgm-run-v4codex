@@ -1,7 +1,7 @@
 # PA17 query/candidate implementation — loop 58
 
 Entry `411ad00e37b421dc1d3d85b5438e010bd099e025`: 330/343.
-First code increment `7d04e8ce`: 333/343. No course fixture, reference,
+First code increment `7d04e8ce`: 333/343; `1e5f15ab` restores the original entity size and explicit-specialization deletion ownership. A final increment removes redundant default validation for fully deduced calls. No course fixture, reference,
 comparison rule, or bundle revision changed. This is an implementation handoff;
 independent stage review and the ten remaining course failures are still open.
 
@@ -9,7 +9,7 @@ independent stage review and the ten remaining course failures are still open.
 
 | Owner | Fact flow | Work and lifetime |
 |---|---|---|
-| Candidate substitution | Deduction preserves every deduced argument, including positions after a default hole. `deduced_specialization` uses the canonical template head and full incomplete argument tuple to mark active default/signature substitution. Recursive demand observes that mark and discards only that active candidate. A completed tuple proceeds to the existing specialization fact. | One average O(1) flat-index operation per default-bearing candidate, plus O(head width) argument interning; fully deduced tuples need no active index. Scope exit restores only the current key. Marks are not cached negative results and therefore do not outlive the active deduction. Index capacity and interned tuples belong to the TU. No global generation or retry scan. |
+| Candidate substitution | Deduction preserves every deduced argument, including positions after a default hole. `deduced_specialization` uses the canonical template head and full incomplete argument tuple to mark active default/signature substitution. Recursive demand observes that mark and discards only that active candidate. A completed tuple proceeds to the existing specialization fact. | One average O(1) flat-index operation per default-bearing candidate, plus O(head width) argument interning; fully deduced tuples need no active index or extra default validation. Scope exit restores only the current key. Marks are not cached negative results and therefore do not outlive the active deduction. Index capacity and interned tuples belong to the TU. No global generation or retry scan. |
 | Type queries | Canonical substituted query nodes retain compact invalid-operand, no-viable, ambiguity, and deleted-selection outcomes. Child failures propagate without evaluating consumers or unwinding C++ exceptions. `decltype` returns the substitution failure sentinel without qualifying it into a false concrete type. Completed query/type facts cache their result at the existing query/environment owner. | One computation per canonical query; candidates and associated namespaces/classes use local sequences and flat deduplication. No token replay, AST clone, or LowIR adapter. |
 | Immediate context | Candidate signatures/defaults and partial-pattern comparison enable a separate immediate-query mode. This differs from the existing partial type-construction mode at a source definition. Class-definition demand suspends both modes; its partial matcher establishes its own local probe, while a selected class body's errors remain hard errors. | Stack-scoped booleans, restored on all exits. No exception catch converts arbitrary class/body errors into candidate failure. |
 | Deleted functions | Source declarations record deletion on the function entity; concrete template declarations inherit it. Operator/call selection checks the chosen entity, retaining deleted candidates for ranking. Ordinary calls and addresses consume the same deletion fact. Deleted definitions must be first, and cannot acquire a later body. Explicit specialization replaces the primary deletion fact along with the primary definition owner. | One entity flag within existing padding; existing member transfer deletion remains available for implicitly deleted special members. No semantic names or emitted strings are keys. |
@@ -54,3 +54,10 @@ member heads and partial explicit arguments, query failure-cache validity at
 instantiation boundaries, and probe-mode restoration on side effects. Earlier
 base-graph/qualified-receiver/performance review questions are preserved. These
 questions do not replace or waive any of the ten unfinished implementations.
+
+The first complete performance campaign exposed a field-placement cost: `Entity`
+grew from 120 to 128 bytes. Moving the new flag into existing padding restores
+120 bytes. A second complete campaign is also preserved; final code review then
+removed redundant normalization for fully deduced calls. The final campaign adds
+that common path to the fixed corpus. All prior observations remain available;
+only the final frozen implementation supplies current acceptance evidence.

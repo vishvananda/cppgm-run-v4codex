@@ -13,7 +13,7 @@ def digest():
 def failures(s):return set(re.findall(r'^(pa\d+/[^:]+): ERROR:',s,re.M))
 def performance(file,final=False):
  p=json.loads((ROOT/file).read_text());assert p.get('finished_utc') and not p['source_diff']
- assert sha(ROOT/'student.tests/pa17/query_benchmark.py')==p['harness_sha256']
+ assert hashlib.sha256(subprocess.check_output(['git','show',p['source_commit']+':student.tests/pa17/query_benchmark.py'],cwd=ROOT)).hexdigest()==p['harness_sha256']
  assert sha(ROOT/'student.tests/pa10/benchmark.py')==p['shared_harness_sha256']
  assert p['flags']==['--emit-lowir','-O0']
  for b in p['binaries']:assert sha(b['path'])==b['sha256']
@@ -37,7 +37,7 @@ def performance(file,final=False):
   assert 'compiler' in w
   for phase in ['compiler','runtime']:
    if phase in w:measurement(w[phase],common)
- assert len(p['workloads'])==14
+ assert len(p['workloads'])==(16 if final else 14)
  return p
 
 def verify():
@@ -75,6 +75,7 @@ def verify():
  assert [(r['name'],r['source_sha256']) for r in before]==[(r['name'],r['source_sha256']) for r in controls['query']]
  for r in before:assert hashlib.sha256(r['source'].encode()).hexdigest()==r['source_sha256']
  performance('student.tests/pa17/query-performance-before-packing.json')
+ performance('student.tests/pa17/query-performance-before-fastpath.json')
  p=performance('student.tests/pa17/query-performance.json',True)
  assert p['source_commit']==tip and p['binaries'][1]['sha256']==sha(ROOT/'dev/cppgm++')
  for f in e['evidence_files']:assert sha(ROOT/f['path'])==f['sha256']

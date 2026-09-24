@@ -21,7 +21,7 @@ EntityId Analyzer::deduced_specialization(EntityId primary, std::vector<Argument
         }
         ~Active() { if (identity) index.put(identity,0); probe = saved; immediate = saved_immediate; }
     } active(active_candidate_substitutions,identity,template_type_probe,immediate_query_probe);
-    if (!template_defaults(primary,arguments)) return 0;
+    if (defaults && !template_defaults(primary,arguments)) return 0;
     return specialize(primary,arguments);
 }
 } }
