@@ -89,13 +89,14 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     TypeId function_type = 0;
     if (fn.entity && function_binding(fn.entity)) {
         std::vector<Conversion> chosen;
-        auto choice = select_call(fn.entity,args,0,object,category,0,callee.arguments,chosen);
+        auto naming = object_uses[fn.object_use].naming_scope;
+        auto choice = select_call(fn.entity,args,0,object,category,naming,callee.arguments,chosen);
         if (choice.failure == CallFailure::NoViable) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
         if (choice.failure == CallFailure::Ambiguous) return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
         auto selected = choice.entity;
         if (deleted_transfer(selected))
             return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-        check_access(selected,q.context,entities[selected].owner,object);
+        check_access(selected,q.context,naming,object);
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {
             Expression value; value.type = object; value.category = category;

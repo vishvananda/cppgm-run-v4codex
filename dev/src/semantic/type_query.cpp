@@ -7,7 +7,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     std::uint64_t hash = 1469598103934665603ULL;
     auto add = [&](std::uint64_t x) { hash = (hash ^ x) * 1099511628211ULL; };
     add(unsigned(q.kind)); add(q.op); add(q.type); add(q.entity); add(q.name);
-    add(q.context); add(q.arguments); add(q.value); add(q.null_pointer_constant);
+    add(q.context); add(q.naming); add(q.arguments); add(q.value); add(q.null_pointer_constant);
     for (auto c : children) add(c);
     if (query_slots.empty() || type_queries.size()*2 >= query_slots.size()) {
         query_slots.assign(query_slots.empty() ? 32 : query_slots.size()*2,0);
@@ -21,7 +21,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     while (auto id = query_slots[pos]) {
         auto p = type_queries[id];
         bool same = query_hashes[id] == hash && p.kind == q.kind && p.op == q.op && p.type == q.type &&
-            p.entity == q.entity && p.name == q.name && p.context == q.context &&
+            p.entity == q.entity && p.name == q.name && p.context == q.context && p.naming == q.naming &&
             p.arguments == q.arguments && p.value == q.value && p.count == children.size() &&
             p.null_pointer_constant == q.null_pointer_constant;
         for (unsigned i = 0; same && i < p.count; ++i) same = query_edges[p.offset+i] == children[i];
@@ -95,6 +95,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             q.kind = QueryKind::Parameter; q.type = entity.type; q.value = ordinal-1;
         } else {
             q.kind = QueryKind::Name; q.entity = e;
+            if (function_binding(e)) q.naming = naming_class(name_owner(name,s));
             if (!function_binding(e)) q.type = entity.type;
             // The source method owns implicit-object cv. Keep the declared
             // field type separately for unparenthesized decltype.
@@ -270,6 +271,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         auto result = argument_query(arg); results.put(cache_key,result); return result;
     }
     if (owner && q.context) q.context = substitution_scope(owner,q.context);
+    if (owner && q.naming) q.naming = substitution_scope(owner,q.naming);
     if (owner && q.entity) q.entity = substitution_binding(owner,q.entity);
     if (q.type) {
         q.type = substitute_type(q.type,bindings,cache,owner);
@@ -398,6 +400,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             // A template overload family is a concrete lookup result. Its
             // dependent candidate signatures do not make the callee dependent.
             x.form = ExpressionForm::Overload; x.type = 0;
+            record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
             if (entities[entity].kind != EntityKind::Function || entities[entity].template_info) r.declared_type = 0;
         }
         break;
@@ -413,6 +416,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         if (q.entity && nonstatic_field(q.entity))
             x = member_value(q.entity,unsigned(q.value),ValueCategory::Lvalue);
         if (q.entity && function_binding(q.entity)) x.form = ExpressionForm::Overload;
+        if (q.naming) { record_object(x,0,0,0); object_uses[x.object_use].naming_scope = q.naming; }
         if (q.entity && entities[q.entity].kind == EntityKind::Function && !entities[q.entity].template_info)
             r.declared_type = entities[q.entity].type;
         break;
@@ -448,7 +452,10 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
         }
         x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
-        if (function_binding(e)) { x.form = ExpressionForm::Overload; x.type = 0; }
+        if (function_binding(e)) {
+            x.form = ExpressionForm::Overload; x.type = 0;
+            record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
+        }
         else { check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type; }
         break;
     }

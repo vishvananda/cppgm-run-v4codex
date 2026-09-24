@@ -691,6 +691,7 @@ private:
     unsigned base_path(TypeId from, EntityId to);
     std::uint64_t layout_base_path(unsigned path);
     unsigned base_steps(TypeId from, EntityId to);
+    void record_member_receiver(Expression& result, NodeId node, TypeId object, EntityId selected, ScopeId naming, bool qualified, ScopeId context);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
     Index injected_class_owners;

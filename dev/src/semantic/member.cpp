@@ -32,7 +32,12 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     if (types.unqualified(object) != types.unqualified(wanted) && !derived) return c;
     // Candidate viability needs only declared base edges, including retained
     // template patterns. It must not demand object layout or member definitions.
-    if (derived && base_adjustments[base_path(object,types[wanted].entity)].ambiguous) return c;
+    if (derived) {
+        auto named = naming && scopes[naming].kind == ScopeKind::Class ? scopes[naming].entity : types[object].entity;
+        auto first = base_path(object,named), tail = base_path(entities[named].type,types[wanted].entity);
+        if ((first && (!base_adjustments[first].edge || base_adjustments[first].ambiguous)) ||
+            (tail && (!base_adjustments[tail].edge || base_adjustments[tail].ambiguous))) return c;
+    }
     c.rank = derived ? 2 : 0; c.derived = derived;
     c.qualification = types[wanted].cv & ~types[object].cv;
     c.preference = rvalue && f.ref == RefQualifier::Lvalue;

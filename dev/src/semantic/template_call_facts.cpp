@@ -56,20 +56,10 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         check_access(selected,s,naming,object_type);
         if (member) {
             bool nonstatic = entities[selected].member_info && !entities[selected].is_static;
-            if (nonstatic) {
-                Expression object; object.type = object_type; object.category = category;
-                check_fixed_conversion(object,object_node,chosen[0],s);
-            }
             chosen.erase(chosen.begin());
-            record_object(result,object_node,nonstatic ? types.parameters[types[call_type(selected)].offset] : 0,
-                nonstatic ? base_steps(object_type,scopes[entities[selected].owner].entity) : 0);
+            if (nonstatic) record_member_receiver(result,object_node,object_type,selected,naming,ast[name].first != ast[name].last,s);
+            else record_object(result,object_node,0,0);
             auto& use = object_uses[result.object_use]; use.source_owned = true;
-            if (nonstatic && ast[name].first == ast[name].last) use.virtual_slot = members[entities[selected].member_info].virtual_slot;
-            if (nonstatic && ast[name].first != ast[name].last && naming && scopes[naming].kind == ScopeKind::Class) {
-                auto qualifier = scopes[naming].entity;
-                use.qualifier_adjustment = base_steps(object_type,qualifier);
-                use.adjustment = base_steps(entities[qualifier].type,scopes[entities[selected].owner].entity);
-            }
         }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {

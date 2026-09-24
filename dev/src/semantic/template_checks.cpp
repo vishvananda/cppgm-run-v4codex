@@ -152,6 +152,7 @@ QueryId Analyzer::template_signature_query(QueryId id, EntityId primary, Index& 
     // not this declaration-matching key; these normalized queries are never
     // substituted to establish a concrete declaration's type.
     query.context = 0;
+    query.naming = 0;
     if (query.type) query.type = template_member_aliases(query.type,primary,cache);
     std::vector<QueryId> children;
     for (unsigned i = 0; i < query.count; ++i)

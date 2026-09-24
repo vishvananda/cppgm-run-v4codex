@@ -7,12 +7,12 @@ enum class QueryKind : unsigned char { Value, String, Parameter, TemplateValuePa
 // nodes; these records retain resolved declaration/type/operation identities.
 struct TypeQuery {
     QueryKind kind = QueryKind::Value;
+    bool null_pointer_constant = false;
     ETokenType op = TOK_INVALID;
     TypeId type = 0;
     EntityId entity = 0;
     IdentifierId name = 0;
-    ScopeId context = 0;
-    bool null_pointer_constant = false;
+    ScopeId context = 0, naming = 0;
     std::uint32_t arguments = 0, offset = 0, count = 0;
     std::uint64_t value = 0;
 };

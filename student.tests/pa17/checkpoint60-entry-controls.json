@@ -1,0 +1,308 @@
+[
+  {
+    "name": "query_added_default",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,class U>long f(T);char f(...);using Before=decltype(f(1));template<class T,class U=int>long f(T);using After=decltype(f(1));static_assert(sizeof(Before)==1 && sizeof(After)==8,\"defaults publication\");int main(){}",
+    "source_sha256": "15609291cc075fa3efb4afe2cbcaafe5955877fb158c770124dc10c24a899fe1"
+  },
+  {
+    "name": "query_added_overload",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "char f(...);using Before=decltype(f(1));long f(int);using After=decltype(f(1));static_assert(sizeof(Before)==1 && sizeof(After)==8,\"declaration publication\");int main(){}",
+    "source_sha256": "54ab579a0584b8e5fae5981c9c5c858f3999d1e848208b1169c0fba711e6a3e1"
+  },
+  {
+    "name": "qualified_arrow_receiver",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;static_cast<R&>(x).n=7;D<R>*p=&x;return p->R::f()!=7;}",
+    "source_sha256": "38d3d35e807b7ad1068fc20ec8088bc1d4dc8db6a039ff1d8d2be7e15563a2f1"
+  },
+  {
+    "name": "qualified_alias_receiver",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{using base=T;int g(){return base::f();}};int main(){D<R>x;static_cast<R&>(x).n=7;return x.g()!=7;}",
+    "source_sha256": "b56b5a01f5dc1e52302408e88b627fdaac958aff653a23690bac47dddeed1da2"
+  },
+  {
+    "name": "qualified_virtual_suppression",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{virtual int f(){return 3;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{int f(){return 7;}};int main(){D<R>x;return x.R::f()!=3||x.f()!=7;}",
+    "source_sha256": "89b4b83550dd0976b7c9f95e7f4979b0d6fecb010a76d34bc4a4af6d740357d7"
+  },
+  {
+    "name": "qualified_overload_cv",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int f(){return 3;}int f()const{return 7;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;const D<R>&y=x;return x.R::f()!=3||y.R::f()!=7;}",
+    "source_sha256": "7982b031974dbab2f64cd356e817a5eac6c48ced5e4bb2ba0ab984fc7e6a0be1"
+  },
+  {
+    "name": "qualified_static_repeated_base",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct B{static int f(){return 7;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;return x.B::f()!=7;}",
+    "source_sha256": "07cbf1c8e7c166655ceb212478b91bbaae21c66e33d5044256d4fdaeef52691b"
+  },
+  {
+    "name": "exposed_base_address",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct B{static int f(){return 7;}};class D:private B{public:using B::f;};template<class T>struct X{using P=decltype(&D::f);static P p;};template<class T>typename X<T>::P X<T>::p=&D::f;int main(){return X<int>::p()!=7;}",
+    "source_sha256": "e2eba1c07f6229101336f9f66cc9d3b404309f79d95f663e9eba6566131cd0d0"
+  },
+  {
+    "name": "dependent_private_address_friend",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class B{static int f(){return 7;}template<class>friend struct X;};template<class T>struct X{using P=decltype(&T::f);static P p;};template<class T>typename X<T>::P X<T>::p=&T::f;int main(){return X<B>::p()!=7;}",
+    "source_sha256": "830935fc798f86f8d30d58f5f5c543786355f720b004e5f1b4e18ae4336291fb"
+  },
+  {
+    "name": "qualified_repeated_base",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;static_cast<L&>(x).n=3;static_cast<R&>(x).n=7;return x.L::f()!=3||x.R::f()!=7;}",
+    "source_sha256": "5db5f50705a1ab89980a1ccf955af002a92f12439bb2c7e8ac7ab2686984ee85"
+  },
+  {
+    "name": "fixed_qualified_repeated_base",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable fixed template call\n",
+    "passed": false,
+    "source": "struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};struct D:L,R{};template<class T>int run(D&x){return x.L::f()+x.R::f();}int main(){D x;static_cast<L&>(x).n=3;static_cast<R&>(x).n=7;return run<int>(x)!=10;}",
+    "source_sha256": "0972c45653e2a5d351c1f581241c83f8fdb2f5d7c9c9ab90e564557724148813"
+  },
+  {
+    "name": "dependent_qualified_repeated_base",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{int g(){return T::f();}};int main(){D<R>x;static_cast<R&>(x).n=7;return x.g()!=7;}",
+    "source_sha256": "9fa827f19b1f560a05fe766a553801c95f23cdcc71d4cd6ba91de71cb9bb8e37"
+  },
+  {
+    "name": "qualified_const_receiver",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;int f()const{return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;static_cast<R&>(x).n=7;const D<R>&y=x;return y.R::f()!=7;}",
+    "source_sha256": "ed76d64e3ace0a940edcee42e1a3e11a2b994953b43cb580b903b2134982a40e"
+  },
+  {
+    "name": "signature_function_query",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct X{static decltype(T::f()) n;};template<class U>decltype(U::f()) X<U>::n=7;struct Y{static int f();};int main(){return X<Y>::n!=7;}",
+    "source_sha256": "9cdc95a41c904bbfae2bfe65066840359fa6ad2bd5f5b2a3c2260e9d848a1f7b"
+  },
+  {
+    "name": "signature_parenthesized_query",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct X{static decltype((T::n)) n;};template<class U>decltype((U::n)) X<U>::n=U::n;struct Y{static int n;};int Y::n=7;int main(){X<Y>::n=9;return Y::n!=9;}",
+    "source_sha256": "0ab5dd77ae2d49faf6e95badafb31d3753aea6062e3114618708060c122e8d9a"
+  },
+  {
+    "name": "signature_bound_names",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "int g(int);long g(long);template<class T>struct X{static decltype(g(T())) n;};template<class U>decltype(g(U())) X<U>::n=7;int main(){return X<int>::n!=7||X<long>::n!=7;}",
+    "source_sha256": "e4b44ac587f94dff3bd5cc5b57a4e893a1c6f47309e7ca6327d5480a3860aa94"
+  },
+  {
+    "name": "member_template_default_holes",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct X{template<class U=int,class V>int f(V){return sizeof(T)+sizeof(U)+sizeof(V);}};int main(){X<char>x;X<long>y;return x.f(char())!=6||y.f(long())!=20;}",
+    "source_sha256": "39c38df56556e8094922c86851337017d8ecbcea48c0573518ab60b858002866"
+  },
+  {
+    "name": "partial_head_default_holes",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,class U=int,class V>int f(T,V){return sizeof(T)+sizeof(U)+sizeof(V);}int main(){return f<char>(char(),long())!=13||f<long>(long(),char())!=13;}",
+    "source_sha256": "e249bfa50686f02a9b82d9b38312a0a14d7692d77b18d23fc9282e39eb3ce4a0"
+  },
+  {
+    "name": "private_address_own_context",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class X{static int f(){return 7;}public:template<class T>static int run(){struct S{decltype(&f) p;};static S s={&f};return s.p();}};int main(){return X::run<int>()!=7;}",
+    "source_sha256": "8196e7af0cd2473c51b77a142e424b2a42b41e44225ce8a5a64e082d4710526d"
+  },
+  {
+    "name": "private_overload_address_own_context",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "class X{static int f(){return 7;}static int f(int n){return n;}public:template<class T>static int run(){struct S{int(*p)();};static S s={&f};return s.p();}};int main(){return X::run<int>()!=7;}",
+    "source_sha256": "d7cc15682c1dab19e23c100954e60bd97d9073753a92f53a119cc9e2b5a89c9c"
+  },
+  {
+    "name": "qualified_private_overload",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible base conversion\n",
+    "passed": true,
+    "source": "struct B{static int f();static int f(int);};class D:private B{};template<class T>int g(){struct S{int(*p)();};static S s={&D::f};return s.p();}int main(){return g<int>();}",
+    "source_sha256": "93825759ae9bdefb1aa7021a813469b953981068cb46655b4abf462b3554315a"
+  },
+  {
+    "name": "private_qualified_query_call",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible base conversion\n",
+    "passed": true,
+    "source": "struct B{static int f();};class D:private B{};template<class T>struct X{using P=decltype(D::f());};X<int>x;int main(){}",
+    "source_sha256": "4cfa6987ad602f19e830a94cd2329a0532d922caca9b54b97cdc027405b2f739"
+  },
+  {
+    "name": "inaccessible_receiver_qualifier",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": true,
+    "source": "struct B{int f(){return 7;}};struct L:B{};struct R:B{};template<class T>class D:public L,private T{};int main(){D<R>x;return x.R::f();}",
+    "source_sha256": "fc3673c4d2519be44772e44a587a4d246d858cae68ac8391ee9649af3e9343c4"
+  },
+  {
+    "name": "ambiguous_receiver_qualifier",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": true,
+    "source": "struct B{int f(){return 7;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;return x.B::f();}",
+    "source_sha256": "52b7bc850af65f4a562a794ffe43043f79ba660e562bb5126b403329a1a72ff0"
+  },
+  {
+    "name": "dependent_private_address",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible base conversion\n",
+    "passed": true,
+    "source": "struct B{static int f();};class D:private B{};template<class T>struct X{using P=decltype(&T::f);};X<D>x;int main(){}",
+    "source_sha256": "beb2cc19531793b235b4ff8e0047fd4a6a244e1a5aeebaf5a858cffc5b5accf6"
+  },
+  {
+    "name": "qualified_private_base_address",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct B{static int f(){return 7;}};class D:private B{};template<class T>struct X{using P=decltype(&D::f);};X<int>x;int main(){}",
+    "source_sha256": "fea5d7a615338dafa139d6ef584ee3d7abd76fb9f5e40ddc916adf6c37cd6fb7"
+  },
+  {
+    "name": "private_address_query",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true,
+    "source": "class X{static int f();};template<class T>struct Y{using P=decltype(&X::f);};Y<int>x;int main(){}",
+    "source_sha256": "28ce5df3f203b3ea2a8aacf4114a96040fc13720aa6c91b46c47f70114899406"
+  },
+  {
+    "name": "private_overload_table",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: inaccessible class member\n",
+    "passed": true,
+    "source": "class X{static int f();static int f(int);};template<class T>int g(){struct S{int(*p)();};static S s={&X::f};return s.p();}int main(){return g<int>();}",
+    "source_sha256": "ab4d465014d7a773e02ff439c850def4328ed1a97b558636c3592ab7d964746c"
+  },
+  {
+    "name": "signature_distinct_names",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: template definition does not match a declared member\n",
+    "passed": true,
+    "source": "int f(int);int g(int);template<class T>struct X{static decltype(f(T())) n;};template<class T>decltype(g(T())) X<T>::n;int main(){}",
+    "source_sha256": "2477043c94f97b68d61d5a465994ce01b325f8d7cadfdf43804f232d6a7129d0"
+  },
+  {
+    "name": "qualified_const_mutation",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": true,
+    "source": "struct B{int f(){return 0;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){const D<R>x;return x.R::f();}",
+    "source_sha256": "194c7b529de6f991c6f3823c89c297a386d40b53ba3490692f4b0b8496499df4"
+  }
+]

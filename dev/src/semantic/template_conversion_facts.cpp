@@ -55,7 +55,7 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
     }
     if (c.function) {
         if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed conversion target");
-        check_access(c.function,s,entities[c.function].owner);
+        check_access(c.function,s,object_uses[source.object_use].naming_scope);
     }
 }
 Conversion Analyzer::copy_conversion_recipe(Conversion c)
