@@ -1,0 +1,752 @@
+{
+  "loop": 55,
+  "phase": "implement",
+  "target": "pa17 full-stage",
+  "status": "validated implementation handoff; assignment incomplete",
+  "entry_commit": "4d1527e774b124ae47574a6c74006af4437cd0dd",
+  "code_commit": "df97733f3f0d8c179b3b8dc4eefd8b9f193c3ea6",
+  "stage_base": "21748547a9e5befaae65e4fae120a63b3f9fcafb",
+  "last_reviewed_commit": "c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30",
+  "previous_turn": "progress: committed loop 54 fixes and clean entry log establish 321/343; original 22 failures preserved before edits",
+  "source_digest": "223f63665b3bee7013483f2907ea5956cb39acb0bd089be800950ce4f9813c56",
+  "protected_paths": [
+    "AGENTS.md",
+    "TESTING_AND_REFERENCES.md",
+    "spec.md",
+    "Makefile",
+    "scripts",
+    "doc",
+    "reference-binaries",
+    "pa17/README.md",
+    "pa17/Makefile",
+    "pa17/pa17.gram",
+    ":(glob)pa*/tests/**"
+  ],
+  "logs": {
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/entry.log",
+      "sha256": "bda9685a63d9b1017322ab877fae77fb3638df85da7ec69df6001cbc8ef1d93a",
+      "command": "Ralph turn-start last-test.log copied before edits",
+      "exit_code": 2
+    },
+    "stage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/stage.log",
+      "sha256": "5339f887e4cf704ec58e798a18d15242c3ef27689ccc02dae35a793fd37d6189",
+      "command": "make test-pa17",
+      "exit_code": 2
+    },
+    "prior": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/prior.log",
+      "sha256": "967173723342b3c0abf5b9e26710e9ef2094f41c3a33e7d23e0831760f67bea9",
+      "command": "make test-report-through-pa16",
+      "exit_code": 0
+    },
+    "through": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/through.log",
+      "sha256": "b76dfa7670879608ae3833e012227762eab6577dd333229e45186127f7af1e64",
+      "command": "make test-report-through-pa17",
+      "exit_code": 2
+    },
+    "file_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/file-audit.log",
+      "sha256": "b40da0957f8ab5dea6cb4e3531ee3c2d1ea1f275ab22409e6f102506e18a3c04",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa17 --paths dev/src",
+      "exit_code": 0
+    },
+    "stage_progress": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop55/stage-progress.log",
+      "sha256": "b95de603f6887c267b74e766d86dcd72a48f66508dd1a7a8383544bae32bdcbd",
+      "command": "Compare original failure sets, unchanged coverage/comparison paths and prior-through results",
+      "exit_code": 0
+    }
+  },
+  "course_tests": [
+    "pa17/tests/general/100-dependent-pack-owner-skips-fixed-partial-nested-definition.t",
+    "pa17/tests/general/100-forward-partial-template-base-bad.t",
+    "pa17/tests/general/100-function-template-pack-ref-return-cache-key.t",
+    "pa17/tests/general/100-namespace-alias-qualified-function-decltype-type-argument.t",
+    "pa17/tests/general/100-nested-pack-expansion-outer-type-pack.t",
+    "pa17/tests/general/100-nontype-argument-member-hides-namespace-template.t",
+    "pa17/tests/general/100-nontype-placeholder-partial-order.t",
+    "pa17/tests/general/100-out-of-class-nested-method-distinguishes-partial-owner.t",
+    "pa17/tests/general/100-partial-class-specialization-nested-enum-owner.t",
+    "pa17/tests/general/100-partial-selection-retained-owner.t",
+    "pa17/tests/general/100-partial-specialization-member-typedef-outdef.t",
+    "pa17/tests/general/100-partial-specialization-nested-template-id-member-outdef.t",
+    "pa17/tests/general/100-partial-specialization-pack-expansion-value-pattern.t",
+    "pa17/tests/general/100-partial-specialization-preserves-template-identity.t",
+    "pa17/tests/general/100-partial-static-out-of-class-dependent-return-definition.t",
+    "pa17/tests/general/100-partial-typedef-late-using-directive-shadow.t",
+    "pa17/tests/general/100-recursive-base-mixed-dependent-type.t",
+    "pa17/tests/general/100-reference-shell-out-of-class-current-specialization-iterator.t",
+    "pa17/tests/general/100-relative-qualified-partial-specialization.t",
+    "pa17/tests/general/100-rvalue-reference-binds-converted-temporary.t",
+    "pa17/tests/general/100-template-id-pointee-cv-class-partial-specialization.t",
+    "pa17/tests/general/100-top-cv-pointer-does-not-match-unqualified-pointer-partial.t",
+    "pa17/tests/general/100-variadic-function-specialization-base-preserves-ellipsis.t",
+    "pa17/tests/general/200-adl-template-template-argument-namespace.t",
+    "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
+    "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
+    "pa17/tests/general/200-bad-dependent-nonstatic-member-constant.t",
+    "pa17/tests/general/200-deferred-incomplete-member-layout-alias-value-type.t",
+    "pa17/tests/general/200-dependent-remove-cv-transform-alias-substitution.t",
+    "pa17/tests/general/200-lazy-header-constexpr-static-assert.t",
+    "pa17/tests/general/200-nested-template-id-argument-pack-base-lookup.t",
+    "pa17/tests/general/200-partial-specialization-nested-template-id-pack-expansion.t",
+    "pa17/tests/general/200-qualified-template-template-variable-partial.t",
+    "pa17/tests/general/200-reference-alias-top-cv-return-binding.t",
+    "pa17/tests/general/200-reference-field-decltype-alias.t",
+    "pa17/tests/general/200-shared-partial-specialization-variable-selection-runtime.t",
+    "pa17/tests/general/200-template-template-function-result-reconstruction.t",
+    "pa17/tests/general/200-template-template-inner-pack-scope.t",
+    "pa17/tests/general/200-template-template-nontype-parameter-type-match.t",
+    "pa17/tests/general/200-template-template-parameter.t",
+    "pa17/tests/general/200-trailing-template-template-argument-pack-partial-specialization.t",
+    "pa17/tests/general/200-variable-template-alignas-member-alias.t",
+    "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
+    "pa17/tests/general/300-ambiguous-operator-outside-substitution-bad.t",
+    "pa17/tests/general/300-anonymous-member-injection-in-class-template.t",
+    "pa17/tests/general/300-anonymous-union-storage-constructor-noop.t",
+    "pa17/tests/general/300-array-functional-cast-pack-call.t",
+    "pa17/tests/general/300-bad-missing-nested-member-template-owner.t",
+    "pa17/tests/general/300-basic-template-operator-overloads.t",
+    "pa17/tests/general/300-class-template-hidden-friend-body-lexical-scope.t",
+    "pa17/tests/general/300-class-template-member-overload-braced-call-operator.t",
+    "pa17/tests/general/300-conditional-explicit-on-a-constructor-template.t",
+    "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
+    "pa17/tests/general/300-constructor-and-conversion-function-template-roles.t",
+    "pa17/tests/general/300-crtp-static-cast-reference-before-constructor-template.t",
+    "pa17/tests/general/300-dependent-base-qualified-rvalue-assignment.t",
+    "pa17/tests/general/300-dependent-call-finds-class-template-hidden-friend.t",
+    "pa17/tests/general/300-dependent-completion-tolerates-shape-only-member.t",
+    "pa17/tests/general/300-dependent-decltype-const-dereference-overload.t",
+    "pa17/tests/general/300-dependent-friend-alias-private-constructor-access.t",
+    "pa17/tests/general/300-dependent-friend-self-private-constructor-access.t",
+    "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
+    "pa17/tests/general/300-dependent-layout-and-friend-templates.t",
+    "pa17/tests/general/300-dependent-member-template-missing-keyword-bad.t",
+    "pa17/tests/general/300-dependent-member-template-type-requires-typename-bad.t",
+    "pa17/tests/general/300-dependent-qualified-member-template-template-argument.t",
+    "pa17/tests/general/300-dependent-qualified-pack-type-requires-typename-bad.t",
+    "pa17/tests/general/300-dependent-typename-cast-expression.t",
+    "pa17/tests/general/300-dependent-typename-valid.t",
+    "pa17/tests/general/300-dependent-variable-template-value-argument.t",
+    "pa17/tests/general/300-explicit-instantiation-declaration-after-definition-bad.t",
+    "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
+    "pa17/tests/general/300-explicit-instantiation-member-type-access.t",
+    "pa17/tests/general/300-explicit-instantiation-member-type-scope.t",
+    "pa17/tests/general/300-explicit-member-call-function-template-id.t",
+    "pa17/tests/general/300-explicit-member-function-template-call.t",
+    "pa17/tests/general/300-explicit-member-specializations-multiple-owners.t",
+    "pa17/tests/general/300-explicit-member-template-id-shares-ordinary-overload.t",
+    "pa17/tests/general/300-explicit-member-template-specializations-multiple-owners.t",
+    "pa17/tests/general/300-explicit-specialization-out-of-class-member-template-owner.t",
+    "pa17/tests/general/300-explicit-type-arg-decltype-member-access.t",
+    "pa17/tests/general/300-extern-template-builtin-operator-function-declaration-bad.t",
+    "pa17/tests/general/300-extern-template-declaration.t",
+    "pa17/tests/general/300-extern-template-reference-template-id-argument.t",
+    "pa17/tests/general/300-friend-existing-template-private-ctor-access.t",
+    "pa17/tests/general/300-friend-function-template-access.t",
+    "pa17/tests/general/300-friend-function-template-collection.t",
+    "pa17/tests/general/300-friend-function-template-distinct-class-template-entities.t",
+    "pa17/tests/general/300-friend-template-coexists-with-hidden-nontemplate-friend.t",
+    "pa17/tests/general/300-friend-type-template-id-nontype-expression.t",
+    "pa17/tests/general/300-function-pack-template-id-deduction-decltype.t",
+    "pa17/tests/general/300-function-signature-partial-specialization-functor-assignment.t",
+    "pa17/tests/general/300-function-template-local-static-per-specialization.t",
+    "pa17/tests/general/300-function-template-redeclaration-equivalent-alias-entity.t",
+    "pa17/tests/general/300-hidden-friend-template-call-adl.t",
+    "pa17/tests/general/300-inherited-class-template-id-member-pointer.t",
+    "pa17/tests/general/300-inherited-enclosing-member-template-argument.t",
+    "pa17/tests/general/300-inherited-member-template-subscript-action.t",
+    "pa17/tests/general/300-lazy-member-alias-point-of-declaration.t",
+    "pa17/tests/general/300-local-qualified-argument-replay.t",
+    "pa17/tests/general/300-member-alias-default-declaration-scope.t",
+    "pa17/tests/general/300-member-class-explicit-specialization-owner-lookup.t",
+    "pa17/tests/general/300-member-init-nested-pack-functional-cast.t",
+    "pa17/tests/general/300-member-template-as-template-template-argument.t",
+    "pa17/tests/general/300-member-template-assignment-not-special-member.t",
+    "pa17/tests/general/300-member-template-assignment-operator-value.t",
+    "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
+    "pa17/tests/general/300-member-template-call-body-check.t",
+    "pa17/tests/general/300-member-template-call-operator.t",
+    "pa17/tests/general/300-member-template-class-pack-forward-before-token.t",
+    "pa17/tests/general/300-member-template-empty-argument-list-after-same-named-member.t",
+    "pa17/tests/general/300-member-template-head-identity.t",
+    "pa17/tests/general/300-member-template-local-using-does-not-suppress-adl.t",
+    "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
+    "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+    "pa17/tests/general/300-nested-base-prefers-direct-sibling-member-template.t",
+    "pa17/tests/general/300-nested-class-friend-template-namespace-scope.t",
+    "pa17/tests/general/300-nested-class-template-current-owner-lookup.t",
+    "pa17/tests/general/300-nested-class-template-reference-reset.t",
+    "pa17/tests/general/300-nested-member-partial-specialization-apply-scope.t",
+    "pa17/tests/general/300-nested-member-partial-specialization-survives-reference-reset.t",
+    "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
+    "pa17/tests/general/300-nested-partial-sibling-alias-source-order.t",
+    "pa17/tests/general/300-nested-template-late-member-definition-after-use.t",
+    "pa17/tests/general/300-noncurrent-specialization-requires-typename-bad.t",
+    "pa17/tests/general/300-nondependent-member-template-id-call.t",
+    "pa17/tests/general/300-nondependent-template-base.t",
+    "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
+    "pa17/tests/general/300-out-of-class-ctor-using-imported-member-template.t",
+    "pa17/tests/general/300-out-of-class-member-function-template-definition.t",
+    "pa17/tests/general/300-out-of-class-member-partial-specialization.t",
+    "pa17/tests/general/300-out-of-class-member-template-namespace-typedef.t",
+    "pa17/tests/general/300-out-of-class-member-template-unnamed-declaration-param.t",
+    "pa17/tests/general/300-out-of-class-nested-definitions-distinguish-partial-owner.t",
+    "pa17/tests/general/300-out-of-class-nested-member-template-static-definition.t",
+    "pa17/tests/general/300-out-of-class-return-requires-typename-bad.t",
+    "pa17/tests/general/300-pack-dependent-template-id.t",
+    "pa17/tests/general/300-parenthesized-qualified-template-functional-call.t",
+    "pa17/tests/general/300-partial-owner-out-of-class-member-binding-args.t",
+    "pa17/tests/general/300-qualified-friend-class-template-id.t",
+    "pa17/tests/general/300-qualified-friend-member-template-access.t",
+    "pa17/tests/general/300-qualified-member-class-explicit-specialization.t",
+    "pa17/tests/general/300-qualified-member-template-hiding.t",
+    "pa17/tests/general/300-qualified-owner-static-template-nttp.t",
+    "pa17/tests/general/300-qualified-preselected-member-template-call.t",
+    "pa17/tests/general/300-qualified-variable-template-hiding-bad.t",
+    "pa17/tests/general/300-reference-member-class-template-visible.t",
+    "pa17/tests/general/300-reference-shell-nested-class-template-reuse.t",
+    "pa17/tests/general/300-retained-call-through-a-dependent-qualifier.t",
+    "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
+    "pa17/tests/general/300-shape-completion-skips-member-layout.t",
+    "pa17/tests/general/300-short-circuit-does-not-devalue-a-variable-template.t",
+    "pa17/tests/general/300-sibling-namespace-dependent-member-template-id-owner.t",
+    "pa17/tests/general/300-single-pack-cast-target.t",
+    "pa17/tests/general/300-sizeof-pack-in-a-partial-specialization-shape.t",
+    "pa17/tests/general/300-static-constexpr-function-template-pointer-array.t",
+    "pa17/tests/general/300-template-friend-class-constructor-access.t",
+    "pa17/tests/general/300-template-hidden-friend-adl.t",
+    "pa17/tests/general/300-template-instantiation-use-location-explicit-specialization.t",
+    "pa17/tests/general/300-template-specialization-qualified-constructor-declaration.t",
+    "pa17/tests/general/300-template-template-argument-in-an-explicit-specifier.t",
+    "pa17/tests/general/300-template-template-trailing-pack-rebind-function-pointer.t",
+    "pa17/tests/general/300-templated-constructor-special-member-collection.t",
+    "pa17/tests/general/300-unary-member-operator-template-default.t",
+    "pa17/tests/general/300-unused-class-template-hidden-friend-body.t",
+    "pa17/tests/general/300-using-base-same-signature-derived-template-preferred.t",
+    "pa17/tests/general/300-using-base-template-replay-per-specialization.t",
+    "pa17/tests/general/300-variable-template-as-a-nontype-argument.t",
+    "pa17/tests/general/300-variable-template-forwarding-partial-top-const.t",
+    "pa17/tests/general/300-variable-template-forwarding-partial-top-cv.t",
+    "pa17/tests/general/300-variable-template-run-specialization-selection.t",
+    "pa17/tests/general/300-variable-template-static-assert-specialization-selection.t",
+    "pa17/tests/general/300-wrong-arity-return-class-not-completed.t",
+    "pa17/tests/general/400-alias-nontype-expression-declaration-scope.t",
+    "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
+    "pa17/tests/general/400-alias-nontype-pack-partial-specialization-pattern.t",
+    "pa17/tests/general/400-alias-pack-expansion-through-alias.t",
+    "pa17/tests/general/400-alias-pack-nontype-expression-fast-path.t",
+    "pa17/tests/general/400-alias-rebind-partial-specialization-shadow.t",
+    "pa17/tests/general/400-alias-template-decltype-greater-type-argument.t",
+    "pa17/tests/general/400-alias-template-decltype-member-type-argument.t",
+    "pa17/tests/general/400-alias-template-decltype-shift-type-argument.t",
+    "pa17/tests/general/400-alias-template-nontype-shadowed-by-inner-value.t",
+    "pa17/tests/general/400-alias-template-pack-id-preserves-syntax.t",
+    "pa17/tests/general/400-alias-template-pointer-cv-cache-distinction.t",
+    "pa17/tests/general/400-alias-value-expression-type-argument.t",
+    "pa17/tests/general/400-bool-or-dependent-member-type-conditional-base.t",
+    "pa17/tests/general/400-bound-template-template-recursive-nontype-scope.t",
+    "pa17/tests/general/400-concrete-template-head-beats-template-template-pack.t",
+    "pa17/tests/general/400-cv-parameter-beats-template-id-partial.t",
+    "pa17/tests/general/400-cv-qualified-template-id-wrapper-class-partial-specialization.t",
+    "pa17/tests/general/400-defaulted-nested-cv-template-template-partial-specialization.t",
+    "pa17/tests/general/400-defaulted-template-template-partial-coverage-order.t",
+    "pa17/tests/general/400-dependent-alias-helper-partial-specialization.t",
+    "pa17/tests/general/400-dependent-alias-member-template-id-defer.t",
+    "pa17/tests/general/400-dependent-conditional-default-alias-recomputed.t",
+    "pa17/tests/general/400-dependent-owner-member-class-template-partial-specialization.t",
+    "pa17/tests/general/400-dependent-pack-typename-nontype-expression.t",
+    "pa17/tests/general/400-empty-pack-member-alias-owner-specialization.t",
+    "pa17/tests/general/400-forward-function-type-partial-specialization-pack-arity.t",
+    "pa17/tests/general/400-forward-primary-partial-switch-value.t",
+    "pa17/tests/general/400-function-parameter-pack-alias-expansion.t",
+    "pa17/tests/general/400-function-pointer-varargs-partial-specialization-order.t",
+    "pa17/tests/general/400-function-type-cv-partial-specialization.t",
+    "pa17/tests/general/400-function-type-partial-specialization-preference.t",
+    "pa17/tests/general/400-function-type-ref-qualified-partial-specialization.t",
+    "pa17/tests/general/400-identity-alias-cv-partial-specialization.t",
+    "pa17/tests/general/400-inline-namespace-template-template-argument.t",
+    "pa17/tests/general/400-local-value-shadows-template-relational.t",
+    "pa17/tests/general/400-member-alias-template-owner-rebind-cache.t",
+    "pa17/tests/general/400-member-alias-template-template-dependent-replay.t",
+    "pa17/tests/general/400-member-alias-template-template-empty-template-id-argument.t",
+    "pa17/tests/general/400-member-template-nontype-shadowed-global-replay.t",
+    "pa17/tests/general/400-nested-function-type-argument-partial-specialization.t",
+    "pa17/tests/general/400-nested-template-id-cv-partial-order.t",
+    "pa17/tests/general/400-nontype-pack-comma-expression-syntax.t",
+    "pa17/tests/general/400-nontype-pack-fixed-tail-partial-specialization-ordering.t",
+    "pa17/tests/general/400-nttp-pack-void-comma-expression.t",
+    "pa17/tests/general/400-out-of-namespace-class-template-member-result.t",
+    "pa17/tests/general/400-pack-expanded-member-alias-source-scope.t",
+    "pa17/tests/general/400-partial-owner-member-alias-scope-shadow.t",
+    "pa17/tests/general/400-partial-specialization-alias-pattern.t",
+    "pa17/tests/general/400-partial-specialization-concrete-namespace-argument-order.t",
+    "pa17/tests/general/400-partial-specialization-conversion-operator-pointer-binding.t",
+    "pa17/tests/general/400-partial-specialization-cv-ref-ordering.t",
+    "pa17/tests/general/400-partial-specialization-fixed-nontype-cv-ref.t",
+    "pa17/tests/general/400-partial-specialization-member-template-id-cv-mismatch.t",
+    "pa17/tests/general/400-partial-specialization-nontype-pattern-order.t",
+    "pa17/tests/general/400-partial-specialization-redecl-member-template-empty-pack.t",
+    "pa17/tests/general/400-qualified-base-type-alias-from-nontype-pack.t",
+    "pa17/tests/general/400-qualified-template-id-current-scope-alias-shadow.t",
+    "pa17/tests/general/400-recursive-pack-alias-carries-expanded-type-syntax.t",
+    "pa17/tests/general/400-reference-member-depth-pack-sum.t",
+    "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
+    "pa17/tests/general/400-repeated-argument-partial-specialization-ordering.t",
+    "pa17/tests/general/400-repeated-pack-partial-specialization-ordering.t",
+    "pa17/tests/general/400-template-id-fixed-prefix-pack-partial-ordering.t",
+    "pa17/tests/general/400-template-template-arity-incomplete-partial.t",
+    "pa17/tests/general/400-template-template-fixed-prefix-pack-order.t",
+    "pa17/tests/general/400-template-template-id-const-reference-partial-order.t",
+    "pa17/tests/general/400-template-template-member-current-specialization.t",
+    "pa17/tests/general/400-trailing-pack-partial-specialization-common-type-member.t",
+    "pa17/tests/general/400-two-argument-pointer-partial-specialization-ordering.t",
+    "pa17/tests/general/400-variadic-template-pack-under-lvalue-reference-partial.t",
+    "pa17/tests/general/400-void-head-pack-partial-specialization-ordering.t",
+    "pa17/tests/spec/100-class-partial-specialization-array-size.t",
+    "pa17/tests/spec/100-class-partial-specialization-unbounded-array-mismatch.t",
+    "pa17/tests/spec/100-defaulted-trailing-class-partial-specialization.t",
+    "pa17/tests/spec/100-function-type-pack-partial-specialization-replay.t",
+    "pa17/tests/spec/100-function-type-top-level-cv-partial-specialization.t",
+    "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t",
+    "pa17/tests/spec/100-nested-cv-pointer-partial-specialization-ordering.t",
+    "pa17/tests/spec/100-nontype-static-outdef-value-member-preserves-type.t",
+    "pa17/tests/spec/100-partial-order-stored-nested-default-pattern.t",
+    "pa17/tests/spec/100-partial-specialization-concrete-type-shadows-parameter-name.t",
+    "pa17/tests/spec/100-partial-specialization-cv-pointer-selection.t",
+    "pa17/tests/spec/100-partial-specialization-definition-time-namespace-binding.t",
+    "pa17/tests/spec/100-partial-specialization-top-const-reference-mismatch.t",
+    "pa17/tests/spec/100-partial-specialization-uses-primary-default-argument.t",
+    "pa17/tests/spec/100-qualified-function-type-partial-specialization.t",
+    "pa17/tests/spec/100-unmatched-partial-member-owner-rejected.t",
+    "pa17/tests/spec/100-variadic-base-pack-expansion.t",
+    "pa17/tests/spec/200-deduced-template-template-qualified-identity.t",
+    "pa17/tests/spec/200-elaborated-type-template-argument.t",
+    "pa17/tests/spec/200-private-intermediate-alias-member-rejected.t",
+    "pa17/tests/spec/200-template-template-parameter-arity-mismatch.t",
+    "pa17/tests/spec/200-template-template-parameter-nested-partial-specialization.t",
+    "pa17/tests/spec/200-template-template-redeclaration-shape-bad.t",
+    "pa17/tests/spec/200-unnamed-template-template-parameter.t",
+    "pa17/tests/spec/300-compound-assignment-operator-template-distractor.t",
+    "pa17/tests/spec/300-const-member-function-template-overload.t",
+    "pa17/tests/spec/300-contextual-logical-bool-prefers-nontemplate-conversion.t",
+    "pa17/tests/spec/300-defaulted-type-arg-specialization-nontype-value.t",
+    "pa17/tests/spec/300-dependent-member-template-ref-qualified-overload.t",
+    "pa17/tests/spec/300-dependent-super-member-template-chain.t",
+    "pa17/tests/spec/300-dependent-using-operator-out-of-class-member-template.t",
+    "pa17/tests/spec/300-duplicate-explicit-member-template-definition-rejected.t",
+    "pa17/tests/spec/300-explicit-instantiation-class.t",
+    "pa17/tests/spec/300-explicit-instantiation-deduced-member-function-template.t",
+    "pa17/tests/spec/300-explicit-instantiation-free-function-emits-definition.t",
+    "pa17/tests/spec/300-explicit-instantiation-function.t",
+    "pa17/tests/spec/300-explicit-instantiation-out-of-class-nested-member.t",
+    "pa17/tests/spec/300-explicit-instantiation-prior-reference-static-data.t",
+    "pa17/tests/spec/300-explicit-instantiation-static-member-function.t",
+    "pa17/tests/spec/300-explicit-member-template-definition-replaces-primary-instantiation.t",
+    "pa17/tests/spec/300-explicit-specialization-after-instantiation.t",
+    "pa17/tests/spec/300-explicit-specialization-cross-converting-ctor-body.t",
+    "pa17/tests/spec/300-explicit-specialization-member-definition-after-forward-use.t",
+    "pa17/tests/spec/300-explicit-specialization-member-function.t",
+    "pa17/tests/spec/300-explicit-specialization-out-of-class-member-overrides-primary.t",
+    "pa17/tests/spec/300-explicit-specialization-refreshes-stale-primary-instantiation.t",
+    "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
+    "pa17/tests/spec/300-explicit-specialized-ctor-template-header-bad.t",
+    "pa17/tests/spec/300-extern-template-class-declaration.t",
+    "pa17/tests/spec/300-extern-template-class-keeps-inline-defaulted-assignment.t",
+    "pa17/tests/spec/300-extern-template-constructor-declaration.t",
+    "pa17/tests/spec/300-extern-template-deduced-function-declaration.t",
+    "pa17/tests/spec/300-extern-template-function-call-suppresses-materialization.t",
+    "pa17/tests/spec/300-extern-template-operator-function-declaration.t",
+    "pa17/tests/spec/300-extern-template-overload-type-selects-target.t",
+    "pa17/tests/spec/300-friend-class-template-nested-private-typedef-access.t",
+    "pa17/tests/spec/300-friend-class-template-protected-base-access.t",
+    "pa17/tests/spec/300-friend-intermediate-derived-protected-nested-type.t",
+    "pa17/tests/spec/300-function-explicit-specialization-declaration-before-primary-definition.t",
+    "pa17/tests/spec/300-function-template-pointer-argument-incomplete-pointee.t",
+    "pa17/tests/spec/300-functional-cast-type-not-hidden-by-constructor-template.t",
+    "pa17/tests/spec/300-hidden-friend-template-call-adl.t",
+    "pa17/tests/spec/300-hidden-friend-template-operator-adl.t",
+    "pa17/tests/spec/300-inherited-member-template-call-during-static-assert-validation.t",
+    "pa17/tests/spec/300-inline-nested-owner-out-of-class-member-template-definitions.t",
+    "pa17/tests/spec/300-member-call-template-hides-inherited-instantiation.t",
+    "pa17/tests/spec/300-member-class-template-out-of-class.t",
+    "pa17/tests/spec/300-member-operator-template-active-owner.t",
+    "pa17/tests/spec/300-member-operator-template-in-class-template.t",
+    "pa17/tests/spec/300-member-template-cache-hit-concrete-scope.t",
+    "pa17/tests/spec/300-member-template-definition-after-first-call.t",
+    "pa17/tests/spec/300-member-template-id-not-blocked-by-owner-value-name.t",
+    "pa17/tests/spec/300-member-template-trailing-return-implicit-field.t",
+    "pa17/tests/spec/300-nested-class-member-template-nontype-return-key.t",
+    "pa17/tests/spec/300-nested-member-class-template-explicit-specialization.t",
+    "pa17/tests/spec/300-nested-member-template-definition-parameter-alias-default.t",
+    "pa17/tests/spec/300-nested-owner-out-of-class-member-template-alias-parameter.t",
+    "pa17/tests/spec/300-noexcept-member-template-call-operator.t",
+    "pa17/tests/spec/300-nontype-parameter-dependent-owner-static-assert-bad.t",
+    "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+    "pa17/tests/spec/300-out-of-class-member-template-dependent-default-argument.t",
+    "pa17/tests/spec/300-out-of-class-member-template-owner-param-rename.t",
+    "pa17/tests/spec/300-out-of-class-member-template-renamed-owner-parameters.t",
+    "pa17/tests/spec/300-out-of-class-member-template-tag-dispatch-definition.t",
+    "pa17/tests/spec/300-out-of-class-nested-class-member-template-constructor.t",
+    "pa17/tests/spec/300-out-of-class-overloaded-member-template-definition.t",
+    "pa17/tests/spec/300-private-base-inherited-member-template-argument-rejected.t",
+    "pa17/tests/spec/300-private-leading-template-id-path-rejected.t",
+    "pa17/tests/spec/300-private-member-alias-template-argument-rejected.t",
+    "pa17/tests/spec/300-qualified-friend-function-template-member-access.t",
+    "pa17/tests/spec/300-qualified-member-template-hides-base-function.t",
+    "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
+    "pa17/tests/spec/300-static-member-function-template-out-of-class.t",
+    "pa17/tests/spec/300-template-friend-inside-class-template.t",
+    "pa17/tests/spec/300-using-imported-member-template-active-owner.t",
+    "pa17/tests/spec/300-using-inherited-alias-operator-template.t",
+    "pa17/tests/spec/300-variable-template-defaulted-trailing-specialization.t",
+    "pa17/tests/spec/300-variable-template-nested-nontype-specialization.t"
+  ],
+  "resolved_failures": [
+    "pa17/tests/general/300-local-qualified-argument-replay.t",
+    "pa17/tests/general/400-reference-member-lookup-in-progress-base-typedef.t",
+    "pa17/tests/spec/100-inline-namespace-qualified-template-id-pack-expansion.t"
+  ],
+  "remaining_failures": [
+    "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
+    "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
+    "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
+    "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
+    "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
+    "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
+    "pa17/tests/general/300-function-template-local-static-per-specialization.t",
+    "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
+    "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
+    "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+    "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
+    "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
+    "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
+    "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
+    "pa17/tests/general/400-local-value-shadows-template-relational.t",
+    "pa17/tests/spec/300-dependent-super-member-template-chain.t",
+    "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
+    "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+    "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t"
+  ],
+  "remaining_groups": {
+    "query": {
+      "owner": "Expression query/candidate substitution",
+      "data_flow": "Dependent expression query -> nested candidate deduction/class selection -> success, expected rejection or recursive demand",
+      "complexity": "Actual candidates and query dependency edges; active/failure states and negative cache validity need implementation.",
+      "validation": "Three original query fixtures plus positive/negative recursive and ambiguous-operator controls; prior-through report.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-a-candidate-is-not-collected-twice.t",
+          "compiler_exit_status": "EXIT_FAILURE",
+          "diagnostic": "ERROR: recursive type query\n"
+        },
+        {
+          "path": "pa17/tests/general/300-nested-argument-dependent-lookup-keeps-its-classes.t",
+          "compiler_exit_status": "EXIT_FAILURE",
+          "diagnostic": "ERROR: recursive type query\n"
+        },
+        {
+          "path": "pa17/tests/general/300-sfinae-discards-an-ambiguous-operator.t",
+          "compiler_exit_status": "EXIT_FAILURE",
+          "diagnostic": "ERROR: ambiguous type-query operator\n"
+        }
+      ]
+    },
+    "lambda": {
+      "owner": "Lambda declaration and semantic closure identity",
+      "data_flow": "Parsed lambda -> closure entity/call operator -> member-template deduction and body/lifetime demand",
+      "complexity": "One closure identity per source/instantiation environment, source-proportional body ownership.",
+      "validation": "Original chained nonprimary lambda fixture; distinct closure, body, capture/call and lifetime controls.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-nonprimary-chained-member-template-lambda-anchor-collision.t",
+          "compiler_exit_status": "EXIT_FAILURE",
+          "diagnostic": "ERROR: unsupported expression\n"
+        }
+      ]
+    },
+    "storage": {
+      "owner": "Static storage, definition publication and initialization",
+      "data_flow": "Selected specialization/static entity -> definition/storage/constant policy -> globals, guards and initializer emission",
+      "complexity": "One storage/emission identity per declaration; work proportional to demanded initializers/relocations.",
+      "validation": "Seven unchanged required LowIR comparisons and native initialization/storage controls.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-constexpr-static-fn-template-address-pack.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-constexpr-static-fn-template-address-pack.my.lowir.compare.diff",
+            "sha256": "b8089ca1bbbda3265b57ab11fbf2d9ee4797204f0a7c8ae45563e8ce041eb45a",
+            "text": "--- tests/general/300-constexpr-static-fn-template-address-pack.my.lowir.ref.compare\t2026-09-24 15:26:16.148990372 +0000\n+++ tests/general/300-constexpr-static-fn-template-address-pack.my.lowir.my.compare\t2026-09-24 15:26:16.149045710 +0000\n@@ -1,5 +1,5 @@\n global @<global0> = {\n-  zero 8\n+  ptr addr @<fn0>\n }\n \n function @<fn0>() -> void {\n@@ -35,11 +35,3 @@\n     %<value1> = load i32 $<slot0>\n     return i32 %<value1>\n }\n-\n-function @<fn3>() -> void [role=init] {\n-  block ^<block0>:\n-    %<value0> = addr @<global0>\n-    %<value1> = addr @<fn0>\n-    call void @<fn1>(%<value0>, %<value1>)\n-    return void\n-}\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.my.lowir.compare.diff",
+            "sha256": "883e9761af639a99fdac5791e35c4d42cf6dd51f4ed3b8d8cde3c81d7a648a46",
+            "text": "--- tests/general/300-dependent-hidden-friend-static-member-definition.my.lowir.ref.compare\t2026-09-24 15:26:16.205138412 +0000\n+++ tests/general/300-dependent-hidden-friend-static-member-definition.my.lowir.my.compare\t2026-09-24 15:26:16.205190024 +0000\n@@ -1,4 +1,4 @@\n-global @<global0> : i64 = 0\n+declare global @<global0> : i64\n \n function @<fn0>() -> u8 {\n   slot $<slot0> : obj<1x1>\n@@ -43,6 +43,7 @@\n     store i64 %<value0>, $<slot0>\n     store ptr %<value1>, $<slot1>\n     %<value2> = addr $<slot2>\n+    zeroinit 1x1 %<value2>\n     return obj<1x1> $<slot2>\n }\n \n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/300-function-template-local-static-per-specialization.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-function-template-local-static-per-specialization.my.lowir.compare.diff",
+            "sha256": "5926b9b46a6a060e069264785db5944a435e0f671da4db32c56a83385c1efcb5",
+            "text": "--- tests/general/300-function-template-local-static-per-specialization.my.lowir.ref.compare\t2026-09-24 15:26:16.359408470 +0000\n+++ tests/general/300-function-template-local-static-per-specialization.my.lowir.my.compare\t2026-09-24 15:26:16.359463504 +0000\n@@ -1,46 +1,28 @@\n global @<global0> = {\n-  zero 16\n+  ptr addr @<fn4>\n+  ptr addr @<fn2>\n }\n \n-global @<global1> : i64 = zero\n-\n-global @<global2> = {\n-  zero 16\n+global @<global1> = {\n+  ptr addr @<fn5>\n+  ptr addr @<fn3>\n }\n \n-global @<global3> : i64 = zero\n-\n function @<fn0>(%<value0> : ptr, %<value1> : obj<1x1>) -> i32 {\n   slot $<slot0> : ptr\n   slot $<slot1> : obj<1x1>\n   block ^<block0>:\n     store ptr %<value0>, $<slot0>\n-    %<value2> = load i64 @<global1>\n-    %<value3> = cmp ne i64 %<value2>, 0\n-    branch %<value3>, ^<block2>, ^<block1>\n-  block ^<block1>:\n-    %<value4> = addr @<global0>\n-    %<value5> = addr @<fn4>\n+    %<value2> = addr @<global0>\n+    %<value3> = index i8 %<value2>, 0\n+    %<value4> = load ptr %<value3>\n+    %<value5> = call i32 %<value4>() as () -> i32\n     %<value6> = addr @<global0>\n-    %<value7> = index i8 %<value6>, 0\n-    store ptr %<value5>, %<value7>\n-    %<value8> = addr @<fn2>\n-    %<value9> = addr @<global0>\n-    %<value10> = index i8 %<value9>, 8\n-    store ptr %<value8>, %<value10>\n-    store i64 1, @<global1>\n-    jump ^<block2>\n-  block ^<block2>:\n-    %<value11> = addr @<global0>\n-    %<value12> = index i8 %<value11>, 0\n-    %<value13> = load ptr %<value12>\n-    %<value14> = call i32 %<value13>() as () -> i32\n-    %<value15> = addr @<global0>\n-    %<value16> = index i8 %<value15>, 8\n-    %<value17> = load ptr %<value16>\n-    %<value18> = call i32 %<value17>() as () -> i32\n-    %<value19> = binary add i32 %<value14>, %<value18>\n-    return i32 %<value19>\n+    %<value7> = index i8 %<value6>, 8\n+    %<value8> = load ptr %<value7>\n+    %<value9> = call i32 %<value8>() as () -> i32\n+    %<value10> = binary add i32 %<value5>, %<value9>\n+    return i32 %<value10>\n }\n \n function @<fn1>(%<value0> : ptr, %<value1> : obj<1x1>) -> i32 {\n@@ -48,32 +30,16 @@\n   slot $<slot1> : obj<1x1>\n   block ^<block0>:\n     store ptr %<value0>, $<slot0>\n-    %<value2> = load i64 @<global3>\n-    %<value3> = cmp ne i64 %<value2>, 0\n-    branch %<value3>, ^<block2>, ^<block1>\n-  block ^<block1>:\n-    %<value4> = addr @<global2>\n-    %<value5> = addr @<fn5>\n-    %<value6> = addr @<global2>\n-    %<value7> = index i8 %<value6>, 0\n-    store ptr %<value5>, %<value7>\n-    %<value8> = addr @<fn3>\n-    %<value9> = addr @<global2>\n-    %<value10> = index i8 %<value9>, 8\n-    store ptr %<value8>, %<value10>\n-    store i64 1, @<global3>\n-    jump ^<block2>\n-  block ^<block2>:\n-    %<value11> = addr @<global2>\n-    %<value12> = index i8 %<value11>, 0\n-    %<value13> = load ptr %<value12>\n-    %<value14> = call i32 %<value13>() as () -> i32\n-    %<value15> = addr @<global2>\n-    %<value16> = index i8 %<value15>, 8\n-    %<value17> = load ptr %<value16>\n-    %<value18> = call i32 %<value17>() as () -> i32\n-    %<value19> = binary add i32 %<value14>, %<value18>\n-    return i32 %<value19>\n+    %<value2> = addr @<global1>\n+    %<value3> = index i8 %<value2>, 0\n+    %<value4> = load ptr %<value3>\n+    %<value5> = call i32 %<value4>() as () -> i32\n+    %<value6> = addr @<global1>\n+    %<value7> = index i8 %<value6>, 8\n+    %<value8> = load ptr %<value7>\n+    %<value9> = call i32 %<value8>() as () -> i32\n+    %<value10> = binary add i32 %<value5>, %<value9>\n+    return i32 %<value10>\n }\n \n function @<fn2>() -> i32 {\n@@ -106,10 +72,12 @@\n     %<value0> = addr $<slot0>\n     %<value1> = addr $<slot0>\n     %<value2> = addr $<slot1>\n+    zeroinit 1x1 %<value2>\n     %<value3> = call i32 @<fn0>(%<value1>, $<slot1>)\n     store i32 %<value3>, $<slot2>\n     %<value4> = addr $<slot0>\n     %<value5> = addr $<slot3>\n+    zeroinit 1x1 %<value5>\n     %<value6> = call i32 @<fn1>(%<value4>, $<slot3>)\n     store i32 %<value6>, $<slot4>\n     %<value7> = load i32 $<slot2>\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.my.lowir.compare.diff",
+            "sha256": "5a455870ee6eb7a7c3e724425611156882089e41579e567d852b911fe0896edf",
+            "text": "--- tests/general/300-namespace-function-template-hides-outer-callable-object.my.lowir.ref.compare\t2026-09-24 15:26:16.510197859 +0000\n+++ tests/general/300-namespace-function-template-hides-outer-callable-object.my.lowir.my.compare\t2026-09-24 15:26:16.510249340 +0000\n@@ -2,7 +2,7 @@\n   zero 1\n }\n \n-global @<global1> : ptr = zero\n+global @<global1> : ptr = addr @<global0>\n \n function @<fn0>(%<value0> : ptr [pass=by_address]) -> i32 {\n   slot $<slot0> : ptr\n@@ -51,10 +51,3 @@\n     %<value3> = load i32 $<slot1>\n     return i32 %<value3>\n }\n-\n-function @<fn4>() -> void [role=init] {\n-  block ^<block0>:\n-    %<value0> = addr @<global0>\n-    store ptr %<value0>, @<global1>\n-    return void\n-}\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/400-alias-nontype-pack-partial-base.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/400-alias-nontype-pack-partial-base.my.lowir.compare.diff",
+            "sha256": "1c6aa4e4a48e7cc59cec9b180d821912135e58b778409773d067b1f06cd0e141",
+            "text": "--- tests/general/400-alias-nontype-pack-partial-base.my.lowir.ref.compare\t2026-09-24 15:26:16.790711558 +0000\n+++ tests/general/400-alias-nontype-pack-partial-base.my.lowir.my.compare\t2026-09-24 15:26:16.790760941 +0000\n@@ -2,9 +2,9 @@\n   zero 1\n }\n \n-global @<global1> : ptr = zero\n+global @<global1> : ptr = addr @<global0>\n \n-global @<global2> : ptr = zero\n+global @<global2> : ptr = addr @<global0>\n \n function @<fn0>() -> i32 [role=entry] {\n   block ^<block0>:\n@@ -13,11 +13,5 @@\n \n function @<fn1>() -> void [role=init] {\n   block ^<block0>:\n-    %<value0> = addr @<global0>\n-    %<value1> = index i8 %<value0>, 0\n-    store ptr %<value1>, @<global1>\n-    %<value2> = addr @<global0>\n-    %<value3> = index i8 %<value2>, 0\n-    store ptr %<value3>, @<global2>\n     return void\n }\n"
+          }
+        },
+        {
+          "path": "pa17/tests/spec/300-explicit-specialization-static-data-member.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/spec/300-explicit-specialization-static-data-member.my.lowir.compare.diff",
+            "sha256": "fa5651e40e711c56e65ed0c12fb56d57bc1ca589b9692b91269a64409a82a265",
+            "text": "--- tests/spec/300-explicit-specialization-static-data-member.my.lowir.ref.compare\t2026-09-24 15:26:17.137655083 +0000\n+++ tests/spec/300-explicit-specialization-static-data-member.my.lowir.my.compare\t2026-09-24 15:26:17.137705769 +0000\n@@ -6,20 +6,19 @@\n   slot $<slot0> : i64\n   slot $<slot1> : i32\n   block ^<block0>:\n-    %<value0> = load i32 @<global0>\n-    %<value1> = cmp eq i32 %<value0>, 1\n-    branch %<value1>, ^<block1>, ^<block2>\n+    %<value0> = cmp eq i32 1, 1\n+    branch %<value0>, ^<block1>, ^<block2>\n   block ^<block1>:\n-    %<value2> = cmp eq i32 7, 7\n-    %<value3> = cmp ne i64 %<value2>, 0\n-    store i64 %<value3>, $<slot0>\n+    %<value1> = cmp eq i32 7, 7\n+    %<value2> = cmp ne i64 %<value1>, 0\n+    store i64 %<value2>, $<slot0>\n     jump ^<block3>\n   block ^<block2>:\n     store i64 0, $<slot0>\n     jump ^<block3>\n   block ^<block3>:\n-    %<value4> = load i64 $<slot0>\n-    branch %<value4>, ^<block4>, ^<block5>\n+    %<value3> = load i64 $<slot0>\n+    branch %<value3>, ^<block4>, ^<block5>\n   block ^<block4>:\n     store i32 0, $<slot1>\n     jump ^<block6>\n@@ -27,6 +26,6 @@\n     store i32 1, $<slot1>\n     jump ^<block6>\n   block ^<block6>:\n-    %<value5> = load i32 $<slot1>\n-    return i32 %<value5>\n+    %<value4> = load i32 $<slot1>\n+    return i32 %<value4>\n }\n"
+          }
+        },
+        {
+          "path": "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.my.lowir.compare.diff",
+            "sha256": "7f16646c0f94b167f0ee8ba320b342693add0efea2ac7b522fba683c5b09a363",
+            "text": "--- tests/spec/300-rooted-qualified-static-data-member-template-definition.my.lowir.ref.compare\t2026-09-24 15:26:17.389292974 +0000\n+++ tests/spec/300-rooted-qualified-static-data-member-template-definition.my.lowir.my.compare\t2026-09-24 15:26:17.389346393 +0000\n@@ -2,7 +2,7 @@\n   zero 1\n }\n \n-global @<global1> : ptr = zero\n+global @<global1> : ptr = addr @<global0>\n \n function @<fn0>(%<value0> : ptr) -> void {\n   slot $<slot0> : ptr\n@@ -32,8 +32,6 @@\n function @<fn2>() -> void [role=init] {\n   block ^<block0>:\n     %<value0> = addr @<global0>\n-    store ptr %<value0>, @<global1>\n-    %<value1> = addr @<global0>\n-    call void @<fn0>(%<value1>)\n+    call void @<fn0>(%<value0>)\n     return void\n }\n"
+          }
+        }
+      ]
+    },
+    "arrays": {
+      "owner": "Array initialization effects and O0 representation",
+      "data_flow": "Recorded element initialization/effects -> scalar plan or bounded constant-copy lowering",
+      "complexity": "Proportional explicit elements; retain effect ordering and existing bounded expansion/fallback.",
+      "validation": "Two original array-initialization comparisons; effects, empty temporaries, constants and runtime checks.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/200-alias-template-template-argument-use-scope.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/200-alias-template-template-argument-use-scope.my.lowir.compare.diff",
+            "sha256": "84807f797ce31f3aaffbcd5ff7aa8f020360479baf6e66191a1e0e6ab50ef813",
+            "text": "--- tests/general/200-alias-template-template-argument-use-scope.my.lowir.ref.compare\t2026-09-24 15:26:16.000371006 +0000\n+++ tests/general/200-alias-template-template-argument-use-scope.my.lowir.my.compare\t2026-09-24 15:26:16.000422474 +0000\n@@ -1,3 +1,8 @@\n+global @<global0> = {\n+  i32 0\n+  i32 0\n+}\n+\n function @<fn0>() -> i32 [role=entry] {\n   block ^<block0>:\n     call void @<fn1>()\n@@ -10,17 +15,9 @@\n \n function @<fn1>() -> void {\n   slot $<slot0> : obj<8x4>\n-  slot $<slot1> : obj<1x1>\n-  slot $<slot2> : obj<1x1>\n   block ^<block0>:\n     %<value0> = addr $<slot0>\n-    %<value1> = addr $<slot1>\n-    zeroinit 1x1 %<value1>\n-    store i32 0, %<value0>\n-    %<value2> = index i8 %<value0>, 4\n-    %<value3> = addr $<slot2>\n-    zeroinit 1x1 %<value3>\n-    store i32 0, %<value2>\n-    %<value4> = addr $<slot0>\n+    copyobj 8x4 @<global0>, %<value0>\n+    %<value1> = addr $<slot0>\n     return void\n }\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/400-local-value-shadows-template-relational.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/400-local-value-shadows-template-relational.my.lowir.compare.diff",
+            "sha256": "3512307658014e267febedaa780538e7847892703bdcb1b7b1dd6d8535f5d1a5",
+            "text": "--- tests/general/400-local-value-shadows-template-relational.my.lowir.ref.compare\t2026-09-24 15:26:16.871351151 +0000\n+++ tests/general/400-local-value-shadows-template-relational.my.lowir.my.compare\t2026-09-24 15:26:16.871406812 +0000\n@@ -1,3 +1,8 @@\n+global @<global0> = {\n+  i64 0\n+  i64 0\n+}\n+\n function @<fn0>(%<value0> : ptr, %<value1> : i64) -> i32 {\n   slot $<slot0> : ptr\n   slot $<slot1> : i64\n@@ -36,20 +41,18 @@\n   block ^<block0>:\n     %<value0> = addr $<slot0>\n     %<value1> = addr $<slot1>\n-    store i64 0, %<value1>\n-    %<value2> = index i8 %<value1>, 8\n-    store i64 0, %<value2>\n-    %<value3> = addr $<slot1>\n-    %<value4> = addr $<slot0>\n-    %<value5> = index i8 %<value4>, 0\n-    store ptr %<value3>, %<value5>\n-    %<value6> = addr $<slot1>\n-    %<value7> = binary mul i64 2, 8\n-    %<value8> = index i8 %<value6>, %<value7>\n-    %<value9> = addr $<slot0>\n-    %<value10> = index i8 %<value9>, 8\n-    store ptr %<value8>, %<value10>\n-    %<value11> = addr $<slot0>\n-    %<value12> = call i32 @<fn0>(%<value11>, 1)\n-    return i32 %<value12>\n+    copyobj 16x8 @<global0>, %<value1>\n+    %<value2> = addr $<slot1>\n+    %<value3> = addr $<slot0>\n+    %<value4> = index i8 %<value3>, 0\n+    store ptr %<value2>, %<value4>\n+    %<value5> = addr $<slot1>\n+    %<value6> = binary mul i64 2, 8\n+    %<value7> = index i8 %<value5>, %<value6>\n+    %<value8> = addr $<slot0>\n+    %<value9> = index i8 %<value8>, 8\n+    store ptr %<value7>, %<value9>\n+    %<value10> = addr $<slot0>\n+    %<value11> = call i32 @<fn0>(%<value10>, 1)\n+    return i32 %<value11>\n }\n"
+          }
+        }
+      ]
+    },
+    "conversion_transfer": {
+      "owner": "Scalar conversions and memberwise transfer representation",
+      "data_flow": "Recorded constant conversions/selected transfer actions -> typed scalar/member stores",
+      "complexity": "Linear in conversions and transferred members; no semantic reconstruction in lowering.",
+      "validation": "Three original conversion/transfer comparisons and side-effect/overlap/constant conversion controls.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/200-alias-template-binds-forward-specialization-member.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/200-alias-template-binds-forward-specialization-member.my.lowir.compare.diff",
+            "sha256": "418f752255af989c5f9654364aa37dd628e7994fb6f6d893a8b0cafc3242cb67",
+            "text": "--- tests/general/200-alias-template-binds-forward-specialization-member.my.lowir.ref.compare\t2026-09-24 15:26:15.990407459 +0000\n+++ tests/general/200-alias-template-binds-forward-specialization-member.my.lowir.my.compare\t2026-09-24 15:26:15.990482926 +0000\n@@ -5,16 +5,17 @@\n function @<fn0>() -> i32 [role=entry] {\n   slot $<slot0> : i32\n   block ^<block0>:\n-    %<value0> = addr @<global0>\n-    %<value1> = index i8 %<value0>, 0\n+    %<value0> = convert sext i64 i32 7\n+    %<value1> = addr @<global0>\n     %<value2> = index i8 %<value1>, 0\n-    store i64 7, %<value2>\n-    %<value3> = addr @<global0>\n-    %<value4> = index i8 %<value3>, 0\n+    %<value3> = index i8 %<value2>, 0\n+    store i64 %<value0>, %<value3>\n+    %<value4> = addr @<global0>\n     %<value5> = index i8 %<value4>, 0\n-    %<value6> = load i64 %<value5>\n-    %<value7> = cmp eq i64 %<value6>, 7\n-    branch %<value7>, ^<block1>, ^<block2>\n+    %<value6> = index i8 %<value5>, 0\n+    %<value7> = load i64 %<value6>\n+    %<value8> = cmp eq i64 %<value7>, 7\n+    branch %<value8>, ^<block1>, ^<block2>\n   block ^<block1>:\n     store i32 0, $<slot0>\n     jump ^<block3>\n@@ -22,8 +23,8 @@\n     store i32 1, $<slot0>\n     jump ^<block3>\n   block ^<block3>:\n-    %<value8> = load i32 $<slot0>\n-    return i32 %<value8>\n+    %<value9> = load i32 $<slot0>\n+    return i32 %<value9>\n }\n \n function @<fn1>() -> void [role=init] {\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/300-member-template-body-deferred-past-open-class.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-member-template-body-deferred-past-open-class.my.lowir.compare.diff",
+            "sha256": "4fdacdb1799abe8514af6dae1a53ac6ae8fc6be0e879173ae040b3e1f59dcaa8",
+            "text": "--- tests/general/300-member-template-body-deferred-past-open-class.my.lowir.ref.compare\t2026-09-24 15:26:16.455006549 +0000\n+++ tests/general/300-member-template-body-deferred-past-open-class.my.lowir.my.compare\t2026-09-24 15:26:16.455061099 +0000\n@@ -33,14 +33,11 @@\n   block ^<block0>:\n     store ptr %<value0>, $<slot0>\n     store ptr %<value1>, $<slot1>\n-    %<value2> = load ptr $<slot1>\n-    %<value3> = index i8 %<value2>, 4\n-    %<value4> = load i32 %<value3>\n-    %<value5> = load ptr $<slot0>\n-    %<value6> = index i8 %<value5>, 4\n-    store i32 %<value4>, %<value6>\n-    %<value7> = load ptr $<slot0>\n-    return ptr %<value7>\n+    %<value2> = load ptr $<slot0>\n+    %<value3> = load ptr $<slot1>\n+    copyobj 8x4 %<value3>, %<value2>\n+    %<value4> = load ptr $<slot0>\n+    return ptr %<value4>\n }\n \n function @<fn3>() -> i32 [role=entry] {\n"
+          }
+        },
+        {
+          "path": "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.my.lowir.compare.diff",
+            "sha256": "892e958cf12cc147152f192200db479377b7f16fa46215f0107a0552ac645b01",
+            "text": "--- tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.my.lowir.ref.compare\t2026-09-24 15:26:17.323718542 +0000\n+++ tests/spec/300-out-of-class-copy-assignment-before-member-template-overload.my.lowir.my.compare\t2026-09-24 15:26:17.323780954 +0000\n@@ -59,17 +59,18 @@\n     jump ^<block3>\n   block ^<block3>:\n     %<value13> = addr $<slot2>\n-    %<value14> = addr $<slot2>\n-    %<value15> = index i8 %<value14>, 0\n-    store i64 9, %<value15>\n-    %<value16> = addr $<slot1>\n-    %<value17> = addr $<slot2>\n-    %<value18> = call ptr @<fn1>(%<value16>, %<value17>)\n-    %<value19> = addr $<slot1>\n-    %<value20> = index i8 %<value19>, 0\n-    %<value21> = load i32 %<value20>\n-    %<value22> = cmp eq i32 %<value21>, 9\n-    branch %<value22>, ^<block4>, ^<block5>\n+    %<value14> = convert sext i64 i32 9\n+    %<value15> = addr $<slot2>\n+    %<value16> = index i8 %<value15>, 0\n+    store i64 %<value14>, %<value16>\n+    %<value17> = addr $<slot1>\n+    %<value18> = addr $<slot2>\n+    %<value19> = call ptr @<fn1>(%<value17>, %<value18>)\n+    %<value20> = addr $<slot1>\n+    %<value21> = index i8 %<value20>, 0\n+    %<value22> = load i32 %<value21>\n+    %<value23> = cmp eq i32 %<value22>, 9\n+    branch %<value23>, ^<block4>, ^<block5>\n   block ^<block4>:\n     store i32 0, $<slot3>\n     jump ^<block6>\n@@ -77,6 +78,6 @@\n     store i32 1, $<slot3>\n     jump ^<block6>\n   block ^<block6>:\n-    %<value23> = load i32 $<slot3>\n-    return i32 %<value23>\n+    %<value24> = load i32 $<slot3>\n+    return i32 %<value24>\n }\n"
+          }
+        }
+      ]
+    },
+    "object": {
+      "owner": "Base-object adjustment and empty value initialization",
+      "data_flow": "Selected member + recorded base path + value-initialization plan -> receiver address and object stores",
+      "complexity": "Visit the selected path and consumed plan only.",
+      "validation": "Original dependent-super chain comparison, multibase offsets, cv and empty-object controls.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/spec/300-dependent-super-member-template-chain.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/spec/300-dependent-super-member-template-chain.my.lowir.compare.diff",
+            "sha256": "ebb25058c789ec2716065a67eb6b4d32f7eef1f2a85fac16f967bca261b763ac",
+            "text": "--- tests/spec/300-dependent-super-member-template-chain.my.lowir.ref.compare\t2026-09-24 15:26:17.065608013 +0000\n+++ tests/spec/300-dependent-super-member-template-chain.my.lowir.my.compare\t2026-09-24 15:26:17.065661678 +0000\n@@ -16,14 +16,13 @@\n     store i32 %<value7>, %<value5>\n     %<value8> = load ptr $<slot0>\n     %<value9> = index i8 %<value8>, 0\n-    %<value10> = index i8 %<value9>, 0\n-    %<value11> = load ptr $<slot2>\n-    %<value12> = load ptr $<slot3>\n-    %<value13> = addr $<slot4>\n-    %<value14> = addr $<slot5>\n-    %<value15> = call i32 @<fn1>(%<value10>, 0, %<value11>, %<value12>, $<slot4>)\n-    %<value16> = binary add i32 %<value15>, 100\n-    return i32 %<value16>\n+    %<value10> = load ptr $<slot2>\n+    %<value11> = load ptr $<slot3>\n+    %<value12> = addr $<slot4>\n+    %<value13> = addr $<slot5>\n+    %<value14> = call i32 @<fn1>(%<value9>, 0, %<value10>, %<value11>, $<slot4>)\n+    %<value15> = binary add i32 %<value14>, 100\n+    return i32 %<value15>\n }\n \n function @<fn1>(%<value0> : ptr, %<value1> : i32, %<value2> : ptr, %<value3> : ptr [pass=by_address], %<value4> : obj<1x1>) -> i32 {\n@@ -100,6 +99,7 @@\n     %<value3> = load ptr $<slot2>\n     %<value4> = addr $<slot1>\n     %<value5> = addr $<slot3>\n+    zeroinit 1x1 %<value5>\n     %<value6> = call i32 @<fn0>(%<value2>, 0, %<value3>, %<value4>, $<slot3>)\n     store i32 %<value6>, $<slot4>\n     %<value7> = load i32 $<slot4>\n"
+          }
+        }
+      ]
+    },
+    "cleanup": {
+      "owner": "Exception cleanup-region scheduling",
+      "data_flow": "Recorded live objects/full expressions and call exception facts -> cleanup-region entry/exit/actions",
+      "complexity": "Function-local lifetime/dependency work; preserve action order and existing IR bounds.",
+      "validation": "Two original lifetime comparisons and destructor/throwing-call/normal-return executable controls.",
+      "status": "unfinished implementation",
+      "failures": [
+        {
+          "path": "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-explicit-instantiation-declaration-member-coverage.my.lowir.compare.diff",
+            "sha256": "17800bcbac367c976e8de4f71014ce9da4dce00f7b6bc948d4a238b56114a811",
+            "text": "--- tests/general/300-explicit-instantiation-declaration-member-coverage.my.lowir.ref.compare\t2026-09-24 15:26:16.244631648 +0000\n+++ tests/general/300-explicit-instantiation-declaration-member-coverage.my.lowir.my.compare\t2026-09-24 15:26:16.244687748 +0000\n@@ -26,7 +26,6 @@\n function @<fn4>() -> i32 [role=entry] {\n   slot $<slot0> : obj<1x1>\n   slot $<slot1> : obj<4x4>\n-  slot $<slot2> : i32\n   block ^<block0>:\n     %<value0> = addr $<slot0>\n     %<value1> = addr $<slot1>\n@@ -41,17 +40,17 @@\n     call void @<fn1>(%<value2>)\n     jump ^<block1>\n   block ^<block3>:\n-    eh_try ^<block2>\n     %<value3> = addr $<slot0>\n+    eh_try ^<block2>\n     %<value4> = call i32 @<fn3>(%<value3>)\n-    store i32 %<value4>, $<slot2>\n-    %<value5> = load i32 $<slot2>\n-    %<value6> = addr $<slot1>\n-    %<value7> = index i8 %<value6>, 0\n-    %<value8> = load i32 %<value7>\n-    %<value9> = binary add i32 %<value5>, %<value8>\n     eh_end\n-    %<value10> = addr $<slot0>\n-    call void @<fn1>(%<value10>)\n-    return i32 %<value9>\n+    jump ^<block4>\n+  block ^<block4>:\n+    %<value5> = addr $<slot1>\n+    %<value6> = index i8 %<value5>, 0\n+    %<value7> = load i32 %<value6>\n+    %<value8> = binary add i32 %<value4>, %<value7>\n+    %<value9> = addr $<slot0>\n+    call void @<fn1>(%<value9>)\n+    return i32 %<value8>\n }\n"
+          }
+        },
+        {
+          "path": "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.t",
+          "compiler_exit_status": "EXIT_SUCCESS",
+          "diagnostic": "",
+          "comparison_diff": {
+            "path": "pa17/tests/general/300-nested-member-template-prvalue-dtor-output.my.lowir.compare.diff",
+            "sha256": "0675a955d3610c999638af8f4c135cc1d31217b62cc08065733bf81ba9ca93c6",
+            "text": "--- tests/general/300-nested-member-template-prvalue-dtor-output.my.lowir.ref.compare\t2026-09-24 15:26:16.567642816 +0000\n+++ tests/general/300-nested-member-template-prvalue-dtor-output.my.lowir.my.compare\t2026-09-24 15:26:16.567696104 +0000\n@@ -52,35 +52,18 @@\n     %<value0> = addr $<slot0>\n     call void @<fn0>(%<value0>)\n     store i64 0, $<slot1>\n-    eh_try ^<block2>\n     %<value1> = addr $<slot2>\n     %<value2> = addr $<slot0>\n     %<value3> = addr $<slot1>\n     call void @<fn6>(%<value1>, %<value2>, %<value3>)\n-    eh_end\n-    jump ^<block3>\n-  block ^<block1>:\n-    resume\n-  block ^<block2>:\n-    %<value4> = addr $<slot0>\n-    call void @<fn1>(%<value4>)\n-    jump ^<block1>\n-  block ^<block3>:\n-    eh_try ^<block4>\n     call void @<fn2>(%<value1>)\n     call void @<fn4>(%<value1>)\n-    eh_end\n-    jump ^<block5>\n-  block ^<block4>:\n-    call void @<fn4>(%<value1>)\n-    jump ^<block2>\n-  block ^<block5>:\n-    %<value5> = load i32 @<global0>\n-    %<value6> = cmp ne i32 %<value5>, 2\n-    %<value7> = convert trunc i32 i64 %<value6>\n-    %<value8> = addr $<slot0>\n-    call void @<fn1>(%<value8>)\n-    return i32 %<value7>\n+    %<value4> = load i32 @<global0>\n+    %<value5> = cmp ne i32 %<value4>, 2\n+    %<value6> = convert trunc i32 i64 %<value5>\n+    %<value7> = addr $<slot0>\n+    call void @<fn1>(%<value7>)\n+    return i32 %<value6>\n }\n \n function @<fn6>(%<value0> : ptr [pass=indirect_result], %<value1> : ptr, %<value2> : ptr [pass=by_address]) -> void {\n"
+          }
+        }
+      ]
+    }
+  },
+  "completed_groups": [
+    {
+      "owner": "Qualified current-instantiation types",
+      "data_flow": "Retained source qualifier -> canonical current-instantiation type -> definition lookup or dependent member recipe -> substituted member/access fact",
+      "complexity": "Indexed lexical/current class/base edges; source type path shared, completed member cache only for complete classes, access once per recipe/frame.",
+      "validation": "Two original required failures resolved; positive inherited aliases/references/partials/nested templates, access, hiding, typename/template rejection, and dependent-base ambiguity controls."
+    },
+    {
+      "owner": "Inline namespace syntax visibility",
+      "data_flow": "Namespace declaration opening -> immediate indexed import -> qualified template-id parse -> existing semantic name binding",
+      "complexity": "One existing import edge per opening; same indexed traversal, no grammar replay or copied source.",
+      "validation": "Original inline-qualified pack fixture resolved jointly with argument application; nested/reopened/namespace-alias, local hiding, type/value template-id and pack-call controls."
+    },
+    {
+      "owner": "Fixed-position pack application",
+      "data_flow": "Typed source expansion suffix -> immutable substitution/expansion frames -> expanded argument sequence -> target head/default normalization and canonical specialization tuple",
+      "complexity": "O(source arguments + emitted lanes), existing type/frame result cache and flat canonical argument tables; temporary vectors release at substitution return.",
+      "validation": "Fixed and multiple fixed heads, value/type/reference packs, empty tails, alias/member/recursive applications, missing/wrong-kind rejection, all inherited controls and PA1-PA16."
+    }
+  ],
+  "new_control_entry_failures": 26,
+  "handoff_boundary": "Qualified template name/type application is complete for this increment, extended beyond two inherited-member fixes through immediate inline visibility, fixed-position expansion, multiple heads, non-type packs, dependent-base ambiguity and preserved argument-kind rejection. The three query failures require a separate recursive candidate/class demand and expected-failure protocol; the lambda case lacks closure semantic ownership. Fifteen LowIR differences already reach concrete selected entities and require static-storage/initializer, conversion/transfer, object-adjustment or cleanup scheduling analysis with separate controls. No further known defect remains in the completed group; the remaining implementation is explicitly not waived.",
+  "independent_review_questions": [
+    "Review current-instantiation type/access recipe keys, definition/instantiation lookup timing and dependent-base ambiguity against [temp.dep.type]/4-7.",
+    "Review early inline namespace visibility and parser/semantic scope alignment across reopening, aliases and name hiding.",
+    "Review canonical identity of symbolic argument sequences, normalization/default timing after expansion, frame composition, wrong-kind rejection and cache lifetime.",
+    "Retain unresolved independent review for loops 53/54: query keys/negative validity, anonymous member access/base edges, conditional specifier identity, retained pack lanes and bounded zero-plan lowering.",
+    "Review the preserved A/A/ABBA campaigns, semantic scaling and source-to-ELF trace under stage-scoped O0 acceptance; none certifies full-stage architecture or later backend/self-hosting."
+  ],
+  "acceptance": {
+    "stage": "324/343; 22 -> 19 original failures, no new failures or coverage loss",
+    "prior": "2266/2266",
+    "through": "2590/2609",
+    "file_audit": "pass with three inherited header-ownership warnings",
+    "personal": "439/439 including 391 inherited and 48 new",
+    "performance": "Frozen equivalent common outputs, all four dimensions measured; common repeat shows no repeatable avoidable regression; new workloads are required semantic costs; PA17/O0 has no numerical exit gate.",
+    "review": "Independent review remains required; stage is incomplete, no advancement."
+  },
+  "evidence_files": [
+    {
+      "path": "student.tests/pa17/qualified-controls.json",
+      "sha256": "461a8e2e1a6b9195223549911e1e04bfc4eaae0c7da9910dce8a098eb56cc7c0"
+    },
+    {
+      "path": "student.tests/pa17/qualified-entry-controls.json",
+      "sha256": "c11a3ef9b1ddd32fdf5eee9aa0254a593003c7a98d0d078b67820b6f30de6a57"
+    },
+    {
+      "path": "student.tests/pa17/qualified-performance.json",
+      "sha256": "8bfb737059dfb084dc17f97f7af2225255fba0d3996279273d3ea79e913a210a"
+    },
+    {
+      "path": "student.tests/pa17/qualified-recheck.json",
+      "sha256": "5a72d9809792f754b73a7adfd87eeb12908024c9687e8c5dc5682e2391330046"
+    },
+    {
+      "path": "student.tests/pa17/qualified-trace.json",
+      "sha256": "a180dfc3e9780d69df0d63e3975277fb6e64b1e4d6269d078ae30f0189f8c614"
+    },
+    {
+      "path": "student.tests/pa17/qualified_controls.py",
+      "sha256": "dfc5a0ca809c6e19e619ef1fa9e38ab9568f0a64ec22b760b122842d146a4f22"
+    },
+    {
+      "path": "student.tests/pa17/qualified_benchmark.py",
+      "sha256": "ee6f7363165f0d216675b890b985503ce0642fbd308b2dfb207675cde2fbe1f2"
+    },
+    {
+      "path": "student.tests/pa17/qualified_recheck.py",
+      "sha256": "e2e836ec10b5f321affb00525f862796c8ec65cfd5c2300c7d2be516c111b934"
+    },
+    {
+      "path": "student.tests/pa17/member_lowir_controls.py",
+      "sha256": "2cba81e472623768c6e8af854c561696fe3ae70be5d2fb7857f372e8900b5708"
+    },
+    {
+      "path": "pa17/qualified-performance.md",
+      "sha256": "d3962726af239d62660fd5c8f3040ae06343f5f259105e9991417b5817ea94fd"
+    }
+  ],
+  "reference_corrections": [],
+  "waivers": [],
+  "record_policy": "Frozen code tip precedes records commit. Historical ledgers/verifiers keep their own tips; stage base and last-reviewed marker unchanged. Initial concurrent root reports had shared report scratch and are not used as evidence; authoritative stage/prior/through logs above were rerun separately. Intermediate prior failure was fixed before all recorded gates."
+}

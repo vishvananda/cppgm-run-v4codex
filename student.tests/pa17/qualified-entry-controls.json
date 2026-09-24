@@ -1,0 +1,359 @@
+[
+  {
+    "name": "inherited_current",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_current_explicit",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inherited_reference_alias",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_specialization",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_nested_template",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_alias_template",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_second_qualifier",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_outer_inner",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_partial_current",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_out_of_class",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "known_current_no_typename",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "known_fixed_base_no_typename",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "unknown_unused_deferred",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "private_inherited_inside",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "inline_qualified_function",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": false
+  },
+  {
+    "name": "inline_alias_qualified_function",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": false
+  },
+  {
+    "name": "inline_nested_qualified_function",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": false
+  },
+  {
+    "name": "inline_qualified_type",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unresolved overload in value context\n",
+    "passed": false
+  },
+  {
+    "name": "inline_reopened",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inline_qualified_pack",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": false
+  },
+  {
+    "name": "inline_qualified_type_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_and_dependent_own_hides",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_and_dependent_unambiguous",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_pack_head_return",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: arithmetic operands required\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_two_heads",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_empty_tail",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: arithmetic operands required\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_reference",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: modifiable lvalue required\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_alias",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid implicit conversion\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_recursive",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: arithmetic operands required\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_value",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_enclosing_member",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: arithmetic operands required\n",
+    "passed": false
+  },
+  {
+    "name": "inherited_requires_typename",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "inherited_requires_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: dependent qualified template requires template\n",
+    "passed": true
+  },
+  {
+    "name": "inherited_template_requires_typename",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "inherited_missing_after_substitution",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "closed_current_missing",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "closed_fixed_base_missing",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "inherited_private",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "inherited_ambiguous",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  },
+  {
+    "name": "different_specialization_requires_typename",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: dependent qualified type requires typename\n",
+    "passed": true
+  },
+  {
+    "name": "inline_local_value_hides",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": true
+  },
+  {
+    "name": "inline_qualified_no_parent",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found ')'\n",
+    "passed": true
+  },
+  {
+    "name": "fixed_pack_wrong_type_kind",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": true
+  },
+  {
+    "name": "fixed_pack_wrong_value_kind",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "fixed_and_dependent_ambiguity",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_missing_head",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid implicit conversion\n",
+    "passed": true
+  },
+  {
+    "name": "fixed_pack_missing_second",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": true
+  },
+  {
+    "name": "closed_current_missing_unused",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": true
+  }
+]
