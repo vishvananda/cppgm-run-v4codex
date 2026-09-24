@@ -88,22 +88,22 @@ std::string Encoder::target(const Target& t) {
 }
 void Encoder::external(Id id) {
     const Node n = g[id];
-    // An external-name literal has its own substitution grammar state. Reusing
-    // the outer sequence here would change both the symbol and later indices.
+    // A structured external-name literal participates in the enclosing
+    // substitution sequence, just like its surrounding template arguments.
+    // An explicitly supplied symbol spelling remains an opaque tool input.
     if (n.kind == Kind::SymbolEntity) { output += g.spelling(n.a); return; }
-    Encoder isolated(g, output, depth);
-    isolated.output += "_Z";
-    if (n.kind == Kind::FunctionEntity) isolated.function(entity_function(g, id));
+    output += "_Z";
+    if (n.kind == Kind::FunctionEntity) function(entity_function(g, id));
     else if (n.kind == Kind::VariableEntity) {
         const Node complete = g[n.a];
         const Node name = complete.kind == Kind::Template ? g[complete.a] : complete;
-        bool nest = isolated.nested(n.a);
-        if (nest) isolated.output += 'N';
-        if (name.a) isolated.prefix(name.a);
-        if (n.b) isolated.output += 'L';
-        isolated.source(name.b);
-        if (complete.kind == Kind::Template) isolated.args(complete);
-        if (nest) isolated.output += 'E';
+        bool nest = nested(n.a);
+        if (nest) output += 'N';
+        if (name.a) prefix(name.a);
+        if (n.b) output += 'L';
+        source(name.b);
+        if (complete.kind == Kind::Template) args(complete);
+        if (nest) output += 'E';
     } else throw std::runtime_error("invalid external ABI entity");
 }
 } // namespace abi_mangle

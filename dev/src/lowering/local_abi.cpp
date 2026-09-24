@@ -20,7 +20,7 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
         auto e = address.entity;
         auto entity = sem.entities[e].kind == semantic::EntityKind::Function ? abi_function_context(e) :
             abi.make(Kind::VariableEntity,abi_entity_name(e));
-        return abi.make(Kind::EntityArgument,entity);
+        return abi.make(Kind::EntityArgument,entity,sem.types[query.type].kind == TypeKind::Pointer);
     }
     auto value = abi_query(q);
     return sem.type_query(q).kind == semantic::QueryKind::Value ? value : abi.make(Kind::ExpressionArgument,value);
