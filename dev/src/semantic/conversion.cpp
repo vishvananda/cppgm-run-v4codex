@@ -166,6 +166,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         if ((category || const_binding) && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
             c.adjustment = base_path(from,types[target.child].entity);
             if (base_adjustments[c.adjustment].ambiguous) return c;
+            c.adjustment = base_steps(from,types[target.child].entity);
             c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv;
             c.preference = x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
@@ -205,6 +206,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         if (derived_from(types[from].child, types[to].child) && !(a.cv & ~b.cv)) {
             c.adjustment = base_path(types[from].child,b.entity);
             if (base_adjustments[c.adjustment].ambiguous) return c;
+            c.adjustment = base_steps(types[from].child,b.entity);
             c.rank = 2; c.derived = true; c.qualification = b.cv & ~a.cv; return c;
         }
         if (fundamental(types[to].child, FT_VOID) && a.kind != TypeKind::Function && !(a.cv & ~b.cv)) {

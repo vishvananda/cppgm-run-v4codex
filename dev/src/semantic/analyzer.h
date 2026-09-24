@@ -685,6 +685,7 @@ private:
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
     unsigned base_path(TypeId from, EntityId to);
+    std::uint64_t layout_base_path(unsigned path);
     unsigned base_steps(TypeId from, EntityId to);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);

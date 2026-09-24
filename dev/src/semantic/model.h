@@ -322,8 +322,8 @@ struct Expression {
 };
 struct BaseAdjustment {
     std::uint64_t offset = 0, total = 0;
-    std::uint32_t next = 0;
-    bool ambiguous = false;
+    std::uint32_t next = 0, edge = 0;
+    bool ambiguous = false, laid_out = false;
 };
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;

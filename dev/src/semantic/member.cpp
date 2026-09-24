@@ -30,10 +30,9 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     bool derived = types[object].kind == TypeKind::Named && types[wanted].kind == TypeKind::Named &&
         types[object].entity != types[wanted].entity && class_derives(types[object].entity,types[wanted].entity);
     if (types.unqualified(object) != types.unqualified(wanted) && !derived) return c;
-    // Pattern-only lookup has no object layout. Its concrete receiver is
-    // checked after substitution, when the complete base graph is available.
-    if (derived && !entities[types[object].entity].template_pattern &&
-        base_adjustments[base_path(object,types[wanted].entity)].ambiguous) return c;
+    // Candidate viability needs only declared base edges, including retained
+    // template patterns. It must not demand object layout or member definitions.
+    if (derived && base_adjustments[base_path(object,types[wanted].entity)].ambiguous) return c;
     c.rank = derived ? 2 : 0; c.derived = derived;
     c.qualification = types[wanted].cv & ~types[object].cv;
     c.preference = rvalue && f.ref == RefQualifier::Lvalue;
@@ -44,30 +43,40 @@ unsigned Analyzer::base_path(TypeId from, EntityId to)
     while (auto enclosing = injected_class_owners.get(to)) to = enclosing;
     EntityId e = types[from].entity;
     if (e == to) return 0;
-    // Layout is immutable once published. Cache by canonical class identity;
-    // cv/ref views share the same path, and tails are shared across derived uses.
+    // Base edges are fixed before member checking; concrete specializations
+    // have distinct entity identities from retained patterns. Cache graph facts
+    // separately from layout, and share tails across derived uses.
     auto identity = key(e,to);
     if (auto known = base_adjustment_index.get(identity)) { ++base_adjustment_hits; return known; }
-    size(from);
     BaseAdjustment path; bool found = false;
-    for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next) {
+    for (auto b = access_base(e); b; b = bases[b].next) {
         ++base_adjustment_work;
         auto edge = bases[b];
-        if (edge.base != to && !class_derives(edge.base,to)) continue;
+        auto tail = base_path(entities[edge.base].type,to);
+        if (tail && !base_adjustments[tail].edge) continue;
         if (found) { path.ambiguous = true; break; }
-        found = true; path.offset = edge.offset;
-        path.next = edge.base == to ? 0 : base_path(entities[edge.base].type,to);
-        path.total = path.offset + base_adjustments[path.next].total;
+        found = true; path.edge = b; path.next = tail;
         path.ambiguous = base_adjustments[path.next].ambiguous;
     }
-    if (!found) throw std::logic_error("missing selected base path");
+    // A nonzero record without an edge is a cached miss. Memoizing these
+    // avoids repeated subtree searches in branching inheritance graphs.
     auto id = base_adjustments.size(); base_adjustments.push_back(path);
     base_adjustment_index.put(identity,id); return id;
+}
+std::uint64_t Analyzer::layout_base_path(unsigned id)
+{
+    if (!id || base_adjustments[id].laid_out) return base_adjustments[id].total;
+    auto tail = layout_base_path(base_adjustments[id].next);
+    auto& path = base_adjustments[id];
+    path.offset = bases[path.edge].offset; path.total = path.offset + tail;
+    path.laid_out = true; return path.total;
 }
 unsigned Analyzer::base_steps(TypeId from, EntityId to)
 {
     auto path = base_path(from,to);
+    if (path && !base_adjustments[path].edge) throw std::logic_error("missing selected base path");
     if (base_adjustments[path].ambiguous) throw std::runtime_error("ambiguous base subobject");
+    if (path && !base_adjustments[path].laid_out) { size(from); layout_base_path(path); }
     return path;
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)

@@ -19,6 +19,7 @@ runner.GOOD = {
  'nontrivial_empty_assignment': 'int count;struct E{E&operator=(const E&){++count;return *this;}};template<class T>struct X{T e;int n;};int main(){X<E>a,b;a.n=7;b=a;return count!=1||b.n!=7;}',
  'volatile_sparse_assignment': 'struct E{};template<class T>struct X{E e;volatile T n;};int main(){X<int>a,b;a.n=11;b=a;return b.n!=11;}',
  'reference_copy_constructor': 'struct E{};template<class T>struct X{E e;T&r;X(T&v):r(v){}};int main(){int n=7;X<int>a(n);X<int>b=a;b.r=13;return n!=13;}',
+ 'qualified_fixed_base': 'struct B{int n;int f(){return n;}};struct M:B{};template<int>struct D:M{int g(){return M::f();}};int main(){D<0>x;x.n=7;return x.g()!=7;}',
  'qualified_base_receiver': 'struct Pad{long n;};struct B{int n;int f(){return n;}};template<class T>struct Mid:Pad,T{};template<class T>struct D:Mid<T>{int f(){return Mid<T>::f()+1;}};int main(){D<B>x;x.Pad::n=8;x.B::n=13;return x.f()!=14;}',
  'unqualified_base_receiver': 'struct Pad{long n;};struct B{int n;int f(){return n;}};struct M:Pad,B{};template<class T>struct D:T{};int main(){D<M>x;x.Pad::n=8;x.B::n=13;return x.f()!=13;}',
  'qualified_explicit_object': 'struct Pad{long n;};struct B{int n;int f(){return n;}};struct M:Pad,B{};template<class T>struct D:T{};int main(){D<M>x;x.B::n=13;return x.M::f()!=13;}',
