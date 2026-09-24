@@ -1,0 +1,30 @@
+[
+  {
+    "name": "assign_runtime",
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/loop69/query-controls/assign_runtime.lowir",
+    "sha256": "78234b05495ab16da33ec1501e1a2b6b7767f4e214e2918b8a1df49ac8111090",
+    "expected": "_Z3addIiEDTpLfp_Li2EERT_",
+    "passed": true
+  },
+  {
+    "name": "destructor_trailing_abi",
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/loop69/query-controls/destructor_trailing_abi.lowir",
+    "sha256": "aacfc801d44845adfb97c2fe7822c0d49f1aff6e21d16b3e56a3bcc407e4593a",
+    "expected": "_Z7destroyIiEDTclptfp_dnT_EEPS0_",
+    "passed": true
+  },
+  {
+    "name": "destructor_template_id_abi",
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/loop69/query-controls/destructor_template_id_abi.lowir",
+    "sha256": "39097d2260db87980dea5520ba98948a2b20f31dd8b716833d2b7259a8002eca",
+    "expected": "_Z7destroyIiEDTclptfp_dn1AIT_EEEP1AIS0_E",
+    "passed": true
+  },
+  {
+    "name": "destructor_base_runtime",
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/loop69/query-controls/destructor_base_runtime.lowir",
+    "sha256": "3383861d5095935524d06d7eaff32c5e861f5cb9a8ccf1a9ebc3cf8b6d13ca1a",
+    "expected": "_Z7destroyI1DEDTclptfp_sr1BEdn1BEEPT_",
+    "passed": true
+  }
+]
