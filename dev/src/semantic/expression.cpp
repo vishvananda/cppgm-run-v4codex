@@ -86,7 +86,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     }
     case Kind::KeywordLiteral:
         if (ast[n].op == KW_THIS) {
-            if (closure_functions.get(current_function)) throw std::runtime_error("this requires lambda capture");
+            if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth)
+                throw std::runtime_error("this requires lambda capture");
             r.type = implicit_object_type(s);
             if (!r.type) throw std::runtime_error("this outside nonstatic member");
             return r;

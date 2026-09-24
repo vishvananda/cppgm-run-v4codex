@@ -86,8 +86,17 @@ unsigned Analyzer::base_steps(TypeId from, EntityId to)
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {
-    while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
-    EntityId e = scopes[s].entity;
+    EntityId e = 0;
+    while (s) {
+        while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
+        e = scopes[s].entity;
+        if (!closure_functions.get(e)) break;
+        // A closure's ABI receiver is not source-language `this`. An
+        // unevaluated use observes the enclosing lexical member context;
+        // an evaluated use would need a capture.
+        if (unevaluated_depth == body_evaluation_depth) return 0;
+        s = scopes[s].parent; e = 0;
+    }
     if (!e || !entities[e].member_info || entities[e].is_static) return 0;
     Type f = types[members[entities[e].member_info].call_type];
     return types.parameters[f.offset];
