@@ -576,6 +576,10 @@ private:
     std::vector<TypeQueryFact> query_facts = std::vector<TypeQueryFact>(1);
     QueryId incomplete_substitution = 0, active_type_query = 0;
     Index incomplete_specializations, incomplete_aliases;
+    struct QueryPrerequisite { QueryId query = 0; std::uint32_t revision = 0; };
+    std::vector<QueryPrerequisite> substitution_prerequisites = std::vector<QueryPrerequisite>(1);
+    Index query_revisions;
+    void retain_query_prerequisite(Index& owners, std::uint32_t owner);
     struct QueryDependency { QueryId consumer; std::uint32_t next; };
     std::vector<QueryDependency> query_dependencies = std::vector<QueryDependency>(1);
     Index query_dependency_heads, query_dependency_edges, class_query_heads, class_query_edges;

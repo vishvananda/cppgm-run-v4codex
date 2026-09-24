@@ -63,6 +63,9 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
         // [temp.deduct.partial]/11: unused head parameters are irrelevant,
         // but parameters occurring only in a non-deduced context still count.
         // Traverse retained types/queries, never instantiate their classes.
+        // Tag a query identity directly: value_argument_id also evaluates
+        // concrete expressions and belongs to substitution, not this walk.
+        auto query_argument = [](QueryId q) { return ArgumentId(0x80000000U|q); };
         std::vector<ArgumentId> work(1,type); Index seen;
         for (unsigned i = 0; i < work.size(); ++i) {
             auto arg = work[i];
@@ -78,7 +81,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
                 if (q.type) work.push_back(q.type);
                 auto args = argument_packs[q.arguments];
                 for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
-                for (unsigned j = 0; j < q.count; ++j) work.push_back(value_argument_id(query_edges[q.offset+j]));
+                for (unsigned j = 0; j < q.count; ++j) work.push_back(query_argument(query_edges[q.offset+j]));
             } else {
                 auto t = types[arg];
                 if (t.kind == TypeKind::Named) {
@@ -95,8 +98,8 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
                     for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
                 }
                 if (t.kind == TypeKind::PackExpansion) work.push_back(t.bound);
-                if (t.kind == TypeKind::Decltype) work.push_back(value_argument_id(t.entity));
-                if (t.kind == TypeKind::DependentArray) work.push_back(value_argument_id(t.bound));
+                if (t.kind == TypeKind::Decltype) work.push_back(query_argument(t.entity));
+                if (t.kind == TypeKind::DependentArray) work.push_back(query_argument(t.bound));
                 if (t.child) work.push_back(t.child);
                 for (unsigned j = 0; j < t.count; ++j) work.push_back(types.parameters[t.offset+j]);
             }

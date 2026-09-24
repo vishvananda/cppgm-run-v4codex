@@ -1,5 +1,17 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
+void Analyzer::retain_query_prerequisite(Index& owners, std::uint32_t owner)
+{
+    auto slot = owners.get(owner);
+    if (!slot) {
+        slot = substitution_prerequisites.size();
+        substitution_prerequisites.push_back(QueryPrerequisite());
+        owners.put(owner,slot);
+    }
+    auto& prerequisite = substitution_prerequisites[slot];
+    prerequisite.query = incomplete_substitution;
+    prerequisite.revision = query_revisions.get(incomplete_substitution);
+}
 TypeQueryFact Analyzer::incomplete_query(TypeId type)
 {
     auto result = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
@@ -41,6 +53,9 @@ void Analyzer::complete_query_class(EntityId entity)
         // evaluation: it has not published a result using an incomplete fact.
         if (query_facts[query].state == FactState::Active) continue;
         query_facts[query] = TypeQueryFact();
+        // A failed consumer must still observe this change if a different
+        // consumer recomputes the query before it next probes its own cache.
+        query_revisions.put(query,query_revisions.get(query)+1);
         ++query_invalidations;
         if (auto value = query_value_index.get(query)) query_values[value] = QueryValue();
         for (auto edge = query_dependency_heads.get(query); edge; edge = query_dependencies[edge].next)

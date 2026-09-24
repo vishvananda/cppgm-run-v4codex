@@ -246,16 +246,16 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     auto& index_owner = pack_prefix ? explicit_pack_index : specialization_index;
     std::uint32_t previous = index_owner.get(key(pattern, pack));
     if (previous) {
-        auto blocked = incomplete_specializations.get(previous);
-        if (!blocked || query_facts[blocked].state != FactState::NotStarted) {
-            if (blocked) { incomplete_substitution = blocked; record_query_dependency(blocked); }
+        auto blocked = substitution_prerequisites[incomplete_specializations.get(previous)];
+        if (!blocked.query || blocked.revision == query_revisions.get(blocked.query)) {
+            if (blocked.query) { incomplete_substitution = blocked.query; record_query_dependency(blocked.query); }
             dependency.succeeded = specializations[previous].entity != 0;
             return specializations[previous].entity;
         }
     }
     Specialization spec; spec.pattern = pattern; spec.arguments = pack; spec.declaration = FactState::Active;
     std::uint32_t index = previous ? previous : specializations.size();
-    if (previous) { specializations[index] = spec; incomplete_specializations.put(index,0); }
+    if (previous) { specializations[index] = spec; substitution_prerequisites[incomplete_specializations.get(index)] = QueryPrerequisite(); }
     else specializations.push_back(spec);
     index_owner.put(key(pattern, pack), index);
     try {
@@ -272,7 +272,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
     if (!type) {
         specializations[index].declaration = FactState::Failure;
-        if (incomplete_substitution) incomplete_specializations.put(index,incomplete_substitution);
+        if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
         return 0;
     }
     if (!partial) check_substituted_type_access(entities[pattern].source,frame);
