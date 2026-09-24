@@ -327,6 +327,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
 }
 TypeQueryFact Analyzer::query_fact(QueryId id)
 {
+    if (query_facts[id].incomplete) { incomplete_substitution = id; record_query_dependency(id); }
     if (query_facts[id].state == FactState::Success) return query_facts[id];
     if (query_facts[id].state == FactState::Failure) {
         if (immediate_query_probe && query_facts[id].failure != TypeQueryFact::Failure::None) return query_facts[id];
@@ -334,6 +335,15 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     if (query_facts[id].state == FactState::Active) throw std::runtime_error("recursive type query");
     query_facts[id].state = FactState::Active;
+    SubstitutionDependency dependency(incomplete_substitution);
+    struct ActiveQuery {
+        Analyzer& sem; QueryId id, saved;
+        ActiveQuery(Analyzer& a, QueryId q) : sem(a), id(q), saved(a.active_type_query) { sem.active_type_query = id; }
+        ~ActiveQuery() {
+            sem.active_type_query = saved;
+            if (sem.query_facts[id].incomplete) sem.record_query_dependency(id);
+        }
+    } active(*this,id);
     struct QueryScope { unsigned& depth; QueryScope(unsigned& d) : depth(d) { ++depth; } ~QueryScope() { --depth; } } guard(unevaluated_depth);
     try {
     ++query_work;
@@ -342,6 +352,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     for (unsigned i = 0; i < q.count; ++i) {
         children.push_back(query_fact(query_edges[q.offset+i])); r.dependent |= children.back().dependent;
         if (children.back().state == FactState::Failure) {
+            if (children.back().incomplete) incomplete_substitution = id;
             query_facts[id] = children.back(); return query_facts[id];
         }
     }
@@ -404,13 +415,13 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         x.type = q.type; r.declared_type = q.type; x.entity = q.entity; break;
     case QueryKind::TypeValue: x.type = q.type; r.declared_type = q.type; break;
     case QueryKind::QualifiedValue: {
-        if (!class_value(q.type)) throw std::runtime_error("value qualifier is not a class");
+        if (!class_value(q.type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         auto cls = types[q.type].entity; complete_class(cls);
         auto entity = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
-        if (!entity) throw std::runtime_error("qualified value not found");
+        if (!entity) { r = incomplete_query(q.type); break; }
         auto kind = entities[entity].kind;
         if (kind != EntityKind::Variable && kind != EntityKind::Enumerator && !function_binding(entity))
-            throw std::runtime_error("qualified type used as value");
+            { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         check_access(entity,q.context,entities[cls].scope);
         x.type = value_type(entities[entity].type); x.entity = entity;
         r.declared_type = entities[entity].type;
@@ -444,7 +455,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Cast:
         if (integral(q.type) && class_value(children[0].expression.type)) {
             auto c = conversion_function_value(children[0].expression,q.type,q.op != TOK_INVALID);
-            if (!c.valid() || deleted_transfer(c.function)) throw std::runtime_error("invalid constant object conversion");
+            if (!c.valid() || deleted_transfer(c.function)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             check_access(c.function,q.context,entities[c.function].owner,children[0].expression.type);
             r.selected = c.function; x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
         } else if (q.op != TOK_INVALID) {
@@ -452,28 +463,28 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
             if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))
-            throw std::runtime_error("implicit constant query cast requires arithmetic operands");
+            { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         x.type = value_type(q.type); break;
     case QueryKind::Member: {
         auto object = children[0].expression; auto type = object.type;
         if (q.op == OP_ARROW) {
             r.arrow = prepare_arrow(object,q.context,0,false);
             if (r.arrow) type = arrow_chains[r.arrow].type;
-            if (!pointer(type)) throw std::runtime_error("type query arrow needs pointer");
+            if (!pointer(type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             type = types[type].child;
         }
-        if (!class_value(type) && !pattern_class_type(type)) throw std::runtime_error("type query member needs class");
+        if (!class_value(type) && !pattern_class_type(type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         auto cls = types[type].entity;
         if (class_value(type)) complete_class(cls);
         if (q.type) {
-            if (!class_value(q.type) && !pattern_class_type(q.type)) throw std::runtime_error("query member qualifier is not a class");
+            if (!class_value(q.type) && !pattern_class_type(q.type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             cls = types[q.type].entity;
             if (class_value(q.type)) complete_class(cls);
         }
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
         if (!e) {
             if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; break; }
-            r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
+            r = incomplete_query(type); break;
         }
         x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         if (function_binding(e)) {
@@ -489,9 +500,12 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;
     case QueryKind::Call: r = query_call(q,children); break;
     case QueryKind::Sizeof:
-        if (q.op != KW_NOEXCEPT) size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
+        if (q.op != KW_NOEXCEPT && !size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF,true)) {
+            r = incomplete_query(q.type ? q.type : children[0].expression.type); break;
+        }
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;
     }
+    if (incomplete_substitution) { r.incomplete = 1; incomplete_substitution = id; }
     if (r.state == FactState::Failure) {
         query_facts[id] = r;
         if (immediate_query_probe) return r;

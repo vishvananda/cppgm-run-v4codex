@@ -574,6 +574,15 @@ private:
     std::vector<QueryId> query_edges, query_slots;
     std::vector<std::uint64_t> query_hashes = std::vector<std::uint64_t>(1);
     std::vector<TypeQueryFact> query_facts = std::vector<TypeQueryFact>(1);
+    QueryId incomplete_substitution = 0, active_type_query = 0;
+    Index incomplete_specializations, incomplete_aliases;
+    struct QueryDependency { QueryId consumer; std::uint32_t next; };
+    std::vector<QueryDependency> query_dependencies = std::vector<QueryDependency>(1);
+    Index query_dependency_heads, query_dependency_edges, class_query_heads, class_query_edges;
+    std::size_t query_invalidations = 0;
+    void record_query_dependency(QueryId source);
+    void complete_query_class(EntityId entity);
+    TypeQueryFact incomplete_query(TypeId type);
     Index query_sources, query_callee_sources, signature_parameters;
     std::size_t query_work = 0;
     struct QueryValue { std::uint32_t constant = 0; FactState state = FactState::NotStarted; };
@@ -731,6 +740,7 @@ private:
     void demand_vtable(EntityId cls, VtableReason reason);
     void check_covariance(EntityId e, EntityId base);
     void reject_abstract(TypeId t);
+    bool abstract_value(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     std::vector<EntityId> key_vtable_demand, vtable_emission;
     std::size_t key_vtable_cursor = 0;
@@ -980,7 +990,7 @@ private:
     Constant binary(ETokenType op, Constant a, Constant b, bool converted = false);
     Constant convert(Constant value, TypeId to, bool explicit_cast = false);
     TypeId expression_type(NodeId n, ScopeId s, bool decltype_form = false);
-    std::uint64_t size(TypeId t, bool alignment = false);
+    std::uint64_t size(TypeId t, bool alignment = false, bool probe = false);
     bool integral(TypeId t) const;
     bool is_unsigned(TypeId t) const;
     bool scoped_enum(TypeId t) const;

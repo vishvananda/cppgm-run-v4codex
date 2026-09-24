@@ -32,6 +32,12 @@ std::uint32_t Analyzer::query_value(QueryId id)
     query_values[slot].state = FactState::Active; ++query_value_work;
     try {
         auto fact = query_fact(id);
+        if (fact.state == FactState::Failure) {
+            // The structured expression failure is cached by query_fact. Do
+            // not evaluate its operands or manufacture a constant from it.
+            query_values[slot].state = fact.incomplete ? FactState::NotStarted : FactState::Success;
+            query_values[slot].constant = 0; return 0;
+        }
         if (fact.dependent) throw std::logic_error("dependent query demanded as a concrete value");
         auto query = type_queries[id]; Constant value;
         if (query.kind == QueryKind::Sizeof) {

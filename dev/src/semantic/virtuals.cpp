@@ -105,11 +105,15 @@ void Analyzer::complete_virtuals(EntityId cls)
         if (virtual_classes[v].key_function) vtable_definition_available(virtual_classes[v].key_function);
     }
 }
-void Analyzer::reject_abstract(TypeId t)
+bool Analyzer::abstract_value(TypeId t)
 {
     while (types[t].kind == TypeKind::Array) t = types[t].child;
-    if (class_value(t) && polymorphic(types[t].entity) && virtual_class(types[t].entity).abstract)
-        throw std::runtime_error("abstract class value");
+    if (definitions && class_value(t)) complete_class(types[t].entity);
+    return class_value(t) && polymorphic(types[t].entity) && virtual_class(types[t].entity).abstract;
+}
+void Analyzer::reject_abstract(TypeId t)
+{
+    if (abstract_value(t)) throw std::runtime_error("abstract class value");
 }
 } }
 

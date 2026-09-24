@@ -96,6 +96,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     }
     TypeQueryFact r;
     if (viable.empty()) {
+        if ((q.op == OP_INC || q.op == OP_DEC) && pointer(decay(args[0].type)))
+            return incomplete_query(types[decay(args[0].type)].child);
         if (q.op == OP_COMMA) { r.expression = args[1]; return r; }
         if (q.op == OP_AMP && args.size() == 1 && args[0].category != ValueCategory::Prvalue && !field_fact(args[0].entity).bit_field) {
             auto member = args[0].entity;
@@ -128,7 +130,13 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
     auto selected = viable[best];
     if (selected.builtin) {
-        if (args.size() == 2) check_pointer_arithmetic(q.op,sequences[selected.offset].target,sequences[selected.offset+1].target);
+        if (q.op == OP_PLUS || q.op == OP_MINUS || q.op == OP_LSQUARE) {
+            for (unsigned i = 0; i < args.size(); ++i) {
+                auto type = sequences[selected.offset+i].target;
+                if (pointer(type) && !size(types[type].child,false,true))
+                    return incomplete_query(types[type].child);
+            }
+        }
         r.expression.type = builtins[selected.builtin-1].type;
         r.expression.category = builtins[selected.builtin-1].category;
     } else {
@@ -149,7 +157,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         for (unsigned i = args.size()-member; i < f.count; ++i) {
             Conversion c; default_argument(selected.entity,i,&c,DefaultReason::Recipe); chosen.push_back(c);
         }
-        for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
+        for (unsigned i = 0; i < f.count; ++i)
+            if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     }
     r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
     conversions.insert(conversions.end(),chosen.begin(),chosen.end());

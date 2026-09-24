@@ -28,11 +28,14 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     if (callee.kind == QueryKind::TypeValue) {
         auto constructed = fn.type;
         if (class_value(constructed)) {
-            complete_class(types[constructed].entity); reject_abstract(constructed);
+            complete_class(types[constructed].entity);
+            if (!entities[types[constructed].entity].complete || abstract_value(constructed))
+                return incomplete_query(constructed);
             std::vector<NodeId> nodes(args.size(),0);
             Expression recipe;
             auto ctor = choose_constructor(constructed,nodes,&recipe,q.context,true,true,&args);
-            if (!ctor || deleted_transfer(ctor)) throw std::runtime_error("invalid query constructor");
+            if (!ctor) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+            if (deleted_transfer(ctor)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
             auto access = ctor;
             while (members[entities[access].member_info].inherited_constructor)
                 access = members[entities[access].member_info].inherited_constructor;
@@ -54,14 +57,15 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         } else {
             if (integral(constructed) && args.size() == 1 && class_value(args[0].type)) {
                 auto c = conversion_function_value(args[0],constructed,true);
-                if (!c.valid() || deleted_transfer(c.function)) throw std::runtime_error("invalid scalar constant conversion");
+                if (!c.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+                if (deleted_transfer(c.function)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
                 check_access(c.function,q.context,entities[c.function].owner,args[0].type);
                 TypeQueryFact result; result.expression.type = constructed; result.selected = c.function;
                 result.expression.conversions = conversions.size(); result.expression.count = 1;
                 conversions.push_back(c); return result;
             }
             if (args.size() > 1 || (!args.empty() && !standard_conversion(args[0],constructed).valid()))
-                throw std::runtime_error("invalid scalar type-query construction");
+                return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             TypeQueryFact result; result.expression.type = constructed; return result;
         }
     }
@@ -108,7 +112,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         for (unsigned i = args.size(); i < f.count; ++i) {
             Conversion c; default_argument(selected,i,&c,DefaultReason::Recipe); chosen.push_back(c);
         }
-        for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
+        for (unsigned i = 0; i < f.count; ++i)
+            if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         auto count = chosen.size();
         r.expression.conversions = conversions.size(); r.expression.count = count;
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());

@@ -201,7 +201,10 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
 EntityId Analyzer::specialize_class(EntityId pattern, const std::vector<TypeId>& arguments)
 {
     auto args = arguments;
-    if (!template_defaults(pattern,args)) throw std::runtime_error("invalid class template arguments");
+    if (!template_defaults(pattern,args)) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid class template arguments");
+    }
     auto pack = intern_arguments(args);
     if (auto old = specialization_index.get(key(pattern,pack))) return specializations[old].entity;
     auto source = entities[pattern];

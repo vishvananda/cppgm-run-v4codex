@@ -24,10 +24,18 @@ struct TypeQueryFact {
     TypeId surrogate = 0;
     FactState state = FactState::NotStarted;
     bool dependent = false;
+    bool incomplete = false; // Depends on incomplete prerequisites, possibly discarded candidates.
     enum class Failure : unsigned char { None, NoViable, Ambiguous, Deleted, InvalidOperands };
     Failure failure = Failure::None;
     static TypeQueryFact failed(Failure reason) {
         TypeQueryFact fact; fact.state = FactState::Failure; fact.failure = reason; return fact;
     }
+};
+// Stack-local collection of an unresolved query prerequisite of a failed
+// substitution. Query reverse edges retain all of its completion dependencies.
+struct SubstitutionDependency {
+    QueryId& pending; QueryId prior; bool succeeded = false;
+    explicit SubstitutionDependency(QueryId& p) : pending(p), prior(p) { pending = 0; }
+    ~SubstitutionDependency() { pending = succeeded || !pending ? prior : pending; }
 };
 } }

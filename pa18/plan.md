@@ -10,14 +10,15 @@ Previous turn classification: progress (16 existing failures fixed). Review mark
 |---|---|
 | Function deduction and ordering (completed group) | Canonical type/parameter identities feed directional partial deduction; only participating call parameters (full signature for addresses). Reference/cv and pack tie rules select the declaration once; conversion facts carry it to typed LowIR. Scratch bindings live for one comparison; O(candidate count × compared type edges), no body demand, rendered keys, exception-based rejection or global scans. |
 | Prototype packs / ABI (completed group) | Signature expansion and element expression types are distinct. Typed object/type lanes; structured indirect-query failure; direct `sizeof...` ABI graph. O(required lanes/query edges/output), TU-owned facts. |
-| Immediate substitution / SFINAE (active, loop 64) | `specialize`/defaults and query/type owners: retained dependent query/type → immutable substitution frame → candidate success/discard. Unify explicit and deduced probing; propagate failed results before access checks; retain class/body hard-error boundary. Work proportional to candidate signature/default query edges, completed facts keyed by canonical type/query and frame, TU lifetime. Validate default/result/operator/alias rejection with successful siblings and hard-error controls; measure frozen A/B latency/RSS and checked runtime/text. Declaring-scope identity and remaining expression validity follow the same data flow. |
+| Immediate substitution / SFINAE (loop 64) | `specialize`/defaults and query/type owners unify explicit/deduced probing, propagate query/array/alias failures before access checks, preserve class/body hard errors. Incomplete prerequisites publish class→query→consumer edges; completion invalidates only affected queries/constants, and blocked alias/signature facts retry on demand. O(required type/query edges + notified dependency edges); canonical identity, TU storage, stack-local candidate state. |
+| Retained member/lexical contexts and remaining expressions (unfinished) | Bind declaring/source owner frames for nested/member results/defaults. Add missing compound assignment, braced construction and destructor queries; implement remaining cast/access/conversion validity at their semantic owners. These require new facts/checks, not broader exception suppression. |
 | Conversion/constructor/explicit deduction (remaining) | Target or call values → deduction → ordinary recorded conversions; preserve demand boundaries and member owners. |
 | LowIR mismatches (remaining) | Separate already-correct deduction from initialization, result metadata, and constant lowering differences; preserve comparison rules. |
 
 Spec alignment: extend the existing typed semantic graph, TU interners and
 per-comparison scratch; no token replay or semantic text transport. Stage is
 O0 LowIR: no optional optimization or native-backend work is introduced.
-Performance: [frozen measurements](performance.md) cover A/A and ABBA compiler
+Prior performance: [frozen measurements](performance.md) cover A/A and ABBA compiler
 latency/RSS, exact common LowIR/executable identity, final-only semantic costs,
 checked runtime/text size and 600→2400 specialization scaling.
 PA18/O0 mandates no numeric latency/RSS ceiling; later native/self-host stages

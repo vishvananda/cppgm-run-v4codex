@@ -6,9 +6,8 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     // This unevaluated owner checks allocation and construction declarations;
     // it creates no runtime object, initializer occurrence or body demand.
     auto allocated = q.type;
-    size(allocated);
-    if (types[allocated].kind == TypeKind::LRef || types[allocated].kind == TypeKind::RRef)
-        throw std::runtime_error("new cannot allocate a reference");
+    if (!size(allocated,false,true) || types[allocated].kind == TypeKind::LRef || types[allocated].kind == TypeKind::RRef)
+        return incomplete_query(allocated);
     auto name = operator_name(KW_NEW);
     EntityId family = 0;
     if (!q.value && class_value(allocated))
@@ -21,7 +20,8 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     for (unsigned j = 1; j < children.size(); ++j) args.push_back(children[j].expression);
     std::vector<Conversion> conversions;
     auto choice = select_call(family,args,0,0,ValueCategory::Prvalue,0,0,conversions);
-    if (choice.failure != CallFailure::None) throw std::runtime_error("invalid allocation in new-expression query");
+    if (choice.failure != CallFailure::None || deleted_transfer(choice.entity))
+        return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
     check_access(choice.entity,q.context,entities[choice.entity].owner);
     auto result = types[entities[choice.entity].type].child;
     if (!pointer(result) || !fundamental(types[result].child,FT_VOID))

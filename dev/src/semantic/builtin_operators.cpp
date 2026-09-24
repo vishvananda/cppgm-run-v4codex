@@ -61,7 +61,7 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
         for (TypeId t : left) {
             if (types[t].kind != TypeKind::Named && (arithmetic(t) || object_pointer(t)) &&
                 !(op == OP_DEC && fundamental(t,FT_BOOL))) {
-                if (object_pointer(t)) size(types[t].child);
+                if (object_pointer(t) && !size(types[t].child,false,true)) continue;
                 auto target = class_value(args[0].type) ? t : args[0].type;
                 if (!(types[target].cv & 1))
                     add(types.compound(TypeKind::LRef,target),types.fundamental(FT_INT),

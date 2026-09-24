@@ -188,6 +188,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_type_query_work\":" << query_work
         << ",\"semantic_candidate_substitutions\":" << candidate_substitution_work
         << ",\"semantic_candidate_cycles\":" << candidate_substitution_cycles
+        << ",\"query_completion_edges\":" << query_dependencies.size()-1
+        << ",\"query_completion_invalidations\":" << query_invalidations
         << ",\"semantic_deferred_function_uses\":" << deferred_function_uses.size()-1
         << ",\"semantic_deferred_function_use_work\":" << deferred_function_use_cursor
         << ",\"semantic_template_binding_work\":" << template_binding_work

@@ -16,29 +16,33 @@ std::uint64_t layout_align(std::uint64_t bytes, std::uint64_t alignment)
     return remainder ? layout_add(bytes, alignment - remainder) : bytes;
 }
 }
-std::uint64_t Analyzer::size(TypeId id, bool alignment)
+std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
 {
     Type t = types[id];
     if (definitions && t.kind == TypeKind::Named && entities[t.entity].class_info) complete_class(t.entity);
-    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment);
+    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
     if (t.kind == TypeKind::Pointer) return 8;
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
-        if (!t.bound) throw std::runtime_error("sizeof incomplete array");
-        if (alignment) return size(t.child, true);
-        std::uint64_t element = size(t.child);
-        if (t.bound > std::numeric_limits<std::uint64_t>::max() / element)
+        if (!t.bound) { if (probe) return 0; throw std::runtime_error("sizeof incomplete array"); }
+        if (alignment) return size(t.child, true,probe);
+        std::uint64_t element = size(t.child,false,probe);
+        if (!element) return 0;
+        if (t.bound > std::numeric_limits<std::uint64_t>::max() / element) {
+            if (probe) return 0;
             throw std::runtime_error("array size overflow");
+        }
         return t.bound * element;
     }
     if (t.kind == TypeKind::Fundamental && t.fundamental != FT_VOID) return fundamental_width(t.fundamental);
-    if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment);
+    if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment,probe);
     if (t.kind == TypeKind::Named && entities[t.entity].complete) {
         EntityId e = t.entity;
         std::uint32_t layout = entities[e].class_info;
         class_layout(e);
         return alignment ? class_facts[layout].alignment : class_facts[layout].size;
     }
+    if (probe) return 0;
     throw std::runtime_error("sizeof unsupported or incomplete type");
 }
 void Analyzer::class_layout(EntityId e)

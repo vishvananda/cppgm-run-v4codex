@@ -100,7 +100,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             auto value = constants[query_value(query)];
             if (!value.valid || !integral(value.type) || scoped_enum(value.type) || !value.bits ||
                 (!is_unsigned(value.type) && static_cast<std::int64_t>(value.bits) < 0))
-                throw std::runtime_error("substituted array bound must be a positive integral constant");
+                return 0;
+            if (fundamental(child,FT_VOID) || types[child].kind == TypeKind::Function ||
+                types[child].kind == TypeKind::LRef || types[child].kind == TypeKind::RRef || abstract_value(child)) return 0;
             result = types.compound(TypeKind::Array,child,value.bits);
         }
         result = types.qualify(result,p.cv);
@@ -180,7 +182,8 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             }
             args.swap(flat);
         }
-        result = types.qualify(apply_type_template(pattern,args),p.cv);
+        result = apply_type_template(pattern,args);
+        if (result) result = types.qualify(result,p.cv);
     } else if (p.kind == TypeKind::Function) {
         TypeId returned = substitute_type(p.child, bindings, cache,owner);
         if (!returned || types[returned].kind == TypeKind::Array || types[returned].kind == TypeKind::Function) return 0;
@@ -207,14 +210,14 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         bool reference = types[child].kind == TypeKind::LRef || types[child].kind == TypeKind::RRef;
         if (reference && (p.kind == TypeKind::Pointer || p.kind == TypeKind::Array || p.kind == TypeKind::MemberPointer)) return 0;
         if ((p.kind == TypeKind::LRef || p.kind == TypeKind::RRef) && fundamental(child, FT_VOID)) return 0;
-        if (p.kind == TypeKind::Array && (fundamental(child, FT_VOID) || types[child].kind == TypeKind::Function)) return 0;
+        if (p.kind == TypeKind::Array && (fundamental(child, FT_VOID) || types[child].kind == TypeKind::Function || abstract_value(child))) return 0;
         result = p.kind == TypeKind::MemberPointer ? types.member_pointer(p.entity, child) : types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
     }
     // A completed dependent-name failure belongs to the same immutable
     // type/frame key as success. Missing bindings and members of an active
     // class can still become available; they are not negative cache facts.
-    if (!result && !complete_failure) return 0;
+    if (!result && (!complete_failure || incomplete_substitution)) return 0;
     auto stored = result ? result : failed_substitution;
     if (owner) { specialization_type_cache.put(cache_key,stored); ++substitution_records; }
     else cache.put(pattern, stored);
@@ -222,6 +225,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
 }
 EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input, bool explicit_head)
 {
+    SubstitutionDependency dependency(incomplete_substitution);
     // Explicit template arguments and deduced arguments establish the same
     // immediate-context obligations. Class completion/body demand temporarily
     // restores hard diagnostics in its own owner.
@@ -241,9 +245,18 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     std::uint32_t pack = intern_arguments(args);
     auto& index_owner = pack_prefix ? explicit_pack_index : specialization_index;
     std::uint32_t previous = index_owner.get(key(pattern, pack));
-    if (previous) return specializations[previous].entity;
+    if (previous) {
+        auto blocked = incomplete_specializations.get(previous);
+        if (!blocked || query_facts[blocked].state != FactState::NotStarted) {
+            if (blocked) { incomplete_substitution = blocked; record_query_dependency(blocked); }
+            dependency.succeeded = specializations[previous].entity != 0;
+            return specializations[previous].entity;
+        }
+    }
     Specialization spec; spec.pattern = pattern; spec.arguments = pack; spec.declaration = FactState::Active;
-    std::uint32_t index = specializations.size(); specializations.push_back(spec);
+    std::uint32_t index = previous ? previous : specializations.size();
+    if (previous) { specializations[index] = spec; incomplete_specializations.put(index,0); }
+    else specializations.push_back(spec);
     index_owner.put(key(pattern, pack), index);
     try {
     Index bindings, cache;
@@ -257,7 +270,11 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         }
     }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
-    if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
+    if (!type) {
+        specializations[index].declaration = FactState::Failure;
+        if (incomplete_substitution) incomplete_specializations.put(index,incomplete_substitution);
+        return 0;
+    }
     if (!partial) check_substituted_type_access(entities[pattern].source,frame);
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].template_pattern = false;
@@ -291,6 +308,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         }
     }
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;
+    dependency.succeeded = true;
     return e;
     } catch (...) {
         specializations[index].declaration = FactState::Failure; throw;

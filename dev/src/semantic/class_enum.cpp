@@ -126,6 +126,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
         if (calls) { inherited_constructors(e); complete_virtuals(e); }
         entities[e].complete = true;
+        complete_query_class(e);
         entities[e].definition = n;
         if (calls) check_constexpr_class(e);
         if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);

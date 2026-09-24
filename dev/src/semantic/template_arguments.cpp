@@ -5,11 +5,16 @@ using syntax::Kind;
 ArgumentId Analyzer::value_argument_id(QueryId query)
 {
     if (!query) return 0;
+    auto fact = query_fact(query);
+    if (fact.state == FactState::Failure) return 0;
     // A class expression retains its typed construction query until the
     // non-type parameter supplies the target of its user-defined conversion.
-    if (!query_fact(query).dependent && !class_value(query_fact(query).expression.type)) {
+    if (!fact.dependent && !class_value(fact.expression.type)) {
         auto value = constants[query_value(query)];
-        if (!value.valid || !integral(value.type)) throw std::runtime_error("integral constant template argument required");
+        if (!value.valid || !integral(value.type)) {
+            if (immediate_query_probe) return 0;
+            throw std::runtime_error("integral constant template argument required");
+        }
         TypeQuery q; q.type = types.unqualified(value.type); q.value = value.bits;
         query = intern_query(q,{});
     }
@@ -137,6 +142,7 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
 {
     if (!value_argument(arg)) return 0;
     auto query = argument_query(arg);
+    if (query_fact(query).state == FactState::Failure) return 0;
     // A cast owns its result type even while dependence defers its expression
     // fact. Reapplying the same conversion must preserve canonical identity.
     auto source_type = type_queries[query].kind == QueryKind::Cast ? type_queries[query].type : query_fact(query).expression.type;

@@ -106,8 +106,12 @@ TypeId Analyzer::apply_type_template(EntityId e, const std::vector<ArgumentId>& 
 }
 TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& input)
 {
+    SubstitutionDependency dependency(incomplete_substitution);
     auto args = input;
-    if (!template_defaults(e,args)) throw std::runtime_error("invalid alias template arguments");
+    if (!template_defaults(e,args)) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid alias template arguments");
+    }
     auto k = key(e,intern_arguments(args));
     auto id = alias_specializations.get(k);
     if (!id) {
@@ -115,10 +119,15 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
         alias_specializations.put(k,id);
     }
     auto state = alias_facts[id].state;
-    if (state == FactState::Success) return alias_facts[id].type;
+    if (state == FactState::Success) { dependency.succeeded = true; return alias_facts[id].type; }
     if (state == FactState::Failure) {
-        if (template_type_probe) return 0;
-        throw std::runtime_error("failed alias specialization");
+        auto blocked = incomplete_aliases.get(id);
+        if (!blocked || query_facts[blocked].state != FactState::NotStarted) {
+            if (blocked) { incomplete_substitution = blocked; record_query_dependency(blocked); }
+            if (template_type_probe) return 0;
+            throw std::runtime_error("failed alias specialization");
+        }
+        incomplete_aliases.put(id,0);
     }
     if (state == FactState::Active) throw std::runtime_error("recursive alias specialization");
     alias_facts[id].state = FactState::Active;
@@ -130,11 +139,13 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     auto type = substitute_type(entities[e].type,bindings,cache,frame);
     if (!type) {
         alias_facts[id].state = FactState::Failure;
+        if (incomplete_substitution) incomplete_aliases.put(id,incomplete_substitution);
         if (template_type_probe) return 0;
         throw std::runtime_error("invalid alias substitution");
     }
     check_substituted_type_access(entities[e].source,frame);
     alias_facts[id].type = type; alias_facts[id].state = FactState::Success;
+    dependency.succeeded = true;
     return type;
     } catch (...) { alias_facts[id].state = FactState::Failure; throw; }
 }
