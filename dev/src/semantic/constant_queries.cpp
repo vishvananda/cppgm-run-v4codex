@@ -27,7 +27,8 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
         if (!parent) return 0;
         if (!nonstatic_field(fact.expression.entity)) return constant_entity_address(fact.expression.entity);
         auto field = fact.expression.entity;
-        parent = constant_base_address(parent,entities[scopes[entities[field].owner].entity].type);
+        auto use = object_uses[fact.expression.object_use];
+        parent = constant_base_projection(constant_base_projection(parent,use.qualifier_adjustment),use.adjustment);
         auto address = constant_subobject(parent,entities[field].type,field);
         auto kind = types[entities[field].type].kind;
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
@@ -100,7 +101,10 @@ Constant Analyzer::constant_query_call(QueryId id)
             auto receiver = query_edges[callee.offset];
             object = callee.op == OP_ARROW ? constant_query_arrow(receiver,query_fact(callee_id).arrow) : constant_query_object(receiver);
         } else { object = constant_query_object(callee_id); first_argument = 1; }
-        object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
+        if (fact.expression.object_use) {
+            auto use = object_uses[fact.expression.object_use];
+            object = constant_base_projection(constant_base_projection(object,use.qualifier_adjustment),use.adjustment);
+        } else object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
         if (!object) return Constant();
     } else if (q.kind == QueryKind::Call && callee.kind == QueryKind::Member) {
         auto receiver = query_edges[callee.offset];

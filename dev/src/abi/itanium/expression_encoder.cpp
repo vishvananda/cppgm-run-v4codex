@@ -102,7 +102,10 @@ void Encoder::expression(Id id) {
             std::vector<Id> scopes;
             for (auto p = name.a; p; p = g[p].a) scopes.push_back(p);
             output += "sr";
-            for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) source(g[*p].b);
+            for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) {
+                if (g[*p].kind == Kind::Template) args(g[*p]);
+                else source(g[*p].b);
+            }
             output += 'E';
         }
         source(name.b); if (n.b) args(n); break;

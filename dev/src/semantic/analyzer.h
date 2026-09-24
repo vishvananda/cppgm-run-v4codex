@@ -180,6 +180,14 @@ private:
     void record_class_return(NodeId n, ScopeId s);
     void finish_class_returns(EntityId e);
     EntityId current_function = 0;
+    unsigned body_evaluation_depth = 0;
+    struct DeferredFunctionUse { EntityId target = 0; std::uint32_t next = 0; bool direct = false, queued = false, processed = false; };
+    std::vector<DeferredFunctionUse> deferred_function_uses = std::vector<DeferredFunctionUse>(1);
+    Index deferred_function_use_index, deferred_function_use_heads;
+    std::vector<std::uint32_t> deferred_function_use_queue;
+    std::size_t deferred_function_use_cursor = 0;
+    void record_deferred_function_use(EntityId target);
+    void activate_deferred_function_uses(EntityId owner);
     bool literal_type(TypeId type);
     bool constexpr_constructor(EntityId function);
     void check_constexpr_signature(EntityId function);
@@ -461,6 +469,7 @@ private:
     std::uint32_t constant_entity_address(EntityId entity);
     std::uint32_t constant_address(NodeId node, ScopeId scope);
     std::uint32_t constant_base_address(std::uint32_t address, TypeId type);
+    std::uint32_t constant_base_projection(std::uint32_t address, unsigned path);
     Constant constant_read(std::uint32_t address);
     Constant constant_indirect(Constant value);
     void constant_dependencies(Constant value, std::vector<ArgumentId>& arguments, Index& seen);
@@ -691,7 +700,7 @@ private:
     unsigned base_path(TypeId from, EntityId to);
     std::uint64_t layout_base_path(unsigned path);
     unsigned base_steps(TypeId from, EntityId to);
-    void record_member_receiver(Expression& result, NodeId node, TypeId object, EntityId selected, ScopeId naming, bool qualified, ScopeId context);
+    void record_member_receiver(Expression& result, NodeId node, TypeId object, EntityId selected, ScopeId naming, bool qualified, ScopeId context, bool layout = true);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
     Index injected_class_owners;

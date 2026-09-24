@@ -1,5 +1,134 @@
 [
   {
+    "name": "query_nested_template_qualifier",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "namespace n{template<class U>struct B{constexpr int f()const{return 7;}};}template<class T>struct D:n::B<int>{};template<class T>auto read(T const&t)->decltype(t.n::B<int>::f()){return t.n::B<int>::f();}int main(){D<char>x;return read(x)!=7;}",
+    "source_sha256": "1cce546dfc2df8316dec2a9384209d198b09654c22c941a70902e867ed8fce27"
+  },
+  {
+    "name": "deferred_free_template_emission",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: undefined top-level symbol\n",
+    "passed": false,
+    "source": "struct X{static constexpr int f(int n){return n+1;}};template<class T>constexpr int g(int n){return X::f(n);}static_assert(g<int>(2)==3,\"value\");int main(){volatile int n=2;return g<int>(n)!=3;}",
+    "source_sha256": "03f8878b1abd0d5f44103bcb37c65576aad7b48c7682072a9e94463023f9ce37"
+  },
+  {
+    "name": "deferred_cycle",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{static constexpr int f(int n){return n?g(n-1):0;}static constexpr int g(int n){return n?f(n-1):0;}};static_assert(X::f(4)==0,\"value\");int main(){volatile int n=4;return X::f(n);}",
+    "source_sha256": "67bd289659bbc5a088151821766f7b9297688646f0ad102252ee21df607a0570"
+  },
+  {
+    "name": "query_constexpr_receiver",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query expression\n",
+    "passed": false,
+    "source": "struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().R::f())>::n==7,\"query path\");int main(){}",
+    "source_sha256": "6f78cf14a6fcfbbb67c8924fde5d6b9b19e25b7bbea17e2b59a0eecb4792bbea"
+  },
+  {
+    "name": "query_constexpr_field",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().R::n)>::n==7,\"query field path\");int main(){}",
+    "source_sha256": "56d73cabf94ddd62a8e2ebaba9733a05475410abdcba3de8fee753ee6363ab2c"
+  },
+  {
+    "name": "query_nested_constexpr_receiver",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().g())>::n==7,\"query path\");int main(){}",
+    "source_sha256": "801a4adf124a3f7f632e9e8ddcb44794e4ccc2ec8ff4444e6f5edb6b2749d990"
+  },
+  {
+    "name": "query_dependent_qualifier",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};template<class T>auto read(T const&t)->decltype(t.R::f()){return t.R::f();}int main(){D<R>x;return read(x)!=7;}",
+    "source_sha256": "34d73ea1e152fb283218ed348148cd3c9e2462c3db7017575410dd748fb4e204"
+  },
+  {
+    "name": "deferred_member_emission",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: undefined top-level symbol\n",
+    "passed": false,
+    "source": "template<class T>struct X{static constexpr int f(int n){return n+1;}static constexpr int g(int n){return f(n);}};static_assert(X<int>::g(2)==3,\"value\");int main(){volatile int n=2;return X<int>::g(n)!=3;}",
+    "source_sha256": "b21a89e472005116de8b93e010742cf16b083412c173e8da177249b2c98d4dbe"
+  },
+  {
+    "name": "deferred_use_after_demand",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: undefined top-level symbol\n",
+    "passed": false,
+    "source": "template<class T>struct X{static constexpr int f(int n){return n+1;}static constexpr int g(int n){return f(n);}};int run(int n){return X<int>::g(n);}static_assert(X<int>::g(2)==3,\"value\");int main(){volatile int n=2;return run(n)!=3;}",
+    "source_sha256": "7e5f3a4695053d5da2aa1cd4eb26fa52651e0fdab4df5ce8606bd2a99478cb96"
+  },
+  {
+    "name": "deferred_unused_definition",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct X{static constexpr int bad(){return T::missing;}static constexpr int g(int n){return n?7:bad();}};static_assert(X<int>::g(1)==7,\"value\");int main(){return 0;}",
+    "source_sha256": "645049a324985372c900ccdeddbd46b80b7979cf9fee8a8d3a4008ab7b3f8752"
+  },
+  {
+    "name": "deferred_unevaluated_operand",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct X{static constexpr int bad(){return T::missing;}static constexpr int g(){return sizeof(bad());}};static_assert(X<int>::g()==4,\"value\");int main(){return X<int>::g()!=4;}",
+    "source_sha256": "713a248646960d5f0bba75d2914058dd0d8e58ce07c2b3288e0e502cbf76e8ef"
+  },
+  {
+    "name": "deferred_transitive_emission",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: undefined top-level symbol\n",
+    "passed": false,
+    "source": "template<int N>constexpr int step(int n){return n+N;}template<class T>struct X{static constexpr int f(int n){return step<3>(n);}static constexpr int g(int n){return f(n);}};static_assert(X<int>::g(2)==5,\"value\");int main(){volatile int n=2;return X<int>::g(n)!=5;}",
+    "source_sha256": "82eb1770d382886d73db83a5317b7e3e2439ee98617adf438cc43cd834696c51"
+  },
+  {
+    "name": "constexpr_qualified_receivers",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};constexpr D<R>x;static_assert(x.g()==7 && x.L::f()==3 && x.R::f()==7,\"qualified constant receivers\");int main(){return x.g()!=7;}",
+    "source_sha256": "69d7a0b8174575d06f6ce4a6a190de045714b908589393a6584080b4d59eaee1"
+  },
+  {
     "name": "query_added_default",
     "expected": "native",
     "compiler_exit": 0,

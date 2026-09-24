@@ -52,7 +52,19 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
             abi.make(Kind::Conversion,abi_type(q.type),0,0,0,{child(0)}); break;
     case QueryKind::Unary: result = abi.make(Kind::Unary,child(0),abi_mangle::operation(query_operation(q.op,true))); break;
     case QueryKind::Binary: result = abi.make(Kind::Binary,child(0),child(1),abi_mangle::operation(query_operation(q.op,false))); break;
-    case QueryKind::Member: result = abi.make(Kind::ObjectMember,child(0),abi.string(spelling(q.name)),abi_mangle::operation(query_operation(q.op,false)),0,args); break;
+    case QueryKind::Member: {
+        auto op = abi_mangle::operation(query_operation(q.op,false));
+        if (!q.type) result = abi.make(Kind::ObjectMember,child(0),abi.string(spelling(q.name)),op,0,args);
+        else {
+            auto owner = abi_type(q.type); bool known = true;
+            for (auto part = owner; part; part = abi[part].a)
+                if (abi[part].kind != Kind::Name && abi[part].kind != Kind::Template) { known = false; break; }
+            auto name = known ? abi.make(Kind::UnresolvedName,abi.name(owner,spelling(q.name)),q.arguments!=0,0,0,args) :
+                abi.make(Kind::Member,owner,abi.string(spelling(q.name)),0,0,args);
+            result = abi.make(Kind::Binary,child(0),name,op);
+        }
+        break;
+    }
     case QueryKind::Call: {
         auto callee = sem.type_query(sem.type_query_child(id,0)); args.clear();
         for (unsigned i = 1; i < q.count; ++i) args.push_back(child(i));

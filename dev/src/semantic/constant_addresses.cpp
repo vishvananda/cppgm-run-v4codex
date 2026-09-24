@@ -132,6 +132,14 @@ std::uint32_t Analyzer::constant_base_address(std::uint32_t id, TypeId target)
     }
     return 0;
 }
+std::uint32_t Analyzer::constant_base_projection(std::uint32_t address, unsigned path)
+{
+    for (; address && path; path = base_adjustments[path].next) {
+        auto base = bases[base_adjustments[path].edge].base;
+        address = constant_subobject(address,entities[base].type,0x80000000U | base);
+    }
+    return address;
+}
 std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
 {
     auto x = expressions[n]; auto first = ast[n].first;

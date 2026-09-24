@@ -17,6 +17,20 @@ template<class T> struct Probe<T, decltype(val<T>().read(), void())> {
 };
 struct Empty {};
 template<class T> struct Sparse { Empty e; T n; };
+struct ConstantBase {
+    int n;
+    constexpr ConstantBase(int v) : n(v) {}
+    constexpr int read() const { return n; }
+};
+struct ConstantLeft : ConstantBase { constexpr ConstantLeft(int n) : ConstantBase(n) {} };
+struct ConstantRight : ConstantBase { constexpr ConstantRight(int n) : ConstantBase(n) {} };
+template<int N> struct ConstantBoth : ConstantLeft, ConstantRight {
+    constexpr ConstantBoth() : ConstantLeft(N), ConstantRight(N+7) {}
+    constexpr int read() const { return ConstantRight::read(); }
+};
+template<int N> struct Value { static const int value = N; };
+static_assert(Value<(ConstantBoth<0>().ConstantRight::read())>::value == 7, "typed query path");
+static_assert(ConstantBoth<0>().read() == 7, "constant path and later emission");
 int main() {
     Both<Right> x;
     static_cast<Left&>(x).n = 3;
@@ -24,5 +38,6 @@ int main() {
     Sparse<int> a, b;
     a.n = x.add(2) + TableOwner<Right>::fn();
     b = a;
-    return b.n != 20 || x.Left::read() != 3 || Probe<Right>::n != 1;
+    ConstantBoth<0> c;
+    return b.n != 20 || x.Left::read() != 3 || Probe<Right>::n != 1 || c.read() != 7;
 }

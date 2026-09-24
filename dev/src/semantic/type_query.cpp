@@ -190,7 +190,18 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
                 append_template_argument(a,s,template_argument_node(a,s),args);
             q.arguments = intern_arguments(args);
         }
-        children.push_back(expression_query(first,s)); break;
+        children.push_back(expression_query(first,s));
+        if (ast[name].first != ast[name].last) {
+            // Retain the typed naming class, including a dependent qualifier.
+            auto object = query_fact(children[0]).expression.type;
+            if (node.op == OP_ARROW && pointer(object)) object = types[object].child;
+            auto scope = class_value(object) || pattern_class_type(object) ? entities[types[object].entity].scope : s;
+            auto qualifier = ast[name].first;
+            while (ast[qualifier].next != ast[name].last) qualifier = ast[qualifier].next;
+            q.type = type_name(name,scope,qualifier);
+            if (!q.type) throw std::runtime_error("invalid query member qualifier");
+        }
+        break;
     }
     case Kind::SizeofPack: {
         auto occurrence = ast.nodes.occurrences[n];
@@ -446,6 +457,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         if (!class_value(type) && !pattern_class_type(type)) throw std::runtime_error("type query member needs class");
         auto cls = types[type].entity;
         if (class_value(type)) complete_class(cls);
+        if (q.type) {
+            if (!class_value(q.type) && !pattern_class_type(q.type)) throw std::runtime_error("query member qualifier is not a class");
+            cls = types[q.type].entity;
+            if (class_value(q.type)) complete_class(cls);
+        }
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
         if (!e) {
             if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; break; }
@@ -456,7 +472,10 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             x.form = ExpressionForm::Overload; x.type = 0;
             record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
         }
-        else { check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type; }
+        else {
+            check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type;
+            if (nonstatic_field(e)) record_member_receiver(x,0,type,e,entities[cls].scope,q.type!=0,q.context,false);
+        }
         break;
     }
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;

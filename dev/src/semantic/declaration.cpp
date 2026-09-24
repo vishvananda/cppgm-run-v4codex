@@ -31,6 +31,11 @@ void Analyzer::finish()
     if (ast.telemetry) started = Clock::now();
     EntityId boundary_cursor = 1;
     for (;;) {
+        if (deferred_function_use_cursor < deferred_function_use_queue.size()) {
+            auto id = deferred_function_use_queue[deferred_function_use_cursor++];
+            auto use = deferred_function_uses[id]; deferred_function_uses[id].processed = true;
+            use_selected_function(use.target,use.direct); continue;
+        }
         if (key_vtable_cursor < key_vtable_demand.size()) {
             demand_vtable(key_vtable_demand[key_vtable_cursor++], VtableReason::KeyDefinition); continue;
         }
@@ -413,15 +418,18 @@ void Analyzer::function_body(const Body& body)
     // storage only when it is live; ordinary bodies reuse the scratch capacity.
     TypeId saved_return = return_type;
     EntityId saved_function = current_function;
+    auto saved_evaluation_depth = body_evaluation_depth;
     auto saved_loop = loop_depth, saved_switch = switch_depth;
     std::vector<SwitchContext> enclosing_switches;
     bool nested_switch = !switches.empty();
     if (nested_switch) enclosing_switches.swap(switches);
     loop_depth = switch_depth = 0;
     current_function = body.entity;
+    body_evaluation_depth = unevaluated_depth;
     return_type = types[entities[body.entity].type].child;
     auto restore = [&]() {
         return_type = saved_return; current_function = saved_function;
+        body_evaluation_depth = saved_evaluation_depth;
         loop_depth = saved_loop; switch_depth = saved_switch;
         switches.clear();
         if (nested_switch) switches.swap(enclosing_switches);

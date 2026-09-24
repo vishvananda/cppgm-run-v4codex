@@ -20,7 +20,7 @@ void Analyzer::demand_function_expression(const Expression& value)
     // A uniquely named free function is odr-used in every evaluated context,
     // including a discarded expression. Overload selection and nonstatic
     // member use retain their own call/address demand decisions.
-    if (!definitions || unevaluated_depth || !value.entity || types[value.type].kind != TypeKind::Function ||
+    if (!definitions || (unevaluated_depth && unevaluated_depth != body_evaluation_depth) || !value.entity || types[value.type].kind != TypeKind::Function ||
         value.form == ExpressionForm::Overload || entities[value.entity].member_info) return;
     use_selected_function(value.entity,true);
 }

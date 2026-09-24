@@ -50,10 +50,22 @@ for n in (600,2400):
  source='struct B{static int f(){return 7;}};struct D:private B{public:using B::f;};\n'
  source+=''.join(f'template<class T>struct X{i}{{static decltype(&D::f) p;}};template<class T>decltype(&D::f) X{i}<T>::p=&D::f;int f{i}(){{return X{i}<int>::p();}}\n' for i in range(n))
  source+='int main(){return ('+'+'.join(f'f{i}()' for i in range(n))+f')!={n*7};}}'
- corpus.append((f'audit-address-{n}',source,'exact',True))
+ corpus.append((f'audit-address-{n}',source,'exact' if MODE=='audit' else 'entry-rejected',True))
 source='struct B{int n;int f()const{return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{int g()const{return T::f();}};int step(int n){D<R>x;static_cast<R&>(x).n=n;return x.g();}int main(){volatile int n=24000000;int s=0;for(int i=0;i<n;++i)s=(s+step(i&1023))&65535;return s!='
 n=24000000; expected=((n//1024)*sum(range(1024))+sum(range(n%1024)))%65536
 corpus.append(('runtime-audit-receiver',source+str(expected)+';}','entry-rejected',True))
+for n in (600,2400):
+ source='template<int N>struct X{static constexpr int f(int n){return n+N;}};template<int N>constexpr int g(int n){return X<N>::f(n);}\n'
+ source+=''.join(f'static_assert(g<{i}>(2)=={i+2},"value");int f{i}(int x){{return g<{i}>(x);}}\n' for i in range(n))
+ source+='int main(){return ('+'+'.join(f'f{i}(3)' for i in range(n))+f')!={n*(n-1)//2+3*n};}}'
+ corpus.append((f'audit-deferred-use-{n}',source,'entry-rejected',True))
+ source='struct B{int n;constexpr B(int v):n(v){}constexpr int f()const{return n;}};struct L:B{constexpr L(int n):B(n){}};struct R:B{constexpr R(int n):B(n){}};template<int N>struct D:L,R{constexpr D():L(N),R(N+7){}};template<int N>struct Tag{static const int n=N;};\n'
+ source+=''.join(f'int f{i}(){{return Tag<(D<{i}>().R::f())>::n;}}\n' for i in range(n))
+ source+='int main(){return ('+'+'.join(f'f{i}()' for i in range(n))+f')!={n*(n-1)//2+7*n};}}'
+ corpus.append((f'audit-constant-query-{n}',source,'entry-rejected',True))
+source='struct X{static constexpr int f(int n){return n+1;}};template<class T>constexpr int g(int n){return X::f(n);}static_assert(g<int>(2)==3,"value");int main(){volatile int n=24000000;int s=0;for(int i=0;i<n;++i)s=(s+g<int>(i&1023))&65535;return s!='
+n=24000000;expected=((n//1024)*sum(range(1024))+sum(range(n%1024))+n)%65536
+corpus.append(('runtime-audit-deferred-use',source+str(expected)+';}','entry-rejected',True))
 def native_size(exe,ir):
  # All corpus globals are scalar/array data without symbol aliases. Count only
  # typed data widths; backend alignment remains explicitly in the code metric.

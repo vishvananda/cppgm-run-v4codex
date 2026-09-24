@@ -4,7 +4,22 @@ from pathlib import Path
 import sys
 import entity_controls as runner
 
+CONST_RECEIVER = 'struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};'
+
 runner.GOOD = {
+ 'query_nested_template_qualifier': 'namespace n{template<class U>struct B{constexpr int f()const{return 7;}};}template<class T>struct D:n::B<int>{};template<class T>auto read(T const&t)->decltype(t.n::B<int>::f()){return t.n::B<int>::f();}int main(){D<char>x;return read(x)!=7;}',
+ 'deferred_free_template_emission': 'struct X{static constexpr int f(int n){return n+1;}};template<class T>constexpr int g(int n){return X::f(n);}static_assert(g<int>(2)==3,"value");int main(){volatile int n=2;return g<int>(n)!=3;}',
+ 'deferred_cycle': 'struct X{static constexpr int f(int n){return n?g(n-1):0;}static constexpr int g(int n){return n?f(n-1):0;}};static_assert(X::f(4)==0,"value");int main(){volatile int n=4;return X::f(n);}',
+ 'query_constexpr_receiver': CONST_RECEIVER+'template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().R::f())>::n==7,"query path");int main(){}',
+ 'query_constexpr_field': CONST_RECEIVER+'template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().R::n)>::n==7,"query field path");int main(){}',
+ 'query_nested_constexpr_receiver': CONST_RECEIVER+'template<int N>struct Tag{static const int n=N;};static_assert(Tag<(D<R>().g())>::n==7,"query path");int main(){}',
+ 'query_dependent_qualifier': CONST_RECEIVER+'template<class T>auto read(T const&t)->decltype(t.R::f()){return t.R::f();}int main(){D<R>x;return read(x)!=7;}',
+ 'deferred_member_emission': 'template<class T>struct X{static constexpr int f(int n){return n+1;}static constexpr int g(int n){return f(n);}};static_assert(X<int>::g(2)==3,"value");int main(){volatile int n=2;return X<int>::g(n)!=3;}',
+ 'deferred_use_after_demand': 'template<class T>struct X{static constexpr int f(int n){return n+1;}static constexpr int g(int n){return f(n);}};int run(int n){return X<int>::g(n);}static_assert(X<int>::g(2)==3,"value");int main(){volatile int n=2;return run(n)!=3;}',
+ 'deferred_unused_definition': 'template<class T>struct X{static constexpr int bad(){return T::missing;}static constexpr int g(int n){return n?7:bad();}};static_assert(X<int>::g(1)==7,"value");int main(){return 0;}',
+ 'deferred_unevaluated_operand': 'template<class T>struct X{static constexpr int bad(){return T::missing;}static constexpr int g(){return sizeof(bad());}};static_assert(X<int>::g()==4,"value");int main(){return X<int>::g()!=4;}',
+ 'deferred_transitive_emission': 'template<int N>constexpr int step(int n){return n+N;}template<class T>struct X{static constexpr int f(int n){return step<3>(n);}static constexpr int g(int n){return f(n);}};static_assert(X<int>::g(2)==5,"value");int main(){volatile int n=2;return X<int>::g(n)!=5;}',
+ 'constexpr_qualified_receivers': 'struct B{int n;constexpr B(int x):n(x){}constexpr int f()const{return n;}};struct L:B{constexpr L(int x):B(x){}};struct R:B{constexpr R(int x):B(x){}};template<class T>struct D:L,T{constexpr D():L(3),T(7){}constexpr int g()const{return T::f();}};constexpr D<R>x;static_assert(x.g()==7 && x.L::f()==3 && x.R::f()==7,"qualified constant receivers");int main(){return x.g()!=7;}',
  'query_added_default': 'template<class T,class U>long f(T);char f(...);using Before=decltype(f(1));template<class T,class U=int>long f(T);using After=decltype(f(1));static_assert(sizeof(Before)==1 && sizeof(After)==8,"defaults publication");int main(){}',
  'query_added_overload': 'char f(...);using Before=decltype(f(1));long f(int);using After=decltype(f(1));static_assert(sizeof(Before)==1 && sizeof(After)==8,"declaration publication");int main(){}',
  'qualified_arrow_receiver': 'struct B{int n;int f(){return n;}};struct L:B{};struct R:B{};template<class T>struct D:L,T{};int main(){D<R>x;static_cast<R&>(x).n=7;D<R>*p=&x;return p->R::f()!=7;}',

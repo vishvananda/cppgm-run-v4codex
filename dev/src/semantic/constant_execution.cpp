@@ -182,7 +182,10 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         if (use.node) {
             object = constant_arrow(use.node,use.arrow);
         } else if (active_constant) object = constant_activations[active_constant].object;
-        object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
+        // Use the same selected subobjects as runtime lowering. Searching by
+        // the declaring class would lose a qualified path through repeated bases.
+        object = constant_base_projection(constant_base_projection(object,use.qualifier_adjustment),use.adjustment);
+        if (member_pointer) object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
         if (!object) return Constant();
     }
     std::vector<Constant> args;

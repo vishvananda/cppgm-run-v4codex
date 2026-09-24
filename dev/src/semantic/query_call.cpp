@@ -99,8 +99,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         check_access(selected,q.context,naming,object);
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {
-            Expression value; value.type = object; value.category = category;
-            check_fixed_conversion(value,0,chosen[0],q.context);
+            bool qualified = callee.kind == QueryKind::Member ? callee.type != 0 : !callee.name && naming;
+            record_member_receiver(r.expression,0,object,selected,naming,qualified,q.context,false);
         }
         for (unsigned i = 0; i < args.size(); ++i)
             check_fixed_conversion(args[i],0,chosen[i+(object!=0)],q.context);
