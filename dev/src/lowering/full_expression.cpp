@@ -43,7 +43,7 @@ bool Procedural::unwind_expression(NodeId n)
 void Procedural::begin_full_expression(NodeId n, bool omit_result)
 {
     if (full_expression.enabled) throw std::logic_error("nested full-expression owner");
-    full_expression.enabled = cleanup_expression(n,omit_result);
+    full_expression.enabled = cleanup_expression(n,omit_result) || (live && unwind_expression(n));
     if (full_expression.enabled && !omit_result) {
         auto result = n;
         while (ast[result].kind == Kind::Parenthesized || ast[result].kind == Kind::Initializer || ast[result].kind == Kind::ParenInitializer)
@@ -66,7 +66,10 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
     // for the first resource-owning expression to establish the region.
     if (full_expression.scalar_terminal && !live && !resume_terminal &&
         !sem.temporary_cleanup(sem.object_fact(n).temporary)) return;
-    if (unwind_expression(n)) open_expression_region();
+    // O0 keeps the structural region for an intermediate class temporary,
+    // even when its selected calls are nonthrowing. Activation changes the
+    // live cleanup suffix consumed by the remainder of the expression.
+    if (unwind_expression(n) || (live && cleanup_expression(n))) open_expression_region();
 }
 void Procedural::open_expression_region()
 {

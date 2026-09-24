@@ -1,7 +1,22 @@
-# PA17 compact plan — checkpoint audit, loop 60
+# PA17 compact plan — implementation, loop 61
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `2290a7bf8b56bc33e6ad975a8ae714a341f55ce5`
+
+Loop 61 entry: `9efd570fd4a0489a39d17fdabd0b05bf062604a6`, clean,
+340/343. Previous goal turn classified as progress: checkpoint audit records
+and validation changed authoritative evidence; no live test handle is inherited.
+Preserve the stage/review markers above. Implementation sequence:
+
+| Owner | Data flow / work bound | Validation |
+|---|---|---|
+| Full-expression cleanup regions | Semantic call effects and lifetime identities → expression region / suffix edges → typed LowIR; memoized expression walk and shared cleanup suffixes, proportional to consumed expressions/actions. Include ordinary live locals and temporary activation, including noexcept class calls. | Both cleanup failures, personal exceptional/normal lifetime controls, prior through report. |
+| Closure entities | Parsed lambda occurrence + substitution context → canonical closure and call operator → ordinary class value/call/ABI lowering; one entity/body per complete identity, no token-anchor identity or grammar replay. | Chained nonprimary closure failure; identity, substitution, signature, body and class-value consumers. |
+
+Freeze entry/final compiler binaries and fixed inputs for A/A + ABBA compiler
+latency/RSS and checked executable runtime/text evidence at PA17/O0. No optional
+optimization or numerical gate is introduced. Finish these related owners and
+record any remaining implementation separately from independent audit questions.
 
 Target: **PA17 full-stage**. Checkpoint audit complete; implementation remains
 incomplete and must not advance. Entry `119fa9fe` was clean at **340/343 with
