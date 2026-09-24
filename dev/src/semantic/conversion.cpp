@@ -2,6 +2,15 @@
 #include <stdexcept>
 
 namespace cppgm { namespace semantic {
+namespace {
+unsigned object_cv(const Types& types, TypeId type)
+{
+    // [basic.type.qualifier]/5: an array has its element's qualification.
+    while (types[type].kind == TypeKind::Array) type = types[type].child;
+    return types[type].cv;
+}
+}
+
 using syntax::Kind;
 bool Analyzer::fundamental(TypeId t, EFundamentalType f) const
 {
@@ -76,7 +85,7 @@ TypeId Analyzer::composite_pointer(TypeId a, TypeId b)
 {
     if (!pointer(a) || !pointer(b)) return 0;
     TypeId ac = types[a].child, bc = types[b].child, result = 0;
-    unsigned cv = types[ac].cv | types[bc].cv;
+    unsigned cv = object_cv(types,ac) | object_cv(types,bc);
     if (types.unqualified(ac) == types.unqualified(bc)) result = types.qualify(ac, cv);
     else if (pointer(ac) && pointer(bc)) {
         result = composite_pointer(ac, bc);
@@ -165,19 +174,19 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     if (ref) {
         if (field_fact(x.entity).bit_field) {
-            if (target.kind != TypeKind::LRef || types[target.child].cv != 1) return c;
+            if (target.kind != TypeKind::LRef || object_cv(types,target.child) != 1) return c;
             c = standard_conversion(x, types.unqualified(target.child), n);
             c.target = to; c.reference = true; c.temporary = true; return c;
         }
         unsigned added = 0;
         bool function_lvalue = types[from].kind == TypeKind::Function;
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
-        bool const_binding = target.kind == TypeKind::LRef && types[target.child].cv == 1;
-        if ((category || const_binding) && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
+        bool const_binding = target.kind == TypeKind::LRef && object_cv(types,target.child) == 1;
+        if ((category || const_binding) && derived_from(from, target.child) && !(object_cv(types,from) & ~object_cv(types,target.child))) {
             c.adjustment = base_path(from,types[target.child].entity);
             if (base_adjustments[c.adjustment].ambiguous) return c;
             c.adjustment = base_steps(from,types[target.child].entity);
-            c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv;
+            c.rank = 2; c.reference = true; c.derived = true; c.qualification = object_cv(types,target.child) & ~object_cv(types,from);
             c.preference = x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
         if ((category || const_binding || function_lvalue) && qualification(from, target.child, added)) {
@@ -185,11 +194,17 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
             c.preference = function_lvalue ? target.kind == TypeKind::RRef : x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
         // A const, nonvolatile lvalue reference may bind a converted temporary.
-        if ((target.kind == TypeKind::LRef && types[target.child].cv != 1) ||
-            (types[from].cv & ~types[target.child].cv) ||
-            (target.kind == TypeKind::RRef && types.unqualified(from) == types.unqualified(target.child))) return c;
+        auto source_object = from, target_object = target.child;
+        while (types[source_object].kind == TypeKind::Array && types[target_object].kind == TypeKind::Array &&
+            types[source_object].bound == types[target_object].bound) {
+            source_object = types[source_object].child; target_object = types[target_object].child;
+        }
+        bool related = types.unqualified(source_object) == types.unqualified(target_object) || derived_from(from,target.child);
+        if ((target.kind == TypeKind::LRef && object_cv(types,target.child) != 1) ||
+            (related && (object_cv(types,from) & ~object_cv(types,target.child))) ||
+            (related && target.kind == TypeKind::RRef)) return c;
         c = standard_conversion(x, types.unqualified(target.child), n);
-        c.target = to; c.reference = true; c.qualification = types[target.child].cv;
+        c.target = to; c.reference = true; c.qualification = object_cv(types,target.child);
         c.temporary = types.unqualified(from) != types.unqualified(target.child);
         c.preference = target.kind == TypeKind::LRef;
         return c;
@@ -213,6 +228,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
             c.rank = 0; c.qualification = added; return c;
         }
         Type a = types[types[from].child], b = types[types[to].child];
+        a.cv = object_cv(types,types[from].child); b.cv = object_cv(types,types[to].child);
         if (derived_from(types[from].child, types[to].child) && !(a.cv & ~b.cv)) {
             c.adjustment = base_path(types[from].child,b.entity);
             if (base_adjustments[c.adjustment].ambiguous) return c;

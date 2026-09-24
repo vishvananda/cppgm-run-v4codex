@@ -103,6 +103,9 @@ bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& a
         }
         Index empty, cache;
         auto element = frame ? substitute_argument(pattern,empty,cache,frame) : pattern;
+        // A braced list is a non-deduced lane. An explicit pack prefix may
+        // already supply its complete target; otherwise deduction cannot bind it.
+        if (!a && element && dependent_argument(element)) return false;
         if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings,kind))) return false;
         if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings,kind)) return false;
         ++lane;

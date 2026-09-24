@@ -92,31 +92,42 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         if (!pack && y.size() > x.size()) y.resize(x.size()); // compatible head supplied the omitted defaults
         return deduce_sequence(x,y,bindings,kind);
     }
-    if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].class_info &&
-        (!entities[a.entity].specialization || specialization_pattern(p.entity) != specialization_pattern(a.entity))) {
-        // [temp.deduct.call] permits a matching base specialization when the
-        // parameter is a simple-template-id (also behind a pointer). Only
-        // explicit base edges participate; non-type arguments stay non-deduced.
+    if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].class_info) {
+        auto ps = specializations[entities[p.entity].specialization];
+        auto match = [&](EntityId entity, Index& trial) {
+            if (!entities[entity].specialization) return false;
+            auto as = specializations[entities[entity].specialization];
+            if (ps.pattern != as.pattern) return false;
+            auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
+            if (x.count != y.count) return false;
+            for (unsigned j = 0; j < x.count; ++j)
+                if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],trial,kind)) return false;
+            return true;
+        };
+        Index direct = bindings;
+        if (match(a.entity,direct)) { bindings = std::move(direct); return true; }
         if (kind != DeductionKind::Call) return false;
-        complete_class(a.entity);
-        Index selected; unsigned matches = 0;
-        for (auto b = class_facts[entities[a.entity].class_info].first_base; b; b = bases[b].next) {
-            Index trial = bindings;
-            if (!deduce_type(pattern,types.qualify(entities[bases[b].base].type,a.cv),trial,kind)) continue;
-            if (++matches > 1) return false;
-            selected = std::move(trial);
+        // [temp.deduct.call]/4-5: only failed direct deduction admits base
+        // alternatives, including another specialization of the same primary.
+        // Visit each reachable class once; repeated paths to one base type do
+        // not create a second deduced A. Conversion separately checks subobjects.
+        std::vector<EntityId> pending(1,a.entity); Index visited, selected;
+        visited.put(a.entity,1); unsigned matches = 0;
+        while (!pending.empty()) {
+            auto entity = pending.back(); pending.pop_back(); complete_class(entity);
+            for (auto b = class_facts[entities[entity].class_info].first_base; b; b = bases[b].next) {
+                auto base = bases[b].base;
+                if (visited.get(base)) continue;
+                visited.put(base,1);
+                Index trial = bindings;
+                if (match(base,trial)) {
+                    if (++matches > 1) return false;
+                    selected = std::move(trial);
+                } else pending.push_back(base);
+            }
         }
         if (matches) bindings = std::move(selected);
         return matches != 0;
-    }
-    if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization) {
-        auto ps = specializations[entities[p.entity].specialization], as = specializations[entities[a.entity].specialization];
-        if (ps.pattern != as.pattern) return false;
-        auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
-        if (x.count != y.count) return false;
-        for (unsigned j = 0; j < x.count; ++j)
-            if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],bindings,kind)) return false;
-        return true;
     }
     if (p.kind == TypeKind::Function) {
         if (p.variadic != a.variadic || p.cv != a.cv || p.ref != a.ref) return false;

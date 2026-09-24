@@ -345,7 +345,7 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
                 if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
                     entities[types[param.child].entity].template_parameter && !types[param.child].cv && args[j].category == ValueCategory::Lvalue)
                     type = types.compound(TypeKind::LRef,type);
-                if (param.kind != TypeKind::LRef && param.kind != TypeKind::RRef) type = decay(type);
+                if (type && param.kind != TypeKind::LRef && param.kind != TypeKind::RRef) type = decay(type);
                 actual.push_back(type);
             }
             if (types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef) element = types[element].child;
