@@ -1,0 +1,2147 @@
+{
+  "assignment": "pa18",
+  "phase": "checkpointAudit",
+  "previous_goal_turn": "progress: loop 69 committed implementation and validation",
+  "stage_base": "94dcb8ad21664137e87d574e878c14a4a047348a",
+  "previous_review": "3a883d10a27e41d1b126eaef05eaf0b454de1646",
+  "entry": "15b34993c14b10a196c90b876b76d1658da129ba",
+  "last_reviewed_commit": "f59e8f67cd8c832361130aef9af1a0337b25c45d",
+  "reviewed_commits": [
+    {
+      "commit": "06211ad0438df250952a414eef409d657b0ff5b0",
+      "subject": "Record complete PA18 checkpoint 66 audit and frozen performance evidence",
+      "files": [
+        "pa18/audit.md",
+        "pa18/performance66.md",
+        "pa18/plan.md",
+        "student.tests/pa18/loop66-cumulative-performance.json",
+        "student.tests/pa18/loop66-evidence.json",
+        "student.tests/pa18/loop66-performance-attempt1.json",
+        "student.tests/pa18/loop66-performance.json"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "626b5809463c6d41d9421c9e761dde56bd76e046",
+      "subject": "Implement typed pointer, reference and function template arguments",
+      "files": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/local_abi.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_queries.cpp",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/template_address_arguments.cpp",
+        "dev/src/semantic/template_arguments.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/template_entities.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "pa18/plan.md",
+        "student.tests/pa18/address_controls.py"
+      ],
+      "implementation_patch_sha256": "fbf138cf5162336cf46d607902e9cb07d01c53775967075d052d35c8bac291e2"
+    },
+    {
+      "commit": "d5497ec7cb88896d20a77af03897ee6748f4ffba",
+      "subject": "Encode address arguments with shared ABI substitutions and correct proven oracle",
+      "files": [
+        "dev/src/abi/itanium/function_encoder.cpp",
+        "dev/src/lowering/local_abi.cpp",
+        "pa18/reference-correction67.md",
+        "pa9/tests/abi/300-function-owner-member-pointer-nttp-data.ref",
+        "student.tests/pa18/address_abi.py",
+        "student.tests/pa18/address_abi_reducer.abi",
+        "student.tests/pa18/address_abi_reducer.cpp"
+      ],
+      "implementation_patch_sha256": "5a92761ddbff32326b2512e9635a8fafaf27eae413a5063e92f9990b1ca998fd"
+    },
+    {
+      "commit": "f2cd086f6004d1af48c0a6a74c8d06307200ea32",
+      "subject": "Preserve internal NTTP linkage through typed ABI and merged translation units",
+      "files": [
+        "dev/src/abi/itanium/encoder.h",
+        "dev/src/lowering/local_abi.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/symbols.cpp",
+        "student.tests/pa18/address_abi.py",
+        "student.tests/pa18/address_linkage.py"
+      ],
+      "implementation_patch_sha256": "adccc96e6113508d08905e7df6c759482c35d1a770b70c776a50ae6300ddbd0a"
+    },
+    {
+      "commit": "0b60ca526215213ac3e3a29764b5f6cd19e6fb0a",
+      "subject": "Cache complete address conversions with access-aware candidate failure",
+      "files": [
+        "dev/src/semantic/access.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/template_address_arguments.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "student.tests/pa18/address_controls.py"
+      ],
+      "implementation_patch_sha256": "afb7a42428c25e399319860e26af074d77c6b34f441155ed289459f33f237009"
+    },
+    {
+      "commit": "047215cfa4da05d21088898b0b9682a50114e135",
+      "subject": "Record validated PA18 address-argument handoff and frozen performance evidence",
+      "files": [
+        "pa18/handoff67.md",
+        "pa18/performance67.md",
+        "pa18/plan.md",
+        "student.tests/pa18/address_cache.py",
+        "student.tests/pa18/address_course.py",
+        "student.tests/pa18/benchmark67.py",
+        "student.tests/pa18/loop67-evidence.json",
+        "student.tests/pa18/loop67-performance-before-abi.json",
+        "student.tests/pa18/loop67-performance-before-cache.json",
+        "student.tests/pa18/loop67-performance.json",
+        "student.tests/pa18/verify67.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "3c78f08315937826d18f67bec3a5c46a57cec6bc",
+      "subject": "Preserve partial template heads and non-deduced braced call arguments",
+      "files": [
+        "dev/src/semantic/constant_execution.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "pa18/plan.md",
+        "student.tests/pa18/deduction68_controls.py",
+        "student.tests/pa18/deduction68_course.py"
+      ],
+      "implementation_patch_sha256": "98e7098bec05ddeeb891371c4f2835d0c764b6242aec590d97be3c0768513c81"
+    },
+    {
+      "commit": "e0cc21b4745f9967ff8de98d4579276045ec5f5e",
+      "subject": "Complete base fallback deduction and preserve array qualification in conversions",
+      "files": [
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_deduction.cpp",
+        "dev/src/semantic/template_packs.cpp",
+        "student.tests/pa18/deduction68_controls.py",
+        "student.tests/pa18/virtual_base_pending.cpp"
+      ],
+      "implementation_patch_sha256": "9a9f74e6f23c0a837a80132ec0cca15f5f50a49024fda950c6786d8ce6115ebb"
+    },
+    {
+      "commit": "bd1d7b4c2bbf837e0c7ed5316998536107d9e37d",
+      "subject": "Filter base alternatives before allocating deduction bindings",
+      "files": [
+        "dev/src/semantic/template_deduction.cpp"
+      ],
+      "implementation_patch_sha256": "24bcea77b439dd65577f7bcfb1a8e6a4eb900c372c5f170694ba0de6dc37ae27"
+    },
+    {
+      "commit": "e09162fa8e25361b824859df63ccba7b7f752b13",
+      "subject": "Record validated PA18 deduction handoff and stage-scoped performance evidence",
+      "files": [
+        "pa18/handoff68.md",
+        "pa18/performance68.md",
+        "pa18/plan.md",
+        "student.tests/pa18/benchmark68.py",
+        "student.tests/pa18/deduction68_course.py",
+        "student.tests/pa18/loop68-evidence.json",
+        "student.tests/pa18/loop68-performance-before-filter.json",
+        "student.tests/pa18/loop68-performance.json",
+        "student.tests/pa18/verify68.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "f2a9d7a3bc5f18374f320bd683deaefec72394dd",
+      "subject": "Retain assignment and destructor query semantics through substitution and lowering",
+      "files": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/abi/itanium/argument_reader.cpp",
+        "dev/src/abi/itanium/expression_encoder.cpp",
+        "dev/src/abi/itanium/fact_writer.cpp",
+        "dev/src/abi/itanium/graph.h",
+        "dev/src/abi/itanium/graph_validation.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/query_abi.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/assignment_operators.cpp",
+        "dev/src/semantic/builtin_operators.cpp",
+        "dev/src/semantic/default_destructor_facts.cpp",
+        "dev/src/semantic/exception_expression.cpp",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/operator_call.cpp",
+        "dev/src/semantic/operators.cpp",
+        "dev/src/semantic/query_call.cpp",
+        "dev/src/semantic/query_destructor.cpp",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/template_binding.cpp",
+        "dev/src/semantic/template_operator_facts.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "dev/src/semantic/type_query.h",
+        "dev/src/syntax/name_parser.cpp",
+        "pa18/plan.md",
+        "student.tests/pa18/query69_controls.py"
+      ],
+      "implementation_patch_sha256": "8d3ba3a78dc33248d2915a811d06206e3aa82df445fcf399fe833a97c5394e0a"
+    },
+    {
+      "commit": "6073dbc06a9b7e9754591ced02f74373fd44bea1",
+      "subject": "Correct pseudo-destructor noexcept oracle with receiver-effect proof",
+      "files": [
+        "pa18/reference-correction69.md",
+        "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.ref.exit_status",
+        "student.tests/pa18/loop69-reference.json",
+        "student.tests/pa18/noexcept69_reducer.cpp",
+        "student.tests/pa18/reference69.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "15b34993c14b10a196c90b876b76d1658da129ba",
+      "subject": "Record validated PA18 query handoff with frozen performance and review ledger",
+      "files": [
+        "pa18/handoff69.md",
+        "pa18/performance69.md",
+        "pa18/plan.md",
+        "student.tests/pa18/benchmark69.py",
+        "student.tests/pa18/loop69-abi.json",
+        "student.tests/pa18/loop69-evidence.json",
+        "student.tests/pa18/loop69-performance.json",
+        "student.tests/pa18/query69_abi.py",
+        "student.tests/pa18/query69_course.py",
+        "student.tests/pa18/verify69.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "audit_fix": {
+    "commit": "f59e8f67cd8c832361130aef9af1a0337b25c45d",
+    "patch_sha256": "5cf081c25267236046f3f85cd4222e1f981501d9666ffa90ec875417e35fac72"
+  },
+  "implementation_files": {
+    "dev/frontend_source_sets.mk": "2f66083d1ed80a176c5a20d8b7d0067fcf7f454c41b336420301c0f740f6318b",
+    "dev/src/abi/itanium/argument_reader.cpp": "33890fe3f8be05678c74d36be9ffb904e86fb77418dae5bcf6f150fa82eeaf33",
+    "dev/src/abi/itanium/encoder.h": "15ea363fdde57a133f3484bcde2facefa056d0e6f94e2cca1dce1af76fffd48a",
+    "dev/src/abi/itanium/expression_encoder.cpp": "08d4da88f37c52a4bec7405009d29539a2c9ab4a1476c03e0e40f016f82fbd5b",
+    "dev/src/abi/itanium/fact_writer.cpp": "3447d1c41d6d972862ba03cadae542e7ad71346ee7f863a49e9994535dd95670",
+    "dev/src/abi/itanium/function_encoder.cpp": "6c0112b4f8fc1b162386fe562114c94e9efd2312f03287fb04c4a57cd55a0393",
+    "dev/src/abi/itanium/graph.h": "08e9c4e41c1de973058910221489bc58debe094a004fb081a552ea0ab40866fd",
+    "dev/src/abi/itanium/graph_validation.cpp": "873febde36dda09120a10f8700ee256def610f2de228d5875315bedea55a1127",
+    "dev/src/lowering/expression.cpp": "90f0c824c5bcc071eaaf1b1084c2c32838aeb0e2bb4190e956f46e07875b4bec",
+    "dev/src/lowering/local_abi.cpp": "d7080ab0d7210709244b6a5cdaf20e389e72e2bfe7bdd4a248cdd3cece5b9fdb",
+    "dev/src/lowering/procedural.h": "10369e85631b581cba1b906bd750045041b8fbc08912fcbb3b3c640e462cdd01",
+    "dev/src/lowering/query_abi.cpp": "f27105a405ccf86a9c6010d114fd4e97f0e2006b8eae5fb4b339d188a333fcb4",
+    "dev/src/lowering/symbols.cpp": "f1c199f1f4af683e9de03921f3467f0827ac7bc91260f7c0b2eaa02cfb6a171d",
+    "dev/src/semantic/access.cpp": "ee54e7cf15422bea79c7f2768d69cba3f99a0d2e63dfdbdb3478eaa1d74c2f32",
+    "dev/src/semantic/analyzer.h": "d97049547a4fa7f8b7ea0ce6542d9cd62325477d435867d7e9582c9e53ba8ed6",
+    "dev/src/semantic/arrow.cpp": "29df49a3d25da026942539069c0cd444d7d86e28f64b0630ff65e459772d04a3",
+    "dev/src/semantic/assignment_operators.cpp": "8b1ca308bbd55960171dc415a2a6c30d397c96a612bac5c7420583ae31a6729a",
+    "dev/src/semantic/builtin_operators.cpp": "4cc2584b4f43979ecf288bb563a5a36d1de39ef9938041d16b32213eeb2765d7",
+    "dev/src/semantic/constant_execution.cpp": "c7d973dc1736244144760037863de4d367b3f3decdc2b49eefec3e07da8c0a4e",
+    "dev/src/semantic/constant_queries.cpp": "10304c9f31da3056fc3e58fc2613865fb97cc9b04a79bab4ab9b4632e678718d",
+    "dev/src/semantic/conversion.cpp": "3fdaedc79d0da7a6ef8d1ba0aff65a089c94c267338271e4406052112cd80bce",
+    "dev/src/semantic/default_destructor_facts.cpp": "2a95f179c59f69a11cc686140a16bdb1f20d681c3c34a4ab8a32aec3aa6c7010",
+    "dev/src/semantic/exception_expression.cpp": "71c15050e370d923c34c52ac81f6d956568e6ac8643c91dd222efdf8ef15a1b9",
+    "dev/src/semantic/expression.cpp": "2452eda6f5cdbbb8465774f1b69545e38b02c2a8833c9cf7ec5723f88e3b39b8",
+    "dev/src/semantic/model.h": "012da2ec7846fc84a33d8167a6fe34fd5231e70a684a79fe9a9751da44caf35e",
+    "dev/src/semantic/operator_call.cpp": "0b81680557b150b50c4b709b92ccc6d180fd6835789884278b0586347c0b2b44",
+    "dev/src/semantic/operators.cpp": "1c7268b23056e3ebaf316bd687fe67bf5870bbd94d035f6e97f8cc56849b4a3e",
+    "dev/src/semantic/query_call.cpp": "0b69859b7e199f23aec61466e5eb28c91c4a71c816b59986d9885b24509258ac",
+    "dev/src/semantic/query_destructor.cpp": "709bc3d2070dee2ab8153d2da523d634fed0e2e93e13daae3cc24954770c2f15",
+    "dev/src/semantic/query_operator.cpp": "958c8fe685208089f137aea47fe355e3f443a5e397eb13f554bee7ad74ce4a5c",
+    "dev/src/semantic/template_address_arguments.cpp": "f397509e6976923877d9529be5425d773e53162ed8176e1df75133816745fc39",
+    "dev/src/semantic/template_arguments.cpp": "d553c7bf6e3ae0adca3e6ea5f66c1a3f79cbd639b770d85c5807f4a183edc03d",
+    "dev/src/semantic/template_binding.cpp": "42b52394faf17e7e87650b16f0097a53c67f703573b46873e4d3487c9acc9e6a",
+    "dev/src/semantic/template_call.cpp": "beeceb47d4ca428e6ed797d7e0a0720647f81ed85f175aad30e10cd59e31bcd7",
+    "dev/src/semantic/template_class.cpp": "72e57e1e5f2d6bb3b37cf1f3d676d9f5e32a6b56ca99de79b1058ae54175b07c",
+    "dev/src/semantic/template_deduction.cpp": "2f09629f348bdfcd68a26d5b900757edd8d1c4aee5c70edac9c17eef4b24fe17",
+    "dev/src/semantic/template_entities.cpp": "41d62139930117baf25de3b0ca08ea3fe76416ecca5cb91a263be3724732a274",
+    "dev/src/semantic/template_operator_facts.cpp": "aa8c4dbbad23b957bad7f0ef4db07d362b459c15c72723734004dba2a40414fb",
+    "dev/src/semantic/template_packs.cpp": "6ccc1c1b115d1ae04aef5a35e7a0a99cc45cfadb4e7219192e3cce1012ae322c",
+    "dev/src/semantic/type_query.cpp": "660b5ab9497b3656aa7fd1985c44d65aa86a531122d14e6a5f548a8e319badfb",
+    "dev/src/semantic/type_query.h": "6d5d3b683bde426d689e911214534134da9bbc2e5d37b1d42117d82b71f117f7",
+    "dev/src/syntax/name_parser.cpp": "3c9b92b69f785735ddb5406136f9c07479e62092adf62b4c000e82188f3281de"
+  },
+  "records": {
+    "pa18/plan.md": "24f068cce29eaa6e53543d86709aa8446fe7c822fae6db40825f56f1eea9e43b",
+    "pa18/audit.md": "6808345be51fdcd1e9e7de82e498a46301292d7b385e2a2eb62e6900eccacb70",
+    "pa18/audit66.md": "4d2e5a88fcd468a23e47f894ecaa8caa3faf915d9f466196cbf85470e741b2b6",
+    "pa18/performance70.md": "af96a40c9c5e6a213a293f435a349987b0a980b521c292040337ed43a99903c7",
+    "student.tests/pa18/audit70_controls.py": "ab8c3d3eaa5b2f41ae04693c0d4c6e476684673eee1872a42ff00b1ed9bb6f5e",
+    "student.tests/pa18/audit70_trace.cpp": "898fa09535b6e289f914538bd51e6f0b2136e4d16ff9a9497e62d29be2435412",
+    "student.tests/pa18/audit70_benchmark.py": "f2178c5ddb91f2849b889e1708e43ac8ce194c24a229c1d47b5a5b4328df0102"
+  },
+  "coverage": {
+    "count": 420,
+    "tracked": 1686,
+    "hash_algorithm": "SHA256 over sorted path NUL contents NUL",
+    "sha256": "c32c323966b49b506974d3a9b13edabe216abd6644727545a0eeba2936eb230e",
+    "matches_entry": true
+  },
+  "checks": {
+    "stageTests": {
+      "command": "make test-pa18",
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/final-stage.log",
+      "sha256": "e5d6472e5a21c4070298cd4fce99b6974cf7ed2d513407ca1257bcc411da50ea"
+    },
+    "priorThroughTests": {
+      "command": "n=18; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/final-prior.log",
+      "sha256": "3baef05220ee75a639009d268a2f94ed14055ce2c92bae7ab1893d51b8631a52"
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/final-file-audit.log",
+      "sha256": "12faa7a5bed8bd6d000828942d7f1064351b88544085aadac5048e06fd054ae0"
+    },
+    "stageProgressPreserved": {
+      "exit_code": 0,
+      "entry_failures": 67,
+      "final_failures": 67,
+      "new_failures": [],
+      "same_failing_paths": true,
+      "coverage": "c32c323966b49b506974d3a9b13edabe216abd6644727545a0eeba2936eb230e",
+      "prior_pass": true
+    }
+  },
+  "stage": {
+    "passing": 353,
+    "total": 420,
+    "entry_failure_paths": [
+      "pa18/tests/general/100-dependent-braced-overload-signature.t",
+      "pa18/tests/general/100-dependent-remove-reference-transform-forwarding.t",
+      "pa18/tests/general/100-forwarded-const-reference-multidimensional-array-deduction.t",
+      "pa18/tests/general/100-function-template-fixed-over-trailing-pack-fallback.t",
+      "pa18/tests/general/100-member-trailing-return-this-explicit-template-id.t",
+      "pa18/tests/general/100-qualified-alias-template-member-deduction.t",
+      "pa18/tests/general/200-inherited-constructor-template-forwarding.t",
+      "pa18/tests/general/200-nested-array-reference-partial-ordering.t",
+      "pa18/tests/general/200-range-array-reference-mutable-begin.t",
+      "pa18/tests/general/300-abstract-array-parameter-sfinae.t",
+      "pa18/tests/general/300-adl-overload-set-argument-deduction.t",
+      "pa18/tests/general/300-alias-bool-explicit-pack-call-dependent-tag.t",
+      "pa18/tests/general/300-alias-sfinae-inherited-member-value.t",
+      "pa18/tests/general/300-ambiguous-inherited-member-type-sfinae.t",
+      "pa18/tests/general/300-base-qualified-template-value-arg-syntax.t",
+      "pa18/tests/general/300-boost-enable-if-type-condition-static-keyword-overload.t",
+      "pa18/tests/general/300-constexpr-forwarded-function-designator-pack-call.t",
+      "pa18/tests/general/300-dependent-call-operator-implicit-object-const-sfinae.t",
+      "pa18/tests/general/300-empty-pack-unknown-bound-array-lowir.t",
+      "pa18/tests/general/300-explicit-template-call-transitive-base-deduction.t",
+      "pa18/tests/general/300-friend-function-template-alias-result-definition.t",
+      "pa18/tests/general/300-function-template-nested-alias-explicit-call.t",
+      "pa18/tests/general/300-function-template-result-first-lookup.t",
+      "pa18/tests/general/300-internal-remove-cvref-alias-sfinae.t",
+      "pa18/tests/general/300-lazy-nested-class-in-member-template.t",
+      "pa18/tests/general/300-lazy-nested-member-class-instantiation.t",
+      "pa18/tests/general/300-nested-alias-defer-validity.t",
+      "pa18/tests/general/300-out-of-class-partial-owner-ctor-using-alias.t",
+      "pa18/tests/general/300-pack-expanded-explicit-member-template-arguments.t",
+      "pa18/tests/general/300-single-element-detector-idiom-sfinae-false.t",
+      "pa18/tests/general/300-using-base-specialization-beats-derived-generic-reference.t",
+      "pa18/tests/general/300-using-directive-overloaded-function-template-arg.t",
+      "pa18/tests/general/400-alias-template-function-argument-cv.t",
+      "pa18/tests/general/400-array-bound-expression-is-nondeduced.t",
+      "pa18/tests/general/400-pack-expansion-size-mismatch-sfinae.t",
+      "pa18/tests/general/400-partial-specialization-inherited-constructor-template.t",
+      "pa18/tests/general/500-bool-alias-function-template-result-metadata.t",
+      "pa18/tests/general/500-constructor-pack-default-rewritten-pointer.t",
+      "pa18/tests/general/500-constructor-sfinae-namespace-constant-symbol.t",
+      "pa18/tests/general/500-defaulted-pack-bool-short-circuit-sfinae.t",
+      "pa18/tests/general/500-explicit-pack-deduced-pack-member-result.t",
+      "pa18/tests/general/500-inherited-constructor-template-member-alias-pack.t",
+      "pa18/tests/general/500-member-template-enable-if-redeclaration-overload.t",
+      "pa18/tests/general/500-member-template-retained-dependent-param-candidate-drop.t",
+      "pa18/tests/general/500-pack-alias-functional-bool-trait-sfinae.t",
+      "pa18/tests/general/500-source-owner-member-template-sfinae-default.t",
+      "pa18/tests/spec/100-constexpr-union-active-pack-constructor.t",
+      "pa18/tests/spec/100-constructor-template-braced-array-bound-deduction.t",
+      "pa18/tests/spec/100-explicit-member-specialization-dependent-alias-parameter.t",
+      "pa18/tests/spec/100-function-template-array-bound-deduction.t",
+      "pa18/tests/spec/100-function-template-array-bound-shared-deduction.t",
+      "pa18/tests/spec/200-array-reference-cv-partial-ordering.t",
+      "pa18/tests/spec/200-nondeduced-qualified-member-type-allows-conversion.t",
+      "pa18/tests/spec/300-c-style-virtual-base-downcast-sfinae.t",
+      "pa18/tests/spec/300-concrete-owner-member-result-sfinae.t",
+      "pa18/tests/spec/300-conversion-function-template-object-result-copy-init.t",
+      "pa18/tests/spec/300-defaulted-enable-if-after-array-bound-deduction.t",
+      "pa18/tests/spec/300-dependent-result-defaulted-nontype-declaring-scope.t",
+      "pa18/tests/spec/300-detected-or-sfinae-fallback.t",
+      "pa18/tests/spec/300-list-initialization-narrowing-sfinae.t",
+      "pa18/tests/spec/300-member-overload-set-survives-class-completion.t",
+      "pa18/tests/spec/300-out-of-class-return-sfinae-overload-definitions.t",
+      "pa18/tests/spec/300-out-of-class-sfinae-member-template-alias-body.t",
+      "pa18/tests/spec/300-out-of-class-sfinae-member-template-body.t",
+      "pa18/tests/spec/300-qualified-member-function-value-fallback-sfinae.t",
+      "pa18/tests/spec/300-using-member-decltype-invoke-cross-specialization.t",
+      "pa18/tests/spec/300-void-t-decltype-call-sidecar-partial-specialization.t"
+    ],
+    "final_failures": {
+      "pa18/tests/general/100-dependent-braced-overload-signature.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/100-dependent-remove-reference-transform-forwarding.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-dependent-remove-reference-transform-forwarding.my.lowir.compare.diff",
+      "pa18/tests/general/100-forwarded-const-reference-multidimensional-array-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-forwarded-const-reference-multidimensional-array-deduction.my.lowir.compare.diff",
+      "pa18/tests/general/100-function-template-fixed-over-trailing-pack-fallback.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-function-template-fixed-over-trailing-pack-fallback.my.lowir.compare.diff",
+      "pa18/tests/general/100-member-trailing-return-this-explicit-template-id.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/100-qualified-alias-template-member-deduction.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/200-inherited-constructor-template-forwarding.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/200-nested-array-reference-partial-ordering.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-nested-array-reference-partial-ordering.my.lowir.compare.diff",
+      "pa18/tests/general/200-range-array-reference-mutable-begin.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-range-array-reference-mutable-begin.my.lowir.compare.diff",
+      "pa18/tests/general/300-abstract-array-parameter-sfinae.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-abstract-array-parameter-sfinae.my.lowir.compare.diff",
+      "pa18/tests/general/300-adl-overload-set-argument-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-adl-overload-set-argument-deduction.my.lowir.compare.diff",
+      "pa18/tests/general/300-alias-bool-explicit-pack-call-dependent-tag.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-alias-sfinae-inherited-member-value.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-ambiguous-inherited-member-type-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-base-qualified-template-value-arg-syntax.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-boost-enable-if-type-condition-static-keyword-overload.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-boost-enable-if-type-condition-static-keyword-overload.my.lowir.compare.diff",
+      "pa18/tests/general/300-constexpr-forwarded-function-designator-pack-call.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-dependent-call-operator-implicit-object-const-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-empty-pack-unknown-bound-array-lowir.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-explicit-template-call-transitive-base-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-explicit-template-call-transitive-base-deduction.my.lowir.compare.diff",
+      "pa18/tests/general/300-friend-function-template-alias-result-definition.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/300-friend-function-template-alias-result-definition.my.lowir.compare.diff",
+      "pa18/tests/general/300-function-template-nested-alias-explicit-call.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-function-template-result-first-lookup.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-internal-remove-cvref-alias-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-lazy-nested-class-in-member-template.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-lazy-nested-member-class-instantiation.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-nested-alias-defer-validity.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-out-of-class-partial-owner-ctor-using-alias.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-pack-expanded-explicit-member-template-arguments.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-single-element-detector-idiom-sfinae-false.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-using-base-specialization-beats-derived-generic-reference.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/300-using-directive-overloaded-function-template-arg.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/400-alias-template-function-argument-cv.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/400-array-bound-expression-is-nondeduced.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/400-array-bound-expression-is-nondeduced.my.lowir.compare.diff",
+      "pa18/tests/general/400-pack-expansion-size-mismatch-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/400-partial-specialization-inherited-constructor-template.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-bool-alias-function-template-result-metadata.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/500-bool-alias-function-template-result-metadata.my.lowir.compare.diff",
+      "pa18/tests/general/500-constructor-pack-default-rewritten-pointer.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/500-constructor-pack-default-rewritten-pointer.my.lowir.compare.diff",
+      "pa18/tests/general/500-constructor-sfinae-namespace-constant-symbol.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/500-constructor-sfinae-namespace-constant-symbol.my.lowir.compare.diff",
+      "pa18/tests/general/500-defaulted-pack-bool-short-circuit-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-explicit-pack-deduced-pack-member-result.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-inherited-constructor-template-member-alias-pack.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-member-template-enable-if-redeclaration-overload.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-member-template-retained-dependent-param-candidate-drop.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-pack-alias-functional-bool-trait-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/general/500-source-owner-member-template-sfinae-default.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/500-source-owner-member-template-sfinae-default.my.lowir.compare.diff",
+      "pa18/tests/spec/100-constexpr-union-active-pack-constructor.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/100-constexpr-union-active-pack-constructor.my.lowir.compare.diff",
+      "pa18/tests/spec/100-constructor-template-braced-array-bound-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/100-constructor-template-braced-array-bound-deduction.my.lowir.compare.diff",
+      "pa18/tests/spec/100-explicit-member-specialization-dependent-alias-parameter.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/100-function-template-array-bound-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/100-function-template-array-bound-deduction.my.lowir.compare.diff",
+      "pa18/tests/spec/100-function-template-array-bound-shared-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/100-function-template-array-bound-shared-deduction.my.lowir.compare.diff",
+      "pa18/tests/spec/200-array-reference-cv-partial-ordering.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/200-array-reference-cv-partial-ordering.my.lowir.compare.diff",
+      "pa18/tests/spec/200-nondeduced-qualified-member-type-allows-conversion.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/200-nondeduced-qualified-member-type-allows-conversion.my.lowir.compare.diff",
+      "pa18/tests/spec/300-c-style-virtual-base-downcast-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-concrete-owner-member-result-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-conversion-function-template-object-result-copy-init.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-conversion-function-template-object-result-copy-init.my.lowir.compare.diff",
+      "pa18/tests/spec/300-defaulted-enable-if-after-array-bound-deduction.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-defaulted-enable-if-after-array-bound-deduction.my.lowir.compare.diff",
+      "pa18/tests/spec/300-dependent-result-defaulted-nontype-declaring-scope.t": "generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/spec/300-dependent-result-defaulted-nontype-declaring-scope.my.lowir.compare.diff",
+      "pa18/tests/spec/300-detected-or-sfinae-fallback.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-list-initialization-narrowing-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-member-overload-set-survives-class-completion.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-out-of-class-return-sfinae-overload-definitions.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-out-of-class-sfinae-member-template-alias-body.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-out-of-class-sfinae-member-template-body.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-qualified-member-function-value-fallback-sfinae.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-using-member-decltype-invoke-cross-specialization.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa18/tests/spec/300-void-t-decltype-call-sidecar-partial-specialization.t": "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+    },
+    "new_failures": [],
+    "status_failures": 43,
+    "lowir_failures": 24,
+    "baseline_log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/baseline.log",
+    "baseline_log_sha256": "9c9b32b9db5151ca0d0dfe171e788d28e6194c4e9b6bbaffb1b9dbfd244d8fc2"
+  },
+  "controls": {
+    "final-control-checks.json": [
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/ordering_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/ordering_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/ordering_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/ordering_controls-final/results.json",
+        "log_sha256": "9579b16787fb21217e909206f045a499f62ccc0a6c19b54fde2ac3ec133bce33",
+        "results_sha256": "61a28f34dcef7b0f2387ef71b0e2374913e05ceb76f4545e9ca858e23d5fbd7d",
+        "cases": 64
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/substitution_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/substitution_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/substitution_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/substitution_controls-final/results.json",
+        "log_sha256": "0f1ffad0e5b2ad8d310af757a2f479c3d1ba675a33350d435f2041946c7f54be",
+        "results_sha256": "d18000aa5d0b910e9295136828f3f919904df75e15cd8a0213e6859ad457e080",
+        "cases": 33
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/conversion_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_controls-final/results.json",
+        "log_sha256": "2c23202e00a9dca5fef7040b7c0212a8e43fc7084bdc49b1adc37a11c7369d85",
+        "results_sha256": "16037d853bc943278640099840f803f0dbbb416ae32dc697063643d9ebe1db17",
+        "cases": 51
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/address_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_controls-final/results.json",
+        "log_sha256": "ac654d50c5d533361d1a280ad17d00db248910602c3f4ed8521028ca227c4e20",
+        "results_sha256": "f673adf52457608fb3909e557c8b5aa115df8e0b9251e9ac8150d74f5650c2db",
+        "cases": 63
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/deduction68_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/deduction68_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/deduction68_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/deduction68_controls-final/results.json",
+        "log_sha256": "acc532deedcd37ce3beedc429d323eda6262d2a9cf3e4c1846c4611138b5d59a",
+        "results_sha256": "7ad0a8c9c3c29d037c336648f80082467a228d1e2d6aa4ae931fab16dac86282",
+        "cases": 56
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/query69_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final/results.json",
+        "log_sha256": "6766253b9ffc63bde969b30531425e3d9c2a916b9c4028c87b6f0d8810c06ebd",
+        "results_sha256": "f9a3913d2e3639f360b213be5dc09f430c397823aa50f58760366f81b6cc550d",
+        "cases": 58
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/audit66_controls.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/audit66_controls-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/audit66_controls-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/audit66_controls-final/results.json",
+        "log_sha256": "6d56c54ee8039cc2835bcd5002a75c244b90254a7c0d0d4610e25afb2c6b9292",
+        "results_sha256": "b1c03477414a22077c6a703e68b7aec87fcf6333691b9f753a3a61b063f587ab",
+        "cases": 5
+      }
+    ],
+    "final-additional-checks.json": [
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/address_abi.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_abi-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_abi-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_abi-final/results.json",
+        "log_sha256": "6c9b43f32721df24a1301b8d0fe06d44cc0fa742a0152132fcbfff2d23fccc3d",
+        "results_sha256": "838cf915dc33eb48419e1231047e67487113ffd19aeb95a8191fac54c0b10106",
+        "cases": 13
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/address_linkage.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_linkage-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_linkage-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_linkage-final/results.json",
+        "log_sha256": "33355de80b3f3283fa9fe6f232e68abf012a40aca770ee2161509e3e055813c6",
+        "results_sha256": "4304f77c9218797e635cb1c5f5c054bb741e293e39897aba3b41df68650e6b59",
+        "cases": 5
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/address_cache.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_cache-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_cache-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/address_cache-final/results.json",
+        "log_sha256": "428c980628c217d4633119f134c046fa2b92a7e63290f3d5cf54765a9cd05de0",
+        "results_sha256": "7ee2406946072612e6e4a2c65dfed2ca229461510a4fcfc6641d685a9b89ab81",
+        "cases": 3
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/conversion_abi.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_abi-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_abi-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/conversion_abi-final/results.json",
+        "log_sha256": "5c6b47604e066ef7764fbbbdce8865d5ac8d91cbe0c7e6e6779d43e41df26b17",
+        "results_sha256": "1719315a36ce66d489d8b457099b84ff0740cd1e0801b04cabd2e4f8f387cd84",
+        "cases": 4
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/completion_scaling.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/completion-scaling-final"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/completion-scaling-final.log",
+        "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/completion-scaling-final/results.json",
+        "log_sha256": "dacd5fbfc2b3e9e63662791fcb8134fd245191a3fd77cf6bb135821129a83b40",
+        "results_sha256": "87ce5a94ea7b204eba068613a1a75f7b8edb91065959d86318d66a88431d6387",
+        "cases": 3
+      }
+    ],
+    "course-checks.json": [
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/address_course.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa18-loop67/entry-stage.log",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa18-loop67/complete-stage.log",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/course67"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course-check-0.log",
+        "log_sha256": "86220ff1430dff4883c27156e37e1b8d616a00cf3ea59df7cfd35586c4154699"
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/deduction68_course.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/handoff68/course",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa18-loop68/complete-stage.log"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course-check-1.log",
+        "log_sha256": "ab87a0c50df8d71f282ce6a6c6a10c088fd0553c2f5f938ba7dc58095766a0b5"
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/query69_course.py",
+          "dev/cppgm++",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/course69",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop69/baseline.log",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop69/stage.log"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course-check-2.log",
+        "log_sha256": "f639cb41f209d8fe2445e702cc425fa937daf05f0c92e453e14ba1e488871ec7"
+      },
+      {
+        "command": [
+          "python3",
+          "student.tests/pa18/query69_abi.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final",
+          "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69-abi.json"
+        ],
+        "exit": 0,
+        "log": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course-check-3.log",
+        "log_sha256": "6cbe12bfab2388109de14c87a4e648cb46abc42f2db8258dab678f0169b128ec"
+      }
+    ],
+    "audit70": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/audit70-controls-final/results.json",
+      "sha256": "b33565a2cb38f6443c1b9017ab3eea71ed0cf3d03768bec4971c9ff1b7dae39b",
+      "count": 56,
+      "passing": 56,
+      "cases": [
+        {
+          "name": "volatile_ref",
+          "source_sha256": "f37627e3857f7a2891bc541c1235c7fc845365c9001b2afb1788b34de45e0603",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "rank_arithmetic",
+          "source_sha256": "421dbdbbb2e44f865f13e784053adde3f497429cbcf9d536d113e7e925218a1b",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "rank_pointer",
+          "source_sha256": "52de3f1deee973caf6710b9f1386900dd4b9b4a7cfb43c45d33fbd7c7623f0df",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_scalar",
+          "source_sha256": "fb36eb83909dcbeeecd6bab570dd76823affe5c02a31e3cae4da666a74f92ec9",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_signature",
+          "source_sha256": "3c6559f051a77f761e15b982a4bef809093bdf4b8fd552bc1fd9a630f0261a79",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_throws",
+          "source_sha256": "29b396f8539d6650aa9278507ac6cec9e567da6f264733e1be1bbd38db3fef50",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_nothrow",
+          "source_sha256": "21d453587939783f4d41528a0e6ab6a42364a7539f392b78bcba48cfaffde9fe",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_temporary",
+          "source_sha256": "ea60e31921c071870da42143e51da46c1d0f1a6117dededd5a3342cc38d38679",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "unscoped_assign",
+          "source_sha256": "787339af35b88e726886a95ec74da626221cb0fba66b952cfbeaab5284688bb6",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_9",
+          "source_sha256": "57ee325351d94c9bf2596a8b1f166e51973a71dd9d2ded109de7c658583f3927",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_10",
+          "source_sha256": "9f2ee3f395281f66ca17c4bdc012f03569d79ee8c30f519a0730332a199df84d",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_11",
+          "source_sha256": "d632761100eef36065c2413d8733ade2f6d5cc1e5a1198446251f7b3d1fd3a9d",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_12",
+          "source_sha256": "d547634400f01558766fa433f2e8d99233c3aaa41fbbc73391cfeefd13e81797",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_13",
+          "source_sha256": "0c054e0942c115463f92d8624e9509ba8b7c2a0cb5754717078c7c7e9cddd268",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_14",
+          "source_sha256": "a2fcf04d33b05778b5e3db9c5d0c70292db7fd194a701ad86ef96fbfcfcb0399",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_15",
+          "source_sha256": "9a7a1eb0d4489e864e72e3dd080ce889a69838535308bb11e660f50433243630",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_16",
+          "source_sha256": "ade8a54ceb4e68d60adefcadb3d2e7e35a33e64748a662762cd253a9d8e13144",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_17",
+          "source_sha256": "7453e07200f0999fcb4fff5a1d918a8dc966490909a02e1f093fbe6c0b091e08",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_18",
+          "source_sha256": "cf13a5a016f69e284ba428ad17f593c617e21d451d1fe05dc2b131cc05cc3547",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_19",
+          "source_sha256": "a0c597dca60a89d32a592940c958ac5c38251db751fab8ba8fe01c378635ca54",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_20",
+          "source_sha256": "52b914e8a93336d3ecf5d39a1a9e79693ca2f6b570186a0f7d2a539548f429a9",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_21",
+          "source_sha256": "4fd2ebc6a6811521f1aa6e95d8d853f53d5a5c89a7b49c89e91f65f7fbf015e2",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_22",
+          "source_sha256": "43a628a9df80b214b1451cbf2477af4db7095a908e7699f0e1e5ff679dcc0d84",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_23",
+          "source_sha256": "cbaf87f66bd01f821a68763d006bf5af7bd4287d7259b5551e629da5597c52c3",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_24",
+          "source_sha256": "aad8fb5499d5a5ddbed8b44225c747b6913c0deffb02bf6b20baf7ce7e0fd954",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_25",
+          "source_sha256": "d8ccf061f41795867700dc29fe5ea466cee3d952de2ee31861851bc0c60fe0fc",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_26",
+          "source_sha256": "bda621786f11387849e3b627984839ea5c9c0d448f1a6b9c23a9f35f6942e869",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_27",
+          "source_sha256": "0aab9707f77cbd20f3b04de1fd0fab8f034b3848c5300ae6169720b5462ca999",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_28",
+          "source_sha256": "52fee3b3a6069de0b4f2e5225637423cd3bba158771cc437ce7391a54b8165d3",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "rank_arithmetic_runtime",
+          "source_sha256": "e1f2b8d2a9a070320086426e6beea583070422c4f21a3136ff639f08120f78bd",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_pointer",
+          "source_sha256": "b13ffd0078235b3589937be6327d7cf750f1f79b9cb26082b6cb0bf980a3b8ee",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "ambiguous_rhs",
+          "source_sha256": "30782020845d9297dd2240becabbc022756a1fc0c1d40c650ade3a3095adbc55",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "const_reference_rejected",
+          "source_sha256": "adc923cbe2aa83b302cbeef76ddbabe93ebde068f264b4823a48c28f26d7cdb1",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "value_conversion_rejected",
+          "source_sha256": "d639811c29e82539de1bbb5bceceec249e9e37a92950f0729d62f80f45ef512c",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_fixed_body",
+          "source_sha256": "0cbe9d23f79d6cfc6f14b0483d494f6fb165394a89a1f1d6e24e51b11638b4bb",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_quiet",
+          "source_sha256": "25acbd7ff9c4bb32e875b905548563faaaf3bdadd39158d5f1ed8ca9e40164b1",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_throws",
+          "source_sha256": "68f83a1dd5cae6734b53a371cdf39b687e64790b7d0751981df9211c98672910",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_nested",
+          "source_sha256": "fe4b7bcfb9f9343fc4c0897feae7e03909419d5c512214f9e0322b6d0c72fca6",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_temporary",
+          "source_sha256": "83a595c0a5404c739592e69f984c489c5b22d90c7876b87909f18fb36530ce8d",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_reference",
+          "source_sha256": "992f388a7b35de2188c03e9bdff69698fdfca24aaf66bd1ce1a2d072fb924f5a",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_quiet_temporary",
+          "source_sha256": "62bd697d98dc770bb373ea42d00f1fb08c326e08bb1afde92bc0fc94587eaf15",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_runtime",
+          "source_sha256": "b9dcf8587425de5bca75a66e520ec28f753b1bddc6b10f1f3dcabeb4aced2b23",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_temporary_runtime",
+          "source_sha256": "c5cbfcd23ed5698b16d2839cda76dc3499e0379bed1c4c9ec46566ce43d87a07",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_missing",
+          "source_sha256": "6e6887a4990289aa977dda4affe25330099c97b4d8269e7140de365f7741035c",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_private",
+          "source_sha256": "abc9e2f0b01e6653b238e1c64f28f02672577587a49e8d7e461ee420e105a68d",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_deleted",
+          "source_sha256": "2361f3cfcf5969ca0fcb4e4cc0d848db838c5ed5275e8e3535527d5415eb8b11",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_nonpointer",
+          "source_sha256": "998cfd9fb14b064102975239962e2fb5697a98230d911b693e40183a026b2933",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_recursive",
+          "source_sha256": "a9324db4a7f82a6473b24ecd2c94acb3ae1fe1eeec4a92d556dcfc0c57656ecf",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_deleted_temporary",
+          "source_sha256": "78c6f8160071a437e64e3a61a3907d13dc85a7fc0404fc398c69c347d34c40f8",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_sfinae_public",
+          "source_sha256": "5f02d1918f3b58dcf34f802f6eb00f9d1c42aba167973769f6a632fe7c8cf0df",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_completion",
+          "source_sha256": "8d7665cf5a08df6ae85ba58f45f30310d9ca1da61c9a7bb7a6671f4d9b861435",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "class_bool_pointer",
+          "source_sha256": "938f490440457fb3f28650ca8cbded160d0ce57dabf7c52c7fdb9fa53ed3f8eb",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "property_context_own_friend",
+          "source_sha256": "ceddbb152edbe8e072b77880b545197053d3ddc8be2541f3da9005fdc8a224a7",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "property_template_context_own_friend",
+          "source_sha256": "7e2a6610acfe12a97271304c7baf90912e82c87371df8695d00cc70c897fcf23",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "property_context",
+          "source_sha256": "d0ca096561b560bced74299c45785e1a115649b8c843389bc116d870e8c24955",
+          "expected": "reject",
+          "compiler_exit": 1,
+          "passed": true
+        },
+        {
+          "name": "property_template_context",
+          "source_sha256": "003c9453ea8cd784484387b8b2d54ee4e3721aecaf6ffed890237c6c2f98fef6",
+          "expected": "reject",
+          "compiler_exit": 1,
+          "passed": true
+        }
+      ]
+    },
+    "audit70_entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/entry-controls-complete/results.json",
+      "sha256": "a308aa50cfec4e67cb7ff59699418c8855c28ca7299e5cef2f2384625e363cff",
+      "count": 56,
+      "passing": 22,
+      "cases": [
+        {
+          "name": "volatile_ref",
+          "source_sha256": "f37627e3857f7a2891bc541c1235c7fc845365c9001b2afb1788b34de45e0603",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "rank_arithmetic",
+          "source_sha256": "421dbdbbb2e44f865f13e784053adde3f497429cbcf9d536d113e7e925218a1b",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "rank_pointer",
+          "source_sha256": "52de3f1deee973caf6710b9f1386900dd4b9b4a7cfb43c45d33fbd7c7623f0df",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_scalar",
+          "source_sha256": "fb36eb83909dcbeeecd6bab570dd76823affe5c02a31e3cae4da666a74f92ec9",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_signature",
+          "source_sha256": "3c6559f051a77f761e15b982a4bef809093bdf4b8fd552bc1fd9a630f0261a79",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_throws",
+          "source_sha256": "29b396f8539d6650aa9278507ac6cec9e567da6f264733e1be1bbd38db3fef50",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_nothrow",
+          "source_sha256": "21d453587939783f4d41528a0e6ab6a42364a7539f392b78bcba48cfaffde9fe",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_temporary",
+          "source_sha256": "ea60e31921c071870da42143e51da46c1d0f1a6117dededd5a3342cc38d38679",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "unscoped_assign",
+          "source_sha256": "787339af35b88e726886a95ec74da626221cb0fba66b952cfbeaab5284688bb6",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "plain_9",
+          "source_sha256": "57ee325351d94c9bf2596a8b1f166e51973a71dd9d2ded109de7c658583f3927",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_10",
+          "source_sha256": "9f2ee3f395281f66ca17c4bdc012f03569d79ee8c30f519a0730332a199df84d",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_11",
+          "source_sha256": "d632761100eef36065c2413d8733ade2f6d5cc1e5a1198446251f7b3d1fd3a9d",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_12",
+          "source_sha256": "d547634400f01558766fa433f2e8d99233c3aaa41fbbc73391cfeefd13e81797",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_13",
+          "source_sha256": "0c054e0942c115463f92d8624e9509ba8b7c2a0cb5754717078c7c7e9cddd268",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_14",
+          "source_sha256": "a2fcf04d33b05778b5e3db9c5d0c70292db7fd194a701ad86ef96fbfcfcb0399",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_15",
+          "source_sha256": "9a7a1eb0d4489e864e72e3dd080ce889a69838535308bb11e660f50433243630",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_16",
+          "source_sha256": "ade8a54ceb4e68d60adefcadb3d2e7e35a33e64748a662762cd253a9d8e13144",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_17",
+          "source_sha256": "7453e07200f0999fcb4fff5a1d918a8dc966490909a02e1f093fbe6c0b091e08",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_18",
+          "source_sha256": "cf13a5a016f69e284ba428ad17f593c617e21d451d1fe05dc2b131cc05cc3547",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_19",
+          "source_sha256": "a0c597dca60a89d32a592940c958ac5c38251db751fab8ba8fe01c378635ca54",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_20",
+          "source_sha256": "52b914e8a93336d3ecf5d39a1a9e79693ca2f6b570186a0f7d2a539548f429a9",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_21",
+          "source_sha256": "4fd2ebc6a6811521f1aa6e95d8d853f53d5a5c89a7b49c89e91f65f7fbf015e2",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_22",
+          "source_sha256": "43a628a9df80b214b1451cbf2477af4db7095a908e7699f0e1e5ff679dcc0d84",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_23",
+          "source_sha256": "cbaf87f66bd01f821a68763d006bf5af7bd4287d7259b5551e629da5597c52c3",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_24",
+          "source_sha256": "aad8fb5499d5a5ddbed8b44225c747b6913c0deffb02bf6b20baf7ce7e0fd954",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_25",
+          "source_sha256": "d8ccf061f41795867700dc29fe5ea466cee3d952de2ee31861851bc0c60fe0fc",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_26",
+          "source_sha256": "bda621786f11387849e3b627984839ea5c9c0d448f1a6b9c23a9f35f6942e869",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "plain_27",
+          "source_sha256": "0aab9707f77cbd20f3b04de1fd0fab8f034b3848c5300ae6169720b5462ca999",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_28",
+          "source_sha256": "52fee3b3a6069de0b4f2e5225637423cd3bba158771cc437ce7391a54b8165d3",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "rank_arithmetic_runtime",
+          "source_sha256": "e1f2b8d2a9a070320086426e6beea583070422c4f21a3136ff639f08120f78bd",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_pointer",
+          "source_sha256": "b13ffd0078235b3589937be6327d7cf750f1f79b9cb26082b6cb0bf980a3b8ee",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "ambiguous_rhs",
+          "source_sha256": "30782020845d9297dd2240becabbc022756a1fc0c1d40c650ade3a3095adbc55",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "const_reference_rejected",
+          "source_sha256": "adc923cbe2aa83b302cbeef76ddbabe93ebde068f264b4823a48c28f26d7cdb1",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "value_conversion_rejected",
+          "source_sha256": "d639811c29e82539de1bbb5bceceec249e9e37a92950f0729d62f80f45ef512c",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "volatile_fixed_body",
+          "source_sha256": "0cbe9d23f79d6cfc6f14b0483d494f6fb165394a89a1f1d6e24e51b11638b4bb",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "scalar_arrow_quiet",
+          "source_sha256": "25acbd7ff9c4bb32e875b905548563faaaf3bdadd39158d5f1ed8ca9e40164b1",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_throws",
+          "source_sha256": "68f83a1dd5cae6734b53a371cdf39b687e64790b7d0751981df9211c98672910",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "scalar_arrow_nested",
+          "source_sha256": "fe4b7bcfb9f9343fc4c0897feae7e03909419d5c512214f9e0322b6d0c72fca6",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "scalar_arrow_temporary",
+          "source_sha256": "83a595c0a5404c739592e69f984c489c5b22d90c7876b87909f18fb36530ce8d",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "scalar_arrow_reference",
+          "source_sha256": "992f388a7b35de2188c03e9bdff69698fdfca24aaf66bd1ce1a2d072fb924f5a",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_quiet_temporary",
+          "source_sha256": "62bd697d98dc770bb373ea42d00f1fb08c326e08bb1afde92bc0fc94587eaf15",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "scalar_arrow_runtime",
+          "source_sha256": "b9dcf8587425de5bca75a66e520ec28f753b1bddc6b10f1f3dcabeb4aced2b23",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": false,
+          "backend_exit": 0,
+          "native_exit": 1
+        },
+        {
+          "name": "scalar_arrow_temporary_runtime",
+          "source_sha256": "c5cbfcd23ed5698b16d2839cda76dc3499e0379bed1c4c9ec46566ce43d87a07",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": false,
+          "backend_exit": 0,
+          "native_exit": 1
+        },
+        {
+          "name": "arrow_sfinae_missing",
+          "source_sha256": "6e6887a4990289aa977dda4affe25330099c97b4d8269e7140de365f7741035c",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_private",
+          "source_sha256": "abc9e2f0b01e6653b238e1c64f28f02672577587a49e8d7e461ee420e105a68d",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_deleted",
+          "source_sha256": "2361f3cfcf5969ca0fcb4e4cc0d848db838c5ed5275e8e3535527d5415eb8b11",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_nonpointer",
+          "source_sha256": "998cfd9fb14b064102975239962e2fb5697a98230d911b693e40183a026b2933",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_recursive",
+          "source_sha256": "a9324db4a7f82a6473b24ecd2c94acb3ae1fe1eeec4a92d556dcfc0c57656ecf",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_deleted_temporary",
+          "source_sha256": "78c6f8160071a437e64e3a61a3907d13dc85a7fc0404fc398c69c347d34c40f8",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "arrow_sfinae_public",
+          "source_sha256": "5f02d1918f3b58dcf34f802f6eb00f9d1c42aba167973769f6a632fe7c8cf0df",
+          "expected": "native",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "name": "arrow_completion",
+          "source_sha256": "8d7665cf5a08df6ae85ba58f45f30310d9ca1da61c9a7bb7a6671f4d9b861435",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "class_bool_pointer",
+          "source_sha256": "938f490440457fb3f28650ca8cbded160d0ce57dabf7c52c7fdb9fa53ed3f8eb",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "property_context_own_friend",
+          "source_sha256": "ceddbb152edbe8e072b77880b545197053d3ddc8be2541f3da9005fdc8a224a7",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "property_template_context_own_friend",
+          "source_sha256": "7e2a6610acfe12a97271304c7baf90912e82c87371df8695d00cc70c897fcf23",
+          "expected": "native",
+          "compiler_exit": 1,
+          "passed": false
+        },
+        {
+          "name": "property_context",
+          "source_sha256": "d0ca096561b560bced74299c45785e1a115649b8c843389bc116d870e8c24955",
+          "expected": "reject",
+          "compiler_exit": 0,
+          "passed": false
+        },
+        {
+          "name": "property_template_context",
+          "source_sha256": "003c9453ea8cd784484387b8b2d54ee4e3721aecaf6ffed890237c6c2f98fef6",
+          "expected": "reject",
+          "compiler_exit": 0,
+          "passed": false
+        }
+      ]
+    },
+    "course67": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course67/results.json",
+      "sha256": "2985fb173d9089736ce78e7b2475948b863ee4b8c9491adc4925a29ed1a687ed",
+      "count": 16,
+      "passing": 16,
+      "cases": [
+        {
+          "path": "pa18/tests/general/300-static-member-template-function-pointer-nttp.t",
+          "source_sha256": "457eefc25f5726aab42c8dfce97b2cf2b8e98cdf76404f4425631fb40752469f",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/300-tcc-member-constructible-pack-sfinae.t",
+          "source_sha256": "5ad59569e28f70a30bc6e814f0359e3103aaf310fa4db34d95573d72a714526e",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 249
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 249
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-constructor-template-pack-before-defaulted-nontype.t",
+          "source_sha256": "4addfb1c35da661721d6a7aafbe88ef58fe341afd0446f6aae32172005d646c8",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-defaulted-dependent-pointer-nttp-cstyle-cast-symbol.t",
+          "source_sha256": "ebf6fc2739587859500d083841f8f3016e6572ad11d4682eaa102a95108e6bb7",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-defaulted-pointer-nontype-cstyle-null.t",
+          "source_sha256": "ff435d008f9c59cf24634695e83eef9e07082882d5f62b42d875fdfce2b5eef2",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-dependent-parameter-declarator-owner.t",
+          "source_sha256": "2c77915bbbd01666e2b501b5680b1b894f9fb7c0fb8f9055c30be1c924cb15a5",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-object-pointer-nttp-address.t",
+          "source_sha256": "4e103026be6d32ae3fe41d986f8bf8338968e6c19725c1bd4c9e49e11f43cde5",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-object-pointer-nttp-rebound-member-template.t",
+          "source_sha256": "75da37d14c5c3b4ec5cdaed6dc0bb8a7b57dfb3dc08413cf0986c58dc9065f76",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-qualified-static-array-pointer-nontype-argument.t",
+          "source_sha256": "9db37e068eb75a9bd3f54bbcaf8ff6c764f56a4aad269c79a9d8420ad8b6fcff",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-static-member-pointer-reference-nontype-identity.t",
+          "source_sha256": "c5c6babfcfdc7f58d880339be4f2c6058eac092fda3d2d2841fc197dc0a78a33",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/400-unnamed-nontype-pack-static-enable-if-default.t",
+          "source_sha256": "55c6bc773c3a8d2129289b683286c93bddaf2cc7c22cd7a7a6b568d84c8a4018",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/500-defaulted-nontype-qualified-alias-value.t",
+          "source_sha256": "a8513ce36fca138c1776d35b8dcb151af39617dc20ef99aa68ba64f5d4dec7a4",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/general/500-tcc-member-constructible-pack-sfinae.t",
+          "source_sha256": "6dcd82bc2da63795d5af0f403db9560f4ad4ea51637e5c074bea24c942a4183f",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/spec/400-enum-qualified-operator-new-nttp-sfinae.t",
+          "source_sha256": "82a39c7127cbdb8ac19833d7eb950e4ac37237e52c1b6bfc98121512401a7e93",
+          "compiler_exit": 0,
+          "oracle": "validated-lowir (source has no entry point)",
+          "passed": true
+        },
+        {
+          "path": "pa18/tests/spec/400-nontype-reference-argument.t",
+          "source_sha256": "bf95f3b7967e8c7c838d72222ba22ff9c1989777df9c73c7ad3d9da958b8c1d7",
+          "compiler_exit": 0,
+          "oracle": "same executable exit as checked reference",
+          "passed": true,
+          "executions": [
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            },
+            {
+              "backend_exit": 0,
+              "diagnostic": "",
+              "execution_exit": 0
+            }
+          ]
+        },
+        {
+          "path": "pa18/tests/spec/400-unselected-converting-constructor-validation.t",
+          "source_sha256": "1ee0c3c16ad56f530fe68fb229f908ef490ccea60bcb7484a37d91b44a156d30",
+          "compiler_exit": 0,
+          "oracle": "validated-lowir (source has no entry point)",
+          "passed": true
+        }
+      ]
+    },
+    "course68": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/handoff68/course/results.json",
+      "sha256": "657a35d305e9baea149027b33c858f6dff7a86d9fa2511484df256bc3edc6ad1",
+      "count": 5,
+      "passing": 5,
+      "cases": [
+        {
+          "path": "pa18/tests/general/100-function-template-array-reference-return.t",
+          "source_sha256": "0841060a5de9fed1b52e37c952a262f5721ef795d9d19f23e5c81a4988c5140a",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 1,
+          "unlinked_compile_only": true
+        },
+        {
+          "path": "pa18/tests/general/300-array-pointee-cv-void-conversion-sfinae.t",
+          "source_sha256": "1c360b922af109057377be7a180bcff1e5ec6c79454bac54b3f4a96dc4431ffc",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/general/500-adl-explicit-function-template-id.t",
+          "source_sha256": "59b22c957885f674f6ad3b300f26a5f9af6b2f3d613ff5973b6dfc1df808d92c",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/spec/100-constexpr-member-template-braced-argument.t",
+          "source_sha256": "24842727b9962c17c8e1035a30edbf166cb35044f335161c46dae7f2e240fe1f",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/spec/100-function-template-array-bound-braced-empty-argument.t",
+          "source_sha256": "68d14805cad35ee71cf702a53c92dfe70453166f9bb733193f7f5db0d049f1eb",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        }
+      ]
+    },
+    "course69": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/course69/results.json",
+      "sha256": "9ef52bca92e8ac8270203d8d8d210e92a6c5a18570c941caebe4576d64f31267",
+      "count": 5,
+      "passing": 5,
+      "cases": [
+        {
+          "path": "pa18/tests/general/300-compound-assignment-complete-object-pointer-sfinae.t",
+          "source_sha256": "77f28a1edc3e348dafd671b19d894b1715df6ae5acdb02d34de9bf262e49e3bf",
+          "expected": "execute",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/general/300-destructor-template-id-sfinae.t",
+          "source_sha256": "3367c7eae63f3ed451cff1381d1c28253e6b587375eb22ce9b8e00c2f7f1960d",
+          "expected": "execute",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/spec/300-defaulted-member-template-declval-trailing-return-sfinae.t",
+          "source_sha256": "86cc4b7188583e3c5e9ebba77deb550979537be59ab79dd0e08ae526b2a45782",
+          "expected": "execute",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        },
+        {
+          "path": "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.t",
+          "source_sha256": "40e2c1848e6da89b3957477aafa9e8e608d0ac46a6da86d4655fc49266bfa001",
+          "expected": "reject",
+          "compiler_exit": 1,
+          "passed": true
+        },
+        {
+          "path": "pa18/tests/spec/300-unrelated-compound-assignment-overload-sfinae.t",
+          "source_sha256": "6758299264ba6384adc0542dc4416b880d943c2fb2a965cbe2cebf770d8b5fc4",
+          "expected": "execute",
+          "compiler_exit": 0,
+          "passed": true,
+          "backend_exit": 0,
+          "native_exit": 0
+        }
+      ]
+    },
+    "query_abi": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69-abi.json",
+      "sha256": "f8106c4c2a784fcb7044a620d5ea5e520b1d516db4c223c87f078d15f69bd099",
+      "count": 4,
+      "passing": 4,
+      "cases": [
+        {
+          "name": "assign_runtime",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final/assign_runtime.lowir",
+          "sha256": "78234b05495ab16da33ec1501e1a2b6b7767f4e214e2918b8a1df49ac8111090",
+          "expected": "_Z3addIiEDTpLfp_Li2EERT_",
+          "passed": true
+        },
+        {
+          "name": "destructor_trailing_abi",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final/destructor_trailing_abi.lowir",
+          "sha256": "aacfc801d44845adfb97c2fe7822c0d49f1aff6e21d16b3e56a3bcc407e4593a",
+          "expected": "_Z7destroyIiEDTclptfp_dnT_EEPS0_",
+          "passed": true
+        },
+        {
+          "name": "destructor_template_id_abi",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final/destructor_template_id_abi.lowir",
+          "sha256": "39097d2260db87980dea5520ba98948a2b20f31dd8b716833d2b7259a8002eca",
+          "expected": "_Z7destroyIiEDTclptfp_dn1AIT_EEEP1AIS0_E",
+          "passed": true
+        },
+        {
+          "name": "destructor_base_runtime",
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/query69_controls-final/destructor_base_runtime.lowir",
+          "sha256": "3383861d5095935524d06d7eaff32c5e861f5cb9a8ccf1a9ebc3cf8b6d13ca1a",
+          "expected": "_Z7destroyI1DEDTclptfp_sr1BEdn1BEEPT_",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "performance": {
+    "student.tests/pa18/loop70-performance.json": {
+      "sha256": "9f1525dbd0638a40ce6b6a5a6667a9447fa45b688435b54fba9f85d7b1b56ce9",
+      "workloads": 28,
+      "finished": "2026-09-24 23:09:35"
+    },
+    "student.tests/pa18/loop70-cumulative-performance.json": {
+      "sha256": "cf723af32b5a3882cfc18514d45ee0608001b9dd9ac8143f7ab23cc4fff00928",
+      "workloads": 28,
+      "finished": "2026-09-24 23:12:38"
+    },
+    "student.tests/pa18/loop70-focused-performance.json": {
+      "sha256": "7c4b613b41915120fa60129c95b1e113d0a670c95d441ba74f90475a06eb8845",
+      "workloads": 4,
+      "finished": "2026-09-24 23:15:41"
+    },
+    "student.tests/pa18/loop70-focused-cumulative.json": {
+      "sha256": "088979dd06e212dfb57387ffb1431516cb498a22e8d77af92383fd4583741168",
+      "workloads": 3,
+      "finished": "2026-09-24 23:18:07"
+    }
+  },
+  "frozen_binaries": {
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/cppgm-entry",
+      "sha256": "7979fa9128b01bee21d63a5840357b03ebc4396143c3ced0345aaa8154df196c"
+    },
+    "final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop70/cppgm-final",
+      "sha256": "7d7c0f93ba45ef69f5408dedf6cfc0248ca8fcf63d4e3f4ba3f1c34046ae9f70"
+    }
+  },
+  "trace": {
+    "source": "student.tests/pa18/audit70_trace.cpp",
+    "source_sha256": "898fa09535b6e289f914538bd51e6f0b2136e4d16ff9a9497e62d29be2435412",
+    "results": "/home/vishvananda/work/private/v4codex/artifacts/loop70/trace-results.json",
+    "results_sha256": "276e1f14e022d45f81bb35ddaa940291d43d35d96cc50059c477c91c20c2a719",
+    "lowir": "/home/vishvananda/work/private/v4codex/artifacts/loop70/final-trace.lowir",
+    "lowir_sha256": "1fef7207f10af2e2637398ac409490cdfd7898f8b620e6f7cac0cd18c353f992",
+    "elf": "/home/vishvananda/work/private/v4codex/artifacts/loop70/trace.exe",
+    "elf_sha256": "5506b3e62e91ca0ae67b9657282ea13247fdaf40109fbed78a62e92435eec6ff",
+    "function_definitions": 7,
+    "abi_symbols": [
+      "_Z6targeti",
+      "_ZN5ProxycvRiEv",
+      "_ZN7PointerptEv",
+      "_Z7advanceI5ProxyXadL_Z6targetiEEEDTpLfp_clT0_Li1EEERT_",
+      "_Z7destroyI7PointerEvRT_",
+      "_Z6lengthIiLi2EEiRAT0__T_"
+    ]
+  },
+  "references": {
+    "changed_in_review_range": [
+      "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.ref.exit_status",
+      "pa9/tests/abi/300-function-owner-member-pointer-nttp-data.ref"
+    ],
+    "changed_during_audit": [],
+    "proofs": {
+      "pa18/reference-correction67.md": "4990633cd4345131e2da2938811274b442389453814246fff915b76176ffeab6",
+      "pa18/reference-correction69.md": "583ab4ac5b1744e62034350aea2b263e5587e0145dd7823f561ec53636298da0"
+    },
+    "reproduced_noexcept": "/home/vishvananda/work/private/v4codex/artifacts/loop70/reference69.json",
+    "reproduced_noexcept_sha256": "4298bbb2cf7f912ba7cbd12ea5ebf4e93a4c9f899dbd05257851e69298b5396e",
+    "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98"
+  },
+  "historical_evidence_check": [
+    {
+      "loop": 67,
+      "performance_sha256": "945c0c9d11d502145df0250635286c5477700eecf9e2623fde7f459500e88506",
+      "workloads": 13,
+      "verified": true
+    },
+    {
+      "loop": 68,
+      "performance_sha256": "5710288f4e8ac59179e7815493cb2f94772f0c198adde10a7bfa8f9fa71b2f75",
+      "workloads": 13,
+      "verified": true
+    },
+    {
+      "loop": 69,
+      "performance_sha256": "fa7f7daf71e19209b157e0708d96f7a2fef539e734e968b53f4e3f77eb3e75be",
+      "workloads": 13,
+      "verified": true
+    }
+  ],
+  "remaining_groups": [
+    "retained contexts, packs and expression validity",
+    "constructor and explicit deduction",
+    "LowIR initialization and result facts"
+  ],
+  "disposition": "Checkpoint audit complete; PA18 full-stage remains incomplete, no PA19 advancement. Performance accepted within PA18/O0 scope; all mandated correctness and coverage gates preserved."
+}

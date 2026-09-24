@@ -1,64 +1,53 @@
 # PA18 implementation plan
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Last reviewed commit: `3a883d10a27e41d1b126eaef05eaf0b454de1646`.
-Target: **PA18 full-stage**, still unfinished. Previous goal turn: **progress**
-(loop 68's committed implementation and measured validation). Loop 69 is
-**progress**: entry `e09162fa` → implementation `f2a9d7a3`, reference proof
-`6073dbc0`. Independent review of loops 67–69 remains pending.
+Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
+Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 70**.
+Previous goal turn: **progress** (loop 69 implementation, proof and validation).
+Loop 70: **progress** (accumulated review, independent reducers, ownership fixes,
+required validation and frozen performance evidence).
 
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
-audit 66 **327** → handoff 67 **343** → 68 **348** → 69 **353/420**.
-Loop 69 resolves **five original failures**, with **zero new failures** and
-unchanged 420-source coverage/comparison rules. Four are compiler repairs; one
-is a documented rejection-oracle correction. Earlier PAs pass **2609/2609**;
-file audit passes with the same three inherited advisories.
-[Audit 66](audit.md) retains the accumulated review and earlier ledger.
+audit 66 **327** → handoff 67 **343** → 68 **348** → 69 **353** → audit 70
+**353/420**. The audit retains exactly the entry's **67 failures** (43 status,
+24 LowIR), all 420 inputs and comparison rules. Earlier PAs: **2609/2609**;
+file audit passes with the same three inherited header advisories.
+[Audit 70](audit.md) reviews all 13 commits since audit 66 plus the audit fix.
+[Audit 66](audit66.md) preserves the first accumulated review and its evidence.
 
-| Ownership group | Design/spec alignment and remaining implementation |
+| Ownership group | State and next work |
 |---|---|
-| Reviewed deduction, ordering, conversion and query demand | Canonical directional comparisons, nominated types, selected declarations/conversions, explicit class→query→consumer edges, local prerequisite revisions and observational ordering inspection. Preserve these owners. |
-| Completed in 67: address NTTPs and outer-head defaults | Typed argument queries, canonical constant storage identity, immutable frames, demand and ABI/linkage. Review remains pending; [handoff 67](handoff67.md). |
-| Completed in 68: concrete call deduction and array/base conversions | Partial explicit heads preserve typed non-type parameters; deduction precedes defaults. Braced arguments/explicit pack lanes consume selected list conversions and constexpr storage. Failed direct class matching traverses indexed base edges with isolated trial bindings and canonical-primary filtering. Array cv and reference-related conversions remain source-faithful. [Owners, bounds and validation](handoff68.md). |
-| Completed in 69: retained assignment/destructor queries | Typed source operations, canonical substitution/failure facts, required operator candidates, implicit deletion and class completion edges. Concrete/retained compound assignment consumes selected reference conversion and arithmetic type exactly once. Destructor template-ids, receiver effects and ABI names retain source meaning. [Owners, bounds and validation](handoff69.md). |
-| **Remaining: retained contexts, packs and expression validity** | Correlated outer/inner pack lanes, nested/member aliases/results/defaults and out-of-class ownership; retained braced query operands/conversion plans, cast/access and other selected-conversion validity. Extend typed facts and structured failure results. |
-| **Remaining: constructor/explicit deduction** | Constructor and inherited-constructor participation, remaining member-template/alias contexts. Concrete list non-deduction and ordinary explicit ADL are repaired; the broader required groups remain. |
-| **Remaining: LowIR initialization and result facts** | Constant/array initialization, bool/result metadata, class-result conventions and discarded-value loads. Executable agreement does not replace required LowIR comparison. |
+| Reviewed: deduction, ordering, conversion, query demand, address NTTPs, outer-head defaults and concrete braced/base/array deduction | Preserve canonical identities, immutable frames, precise completion edges, selected conversions, address demand and internal linkage. Handoffs [67](handoff67.md), [68](handoff68.md) and their interactions are reviewed. |
+| Reviewed: assignment/destructor queries and ordinary lowering | Handoff [69](handoff69.md) reviewed and corrected: volatile reference targets and builtin ranking, scalar receiver effects/cleanup, query-only arrow validity, and caller-independent destructor deletion facts. 56 independent audit controls pass; 34 fail at entry. |
+| **Remaining: retained contexts, packs and expression validity** | Correlated outer/inner pack lanes, nested/member aliases/results/defaults and out-of-class ownership; typed braced query/list conversion plans shared by narrowing, constant evaluation and exception effects; remaining cast/access/selected-conversion validity. |
+| **Remaining: constructor/explicit deduction** | Constructor and inherited-constructor participation, remaining explicit/member-template and alias contexts. |
+| **Remaining: LowIR initialization and result facts** | Constant/array initialization, bool/result metadata, class-result conventions and discarded-value loads. Execution agreement does not replace canonical LowIR comparison. |
 
-The **43 status failures and 24 LowIR mismatches** are unfinished required
-implementation, not review questions. [Handoff 69](handoff69.md) records the
-extended group and concrete boundary: braced queries need a typed list plan
-shared by conversion, narrowing, constant evaluation and exception effects;
-source-only ListPlan inputs cannot supply this without forbidden fake nodes.
-Nested/member result contexts and initialization facts have separate owners.
+These three remaining groups are required implementation, not waived audit
+questions. Avoid another sequence of narrow handoffs across one ownership path:
+finish each group's query, substitution, ordinary execution, ABI and cache
+interactions together, then package shared validation once. Loops 67–69 repeated
+evidence packaging and left shared query/access/effect interactions to this audit.
 
-Spec scope is **O0 LowIR**. New work follows query/operand edges, language-required
-candidates and destructor subobjects. Existing canonical TU facts/cache keys,
-precise completion dependencies and local scratch remain; typed lowering records
-avoid semantic reconstruction. [Performance 69](performance69.md) freezes A/B
-inputs/binaries, A/A calibration, ABBA latency/RSS and checked runtime/size.
-Equivalent generated outputs are byte-identical; no optimizer benefit is claimed.
-No PA18 numerical ceiling is mandated. Historical PA17 **+15%, +16 MiB, 5.5×**
-self-selected targets remain diagnostics under spec §9. Preserve earlier
+Performance acceptance is **PA18/O0 LowIR** under spec §9. [Performance 70](performance70.md)
+records the checkpoint and complete review-range comparisons, A/A calibration,
+ABBA latency/RSS, checked runtime/text proxy, scaling and all observations.
+No optional optimization or new numerical limit is introduced. Historical PA17
+**+15%, +16 MiB, 5.5×** targets remain diagnostics; preserve all earlier
 [63](performance.md), [64](performance64.md), [65](performance65.md),
-[66](performance66.md), [67](performance67.md), [68](performance68.md) evidence.
-Correctness, coverage and graph-work bounds remain gates. Native optimization
-and self-hosting remain PA24–PA34 obligations.
+[66](performance66.md), [67](performance67.md), [68](performance68.md),
+[69](performance69.md) measurements. Correctness, coverage and graph-work bounds
+remain gates. Native backend/optimization and self-hosting belong to PA24–PA34.
 
-Reference corrections since stage base: [constant initialization in 65](reference-correction65.md),
-[one PA9 ABI oracle in 67](reference-correction67.md), and
-[pseudo-destructor receiver effects in 69](reference-correction69.md).
-Loop 69 changes only that fixture's required rejection status, with a reducer,
-N3485 proof and pinned-bundle observations; no coverage/comparison waiver.
+Reference corrections remain [65](reference-correction65.md),
+[67](reference-correction67.md) and [69](reference-correction69.md), each with
+reducer, standard/contract proof and pinned bundle. Audit 70 adds none.
 
-| Handoff ledger | Implementation and evidence | Independent review |
-|---|---|---|
-| 66 audit | stage base → `3a883d10`, **327/420**, prior **2609/2609**, file audit and stage-scoped performance accepted | Completed accumulated review; markers above preserved. |
-| 67 implementation | `06211ad0` → `0b60ca52`, **343/420**, prior/file audit pass; [hashed evidence](../student.tests/pa18/loop67-evidence.json) | Pending: argument definition-demand, canonical reference/pack identity, outer-head frames, internal linkage and ABI proof. |
-| 68 implementation | `047215cf` → `bd1d7b4c`, three coherent code commits; **348/420**, prior/file audit pass; 56 new controls, 211 inherited controls and five repaired course inputs; [hashed evidence](../student.tests/pa18/loop68-evidence.json) | Pending: partial-frame identity/default timing, binding isolation across base alternatives, array/reference cv, constexpr temporary identity and performance evidence. No review obligation waived. |
-| 69 implementation | `e09162fa` → `f2a9d7a3` plus `6073dbc0` oracle proof; **353/420**, prior/file audit pass; 330 semantic controls, four emitted ABI identities and five repaired course checks; [hashed evidence](../student.tests/pa18/loop69-evidence.json) | Pending: builtin ranking/single evaluation, destructor property/access separation and completion edges, ABI identity, reference proof and performance. No review obligation waived. |
+| Checkpoint ledger | Reviewed range / disposition |
+|---|---|
+| 66 | Stage base → `3a883d10`; 327/420, prior/file audit pass; [archived record](audit66.md). |
+| 70 | `3a883d10` → entry `15b34993` → fix `f59e8f67`; all three handoffs reviewed, ownership findings fixed; 353/420, same 67 failures, prior/file audit pass, coverage retained; [evidence](../student.tests/pa18/loop70-evidence.json). |
 
-Required checks: `make test-pa18`, `make test-report-through-pa17` and the PA18
-file audit. Root reports run sequentially (shared `.test_counts`).
-**Do not advance to PA19 until `make test-report-through-pa18` passes and the
-independent whole-stage audit is resolved.**
+Required checks: `make test-pa18`, `make test-report-through-pa17`, and the PA18
+file audit. Root reports run sequentially because they share `.test_counts`.
+**Do not advance to PA19 until `make test-report-through-pa18` passes.**
