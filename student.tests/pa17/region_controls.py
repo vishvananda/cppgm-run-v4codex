@@ -25,6 +25,11 @@ if __name__ == '__main__':
  for name in ('local_call_sum','local_nested_calls','noexcept_temporary_receiver','noexcept_temporary_chain'):
   text = (work/(name+'.lowir')).read_text() if (work/(name+'.lowir')).exists() else ''
   checks[name] = all(op in text for op in ('eh_try','eh_end','resume'))
+  if name in ('local_call_sum','local_nested_calls'):
+   # Both receiver calls belong to the same full-expression region, not
+   # merely to two individually protected calls with equal cleanup targets.
+   checks[name] &= any(part.split('eh_end',1)[0].count('call i32 @f(') == 2
+                       for part in text.split('eh_try')[1:])
  checks['conditional_no_live_prefix'] = 'eh_try' not in (work/'conditional_no_live_prefix.lowir').read_text()
  (work/'structure.json').write_text(json.dumps(checks,indent=2)+'\n')
  print(checks)

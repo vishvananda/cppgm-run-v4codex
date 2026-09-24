@@ -22,11 +22,20 @@ backend for behavioral validation). Remaining known implementation in the two
 original groups: **none**. Independent review must assess whole-stage correctness
 and architecture; a passing implementation handoff does not waive that audit.
 
-Performance evidence: frozen entry/final compiler comparison is being collected
-by `student.tests/pa17/handoff61_benchmark.py`. It includes fixed common inputs,
-cleanup/closure scaling, A/A + ABBA compiler latency/RSS, and checked executable
-runtime/text. Entry-rejected closure cases get final-only observations, never
-speedup claims. PA17/O0 has no mandated numeric ceiling or optional transform.
+Validation: PA17 **343/343**, prior **2266/2266**, through **2609/2609**;
+file audit passes with three inherited warnings. All **704 PA17 personal
+controls** and the earlier PA9 API/roundtrip controls pass. No course fixtures,
+references, statuses or comparison rules changed. Run
+`python3 student.tests/pa17/verify_handoff61.py` for the frozen evidence checks.
+
+[Handoff and performance evidence](handoff61.md) preserves both frozen runs:
+A/A + ABBA compiler latency/RSS, checked runtime/text and scaling telemetry.
+The larger cleanup case costs 6.2% compiler latency / 384 KiB RSS, while runtime
+ratios repeat at 0.7400/0.7452 and native code shrinks 112 bytes. Compiler `.text`
+grows 22,400 bytes (1.25%). Common-output timing variation changes direction
+across runs; no general speedup is claimed. New closure work scales with
+instances; entry-rejected cases receive final-only observations. PA17/O0 has
+no mandated numeric ceiling or optional transform.
 Historical +15%, +16 MiB and 5.5× gates remain diagnostics under spec.md §9;
 all prior measurements and mandated correctness/coverage limits are preserved.
 
@@ -35,7 +44,7 @@ all prior measurements and mandated correctness/coverage limits are preserved.
 | 56 / checkpointAudit | `c43e8eb6..e14b96fa`; 324/343; [previous audit](audit-loop56.md). |
 | 57–59 / implement | Transfers, queries and storage; 324 → 330 → 333 → 340 / 343, including six proved reference corrections. |
 | 60 / checkpointAudit | `e14b96fa..2290a7bf`; accumulated ownership fixes; 340/343, prior 2266/2266, 610 controls; [audit](audit.md), [performance](checkpoint60-performance.md), [evidence](../student.tests/pa17/checkpoint60-evidence.json). |
-| 61 / implement | `9efd570f` entry; `2827d328` closes cleanup owner, closure increment closes the final failure. PA17 343/343 and prior 2266/2266; final evidence refresh pending. |
+| 61 / implement | `9efd570f` entry; `2827d328` cleanup, `bb1d961d` closures, `7815c150` lexical context; 340 → 343/343, prior 2266/2266, 704 controls. [Evidence](../student.tests/pa17/handoff61-evidence.json) binds the implementation and unchanged course trees. |
 
 Handoff boundary: both remaining semantic owners are complete and reviewable
 as one implementation turn. Prior whole-stage findings/measurements remain in

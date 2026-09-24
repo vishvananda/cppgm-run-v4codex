@@ -1,0 +1,204 @@
+{
+  "entry_commit": "9efd570fd4a0489a39d17fdabd0b05bf062604a6",
+  "implementation_tip": "7815c1508915aca259a8b554d485ac8f36b7d39f",
+  "implementation_tree": "34c1c02ce1a44c74211d0382000e3415ccc69e22",
+  "course_trees": {
+    "scripts": "ed4bd8a4ac5ba7038912ee6ac8bd6dcae3d36782",
+    "reference-binaries": "df62b63d88bad7300b4ff522d8b2d75350a63d91",
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa1/scripts": "36f0883f95f6ab5240f963a978fb0448c8cc284f",
+    "pa1/Makefile": "ddf4be03505d5ac546c59321140aeda3f75c83ef",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa2/scripts": "65082e11f542bb29221bcc64c24b9ac0e661c6bd",
+    "pa2/Makefile": "a415ea9160cb312d7a3c1193bbd92f8f4eb38623",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa3/scripts": "65082e11f542bb29221bcc64c24b9ac0e661c6bd",
+    "pa3/Makefile": "faeb053ce4fb6377566e2ed97221ab8c065ba186",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa4/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa4/Makefile": "ff9a13aca8cdfdae6355f663cdc47389a771fd78",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa5/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa5/Makefile": "ff1cbb8bbc1e1699acdbce7936fb4d8645212c05",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa6/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa6/Makefile": "4fb1d275cbaedca045ec9ad16ff72be1bb2ad7ea",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa7/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa7/Makefile": "864881fd7ed68cf0f840420eca1b86ed3b5efde0",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa8/scripts": "361e302b42ec9c81702f575a0fb9ebbb03e212b5",
+    "pa8/Makefile": "eab505211eb1e5804872b09cba1784690f2f1f03",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa9/scripts": "52c57cdb7d9b073b4d26fbefc0ce2956d3254a84",
+    "pa9/Makefile": "b8e2139c0ed5d1b4594634aae8ac0de51ad84771",
+    "pa10/tests": "1a173cf901e39f42d80195118901be6312e86ef9",
+    "pa10/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa10/Makefile": "5cb8279590b9f22c8daebf91e6a39719871884ff",
+    "pa11/tests": "195b1d8b8978e57307384b1591706322bfaee329",
+    "pa11/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa11/Makefile": "2cb249337900c7989c17c91a44f29d2d4e9be525",
+    "pa12/tests": "e2cce23cd78a3ced0bac4af7350ce7ae5b884bdb",
+    "pa12/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa12/Makefile": "315f6cb60793fa1b448cae756de1d69cced61428",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa13/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa13/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa14/tests": "42bac7d80e8889f116b70ff6fd407af9d29da5d3",
+    "pa14/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa14/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa15/tests": "4af7ff1f1f5a6d9d03e3a7b4b77d524b930bd9d8",
+    "pa15/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa15/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa16/tests": "05ce9a6c16f5199cac083bfb6da996d98972b109",
+    "pa16/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa16/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa17/tests": "326af6f7870a5da1960da72b966ee5edd55227a5",
+    "pa17/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa17/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250"
+  },
+  "stage": {
+    "entry_passed": 340,
+    "final_passed": 343,
+    "total": 343,
+    "original_failures_remaining": 0
+  },
+  "original_failures": [
+    "300-explicit-instantiation-declaration-member-coverage.t",
+    "300-nested-member-template-prvalue-dtor-output.t",
+    "300-nonprimary-chained-member-template-lambda-anchor-collision.t"
+  ],
+  "review_markers": [
+    "Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`",
+    "Last reviewed commit: `2290a7bf8b56bc33e6ad975a8ae714a341f55ce5`"
+  ],
+  "checks": [
+    {
+      "command": "make test-pa17",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/stage-handoff.log",
+      "log_sha256": "ad324c1b0c37142a074fe519c35571ec6a74e0ff50d5742e828c069abcc7da9a",
+      "result": "343 / 343"
+    },
+    {
+      "command": "make test-report-through-pa16",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/prior-handoff.log",
+      "log_sha256": "967173723342b3c0abf5b9e26710e9ef2094f41c3a33e7d23e0831760f67bea9",
+      "result": "2266 / 2266"
+    },
+    {
+      "command": "make test-report-through-pa17",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/through-handoff.log",
+      "log_sha256": "ac547f1413f48ff1cc483359f6e01f794d6b3ac914b389d400edef6155755c0d",
+      "result": "2609 / 2609"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa17 --paths dev/src",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/file-audit-handoff.log",
+      "log_sha256": "b40da0957f8ab5dea6cb4e3531ee3c2d1ea1f275ab22409e6f102506e18a3c04",
+      "result": "File audit passed for pa17 with 3 warning(s)."
+    },
+    {
+      "command": "python3 student.tests/pa17/checkpoint60_replay.py dev/cppgm++ /tmp/pa17-loop61/replay-handoff /tmp/pa17-loop61/replay-handoff.json",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/replay-handoff.log",
+      "log_sha256": "aad9286519450d99e29c1444d501726cc8683a0237f47afb842104f06cb60138",
+      "result": "checkpoint60 43 / 43"
+    },
+    {
+      "command": "python3 student.tests/pa17/closure_controls.py dev/cppgm++ /tmp/pa17-loop61/closures-lexical",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/closures-lexical.log",
+      "log_sha256": "444043e00e7a20b96b1495924b2c81a4f7e5333428fd4800d27a8c7bf61af4c2",
+      "result": "auto_deleted_member_address PASS"
+    },
+    {
+      "command": "python3 student.tests/pa17/region_controls.py /tmp/pa17-loop61/final2-cppgm /tmp/pa17-loop61/regions-handoff",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/regions-handoff.log",
+      "log_sha256": "60f16ea13ef495eb1bc2382d7a933c6cc5fab8a48ec470d5e92662fca77d474a",
+      "result": "'conditional_no_live_prefix': True"
+    },
+    {
+      "command": "python3 student.tests/pa17/closure_abi.py dev/cppgm++ /tmp/pa17-loop61/check-abi /tmp/pa17-loop61/abi-handoff",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/abi-handoff.log",
+      "log_sha256": "10dfd9d5afa05171460b9dd7d3e6eebab9b4883d7717b230ecdf3686821c932f",
+      "result": "7 exact ABI fact roundtrips and source closure numbering/native check pass"
+    },
+    {
+      "command": "python3 student.tests/pa9/check.py --api /tmp/pa17-loop61/check-abi && python3 student.tests/pa9/check_final.py --api /tmp/pa17-loop61/check-abi",
+      "exit_code": 0,
+      "log_path": "/tmp/pa17-loop61/pa9-controls.log",
+      "log_sha256": "d9bb49e7197fd9de22ed76263a48d7a48396044854155b6f84547e730e5f78e9",
+      "result": "8 exact/roundtrip probes, 11 controlled rejections pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "pa17/handoff61.md",
+      "sha256": "4ccb2b26588b5e558c8813c3b39ad0b68a6b6632e400d61c5a26e156ec355862"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-controls.json",
+      "sha256": "3360d26c68fabadc2e5e20f4bfcdada14a7cda12ffa3cbb67c023f7177980338"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-performance.json",
+      "sha256": "61a60a3eab6d159219ee96a64969cb906b2f43c3c2f73076758807500463e200"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-prelexical-performance.json",
+      "sha256": "32a1fa273bf4a63236850f26423f1fde5ff29771e5fb4d0080197b0db0db137d"
+    },
+    {
+      "path": "student.tests/pa17/handoff61_benchmark.py",
+      "sha256": "2a18e91194114558d5b2abc66613edda08d54e7d7467f899089a6d634ea37ab6"
+    },
+    {
+      "path": "student.tests/pa17/verify_handoff61.py",
+      "sha256": "cbca06151a7a66ecf6e2fad9c54c38acdf24ceec6208e947a171925808859cff"
+    },
+    {
+      "path": "student.tests/pa17/closure_controls.py",
+      "sha256": "a869670a9ae437f0588e7a16601824b5974a7a8f00106625a351a343e62b218e"
+    },
+    {
+      "path": "student.tests/pa17/region_controls.py",
+      "sha256": "ceb63a37ca26789570e826de867e0a90a286340e749f8274df05db1895cb4da0"
+    },
+    {
+      "path": "student.tests/pa17/closure_abi.py",
+      "sha256": "4ccec1c90deb4f11a936f705203e1a117eb50e53246d577233f1705fd211919d"
+    }
+  ],
+  "binaries": [
+    {
+      "path": "/tmp/pa17-loop61/entry-cppgm",
+      "sha256": "78e664489402136e18859f1eee29e51b3549222d6c1dc8dea62646f2372e3993"
+    },
+    {
+      "path": "/tmp/pa17-loop61/final-cppgm",
+      "sha256": "6535a77efe0fa028aa3dd7bda4982c2fe914b7d2d742f0a452f30243a36853e6"
+    },
+    {
+      "path": "/tmp/pa17-loop61/final2-cppgm",
+      "sha256": "89859de908e8af110a1e4cb85d830d1547e7b81cf413075f5b2abd0dbf338144"
+    },
+    {
+      "path": "/tmp/pa17-loop61/check-abi",
+      "sha256": "9206c4d713f77f6451bd1887574f87b78987b3ed997ca2f989a27faa6a16d328"
+    }
+  ],
+  "build_flags": "-std=gnu++11 -Wall -O3 \n-std=gnu++11 -Wall -O3  -Dmain=test_runner_real_main\n",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "unfinished_implementation": [],
+  "independent_audit": [
+    "Ralph full-stage audit of the accumulated PA17 implementation remains pending; passing this handoff does not certify whole-stage audit."
+  ],
+  "stage_scoped_acceptance": "PA17/O0 has no mandated numeric ceiling. No optional transform. Typed closure records/body/signature work per complete identity; O(L log L) numbering; memoized expression effects and shared lifetime suffixes. Preserve all observations and inherited diagnostics.",
+  "reference_changes": []
+}
