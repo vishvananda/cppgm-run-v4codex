@@ -107,7 +107,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     } else if (p.kind == TypeKind::Decltype) {
         auto query = substitute_query(p.entity,bindings,cache,owner);
         if (!query) return 0;
-        result = types.qualify(query_decltype(query,p.bound),p.cv);
+        result = query_decltype(query,p.bound);
+        if (result) result = types.qualify(result,p.cv);
+        else complete_failure = true;
     } else if (p.kind == TypeKind::DependentName) {
         auto qualifier = substitute_type(p.child,bindings,cache,owner);
         if (!qualifier) return 0;
@@ -253,6 +255,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;
     entities[e].constexpr_function = entities[pattern].constexpr_function;
+    entities[e].deleted_function = entities[pattern].deleted_function;
     entities[e].inline_function = entities[pattern].inline_function;
     entities[e].is_static = entities[pattern].is_static;
     entities[e].access = entities[pattern].access;
@@ -357,12 +360,11 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
         auto parameter = template_parameters[t.offset+i];
         TypeId a = bindings.get(parameter);
         if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
-        if (!a) break;
         arguments.push_back(a);
     }
     auto primary = t.primary ? t.primary : pattern;
-    if (arguments.size() != t.count && (!definitions || !template_defaults(primary,arguments))) return 0;
-    return specialize(primary,arguments);
+    if (!definitions) for (auto argument : arguments) if (!argument) return 0;
+    return deduced_specialization(primary,arguments);
 }
 EntityId Analyzer::deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin)
 {
@@ -409,12 +411,10 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
         auto parameter = template_parameters[t.offset+j];
         auto a = bindings.get(parameter);
         if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
-        if (!a) break;
         args.push_back(a);
     }
     auto primary = t.primary ? t.primary : pattern;
-    if (args.size() != t.count && !template_defaults(primary,args)) return 0;
-    auto instance = specialize(primary,args);
+    auto instance = deduced_specialization(primary,args);
     return instance && entities[instance].type == target ? instance : 0;
 }
 EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)

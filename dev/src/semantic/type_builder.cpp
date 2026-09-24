@@ -434,6 +434,13 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (!function && !specialized_member_declaration && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
+    auto special = child(init, Kind::SpecialInitializer);
+    if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
+    if (function && special && ast[special].op == KW_DELETE) {
+        if (entities[e].source != source || entities[e].deleted_function) throw std::runtime_error("deleted definition must be the first declaration");
+        entities[e].deleted_function = entities[e].inline_function = true;
+    } else if (function && entities[e].deleted_function && ast[source].kind == Kind::Function)
+        throw std::runtime_error("definition of deleted function");
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
@@ -451,8 +458,6 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         members[m].destructor = destructor;
         if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
         explicit_specifier(e,source,s);
-        NodeId special = child(init, Kind::SpecialInitializer);
-        if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;
         classify_transfer(e, special, s);
         if (constructor && !special && !source_constructor) class_facts[entities[cls].class_info].aggregate = false;

@@ -84,6 +84,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/type_query semantic/query_call
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_value_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/call_selection
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/query_operator
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/candidate_substitution
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/query_abi
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_instantiation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_statement_facts

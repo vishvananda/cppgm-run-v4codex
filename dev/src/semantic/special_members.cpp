@@ -162,7 +162,7 @@ EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory c
 bool Analyzer::deleted_transfer(EntityId e)
 {
     if (transfer_member(e) && members[entities[e].member_info].synthetic) prepare_transfer(e);
-    return entities[e].member_info && members[entities[e].member_info].deleted;
+    return entities[e].deleted_function || (entities[e].member_info && members[entities[e].member_info].deleted);
 }
 bool Analyzer::transfer_accessible(EntityId e, ScopeId context) const
 {

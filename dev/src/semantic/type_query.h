@@ -24,5 +24,10 @@ struct TypeQueryFact {
     TypeId surrogate = 0;
     FactState state = FactState::NotStarted;
     bool dependent = false;
+    enum class Failure : unsigned char { None, NoViable, Ambiguous, Deleted, InvalidOperands };
+    Failure failure = Failure::None;
+    static TypeQueryFact failed(Failure reason) {
+        TypeQueryFact fact; fact.state = FactState::Failure; fact.failure = reason; return fact;
+    }
 };
 } }

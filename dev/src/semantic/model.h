@@ -169,7 +169,7 @@ struct Entity {
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
-    bool constexpr_function = false;
+    bool constexpr_function = false, deleted_function = false;
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;
     bool mutable_field = false;

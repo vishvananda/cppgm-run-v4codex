@@ -98,7 +98,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
             (scoped_enum(args[0].type) || (equality && fundamental(args[0].type,FT_NULLPTR_T)))) {
             r.expression.type = types.fundamental(FT_BOOL); return r;
         }
-        throw std::runtime_error("invalid type-query operator operands");
+        return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     }
     auto preferred = [&](unsigned a, unsigned b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
@@ -109,14 +109,15 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     };
     unsigned best = 0;
     for (unsigned i = 1; i < viable.size(); ++i) if (preferred(i,best)) best = i;
-    for (unsigned i = 0; i < viable.size(); ++i) if (i != best && !preferred(best,i)) throw std::runtime_error("ambiguous type-query operator");
+    for (unsigned i = 0; i < viable.size(); ++i) if (i != best && !preferred(best,i))
+        return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
     auto selected = viable[best];
     if (selected.builtin) {
         if (args.size() == 2) check_pointer_arithmetic(q.op,sequences[selected.offset].target,sequences[selected.offset+1].target);
         r.expression.type = builtins[selected.builtin-1].type;
         r.expression.category = builtins[selected.builtin-1].category;
     } else {
-        if (deleted_transfer(selected.entity)) throw std::runtime_error("deleted type-query operator");
+        if (deleted_transfer(selected.entity)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
         check_access(selected.entity,q.context,naming,object);
         auto returned = types[selected.surrogate ? selected.surrogate : entities[selected.entity].type].child;
         r.expression.type = value_type(returned);

@@ -90,11 +90,11 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     if (fn.entity && function_binding(fn.entity)) {
         std::vector<Conversion> chosen;
         auto choice = select_call(fn.entity,args,0,object,category,0,callee.arguments,chosen);
-        if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable function in type query");
-        if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous function in type query");
+        if (choice.failure == CallFailure::NoViable) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+        if (choice.failure == CallFailure::Ambiguous) return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
         auto selected = choice.entity;
-        if (entities[selected].member_info && members[entities[selected].member_info].deleted)
-            throw std::runtime_error("deleted function in type query");
+        if (deleted_transfer(selected))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
         check_access(selected,q.context,entities[selected].owner,object);
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {

@@ -86,9 +86,10 @@ bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, 
     auto frame = packs || parent ? substitution_frame(0,head.offset,head.count,parent,intern_arguments(deduced)) : 0;
     struct Probe {
         bool& value; bool prior;
-        Probe(bool& v) : value(v), prior(v) { value = true; }
-        ~Probe() { value = prior; }
-    } probe(template_type_probe);
+        bool& immediate; bool saved;
+        Probe(bool& v, bool& q) : value(v), prior(v), immediate(q), saved(q) { value = true; immediate = true; }
+        ~Probe() { value = prior; immediate = saved; }
+    } probe(template_type_probe,immediate_query_probe);
     for (unsigned j = 0; j < source.count; ++j)
         if (argument_types[source.offset+j] != argument_types[actual.offset+j] &&
             substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;

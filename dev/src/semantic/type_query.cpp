@@ -307,7 +307,10 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
 TypeQueryFact Analyzer::query_fact(QueryId id)
 {
     if (query_facts[id].state == FactState::Success) return query_facts[id];
-    if (query_facts[id].state == FactState::Failure) throw std::runtime_error("failed type query");
+    if (query_facts[id].state == FactState::Failure) {
+        if (immediate_query_probe && query_facts[id].failure != TypeQueryFact::Failure::None) return query_facts[id];
+        throw std::runtime_error("failed type query");
+    }
     if (query_facts[id].state == FactState::Active) throw std::runtime_error("recursive type query");
     query_facts[id].state = FactState::Active;
     struct QueryScope { unsigned& depth; QueryScope(unsigned& d) : depth(d) { ++depth; } ~QueryScope() { --depth; } } guard(unevaluated_depth);
@@ -317,6 +320,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     std::vector<TypeQueryFact> children;
     for (unsigned i = 0; i < q.count; ++i) {
         children.push_back(query_fact(query_edges[q.offset+i])); r.dependent |= children.back().dependent;
+        if (children.back().state == FactState::Failure) {
+            query_facts[id] = children.back(); return query_facts[id];
+        }
     }
     r.dependent |= q.type && dependent_type(q.type);
     r.dependent |= q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion;
@@ -439,7 +445,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
         if (!e) {
             if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; break; }
-            throw std::runtime_error("type query member not found");
+            r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
         }
         x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         if (function_binding(e)) { x.form = ExpressionForm::Overload; x.type = 0; }
@@ -452,6 +458,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         if (q.op != KW_NOEXCEPT) size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF);
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;
     }
+    if (r.state == FactState::Failure) {
+        query_facts[id] = r;
+        if (immediate_query_probe) return r;
+        throw std::runtime_error("invalid type-query expression");
+    }
     r.dependent |= r.expression.type && dependent_type(r.expression.type);
     r.state = FactState::Success; query_facts[id] = r; return r;
     } catch (...) { query_facts[id].state = FactState::Failure; throw; }
@@ -459,6 +470,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
 TypeId Analyzer::query_decltype(QueryId id, bool direct)
 {
     auto value = query_fact(id);
+    if (value.state == FactState::Failure) return 0;
     if (value.dependent) return types.decltype_type(id,direct);
     if (direct && value.declared_type) return value.declared_type;
     auto x = value.expression;

@@ -1,15 +1,31 @@
-# PA17 compact plan — implementation handoff, loop 57
+# PA17 compact plan — implementation in progress, loop 58
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `e14b96fa9d4b3376e5922b8ad30093c3c0b0c759`
 
 Target: **PA17 full-stage**. Implementation remains incomplete; do not advance.
-Loop 57 entered clean at `69152966`, **324/343** (19 failures). Previous turn
-was verified progress: committed audit fixes and validation. Code `794b150e`
-now passes **330/343**: six original failures closed, no new failures, all 343
-course inputs unchanged. PA1–PA16 pass **2266/2266**; through PA17 is
-**2596/2609**. **493/493 personal controls** pass (465 inherited, 28 new).
-File audit passes with the same three header-division warnings. No course test,
+Loop 58 entered clean at `411ad00e37b421dc1d3d85b5438e010bd099e025`,
+**330/343** (13 failures). Previous goal turn was verified progress: six course
+failures closed with committed validation; no live work remains from that turn.
+Frozen entry compiler/log: `/tmp/pa17-loop58/`. Review markers above are preserved.
+
+Current increment: three query/candidate failures closed (333/343), plus related
+deleted-function and default-hole defects found by controls. Prior stages pass
+2266/2266; 524/524 accumulated controls pass. Performance evidence is pending.
+
+Initial group: query/candidate demand, then related closure callable ownership.
+Owner: semantic query and template-selection facts; retained dependent expressions
+flow through substitution and candidate selection into recorded call facts and
+typed lowering. Per-query candidate/ADL state must be reentrant; recursive fact
+demand must observe in-progress state, and expected candidate failure must remain
+a compact result. Work should track actual candidates and dependency edges,
+without global retry, grammar replay, or rendered identity keys. Validate original
+failures, focused native/rejection controls, cumulative controls, prior through
+report, file audit, and frozen A/A+ABBA latency/RSS/runtime/size evidence. Extend
+related behavior while these owners support further progress.
+
+Previous completed handoff: loop 57 code `794b150e`, 330/343; PA1–PA16
+2266/2266; through PA17 2596/2609; 493 personal controls. No course input,
 reference, bundle revision or comparison rule changed.
 
 | Completed behavior owner | Data flow / spec alignment |

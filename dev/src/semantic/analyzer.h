@@ -530,6 +530,10 @@ private:
     std::vector<TemplateFunction> templates;
     std::vector<EntityId> template_parameters;
     Index template_default_types;
+    Index active_candidate_substitutions;
+    bool immediate_query_probe = false;
+    std::size_t candidate_substitution_work = 0, candidate_substitution_cycles = 0;
+    EntityId deduced_specialization(EntityId primary, std::vector<ArgumentId>& arguments);
     ArgumentId value_argument_id(QueryId query);
     ArgumentId template_argument_node(NodeId n, ScopeId scope);
     ArgumentId template_argument_node_impl(NodeId n, ScopeId scope);

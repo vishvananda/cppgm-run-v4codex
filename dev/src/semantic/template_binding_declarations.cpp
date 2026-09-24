@@ -224,6 +224,9 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
                 if (function) template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
             }
             if (function) declaration_attributes(e,specs,n);
+            auto special_init = child(init,Kind::SpecialInitializer);
+            if (!special_init) special_init = child(child(n,Kind::Initializer),Kind::SpecialInitializer);
+            if (function && special_init && ast[special_init].op == KW_DELETE) entities[e].deleted_function = true;
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (function && type) bind_pattern_member(e,n,d);
             if (body) {

@@ -170,7 +170,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             args[j] = make_argument_pack(elements); bindings.put(p,args[j]);
             frame = argument_frame(frame,p,args[j]); continue;
         }
-        if (j == args.size()) {
+        if (j == args.size() || !args[j]) {
             TypeId value = template_default_types.get(p);
             if (!value) {
                 NodeId d = entities[p].initializer;
@@ -179,7 +179,8 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             }
             value = substitute_argument(value,bindings,cache,frame);
             if (!value) return false;
-            args.push_back(value);
+            if (j == args.size()) args.push_back(value);
+            else args[j] = value;
         }
         if (entities[p].kind == EntityKind::Type) {
             if (value_argument(args[j])) return false;
@@ -289,6 +290,15 @@ void Analyzer::complete_class(EntityId e)
             { flag = false; context = 0; }
         ~AccessContext() { flag = saved; context = saved_context; }
     } access(explicit_instantiation_naming,access_override);
+    // A demanded class body is a substitution side effect, outside a caller's
+    // immediate context. Partial matching establishes its own probe below;
+    // errors in the selected definition must still diagnose the program.
+    struct DefinitionContext {
+        bool& probe; bool saved;
+        bool& immediate; bool saved_immediate;
+        DefinitionContext(bool& p, bool& q) : probe(p), saved(p), immediate(q), saved_immediate(q) { probe = false; immediate = false; }
+        ~DefinitionContext() { probe = saved; immediate = saved_immediate; }
+    } definition_context(template_type_probe,immediate_query_probe);
     if (!e) return;
     auto index = entities[e].specialization;
     if (index && specializations[index].body == FactState::Failure)
