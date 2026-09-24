@@ -1,0 +1,74 @@
+{
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "proof": "N3485 5.2.4/1, 5.3.7/3, 15.4/12, 7/4",
+  "observations": [
+    {
+      "source": "student.tests/pa18/noexcept69_reducer.cpp",
+      "source_text": "// N3485 [expr.pseudo]/1 preserves evaluation of the receiver; its call may throw.\nusing I = int;\nI* value();\nstatic_assert(noexcept(value()->~I()), \"receiver may throw\");\n",
+      "source_sha256": "25a07c140e09e8a696cf8e9e544c7d0b43137f05442a29c0b003f2b1321db71a",
+      "compiler": "dev/cppgm++-ref",
+      "command": [
+        "dev/cppgm++-ref",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/loop69/reference/noexcept69_reducer-reference.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/noexcept69_reducer.cpp"
+      ],
+      "exit": 0,
+      "diagnostic": "",
+      "lowir": ""
+    },
+    {
+      "source": "student.tests/pa18/noexcept69_reducer.cpp",
+      "source_text": "// N3485 [expr.pseudo]/1 preserves evaluation of the receiver; its call may throw.\nusing I = int;\nI* value();\nstatic_assert(noexcept(value()->~I()), \"receiver may throw\");\n",
+      "source_sha256": "25a07c140e09e8a696cf8e9e544c7d0b43137f05442a29c0b003f2b1321db71a",
+      "compiler": "dev/cppgm++",
+      "command": [
+        "dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/loop69/reference/noexcept69_reducer-student.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/noexcept69_reducer.cpp"
+      ],
+      "exit": 1,
+      "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+      "lowir": null
+    },
+    {
+      "source": "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.t",
+      "source_text": "template<class T> T* value();\ntemplate<class T> struct trait { static const bool value = noexcept(::value<T>()->~T()); };\nstatic_assert(trait<int>::value, \"\");\n",
+      "source_sha256": "40e2c1848e6da89b3957477aafa9e8e608d0ac46a6da86d4655fc49266bfa001",
+      "compiler": "dev/cppgm++-ref",
+      "command": [
+        "dev/cppgm++-ref",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/loop69/reference/300-scalar-pseudo-destructor-noexcept-reference.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.t"
+      ],
+      "exit": 0,
+      "diagnostic": "",
+      "lowir": ""
+    },
+    {
+      "source": "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.t",
+      "source_text": "template<class T> T* value();\ntemplate<class T> struct trait { static const bool value = noexcept(::value<T>()->~T()); };\nstatic_assert(trait<int>::value, \"\");\n",
+      "source_sha256": "40e2c1848e6da89b3957477aafa9e8e608d0ac46a6da86d4655fc49266bfa001",
+      "compiler": "dev/cppgm++",
+      "command": [
+        "dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/loop69/reference/300-scalar-pseudo-destructor-noexcept-student.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.t"
+      ],
+      "exit": 1,
+      "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+      "lowir": null
+    }
+  ]
+}
