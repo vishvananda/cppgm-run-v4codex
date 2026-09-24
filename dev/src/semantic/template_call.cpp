@@ -81,6 +81,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     ++substitution_work;
     Type p = types[pattern];
     TypeId result = pattern;
+    bool complete_failure = false;
     if (p.kind == TypeKind::ArgumentPack) {
         auto args = argument_packs[p.bound]; std::vector<ArgumentId> values;
         for (unsigned j = 0; j < args.count; ++j)
@@ -118,6 +119,8 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         // A failed lookup is not type zero with qualifiers: qualifying that
         // sentinel would manufacture a fundamental type and admit a candidate.
         if (result) result = types.qualify(result,p.cv);
+        else complete_failure = types[qualifier].kind != TypeKind::Named ||
+            entities[types[qualifier].entity].complete;
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);
         if (!result) return 0;
@@ -206,8 +209,10 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         result = p.kind == TypeKind::MemberPointer ? types.member_pointer(p.entity, child) : types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
     }
-    // A resolved dependent-name failure belongs to the same immutable
-    // type/frame key as success. Missing bindings returned above are not facts.
+    // A completed dependent-name failure belongs to the same immutable
+    // type/frame key as success. Missing bindings and members of an active
+    // class can still become available; they are not negative cache facts.
+    if (!result && !complete_failure) return 0;
     auto stored = result ? result : failed_substitution;
     if (owner) { specialization_type_cache.put(cache_key,stored); ++substitution_records; }
     else cache.put(pattern, stored);
