@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify scope, preserved coverage, frozen evidence and review markers."""
 from pathlib import Path
-import hashlib,json,subprocess
+import hashlib,json,re,subprocess
 from record_checkpoint60 import ROOT,git,sha,patch,digest,failures
 from verify_checkpoint56 import measurement
 from storage_reference_corrections import corrected
@@ -39,17 +39,24 @@ def verify():
  inherited=json.loads((ROOT/'student.tests/pa17/storage-controls.json').read_text())
  controls=json.loads((ROOT/'student.tests/pa17/checkpoint60-controls.json').read_text())
  assert set(controls)==set(inherited)|{'checkpoint60'} and sum(map(len,controls.values()))==e['control_count']==610
+ identity=lambda r:(r['name'],r['source_sha256'],r.get('expected'),r.get('required'),r.get('forbidden'))
  for group,rows in controls.items():
-  if group in inherited:assert [(r['name'],r['source_sha256'],r['expected']) for r in rows]==[(r['name'],r['source_sha256'],r['expected']) for r in inherited[group]]
+  if group in inherited:assert list(map(identity,rows))==list(map(identity,inherited[group]))
   for row in rows:
    assert row['passed'] and hashlib.sha256(row['source'].encode()).hexdigest()==row['source_sha256']
-   if row['expected']=='native':assert row['compiler_exit']==row['backend_exit']==row['native_exit']==0
-   if row['expected']=='reject':assert row['compiler_exit']>0
+   if 'required' in row:
+    ir=(Path(e['logs']['controls']['command'][3])/group/(row['name']+'.lowir')).read_text()
+    assert row['compiler_exit']==0 and re.search(row['required'],ir,re.M) and not re.search(row['forbidden'],ir,re.M)
+   elif row['expected']=='native':assert row['compiler_exit']==row['backend_exit']==row['native_exit']==0
+   else:assert row['expected']=='reject' and row['compiler_exit']>0
  entry=json.loads((ROOT/'student.tests/pa17/checkpoint60-entry-controls.json').read_text())
  assert len(entry)==e['new_control_count']==43 and sum(not r['passed'] for r in entry)==e['entry_control_failures']
  assert [(r['name'],r['source_sha256']) for r in entry]==[(r['name'],r['source_sha256']) for r in controls['checkpoint60']]
  for filename in e['performance']:
-  p=json.loads((ROOT/filename).read_text());assert p['finished_utc'] and not p['source_diff'] and p['source_commit']==tip
+  p=json.loads((ROOT/filename).read_text());assert p['finished_utc'] and not p['source_diff']
+  # Evidence-verifier fixes may follow timing without changing the compiler.
+  subprocess.check_call(['git','merge-base','--is-ancestor',p['source_commit'],tip],cwd=ROOT)
+  assert not git('diff',p['source_commit'],tip,'--','dev')
   assert p['harness_sha256']==sha(ROOT/'student.tests/pa17/checkpoint60_benchmark.py') and p['shared_harness_sha256']==sha(ROOT/'student.tests/pa10/benchmark.py')
   for b in p['binaries']+[p['backend']]:assert sha(b['path'])==b['sha256']
   assert p['binaries'][1]['sha256']==sha(ROOT/'dev/cppgm++') and p['flags']==['--emit-lowir','-O0']
