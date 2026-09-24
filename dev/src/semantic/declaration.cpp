@@ -136,9 +136,9 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         return;
     }
     ScopeId ts = make_scope(ScopeKind::Template, s);
-    declare_template_parameters(params,ts);
     auto source_head = template_source_heads.get(ast.nodes.occurrences[n].source);
     auto enclosing_frame = template_type_contexts.get(ast.nodes.occurrences[n].context);
+    declare_template_parameters(params,ts,source_head,enclosing_frame);
     if (source_head && enclosing_frame) {
         auto source = templates[source_head];
         std::vector<ArgumentId> arguments;

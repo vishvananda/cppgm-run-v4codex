@@ -120,7 +120,7 @@ void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId pre
         if (result) template_default_types.put(template_parameters[selected.offset+j],result);
     }
 }
-EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor)
+EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor, bool conversion)
 {
     ScopeId environment = active_template_scope;
     ScopeId scope = owner == environment ? scopes[owner].parent : owner;
@@ -171,6 +171,13 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
         merge_template_defaults(e,environment);
         if (!family) { family = e; template_families.put(key(scope,name),family); }
         template_signatures.put(key(family,signature),e);
+    }
+    if (conversion) {
+        if (!entities[e].member_info) {
+            entities[e].member_info = members.size(); members.push_back(MemberFacts());
+        }
+        auto shape = argument_packs[signature];
+        members[entities[e].member_info].conversion_hiding_target = types[argument_types[shape.offset+shape.count-1]].child;
     }
     if (!constructor) {
         bind(owner,name,e);

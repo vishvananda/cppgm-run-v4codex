@@ -2,19 +2,37 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-void Analyzer::declare_template_parameters(NodeId params, ScopeId ts)
+void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint32_t source_head, std::uint32_t frame)
 {
+    auto source = templates[source_head]; unsigned ordinal = 0;
+    auto bind_parameter = [&](EntityId e) {
+        if (source_head && frame) {
+            auto arg = parameter_argument(e);
+            if (entities[e].parameter_pack) arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});
+            frame = argument_frame(frame,template_parameters[source.offset+ordinal],arg);
+        }
+        ++ordinal;
+    };
     for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
         if (definitions && ast[p].kind == Kind::NonTypeParameter) {
             auto specs = ast[p].first;
             auto d = child(p,Kind::Declarator);
-            auto type = declarator(d,specifiers(specs,ts),ts);
+            TypeId type = 0;
+            if (source_head && frame) {
+                // The retained head already owns this type. Substitute it
+                // under the enclosing specialization and earlier parameters
+                // of this new head, without projecting another syntax region.
+                Index bindings, cache;
+                type = substitute_type(entities[template_parameters[source.offset+ordinal]].type,bindings,cache,frame);
+                if (!type) throw std::runtime_error("invalid member template parameter type");
+            } else type = declarator(d,specifiers(specs,ts),ts);
             if (!dependent_type(type) && !integral(type)) throw std::runtime_error("integral template parameter required");
             auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
             entities[e].template_parameter = true;
             entities[e].parameter_pack = child(p,Kind::ParameterPack) != 0; entities[e].type = types.unqualified(type);
             entities[e].initializer = child(p,Kind::DefaultTemplateArgument);
             bind(ts,entities[e].name,e); record(ts,e,p,type,EntityKind::Parameter);
+            bind_parameter(e);
             continue;
         }
         if (ast[p].kind != Kind::TypeParameter) continue;
@@ -29,11 +47,13 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts)
         entities[e].type = types.named(e);
         if (entities[e].key == KW_TEMPLATE && definitions) {
             auto nested = make_scope(ScopeKind::Template,ts);
-            declare_template_parameters(child(p,Kind::TemplateParameters),nested);
+            auto nested_head = source_head && frame ? entities[template_parameters[source.offset+ordinal]].template_info : 0;
+            declare_template_parameters(child(p,Kind::TemplateParameters),nested,nested_head,frame);
             template_facts(e,nested);
             entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
         }
         bind(ts, name, e); record(ts, e, p, entities[e].type, EntityKind::Type);
+        bind_parameter(e);
     }
 }
 std::uint32_t Analyzer::template_head_shape(EntityId e)

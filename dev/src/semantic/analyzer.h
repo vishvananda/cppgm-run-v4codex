@@ -526,7 +526,7 @@ private:
     Index template_families, template_signatures;
     std::vector<TypeId> canonical_parameters;
     Index canonical_value_parameters, canonical_template_parameters, canonical_nested_parameters;
-    void declare_template_parameters(NodeId parameters, ScopeId scope);
+    void declare_template_parameters(NodeId parameters, ScopeId scope, std::uint32_t source_head = 0, std::uint32_t frame = 0);
     std::uint32_t template_head_shape(EntityId entity);
     std::uint32_t template_head_shape(EntityId entity, Index& bindings, Index& cache, unsigned depth);
     bool template_compatible(EntityId parameter, EntityId argument, Index& bindings, unsigned depth = 1);
@@ -756,7 +756,7 @@ private:
     Index template_lexical_frames;
     std::uint32_t template_lexical_frame(ScopeId scope);
     std::vector<Body>* template_source_deferred = 0;
-    EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false);
+    EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, bool conversion = false);
     ScopeId member_template_environment(ScopeId head, ScopeId owner);
     Index member_template_environments;
     std::uint32_t template_declaration_shape(TypeId type, ScopeId environment);

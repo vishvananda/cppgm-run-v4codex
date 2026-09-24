@@ -47,6 +47,7 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
         std::vector<TypeId> targets;
         for (EntityId e = class_facts[info].first_conversion; e; e = members[entities[e].member_info].next_conversion) {
             TypeId t = members[entities[e].member_info].conversion_target;
+            if (auto canonical = members[entities[e].member_info].conversion_hiding_target) t = canonical;
             if (!hidden.get(t)) result.push_back(e);
             targets.push_back(t);
         }

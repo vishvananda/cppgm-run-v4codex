@@ -26,7 +26,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     if (definitions && active_template_scope &&
         (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace ||
          (source && scopes[owner].kind == ScopeKind::Class)))
-        return declare_template_function(owner,name,source,type,constructor);
+        return declare_template_function(owner,name,source,type,constructor,conversion != 0);
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);

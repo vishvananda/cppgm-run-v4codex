@@ -35,6 +35,13 @@ GOOD={
  'constexpr_conditional_reference':'constexpr int n=7;struct S{constexpr S(){}template<class T>constexpr operator const T&()const{return n;}};constexpr const int&r=true?S():n;static_assert(&r==&n,"");int main(){return r!=7;}',
  'class_trailing_qualifier':'struct A{int n;};struct S{template<class T>operator T()const{return T{7};}}const s={};int main(){A a=s;return a.n!=7;}',
  'constructor_local_relational':'struct S{int n;template<class T>S(T x):n(0){for(int i=0;i<3;++i)n+=x;}};int main(){S s(2);return s.n!=6;}',
+ 'inherited_template_hidden':'struct B{template<class T>operator T()const{return T::missing;}};struct S:B{template<class U>operator U()const{return U(7);}};int main(){S s;int n=s;return n!=7;}',
+ 'inherited_ordinary_preferred':'struct B{operator int()const{return 7;}};struct S:B{template<class T>operator T()const{return T::missing;}};int main(){S s;int n=s;return n!=7;}',
+ 'inherited_fixed_template_hides':'struct B{operator int()const{return 3;}};struct S:B{template<class T=int>operator int()const{return 7;}};int main(){S s;int n=s;return n!=7;}',
+ 'inherited_explicit_not_viable':'struct B{operator int()const{return 7;}};struct S:B{template<class T>explicit operator T()const{return T::missing;}};int main(){S s;int n=s;return n!=7;}',
+ 'member_nontype_head':'template<class A>struct S{template<class T,T N=7>int f(){return N;}};int main(){S<void>s;return s.f<int>()!=7;}',
+ 'member_nontype_head_shadow':'template<class T>struct S{template<class U,U N=7>int f(){return N;}};int main(){S<float>s;return s.f<int>()!=7;}',
+ 'member_nontype_outer_head':'template<class T>struct S{template<T N=7>int f(){return N;}};int main(){S<int>s;return s.f<>()!=7;}',
 }
 BAD={
  'explicit_implicit':'struct S{template<class T>explicit operator T()const{return T();}};int main(){S s;int n=s;}',

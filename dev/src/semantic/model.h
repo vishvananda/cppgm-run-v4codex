@@ -195,6 +195,7 @@ struct MemberFacts {
     std::uint32_t prototype = 0;
     TypeId call_type = 0;
     TypeId conversion_target = 0;
+    TypeId conversion_hiding_target = 0; // Alpha-normalized template conversion type.
     std::uint32_t explicit_condition = 0; // Canonical QueryId.
     EntityId next_conversion = 0;
     EntityId inherited_constructor = 0;
