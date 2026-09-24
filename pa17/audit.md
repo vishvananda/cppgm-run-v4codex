@@ -1,167 +1,206 @@
-# PA17 checkpoint audit — Ralph loop 56
+# PA17 checkpoint audit — Ralph loop 60
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
-Last reviewed commit: `e14b96fa9d4b3376e5922b8ad30093c3c0b0c759`
+Last reviewed commit: `2290a7bf8b56bc33e6ad975a8ae714a341f55ce5`
 
-Target: **PA17 full-stage**, implementation still incomplete. Reviewed the entire
-`c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30..e14b96fa` range, including all
-three accepted handoffs and both audit fixes: **10 commits and 37 implementation
-paths**. Entry `b739e08d` was clean, **324/343 with 19 failures**. The preceding
-goal turn was progress, confirmed from committed loop-55 implementation and the
-entry checkpoint log. The [previous audit](audit-loop52.md) remains preserved.
+Target: **PA17 full-stage**. This checkpoint audit is complete; implementation
+still has three course failures and must not advance. Entry `119fa9fe` was clean,
+**340/343 with three failures**. The reported check status 2 was make's exit code,
+not a two-case failure baseline. The preceding goal turn is classified as
+progress from the committed loop-59 storage handoff and its validation; process
+inspection found no remaining compiler/test job at entry.
 
-The [range record](../student.tests/pa17/checkpoint56-range.json) lists every
-commit, touched path and implementation patch hash, including the combined diff.
-Reviewed `spec.md`, the assignment README, compact plan, testing/reference rules,
-all accumulated implementation patches, all three handoff ledgers and their
-benchmark/validation harnesses. Contract fixtures, references, bundle revision,
-comparison rules and course coverage are unchanged. No reference correction or
-waiver was made.
+Reviewed **every commit and the combined changes in `e14b96fa..2290a7bf`**:
+15 commits, three accepted implementation handoffs, two audit implementation fixes,
+one evidence verifier correction and **40 implementation paths**. The [range manifest](../student.tests/pa17/checkpoint60-range.json)
+records every commit, changed path and implementation patch hash, including the
+combined patch. The [previous audit](audit-loop56.md) remains preserved. Read
+`spec.md`, the PA17 handout, compact plan, testing/reference rules, all handoff
+records, the accumulated source patches and their neighboring owners, controls,
+benchmark harnesses, historical samples, and reference proofs.
 
-| Commit | Review and interactions |
+| Commit | Review and interaction |
 |---|---|
-| `65b02f17` | Previous audit records; preserved the code baseline, full-stage obligations, historical measurements and stage-scoped acceptance. |
-| `0a720134` | Shared exact class/variable partial selection; canonical tuple/default/pack queries; member-partial source heads and lexical frames; qualified argument lists and constant boolean lowering. Found a missing type/template category in qualified-name identity and invalid-type failure mishandling. |
-| `3f1f6f0b` | Selection handoff and frozen observations. Checked explicit semantic costs, unchanged controls and the disclosed boolean-branch runtime/text change. Its assertion that no argument/substitution defect remained was too strong; the audit reducers below expose two. |
-| `5c5756b7` | Anonymous class injection and storage/access/base paths; constructor/conversion parsing and explicit-condition query/rebinding; array list materialization; bounded selected-union zero stores. Checked concrete versus source pack contexts and typed lowering ownership. |
-| `4d1527e7` | Publication handoff, controls, scaling and both original/repeated observations. Preserved noisy samples and scoped later-backend constraints; no numerical diagnostic becomes an exit gate. |
-| `deb07c4e` | Current-instantiation dependent-base lookup/access, early inline namespace import, and fixed-position argument expansions. Reviewed with partial selection and retained member publication; source sequences normalize into target arguments only after expansion. |
-| `df97733f` | Restores immediate rejection of a known type/value pack mismatch while preserving unresolved suffixes. Reviewed the intermediate permissive change as well as the combined result. |
-| `b739e08d` | Qualified handoff, exact 19-case failure set, 439 controls, frozen campaign and repeat. Carried every pending review question from all three increments into this audit. |
-| `d37a1049` | Audit fixes for lookup category, cv-preserving failure propagation and expected candidate mismatch; 26 reduced controls and cumulative benchmark harness. |
-| `e14b96fa` | Follow-up cache validity: negative type/frame entries require a completed qualifier. Active-class members may still be published; such misses remain uncached. Final checks and complete measurements use this tip. |
+| `69152966` | Previous audit records; preserves the e14b96fa code baseline, previous controls and performance observations. |
+| `4e82009f` | Specialized stores, empty subobject transfers, automatic array initialization and canonical base adjustments. Checked their conversion, layout, constant-address and lowering consumers together. |
+| `794b150e` | Separates base reachability from layout demand after the fixed-receiver preflight failure. Checked immutable pattern/concrete keys and cached misses, shared tails and deferred layout. |
+| `411ad00e` | Transfer handoff and frozen observations, including the failed preflight. Its qualified receiver review question exposed the incomplete call and constexpr paths below. |
+| `7d04e8ce` | Active incomplete candidate tuples, default holes, immediate query failures and deleted declarations. Reviewed recursive ADL/default demand with selected class-definition side effects. |
+| `1e5f15ab` | Explicit specialization replaces deletion ownership; flag packing restores 120-byte entities. Both the intermediate and final layouts were reviewed. |
+| `f284514b` | Fully deduced candidates bypass redundant default work while the ordinary specialization owner still validates its tuple. |
+| `7cc89281` | Query handoff, inherited/new controls and all three performance campaigns. Active keys, query failure caching and context restoration were checked across member and partial heads. |
+| `8654829c` | Storage plan; preserves the review marker, full-stage scope and reference-proof requirement. |
+| `6a1a51a8` | Static definition signatures, immutable read snapshots and function-address queries. Reviewed source/instantiation boundaries, concrete access contexts and query/call consumers. |
+| `3c7eeea2` | Six surgical reference corrections; independent standard/contract verification described below. No source, status, coverage or comparator changes. |
+| `119fa9fe` | Storage handoff and complete frozen evidence. The entry verifier passes against this checkout; its claim of a closed owner was incomplete at the address-query naming boundary. |
+| `1f319dac` | First audit fix: qualified receiver paths and query naming/access provenance, with 30 reducers. Its complete performance campaign is preserved, but later tracing found the constexpr consumer still incomplete. |
+| `3ad8f2f4` | Completes constant and query receiver consumption, ABI qualification and deferred emission dependencies. Includes 43 audit controls, final validation harnesses and expanded benchmark inputs. Final compiler changes and frozen benchmark source. |
+| `2290a7bf` | Evidence-verifier correction: preserves inherited LowIR required/forbidden patterns, verifies their outputs, and accepts only ancestor campaigns with identical compiler sources and binary hashes. No compiler behavior changes. This is the reviewed code tip. |
 
-The audit fixed these ownership defects:
+## Findings and fixes
 
-- A retained dependent name encoded only whether it had an argument list.
-  Supporting a member alias template as a template-template argument consequently
-  also accepted `typename T::A` when `A` was a template. A function returning
-  that invalid bare-template pointer could compile and execute. A compact
-  `DependentNameKind` now distinguishes a type, applied template-id and template
-  entity in the canonical key. Argument construction supplies the category;
-  substitution, source-head normalization and typed ABI views preserve it.
-  Lookup enforces the requested category without rendering or reconstructing
-  names. N3485 **14.6 [temp.res]/3–4** requires a typename-specifier to denote a
-  type; **14.3.3 [temp.arg.template]/1** separately permits class/alias template
-  names as template-template arguments.
-- Expected qualified lookup failure returned type zero, but the caller applied
-  cv-qualification to it. Since the sentinel record has a default fundamental
-  descriptor, this manufactured `const int`, `volatile int` or `const volatile
-  int` and could select the wrong partial specialization. Substitution now
-  propagates failure before qualification. The alias fact records failure before
-  checking access on a nonexistent substituted type. Successful aliases still
-  perform their definition-owned access checks. This applies the exact-match
-  obligation in **14.5.5.1 [temp.class.spec.match]/1–2** and the invalid-type
-  rules in **14.8.2 [temp.deduct]/8**.
-- The same partial-selection probe threw on non-class qualifiers or an ordinary
-  member where a template was required, aborting selection before the primary
-  fallback. These category mismatches now return the existing compact failed
-  probe result. Hard uses remain diagnosed. Completed dependent-name failures
-  share the immutable type/frame cache with successes via a reserved failure
-  value; missing bindings and active-class members do not establish negative
-  entries. This closes the affected PA17 partial-matching path without claiming
-  completion of PA18's broader SFINAE surface or the remaining recursive-query
-  protocol. **[temp.class.spec.match]/2** invokes deduction; **[temp.deduct]/8**
-  explicitly lists non-class qualifiers and wrong member categories.
+**Qualified subobjects.** Candidate viability tested the whole object's direct
+path to the declaring base before consuming the explicitly named intermediate
+class. It rejected `object.Right::f()` when `Left` and `Right` each contained a
+`Base`, although both selected path segments were unambiguous. The ordinary and
+retained fixed call paths also attempted that ambiguous direct projection before
+overwriting it. They now share `record_member_receiver`; viability checks both
+graph segments, and semantic selection records those segments once. Ordinary
+lowering consumes completed offsets. Queries record graph paths without demanding
+layout. Access, cv/ref ranking, static calls and virtual suppression retain their
+own checks. N3485 **5.2.5 [expr.ref]/5** and **11.2 [class.access.base]/5–6** state
+these two naming-class boundaries; the whole-object direct path is not the rule.
 
-The standard citations refer to the checked-in [N3485 text](../doc/n3485.txt).
-The [reducers and neighbors](../student.tests/pa17/checkpoint56_controls.py)
-cover valid ordinary/applied/template names, inherited template arguments,
-const/volatile failures, repeated alias failure, viable fallback, hard rejection,
-category use order, pack/default application, conditional constructors and member
-variable partials. Entry fails **11/26**; final passes **26/26**, including all
-expected native results and normal rejection statuses. All **439 inherited
-controls** also pass. No test or comparison was removed or loosened.
+**Constant evaluation and typed queries.** Runtime lowering already consumed two
+recorded adjustments, but constexpr calls reconstructed a receiver by searching
+for the declaration's class, selecting the wrong repeated base. Constant calls
+and query calls/fields now project through the same recorded edges into canonical
+constant subobject addresses. A query previously retained only the final member
+name; it now retains the typed explicit qualifier through substitution and
+lookup. This fixes both a `static_assert` and a non-type argument using the same
+qualified call. The ABI adapter preserves that qualifier through typed expression
+nodes. Existing unresolved-name encoding now accepts named template qualifier
+levels, without text keys or reparsing. The
+[ABI checks](../student.tests/pa17/checkpoint60-abi.json) verify ordinary and nested
+template qualifiers against the checked-in Itanium **5.1.6 expression and
+unresolved-name grammar**; demangling is supplementary evidence.
 
-Architecture audit: immutable source buffers feed the streaming preprocessor,
-post-token cursor and integrated parser/semantic construction in
-`lowering/driver.cpp`. Inline namespace import is established at namespace
-opening. Parsed template definitions remain source recipes; projected nodes carry
-context IDs rather than cloned subtrees or replayed grammar. Identifiers, source
-heads, entities, types, argument slices, query IDs and parent-linked frames own
-canonical identity. The new name-category discriminator participates in type
-interning, substitution, head equivalence and ABI adaptation; rendering remains
-a view. Qualifiers and argument sequences are substituted only when dependent.
+**Address-query access.** `decltype(&Derived::f)` checked the declaration owner
+instead of the naming class and admitted an otherwise public function through a
+private base. Canonical name queries now retain an interned naming scope in their
+key; substitution maps it along with the access context. Query facts carry that
+scope to selected address/call and target-conversion checks. Signature-only
+normalization omits access/naming environments while preserving bound entities
+and canonical head types; concrete checking still uses the original query.
+Private-member, private-base, friend and public using-declaration controls cover
+both single functions and overload families. N3485 **11.2/5–6** supplies the rule.
+Entity and query records remain **120 and 48 bytes** respectively.
 
-Selection visits the primary's indexed class/variable partial list. Exact
-matching follows candidate shape and emitted pack lanes; winner selection and
-verification take O(C) pair comparisons. Immutable candidate-pair ordering facts
-are cached; argument-dependent coverage stays local to the match and uses
-O(n log n) sorting only when multiple candidates compete. No global template
-scan, all-class retry, text key or environment copy was added. Out-of-class
-member definitions attach through existing indexed source-head/prototype edges;
-selected outer and inner parameter slices remain distinct. Query packs retain
-explicit arguments and symbolic counts until their enclosing frames resolve.
+**Emission after constexpr checking.** A body checked first for constant evaluation
+could later be emitted with an undefined callee symbol, because its earlier
+unevaluated context had suppressed runtime demand. A TU-owned flat
+`(body entity, selected callee)` index now records deferred uses. First emission
+demand activates only that body's edges; newly recorded edges of an already
+requested body enqueue directly. A deduplicated worklist processes each edge once
+and terminates on cycles. The body's entry evaluation depth distinguishes its
+potentially evaluated uses from deeper `sizeof`/`decltype` operands. No body scan,
+semantic reconstruction, global retry or eager dormant definition is needed.
+The controls exercise transitive/member/free-template calls, demand before and
+after checking, cycles, unused erroneous definitions and unevaluated operands.
+This separates definition checking from emission as spec.md §§4–6 require and
+preserves the instantiation boundary in N3485 **14.7.1 [temp.inst]/2–3,8,10**.
 
-Anonymous members use explicit injection edges with direct-name precedence,
-separate storage entities and enclosing access paths. Semantic base adjustment
-is recorded as a byte offset; lowering adds recorded nested storage offsets
-without repeating lookup or overload selection. Explicit conditions are canonical
-queries rebound on renamed source heads and evaluated per specialization;
-nondependent results are reused. List initialization consumes recorded conversion,
-construction and lifetime plans, retaining a concrete pack lane's own frame.
-Declaration publication, class completion, body demand, constant execution,
-layout and emission remain separate facts. Qualified-member positive caches
-publish only after class completion; the new negative substitution cache applies
-the same completion constraint. Access facts retain recipe/frame identity.
+The [43 audit reducers and neighbors](../student.tests/pa17/checkpoint60_controls.py)
+fail **18/43** at entry and pass **43/43** at the reviewed tip. All **567 inherited
+controls** also pass, for **610/610**. Expected successes execute through the
+supplied native backend; rejections have ordinary nonzero compiler statuses.
+Coverage also includes query publication before/after added defaults or overloads,
+member/partial default holes, distinct bound signature names, const receivers,
+nonzero offsets, alias qualifiers and repeated queries. No old control was removed
+or weakened. Broader PA18 deduction/SFINAE completion is not claimed by this audit.
 
-TU-owned source buffers, interners, node slabs, flat indexes and fact vectors
-release with the analyzer. Candidate/argument scratch vectors release at their
-owner return; immutable frames share parents. No per-node owning smart pointer,
-process-global mutable cache, second semantic tree or retained serialized IR was
-introduced. Function lowering consumes selected declarations, conversions,
-layouts, lifetime actions and ABI entries directly into typed LowIR; its local
-builder state releases per function. The typed program survives for the explicit
-requested LowIR writer. The [trace](../student.tests/pa17/checkpoint56-trace.json)
-binds a nontrivial member-template declaration and demanded primary/partial,
-source/IR/ELF hashes, untimed counters, native result and decoded instructions.
-The pinned supplied backend is an explicit validation consumer, as PA17 requires;
-own MIR, allocation, ELF writing and self-hosting belong to PA24–PA34.
+## Architecture and optimization audit
 
-Optimization audit: recorded nonvolatile boolean constants can select an O0
-branch in O(1), without evaluating effects, scanning expressions or adding code.
-All other forms retain ordinary lowering. Selected-union aggregate zeroing uses
-only a semantic child plan that proves representation zeroing legal; scalar,
-volatile, member-pointer and other distinct plans keep their own actions. Small
-regions emit at most eight stores and seven internal address operations; larger
-regions retain bulk zeroing. Nested array expansion retains the aggregate
-8-element budget and counted-loop fallback. Constant execution keeps its
-1,000,000-work/512-depth limits. No new optimizer, fixed point, speculative
-analysis, ABI/debug relaxation or unbounded growth was introduced. The useful
-constant fact in the trace flows from selection through typed lowering to native
-encoding; runtime workloads keep live calls, memory and floating-point work.
+The [combined trace](../student.tests/pa17/checkpoint60-trace.json) follows
+`Both<Right>::add`, `TableOwner<Right>::fn`, the selected `Probe<Right>` partial,
+sparse transfer, and `ConstantBoth<0>` through source, typed LowIR and checked ELF.
+Immutable source buffers feed the streaming preprocessor/post-token cursor and
+integrated parser/analyzer in `lowering/driver.cpp`. Parsed patterns remain shared
+source recipes; projected occurrences retain source/context identities rather
+than cloned trees or replayed grammar. Canonical identifiers, entities, types,
+argument slices, heads and immutable parent-linked frames own semantic identity.
 
-[Performance evidence](checkpoint56-performance.md) reports compiler latency/RSS
-and separate checked executable runtime/text together, with frozen checkpoint and
-cumulative A/B binaries, flags, sources, A/A calibration, ABBA pairs/spread and
-scaling counters. All historical campaigns and noisy observations remain intact,
-as does the explicitly interrupted pre-cache-validity campaign. The boolean
-branch's historical runtime regression and union zeroing's measured benefit are
-both disclosed; smaller IR alone is not treated as profit. PA17/O0 has no mandated
-numerical ceiling. Inherited +15%, +16 MiB and 5.5× diagnostics do not add exit
-gates; required semantics, coverage, existing work/growth bounds and avoidance of
-unnecessary work remain binding. Later backend constraints do not waive PA17
-correctness.
+Scope/name and primary/partial indexes limit lookup and selection to relevant
+owners. Candidate active keys include the canonical head and incomplete tuple,
+including default holes; marks restore on scope exit and are not cached negative
+results. Class-definition side effects suspend immediate-context probe modes.
+Query results retain structured expected failures; context and naming provenance
+participate in canonical identity. Declaration insertion/default controls and
+repeated cv/namespace queries verify the relevant cache boundaries. No broad
+invalidation, global generation counter or unrelated retry was introduced.
 
-Validation: `make test-pa17` is **324/343**, exactly the entry's **19 failures**.
-`make test-report-through-pa16` passes **2266/2266**. The through-PA17 report is
-**2590/2609**, with all failures in PA17. File audit passes with the same three
-inherited header-division warnings. The
-[evidence manifest](../student.tests/pa17/checkpoint56-evidence.json) binds the
-code/range, logs and exit statuses, exact failures, 343 course inputs, 465
-controls, historical integrity checks, trace and measurements. Run
-`python3 student.tests/pa17/verify_checkpoint56.py` to verify it.
+Definition signatures attach to indexed source prototypes. Static definition
+application retains its `(specialization, source definition)` monotonic state;
+entity-keyed storage demand preserves dormant members. Signature normalization is
+memoized and remains separate from concrete access checking. Ordinary O0 reads
+snapshot at their source use, instantiated reads after their required demand;
+member lowering consumes the snapshot, not a subsequently published entity value.
+Selected address targets feed typed initializer/relocation facts. Base graphs
+publish before member checks; concrete and retained-pattern identities are distinct.
+Graph reachability and layout remain separate cached facts. The new deferred
+emission queue follows explicit selected-callee edges only.
 
-All **19 failures remain implementation obligations**, grouped broadly in
-[plan.md](plan.md): query/candidate demand and closures (4), static storage and
-initialization (9), scalar/object transfer and adjustment (4), and exception
-cleanup scheduling (2). All accumulated independent review questions are closed;
-that does not mean the stage is complete. Avoidable handoff fragmentation split
-selection, publication and qualified-name/argument facts across three increments,
-delaying discovery of shared category and failure defects. Future handoffs should
-close a broad owner together with its declaration, substitution, demand and
-lowering interactions.
+All added indexes, vectors and records are analyzer/TU owned. Scratch candidate,
+query-child, initializer and signature sequences release at their owner returns.
+No per-node owning smart pointer, deep environment copy or process-global mutable
+cache was added. Each function lowers once from recorded declarations,
+conversions, paths, layouts, lifetime actions and ABI entries into typed LowIR;
+function-local builder state releases per function. The typed program survives
+for the explicit LowIR writer. The pinned native backend is an authorized
+validation consumer; own MIR, register allocation, ELF emission and self-hosting
+remain PA24–PA34 responsibilities.
+
+Optimization review covers the entire transfer/query/storage range. Specialized
+wide stores preserve target width/sign; empty trivial subobjects retain memberwise
+actions, while nontrivial, volatile, reference, union and array behavior keeps its
+own plans. Automatic constant-array selection scans explicit initializer nodes,
+not expanded bounds, and retains evaluated class materializations. Short wide
+arrays use the existing eight-lane limit (at most 24 conversion/address/store
+instructions); larger arrays retain bulk/loop fallbacks. Nested expansion budgets
+remain shared. Constant evaluation retains its **1,000,000-work / 512-depth**
+limits. Selected graph paths replace searches; emission uses a monotonic queue.
+No optional optimizer, fixed-point rescan, speculative growth, ABI relaxation or
+debug-policy change was introduced. Missing required facts still diagnose rather
+than trigger name-based lowering recovery.
+
+The trace follows a selected constant/subobject fact through legally recorded
+projections, constant execution or ordinary O0 call emission, final ABI naming
+and decoded native instructions. Profitability is evaluated separately in the
+[performance report](checkpoint60-performance.md): prior sparse-transfer and
+wide-array outcomes, unchanged call/memory/floating controls, static-read cost,
+and newly required receiver/emission behavior are all retained. Smaller IR alone
+is not evidence of runtime profit.
+
+## References and validation
+
+Independently verified all six corrections in
+[storage-references.md](storage-references.md), the reducer sources and pinned
+bundle **c2f713cd70d06170632bfde3e75dd6fe1aa44d98**. The correction reproducer derives
+only the six explicit edits from frozen original oracles, without copying student
+output. N3485 **3.6.2/2**, **5.19/4** and **6.7/4** require constant initialization
+of the reference/function-address cases; **8.5/6,8** requires empty-class value
+zeroing, including padding; **14.7.1/1–2,8,10** prohibits unused static-member
+instantiation. Reduced observations show delayed reference binding, unwanted
+initialization, dynamic guards and missing zeroing in the reference. Agreement
+with a compiler is not the proof. Preserve the dynamic referent constructor,
+selected function definitions, distinct specializations and ordered lifecycle
+work. No additional reference correction was made in loop 60.
+
+Final `make test-pa17`: **340/343**, exactly the entry's three failures.
+`make test-report-through-pa16`: **2266/2266**.
+`make test-report-through-pa17`: **2606/2609**, all failures in PA17.
+File audit passes with the same three inherited header-division warnings.
+The final evidence verifier also rechecks inherited LowIR-property controls, whose
+record schema differs from native/rejection controls. Its correction follows
+the compiler freeze; both campaigns remain at `3ad8f2f4` with identical `dev/`
+content and compiler hash at the reviewed tip. No timing observation was edited.
+All **343 course inputs**, expected statuses, earlier suites and comparison rules
+are unchanged; only the six previously proved reference outputs differ from the
+last review. The [evidence manifest](../student.tests/pa17/checkpoint60-evidence.json)
+binds logs/exit statuses, source digest, full range, exact failures, coverage,
+controls, historical integrity, ABI/ELF trace and frozen observations. Run
+`python3 student.tests/pa17/verify_checkpoint60.py` to verify it.
+
+The [compact plan](plan.md) keeps two unfinished implementation groups: **closure
+entities (one case)** and **exception cleanup scheduling (two cases)**. All
+accumulated independent review questions are closed by this audit; these three
+implementation failures remain obligations. Avoidable fragmentation split shared
+receiver/query/emission facts across the transfer, query and storage handoffs.
+The first audit increment also stopped too early at runtime lowering; following
+the same facts into constexpr execution exposed the remaining consumers. Future
+handoffs should close a broad semantic owner together with its source, query,
+constant, emission, ABI and lowering consumers.
 
 | Loop / phase | Reviewed range | Findings and disposition | Validation / remaining work |
 |---|---|---|---|
-| 56 / checkpointAudit | `c43e8eb6..e14b96fa` (entry `b739e08d`; 10 commits, 37 implementation paths) | Fixed dependent-name categories, cv failure corruption, expected partial mismatch and negative-cache validity; reviewed all three handoffs and their interactions; stage-scoped performance accepted with all observations preserved. | Earlier 2266/2266; PA17 324/343, same 19 failures; file audit pass; 465 controls. Four broad implementation groups remain; no stage advancement. |
+| 60 / checkpointAudit | `e14b96fa..2290a7bf` (entry `119fa9fe`; 15 commits, 40 implementation paths) | Fixed qualified receiver paths, query access/qualifier provenance, constant consumption, ABI qualification and deferred emission dependencies; verified six prior reference corrections and stage-scoped performance evidence. | Earlier 2266/2266; PA17 340/343, same three failures; file audit pass; 610 controls. Closure and cleanup groups remain; no stage advancement. |

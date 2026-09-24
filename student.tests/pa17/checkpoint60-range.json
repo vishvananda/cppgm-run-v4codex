@@ -1,0 +1,321 @@
+{
+  "review_start": "e14b96fa9d4b3376e5922b8ad30093c3c0b0c759",
+  "entry_commit": "119fa9feb12fbc002a2c49c6ae9fad66d73f8066",
+  "reviewed_tip": "2290a7bf8b56bc33e6ad975a8ae714a341f55ce5",
+  "commits": [
+    {
+      "commit": "6915296626992eb1ed20f6ca6e8c25a028c0335f",
+      "subject": "Record accumulated PA17 checkpoint audit through e14b96fa",
+      "paths": [
+        "pa17/audit-loop52.md",
+        "pa17/audit.md",
+        "pa17/checkpoint56-performance.md",
+        "pa17/plan.md",
+        "student.tests/pa17/checkpoint56-controls.json",
+        "student.tests/pa17/checkpoint56-cumulative-performance.json",
+        "student.tests/pa17/checkpoint56-entry-controls.json",
+        "student.tests/pa17/checkpoint56-evidence.json",
+        "student.tests/pa17/checkpoint56-performance-before-cache-validity.json",
+        "student.tests/pa17/checkpoint56-performance.json",
+        "student.tests/pa17/checkpoint56-range.json",
+        "student.tests/pa17/checkpoint56-trace.json",
+        "student.tests/pa17/verify_checkpoint56.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "4e82009f07369d4b7537f9812b9ee00a5b744757",
+      "subject": "Preserve PA17 specialized transfer and initializer actions",
+      "paths": [
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/values.cpp",
+        "dev/src/lowering/virtuals.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_addresses.cpp",
+        "dev/src/semantic/constant_array.cpp",
+        "dev/src/semantic/constant_objects.cpp",
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/operators.cpp",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/overload.cpp",
+        "dev/src/semantic/template_call_facts.cpp",
+        "dev/src/semantic/transfer_actions.cpp",
+        "pa17/plan.md",
+        "student.tests/pa17/transfer-shapes.cpp",
+        "student.tests/pa17/transfer_controls.py"
+      ],
+      "implementation_patch_sha256": "cec94d87620a56e2e1243f6be5c6d152446697dc6e7e2615f7f4a2a9d9d90aa5"
+    },
+    {
+      "commit": "794b150e491c5aabe25b7f9b8537a602267fba51",
+      "subject": "Separate base reachability from demanded object layout",
+      "paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/model.h",
+        "student.tests/pa17/qualified-fixed-base.cpp",
+        "student.tests/pa17/transfer_controls.py"
+      ],
+      "implementation_patch_sha256": "698518c7bf50fd5d86b111742978aca11c9444c688c4559730678af5dab1e2d3"
+    },
+    {
+      "commit": "411ad00e37b421dc1d3d85b5438e010bd099e025",
+      "subject": "Record validated PA17 transfer implementation handoff",
+      "paths": [
+        "pa17/plan.md",
+        "pa17/transfer-handoff.md",
+        "pa17/transfer-performance.md",
+        "student.tests/pa17/transfer-controls.json",
+        "student.tests/pa17/transfer-entry-controls.json",
+        "student.tests/pa17/transfer-evidence.json",
+        "student.tests/pa17/transfer-performance-before-fixed-receiver.json",
+        "student.tests/pa17/transfer-performance.json",
+        "student.tests/pa17/transfer-trace.cpp",
+        "student.tests/pa17/transfer_benchmark.py",
+        "student.tests/pa17/transfer_replay.py",
+        "student.tests/pa17/verify_transfer.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "7d04e8cec8c068ff91dfda3edbd576cbd084849e",
+      "subject": "Handle recursive candidate defaults and immediate query failures",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/candidate_substitution.cpp",
+        "dev/src/semantic/class_pattern_selection.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/query_call.cpp",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/special_members.cpp",
+        "dev/src/semantic/template_binding_declarations.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_class.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "dev/src/semantic/type_query.h",
+        "pa17/plan.md",
+        "student.tests/pa17/query-controls.json",
+        "student.tests/pa17/query_benchmark.py",
+        "student.tests/pa17/query_controls.py",
+        "student.tests/pa17/query_replay.py"
+      ],
+      "implementation_patch_sha256": "c419c5e00249315758c80535bcaa5f2de1a99ebdb8558bb84de3e0bb392a04a2"
+    },
+    {
+      "commit": "1e5f15ab1e9a15244c675b9936d1d57c69c9eede",
+      "subject": "Preserve specialization deletion ownership without entity growth",
+      "paths": [
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/template_specialization.cpp",
+        "pa17/plan.md",
+        "pa17/query-handoff.md",
+        "student.tests/pa17/query-controls.json",
+        "student.tests/pa17/query-entry-controls.json",
+        "student.tests/pa17/query-performance-before-packing.json",
+        "student.tests/pa17/query-trace.cpp",
+        "student.tests/pa17/query_controls.py",
+        "student.tests/pa17/verify_query.py"
+      ],
+      "implementation_patch_sha256": "686003f1e99c0a12f94e7ffee3470fa73d990e7743680c4a7572b51d38cc3ced"
+    },
+    {
+      "commit": "f284514b703400226140886a4d353a4953415f31",
+      "subject": "Avoid redundant defaults work for fully deduced candidates",
+      "paths": [
+        "dev/src/semantic/candidate_substitution.cpp",
+        "pa17/plan.md",
+        "pa17/query-handoff.md",
+        "student.tests/pa17/query-performance-before-fastpath.json",
+        "student.tests/pa17/query_benchmark.py",
+        "student.tests/pa17/verify_query.py"
+      ],
+      "implementation_patch_sha256": "e4e5744cc93c2c9ef7800d9619d3312288e76259c6ec556cdaa37a460faf1d22"
+    },
+    {
+      "commit": "7cc89281e1b51eefd93a96cb24dbd048ee82ddce",
+      "subject": "Record validated PA17 query implementation handoff",
+      "paths": [
+        "pa17/plan.md",
+        "pa17/query-handoff.md",
+        "pa17/query-performance.md",
+        "student.tests/pa17/query-evidence.json",
+        "student.tests/pa17/query-performance.json"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "8654829ccc511b0f0a143aaa6227046af741f098",
+      "subject": "Plan PA17 static storage implementation and reference proof",
+      "paths": [
+        "pa17/plan.md"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "6a1a51a840203501e5b9ab84ff47da10adcd6da4",
+      "subject": "Own static member definitions and retain initializer read facts",
+      "paths": [
+        "dev/src/lowering/expression.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/template_checks.cpp",
+        "dev/src/semantic/template_definition.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "student.tests/pa17/storage-entry-controls-initial.json",
+        "student.tests/pa17/storage-entry-controls.json",
+        "student.tests/pa17/storage_benchmark.py",
+        "student.tests/pa17/storage_controls.py",
+        "student.tests/pa17/storage_replay.py"
+      ],
+      "implementation_patch_sha256": "8ca422c296125b15549622ec9a2a2efbbc92836127303520cb8e5d191b5a1d9a"
+    },
+    {
+      "commit": "3c7eeea2bbc0a1ba89c5c189b500f1a5cf8b129b",
+      "subject": "Correct PA17 static initialization oracles with standard proofs",
+      "paths": [
+        "pa17/storage-references.md",
+        "pa17/tests/general/300-constexpr-static-fn-template-address-pack.ref",
+        "pa17/tests/general/300-dependent-hidden-friend-static-member-definition.ref",
+        "pa17/tests/general/300-function-template-local-static-per-specialization.ref",
+        "pa17/tests/general/300-namespace-function-template-hides-outer-callable-object.ref",
+        "pa17/tests/general/400-alias-nontype-pack-partial-base.ref",
+        "pa17/tests/spec/300-rooted-qualified-static-data-member-template-definition.ref",
+        "student.tests/pa17/storage-reference-observations-preliminary.json",
+        "student.tests/pa17/storage-reference-observations.json",
+        "student.tests/pa17/storage_reference_corrections.py",
+        "student.tests/pa17/storage_reference_proof.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "119fa9feb12fbc002a2c49c6ae9fad66d73f8066",
+      "subject": "Record validated PA17 storage implementation handoff",
+      "paths": [
+        "pa17/plan.md",
+        "pa17/storage-handoff.md",
+        "pa17/storage-performance.md",
+        "student.tests/pa17/storage-controls.json",
+        "student.tests/pa17/storage-evidence.json",
+        "student.tests/pa17/storage-performance.json",
+        "student.tests/pa17/storage-trace.cpp",
+        "student.tests/pa17/verify_storage.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "1f319dac00b420970e771382344b914cd6cd8d0f",
+      "subject": "Preserve qualified receiver paths and query access provenance",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/member_receiver.cpp",
+        "dev/src/semantic/overload.cpp",
+        "dev/src/semantic/query_call.cpp",
+        "dev/src/semantic/query_operator.cpp",
+        "dev/src/semantic/template_call_facts.cpp",
+        "dev/src/semantic/template_checks.cpp",
+        "dev/src/semantic/template_conversion_facts.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "dev/src/semantic/type_query.h",
+        "student.tests/pa17/checkpoint60-controls.json",
+        "student.tests/pa17/checkpoint60-entry-controls.json",
+        "student.tests/pa17/checkpoint60-trace.cpp",
+        "student.tests/pa17/checkpoint60_benchmark.py",
+        "student.tests/pa17/checkpoint60_controls.py",
+        "student.tests/pa17/checkpoint60_replay.py"
+      ],
+      "implementation_patch_sha256": "3e98a6f90baed82e04c2cb642c04ab7c2fc77e6fcf75858b9040c453b68f791d"
+    },
+    {
+      "commit": "3ad8f2f429fa72f4f314931edacc30be488e6dcd",
+      "subject": "Carry qualified subobjects and constexpr body dependencies through evaluation",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/abi/itanium/expression_encoder.cpp",
+        "dev/src/abi/itanium/graph_validation.cpp",
+        "dev/src/lowering/query_abi.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_addresses.cpp",
+        "dev/src/semantic/constant_execution.cpp",
+        "dev/src/semantic/constant_queries.cpp",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/deferred_function_uses.cpp",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/member_receiver.cpp",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/query_call.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "student.tests/pa17/checkpoint60-controls.json",
+        "student.tests/pa17/checkpoint60-entry-controls.json",
+        "student.tests/pa17/checkpoint60-performance-before-constant-receiver.json",
+        "student.tests/pa17/checkpoint60-trace.cpp",
+        "student.tests/pa17/checkpoint60_benchmark.py",
+        "student.tests/pa17/checkpoint60_controls.py",
+        "student.tests/pa17/record_checkpoint60.py",
+        "student.tests/pa17/verify_checkpoint60.py"
+      ],
+      "implementation_patch_sha256": "37048fa263ffb2bb168544229171c9ccb05122df3ea24d8ff2b1419fb1ce9e40"
+    },
+    {
+      "commit": "2290a7bf8b56bc33e6ad975a8ae714a341f55ce5",
+      "subject": "Verify inherited LowIR property controls in PA17 audit evidence",
+      "paths": [
+        "student.tests/pa17/verify_checkpoint60.py"
+      ],
+      "implementation_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "combined_implementation_paths": [
+    "dev/frontend_source_sets.mk",
+    "dev/src/abi/itanium/expression_encoder.cpp",
+    "dev/src/abi/itanium/graph_validation.cpp",
+    "dev/src/lowering/expression.cpp",
+    "dev/src/lowering/query_abi.cpp",
+    "dev/src/lowering/values.cpp",
+    "dev/src/lowering/virtuals.cpp",
+    "dev/src/semantic/analyzer.h",
+    "dev/src/semantic/candidate_substitution.cpp",
+    "dev/src/semantic/class_pattern_selection.cpp",
+    "dev/src/semantic/constant_addresses.cpp",
+    "dev/src/semantic/constant_array.cpp",
+    "dev/src/semantic/constant_execution.cpp",
+    "dev/src/semantic/constant_objects.cpp",
+    "dev/src/semantic/constant_queries.cpp",
+    "dev/src/semantic/conversion.cpp",
+    "dev/src/semantic/declaration.cpp",
+    "dev/src/semantic/deferred_function_uses.cpp",
+    "dev/src/semantic/expression.cpp",
+    "dev/src/semantic/member.cpp",
+    "dev/src/semantic/member_receiver.cpp",
+    "dev/src/semantic/model.h",
+    "dev/src/semantic/operators.cpp",
+    "dev/src/semantic/output.cpp",
+    "dev/src/semantic/overload.cpp",
+    "dev/src/semantic/query_call.cpp",
+    "dev/src/semantic/query_operator.cpp",
+    "dev/src/semantic/special_members.cpp",
+    "dev/src/semantic/template_binding_declarations.cpp",
+    "dev/src/semantic/template_call.cpp",
+    "dev/src/semantic/template_call_facts.cpp",
+    "dev/src/semantic/template_checks.cpp",
+    "dev/src/semantic/template_class.cpp",
+    "dev/src/semantic/template_conversion_facts.cpp",
+    "dev/src/semantic/template_definition.cpp",
+    "dev/src/semantic/template_specialization.cpp",
+    "dev/src/semantic/transfer_actions.cpp",
+    "dev/src/semantic/type_builder.cpp",
+    "dev/src/semantic/type_query.cpp",
+    "dev/src/semantic/type_query.h"
+  ],
+  "combined_patch_sha256": "6cf9d1711970c74406342dd4b9a71e47427e04d4e8576a897faeea222eaa452e"
+}

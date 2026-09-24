@@ -1,0 +1,25 @@
+{
+  "contract": "doc/itanium-mangling.txt:541-578,635-649 (member access and unresolved-name grammar)",
+  "checks": [
+    {
+      "name": "query_dependent_qualifier",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/checkpoint60/final-controls/checkpoint60/query_dependent_qualifier.cpp",
+      "source_sha256": "34d73ea1e152fb283218ed348148cd3c9e2462c3db7017575410dd748fb4e204",
+      "lowir_path": "/home/vishvananda/work/private/v4codex/artifacts/checkpoint60/final-controls/checkpoint60/query_dependent_qualifier.lowir",
+      "lowir_sha256": "d4218668e4b4fad1039a7d27eda561499d2b97772d9f3a0c40066716410a1e41",
+      "required_abi_fragment": "DTcldtfp_sr1RE1fEE",
+      "symbol": "_Z4readI1DI1REEDTcldtfp_sr1RE1fEERKT_",
+      "decoded": "decltype (({parm#1}.R::f)()) read<D<R> >(D<R> const&)"
+    },
+    {
+      "name": "query_nested_template_qualifier",
+      "source_path": "/home/vishvananda/work/private/v4codex/artifacts/checkpoint60/final-controls/checkpoint60/query_nested_template_qualifier.cpp",
+      "source_sha256": "1cce546dfc2df8316dec2a9384209d198b09654c22c941a70902e867ed8fce27",
+      "lowir_path": "/home/vishvananda/work/private/v4codex/artifacts/checkpoint60/final-controls/checkpoint60/query_nested_template_qualifier.lowir",
+      "lowir_sha256": "b78778c907252b6f70d1f982890c2790645655eecbc43c31a5c8fdd7bc3d57b4",
+      "required_abi_fragment": "DTcldtfp_sr1n1BIiEE1fEE",
+      "symbol": "_Z4readI1DIcEEDTcldtfp_sr1n1BIiEE1fEERKT_",
+      "decoded": "decltype (({parm#1}.n::B<int>::f)()) read<D<char> >(D<char> const&)"
+    }
+  ]
+}
