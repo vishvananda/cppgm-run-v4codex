@@ -30,4 +30,16 @@ runner.BAD={
  'base_incomplete':'struct B;template<class T>T choose();template<class T>struct A:decltype(choose<T>()){};A<B>a;int main(){}',
  'base_final':'struct B final{};template<class T>T choose();template<class T>struct A:decltype(choose<T>()){};A<B>a;int main(){}',
 }
+runner.GOOD.update({
+ 'out_of_class_nttp':GATE+'template<class T>struct A{template<class U,Enable<sizeof(U)==sizeof(T),int> =0>int f(U);template<class U,Enable<sizeof(U)!=sizeof(T),int> =0>int f(U);};template<class V>template<class W,Enable<sizeof(W)==sizeof(V),int>>int A<V>::f(W){return 3;}template<class V>template<class W,Enable<sizeof(W)!=sizeof(V),int>>int A<V>::f(W){return 8;}int main(){A<int>a;A<long>b;return a.f(0)!=3||a.f(0L)!=8||b.f(0)!=8||b.f(0L)!=3;}',
+ 'out_of_class_reference':GATE+SAME+'template<class T>struct A{template<class U>Enable<sizeof(U)==sizeof(T),T&> f(U&);};template<class V>template<class W>Enable<sizeof(W)==sizeof(V),V&>A<V>::f(W&x){return x;}int main(){int n=3;A<int>a;static_assert(Same<decltype(a.f(n)),int&>::value,"");a.f(n)=7;return n!=7;}',
+ 'out_of_class_alias':GATE+'template<class T>struct A{using Value=T;template<class U>Enable<sizeof(U)==sizeof(T),Value> f(U);};template<class V>template<class W>Enable<sizeof(W)==sizeof(V),typename A<V>::Value>A<V>::f(W x){return x;}int main(){A<int>a;A<long>b;return a.f(3)!=3||b.f(4L)!=4;}',
+ 'class_query_isolation':GATE+'template<class T>struct A{template<class U>using R=Enable<sizeof(U)==sizeof(T),int>;template<class U>R<U> f(U){return 3;}};template<class T>struct B{template<class U>using R=Enable<sizeof(U)==sizeof(T),int>;template<class U>R<U> f(U){return 8;}};int main(){A<int>a;B<int>b;return a.f(0)!=3||b.f(0)!=8;}',
+ 'failed_expansion_argument':'template<class...>struct List{};struct X{using type=int;};template<class...T>List<typename T::type...>probe(T...);long probe(...);int main(){static_assert(sizeof(decltype(probe(X(),X())))==1,"");static_assert(sizeof(decltype(probe(X(),0)))==sizeof(long),"");return 0;}',
+})
+runner.BAD.update({
+ 'definition_wrong_operator':GATE+'template<class T>struct A{template<class U>Enable<sizeof(U)==sizeof(T),int>f(U);};template<class V>template<class W>Enable<sizeof(W)!=sizeof(V),int>A<V>::f(W){return 1;}int main(){}',
+ 'definition_wrong_parameter':GATE+'template<class T>struct A{template<class U>Enable<sizeof(U)==sizeof(T),int>f(U);};template<class V>template<class W>Enable<sizeof(W)==sizeof(V),int>A<V>::f(W*){return 1;}int main(){}',
+ 'definition_bound_name':'const int count=1;template<int>struct Tag{};template<class T>struct A{static const int count=2;template<class U>Tag<sizeof(U)+count>f(U);};template<class T>template<class U>Tag<sizeof(U)+count>A<T>::f(U){return {};};int main(){}',
+})
 if __name__=='__main__':sys.exit(0 if runner.run(Path(sys.argv[1]).resolve(),Path(sys.argv[2])) else 1)
