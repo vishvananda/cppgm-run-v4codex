@@ -194,9 +194,12 @@ void Encoder::local_component(Id id) {
         }
     } else {
         output += "Ul";
-        if (!n.count) output += 'v';
+        if (!n.count && !n.c) output += 'v';
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
-        output += 'E' + std::to_string(n.value) + '_';
+        if (n.c) output += 'z';
+        output += 'E';
+        if (!n.b) output += std::to_string(n.value);
+        output += '_';
     }
 }
 std::string mangle(Graph& graph, const Target& target) {

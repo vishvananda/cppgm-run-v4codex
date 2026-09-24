@@ -106,6 +106,15 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::NamespaceAlias: case Kind::StaticAssert: case Kind::Class: case Kind::ClassForward: case Kind::Enum:
         declaration(n, s); return;
     case Kind::Return:
+        if (auto id = closure_functions.get(current_function)) {
+            if (closures[id].inferred_return == n) {
+                return_type = types.unqualified(decay(expression(ast[n].first,s).type));
+                auto f = types[entities[current_function].type];
+                std::vector<TypeId> params(types.parameters.begin()+f.offset,types.parameters.begin()+f.offset+f.count);
+                entities[current_function].type = types.function(return_type,params,f.variadic,f.cv);
+                member_facts(current_function);
+            }
+        }
         if (class_value(return_type)) { record_class_return(n,s); return; }
         if (ast[n].first) {
             NodeId value_node = ast[n].first;

@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 const ScalarConsumption& Analyzer::scalar_consumption(EntityId object) const
@@ -17,8 +18,14 @@ bool Analyzer::private_scalar(EntityId object) const
 { return local_scalar(object) && !(types[entities[object].type].cv & 2) && !scalar_observations.get(object); }
 void Analyzer::observe_scalar(NodeId n)
 {
-    if (unevaluated_depth) return;
     EntityId e = expressions[n].entity;
+    if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth && e &&
+        (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Parameter) &&
+        !entities[e].is_static && !entities[e].external_decl &&
+        scopes[entities[e].owner].kind != ScopeKind::Namespace && scopes[entities[e].owner].kind != ScopeKind::Class &&
+        !encloses(entities[current_function].scope,entities[e].owner))
+        throw std::runtime_error("odr-use requires lambda capture");
+    if (unevaluated_depth) return;
     if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) entities[e].emission |= Entity::Used;
     if (private_scalar(e)) { scalar_observations.put(e,1); ++scalar_observation_count; }
 }

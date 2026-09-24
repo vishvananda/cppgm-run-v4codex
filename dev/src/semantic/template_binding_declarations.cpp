@@ -199,7 +199,9 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             for (auto c = ast[d].first; c; c = ast[c].next)
                 if (ast[c].kind != Kind::Parameters && ast[c].kind != Kind::Identifier && ast[c].kind != Kind::TrailingReturn)
                     dep |= bind_template_expression(c,s);
-            auto type = special ? bind_template_special_type(d,s) : bind_template_type(specs,d,s);
+            bool placeholder = !function && spec_has(specs,KW_AUTO);
+            if (placeholder) dep = true;
+            auto type = placeholder ? 0 : special ? bind_template_special_type(d,s) : bind_template_type(specs,d,s);
             if (type) function = types[type].kind == TypeKind::Function;
             auto kind = spec_has(specs,KW_TYPEDEF) ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
             auto id = special && ast[ast[name].last].op != KW_OPERATOR ? 0 : terminal(name);

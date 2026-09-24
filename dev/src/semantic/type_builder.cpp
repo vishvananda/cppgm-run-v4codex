@@ -169,7 +169,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
 {
     if (template_type_probe && !base) return 0;
     if (!n) return base;
-    if (definitions && !dynamic_array) if (auto type = reuse_template_type(n,s)) return type;
+    if (definitions && !dynamic_array && !deducing_placeholder) if (auto type = reuse_template_type(n,s)) return type;
     NodeId name = decl_name(n);
     if (name && !name_resolved) {
         auto owner = name_owner(name,s,true);
@@ -402,6 +402,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         e = selected;
     }
     else if (function) e = declare_function(owner, id, source, canonical, false, conversion_target);
+    else if (e && placeholder_objects.get(e) == d) {
+        entities[e].type = canonical; placeholder_objects.put(e,0);
+    }
     else if (e && entities[e].kind == kind) {
         if (calls && scopes[owner].kind == ScopeKind::Class && owner == s)
             throw std::runtime_error("duplicate class member");

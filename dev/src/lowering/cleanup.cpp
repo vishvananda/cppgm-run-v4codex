@@ -26,7 +26,10 @@ void Procedural::activate_temporary(EntityId e)
         emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::slot(SlotId(guard))});
     if (sem.object_lifetime(e)) return;
     EntityId dtor = sem.object_destructor(e);
-    if (!sem.temporary_cleanup(e)) return;
+    if (!sem.temporary_cleanup(e)) {
+        if (full_expression.argument_storage && sem.class_value(sem.entities[e].type)) close_expression_region();
+        return;
+    }
     if (full_expression.scalar_unreachable) { close_expression_region(); return; }
     bool reopen = full_expression.open;
     close_expression_region();
@@ -36,7 +39,7 @@ void Procedural::activate_temporary(EntityId e)
     temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
     // The full-expression result has no remaining evaluation after activation.
     // Its cleanup calls establish their own live suffix if they can throw.
-    if (reopen && e != full_expression.result_temporary) open_expression_region();
+    if (reopen && e != full_expression.result_temporary && !full_expression.argument_storage) open_expression_region();
 }
 SlotId Procedural::source_slot(EntityId e)
 {

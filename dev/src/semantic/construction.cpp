@@ -115,9 +115,13 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
         member_facts(ctor);
         auto m = entities[ctor].member_info;
         members[m].synthetic = members[m].constructor = true;
+        members[m].deleted = closure(cls).function != 0;
         class_facts[c].implicit_constructor = ctor;
     }
-    if (demand) { check_default_constructor(ctor); demand_member(ctor); }
+    if (demand) {
+        if (members[entities[ctor].member_info].deleted) throw std::runtime_error("deleted default constructor");
+        check_default_constructor(ctor); demand_member(ctor);
+    }
     return ctor;
 }
 bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)

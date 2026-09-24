@@ -97,7 +97,7 @@ void Analyzer::finish()
         for (EntityId seen : chain) delegation_states.put(seen, 2);
         chain.clear();
     }
-    if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); }
+    if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); finish_closures(); }
     // Semantic discovery order is independent of deterministic ABI publication.
     std::sort(vtable_emission.begin(), vtable_emission.end());
     for (EntityId e : jump_bodies) finish_body(e);
@@ -255,9 +255,16 @@ void Analyzer::simple(NodeId n, ScopeId s)
         schedule_body({ast[d].next, d, entities[e].owner, e, n});
         return;
     }
+    TypeId shared_deduction = 0;
     for (NodeId item = ast[list].first; item; item = ast[item].next) {
         NodeId d = ast[item].first;
-        TypeId t = declarator(d, base, s);
+        TypeId deduction = 0;
+        TypeId t = calls && spec_has(specs,KW_AUTO) && !child(d,Kind::Parameters) ?
+            deduced_object_type(specs,d,ast[d].next,s,deduction) : declarator(d, base, s);
+        if (deduction) {
+            if (shared_deduction && deduction != shared_deduction) throw std::runtime_error("inconsistent auto declaration types");
+            shared_deduction = deduction;
+        }
         EntityId e = declare_object(d, ast[d].next, t, specs, s, n);
         if (calls && scopes[s].kind == ScopeKind::Class && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs))) {
             auto alignment = std::max(alignment_attributes(n, s), alignment_attributes(specs, s));

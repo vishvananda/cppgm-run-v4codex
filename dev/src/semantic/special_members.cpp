@@ -126,7 +126,7 @@ void Analyzer::ensure_transfers(TypeId t, bool assignment)
         auto m = entities[e].member_info;
         members[m].synthetic = true; members[m].constructor = !assignment;
         members[m].transfer = TransferKind(kind);
-        members[m].deleted = kind == copy && (declared & (2|8));
+        members[m].deleted = (kind == copy && (declared & (2|8))) || (assignment && closure(cls).function);
         if (!assignment) class_facts[info].constructor = merge_lookup(class_facts[info].constructor, e);
     }
 }

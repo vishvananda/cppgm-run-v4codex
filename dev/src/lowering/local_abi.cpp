@@ -52,6 +52,7 @@ bool Procedural::local_abi_type(TypeId t)
             local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
     } else if (type.kind == TypeKind::Named) {
         auto e = sem.entities[type.entity];
+        local |= sem.closure(type.entity).function != 0;
         local |= local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
         for (unsigned j = 0; j < args.count; ++j) local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
@@ -67,6 +68,7 @@ bool Procedural::local_abi_scope(semantic::ScopeId s)
     if (local_abi_scopes[s]) return local_abi_scopes[s] == 2;
     auto scope = sem.scopes[s];
     bool local = scope.kind == semantic::ScopeKind::Function || local_abi_scope(scope.parent);
+    if (scope.kind == semantic::ScopeKind::Class) local |= sem.closure(scope.entity).function != 0;
     if (scope.kind == semantic::ScopeKind::Class && sem.entities[scope.entity].specialization)
         local |= local_abi_type(sem.entities[scope.entity].type);
     local_abi_scopes[s] = local ? 2 : 1; return local;

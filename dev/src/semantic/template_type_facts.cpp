@@ -175,7 +175,8 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         if (!type) throw std::runtime_error("invalid substituted declaration type");
     }
     if (types[type].kind == TypeKind::Function &&
-        (ast[node].kind == syntax::Kind::Declarator || ast[node].kind == syntax::Kind::AbstractDeclarator)) {
+        (ast[node].kind == syntax::Kind::Declarator || ast[node].kind == syntax::Kind::AbstractDeclarator ||
+         ast[node].kind == syntax::Kind::LambdaDeclarator)) {
         // The callable type alone is insufficient: a body consumes the raw
         // parameter cv/array/function forms retained by the source signature.
         // Prototype queries already own ordinal/type identities, so applying

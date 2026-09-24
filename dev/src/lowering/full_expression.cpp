@@ -37,7 +37,8 @@ bool Procedural::unwind_expression(NodeId n)
     };
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));
-    for (NodeId child = ast[n].first; child; child = ast[child].next) result |= unwind_expression(child);
+    if (ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Sizeof && ast[n].kind != Kind::TypeTrait)
+        for (NodeId child = ast[n].first; child; child = ast[child].next) result |= unwind_expression(child);
     unwind_expressions[n] = result ? 2 : 1; return result;
 }
 void Procedural::begin_full_expression(NodeId n, bool omit_result)
@@ -57,6 +58,7 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
 void Procedural::guard_expression(NodeId n, bool storage_ready)
 {
     if (!full_expression.enabled || full_expression.open || emitting_cleanup || full_expression.suppress_guard) return;
+    if (ast[n].kind == Kind::Lambda && !unwind_expression(n) && !cleanup_expression(n)) return;
     while (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer)
         n = ast[n].first;
     if (ast[n].kind == Kind::Conditional || (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR))) return;

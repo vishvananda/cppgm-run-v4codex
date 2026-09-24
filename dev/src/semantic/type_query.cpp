@@ -40,6 +40,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
+    case Kind::Lambda:
+        // An unevaluated lambda is forbidden in C++11. The source binder may
+        // still ask for a dependent initializer's type before instantiation.
+        if (template_type_probe) return 0;
+        throw std::runtime_error("lambda in unevaluated operand");
     case Kind::PackExpression:
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
     case Kind::New: {

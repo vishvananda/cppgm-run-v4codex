@@ -78,6 +78,10 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = emit(Opcode::Const, type(c.type), {(type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits))}); v.type = c.type; return v;
     }
     switch (node.kind) {
+    case Kind::Lambda: {
+        auto value = class_address(sem.object_fact(n).temporary,fact.type);
+        value.type = fact.type; value.address = true; return value;
+    }
     case Kind::New: return placement_new(n);
     case Kind::Delete: return delete_expression(n);
     case Kind::Literal: {
@@ -337,6 +341,17 @@ Value Procedural::call(NodeId n, Value destination)
     call_work.push_back(Operand());
     if (indirect_result) call_work.push_back(destination.operand);
     auto object_use = sem.object_fact(n);
+    bool saved_storage = full_expression.argument_storage;
+    bool storage_only = fact.argument_count != 0;
+    for (unsigned j = 0; j < fact.argument_count; ++j) {
+        auto arg = sem.call_argument(fact,j), target = sem.conversion_fact(fact.conversions+j).target;
+        if (reference(target)) target = sem.types[target].child;
+        storage_only &= ast[arg].kind == Kind::Lambda && sem.types.unqualified(target) == sem.types.unqualified(sem.expression_fact(arg).type);
+    }
+    // Captureless arguments only require addressable storage. Finish receiver
+    // activation before allocating those slots; the actual call opens its
+    // own region using the completed receiver's live suffix.
+    full_expression.argument_storage |= storage_only;
     Value member_function;
     if (object_use.member_pointer) {
         auto object = member_pointer_object(object_use,&member_function);
@@ -359,6 +374,7 @@ Value Procedural::call(NodeId n, Value destination)
             if (sem.types[object.type].kind == TypeKind::Pointer) load(object);
         }
     }
+    full_expression.argument_storage = saved_storage;
     if (fact.form == semantic::ExpressionForm::LiteralCall) literal_arguments(n);
     // The course's indirect-call fixtures evaluate arguments before fetching
     // the callee; C++11 leaves their relative evaluation order unspecified.

@@ -147,6 +147,14 @@ public:
     const ConstantObject& constant_construction(NodeId n, TypeId t);
     const ConstantObject& constant_value_data(Constant value);
     std::vector<ConstantField> constant_fields;
+    struct Closure {
+        EntityId entity = 0, function = 0, enclosing = 0, conversion = 0, thunk = 0;
+        NodeId source = 0, inferred_return = 0;
+        TypeId signature = 0;
+        unsigned ordinal = 0;
+    };
+    const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
+    const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
 private:
     FactState completion_state = FactState::NotStarted;
     Index list_index, direct_list_index, empty_list_index, empty_direct_list_index;
@@ -270,6 +278,15 @@ private:
     std::uint64_t unit_transfer_fields = 0;
     std::uint64_t parameter_queries = 0, parameter_query_work = 0;
     Index field_index, local_class_names, local_enum_functions, local_enum_ordinals;
+    std::vector<Closure> closures = std::vector<Closure>(1);
+    Index closure_entities, closure_functions, closure_occurrences, closure_adapters;
+    Expression lambda_expression(NodeId n, ScopeId s);
+    void bind_lambda_body(NodeId n, ScopeId s);
+    void finish_closures();
+    EntityId placeholder_parameter = 0;
+    Index placeholder_objects;
+    bool deducing_placeholder = false;
+    TypeId deduced_object_type(NodeId specs, NodeId declarator, NodeId initializer, ScopeId scope, TypeId& deduction);
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);

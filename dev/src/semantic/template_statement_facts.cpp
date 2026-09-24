@@ -73,7 +73,7 @@ void Analyzer::bind_template_return(NodeId n, ScopeId s)
     auto value = template_statement_value(c,s);
     if (!value.type) return;
     if (fundamental(return_type,FT_VOID)) {
-        if (!fundamental(value.type,FT_VOID)) throw std::runtime_error("value returned from void");
+        if (!fundamental(value.type,FT_VOID)) throw std::runtime_error("non-void return in retained void function");
         return;
     }
     auto id = c;

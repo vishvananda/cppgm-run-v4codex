@@ -106,7 +106,7 @@ std::string FactWriter::type(Id id) {
     case Kind::MemberPointer: return join_form({"member-pointer ", ref('t', n.a), " ", ref('t', n.b)});
     case Kind::Decltype: return join_form({"decltype ", ref('x', n.a)});
     case Kind::Local: return join_form({"local-type ", ref('c', n.a), " ", g.spelling(n.b), " ", std::to_string(n.value)});
-    case Kind::Lambda: return join_form({"lambda-closure ", ref('c', n.a), " ", std::to_string(n.value), list(n, 't')});
+    case Kind::Lambda: return join_form({"lambda-closure ", ref('c', n.a), " ", n.b ? "first" : std::to_string(n.value), list(n, 't'), n.c ? " ..." : ""});
     default: throw std::runtime_error("invalid type fact serialization");
     }
 }

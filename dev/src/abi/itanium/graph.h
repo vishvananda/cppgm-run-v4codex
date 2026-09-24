@@ -25,6 +25,9 @@ enum class Kind : std::uint8_t {
 struct Node {
     Kind kind = Kind::Name;
     Id a = 0, b = 0, c = 0; // kind-specific child IDs, string IDs, or enum values
+    // Lambda: a is the enclosing context, b marks the unsuffixed first
+    // closure; otherwise value is the explicit ABI discriminator (0, 1, ...).
+    // c marks an ellipsis in its parameter signature.
     std::uint64_t value = 0;
     Id begin = 0, count = 0;
 };

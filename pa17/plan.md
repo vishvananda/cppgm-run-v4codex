@@ -1,76 +1,43 @@
-# PA17 compact plan — implementation, loop 61
+# PA17 compact plan — implementation handoff, loop 61
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `2290a7bf8b56bc33e6ad975a8ae714a341f55ce5`
 
-Loop 61 entry: `9efd570fd4a0489a39d17fdabd0b05bf062604a6`, clean,
-340/343. Previous goal turn classified as progress: checkpoint audit records
-and validation changed authoritative evidence; no live test handle is inherited.
-Preserve the stage/review markers above. Implementation sequence:
+Target: **PA17 full-stage**. Entry `9efd570f` was clean at **340/343**;
+all three original failures now pass, with unchanged course coverage. This is an
+implementation handoff; Ralph's independent full-stage audit remains pending.
+The stage base and last-reviewed markers above are preserved.
 
-| Owner | Data flow / work bound | Validation |
+| Completed owner | Design/spec alignment and data flow | Work bound / validation |
 |---|---|---|
-| Full-expression cleanup regions | Semantic call effects and lifetime identities → expression region / suffix edges → typed LowIR; memoized expression walk and shared cleanup suffixes, proportional to consumed expressions/actions. Include ordinary live locals and temporary activation, including noexcept class calls. | Both cleanup failures, personal exceptional/normal lifetime controls, prior through report. |
-| Closure entities | Parsed lambda occurrence + substitution context → canonical closure and call operator → ordinary class value/call/ABI lowering; one entity/body per complete identity, no token-anchor identity or grammar replay. | Chained nonprimary closure failure; identity, substitution, signature, body and class-value consumers. |
+| Full-expression cleanup | Semantic call effects and live lifetime suffix → expression region → typed LowIR. Calls with live locals share the full-expression region; noexcept temporary activation retains the required structural regions. Closure argument storage precedes call protection after receiver activation. | Memoized expression walks plus shared cleanup suffixes, proportional to expressions/actions. Two original failures and 10 native/5 structural controls. |
+| Closure entities and signatures | Parsed occurrence + substitution context → unique class/call operator and retained body → ordinary value/call lowering. Source binding retains lookup; specialization publishes raw parameter types (including packs), return and noexcept facts. Function-pointer adapters demand the same operator body. | One closure per occurrence/context; one body check per specialization; flat entity indices; one O(L log L) ABI numbering pass. Original chained nonprimary failure and closure controls. |
+| Placeholder initialization | Canonical pending object → initializer type → existing typed deduction/substitution → declaration. Pending identity prevents shadowed self-reference; multi-declarator deductions must agree. | Proportional to typed declarator/initializer; no text reconstruction. Function-address selection preserves access/deletion checks. |
+| ABI publication | Typed closure context/signature → Itanium first/numbered discriminator → existing typed graph/encoder. Inspection facts preserve both the unsuffixed first closure and existing numeric discriminator forms. | ABI exact/roundtrip/source checks plus earlier PA9 contracts. No reference changes. |
 
-Freeze entry/final compiler binaries and fixed inputs for A/A + ABBA compiler
-latency/RSS and checked executable runtime/text evidence at PA17/O0. No optional
-optimization or numerical gate is introduced. Finish these related owners and
-record any remaining implementation separately from independent audit questions.
+Captureless closure support covers the PA17 fixture and adjacent consumers;
+captures and initializer-list deduction are not introduced. No native backend,
+optimization level or self-hosting surface is added (PA17 still uses the supplied
+backend for behavioral validation). Remaining known implementation in the two
+original groups: **none**. Independent review must assess whole-stage correctness
+and architecture; a passing implementation handoff does not waive that audit.
 
-Target: **PA17 full-stage**. Checkpoint audit complete; implementation remains
-incomplete and must not advance. Entry `119fa9fe` was clean at **340/343 with
-three failures** (make exit code 2). Reviewed all **15 commits / 40 implementation
-paths** in `e14b96fa..2290a7bf`, including all three handoffs, two audit
-implementation fixes and the evidence verifier correction. Benchmarks at `3ad8f2f4` have identical compiler sources.
-Previous goal turn: progress established by the committed storage handoff;
-no prior live compiler/test process remained.
+Performance evidence: frozen entry/final compiler comparison is being collected
+by `student.tests/pa17/handoff61_benchmark.py`. It includes fixed common inputs,
+cleanup/closure scaling, A/A + ABBA compiler latency/RSS, and checked executable
+runtime/text. Entry-rejected closure cases get final-only observations, never
+speedup claims. PA17/O0 has no mandated numeric ceiling or optional transform.
+Historical +15%, +16 MiB and 5.5× gates remain diagnostics under spec.md §9;
+all prior measurements and mandated correctness/coverage limits are preserved.
 
-| Completed owner / audit correction | Design and evidence |
+| Handoff ledger | Status |
 |---|---|
-| Transfer and automatic initialization | Canonical base graph/layout facts; bounded short-array stores and evaluated materializations; sparse memberwise transfer. Qualified calls now consume both selected receiver segments. |
-| Candidate and query facts | Complete active head/tuple keys, structured immediate failures, deletion ownership, source/instantiation snapshots, signature-only normalization. Naming/access provenance and typed member qualifiers survive substitution and ABI adaptation. |
-| Static definition and initializer demand | Prototype/signature/definition links and entity-keyed storage demand; typed function-address relocations. Six prior oracle corrections independently verified with reducers and standard proof. |
-| Constant and emission consumers | Constant calls/query fields consume recorded subobject paths. First runtime demand activates only deferred selected-callee edges of constexpr-checked bodies; deeper unevaluated operands and unused bodies stay dormant. |
+| 56 / checkpointAudit | `c43e8eb6..e14b96fa`; 324/343; [previous audit](audit-loop56.md). |
+| 57–59 / implement | Transfers, queries and storage; 324 → 330 → 333 → 340 / 343, including six proved reference corrections. |
+| 60 / checkpointAudit | `e14b96fa..2290a7bf`; accumulated ownership fixes; 340/343, prior 2266/2266, 610 controls; [audit](audit.md), [performance](checkpoint60-performance.md), [evidence](../student.tests/pa17/checkpoint60-evidence.json). |
+| 61 / implement | `9efd570f` entry; `2827d328` closes cleanup owner, closure increment closes the final failure. PA17 343/343 and prior 2266/2266; final evidence refresh pending. |
 
-Final checks: PA17 **340/343**, exactly the same three failing inputs; prior
-**2266/2266**; through PA17 **2606/2609**. File audit passes with the same three
-inherited warnings. All **610 personal controls** pass: 567 inherited plus 43
-new controls (entry fails 18/43). Course coverage remains 343 cases, with no source,
-status or comparison changes. The native trace and ABI qualifier checks pass.
-
-[Audit and ledger](audit.md), [range](../student.tests/pa17/checkpoint60-range.json),
-[performance](checkpoint60-performance.md), and
-[evidence](../student.tests/pa17/checkpoint60-evidence.json) bind the reviewed tip.
-Historical transfer/query/storage handoffs and measurements remain preserved,
-including the first audit campaign before constant/emission completion. PA17/O0
-has no mandated numerical ceiling. Historical +15%, +16 MiB and 5.5× targets
-remain diagnostics under spec.md §9. Necessary semantic/contract costs and later
-backend constraints do not add exit gates; correctness, coverage, bounded work
-and avoidance of unnecessary regressions remain required. No optional transform
-or broader optimization level was introduced. Audit common compiler ratios span
-0.9561–1.0336 (RSS −252 to +588 KiB); cumulative ratios span 0.9761–1.0378
-(RSS −140 to +2,324 KiB). Sparse transfer and eight-element array runtime benefits
-repeat; the required static-read boundary costs about 2% runtime and eight bytes.
-
-| Remaining implementation group | Failures | Required next work |
-|---|---:|---|
-| Closure entities | 1 | Closure identity, call-operator/body binding, class value and lifetime/lowering facts. |
-| Exception cleanup scheduling | 2 | Call-region boundaries and temporary/automatic cleanup order. |
-
-All accumulated independent review questions are closed. These three behavior
-failures remain unfinished implementation, not waivers. Avoidable handoff
-fragmentation split shared receiver, query and emission ownership across three
-increments, and the initial audit fix missed the constant consumer. Close broad
-owners together with their declaration, substitution, query, constant, emission,
-ABI and lowering consumers in future handoffs.
-
-| Loop / phase | Checkpoint ledger |
-|---|---|
-| 56 / checkpointAudit | `c43e8eb6..e14b96fa`; 324/343; [previous audit](audit-loop56.md) preserved. |
-| 57–59 / implement | Transfers, queries and storage; 324 → 330 → 333 → 340 / 343; three accepted handoffs, including six proved reference corrections. |
-| 60 / checkpointAudit | `e14b96fa..2290a7bf`; full accumulated review and ownership fixes; 340/343 unchanged, earlier 2266/2266, 610 controls, file audit and stage-scoped evidence pass. Two implementation groups remain. |
-
-Run `python3 student.tests/pa17/verify_checkpoint60.py`. Historical verifiers
-remain records of their frozen tips; the review markers above are the next audit
-baseline. The subsequent records commit contains no implementation edits.
+Handoff boundary: both remaining semantic owners are complete and reviewable
+as one implementation turn. Prior whole-stage findings/measurements remain in
+the linked records; independent full-stage audit is the next phase, not another
+unresolved implementation group.

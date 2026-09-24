@@ -288,6 +288,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_type_probes\":" << types.probes
         << ",\"semantic_constant_work\":" << constant_work
         << ",\"constexpr_validity_work\":" << constexpr_validity_work
-        << ",\"exception_work\":" << exception_work;
+        << ",\"exception_work\":" << exception_work
+        << ",\"closures\":" << closures.size()-1;
 }
 } }

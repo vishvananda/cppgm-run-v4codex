@@ -143,9 +143,15 @@ Id FactReader::type(const Words& w, std::size_t& p) {
     if (op == "local-type" || op == "lambda-closure") {
         Id ctx = reference(take(w, p), BindingKind::Context);
         Id name = op == "local-type" ? g.string(take(w, p)) : 0;
-        auto ordinal = index_value(take(w, p)); std::vector<Id> params;
-        while (p < w.size()) params.push_back(type(w, p));
-        return g.make(op == "local-type" ? Kind::Local : Kind::Lambda, ctx, name, 0, ordinal, params);
+        auto discriminator = take(w,p);
+        bool first = op == "lambda-closure" && discriminator == "first";
+        auto ordinal = first ? 0 : index_value(discriminator); std::vector<Id> params;
+        bool variadic = false;
+        while (p < w.size()) {
+            if (op == "lambda-closure" && w[p] == "...") { ++p; variadic = true; break; }
+            params.push_back(type(w, p));
+        }
+        return g.make(op == "local-type" ? Kind::Local : Kind::Lambda, ctx, first ? 1 : name, variadic, ordinal, params);
     }
     if (op == "namespace-lambda") {
         std::string name = take(w, p); Id parent = 0;

@@ -9,14 +9,20 @@ Function FactReader::function(const Words& w, std::size_t& p) {
     if (op == "local" || op == "lambda") {
         f.context = reference(take(w, p), BindingKind::Context);
         Id source = op == "local" ? g.string(take(w, p)) : 0;
-        auto ordinal = op == "lambda" ? index_value(take(w, p)) : 0;
+        auto discriminator = op == "lambda" ? take(w,p) : "0";
+        bool first = op == "lambda" && discriminator == "first";
+        auto ordinal = first ? 0 : index_value(discriminator);
         const std::string terminal = take(w, p);
         if (!abi_find_terminal_kind(terminal, &f.terminal)) f.name = g.name(0, terminal);
         if (op == "local") ordinal = index_value(take(w, p));
         std::vector<Id> params;
-        while (p < w.size()) params.push_back(type(w, p));
+        bool variadic = false;
+        while (p < w.size()) {
+            if (op == "lambda" && w[p] == "...") { ++p; variadic = true; break; }
+            params.push_back(type(w, p));
+        }
         f.local_owner = g.make(op == "local" ? Kind::Local : Kind::Lambda,
-            f.context, source, 0, ordinal, params);
+            f.context, first ? 1 : source, variadic, ordinal, params);
         return f;
     }
     if (op == "namespace-lambda") {
@@ -158,10 +164,16 @@ void FactReader::function_record(const Words& w) {
     else if (op == "local-context" || op == "lambda-context") {
         f.context = reference(take(w, p), BindingKind::Context);
         Id name = op == "local-context" ? g.string(take(w, p)) : 0;
-        auto ordinal = index_value(take(w, p)); std::vector<Id> params;
-        while (p < w.size()) params.push_back(type(w, p));
+        auto discriminator = take(w,p);
+        bool first = op == "lambda-context" && discriminator == "first";
+        auto ordinal = first ? 0 : index_value(discriminator); std::vector<Id> params;
+        bool variadic = false;
+        while (p < w.size()) {
+            if (op == "lambda-context" && w[p] == "...") { ++p; variadic = true; break; }
+            params.push_back(type(w, p));
+        }
         f.local_owner = g.make(op == "local-context" ? Kind::Local : Kind::Lambda,
-            f.context, name, 0, ordinal, params);
+            f.context, first ? 1 : name, variadic, ordinal, params);
         f.terminal = ABI_TERMINAL_CALL;
     } else if (op == "namespace-lambda-context") {
         std::string source = take(w, p); Id owner = 0;

@@ -113,6 +113,10 @@ void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
     bool first_use = !(entities[e].emission & Entity::Used);
     entities[e].emission |= Entity::Used;
     if (first_use) activate_deferred_function_uses(e);
+    if (first_use && closure_adapter(e).function) {
+        auto adapter = closure_adapter(e);
+        use_selected_function(e == adapter.conversion ? adapter.thunk : adapter.function,true);
+    }
     if (definitions && entities[e].specialization && !entities[e].template_info) demand_specialization(e);
     std::uint32_t m = entities[e].member_info;
     if (m) { members[m].referenced = true; members[m].demand_reasons |= static_cast<unsigned char>(reason); }

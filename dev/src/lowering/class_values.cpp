@@ -32,12 +32,14 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
     auto materialized = construction ? sem.conversion_objects[c.materialization] : semantic::ConversionObject();
     bool elided = construction ? materialized.elided : c.empty_copy && fact.category == ValueCategory::Prvalue;
+    if (elided && ast[n].kind == Kind::Lambda) return; // Captureless closure has no initialized subobjects.
     if (construction && materialized.branches) { conditional(n,false,destination,materialized.branches,terminal); return; }
     if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination,0,terminal); return; }
     if (elided && fact.form == semantic::ExpressionForm::ListValue) {
         list_conversion(sem.conversion_fact(fact.conversions),destination); return;
     }
     if (elided && fact.form == semantic::ExpressionForm::Construction) {
+        if (terminal && result_type() == IRType::Void && sem.empty_class(fact.type) && !sem.constructor_needed(sem.facts[n].entity)) return;
         construct(sem.facts[n].entity,n,destination); return;
     }
     if (elided && fact.form == semantic::ExpressionForm::Cast) {

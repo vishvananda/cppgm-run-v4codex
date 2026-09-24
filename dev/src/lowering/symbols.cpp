@@ -38,7 +38,14 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::Named: {
         auto e = sem.entities[t.entity];
         if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
-        else if (sem.local_function(t.entity))
+        else if (sem.closure(t.entity).function && sem.closure(t.entity).enclosing) {
+            auto closure = sem.closure(t.entity);
+            auto f = sem.types[closure.signature];
+            std::vector<abi_mangle::Id> params;
+            for (unsigned i = 0; i < f.count; ++i) params.push_back(abi_type(sem.types.parameters[f.offset+i]));
+            result = abi.make(abi_mangle::Kind::Lambda,abi_function_context(closure.enclosing),!closure.ordinal,f.variadic,
+                closure.ordinal ? closure.ordinal-1 : 0,params);
+        } else if (sem.local_function(t.entity))
             result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
         else result = abi_entity_name(t.entity);
         break;
@@ -290,11 +297,11 @@ void Procedural::run()
         if (sem.scopes[entity.owner].kind != semantic::ScopeKind::Namespace && !member && !sem.local_static(e)) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && !entity.is_static) continue;
         if (member && entity.kind == semantic::EntityKind::Function && sem.member_fact(e).in_class_body && !sem.member_demanded(e)) continue;
-        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
+        if (member && entity.kind == semantic::EntityKind::Function && !entity.body && (!sem.member_demanded(e) || (sem.synthetic_member(e) && !sem.closure_adapter(e).function && !sem.member_fact(e).retained_root && !(sem.destructor_member(e) ? sem.destructor_needed(e) : sem.constructor_needed(e))))) continue;
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function || entity.template_info) continue;
-        bool defined = entity.body || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
+        bool defined = entity.body || sem.closure_adapter(e).function || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
         Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];
         if (existing.kind == Symbol::FunctionSymbol) {
@@ -377,6 +384,7 @@ void Procedural::run()
 }
 void Procedural::function_body(EntityId e, bool base)
 {
+    if (sem.closure_adapter(e).function) { closure_adapter(e); return; }
     if (sem.entities[e].body) sem.require_body_facts(e);
     function = FunctionId(p.symbols[(base ? base_symbols[e] : symbols[e]).index-1].entity);
     builder.reset(new FunctionBuilder(p, function));

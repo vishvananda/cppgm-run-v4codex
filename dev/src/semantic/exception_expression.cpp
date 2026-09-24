@@ -69,7 +69,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     auto node = ast[n]; auto x = expressions[n];
     // These operands are unevaluated, including nested noexcept. Their type
     // and validity have already been checked by semantic construction.
-    if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
+    if (node.kind == Kind::Lambda || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
     bool result = node.kind != Kind::Throw;
     auto arrow = arrow_chains[object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) {

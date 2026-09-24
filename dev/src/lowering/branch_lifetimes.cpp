@@ -50,6 +50,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     if (incoming) if (auto call = conversion_call(sem.conversion_fact(incoming))) arguments(*call);
     for (unsigned i = 0; i < expression.count; ++i)
         if (auto call = conversion_call(sem.conversion_fact(expression.conversions+i))) arguments(*call);
+    if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
             (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
