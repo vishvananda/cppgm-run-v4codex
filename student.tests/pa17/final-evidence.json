@@ -1,0 +1,1097 @@
+{
+  "entry": "0970f3f01f25686b949edbb82478fda6c01d0c25",
+  "implementation_tip": "12140852e1f6ff10304c7b70851f349ca540e4a1",
+  "implementation_tree": "2f209433892945740a2a15f09d5ff6b9556bbb59",
+  "compiler_sha256": "4436d458cdd896585e5cb7065bf5e751644288ad9fc4cd4b09e576c3434ea4ca",
+  "stage": {
+    "passed": 343,
+    "total": 343,
+    "through_passed": 2609,
+    "through_total": 2609,
+    "stages": 17
+  },
+  "course_trees": {
+    "scripts": "ed4bd8a4ac5ba7038912ee6ac8bd6dcae3d36782",
+    "reference-binaries": "df62b63d88bad7300b4ff522d8b2d75350a63d91",
+    "pa1/tests": "4de8c9d4f000e92da70076ff56d736e4ffef4ed9",
+    "pa1/scripts": "36f0883f95f6ab5240f963a978fb0448c8cc284f",
+    "pa1/Makefile": "ddf4be03505d5ac546c59321140aeda3f75c83ef",
+    "pa2/tests": "2af8bf8b8b01a61ef9427531a7359d146c6ab7f6",
+    "pa2/scripts": "65082e11f542bb29221bcc64c24b9ac0e661c6bd",
+    "pa2/Makefile": "a415ea9160cb312d7a3c1193bbd92f8f4eb38623",
+    "pa3/tests": "55e56b024b102b1fcb6c1013987b3763380cdcbc",
+    "pa3/scripts": "65082e11f542bb29221bcc64c24b9ac0e661c6bd",
+    "pa3/Makefile": "faeb053ce4fb6377566e2ed97221ab8c065ba186",
+    "pa4/tests": "6b0b69416c153c010655e69dd1f5046877655767",
+    "pa4/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa4/Makefile": "ff9a13aca8cdfdae6355f663cdc47389a771fd78",
+    "pa5/tests": "ff71e073867365053294eaaf7aeff6fdb33bd8c5",
+    "pa5/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa5/Makefile": "ff1cbb8bbc1e1699acdbce7936fb4d8645212c05",
+    "pa6/tests": "c93430892466a7ed139893f4385eb0daaed28eca",
+    "pa6/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa6/Makefile": "4fb1d275cbaedca045ec9ad16ff72be1bb2ad7ea",
+    "pa7/tests": "49dee0a8ec23539d9c031d4e890a71346cbe4fd8",
+    "pa7/scripts": "5abc757c10382b8f03d89300f9405b85825df12c",
+    "pa7/Makefile": "864881fd7ed68cf0f840420eca1b86ed3b5efde0",
+    "pa8/tests": "584e379f0a53e151d158704f6077b98dd33aa161",
+    "pa8/scripts": "361e302b42ec9c81702f575a0fb9ebbb03e212b5",
+    "pa8/Makefile": "eab505211eb1e5804872b09cba1784690f2f1f03",
+    "pa9/tests": "7fe2c92704dddeda8f0e20d33344bfecde0c8d6a",
+    "pa9/scripts": "52c57cdb7d9b073b4d26fbefc0ce2956d3254a84",
+    "pa9/Makefile": "b8e2139c0ed5d1b4594634aae8ac0de51ad84771",
+    "pa10/tests": "1a173cf901e39f42d80195118901be6312e86ef9",
+    "pa10/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa10/Makefile": "5cb8279590b9f22c8daebf91e6a39719871884ff",
+    "pa11/tests": "195b1d8b8978e57307384b1591706322bfaee329",
+    "pa11/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa11/Makefile": "2cb249337900c7989c17c91a44f29d2d4e9be525",
+    "pa12/tests": "e2cce23cd78a3ced0bac4af7350ce7ae5b884bdb",
+    "pa12/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa12/Makefile": "315f6cb60793fa1b448cae756de1d69cced61428",
+    "pa13/tests": "f5fad33236c3114536f8817f4e79a11b52ef23d8",
+    "pa13/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa13/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa14/tests": "42bac7d80e8889f116b70ff6fd407af9d29da5d3",
+    "pa14/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa14/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa15/tests": "4af7ff1f1f5a6d9d03e3a7b4b77d524b930bd9d8",
+    "pa15/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa15/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa16/tests": "05ce9a6c16f5199cac083bfb6da996d98972b109",
+    "pa16/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa16/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250",
+    "pa17/tests": "326af6f7870a5da1960da72b966ee5edd55227a5",
+    "pa17/scripts": "0dc68e67c9aac519a33a17e2c511ba6ecbde59c6",
+    "pa17/Makefile": "eb1e1fb98ad500ae11a0ae6d89d10357dc19c250"
+  },
+  "checks": [
+    {
+      "command": "make test-pa17",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/pa17.log",
+      "sha256": "ad324c1b0c37142a074fe519c35571ec6a74e0ff50d5742e828c069abcc7da9a",
+      "log_text": "===== pa17 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (343 / 343) =====\n",
+      "required_text": "(343 / 343)"
+    },
+    {
+      "command": "make test-report-through-pa17",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/exit-through-pa17.log",
+      "sha256": "ac547f1413f48ff1cc483359f6e01f794d6b3ac914b389d400edef6155755c0d",
+      "log_text": "===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (2609 / 2609) =====\n",
+      "required_text": "(2609 / 2609)"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa17 --paths dev/src",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/exit-file-audit.log",
+      "sha256": "b40da0957f8ab5dea6cb4e3531ee3c2d1ea1f275ab22409e6f102506e18a3c04",
+      "log_text": "File audit passed for pa17 with 3 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n",
+      "required_text": "File audit passed for pa17"
+    },
+    {
+      "command": "python3 student.tests/pa17/checkpoint60_replay.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/loop62/inherited-final /home/vishvananda/work/private/v4codex/artifacts/loop62/inherited-final.json",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/inherited-final.log",
+      "sha256": "aad9286519450d99e29c1444d501726cc8683a0237f47afb842104f06cb60138",
+      "log_text": "entity 34 / 34\nmember 34 / 34\nmember_lowir 4 / 4\ndefinition 18 / 18\naudit 25 / 25\nhead 43 / 43\nfriend 47 / 47\nname 56 / 56\ncheckpoint52 52 / 52\nselection 31 / 31\npublication 47 / 47\nqualified 48 / 48\ncheckpoint56 26 / 26\ntransfer 28 / 28\nquery 37 / 37\nstorage 37 / 37\ncheckpoint60 43 / 43\n",
+      "required_text": "checkpoint60 43 / 43"
+    },
+    {
+      "command": "python3 student.tests/pa17/closure_controls.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/loop62/closures-final",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/closures-final.log",
+      "sha256": "444043e00e7a20b96b1495924b2c81a4f7e5333428fd4800d27a8c7bf61af4c2",
+      "log_text": "void_body PASS \nconst_call PASS \nparameters PASS \nellipsis_signature PASS \nmutable_call PASS \nmutable_const_surrogate PASS \ntrailing_reference PASS \ntrailing_control PASS \nnoexcept_call PASS \nnoexcept_expression PASS \nthrowing_call PASS \nlocal_constant PASS \nnested_body PASS \ncopy_value PASS \nvalue_argument PASS \nref_argument PASS \ndistinct_identities PASS \nspecialization_body PASS \nspecialization_parameter PASS \nspecialization_local PASS \ndeclaration_lookup PASS \nclass_return PASS \nunused_body_demand PASS \nbody_lifetime PASS \nfunction_pointer PASS \npointer_reference_return PASS \npointer_class_result PASS \npointer_class_parameter PASS \npointer_mutable PASS \nnamespace_closure PASS \nlocal_static PASS \nprivate_context PASS \nunevaluated_local PASS \nunevaluated_this PASS \nunevaluated_member PASS \ntemplate_unevaluated_this PASS \nnested_unevaluated_this PASS \nauto_reference PASS \nauto_forward_reference PASS \nauto_pointer PASS \ntemplate_nested_lambda PASS \nlambda_to_class_conversion PASS \ntemplate_distinct_static PASS \nparameter_decltype_return PASS \ntemplate_parameter_decltype_return PASS \nlambda_parameter_pack PASS \nauto_scalar_shapes PASS \nauto_shared_deduction PASS \nuncaptured_local PASS ERROR: automatic variable requires lambda capture\nuncaptured_parameter PASS ERROR: automatic variable requires lambda capture\nuncaptured_this PASS ERROR: this requires lambda capture\ndefault_construction PASS ERROR: deleted default constructor\ncopy_assignment PASS ERROR: deleted operator\nbad_body PASS ERROR: unknown expression name: missing\ndefault_parameter PASS ERROR: lambda parameter default\nunused_default_parameter PASS ERROR: lambda parameter default\nuncaptured_constant_address PASS ERROR: odr-use requires lambda capture\nunevaluated_lambda PASS ERROR: lambda in unevaluated operand\nouter_loop_break PASS ERROR: break outside loop/switch\ninferred_multiple_returns PASS ERROR: value returned from void\nunused_template_bad_body PASS ERROR: unbound template value name\nunused_template_default_parameter PASS ERROR: lambda parameter default\nlambda_const_suffix PASS ERROR: invalid lambda qualifier\nlambda_auto_parameter PASS ERROR: generic lambda is not C++11\nauto_self_reference PASS ERROR: use before auto type deduction\nauto_shadowed_self PASS ERROR: use before auto type deduction\nauto_inconsistent_deduction PASS ERROR: inconsistent auto declaration types\nauto_missing_initializer PASS ERROR: auto requires an expression initializer\nauto_deleted_function_address PASS ERROR: selected deleted member function\nauto_deleted_function_decay PASS ERROR: selected deleted member function\nauto_deleted_member_address PASS ERROR: selected deleted member function\n",
+      "required_text": "auto_deleted_member_address PASS"
+    },
+    {
+      "command": "python3 student.tests/pa17/region_controls.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/loop62/regions-final",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/regions-final.log",
+      "sha256": "60f16ea13ef495eb1bc2382d7a933c6cc5fab8a48ec470d5e92662fca77d474a",
+      "log_text": "local_call_sum PASS \nlocal_nested_calls PASS \nlocal_call_condition PASS \nlocal_call_comma PASS \nlocal_call_default PASS \nnoexcept_temporary_receiver PASS \nnoexcept_temporary_chain PASS \nconditional_no_live_prefix PASS \ntemporary_argument PASS \nloop_locals PASS \n{'local_call_sum': True, 'local_nested_calls': True, 'noexcept_temporary_receiver': True, 'noexcept_temporary_chain': True, 'conditional_no_live_prefix': True}\n",
+      "required_text": "'conditional_no_live_prefix': True"
+    },
+    {
+      "command": "python3 student.tests/pa17/final_controls.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/loop62/final-current",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/final-current.log",
+      "sha256": "2931c743dad88b00f4cc8adda6a6e5f58d8561a14d00b686bec4b5a7c8aaa493",
+      "log_text": "parameter_size PASS \nparameter_shadow PASS \nparameter_cv PASS \nparameter_array PASS \nparameter_function PASS \ntemplate_parameter PASS \ntemplate_parameter_cv PASS \nparameter_pack PASS \nlexical_this PASS \ntemplate_lexical_this PASS \nnested_parameter PASS \nfixed_lookup PASS \ncontextual_bool_true PASS \ncontextual_bool_false PASS \npointer_adapter PASS \nempty_copy_effects PASS \nempty_copy_template PASS \nclosure_statics PASS \nselected_partial_definition PASS \nalias_forward_definition PASS \ndormant_member PASS \nconstexpr_then_emit PASS \nparameter_runtime_value PASS ERROR: nonconstant noexcept specification\nbody_local_not_parameter PASS ERROR: unknown expression name: n\nunused_template_unknown PASS ERROR: invalid indirect type-query call\ncontextual_bool_missing PASS ERROR: nonconstant noexcept specification\ncontextual_bool_nonconstant PASS ERROR: nonconstant noexcept specification\ncontextual_bool_deleted PASS ERROR: nonconstant noexcept specification\nparameter_unavailable_outside PASS ERROR: unknown expression name: n\nuncaptured_reference PASS ERROR: odr-use requires lambda capture\n",
+      "required_text": "parameter_size PASS"
+    },
+    {
+      "command": "python3 student.tests/pa17/closure_abi.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/loop62/check-abi /home/vishvananda/work/private/v4codex/artifacts/loop62/abi-checked",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/abi-checked.log",
+      "sha256": "10dfd9d5afa05171460b9dd7d3e6eebab9b4883d7717b230ecdf3686821c932f",
+      "log_text": "7 exact ABI fact roundtrips and source closure numbering/native check pass\n",
+      "required_text": "source closure numbering/native check pass"
+    },
+    {
+      "command": "python3 student.tests/pa9/check.py --api /home/vishvananda/work/private/v4codex/artifacts/loop62/check-abi && python3 student.tests/pa9/check_final.py --api /home/vishvananda/work/private/v4codex/artifacts/loop62/check-abi",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/pa9-controls.log",
+      "sha256": "d9bb49e7197fd9de22ed76263a48d7a48396044854155b6f84547e730e5f78e9",
+      "log_text": "final audit canonical values, function facts, graph validation and nesting pass\ndirect graph identity, local context, sparse work, deep modifiers and thunk checks pass\n117 contract status/output and serialization checks; 11 valid/15 invalid personal probes; batch order pass\nfinal audit: 8 exact/roundtrip probes, 11 controlled rejections pass\n",
+      "required_text": "8 exact/roundtrip probes, 11 controlled rejections pass"
+    },
+    {
+      "command": "python3 student.tests/pa17/storage_reference_corrections.py",
+      "exit_code": 0,
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/references.log",
+      "sha256": "5bd50cb227d718184cac4c22eb532927fd3a8f340c535f32aefa683da2b5b6fd",
+      "log_text": "Six storage references follow the documented surgical corrections.\n",
+      "required_text": "Six storage references follow"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "student.tests/pa17/final-controls.json",
+      "sha256": "1693e7e6703a2193a205cbcca56d59577f6dd807392d0f997a00d899e4cf3f30"
+    },
+    {
+      "path": "student.tests/pa17/final-range.json",
+      "sha256": "f75e38280b6abf6b507223bc5cbf00a0b0324c9b9a10d82fbf8793ad625a7ba2"
+    },
+    {
+      "path": "student.tests/pa17/final-trace.cpp",
+      "sha256": "ab3f1a6c6b5d0b72c23a623958140dfc54133687b9ded37c31d0cc29bfefe8f8"
+    },
+    {
+      "path": "student.tests/pa17/final-trace.json",
+      "sha256": "02ad3f5d7046b145d719d05ce48502184cdcc20f071b4d651b8e7ed2a7089df3"
+    },
+    {
+      "path": "student.tests/pa17/final_controls.py",
+      "sha256": "85225dddbc34ca9e8067c1334e9edf0064e78f1f0107bb2f90a7eb6fa57347eb"
+    },
+    {
+      "path": "student.tests/pa17/final_benchmark.py",
+      "sha256": "adcee2ada0696e4cce50f13003505c184c4de8b68fb626b1f952b33a282d91b1"
+    },
+    {
+      "path": "student.tests/pa17/final-performance.json",
+      "sha256": "7f465270d6267ee2166b6e5025e874b3cd1de623b3cb7d05bcf73d0785a36bcc"
+    },
+    {
+      "path": "student.tests/pa17/final-stage-performance.json",
+      "sha256": "ea34766a955d82d591df66ff823e09624e5e26c1f79c1867d2722fa34a1e557e"
+    },
+    {
+      "path": "student.tests/pa17/verify_final.py",
+      "sha256": "f80076b7e6807bd84212e03bfd4c3465eb08e3d4c2bb34262a98e7616f01daed"
+    },
+    {
+      "path": "student.tests/pa17/record_final.py",
+      "sha256": "759d0f71eb2c437e0d503b4402d5330357138ac1621c4bdf20489a334e2534cd"
+    },
+    {
+      "path": "spec.md",
+      "sha256": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3"
+    },
+    {
+      "path": "pa17/README.md",
+      "sha256": "8eda15da35f538ba446435645a7e38f46fc9ad7440f51528004d2a11d6789f6b"
+    },
+    {
+      "path": "pa17/plan.md",
+      "sha256": "fa534f3fd93a7f6b3a5653b7e0843e5dc6ae77acea5d99466c646dcdb7f70872"
+    },
+    {
+      "path": "pa17/audit.md",
+      "sha256": "090227de298c0d77fb09c862447c879cd8c79ec1d4b5909baa0bb1b80b9d6a8e"
+    },
+    {
+      "path": "pa17/final-performance.md",
+      "sha256": "aad89cd18f033ece13a6ee6ef44a7935ad8fcf8e290801e276adba9449e2d306"
+    },
+    {
+      "path": "pa17/plan-loop61.md",
+      "sha256": "4079d38f87f904664de32562224348e6b4951034d415684753b92c5117599149"
+    },
+    {
+      "path": "pa17/audit-loop60.md",
+      "sha256": "028340a811fc2102d33a0daa6f591ed3ee501cf3284430c504a41044899103a0"
+    }
+  ],
+  "historical": [
+    {
+      "path": "pa17/.gitignore",
+      "sha256": "e2d02bad5fc71c584572b94ece8f5938fc066c320b4bba6c06c64e9b6ca668e4"
+    },
+    {
+      "path": "pa17/Makefile",
+      "sha256": "d8ea785e61fe66c4c239b31a51f47091c43f00043be6ebef5487fea581f17e0f"
+    },
+    {
+      "path": "pa17/README.md",
+      "sha256": "8eda15da35f538ba446435645a7e38f46fc9ad7440f51528004d2a11d6789f6b"
+    },
+    {
+      "path": "pa17/audit-loop48.md",
+      "sha256": "cac5b19b56cfc6c37ddfc31cfa34d4a47bc33c43b1bc6a7dcfde290d90ea142b"
+    },
+    {
+      "path": "pa17/audit-loop52.md",
+      "sha256": "a151c1ed22d985fd668c469470110463af18c5c18e7b8cebd34fa5163f3ec6a7"
+    },
+    {
+      "path": "pa17/audit-loop56.md",
+      "sha256": "c6a7297a8371b3118899384b089f7a41df51b1e90b2754c63b336d422f46904f"
+    },
+    {
+      "path": "pa17/audit-performance.md",
+      "sha256": "94614aca3369f5b15331fa93df6a321357a954fd15dd31879609aac4eb4ae4b3"
+    },
+    {
+      "path": "pa17/checkpoint52-performance.md",
+      "sha256": "f1a058c4d4738b90acf8dff00f18dc99e70c447219265afa3428665c7ecd86db"
+    },
+    {
+      "path": "pa17/checkpoint56-performance.md",
+      "sha256": "1c9d28bf292b3b152ffdc3a29251882dcb553457317f49f6926436d3c0fad06e"
+    },
+    {
+      "path": "pa17/checkpoint60-performance.md",
+      "sha256": "9691e5a8749e07a0cf90216eed9c1e947c8b957d278ec0c86e1e25900e522470"
+    },
+    {
+      "path": "pa17/cppgm++-ref",
+      "symlink_target": "../scripts/run_reference_binary.sh",
+      "sha256": "32a4ebfbd7873a9624003abbd44ccbcf2090720c59c1e68fd220aef705e461a8"
+    },
+    {
+      "path": "pa17/cppgm++.cpp",
+      "symlink_target": "../dev/cppgm++.cpp",
+      "sha256": "37a14c729492e5218d593ca43a81771083725bbc7ff31afded2bb18be20fd210"
+    },
+    {
+      "path": "pa17/definition-performance.md",
+      "sha256": "0cadde82bf0926e7e0dfd73752f2ecfca21919b65335975ba93a15ed73f922a1"
+    },
+    {
+      "path": "pa17/entity-performance.md",
+      "sha256": "6ba30fcc4bc666662e470de0df9275b2cbd6d3d5b2e378f3bedd4b76d9ee68ef"
+    },
+    {
+      "path": "pa17/friend-performance.md",
+      "sha256": "b5cfede5949b43305ef6579869252a93653ef030454cb9734d7d2f17e78a5232"
+    },
+    {
+      "path": "pa17/handoff61.md",
+      "sha256": "4ccb2b26588b5e558c8813c3b39ad0b68a6b6632e400d61c5a26e156ec355862"
+    },
+    {
+      "path": "pa17/head-performance.md",
+      "sha256": "abda0b3575693850fb8df36002cc7920570ce32519f4b77253d0b16a4e572752"
+    },
+    {
+      "path": "pa17/member-performance.md",
+      "sha256": "d133b96c9d58fe7d7e8b315fadb652c8fb20f79879c3fc2dd289f07aa66a9b44"
+    },
+    {
+      "path": "pa17/name-implementation.md",
+      "sha256": "a4a8ad65436b068e5e002a42a2fa7a510360ce4ed3f1864008aaf2f7ed0dec1d"
+    },
+    {
+      "path": "pa17/name-performance.md",
+      "sha256": "eff9f073b64a2be4b46edc9d2ba7e2a1297c71b7f61d4c3b99a365958569bf03"
+    },
+    {
+      "path": "pa17/pa17.gram",
+      "symlink_target": "../shared/source.gram",
+      "sha256": "d8d31e64f62718ac66364a6c8978da8fd7f6c545d5458dc56d38f854ca95c7c7"
+    },
+    {
+      "path": "pa17/publication-performance.md",
+      "sha256": "7d8d172212487582d49e24ea3e8009e195b5f6de7d6f2797897f9c84508a94d0"
+    },
+    {
+      "path": "pa17/qualified-performance.md",
+      "sha256": "d3962726af239d62660fd5c8f3040ae06343f5f259105e9991417b5817ea94fd"
+    },
+    {
+      "path": "pa17/query-handoff.md",
+      "sha256": "7e4eb1c3cc6afe6f8a49f096d702a916f0a99b7643f466c2f4a427a4899adcc8"
+    },
+    {
+      "path": "pa17/query-performance.md",
+      "sha256": "fd99aed09e2ae869ce8889a99074e821009a6ced22c7a96197f2300120bff389"
+    },
+    {
+      "path": "pa17/selection-performance.md",
+      "sha256": "ef8a3193cb1ab1e6fb6244115f36bd0061a51e1d48987112ebf6e4fb89fde3f6"
+    },
+    {
+      "path": "pa17/storage-handoff.md",
+      "sha256": "8ee77d8197753500bdb6b82af5d6347da396db1210ac754127c55b05816b3895"
+    },
+    {
+      "path": "pa17/storage-performance.md",
+      "sha256": "7a1d085f79dfe86d1b368d612de64ef5b0779e33ce0e32e13b59fcb7b44dab58"
+    },
+    {
+      "path": "pa17/storage-references.md",
+      "sha256": "da08ae2b3d7b41a0080938c675dbc7271a7fd74ec28ced5360877f8667d989bc"
+    },
+    {
+      "path": "pa17/transfer-handoff.md",
+      "sha256": "1620a1fd99e11fdabd6de3234dc241d2e73997791eebb0cf672e8d8960555d46"
+    },
+    {
+      "path": "pa17/transfer-performance.md",
+      "sha256": "f7b69e2cc9b5c4ef23f75f4cca7b6abcd895febfe379750b7bf649f9cc983e3d"
+    },
+    {
+      "path": "student.tests/pa17/audit-base-performance.json",
+      "sha256": "1c986008289f13a7af4e3d38c4b9c7913c223fa0f12869ef309ea85c6be61b1c"
+    },
+    {
+      "path": "student.tests/pa17/audit-controls-results.json",
+      "sha256": "af1e89d648c93b7ca5d8c4e225d4ec44e1ae66239826f4a36b091f4d7c007ac3"
+    },
+    {
+      "path": "student.tests/pa17/audit-evidence.json",
+      "sha256": "64af992f60d6b1633b33ba9a335533cab9c7a5ea8af87234a2f0be5afd18f06a"
+    },
+    {
+      "path": "student.tests/pa17/audit-performance-before-heads.json",
+      "sha256": "ff6191ae69b62c512cfa2bc3668017c226704f53bc00513073b275af73d4b6fe"
+    },
+    {
+      "path": "student.tests/pa17/audit-performance.json",
+      "sha256": "d105f61bc90c80d82bb431d3e1f0a2c64e76f5c0f5ede1b35eb49e5c56e50d46"
+    },
+    {
+      "path": "student.tests/pa17/audit-trace.json",
+      "sha256": "0b926e5a32123d2fe8b1211c641e3d41f5ca3d60d4c535361c72b388be8286a6"
+    },
+    {
+      "path": "student.tests/pa17/audit_benchmark.py",
+      "sha256": "d4cf74cd5aac911ac537583feb27d964d8e443b8ec671ca71d3b32bab7190a7b"
+    },
+    {
+      "path": "student.tests/pa17/audit_controls.py",
+      "sha256": "7f2d47bc2c57602955434d732473fdb2a2aab53a3bbc3e661b966ce6052a1426"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-controls.json",
+      "sha256": "bf5e5d27dce2bc2b52fce8b944df5f09f9654b1b2e7485c0f5ce66252225ac5c"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-cumulative-before-function-demand.json",
+      "sha256": "8ee7a508d1e87a16594d04b39a96bc796bcb33203e3065869d902d5063b02244"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-cumulative-performance.json",
+      "sha256": "8a01c0139c78358de213758d5122fd61d82a8d9c1bfd4752a3117df7f6a8ee62"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-evidence.json",
+      "sha256": "4de879ed2a2ae2624a55f654400b5454d3e0b9aa92b16fc2bc23c6ee6d43debd"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-performance-before-entry-validation.json",
+      "sha256": "1d4a72941bfbf348d0be3bbabc53870e85502954eb6ac11a98a6522c66cfbb04"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-performance-before-function-demand.json",
+      "sha256": "fabc98a4b6848b73f5f10a6b41268940c0f78bf8633894601278e06df06acc60"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-performance.json",
+      "sha256": "77bcb951f60689eeee3310baafc63054948e98750c805679fcf4142065474ef7"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-range.json",
+      "sha256": "eba2671d06098e396bdcbf8cf1e864a50f1ff680ed0eb82040cc1bac87918a40"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52-trace.json",
+      "sha256": "f033836deb7c78046a565e4889c7abb26e91f12f9ab7d77f12b2288eff52fb51"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52_benchmark.py",
+      "sha256": "cdaa1d8541fae354a0488941063af7b425f1d3b8a8b2b12692475ad1ea8b9c2f"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint52_controls.py",
+      "sha256": "da02f6a5041937c5f7f5a68d997174317907988eb0390ab2c1969a5f00946e48"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-controls.json",
+      "sha256": "662907d7f53aca75a08bfa4ec99396f3d4a591ebd5a413408eef956e54b23d0e"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-cumulative-performance.json",
+      "sha256": "1d4276a8702fa711e50cce749bceadb7bb61bbc94b566f3e011061f7b8a5427a"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-entry-controls.json",
+      "sha256": "9bff8b086d5c4ad514f73a0343a0dbdc8a573cfc2dfc60f734d381340dadbce9"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-evidence.json",
+      "sha256": "d5c6151df15d06dcebb3061bc218abb64ea65a7cbee35d3d7f285218fdcf5cd7"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-performance-before-cache-validity.json",
+      "sha256": "fffb2b320971582cf07e24ed3454f2771f2653928d21bdf6ef5d7db60a261cf0"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-performance.json",
+      "sha256": "0b95695d5596ea8c78be37153b206e84280ffbcff55102cfe02ea35f4ef47d0c"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-range.json",
+      "sha256": "c82ce9753f77a78f84361a2071c63a2ecf1310ee5fbcddd4565fa458b948a62f"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56-trace.json",
+      "sha256": "eb1d84e22abbc2d889172ef9b2110e911faadb6beafe9bf1eed98bee8d8e9521"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56_benchmark.py",
+      "sha256": "d68cc20d05a31aee1267a5cd2484986c95212a228782d9d5db850b59eebd690b"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint56_controls.py",
+      "sha256": "51c3f3a6ed5e629144ea6975d1ae92b9e5e466253d9d9268b36f7ce0be6d75b0"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-abi.json",
+      "sha256": "3b1f6fdf930342429545156afcf336f410e25bdbdf90f13a938ee3f9e92508c6"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-controls.json",
+      "sha256": "e4d056c5cf64cf73f31cf0770f65d5f3bbff4b93d45b309d77c18d6057de3222"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-cumulative-performance.json",
+      "sha256": "fe8c44b85f5db8baebc5d885027cbd97715c4239bb5f12cd481e3b70e9cc3035"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-entry-controls.json",
+      "sha256": "290531cd504f9be7a914ad0a25a2443a771cca1a2b33f4c7b1f255a248b3b63c"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-evidence.json",
+      "sha256": "afa0063f874f01dff983dbc50e0d3c0765723e9c1570c3ecaf9c847469d02b4e"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-performance-before-constant-receiver.json",
+      "sha256": "85acab8d84c61057f3e8d7d7fbdd7a2660c16d7b88d1a853ce358effe0995f91"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-performance.json",
+      "sha256": "db5214f2a622c37cf6b7300862350957b8ad32b07b7a16a624a0fb355971e571"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-range.json",
+      "sha256": "db6eb661e2d1358472e67919578e8a6b71eef62aa5486094b16a2b823216b3a3"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-trace.cpp",
+      "sha256": "4c93a43169520d14909d76d6813d7ebf64624b354117c3a7e1c1b95eb0df599a"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60-trace.json",
+      "sha256": "8aeb3f4fe7e304ad59ae35e1a1561ef091b2f01364275380393f9cdb86d93c93"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60_benchmark.py",
+      "sha256": "1708508e98d90ddcdbb2692ee51e89d441a6be924222dea3dca3ffd8ca6f37cc"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60_controls.py",
+      "sha256": "5b773910767819d4706cd7841ac7b00d4c54392913c40f9cba95f1e169188adb"
+    },
+    {
+      "path": "student.tests/pa17/checkpoint60_replay.py",
+      "sha256": "57b53f1be153e8146ae3656da5d03c4fba51808ae5ce623918f3bd5722d78f42"
+    },
+    {
+      "path": "student.tests/pa17/closure_abi.py",
+      "sha256": "4ccec1c90deb4f11a936f705203e1a117eb50e53246d577233f1705fd211919d"
+    },
+    {
+      "path": "student.tests/pa17/closure_controls.py",
+      "sha256": "a869670a9ae437f0588e7a16601824b5974a7a8f00106625a351a343e62b218e"
+    },
+    {
+      "path": "student.tests/pa17/definition-controls-results.json",
+      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711"
+    },
+    {
+      "path": "student.tests/pa17/definition-performance.json",
+      "sha256": "0409f6a648764274ec6a483185d56339838e1baffa5cfc316a53d348a0b5f7d2"
+    },
+    {
+      "path": "student.tests/pa17/definition_benchmark.py",
+      "sha256": "765cde29397bc68e3d457395b4f0e7fb83b4b8d60f82aec141eb85b11a43703e"
+    },
+    {
+      "path": "student.tests/pa17/definition_controls.py",
+      "sha256": "a34a95fb345248297659cdf2c2064303d2133c1bc88af77678a69e7170d1d12d"
+    },
+    {
+      "path": "student.tests/pa17/entity-controls-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/entity-performance-initial.json",
+      "sha256": "5c88a40a24aab686986575b1d2a696b46a88c0a11e12d58967aa3c06d7ed1751"
+    },
+    {
+      "path": "student.tests/pa17/entity-performance-pre-coverage-demand.json",
+      "sha256": "5866efc0204d40ac98688ffcc4c191fc86ca49a2ebeeb66adb64b6c6dd598e66"
+    },
+    {
+      "path": "student.tests/pa17/entity-performance.json",
+      "sha256": "92e2787b069b7565c25475d7f09bf549b6f9e8d5b32344dc98cb176eea85527a"
+    },
+    {
+      "path": "student.tests/pa17/entity_benchmark.py",
+      "sha256": "95ef025c28f0912bf0f08cbfbbb138cb5ea28b20298b361b4e5a763d32935c39"
+    },
+    {
+      "path": "student.tests/pa17/entity_controls.py",
+      "sha256": "b609cccbfa1a45eed1fadaddbca5302fc38f0bb05ee62808e12f7fcef00c8504"
+    },
+    {
+      "path": "student.tests/pa17/friend-performance.json",
+      "sha256": "8308750460c67d234811bb9c7c1d7349de3e034449f961e44ee929ec97ba584a"
+    },
+    {
+      "path": "student.tests/pa17/friend_benchmark.py",
+      "sha256": "7a7aace1d405531c3441f349dee29f676a4e54dbdc145b9b7fd3c3f7ad79461d"
+    },
+    {
+      "path": "student.tests/pa17/friend_controls.py",
+      "sha256": "f18cb948430837a6e0ae84d961da686447da8c6d4b39be57dd2187a205f2e53e"
+    },
+    {
+      "path": "student.tests/pa17/handoff-loop45.json",
+      "sha256": "940765d93cc5f0071b1e2734194be16f00968dd4fc3cb3baddccbafdfbfdbeb1"
+    },
+    {
+      "path": "student.tests/pa17/handoff-loop46.json",
+      "sha256": "81d801c36d5d8e16d0e990fb9d925982093f3d92a813a5229b0ba0dd166a1d80"
+    },
+    {
+      "path": "student.tests/pa17/handoff-loop47.json",
+      "sha256": "645dc77309379a68c0d820ac181f8e5d7a87611d1b3237b6ca33167b7b038c92"
+    },
+    {
+      "path": "student.tests/pa17/handoff-loop49.json",
+      "sha256": "a27af58455bcc9d6aa72970f786e795ad29940152ecd8549fd4dfee344f80afe"
+    },
+    {
+      "path": "student.tests/pa17/handoff-loop50.json",
+      "sha256": "8763b05f75c6225c26810f780cf793412e611217f363cf7f9d7c060b5f3de2ae"
+    },
+    {
+      "path": "student.tests/pa17/handoff.json",
+      "sha256": "b6aeab4ee4dac1fcf7b81b6be6b4b670827a3ea293016e59d12ba154afedee4f"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-controls.json",
+      "sha256": "3360d26c68fabadc2e5e20f4bfcdada14a7cda12ffa3cbb67c023f7177980338"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-evidence.json",
+      "sha256": "ea2ac66d8a5f414bbde63ba8ec6c978d977273d119d2367f79029f3338dc6fc3"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-performance.json",
+      "sha256": "61a60a3eab6d159219ee96a64969cb906b2f43c3c2f73076758807500463e200"
+    },
+    {
+      "path": "student.tests/pa17/handoff61-prelexical-performance.json",
+      "sha256": "32a1fa273bf4a63236850f26423f1fde5ff29771e5fb4d0080197b0db0db137d"
+    },
+    {
+      "path": "student.tests/pa17/handoff61_benchmark.py",
+      "sha256": "2a18e91194114558d5b2abc66613edda08d54e7d7467f899089a6d634ea37ab6"
+    },
+    {
+      "path": "student.tests/pa17/head-performance-before-pack.json",
+      "sha256": "c1fee84af906a393ff62cf7b2555900e506d1f3fcf2c1b7dde82a7d422808ce5"
+    },
+    {
+      "path": "student.tests/pa17/head-performance.json",
+      "sha256": "2531fb656bbc657af0d36eed2c9e4edea3ae54e1cf425a9c08d3013327c63cfc"
+    },
+    {
+      "path": "student.tests/pa17/head_benchmark.py",
+      "sha256": "5f95e472f8418fbb02f60a3c1c08f0845b0c39499feec2c623e9d8c89ef2fee1"
+    },
+    {
+      "path": "student.tests/pa17/head_controls.py",
+      "sha256": "83447322604cbe9e9f334a27d5ab6178e27c5c9fdaefa6778658a40c23100864"
+    },
+    {
+      "path": "student.tests/pa17/loop46-entity-controls-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/loop47-entity-controls-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/loop47-member-controls-results.json",
+      "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11"
+    },
+    {
+      "path": "student.tests/pa17/loop47-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535"
+    },
+    {
+      "path": "student.tests/pa17/loop49-audit-results.json",
+      "sha256": "9a9936107e5fd44101c7b24849ea08639910c4094f2a81fb6ad13b71ad00789a"
+    },
+    {
+      "path": "student.tests/pa17/loop49-definition-results.json",
+      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711"
+    },
+    {
+      "path": "student.tests/pa17/loop49-entity-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/loop49-head-results.json",
+      "sha256": "26888e4c242cfc4a8e3e2b1e32e4253eb2273ce5cedf20f1a72d8709d15e847b"
+    },
+    {
+      "path": "student.tests/pa17/loop49-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535"
+    },
+    {
+      "path": "student.tests/pa17/loop49-member-results.json",
+      "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11"
+    },
+    {
+      "path": "student.tests/pa17/loop50-audit-results.json",
+      "sha256": "9a9936107e5fd44101c7b24849ea08639910c4094f2a81fb6ad13b71ad00789a"
+    },
+    {
+      "path": "student.tests/pa17/loop50-definition-results.json",
+      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711"
+    },
+    {
+      "path": "student.tests/pa17/loop50-entity-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/loop50-friend-results.json",
+      "sha256": "66eb979eb5466590c9cecfba6a0fbf740cf492b3aeca6db8239de402d6bf409a"
+    },
+    {
+      "path": "student.tests/pa17/loop50-head-results.json",
+      "sha256": "26888e4c242cfc4a8e3e2b1e32e4253eb2273ce5cedf20f1a72d8709d15e847b"
+    },
+    {
+      "path": "student.tests/pa17/loop50-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535"
+    },
+    {
+      "path": "student.tests/pa17/loop50-member-results.json",
+      "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11"
+    },
+    {
+      "path": "student.tests/pa17/loop51-audit-results.json",
+      "sha256": "9a9936107e5fd44101c7b24849ea08639910c4094f2a81fb6ad13b71ad00789a"
+    },
+    {
+      "path": "student.tests/pa17/loop51-definition-results.json",
+      "sha256": "1415f88e23746534c51943a18e40554fd2abfbd97e14c7bf5fe5e22301c5d711"
+    },
+    {
+      "path": "student.tests/pa17/loop51-entity-results.json",
+      "sha256": "7d41de26fa44ef63d344d6d6720b248f0cb3d3ebacd59615d2d49d91fcc4b344"
+    },
+    {
+      "path": "student.tests/pa17/loop51-entry-name-results.json",
+      "sha256": "62c48536abc0f367b9d0368e1cff849437812d2c2910dc1745dec7c1baf10ebf"
+    },
+    {
+      "path": "student.tests/pa17/loop51-friend-results.json",
+      "sha256": "66eb979eb5466590c9cecfba6a0fbf740cf492b3aeca6db8239de402d6bf409a"
+    },
+    {
+      "path": "student.tests/pa17/loop51-head-results.json",
+      "sha256": "26888e4c242cfc4a8e3e2b1e32e4253eb2273ce5cedf20f1a72d8709d15e847b"
+    },
+    {
+      "path": "student.tests/pa17/loop51-member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535"
+    },
+    {
+      "path": "student.tests/pa17/loop51-member-results.json",
+      "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11"
+    },
+    {
+      "path": "student.tests/pa17/loop51-name-results.json",
+      "sha256": "ed032d87420fea494acb078ec7ff38fd68a0c1c1e9321c3c766f1357987cb356"
+    },
+    {
+      "path": "student.tests/pa17/member-controls-results.json",
+      "sha256": "db7829acf34cd06f6e58615beee548c8602a4b1338ff1696c9b66baadcad2c11"
+    },
+    {
+      "path": "student.tests/pa17/member-lowir-results.json",
+      "sha256": "b32e92365fc928444857e7a401283c090b01d9e8f3cc58f292045c2181db0535"
+    },
+    {
+      "path": "student.tests/pa17/member-performance-before-alias-access.json",
+      "sha256": "7b066da2920a7f5588be736ab51d6ebf88bccd4180f8c47a426f423d32052de6"
+    },
+    {
+      "path": "student.tests/pa17/member-performance.json",
+      "sha256": "d0d17af72a2817110ffeb5d2e1fc5539534ff10e83fd7cc5c20c0d9a22aee123"
+    },
+    {
+      "path": "student.tests/pa17/member_benchmark.py",
+      "sha256": "2094d1fedc1d00247ca48f915bcb63c03e3bbfe557ede393c9d3c38ac8e3f135"
+    },
+    {
+      "path": "student.tests/pa17/member_controls.py",
+      "sha256": "505491e6ef9d6891fa08936c54b9fd34dfbb89896596c94d05847d0eef3982e4"
+    },
+    {
+      "path": "student.tests/pa17/member_lowir_controls.py",
+      "sha256": "2cba81e472623768c6e8af854c561696fe3ae70be5d2fb7857f372e8900b5708"
+    },
+    {
+      "path": "student.tests/pa17/name-performance-before-prefilter.json",
+      "sha256": "e9cb71e613685368cc67d4f6997bb9cd322529fde32396a7cd0163e397e47610"
+    },
+    {
+      "path": "student.tests/pa17/name-performance-before-shared-view.json",
+      "sha256": "6fae92001a86954e6a9e61a00f1411fda19f56210656963cfaab54a635c6c870"
+    },
+    {
+      "path": "student.tests/pa17/name-performance.json",
+      "sha256": "dd86d2f24300b0006a3d9602470b15e604de2283e25878e46cbc135f3d1d68a5"
+    },
+    {
+      "path": "student.tests/pa17/name_benchmark.py",
+      "sha256": "8ebbe17f0241acd1654cac661fdc84539406127cde1861194fe25d8e69410dee"
+    },
+    {
+      "path": "student.tests/pa17/name_controls.py",
+      "sha256": "4a6f327426e749b95a75b238f5361a63a9e40da8305eda3bf456ead3f726e6de"
+    },
+    {
+      "path": "student.tests/pa17/publication-controls.json",
+      "sha256": "3d02872db65ba7636fab5e0c29cafa1d1bea07979d3d2e69becbaa10f4659288"
+    },
+    {
+      "path": "student.tests/pa17/publication-entry-controls.json",
+      "sha256": "9e5e71444635c4cbb509505559b8fe28a6519711e9c2b368f1bf060b95714251"
+    },
+    {
+      "path": "student.tests/pa17/publication-handoff.json",
+      "sha256": "8dd34e048e15f025d5683709dc33d18c5ecbfa7f5c61431318103d4c7a1c753b"
+    },
+    {
+      "path": "student.tests/pa17/publication-performance.json",
+      "sha256": "d1ffed1bd5869e367b3ea6024aac68adba2ccf64cbcf867e896af6b59dd537cd"
+    },
+    {
+      "path": "student.tests/pa17/publication-recheck.json",
+      "sha256": "5daa3632bf9c5664daeed005c098e8406c3779e07cbc25f27d8efba8ccdad02d"
+    },
+    {
+      "path": "student.tests/pa17/publication-trace.json",
+      "sha256": "bd4b9afccdc1c2e58cc9e6650bbd02e5f36dfb2b28aef343262ac309161094b8"
+    },
+    {
+      "path": "student.tests/pa17/publication_benchmark.py",
+      "sha256": "6dc0a20bd59b42a1a33417d2dff83e6b28200e83c74a0d706577c44a5d2edd8f"
+    },
+    {
+      "path": "student.tests/pa17/publication_controls.py",
+      "sha256": "0eb45b3e89b48179f881fdae52f1c35431b302243e5fa2da76a36c52204ff010"
+    },
+    {
+      "path": "student.tests/pa17/publication_recheck.py",
+      "sha256": "4fc25b904785a93cc0ebf62831c6b452dfcd418a992f2f8ebf187a7712ac9e6a"
+    },
+    {
+      "path": "student.tests/pa17/qualified-controls.json",
+      "sha256": "461a8e2e1a6b9195223549911e1e04bfc4eaae0c7da9910dce8a098eb56cc7c0"
+    },
+    {
+      "path": "student.tests/pa17/qualified-entry-controls.json",
+      "sha256": "c11a3ef9b1ddd32fdf5eee9aa0254a593003c7a98d0d078b67820b6f30de6a57"
+    },
+    {
+      "path": "student.tests/pa17/qualified-fixed-base.cpp",
+      "sha256": "105ca04303bbfecc47cf5179e93a693fefd6dbd795e372619f74a6524d1ceac1"
+    },
+    {
+      "path": "student.tests/pa17/qualified-handoff.json",
+      "sha256": "e0519a1d93265a81403ef9ff5225f5490c3ee60def204e7d2f3bd131e409cde7"
+    },
+    {
+      "path": "student.tests/pa17/qualified-performance.json",
+      "sha256": "8bfb737059dfb084dc17f97f7af2225255fba0d3996279273d3ea79e913a210a"
+    },
+    {
+      "path": "student.tests/pa17/qualified-recheck.json",
+      "sha256": "5a72d9809792f754b73a7adfd87eeb12908024c9687e8c5dc5682e2391330046"
+    },
+    {
+      "path": "student.tests/pa17/qualified-trace.json",
+      "sha256": "a180dfc3e9780d69df0d63e3975277fb6e64b1e4d6269d078ae30f0189f8c614"
+    },
+    {
+      "path": "student.tests/pa17/qualified_benchmark.py",
+      "sha256": "ee6f7363165f0d216675b890b985503ce0642fbd308b2dfb207675cde2fbe1f2"
+    },
+    {
+      "path": "student.tests/pa17/qualified_controls.py",
+      "sha256": "dfc5a0ca809c6e19e619ef1fa9e38ab9568f0a64ec22b760b122842d146a4f22"
+    },
+    {
+      "path": "student.tests/pa17/qualified_recheck.py",
+      "sha256": "e2e836ec10b5f321affb00525f862796c8ec65cfd5c2300c7d2be516c111b934"
+    },
+    {
+      "path": "student.tests/pa17/query-controls.json",
+      "sha256": "df812a7b575549923af6c820b70f31127a8dc60b1afa198504e04033fa71603a"
+    },
+    {
+      "path": "student.tests/pa17/query-entry-controls.json",
+      "sha256": "d871975b8dd8b4f7873d55cbcc7fdc426efd032784f9918be047f13f65576e58"
+    },
+    {
+      "path": "student.tests/pa17/query-evidence.json",
+      "sha256": "41b9834cf2f8a61d9aac176937ea5e034158ba1cee13dfdbdf79a4968912ff88"
+    },
+    {
+      "path": "student.tests/pa17/query-performance-before-fastpath.json",
+      "sha256": "45cd092479213432ecb0c259fbc3980b75d868cad02e6401ea5ffd27ec700613"
+    },
+    {
+      "path": "student.tests/pa17/query-performance-before-packing.json",
+      "sha256": "a7ef614c91a6165c4e493c8971cc95f6bf9dff82e31ca13548f681f5ea6377d9"
+    },
+    {
+      "path": "student.tests/pa17/query-performance.json",
+      "sha256": "61b4e8c17e823b0519ed8430e1018ceb2d5636748af63068bc138beba5b75367"
+    },
+    {
+      "path": "student.tests/pa17/query-trace.cpp",
+      "sha256": "56265e9bbe40b65262124a90a8c75577fb5f86166d4508340cf5ddfcd9aac27f"
+    },
+    {
+      "path": "student.tests/pa17/query_benchmark.py",
+      "sha256": "ca9eb7a59a9612fc99c0b0d6ff6d1ac7c1997686f0f2c09fa6995b9a3057649e"
+    },
+    {
+      "path": "student.tests/pa17/query_controls.py",
+      "sha256": "0cab62d6fbb73b3f06264a6371899223f04654c55b8efd5dfa1c6cc579b91d39"
+    },
+    {
+      "path": "student.tests/pa17/query_replay.py",
+      "sha256": "092faf9f045bf1e1243053b2aaa4f9a73119f9a0ab49a08cb6115be9df6c1482"
+    },
+    {
+      "path": "student.tests/pa17/record_checkpoint60.py",
+      "sha256": "8dae0cf2086ae714d1ddeac5bfa2a728fab89c5ee1c367c8e631e2d6feb5cd61"
+    },
+    {
+      "path": "student.tests/pa17/region_controls.py",
+      "sha256": "ceb63a37ca26789570e826de867e0a90a286340e749f8274df05db1895cb4da0"
+    },
+    {
+      "path": "student.tests/pa17/selection-controls.json",
+      "sha256": "e4a0a9707dbdda19eaf34080600f579f2f3dc089e85da39b853f7e97be1858e5"
+    },
+    {
+      "path": "student.tests/pa17/selection-entry-controls.json",
+      "sha256": "2a26228e689d626fa303c5643b8c6528ad70b7d9a3a4b9cb0c04008a488c4d7a"
+    },
+    {
+      "path": "student.tests/pa17/selection-handoff.json",
+      "sha256": "78da768d4dec143c7240a04553419ca6b9261dfac97a08b952a493b4484fde81"
+    },
+    {
+      "path": "student.tests/pa17/selection-performance.json",
+      "sha256": "3acf61d2117a81a7ced4d5318078164e43274f501d3069105e65d1fb0c7d6f07"
+    },
+    {
+      "path": "student.tests/pa17/selection-trace.json",
+      "sha256": "dfabadf1a52a385aecdc24ee91eb9e6d85c9264a10958a9c69ca9870ef431acc"
+    },
+    {
+      "path": "student.tests/pa17/selection_benchmark.py",
+      "sha256": "493630694b4b331c5d4b7ceb6924f1eb964127170d60ca350a3444205c6e539c"
+    },
+    {
+      "path": "student.tests/pa17/selection_controls.py",
+      "sha256": "87117048d2d75dffa2b4bc9ab8a8c6a274b62c3f37942fa52617aa0ccbb84843"
+    },
+    {
+      "path": "student.tests/pa17/storage-controls.json",
+      "sha256": "bf5123d45d45f31b0d040eebfc3eb2973ca96a039ba4e1dbef404a03f0a8e064"
+    },
+    {
+      "path": "student.tests/pa17/storage-entry-controls-initial.json",
+      "sha256": "ff6562d864013a73f7807ee922423adcd29cc55a91f1ea9858f3dbe1d63697f7"
+    },
+    {
+      "path": "student.tests/pa17/storage-entry-controls.json",
+      "sha256": "cc98abf1a9c3f8160595da19daa33a3dfeabaa348f8776fbdd7e1f76521c9f0e"
+    },
+    {
+      "path": "student.tests/pa17/storage-evidence.json",
+      "sha256": "634a9a9fc7ab3a5763f04b5125fdeacd4664f13bc3ad029154bf1f954e872fee"
+    },
+    {
+      "path": "student.tests/pa17/storage-performance.json",
+      "sha256": "26d19800b89135a1ed8d4c7768c18062daa113db800d0d0af12ce644291f6889"
+    },
+    {
+      "path": "student.tests/pa17/storage-reference-observations-preliminary.json",
+      "sha256": "1060282aab3ecf3bedd2a9a12df4f7038ab3e67591740e1ea367f7320e64e2b9"
+    },
+    {
+      "path": "student.tests/pa17/storage-reference-observations.json",
+      "sha256": "144e1222b2b4f383fac1899a77406906326484bcfdff4f230626279222cd1209"
+    },
+    {
+      "path": "student.tests/pa17/storage-trace.cpp",
+      "sha256": "b8a5a749835d7753a75c8a9213c38233b6b6e31fadc711e353f104b672f40f6a"
+    },
+    {
+      "path": "student.tests/pa17/storage_benchmark.py",
+      "sha256": "8c74929e8307a6b91254ab3e852cd3fb907b18e6e9ba81c4cb4eeb40662572c1"
+    },
+    {
+      "path": "student.tests/pa17/storage_controls.py",
+      "sha256": "1796f18394ff238bb98a0c1a4d312b40a012861fccda379ec3fed8420610ff29"
+    },
+    {
+      "path": "student.tests/pa17/storage_reference_corrections.py",
+      "sha256": "0b5b8bd00b935b7a70a7f4542b1212524432a5a5a947954a401ea1ea48ec3121"
+    },
+    {
+      "path": "student.tests/pa17/storage_reference_proof.py",
+      "sha256": "d64a681202c839234b5f40d6330aa646130ec626fb2496b3730792984531d252"
+    },
+    {
+      "path": "student.tests/pa17/storage_replay.py",
+      "sha256": "d65167f652e637ed48eedbaf2d5db429858026ec1b73096181dd560e14ba8104"
+    },
+    {
+      "path": "student.tests/pa17/transfer-controls.json",
+      "sha256": "a91a24febd4e7bc4ad452065b1e968bcf49dda57b2ba0e032999eee568d5f9c0"
+    },
+    {
+      "path": "student.tests/pa17/transfer-entry-controls.json",
+      "sha256": "5d086db063cac95322612b7a65c88cb10e7254eff7129cb84f291eec6163ceb1"
+    },
+    {
+      "path": "student.tests/pa17/transfer-evidence.json",
+      "sha256": "1b4aed63e7db63c4fc437b19d2b64b4c9543b2882b5d37619f12f124bd443a7e"
+    },
+    {
+      "path": "student.tests/pa17/transfer-performance-before-fixed-receiver.json",
+      "sha256": "7219a72c0b4b35ebbc2aa079cb98fbc497fec0f8fdcf2df434938e117f036957"
+    },
+    {
+      "path": "student.tests/pa17/transfer-performance.json",
+      "sha256": "80cf1d4918138be0b5560ce05a4cd2265a8c95efd176b1c5cf9a4547e2f41154"
+    },
+    {
+      "path": "student.tests/pa17/transfer-shapes.cpp",
+      "sha256": "07f3eeafaf4a2d05db7d1651828c966bab1483c5db752d952ab4582725775da9"
+    },
+    {
+      "path": "student.tests/pa17/transfer-trace.cpp",
+      "sha256": "9a00619ba8e1c0438eda8dd2a79512e7e52dc81dd0bea96dd8f61d7a3226c58e"
+    },
+    {
+      "path": "student.tests/pa17/transfer_benchmark.py",
+      "sha256": "e8777d794e57273699b21fed08144cb5edb992359bdf0d4c1474d64e2324d20c"
+    },
+    {
+      "path": "student.tests/pa17/transfer_controls.py",
+      "sha256": "d0dc595b6bed8055cbab41da3417eb789e218582bcb254b34b086fd626f15831"
+    },
+    {
+      "path": "student.tests/pa17/transfer_replay.py",
+      "sha256": "db3d8e7bf947c2bb4dfd62c4474a5133bb488d14f2477496b22ff9631fdd788a"
+    },
+    {
+      "path": "student.tests/pa17/verify_audit.py",
+      "sha256": "dcb09d5a96907e869e974198e839b52968e20027bb268dd0de80044b9bba7386"
+    },
+    {
+      "path": "student.tests/pa17/verify_checkpoint52.py",
+      "sha256": "ac5f43e7cdb9ef2a3be1ef06bcdbd5cfa279372213198dda76fc1b593ed4344b"
+    },
+    {
+      "path": "student.tests/pa17/verify_checkpoint56.py",
+      "sha256": "3dbe9359a221cf6bbee8b6ddc32a79c4a3afa75e84438d5877a2602ec1f5918f"
+    },
+    {
+      "path": "student.tests/pa17/verify_checkpoint60.py",
+      "sha256": "703cea342bc0a7e9f1cc5903b8106aa499e0754148efbc0f2f82f6f045311697"
+    },
+    {
+      "path": "student.tests/pa17/verify_handoff.py",
+      "sha256": "b7527f0ad49f2d0f403a720c1f221549451589feee6757d20f8357b4a36b90cb"
+    },
+    {
+      "path": "student.tests/pa17/verify_handoff61.py",
+      "sha256": "cbca06151a7a66ecf6e2fad9c54c38acdf24ceec6208e947a171925808859cff"
+    },
+    {
+      "path": "student.tests/pa17/verify_publication.py",
+      "sha256": "a91ff1ea603cb301d4e772fddab984411d4f78fc6aabe33621614c7cdf5397fc"
+    },
+    {
+      "path": "student.tests/pa17/verify_qualified.py",
+      "sha256": "8eed10e34f30fef6ea68071982190c0985352d3c14422a0d931fec0fdd3adcb3"
+    },
+    {
+      "path": "student.tests/pa17/verify_query.py",
+      "sha256": "01726de48ab8430c438410975bc68b0ff805419665285ced13d1dcfbc262ac4e"
+    },
+    {
+      "path": "student.tests/pa17/verify_selection.py",
+      "sha256": "05efd44b3a0577aa12860817c99a8078c132453f42a365e0449d171f82e5a4bb"
+    },
+    {
+      "path": "student.tests/pa17/verify_storage.py",
+      "sha256": "5f11715b6114b89ecfc101bdd785d4818ba19d92a1e9ca77e8045e1c91bca1ea"
+    },
+    {
+      "path": "student.tests/pa17/verify_transfer.py",
+      "sha256": "b9f696b3007cb6a6d4c265e1a17b290c233136c5743de93afad12387c11c760a"
+    }
+  ],
+  "remaining_defects": [],
+  "unaudited_handoffs": [],
+  "reference_changes": [],
+  "performance_acceptance": "PA17/O0 stage-scoped acceptance; no mandated numerical ceiling. Preserve historical diagnostics, semantic costs, work/growth bounds and later-stage ownership.",
+  "advisory_warnings": [
+    "lowering/procedural.h header division",
+    "semantic/analyzer.h header division",
+    "semantic/model.h header division"
+  ],
+  "corrected_invocation": {
+    "log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop62/abi-final.log",
+      "sha256": "54189715b7effd32773960baa9a7672cb57fddc9e3eb87a82305eda5ce16bb20"
+    },
+    "explanation": "Passed CLI abimangle to API harness; rebuilt intended API harness and reran successfully."
+  }
+}
