@@ -1,4 +1,4 @@
-global @_GLOBAL__N_1__color_map : ptr [binding=internal, object=_ZN12_GLOBAL__N_19color_mapE] = zero
+global @_GLOBAL__N_1__color_map : ptr [binding=internal, object=_ZN12_GLOBAL__N_19color_mapE] = addr @n____cppgm_class_template_identity_0_0_0__instance
 global @n____cppgm_class_template_identity_0_0_0__instance [binding=weak, object=_ZN1n7keywordIN3tag9color_mapEE8instanceE] = {
   zero 1
 }
@@ -33,8 +33,6 @@ function @n__keyword_tag__color_map___keyword_tag__color_map_(%this : ptr [objec
 }
 function @__cppgm_init() -> void [role=init, binding=internal] {
   block ^entry:
-    %t1 = addr @n____cppgm_class_template_identity_0_0_0__instance
-    store ptr %t1, @_GLOBAL__N_1__color_map
     %t2 = addr @n____cppgm_class_template_identity_0_0_0__instance
     call void @n__keyword_tag__color_map___keyword_tag__color_map_(%t2)
     return void

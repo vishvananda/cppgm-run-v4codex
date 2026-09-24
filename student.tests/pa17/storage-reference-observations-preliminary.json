@@ -1,0 +1,71 @@
+{
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "compiler_sha256": "e32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70",
+  "reducers": [
+    {
+      "name": "reference",
+      "source": "int value;extern int& ref;int check(){return &ref==&value;}int observed=check();int& ref=value;int main(){return observed!=1;}",
+      "source_sha256": "15e4818d35b934813a30491b3196ef7110cb432f56706e47229128ca2e4a724e",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "lowir": "global @value : i32 [binding=strong, object=_Z5value] = zero\nglobal @observed : i32 [binding=strong, object=_Z8observed] = zero\nglobal @ref : ptr [binding=strong, object=_Z3ref] = zero\n\nfunction @check() -> i32 [binding=strong, object=_Z5checkv] {\n  block ^entry:\n    %t1 = load ptr @ref\n    %t2 = addr @value\n    %t3 = cmp eq ptr %t1, %t2\n    %t4 = convert trunc i32 i64 %t3\n    return i32 %t4\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  block ^entry:\n    %t1 = load i32 @observed\n    %t2 = cmp ne i32 %t1, 1\n    %t3 = convert trunc i32 i64 %t2\n    return i32 %t3\n}\nfunction @__cppgm_init() -> void [role=init, binding=internal] {\n  block ^entry:\n    %t1 = call i32 @check()\n    store i32 %t1, @observed\n    %t2 = addr @value\n    store ptr %t2, @ref\n    return void\n}\n",
+      "lowir_sha256": "0798d1449ab4158093bc309c470a92f39422d28bc18b744b2964dc764026ef91",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 1,
+      "native_sha256": "ec766e031c1c09c2b1125fc78bb1c73dd43f29a39e15bbda2bb26eee7203d7b5"
+    },
+    {
+      "name": "constexpr_function_address",
+      "source": "void f(){}struct Table{void(*p)();constexpr Table(void(*q)()):p(q){}};constexpr Table t(&f);int main(){return t.p!=&f;}",
+      "source_sha256": "5b6636376b03773bb7dba9b2224e270ebb16a496966318d44e62f8f055431596",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "lowir": "global @t [binding=internal, object=_Z1t] = {\n  ptr addr @f\n}\n\nfunction @f() -> void [binding=strong, object=_Z1fv] {\n  block ^entry:\n    return void\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  block ^entry:\n    %t1 = addr @t\n    %t2 = index i8 [projection=field] %t1, 0\n    %t3 = load ptr %t2\n    %t4 = addr @f\n    %t5 = cmp ne ptr %t3, %t4\n    %t6 = convert trunc i32 i64 %t5\n    return i32 %t6\n}\nfunction @Table__Table(%this : ptr [object_bytes=8], %q : ptr) -> void [binding=weak, object=_ZN5TableC1EPFvvE, inline_hint=yes] {\n  slot $this : ptr\n  slot $q : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    store ptr %q, $q\n    %t1 = load ptr $q\n    %t2 = load ptr $this\n    %t3 = index i8 [projection=field] %t2, 0\n    store ptr %t1, %t3\n    return void\n}\nalias object _ZN5TableC2EPFvvE = @Table__Table\n",
+      "lowir_sha256": "5b06798ea7d903c0acd7cc5c7bf7c76b578a13183d0b6fee93e7381a83cb2cca",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0,
+      "native_sha256": "a3aba5c597b81a21bdf807997253a909e96706b98c633742345923bbe4fe6ff7"
+    },
+    {
+      "name": "local_function_address",
+      "source": "int f(){return 7;}struct Table{int(*p)();};int main(){static const Table t={&f};return t.p()!=7;}",
+      "source_sha256": "0f7bd49f4928afe62cbce0f0c6fd9e909561fb4271cd7116da6fd70dc00a2061",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "lowir": "global @__local_static__main__decl0__t [binding=internal] = {\n  ptr addr @f\n}\n\nfunction @f() -> i32 [binding=strong, object=_Z1fv] {\n  block ^entry:\n    return i32 7\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  block ^entry:\n    %t1 = addr @__local_static__main__decl0__t\n    %t2 = index i8 [projection=field] %t1, 0\n    %t3 = load ptr %t2\n    %t4 = call i32 %t3() as () -> i32\n    %t5 = cmp ne i32 %t4, 7\n    %t6 = convert trunc i32 i64 %t5\n    return i32 %t6\n}\n",
+      "lowir_sha256": "8628b206acc687eba537de99e09281764d496f58490694a4465cc4525be6df19",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0,
+      "native_sha256": "673c6bef4093769574b801b7fd8e6d3348b07c7298616943af38b68cf4a969a1"
+    },
+    {
+      "name": "unused_member",
+      "source": "int calls;int init(){++calls;return 1;}template<class T>struct X{static const int n;friend X f(X){return X();}};template<class T>const int X<T>::n=init();int main(){X<int>x;f(x);return calls;}",
+      "source_sha256": "a4e0f2cd520d0d103e52c48663ff25b064bc169de223b12cf93fe722180b556c",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "lowir": "global @calls : i32 [binding=strong, object=_Z5calls] = zero\nglobal @__cppgm_class_template_identity_0_0_0__n : i32 [binding=weak, object=_ZN1XIiE1nE] = zero\n\nfunction @init() -> i32 [binding=strong, object=_Z4initv] {\n  block ^entry:\n    %t1 = load i32 @calls\n    %t2 = binary add i32 %t1, 1\n    store i32 %t2, @calls\n    return i32 1\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $x : obj<1x1>\n  slot $discard__1 : obj<1x1>\n  slot $argobj__2 : obj<1x1>\n\n  block ^entry:\n    %t1 = addr $x\n    %t2 = addr $discard__1\n    %t3 = addr $argobj__2\n    %t4 = addr $x\n    %t5 = call obj<1x1> @f($argobj__2)\n    %t6 = load i32 @calls\n    return i32 %t6\n}\nfunction @f(%__param0 : obj<1x1>) -> obj<1x1> [binding=weak, object=_Z1f1XIiE, inline_hint=yes] {\n  slot $__param0 : obj<1x1>\n  slot $retobj__1 : obj<1x1>\n\n  block ^entry:\n    %t1 = addr $retobj__1\n    return obj<1x1> $retobj__1\n}\nfunction @__cppgm_init() -> void [role=init, binding=internal] {\n  block ^entry:\n    %t1 = call i32 @init()\n    store i32 %t1, @__cppgm_class_template_identity_0_0_0__n\n    return void\n}\n",
+      "lowir_sha256": "ffe971081b3e082422aa2370d2b0bafc6dfb18ada640e68f80ed3af82426abc4",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 1,
+      "native_sha256": "87d6690e3611e4e701177e6f8d3f6d62e4cc74b932a0ffb9877fee574acc6991"
+    },
+    {
+      "name": "empty_value",
+      "source": "struct X{};X f(){return X();}int main(){X x=f();return 0;}",
+      "source_sha256": "e9b16d0812e6815d37e38fd5a800b8d5fa5f4a12a806aadebd99617f8a449bc4",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "lowir": "function @f() -> obj<1x1> [binding=strong, object=_Z1fv] {\n  slot $retobj__1 : obj<1x1>\n\n  block ^entry:\n    %t1 = addr $retobj__1\n    return obj<1x1> $retobj__1\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $x : obj<1x1>\n\n  block ^entry:\n    %t1 = addr $x\n    %t2 = call obj<1x1> @f()\n    return i32 0\n}\n",
+      "lowir_sha256": "0f5c9964dfbc836a3aa6495e7be506b2f2b94f817f8530241aa99cc026e12ee7",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0,
+      "native_sha256": "84c34a64d1ce476d91e932316e5176314322a75b7115c8de2b64691f2e1497fe"
+    }
+  ]
+}

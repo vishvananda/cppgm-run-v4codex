@@ -1,4 +1,4 @@
-global @__cppgm_class_template_identity_0_0_0__block_size : i64 [storage=readonly, binding=weak, object=_ZN4IterIilE10block_sizeE] = 0
+declare global @__cppgm_class_template_identity_0_0_0__block_size : i64 [storage=readonly, binding=weak, object=_ZN4IterIilE10block_sizeE]
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $it : obj<1x1>
@@ -33,6 +33,7 @@ function @operator_(%__param0 : i64, %__param1 : ptr [pass=by_address, object_by
     store i64 %__param0, $__param0
     store ptr %__param1, $__param1
     %t1 = addr $retobj__1
+    zeroinit 1x1 %t1
     return obj<1x1> $retobj__1
 }
 function @hidden_friend_current_instantiation__operator__(%left : ptr [pass=by_address, object_bytes=1], %right : ptr [pass=by_address, object_bytes=1]) -> u8 [binding=weak, object=_ZN35hidden_friend_current_instantiationneERKNS_4iterIiEES3_, inline_hint=yes] {

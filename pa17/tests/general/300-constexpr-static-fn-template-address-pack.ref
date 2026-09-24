@@ -1,5 +1,5 @@
 global @__cppgm_class_template_identity_1_0_0__value [binding=weak, object=_ZN14table_instanceIiJFvvEEE5valueE] = {
-  zero 8
+  ptr addr @slot_void_____impl
 }
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
@@ -36,13 +36,6 @@ function @table__table(%this : ptr [object_bytes=8], %first : ptr) -> void [bind
 }
 function @slot_void_____impl() -> void [binding=weak, object=_ZN4slotIFvvEE4implIiEEvv, inline_hint=yes] {
   block ^entry:
-    return void
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @__cppgm_class_template_identity_1_0_0__value
-    %t2 = addr @slot_void_____impl
-    call void @table__table(%t1, %t2)
     return void
 }
 alias object _ZN5tableC2EPFvvE = @table__table

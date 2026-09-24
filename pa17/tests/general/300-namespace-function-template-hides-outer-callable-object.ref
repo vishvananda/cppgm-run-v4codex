@@ -1,4 +1,4 @@
-global @outer___GLOBAL__N_1__print : ptr [binding=internal, object=_ZN5outer12_GLOBAL__N_15printE] = zero
+global @outer___GLOBAL__N_1__print : ptr [binding=internal, object=_ZN5outer12_GLOBAL__N_15printE] = addr @outer____cppgm_class_template_identity_0_0_0__value
 global @outer____cppgm_class_template_identity_0_0_0__value [binding=weak, object=_ZN5outer12static_constINS_4impl7printerEE5valueE] = {
   zero 1
 }
@@ -53,10 +53,4 @@ function @outer__impl__print(%__param0 : ptr [pass=by_address, object_bytes=1]) 
   block ^entry:
     store ptr %__param0, $__param0
     return i32 1
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @outer____cppgm_class_template_identity_0_0_0__value
-    store ptr %t1, @outer___GLOBAL__N_1__print
-    return void
 }
