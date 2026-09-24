@@ -1,0 +1,343 @@
+[
+  {
+    "name": "anonymous_nested_storage",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_union_struct",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_alignment",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "named_anonymous_type_not_injected",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "anonymous_cv_access",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": false
+  },
+  {
+    "name": "constructor_conversion_declarations",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "constructor_conversion_qualified_target",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "constructor_template_body_and_conversion_name",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type name is not visible\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_false_copy",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_true_direct",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_parameter_copy",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_outer_parameter",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_fixed_non_template",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_default_constructor",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_renamed_definition",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_constexpr_function",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_contextual_bool",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_nullptr",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_short_circuit",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_template_template",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_fixed_field_body",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unbound template value name\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_hides_base",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 4
+  },
+  {
+    "name": "anonymous_protected",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: x\n",
+    "passed": false
+  },
+  {
+    "name": "array_functional_pack",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: scalar cast arity\n",
+    "passed": false
+  },
+  {
+    "name": "array_functional_fixed",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: fixed scalar cast arity\n",
+    "passed": false
+  },
+  {
+    "name": "array_functional_values",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: scalar cast arity\n",
+    "passed": false
+  },
+  {
+    "name": "array_functional_zero_tail",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid explicit cast\n",
+    "passed": false
+  },
+  {
+    "name": "array_functional_class_cleanup",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "conditional_nested_renamed_definition",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_pack",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "conditional_conversion_function",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_inherited_offsets",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: x\n",
+    "passed": false
+  },
+  {
+    "name": "anonymous_volatile",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": false
+  },
+  {
+    "name": "union_large_zero_fallback",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "conditional_true_copy",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_parameter_copy_reject",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_outer_copy_reject",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_renamed_copy_reject",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_nonconstant",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_scoped_enum",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "anonymous_const_write",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": true
+  },
+  {
+    "name": "anonymous_private",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": true
+  },
+  {
+    "name": "array_functional_excess",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: scalar cast arity\n",
+    "passed": true
+  },
+  {
+    "name": "array_functional_narrow",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: scalar cast arity\n",
+    "passed": true
+  },
+  {
+    "name": "anonymous_protected_reject",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": true
+  },
+  {
+    "name": "conditional_conversion_reject",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier\n",
+    "passed": true
+  },
+  {
+    "name": "anonymous_duplicate_lookup",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown member\n",
+    "passed": true
+  }
+]

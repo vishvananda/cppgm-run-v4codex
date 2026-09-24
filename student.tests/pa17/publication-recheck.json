@@ -1,0 +1,1812 @@
+{
+  "reason": "Initial common compiler samples show large bidirectional wall-time excursions; repeat with identical binaries/inputs. Confirm the changed union-zero runtime separately.",
+  "campaign_sha256": "d1ffed1bd5869e367b3ea6024aac68adba2ccf64cbcf867e896af6b59dd537cd",
+  "harness_sha256": "4fc25b904785a93cc0ebf62831c6b452dfcd418a992f2f8ebf187a7712ac9e6a",
+  "cpu": 31,
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop54/cppgm-entry",
+      "sha256": "16b3783f192303ee0badbe50da7c5552bb091a3d3daec634767169c050e36ffd",
+      "text_bytes": 1772678
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/loop54/cppgm-final",
+      "sha256": "181bc044df898d92b829a599282f9e55da4f3359e68a901552c23de73936e189",
+      "text_bytes": 1776454
+    }
+  ],
+  "protocol": "one warmup each; four A/A samples followed by four ABBA blocks; final-only six samples",
+  "started_utc": "2026-09-24 15:06:23",
+  "workloads": {
+    "common-partials-1500": {
+      "source_sha256": "e715a29664ac59a541eaed6ffcd39158ffb59cdd065cebddd9385b4ebc1d2206",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 0.253629996,
+            "rss_kib": 22568,
+            "user_s": 0.18,
+            "system_s": 0.05,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.208335041,
+            "rss_kib": 22564,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 0.2123753,
+            "rss_kib": 22304,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.235639352,
+            "rss_kib": 22524,
+            "user_s": 0.19,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.246147493,
+            "rss_kib": 22156,
+            "user_s": 0.2,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.216519661,
+            "rss_kib": 22304,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.215938036,
+            "rss_kib": 22408,
+            "user_s": 0.17,
+            "system_s": 0.04,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.218246012,
+            "rss_kib": 22180,
+            "user_s": 0.18,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.211340379,
+            "rss_kib": 22424,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.215216013,
+            "rss_kib": 22404,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.24324591,
+            "rss_kib": 22356,
+            "user_s": 0.21,
+            "system_s": 0.02,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.214606981,
+            "rss_kib": 22516,
+            "user_s": 0.16,
+            "system_s": 0.04,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.228027142,
+            "rss_kib": 22572,
+            "user_s": 0.18,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.215969898,
+            "rss_kib": 22408,
+            "user_s": 0.18,
+            "system_s": 0.02,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.243654279,
+            "rss_kib": 22208,
+            "user_s": 0.2,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.208379027,
+            "rss_kib": 22388,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.217525772,
+            "rss_kib": 22640,
+            "user_s": 0.17,
+            "system_s": 0.04,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.209490779,
+            "rss_kib": 22384,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.21342806,
+            "rss_kib": 22524,
+            "user_s": 0.17,
+            "system_s": 0.03,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.235993929,
+            "rss_kib": 22636,
+            "user_s": 0.2,
+            "system_s": 0.02,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.22676608,
+            "rss_kib": 22356,
+            "user_s": 0.19,
+            "system_s": 0.02,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.239520673,
+            "rss_kib": 22384,
+            "user_s": 0.18,
+            "system_s": 0.04,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.9963640420317611,
+          0.9638913018429888,
+          0.9398862273369425,
+          1.0216608973272037
+        ],
+        "median_b_over_a": 0.9801276719373749,
+        "aa_range_s": [
+          0.2123753,
+          0.246147493
+        ],
+        "0": {
+          "median_wall_s": 0.215953967,
+          "wall_range_s": [
+            0.209490779,
+            0.243654279
+          ],
+          "peak_rss_kib": 22524
+        },
+        "1": {
+          "median_wall_s": 0.217885892,
+          "wall_range_s": [
+            0.208379027,
+            0.235993929
+          ],
+          "peak_rss_kib": 22640
+        }
+      }
+    },
+    "common-loop-float-1500": {
+      "source_sha256": "329f5472e925a8e245a3f0533b1f9102e9812f460d1cd628964aa826f5ca6dae",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 0.325418992,
+            "rss_kib": 30140,
+            "user_s": 0.26,
+            "system_s": 0.05,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.313710409,
+            "rss_kib": 30216,
+            "user_s": 0.25,
+            "system_s": 0.04,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 0.338909528,
+            "rss_kib": 30152,
+            "user_s": 0.25,
+            "system_s": 0.06,
+            "involuntary": 0,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.352953991,
+            "rss_kib": 30024,
+            "user_s": 0.25,
+            "system_s": 0.09,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.366859864,
+            "rss_kib": 29992,
+            "user_s": 0.27,
+            "system_s": 0.08,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.344285827,
+            "rss_kib": 30036,
+            "user_s": 0.27,
+            "system_s": 0.06,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.382262995,
+            "rss_kib": 30280,
+            "user_s": 0.3,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.32459014,
+            "rss_kib": 29972,
+            "user_s": 0.26,
+            "system_s": 0.05,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.359537715,
+            "rss_kib": 29968,
+            "user_s": 0.27,
+            "system_s": 0.08,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.346805262,
+            "rss_kib": 30080,
+            "user_s": 0.26,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.355945607,
+            "rss_kib": 30188,
+            "user_s": 0.27,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.350511784,
+            "rss_kib": 30224,
+            "user_s": 0.26,
+            "system_s": 0.07,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.366458572,
+            "rss_kib": 29968,
+            "user_s": 0.27,
+            "system_s": 0.08,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.336212337,
+            "rss_kib": 29956,
+            "user_s": 0.26,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.353200785,
+            "rss_kib": 29952,
+            "user_s": 0.27,
+            "system_s": 0.07,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.352294697,
+            "rss_kib": 30028,
+            "user_s": 0.28,
+            "system_s": 0.06,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.334822657,
+            "rss_kib": 30032,
+            "user_s": 0.25,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.356396885,
+            "rss_kib": 30100,
+            "user_s": 0.27,
+            "system_s": 0.07,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.360973932,
+            "rss_kib": 29964,
+            "user_s": 0.28,
+            "system_s": 0.06,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.348228087,
+            "rss_kib": 30156,
+            "user_s": 0.27,
+            "system_s": 0.07,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.329197962,
+            "rss_kib": 30188,
+            "user_s": 0.24,
+            "system_s": 0.08,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.348798049,
+            "rss_kib": 29956,
+            "user_s": 0.28,
+            "system_s": 0.05,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.9383591295211198,
+          1.0358479046799758,
+          0.9683196310382474,
+          0.95442771359553
+        ],
+        "median_b_over_a": 0.9613736723168886,
+        "aa_range_s": [
+          0.338909528,
+          0.366859864
+        ],
+        "0": {
+          "median_wall_s": 0.35457319600000003,
+          "wall_range_s": [
+            0.336212337,
+            0.382262995
+          ],
+          "peak_rss_kib": 30280
+        },
+        "1": {
+          "median_wall_s": 0.3493699355,
+          "wall_range_s": [
+            0.32459014,
+            0.366458572
+          ],
+          "peak_rss_kib": 30224
+        }
+      }
+    },
+    "common-loop-float-6000": {
+      "source_sha256": "53381d91047c930ee8d1af5821a7b595e1ab33e697bf7f0633239014bc850a0c",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 1.398627537,
+            "rss_kib": 104100,
+            "user_s": 1.05,
+            "system_s": 0.34,
+            "involuntary": 7,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.321680365,
+            "rss_kib": 104204,
+            "user_s": 1.11,
+            "system_s": 0.2,
+            "involuntary": 9,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 1.22336506,
+            "rss_kib": 103940,
+            "user_s": 1.0,
+            "system_s": 0.21,
+            "involuntary": 8,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.231998465,
+            "rss_kib": 104012,
+            "user_s": 1.0,
+            "system_s": 0.21,
+            "involuntary": 6,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.220397893,
+            "rss_kib": 103884,
+            "user_s": 0.98,
+            "system_s": 0.21,
+            "involuntary": 7,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.263418851,
+            "rss_kib": 103960,
+            "user_s": 0.98,
+            "system_s": 0.21,
+            "involuntary": 9,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.221826803,
+            "rss_kib": 104052,
+            "user_s": 0.97,
+            "system_s": 0.23,
+            "involuntary": 6,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.261313917,
+            "rss_kib": 103892,
+            "user_s": 1.06,
+            "system_s": 0.19,
+            "involuntary": 7,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.370798781,
+            "rss_kib": 104172,
+            "user_s": 1.14,
+            "system_s": 0.22,
+            "involuntary": 6,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.283894575,
+            "rss_kib": 103944,
+            "user_s": 1.06,
+            "system_s": 0.21,
+            "involuntary": 12,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.265458911,
+            "rss_kib": 103964,
+            "user_s": 1.05,
+            "system_s": 0.2,
+            "involuntary": 13,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.311614241,
+            "rss_kib": 104012,
+            "user_s": 1.08,
+            "system_s": 0.22,
+            "involuntary": 8,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.212423778,
+            "rss_kib": 104152,
+            "user_s": 1.0,
+            "system_s": 0.2,
+            "involuntary": 13,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.228913209,
+            "rss_kib": 104148,
+            "user_s": 1.0,
+            "system_s": 0.21,
+            "involuntary": 19,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.265127507,
+            "rss_kib": 104012,
+            "user_s": 1.04,
+            "system_s": 0.21,
+            "involuntary": 9,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.259224165,
+            "rss_kib": 104136,
+            "user_s": 1.01,
+            "system_s": 0.23,
+            "involuntary": 3,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.296901386,
+            "rss_kib": 103948,
+            "user_s": 1.07,
+            "system_s": 0.21,
+            "involuntary": 7,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.213939994,
+            "rss_kib": 104064,
+            "user_s": 1.0,
+            "system_s": 0.2,
+            "involuntary": 11,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.297908205,
+            "rss_kib": 103936,
+            "user_s": 1.07,
+            "system_s": 0.21,
+            "involuntary": 5,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.311803682,
+            "rss_kib": 104172,
+            "user_s": 1.07,
+            "system_s": 0.22,
+            "involuntary": 5,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 1.266265151,
+            "rss_kib": 104204,
+            "user_s": 1.04,
+            "system_s": 0.21,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.238250092,
+            "rss_kib": 103964,
+            "user_s": 1.03,
+            "system_s": 0.2,
+            "involuntary": 10,
+            "voluntary": 2,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          1.0504410909807071,
+          1.011893132849801,
+          1.0310834819822035,
+          1.0165252050905402
+        ],
+        "median_b_over_a": 1.023804343536372,
+        "aa_range_s": [
+          1.220397893,
+          1.263418851
+        ],
+        "0": {
+          "median_wall_s": 1.2516887995000001,
+          "wall_range_s": [
+            1.213939994,
+            1.297908205
+          ],
+          "peak_rss_kib": 104148
+        },
+        "1": {
+          "median_wall_s": 1.2815832685,
+          "wall_range_s": [
+            1.212423778,
+            1.370798781
+          ],
+          "peak_rss_kib": 104204
+        }
+      }
+    },
+    "member-qualified-1500": {
+      "source_sha256": "c498eab806a013a86cbd0cd6c8c21fd63653cffdb36769d09538d0de56357589",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 0.647623373,
+            "rss_kib": 50600,
+            "user_s": 0.54,
+            "system_s": 0.1,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.601806591,
+            "rss_kib": 50076,
+            "user_s": 0.51,
+            "system_s": 0.08,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 0.624506184,
+            "rss_kib": 50496,
+            "user_s": 0.51,
+            "system_s": 0.1,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.594951806,
+            "rss_kib": 50776,
+            "user_s": 0.5,
+            "system_s": 0.08,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.596796636,
+            "rss_kib": 50472,
+            "user_s": 0.5,
+            "system_s": 0.08,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.587933542,
+            "rss_kib": 50536,
+            "user_s": 0.48,
+            "system_s": 0.1,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.582303552,
+            "rss_kib": 50620,
+            "user_s": 0.5,
+            "system_s": 0.07,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.617752716,
+            "rss_kib": 50172,
+            "user_s": 0.52,
+            "system_s": 0.08,
+            "involuntary": 9,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.556445688,
+            "rss_kib": 50212,
+            "user_s": 0.44,
+            "system_s": 0.1,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.602260439,
+            "rss_kib": 50404,
+            "user_s": 0.5,
+            "system_s": 0.09,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.588796461,
+            "rss_kib": 50364,
+            "user_s": 0.47,
+            "system_s": 0.11,
+            "involuntary": 5,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.59960086,
+            "rss_kib": 50256,
+            "user_s": 0.5,
+            "system_s": 0.08,
+            "involuntary": 7,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.578789171,
+            "rss_kib": 50188,
+            "user_s": 0.48,
+            "system_s": 0.09,
+            "involuntary": 7,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.57588745,
+            "rss_kib": 50616,
+            "user_s": 0.49,
+            "system_s": 0.08,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.598209188,
+            "rss_kib": 50368,
+            "user_s": 0.5,
+            "system_s": 0.08,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.554383211,
+            "rss_kib": 50204,
+            "user_s": 0.45,
+            "system_s": 0.09,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.58781063,
+            "rss_kib": 50252,
+            "user_s": 0.5,
+            "system_s": 0.07,
+            "involuntary": 7,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.650526032,
+            "rss_kib": 50452,
+            "user_s": 0.52,
+            "system_s": 0.11,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.549562088,
+            "rss_kib": 50536,
+            "user_s": 0.45,
+            "system_s": 0.09,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.552062031,
+            "rss_kib": 50376,
+            "user_s": 0.46,
+            "system_s": 0.07,
+            "involuntary": 5,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.578272452,
+            "rss_kib": 50220,
+            "user_s": 0.49,
+            "system_s": 0.08,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.580262108,
+            "rss_kib": 50528,
+            "user_s": 0.47,
+            "system_s": 0.09,
+            "involuntary": 5,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.9912494495200302,
+          1.0117681028050194,
+          0.9146805685515943,
+          1.0004516516833386
+        ],
+        "median_b_over_a": 0.9958505506016844,
+        "aa_range_s": [
+          0.587933542,
+          0.624506184
+        ],
+        "0": {
+          "median_wall_s": 0.5855500065,
+          "wall_range_s": [
+            0.549562088,
+            0.650526032
+          ],
+          "peak_rss_kib": 50620
+        },
+        "1": {
+          "median_wall_s": 0.5785308115000001,
+          "wall_range_s": [
+            0.552062031,
+            0.617752716
+          ],
+          "peak_rss_kib": 50376
+        }
+      }
+    },
+    "member-qualified-6000": {
+      "source_sha256": "66adfd331e409ddf7b9d9d52a6fdaf736dac97369963bdbe7e22d819f1846978",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 2.466088209,
+            "rss_kib": 184680,
+            "user_s": 1.94,
+            "system_s": 0.51,
+            "involuntary": 26,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 2.360302166,
+            "rss_kib": 184952,
+            "user_s": 1.97,
+            "system_s": 0.38,
+            "involuntary": 20,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 2.748802478,
+            "rss_kib": 184912,
+            "user_s": 2.24,
+            "system_s": 0.49,
+            "involuntary": 28,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 2.582290602,
+            "rss_kib": 184736,
+            "user_s": 2.1,
+            "system_s": 0.46,
+            "involuntary": 23,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 2.606114882,
+            "rss_kib": 184820,
+            "user_s": 2.19,
+            "system_s": 0.4,
+            "involuntary": 23,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 2.365509934,
+            "rss_kib": 184708,
+            "user_s": 2.01,
+            "system_s": 0.33,
+            "involuntary": 14,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 2.404433352,
+            "rss_kib": 184652,
+            "user_s": 2.03,
+            "system_s": 0.36,
+            "involuntary": 17,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 2.84413852,
+            "rss_kib": 184940,
+            "user_s": 2.38,
+            "system_s": 0.45,
+            "involuntary": 20,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.037438992,
+            "rss_kib": 184864,
+            "user_s": 2.49,
+            "system_s": 0.53,
+            "involuntary": 25,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 3.462927467,
+            "rss_kib": 184644,
+            "user_s": 2.93,
+            "system_s": 0.52,
+            "involuntary": 27,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 3.253028396,
+            "rss_kib": 184804,
+            "user_s": 2.68,
+            "system_s": 0.55,
+            "involuntary": 24,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.448363552,
+            "rss_kib": 185048,
+            "user_s": 2.91,
+            "system_s": 0.52,
+            "involuntary": 22,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.322258634,
+            "rss_kib": 185084,
+            "user_s": 2.82,
+            "system_s": 0.48,
+            "involuntary": 35,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 3.244946233,
+            "rss_kib": 184800,
+            "user_s": 2.74,
+            "system_s": 0.49,
+            "involuntary": 17,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 2.829194758,
+            "rss_kib": 184696,
+            "user_s": 2.34,
+            "system_s": 0.47,
+            "involuntary": 38,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.131712637,
+            "rss_kib": 184912,
+            "user_s": 2.61,
+            "system_s": 0.51,
+            "involuntary": 19,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.289905998,
+            "rss_kib": 184904,
+            "user_s": 2.81,
+            "system_s": 0.47,
+            "involuntary": 21,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 3.323681278,
+            "rss_kib": 184684,
+            "user_s": 2.81,
+            "system_s": 0.5,
+            "involuntary": 36,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 3.235582713,
+            "rss_kib": 184720,
+            "user_s": 2.72,
+            "system_s": 0.5,
+            "involuntary": 34,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.028326859,
+            "rss_kib": 185028,
+            "user_s": 2.57,
+            "system_s": 0.44,
+            "involuntary": 30,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 3.479663928,
+            "rss_kib": 184908,
+            "user_s": 2.95,
+            "system_s": 0.51,
+            "involuntary": 41,
+            "voluntary": 2,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 1.40963573,
+            "rss_kib": 184824,
+            "user_s": 1.02,
+            "system_s": 0.38,
+            "involuntary": 12,
+            "voluntary": 2,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          1.0024230132488123,
+          1.0419588521911418,
+          1.043677557848981,
+          1.4010085568326844
+        ],
+        "median_b_over_a": 1.0428182050200614,
+        "aa_range_s": [
+          2.365509934,
+          2.748802478
+        ],
+        "0": {
+          "median_wall_s": 3.240264473,
+          "wall_range_s": [
+            1.40963573,
+            3.462927467
+          ],
+          "peak_rss_kib": 184824
+        },
+        "1": {
+          "median_wall_s": 3.2108093175,
+          "wall_range_s": [
+            2.84413852,
+            3.479663928
+          ],
+          "peak_rss_kib": 185084
+        }
+      }
+    },
+    "union-zero-runtime": {
+      "source_sha256": "5ea62bd63d8499716cfff1f29ad38ab1b4cb361610c7b2b21f02a3b385f6ea8c",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 0.00526384,
+            "rss_kib": 5700,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.00555337,
+            "rss_kib": 5796,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 0.004817301,
+            "rss_kib": 5540,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004710447,
+            "rss_kib": 5728,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004605371,
+            "rss_kib": 5840,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004796971,
+            "rss_kib": 5588,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004666667,
+            "rss_kib": 5840,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.00463032,
+            "rss_kib": 5796,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.004597626,
+            "rss_kib": 5608,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004783121,
+            "rss_kib": 5672,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.0056759,
+            "rss_kib": 5608,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.004731988,
+            "rss_kib": 5660,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.004584816,
+            "rss_kib": 5704,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.00468567,
+            "rss_kib": 5820,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.00464072,
+            "rss_kib": 5488,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.004716245,
+            "rss_kib": 5544,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.005216472,
+            "rss_kib": 5788,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.00492637,
+            "rss_kib": 5640,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004920326,
+            "rss_kib": 5704,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.004889994,
+            "rss_kib": 5672,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.00476165,
+            "rss_kib": 5612,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.004601991,
+            "rss_kib": 5724,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.9765241294302052,
+          0.8991691413559915,
+          1.0382171590316387,
+          1.0135814634190399
+        ],
+        "median_b_over_a": 0.9950527964246225,
+        "aa_range_s": [
+          0.004605371,
+          0.004817301
+        ],
+        "0": {
+          "median_wall_s": 0.0047343955,
+          "wall_range_s": [
+            0.004601991,
+            0.0056759
+          ],
+          "peak_rss_kib": 5840
+        },
+        "1": {
+          "median_wall_s": 0.0047241165,
+          "wall_range_s": [
+            0.004584816,
+            0.005216472
+          ],
+          "peak_rss_kib": 5796
+        }
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "binary": 0,
+            "wall_s": 0.432453499,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.085707346,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 0,
+            "wall_s": 0.432904383,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.429862312,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.43232521,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 10,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.441851652,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.44290357,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.086122092,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.085772386,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.437362308,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.441898823,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 7,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.08717988,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.085932574,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.431480846,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.431359917,
+            "rss_kib": 256,
+            "user_s": 0.42,
+            "system_s": 0.0,
+            "involuntary": 5,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.086430544,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 2,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.085719776,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.44175989,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 7,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.440988176,
+            "rss_kib": 256,
+            "user_s": 0.43,
+            "system_s": 0.0,
+            "involuntary": 6,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.087173217,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.088554706,
+            "rss_kib": 256,
+            "user_s": 0.08,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 0,
+            "wall_s": 0.443822163,
+            "rss_kib": 256,
+            "user_s": 0.44,
+            "system_s": 0.0,
+            "involuntary": 3,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "paired_b_over_a": [
+          0.19527563466455303,
+          0.1982098509325387,
+          0.19716689350056174,
+          0.19860518718464026
+        ],
+        "median_b_over_a": 0.19768837221655022,
+        "aa_range_s": [
+          0.429862312,
+          0.441851652
+        ],
+        "0": {
+          "median_wall_s": 0.441374033,
+          "wall_range_s": [
+            0.431359917,
+            0.443822163
+          ],
+          "peak_rss_kib": 256
+        },
+        "1": {
+          "median_wall_s": 0.08627631799999999,
+          "wall_range_s": [
+            0.085719776,
+            0.088554706
+          ],
+          "peak_rss_kib": 256
+        }
+      }
+    }
+  },
+  "finished_utc": "2026-09-24 15:08:27"
+}
