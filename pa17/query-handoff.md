@@ -1,7 +1,7 @@
 # PA17 query/candidate implementation — loop 58
 
 Entry `411ad00e37b421dc1d3d85b5438e010bd099e025`: 330/343.
-First code increment `7d04e8ce`: 333/343; `1e5f15ab` restores the original entity size and explicit-specialization deletion ownership. A final increment removes redundant default validation for fully deduced calls. No course fixture, reference,
+First code increment `7d04e8ce`: 333/343; `1e5f15ab` restores the original entity size and explicit-specialization deletion ownership. Final code `f284514b` removes redundant default validation for fully deduced calls. No course fixture, reference,
 comparison rule, or bundle revision changed. This is an implementation handoff;
 independent stage review and the ten remaining course failures are still open.
 

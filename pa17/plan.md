@@ -5,7 +5,7 @@ Last reviewed commit: `e14b96fa9d4b3376e5922b8ad30093c3c0b0c759`
 
 Target: **PA17 full-stage**. Implementation remains incomplete; do not advance.
 Loop 58 entered clean at `411ad00e`, **330/343** (13 failures). The previous
-turn was verified progress; no live process remained from it. Code `1e5f15ab`
+turn was verified progress; no live process remained from it. Code `f284514b`
 passes **333/343**: three original failures closed, no new failures and unchanged
 343-case coverage. PA1–PA16 pass **2266/2266**; through PA17 is **2599/2609**.
 All **530 personal controls** pass (493 inherited, 37 new). File audit passes
@@ -25,15 +25,16 @@ course input or comparison rule changed.
 The source→query→specialization→LowIR→supplied-backend trace is retained with
 hashes and a checked runtime result. The compiler does not invoke the backend.
 
-Performance: final campaign pending. The complete preliminary campaign is
-preserved; it exposed avoidable per-entity growth (128 bytes), corrected to the
-entry's 120 bytes. The frozen final campaign measures common correct programs
-with A/A calibration and four ABBA blocks, plus final-only newly accepted inputs.
-All four dimensions, query/candidate work, output equivalence and limitations
-are recorded. No optional optimization is added. PA17/O0 has no mandated numeric
-ceiling; historical +15%, +16 MiB and 5.5× targets remain diagnostic under spec.md
-§9. Work is bounded by actual candidates, head widths and canonical queries;
-no extra generated-code expansion policy is introduced.
+Performance: 16 final workloads, A/A calibration and four ABBA blocks on
+common correct inputs; newly accepted inputs have final-only costs. Compiler
+.text +5,312 B; entity size remains 120 B; maximum extra observed RSS +1,676 KiB.
+Common compiler paired medians 0.9975–1.0209. Common runtime binaries and sizes
+are identical. Recursive inputs at 4× scale produce 4× candidate/cycle work;
+canonical query computations equal query counts. Both preliminary campaigns
+remain preserved. No optimization benefit is claimed and no optional transform
+is added. PA17/O0 has no mandated numeric ceiling; historical +15%, +16 MiB and
+5.5× targets remain diagnostic under spec.md §9. Work is bounded by candidates,
+head widths and canonical queries; no generated-code expansion is introduced.
 
 | Unfinished implementation owner | Failures | Next work |
 |---|---:|---|
@@ -57,7 +58,7 @@ review questions as well. Neither review nor unfinished implementation is waived
 |---|---|
 | 56 / checkpointAudit | `c43e8eb6..e14b96fa`; accumulated review complete; 324/343; earlier 2266/2266; 465 controls; file audit/performance accepted. [Audit](audit.md) preserved. |
 | 57 / implement | `69152966..794b150e`; transfers/adjustments and automatic initialization; 330/343, six failures closed; earlier 2266/2266; 493 controls; [evidence](transfer-handoff.md) preserved. |
-| 58 / implement | `411ad00e..1e5f15ab`; query/candidate demand and adjacent deletion/default ownership; 333/343, three failures closed; earlier 2266/2266; 530 controls. Final performance/evidence verification pending. |
+| 58 / implement | `411ad00e..f284514b`; query/candidate demand and adjacent deletion/default ownership; 333/343, three failures closed; earlier 2266/2266; 530 controls. File audit and frozen performance evidence pass; independent review and ten implementation cases remain. |
 
 Run `python3 student.tests/pa17/verify_query.py`. Historical verifiers describe
 their frozen tips. Review markers above are preserved for Ralph's next audit.
