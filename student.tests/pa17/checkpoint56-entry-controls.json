@@ -1,0 +1,272 @@
+[
+  {
+    "name": "type_member_pointer",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{using A=int;};template<class T>typename T::A* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "2d1f07cdf739c1f42b4009045e14d2b53d6a8d95e54673c25d24b218b3035a84"
+  },
+  {
+    "name": "applied_alias_pointer",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class U>using A=U;};template<class T>typename T::template A<int>* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "1dd0fa265ea765bfe510e06322f62756106d3f1376e1f095603627137623c2de"
+  },
+  {
+    "name": "applied_class_pointer",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class U>struct A{};};template<class T>typename T::template A<int>* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "4c5ed53dbfabfe69cc22545cc82466bf50723fdd10bb2eb5dbe8099f2dbd838e"
+  },
+  {
+    "name": "alias_template_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class U>using A=U;};template<template<class>class F>struct S{using type=F<int>;};template<class T>using V=typename S<T::template A>::type;int main(){V<X>x=7;return x-7;}",
+    "source_sha256": "695de4ba2447e710f1bea9690c9fa3687cb84183adac4331b3aeeb7112e598f5"
+  },
+  {
+    "name": "class_template_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class U>struct A{static const int n=sizeof(U);};};template<template<class>class F>struct S{static const int n=F<int>::n;};template<class T>int f(){return S<T::template A>::n;}int main(){return f<X>()-4;}",
+    "source_sha256": "fdd8fa7b4822a031a0e7db75eb2f6a91a5d0a833ba24e98f88f30de69089acac"
+  },
+  {
+    "name": "inherited_template_argument",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>struct B{template<class U>using A=U;};template<class T>struct D:B<T>{};template<template<class>class F>struct S{using type=F<int>;};template<class T>using V=typename S<T::template A>::type;int main(){V<D<char>>x=7;return x-7;}",
+    "source_sha256": "d331bc5169b178fb5383751de95d5dc8efd014e7f632b6d925827cee507e6e14"
+  },
+  {
+    "name": "partial_nonclass_qualifier",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type qualifier is not a class\n",
+    "passed": false,
+    "source": "template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,typename T::type>{static const int n=1;};struct X{using type=void;};static_assert(S<int>::n==0 && S<X>::n==1,\"candidate\");int main(){return 0;}",
+    "source_sha256": "0f2d129f80c89a05349c811b8d26bed5667c23da9c6045fb0239de5b05251596"
+  },
+  {
+    "name": "partial_nontemplate_member",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: member is not a class template\n",
+    "passed": false,
+    "source": "template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,typename T::template F<int>>{static const int n=1;};struct X{using F=int;};struct Y{template<class>using F=void;};static_assert(S<X>::n==0 && S<Y>::n==1,\"candidate\");int main(){return 0;}",
+    "source_sha256": "2a89a6759c35f4ccee883ec0a381d34be814ec851135ed7761ef357aee7af8f0"
+  },
+  {
+    "name": "partial_template_as_type",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,typename T::F>{static const int n=1;};struct X{template<class>using F=int;};struct Y{using F=void;};static_assert(S<X>::n==0 && S<Y>::n==1,\"candidate\");int main(){return 0;}",
+    "source_sha256": "eeee36330019ce91cf071b24ba9ec75b50b207f49d1fb57c3d7345f30544a065"
+  },
+  {
+    "name": "partial_const_failure",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<bool,class=void>struct E{};template<class T>struct E<true,T>{using type=T;};template<class T>using A=const typename E<(sizeof(T)>1),T>::type;template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,A<T>>{static const int n=1;};static_assert(S<char,const int>::n==0 && S<int,const int>::n==1,\"failed type has no cv\");int main(){return 0;}",
+    "source_sha256": "52ef1964a86fdcb73b68c146bf74b9edb52244668433ae6f96614737e1fbc99c"
+  },
+  {
+    "name": "partial_volatile_failure",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<bool,class=void>struct E{};template<class T>struct E<true,T>{using type=T;};template<class T>using A=volatile typename E<(sizeof(T)>1),T>::type;template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,A<T>>{static const int n=1;};static_assert(S<char,volatile int>::n==0 && S<int,volatile int>::n==1,\"failed type has no cv\");int main(){return 0;}",
+    "source_sha256": "bf8610aab97ef692d031ba7bb4c01825121c6a49318e53edad95493cf2411f84"
+  },
+  {
+    "name": "partial_cv_direct_failure",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,const volatile typename T::type>{static const int n=1;};struct X{};struct Y{using type=int;};static_assert(S<X,const volatile int>::n==0 && S<Y,const volatile int>::n==1,\"failed type\");int main(){return 0;}",
+    "source_sha256": "c31ecfda418792ea07cb61364eea772f6305055ad6bc527a2adcf232d23077d2"
+  },
+  {
+    "name": "partial_repeated_failure",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T>using A=const typename T::type;template<class T,class=void>struct S{static const int n=0;};template<class T>struct S<T,A<T>>{static const int n=1;};template<class T,class=void>struct Q{static const int n=0;};template<class T>struct Q<T,A<T>>{static const int n=2;};struct X{};struct Y{using type=int;};static_assert(S<X,const int>::n==0 && Q<X,const int>::n==0 && S<Y,const int>::n==1 && Q<Y,const int>::n==2,\"cached failure\");int main(){return 0;}",
+    "source_sha256": "ce730b4c0e8337d0885ed196e5c96e3fb17f8ebd26992104aa36a24daa689078"
+  },
+  {
+    "name": "fixed_pack_suffix",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class A,class B>struct S{using type=B;};template<class...T>using X=typename S<T...,int>::type;int main(){X<char>x=7;return x-7;}",
+    "source_sha256": "9de7ea2b3ccc2d5302a0f731493d83ebfe40c58d70424b23fbd6172782c3a564"
+  },
+  {
+    "name": "fixed_pack_defaults",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class A=int,class B=long>struct S{using type=B;};template<class...T>using X=typename S<T...>::type;static_assert(sizeof(X<>)==8 && sizeof(X<char,int>)==4,\"defaults\");int main(){return 0;}",
+    "source_sha256": "e77dcca0bb6d1793c8d38e5f76f56d962f1892c9ea3ce34a650ad1ddb868adcf"
+  },
+  {
+    "name": "conditional_empty_pack",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class...T>explicit(sizeof...(T)>0)X(T...){}};int main(){X x={};return 0;}",
+    "source_sha256": "82daa52fa655dbbdf586e690f55853795afb49c4ac3ad61bbd7d2978b8b84f51"
+  },
+  {
+    "name": "conditional_candidate_filter",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{int n;template<class T>explicit(sizeof(T)>4)X(T):n(1){} X(int):n(2){}};int f(X x){return x.n;}int main(){return f(3L)-2;}",
+    "source_sha256": "15e55ca965cc91ecc4759a0509bbcd126b41c3fcfb0b53515399668f4159a7c6"
+  },
+  {
+    "name": "variable_member_partial_outer",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class X>struct O{template<class T>static const int v=sizeof(X);template<class T>static const int v<T*> =sizeof(X)+sizeof(T);};static_assert(O<char>::v<int*> ==5,\"outer\");int main(){return 0;}",
+    "source_sha256": "d7e1d1140a05f2e1186108c272e37762e095a5db33f1c5259e7aef04a606bce8"
+  },
+  {
+    "name": "bare_alias_pointer",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{template<class>using A=int;};template<class T>typename T::A* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "4642f6f12d833c2cf9b2ac891f8437481a1447cb03512b9c2bdc1a581f2b038f"
+  },
+  {
+    "name": "bare_class_pointer",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{template<class>struct A{};};template<class T>typename T::A* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "b16300267f51c19812b05bb08b2502820e1dea863cc79936d10fae63110207dc"
+  },
+  {
+    "name": "bare_alias_typedef",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{template<class>using A=int;};template<class T>struct S{using type=typename T::A;};using Bad=S<X>::type;int main(){return 0;}",
+    "source_sha256": "6aefd636889e08900726db2aca271e54d09f8d02a6f99124d3848e56e8982d91"
+  },
+  {
+    "name": "bare_alias_const_pointer",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{template<class>using A=int;};template<class T>const typename T::A* f(){return 0;}int main(){return f<X>()!=0;}",
+    "source_sha256": "8e17a77b868757cf70106171b040d254ac4b19153ca1938a63691bb29b89938f"
+  },
+  {
+    "name": "ordinary_type_as_dependent_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": true,
+    "source": "struct X{using A=int;};template<template<class>class F>struct S{using type=F<int>;};template<class T>using V=typename S<T::template A>::type;V<X>x;",
+    "source_sha256": "8e8a38804b1e5b63e07fbcc6861de249908ec439856b7268d31c2cc0eb514410"
+  },
+  {
+    "name": "hard_missing_const_type",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: qualified type member not found\n",
+    "passed": true,
+    "source": "struct X{};template<class T>using A=const typename T::type;A<X>*p;",
+    "source_sha256": "1a6469e940d0b84bdae2b95bdcfa7cae736083096f90e9c3cf96686e875ab475"
+  },
+  {
+    "name": "hard_nonclass_qualifier",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type qualifier is not a class\n",
+    "passed": true,
+    "source": "template<class T>using A=typename T::type;A<int>*p;",
+    "source_sha256": "aeefa6bad1dd4da6c1e31bfdb1805182da06c668a0119a056fae6e0a46a6d60c"
+  },
+  {
+    "name": "template_use_then_type_use",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{template<class U>using A=U;};template<template<class>class F>struct S{using type=F<int>;};template<class T>struct Q{using good=typename S<T::template A>::type;using bad=typename T::A;};Q<X>q;",
+    "source_sha256": "d708d1fd54686a21e98692833b992c617b157afdb12129ab74fc71bd724e97a4"
+  }
+]
