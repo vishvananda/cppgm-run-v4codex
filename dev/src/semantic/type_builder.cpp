@@ -251,8 +251,13 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 if (parameter_scope != s && id) {
                     auto e = make_entity(EntityKind::Parameter,parameter_scope,id,p);
                     auto type = params.back();
-                    entities[e].type = (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::DependentArray) ? types.compound(TypeKind::Pointer,types[type].child) :
-                        types[type].kind == TypeKind::Function ? types.compound(TypeKind::Pointer,types.signature(type)) : type;
+                    if (types[type].kind == TypeKind::PackExpansion) {
+                        entities[e].parameter_pack = true;
+                        type = types[type].bound;
+                    }
+                    // The signature owns expansion; an occurrence of the
+                    // parameter denotes one element within that expansion.
+                    entities[e].type = parameter_body_type(type);
                     signature_parameters.put(e,params.size()); bind(parameter_scope,id,e);
                 }
             }

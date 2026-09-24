@@ -217,7 +217,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         auto pack = entity_pack_arguments.get(e);
         if (!pack && occurrence.context) pack = unexpanded_argument(template_type_contexts.get(occurrence.context),e);
         if (pack) { q.type = types.fundamental(FT_UNSIGNED_LONG_INT); q.value = pack_arguments(pack).count; }
-        else { q.kind = QueryKind::SizeofPack; q.entity = e; }
+        else {
+            q.kind = QueryKind::SizeofPack; q.entity = e;
+            if (!entities[e].template_parameter) q.value = signature_parameters.get(e)-1;
+        }
         break;
     }
     case Kind::Sizeof: case Kind::TypeTrait:

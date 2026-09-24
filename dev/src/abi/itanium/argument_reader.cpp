@@ -51,6 +51,8 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
         auto index = index_value(take(w, p));
         return g.make(op == "template-param" ? Kind::ExprParameter : Kind::ExprFunctionParameter, 0, 0, 0, index);
     }
+    if (op == "sizeof-pack") return g.make(Kind::SizeofPack,reference(take(w,p),BindingKind::Expression));
+    if (op == "sizeof-captured-pack") return g.make(Kind::SizeofPack,0,0,0,0,refs(w,p,BindingKind::Argument));
     if (op == "literal" || op == "value") {
         Id t = op == "value" ? type(w, p) : g.builtin(ABI_BUILTIN_TYPE_INT);
         return g.make(Kind::Value, t, 0, 0, integral_value(take(w, p)));

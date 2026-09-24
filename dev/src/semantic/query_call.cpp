@@ -117,10 +117,11 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         if (pointer(function_type)) function_type = types[function_type].child;
         auto f = types[function_type];
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
-            throw std::runtime_error("invalid indirect type-query call");
+            return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
         std::vector<Conversion> chosen;
         for (unsigned i = 0; i < args.size(); ++i) {
             auto c = i < f.count ? conversion_value(args[i],types.parameters[f.offset+i]) : ellipsis_conversion_value(args[i]);
+            if (!c.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
             check_fixed_conversion(args[i],0,c,q.context); chosen.push_back(c);
         }
         r.expression.conversions = conversions.size(); r.expression.count = chosen.size();

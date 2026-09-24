@@ -86,6 +86,14 @@ void Encoder::expression(Id id) {
     case Kind::Conditional:
         output += "qu"; expression(n.a); expression(n.b); expression(n.c); break;
     case Kind::ExprPack: output += "sp"; expression(n.a); break;
+    case Kind::SizeofPack:
+        if (n.a) { output += "sZ"; expression(n.a); }
+        else {
+            output += "sP";
+            for (Id i = 0; i < n.count; ++i) argument(g.child(n,i));
+            output += 'E';
+        }
+        break;
     case Kind::Call:
         output += "cl"; expression(n.a);
         for (Id i = 0; i < n.count; ++i) expression(g.child(n, i));

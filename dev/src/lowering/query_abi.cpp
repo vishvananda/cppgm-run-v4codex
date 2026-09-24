@@ -73,7 +73,20 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     }
     case QueryKind::Expansion: result = abi.make(Kind::ExprPack,child(0)); break;
     case QueryKind::New: throw std::logic_error("new-expression ABI query is not yet represented");
-    case QueryKind::SizeofPack: throw std::logic_error("sizeof-pack ABI query not yet lowered");
+    case QueryKind::SizeofPack: {
+        if (q.entity) {
+            bool parameter = sem.entities[q.entity].template_parameter;
+            auto operand = abi.make(parameter ? Kind::ExprParameter : Kind::ExprFunctionParameter,0,0,0,
+                parameter ? sem.template_ordinal(q.entity) : q.value);
+            result = abi.make(Kind::SizeofPack,operand);
+        } else {
+            args.clear();
+            auto captured = sem.pack_arguments(sem.template_argument(pack.offset));
+            for (unsigned j = 0; j < captured.count; ++j) args.push_back(abi_argument(sem.template_argument(captured.offset+j)));
+            result = abi.make(Kind::SizeofPack,0,0,0,0,args);
+        }
+        break;
+    }
     case QueryKind::Sizeof:
         result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
             abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_ALIGNOF ? "az" : "sz")); break;

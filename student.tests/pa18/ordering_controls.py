@@ -4,6 +4,18 @@ from pathlib import Path
 import hashlib, itertools, json, subprocess, sys
 ROOT=Path(__file__).resolve().parents[2]
 GOOD={
+ 'pack_member_result':'int g(){return 3;}long g(int){return 7;}struct M{template<class...A>auto f(A...a)->decltype(g(a...)){return g(a...);}};int main(){M m;return m.f()!=3||m.f(1)!=7;}',
+ 'pack_result_template_size':'template<int>struct A{};template<class...T>auto f(T...)->A<sizeof...(T)>{return A<sizeof...(T)>();}int use(A<0>){return 1;}int use(A<2>){return 2;}int main(){return use(f())!=1||use(f(1,2L))!=2;}',
+ 'pack_result_second_size':'template<int>struct A{};template<class...T>auto f(int,T...a)->A<sizeof...(a)>{return A<sizeof...(a)>();}int use(A<0>){return 1;}int use(A<2>){return 2;}int main(){return use(f(1))!=1||use(f(1,2,3L))!=2;}',
+ 'pack_indirect_sfinae_arity':'template<class F,class...A>auto f(F p,A...a)->decltype(p(a...)){return p(a...);}int f(...){return 2;}int g(){return 1;}int main(){return f(g)!=1||f(g,3)!=2;}',
+ 'pack_indirect_sfinae_type':'struct A{};template<class F,class...T>auto f(F p,T...a)->decltype(p(a...)){return p(a...);}int f(...){return 2;}int g(int){return 1;}int main(){return f(g,1)!=1||f(g,A())!=2;}',
+
+ 'pack_result_empty':'template<class...A>int invoke(A&&...);template<class F,class...A>auto invoke(F&&f,A&&...a)->decltype(f(a...)){return f(a...);}int g(){return 7;}int main(){int(*p)()=g;return invoke(p)!=7;}',
+ 'pack_result_many':'template<class F,class...A>auto invoke(F&&f,A&&...a)->decltype(f(a...)){return f(a...);}int g(int x,long y){return x+y;}int main(){int(*p)(int,long)=g;return invoke(p,3,4L)!=7;}',
+ 'pack_result_reference':'int value;int&g(int&x){return x;}template<class F,class...A>auto invoke(F f,A&...a)->decltype(f(a...)){return f(a...);}int main(){invoke(g,value)=7;return value!=7;}',
+ 'pack_result_overload':'int g(){return 3;}long g(int){return 7;}template<class...A>auto invoke(A...a)->decltype(g(a...)){return g(a...);}int main(){return invoke()!=3||invoke(1)!=7;}',
+ 'pack_result_size':'template<int>struct A{};template<class...T>auto f(T...a)->A<sizeof...(a)>{return A<sizeof...(a)>();}int use(A<0>){return 1;}int use(A<2>){return 2;}int main(){return use(f())!=1||use(f(1,2L))!=2;}',
+
  'nondeduced_explicit':'template<class T>struct A{typedef int type;};template<class T>int f(typename A<T>::type){return 1;}template<class T>int f(T){return 2;}int main(){return f<int>(1)!=1;}',
  'address_nested_cv':'template<class T>int f(T*){return 1;}template<class T>int f(const T*){return 2;}int main(){int(*p)(const int*)=f;return p(0)!=2;}',
  'address_distinct_defaults':'template<class T>int f(T*,int=0){return 1;}template<class T>int f(T){return 2;}int main(){int(*p)(int*,int)=f;return p(0,1)!=1;}',

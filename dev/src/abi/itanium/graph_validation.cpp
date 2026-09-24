@@ -66,6 +66,9 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::EntityArgument: case Kind::EntityExpression:
         edge(a, Role::Entity); require(b <= 1); break;
     case Kind::ExprParameter: case Kind::ExprFunctionParameter: break;
+    case Kind::SizeofPack:
+        if (!a) { sequence(Role::Argument); return; }
+        require((*this)[a].kind == Kind::ExprParameter || (*this)[a].kind == Kind::ExprFunctionParameter); break;
     case Kind::Unary: edge(a, Role::Expression); operation_code(b); break;
     case Kind::Binary: edge(a, Role::Expression); edge(b, Role::Expression); operation_code(c); break;
     case Kind::Conditional:

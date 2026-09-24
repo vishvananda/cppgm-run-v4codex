@@ -52,6 +52,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         auto name = terminal(decl_name(decl));
         auto e = make_entity(EntityKind::Parameter,scope,name,p);
         entities[e].template_pattern = true;
+        entities[e].parameter_pack = child(decl,Kind::ParameterPack) != 0;
         entities[e].type = type ? parameter_body_type(type) : 0;
         template_pattern_entities.put(e,!type || dependent_type(type) ? 2 : 1);
         signature_parameters.put(e,++ordinal); bind(scope,name,e);
