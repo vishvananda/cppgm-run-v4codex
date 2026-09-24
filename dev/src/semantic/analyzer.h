@@ -966,7 +966,7 @@ private:
     void builtin_operators(ETokenType op, const std::vector<NodeId>& arguments, std::vector<BuiltinOperator>& results);
     void builtin_operators_values(ETokenType op, const std::vector<Expression>& arguments, std::vector<BuiltinOperator>& results, const std::vector<NodeId>* nodes = 0);
     std::vector<TypeId> builtin_operand_types(NodeId n);
-    std::vector<TypeId> builtin_operand_types_value(Expression source);
+    std::vector<TypeId> builtin_operand_types_value(Expression source, bool modifying = false);
     Conversion converting_constructor(NodeId n, TypeId target);
     Conversion converting_constructor_value(Expression source, TypeId target, NodeId node = 0);
     void materialize_conversion(NodeId n, Conversion& c, bool defer = false,

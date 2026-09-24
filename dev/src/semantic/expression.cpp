@@ -229,6 +229,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             if (!class_type) {
                 if (!(arithmetic(t) || pointer(t) || (types[t].kind == TypeKind::Named && entities[types[t].entity].underlying) || fundamental(t, FT_NULLPTR_T))) throw std::runtime_error("pseudo-destructor requires scalar");
                 r.type = types.function(types.fundamental(FT_VOID), {}, false);
+                record_object(r,first,t,0); object_uses[r.object_use].arrow = arrow;
                 r.form = ExpressionForm::PseudoDestructor; return r;
             }
         }

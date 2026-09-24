@@ -1,6 +1,16 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+namespace {
+// Deletion is a property of the destructor's definition, independent of the
+// access privileges of the declaration that first demands it.
+struct PropertyAccess {
+    bool& naming; bool saved_naming; ScopeId& scope; ScopeId saved_scope;
+    PropertyAccess(bool& n, ScopeId& s) : naming(n), saved_naming(n), scope(s), saved_scope(s)
+        { naming = false; scope = 0; }
+    ~PropertyAccess() { naming = saved_naming; scope = saved_scope; }
+};
+}
 void Analyzer::check_default_destruction(TypeId type, ScopeId scope, bool variant)
 {
     if (!default_destruction_valid(type,scope,variant)) throw std::runtime_error("deleted defaulted destructor");
@@ -42,6 +52,7 @@ bool Analyzer::default_destructor_valid(EntityId e)
     if (state == FactState::Success) return true;
     if (state == FactState::Failure) return false;
     if (state == FactState::Active) throw std::runtime_error("recursive default destructor properties");
+    PropertyAccess access(explicit_instantiation_naming,access_override);
     members[m].destructor_properties = FactState::Active;
     try {
         require_destructor_class(cls);
@@ -73,6 +84,7 @@ void Analyzer::check_pattern_destruction(EntityId cls, ScopeId scope)
     if (state == FactState::Success) return;
     if (state == FactState::Failure) throw FailedSemanticFact(SemanticFact::DefaultDestructorProperties,cls,entities[cls].source);
     if (state == FactState::Active) throw std::runtime_error("recursive local destructor properties");
+    PropertyAccess access(explicit_instantiation_naming,access_override);
     template_pattern_property_states.put(k,unsigned(FactState::Active));
     try {
         for (auto b = template_pattern_bases.get(cls); b; b = bases[b].next)

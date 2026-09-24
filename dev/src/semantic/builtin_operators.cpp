@@ -10,7 +10,7 @@ std::vector<TypeId> Analyzer::builtin_operand_types(NodeId n)
 {
     return builtin_operand_types_value(expressions[n]);
 }
-std::vector<TypeId> Analyzer::builtin_operand_types_value(Expression expression)
+std::vector<TypeId> Analyzer::builtin_operand_types_value(Expression expression, bool modifying)
 {
     TypeId source = expression.type;
     if (!source) return {};
@@ -21,7 +21,11 @@ std::vector<TypeId> Analyzer::builtin_operand_types_value(Expression expression)
     for (EntityId e : conversion_candidates(source)) {
         auto member = members[entities[e].member_info];
         if (member.explicit_constructor || !object_conversion(e,source,expression.category).valid()) continue;
-        TypeId t = decay(types[entities[e].type].child);
+        auto returned = types[entities[e].type].child;
+        // Modifying builtins bind an lvalue reference. Decaying its result
+        // would erase volatile before candidate construction and ranking.
+        if (modifying && types[returned].kind != TypeKind::LRef) continue;
+        TypeId t = modifying ? types[returned].child : decay(returned);
         if ((!arithmetic(t) && !pointer(t)) || seen.get(t)) continue;
         seen.put(t,1); result.push_back(t);
     }

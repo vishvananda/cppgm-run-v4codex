@@ -255,6 +255,8 @@ Value Procedural::binary(NodeId n, bool location)
             TypeId common = sem.conversion_fact(fact.conversions+
                 (sem.conversion_fact(fact.conversions).reference ? 2 : 0)).target;
             lhs = convert(lhs, common);
+            if (binary != OP_LSHIFT && binary != OP_RSHIFT && lhs.ir != IRType::Ptr && rhs.ir != IRType::Ptr)
+                rhs = convert(rhs,common);
             rhs = operation(binary, lhs, rhs, common);
             rhs = convert(rhs, fact.type);
         }
@@ -328,8 +330,8 @@ Value Procedural::call(NodeId n, Value destination)
     if (fact.form == semantic::ExpressionForm::PseudoDestructor) {
         NodeId member = node.first;
         while (ast[member].kind == Kind::Parenthesized) member = ast[member].first;
-        Value object = expression(ast[member].first);
-        if (ast[member].op == OP_ARROW) load(object);
+        if (ast[member].op == OP_ARROW) arrow_object(ast[member].first,sem.object_fact(member).arrow);
+        else expression(ast[member].first);
         return Value(Operand(), IRType::Void, fact.type);
     }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});

@@ -41,20 +41,24 @@ void Analyzer::builtin_assignment_values(ETokenType op, const std::vector<Expres
         if (arithmetic(t) || pointer(t) || types[t].kind == TypeKind::MemberPointer || scoped_enum(t) || fundamental(t,FT_NULLPTR_T)) add(t,t,0);
         return;
     }
-    auto left = builtin_operand_types_value(args[0]), right = builtin_operand_types_value(args[1]);
+    auto left = builtin_operand_types_value(args[0],true), right = builtin_operand_types_value(args[1]);
     for (auto a : left) for (auto b : right) {
         auto target = class_value(args[0].type) ? a : args[0].type;
         if (types[a].kind == TypeKind::Named) continue;
         bool shift = binary == OP_LSHIFT || binary == OP_RSHIFT;
         bool integer = shift || binary == OP_MOD || binary == OP_AMP || binary == OP_BOR || binary == OP_XOR;
         if (arithmetic(a) && arithmetic(b) && (!integer || (integral(a) && integral(b))))
-            add(target,shift ? promote(b) : arithmetic_type(a,b),shift ? promote(a) : arithmetic_type(a,b));
+            // [over.built]/18,22: rank the promoted RHS parameter; the
+            // usual arithmetic result is a separate computation fact.
+            add(target,promote(b),shift ? promote(a) : arithmetic_type(a,b));
         if ((binary == OP_PLUS || binary == OP_MINUS) && object_pointer(a) && integral(b) && !scoped_enum(b)) {
-            if (size(types[a].child,false,true)) add(target,promote(b),a);
+            if (size(types[a].child,false,true)) add(target,types.fundamental(FT_LONG_INT),a);
         }
-        // E1 op= E2 has the validity of E1 = E1 op E2, with one
-        // evaluation of E1. A pointer sum can convert back to bool.
-        if (binary == OP_PLUS && fundamental(a,FT_BOOL) && object_pointer(b) && size(types[b].child,false,true))
+        // Ordinary E1 op= E2 permits a pointer sum converted back to bool.
+        // [over.built] provides no such candidate when a class operand
+        // requires overload resolution; do not invent an extra overload.
+        if (!class_value(args[0].type) && !class_value(args[1].type) &&
+            binary == OP_PLUS && fundamental(a,FT_BOOL) && object_pointer(b) && size(types[b].child,false,true))
             add(target,b,promote(a));
     }
 }
