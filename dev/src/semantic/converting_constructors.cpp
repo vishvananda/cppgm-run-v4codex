@@ -34,7 +34,7 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
         if (better(x,y,1)) return true;
         if (better(y,x,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
-        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb);
+        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,1);
     };
     std::size_t best = 0;
     for (std::size_t j = 1; j < viable.size(); ++j)

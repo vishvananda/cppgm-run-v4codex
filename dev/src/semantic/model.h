@@ -50,7 +50,7 @@ struct UnavailableSemanticFact : std::exception {
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion };
 // The lookup obligation is part of a dependent name's canonical identity.
 enum class DependentNameKind : unsigned char { Type, Application, Template };
-enum class DeductionKind : unsigned char { Call, ClassPattern };
+enum class DeductionKind : unsigned char { Call, ClassPattern, PartialOrdering };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {

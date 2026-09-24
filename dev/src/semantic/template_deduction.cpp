@@ -56,7 +56,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         auto element = actual;
         while (types[element].kind == TypeKind::Array || types[element].kind == TypeKind::DependentArray) element = types[element].child;
         auto cv = types[element].cv;
-        if (kind == DeductionKind::ClassPattern && ((p.cv & cv) != p.cv ||
+        if (kind != DeductionKind::Call && ((p.cv & cv) != p.cv ||
             (p.cv && (a.kind == TypeKind::Function || a.kind == TypeKind::LRef || a.kind == TypeKind::RRef)))) return false;
         TypeId value = actual;
         if (p.cv && a.kind != TypeKind::Function) {
@@ -69,7 +69,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         bindings.put(p.entity, value); return true;
     }
     if (p.kind != a.kind) return false;
-    if (kind == DeductionKind::ClassPattern && p.cv != a.cv) return false;
+    if (kind != DeductionKind::Call && p.cv != a.cv) return false;
     if (p.kind == TypeKind::Array && p.bound != a.bound) return false;
     if (p.kind == TypeKind::MemberPointer && p.entity != a.entity) return false;
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization &&
@@ -97,7 +97,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         // [temp.deduct.call] permits a matching base specialization when the
         // parameter is a simple-template-id (also behind a pointer). Only
         // explicit base edges participate; non-type arguments stay non-deduced.
-        if (kind == DeductionKind::ClassPattern) return false;
+        if (kind != DeductionKind::Call) return false;
         complete_class(a.entity);
         Index selected; unsigned matches = 0;
         for (auto b = class_facts[entities[a.entity].class_info].first_base; b; b = bases[b].next) {

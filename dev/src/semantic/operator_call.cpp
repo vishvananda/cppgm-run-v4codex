@@ -99,9 +99,10 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     auto better_candidate = [&](std::size_t a, std::size_t b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         if (better(x,y,args.size())) return true;
-        if (better(y,x,args.size())) return false;
+        for (unsigned i = 0; i < args.size(); ++i)
+            if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
-        return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb));
+        return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,args.size(),true));
     };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i)

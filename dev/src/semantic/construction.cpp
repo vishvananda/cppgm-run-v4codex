@@ -59,7 +59,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         for (std::size_t i = 0; i < args.size(); ++i)
             if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
-        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb);
+        return (!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,args.size());
     };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i)

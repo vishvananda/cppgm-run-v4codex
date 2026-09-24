@@ -546,7 +546,8 @@ private:
     EntityId specialize_variable(EntityId primary, const std::vector<TypeId>& arguments, bool initialize = true);
     Index variable_template_queries, variable_partial_heads, variable_partial_next;
     Index class_partial_heads, class_partial_next, class_partial_signatures;
-    Index class_partial_ordering;
+    Index class_partial_ordering, function_partial_ordering;
+    std::size_t function_ordering_work = 0, function_ordering_hits = 0;
     std::size_t class_ordering_work = 0, class_ordering_hits = 0;
     TypeId declare_class_partial(NodeId source, ScopeId scope, EntityId primary);
     void validate_partial_pattern(EntityId pattern);
@@ -755,7 +756,7 @@ private:
     void instantiate_function(EntityId e);
     void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);
-    bool template_more_specialized(EntityId a, EntityId b);
+    bool template_more_specialized(EntityId a, EntityId b, unsigned arguments = ~0u, bool operator_call = false);
     NodeId instantiate_default(EntityId e, NodeId source);
     void validate_list_plan(std::uint32_t id);
     TypeId declare_class_template(NodeId n, ScopeId s, ScopeId friend_owner = 0);

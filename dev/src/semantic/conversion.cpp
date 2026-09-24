@@ -121,6 +121,8 @@ bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool inter
 bool Analyzer::similar_type(TypeId a, TypeId b)
 {
     if (types[a].kind != types[b].kind) return false;
+    if (types[a].kind == TypeKind::Array)
+        return types[a].bound == types[b].bound && similar_type(types[a].child,types[b].child);
     if (pointer(a)) return similar_type(types[a].child, types[b].child);
     return types.unqualified(a) == types.unqualified(b);
 }
@@ -133,13 +135,21 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     if (x.form == ExpressionForm::Overload) {
         TypeId ft = ref || pointer(to) || target.kind == TypeKind::MemberPointer ? target.child : to;
         if (types[ft].kind != TypeKind::Function) return c;
+        std::vector<EntityId> matching;
         for (EntityId e : candidates(x.entity)) {
+            ++candidate_work;
             if (definitions && entities[e].template_info) e = deduce_target(e,ft);
             if (!e || entities[e].type != ft) continue;
-            if (target.kind == TypeKind::MemberPointer && scopes[entities[e].owner].entity != target.entity) continue;
-            if (c.function && c.function != e) return Conversion();
-            c.function = e;
+            bool member = entities[e].member_info && !entities[e].is_static;
+            if (member != (target.kind == TypeKind::MemberPointer)) continue;
+            matching.push_back(e);
         }
+        auto preferred = [&](EntityId a, EntityId b) {
+            return (!entities[a].specialization && entities[b].specialization) || template_more_specialized(a,b);
+        };
+        for (auto e : matching) if (!c.function || preferred(e,c.function)) c.function = e;
+        // Do not reject a tied prefix: a later candidate can dominate both.
+        for (auto e : matching) if (e != c.function && !preferred(c.function,e)) return Conversion();
         if (c.function) { c.rank = 0; c.reference = ref; c.preference = target.kind == TypeKind::RRef; }
         return c;
     }

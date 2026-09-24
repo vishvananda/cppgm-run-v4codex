@@ -117,9 +117,10 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     auto preferred = [&](unsigned a, unsigned b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         if (better(x,y,args.size())) return true;
-        if (better(y,x,args.size())) return false;
+        for (unsigned i = 0; i < args.size(); ++i)
+            if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
-        return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb));
+        return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,args.size(),true));
     };
     unsigned best = 0;
     for (unsigned i = 1; i < viable.size(); ++i) if (preferred(i,best)) best = i;

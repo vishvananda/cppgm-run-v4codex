@@ -61,7 +61,7 @@ EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeI
     auto list = child(ast[name].last,Kind::TemplateArguments);
     std::vector<TypeId> supplied;
     for (auto a = ast[list].first; a; a = ast[a].next) supplied.push_back(template_argument_node(a,s));
-    EntityId selected = 0;
+    EntityId selected = 0; std::vector<EntityId> matching;
     for (auto primary : candidates(local(owner,terminal(name)))) {
         if (!entities[primary].template_info || entities[primary].specialization) continue;
         ++candidate_work;
@@ -73,12 +73,11 @@ EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeI
         auto instance = supplied.empty() ? primary : specialize(primary,supplied,true);
         if (instance && entities[instance].template_info) instance = deduce_target(instance,type);
         if (!instance || entities[instance].type != type) continue;
-        if (selected && !template_more_specialized(instance,selected)) {
-            if (template_more_specialized(selected,instance)) continue;
-            throw std::runtime_error("ambiguous explicit function specialization");
-        }
-        selected = instance;
+        matching.push_back(instance);
+        if (!selected || template_more_specialized(instance,selected)) selected = instance;
     }
+    for (auto instance : matching) if (instance != selected && !template_more_specialized(selected,instance))
+        throw std::runtime_error("ambiguous explicit function specialization");
     if (!selected) throw std::runtime_error("explicit function specialization has no matching primary");
     return selected;
 }

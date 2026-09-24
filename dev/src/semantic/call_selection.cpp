@@ -51,9 +51,10 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         auto arguments = count+(object!=0);
         if (better(x,y,arguments)) return true;
-        if (better(y,x,arguments)) return false;
+        for (unsigned i = 0; i < arguments; ++i)
+            if (better(y+i,x+i,1)) return false;
         return (!entities[viable[a].entity].specialization && entities[viable[b].entity].specialization) ||
-            template_more_specialized(viable[a].entity,viable[b].entity);
+            template_more_specialized(viable[a].entity,viable[b].entity,count);
     };
     unsigned best = 0;
     for (unsigned i = 1; i < viable.size(); ++i) if (preferred(i,best)) best = i;

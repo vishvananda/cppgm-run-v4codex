@@ -172,6 +172,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"variable_template_initializers\":" << variable_initializers
         << ",\"variable_template_reuses\":" << variable_reuses
         << ",\"variable_template_candidates\":" << variable_candidates
+        << ",\"function_ordering_work\":" << function_ordering_work
+        << ",\"function_ordering_hits\":" << function_ordering_hits
         << ",\"class_pattern_ordering_work\":" << class_ordering_work
         << ",\"class_pattern_ordering_hits\":" << class_ordering_hits
         << ",\"template_definition_applications\":" << template_definition_work
