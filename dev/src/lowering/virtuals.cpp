@@ -104,7 +104,7 @@ Value Procedural::virtual_function(Value object, unsigned slot)
 }
 Value Procedural::pointer_projection(Value base, unsigned adjustment)
 {
-    if (adjustment <= 1) return base_projection(base,adjustment);
+    if (!sem.base_adjustments[adjustment].total) return base_projection(base,adjustment);
     auto slot = builder->add_slot(0,IRType::Ptr);
     auto test = emit(Opcode::Compare,IRType::Ptr,{base.operand,Operand::integer(0)},Operation::Eq);
     auto null = block(), adjust = block(), end = block();

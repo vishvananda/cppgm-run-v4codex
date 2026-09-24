@@ -30,23 +30,45 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     bool derived = types[object].kind == TypeKind::Named && types[wanted].kind == TypeKind::Named &&
         types[object].entity != types[wanted].entity && class_derives(types[object].entity,types[wanted].entity);
     if (types.unqualified(object) != types.unqualified(wanted) && !derived) return c;
+    // Pattern-only lookup has no object layout. Its concrete receiver is
+    // checked after substitution, when the complete base graph is available.
+    if (derived && !entities[types[object].entity].template_pattern &&
+        base_adjustments[base_path(object,types[wanted].entity)].ambiguous) return c;
     c.rank = derived ? 2 : 0; c.derived = derived;
     c.qualification = types[wanted].cv & ~types[object].cv;
     c.preference = rvalue && f.ref == RefQualifier::Lvalue;
     return c;
 }
-unsigned Analyzer::base_steps(TypeId from, EntityId to)
+unsigned Analyzer::base_path(TypeId from, EntityId to)
 {
     while (auto enclosing = injected_class_owners.get(to)) to = enclosing;
     EntityId e = types[from].entity;
     if (e == to) return 0;
+    // Layout is immutable once published. Cache by canonical class identity;
+    // cv/ref views share the same path, and tails are shared across derived uses.
+    auto identity = key(e,to);
+    if (auto known = base_adjustment_index.get(identity)) { ++base_adjustment_hits; return known; }
     size(from);
+    BaseAdjustment path; bool found = false;
     for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next) {
+        ++base_adjustment_work;
         auto edge = bases[b];
-        if (edge.base == to) return edge.offset+1;
-        if (class_derives(edge.base,to)) return edge.offset+base_steps(entities[edge.base].type,to);
+        if (edge.base != to && !class_derives(edge.base,to)) continue;
+        if (found) { path.ambiguous = true; break; }
+        found = true; path.offset = edge.offset;
+        path.next = edge.base == to ? 0 : base_path(entities[edge.base].type,to);
+        path.total = path.offset + base_adjustments[path.next].total;
+        path.ambiguous = base_adjustments[path.next].ambiguous;
     }
-    return 0;
+    if (!found) throw std::logic_error("missing selected base path");
+    auto id = base_adjustments.size(); base_adjustments.push_back(path);
+    base_adjustment_index.put(identity,id); return id;
+}
+unsigned Analyzer::base_steps(TypeId from, EntityId to)
+{
+    auto path = base_path(from,to);
+    if (base_adjustments[path].ambiguous) throw std::runtime_error("ambiguous base subobject");
+    return path;
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {

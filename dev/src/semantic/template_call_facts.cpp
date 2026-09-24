@@ -65,6 +65,11 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
                 nonstatic ? base_steps(object_type,scopes[entities[selected].owner].entity) : 0);
             auto& use = object_uses[result.object_use]; use.source_owned = true;
             if (nonstatic && ast[name].first == ast[name].last) use.virtual_slot = members[entities[selected].member_info].virtual_slot;
+            if (nonstatic && ast[name].first != ast[name].last && naming && scopes[naming].kind == ScopeKind::Class) {
+                auto qualifier = scopes[naming].entity;
+                use.qualifier_adjustment = base_steps(object_type,qualifier);
+                use.adjustment = base_steps(entities[qualifier].type,scopes[entities[selected].owner].entity);
+            }
         }
         auto f = types[ft];
         for (unsigned i = args.size(); i < f.count; ++i) {

@@ -171,11 +171,14 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         if (op == OP_ASS) {
             Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0;
             record_conversion(r, an, left);
-            // Union-member assignment can begin the variant's lifetime and
-            // retains initializer-form immediates. Ordinary wide scalar stores
-            // keep their typed conversion boundary at O0.
-            bool variant = nonstatic_field(a.entity) && entities[scopes[entities[a.entity].owner].entity].key == KW_UNION;
-            Conversion right = conversion(bn,a.type); right.preserve_widen = integral(a.type) && size(a.type)>4 && !variant;
+            // A specialized field has its final destination type; consume its
+            // converted immediate just as its initializer does. Preserve the
+            // ordinary O0 assignment boundary for other wide scalar stores.
+            bool field = nonstatic_field(a.entity);
+            bool variant = field && entities[scopes[entities[a.entity].owner].entity].key == KW_UNION;
+            Conversion right = conversion(bn,a.type);
+            right.preserve_widen = integral(a.type) && size(a.type)>4 &&
+                !variant && !(field && entities[a.entity].template_member);
             record_conversion(r, bn, right);
             auto index = expressions[bn].incoming;
             Conversion applied = conversions[index];

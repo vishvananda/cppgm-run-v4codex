@@ -148,6 +148,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_statement_conversion_work\":" << statement_conversion_work
         << ",\"semantic_statement_conversion_uses\":" << statement_conversion_uses
         << ",\"semantic_constant_array_work\":" << constant_array_work
+        << ",\"semantic_base_adjustment_paths\":" << base_adjustments.size()-1
+        << ",\"semantic_base_adjustment_work\":" << base_adjustment_work
+        << ",\"semantic_base_adjustment_hits\":" << base_adjustment_hits
         << ",\"semantic_static_initialization_work\":" << static_initialization_work
         << ",\"semantic_static_plan_work\":" << static_plan_work
         << ",\"semantic_constant_array_index_entries\":" << constant_array_children.size()

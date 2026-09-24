@@ -320,12 +320,17 @@ struct Expression {
     bool null_pointer_constant : 1;
     Expression() : ready(false), evaluated(false), null_pointer_constant(false) {}
 };
+struct BaseAdjustment {
+    std::uint64_t offset = 0, total = 0;
+    std::uint32_t next = 0;
+    bool ambiguous = false;
+};
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0;
     std::uint32_t arrow = 0;
     std::uint32_t virtual_slot = 0;
-    unsigned adjustment = 0; std::uint32_t callee_conversion = 0;
+    unsigned adjustment = 0, qualifier_adjustment = 0; std::uint32_t callee_conversion = 0;
     bool value_initialize = false, source_owned = false; };
 struct ArrowStep {
     EntityId function = 0, temporary = 0;
@@ -335,7 +340,7 @@ struct ArrowStep {
 struct ArrowChain { std::uint32_t first = 0, count = 0; TypeId type = 0; };
 struct Conversion {
     TypeId target = 0;
-    std::uint32_t adjustment = 0; // Zero: no projection; otherwise byte offset + 1.
+    std::uint32_t adjustment = 0; // Canonical BaseAdjustment chain; zero is the identity path.
     EntityId function = 0; // Target-selected overload, if any.
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;

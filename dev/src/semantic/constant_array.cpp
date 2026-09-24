@@ -102,6 +102,17 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
         // The automatic-data rule covers trivial scalar arrays. Class arrays
         // keep their selected construction and lifetime actions.
         if (class_value(leaf) || (types[leaf].cv & 2)) return;
+        // Short wide-integer arrays keep immediate stores at O0. Avoid the
+        // source data object and bulk-copy setup within the existing eight-lane
+        // budget; other scalar images retain their established representation.
+        // Required constexpr arrays retain independent constant-value facts.
+        std::uint64_t elements = 1;
+        for (TypeId array = entities[e].type; types[array].kind == TypeKind::Array; array = types[array].child) {
+            auto bound = types[array].bound;
+            if (bound > 8 / elements) { elements = 9; break; }
+            elements *= bound;
+        }
+        if (elements <= 8 && integral(leaf) && size(leaf) > 4) return;
     }
     auto plan = initializer_plan(entities[e].initializer,entities[e].type);
     if (!entities[e].initializer || !constant_array_plan_valid(plan)) {
@@ -112,6 +123,18 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
     // expression (for example a target pointer/integer reinterpretation).
     // Required constexpr arrays use the same semantic value check as classes.
     if (required && !constant_expression_plan(plan)) throw std::runtime_error("nonconstant constexpr array initializer");
+    if (!required) {
+        // Keep evaluated class materializations in automatic initializers.
+        // Each declaration owns this scan of its explicit initializer nodes;
+        // array bounds are never expanded. Constant-expression facts remain
+        // available independently for required constexpr objects.
+        std::vector<NodeId> pending(1,entities[e].initializer);
+        while (!pending.empty()) {
+            auto node = pending.back(); pending.pop_back();
+            if (expression_fact(node).form == ExpressionForm::Construction) return;
+            for (auto child = ast[node].first; child; child = ast[child].next) pending.push_back(child);
+        }
+    }
     // Volatile subobjects still need their ordinary observable stores.
     if (constant_array_plans.get(plan) == 3) constant_arrays.put(e,plan);
 }

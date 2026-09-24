@@ -198,8 +198,8 @@ Value Procedural::incoming(NodeId n)
 }
 Value Procedural::base_projection(Value base, unsigned steps)
 {
-    // The semantic owner records a complete base-path byte offset plus one.
-    if (steps) base = emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(steps-1)});
+    if (steps) base = emit(Opcode::Index, IRType::I8,
+        {base.operand, Operand::integer(sem.base_adjustments[steps].total)});
     return base;
 }
 Value Procedural::field(Value base, EntityId e, unsigned steps)

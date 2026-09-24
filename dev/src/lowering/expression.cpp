@@ -350,7 +350,8 @@ Value Procedural::call(NodeId n, Value destination)
                 object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
             }
         } else object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
-        call_work.push_back(base_projection(object, sem.object_fact(n).adjustment).operand);
+        object = base_projection(object,object_use.qualifier_adjustment);
+        call_work.push_back(base_projection(object,object_use.adjustment).operand);
     } else if (object_use.node) {
         if (object_use.arrow) arrow_object(object_use.node,object_use.arrow);
         else {

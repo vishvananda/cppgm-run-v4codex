@@ -319,6 +319,15 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             NodeId name = ast[direct].kind == Kind::Member ? ast[ast[ast[direct].first].next].detail : ast[direct].detail;
             if (!name || ast[name].first == ast[name].last)
                 object_uses[result.object_use].virtual_slot = members[entities[selected].member_info].virtual_slot;
+            else {
+                auto naming = object_uses[fn.object_use].naming_scope;
+                if (naming && scopes[naming].kind == ScopeKind::Class) {
+                    auto qualifier = scopes[naming].entity;
+                    auto& use = object_uses[result.object_use];
+                    use.qualifier_adjustment = base_steps(object_type,qualifier);
+                    use.adjustment = base_steps(entities[qualifier].type,scopes[entities[selected].owner].entity);
+                }
+            }
         }
         ft = entities[selected].type;
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);

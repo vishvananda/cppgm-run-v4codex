@@ -164,7 +164,9 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         bool category = target.kind == TypeKind::LRef ? x.category == ValueCategory::Lvalue : x.category != ValueCategory::Lvalue;
         bool const_binding = target.kind == TypeKind::LRef && types[target.child].cv == 1;
         if ((category || const_binding) && derived_from(from, target.child) && !(types[from].cv & ~types[target.child].cv)) {
-            c.rank = 2; c.reference = true; c.derived = true; c.adjustment = base_steps(from, types[target.child].entity); c.qualification = types[target.child].cv & ~types[from].cv;
+            c.adjustment = base_path(from,types[target.child].entity);
+            if (base_adjustments[c.adjustment].ambiguous) return c;
+            c.rank = 2; c.reference = true; c.derived = true; c.qualification = types[target.child].cv & ~types[from].cv;
             c.preference = x.category != ValueCategory::Lvalue && target.kind == TypeKind::LRef; return c;
         }
         if ((category || const_binding || function_lvalue) && qualification(from, target.child, added)) {
@@ -201,7 +203,9 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         }
         Type a = types[types[from].child], b = types[types[to].child];
         if (derived_from(types[from].child, types[to].child) && !(a.cv & ~b.cv)) {
-            c.rank = 2; c.derived = true; c.adjustment = base_steps(types[from].child,b.entity); c.qualification = b.cv & ~a.cv; return c;
+            c.adjustment = base_path(types[from].child,b.entity);
+            if (base_adjustments[c.adjustment].ambiguous) return c;
+            c.rank = 2; c.derived = true; c.qualification = b.cv & ~a.cv; return c;
         }
         if (fundamental(types[to].child, FT_VOID) && a.kind != TypeKind::Function && !(a.cv & ~b.cv)) {
             c.rank = 2; c.qualification = b.cv & ~a.cv; return c;

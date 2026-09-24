@@ -54,7 +54,7 @@ std::uint64_t Analyzer::constant_offset(std::uint32_t id)
     auto offset = constant_offset(a.parent);
     if (types[parent.type].kind == TypeKind::Array) offset += a.selector * size(a.type);
     else if (a.selector == ~std::uint64_t(0)) offset += size(a.type);
-    else if (a.selector & 0x80000000U) offset += base_steps(parent.type,types[a.type].entity)-1;
+    else if (a.selector & 0x80000000U) offset += base_offset(parent.type,a.type);
     else { size(parent.type); offset += entities[a.selector].member_offset; }
     constant_addresses[id].offset = offset; constant_addresses[id].located = true; return offset;
 }

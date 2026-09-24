@@ -190,7 +190,7 @@ bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId
             auto part = evaluated_parts[object.first+i];
             auto at = offset;
             if (types[v.type].kind == TypeKind::Array) at += part.selector * size(part.value.type);
-            else if (part.selector & 0x80000000U) at += base_steps(v.type,types[part.value.type].entity)-1;
+            else if (part.selector & 0x80000000U) at += base_offset(v.type,part.value.type);
             else at += entities[part.selector].member_offset;
             auto member = types[v.type].kind != TypeKind::Array && !(part.selector & 0x80000000U) ? EntityId(part.selector) : 0;
             if (member && field_fact(member).bit_field && !field_fact(member).width) continue;

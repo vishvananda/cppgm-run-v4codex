@@ -73,7 +73,10 @@ public:
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
     bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
-    std::uint64_t base_offset(TypeId t, TypeId base = 0) { size(t); return base ? base_steps(t,types[base].entity)-1 : class_facts[entities[types[t].entity].class_info].base_offset; }
+    std::uint64_t base_offset(TypeId t, TypeId base = 0) { size(t); return base ? base_adjustments[base_steps(t,types[base].entity)].total : class_facts[entities[types[t].entity].class_info].base_offset; }
+    std::vector<BaseAdjustment> base_adjustments = std::vector<BaseAdjustment>(1);
+    Index base_adjustment_index;
+    std::size_t base_adjustment_work = 0, base_adjustment_hits = 0;
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
@@ -681,6 +684,7 @@ private:
     void add_edge(ScopeId s, ScopeId to, bool is_inline = false);
     void declaration(NodeId n, ScopeId s);
     void simple(NodeId n, ScopeId s);
+    unsigned base_path(TypeId from, EntityId to);
     unsigned base_steps(TypeId from, EntityId to);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);

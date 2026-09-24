@@ -1,9 +1,40 @@
-# PA17 compact plan — checkpoint audit, loop 56
+# PA17 compact plan — implementation, loop 57
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `e14b96fa9d4b3376e5922b8ad30093c3c0b0c759`
 
-Target: **PA17 full-stage**, implementation still incomplete. The accumulated
+Target: **PA17 full-stage**, implementation still incomplete.
+
+Loop 57 entry: `6915296626992eb1ed20f6ca6e8c25a028c0335f`, clean;
+324/343, 19 failures. Previous turn: verified progress (committed audit fixes
+and evidence). Entry compiler and failure log frozen in
+`scratch/implementation57/`. Review markers above are preserved.
+
+Implementation sequence and ownership:
+- Semantic conversions/transfer actions own immediate stores, memberwise copies,
+  and complete base paths; typed lowering consumes the recorded actions. Work
+  follows converted expressions, subobjects and selected path edges.
+- Semantic initialization/publication owns static definitions, addresses,
+  constant reads and automatic array effects; storage lowering consumes those
+  facts once per entity. Extend into this related group as transfer findings
+  support it; preserve bounded array work/growth and earlier contracts.
+- Query/candidate/closure demand and exception-region scheduling remain distinct
+  unfinished owners. No independent review requirement is waived.
+
+Validate with focused course cases, explicitly run personal controls, full PA17,
+PA1–PA16 and file audit. Freeze final compiler/inputs for A/A + ABBA latency/RSS
+and executable runtime/text observations. PA17/O0 has no mandated numerical
+ceiling; preserve existing bounded-work limits and document semantic costs.
+
+Validated implementation increment: PA17 **330/343** (six original failures
+closed); PA1–PA16 **2266/2266**; 27 new controls pass. Typed base paths now retain
+qualification boundaries and reject ambiguous conversions without candidate
+exceptions; scalar/memberwise transfer fixes extend through automatic array
+materialization. Cumulative personal controls and frozen performance campaign
+remain pending. The remaining storage-demand, query/closure and exception-region
+owners are implementation work, separate from independent review of this increment.
+
+Historical reviewed checkpoint: The accumulated
 review covers `c43e8eb6..e14b96fa`: all three accepted handoffs, their interactions,
 and both audit fixes (10 commits, 37 implementation paths). Entry `b739e08d`
 and final pass **324/343**, with the exact same **19 failures** and all 343
