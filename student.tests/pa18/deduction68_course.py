@@ -16,7 +16,9 @@ for path in sorted(fixed):
   row.update(backend_exit=b.returncode,backend_diagnostic=b.stderr)
   if b.returncode==0:
    row['native_exit']=subprocess.run([exe],timeout=30).returncode;row['passed'] &= row['native_exit']==0
-  else:row['unlinked_compile_only']=True
+  else:
+   row['unlinked_compile_only']=path=='pa18/tests/general/100-function-template-array-reference-return.t' and 'undefined native symbol: cast' in b.stderr
+   row['passed'] &= row['unlinked_compile_only']
  rows.append(row);print(path,row['passed'],flush=True)
 (work/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
 assert all(r['passed'] for r in rows)
