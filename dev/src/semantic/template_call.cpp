@@ -262,6 +262,14 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     Index bindings, cache;
     auto condition = members[entities[pattern].member_info].explicit_condition;
     auto frame = dependent_type(entities[pattern].type) || condition ? substitution_frame(index,t.offset,t.count) : 0;
+    if (partial && !pack_prefix) {
+        // Partial explicit arguments retain every unbound parameter as a typed
+        // symbol, including non-type parameters used in array bounds/results.
+        auto symbolic = args;
+        for (unsigned j = symbolic.size(); j < t.count; ++j)
+            symbolic.push_back(parameter_argument(template_parameters[t.offset+j]));
+        frame = substitution_frame(index,t.offset,t.count,0,intern_arguments(symbolic));
+    }
     if (pack_prefix) {
         frame = 0;
         for (unsigned j = 0; j < t.count; ++j) {
@@ -346,6 +354,10 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
             break;
         }
         if (!dependent_type(p)) continue;
+        // A braced-init-list has no argument type. Outside initializer_list
+        // deduction (not part of this stage), the parameter is non-deduced;
+        // other arguments, explicit arguments or defaults supply its type.
+        if (args[i].form == ExpressionForm::InitializerList) continue;
         if (args[i].form == ExpressionForm::Overload) {
             auto kind = types[p].kind;
             auto adjusted = kind == TypeKind::LRef || kind == TypeKind::RRef ? types[p].child : p;

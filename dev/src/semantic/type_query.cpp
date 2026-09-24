@@ -292,7 +292,14 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         auto arg = owner ? substitution_argument(owner,q.entity) : bindings.get(q.entity);
         if (!arg) return 0;
         if (!value_argument(arg)) throw std::logic_error("type bound to a value parameter");
-        auto result = argument_query(arg); results.put(cache_key,result); return result;
+        auto result = argument_query(arg);
+        if (type_queries[result].kind == QueryKind::TemplateValueParameter &&
+            type_queries[result].entity == q.entity && dependent_type(q.type)) {
+            q.type = substitute_type(q.type,bindings,cache,owner);
+            if (!q.type) return 0;
+            result = intern_query(q,{});
+        }
+        results.put(cache_key,result); return result;
     }
     if (owner && q.context) q.context = substitution_scope(owner,q.context);
     if (owner && q.naming) q.naming = substitution_scope(owner,q.naming);

@@ -215,7 +215,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto value = evaluate(n,s);
         return value.valid ? Constant(types.fundamental(FT_VOID),0) : Constant();
     }
-    if (ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target) || types[c.target].kind == TypeKind::MemberPointer))
+    if (!c.reference && ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target) || types[c.target].kind == TypeKind::MemberPointer))
         return convert(Constant(types.fundamental(FT_INT),0),c.target,true);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_node_object(n);

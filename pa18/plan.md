@@ -6,6 +6,18 @@ Target: **PA18 full-stage**, still unfinished. Previous goal turn: **progress**
 (audit 66 fixed prerequisite validity and established full-range evidence).
 Loop 67: **progress**, completed address NTTPs and the related outer-head,
 pack, demand, ABI and internal-linkage paths; independent review remains pending.
+Loop 68 entry: `047215cfa4da05d21088898b0b9682a50114e135`, **343/420**.
+Previous turn classification: **progress** (67's committed implementation and
+validated evidence); the repeated stage-progress check is a baseline, not work.
+Current group: braced arguments and dependent array/function substitution.
+Owner/data flow: retained typed queries and canonical types → deduction bindings
+→ immutable substitution frame → selected list conversion → ordinary lowering.
+Work must follow required query/type/argument edges, with TU-owned canonical
+facts and local candidate scratch; no grammar replay or synthesized source nodes.
+Validate course cases plus explicit positive/negative, reuse and scaling controls;
+freeze entry/final binaries for §9 A/A and ABBA latency/RSS/runtime/size evidence.
+Small-array copy/store oracle differences remain a separate lowering-contract
+group: earlier fixtures require images, so no global policy change is assumed.
 
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
 audit 66 **327** → handoff 67 **343/420**. This handoff fixes **16 original

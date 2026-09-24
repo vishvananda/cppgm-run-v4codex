@@ -172,6 +172,9 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             frame = argument_frame(frame,p,args[j]); continue;
         }
         if (j == args.size() || !args[j]) {
+            // An explicit function template-id supplies only a prefix. Its
+            // omitted arguments remain deducible even when defaults exist.
+            if (partial) return true;
             TypeId value = template_default_types.get(p);
             if (!value) {
                 NodeId d = entities[p].initializer;
