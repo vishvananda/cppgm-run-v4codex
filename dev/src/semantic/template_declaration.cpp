@@ -22,7 +22,7 @@ ScopeId Analyzer::member_template_environment(ScopeId head, ScopeId owner)
     }
     member_template_environments.put(k,environment); return environment;
 }
-std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environment)
+std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environment, TypeId* result)
 {
     Index bindings, cache;
     std::vector<TypeId> shape;
@@ -49,7 +49,9 @@ std::uint32_t Analyzer::template_declaration_shape(TypeId type, ScopeId environm
     }
     TypeId normalized = substitute_type(type,bindings,cache);
     if (!normalized) throw std::runtime_error("invalid template declaration shape");
+    if (result) *result = normalized;
     shape.push_back(normalized);
+    for (auto& argument : shape) argument = template_signature_shape(argument);
     return intern_arguments(shape);
 }
 bool Analyzer::equivalent_alias_template(EntityId e, TypeId type, ScopeId environment)
@@ -125,7 +127,8 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
     ScopeId environment = active_template_scope;
     ScopeId scope = owner == environment ? scopes[owner].parent : owner;
     environment = member_template_environment(environment,scope);
-    auto signature = template_declaration_shape(type,environment);
+    TypeId normalized = 0;
+    auto signature = template_declaration_shape(type,environment,&normalized);
     auto family = template_families.get(key(scope,name));
     auto e = family ? template_signatures.get(key(family,signature)) : 0;
     if (e) {
@@ -176,8 +179,7 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
         if (!entities[e].member_info) {
             entities[e].member_info = members.size(); members.push_back(MemberFacts());
         }
-        auto shape = argument_packs[signature];
-        members[entities[e].member_info].conversion_hiding_target = types[argument_types[shape.offset+shape.count-1]].child;
+        members[entities[e].member_info].conversion_hiding_target = types[normalized].child;
     }
     if (!constructor) {
         bind(owner,name,e);

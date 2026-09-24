@@ -286,7 +286,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
             }
             shape = intern_arguments(arguments);
         }
-        return intern_arguments({type,shape});
+        return intern_arguments({template_signature_shape(type),shape});
     };
     auto signature = signature_of(d,head);
     if (!signature) return 0;

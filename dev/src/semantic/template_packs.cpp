@@ -193,7 +193,7 @@ void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index
             for (int j = 0; j < count; ++j) {
                 auto lane = expansion_frame(frame,params,j);
                 auto value = substitute_argument(pattern,bindings,cache,lane);
-                out.push_back(substitution_frames[lane].symbolic ? types.compound(TypeKind::PackExpansion,0,value) : value);
+                out.push_back(value && substitution_frames[lane].symbolic ? types.compound(TypeKind::PackExpansion,0,value) : value);
             }
             return;
         }

@@ -2,10 +2,17 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
-Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 70**.
-Previous goal turn: **progress** (loop 69 implementation, proof and validation).
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 71**.
+Previous goal turn: **progress** (audit 70 ownership fixes and validation).
 Loop 70: **progress** (accumulated review, independent reducers, ownership fixes,
 required validation and frozen performance evidence).
+Loop 71 entry: `2eb83de5d32f081b028dabfd63f9b57b7ce96d8b`, **353/420**.
+Investigate retained template contexts and correlated packs together: immutable
+substitution frames own lexical/access identity; alias and member queries consume
+that identity before candidate formation, and ordinary lowering consumes selected
+facts. Work must follow frame ancestry, demanded declarations and expansion lanes,
+with no scope recovery scans or source replay. Validate original failing cases,
+query/body/cache controls and stage-scoped frozen performance before handoff.
 
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
 audit 66 **327** → handoff 67 **343** → 68 **348** → 69 **353** → audit 70

@@ -90,6 +90,12 @@ EntityId Analyzer::substitution_binding(std::uint32_t frame, EntityId source)
     auto result = entity.kind == EntityKind::Overload ?
         merge_lookup(substitution_binding(frame,entity.first),substitution_binding(frame,entity.second)) :
         substitution_entity(frame,source);
+    // Applying an alias inside a still-dependent class uses an explicitly
+    // retained lexical frame. Its declarations have source identity until a
+    // later enclosing specialization supplies their concrete bindings.
+    auto lexical = template_lexical_frames.get(entity.owner);
+    for (auto f = frame; !result && lexical > 1 && f; f = substitution_frames[f].parent)
+        if (f == lexical-1) result = source;
     if (!result) throw std::logic_error("missing substituted query declaration");
     substitution_binding_cache.put(k,result); return result;
 }
@@ -103,9 +109,13 @@ ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
             auto spec = specializations[substitution_frames[f].specialization];
             if ((e == spec.pattern || e == spec.definition_pattern) && entities[spec.entity].scope) return entities[spec.entity].scope;
         }
-        if (!entities[e].template_pattern) continue;
         auto concrete = substitution_entity(frame,e);
-        if (!concrete) continue;
+        if (!concrete) {
+            auto lexical = template_lexical_frames.get(scope);
+            for (auto f = frame; lexical > 1 && f; f = substitution_frames[f].parent)
+                if (f == lexical-1) return scope;
+            continue;
+        }
         if (entities[concrete].scope) return entities[concrete].scope;
         // Before a member body exists, its declaring class still supplies the
         // member signature's access context.

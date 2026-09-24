@@ -772,7 +772,7 @@ private:
     EntityId declare_template_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor = false, bool conversion = false);
     ScopeId member_template_environment(ScopeId head, ScopeId owner);
     Index member_template_environments;
-    std::uint32_t template_declaration_shape(TypeId type, ScopeId environment);
+    std::uint32_t template_declaration_shape(TypeId type, ScopeId environment, TypeId* normalized = 0);
     bool equivalent_alias_template(EntityId entity, TypeId type, ScopeId environment);
     void merge_template_defaults(EntityId entity, ScopeId incoming, ScopeId previous = 0);
     Index alias_declaration_shapes;
@@ -875,6 +875,9 @@ private:
     TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
     ScopeId template_signature_owner(TypeId type, EntityId primary);
     std::uint32_t check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
+    std::uint32_t template_signature_shape(ArgumentId argument);
+    Index template_signature_shapes;
+    std::size_t template_signature_shape_work = 0, template_signature_shape_hits = 0;
     QueryId template_signature_query(QueryId query, EntityId primary, Index& cache);
     int template_exception(NodeId d, ScopeId s);
     Index template_prototype_index, template_prototype_sources;

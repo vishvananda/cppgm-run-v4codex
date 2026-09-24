@@ -63,7 +63,7 @@ ArgumentId Analyzer::canonical_argument(EntityId parameter, unsigned ordinal, In
     }
     auto type = substitute_type(entities[parameter].type,bindings,cache);
     if (!type) throw std::runtime_error("missing template parameter type environment");
-    auto k = key(type,intern_arguments({depth,ordinal+1}));
+    auto k = key(template_signature_shape(type),intern_arguments({depth,ordinal+1}));
     auto e = canonical_value_parameters.get(k);
     if (!e) {
         e = make_entity(EntityKind::Parameter,0,0,0);

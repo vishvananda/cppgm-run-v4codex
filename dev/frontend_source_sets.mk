@@ -102,6 +102,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_initialization_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/default_destructor_facts
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_arguments semantic/template_entities
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_signature_shape
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_objects semantic/constant_addresses semantic/constant_execution
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_queries
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_conversion

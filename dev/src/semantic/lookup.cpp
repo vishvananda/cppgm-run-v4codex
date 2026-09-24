@@ -322,6 +322,13 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
 {
     if (!n) return 0;
+    // A decltype-specifier can be the complete class-or-decltype in a base,
+    // not just an intermediate nested-name qualifier. Its query owns the
+    // selected type; there is no terminal identifier to look up.
+    if (ast[ast[ast[n].last].detail].kind == Kind::Decltype) {
+        auto type = type_name(n,s);
+        return types[type].kind == TypeKind::Named ? types[type].entity : 0;
+    }
     if (definitions && (mode == Lookup::Ordinary || mode == Lookup::Qualifier) && ast.nodes.occurrences[n].context) {
         auto id = template_binding_index.get(ast.nodes.occurrences[n].source);
         if (id) {

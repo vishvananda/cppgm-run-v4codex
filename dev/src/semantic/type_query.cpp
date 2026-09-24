@@ -119,7 +119,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             for (auto a = ast[list].first; a; a = ast[a].next) {
                 auto type = template_argument_node(a,s);
                 if (template_type_probe && !type) return 0;
-                arguments.push_back(type);
+                append_template_argument(a,s,type,arguments);
             }
             if (list) q.arguments = intern_arguments(arguments);
             if (ast[name].first == ast[name].last && ast[name].op != OP_COLON2) q.name = terminal(name);

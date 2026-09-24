@@ -86,6 +86,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         auto args = argument_packs[p.bound]; std::vector<ArgumentId> values;
         for (unsigned j = 0; j < args.count; ++j)
             substitute_arguments(argument_types[args.offset+j],bindings,cache,owner,values);
+        for (auto value : values) if (!value) return 0;
         result = make_argument_pack(values);
     } else if (p.kind == TypeKind::PackExpansion) {
         auto arg = substitute_argument(p.bound,bindings,cache,owner);
@@ -261,14 +262,15 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     try {
     Index bindings, cache;
     auto condition = members[entities[pattern].member_info].explicit_condition;
-    auto frame = dependent_type(entities[pattern].type) || condition ? substitution_frame(index,t.offset,t.count) : 0;
+    auto frame = dependent_type(entities[pattern].type) || condition || t.parent_frame ?
+        substitution_frame(index,t.offset,t.count,t.parent_frame) : 0;
     if (partial && !pack_prefix) {
         // Partial explicit arguments retain every unbound parameter as a typed
         // symbol, including non-type parameters used in array bounds/results.
         auto symbolic = args;
         for (unsigned j = symbolic.size(); j < t.count; ++j)
             symbolic.push_back(parameter_argument(template_parameters[t.offset+j]));
-        frame = substitution_frame(index,t.offset,t.count,0,intern_arguments(symbolic));
+        frame = substitution_frame(index,t.offset,t.count,t.parent_frame,intern_arguments(symbolic));
     }
     if (pack_prefix) {
         frame = 0;

@@ -153,6 +153,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
                 args.resize(j+1);
             }
             for (auto& value : elements) {
+                if (!value) return false;
                 // An expansion retains its own source parameter until the
                 // enclosing specialization supplies concrete pack boundaries.
                 if (!value_argument(value) && types[value].kind == TypeKind::PackExpansion) continue;

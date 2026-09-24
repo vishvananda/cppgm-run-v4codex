@@ -289,6 +289,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_regions\":" << analyzed
         << ",\"semantic_lookup_work\":" << lookup_work
         << ",\"semantic_signature_work\":" << types.signature_work
+        << ",\"semantic_template_signature_shape_work\":" << template_signature_shape_work
+        << ",\"semantic_template_signature_shape_hits\":" << template_signature_shape_hits
         << ",\"semantic_type_probes\":" << types.probes
         << ",\"semantic_constant_work\":" << constant_work
         << ",\"constexpr_validity_work\":" << constexpr_validity_work
