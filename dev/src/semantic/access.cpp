@@ -48,12 +48,16 @@ void Analyzer::check_base_access(TypeId from, TypeId to, ScopeId context)
 }
 void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId context)
 {
-    if (explicit_instantiation_naming) return;
+    if (!base_accessible(cls,target,context)) throw std::runtime_error("inaccessible base conversion");
+}
+bool Analyzer::base_accessible(EntityId cls, EntityId target, ScopeId context)
+{
+    if (explicit_instantiation_naming) return true;
     if (access_override) context = access_override;
     for (EntityId current = cls; current && current != target;) {
         auto edge = access_base(current);
         while (edge && !class_derives(bases[edge].base,target)) edge = bases[edge].next;
-        if (!edge) throw std::runtime_error("unrelated base conversion");
+        if (!edge) return false;
         Access level = bases[edge].access;
         bool allowed = level == Access::Public || privileged(context, current);
         if (!allowed && level == Access::Protected) {
@@ -64,17 +68,22 @@ void Analyzer::check_base_entity_access(EntityId cls, EntityId target, ScopeId c
                 auto b = access_base(d); d = b ? bases[b].base : 0;
             }
         }
-        if (!allowed) throw std::runtime_error("inaccessible base conversion");
+        if (!allowed) return false;
         current = bases[edge].base;
     }
+    return true;
 }
 void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
-    if (explicit_instantiation_naming) return;
-    if (!calls || !e || entities[e].kind == EntityKind::Overload || scopes[entities[e].owner].kind != ScopeKind::Class) return;
+    if (!accessible(e,context,naming,object)) throw std::runtime_error("inaccessible class member");
+}
+bool Analyzer::accessible(EntityId e, ScopeId context, ScopeId naming, TypeId object)
+{
+    if (explicit_instantiation_naming) return true;
+    if (!calls || !e || entities[e].kind == EntityKind::Overload || scopes[entities[e].owner].kind != ScopeKind::Class) return true;
     if (access_override) context = access_override;
     EntityId owner = scopes[entities[e].owner].entity;
-    if (injected_class_owners.get(owner)) check_access(owner,context,naming,object);
+    if (injected_class_owners.get(owner) && !accessible(owner,context,naming,object)) return false;
     EntityId named = scopes[naming_class(naming)].entity;
     if (!named || !class_derives(named, owner)) named = owner;
     Access level = entities[e].access;
@@ -85,8 +94,8 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
         if (current == owner) break;
         auto b = access_base(current); current = b ? bases[b].base : 0;
     }
-    if (named != introduced) check_base_entity_access(named,introduced,context);
-    if (level == Access::Public || privileged(context, introduced)) return;
+    if (named != introduced && !base_accessible(named,introduced,context)) return false;
+    if (level == Access::Public || privileged(context, introduced)) return true;
     if (level == Access::Protected) {
         bool object_bound = !entities[e].is_static && (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Function);
         EntityId actual = object && types[object].kind == TypeKind::Named ? types[object].entity : named;
@@ -95,12 +104,12 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
             if (class_derives(enclosing, introduced)) actual = enclosing;
         }
         for (EntityId candidate = actual; candidate && class_derives(candidate, introduced);) {
-            if (privileged(context, candidate)) return;
+            if (privileged(context, candidate)) return true;
             auto b = access_base(candidate); candidate = b ? bases[b].base : 0;
         }
         if (!object_bound) for (auto s = context; s; s = scopes[s].parent)
-            if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, introduced)) return;
+            if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, introduced)) return true;
     }
-    throw std::runtime_error("inaccessible class member");
+    return false;
 }
 } }

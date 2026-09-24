@@ -17,7 +17,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         auto e = args[0].entity;
         if (e && entities[e].kind == EntityKind::Function && !entities[e].template_info) {
             if (deleted_transfer(e)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-            check_access(e,q.context,object_uses[args[0].object_use].naming_scope);
+            if (!accessible(e,q.context,object_uses[args[0].object_use].naming_scope))
+                return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             bool member = entities[e].member_info && !entities[e].is_static;
             if (member && !q.value) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             result.expression.type = member ? types.member_pointer(scopes[entities[e].owner].entity,entities[e].type) :

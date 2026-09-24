@@ -59,12 +59,20 @@ GOOD.update({
  'null_identity':'template<int*P>struct A{};template<class T,class U>struct Same{static const bool value=false;};template<class T>struct Same<T,T>{static const bool value=true;};static_assert(Same<A<nullptr>,A<(int*)0>>::value,"");int main(){}',
  'null_pointer_variable':'constexpr int*p=nullptr;template<int*P>bool f(){return P==nullptr;}int main(){return !f<p>();}',
  'outer_parameter_type':'int x=7;template<class T>struct A{template<T P>struct B{static int f(){return *P;}};};int main(){return A<int*>::B<&x>::f()!=7;}',
+ 'private_function_owner':'template<int(*P)()>struct Use{static int get(){return P();}};class S{static int f(){return 7;}public:static int get(){return Use<f>::get();}};int main(){return S::get()!=7;}',
+ 'private_function_template_owner':'template<int(*P)(int)>struct Use{static int get(){return P(7);}};class S{template<class T>static T f(T x){return x;}public:static int get(){return Use<&S::f>::get();}};int main(){return S::get()!=7;}',
+ 'private_object_owner':'template<int*P>struct Use{static int get(){return *P;}};class S{static int x;public:static int get(){return Use<&x>::get();}};int S::x=7;int main(){return S::get()!=7;}',
+ 'private_object_sfinae':'template<class T,int* = &T::x>int f(T*){return 7;}int f(...){return 3;}class S{static int x;};int S::x=1;int main(){S s;return f(&s)!=3;}',
+ 'private_function_sfinae':'template<class T,int(*P)() = &T::f>int g(T*){return P();}int g(...){return 3;}class S{static int f(){return 7;}};int main(){S s;return g(&s)!=3;}',
+ 'overload_target_cache':'int f(int){return 3;}long f(long){return 7;}template<class T,T(*P)(T)>T g(T x){return P(x);}int main(){return g<int,&f>(0)!=3||g<long,&f>(0)!=7||g<int,&f>(0)!=3;}',
 })
 BAD.update({
  'address_body_demand':'template<void(*)()>struct A{};template<class T>struct B{static void f(){T::bad();}typedef A<&B::f> type;};template<class T>struct D:B<T>{typedef int type;};template<class T>typename D<T>::type g(T*,long*);template<class T>void g(T*,int){}int main(){g((int*)0,0);}',
  'explicit_wrong_function':'template<class T>int f(T){return 1;}template<int(*P)(int)>struct A{};A<&f<char>>a;',
  'reference_pointer_conversion':'int x;int*p=&x;template<const int*&R>struct A{};A<p>a;',
  'reference_rvalue_parameter':'template<int&&R>struct A{};',
+ 'private_function_outside':'template<int(*P)()>struct Use{};class S{static int f(){return 7;}public:static int get(){return sizeof(Use<f>);}};Use<S::f>bad;',
+ 'private_object_outside':'template<int*P>struct Use{};class S{static int x;public:static int get(){return sizeof(Use<&x>);}};int S::x=7;Use<&S::x>bad;',
 })
 if __name__=='__main__':
  runner.GOOD=GOOD;runner.BAD=BAD

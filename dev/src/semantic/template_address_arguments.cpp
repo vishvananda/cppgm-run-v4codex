@@ -2,6 +2,14 @@
 namespace cppgm { namespace semantic {
 ArgumentId Analyzer::address_template_argument(QueryId query, TypeId target)
 {
+    // The retained query includes declaration, lexical and naming contexts;
+    // Include the target and any explicit access override used by the demand
+    // owner; a permissive explicit-instantiation lookup cannot warm other uses.
+    // Only completed success is stable. Incomplete queries retain their own
+    // dependency edges; failed conversions are not negatively cached here.
+    auto identity = intern_arguments({query,target,access_override,unsigned(explicit_instantiation_naming)});
+    if (auto known = address_template_arguments.get(identity)) return known;
+    SubstitutionDependency dependency(incomplete_substitution);
     // [temp.arg.nontype]/1,5. A source query keeps the permitted syntactic
     // form; a Value query is an already-validated substituted parameter.
     auto q = type_queries[query];
@@ -16,7 +24,9 @@ ArgumentId Analyzer::address_template_argument(QueryId query, TypeId target)
         value = constants[query_value(query)];
     auto publish = [&](Constant v) {
         TypeQuery result; result.type = target; result.value = v.bits;
-        return value_argument_id(intern_query(result,{}));
+        auto arg = value_argument_id(intern_query(result,{}));
+        if (!fact.incomplete && !incomplete_substitution) address_template_arguments.put(identity,arg);
+        return arg;
     };
     // Null expressions need no id-expression form, but integral zero is not
     // a permitted pointer NTTP conversion. Casted pointer zero is permitted.
@@ -71,7 +81,7 @@ ArgumentId Analyzer::address_template_argument(QueryId query, TypeId target)
     }
     if (c.function) {
         if (deleted_transfer(c.function)) return 0;
-        check_access(c.function,q.context,object_uses[source.object_use].naming_scope);
+        if (!accessible(c.function,q.context,object_uses[source.object_use].naming_scope)) return 0;
         value = Constant(target,constant_entity_address(c.function));
     } else if (canonical) value = convert(value,target);
     else value = constant_query_conversion(query,c);
@@ -82,6 +92,7 @@ ArgumentId Analyzer::address_template_argument(QueryId query, TypeId target)
     if (!e || storage.literal || !storage.live || nonstatic_field(e) || entities[e].thread_local_storage) return 0;
     if (scopes[entities[e].owner].kind != ScopeKind::Namespace &&
         !(scopes[entities[e].owner].kind == ScopeKind::Class && entities[e].is_static)) return 0;
+    if (!canonical && !accessible(e,q.context,q.naming)) return 0;
     if (address.parent && !(types[storage.type].kind == TypeKind::Array && !reference &&
         !constant_addresses[address.parent].parent && address.selector == 0)) return 0;
     if (entities[e].kind == EntityKind::Function) {

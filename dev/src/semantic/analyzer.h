@@ -401,6 +401,8 @@ private:
     bool class_derives(EntityId derived, EntityId base) const;
     std::uint32_t access_base(EntityId entity) const;
     void check_base_entity_access(EntityId from, EntityId to, ScopeId context);
+    bool base_accessible(EntityId cls, EntityId target, ScopeId context);
+    bool accessible(EntityId entity, ScopeId context, ScopeId naming = 0, TypeId object = 0);
     void check_access(EntityId e, ScopeId context, ScopeId naming = 0, TypeId object = 0);
     void check_base_access(TypeId from, TypeId to, ScopeId context);
     ScopeId naming_class(ScopeId s) const;
@@ -533,7 +535,7 @@ private:
     EntityId template_entity(EntityId entity) const;
     TypeId apply_type_template(EntityId entity, const std::vector<ArgumentId>& arguments);
     TypeId specialize_alias(EntityId entity, const std::vector<ArgumentId>& arguments);
-    Index alias_specializations, template_argument_sources, template_head_shapes;
+    Index alias_specializations, template_argument_sources, template_head_shapes, address_template_arguments;
     std::vector<TemplateAliasFact> alias_facts = std::vector<TemplateAliasFact>(1);
 
     ScopeId active_template_scope = 0;

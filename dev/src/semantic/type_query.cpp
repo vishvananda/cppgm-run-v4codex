@@ -101,6 +101,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         } else {
             q.kind = QueryKind::Name; q.entity = e;
             if (function_binding(e)) q.naming = naming_class(name_owner(name,s));
+            if (q.naming || (e && scopes[entity.owner].kind == ScopeKind::Class)) {
+                q.naming = naming_class(name_owner(name,s)); q.context = s;
+                while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+                    q.context = scopes[q.context].parent;
+            }
             if (!function_binding(e)) q.type = entity.type;
             // The source method owns implicit-object cv. Keep the declared
             // field type separately for unparenthesized decltype.
@@ -437,7 +442,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto kind = entities[entity].kind;
         if (kind != EntityKind::Variable && kind != EntityKind::Enumerator && !function_binding(entity))
             { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
-        check_access(entity,q.context,entities[cls].scope);
+        if (!accessible(entity,q.context,entities[cls].scope))
+            { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         x.type = value_type(entities[entity].type); x.entity = entity;
         r.declared_type = entities[entity].type;
         if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
