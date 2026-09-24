@@ -2,60 +2,53 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `3a883d10a27e41d1b126eaef05eaf0b454de1646`.
-Target: **PA18 full-stage**, still unfinished. Checkpoint audit 66 reviewed the
-entire stage-base→code-tip range, including all three implementation handoffs.
-Previous goal turn: **progress** (loop 65 implemented conversion/head behavior).
-This audit: **progress** (fixed query prerequisite validity and removed semantic
-evaluation from ordering inspection; validated the full accumulated range).
+Target: **PA18 full-stage**, still unfinished. Previous goal turn: **progress**
+(audit 66 fixed prerequisite validity and established full-range evidence).
+Loop 67: **progress**, completed address NTTPs and the related outer-head,
+pack, demand, ABI and internal-linkage paths; independent review remains pending.
 
-Stage entry **266/420** → handoffs 63 **282/420**, 64 **312/420**, 65 **327/420**.
-Audit 66: **327/420**, the same **93 failures**, no new failures or lost coverage.
-Earlier PAs pass **2609/2609**. File audit passes with three inherited advisories.
-[Audit record](audit.md) contains the review, evidence, and checkpoint ledger.
+Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
+audit 66 **327** → handoff 67 **343/420**. This handoff fixes **16 original
+failures**, with **zero regressions** and unchanged coverage. Earlier PAs pass
+**2609/2609**; file audit passes with the same three inherited advisories.
+[Audit 66](audit.md) retains the accumulated review and earlier ledger.
 
-| Ownership group | Reviewed implementation / remaining work |
+| Ownership group | Design/spec alignment and remaining implementation |
 |---|---|
-| Deduction, ordering and conversion selection | Typed directional partial ordering, nominated call/address/conversion types, prototype pack element identities, overload selection and inherited conversion hiding are reviewed. Scratch bindings belong to the comparison; completed facts use canonical identities. Selected declarations/conversions feed ordinary demand and typed LowIR. |
-| Substitution, queries and demand | Explicit/deduced immediate probing, structured failure, class→query→consumer edges and retained member heads are reviewed. Failed aliases/signatures now retain the prerequisite's local revision, so another consumer's recomputation cannot hide completion. Ordering inspects retained query identities without evaluation. No global invalidation or speculative body demand. |
-| **Remaining: retained contexts, packs and expression validity** | Finish correlated outer/inner pack lanes, nested/member result/default and out-of-class ownership, compound assignment, braced construction, destructor, cast/access and selected-conversion checks. Extend the appropriate typed facts and failure owners; do not broadly catch exceptions. |
-| **Remaining: constructor/explicit deduction and NTTP identities** | Finish braced/explicit template arguments, ADL template-id participation, constructor/inherited-template participation, and pointer/reference/static-member non-type values. Preserve lexical identity and demand boundaries. |
-| **Remaining: LowIR initialization and result facts** | Resolve constant/array initialization, bool/result metadata and class-result calling conventions. Existing native success does not waive the course LowIR comparison. |
+| Reviewed deduction, ordering, conversion and query demand | Canonical directional comparisons, nominated types, selected declarations/conversions, explicit class→query→consumer edges, local prerequisite revisions and observational ordering inspection. Preserve these owners. |
+| Completed in 67: address NTTPs and outer-head defaults | Typed expression query → target conversion and C++11 address restrictions → canonical constant storage identity → immutable substitution frame → ordinary demand and typed ABI/LowIR. Explicit function template-ids, packs, reference categories, static-member demand and internal-linkage isolation are covered. Completed address conversions include access context in their keys; access failures return candidate state. No text keys, grammar replay or broad retries. |
+| **Remaining: retained contexts, packs and expression validity** | Correlated outer/inner pack lanes, nested/member aliases/results/defaults and out-of-class ownership; compound assignment, braced construction, destructor, cast/access and selected-conversion validity. Extend the owning typed facts and structured failure results. |
+| **Remaining: constructor/explicit deduction** | Braced/explicit arguments, ADL template-id participation, constructor and inherited-constructor participation. Address NTTP conversion is complete at this boundary; do not relax it to mask these failures. |
+| **Remaining: LowIR initialization and result facts** | Constant/array initialization, bool/result metadata, class-result conventions. Executable agreement does not replace the required LowIR comparison. |
 
-The remaining **69 status failures and 24 LowIR mismatches** remain required
-implementation. Group future work by these semantic/lowering owners and validate
-across their interactions before handing off. The three prior handoffs were useful
-progress but fragmented the dependent default/query/member context path; repeated
-full benchmark/report records and deferred cross-owner review were avoidable.
+The remaining **53 status failures and 24 LowIR mismatches** are unfinished
+required implementation, not review questions. Further work crosses into the
+retained expression/member/constructor or initializer owners above: the address
+argument path cannot supply their missing facts. The initial group was extended
+through its related ownership edges before stopping; see [handoff67.md](handoff67.md).
 
-Spec scope: **O0 LowIR**. Canonical TU facts and immutable frames; scratch released
-on return; work follows required candidates/type/query/lexical/dependency edges.
-No optional optimizer or native backend was added. [Audit performance evidence](performance66.md)
-compares the frozen stage base and checkpoint entry with the reviewed compiler;
-all earlier [63](performance.md), [64](performance64.md), and [65](performance65.md)
-measurements remain preserved. PA18 mandates no numerical latency/RSS/runtime
-ceiling. Inherited PA17 self-selected targets remain diagnostics under spec §9;
-required work bounds, correctness and coverage remain gates. Native optimization
-and self-hosting performance belong to PA24–PA34.
+Spec scope is **O0 LowIR**. Work tracks argument queries, required overload
+candidates, immutable frame and demand edges; cached complete identity/linkage
+queries are O(1) average. TU vectors/flat indexes own durable facts, local scratch
+releases on return. [Performance 67](performance67.md) freezes A/B inputs/binaries,
+A/A calibration, ABBA latency/RSS and checked runtime/size. Common executables
+are identical; compiler `.text` grows 0.400%. No optional transform or own native
+backend is added. No PA18 numerical ceiling is mandated; inherited PA17
+**+15%, +16 MiB, 5.5×** targets remain diagnostics under spec §9. All earlier
+[63](performance.md), [64](performance64.md), [65](performance65.md), and
+[66](performance66.md) evidence remains. Graph bounds, correctness and coverage
+remain required; native optimization/self-hosting remain PA24–PA34 work.
 
-The sole stage reference change is the [constant-initialization correction](reference-correction65.md),
-independently rechecked in audit 66 against its reducer and N3485 proof. No other
-fixture, success status, bundle or comparison rule changed.
+Reference corrections since stage base: [constant initialization in 65](reference-correction65.md)
+and [one PA9 ABI substitution oracle in 67](reference-correction67.md), both with
+reducers and contract proofs. No source, status, test count or comparison rule changes.
 
-Next validation: focused required fixtures and explicit personal controls,
-`make test-pa18`, `make test-report-through-pa17`, and the PA18 file audit.
-Run root report targets sequentially because they share `.test_counts`.
-**Do not advance to PA19 until `make test-report-through-pa18` passes.**
+| Handoff ledger | Implementation and evidence | Independent review |
+|---|---|---|
+| 66 audit | stage base → `3a883d10`, **327/420**, prior **2609/2609**, file audit and stage-scoped performance accepted | Completed accumulated review; markers above preserved. |
+| 67 implementation | `06211ad0` → `0b60ca52`; four coherent commits; **343/420**, prior **2609/2609**, file audit pass; 63 address, 13 ABI, 5 merged-source and 3 repeated-address controls and 16 repaired course cases; [hashed evidence](../student.tests/pa18/loop67-evidence.json) | Pending: review argument definition-demand, canonical reference/pack identity, outer-head frames, cached internal linkage and ABI proof as part of the whole-stage audit. No review obligation waived. |
 
-Loop 67 implementation entry: `06211ad0438df250952a414eef409d657b0ff5b0`,
-**327/420** (93 failures). Previous goal turn classified **progress**: audit 66
-changed prerequisite validity and established authoritative validation evidence.
-Current group: pointer/reference/function NTTP identity and target conversion.
-Owner/data flow: retained typed argument query → parameter-directed conversion
-and C++11 address validation → canonical constant storage/entity identity →
-substitution frame → ordinary expression/demand/typed ABI and LowIR consumers.
-Work is proportional to the argument expression and required overload candidates;
-canonical query/storage lookups are O(1) average, TU-owned, with local conversion
-scratch. Validate nulls, qualification, linkage, array/function decay, static
-members, overload sets, nested forwarding, rejection/SFINAE and emission. Extend
-related conversion/identity defects before handoff; independent review remains
-separate from unfinished implementation. Frozen entry: `/tmp/pa18-loop67/entry`.
+Required next checks remain `make test-pa18`, `make test-report-through-pa17`
+and the PA18 file audit; run root reports sequentially (shared `.test_counts`).
+**Do not advance to PA19 until `make test-report-through-pa18` passes and the
+independent whole-stage audit is resolved.**
