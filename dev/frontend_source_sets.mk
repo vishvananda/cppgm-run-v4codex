@@ -113,3 +113,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_type_access
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition_owner
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/explicit_specifier
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_conversion_deduction

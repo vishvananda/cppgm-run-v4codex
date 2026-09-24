@@ -53,8 +53,10 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
         if (better(x,y,arguments)) return true;
         for (unsigned i = 0; i < arguments; ++i)
             if (better(y+i,x+i,1)) return false;
-        return (!entities[viable[a].entity].specialization && entities[viable[b].entity].specialization) ||
-            template_more_specialized(viable[a].entity,viable[b].entity,count);
+        auto ae = viable[a].entity, be = viable[b].entity;
+        bool conversion = members[entities[ae].member_info].conversion_target && members[entities[be].member_info].conversion_target;
+        return (!entities[ae].specialization && entities[be].specialization) ||
+            template_more_specialized(ae,be,conversion ? ~0u : count,false,conversion);
     };
     unsigned best = 0;
     for (unsigned i = 1; i < viable.size(); ++i) if (preferred(i,best)) best = i;

@@ -3,10 +3,10 @@
 
 namespace cppgm { namespace syntax {
 
-NodeId Parser::specifiers(bool type_only)
+NodeId Parser::specifiers(bool type_only, NodeId result)
 {
-    NodeId result = make(type_only ? Kind::TypeSpecifiers : Kind::DeclSpecifiers);
-    bool have_type = false;
+    bool have_type = result != 0;
+    if (!result) result = make(type_only ? Kind::TypeSpecifiers : Kind::DeclSpecifiers);
     std::uint32_t alignment = 0;
     for (;;) {
         attributes(&alignment);

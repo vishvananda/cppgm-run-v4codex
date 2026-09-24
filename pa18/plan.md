@@ -6,6 +6,16 @@ Target: PA18 full-stage. Stage entry: **266/420**; handoff 63: **282/420**.
 Loop 64 entry: `30a610065e586c481a094c60698f7ae8a7952904`, **282/420**.
 Loop 64 handoff: **312/420**, 30 existing failures fixed, zero new failures.
 Previous turn classification: progress (16 existing failures fixed). Review markers above remain unchanged.
+Loop 65 entry: `52d972234f7f4dfdb9ec4c0969f559b9521bdf62`, **312/420**.
+Previous goal turn: progress (loop 64's validated substitution/dependency work).
+Current work: conversion-function template deduction and selection, extending
+related target/reference/default/member-owner behavior while evidence supports it.
+Owner/data flow: conversion target TypeId + indexed class conversion declarations
+→ return-type deduction → immediate signature/default substitution → recorded
+object/result conversions → ordinary member demand and typed LowIR. Candidate
+scratch is local; work follows candidate/type edges, with TU-owned canonical
+specializations. Validate positive/negative deduction, explicit/ref/cv selection,
+SFINAE and body-demand controls plus course tests and frozen performance evidence.
 
 | Owner / group | Design, data flow and work |
 |---|---|

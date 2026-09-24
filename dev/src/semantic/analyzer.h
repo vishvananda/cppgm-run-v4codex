@@ -766,7 +766,8 @@ private:
     void instantiate_function(EntityId e);
     void instantiate_parameters(NodeId d, std::uint32_t context, std::uint32_t frame, ScopeId environment);
     EntityId deduce_target(EntityId pattern, TypeId target);
-    bool template_more_specialized(EntityId a, EntityId b, unsigned arguments = ~0u, bool operator_call = false);
+    EntityId deduce_conversion(EntityId pattern, TypeId target);
+    bool template_more_specialized(EntityId a, EntityId b, unsigned arguments = ~0u, bool operator_call = false, bool conversion = false);
     NodeId instantiate_default(EntityId e, NodeId source);
     void validate_list_plan(std::uint32_t id);
     TypeId declare_class_template(NodeId n, ScopeId s, ScopeId friend_owner = 0);

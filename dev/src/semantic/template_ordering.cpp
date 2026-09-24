@@ -1,6 +1,6 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
-bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned arguments, bool operator_call)
+bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned arguments, bool operator_call, bool conversion)
 {
     if (!a || !b || !entities[a].specialization || !entities[b].specialization) return false;
     const bool call = arguments != ~0u;
@@ -11,12 +11,16 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
     // All inputs are stable identities. Probe before constructing nominated
     // shapes, so a completed comparison has O(1) average lookup cost even for
     // long parameter lists. Defaults and body demand cannot change the key.
-    auto identity = intern_arguments({original_a,original_b,arguments,unsigned(operator_call),owner(a),owner(b)});
+    auto identity = intern_arguments({original_a,original_b,arguments,unsigned(operator_call),owner(a),owner(b),unsigned(conversion)});
     if (auto known = function_partial_ordering.get(identity)) { ++function_ordering_hits; return known == 2; }
     ++function_ordering_work;
     auto shape = [&](EntityId e) {
         auto pattern = specialization_pattern(e);
         auto t = types[entities[pattern].type];
+        // Conversion ordering nominates only the return type. A one-element
+        // sequence reuses the reference/cv transformations and completeness
+        // checks without involving unused template head parameters.
+        if (conversion) return types.function(types.fundamental(FT_VOID),{t.child},false);
         if (!call) return entities[pattern].type;
         std::vector<TypeId> parameters;
         bool member = operator_call && entities[pattern].member_info && !entities[pattern].is_static;
@@ -43,7 +47,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
         return type;
     };
     auto transformed = [&](TypeId signature) {
-        if (!call) return signature;
+        if (!call && !conversion) return signature;
         auto t = types[signature]; std::vector<TypeId> params;
         for (unsigned j = 0; j < t.count; ++j) {
             auto p = types.parameters[t.offset+j];
@@ -104,7 +108,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
     bool accepts_a = deduce_type(ty,tx,yx,DeductionKind::PartialOrdering) && complete(ty,yx);
     bool accepts_b = deduce_type(tx,ty,xy,DeductionKind::PartialOrdering) && complete(tx,xy);
     bool result = accepts_a && !accepts_b;
-    if (accepts_a && call) {
+    if (accepts_a && (call || conversion)) {
         auto left = types[x], right = types[y]; bool stricter = false, worse = false;
         auto cv = [&](TypeId p) {
             while (types[p].kind == TypeKind::Array || types[p].kind == TypeKind::DependentArray) p = types[p].child;

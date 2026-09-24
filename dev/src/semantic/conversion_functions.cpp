@@ -57,12 +57,16 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
 }
 EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target)
 {
-    while (owner && scopes[owner].kind == ScopeKind::Class) {
-        if (auto e = conversion_bindings.get(key(owner,target))) return e;
-        auto b = class_facts[entities[scopes[owner].entity].class_info].first_base;
-        owner = b ? entities[bases[b].base].scope : 0;
+    if (!owner || scopes[owner].kind != ScopeKind::Class) return 0;
+    EntityId result = 0;
+    for (auto e : conversion_candidates(entities[scopes[owner].entity].type)) {
+        ++candidate_work;
+        if (entities[e].template_info) e = deduce_conversion(e,target);
+        // Explicit member calls name the exact conversion-type-id. The
+        // qualification alternatives for initialization do not change it.
+        if (e && types[entities[e].type].child == target) result = merge_lookup(result,e);
     }
-    return 0;
+    return result;
 }
 Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
 {
@@ -78,16 +82,30 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
     for (EntityId e : conversion_candidates(source.type)) {
         ++candidate_work;
         auto m = members[entities[e].member_info];
-        if (entities[e].template_info || (m.explicit_constructor && !explicit_allowed)) continue;
+        if (m.explicit_constructor && !explicit_allowed) continue;
         Conversion object = object_conversion(e,source.type,source.category);
         if (!object.valid()) continue;
+        bool templated = entities[e].template_info != 0;
+        if (templated) {
+            auto declared = types[entities[e].type].child;
+            bool returns_reference = types[declared].kind == TypeKind::LRef || types[declared].kind == TypeKind::RRef;
+            if (direct_reference && !returns_reference) continue;
+            // A value result initializes the referred-to object. Its required
+            // type is unqualified; the final sequence records the binding's
+            // cv/category. Reference-return deduction retains that reference.
+            auto required = returns_reference ? to : types.unqualified(value_type(to));
+            e = deduce_conversion(e,required);
+            if (!e) continue;
+            m = members[entities[e].member_info];
+            if (m.explicit_constructor && !explicit_allowed) continue;
+        }
         TypeId declared = types[entities[e].type].child;
         Expression value; value.type = value_type(declared);
         value.category = types[declared].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[declared].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         Conversion second = standard_conversion(value,to);
         if (!second.valid() || (direct_reference && (value.category == ValueCategory::Prvalue || second.temporary))) continue;
-        if (m.explicit_constructor && second.rank != 0) continue;
+        if ((templated || m.explicit_constructor) && second.rank != 0) continue;
         if (second.kind == Conversion::Kind::Construction && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(to)) {
             // The call result initializes this complete object directly.
             second.kind = Conversion::Kind::Standard;
@@ -98,7 +116,10 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
     auto preferred = [&](const Candidate& a, const Candidate& b) {
         if (better(&a.object,&b.object,1)) return true;
         if (better(&b.object,&a.object,1)) return false;
-        return better(&a.second,&b.second,1);
+        if (better(&a.second,&b.second,1)) return true;
+        if (better(&b.second,&a.second,1)) return false;
+        bool at = entities[a.function].specialization != 0, bt = entities[b.function].specialization != 0;
+        return (!at && bt) || (at && bt && template_more_specialized(a.function,b.function,~0u,false,true));
     };
     std::size_t best = 0;
     for (std::size_t i = 1; i < viable.size(); ++i) if (preferred(viable[i],viable[best])) best = i;
@@ -143,6 +164,9 @@ Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, N
         auto object = user_conversions[function.materialization].object;
         if (better(&argument,&object,1)) return constructor;
         if (better(&object,&argument,1)) return function;
+        bool ct = entities[constructor.function].specialization != 0;
+        bool ft = entities[function.function].specialization != 0;
+        if (ct != ft) return ct ? function : constructor;
         result.ambiguous = true; return result;
     }
     if (!function.valid() && !constructor.valid() && (function.ambiguous || constructor.ambiguous)) {

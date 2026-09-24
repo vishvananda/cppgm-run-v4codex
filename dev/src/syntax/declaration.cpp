@@ -51,7 +51,7 @@ NodeId Parser::unadorned_declaration()
 
 NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
 {
-    if (!specs) specs = specifiers();
+    specs = specifiers(false,specs);
     ScopeId owner = scope;
     DeclaratorFacts facts;
     NodeId decl = declarator(false, false, &facts);

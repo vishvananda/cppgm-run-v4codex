@@ -211,7 +211,15 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto cond = c.target ? constant_node_conversion(first,c,s) : evaluate(first,s);
         if (!cond.valid) return 0;
         auto yes = ast[first].next;
-        return constant_address(constant_truth(cond) ? yes : ast[yes].next,s);
+        bool selected = constant_truth(cond);
+        auto branch = selected ? yes : ast[yes].next;
+        if (x.count == 3) {
+            auto value = constant_node_conversion(branch,conversions[x.conversions+(selected ? 1 : 2)],s);
+            if (!value.valid) return 0;
+            auto kind = types[value.type].kind;
+            if (kind == TypeKind::LRef || kind == TypeKind::RRef) return value.bits;
+        }
+        return constant_address(branch,s);
     }
     if (ast[n].kind == Kind::Cast) {
         auto v = constant_node_conversion(ast[first].next,conversions[x.conversions],s);

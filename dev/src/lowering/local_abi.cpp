@@ -102,6 +102,9 @@ void Procedural::template_function_abi(EntityId e, abi_mangle::Function& target)
     for (unsigned j = 0; j < pack.count; ++j)
         target.arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     auto t = sem.types[sem.entities[sem.specialization_pattern(e)].type];
+    // The conversion-type-id belongs to the template declaration, just like
+    // its parameter types. The specialization arguments supply concrete types.
+    if (sem.member_fact(e).conversion_target) target.conversion = abi_type(t.child);
     target.result = abi_type(t.child); target.parameters.clear();
     for (unsigned j = 0; j < t.count; ++j) target.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));
 }

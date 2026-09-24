@@ -153,8 +153,11 @@ NodeId Parser::special_member(NodeId specs)
     if (in.is("=")) ast.append(result, initializer());
     if (in.is(":") || in.is("{") || in.is("try")) {
         ast[result].kind = Kind::SpecialDefinition;
+        bool saved_template = template_declaration;
+        template_declaration = false;
         if (in.is(":")) ast.append(result, ctor_initializer());
         ast.append(result, in.is("try") ? try_block(true) : compound());
+        template_declaration = saved_template;
     } else in.require(";");
     scope = saved;
     return result;

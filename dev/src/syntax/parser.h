@@ -72,7 +72,7 @@ private:
     NodeId simple_declaration(bool require_semicolon = true, NodeId specs = 0);
     NodeId special_member(NodeId specs = 0);
     NodeId ctor_initializer();
-    NodeId specifiers(bool type_only = false);
+    NodeId specifiers(bool type_only = false, NodeId result = 0);
     NodeId type_id(bool new_type = false);
     struct DeclaratorFacts {
         NodeId name = 0;
