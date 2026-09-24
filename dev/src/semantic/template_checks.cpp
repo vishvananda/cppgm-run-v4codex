@@ -141,6 +141,23 @@ ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
     }
     return 0;
 }
+QueryId Analyzer::template_signature_query(QueryId id, EntityId primary, Index& cache)
+{
+    auto key = (std::uint64_t(1) << 63) | id;
+    if (auto known = cache.get(key)) return known;
+    cache.put(key,id);
+    auto query = type_queries[id];
+    // Signature equivalence compares already-bound operands and canonical
+    // head ordinals. Access environments belong to the original source query,
+    // not this declaration-matching key; these normalized queries are never
+    // substituted to establish a concrete declaration's type.
+    query.context = 0;
+    if (query.type) query.type = template_member_aliases(query.type,primary,cache);
+    std::vector<QueryId> children;
+    for (unsigned i = 0; i < query.count; ++i)
+        children.push_back(template_signature_query(query_edges[query.offset+i],primary,cache));
+    auto result = intern_query(query,children); cache.put(key,result); return result;
+}
 TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& cache)
 {
     if (!type || !dependent_type(type)) return type;
@@ -149,7 +166,9 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
     auto t = types[type]; TypeId result = type;
     auto child = t.child ? template_member_aliases(t.child,primary,cache) : 0;
     if (t.child && !child) return 0;
-    if (t.kind == TypeKind::DependentName) {
+    if (t.kind == TypeKind::Decltype) {
+        result = types.qualify(types.decltype_type(template_signature_query(t.entity,primary,cache),t.bound),t.cv);
+    } else if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(child,primary);
         auto alias = owner && !t.bound ? local(owner,t.entity,Lookup::Qualifier) : 0;
         if (alias && entities[alias].type && (entities[alias].kind == EntityKind::Alias ||
@@ -247,7 +266,7 @@ TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId p
 std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary)
 {
     auto declared = facts[d].type;
-    if (!declared || types[declared].kind != TypeKind::Function) return 0;
+    if (!declared) return 0;
     auto signature_of = [&](NodeId node, ScopeId environment) {
         auto type = template_member_signature(facts[node].type,environment,primary,facts[node].scope);
         if (!type) return std::uint32_t(0);
@@ -292,6 +311,11 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
     if (auto p = template_signature_index.get(key(group,signature))) {
         auto prototype = template_prototypes[p];
         if (prototype.inline_definition) throw std::runtime_error("template member was already defined in its class");
+        if (types[declared].kind != TypeKind::Function) {
+            if (!entities[facts[prototype.declarator].entity].is_static)
+                throw std::runtime_error("out-of-class data definition requires a static member");
+            return p;
+        }
         auto current = template_exception(d,head);
         auto previous = template_exception(prototype.declarator,prototype.environment);
         if (current >= 0 && previous >= 0 && current != previous)

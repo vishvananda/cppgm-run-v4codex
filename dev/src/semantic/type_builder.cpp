@@ -428,6 +428,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function) declare_operator(e, name);
     declaration_attributes(e,specs,source);
     bool specialized_member_declaration = source == explicit_specialization_source && !init && scopes[owner].kind == ScopeKind::Class;
+    if (calls && !function && entities[e].definition && entities[e].is_static &&
+        scopes[owner].kind == ScopeKind::Class && scopes[s].kind != ScopeKind::Class &&
+        !specialized_member_declaration && source != explicit_specialization_source)
+        throw std::runtime_error("static data member defined twice");
     if (calls && init && !function && entities[e].is_static && scopes[owner].kind == ScopeKind::Class &&
         entities[e].initializer && source != explicit_specialization_source)
         throw std::runtime_error("static member initializer specified twice");

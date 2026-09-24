@@ -823,6 +823,7 @@ private:
     TypeId template_member_aliases(TypeId type, EntityId primary, Index& cache);
     ScopeId template_signature_owner(TypeId type, EntityId primary);
     std::uint32_t check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary);
+    QueryId template_signature_query(QueryId query, EntityId primary, Index& cache);
     int template_exception(NodeId d, ScopeId s);
     Index template_prototype_index, template_prototype_sources;
     Index template_signature_index, template_signature_groups;

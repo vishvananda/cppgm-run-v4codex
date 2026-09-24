@@ -39,12 +39,19 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
     demand_function_expression(result);
-    if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(result.entity);
-    if (ast[n].kind == Kind::IdExpression && result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
+    bool storage = (!unevaluated_depth || active_default_fact) && definitions;
+    bool substituted = ast.nodes.occurrences[n].context != 0;
+    if (storage && substituted) demand_template_storage(result.entity);
+    // A substituted use establishes its value at instantiation. Ordinary O0
+    // reads retain the value already published at that source use, before its
+    // storage demand can attach an out-of-class initializer. Both paths record
+    // the decision here; lowering never consults a later declaration value.
+    if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
         (entities[result.entity].kind == EntityKind::Variable && entities[result.entity].specialization)) &&
         entities[result.entity].constant.valid) {
         facts.edit(n).value = constants.size(); constants.push_back(entities[result.entity].constant);
     }
+    if (storage && !substituted) demand_template_storage(result.entity);
     class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);

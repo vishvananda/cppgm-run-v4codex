@@ -10,8 +10,22 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         named |= types[c.expression.type].kind == TypeKind::Named;
         class_operand |= class_value(c.expression.type) || pattern_class_type(c.expression.type);
     }
-    if (q.op == OP_AMP && q.value && args.size() == 1 && args[0].form == ExpressionForm::Overload) {
-        TypeQueryFact result; result.expression = args[0]; return result;
+    if (q.op == OP_AMP && args.size() == 1 && args[0].form == ExpressionForm::Overload) {
+        // An address initializer may supply the target function type later.
+        // Do not form pointer-to-unknown from an unqualified overload family.
+        TypeQueryFact result; result.expression = args[0];
+        auto e = args[0].entity;
+        if (e && entities[e].kind == EntityKind::Function && !entities[e].template_info) {
+            if (deleted_transfer(e)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
+            check_access(e,q.context,entities[e].owner);
+            bool member = entities[e].member_info && !entities[e].is_static;
+            if (member && !q.value) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            result.expression.type = member ? types.member_pointer(scopes[entities[e].owner].entity,entities[e].type) :
+                types.compound(TypeKind::Pointer,entities[e].type);
+            result.expression.form = ExpressionForm::Ordinary;
+            result.expression.category = ValueCategory::Prvalue;
+        }
+        return result;
     }
     auto object = args[0].type;
     ScopeId naming = 0; EntityId family = q.entity;

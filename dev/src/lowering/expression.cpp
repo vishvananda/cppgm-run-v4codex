@@ -136,10 +136,10 @@ Value Procedural::expression(NodeId n, bool location)
     }
     case Kind::Member: {
         auto member = sem.entities[fact.entity];
-        if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && member.constant.valid && !location)) {
+        if (member.kind == semantic::EntityKind::Enumerator || (member.is_static && sem.constant_fact(n).valid && !location)) {
             if (sem.object_fact(n).arrow) arrow_object(a,sem.object_fact(n).arrow);
             else discard(a, false);
-            return constant_operand(member.constant,fact.type);
+            return constant_operand(member.kind == semantic::EntityKind::Enumerator ? member.constant : sem.constant_fact(n),fact.type);
         }
         if (member.is_static) {
             if (sem.object_fact(n).arrow) arrow_object(a,sem.object_fact(n).arrow);

@@ -214,7 +214,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     }
     if (prototype) {
         auto special = child(def.initializer ? def.initializer : child(n,Kind::Initializer),Kind::SpecialInitializer);
-        if (ast[n].kind != Kind::Function && ast[n].kind != Kind::SpecialDefinition && !special)
+        bool storage = d && facts[d].type && types[facts[d].type].kind != TypeKind::Function;
+        if (!storage && ast[n].kind != Kind::Function && ast[n].kind != Kind::SpecialDefinition && !special)
             throw std::runtime_error("out-of-class member must be a definition");
         if (special && ast[special].op == KW_DELETE)
             throw std::runtime_error("deleted definition must be the first declaration");
