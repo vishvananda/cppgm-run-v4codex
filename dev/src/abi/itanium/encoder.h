@@ -4,7 +4,7 @@
 
 namespace abi_mangle {
 // One encoder owns the substitution sequence for one symbol. Flat sparse
-// slots are local to that symbol; external-name literals use a new encoder.
+// slots include structured external-name literals within that symbol.
 class Encoder {
     std::string owned_output;
 public:

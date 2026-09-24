@@ -7,6 +7,7 @@ ROOT=Path(__file__).resolve().parents[2]
 WORK=Path(sys.argv[1]);WORK.mkdir(parents=True,exist_ok=True)
 CASES={
  'qualification':['_Z1fIXadL_Z1xEEEiv'],
+ 'internal':['_Z1fIXadL_ZL1xEEEiv'],
  'reference':['_ZN1AIL_Z1xEE1fEv'],
  'function':['_Z1gIXadL_Z1fiEEEiv'],
  'function_reference':['_Z1gIL_Z1fiEEiv'],
@@ -31,4 +32,4 @@ expected='_ZN2ns6HolderIXadL_ZN1C1mEEEE1fERS1_\n';actual=out.read_text() if not 
 rows.append(dict(name='structured-reducer',source=src.read_text(),expected=expected,actual=actual,exit=r.returncode,passed=r.returncode==0 and actual==expected))
 (WORK/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
 assert all(r['passed'] for r in rows),rows
-print('12 source/structured ABI checks pass.')
+print('13 source/structured ABI checks pass.')

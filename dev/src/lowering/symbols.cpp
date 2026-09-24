@@ -109,9 +109,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
         return sid;
     }
-    bool internal = (e.is_static && sem.scopes[e.owner].kind != semantic::ScopeKind::Class) || (e.kind == semantic::EntityKind::Variable &&
-        sem.scopes[e.owner].kind != semantic::ScopeKind::Class && sem.types[e.type].cv & 1 && !e.external_decl);
-    internal |= internal_scope(e.owner);
+    bool internal = internal_entity(id);
     std::string name = spelling(e.name);
     // Source ABI spelling and internal IR identity occupy separate namespaces.
     // In particular a root C++ variable's ABI spelling is the bare source name.

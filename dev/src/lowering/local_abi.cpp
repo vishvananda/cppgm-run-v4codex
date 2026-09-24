@@ -19,7 +19,7 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
         auto address = sem.constant_static_value(semantic::Constant(query.type,query.value));
         auto e = address.entity;
         auto entity = sem.entities[e].kind == semantic::EntityKind::Function ? abi_function_context(e) :
-            abi.make(Kind::VariableEntity,abi_entity_name(e));
+            abi.make(Kind::VariableEntity,abi_entity_name(e),internal_entity(e));
         return abi.make(Kind::EntityArgument,entity,sem.types[query.type].kind == TypeKind::Pointer);
     }
     auto value = abi_query(q);
@@ -48,6 +48,31 @@ bool Procedural::internal_scope(semantic::ScopeId s)
     internal_scopes[s] = local ? 2 : 1;
     return local;
 }
+bool Procedural::internal_entity(EntityId id)
+{
+    if (internal_entities.size() <= id) internal_entities.resize(sem.entities.size());
+    if (internal_entities[id]) return internal_entities[id] == 2;
+    auto e = sem.entities[id];
+    bool local = internal_scope(e.owner) || local_abi_scope(e.owner) ||
+        (sem.scopes[e.owner].kind != semantic::ScopeKind::Class &&
+         (e.is_static || (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 1) && !e.external_decl)));
+    if (!local && e.specialization) {
+        auto args = sem.specialization_arguments(id);
+        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));
+    }
+    internal_entities[id] = local ? 2 : 1; return local;
+}
+bool Procedural::local_abi_argument(semantic::ArgumentId arg)
+{
+    if (semantic::value_argument(arg)) {
+        auto q = sem.type_query(semantic::argument_query(arg));
+        if (q.kind != semantic::QueryKind::Value || !q.value ||
+            (sem.types[q.type].kind != TypeKind::Pointer && sem.types[q.type].kind != TypeKind::LRef)) return false;
+        auto e = sem.constant_static_value(semantic::Constant(q.type,q.value)).entity;
+        return e && internal_entity(e);
+    }
+    return local_abi_type(arg);
+}
 bool Procedural::local_abi_type(TypeId t)
 {
     if (!t) return false;
@@ -58,13 +83,13 @@ bool Procedural::local_abi_type(TypeId t)
     if (type.kind == TypeKind::ArgumentPack) {
         auto args = sem.pack_arguments(t);
         for (unsigned j = 0; j < args.count; ++j)
-            local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
+            local |= local_abi_argument(sem.template_argument(args.offset+j));
     } else if (type.kind == TypeKind::Named) {
         auto e = sem.entities[type.entity];
         local |= sem.closure(type.entity).function != 0;
         local |= local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
-        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_type(sem.argument_type(sem.template_argument(args.offset+j)));
+        for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));
     } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(sem.entities[type.entity].type);
     if (type.kind == TypeKind::Function)
         for (unsigned j = 0; j < type.count; ++j) local |= local_abi_type(sem.types.parameters[type.offset+j]);
