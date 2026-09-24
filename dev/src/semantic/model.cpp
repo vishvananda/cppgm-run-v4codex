@@ -47,9 +47,9 @@ TypeId Types::decltype_type(std::uint32_t expression, bool direct)
 {
     Type t; t.kind = TypeKind::Decltype; t.entity = expression; t.bound = direct; return intern(t,{});
 }
-TypeId Types::dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id)
+TypeId Types::dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, DependentNameKind kind)
 {
-    Type t; t.kind = TypeKind::DependentName; t.child = owner; t.entity = name; t.bound = template_id;
+    Type t; t.kind = TypeKind::DependentName; t.child = owner; t.entity = name; t.bound = unsigned(kind);
     return intern(t,args);
 }
 TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)

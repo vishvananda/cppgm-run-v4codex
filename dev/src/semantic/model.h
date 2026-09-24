@@ -48,6 +48,8 @@ struct UnavailableSemanticFact : std::exception {
 };
 
 enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion };
+// The lookup obligation is part of a dependent name's canonical identity.
+enum class DependentNameKind : unsigned char { Type, Application, Template };
 enum class DeductionKind : unsigned char { Call, ClassPattern };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
@@ -79,7 +81,7 @@ public:
     TypeId unqualified(TypeId t);
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
-    TypeId dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& arguments, bool template_id);
+    TypeId dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& arguments, DependentNameKind kind);
     TypeId decltype_type(std::uint32_t expression, bool direct);
     TypeId adjusted(TypeId t);
     TypeId signature(TypeId t);

@@ -15,21 +15,29 @@ EntityId Analyzer::qualified_type_member(TypeId owner, IdentifierId name)
     if (member && entities[cls].complete) qualified_type_members.put(k,member);
     return member;
 }
-TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id)
+TypeId Analyzer::qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, DependentNameKind kind)
 {
-    if (dependent_type(owner)) return types.dependent_name(owner,name,args,template_id);
+    if (dependent_type(owner)) return types.dependent_name(owner,name,args,kind);
+    if (types[owner].kind != TypeKind::Named) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("type qualifier is not a class");
+    }
     EntityId member = qualified_type_member(owner,name);
     if (!member || (entities[member].kind != EntityKind::Type && entities[member].kind != EntityKind::Alias)) {
         if (template_type_probe) return 0;
         throw std::runtime_error("qualified type member not found");
     }
-    if (template_id) {
-        if (!entities[member].template_info) throw std::runtime_error("member is not a class template");
+    bool member_template = entities[member].template_info;
+    if (member_template != (kind != DependentNameKind::Type)) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("qualified member has the wrong type/template category");
+    }
+    if (kind == DependentNameKind::Application) {
         return apply_type_template(member,args);
     }
     // A dependent template-template argument names the member template entity,
     // whereas a template-id applies its alias body to an argument tuple.
-    if (entities[member].template_info) return types.named(member);
+    if (kind == DependentNameKind::Template) return types.named(member);
     return source_type(member);
 }
 TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
@@ -78,7 +86,7 @@ TypeId Analyzer::injected_template_type(EntityId e, ScopeId use)
     if (!entities[e].template_pattern || !entities[e].name || !scope ||
         scopes[scope].kind != ScopeKind::Class || scopes[parent].kind != ScopeKind::Class) return 0;
     auto owner = injected_template_type(scopes[parent].entity,use);
-    return owner ? types.dependent_name(owner,entities[e].name,{},false) : 0;
+    return owner ? types.dependent_name(owner,entities[e].name,{},DependentNameKind::Type) : 0;
 }
 ScopeId Analyzer::current_instantiation_scope(TypeId type, ScopeId use)
 {
@@ -130,7 +138,7 @@ void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId sco
         item = ast[item].next;
     } while (item);
 }
-TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typename)
+TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typename, bool template_name)
 {
     if (!last) last = ast[n].last;
     ScopeId owner = ast[n].op == OP_COLON2 ? global : s;
@@ -163,7 +171,9 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
                 if (template_type_probe && !type) return 0;
                 args.push_back(value_argument(type) ? type : types.signature(type));
             }
-            prefix = types.dependent_name(prefix,ast[p].text,args,list);
+            auto kind = list ? DependentNameKind::Application :
+                template_name && p == last ? DependentNameKind::Template : DependentNameKind::Type;
+            prefix = types.dependent_name(prefix,ast[p].text,args,kind);
             if (p == last) return prefix;
             continue;
         }

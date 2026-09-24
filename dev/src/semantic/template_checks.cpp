@@ -132,12 +132,12 @@ ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
     if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(t.child,primary);
         auto member = owner ? local(owner,t.entity,Lookup::Qualifier) : 0;
-        if (t.bound) {
+        if (DependentNameKind(t.bound) == DependentNameKind::Application) {
             if (!member || !entities[member].class_info || !entities[member].template_info) return 0;
             std::vector<ArgumentId> arguments(types.parameters.begin()+t.offset,types.parameters.begin()+t.offset+t.count);
             return template_signature_owner(entities[specialize_class(member,arguments)].type,primary);
         }
-        if (member && entities[member].kind == EntityKind::Type) return entities[member].scope;
+        if (DependentNameKind(t.bound) == DependentNameKind::Type && member && entities[member].kind == EntityKind::Type) return entities[member].scope;
     }
     return 0;
 }
@@ -175,7 +175,7 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
                 if (!value) return 0;
                 args.push_back(value);
             }
-            result = types.qualify(types.dependent_name(child,t.entity,args,t.bound),t.cv);
+            result = types.qualify(types.dependent_name(child,t.entity,args,DependentNameKind(t.bound)),t.cv);
         }
     } else if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto spec = specializations[entities[t.entity].specialization]; auto pack = argument_packs[spec.arguments];

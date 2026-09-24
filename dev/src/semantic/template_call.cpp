@@ -71,10 +71,13 @@ bool Analyzer::dependent_type(TypeId id)
 TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner)
 {
     if (!dependent_type(pattern)) return pattern;
+    const TypeId failed_substitution = ~TypeId(0);
     auto cache_key = key(owner,pattern);
     if (owner) {
-        if (auto known = specialization_type_cache.get(cache_key)) { ++substitution_hits; return known; }
-    } else if (auto known = cache.get(pattern)) return known;
+        if (auto known = specialization_type_cache.get(cache_key)) {
+            ++substitution_hits; return known == failed_substitution ? 0 : known;
+        }
+    } else if (auto known = cache.get(pattern)) return known == failed_substitution ? 0 : known;
     ++substitution_work;
     Type p = types[pattern];
     TypeId result = pattern;
@@ -111,7 +114,10 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         for (unsigned j = 0; j < p.count; ++j)
             substitute_arguments(types.parameters[p.offset+j],bindings,cache,owner,args);
         for (auto arg : args) if (!arg) return 0;
-        result = types.qualify(qualified_type(qualifier,p.entity,args,p.bound),p.cv);
+        result = qualified_type(qualifier,p.entity,args,DependentNameKind(p.bound));
+        // A failed lookup is not type zero with qualifiers: qualifying that
+        // sentinel would manufacture a fundamental type and admit a candidate.
+        if (result) result = types.qualify(result,p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);
         if (!result) return 0;
@@ -200,8 +206,11 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         result = p.kind == TypeKind::MemberPointer ? types.member_pointer(p.entity, child) : types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
     }
-    if (owner) { specialization_type_cache.put(cache_key,result); ++substitution_records; }
-    else cache.put(pattern, result);
+    // A resolved dependent-name failure belongs to the same immutable
+    // type/frame key as success. Missing bindings returned above are not facts.
+    auto stored = result ? result : failed_substitution;
+    if (owner) { specialization_type_cache.put(cache_key,stored); ++substitution_records; }
+    else cache.put(pattern, stored);
     return result;
 }
 EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input, bool explicit_head)

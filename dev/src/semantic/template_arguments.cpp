@@ -106,7 +106,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
         auto name = ast[n].detail;
         auto binding = bind_template_name(name,scope);
         if (binding.dependent && (ast[ast[name].last].flags & 1) && !child(ast[name].last,Kind::TemplateArguments))
-            return type_name(name,scope);
+            return type_name(name,scope,0,false,true);
         auto e = binding.entity;
         if (e && entities[e].template_pattern && entities[e].kind == EntityKind::Variable &&
             (types[entities[e].type].cv & 1) && integral(entities[e].type)) {

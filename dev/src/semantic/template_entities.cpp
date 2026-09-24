@@ -128,12 +128,12 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     auto parent = head.parent_frame ? head.parent_frame : template_lexical_frame(scopes[head.environment].parent);
     auto frame = substitution_frame(0,head.offset,head.count,parent,intern_arguments(args));
     auto type = substitute_type(entities[e].type,bindings,cache,frame);
-    check_substituted_type_access(entities[e].source,frame);
     if (!type) {
         alias_facts[id].state = FactState::Failure;
         if (template_type_probe) return 0;
         throw std::runtime_error("invalid alias substitution");
     }
+    check_substituted_type_access(entities[e].source,frame);
     alias_facts[id].type = type; alias_facts[id].state = FactState::Success;
     return type;
     } catch (...) { alias_facts[id].state = FactState::Failure; throw; }

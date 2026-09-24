@@ -48,7 +48,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::Decltype: result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity)); break;
     case TypeKind::DependentName: {
         result = abi.name(abi_type(t.child),spelling(t.entity));
-        if (t.bound) {
+        if (semantic::DependentNameKind(t.bound) == semantic::DependentNameKind::Application) {
             std::vector<abi_mangle::Id> args;
             for (unsigned j = 0; j < t.count; ++j)
                 args.push_back(abi_argument(sem.types.parameters[t.offset+j]));

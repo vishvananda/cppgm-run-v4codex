@@ -654,9 +654,9 @@ private:
     TypeId source_type(EntityId e) const;
     ScopeId current_instantiation_scope(TypeId type, ScopeId use);
     void resolve_parenthesized_declaration(NodeId declaration, ScopeId scope);
-    TypeId type_name(NodeId n, ScopeId s, NodeId last = 0, bool require_typename = false);
+    TypeId type_name(NodeId n, ScopeId s, NodeId last = 0, bool require_typename = false, bool template_name = false);
     TypeId injected_template_type(EntityId e, ScopeId use);
-    TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, bool template_id);
+    TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, DependentNameKind kind);
     EntityId qualified_type_member(TypeId owner, IdentifierId name);
     Index qualified_type_members;
     EntityId resolve(NodeId name, ScopeId s, Lookup mode = Lookup::Ordinary);
