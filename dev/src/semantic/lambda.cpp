@@ -61,6 +61,9 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     demand_region(body);
     check_declarator(ast,d);
     auto signature = d ? declarator(d,types.fundamental(FT_VOID),s) : types.function(types.fundamental(FT_VOID),{},false);
+    // Keep raw parameter facts for the body, but publish the adjusted callable
+    // signature just as an ordinary function declaration does.
+    signature = types.signature(signature);
     auto f = types[signature];
     std::vector<TypeId> params(types.parameters.begin()+f.offset,types.parameters.begin()+f.offset+f.count);
     bool variadic = f.variadic;
@@ -98,18 +101,11 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     try { function_body({body,d,entities[cls].scope,fn,body}); }
     catch (...) { --unevaluated_depth; body_evaluation_depth = saved_depth; throw; }
     --unevaluated_depth; body_evaluation_depth = saved_depth;
-    entities[fn].exception_spec = 128;
-    for (auto q = ast[d].first; q; q = ast[q].next) {
-        if (ast[q].op == KW_NOEXCEPT) {
-            bool nonthrowing = true;
-            if (ast[q].first) {
-                auto value = evaluate(ast[q].first,s);
-                if (!value.valid) throw std::runtime_error("nonconstant lambda noexcept");
-                nonthrowing = constant_truth(value);
-            }
-            entities[fn].exception_spec = 128 | (nonthrowing ? 1 : 2);
-        }
-    }
+    // The checked operator scope owns the actual parameter identities (and
+    // expanded packs). Exception expressions use that scope and the ordinary
+    // contextual-bool/constant rules, independently of runtime body demand.
+    exception_specification(fn,d,entities[fn].scope);
+    demand_exception_specification(fn);
     auto call_type = types[entities[fn].type];
     auto pointer = types.compound(TypeKind::Pointer,types.function(call_type.child,params,variadic));
     auto conversion_name = ids.intern(TextView("__closure_conversion",20));

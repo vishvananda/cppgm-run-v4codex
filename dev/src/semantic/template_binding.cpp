@@ -285,6 +285,12 @@ void Analyzer::bind_template_body(const Body& body)
         ValueBinding(bool& value) : mode(value), prior(value) { mode = true; }
         ~ValueBinding() { mode = prior; }
     } value_binding(template_body_values);
+    // A lambda's declarator sees its parameter names. Retain fixed lookup
+    // here, before later declarations can affect an enclosing instantiation.
+    if (ast[body.declarator].kind == Kind::LambdaDeclarator)
+        for (auto q = ast[body.declarator].first; q; q = ast[q].next)
+            if ((ast[q].kind == Kind::FunctionQualifier || ast[q].kind == Kind::Noexcept) && ast[q].op == KW_NOEXCEPT && ast[q].first)
+                bind_template_expression(ast[q].first,fs);
     auto ctor_initializers = child(body.source,Kind::CtorInitializer);
     for (auto item = ast[ctor_initializers].first; item; item = ast[item].next) {
         auto id = child(item,Kind::MemInitializerId);

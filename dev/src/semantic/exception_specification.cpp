@@ -22,7 +22,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     ExceptionSpecificationFact fact; fact.declarator = d; fact.scope = s;
     fact.destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
     for (auto c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind != Kind::FunctionQualifier || ast[c].op != KW_NOEXCEPT) continue;
+        if ((ast[c].kind != Kind::FunctionQualifier && ast[c].kind != Kind::Noexcept) || ast[c].op != KW_NOEXCEPT) continue;
         if (!ast[c].first) fact.specification = 1;
         else fact.expression = ast[c].first;
     }
@@ -75,7 +75,10 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
             // Parameter names in exception specifications denote prototype
             // entities. They can supply types, but never runtime values.
             auto parameters = child(fact.declarator,Kind::Parameters);
-            if (ast[parameters].first) {
+            // A checked body already owns raw parameter types and pack
+            // bindings. Do not shadow them with adjusted signature types.
+            bool body_scope = scope == entities[e].scope && scopes[scope].kind == ScopeKind::Function;
+            if (ast[parameters].first && !body_scope) {
                 auto parent = scope; scope = make_scope(ScopeKind::Block,parent);
                 unsigned ordinal = 0; auto f = types[entities[e].type];
                 for (auto p = ast[parameters].first; p && ordinal < f.count; p = ast[p].next) {
