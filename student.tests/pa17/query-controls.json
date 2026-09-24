@@ -5697,6 +5697,72 @@
       "native_exit": 0
     },
     {
+      "name": "specialization_of_deleted_primary",
+      "source": "template<class T>int f(T)=delete;template<>int f(int){return 7;}int main(){return f(1)!=7;}",
+      "expected": "native",
+      "source_sha256": "a544584661ae824fa072a97694323804c1178f1704edc4731cd1a7b9b0b90455",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "specialization_probe_of_deleted_primary",
+      "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\ntemplate<class T>int f(T)=delete;template<>int f(int){return 7;}template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<char>::n==0 && probe<int>::n==1,\"specialized deletion\");int main(){return f(1)!=7;}",
+      "expected": "native",
+      "source_sha256": "77b6caeb21ca896fc1f9a373a8e9d7e49a9c7453d91989711a7d7430332d1021",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "deleted_specialization_not_used",
+      "source": "template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(1)!=7;}",
+      "expected": "native",
+      "source_sha256": "c36f7e379c5b7bebbf9a0526d2d9f537175d82e9d761a28fa1f23a6f671dcc13",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "specialization_of_deleted_member",
+      "source": "struct X{template<class T>int f(T)=delete;};template<>int X::f(int){return 9;}int main(){X x;return x.f(1)!=9;}",
+      "expected": "native",
+      "source_sha256": "96fc8d8269b67193da76595b1260f36f3c197e76bac7a697682544af13b7716b",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "deleted_specialization_used",
+      "source": "template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(char());}",
+      "expected": "reject",
+      "source_sha256": "cc05131fe91130dc85b9c9858f0e5aa2db31442a09612c45d3e19e6d4cb94a8b",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: selected deleted member function\n",
+      "passed": true
+    },
+    {
+      "name": "late_specialization_deletion",
+      "source": "template<class T>int f(T){return 7;}template<>int f(int);template<>int f(int)=delete;int main(){}",
+      "expected": "reject",
+      "source_sha256": "1811d3e0e02773a7cfbd5fb0f90e9af4088d6c7337b096f7f4db31a36ec4b922",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: deleted definition must be the first declaration\n",
+      "passed": true
+    },
+    {
       "name": "late_deleted_definition",
       "source": "int f();int f()=delete;int main(){}",
       "expected": "reject",

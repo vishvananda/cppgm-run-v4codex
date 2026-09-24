@@ -163,13 +163,14 @@ struct Entity {
     bool complete = false, scoped = false, template_parameter = false, is_static = false;
     bool parameter_pack = false;
     FactState body_state = FactState::NotStarted;
+    bool deleted_function = false;
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
-    bool constexpr_function = false, deleted_function = false;
+    bool constexpr_function = false;
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;
     bool mutable_field = false;

@@ -11,7 +11,8 @@ Frozen entry compiler/log: `/tmp/pa17-loop58/`. Review markers above are preserv
 
 Current increment: three query/candidate failures closed (333/343), plus related
 deleted-function and default-hole defects found by controls. Prior stages pass
-2266/2266; 524/524 accumulated controls pass. Performance evidence is pending.
+2266/2266; 530/530 accumulated controls pass. The preliminary performance run is preserved; it exposed avoidable entity
+padding, now restored from 128 to the original 120 bytes. Final evidence is pending.
 
 Initial group: query/candidate demand, then related closure callable ownership.
 Owner: semantic query and template-selection facts; retained dependent expressions

@@ -1,0 +1,356 @@
+[
+  {
+    "name": "ambiguous_operator_then_valid",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous type-query operator\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};struct L{L(X);};struct R{R(X);};int operator+(L,int);int operator+(R,int);struct Y{};int operator+(Y,int);\ntemplate<class T>struct probe<T,decltype(val<T>()+1,void())>{static const int n=1;};\nstatic_assert(probe<X>::n==0 && probe<Y>::n==1 && probe<X>::n==0,\"query ownership\");int main(){return 0;}",
+    "source_sha256": "c0572e8d794ca91e922524d5cec5dc22313397b8eb520fcab7e15649b3e9dfb7"
+  },
+  {
+    "name": "no_viable_operator",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};template<class T>struct probe<T,decltype(val<T>()+1,void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<int>::n==1,\"viability\");int main(){return 0;}",
+    "source_sha256": "a61597e4b52eafa3524605a81cd0ebf94d44db703432bfa7f76ba5d593c79262"
+  },
+  {
+    "name": "deleted_operator",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};int operator+(X,int)=delete;template<class T>struct probe<T,decltype(val<T>()+1,void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<int>::n==1,\"deleted\");int main(){return 0;}",
+    "source_sha256": "914931cea8db248aa571d15329de60ec778bcd79f738a2543146b41e6858ac53"
+  },
+  {
+    "name": "ambiguous_call",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous function in type query\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};struct L{L(X);};struct R{R(X);};int f(L);int f(R);int f(int);template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<int>::n==1,\"call ambiguity\");int main(){return 0;}",
+    "source_sha256": "58d2518a62cc6feeb1aca5b4b9b7fce4fe112fce437650da00450e8bbfec903d"
+  },
+  {
+    "name": "no_viable_call",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function in type query\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};int f(int);template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<int>::n==1,\"call viability\");int main(){return 0;}",
+    "source_sha256": "1dbb523d6b9a1eb67ad2a90e67614e9bc219e7702a3dc9a0e92f6aa7f0dfcc08"
+  },
+  {
+    "name": "deleted_call",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};int f(X)=delete;int f(int);template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<int>::n==1,\"deleted call\");int main(){return 0;}",
+    "source_sha256": "298ddb3d29b14b1f76035addc474c9c0059f5fc8c57ef141b7a5457ae83d203d"
+  },
+  {
+    "name": "return_sfinae_operator",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();struct X{};template<class T>auto f(T)->decltype(val<T>()[0]+1){return 7;}int f(...){return 3;}int main(){X x;int y;return f(&x)!=3||f(&y)!=7;}",
+    "source_sha256": "fc10cf9ec7580ef64c506e329c24913989bca183cbf3122b5b3ed63373d0ddbf"
+  },
+  {
+    "name": "default_sfinae_operator",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();struct X{};template<class T,class=decltype(val<T>()[0]+1)>int f(T){return 7;}int f(...){return 3;}int main(){X x;int y;return f(&x)!=3||f(&y)!=7;}",
+    "source_sha256": "6f34a7f6ea8484bac52b1af142ba302ba8810f44e43c00d8bf02f109f074d4db"
+  },
+  {
+    "name": "repeated_cv_probe",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};int operator+(X&,int);template<class T>struct probe<T,decltype(val<T>()+1,void())>{static const int n=1;};static_assert(probe<X&>::n==1 && probe<const X&>::n==0 && probe<X&>::n==1,\"cv key\");int main(){return 0;}",
+    "source_sha256": "48574f87f0d22d8e76b57e992b4edf329fa34de6c5872c66bc9fd278c7bfb44c"
+  },
+  {
+    "name": "adl_namespace_isolation",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nnamespace a{struct X{};int operator+(X,int);}namespace b{struct X{};}template<class T>struct probe<T,decltype(val<T>()+1,void())>{static const int n=1;};static_assert(probe<a::X>::n==1 && probe<b::X>::n==0,\"adl key\");int main(){return 0;}",
+    "source_sha256": "a8559941cc4154d3f93a811c86215ca6bf9d734d6ac41ad8f20134dbaa754055"
+  },
+  {
+    "name": "missing_member_query",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type query member not found\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};struct Y{int field;};template<class T>struct probe<T,decltype(val<T>().field,void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<Y>::n==1,\"member query\");int main(){return 0;}",
+    "source_sha256": "01c2951ff049ea1a9ec87e2d40576f38e019e6747a9617f7343b1a46b5bb8fda"
+  },
+  {
+    "name": "callable_object_probe",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\nstruct X{};struct Y{int operator()()const;};template<class T>struct probe<T,decltype(val<T>()(),void())>{static const int n=1;};static_assert(probe<X>::n==0 && probe<Y>::n==1,\"call operator\");int main(){return 0;}",
+    "source_sha256": "87a41816a775b2e9a2ff708648955df70cde3d88be893c12308bf13a6e6b8ac4"
+  },
+  {
+    "name": "deduced_after_default_hole",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "template<class T=int,class U>int f(U){return sizeof(T)+sizeof(U);}int main(){return f(char())!=5||f(1L)!=12;}",
+    "source_sha256": "31adc083caf716bf6aea9cb591f0620bafc5e2682b9e9ed47c3f9537b66b8d34"
+  },
+  {
+    "name": "candidate_default_after_later_declaration",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T,class U>int f(T){return sizeof(U);}int f(...){return 3;}int before(){return f(1);}template<class T,class U=int>int f(T);int main(){return before()!=3||f(1)!=4;}",
+    "source_sha256": "f85abb0f1ca446cae891ab884c543e456b9f6ff6c1f49065f5bacbde09fa8a24"
+  },
+  {
+    "name": "deleted_template_probe",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\ntemplate<class T>int f(T)=delete;int f(int);template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<char>::n==0 && probe<int>::n==1,\"deleted template\");int main(){return 0;}",
+    "source_sha256": "d0a4215f08d4aed6b7abe77ea5310f27d4d9204cedb0673ace90bbdd05cc6231"
+  },
+  {
+    "name": "deleted_not_selected",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "int f(int){return 0;}int f(double)=delete;int main(){return f(1);}",
+    "source_sha256": "0615a6fcc20fcd6a7facb0953d40b2a522b262f8b5fac9371121c767c766cfb5"
+  },
+  {
+    "name": "recursive_hidden_friend_one",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "\ntemplate<class T>T&& val();\ntemplate<bool,class T=void>struct enable{};\ntemplate<class T>struct enable<true,T>{using type=T;};\ntemplate<class S,class T,class=void>struct streams{static const bool ok=false;};\ntemplate<class S,class T>struct streams<S,T,decltype(val<S&>() << val<T const&>(),void())>{static const bool ok=true;};\ntemplate<class S,class T,typename enable<streams<S,T>::ok,int>::type=0>\nS&& operator<<(S&& s,T const& t){s<<t;return static_cast<S&&>(s);}\n\n namespace one{struct base{};struct sink:base{int n;};\n struct value{int n;friend sink&operator<<(sink&s,value const&v){s.n+=v.n;return s;}};}\n int main(){one::sink s;s.n=0;one::value a={3},b={5};\n s<<a;s<<b;s<<a;return s.n!=11;}\n ",
+    "source_sha256": "cbf2b035e9644771ff901a7da426041f5b351217ea43ebe08ed9952ab7dcb47f"
+  },
+  {
+    "name": "recursive_hidden_friend_two",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "\ntemplate<class T>T&& val();\ntemplate<bool,class T=void>struct enable{};\ntemplate<class T>struct enable<true,T>{using type=T;};\ntemplate<class S,class T,class=void>struct streams{static const bool ok=false;};\ntemplate<class S,class T>struct streams<S,T,decltype(val<S&>() << val<T const&>(),void())>{static const bool ok=true;};\ntemplate<class S,class T,typename enable<streams<S,T>::ok,int>::type=0>\nS&& operator<<(S&& s,T const& t){s<<t;return static_cast<S&&>(s);}\n\n namespace two{struct base{};struct sink:base{int n;};\n struct value{int n;friend sink&operator<<(sink&s,value const&v){s.n+=v.n;return s;}};}\n int main(){two::sink s;s.n=0;two::value a={3},b={5};\n s<<a;s<<b;s<<a;return s.n!=11;}\n ",
+    "source_sha256": "66ba536c7aae1fd87015d13b7197fabd6c7a1bb307e6db799f3a600e9cb2734c"
+  },
+  {
+    "name": "recursive_multiple_ordinary_paths",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: recursive type query\n",
+    "passed": false,
+    "source": "\ntemplate<class T>T&& val();\ntemplate<bool,class T=void>struct enable{};\ntemplate<class T>struct enable<true,T>{using type=T;};\ntemplate<class S,class T,class=void>struct streams{static const bool ok=false;};\ntemplate<class S,class T>struct streams<S,T,decltype(val<S&>() << val<T const&>(),void())>{static const bool ok=true;};\ntemplate<class S,class T,typename enable<streams<S,T>::ok,int>::type=0>\nS&& operator<<(S&& s,T const& t){s<<t;return static_cast<S&&>(s);}\n\n struct sink{int n;};struct value{enum E{zero,one};E n;operator E()const{return n;}};\n sink&operator<<(sink&s,value v){s.n+=static_cast<int>(v.n);return s;}\n int main(){sink s;s.n=0;value v={value::one};s<<v;s<<v;return s.n!=2;}\n ",
+    "source_sha256": "e3c16b3721d8cae3f87a10cc75226361f21e42f68a9ca89138784b4801811a50"
+  },
+  {
+    "name": "distinct_default_hole_bindings",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false,
+    "source": "template<class T=int,class U,class V>int f(U,V){return sizeof(T)+sizeof(U)*10+sizeof(V);}int main(){return f(char(),long())!=22||f(long(),char())!=85;}",
+    "source_sha256": "c06821dfcdb6dd57a1f19b1e80a8beadc4ca0b07147de4951b119652a9b7dfc3"
+  },
+  {
+    "name": "specialization_of_deleted_primary",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>int f(T)=delete;template<>int f(int){return 7;}int main(){return f(1)!=7;}",
+    "source_sha256": "a544584661ae824fa072a97694323804c1178f1704edc4731cd1a7b9b0b90455"
+  },
+  {
+    "name": "specialization_probe_of_deleted_primary",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false,
+    "source": "template<class T>T&& val();\ntemplate<class,class=void>struct probe{static const int n=0;};\ntemplate<class T>int f(T)=delete;template<>int f(int){return 7;}template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<char>::n==0 && probe<int>::n==1,\"specialized deletion\");int main(){return f(1)!=7;}",
+    "source_sha256": "77b6caeb21ca896fc1f9a373a8e9d7e49a9c7453d91989711a7d7430332d1021"
+  },
+  {
+    "name": "deleted_specialization_not_used",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(1)!=7;}",
+    "source_sha256": "c36f7e379c5b7bebbf9a0526d2d9f537175d82e9d761a28fa1f23a6f671dcc13"
+  },
+  {
+    "name": "specialization_of_deleted_member",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0,
+    "source": "struct X{template<class T>int f(T)=delete;};template<>int X::f(int){return 9;}int main(){X x;return x.f(1)!=9;}",
+    "source_sha256": "96fc8d8269b67193da76595b1260f36f3c197e76bac7a697682544af13b7716b"
+  },
+  {
+    "name": "deleted_specialization_used",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(char());}",
+    "source_sha256": "cc05131fe91130dc85b9c9858f0e5aa2db31442a09612c45d3e19e6d4cb94a8b"
+  },
+  {
+    "name": "late_specialization_deletion",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "template<class T>int f(T){return 7;}template<>int f(int);template<>int f(int)=delete;int main(){}",
+    "source_sha256": "1811d3e0e02773a7cfbd5fb0f90e9af4088d6c7337b096f7f4db31a36ec4b922"
+  },
+  {
+    "name": "late_deleted_definition",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "int f();int f()=delete;int main(){}",
+    "source_sha256": "b96f458a5df3cfbf176ed652fc576b6f095b037fed818a303e4933602fadfcf6"
+  },
+  {
+    "name": "deleted_redefinition",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "int f()=delete;int f(){return 0;}int main(){}",
+    "source_sha256": "a7e1271ce98c0d1e94b17f43764b57f23b1eca578acc955e519ec3ada6dc0b37"
+  },
+  {
+    "name": "hard_deleted_address",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid implicit conversion\n",
+    "passed": true,
+    "source": "int f()=delete;auto p=&f;int main(){}",
+    "source_sha256": "c6b200b6487bc6a3a44d7ff88b9191602873949c1ecc2063107434b10cf979c7"
+  },
+  {
+    "name": "hard_operator_ambiguity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous operator overload\n",
+    "passed": true,
+    "source": "struct X{};struct L{L(X);};struct R{R(X);};int operator+(L,int);int operator+(R,int);using T=decltype(X()+1);int main(){}",
+    "source_sha256": "ca98fcd54c1d34e049afb863d08bc6f11377d168a8fe4159521e1d6681de6a42"
+  },
+  {
+    "name": "hard_deleted_operator",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "source": "struct X{};int operator+(X,int)=delete;using T=decltype(X()+1);int main(){}",
+    "source_sha256": "356bfa70c323b7159f8c61ecea1941f0892af87bd9ee2d785bb53dceb3cab098"
+  },
+  {
+    "name": "hard_missing_operator",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable builtin operator\n",
+    "passed": true,
+    "source": "struct X{};using T=decltype(X()+1);int main(){}",
+    "source_sha256": "105bfff598cb0a39442757faeff1aba0611d7765bd9650676cba102f7bd0e9f9"
+  },
+  {
+    "name": "hard_call_ambiguity",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous overload\n",
+    "passed": true,
+    "source": "struct X{};struct L{L(X);};struct R{R(X);};int f(L);int f(R);using T=decltype(f(X()));int main(){}",
+    "source_sha256": "b0e7289d80b8e2301c9011b1b301da8a63e6a164b2951bc846cf7b97434dda55"
+  },
+  {
+    "name": "fixed_error_in_unused_template",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": true,
+    "source": "struct X{};template<class T>struct Bad{using U=decltype(X()+1);};int main(){}",
+    "source_sha256": "7d733de739b299902d9417960b131a23fe04257ff750240d360a162ef40fb418"
+  },
+  {
+    "name": "class_body_side_effect",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid substituted type qualifier\n",
+    "passed": true,
+    "source": "template<class T>struct X{using bad=typename T::missing;int f();};template<class T>auto pick(T)->decltype(X<T>().f());int pick(...);int main(){return pick(1);}",
+    "source_sha256": "f6dccda445d95fb440d2937dbd1ed475c611941fb9e9f2387014a3e2c2cc3420"
+  },
+  {
+    "name": "class_body_operator_side_effect",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query operator operands\n",
+    "passed": true,
+    "source": "template<class T>struct X{using bad=decltype(T()+1);int f();};struct S{};template<class T>auto pick(T)->decltype(X<T>().f());int pick(...);int main(){return pick(S());}",
+    "source_sha256": "5365d1ad98fed4946613c8b78d48fc05faf4ec8824436135af4ac219c9228f5b"
+  },
+  {
+    "name": "selected_body_error",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": true,
+    "source": "template<class T>int f(T){return T::missing;}int f(...){return 0;}int main(){return f(1);}",
+    "source_sha256": "3a1759922424bc2ae0ae2a3133f18bc110dc8cad08534b397267ecffebdb9c7a"
+  }
+]

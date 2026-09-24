@@ -53,8 +53,16 @@ runner.GOOD['recursive_multiple_ordinary_paths'] = RECURSIVE+r"""
  int main(){sink s;s.n=0;value v={value::one};s<<v;s<<v;return s.n!=2;}
  """
 runner.GOOD['distinct_default_hole_bindings'] = 'template<class T=int,class U,class V>int f(U,V){return sizeof(T)+sizeof(U)*10+sizeof(V);}int main(){return f(char(),long())!=22||f(long(),char())!=85;}'
+runner.GOOD.update({
+ 'specialization_of_deleted_primary': 'template<class T>int f(T)=delete;template<>int f(int){return 7;}int main(){return f(1)!=7;}',
+ 'specialization_probe_of_deleted_primary': PREFIX+'template<class T>int f(T)=delete;template<>int f(int){return 7;}template<class T>struct probe<T,decltype(f(val<T>()),void())>{static const int n=1;};static_assert(probe<char>::n==0 && probe<int>::n==1,"specialized deletion");int main(){return f(1)!=7;}',
+ 'deleted_specialization_not_used': 'template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(1)!=7;}',
+ 'specialization_of_deleted_member': 'struct X{template<class T>int f(T)=delete;};template<>int X::f(int){return 9;}int main(){X x;return x.f(1)!=9;}',
+})
 # A query's class definition side effect is outside the immediate context.
 runner.BAD = {
+ 'deleted_specialization_used': 'template<class T>int f(T){return 7;}template<>int f(char)=delete;int main(){return f(char());}',
+ 'late_specialization_deletion': 'template<class T>int f(T){return 7;}template<>int f(int);template<>int f(int)=delete;int main(){}',
  'late_deleted_definition': 'int f();int f()=delete;int main(){}',
  'deleted_redefinition': 'int f()=delete;int f(){return 0;}int main(){}',
  'hard_deleted_address': 'int f()=delete;auto p=&f;int main(){}',
