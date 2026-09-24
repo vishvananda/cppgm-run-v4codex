@@ -135,13 +135,15 @@ NodeId Parser::namespace_declaration()
     ScopeId child = !token.text ? names.unnamed_namespace(scope) :
         previous.target ? previous.target : names.enter(scope);
     names.bind(scope, token.text, Category::Namespace, child);
+    // The implicit using-directive is visible inside the namespace body too,
+    // including qualified template-ids through the enclosing namespace.
+    if (is_inline && token.text) names.import(scope, child);
     ScopeId saved = scope;
     scope = child;
     in.require("{");
     while (!in.is("}")) ast.append(result, declaration());
     in.take();
     scope = saved;
-    if (is_inline && token.text) names.import(scope, child);
     return result;
 }
 

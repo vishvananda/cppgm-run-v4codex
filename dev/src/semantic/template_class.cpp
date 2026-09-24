@@ -126,10 +126,20 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
     auto t = templates[entities[pattern].template_info];
     bool packs = false;
     for (unsigned j = 0; j < t.count; ++j) packs |= entities[template_parameters[t.offset+j]].parameter_pack;
-    if (!packs && args.size() > t.count) return false;
+    if (!packs && args.size() > t.count) {
+        unsigned fixed = 0;
+        for (auto arg : args) fixed += value_argument(arg) || types[arg].kind != TypeKind::PackExpansion;
+        if (fixed > t.count) return false;
+    }
     Index bindings, cache; std::uint32_t frame = 0;
     for (unsigned j = 0; j < t.count; ++j) {
         auto p = template_parameters[t.offset+j];
+        // Until its length is known, an expansion at a fixed head position
+        // denotes an argument sequence, not one type/value argument. Retain
+        // the suffix intact: it can fill several fixed parameters, and only
+        // the expanded application can decide which defaults/tail remain.
+        if (!entities[p].parameter_pack && j < args.size() &&
+            !value_argument(args[j]) && types[args[j]].kind == TypeKind::PackExpansion) return true;
         if (entities[p].parameter_pack) {
             if (partial && j == args.size()) return true;
             std::vector<ArgumentId> elements;

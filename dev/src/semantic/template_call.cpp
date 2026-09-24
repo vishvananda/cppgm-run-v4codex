@@ -133,10 +133,17 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         auto pack = argument_packs[spec.arguments];
         std::vector<TypeId> args;
         for (unsigned j = 0; j < pack.count; ++j) {
-            auto value = substitute_argument(argument_types[pack.offset+j],bindings,cache,owner);
-            if (!value) return 0;
-            args.push_back(value);
+            auto arg = argument_types[pack.offset+j];
+            // A source expansion can occupy a fixed head position and later
+            // supply several parameters (Element<I, Ts...>). Expand the source
+            // sequence before the applied template repacks its own tail.
+            if (argument_pack(arg)) {
+                auto tail = pack_arguments(arg);
+                for (unsigned k = 0; k < tail.count; ++k)
+                    substitute_arguments(argument_types[tail.offset+k],bindings,cache,owner,args);
+            } else substitute_arguments(arg,bindings,cache,owner,args);
         }
+        for (auto arg : args) if (!arg) return 0;
         auto pattern = spec.pattern;
         if (owner && entities[pattern].template_pattern) {
             auto concrete = substitution_entity(owner,pattern);

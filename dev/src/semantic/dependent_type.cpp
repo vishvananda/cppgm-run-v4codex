@@ -142,7 +142,12 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
             auto current = current_instantiation_scope(prefix,s);
             // Known members of the current instantiation are looked up at the
             // definition. Other dependent qualifiers retain a substitution path.
-            if (current && lookup(current,ast[p].text,Lookup::Ordinary,true)) {
+            if (current && (lookup(current,ast[p].text,Lookup::Ordinary,true) ||
+                !template_pattern_open_bases.get(scopes[current].entity))) {
+                // A known nondependent base member is looked up again in the
+                // instantiation context when a dependent base can add a
+                // conflicting name ([temp.dep.type]/7).
+                if (template_pattern_open_bases.get(scopes[current].entity)) retain_type_access(p,prefix,s);
                 owner = current; qualified = true; prefix = 0;
             }
         }
@@ -192,10 +197,11 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
         bool type = entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias;
         prefix = type ? source_type(e) : 0;
         // Member class identities have symbolic current-instantiation types.
-        // Nonterminal injected names still use the bound source class scope
-        // so fixed qualified aliases keep their definition-time type facts.
+        // Retain the current-instantiation type for a dependent base member.
+        // The next component uses the source scope only if lookup establishes
+        // that member now; otherwise it remains a dependent qualified path.
         if (entities[e].class_info && entities[e].template_info && encloses(entities[e].scope,s))
-            prefix = p == last ? injected_template_type(e,s) : 0;
+            prefix = injected_template_type(e,s);
         else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {
             if (!type) throw std::runtime_error("type name denotes a value");
