@@ -94,18 +94,21 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     }
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].class_info) {
         auto ps = specializations[entities[p.entity].specialization];
+        auto same_primary = [&](EntityId entity) {
+            return entities[entity].specialization && specializations[entities[entity].specialization].pattern == ps.pattern;
+        };
         auto match = [&](EntityId entity, Index& trial) {
-            if (!entities[entity].specialization) return false;
             auto as = specializations[entities[entity].specialization];
-            if (ps.pattern != as.pattern) return false;
             auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
             if (x.count != y.count) return false;
             for (unsigned j = 0; j < x.count; ++j)
                 if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],trial,kind)) return false;
             return true;
         };
-        Index direct = bindings;
-        if (match(a.entity,direct)) { bindings = std::move(direct); return true; }
+        if (same_primary(a.entity)) {
+            Index direct = bindings;
+            if (match(a.entity,direct)) { bindings = std::move(direct); return true; }
+        }
         if (kind != DeductionKind::Call) return false;
         // [temp.deduct.call]/4-5: only failed direct deduction admits base
         // alternatives, including another specialization of the same primary.
@@ -119,6 +122,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
                 auto base = bases[b].base;
                 if (visited.get(base)) continue;
                 visited.put(base,1);
+                if (!same_primary(base)) { pending.push_back(base); continue; }
                 Index trial = bindings;
                 if (match(base,trial)) {
                     if (++matches > 1) return false;
