@@ -139,7 +139,8 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
         // the suffix intact: it can fill several fixed parameters, and only
         // the expanded application can decide which defaults/tail remain.
         if (!entities[p].parameter_pack && j < args.size() &&
-            !value_argument(args[j]) && types[args[j]].kind == TypeKind::PackExpansion) return true;
+            !value_argument(args[j]) && types[args[j]].kind == TypeKind::PackExpansion)
+            return (entities[p].kind == EntityKind::Type) != value_argument(types[args[j]].bound);
         if (entities[p].parameter_pack) {
             if (partial && j == args.size()) return true;
             std::vector<ArgumentId> elements;

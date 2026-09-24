@@ -53,6 +53,8 @@ runner.GOOD.update({
 'fixed_pack_enclosing_member': 'template<class T,class...U>struct First{using type=T;};template<class...T>struct Outer{template<int N>typename First<T...>::type f(){return N;}};int main(){Outer<int,long>o;return o.f<7>()-7;}',
 })
 runner.BAD.update({
+'fixed_pack_wrong_type_kind': 'template<int I,class...T>struct S;template<class...T>S<T...>* f();',
+'fixed_pack_wrong_value_kind': 'template<class T,int...I>struct S;template<int...I>S<I...>* f();',
 'fixed_and_dependent_ambiguity': 'struct A{using type=int;};struct B{using type=long;};template<class T>struct D:A,T{D::type x;};D<B>d;',
 'fixed_pack_missing_head': 'template<class T,class...U>struct First{using type=T;};template<class...T>typename First<T...>::type f(){return 7;}int main(){return f<>();}',
 'fixed_pack_missing_second': 'template<class T,class U,class...V>struct Second{using type=U;};template<class...T>typename Second<T...>::type f(){return 7;}int main(){return f<int>();}',
