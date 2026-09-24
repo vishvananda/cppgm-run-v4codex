@@ -90,7 +90,11 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
         if (arg) expression(arg,s);
         args.push_back(arg); chosen.push_back(copy_conversion_recipe(conversions[result.conversions+i]));
     }
-    record_call(result,args,chosen);
+    // Builtin compound assignment retains its arithmetic type after the two
+    // operand conversions. It has no additional evaluated argument.
+    for (unsigned i = result.argument_count; i < result.count; ++i)
+        chosen.push_back(conversions[result.conversions+i]);
+    record_call(result,args,chosen); result.count = chosen.size();
     if (result.form == ExpressionForm::ListValue) {
         record_object(result,0,0,0);
         object_uses[result.object_use].temporary = converted_temporary(conversions[result.conversions]);

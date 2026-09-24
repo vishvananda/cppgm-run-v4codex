@@ -213,16 +213,19 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         NodeId part = ast[name].last;
         bool destructor = ast[part].op == OP_COMPL;
         bool class_type = types[t].kind == TypeKind::Named && entities[types[t].entity].class_info;
+        TypeId destructor_type = t;
         if (destructor) {
-            NodeId id = ast[part].first;
-            TypeId named = 0;
-            if (ast[id].kind == Kind::TypeId) named = type_id(id, s);
-            else {
-                EntityId found = class_type ? lookup(entities[types[t].entity].scope,ast[id].text,Lookup::Ordinary,true) : 0;
-                if (!found) found = lookup(s,ast[id].text,Lookup::Ordinary);
-                if (found && (entities[found].kind == EntityKind::Type || entities[found].kind == EntityKind::Alias)) named = entities[found].type;
+            TypeId named = destructor_target(name,t,s);
+            if (!named || (types.unqualified(named) != types.unqualified(t) && !derived_from(t,named)))
+                throw std::runtime_error("destructor name does not match object type");
+            destructor_type = named;
+            if (ast[name].first != part) {
+                auto prefix = ast[name].first;
+                while (ast[prefix].next != part) prefix = ast[prefix].next;
+                auto qualifier = type_name(name,s,prefix);
+                if (types.unqualified(qualifier) != types.unqualified(named))
+                    throw std::runtime_error("destructor qualifier does not match target");
             }
-            if (!named || types.unqualified(named) != types.unqualified(t)) throw std::runtime_error("destructor name does not match object type");
             if (!class_type) {
                 if (!(arithmetic(t) || pointer(t) || (types[t].kind == TypeKind::Named && entities[types[t].entity].underlying) || fundamental(t, FT_NULLPTR_T))) throw std::runtime_error("pseudo-destructor requires scalar");
                 r.type = types.function(types.fundamental(FT_VOID), {}, false);
@@ -232,11 +235,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (!class_type) throw std::runtime_error("member of non-class");
         size(t); // Establish layout once at the semantic owner before recording field use.
         if (operator_token(name) == OP_ASS) ensure_transfers(t, true);
-        EntityId e = destructor ? default_destructor(t, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
+        EntityId e = destructor ? default_destructor(destructor_type, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
         if (ast[part].op == KW_OPERATOR && ast[part].detail)
             e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
         if (!e) throw std::runtime_error("unknown member");
-        if (definitions && function_binding(e)) e = explicit_template(name,e,s);
+        if (definitions && !destructor && function_binding(e)) e = explicit_template(name,e,s);
         r = member_value(e,types[t].cv,ast[n].op == OP_ARROW ? ValueCategory::Lvalue : object.category);
         facts.edit(n).entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);

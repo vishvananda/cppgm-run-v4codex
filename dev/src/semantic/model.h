@@ -406,7 +406,7 @@ struct UserConversion {
     bool prepared = false;
     ConversionUse use = ConversionUse::Recipe;
 };
-struct BuiltinOperator { TypeId type = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
+struct BuiltinOperator { TypeId type = 0, computation = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };
 struct ScalarConsumption { NodeId expression = 0; TypeId target = 0; std::uint32_t conversion = 0; unsigned char truth = 0; bool private_destination = false; };
 struct ValueInitialization { NodeId source = 0; std::uint32_t conversion = 0; };
 struct ReferenceStorage { EntityId object = 0, reference = 0; bool scalar = false, conditional = false; };

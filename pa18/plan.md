@@ -6,6 +6,18 @@ Target: **PA18 full-stage**, still unfinished. Previous goal turn: **progress**
 (loop 67's committed implementation and validated evidence). Loop 68: **progress**,
 entry `047215cf` → code `bd1d7b4c`; independent review remains pending.
 
+Loop 69 in progress, entry `e09162fa`, **348/420** (72 failures). Previous
+turn is progress: committed implementation and measured validation changed the
+authoritative state. Stage/review markers above are preserved. Initial group:
+retained expression validity (`type_query`, `query_operator`, builtin operators,
+member/destructor lookup and list initialization). Source query IDs and typed
+children flow through substitution to cached candidate facts, then selected
+conversions/constant execution; no syntax replay or fake nodes. Work must follow
+query edges, required candidates and list elements; scratch is query-local and
+durable facts TU-owned. Validate repaired course cases, explicit personal
+positive/negative controls, inherited controls and frozen A/B latency/RSS plus
+checked runtime/size. Extend related fixes while these owners support them.
+
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
 audit 66 **327** → handoff 67 **343** → handoff 68 **348/420**.
 Loop 68 fixes **five original failures**, with **zero new failures** and unchanged

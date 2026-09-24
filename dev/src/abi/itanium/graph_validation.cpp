@@ -10,7 +10,7 @@ bool accepts(Kind kind, Role role) {
     case Role::Type: return kind <= Kind::Lambda;
     case Role::Argument: return kind >= Kind::TypeArgument && kind <= Kind::EntityArgument;
     case Role::Expression:
-        return kind == Kind::Value || kind == Kind::AlignofType || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Value || kind == Kind::AlignofType || kind == Kind::DestructorName || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -76,6 +76,10 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Call: edge(a, Role::Expression); sequence(Role::Expression); return;
     case Kind::Conversion: edge(a, Role::Type); sequence(Role::Expression); return;
     case Kind::Cast: edge(a, Role::Type); edge(b, Role::Expression); operation_code(c); break;
+    case Kind::DestructorName:
+        if (a) edge(a,Role::Type); else text(b);
+        if (c) edge(c,Role::Type);
+        sequence(Role::Argument); return;
     case Kind::TemplateId: text(a); sequence(Role::Argument); return;
     case Kind::UnresolvedName:
         edge(a,Role::Type); require((*this)[a].kind == Kind::Name && b <= 1);

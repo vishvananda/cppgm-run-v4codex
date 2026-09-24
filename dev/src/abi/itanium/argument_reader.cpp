@@ -98,6 +98,12 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
     }
     if (op == "sizeof-type") return g.make(Kind::SizeofType, type(w, p));
     if (op == "alignof-type") return g.make(Kind::AlignofType, type(w, p));
+    if (op == "destructor-name") {
+        Id target = w.at(p) == "-" ? (++p,0) : type(w,p);
+        auto name = take(w,p); Id spelling = name == "-" ? 0 : g.string(name);
+        Id qualifier = w.at(p) == "-" ? (++p,0) : type(w,p);
+        return g.make(Kind::DestructorName,target,spelling,qualifier,0,refs(w,p,BindingKind::Argument));
+    }
     if (op == "member") {
         Id owner = type(w, p); bool close = boolean(take(w, p)); Id name = g.string(take(w, p));
         return g.make(Kind::Member, owner, name, close, 0, refs(w, p, BindingKind::Argument));

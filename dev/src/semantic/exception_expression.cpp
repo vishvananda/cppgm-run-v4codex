@@ -123,7 +123,8 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack) return true;
     bool result = true;
     if (fact.selected) result &= function_nonthrowing(fact.selected);
-    else if (q.kind == QueryKind::Call && type_queries[query_edges[q.offset]].kind != QueryKind::TypeValue) result = false;
+    else if (q.kind == QueryKind::Call && fact.expression.form != ExpressionForm::PseudoDestructor &&
+        type_queries[query_edges[q.offset]].kind != QueryKind::TypeValue) result = false;
     auto x = fact.expression;
     if (temporary && q.kind != QueryKind::TypeValue && x.category == ValueCategory::Prvalue && class_value(x.type))
         result &= type_destructor_nonthrowing(x.type);

@@ -185,22 +185,11 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
             apply_conversion(bn, applied); conversions[index] = applied;
         }
         else {
-            ETokenType binary = OP_PLUS;
-            switch (op) {
-            case OP_PLUSASS: binary = OP_PLUS; break;
-            case OP_MINUSASS: binary = OP_MINUS; break;
-            case OP_STARASS: binary = OP_STAR; break;
-            case OP_DIVASS: binary = OP_DIV; break;
-            case OP_MODASS: binary = OP_MOD; break;
-            case OP_BANDASS: binary = OP_AMP; break;
-            case OP_BORASS: binary = OP_BOR; break;
-            case OP_XORASS: binary = OP_XOR; break;
-            case OP_LSHIFTASS: binary = OP_LSHIFT; break;
-            case OP_RSHIFTASS: binary = OP_RSHIFT; break;
-            default: throw std::runtime_error("unknown assignment operator");
-            }
+            ETokenType binary = compound_operation(op);
+            if (binary == TOK_INVALID) throw std::runtime_error("unknown assignment operator");
             TypeId result = builtin_binary(binary, an, bn, r);
-            if (pointer(result) != pointer(a.type) || types[a.type].kind == TypeKind::Named)
+            Expression computed; computed.type = result;
+            if (!standard_conversion(computed,a.type).valid() || types[a.type].kind == TypeKind::Named)
                 throw std::runtime_error("invalid compound assignment conversion");
             Conversion store; store.target = a.type; store.rank = types.unqualified(a.type) == result ? 0 : 2;
             record_conversion(r, 0, store);

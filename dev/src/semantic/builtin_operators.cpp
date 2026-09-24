@@ -37,6 +37,9 @@ void Analyzer::builtin_operators(ETokenType op, const std::vector<NodeId>& args,
 void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Expression>& args, std::vector<BuiltinOperator>& results, const std::vector<NodeId>* nodes)
 {
     if (args.empty() || args.size() > 2) return;
+    if (args.size() == 2 && (op == OP_ASS || compound_operation(op) != TOK_INVALID)) {
+        builtin_assignment_values(op,args,results); return;
+    }
     auto node = [&](unsigned i) { return nodes ? (*nodes)[i] : 0; };
     auto null = [&](unsigned i) { return nodes ? null_constant((*nodes)[i]) :
         args[i].null_pointer_constant || fundamental(args[i].type,FT_NULLPTR_T); };

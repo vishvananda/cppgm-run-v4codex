@@ -165,7 +165,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         }
         children.push_back(child); break;
     }
-    case Kind::Unary: case Kind::Postfix: case Kind::Binary: case Kind::Subscript:
+    case Kind::Unary: case Kind::Postfix: case Kind::Binary: case Kind::Subscript: case Kind::Assignment:
         q.kind = node.kind == Kind::Unary || node.kind == Kind::Postfix ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
         if (node.kind == Kind::Unary && node.op == OP_AMP && ast[first].kind == Kind::IdExpression)
             q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
@@ -193,6 +193,32 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     case Kind::Member: {
         q.kind = QueryKind::Member; q.op = node.op; q.context = s;
         auto name = ast[ast[first].next].detail;
+        if (ast[ast[name].last].op == OP_COMPL) {
+            q.kind = QueryKind::Destructor;
+            q.value = callee;
+            q.name = ast[ast[ast[name].last].first].text;
+            if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
+                std::vector<ArgumentId> args;
+                for (auto a = ast[list].first; a; a = ast[a].next)
+                    append_template_argument(a,s,template_argument_node(a,s),args);
+                q.arguments = intern_arguments(args);
+            }
+            children.push_back(expression_query(first,s));
+            auto object = query_fact(children[0]).expression.type;
+            if (node.op == OP_ARROW && pointer(object)) object = types[object].child;
+            q.type = destructor_target(name,object,s);
+            if (!q.type) {
+                if (template_type_probe) return 0;
+                throw std::runtime_error("unknown destructor target type");
+            }
+            if (ast[name].first != ast[name].last) {
+                auto last = ast[name].first;
+                while (ast[last].next != ast[name].last) last = ast[last].next;
+                TypeQuery qualifier; qualifier.kind = QueryKind::TypeValue; qualifier.type = type_name(name,s,last);
+                children.push_back(intern_query(qualifier,{}));
+            }
+            break;
+        }
         q.name = terminal(name);
         if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
             std::vector<ArgumentId> args;
@@ -430,6 +456,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
     case QueryKind::Value:

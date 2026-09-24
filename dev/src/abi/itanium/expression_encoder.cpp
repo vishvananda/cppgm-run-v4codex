@@ -8,7 +8,7 @@ const char* const operations[] = {
     "ad", "de", "ps", "ng", "co", "nt", "pl", "mi", "ml", "dv", "rm",
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
     "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az",
-    "pp", "mm", "pp_", "mm_"
+    "pp", "mm", "pp_", "mm_", "aS", "pL", "mI", "mL", "dV", "rM", "aN", "oR", "eO", "lS", "rS", "nx"
 };
 }
 Id operation(const std::string& code) {
@@ -104,6 +104,21 @@ void Encoder::expression(Id id) {
         for (Id i = 0; i < n.count; ++i) expression(g.child(n, i));
         output += 'E'; break;
     case Kind::Cast: output += operation_code(n.c); type(n.a); expression(n.b); break;
+    case Kind::DestructorName:
+        if (n.c) {
+            output += "sr";
+            if (g[n.c].kind == Kind::Name || g[n.c].kind == Kind::Template) {
+                std::vector<Id> scopes;
+                for (auto p = n.c; p; p = g[p].a) scopes.push_back(p);
+                for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) {
+                    if (g[*p].kind == Kind::Template) args(g[*p]); else source(g[*p].b);
+                }
+                output += 'E';
+            } else type(n.c);
+        }
+        output += "dn";
+        if (n.a) type(n.a); else { source(n.b); if (n.count) args(n); }
+        break;
     case Kind::TemplateId: source(n.a); args(n); break;
     case Kind::UnresolvedName: {
         auto name = g[n.a];

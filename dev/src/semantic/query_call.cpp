@@ -7,6 +7,11 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     Expression fn = children[0].expression;
     std::vector<Expression> args;
     for (unsigned i = 1; i < children.size(); ++i) args.push_back(children[i].expression);
+    if (fn.form == ExpressionForm::PseudoDestructor) {
+        if (!args.empty()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        TypeQueryFact result; result.expression.type = types.fundamental(FT_VOID);
+        result.expression.form = ExpressionForm::PseudoDestructor; return result;
+    }
     if (callee.kind != QueryKind::TypeValue && (class_value(fn.type) || pattern_class_type(fn.type))) {
         TypeQuery call = q; call.op = OP_LPAREN; call.name = operator_name(OP_LPAREN); call.entity = 0;
         return query_operator(call,children);
@@ -69,7 +74,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             TypeQueryFact result; result.expression.type = constructed; return result;
         }
     }
-    if (callee.kind == QueryKind::Member) {
+    if (callee.kind == QueryKind::Member || callee.kind == QueryKind::Destructor) {
         auto x = query_fact(query_edges[callee.offset]).expression;
         auto pointer_type = children[0].arrow ? arrow_chains[children[0].arrow].type : x.type;
         object = callee.op == OP_ARROW ? types[pointer_type].child : x.type;
@@ -94,7 +99,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     if (fn.entity && function_binding(fn.entity)) {
         std::vector<Conversion> chosen;
         auto naming = object_uses[fn.object_use].naming_scope;
-        auto choice = select_call(fn.entity,args,0,object,category,naming,callee.arguments,chosen);
+        auto choice = select_call(fn.entity,args,0,object,category,naming,
+            callee.kind == QueryKind::Destructor ? 0 : callee.arguments,chosen);
         if (choice.failure == CallFailure::NoViable) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
         if (choice.failure == CallFailure::Ambiguous) return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
         auto selected = choice.entity;
@@ -103,7 +109,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         check_access(selected,q.context,naming,object);
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {
-            bool qualified = callee.kind == QueryKind::Member ? callee.type != 0 : !callee.name && naming;
+            bool qualified = callee.kind == QueryKind::Destructor ? callee.count > 1 :
+                callee.kind == QueryKind::Member ? callee.type != 0 : !callee.name && naming;
             record_member_receiver(r.expression,0,object,selected,naming,qualified,q.context,false);
         }
         for (unsigned i = 0; i < args.size(); ++i)

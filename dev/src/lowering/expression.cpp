@@ -227,9 +227,15 @@ Value Procedural::binary(NodeId n, bool location)
             // A direct object needs no address evaluation; its read follows
             // the binary-operand convention. Indirection/calls must evaluate
             // the RHS before computing the LHS address, exactly once.
-            if (direct) { dest = expression(a, true); lhs = load(dest); }
+            auto destination = sem.conversion_fact(fact.conversions);
+            auto address = [&]() {
+                if (!destination.reference) return expression(a,true);
+                auto value = converted(a,destination);
+                value.type = fact.type; value.address = true; return value;
+            };
+            if (direct) { dest = address(); lhs = load(dest); }
             rhs = converted(b, sem.conversion_fact(fact.conversions+1));
-            if (!direct) { dest = expression(a, true); lhs = load(dest); }
+            if (!direct) { dest = address(); lhs = load(dest); }
         }
         if (op != OP_ASS) {
             ETokenType binary = OP_PLUS;
@@ -246,7 +252,8 @@ Value Procedural::binary(NodeId n, bool location)
             case OP_RSHIFTASS: binary = OP_RSHIFT; break;
             default: break;
             }
-            TypeId common = sem.conversion_fact(fact.conversions).target;
+            TypeId common = sem.conversion_fact(fact.conversions+
+                (sem.conversion_fact(fact.conversions).reference ? 2 : 0)).target;
             lhs = convert(lhs, common);
             rhs = operation(binary, lhs, rhs, common);
             rhs = convert(rhs, fact.type);

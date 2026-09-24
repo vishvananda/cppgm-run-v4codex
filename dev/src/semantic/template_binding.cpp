@@ -179,7 +179,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         auto object = template_object_context(s);
         if (dependent && !ast.nodes.occurrences[n].context) {
             auto part = ast[name].last;
-            if (child(part,Kind::TemplateArguments) && !(ast[part].flags & 1)) {
+            if (child(part,Kind::TemplateArguments) && ast[part].op != OP_COMPL && !(ast[part].flags & 1)) {
                 TypeId type = 0;
                 if (part != ast[name].first) {
                     auto previous = ast[name].first;

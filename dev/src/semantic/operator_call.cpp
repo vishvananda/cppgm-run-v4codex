@@ -138,7 +138,15 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         auto builtin = builtins[selected.builtin-1];
         if (args.size() == 2) check_pointer_arithmetic(op,builtin.arguments[0].target,builtin.arguments[1].target);
         result.type = builtin.type; result.category = builtin.category;
-        if (recipe) {
+        if (op == OP_ASS || builtin.computation) result.entity = expressions[args[0]].entity;
+        if (builtin.computation) {
+            // Preserve the selected lvalue-producing conversion separately
+            // from the arithmetic type. Lowering consumes both without a
+            // second overload search or another evaluation of the lhs.
+            std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
+            Conversion computation; computation.target = builtin.computation; computation.rank = 0;
+            chosen.push_back(computation); publish_call(args,chosen); result.count = chosen.size();
+        } else if (recipe) {
             std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
             publish_call(args,chosen);
         } else for (unsigned j = 0; j < args.size(); ++j) record_conversion(result,args[j],sequences[selected.offset+j]);

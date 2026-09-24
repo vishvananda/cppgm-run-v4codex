@@ -105,6 +105,7 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
     Binding binding = member_name && !qualified ? Binding() :
         qualified ? names.qualified(owner, ast[part].text) : names.lookup(owner, ast[part].text);
     bool potential = template_category(binding.category) || force_template || ast[part].op == KW_OPERATOR;
+    potential |= ast[part].op == OP_COMPL;
     if (binding.category == Category::Unknown && ast[part].text) {
         potential |= lexical_hint(ast[part].text) & 2;
         // An unresolved name with an explicit builtin type argument is unambiguous.

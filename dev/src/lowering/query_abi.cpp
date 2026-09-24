@@ -21,6 +21,10 @@ const char* query_operation(ETokenType op, bool unary)
     case OP_COMMA: return "cm"; case OP_ARROW: return "pt";
     case OP_DOT: return "dt";
     case OP_LSQUARE: return "ix";
+    case OP_ASS: return "aS"; case OP_PLUSASS: return "pL"; case OP_MINUSASS: return "mI";
+    case OP_STARASS: return "mL"; case OP_DIVASS: return "dV"; case OP_MODASS: return "rM";
+    case OP_BANDASS: return "aN"; case OP_BORASS: return "oR"; case OP_XORASS: return "eO";
+    case OP_LSHIFTASS: return "lS"; case OP_RSHIFTASS: return "rS";
     default: throw std::logic_error("missing type-query ABI operation");
     }
 }
@@ -58,6 +62,14 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         result = abi.make(Kind::Unary,child(0),abi_mangle::operation(code)); break;
     }
     case QueryKind::Binary: result = abi.make(Kind::Binary,child(0),child(1),abi_mangle::operation(query_operation(q.op,false))); break;
+    case QueryKind::Destructor: {
+        auto target = abi_type(q.type);
+        bool unresolved = abi[target].kind == Kind::Parameter || abi[target].kind == Kind::Decltype;
+        auto qualifier = q.count > 1 ? abi_type(sem.type_query(sem.type_query_child(id,1)).type) : 0;
+        auto name = abi.make(Kind::DestructorName,unresolved ? target : 0,
+            unresolved ? 0 : abi.string(spelling(q.name)),qualifier,0,args);
+        result = abi.make(Kind::Binary,child(0),name,abi_mangle::operation(query_operation(q.op,false))); break;
+    }
     case QueryKind::Member: {
         auto op = abi_mangle::operation(query_operation(q.op,false));
         if (!q.type) result = abi.make(Kind::ObjectMember,child(0),abi.string(spelling(q.name)),op,0,args);
@@ -95,7 +107,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     }
     case QueryKind::Sizeof:
         result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
-            abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_ALIGNOF ? "az" : "sz")); break;
+            abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_NOEXCEPT ? "nx" : q.op == KW_ALIGNOF ? "az" : "sz")); break;
     case QueryKind::String: throw std::logic_error("string literal is not a type-dependent ABI expression");
     case QueryKind::TypeValue: throw std::logic_error("type-query type used as ABI expression");
     }

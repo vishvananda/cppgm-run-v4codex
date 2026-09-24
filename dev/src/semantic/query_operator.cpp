@@ -31,7 +31,11 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     auto object = args[0].type;
     ScopeId naming = 0; EntityId family = q.entity;
     if (class_value(object) || pattern_class_type(object)) {
-        if (class_value(object)) complete_class(types[object].entity);
+        if (class_value(object)) {
+            complete_class(types[object].entity);
+            if (!entities[types[object].entity].complete) return incomplete_query(object);
+        }
+        if (q.op == OP_ASS && class_value(object)) ensure_transfers(object,true);
         naming = entities[types[object].entity].scope;
         family = merge_lookup(family,lookup(naming,q.name,Lookup::Ordinary,true));
     }
@@ -50,6 +54,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
             concrete_candidates.put(e,1);
         }
         bool member = entities[e].member_info && !entities[e].is_static;
+        if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
+            members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
         auto f = types[entities[e].type];
         auto supplied = args.size()-member;
         if (q.op == OP_LPAREN ? ((!f.variadic && supplied > f.count) ||
@@ -97,6 +103,12 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     }
     TypeQueryFact r;
     if (viable.empty()) {
+        if (compound_operation(q.op) != TOK_INVALID) for (auto arg : args) {
+            if (arg.type && pointer(decay(arg.type))) {
+                auto pending = incomplete_query(types[decay(arg.type)].child);
+                if (pending.incomplete) return pending;
+            }
+        }
         if ((q.op == OP_INC || q.op == OP_DEC) && pointer(decay(args[0].type)))
             return incomplete_query(types[decay(args[0].type)].child);
         if (q.op == OP_COMMA) { r.expression = args[1]; return r; }
@@ -140,6 +152,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         }
         r.expression.type = builtins[selected.builtin-1].type;
         r.expression.category = builtins[selected.builtin-1].category;
+        if (q.op == OP_ASS || compound_operation(q.op) != TOK_INVALID) r.expression.entity = args[0].entity;
     } else {
         if (deleted_transfer(selected.entity)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
         check_access(selected.entity,q.context,naming,object);

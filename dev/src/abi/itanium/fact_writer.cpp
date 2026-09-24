@@ -146,6 +146,8 @@ std::string FactWriter::expression(Id id) {
     case Kind::TypeTrait: return join_form({"type-trait ", g.spelling(n.a), list(n, 't')});
     case Kind::SizeofType: return join_form({"sizeof-type ", ref('t', n.a)});
     case Kind::AlignofType: return join_form({"alignof-type ", ref('t', n.a)});
+    case Kind::DestructorName: return join_form({"destructor-name ", n.a ? ref('t',n.a) : "-", " ",
+        n.b ? g.spelling(n.b) : "-", " ", n.c ? ref('t',n.c) : "-", list(n,'a')});
     case Kind::Member: return join_form({"member ", ref('t', n.a), (n.c ? " yes " : " no "), g.spelling(n.b), list(n, 'a')});
     case Kind::ObjectMember: return join_form({std::string("object-member "), operation_code(n.c), " ", ref('x', n.a), " ", g.spelling(n.b), list(n, 'a')});
     case Kind::EntityExpression: return join_form({std::string(n.b ? "entity-address " : "entity-reference "), ref('e', n.a)});

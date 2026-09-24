@@ -316,6 +316,8 @@ private:
     void bind_template_default_initialization(EntityId entity, ScopeId scope);
     bool check_default_constructor(EntityId constructor);
     void check_default_destructor(EntityId destructor);
+    bool default_destructor_valid(EntityId destructor);
+    bool default_destruction_valid(TypeId type, ScopeId scope, bool variant = false);
     void check_default_destruction(TypeId type, ScopeId scope, bool variant = false);
     void check_pattern_destruction(EntityId cls, ScopeId scope);
     EntityId check_default_initialization(TypeId type, ScopeId scope);
@@ -614,6 +616,8 @@ private:
     TypeId fundamental_cast_type(ETokenType op);
     TypeId parameter_body_type(TypeId source);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
+    TypeId destructor_target(NodeId name, TypeId object, ScopeId scope);
+    TypeQueryFact query_destructor(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     CallSelection select_call(EntityId family, const std::vector<Expression>& values,
         const std::vector<NodeId>* nodes, TypeId object, ValueCategory category,
         ScopeId naming, std::uint32_t explicit_arguments, std::vector<Conversion>& selected);
@@ -757,6 +761,8 @@ private:
     FunctionQualifiers function_qualifiers(NodeId parameters);
     bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
+    ETokenType compound_operation(ETokenType op) const;
+    void builtin_assignment_values(ETokenType op, const std::vector<Expression>& arguments, std::vector<BuiltinOperator>& results);
     void template_facts(EntityId e, ScopeId environment = 0);
     std::uint32_t retain_template_head(ScopeId environment);
     Index template_source_heads;
