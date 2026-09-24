@@ -26,11 +26,13 @@ rows=[]
 for i,name in enumerate(e['stage']['fixed']):
  src=ROOT/name;ir=WORK/(str(i)+'.lowir');exe=WORK/(str(i)+'.exe');row=dict(path=name,source_sha256=sha(src))
  r=run(['dev/cppgm++','--emit-lowir','-O0','--validate-lowir','-o',str(ir),name]);row.update(compiler_exit=r.returncode,diagnostic=r.stderr)
- native=bool(re.search(r'\bmain\s*\(',src.read_text()));row['oracle']='native-exit-zero' if native else 'validated-lowir'
+ native=bool(re.search(r'\bmain\s*\(',src.read_text()));row['oracle']='native-exit' if native else 'validated-lowir'
+ # This fixture returns its chosen overload's value directly; success is 2.
+ row['expected_native_exit']=2 if name.endswith('/300-using-declaration-imports-member-template-sfinae-shadow.t') else 0
  if r.returncode==0 and native:
   b=run(['dev/lowir2native-ref','-O0','-o',str(exe),str(ir)]);row.update(backend_exit=b.returncode,backend_diagnostic=b.stderr)
   if b.returncode==0:row['native_exit']=run([str(exe)]).returncode
- row['passed']=r.returncode==0 and (not native or row.get('native_exit')==0);rows.append(row)
+ row['passed']=r.returncode==0 and (not native or row.get('native_exit')==row['expected_native_exit']);rows.append(row)
 e['controls']['course_execution']=rows
 paths=run(['git','diff','--name-only',ENTRY,'--','dev']).stdout.splitlines()
 e['files']={p:sha(ROOT/p) for p in paths}
