@@ -1,7 +1,21 @@
-# PA17 compact plan — implementation handoff, loop 58
+# PA17 compact plan — implementation in progress, loop 59
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `e14b96fa9d4b3376e5922b8ad30093c3c0b0c759`
+
+Loop 59 entered clean at `7cc89281`, **333/343**. Previous turn: verified
+progress; process inspection found no live compiler/test job. Current group:
+static storage definition demand, initializer facts and constant reads. Owner:
+semantic declaration/initialization facts → entity-keyed storage demand → typed
+relocations or dynamic initialization → ordinary LowIR. Target work is linear
+in demanded members and initializer edges with one cached computation per fact.
+Validate declaration ordering, distinct specializations, function addresses,
+reference/base offsets and local guards with explicit personal controls, all
+course tests, prior-through report and file audit. Investigate suspect reference
+initialization with reduced inputs and N3485 proof before changing any oracle.
+Freeze entry/final compiler and inputs; collect A/A + ABBA latency/RSS and
+checked executable runtime/size. Cleanup scheduling and closure entities remain
+separate unfinished implementation; all independent review markers below stay.
 
 Target: **PA17 full-stage**. Implementation remains incomplete; do not advance.
 Loop 58 entered clean at `411ad00e`, **330/343** (13 failures). The previous
