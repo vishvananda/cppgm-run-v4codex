@@ -163,7 +163,10 @@ std::uint32_t Analyzer::expansion_frame(std::uint32_t parent, std::uint32_t para
         auto args = pack_arguments(arg);
         if (lane >= args.count) throw std::logic_error("pack expansion lane out of bounds");
         auto value = argument_types[args.offset+lane];
-        if (!value_argument(value) && types[value].kind == TypeKind::PackExpansion) {
+        // A function-parameter pack contains EntityIds, not type arguments.
+        // Its lane binds the existing runtime object. Interpreting that ID as
+        // a TypeId can alias an unrelated expansion or exceed the type arena.
+        if (entities[parameter].template_parameter && !value_argument(value) && types[value].kind == TypeKind::PackExpansion) {
             symbolic = true; value = types[value].bound;
         }
         overlay.push_back(parameter); overlay.push_back(value);

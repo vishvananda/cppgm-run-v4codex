@@ -64,7 +64,10 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
             EntityId parameter = 0;
             if (value_argument(arg)) {
                 auto q = type_queries[argument_query(arg)];
-                if (q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack) parameter = q.entity;
+                if (q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack) {
+                    if (q.entity && entities[q.entity].template_parameter) parameter = q.entity;
+                    else if (q.entity) work.push_back(entities[q.entity].type);
+                }
                 if (q.type) work.push_back(q.type);
                 auto args = argument_packs[q.arguments];
                 for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);

@@ -54,6 +54,12 @@ for i,order in enumerate(itertools.permutations([
  'template<class T,class U>int f(T*,U*){return 3;}'])):
  GOOD['address_permutation_'+str(i)]=''.join(order)+'int main(){int(*p)(int*,int*)=f;return p(0,0)!=3;}'
  GOOD['call_permutation_'+str(i)]=''.join(order)+'int main(){int n;return f(&n,&n)!=3;}'
+# Cross the type/entity arena growth boundaries with distinct pack object lanes.
+for n in (1,37,640):
+ source='template<int>struct Tag{};template<class T>int leaf(T*){return 2;}template<class F,class...A>auto invoke(F f,A...a)->decltype(f(a...)){return f(a...);}'
+ source+=''.join(f'int f{i}(){{int(*p)(Tag<{i}>*)=leaf<Tag<{i}>>;Tag<{i}>*a=0;return invoke(p,a);}}' for i in range(n))
+ source+='int main(){return ('+'+'.join(f'f{i}()' for i in range(n))+f')!={2*n};}}'
+ GOOD['pack_identity_scale_'+str(n)]=source
 BAD={
  'crossed_reference_order':'template<class T,class U>int f(const T&,U*){return 1;}template<class T,class U>int f(T&,const U*){return 2;}int main(){const int n=0;const int*p=0;return f(n,p);}',
 
