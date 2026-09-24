@@ -2,13 +2,15 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Target: PA18 full-stage. Entry: **266/420**; handoff: **282/420** (16 existing failures fixed, none added).
+Target: PA18 full-stage. Stage entry: **266/420**; handoff 63: **282/420**.
+Loop 64 entry: `30a610065e586c481a094c60698f7ae8a7952904`, **282/420**.
+Previous turn classification: progress (16 existing failures fixed). Review markers above remain unchanged.
 
 | Owner / group | Design, data flow and work |
 |---|---|
 | Function deduction and ordering (completed group) | Canonical type/parameter identities feed directional partial deduction; only participating call parameters (full signature for addresses). Reference/cv and pack tie rules select the declaration once; conversion facts carry it to typed LowIR. Scratch bindings live for one comparison; O(candidate count × compared type edges), no body demand, rendered keys, exception-based rejection or global scans. |
 | Prototype packs / ABI (completed group) | Signature expansion and element expression types are distinct. Typed object/type lanes; structured indirect-query failure; direct `sizeof...` ABI graph. O(required lanes/query edges/output), TU-owned facts. |
-| Immediate substitution / SFINAE (remaining) | Retained dependent query/type → immutable substitution frame → candidate success/discard; defaults, return types, expression validity and declaring-scope identity. |
+| Immediate substitution / SFINAE (active, loop 64) | `specialize`/defaults and query/type owners: retained dependent query/type → immutable substitution frame → candidate success/discard. Unify explicit and deduced probing; propagate failed results before access checks; retain class/body hard-error boundary. Work proportional to candidate signature/default query edges, completed facts keyed by canonical type/query and frame, TU lifetime. Validate default/result/operator/alias rejection with successful siblings and hard-error controls; measure frozen A/B latency/RSS and checked runtime/text. Declaring-scope identity and remaining expression validity follow the same data flow. |
 | Conversion/constructor/explicit deduction (remaining) | Target or call values → deduction → ordinary recorded conversions; preserve demand boundaries and member owners. |
 | LowIR mismatches (remaining) | Separate already-correct deduction from initialization, result metadata, and constant lowering differences; preserve comparison rules. |
 

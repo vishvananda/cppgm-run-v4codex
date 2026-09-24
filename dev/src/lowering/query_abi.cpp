@@ -50,7 +50,13 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::Cast:
         result = q.op == KW_STATIC_CAST ? abi.make(Kind::Cast,abi_type(q.type),child(0),abi_mangle::operation("sc")) :
             abi.make(Kind::Conversion,abi_type(q.type),0,0,0,{child(0)}); break;
-    case QueryKind::Unary: result = abi.make(Kind::Unary,child(0),abi_mangle::operation(query_operation(q.op,true))); break;
+    case QueryKind::Unary: {
+        // The query's postfix dummy argument participates in overload
+        // resolution, but the ABI uses pp/mm with one encoded operand.
+        auto code = q.op == OP_INC ? (q.count == 1 ? "pp_" : "pp") :
+            q.op == OP_DEC ? (q.count == 1 ? "mm_" : "mm") : query_operation(q.op,true);
+        result = abi.make(Kind::Unary,child(0),abi_mangle::operation(code)); break;
+    }
     case QueryKind::Binary: result = abi.make(Kind::Binary,child(0),child(1),abi_mangle::operation(query_operation(q.op,false))); break;
     case QueryKind::Member: {
         auto op = abi_mangle::operation(query_operation(q.op,false));

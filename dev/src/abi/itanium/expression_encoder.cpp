@@ -7,7 +7,8 @@ namespace {
 const char* const operations[] = {
     "ad", "de", "ps", "ng", "co", "nt", "pl", "mi", "ml", "dv", "rm",
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
-    "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az"
+    "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az",
+    "pp", "mm", "pp_", "mm_"
 };
 }
 Id operation(const std::string& code) {

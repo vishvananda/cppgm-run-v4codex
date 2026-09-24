@@ -222,6 +222,14 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
 }
 EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input, bool explicit_head)
 {
+    // Explicit template arguments and deduced arguments establish the same
+    // immediate-context obligations. Class completion/body demand temporarily
+    // restores hard diagnostics in its own owner.
+    struct Probe {
+        bool& type; bool saved_type; bool& query; bool saved_query;
+        Probe(bool& t, bool& q) : type(t), saved_type(t), query(q), saved_query(q) { type = query = true; }
+        ~Probe() { type = saved_type; query = saved_query; }
+    } probe(template_type_probe,immediate_query_probe);
     TemplateFunction t = templates[entities[pattern].template_info];
     auto args = input;
     if (definitions && !template_defaults(pattern,args,true)) return 0;
@@ -249,8 +257,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         }
     }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
-    if (!partial) check_substituted_type_access(entities[pattern].source,frame);
     if (!type) { specializations[index].declaration = FactState::Failure; return 0; }
+    if (!partial) check_substituted_type_access(entities[pattern].source,frame);
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;
