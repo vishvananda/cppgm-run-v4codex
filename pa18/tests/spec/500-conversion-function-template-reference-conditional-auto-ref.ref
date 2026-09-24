@@ -1,4 +1,4 @@
-global @selected : ptr [binding=internal, object=_Z8selected] = zero
+global @selected : ptr [binding=internal, object=_Z8selected] = addr @__cppgm_class_template_identity_0_3_0__value
 global @__cppgm_class_template_identity_0_3_0__value [binding=weak, object=_ZN14static_storageI7wrapperI12callable_tagEE5valueE] = {
   i32 11
 }
@@ -7,7 +7,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $cond__1 : i32
 
   block ^entry:
-    %t1 = load ptr @selected
+    %t1 = addr @__cppgm_class_template_identity_0_3_0__value
     %t2 = index i8 [projection=field] %t1, 0
     %t3 = load i32 %t2
     %t4 = cmp eq i32 %t3, 11
@@ -70,36 +70,6 @@ function @wrapper_callable_tag___wrapper_callable_tag_(%this : ptr [object_bytes
     %t1 = load ptr $this
     %t2 = index i8 [projection=field] %t1, 0
     store i32 11, %t2
-    return void
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  slot $condaddr__1 : ptr
-  slot $tmpobj__2 : obj<1x1>
-  slot $tmpobj__3 : obj<1x1>
-  slot $arg__4 : obj<1x1>
-
-  block ^entry:
-    branch 1, ^condaddr_then_1, ^condaddr_else_2
-
-  block ^condaddr_then_1:
-    %t1 = addr $tmpobj__2
-    call void @deduce_unique_unique_tag___deduce_unique_unique_tag_(%t1)
-    %t2 = call ptr @deduce_unique_unique_tag___operatorconstF_(%t1)
-    store ptr %t2, $condaddr__1
-    jump ^condaddr_end_3
-
-  block ^condaddr_else_2:
-    %t3 = addr $tmpobj__3
-    call void @factor_unique_tag___factor_unique_tag_(%t3)
-    %t4 = addr $arg__4
-    zeroinit 1x1 %t4
-    %t5 = call ptr @factor_unique_tag___operator___ov3(%t3, %t4)
-    store ptr %t5, $condaddr__1
-    jump ^condaddr_end_3
-
-  block ^condaddr_end_3:
-    %t6 = load ptr $condaddr__1
-    store ptr %t6, @selected
     return void
 }
 alias object _ZN13deduce_uniqueI10unique_tagEC2Ev = @deduce_unique_unique_tag___deduce_unique_unique_tag_

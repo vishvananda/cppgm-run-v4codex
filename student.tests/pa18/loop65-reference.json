@@ -1,0 +1,42 @@
+{
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "proof": "N3485 3.6.2 [basic.start.init]/2; 5.19 [expr.const]; 7.1.5 [dcl.constexpr]",
+  "source": "// N3485 3.6.2 [basic.start.init]/2 requires selected's constant initialization\n// before observed's dynamic initializer calls read(). A zero reference fails.\nint read();\nint observed = read();\nconstexpr int value = 11;\nstruct Source {\n  template<class T> constexpr operator const T&() const { return value; }\n};\nstatic constexpr auto& selected = true ? Source() : value;\nint read() { return selected; }\nint main() { return observed != 11; }\n",
+  "source_sha256": "071c90cf67fa6731905312076af8bf83498f544d79c81e02ecef23b93e49615c",
+  "observations": [
+    {
+      "compiler": "dev/cppgm++-ref",
+      "command": [
+        "dev/cppgm++-ref",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop65/reference-proof/reference.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/constant_reference_reducer.cpp"
+      ],
+      "exit": 0,
+      "diagnostic": "",
+      "lowir": "global @observed : i32 [binding=strong, object=_Z8observed] = zero\nglobal @value : i32 [storage=readonly, binding=internal, object=_Z5value] = 11\nglobal @selected : ptr [binding=internal, object=_Z8selected] = zero\n\nfunction @read() -> i32 [binding=strong, object=_Z4readv] {\n  block ^entry:\n    %t1 = load ptr @selected\n    %t2 = load i32 %t1\n    return i32 %t2\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  block ^entry:\n    %t1 = load i32 @observed\n    %t2 = cmp ne i32 %t1, 11\n    %t3 = convert trunc i32 i64 %t2\n    return i32 %t3\n}\nfunction @Source__operatorconstT_(%this : ptr [object_bytes=1]) -> ptr [binding=weak, object=_ZNK6SourcecvRKiIiEEv, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = addr @value\n    return ptr %t1\n}\nfunction @__cppgm_init() -> void [role=init, binding=internal] {\n  slot $condaddr__1 : ptr\n  slot $tmpobj__2 : obj<1x1>\n\n  block ^entry:\n    %t1 = call i32 @read()\n    store i32 %t1, @observed\n    branch 1, ^condaddr_then_1, ^condaddr_else_2\n\n  block ^condaddr_then_1:\n    %t2 = addr $tmpobj__2\n    zeroinit 1x1 %t2\n    %t3 = call ptr @Source__operatorconstT_(%t2)\n    store ptr %t3, $condaddr__1\n    jump ^condaddr_end_3\n\n  block ^condaddr_else_2:\n    %t4 = addr @value\n    store ptr %t4, $condaddr__1\n    jump ^condaddr_end_3\n\n  block ^condaddr_end_3:\n    %t5 = load ptr $condaddr__1\n    store ptr %t5, @selected\n    return void\n}\n",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": -11
+    },
+    {
+      "compiler": "dev/cppgm++",
+      "command": [
+        "dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop65/reference-proof/student.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/constant_reference_reducer.cpp"
+      ],
+      "exit": 0,
+      "diagnostic": "",
+      "lowir": "global @__global_observed : i32 [binding=strong, object=observed] = zero\nglobal @__global_value : i32 [binding=internal, storage=readonly, object=_ZL5value] = 11\nglobal @__global_selected : ptr [binding=internal, object=_ZL8selected] = addr @__global_value\nfunction @read() -> i32 [binding=strong, object=_Z4readv] {\n  block ^b1:\n    %v2 = load i32 @__global_value\n    return i32 %v2\n}\nfunction @operator(%v1 : ptr [object_bytes=1]) -> ptr [binding=weak, object=_ZNK6SourcecvRKT_IiEEv, inline_hint=yes] {\n  slot $s1 : ptr\n  block ^b2:\n    store ptr %v1, $s1\n    %v3 = addr @__global_value\n    return ptr %v3\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  block ^b3:\n    %v4 = load i32 @__global_observed\n    %v5 = cmp ne i32 %v4, 11\n    %v6 = convert trunc i32 i64 %v5\n    return i32 %v6\n}\nfunction @__cppgm_init() -> void [role=init, binding=internal] {\n  block ^b4:\n    %v7 = call i32 @read()\n    store i32 %v7, @__global_observed\n    return void\n}\n",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    }
+  ]
+}
