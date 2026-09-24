@@ -6,6 +6,14 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
     const bool call = arguments != ~0u;
     auto nonstatic = [&](EntityId e) { return entities[e].member_info && !entities[e].is_static; };
     bool object_parameter = operator_call && nonstatic(a) != nonstatic(b);
+    auto original_a = entities[specialization_pattern(a)].type, original_b = entities[specialization_pattern(b)].type;
+    auto owner = [&](EntityId e) { return operator_call && nonstatic(e) ? scopes[entities[e].owner].entity : 0; };
+    // All inputs are stable identities. Probe before constructing nominated
+    // shapes, so a completed comparison has O(1) average lookup cost even for
+    // long parameter lists. Defaults and body demand cannot change the key.
+    auto identity = intern_arguments({original_a,original_b,arguments,unsigned(operator_call),owner(a),owner(b)});
+    if (auto known = function_partial_ordering.get(identity)) { ++function_ordering_hits; return known == 2; }
+    ++function_ordering_work;
     auto shape = [&](EntityId e) {
         auto pattern = specialization_pattern(e);
         auto t = types[entities[pattern].type];
@@ -25,11 +33,6 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
         return types.function(types.fundamental(FT_VOID),parameters,false);
     };
     auto x = shape(a), y = shape(b);
-    // Canonical shapes include the context's participating parameters and
-    // implicit object. No defaults, completions or bodies affect this fact.
-    auto identity = key(intern_arguments({x,y}),call ? 1 : 2);
-    if (auto known = function_partial_ordering.get(identity)) { ++function_ordering_hits; return known == 2; }
-    ++function_ordering_work;
     auto unqualify = [&](TypeId type) {
         std::vector<Type> arrays;
         while (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::DependentArray) {
