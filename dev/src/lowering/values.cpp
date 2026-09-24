@@ -223,9 +223,9 @@ Value Procedural::binding(EntityId e)
     if (sem.static_temporary(e).object) return Value(Operand::symbol(symbols[e]),type(t),t,true);
     if (object_addresses[e]) return Value(Operand::value(object_addresses[e]),type(t),t,true);
     if (sem.nonstatic_field(e)) {
-        if (auto storage = sem.injected_storage(e)) {
-            if (!sem.nonstatic_field(storage)) return field(address(binding(storage)), e);
-        }
+        auto storage = sem.injected_storage(e);
+        while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
+        if (storage) return field(address(binding(storage)), e);
         if (!this_slot) throw std::logic_error("missing implicit object");
         return field(emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}), e);
     }

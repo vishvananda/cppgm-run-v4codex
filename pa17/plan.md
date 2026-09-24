@@ -1,4 +1,4 @@
-# PA17 compact plan — implementation handoff, loop 53
+# PA17 compact plan — implementation in progress, loop 54
 
 Stage base commit: `21748547a9e5befaae65e4fae120a63b3f9fcafb`
 Last reviewed commit: `c43e8eb68db7e9b3f1dd0bbb18f14c92e4fc4b30`
@@ -62,3 +62,28 @@ remain preserved; this turn does not certify the full assignment.
 Run `python3 student.tests/pa17/verify_selection.py` to verify this handoff.
 The records commit changes only evidence and this plan, leaving the reviewed
 marker unchanged. Historical verifiers describe their own frozen code tips.
+
+### Loop 54 working scope
+
+Entry HEAD: `3f1f6f0baef8888b3c94fb937e7f56e48f33b112`; 315/343,
+28 failures. Previous turn: progress, proven by the committed nine-case
+reduction and recorded checks. Stage base/review markers above are unchanged.
+
+Initial owner group: class-member publication and construction. Parsed member
+declarations feed retained source entities, then concrete specialization
+member/layout facts and ordinary LowIR. Complete anonymous storage/injection
+before member access, preserve alignment metadata, and retain conditional
+explicit/conversion roles through declaration and specialization. Work must
+track the affected declarations/fields and demanded specializations, with
+canonical identities and no parsing replay or global retries. Extend related
+fixes as evidence identifies common ownership. Validate all required fixtures,
+explicit personal execution/rejection controls, and frozen compiler latency/RSS
+and native runtime/text measurements. Remaining lookup/query and unrelated
+storage/lifetime failures remain implementation work; independent review of
+this increment is separately pending.
+
+Loop 54 extension: anonymous injection uses explicit scope edges and enclosing
+access ownership; conditional explicit uses canonical queries, rebinding renamed
+heads and copying completed nondependent facts. Array functional values now use
+ordinary list plans, preserving concrete pack-lane contexts. Six original cases
+pass focused checks; final validation/performance is pending.

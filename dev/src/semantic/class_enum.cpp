@@ -21,7 +21,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         return entities[e].type;
     }
     bool anonymous_union = !id && key_op == KW_UNION;
-    if (calls && !name && !anonymous_union) {
+    bool injected_class = anonymous_union || (!id && (ast[n].flags & 2) && scopes[s].kind == ScopeKind::Class);
+    if (calls && !name && !injected_class) {
         std::string generated = "__local_type" + std::to_string(++anonymous_classes);
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
@@ -56,7 +57,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             bind(owner, id, e);
             bind(entities[e].scope, id, e); // Injected-class-name, without a second source declaration.
         }
-        emit = !anonymous_union;
+        emit = !injected_class;
     } else if (entities[e].kind != EntityKind::Type || entities[e].key == KW_ENUM ||
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
         throw std::runtime_error("incompatible class declaration");
@@ -80,7 +81,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     }
     { auto& published = facts.edit(n); published.type = t; published.entity = e; published.scope = s; }
     if (definitions) publish_template_binding(n,e);
-    if (emit && !anonymous_union) {
+    if (emit && !injected_class) {
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);
         declarations[d].key = key_op;
     }
@@ -151,7 +152,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             for (auto i = exceptions_begin; i < exceptions_end; ++i) demand_exception_specification(declaration_exceptions[i]);
             declaration_exceptions.resize(exceptions_begin);
         }
-        if (anonymous_union) {
+        if (injected_class) {
+            if (scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
             if (calls) {
                 const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
                 std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));

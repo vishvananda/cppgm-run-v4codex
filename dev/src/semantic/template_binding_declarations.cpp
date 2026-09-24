@@ -115,6 +115,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
     }
     if (node.kind == Kind::Class || node.kind == Kind::ClassForward) {
         auto cs = bind_template_class(n,s,0,deferred);
+        if (!node.detail && scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
         if (!node.detail) for (auto d = scopes[cs].first_decl; d; d = declarations[d].next)
             bind(s,entities[declarations[d].entity].name,declarations[d].entity);
         return;
@@ -182,6 +183,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
                 else bind_template_class(c,s,0,deferred);
                 if (!ast[c].detail && !ast[child(n,Kind::InitDeclarators)].first) {
                     auto cs = template_class_bindings.get(ast.nodes.occurrences[c].source);
+                    if (scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
                     for (auto d = scopes[cs].first_decl; d; d = declarations[d].next)
                         bind(s,entities[declarations[d].entity].name,declarations[d].entity);
                 }

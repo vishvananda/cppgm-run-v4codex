@@ -684,6 +684,10 @@ private:
     unsigned base_steps(TypeId from, EntityId to);
     TypeId implicit_object_type(ScopeId s);
     void member_facts(EntityId e);
+    Index injected_class_owners;
+    void inject_class(ScopeId owner, ScopeId members);
+    void explicit_specifier(EntityId e, NodeId source, ScopeId scope);
+    bool explicit_condition_value(QueryId query);
     void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
     void complete_virtuals(EntityId cls);
     void vtable_definition_available(EntityId e);

@@ -332,8 +332,11 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::SpecialMember: case Kind::SpecialDefinition: {
         NodeId d = child(n, Kind::Declarator);
         NodeId name = decl_name(d), part = ast[name].last;
+        auto conversion_scope = calls && ast[part].op == KW_OPERATOR && ast[part].detail ? name_owner(name,s,true) : s;
+        if (definitions && s == active_template_scope)
+            conversion_scope = member_template_environment(s,conversion_scope);
         TypeId result = calls && ast[part].op == KW_OPERATOR && ast[part].detail ?
-            type_id(ast[part].detail,name_owner(name,s,true)) : types.fundamental(FT_VOID);
+            type_id(ast[part].detail,conversion_scope) : types.fundamental(FT_VOID);
         TypeId t = declarator(d, result, s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {

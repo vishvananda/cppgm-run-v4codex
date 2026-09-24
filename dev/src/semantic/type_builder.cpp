@@ -450,7 +450,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         members[m].constructor = constructor;
         members[m].destructor = destructor;
         if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
-        members[m].explicit_constructor |= spec_has(child(source, Kind::MemberSpecifiers), KW_EXPLICIT);
+        explicit_specifier(e,source,s);
         NodeId special = child(init, Kind::SpecialInitializer);
         if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
         members[m].deleted = special && ast[special].op == KW_DELETE;

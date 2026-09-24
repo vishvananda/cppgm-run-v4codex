@@ -67,7 +67,15 @@ void Procedural::zero_plan(std::uint32_t id, Value object, bool scalar_access)
             auto part = sem.zero_parts[plan.first+j];
             if (part.offset > end) zero_padding(object,end,part.offset-end,plan.alignment);
             auto at = part.offset ? emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(part.offset)}) : object;
-            zero_plan(part.plan,at);
+            auto child = sem.zero_initializations[part.plan];
+            // A union's selected aggregate member owns this region. Preserve
+            // the bounded scalar zero stores used for its representation;
+            // large regions retain zero_padding's bulk fallback.
+            auto t = sem.types[plan.type];
+            bool union_member = t.kind == TypeKind::Named && sem.entities[t.entity].key == KW_UNION;
+            if (union_member && child.kind == ZeroInitialization::Representation)
+                zero_padding(at,0,child.bytes,child.alignment);
+            else zero_plan(part.plan,at);
             end = std::max(end,part.offset+sem.zero_initializations[part.plan].bytes);
         }
         if (plan.bytes > end) zero_padding(object,end,plan.bytes-end,plan.alignment);

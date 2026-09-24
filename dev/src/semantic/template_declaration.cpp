@@ -152,6 +152,16 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
             // select the defining head as the owner of the retained body.
             entities[e].type = type;
             template_facts(e,environment);
+            auto condition = members[entities[e].member_info].explicit_condition;
+            if (condition) {
+                auto head = templates[entities[e].template_info];
+                Index bindings, cache;
+                for (unsigned j = 0; j < head.count; ++j)
+                    bindings.put(template_parameters[previous.offset+j],parameter_argument(template_parameters[head.offset+j]));
+                auto rebound = substitute_query(condition,bindings,cache);
+                if (!rebound) throw std::runtime_error("invalid redeclared explicit condition");
+                members[entities[e].member_info].explicit_condition = rebound;
+            }
         }
         merge_template_defaults(e,environment,previous.environment);
     } else {

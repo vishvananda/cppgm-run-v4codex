@@ -223,7 +223,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (e && (entities[e].kind == EntityKind::Alias || entities[e].kind == EntityKind::Type)) cast_type = entities[e].type;
         if (auto fundamental = fundamental_cast_type(ast[callee].op)) cast_type = fundamental;
         if (cast_type) {
-            if (ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) {
+            if (ast[args_node].kind == Kind::BracedInit && (class_value(cast_type) || types[cast_type].kind == TypeKind::Array)) {
                 auto c = list_initialization(args_node,cast_type,s,true);
                 result.type = cast_type; result.form = ExpressionForm::ListValue;
                 record_conversion(result,args_node,c); facts.edit(n).type = cast_type;

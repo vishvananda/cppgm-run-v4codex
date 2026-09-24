@@ -192,6 +192,7 @@ struct MemberFacts {
     std::uint32_t prototype = 0;
     TypeId call_type = 0;
     TypeId conversion_target = 0;
+    std::uint32_t explicit_condition = 0; // Canonical QueryId.
     EntityId next_conversion = 0;
     EntityId inherited_constructor = 0;
     EntityId delegated_constructor = 0;
@@ -297,7 +298,7 @@ struct Declaration {
     ETokenType key = TOK_INVALID;
     std::uint32_t next = 0;
 };
-struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false; };
+struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false, injected_member = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect };
 enum class CallInputs : unsigned char { Concrete, Source, Context };

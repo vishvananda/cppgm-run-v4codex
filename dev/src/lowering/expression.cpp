@@ -108,7 +108,9 @@ Value Procedural::expression(NodeId n, bool location)
             return Value((type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits)), type(fact.type), fact.type);
         }
         if (sem.nonstatic_field(fact.entity)) {
-            if (sem.injected_storage(fact.entity)) { Value v = binding(fact.entity); v.type = fact.type; return v; }
+            auto storage = sem.injected_storage(fact.entity);
+            while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
+            if (storage) { Value v = binding(fact.entity); v.type = fact.type; return v; }
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
             Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
         }

@@ -133,6 +133,7 @@ void Analyzer::bind_pattern_member(EntityId e, NodeId declaration, NodeId declar
     member_facts(e);
     auto m = entities[e].member_info;
     members[m].constructor = constructor; members[m].destructor = destructor;
+    explicit_specifier(e,declaration,scope);
     auto init = entities[e].initializer;
     if (!init) init = child(declaration,Kind::Initializer);
     auto special = child(init,Kind::SpecialInitializer);

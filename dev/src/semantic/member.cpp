@@ -37,6 +37,7 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
 }
 unsigned Analyzer::base_steps(TypeId from, EntityId to)
 {
+    while (auto enclosing = injected_class_owners.get(to)) to = enclosing;
     EntityId e = types[from].entity;
     if (e == to) return 0;
     size(from);

@@ -112,9 +112,9 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
     }
     if (!type || dependent_type(type)) return false;
     auto list = ast[callee].next;
-    // A braced class value shares the list-plan owner with ordinary calls;
+    // A braced class or array value shares the ordinary list-plan owner;
     // the concrete use owns the plan's one materialized temporary.
-    if (ast[list].kind == Kind::BracedInit && class_value(type)) {
+    if (ast[list].kind == Kind::BracedInit && (class_value(type) || types[type].kind == TypeKind::Array)) {
         if (!fixed_initializer_operands(list)) return false;
         RecipeScope guard(unevaluated_depth);
         expression(list,s);

@@ -216,7 +216,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     index_owner.put(key(pattern, pack), index);
     try {
     Index bindings, cache;
-    auto frame = dependent_type(entities[pattern].type) ? substitution_frame(index,t.offset,t.count) : 0;
+    auto condition = members[entities[pattern].member_info].explicit_condition;
+    auto frame = dependent_type(entities[pattern].type) || condition ? substitution_frame(index,t.offset,t.count) : 0;
     if (pack_prefix) {
         frame = 0;
         for (unsigned j = 0; j < t.count; ++j) {
@@ -249,6 +250,13 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         member.explicit_constructor = source.explicit_constructor;
         member.deleted = source.deleted;
         member.conversion_target = source.conversion_target ? types[type].child : 0;
+        if (condition) {
+            auto query = substitute_query(condition,bindings,cache,frame);
+            if (!query) { specializations[index].declaration = FactState::Failure; return 0; }
+            members[entities[e].member_info].explicit_condition = query;
+            if (!query_fact(query).dependent)
+                members[entities[e].member_info].explicit_constructor = explicit_condition_value(query);
+        }
     }
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;
     return e;

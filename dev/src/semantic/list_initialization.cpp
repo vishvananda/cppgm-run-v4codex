@@ -195,7 +195,9 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     std::vector<NodeId> args;
     for (unsigned i = 0; i < plan.call.argument_count; ++i) {
         auto a = call_argument(plan.call,i);
-        if (n && ast.nodes.occurrences[n].context) {
+        // Project source recipes once. A concrete pack lane already carries
+        // its own substitution frame and must not be rebound to the outer list.
+        if (n && ast.nodes.occurrences[n].context && !ast.nodes.occurrences[a].context) {
             auto projected = ast.projected(a,ast.nodes.occurrences[n].context);
             if (projected) a = projected;
         }

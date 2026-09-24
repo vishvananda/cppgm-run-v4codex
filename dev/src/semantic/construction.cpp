@@ -24,12 +24,12 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     std::vector<Viable> viable;
     std::vector<Conversion> sequences;
     for (EntityId e : candidates(binding)) {
-        if (!direct && members[entities[e].member_info].explicit_constructor) continue;
         ++candidate_work;
         if (entities[e].template_info) {
             e = values ? deduce_function(e,*values) : deduce_function(e,args);
             if (!e) continue;
         }
+        if (!direct && members[entities[e].member_info].explicit_constructor) continue;
         Type f = types[entities[e].type];
         if ((!f.variadic && args.size() > f.count) || (args.size() < f.count &&
             (!entities[e].defaults || !default_arguments[entities[e].defaults + args.size()]))) continue;

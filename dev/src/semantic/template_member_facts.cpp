@@ -96,6 +96,7 @@ bool Analyzer::check_template_field(NodeId n, ScopeId s, EntityId field, bool ex
     auto context = template_object_context(s);
     if (!context.owner) return false;
     auto owner = scopes[entities[field].owner].entity;
+    while (auto enclosing = injected_class_owners.get(owner)) owner = enclosing;
     if (context.owner != owner && !class_derives(context.owner,owner)) {
         if (!unevaluated_depth) throw std::runtime_error("member does not belong to the template object");
         return false;
@@ -119,6 +120,7 @@ TemplateMemberUse Analyzer::template_field_use(EntityId field, ScopeId s, Entity
     auto function = scopes[scope].entity;
     auto cls = scopes[entities[function].owner].entity;
     if (!pattern && entities[field].template_pattern) pattern = scopes[entities[field].owner].entity;
+    while (auto enclosing = injected_class_owners.get(pattern)) pattern = enclosing;
     if (!cls || (pattern && cls != pattern && template_class_patterns.get(cls) != pattern && !class_derives(cls,pattern)))
         throw std::logic_error("missing concrete template object owner");
     if (!object_type && !unevaluated_depth) throw std::logic_error("template field use lacks its object");

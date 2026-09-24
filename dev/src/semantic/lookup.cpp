@@ -136,6 +136,16 @@ void Analyzer::add_edge(ScopeId s, ScopeId to, bool is_inline)
     edge_index.put(key(s, to), edges.size());
     scopes[s].first_edge = edges.size(); edges.push_back(e);
 }
+void Analyzer::inject_class(ScopeId owner, ScopeId members)
+{
+    add_edge(owner,members);
+    auto edge = edge_index.get(key(owner,members));
+    if (edges[edge].injected_member) return;
+    edges[edge].injected_member = true;
+    edges[edge].inline_next = scopes[owner].first_inline;
+    scopes[owner].first_inline = edge;
+    injected_class_owners.put(scopes[members].entity,scopes[owner].entity);
+}
 EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
 {
     const EntityId ambiguous = ~EntityId(0);
@@ -158,8 +168,8 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
 EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit)
 {
     if (visited[s] == visit) return 0;
-    // Search the entire inline namespace set before ordinary directives. A hit
-    // anywhere in that set suppresses directives everywhere in the set.
+    // Inline namespaces and anonymous class members contribute direct names.
+    // Search their indexed edges before directives or base-class edges.
     std::size_t begin = qualified_work.size();
     qualified_work.push_back(s);
     visited[s] = visit;
@@ -170,7 +180,7 @@ EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_
         result = merge_lookup(result, local(current, n, mode));
         for (std::uint32_t i = scopes[current].first_inline; i; i = edges[i].inline_next) {
             ScopeId to = edges[i].target;
-            if (edges[i].inline_namespace && visited[to] != visit) {
+            if ((edges[i].inline_namespace || edges[i].injected_member) && visited[to] != visit) {
                 visited[to] = visit;
                 qualified_work.push_back(to);
             }
@@ -180,7 +190,7 @@ EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_
         std::size_t end = qualified_work.size();
         for (std::size_t p = begin; p < end; ++p)
             for (std::uint32_t i = scopes[qualified_work[p]].first_edge; i; i = edges[i].next)
-                if (!edges[i].inline_namespace)
+                if (!edges[i].inline_namespace && !edges[i].injected_member)
                     result = merge_lookup(result, imported(edges[i].target, n, mode, visit));
     }
     qualified_work.resize(begin);

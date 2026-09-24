@@ -127,7 +127,10 @@ bool Parser::special_ahead()
 {
     std::size_t i = 0;
     while (in.is("inline", i) || in.is("virtual", i) || in.is("explicit", i) ||
-           in.is("constexpr", i) || in.is("friend", i) || in.is("static", i)) ++i;
+           in.is("constexpr", i) || in.is("friend", i) || in.is("static", i)) {
+        bool conditional = in.is("explicit", i) && in.is("(", i+1);
+        i = conditional ? in.matching(i+1)+1 : i+1;
+    }
     while (in.is("__attribute__", i) || in.is("__attribute", i)) i = in.matching(i + 1) + 1;
     NameProbe probe = probe_name(i);
     if (!probe.valid) return false;
@@ -178,7 +181,8 @@ void Parser::predeclare_class()
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
             (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1)))
             names.bind(scope, in.peek(i).text, Category::Value);
-        if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class)
+        if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
+            (!i || (!in.is("operator",i-1) && !in.is("::",i-1))))
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
         if (!templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
             in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1)))

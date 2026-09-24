@@ -74,6 +74,7 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
     if (!calls || !e || entities[e].kind == EntityKind::Overload || scopes[entities[e].owner].kind != ScopeKind::Class) return;
     if (access_override) context = access_override;
     EntityId owner = scopes[entities[e].owner].entity;
+    if (injected_class_owners.get(owner)) check_access(owner,context,naming,object);
     EntityId named = scopes[naming_class(naming)].entity;
     if (!named || !class_derives(named, owner)) named = owner;
     Access level = entities[e].access;

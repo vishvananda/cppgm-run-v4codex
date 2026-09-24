@@ -124,7 +124,12 @@ NodeId Parser::special_member(NodeId specs)
     while (in.is("inline") || in.is("virtual") || in.is("explicit") || in.is("constexpr") ||
            in.is("friend") || in.is("static")) {
         if (!specs) specs = make(Kind::MemberSpecifiers);
-        ast.append(specs, leaf(Kind::Specifier));
+        auto specifier = leaf(Kind::Specifier);
+        if (ast[specifier].op == KW_EXPLICIT && in.eat("(")) {
+            ast.append(specifier, expression());
+            in.require(")");
+        }
+        ast.append(specs, specifier);
         attributes();
     }
     NodeId n = name();
