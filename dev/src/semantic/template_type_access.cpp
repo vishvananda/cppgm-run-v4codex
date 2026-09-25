@@ -28,7 +28,11 @@ bool Analyzer::type_access_subtree(NodeId node)
 }
 void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
 {
-    if (!frame || template_type_accesses.size() == 1 || !type_access_subtree(node)) return;
+    if (!substituted_type_access(node,frame)) throw std::runtime_error("invalid substituted type access");
+}
+bool Analyzer::substituted_type_access(NodeId node, std::uint32_t frame)
+{
+    if (!frame || template_type_accesses.size() == 1 || !type_access_subtree(node)) return true;
     // Recipes belong to the template definition, even when the specialization
     // is first demanded by an exempt explicit-instantiation declarator.
     struct DefinitionAccess {
@@ -43,7 +47,7 @@ void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
         if (auto recipe = template_type_access_sources.get(source)) {
             auto k = key(frame,recipe);
             auto state = FactState(template_type_access_states.get(k));
-            if (state == FactState::Failure) throw std::runtime_error("failed substituted type access");
+            if (state == FactState::Failure) return false;
             if (state == FactState::NotStarted) {
                 auto use = template_type_accesses[recipe];
                 template_type_access_states.put(k,unsigned(FactState::Active));
@@ -62,11 +66,14 @@ void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
                         auto environment = pack ? expansion_frame(frame,pack,lane) : frame;
                         auto qualifier = substitute_type(use.qualifier,bindings,cache,environment);
                         if (!qualifier || dependent_type(qualifier)) { complete = false; continue; }
-                        if (types[qualifier].kind != TypeKind::Named) throw std::runtime_error("invalid substituted type qualifier");
+                        if (types[qualifier].kind != TypeKind::Named) {
+                            template_type_access_states.put(k,unsigned(FactState::Failure)); return false;
+                        }
                         auto scope = entities[types[qualifier].entity].scope;
                         auto member = qualified_type_member(qualifier,use.name);
-                        if (!member) throw std::runtime_error("substituted type member not found");
-                        check_access(member,substitution_scope(environment,use.scope),scope);
+                        if (!member || !accessible(member,substitution_scope(environment,use.scope),scope)) {
+                            template_type_access_states.put(k,unsigned(FactState::Failure)); return false;
+                        }
                         ++template_type_access_work;
                         template_type_access_states.put(key(environment,recipe),unsigned(FactState::Success));
                     }
@@ -79,5 +86,6 @@ void Analyzer::check_substituted_type_access(NodeId node, std::uint32_t frame)
         for (auto c = source_node.first; c; c = ast.nodes[c].next)
             if (type_access_subtree(c)) work.push_back(c);
     }
+    return true;
 }
 } }

@@ -124,8 +124,12 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
 bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial)
 {
     auto t = templates[entities[pattern].template_info];
-    bool packs = false;
-    for (unsigned j = 0; j < t.count; ++j) packs |= entities[template_parameters[t.offset+j]].parameter_pack;
+    bool packs = false, access_defaults = false;
+    for (unsigned j = 0; j < t.count; ++j) {
+        auto parameter = template_parameters[t.offset+j];
+        packs |= entities[parameter].parameter_pack;
+        access_defaults |= type_access_subtree(entities[parameter].initializer);
+    }
     if (!packs && args.size() > t.count) {
         unsigned fixed = 0;
         for (auto arg : args) fixed += value_argument(arg) || types[arg].kind != TypeKind::PackExpansion;
@@ -184,6 +188,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             }
             value = substitute_argument(value,bindings,cache,frame);
             if (!value) return false;
+            if (!substituted_type_access(entities[p].initializer,frame)) return false;
             if (j == args.size()) args.push_back(value);
             else args[j] = value;
         }
@@ -199,7 +204,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             args[j] = convert_argument(args[j],target);
             if (!args[j]) return false;
         }
-        bindings.put(p,args[j]); if (packs || frame) frame = argument_frame(frame,p,args[j]);
+        bindings.put(p,args[j]); if (packs || frame || access_defaults) frame = argument_frame(frame,p,args[j]);
     }
     return true;
 }

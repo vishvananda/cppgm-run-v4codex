@@ -5,6 +5,11 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
     if (!argument) return 0;
     if (auto known = template_signature_shapes.get(argument)) { ++template_signature_shape_hits; return known; }
     ++template_signature_shape_work;
+    if (!value_argument(argument) && types[argument].kind == TypeKind::AliasApplication) {
+        auto t = types[argument];
+        auto result = template_signature_shape(types.qualify(t.child,t.cv));
+        template_signature_shapes.put(argument,result); return result;
+    }
     std::vector<ArgumentId> shape;
     auto add = [&](ArgumentId arg) { shape.push_back(template_signature_shape(arg)); };
     if (value_argument(argument)) {

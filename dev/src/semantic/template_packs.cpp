@@ -61,8 +61,8 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
                 }
             }
             if (t.kind == TypeKind::PackExpansion) continue; // nested expansion owns its packs
-            if (t.kind == TypeKind::ArgumentPack) {
-                auto args = pack_arguments(arg);
+            if (t.kind == TypeKind::ArgumentPack || t.kind == TypeKind::AliasApplication) {
+                auto args = argument_packs[t.bound];
                 for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
             }
             if (t.kind == TypeKind::Decltype) work.push_back(0x80000000U|t.entity);

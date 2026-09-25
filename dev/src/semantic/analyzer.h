@@ -799,6 +799,7 @@ private:
     void retain_type_access(NodeId part, TypeId qualifier, ScopeId scope);
     bool type_access_subtree(NodeId node);
     void check_substituted_type_access(NodeId node, std::uint32_t frame);
+    bool substituted_type_access(NodeId node, std::uint32_t frame);
     Index template_type_access_sources, template_type_access_subtrees, template_type_access_states;
     std::vector<TemplateTypeAccess> template_type_accesses = std::vector<TemplateTypeAccess>(1);
     std::size_t template_type_access_work = 0;

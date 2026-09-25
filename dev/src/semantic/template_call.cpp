@@ -47,7 +47,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::PackExpansion;
+    bool dependent = t.kind == TypeKind::PackExpansion || t.kind == TypeKind::AliasApplication;
     if (t.kind == TypeKind::ArgumentPack) {
         auto args = argument_packs[t.bound];
         for (unsigned j = 0; j < args.count; ++j) dependent |= dependent_argument(argument_types[args.offset+j]);
@@ -82,7 +82,22 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     Type p = types[pattern];
     TypeId result = pattern;
     bool complete_failure = false;
-    if (p.kind == TypeKind::ArgumentPack) {
+    if (p.kind == TypeKind::AliasApplication) {
+        auto pack = argument_packs[p.bound]; std::vector<ArgumentId> args;
+        for (unsigned j = 0; j < pack.count; ++j) {
+            auto arg = argument_types[pack.offset+j];
+            if (argument_pack(arg)) {
+                auto tail = pack_arguments(arg);
+                for (unsigned k = 0; k < tail.count; ++k)
+                    substitute_arguments(argument_types[tail.offset+k],bindings,cache,owner,args);
+            } else substitute_arguments(arg,bindings,cache,owner,args);
+        }
+        for (auto arg : args) if (!arg) return 0;
+        auto entity = owner && entities[p.entity].template_pattern ? substitution_binding(owner,p.entity) : p.entity;
+        result = specialize_alias(entity,args);
+        if (result) result = types.qualify(result,p.cv);
+        else complete_failure = true;
+    } else if (p.kind == TypeKind::ArgumentPack) {
         auto args = argument_packs[p.bound]; std::vector<ArgumentId> values;
         for (unsigned j = 0; j < args.count; ++j)
             substitute_arguments(argument_types[args.offset+j],bindings,cache,owner,values);
@@ -338,14 +353,15 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     for (unsigned i = 0; i < explicit_args.count; ++i)
         bindings.put(template_parameters[t.offset+i],argument_types[explicit_args.offset+i]);
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
-        TypeId p = types.parameters[f.offset+i], a = args[i].type;
+        TypeId p = types.alias_target(types.parameters[f.offset+i]), a = args[i].type;
         if (types[p].kind == TypeKind::PackExpansion) {
-            auto element = types[p].bound;
+            auto element = types.alias_target(types[p].bound);
             std::vector<TypeId> actual;
             for (unsigned j = i; j < args.size(); ++j) {
                 auto type = args[j].type, param = types[element];
-                if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
-                    entities[types[param.child].entity].template_parameter && !types[param.child].cv && args[j].category == ValueCategory::Lvalue)
+                auto referred = types[types.alias_target(param.child)];
+                if (param.kind == TypeKind::RRef && referred.kind == TypeKind::Named &&
+                    entities[referred.entity].template_parameter && !referred.cv && args[j].category == ValueCategory::Lvalue)
                     type = types.compound(TypeKind::LRef,type);
                 if (type && param.kind != TypeKind::LRef && param.kind != TypeKind::RRef) type = decay(type);
                 actual.push_back(type);
@@ -388,8 +404,9 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
         }
         if (!a) return 0;
         auto param = types[p];
-        if (param.kind == TypeKind::RRef && types[param.child].kind == TypeKind::Named &&
-            entities[types[param.child].entity].template_parameter && !types[param.child].cv && args[i].category == ValueCategory::Lvalue)
+        auto referred = types[types.alias_target(param.child)];
+        if (param.kind == TypeKind::RRef && referred.kind == TypeKind::Named &&
+            entities[referred.entity].template_parameter && !referred.cv && args[i].category == ValueCategory::Lvalue)
             a = types.compound(TypeKind::LRef,a);
         if (param.kind == TypeKind::LRef || param.kind == TypeKind::RRef) p = param.child;
         else a = decay(a);

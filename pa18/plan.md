@@ -2,7 +2,19 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 71**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 72**.
+Loop 72 entry: `ca314a72`, **367/420**, 53 original failures. Previous goal
+turn classified **progress**: committed context implementation and validation;
+no prior compiler/check process remains live. Review markers below are preserved.
+Initial ownership group: retained alias formation and correlated pack expansion.
+`template_entities` must retain dependent argument validity alongside transparent
+result types; `template_call`/`template_packs` consume those facts under immutable
+frames, with structured candidate failure. Deduction/signature comparison must
+preserve alias transparency, and lowering must consume concrete ordinary types.
+Work is bounded by retained argument/query edges and demanded expansion lanes,
+with TU-owned canonical identities/caches. Validate detectors, nested aliases,
+unequal/empty packs, redeclarations, runtime selection and inherited controls;
+freeze entry/final binaries for stage-scoped latency/RSS/runtime/size evidence.
 Previous goal turn: **progress** (audit 70 ownership fixes and validation).
 Loop 70: **progress** (accumulated review, independent reducers, ownership fixes,
 required validation and frozen performance evidence).

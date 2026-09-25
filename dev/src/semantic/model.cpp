@@ -43,6 +43,18 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 }
 TypeId Types::fundamental(EFundamentalType f) { Type t; t.fundamental = f; return intern(t, {}); }
 TypeId Types::named(EntityId e) { Type t; t.kind = TypeKind::Named; t.entity = e; return intern(t, {}); }
+TypeId Types::alias_application(EntityId alias, TypeId result, std::uint32_t arguments)
+{
+    Type t; t.kind = TypeKind::AliasApplication; t.entity = alias; t.child = result; t.bound = arguments;
+    return intern(t,{});
+}
+TypeId Types::alias_target(TypeId id)
+{
+    while (records[id].kind == TypeKind::AliasApplication) {
+        auto t = records[id]; id = qualify(t.child,t.cv);
+    }
+    return id;
+}
 TypeId Types::decltype_type(std::uint32_t expression, bool direct)
 {
     Type t; t.kind = TypeKind::Decltype; t.entity = expression; t.bound = direct; return intern(t,{});

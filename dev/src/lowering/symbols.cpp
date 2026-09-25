@@ -50,6 +50,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         else result = abi_entity_name(t.entity);
         break;
     }
+    case TypeKind::AliasApplication: result = abi_type(t.child); break;
     case TypeKind::PackExpansion: result = abi.make(abi_mangle::Kind::Pack,abi_type(t.bound)); break;
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
     case TypeKind::Decltype: result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity)); break;

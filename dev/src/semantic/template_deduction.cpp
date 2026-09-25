@@ -16,6 +16,10 @@ bool Analyzer::deduce_sequence(const std::vector<ArgumentId>& pattern, const std
 }
 bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind)
 {
+    if (!value_argument(pattern) && types[pattern].kind == TypeKind::AliasApplication)
+        return deduce_type(types.qualify(types[pattern].child,types[pattern].cv),actual,bindings,kind);
+    if (!value_argument(actual) && types[actual].kind == TypeKind::AliasApplication)
+        return deduce_type(pattern,types.qualify(types[actual].child,types[actual].cv),bindings,kind);
     if (value_argument(pattern) || value_argument(actual)) {
         if (!value_argument(pattern) || !value_argument(actual)) return false;
         auto q = type_queries[argument_query(pattern)];
