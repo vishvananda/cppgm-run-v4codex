@@ -281,6 +281,8 @@ void Analyzer::use_selected_function(EntityId e, bool direct)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (c.ellipsis_object && !c.empty_copy && c.kind != Conversion::Kind::Construction)
+        throw std::runtime_error("class ellipsis argument has no value transfer");
     if (n && c.reference && !c.temporary) observe_scalar(n);
     if (c.kind == Conversion::Kind::ListPlan) { prepare_list(n,c); return; }
     if (c.kind == Conversion::Kind::List) return;

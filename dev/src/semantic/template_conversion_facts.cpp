@@ -8,6 +8,14 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
 bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
 {
     if (!c.valid()) return false;
+    if (c.ellipsis_object && !n && !c.empty_copy &&
+        (!c.function || deleted_transfer(c.function) || !accessible(c.function,s,entities[c.function].owner) ||
+        !default_destruction_valid(value_type(c.target),s))) {
+        // An unevaluated lvalue-to-rvalue conversion does not copy its class
+        // operand. Retain the unavailable evaluated transfer as an effect fact,
+        // rather than turning an otherwise valid type query into SFINAE failure.
+        c.ellipsis_unavailable = true; return true;
+    }
     if (c.kind == Conversion::Kind::Discarded) {
         if (n && discarded_conversions.get(n)) return true;
         Conversion selected;

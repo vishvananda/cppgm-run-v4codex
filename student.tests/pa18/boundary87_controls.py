@@ -49,7 +49,10 @@ runner.GOOD.update({
  'ellipsis_query_dormant':'template<class T>struct A{A(const A&)noexcept{T::missing();}};int f(...)noexcept;template<class T>constexpr bool test(){return noexcept(f(*static_cast<A<T>*>(0)));}int main(){return !test<int>();}',
  'ellipsis_fixed_nontrivial':'int copies,dead;struct A{A(){}A(const A&){++copies;}~A(){++dead;}};A a;int f(...){return copies-dead;}template<class T>int use(){return f(a);}int main(){int x=use<int>();int y=use<long>();return x!=1||y!=1||copies!=2||dead!=2;}',
  'ellipsis_default':'struct A{int n;};A a={3};int f(...){return 7;}template<class T>int use(int x=f(a)){return x;}int main(){return use<int>()!=7||use<long>()!=7;}',
- 'ellipsis_query_sfinae':'struct A{A(const A&)=delete;};int f(...)noexcept;template<class T>auto test(T*p)->decltype(f(*p),char()){return 1;}int test(...){return 2;}int main(){return test(static_cast<A*>(0))!=2;}',
+ # [conv.lval]/2 suppresses class copying in the unevaluated decltype operand.
+ 'ellipsis_query_sfinae':'struct A{A(const A&)=delete;};int f(...)noexcept;template<class T>auto test(T*p)->decltype(f(*p),char()){return 1;}int test(...){return 2;}int main(){return test(static_cast<A*>(0))!=1;}',
+ 'ellipsis_query_volatile':'struct A{};template<class T>T&&declval();long f(...);static_assert(sizeof(f(declval<volatile A&>()))==sizeof(long),"unevaluated ellipsis");int main(){}',
+ 'ellipsis_query_deleted':'struct A{A(const A&)=delete;};template<class T>T&&declval();long f(...);static_assert(sizeof(f(declval<A&>()))==sizeof(long),"unevaluated ellipsis");int main(){}',
 })
 # Native catch execution belongs to PA21; preserve the exploratory inputs and
 # their failed observations without claiming that the PA18 surface implements it.

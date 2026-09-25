@@ -362,9 +362,9 @@ struct Conversion {
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
     bool reference : 1, temporary : 1, derived : 1, empty_copy : 1, fold_widen : 1, implicit_move : 1;
-    bool preserve_widen : 1, ambiguous : 1, constant_forbidden : 1, ellipsis_object : 1;
+    bool preserve_widen : 1, ambiguous : 1, constant_forbidden : 1, ellipsis_object : 1, ellipsis_unavailable : 1;
     Conversion() : reference(false), temporary(false), derived(false), empty_copy(false), fold_widen(false),
-        implicit_move(false), preserve_widen(false), ambiguous(false), constant_forbidden(false), ellipsis_object(false) {}
+        implicit_move(false), preserve_widen(false), ambiguous(false), constant_forbidden(false), ellipsis_object(false), ellipsis_unavailable(false) {}
     unsigned char preference = 0;
     enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List, QueryList };
     Kind kind = Kind::Standard;

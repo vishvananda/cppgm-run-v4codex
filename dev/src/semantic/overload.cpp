@@ -122,7 +122,10 @@ Conversion Analyzer::ellipsis_conversion_value(Expression source)
         // retaining the source-language type for queries and constant evaluation.
         // LowIR's scalar variadic lane carries its private object's address.
         c = transfer_initialization(source,c.target,InitializationMode::Copy);
-        if (c.valid()) c.rank = 6;
+        // [conv.lval]/2 suppresses the copy in an unevaluated operand. The
+        // ellipsis candidate stays viable; an evaluated application diagnoses
+        // a missing/deleted/inaccessible transfer after selecting the call.
+        c.rank = 6;
         c.ellipsis_object = true;
         return c;
     }

@@ -8,11 +8,17 @@ remains separate.
 ## Ownership and data flow
 
 `ellipsis_conversion_value` now selects the class transfer while overload
-resolution retains ellipsis rank. A packed `Conversion::ellipsis_object` fact
+resolution retains ellipsis rank even when that transfer is unavailable. Packed
+`Conversion::ellipsis_object` and `ellipsis_unavailable` facts
 keeps source type/category and the chosen constructor available to queries,
 constant evaluation and concrete materialization. Evaluated applications create
 their own existing `ConversionObject`; fixed template recipes remain shared and
-unevaluated queries do not demand bodies. The flag is copied with the recipe,
+unevaluated queries do not demand bodies. N3485 §4.1 [conv.lval]/2 suppresses
+the class copy for an unevaluated operand: a missing/deleted/inaccessible copy
+does not discard its ellipsis candidate during a type query. Evaluated use still
+diagnoses the invalid transfer; constant execution cannot accept it. Exception
+queries retain potential transfer effects rather than treating an unavailable
+evaluated transfer as proven nonthrowing. These facts are copied with the recipe,
 not inferred again in lowering. Scalar default promotions are unchanged.
 
 The LowIR variadic suffix accepts scalar lanes. A class value therefore uses a
@@ -45,7 +51,7 @@ One transfer selection per examined ellipsis candidate; selected recipes reuse
 the existing TU arenas and canonical class transfer/destruction facts. Each
 evaluated argument owns one materialization and visits its selected conversion
 edges. Lowering is linear in actual arguments and transfer output; a single
-packed bit adds no new graph or owning allocation. Branch analysis remains
+packed facts add no new graph or owning allocation. Branch analysis remains
 memoized by expression identity and omission mode. Typed floating zero uses the
 existing `(NodeId, TypeId)` static-value cache and constant interner. No textual
 keys, token replay, global invalidation, candidate exceptions, optional optimizer,

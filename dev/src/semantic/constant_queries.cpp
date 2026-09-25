@@ -59,7 +59,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
 Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 {
     if (c.kind == Conversion::Kind::QueryList) return constant_query_list(c.materialization);
-    if (c.constant_forbidden) return Constant();
+    if (c.constant_forbidden || c.ellipsis_unavailable) return Constant();
     if (c.function && types[c.target].kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_query_object(source);

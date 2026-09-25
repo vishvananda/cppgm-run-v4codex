@@ -5,6 +5,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::conversion_nonthrowing(Conversion c)
 {
+    if (c.ellipsis_unavailable) return false;
     // Exception demand can append conversions; retain the selected recipe by
     // value across those calls, never a reference into the growing arena.
     if (c.kind == Conversion::Kind::Discarded && c.materialization) {
