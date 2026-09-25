@@ -23,6 +23,9 @@ for name in ('audit74_controls','list75_controls','inherit76_controls','nested77
 entry=read(work/'controls-entry-final/results.json');assert len(entry)==74
 perfpath=root/'student.tests/pa18/loop81-performance.json';perf=read(perfpath)
 assert perf.get('finished_utc') and len(perf['workloads'])==15
+confirm_path=root/'student.tests/pa18/loop81-performance-common-confirmation.json';confirmation=read(confirm_path)
+assert confirmation.get('finished_utc') and confirmation['binaries']==perf['binaries']
+assert confirmation['workloads']['common-loop-float-1500']['source_sha256']==perf['workloads']['common-loop-float-1500']['source_sha256']
 cc=root/'dev/cppgm++';assert sha(cc)==sha(work/'final-cppgm')==perf['binaries'][1]['sha256']==progress['compiler_sha256']
 assert sha(work/'entry-cppgm')==perf['binaries'][0]['sha256']
 traces={}
@@ -33,13 +36,16 @@ inspection=read(v/'result81_inspection/results.json');assert len(inspection)==10
 for family in ('runtime-named-result','runtime-known-branch'):
  w=perf['workloads'][family];a,b=w['outputs']
  assert b['native']['payload_bytes']<a['native']['payload_bytes']
- assert w['runtime']['median_b_over_a']<1
+ assert max(w['runtime']['paired_b_over_a'])<1
+for name in ('retained-result-600','retained-result-2400','runtime-retained-result'):
+ a,b=perf['workloads'][name]['outputs'];assert a['sha256']==b['sha256'] and a['native']['sha256']==b['native']['sha256']
+ assert next(t['semantic_conversion_result_work'] for t in b['telemetry'] if 'semantic_conversion_result_work' in t)==0
 plan=(root/'pa18/plan.md').read_text()
 assert 'Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.' in plan
 assert 'Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.' in plan
-result=dict(entry_commit='6924787714fac6bdeb0b3df29df49bb7cbe5fa7e',implementation_commits=['7b8c98a6','4ab09a9b'],current_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(cc),
+result=dict(entry_commit='6924787714fac6bdeb0b3df29df49bb7cbe5fa7e',implementation_commits=['7b8c98a6','4ab09a9b','25b89fc2'],current_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(cc),
  checks=checks,stage_progress=progress,personal_control_count=total,controls=controls,entry_controls=entry,inspection=inspection,traces=traces,
- performance=dict(path=str(perfpath),sha256=sha(perfpath)),intermediate_performance=dict(path='student.tests/pa18/loop81-performance-before-demand.json',sha256=sha(root/'student.tests/pa18/loop81-performance-before-demand.json'),explanation='An initial 1.6% paired compiler overhead on explicit-only conversions motivated request-driven summaries. Final explicit-only LowIR and native bytes match entry; all intermediate measurements and checks are preserved.'),
+ performance=dict(path=str(perfpath),sha256=sha(perfpath),confirmation_path=str(confirm_path),confirmation_sha256=sha(confirm_path)),intermediate_performance=dict(path='student.tests/pa18/loop81-performance-before-demand.json',sha256=sha(root/'student.tests/pa18/loop81-performance-before-demand.json'),explanation='An initial 1.6% paired compiler overhead on explicit-only conversions motivated request-driven summaries. Final explicit-only LowIR and native bytes match entry; all intermediate measurements and checks are preserved.'),
  boundary='Completed named scalar return summaries through implicit conversions, conditional values/lifetimes and retained explicit/address function uses. Qualified conversion-address lookup and canonical class-alias member pointer ownership are repaired. Remaining 24 course failures require array materialization, class-result ABI/emission and unrelated scalar representation owners. No reference or comparison changes.',
  independent_review='Prior handoffs 79/80 plus summary proof eligibility and validity, selected-branch cleanup, emission roots/address retention and qualified conversion lookup. These review obligations remain distinct from known unfinished implementation.')
 out.write_text(json.dumps(result,indent=2)+'\n');print('Evidence verified: 396/420, prior 2609/2609, file audit,',total,'controls, 10 inspection programs, unchanged fixtures and frozen performance.')
