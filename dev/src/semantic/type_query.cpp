@@ -536,7 +536,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Parenthesized: r = children[0]; r.declared_type = 0; break;
     case QueryKind::Conditional: r = query_conditional(q,children); break;
     case QueryKind::Cast:
-        if (integral(q.type) && class_value(children[0].expression.type)) {
+        if (q.op == TOK_INVALID && integral(q.type) && class_value(children[0].expression.type)) {
             auto c = conversion_function_value(children[0].expression,q.type,q.op != TOK_INVALID);
             if (!c.valid() || deleted_transfer(c.function)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             if (!valid_fixed_conversion(children[0].expression,0,c,q.context)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
@@ -544,6 +544,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         } else if (q.op != TOK_INVALID) {
             auto c = explicit_builtin_conversion(children[0].expression,q.type,q.op,q.context);
             if (!valid_fixed_conversion(children[0].expression,0,c,q.context)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+            if (c.kind == Conversion::Kind::User) r.selected = c.function;
             x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
             if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))

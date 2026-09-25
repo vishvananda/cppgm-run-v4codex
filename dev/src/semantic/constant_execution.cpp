@@ -222,6 +222,16 @@ std::uint32_t Analyzer::constant_node_object(NodeId n)
     }
     return constant_address(n,facts[n].scope);
 }
+Constant Analyzer::constant_result_conversion(Constant value, const Conversion& c)
+{
+    if (!value.valid || c.constant_forbidden) return Constant();
+    auto target = types[c.target], source = types[value.type];
+    if (c.reference && (c.temporary || (source.kind != TypeKind::LRef && source.kind != TypeKind::RRef))) {
+        value = convert(value,target.child,true);
+        return value.valid ? Constant(c.target,constant_storage_address(target.child,value)) : Constant();
+    }
+    return convert(value,c.target,true);
+}
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
     if (c.constant_forbidden) return Constant();
@@ -239,7 +249,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto object = constant_node_object(n);
         object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);
         if (!object || members[entities[c.function].member_info].virtual_member) return Constant();
-        return convert(execute_constant(c.function,{},object),c.target,true);
+        return constant_result_conversion(execute_constant(c.function,{},object),user_conversions[c.materialization].result);
     }
     if (c.kind == Conversion::Kind::Construction) {
         auto material = conversion_objects[c.materialization];
@@ -273,6 +283,11 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return address ? Constant(c.target,1) : Constant();
     }
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef || c.reference) {
+        if (c.temporary) {
+            auto scalar = c; scalar.target = target.child; scalar.reference = scalar.temporary = false;
+            auto value = constant_node_conversion(n,scalar,s);
+            return value.valid ? Constant(c.target,constant_storage_address(target.child,value)) : Constant();
+        }
         auto address = constant_address(n,s);
         if (address && class_value(target.child)) address = constant_base_address(address,target.child);
         return address ? Constant(c.target,address) : Constant();

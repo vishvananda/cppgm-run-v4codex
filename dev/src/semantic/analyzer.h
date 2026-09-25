@@ -538,6 +538,7 @@ private:
     std::uint32_t constant_query_object(QueryId source);
     std::uint32_t constant_node_object(NodeId source);
     Constant constant_node_conversion(NodeId source, Conversion conversion, ScopeId scope);
+    Constant constant_result_conversion(Constant value, const Conversion& conversion);
     std::vector<ClassFacts> class_facts;
     std::vector<MemberFacts> members;
     std::vector<BaseRelation> bases;

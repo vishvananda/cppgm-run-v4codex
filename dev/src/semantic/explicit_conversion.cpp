@@ -25,6 +25,29 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     bool cv_cast = op == KW_CONST_CAST;
     Conversion c; c.target = to; c.rank = 2; c.kind = Conversion::Kind::Explicit;
     c.constant_forbidden = op == KW_REINTERPET_CAST;
+    // Ordinary expressions and substitution queries use the same selected
+    // direct-initialization sequence, including conversion functions and
+    // reference-bound scalar temporaries ([expr.static.cast]/4).
+    bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
+    bool bit_field = field_fact(x.entity).bit_field;
+    if (ref && bit_field && (cv_cast || op == KW_REINTERPET_CAST)) return invalid();
+    if ((ref || class_value(x.type)) && !cv_cast && op != KW_REINTERPET_CAST && !fundamental(to,FT_VOID)) {
+        Expression value = x;
+        if (ref && bit_field && target.kind == TypeKind::RRef) {
+            value.category = ValueCategory::Prvalue; value.entity = 0;
+        }
+        Conversion selected = standard_conversion(value,to,operand);
+        if (!selected.valid() && class_value(value.type))
+            selected = conversion_function_value(value,to,true);
+        bool related = ref && (types.unqualified(value.type) == types.unqualified(target.child) ||
+            derived_from(value.type,target.child) || derived_from(target.child,value.type));
+        if (ref && !related && !selected.valid()) selected = conversion_value(value,to,true,operand);
+        if (selected.valid() && (selected.kind == Conversion::Kind::User || (ref && (!related || bit_field)))) {
+            if (bit_field && ref) selected.temporary = true;
+            return selected;
+        }
+        if (ref && bit_field) return invalid();
+    }
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
         unsigned added = 0;
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);

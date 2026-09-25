@@ -65,7 +65,7 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
         auto object = constant_query_object(source);
         object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);
         if (!object || members[entities[c.function].member_info].virtual_member) return Constant();
-        return convert(execute_constant(c.function,{},object),c.target,true);
+        return constant_result_conversion(execute_constant(c.function,{},object),user_conversions[c.materialization].result);
     }
     if (c.kind == Conversion::Kind::Construction) {
         auto material = conversion_objects[c.materialization];
@@ -77,6 +77,11 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
     auto t = types[c.target]; auto from = query_fact(source).expression.type;
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef ||
         (t.kind == TypeKind::Pointer && (types[from].kind == TypeKind::Array || types[from].kind == TypeKind::Function))) {
+        if (c.temporary) {
+            auto scalar = c; scalar.target = t.child; scalar.reference = scalar.temporary = false;
+            auto value = constant_query_conversion(source,scalar);
+            return value.valid ? Constant(c.target,constant_storage_address(t.child,value)) : Constant();
+        }
         auto address = constant_query_object(source);
         if (t.kind == TypeKind::Pointer && types[from].kind == TypeKind::Array) address = constant_subobject(address,t.child,0);
         if (class_value(t.child)) address = constant_base_address(address,t.child);

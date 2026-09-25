@@ -288,18 +288,6 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         record_object(r,0,0,0);
         return r;
     }
-    if (!cv_cast && op != KW_REINTERPET_CAST && !fundamental(to,FT_VOID)) {
-        Conversion selected = standard_conversion(x,to,operand);
-        if (!selected.valid() && class_value(x.type)) selected = conversion_function(operand,to,true);
-        bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
-        bool related = ref && (types.unqualified(x.type) == types.unqualified(target.child) || derived_from(x.type,target.child) || derived_from(target.child,x.type));
-        if (ref && !related && !selected.valid()) selected = conversion(operand,to);
-        if (selected.valid() && (selected.kind == Conversion::Kind::User || (ref && !related))) {
-            publish(selected);
-            if (ref) r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
-            return r;
-        }
-    }
     auto selected = explicit_builtin_conversion(x,to,cstyle ? OP_LPAREN : op,s,operand);
     if (!selected.valid()) throw std::runtime_error("invalid explicit cast");
     if (selected.reference) r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
