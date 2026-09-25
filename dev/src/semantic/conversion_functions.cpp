@@ -194,6 +194,10 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c, ConversionUse us
     check_access(c.function,facts[n].scope,entities[types[source].entity].scope,source);
     demand_member(c.function);
     TypeId returned = types[entities[c.function].type].child;
+    // The O0 result proof is useful only at materialized conversion uses.
+    // Explicit-only calls and address uses retain their ordinary boundary
+    // without allocating a result summary or deferred emission record.
+    if (integral(returned) || floating_type(returned)) conversion_result_requests.put(c.function,1);
     Conversion second = user_conversions[c.materialization].result;
     if (second.function) {
         if (deleted_transfer(second.function)) throw std::runtime_error("deleted conversion result transfer");

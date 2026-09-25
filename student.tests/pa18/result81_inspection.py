@@ -17,6 +17,10 @@ for n in (1,600,2400):
  assert stats['semantic_conversion_result_work']==n,stats
  assert len([l for l in text.splitlines() if l.startswith('function ')])==n+1
  assert stats['instructions']<=4*n+25
+# Explicit-only uses never request a summary or change their emission order.
+text,stats=run('explicit-only','struct X{static const int value=7;operator int(){return value;}};int main(){X x;return x.operator int()!=7;}')
+assert stats['semantic_conversion_result_work']==0
+assert len([l for l in text.splitlines() if l.startswith('function ')])==2
 # Actual use requires emission, while summary-only use leaves no unused body.
 for direct in (False,True):
  source='struct X{static const int value=7;operator int(){return value;}};int main(){X x;int n=x;return n!=7'+('||x.operator int()!=7' if direct else '')+';}'

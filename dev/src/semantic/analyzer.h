@@ -160,7 +160,7 @@ public:
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
     const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
 private:
-    Index conversion_results;
+    Index conversion_results, conversion_result_requests;
     std::size_t conversion_result_work = 0;
     void prepare_conversion_result(EntityId e);
     FactState completion_state = FactState::NotStarted;

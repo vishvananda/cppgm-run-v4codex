@@ -5,6 +5,7 @@ void Analyzer::prepare_conversion_result(EntityId e)
     auto entity = entities[e];
     if (!entity.member_info || !members[entity.member_info].conversion_target ||
         members[entity.member_info].virtual_member || entity.body_state != FactState::Success) return;
+    if (!conversion_result_requests.get(e)) return;
     auto target = types[entity.type].child;
     if (!integral(target) && !floating_type(target)) return;
     // O0's named-constant forwarding rule consumes an already established

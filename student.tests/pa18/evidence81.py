@@ -29,7 +29,7 @@ traces={}
 for name in ('signature79','scalar80','result81'):
  source=root/'student.tests/pa18'/(name+'_trace.cpp')
  traces[name]=dict(source=source.read_text(),source_sha256=sha(source),lowir_sha256=sha(v/(name+'.lowir')),native_sha256=sha(v/(name+'.exe')),commands={k:c for k,c in checks.items() if k.startswith(name+'-')})
-inspection=read(v/'result81_inspection/results.json');assert len(inspection)==9 and all(r['native_exit']==0 for r in inspection)
+inspection=read(v/'result81_inspection/results.json');assert len(inspection)==10 and all(r['native_exit']==0 for r in inspection)
 for family in ('runtime-named-result','runtime-known-branch'):
  w=perf['workloads'][family];a,b=w['outputs']
  assert b['native']['payload_bytes']<a['native']['payload_bytes']
@@ -39,7 +39,7 @@ assert 'Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.' in plan
 assert 'Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.' in plan
 result=dict(entry_commit='6924787714fac6bdeb0b3df29df49bb7cbe5fa7e',implementation_commits=['7b8c98a6','4ab09a9b'],current_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(cc),
  checks=checks,stage_progress=progress,personal_control_count=total,controls=controls,entry_controls=entry,inspection=inspection,traces=traces,
- performance=dict(path=str(perfpath),sha256=sha(perfpath)),
+ performance=dict(path=str(perfpath),sha256=sha(perfpath)),intermediate_performance=dict(path='student.tests/pa18/loop81-performance-before-demand.json',sha256=sha(root/'student.tests/pa18/loop81-performance-before-demand.json'),explanation='An initial 1.6% paired compiler overhead on explicit-only conversions motivated request-driven summaries. Final explicit-only LowIR and native bytes match entry; all intermediate measurements and checks are preserved.'),
  boundary='Completed named scalar return summaries through implicit conversions, conditional values/lifetimes and retained explicit/address function uses. Qualified conversion-address lookup and canonical class-alias member pointer ownership are repaired. Remaining 24 course failures require array materialization, class-result ABI/emission and unrelated scalar representation owners. No reference or comparison changes.',
  independent_review='Prior handoffs 79/80 plus summary proof eligibility and validity, selected-branch cleanup, emission roots/address retention and qualified conversion lookup. These review obligations remain distinct from known unfinished implementation.')
-out.write_text(json.dumps(result,indent=2)+'\n');print('Evidence verified: 396/420, prior 2609/2609, file audit,',total,'controls, 9 inspection programs, unchanged fixtures and frozen performance.')
+out.write_text(json.dumps(result,indent=2)+'\n');print('Evidence verified: 396/420, prior 2609/2609, file audit,',total,'controls, 10 inspection programs, unchanged fixtures and frozen performance.')

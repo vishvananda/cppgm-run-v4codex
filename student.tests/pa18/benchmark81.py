@@ -44,13 +44,14 @@ for n in (600,2400):
  source='template<int N>struct V{static const int value=N;operator int()const{return value;}};'+''.join(f'int f{i}(){{V<{i}>v;return v;}}' for i in range(n))+'int main(){return f0()!=0||f'+str(n-1)+'()!='+str(n-1)+';}'
  name='named-result-'+str(n);changed.add(name);corpus.append((name,source,True,False))
  source='template<int N>struct V{static const int value=N;operator int()const{return value;}};'+''.join(f'int f{i}(){{V<{i}>v;return v.operator int();}}' for i in range(n))+'int main(){return f0()!=0||f'+str(n-1)+'()!='+str(n-1)+';}'
- name='retained-result-'+str(n);changed.add(name);corpus.append((name,source,True,False))
+ name='retained-result-'+str(n);corpus.append((name,source,True,False))
 for name,step in [('runtime-named-result','int v=x;return n+v;'),('runtime-known-branch','return x?n+7:n+9;'),('runtime-retained-result','return n+x.operator int();')]:
  n=24000000;expected=((n//1024)*sum(range(7,1031))+sum(range(7,7+n%1024)))%65536
  result_type='bool' if name=='runtime-known-branch' else 'int'
  value='true' if result_type=='bool' else '7'
  source=f'struct X{{static const {result_type} value={value};operator {result_type}()const{{return value;}}}};int step(X&x,int n){{'+step+'}int main(){X x;'+f'volatile int n={n};int s=0;for(int i=0;i<n;++i){{s=(s+step(x,i&1023))&65535;}}return s!={expected};}}'
- changed.add(name);corpus.append((name,source,True,True))
+ if name!='runtime-retained-result':changed.add(name)
+ corpus.append((name,source,True,True))
 if len(sys.argv)>5:corpus=[x for x in corpus if x[0].startswith(sys.argv[5])]
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
 empty=WORK/'empty.cpp';empty.write_text('int main(){}')
