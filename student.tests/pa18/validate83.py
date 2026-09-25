@@ -17,7 +17,7 @@ check('file-audit',['perl','scripts/cppgm_file_audit.pl','--stage','pa18','--pat
 for script in ('validate73_controls','audit74_controls','list75_controls','inherit76_controls','nested77_controls','lookup77_controls','audit78_controls','audit78_declarations','syntax79_controls','signature79_controls','course79','scalar80_controls','result81_controls','audit82_controls','array83_controls','result81_inspection','list75_scaling','inherit76_scaling','nested77_scaling','list75_course','inherit76_course'):
  check(script,['python3',root/'student.tests/pa18'/(script+'.py'),cc,w/script])
 check('abi',['python3',root/'student.tests/pa18/list75_abi.py',root/'dev/abimangle','/tmp/pa18-loop75/check-api',w/'list75_controls',w/'abi'])
-for name in ('signature79','scalar80','result81','audit82'):
+for name in ('signature79','scalar80','result81','audit82','array83'):
  check(name+'-trace',[cc,'--emit-lowir','-O0','--validate-lowir','--stats','-o',w/(name+'.lowir'),root/'student.tests/pa18'/(name+'_trace.cpp')])
  check(name+'-backend',[root/'dev/lowir2native-ref','-O0','-o',w/(name+'.exe'),w/(name+'.lowir')])
  check(name+'-execution',[w/(name+'.exe')])
