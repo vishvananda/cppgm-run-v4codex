@@ -2,10 +2,19 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.
-Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 78 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 79 in progress**.
 Reviewed `8dc4636d` → entry `0ed4fe5f` → code `82fca940`, every commit and the
 combined changes across handoffs 75–77. [Audit](audit.md),
 [evidence](../student.tests/pa18/loop78-evidence.json); previous audit in [74](audit74.md).
+
+Implementation 79 entry: `ef0e43c0f1c1792590ca3e21b49b3e6a82bbd5f3`, **388/420**.
+Start with source-signature/template-argument ownership: retained declarator and
+argument syntax → canonical signature/substitution facts → specialization and
+ordinary lowering. Resolve related declaration, candidate, ABI and execution
+consumers together. Work must track parsed regions, argument counts and indexed
+candidates, without grammar replay or text-based identity. Validate focused
+positive/rejection controls, all inherited controls, course progress, prior stages
+and file audit; freeze entry/final compiler and equivalent performance workloads.
 
 ## Design/spec alignment and evidence
 
