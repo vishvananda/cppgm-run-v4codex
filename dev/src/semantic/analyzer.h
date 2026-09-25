@@ -895,7 +895,7 @@ private:
     Index template_class_patterns, template_class_contexts;
     std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
     std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);
-    bool valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
+    bool valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s, bool ellipsis_query = false);
     void check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
     Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);

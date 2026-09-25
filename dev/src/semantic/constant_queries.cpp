@@ -68,11 +68,22 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
         return constant_result_conversion(execute_constant(c.function,{},object),c);
     }
     if (c.kind == Conversion::Kind::Construction) {
+        if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
         auto material = conversion_objects[c.materialization];
         auto call = material.call;
         if (call.argument_count != 1) return Constant();
         auto v = constant_query_conversion(source,conversions[call.conversions]);
-        return v.valid ? constant_construct(material.constructor,{v}) : Constant();
+        if (!v.valid) return Constant();
+        std::vector<Constant> args{v};
+        auto f = types[entities[material.constructor].type];
+        for (unsigned i = 1; c.ellipsis_object && i < f.count; ++i) {
+            Conversion argument;
+            auto n = default_argument(material.constructor,i,&argument,DefaultReason::Recipe);
+            auto value = constant_node_conversion(n,argument,facts[n].scope);
+            if (!value.valid) return Constant();
+            args.push_back(value);
+        }
+        return constant_construct(material.constructor,args);
     }
     auto t = types[c.target]; auto from = query_fact(source).expression.type;
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef ||

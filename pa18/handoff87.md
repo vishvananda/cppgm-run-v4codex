@@ -18,7 +18,11 @@ the class copy for an unevaluated operand: a missing/deleted/inaccessible copy
 does not discard its ellipsis candidate during a type query. Evaluated use still
 diagnoses the invalid transfer; constant execution cannot accept it. Exception
 queries retain potential transfer effects rather than treating an unavailable
-evaluated transfer as proven nonthrowing. These facts are copied with the recipe,
+evaluated transfer as proven nonthrowing. Query recipes retain the source binding
+but defer copy-constructor defaults until exception-effect or constant/evaluated
+demand. Concrete `sizeof` operands use the same rule as retained type queries;
+constant evaluation completes the recipe and enforces literal-type lifetime
+requirements. These facts are copied with the recipe,
 not inferred again in lowering. Scalar default promotions are unchanged.
 
 The LowIR variadic suffix accepts scalar lanes. A class value therefore uses a

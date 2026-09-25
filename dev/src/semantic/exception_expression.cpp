@@ -29,6 +29,14 @@ bool Analyzer::conversion_nonthrowing(Conversion c)
             auto argument = conversions[call.conversions+i];
             if (!conversion_nonthrowing(argument)) return false;
         }
+        if (c.ellipsis_object) {
+            auto f = types[entities[function].type];
+            for (unsigned i = call.argument_count; i < f.count; ++i) {
+                Conversion argument;
+                auto node = default_argument(function,i,&argument,DefaultReason::Recipe);
+                if (!expression_nonthrowing(node) || !conversion_nonthrowing(argument)) return false;
+            }
+        }
     }
     if (c.kind == Conversion::Kind::List || c.kind == Conversion::Kind::ListPlan || c.kind == Conversion::Kind::QueryList) {
         auto plan = c.kind == Conversion::Kind::List ? list_objects[c.materialization].plan : c.materialization;

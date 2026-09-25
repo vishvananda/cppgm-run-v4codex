@@ -53,6 +53,9 @@ runner.GOOD.update({
  'ellipsis_query_sfinae':'struct A{A(const A&)=delete;};int f(...)noexcept;template<class T>auto test(T*p)->decltype(f(*p),char()){return 1;}int test(...){return 2;}int main(){return test(static_cast<A*>(0))!=1;}',
  'ellipsis_query_volatile':'struct A{};template<class T>T&&declval();long f(...);static_assert(sizeof(f(declval<volatile A&>()))==sizeof(long),"unevaluated ellipsis");int main(){}',
  'ellipsis_query_deleted':'struct A{A(const A&)=delete;};template<class T>T&&declval();long f(...);static_assert(sizeof(f(declval<A&>()))==sizeof(long),"unevaluated ellipsis");int main(){}',
+ 'ellipsis_query_dormant_default':'template<class T>struct A{A(const A&,int=sizeof(typename T::missing))noexcept;};template<class T>T&&declval();long f(...);static_assert(sizeof(f(declval<A<int>&>()))==sizeof(long),"no unevaluated copy defaults");int main(){}',
+ 'ellipsis_constant_default':'struct A{int n;constexpr A(int x):n(x){}constexpr A(const A&a,int x=3):n(a.n+x){}};constexpr A a(7);constexpr int f(...){return 1;}static_assert(f(a)==1,"demand constant copy default");int main(){return f(a)!=1;}',
+ 'ellipsis_constant_query':'struct A{int n;};constexpr A a={3};constexpr int f(...){return 7;}template<int N=f(a)>struct V{static const int n=N;};int main(){return V<>::n!=7;}',
 })
 # Native catch execution belongs to PA21; preserve the exploratory inputs and
 # their failed observations without claiming that the PA18 surface implements it.

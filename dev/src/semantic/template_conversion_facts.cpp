@@ -5,10 +5,11 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
 {
     if (!valid_fixed_conversion(source,n,c,s)) throw std::runtime_error("invalid fixed call argument");
 }
-bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
+bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s, bool ellipsis_query)
 {
     if (!c.valid()) return false;
-    if (c.ellipsis_object && !n && !c.empty_copy &&
+    ellipsis_query |= !n;
+    if (c.ellipsis_object && ellipsis_query && !c.empty_copy &&
         (!c.function || deleted_transfer(c.function) || !accessible(c.function,s,entities[c.function].owner) ||
         !default_destruction_valid(value_type(c.target),s))) {
         // An unevaluated lvalue-to-rvalue conversion does not copy its class
@@ -37,6 +38,10 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
         auto f = types[entities[c.function].type];
         std::vector<NodeId> args; std::vector<Conversion> chosen;
         for (unsigned i = 0; i < f.count; ++i) {
+            // A class ellipsis type query does not perform its lvalue-to-rvalue
+            // copy. Retain the selected source binding; default arguments are
+            // demanded only by hypothetical effects or actual evaluation.
+            if (c.ellipsis_object && ellipsis_query && i) break;
             Conversion argument;
             auto a = i ? default_argument(c.function,i,&argument,DefaultReason::Recipe) : n;
             if (!i) {

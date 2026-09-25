@@ -281,6 +281,12 @@ void Analyzer::use_selected_function(EntityId e, bool direct)
 }
 void Analyzer::apply_conversion(NodeId n, Conversion& c)
 {
+    if (c.ellipsis_object && unevaluated_depth && unevaluated_depth != body_evaluation_depth &&
+        (!active_default_fact || unevaluated_depth > 1)) {
+        if (!valid_fixed_conversion(expressions[n],n,c,facts[n].scope,true))
+            throw std::runtime_error("invalid unevaluated ellipsis argument");
+        return;
+    }
     if (c.ellipsis_object && !c.empty_copy && c.kind != Conversion::Kind::Construction)
         throw std::runtime_error("class ellipsis argument has no value transfer");
     if (n && c.reference && !c.temporary) observe_scalar(n);

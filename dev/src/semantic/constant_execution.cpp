@@ -261,10 +261,19 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return constant_result_conversion(execute_constant(c.function,{},object),c);
     }
     if (c.kind == Conversion::Kind::Construction) {
+        if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
         auto material = conversion_objects[c.materialization];
         auto call = material.call; std::vector<Constant> args;
         for (unsigned i = 0; i < call.argument_count; ++i) {
             auto value = constant_node_conversion(call_argument(call,i),conversions[call.conversions+i],s);
+            if (!value.valid) return Constant();
+            args.push_back(value);
+        }
+        auto f = types[entities[material.constructor].type];
+        for (unsigned i = call.argument_count; c.ellipsis_object && i < f.count; ++i) {
+            Conversion argument;
+            auto node = default_argument(material.constructor,i,&argument,DefaultReason::Recipe);
+            auto value = constant_node_conversion(node,argument,facts[node].scope);
             if (!value.valid) return Constant();
             args.push_back(value);
         }
