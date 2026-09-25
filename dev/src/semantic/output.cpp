@@ -277,6 +277,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_friend_processed\":" << friend_definition_cursor
         << ",\"semantic_demand_processed\":" << demand_cursor
         << ",\"semantic_expression_work\":" << expression_work
+        << ",\"semantic_discard_selections\":" << discard_selections
+        << ",\"semantic_discard_recipe_uses\":" << discard_recipe_uses
+        << ",\"semantic_discard_materializations\":" << discard_materializations
         << ",\"semantic_candidate_work\":" << candidate_work
         << ",\"semantic_conversion_work\":" << conversion_work
         << ",\"semantic_conversions\":" << conversions.size() - 1

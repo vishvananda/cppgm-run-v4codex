@@ -34,6 +34,7 @@ public:
     std::vector<ArrowStep> arrow_steps;
     std::vector<ArrowChain> arrow_chains = std::vector<ArrowChain>(1);
     const Conversion& conversion_fact(std::uint32_t n) const { return conversions[n]; }
+    const Conversion& discarded_conversion(NodeId n) const { return conversions[discarded_conversions.get(n)]; }
     EntityId specialization_pattern(EntityId e) const { return specializations[entities[e].specialization].pattern; }
     TypeArguments specialization_arguments(EntityId e) const { return argument_packs[specializations[entities[e].specialization].arguments]; }
     ArgumentId template_argument(std::uint32_t n) const { return argument_types[n]; }
@@ -980,6 +981,12 @@ private:
     std::size_t statement_conversion_work = 0, statement_conversion_uses = 0;
     Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);
+    void prepare_discarded(NodeId n);
+    bool valid_discarded(Expression source, NodeId n, ScopeId s, Conversion& selected);
+    void query_discarded(const TypeQuery& query, const std::vector<TypeQueryFact>& children, TypeQueryFact& result);
+    void prepare_expression_discard(NodeId n);
+    Index discarded_conversions;
+    std::size_t discard_selections = 0, discard_recipe_uses = 0, discard_materializations = 0;
     Expression resolve_expression(NodeId n, ScopeId s);
     bool invoke_expression(NodeId n, ScopeId s);
     Expression callable_expression(NodeId n, ScopeId s, NodeId callee, std::vector<NodeId> args, Expression fn);

@@ -31,14 +31,14 @@ void ExpressionStore::set(NodeId n, Expression value)
     bool same = value.type == prior.type && value.conversions == prior.conversions && value.count == prior.count &&
         value.arguments == prior.arguments && value.argument_count == prior.argument_count &&
         value.category == prior.category && value.form == prior.form && value.inputs == prior.inputs &&
-        value.null_pointer_constant == prior.null_pointer_constant;
+        value.null_pointer_constant == prior.null_pointer_constant && value.discarded_form == prior.discarded_form;
     use.entity = value.entity; use.object = value.object_use; use.incoming = value.incoming;
     use.state = unsigned(value.ready) | (unsigned(value.evaluated)<<1);
     if (same) return;
     Properties facts; facts.type = value.type; facts.conversions = value.conversions; facts.count = value.count;
     facts.arguments = value.arguments; facts.argument_count = value.argument_count;
     facts.category = value.category; facts.form = value.form; facts.inputs = value.inputs;
-    facts.null_pointer_constant = value.null_pointer_constant;
+    facts.null_pointer_constant = value.null_pointer_constant; facts.discarded_form = value.discarded_form;
     use.fact = values.size(); values.push_back(facts); ++changed;
 }
 void ExpressionStore::inherit_conversions(NodeId n, NodeId source, std::uint32_t conversions)

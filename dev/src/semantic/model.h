@@ -334,7 +334,8 @@ struct Expression {
     bool ready : 1;
     bool evaluated : 1;
     bool null_pointer_constant : 1;
-    Expression() : ready(false), evaluated(false), null_pointer_constant(false) {}
+    bool discarded_form : 1; // Built-in forms eligible for [expr]/11 volatile reads.
+    Expression() : ready(false), evaluated(false), null_pointer_constant(false), discarded_form(false) {}
 };
 struct BaseAdjustment {
     std::uint64_t offset = 0, total = 0;

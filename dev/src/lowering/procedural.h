@@ -69,7 +69,6 @@ class Procedural {
     std::vector<StringRecord> string_records = std::vector<StringRecord>(1);
     std::vector<BlockId> labels;
     std::vector<unsigned char> control_entries;
-    std::vector<unsigned char> discard_accesses;
     std::vector<SignatureId> indirect_signatures;
     std::vector<Operand> call_work;
     std::vector<EntityId> definitions, global_initializers;

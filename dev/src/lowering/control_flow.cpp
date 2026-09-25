@@ -4,26 +4,20 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 bool Procedural::discarded_access(NodeId n)
 {
-    // Immutable parsed forms: memoize once per NodeId, including negative
-    // results, so nested discarded conditionals do not rescan their subtrees.
-    if (discard_accesses.empty()) discard_accesses.resize(ast.nodes.size());
-    if (discard_accesses[n]) return discard_accesses[n] == 2;
     ++discard_work;
-    Kind k = ast[n].kind;
-    bool access;
-    if (k == Kind::Conditional) {
-        NodeId b = ast[ast[n].first].next;
-        access = discarded_access(b) && discarded_access(ast[b].next);
-    } else if (k == Kind::Parenthesized) access = discarded_access(ast[n].first);
-    else if (k == Kind::Binary && ast[n].op == OP_COMMA) access = discarded_access(ast[ast[n].first].next);
-    else access = k == Kind::IdExpression || k == Kind::Member || k == Kind::Subscript ||
-        (k == Kind::Unary && ast[n].op == OP_STAR);
-    discard_accesses[n] = access ? 2 : 1;
-    return access;
+    auto fact = sem.expression_fact(n);
+    return fact.discarded_form && fact.category == ValueCategory::Lvalue;
 }
 void Procedural::discard(NodeId n, bool access)
 {
     if (!n) return;
+    const auto& discarded = sem.discarded_conversion(n);
+    if (access && discarded.valid()) {
+        auto temporary = sem.converted_temporary(discarded);
+        auto destination = class_address(temporary,sem.entities[temporary].type);
+        construct_value(n,discarded,destination);
+        activate_temporary(temporary); return;
+    }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
     if (sem.expression_fact(n).form == semantic::ExpressionForm::OperatorCall) { expression(n); return; }
     // A discarded address still evaluates its source, but a plain name or

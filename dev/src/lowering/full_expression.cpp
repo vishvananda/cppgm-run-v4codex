@@ -35,6 +35,8 @@ bool Procedural::unwind_expression(NodeId n)
         }
         if (auto call = conversion_call(c)) arguments(*call);
     };
+    const auto& discarded = sem.discarded_conversion(n);
+    if (discarded.valid()) conversion(discarded);
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));
     if (ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Sizeof && ast[n].kind != Kind::TypeTrait)

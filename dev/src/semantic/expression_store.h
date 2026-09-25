@@ -10,7 +10,9 @@ class ExpressionStore {
         ValueCategory category = ValueCategory::Prvalue;
         ExpressionForm form = ExpressionForm::Ordinary;
         CallInputs inputs = CallInputs::Concrete;
-        bool null_pointer_constant = false;
+        bool null_pointer_constant : 1;
+        bool discarded_form : 1;
+        Properties() : null_pointer_constant(false), discarded_form(false) {}
     };
     struct Use {
         std::uint32_t fact = 0, incoming = 0;
@@ -29,7 +31,7 @@ public:
         value.type = facts.type; value.conversions = facts.conversions; value.count = facts.count;
         value.arguments = facts.arguments; value.argument_count = facts.argument_count;
         value.category = facts.category; value.form = facts.form; value.inputs = facts.inputs;
-        value.null_pointer_constant = facts.null_pointer_constant;
+        value.null_pointer_constant = facts.null_pointer_constant; value.discarded_form = facts.discarded_form;
         if (value.inputs == CallInputs::Source) { value.inputs = CallInputs::Context; value.arguments = n; }
         value.entity = use.entity; value.object_use = use.object; value.incoming = use.incoming;
         value.ready = use.state&1; value.evaluated = use.state&2; return value;
