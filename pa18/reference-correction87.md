@@ -7,6 +7,10 @@ reconstructs three revised output oracles **from entry commit `01b47c20` only**;
 it never reads student LowIR. [The revision manifest](../student.tests/pa18/reference87-revisions.json)
 records original/revised hashes. Inputs, expected success, all other fixtures,
 metadata, evaluation order and comparison rules remain unchanged.
+[reference87_chain.py](../student.tests/pa18/reference87_chain.py) executes the
+historical proof 84 unchanged in a minimal snapshot of the entry references,
+then checks its exact composition with this repair. Thus the shared friend
+oracle retains all earlier required empty-tag zeroing.
 
 ## Defect and reducer
 

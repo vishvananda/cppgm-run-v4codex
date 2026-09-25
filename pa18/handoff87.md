@@ -1,16 +1,15 @@
 # PA18 class call boundaries, implementation 87
 
 Entry `01b47c20b41f68d3142df6a8691fc905c20341a8`: 417/420.
-Stage/review markers in [plan](plan.md) are preserved. This document is updated
-with final validation and performance before handoff; independent stage audit
-remains separate.
+Final implementation `7000a4de`. Stage/review markers in [plan](plan.md) are
+preserved; independent full-stage audit remains separate.
 
 ## Ownership and data flow
 
 `ellipsis_conversion_value` now selects the class transfer while overload
 resolution retains ellipsis rank even when that transfer is unavailable. Packed
 `Conversion::ellipsis_object` and `ellipsis_unavailable` facts
-keeps source type/category and the chosen constructor available to queries,
+keep source type/category and the chosen constructor available to queries,
 constant evaluation and concrete materialization. Evaluated applications create
 their own existing `ConversionObject`; fixed template recipes remain shared and
 unevaluated queries do not demand bodies. N3485 §4.1 [conv.lval]/2 suppresses
@@ -54,12 +53,20 @@ member pointers. Positive zero, explicit negative zero and all other constant
 paths retain their values. This avoids using an integer operand to represent a
 floating static fact, including nested aggregate/conversion results.
 
+The `ellipsis_fixed_nontrivial` control traces the full boundary: a fixed call
+`f(a)` retains its selected copy constructor in the template's semantic recipe.
+`use<int>` and `use<long>` consume that selection with separate materializations;
+lowering constructs each private object, passes its address, then activates
+caller destruction. Native execution checks two copies and two destructions.
+The related dormant-body/default, `noexcept` and constant controls exercise the
+same recipe without confusing type, effect and evaluated demand.
+
 ## Complexity and scope
 
 One transfer selection per examined ellipsis candidate; selected recipes reuse
 the existing TU arenas and canonical class transfer/destruction facts. Each
 evaluated argument owns one materialization and visits its selected conversion
-edges. Lowering is linear in actual arguments and transfer output; a single
+edges. Lowering is linear in actual arguments and transfer output; the
 packed facts add no new graph or owning allocation. Branch analysis remains
 memoized by expression identity and omission mode. Typed floating zero uses the
 existing `(NodeId, TypeId)` static-value cache and constant interner. No textual
@@ -74,6 +81,40 @@ documents the bundle inconsistency and independently reconstructed oracle repair
 
 ## Validation and handoff
 
-Validation and frozen performance evidence are pending at this implementation
-increment. Required course sources, coverage and comparison rules are unchanged.
-The final ledger will distinguish implementation work from independent review.
+The final binary (SHA-256
+`be6a3c1b75c72e2c2606e4a6b32bd746569d0b76a218dd8f3ff1b864bcdfcb9c`)
+is bound to [the evidence manifest](../student.tests/pa18/loop87-evidence.json).
+[validate87.py](../student.tests/pa18/validate87.py) explicitly ran **61 checks**:
+
+- `make test-pa18`: **420/420**, up from **417/420**.
+- Earlier-stage report: **2609/2609**; through-PA18 report: **3029/3029**.
+- File audit: pass, with the same three substantial-header warnings.
+- Accumulated controls, scaling, inspection, ABI and eight executable traces:
+  pass. The 35 result-bearing personal suites record **1,505** passing cases;
+  the **53** new boundary cases improve **30 → 53** on identical source hashes.
+- Reference proofs 83, 85 and 87 pass; unchanged historical proof 84 and exact
+  composition with proof 87 pass. Separately, **24** final student/bundle/oracle
+  observations confirm the documented results, including original direct calls.
+- All **420** course inputs and **1,686** PA18 fixture paths are retained. Earlier
+  fixtures, required exit metadata and comparison scripts are unchanged. Only
+  the three documented result oracles change from entry.
+
+[Performance 87](performance87.md) records the final **438 observations across
+17 workloads** using frozen entry/final binaries, A/A calibration and ABBA blocks.
+Both preceding measurement runs remain: **1,314 observations** total. Compiler
+text grows **7,424 bytes (0.374%)**. Unaffected LowIR/native bytes stay identical;
+selected copies add required argument storage and work. At 600 fixed uses the
+paired compiler ratio is 1.061 (0.751–1.133), peak RSS 10,988 → 11,808 KiB and
+native payload 28,924 → 40,924 bytes. The full report preserves all workload
+latency, RSS, runtime, size, counter and spread evidence, with no speedup claim.
+No optional optimizer or new growth budget was added. PA18/O0 has no mandated
+numeric latency/RSS ceiling; inherited diagnostic targets do not add exit gates.
+
+No unfinished implementation is identified in this completed behavior group.
+Native try/catch, hosted class varargs retrieval and native optimization/debug
+remain later-stage work. **Independent whole-stage review remains required** for
+spec/architecture findings, accumulated oracle corrections (especially the
+canonical result-boundary proof) and stage-scoped performance acceptance. Those
+questions are not waived or represented as completed audit work. Stage and review
+markers remain unchanged; this committed handoff returns control to Ralph and
+does not advance to PA19.
