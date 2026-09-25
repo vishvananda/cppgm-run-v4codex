@@ -114,15 +114,15 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
             cursor = ast[source].next; return id;
         }
     }
-    if (types[t].kind == TypeKind::Array)
-        while (ast[inner].kind == Kind::Parenthesized) inner = ast[inner].first;
-    if (string_initialization(inner, t)) {
+    auto string = inner;
+    while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
+    if (string_initialization(string, t)) {
         if (braced && ast[ast[source].first].next) throw std::runtime_error("excess string initializer");
-        auto lit = ast.literals[ast[inner].literal];
+        auto lit = ast.literals[ast[string].literal];
         if (types[t].bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
-        expression(inner, s);
-        expressions.evaluated(inner,false); // Direct character initialization has no backing-array address use.
-        initializers[id].source = inner; initializers[id].kind = InitKind::String;
+        expression(string, s);
+        expressions.evaluated(string,false); // Direct character initialization has no backing-array address use.
+        initializers[id].source = string; initializers[id].kind = InitKind::String;
         cursor = ast[source].next; return id;
     }
     if (!aggregate) {

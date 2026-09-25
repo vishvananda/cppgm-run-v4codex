@@ -132,13 +132,13 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     bool grouped = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments ||
         ast[source].kind == Kind::ParenInitializer;
     auto inner = grouped ? ast[source].first : source;
-    if (types[target].kind == TypeKind::Array)
-        while (ast[inner].kind == Kind::Parenthesized) inner = ast[inner].first;
-    if (string_initialization(inner,target)) {
+    auto string = inner;
+    while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
+    if (string_initialization(string,target)) {
         if (grouped && ast[ast[source].first].next) throw std::runtime_error("excess fixed string initializer");
-        if (types[target].bound && ast.literals[ast[inner].literal].elements > types[target].bound)
+        if (types[target].bound && ast.literals[ast[string].literal].elements > types[target].bound)
             throw std::runtime_error("fixed string initializer exceeds array");
-        if (bound) *bound = ast.literals[ast[inner].literal].elements;
+        if (bound) *bound = ast.literals[ast[string].literal].elements;
         cursor = ast[source].next; return true;
     }
     if (!template_aggregate_type(target)) {

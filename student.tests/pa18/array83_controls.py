@@ -13,6 +13,8 @@ runner.GOOD={
  'unknown_parenthesized_string':'int main(){char a[]("abc");char b[]=("abc");return sizeof(a)!=4||sizeof(b)!=4||b[2]!=99;}',
  'template_parenthesized_string':'template<class T>int f(){char a[]=("abc");return sizeof(a);}int main(){return f<void>()!=4;}',
  'array_value_member':'struct X{int a[3];X():a(){}};int main(){X x;return x.a[0]||x.a[2];}',
+ 'parenthesized_scalar_clauses':'int main(){int a[]={(1),(2),(3)};return sizeof(a)!=12||a[2]!=3;}',
+ 'parenthesized_pack_clauses':'template<int...N>int f(){int a[]={(N+1)...};return sizeof(a);}int main(){return f<1,2,3>()!=12;}',
  'unknown_string_rows':'int main(){char a[][4]={"abc","de"};return sizeof(a)!=8||a[0][3]!=0||a[1][2]!=0;}',
  'unknown_wide_string':'int main(){wchar_t a[]={L"ab"};return sizeof(a)!=12||a[1]!=98||a[2]!=0;}',
  'unknown_pack':'template<int...N>int f(){int a[]={N...};return sizeof(a)/sizeof(int);}int main(){return f<3,4,5>()!=3;}',
