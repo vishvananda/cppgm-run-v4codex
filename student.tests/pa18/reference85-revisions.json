@@ -1,0 +1,25 @@
+{
+  "entry": "f953e42a875bc8f7e3b9882a324db843f0c4191a",
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "revisions": [
+    {
+      "path": "pa18/tests/general/300-boost-enable-if-type-condition-static-keyword-overload.ref",
+      "before_sha256": "71299c50f360b8394372a646f2ec74e956080eb7f20159a9835e48631b9c890c",
+      "after_sha256": "264be62b2927277aab05973c79afb5dc3f0841c80ebdb41656da6b0d944ccb1d",
+      "reason": "[temp.inst]/1,2,8,10: no definition or initializer demand for unused static member"
+    },
+    {
+      "path": "pa18/tests/general/500-source-owner-member-template-sfinae-default.ref",
+      "before_sha256": "19513ac568446f9deaaa8ae60b94122d9b0d29e62244431a65a2eec1692a9b0b",
+      "after_sha256": "8d0d9f06805b098e381bce1b0e3a4d6049125ddf0360b431c5b496a2a3d30571",
+      "reason": "[temp.inst]/1,2,8,10: no definition or initializer demand for unused static member"
+    },
+    {
+      "path": "pa18/tests/general/300-explicit-template-call-transitive-base-deduction.ref",
+      "before_sha256": "c00ac76e9ae9eb3f59dc0e6b75d1e5091c37cb2dc1fd765d932328e5015a38ab",
+      "after_sha256": "a5593b7580e5052491e9b9cbaed6c68b014c3035a5ec52cb0d9c6b7f84d731ee",
+      "reason": "[expr]/11 and [expr.static.cast]/6: void-cast reference call result has no lvalue-to-rvalue conversion"
+    }
+  ]
+}
