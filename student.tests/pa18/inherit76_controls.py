@@ -39,7 +39,23 @@ runner.GOOD={
  'default_coexists':'struct B{int n;B():n(4){}template<class T>B(T n):n(n){}};struct D:B{using B::B;};int main(){D a;D b(7);return a.n!=4||b.n!=7;}',
  'list':'struct B{int n;template<class T>B(T n):n(n){}};struct D:B{using B::B;};int main(){D a{7};D b={9};return a.n!=7||b.n!=9;}',
 }
+runner.GOOD.update({
+ 'default_local_template':'struct B{int n;template<class T>B(T,int=3):n(1){}};struct D:B{using B::B;template<class U>D(U):B(0){n=2;}};int main(){D a(7);D b(7,4);return a.n!=2||b.n!=1;}',
+ 'default_noexcept':'int def()noexcept(false){return 5;}struct B{template<class T>B(T,int=def())noexcept{}};struct D:B{using B::B;};static_assert(!noexcept(D(1))&&noexcept(D(1,2)),"");int main(){}',
+ 'default_unused':'struct B{template<class T>B(T,int=T::missing){}};struct D:B{using B::B;};int main(){D d(1,2);}',
+ 'value_trivial':'struct A{int n;};struct B{int n;template<class T>B(T a):n(a.n){}};struct D:B{using B::B;};int main(){A a={7};D d(a);return d.n!=7;}',
+ 'value_move':'int moves,copies;struct A{int n;A(int n):n(n){}A(const A&a):n(a.n){++copies;}A(A&&a):n(a.n){++moves;}};struct B{int n;template<class T>B(T a):n(a.n){}};struct D:B{using B::B;};int main(){A a(7);D d(a);return d.n!=7||copies!=1||moves!=1;}',
+ 'value_copy_fallback':'int copies;struct A{int n;A(int n):n(n){}A(const A&a):n(a.n){++copies;}};struct B{int n;template<class T>B(T a):n(a.n){}};struct D:B{using B::B;};int main(){A a(7);D d(a);return d.n!=7||copies!=2;}',
+ 'value_destructor':'int destroyed;struct A{int n;A(int n):n(n){}A(const A&a):n(a.n){}A(A&&a):n(a.n){}~A(){++destroyed;}};struct B{int n;template<class T>B(T a):n(a.n){}};struct D:B{using B::B;};int main(){{A a(7);D d(a);if(d.n!=7||destroyed!=2)return 1;}return destroyed!=3;}',
+ 'constexpr_value':'struct A{int n;constexpr A(int n):n(n){}constexpr A(const A&a):n(a.n+1){}constexpr A(A&&a):n(a.n+2){}};struct B{int n;template<class T>constexpr B(T a):n(a.n){}};struct D:B{using B::B;};constexpr A a(3);constexpr D d(a);static_assert(d.n==6,"");int main(){return d.n!=6;}',
+ 'value_move_default':'struct A{int n;A(int n):n(n){}A(const A&a):n(a.n){}A(A&&a,int k=2):n(a.n+k){}};struct B{int n;template<class T>B(T a):n(a.n){}};struct D:B{using B::B;};int main(){A a(7);D d(a);return d.n!=9;}',
+ 'copy_not_inherited':Q+'struct B{B(){}B(const B&){}};struct D:B{using B::B;};static_assert(!Has<D,B&>::value,"");int main(){D d;D e(d);}',
+ 'constexpr_chain':'struct B{int n;template<class T>constexpr B(T n):n(n){}};struct D:B{using B::B;};struct F:D{using D::D;};static_assert(F(7).n==7,"");int main(){}',
+ 'constexpr_member':'struct B{int n;template<class T>constexpr B(T n):n(n){}};struct D:B{using B::B;int m=9;};constexpr D d(7);static_assert(d.n==7&&d.m==9,"");int main(){}',
+})
 runner.BAD={
+ 'value_deleted_move':'struct A{A(){}A(const A&){}A(A&&)=delete;};struct B{template<class T>B(T){}};struct D:B{using B::B;};int main(){A a;D d(a);}',
+ 'default_used':'struct B{template<class T>B(T,int=T::missing){}};struct D:B{using B::B;};int main(){D d(1);}',
  'private':'class B{template<class T>B(T){}};struct D:B{using B::B;};int main(){D d(3);}',
  'protected':'struct B{protected:template<class T>B(T){}};struct D:B{using B::B;};int main(){D d(3);}',
  'deleted':'struct B{template<class T>B(T)=delete;};struct D:B{using B::B;};int main(){D d(3);}',

@@ -192,11 +192,34 @@ void Analyzer::constructor_actions(EntityId e)
     }
     EntityId inherited = members[m].inherited_constructor;
     if (inherited) {
+        inherited_forwarding(e);
         Type f = types[entities[e].type];
         for (unsigned j = 0; j < f.count; ++j) {
             EntityId p = make_entity(EntityKind::Parameter, scope, 0, 0);
             entities[p].type = types.parameters[f.offset+j];
             record(scope, p, 0, entities[p].type, EntityKind::Parameter);
+            inherited_arguments[members[m].inherited_arguments+j].parameter = p;
+            if (class_value(entities[p].type)) register_destruction(p);
+        }
+        auto target = types[entities[inherited].type];
+        for (unsigned j = 0; j < target.count; ++j) {
+            auto argument = inherited_arguments[members[m].inherited_arguments+j];
+            if (argument.transfer) {
+                members[entities[argument.transfer].member_info].complete_entry = true;
+                demand_member(argument.transfer);
+                auto transfer = types[entities[argument.transfer].type];
+                for (unsigned k = 1; k < transfer.count; ++k) {
+                    Conversion c; auto n = default_argument(argument.transfer,k,&c);
+                    apply_conversion(n,c);
+                    conversions[argument.transfer_defaults+k-1] = c;
+                }
+            }
+            if (argument.value) {
+                Conversion c; auto n = default_argument(inherited,j,&c);
+                apply_conversion(n,c);
+                inherited_arguments[members[m].inherited_arguments+j].conversion = conversions.size();
+                conversions.push_back(c);
+            }
         }
     }
     size(entities[cls].type);

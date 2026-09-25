@@ -181,6 +181,22 @@ bool Analyzer::default_constructor_nonthrowing(EntityId e)
         bool result = true;
         auto info = entities[cls].class_info;
         auto inherited = members[entities[e].member_info].inherited_constructor;
+        if (inherited) {
+            inherited_forwarding(e);
+            auto f = types[entities[inherited].type];
+            auto first = members[entities[e].member_info].inherited_arguments;
+            for (unsigned j = 0; j < f.count; ++j) {
+                auto a = inherited_arguments[first+j];
+                if (a.value) result &= expression_nonthrowing(a.value) && conversion_nonthrowing(conversions[a.conversion]);
+                if (a.transfer) {
+                    result &= function_nonthrowing(a.transfer);
+                    auto transfer = types[entities[a.transfer].type];
+                    for (unsigned k = 1; k < transfer.count; ++k)
+                        result &= expression_nonthrowing(default_argument_value(a.transfer,k)) &&
+                            conversion_nonthrowing(conversions[a.transfer_defaults+k-1]);
+                }
+            }
+        }
         for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
             bool inherited_base = inherited && bases[b].base == scopes[entities[inherited].owner].entity;
             result &= inherited_base ? function_nonthrowing(inherited) : subobject(entities[bases[b].base].type,0);

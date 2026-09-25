@@ -26,6 +26,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/signature_validation lowir/validator low
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction lowering/construction
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inherited_constructors
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inherited_forwarding lowering/inherited_forwarding
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_array lowering/constant_array
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/converting_constructors
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/literal_calls semantic/numeric_literal_calls semantic/literal_constants lowering/literal_calls

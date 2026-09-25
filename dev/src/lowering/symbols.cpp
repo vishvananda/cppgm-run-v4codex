@@ -418,6 +418,12 @@ void Procedural::function_body(EntityId e, bool base)
             }
         } else emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
+    if (sem.member_fact(e).inherited_constructor)
+        for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
+            auto parameter = sem.declarations[d].entity;
+            if (sem.entities[parameter].kind == semantic::EntityKind::Parameter && sem.class_value(sem.entities[parameter].type))
+                activate_temporary(parameter);
+        }
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
     else if (sem.constructor_member(e)) constructor_body(e);
     if (sem.destructor_member(e)) {

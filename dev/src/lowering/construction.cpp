@@ -103,16 +103,7 @@ void Procedural::constructor_body(EntityId e)
             } else initialize(action.initializer, action.type, at);
         }
         else if (!action.field && m.inherited_constructor && action.constructor == m.inherited_constructor) {
-            std::size_t begin = call_work.size();
-            call_work.push_back(Operand::symbol(symbol(m.inherited_constructor, true)));
-            call_work.push_back(at.operand);
-            for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
-                EntityId param = sem.declarations[d].entity;
-                if (sem.entities[param].kind != semantic::EntityKind::Parameter) continue;
-                call_work.push_back(emit(Opcode::Load, type(sem.entities[param].type), {Operand::slot(objects[param])}).operand);
-            }
-            guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
-            call_work.resize(begin);
+            inherited_call(e,at);
         }
         else { at.address = false; construct(action.constructor, 0, at, !action.field); }
         finish_full_expression(0); constructor_cleanup(action);

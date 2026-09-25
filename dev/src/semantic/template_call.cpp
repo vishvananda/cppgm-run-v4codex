@@ -290,14 +290,21 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     auto inherited = members[entities[pattern].member_info].inherited_constructor;
     if (inherited) {
         auto target = specialize(inherited,args,explicit_head);
-        if (!target) { specializations[index].declaration = FactState::Failure; return 0; }
+        if (!target) {
+            specializations[index].declaration = FactState::Failure;
+            if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
+            return 0;
+        }
         auto e = make_entity(EntityKind::Function,entities[pattern].owner,entities[pattern].name,0);
-        entities[e].type = entities[target].type;
+        auto original = types[entities[inherited].type], proxy = types[entities[pattern].type];
+        auto concrete = types[entities[target].type];
+        auto count = concrete.count - (original.count-proxy.count);
+        entities[e].type = count == concrete.count ? entities[target].type : types.function(concrete.child,
+            std::vector<TypeId>(types.parameters.begin()+concrete.offset,types.parameters.begin()+concrete.offset+count),false);
         entities[e].specialization = index;
         entities[e].inline_function = true;
         entities[e].constexpr_function = entities[target].constexpr_function;
         entities[e].access = entities[target].access;
-        entities[e].defaults = entities[target].defaults;
         if (partial) entities[e].template_info = entities[target].template_info;
         member_facts(e);
         auto source = members[entities[target].member_info];

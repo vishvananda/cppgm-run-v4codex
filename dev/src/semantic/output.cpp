@@ -228,6 +228,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_expression_variants\":" << expressions.variants
         << ",\"semantic_call_argument_edges\":" << call_arguments.size()
         << ",\"semantic_constructor_actions\":" << subobject_actions.size()
+        << ",\"semantic_inherited_arguments\":" << inherited_arguments.size()-1
         << ",\"semantic_conversion_objects\":" << conversion_objects.size()-1
         << ",\"semantic_user_conversions\":" << user_conversions.size()-1
         << ",\"semantic_list_plans\":" << list_plans.size()-1

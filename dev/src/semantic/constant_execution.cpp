@@ -105,9 +105,27 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             bool valid = true;
             for (unsigned j = 0; valid && j < member.action_count; ++j) {
                 auto action = subobject_actions[member.action_begin+j];
-                auto v = member.inherited_constructor && action.constructor == member.inherited_constructor ?
-                    constant_construct(action.constructor,args) :
-                    constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
+                Constant v;
+                if (member.inherited_constructor && action.constructor == member.inherited_constructor) {
+                    std::vector<Constant> forwarded;
+                    auto f = types[entities[action.constructor].type];
+                    for (unsigned k = 0; k < f.count; ++k) {
+                        auto a = inherited_arguments[member.inherited_arguments+k];
+                        auto c = conversions[a.conversion];
+                        auto value = a.value ? constant_node_conversion(a.value,c,entities[e].scope) :
+                            k < args.size() ? args[k] : Constant();
+                        if (a.transfer) {
+                            auto transfer = types[entities[a.transfer].type];
+                            std::vector<Constant> values{Constant(types.parameters[transfer.offset],constant_entity_address(a.parameter))};
+                            for (unsigned n = 1; n < transfer.count; ++n)
+                                values.push_back(constant_node_conversion(default_argument_value(a.transfer,n),
+                                    conversions[a.transfer_defaults+n-1],entities[e].scope));
+                            value = constant_construct(a.transfer,values);
+                        }
+                        forwarded.push_back(value);
+                    }
+                    v = constant_construct(action.constructor,forwarded);
+                } else v = constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
                 if (!v.valid) { valid = false; break; }
                 if (member.delegated_constructor) { value = v; break; }
                 EvaluatedPart p; p.selector = action.field ? action.field : (0x80000000U | types[action.type].entity);

@@ -101,6 +101,7 @@ public:
     EntityId static_vptr(EntityId e) const { return static_vptr_objects.get(e); }
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
     std::vector<SubobjectAction> subobject_actions;
+    std::vector<InheritedArgument> inherited_arguments = std::vector<InheritedArgument>(1);
     bool synthetic_member(EntityId e) const;
     bool transfer_member(EntityId e) const;
     bool trivial_transfer(EntityId e) const;
@@ -932,6 +933,7 @@ private:
     void constructor_actions(EntityId e);
     bool inherit_using(NodeId name, ScopeId scope);
     void inherited_constructors(EntityId cls);
+    void inherited_forwarding(EntityId e);
     bool base_initialization = false;
     bool class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode);
     void default_initialize(EntityId object, NodeId declarator = 0);

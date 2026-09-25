@@ -203,6 +203,8 @@ struct MemberFacts {
     std::uint32_t explicit_condition = 0; // Canonical QueryId.
     EntityId next_conversion = 0;
     EntityId inherited_constructor = 0;
+    std::uint32_t inherited_arguments = 0;
+    FactState inherited_state = FactState::NotStarted;
     EntityId delegated_constructor = 0;
     NodeId body = 0, declarator = 0, source = 0;
     ScopeId body_environment = 0;
@@ -285,6 +287,11 @@ struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access:
     BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public, bool v = false) : base(b), next(n), access(a), virtual_base(v) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
+struct InheritedArgument {
+    EntityId parameter = 0, transfer = 0;
+    NodeId value = 0;
+    std::uint32_t conversion = 0, transfer_defaults = 0;
+};
 struct DestructionAction { EntityId field; TypeId type; EntityId destructor; };
 struct LifetimeState { EntityId object = 0, destructor = 0; std::uint32_t tail = 0, depth = 0; };
 struct LifetimeUse { std::uint32_t entry = 0, exit = 0, target = 0; NodeId context = 0; };
