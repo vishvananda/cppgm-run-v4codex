@@ -40,6 +40,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
+    case Kind::BracedInit:
+        q.kind = QueryKind::List; q.context = s;
+        for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
+        break;
     case Kind::Lambda:
         // An unevaluated lambda is forbidden in C++11. The source binder may
         // still ask for a dependent initializer's type before instantiation.
@@ -66,6 +70,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     }
     case Kind::IdExpression: {
         auto name = node.detail;
+        if (callee && node.op == KW_TYPENAME) {
+            q.kind = QueryKind::TypeValue; q.type = type_name(name,s); break;
+        }
         if (callee && (fundamental_cast_type(node.op) || ast[name].kind == Kind::TypeId)) {
             q.kind = QueryKind::TypeValue; q.type = fundamental_cast_type(node.op);
             if (!q.type) q.type = type_id(name,s);
@@ -476,6 +483,10 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::List:
+        x.form = ExpressionForm::InitializerList; x.inputs = CallInputs::Query;
+        x.arguments = id; x.argument_count = q.count; break;
+    case QueryKind::ListInitialization: r = query_list_initialization(id); break;
     case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
@@ -536,6 +547,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             r.selected = c.function; x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
         } else if (q.op != TOK_INVALID) {
             auto c = explicit_builtin_conversion(children[0].expression,q.type,q.op,q.context);
+            if (!c.valid()) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
             if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))

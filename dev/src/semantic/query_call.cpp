@@ -11,7 +11,11 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
         q.context = scopes[q.context].parent;
     if (invoke_expression(n,s)) q.name = invoke_builtin;
     else children.push_back(expression_query(first,s,true));
-    for (auto a = ast[ast[first].next].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+    auto list = ast[first].next;
+    if (ast[list].kind == Kind::BracedInit) {
+        q.op = OP_LBRACE;
+        children.push_back(expression_query(list,s));
+    } else for (auto a = ast[list].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
     if (!children.empty()) {
         auto callee = type_queries[children[0]];
         while (callee.kind == QueryKind::Parenthesized) callee = type_queries[query_edges[callee.offset]];
@@ -59,6 +63,16 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     ValueCategory category = ValueCategory::Lvalue;
     if (callee.kind == QueryKind::TypeValue) {
         auto constructed = fn.type;
+        if (q.op == OP_LBRACE) {
+            auto c = query_list_conversion(query_edges[q.offset+1],constructed,true);
+            if (!c.valid() || !valid_query_list(c.materialization))
+                return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            TypeQueryFact result; result.expression.type = value_type(constructed);
+            result.expression.category = types[constructed].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+                types[constructed].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+            result.expression.conversions = conversions.size(); result.expression.count = 1;
+            conversions.push_back(c); result.initialization = c.materialization; return result;
+        }
         if (class_value(constructed)) {
             complete_class(types[constructed].entity);
             if (!entities[types[constructed].entity].complete || abstract_value(constructed))

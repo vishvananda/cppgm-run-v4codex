@@ -146,6 +146,8 @@ Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 }
 Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, NodeId n)
 {
+    if (source.form == ExpressionForm::InitializerList && source.inputs == CallInputs::Query)
+        return query_list_conversion(source.arguments,to);
     Conversion result = standard_conversion(source,to,n);
     if (result.valid() || !user) return result;
     bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;

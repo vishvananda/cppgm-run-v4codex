@@ -4,6 +4,14 @@ namespace cppgm { namespace semantic {
 Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, ETokenType op, ScopeId s, NodeId operand)
 {
     auto target = types[to];
+    auto invalid = [&]() { Conversion c; c.target = to; return c; };
+    auto downcast = [&](TypeId derived, TypeId base) {
+        auto path = base_path(derived,types[base].entity);
+        if (!path || !base_adjustments[path].edge || base_adjustments[path].ambiguous) return false;
+        for (auto p = path; p; p = base_adjustments[p].next)
+            if (bases[base_adjustments[p].edge].virtual_base) return false;
+        return true;
+    };
     bool cstyle = op == OP_LPAREN;
     bool reinterpret = op == KW_REINTERPET_CAST || cstyle;
     bool cv_cast = op == KW_CONST_CAST;
@@ -16,23 +24,24 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
             if (derived_from(x.type, target.child)) {
                 compatible = true; c.derived = true;
                 c.adjustment = base_steps(x.type, types[target.child].entity);
-                if (!cstyle) check_base_access(x.type, target.child, s);
+                if (!cstyle && !base_accessible(types[x.type].entity,types[target.child].entity,s)) return invalid();
             } else if (derived_from(target.child, x.type)) {
+                if (!downcast(target.child,x.type)) return invalid();
                 compatible = true; c.derived = true;
-                if (!cstyle) check_base_access(target.child, x.type, s);
+                if (!cstyle && !base_accessible(types[target.child].entity,types[x.type].entity,s)) return invalid();
             }
         }
         if (op == KW_REINTERPET_CAST && x.category != ValueCategory::Prvalue &&
             !(types[x.type].cv & ~types[target.child].cv)) compatible = true;
-        if (!compatible) throw std::runtime_error("invalid reference cast");
+        if (!compatible) return invalid();
         if (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue && !(types[target.child].cv & 1))
-            throw std::runtime_error("invalid lvalue cast");
+            return invalid();
         if (cv_cast && (x.category == ValueCategory::Prvalue || types[x.type].kind == TypeKind::Function))
-            throw std::runtime_error("invalid const reference cast");
+            return invalid();
         c.reference = true; return c;
     }
     if (fundamental(to, FT_VOID) && !cv_cast && op != KW_REINTERPET_CAST) {
-        if (x.form == ExpressionForm::Overload) throw std::runtime_error("discarded unresolved overload");
+        if (x.form == ExpressionForm::Overload) return invalid();
         c.kind = Conversion::Kind::Discarded; return c;
     }
     if (!cv_cast && op != KW_REINTERPET_CAST) {
@@ -45,7 +54,7 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     TypeId from = decay(x.type);
     if (cv_cast) {
         if (!pointer(from) || !pointer(to) || types[types[from].child].kind == TypeKind::Function || !similar_type(from, to))
-            throw std::runtime_error("invalid const cast");
+            return invalid();
         return c;
     }
     bool enum_cast = (integral(from) && integral(to)) || (arithmetic(from) && integral(to));
@@ -56,8 +65,9 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         pointer_cast = (cstyle || preserves_cv) && (reinterpret ||
             (fundamental(a, FT_VOID) && types[b].kind != TypeKind::Function) || derived_from(b, a));
         if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(b, a)) {
+            if (!downcast(b,a)) return invalid();
             c.derived = true;
-            if (!cstyle) check_base_access(b, a, s);
+            if (!cstyle && !base_accessible(types[b].entity,types[a].entity,s)) return invalid();
         }
     }
     bool integer_pointer = reinterpret && ((pointer(from) && integral(to) && width(to) >= 64) || (integral(from) && pointer(to)));
@@ -66,6 +76,6 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         c.constant_forbidden |= integer_pointer || (pointer_cast && !c.derived);
         return c;
     }
-    throw std::runtime_error("invalid explicit cast");
+    return invalid();
 }
 } }

@@ -14,7 +14,7 @@ bool Analyzer::conversion_nonthrowing(const Conversion& c)
         if (!function_nonthrowing(c.function)) return false;
         if (!type_destructor_nonthrowing(value_type(c.target))) return false;
     }
-    if (c.kind == Conversion::Kind::List || c.kind == Conversion::Kind::ListPlan) {
+    if (c.kind == Conversion::Kind::List || c.kind == Conversion::Kind::ListPlan || c.kind == Conversion::Kind::QueryList) {
         auto plan = c.kind == Conversion::Kind::List ? list_objects[c.materialization].plan : c.materialization;
         if (!list_nonthrowing(plan)) return false;
     }
@@ -27,7 +27,8 @@ bool Analyzer::list_nonthrowing(std::uint32_t id)
     bool result = !plan.constructor || function_nonthrowing(plan.constructor);
     if (!plan.direct_binding) result &= type_destructor_nonthrowing(value_type(plan.target));
     for (unsigned i = 0; i < plan.call.argument_count; ++i) {
-        result &= expression_nonthrowing(call_argument(plan.call,i));
+        result &= plan.call.inputs == CallInputs::Query ? query_nonthrowing(query_edges[plan.call.arguments+i]) :
+            expression_nonthrowing(call_argument(plan.call,i));
         result &= conversion_nonthrowing(conversions[plan.call.conversions+i]);
     }
     list_exception_facts.put(id,result ? 2 : 1); return result;

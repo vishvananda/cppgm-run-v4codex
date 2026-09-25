@@ -40,6 +40,11 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     for (unsigned j = 0; j < pack.count; ++j)
         args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     switch (q.kind) {
+    case QueryKind::List:
+        args.clear();
+        for (unsigned i = 0; i < q.count; ++i) args.push_back(child(i));
+        result = abi.make(Kind::InitList,0,0,0,0,args); break;
+    case QueryKind::ListInitialization: throw std::logic_error("semantic initialization used as source ABI expression");
     case QueryKind::This: result = abi.make(Kind::ExprThis); break;
     case QueryKind::Value: result = abi.make(Kind::Value,abi_type(q.type),0,0,q.value); break;
     case QueryKind::TemplateValueParameter: result = abi.make(Kind::ExprParameter,0,0,0,sem.template_ordinal(q.entity)); break;
@@ -85,6 +90,12 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         break;
     }
     case QueryKind::Call: {
+        if (q.op == OP_LBRACE) {
+            auto callee = sem.type_query(sem.type_query_child(id,0));
+            auto list = sem.type_query_child(id,1); args.clear();
+            for (unsigned i = 0; i < sem.type_query(list).count; ++i) args.push_back(abi_query(sem.type_query_child(list,i)));
+            result = abi.make(Kind::InitList,abi_type(callee.type),0,0,0,args); break;
+        }
         if (q.name) {
             args.clear();
             for (unsigned i = 0; i < q.count; ++i) args.push_back(child(i));

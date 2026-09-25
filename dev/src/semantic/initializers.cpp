@@ -37,46 +37,44 @@ void Analyzer::list_conversion(NodeId n, TypeId target)
     if (occurrence.context && template_initializer_narrowing.get(occurrence.source) == target) return;
     list_conversion_from(n,expressions[n].type,target);
 }
-void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target)
+bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
 {
-    if (!arithmetic(from) || !arithmetic(target)) return;
+    if (!arithmetic(from) || !arithmetic(target)) return false;
     bool a = integral(from), b = integral(target);
-    bool narrowing = false;
-    if (!a && b) narrowing = true;
-    else if (a && b) {
+    if (!a && b) return false;
+    if (a && b) {
         bool covers = width(target) > width(from) && (is_unsigned(from) || !is_unsigned(target));
         covers |= width(target) == width(from) && is_unsigned(target) == is_unsigned(from);
-        if (fundamental(target, FT_BOOL) && !fundamental(from, FT_BOOL)) covers = false;
-        if (!covers) {
-            Constant value = evaluate(n, facts[n].scope);
-            if (!value.valid) narrowing = true;
-            else if (fundamental(target, FT_BOOL)) narrowing = value.bits > 1;
-            else {
-                auto converted = convert(value, target, true);
-                auto restored = convert(converted, from, true);
-                narrowing = restored.bits != value.bits;
-                if (is_unsigned(target) && !is_unsigned(from) && std::int64_t(value.bits) < 0) narrowing = true;
-                if (!is_unsigned(target) && is_unsigned(from) && (converted.bits >> (width(target)-1))) narrowing = true;
-            }
-        }
-    } else {
-        auto value = static_value(n, from);
-        if (a) {
-            if (value.kind != StaticValue::Integer) narrowing = true;
-            else {
-                long double exact = is_unsigned(from) ? static_cast<long double>(value.bits) : static_cast<long double>(std::int64_t(value.bits));
-                long double rounded = fundamental(target, FT_FLOAT) ? static_cast<long double>(float(exact)) : fundamental(target, FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;
-                narrowing = rounded != exact;
-            }
-        } else if (width(target) < width(from)) {
-            if (value.kind != StaticValue::Floating) narrowing = true;
-            else {
-                long double rounded = fundamental(target, FT_FLOAT) ? static_cast<long double>(float(value.floating)) : static_cast<long double>(double(value.floating));
-                narrowing = rounded != value.floating;
-            }
-        }
+        if (fundamental(target,FT_BOOL) && !fundamental(from,FT_BOOL)) covers = false;
+        return !covers;
     }
-    if (narrowing) throw std::runtime_error("narrowing list initialization");
+    return a || width(target) < width(from);
+}
+bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
+{
+    if (!arithmetic(from) || !arithmetic(target)) return false;
+    bool a = integral(from), b = integral(target);
+    if (!a && b) return true;
+    if (!narrowing_needs_value(from,target)) return false;
+    if (!value.valid) return true;
+    if (a && b) {
+        if (fundamental(target,FT_BOOL)) return value.bits > 1;
+        auto converted = convert(value,target,true), restored = convert(converted,from,true);
+        return restored.bits != value.bits ||
+            (is_unsigned(target) && !is_unsigned(from) && std::int64_t(value.bits) < 0) ||
+            (!is_unsigned(target) && is_unsigned(from) && (converted.bits >> (width(target)-1)));
+    }
+    long double exact = a ? (is_unsigned(from) ? static_cast<long double>(value.bits) :
+        static_cast<long double>(std::int64_t(value.bits))) : floating_value(value);
+    long double rounded = fundamental(target,FT_FLOAT) ? static_cast<long double>(float(exact)) :
+        fundamental(target,FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;
+    return rounded != exact;
+}
+void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target)
+{
+    Constant value;
+    if (narrowing_needs_value(from,target)) value = evaluate(n,facts[n].scope);
+    if (narrowing_conversion(from,target,value)) throw std::runtime_error("narrowing list initialization");
 }
 std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
 {

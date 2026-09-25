@@ -163,6 +163,13 @@ private:
     Conversion list_initialization(NodeId n, TypeId to, ScopeId s = 0, bool direct = false);
     Conversion list_element(NodeId& cursor, TypeId to, ScopeId s);
     std::uint32_t list_aggregate(NodeId& cursor, TypeId to, ScopeId s);
+    Conversion query_list_conversion(QueryId list, TypeId to, bool direct = false);
+    TypeQueryFact query_list_initialization(QueryId id);
+    std::uint32_t query_list_aggregate(const std::vector<QueryId>& args, unsigned& cursor, TypeId to, ScopeId scope);
+    void store_query_arguments(Expression& call, const std::vector<QueryId>& args, const std::vector<Conversion>& chosen);
+    bool valid_query_list(std::uint32_t plan);
+    bool validate_query_list(std::uint32_t plan);
+    Constant constant_query_list(std::uint32_t plan);
     void prepare_list(NodeId n, Conversion& c);
     void store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected);
     EntityId global_allocation(ETokenType op, bool array);
@@ -272,6 +279,8 @@ private:
     bool string_initialization(NodeId n, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
     void list_conversion_from(NodeId n, TypeId from, TypeId target);
+    bool narrowing_conversion(TypeId from, TypeId target, Constant value);
+    bool narrowing_needs_value(TypeId from, TypeId target);
     Index scalar_observations, scalar_consumption_index;
     std::vector<ScalarConsumption> scalar_consumptions = std::vector<ScalarConsumption>(1);
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;

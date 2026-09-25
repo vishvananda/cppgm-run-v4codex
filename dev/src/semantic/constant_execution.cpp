@@ -28,7 +28,7 @@ std::uint32_t Analyzer::constant_body(EntityId e)
     } else if (entities[e].body_state != FactState::Success) return 0;
 
     ConstantBody result; result.function = e; result.parameters = constant_parameters.size();
-    result.valid = !types[entities[e].type].variadic;
+    result.valid = true;
     for (auto d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
         auto parameter = declarations[d].entity;
         if (entities[parameter].kind != EntityKind::Parameter) continue;
@@ -46,7 +46,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     auto body_id = constant_body(e);
     if (!body_id) { constant_unavailable = true; return Constant(); }
     auto body = constant_bodies[body_id];
-    if (!body.valid || body.count != args.size()) return Constant();
+    if (!body.valid || args.size() < body.count || (args.size() != body.count && !types[entities[e].type].variadic)) return Constant();
     if (entities[e].member_info && !entities[e].is_static && !object && !constructor_member(e)) return Constant();
     // The activation key contains typed values and the receiver path, plus
     // snapshots of mutable or retired storage reachable through addresses.
@@ -55,7 +55,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     Index dependencies;
     if (object) constant_dependencies(Constant(types.compound(TypeKind::LRef,constant_addresses[object].type),object),key_args,dependencies);
     for (unsigned i = 0; i < args.size(); ++i) {
-        auto value = convert(args[i],entities[constant_parameters[body.parameters+i]].type);
+        auto value = i < body.count ? convert(args[i],entities[constant_parameters[body.parameters+i]].type) : args[i];
         if (!value.valid) return Constant();
         TypeQuery q; q.type = types.unqualified(value.type); q.value = value.bits;
         key_args.push_back(intern_query(q,{}) | 0x80000000U);
@@ -74,7 +74,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     if (!id) { id = constant_activations.size(); constant_activations.push_back(activation); constant_activation_index.put(key_value,id); }
     else constant_activations[id] = activation;
     ConstantFrame frame;
-    for (unsigned i = 0; i < args.size(); ++i) {
+    for (unsigned i = 0; i < body.count; ++i) {
         auto parameter = constant_parameters[body.parameters+i];
         frame.bindings.put(parameter,frame.values.size());
         frame.values.push_back(convert(args[i],entities[parameter].type));

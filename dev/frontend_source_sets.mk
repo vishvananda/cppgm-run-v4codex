@@ -14,6 +14,7 @@ FRONTEND_OBJ_BASENAMES_preproc := preprocess/source preprocess/identifier_table 
 FRONTEND_OBJ_BASENAMES_cppgm++ := $(FRONTEND_OBJ_BASENAMES_preproc) syntax/ast syntax/cursor syntax/names syntax/parser syntax/prediction syntax/name_parser syntax/declarator syntax/expression syntax/output syntax/statement syntax/declaration syntax/class_parser syntax/template_parser syntax/driver semantic/model semantic/lookup semantic/type_builder semantic/declaration semantic/class_enum semantic/constant semantic/output semantic/overload semantic/conversion semantic/expression semantic/operators semantic/statement semantic/resolved_output semantic/member semantic/template_call
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_lexical_frame semantic/template_definition_environment
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_address_arguments
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/query_list
 FRONTEND_OBJ_BASENAMES_lowiropt :=
 FRONTEND_OBJ_BASENAMES_lowir := preprocess/source preprocess/identifier_table lowir/model lowir/opcode lowir/instruction_shape lowir/reader lowir/metadata lowir/metadata_vocabulary lowir/top_level lowir/instruction_reader lowir/writer lowir/instruction_writer lowir/signature_validation lowir/validator lowir/validation_values lowir/validation_instructions lowir/exercises
 FRONTEND_OBJ_BASENAMES_lowir2native :=

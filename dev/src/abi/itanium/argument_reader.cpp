@@ -80,6 +80,11 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
         Id expr = reference(take(w, p), BindingKind::Expression);
         return g.make(Kind::Cast, t, expr, code);
     }
+    if (op == "init-list") {
+        Id t = 0;
+        if (p < w.size() && w[p] == "-") ++p; else t = type(w,p);
+        return g.make(Kind::InitList,t,0,0,0,refs(w,p,BindingKind::Expression));
+    }
     if (op == "conversion") {
         Id t = type(w, p);
         return g.make(Kind::Conversion, t, 0, 0, 0, refs(w, p, BindingKind::Expression));

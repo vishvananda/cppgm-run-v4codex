@@ -8,6 +8,7 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
 bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
 {
     if (!c.valid()) return false;
+    if (c.kind == Conversion::Kind::QueryList) return valid_query_list(c.materialization);
     if (c.kind == Conversion::Kind::ListPlan) { validate_list_plan(c.materialization); return true; }
     if (c.kind == Conversion::Kind::Construction) {
         if (deleted_transfer(c.function) || !accessible(c.function,s,entities[c.function].owner) ||

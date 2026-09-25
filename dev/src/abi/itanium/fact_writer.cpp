@@ -140,6 +140,7 @@ std::string FactWriter::expression(Id id) {
     case Kind::ExprPack: return join_form({"pack ", ref('x', n.a)});
     case Kind::SizeofPack: return n.a ? join_form({"sizeof-pack ",ref('x',n.a)}) : join_form({"sizeof-captured-pack",list(n,'a')});
     case Kind::Call: return join_form({"call ", ref('x', n.a), list(n, 'x')});
+    case Kind::InitList: return join_form({"init-list ", n.a ? ref('t',n.a) : "-", list(n,'x')});
     case Kind::Conversion: return join_form({"conversion ", ref('t', n.a), list(n, 'x')});
     case Kind::Cast: return join_form({std::string("cast "), operation_code(n.c), " ", ref('t', n.a), " ", ref('x', n.b)});
     case Kind::TemplateId: return join_form({"template-id ", g.spelling(n.a), list(n, 'a')});

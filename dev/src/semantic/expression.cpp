@@ -301,6 +301,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         }
     }
     auto selected = explicit_builtin_conversion(x,to,cstyle ? OP_LPAREN : op,s,operand);
+    if (!selected.valid()) throw std::runtime_error("invalid explicit cast");
     if (selected.reference) r.category = target.kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
     publish(selected); return r;
 }

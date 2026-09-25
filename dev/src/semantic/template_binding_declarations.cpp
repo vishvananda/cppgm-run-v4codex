@@ -56,7 +56,7 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
             ast[ast[n].first].op == KW_CLASS ? Access::Private : Access::Public;
         // Definition-time access consumes the fixed base edge without asking
         // for a concrete specialization's layout or giving a local pattern a type.
-        bases.push_back({base,template_pattern_bases.get(entity),level});
+        bases.push_back({base,template_pattern_bases.get(entity),level,child(b,Kind::Virtual)!=0});
         template_pattern_bases.put(entity,bases.size()-1);
         add_edge(cs,target(base));
     }

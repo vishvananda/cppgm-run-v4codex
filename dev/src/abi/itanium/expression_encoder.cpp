@@ -104,6 +104,11 @@ void Encoder::expression(Id id) {
         output += "cv"; type(n.a); output += '_';
         for (Id i = 0; i < n.count; ++i) expression(g.child(n, i));
         output += 'E'; break;
+    case Kind::InitList:
+        output += n.a ? "tl" : "il";
+        if (n.a) type(n.a);
+        for (Id i = 0; i < n.count; ++i) expression(g.child(n,i));
+        output += 'E'; break;
     case Kind::Cast: output += operation_code(n.c); type(n.a); expression(n.b); break;
     case Kind::DestructorName:
         if (n.c) {

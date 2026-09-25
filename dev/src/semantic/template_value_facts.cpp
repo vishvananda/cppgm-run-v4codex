@@ -119,6 +119,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
             }
         } else if (fact.selected && (query.kind == QueryKind::Unary || query.kind == QueryKind::Binary)) {
             value = constant_query_call(id);
+        } else if (query.kind == QueryKind::ListInitialization || fact.initialization) {
+            value = constant_query_list(fact.initialization);
         } else if (query.kind == QueryKind::Call) {
             auto callee = type_queries[query_edges[query.offset]];
             if (callee.kind == QueryKind::TypeValue && (integral(callee.type) || floating_type(callee.type))) {

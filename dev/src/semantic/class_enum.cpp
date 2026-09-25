@@ -116,7 +116,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                 class_facts[info].aggregate = false;
                 NodeId access = child(b, Kind::Access);
                 Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
-                bases.push_back({base,0,level});
+                bases.push_back({base,0,level,child(b,Kind::Virtual)!=0});
                 auto relation = bases.size()-1;
                 if (tail) bases[tail].next = relation; else class_facts[info].first_base = relation;
                 tail = relation;

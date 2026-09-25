@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
 
 namespace cppgm { namespace semantic {
 std::uint32_t Analyzer::constant_query_arrow(QueryId id, std::uint32_t chain)
@@ -57,6 +58,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
 }
 Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 {
+    if (c.kind == Conversion::Kind::QueryList) return constant_query_list(c.materialization);
     if (c.constant_forbidden) return Constant();
     if (c.function && types[c.target].kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
     if (c.kind == Conversion::Kind::User) {
@@ -115,7 +117,7 @@ Constant Analyzer::constant_query_call(QueryId id)
         auto receiver = query_edges[callee.offset];
         if (!(callee.op == OP_ARROW ? constant_query_arrow(receiver,query_fact(callee_id).arrow) : constant_query_object(receiver))) return Constant();
     }
-    auto count = types[entities[e].type].count;
+    auto count = std::max<unsigned>(types[entities[e].type].count,q.count-first_argument);
     auto offset = fact.expression.count-count;
     std::vector<Constant> args;
     for (unsigned i = 0; i < count; ++i) {

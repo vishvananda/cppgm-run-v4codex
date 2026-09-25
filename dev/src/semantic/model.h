@@ -281,8 +281,8 @@ struct TemplateDefinitionHead {
     std::uint32_t parameters = 0, count = 0, depth = 0;
 };
 struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path = 0; };
-struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public; std::uint64_t offset = 0;
-    BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public) : base(b), next(n), access(a) {} };
+struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public; std::uint64_t offset = 0; bool virtual_base = false;
+    BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public, bool v = false) : base(b), next(n), access(a), virtual_base(v) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
 struct DestructionAction { EntityId field; TypeId type; EntityId destructor; };
@@ -309,7 +309,7 @@ struct Declaration {
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false, injected_member = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect };
-enum class CallInputs : unsigned char { Concrete, Source, Context };
+enum class CallInputs : unsigned char { Concrete, Source, Context, Query };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
@@ -355,7 +355,7 @@ struct Conversion {
     Conversion() : reference(false), temporary(false), derived(false), empty_copy(false), fold_widen(false),
         implicit_move(false), preserve_widen(false), ambiguous(false), constant_forbidden(false) {}
     unsigned char preference = 0;
-    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List };
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List, QueryList };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };
@@ -393,6 +393,7 @@ struct ExceptionSpecificationFact {
 };
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
+    std::uint32_t query = 0; // Canonical formation query; arguments are QueryIds in query_edges.
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
     bool aggregate = false, direct_binding = false, direct = false, zero = false;

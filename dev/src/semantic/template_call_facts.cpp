@@ -160,6 +160,7 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
 }
 NodeId Analyzer::call_argument(const Expression& call, unsigned i) const
 {
+    if (call.inputs == CallInputs::Query) throw std::logic_error("query argument used as syntax");
     if (call.inputs != CallInputs::Context) return call_arguments[call.arguments+i];
     auto node = call.arguments;
     auto source = call_arguments[expressions.argument_slice(node)+i];

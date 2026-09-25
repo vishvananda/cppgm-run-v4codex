@@ -142,7 +142,10 @@ NodeId Parser::primary()
     }
     if (in.eat("{")) return arguments(Kind::BracedInit, "}");
     if (in.is("[")) return lambda();
-    if (in.eat("typename")) return named(Kind::IdExpression, name(true));
+    if (in.eat("typename")) {
+        auto result = named(Kind::IdExpression,name(true));
+        ast[result].op = KW_TYPENAME; return result;
+    }
     if (builtin()) {
         if (builtin(1)) {
             NodeId result = make(Kind::IdExpression);

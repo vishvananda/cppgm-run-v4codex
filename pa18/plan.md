@@ -2,7 +2,19 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
-Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 74 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 75**.
+Entry HEAD: `9fa236532563035e24552fd7c4be583f8dc74322`; 379/420, 41 failures.
+Previous goal turn completed audit evidence (progress); no live build remains.
+Current group: immediate-context initialization/cast queries. Retained query IDs
+and canonical target types feed candidate conversions, narrowing/access checks,
+constant execution and noexcept without reparsing or fake syntax. Query/list
+owners retain per-key success/failure and selected recipes; work follows actual
+initializer edges and candidates, with compressed omitted array tails. Validate
+required failures, nearby personal controls, prior suites and graph scaling;
+freeze entry/final compiler and checked executable measurements under spec §9.
+Array pooling/result-policy mismatches remain separate implementation work:
+earlier fixtures require pooling for the same small scalar-array shapes. No
+stage-specific lowering switch or weakened comparison is authorized.
 [Audit 74](audit.md) reviews all nine accumulated commits from `f59e8f67`
 through entry `2433d6de`, plus fixes `f4b9020b` and `8dc4636d`.
 The checkpoint preservation gate passes; full-stage advancement remains pending.
