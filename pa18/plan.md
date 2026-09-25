@@ -2,72 +2,64 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation 72**.
-Loop 72 entry: `ca314a72`, **367/420**, 53 original failures. Previous goal
-turn classified **progress**: committed context implementation and validation;
-no prior compiler/check process remains live. Review markers below are preserved.
-Initial ownership group: retained alias formation and correlated pack expansion.
-`template_entities` must retain dependent argument validity alongside transparent
-result types; `template_call`/`template_packs` consume those facts under immutable
-frames, with structured candidate failure. Deduction/signature comparison must
-preserve alias transparency, and lowering must consume concrete ordinary types.
-Work is bounded by retained argument/query edges and demanded expansion lanes,
-with TU-owned canonical identities/caches. Validate detectors, nested aliases,
-unequal/empty packs, redeclarations, runtime selection and inherited controls;
-freeze entry/final binaries for stage-scoped latency/RSS/runtime/size evidence.
-Previous goal turn: **progress** (audit 70 ownership fixes and validation).
-Loop 70: **progress** (accumulated review, independent reducers, ownership fixes,
-required validation and frozen performance evidence).
-Loop 71: **progress**, entry `2eb83de5` → implementation `b6287928`.
-Retained contexts, query bases and declaration/body identity complete;
-[handoff](handoff71.md) records ownership, bounds, validation and the concrete
-boundary to correlated-expansion and alias-formation model changes.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 72**.
+Previous goal turn: **progress** (committed context group, validation and evidence).
+Loop 72: **progress**, entry `ca314a72` → implementation `57ee1f2e`.
+[Handoff 72](handoff72.md) records owners, data flow, bounds, validation and the
+boundary to invocation/declaration/initialization work. Review markers above
+are preserved; this implementation handoff is not independent certification.
 
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
 audit 66 **327** → handoff 67 **343** → 68 **348** → 69 **353** → audit 70
-**353** → handoff 71 **367/420**. Fourteen original failures repaired, none added;
-**53 failures** remain (29 status, 24 LowIR), all 420 inputs and comparison rules
-retained. Earlier PAs: **2609/2609**;
-file audit passes with the same three inherited header advisories.
-[Audit 70](audit.md) reviews all 13 commits since audit 66 plus the audit fix.
-[Audit 66](audit66.md) preserves the first accumulated review and its evidence.
+**353** → handoff 71 **367** → handoff 72 **372/420**.
+This turn repairs five original failures with none added; **48 failures** remain
+(23 status, 25 LowIR). All 420 inputs/references/comparison rules are retained.
+Earlier PAs: **2609/2609**. File audit passes with the same three inherited
+header advisories. [Audit 70](audit.md) and [audit 66](audit66.md) remain intact.
 
-| Ownership group | State and next work |
+| Ownership group | State and required next work |
 |---|---|
-| Reviewed: deduction, ordering, conversion, query demand, address NTTPs, outer-head defaults and concrete braced/base/array deduction | Preserve canonical identities, immutable frames, precise completion edges, selected conversions, address demand and internal linkage. Handoffs [67](handoff67.md), [68](handoff68.md) and their interactions are reviewed. |
-| Reviewed: assignment/destructor queries and ordinary lowering | Handoff [69](handoff69.md) reviewed and corrected: volatile reference targets and builtin ranking, scalar receiver effects/cleanup, query-only arrow validity, and caller-independent destructor deletion facts. 56 independent audit controls pass; 34 failed at audit 70 entry. |
-| Implemented, review pending: context and signature identity | Handoff 71 composes concrete parent frames, preserves explicitly symbolic lexical frames, expands query template arguments, resolves decltype bases, and separates structural signature keys from semantic access contexts. Renamed out-of-class heads attach bodies to the selected declaration. 410 semantic controls, 14 repaired-course checks, three completion-scaling cases and four ABI controls pass. |
-| **Remaining: retained packs/results and expression validity** | Correlated outer/inner expansion recipes; alias argument-formation obligations (including unused arguments); lazy nested class definitions, first-declaration result lookup and prototype object facts; typed braced query/list plans and cast/access/selected-conversion validity. These require new retained facts, not scope recovery. |
-| **Remaining: constructor/explicit deduction** | Constructor and inherited-constructor participation, remaining explicit/member-template and alias contexts. |
-| **Remaining: LowIR initialization and result facts** | Constant/array initialization, bool/result metadata, class-result conventions and discarded-value loads. Execution agreement does not replace canonical LowIR comparison. |
+| Reviewed: deduction, ordering, conversion, query demand, address NTTPs, outer defaults and braced/base/array deduction | Preserve canonical identities, immutable frames, precise completion edges, conversions, address demand and linkage. Handoffs [67](handoff67.md), [68](handoff68.md) and their interactions are reviewed. |
+| Reviewed: assignment/destructor queries and ordinary lowering | [Handoff 69](handoff69.md) reviewed and corrected: volatile references/builtin ranking, scalar receiver effects, arrow validity, caller-independent destructor facts. 56 independent audit controls pass. |
+| Implemented, review pending: context and signature identity | [Handoff 71](handoff71.md): lexical/concrete frames, query argument expansion, decltype bases, structural signature keys and renamed definition attachment. |
+| Implemented, review pending: alias formation and correlated expansions | Handoff 72 retains erased/default argument obligations and pack captures; shares type/value/query expansion; preserves source access, transparent signatures, parameter/conversion adjustments and selected alias cast types; interprets template argument roles through their typed owner. 487 semantic, five repaired-course, three completion and six ABI controls pass. |
+| **Remaining: invocation and declaration timing** | `__builtin_invoke` needs query and ordinary callable/object/conversion facts. Lazy nested classes, first-declaration result lookup, prototype `this`, and remaining member/alias syntax and lookup still fail. |
+| **Remaining: constructor/explicit deduction and query validity** | Constructor/inherited-constructor and member-template participation; braced initialization and cast/access/selected-conversion validity. |
+| **Remaining: LowIR initialization and result facts** | Constant/array initialization, bool/result metadata, class-result conventions and discarded-value loads. A nested alias cast now compiles/executes but still fails its array-initialization comparison. A retained personal reducer exposes invalid ordinary class-varargs LowIR; its implementation is unfinished. |
 
-The remaining groups are required implementation, not waived audit
-questions. Avoid another sequence of narrow handoffs across one ownership path:
-finish each group's query, substitution, ordinary execution, ABI and cache
-interactions together, then package shared validation once. Loops 67–69 repeated
-evidence packaging and left shared query/access/effect interactions to this audit.
+The remaining groups are required implementation, not waived audit questions.
+Finish each group's query, substitution, ordinary execution, ABI and cache
+interactions together. Loop 72 expanded through access, adjustments, conversion,
+source signatures, explicit pack arguments, casts and function-type arguments;
+remaining nearby failures require invocation or ordinary lowering facts that
+alias/pack substitution cannot supply. Preserve the detailed boundary in the
+handoff instead of treating test progress alone as completion.
 
-Performance acceptance is **PA18/O0 LowIR** under spec §9. [Performance 71](performance71.md)
-records frozen A/A/ABBA latency/RSS, checked runtime/text proxy and linear shape
-work. Equivalent outputs are byte-identical; member-context semantic overhead
-is 1.7–2.6%, with compiler text +5120 bytes. [Performance 70](performance70.md)
-preserves the prior checkpoint and complete review-range comparisons.
-No optional optimization or new numerical limit is introduced. Historical PA17
-**+15%, +16 MiB, 5.5×** targets remain diagnostics; preserve all earlier
+Performance acceptance is **PA18/O0 LowIR**, spec §9.
+[Performance 72](performance72.md) records frozen A/A/ABBA compiler latency/RSS,
+checked executable runtime/size and graph work. Equivalent outputs are
+byte-identical. Alias semantic cost is 2.5–2.9%; compiler text grows 13,248 bytes
+(0.708%). Fourfold source growth gives about fourfold work/time. The first
+benchmark's class-varargs failure and all observations are preserved; the final
+pack workload uses scalar arguments and introduces no new acceptance gate.
+No optional optimization or mandated numerical ceiling is introduced.
+Historical PA17 **+15%, +16 MiB, 5.5×** targets remain diagnostics. Preserve
 [63](performance.md), [64](performance64.md), [65](performance65.md),
 [66](performance66.md), [67](performance67.md), [68](performance68.md),
-[69](performance69.md) measurements. Correctness, coverage and graph-work bounds
-remain gates. Native backend/optimization and self-hosting belong to PA24–PA34.
+[69](performance69.md), [70](performance70.md), [71](performance71.md).
+Correctness, coverage and graph bounds remain gates; native optimization and
+self-hosting belong to PA24–PA34.
 
 Reference corrections remain [65](reference-correction65.md),
-[67](reference-correction67.md) and [69](reference-correction69.md), each with
-reducer, standard/contract proof and pinned bundle. Loops 70–71 add none.
+[67](reference-correction67.md), [69](reference-correction69.md), each with
+reducer, rule proof and pinned bundle. Loops 70–72 add none.
 
-| Checkpoint ledger | Reviewed range / disposition |
+| Handoff ledger | Reviewed range / disposition |
 |---|---|
-| 66 | Stage base → `3a883d10`; 327/420, prior/file audit pass; [archived record](audit66.md). |
-| 70 | `3a883d10` → entry `15b34993` → fix `f59e8f67`; all three handoffs reviewed, ownership findings fixed; 353/420, same 67 failures, prior/file audit pass, coverage retained; [evidence](../student.tests/pa18/loop70-evidence.json). |
-| 71 | Entry `2eb83de5` → code `b6287928`; 367/420, failures 67 → 53, prior/file audit pass, no fixture/reference changes; [evidence](../student.tests/pa18/loop71-evidence.json). Independent review remains pending for frame identity, signature-key completeness, access isolation, body matching and measured bounds; these questions do not replace unfinished implementation. |
+| 66 | Stage base → `3a883d10`; 327/420, prior/file audit pass; [audit](audit66.md). |
+| 70 | `3a883d10` → entry `15b34993` → fix `f59e8f67`; all three handoffs reviewed, findings fixed; 353/420, prior/file audit pass; [evidence](../student.tests/pa18/loop70-evidence.json). |
+| 71 | Entry `2eb83de5` → code `b6287928`; 367/420, failures 67 → 53, prior/file audit pass; [evidence](../student.tests/pa18/loop71-evidence.json). Review pending for context/signature/body/access identity and bounds. |
+| 72 | Entry `ca314a72` → code `57ee1f2e`; 372/420, failures 53 → 48, prior/file audit pass; [evidence](../student.tests/pa18/loop72-evidence.json). Review pending for alias/capture keys, source/concrete frames, signature/ABI transparency, argument disambiguation, access/error boundaries and measured bounds. These questions do not replace unfinished implementation. |
 
 Required checks: `make test-pa18`, `make test-report-through-pa17`, and the PA18
 file audit. Root reports run sequentially because they share `.test_counts`.
