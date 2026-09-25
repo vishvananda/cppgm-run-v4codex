@@ -1,187 +1,195 @@
-# PA18 checkpoint audit 82
+# PA18 checkpoint audit 86
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Previous Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.
-Entry: `85ea42c0a20d5cc8b051fc53a948c8c4df20233a`.
-Last reviewed commit: `ecc308bc5ee33ed40fa773f7981961f3018a5867`.
+Previous review baseline: `ecc308bc5ee33ed40fa773f7981961f3018a5867`.
+Entry: `890f810bf203639318acc91597273ecdc592c911`.
+Last reviewed commit: `f6eaf8ab213c90eefffd48f5c47b1ac9a75bce8d`.
 
-**Checkpoint audit passes; PA18 full-stage remains incomplete.** This review
-covers all 18 commits from the prior reviewed code tip to entry, the combined
-changes to **35 implementation/registration files**, their interactions across
-handoffs 79–81, and the audit repair. [Audit 78](audit78.md) is preserved verbatim.
-The [evidence manifest](../student.tests/pa18/loop82-evidence.json) records full
-commit/patch/source identities, exact failure sets, coverage, commands, results,
-controls, traces and the frozen performance record.
+**Checkpoint audit passes; PA18 full-stage remains incomplete.** The review
+covers every one of the 17 accumulated commits across handoffs 83–85 and the
+validated audit repair, including the combined changes to **39 implementation
+and registration files**. [Audit 82](audit82.md) is preserved verbatim. The
+[evidence manifest](../student.tests/pa18/loop86-evidence.json) binds full commit,
+patch, source, binary, coverage, check and performance identities.
 
 ## Complete accumulated range
 
-| Commits, chronological | Review scope |
+| Commits, chronological | Reviewed scope |
 |---|---|
-| `ef0e43c0` | Previous audit records and frozen evidence; retained obligations and stage-scoped acceptance. |
-| `78f826de`, `67c4f685`, `50407fc1`, `42312227`, `00738e66`, `c5e2c271` | Signature plan, both implementation commits, both validation/performance extensions and handoff. Qualified angle heads, typedef/alias declaration syntax, explicit member arguments, first-declaration signature identity versus body parameters, fixed/dependent query selection, ABI projection, and the reference correction. |
-| `cec91d23`, `a87dd911`, `ce7d3e7f`, `f660fae4`, `69247877` | Scalar conditions, pointer/reference materialization, shared ordinary/query cast selection, constant storage, unrounded narrowing-check results, harness and evidence. Reviewed the intermediate rounding error and its correction as well as the final combined code. |
-| `86f33d49`, `7b8c98a6`, `4ab09a9b`, `9d980cdc`, `25b89fc2`, `85ea42c0` | Runtime-summary plan, proof/conditional/emission implementation, address/alias repair, benchmark preflight classification, request-driven refinement and handoff. Reviewed actual symbol retention, selected-arm cleanup, proof eligibility, query interactions and all retained performance observations. |
-| `ecc308bc` | Validated ownership repairs below, explicit audit controls/trace and reproducible cumulative validation/performance harnesses. This is the reviewed code tip; subsequent commits contain records only. |
+| `48c864ab` | Audit 82 records, frozen evidence and retained stage obligations. |
+| `e9108b5a`, `5bd58396`, `7b2e89bd`, `89e98f11`, `ac354fad`, `09a77fca` | Array bound completion and query substitution, constant images, static member declaration matching, bounded expansion/progress checks, complete fixture preservation, initializer-form enforcement, parenthesized clause correction, proofs and handoff. Reviewed the intermediate clause-boundary defect and its correction. |
+| `e4a4f2c3`, `cc4cd563`, `b4d66361`, `7a7ce959`, `f953e42a` | Ownership plan, empty helpers, local-specialization roots, delegation entry propagation, empty transfer legality/lifetimes, scalar widening, required zeroing proof, measurements and handoff. |
+| `53252879`, `37c7c832`, `f1fae6ad`, `076eccdd`, `890f810b` | Discarded source forms, volatile class copies/lifetimes, storage/discard proof, functional void queries, fixed-recipe publication/reuse, complete initial/final performance observations and handoff. |
+| `f6eaf8ab` | Audit repairs, 74 focused controls, combined source-to-native trace and reproducible cumulative validation/performance/evidence harnesses. This is the reviewed code tip; subsequent changes are records only. |
 
-The prior goal turn supplied the committed implementation and evidence, so it
-was progress. The entry process inspection found no inherited compiler/test job
-requiring a wait or restart. The baseline stage run independently reproduced
-**396/420**, including the exact **24** entry failure paths.
+The preceding goal turn supplied committed implementation and evidence, so it
+was progress. Entry process inspection found no inherited live compiler/test job
+to wait on or restart. The fresh entry run reproduced **417/420**, with exactly
+three failing fixture paths. Exit status 2 is the make status, not a count of
+test failures.
 
 ## Findings and repairs
 
-**A — conversion-name lookup was owned by one expression adapter.** Handoff 81
-resolved qualified conversion-function-ids in `resolve_expression`, leaving
-unqualified calls and retained-template/query consumers on identifier lookup.
-`operator int()` therefore failed even when a matching conversion existed, and
-qualified-name scope agreement was incorrectly applied to unqualified aliases.
+**A — discarded copy effects stopped before the exception owner.** Handoff 85
+checked volatile class copies and lowered their lifetimes, but ordinary
+`expression_nonthrowing` ignored the retained conversion. Void queries discarded
+the selected recipe; built-in comma queries kept only validity. Consequently
+`noexcept((void)a)`, `noexcept(void(a))` and comma/conditional variants could be
+true even when the required copy, destructor or copy default argument could throw.
 
-The shared resolver now delegates conversion names to the conversion owner.
-Qualified names check both required type contexts; unqualified names use lexical
-type lookup and the enclosing class. Retained declarations publish targets in
-the existing flat `(scope, canonical target)` index. Fixed targets and conversion
-templates remain in the candidate set, including competing cv overloads. Lookup
-uses explicit fixed-base edges on a source-local miss, without completing a
-class or demanding a body. Aliases, access/deletion checks and target deduction
-continue through the ordinary semantic owners.
+The ordinary exception consumer now reads the NodeId-owned conversion. Query
+void conversions retain their checked copy by conversion identity; comma queries
+retain it in a sparse QueryId index. Constructor effect checking consumes the
+existing default-argument recipes and conversions. It neither repeats selection
+nor materializes a temporary or demands a body. Conversion records are passed by
+value across potentially growing arenas. Completion invalidation clears only the
+affected query's retained discard and its two exception-cache variants; unrelated
+queries stay warm. Query/context/frame identities and source-fixed recipe reuse
+remain unchanged.
 
-**B — query substitution confused fixed declaration identity with fixed naming
-context.** A fixed base member could retain the source class as its naming class
-inside a concrete specialization. Conversion templates could similarly retain a
-target-selected specialization owned by the source class. Receiver checking then
-compared unrelated source/concrete identities or demanded an unavailable base
-path. This is an interaction between 79's signature/query identity and 81's
-conversion-name/address handling.
+The proof is N3485 §5 [expr]/11 and §4.1 [conv.lval]/2 (the temporary copy),
+§5.3.7 [expr.unary.noexcept]/3 and footnote 80 (implicit calls), and §12.2
+[class.temporary]/3 (destruction), in [the supplied draft](../doc/n3485.txt).
+Controls distinguish throwing copies, destructors and default expressions or
+conversions from noexcept counterparts, reference-returning calls and mixed
+conditionals. Ordinary expressions, instantiated bodies and dependent signature
+queries all use the same effects. Poison bodies remain undemanded.
 
-Source member queries now consume the existing typed source-object context and
-its fixed base edges. Query substitution remaps the naming class even when the
-callee's value/type is nondependent. A selected source function specialization
-projects its canonical template and arguments through the frame and reuses the
-normal specialization cache; it does not repeat conversion-target deduction.
-The query/frame key owns this work. There is no syntax replay, global retry,
-name-based recovery or new body demand. Checks include ordinary fixed-base
-queries, local patterns, multiple enclosing specializations, dormant poison
-bodies, conversion templates, cv overloads and required rejection.
+**B — constant-array eligibility ignored nonliteral temporary destruction.**
+Handoff 83 correctly removed a blanket syntax-based exclusion of class
+constructions from the PA16 constant-array policy. Its replacement exposed an
+incomplete constant-evaluation proof: `(Marker(), 3)` could be classified as
+constant even when `Marker::~Marker()` changed a global. List and implicit
+reference-bound constructor arguments to constexpr calls had the same hole.
+The resulting readonly image/copy omitted required destructor effects.
 
-The language anchors are N3485 §3.4.1 [basic.lookup.unqual], §5.1.1/12
-[expr.prim.general], §7.1.6.2 [dcl.type.simple], §12.3.2 [class.conv.fct],
-§14.6 [temp.res] and §14.7.1 [temp.inst], in [the supplied draft](../doc/n3485.txt).
-The qualified conversion-type agreement rule does not constrain a local alias
-used in an unqualified conversion-function-id. Unevaluated type determination
-requires valid lookup/selection but does not instantiate an unused member body.
+The shared constant evaluator now checks canonical literal-type facts when
+producing a class prvalue and when consuming a recorded conversion temporary.
+Named object initialization remains separate. No initializer syntax scan,
+class-name exception or new optimization is added. Nonliteral temporaries keep
+ordinary initialization, calls and full-expression cleanup; genuinely constant
+scalar arrays retain the required image/copy. The literal-type fact is memoized
+at the class owner. Short-circuited and unevaluated operands remain unexecuted.
 
-**C — angle prediction allocated scratch per template-id.** Handoff 79's local
-binding vector allocated once for every angle probe. It now shares the existing
-delimiter stack's parser lifetime, reuses capacity, and retains only maximum
-active nesting depth. Entries are cleared between probes and released with the
-parser. This removes avoidable allocation while preserving lexical prediction,
-angle caching, bounded checkpoints and one parse per source region.
+N3485 §5.19 [expr.const]/2 restricts constructor calls in core constant
+expressions to literal classes, §3.9 [basic.types]/10 requires a trivial
+destructor for a literal class, and §12.2 [class.temporary]/3 requires temporary
+destruction. The runtime reducers check constructor/copy/destructor counts and
+array values; constexpr rejection controls check the proof boundary. Explicit,
+list, implicit converting, nested, member and template consumers are covered.
 
-The new audit controls improve **13/27 → 27/27**. With the **1137** inherited
-controls, **1164** pass. Every positive execution control validates student LowIR
-and checks native results; rejection controls check failure status. Two exploratory
-explicit throw/catch probes reached the inherited unsupported-statement boundary;
-their initial log is retained and identified in the evidence. Explicit exception
-syntax is later-stage work, not an added PA18 gate. No existing control was removed.
+**C — cast prediction consumed parenthesized braced construction as a type-id.**
+The expanded lifetime controls exposed `(T{}, value)` taking the C-style cast
+branch, which then expected `)` at `{`. The lexical predictor now recognizes
+that `{` after a type name starts a functional construction. It uses one existing
+lookahead result, adds no checkpoint or grammar replay, and preserves abstract
+pointer/reference cast handling. N3485 §5.2.3 [expr.type.conv] and §5.4 [expr.cast]
+define the two forms. Earlier syntax tests and positive ordinary/template brace
+controls pass.
+
+The final audit controls improve **23/74 → 74/74**, with **1355** inherited
+controls preserved: **1429** total. Exploratory invalid constexpr-member probes
+and intermediate results remain in `/tmp/pa18-loop86`; the manifest compares the
+same final 74-source corpus on entry and reviewed binaries. No existing control
+or course fixture was removed or weakened.
 
 ## Architecture and optimization trace
 
-[The combined audit trace](../student.tests/pa18/audit82_trace.cpp) follows an
-ordinary `receiver` declaration, the redeclared `apply` template, and demanded
-`Scalar<65543>` members through the production frontend. First-declaration lookup
-keeps `apply`'s parameter/result `long` despite the later overload. A selected
-conversion binds a narrowed scalar reference; an effectful receiver selects
-conditional values; explicit calls and a member pointer retain the actual
-conversion definition. Checked execution verifies values, distinct reference
-storage and exactly three receiver effects.
+[The combined trace](../student.tests/pa18/audit86_trace.cpp) follows an ordinary
+`Value` declaration and demanded `run<2,3,5,11>` through array-bound inference,
+query effects, constructor delegation, constant-data publication and lifetimes.
+It preserves a readonly image for the constant long array, ordinary execution
+for the effectful scalar array, one selected volatile copy, both required
+destructors, and base-constructor entry identity. Student LowIR validates and
+the supplied backend's ELF exits zero. All seven inherited traces also pass.
 
-The trace records **305 tokens, 649 nodes, 169 occurrence records, two template
-body transitions and one runtime-summary inspection**. It emits **six functions,
-129 instructions and 201 operands**, with zero query-completion invalidations.
-Its LowIR validates and the supplied backend's ELF exits zero. All three handoff
-traces also validate and execute on the reviewed binary.
+The trace records **302 tokens**, **437 parsed nodes**, **256 contextual
+occurrences**, one template body transition, two delegation-entry work items,
+one concrete discarded materialization and zero query-completion invalidations.
+Two discard selections belong to distinct source-use and exception-query facts.
+It emits **nine functions, 161 instructions and 237 operands**.
 
-Immutable sources feed the streaming preprocessor/post-token cursor and integrated
-parser/semantic consumer. Parsed regions remain source records; substitution uses
-compact source/context occurrences and immutable frames. First-signature records
-retain canonical type, declarator, environment and frame, while parameter facts
-preserve the definition's names, cv and adjusted forms. Query keys retain typed
-operations, children, naming/access context and source dependence; substitutions
-are keyed by the complete frame. Source-name comparison shapes are separate from
-semantic lookup and ABI facts. Lowering consumes selected declarations/conversions
-and emits typed LowIR directly. Serialized LowIR is the explicit PA18 output,
-not transport between this compiler's production phases.
+Immutable sources feed the streaming preprocessor/post-token cursor and
+integrated parser/semantic consumer. Parsed templates remain source records;
+instantiation uses immutable frames and source/context occurrences. Array bound
+completion reuses checked explicit initializer actions, rejects non-consuming
+clauses, and republishes the completed canonical type. Query substitution reads
+that declaration identity. Omitted array tails remain compressed. Static member
+matching indexes canonical element/signature identity and checks supplied bounds;
+no mangling or rendered type becomes a semantic key.
 
-Source, occurrences, semantic facts, queries, constants and flat indexes are
-TU-owned. Candidate/head maps are operation-local, parser angle storage dies with
-the parser, and lowering function state is reset at its existing boundary. The
-driver releases frontend/lowering TU owners before the next input; program/linkage
-identities survive only through output. No process-global mutable cache, owning
-hot-node graph, semantic text key or whole-program recovery was added. Both new
-implementation sources from handoff 81 remain registered in the source lists.
-Inherited list/forwarding/nested scaling checks preserve localized completion
-invalidation, one required body/definition transition and compressed array tails.
+The constructor entry worklist propagates each of three monotonic bits over the
+selected delegation edge at most once, after demand completion; it does not
+retry unrelated bodies. Empty-layout shortcuts require valid implicit trivial
+transfers and no user destructor or volatile source. The aggregate requirement
+excludes base subobjects from that shortcut. Local-specialization roots use the
+existing canonical scope/type locality facts. Discard source forms are one
+packed semantic bit, composed from immediate checked children after overload
+selection; lowering consumes it with value category instead of rebuilding a
+syntax classifier. The 15 inherited fixed-discard scaling checks retain one
+selection, N recipe uses and N distinct materializations.
 
-The useful optimization fact is an already-established named scalar constant
-forwarded by a requested completed conversion body. Its legality proof excludes
-extra statements, effectful/nonconstant/volatile/reference results and virtual
-dispatch; it never grants constexpr eligibility. The O0 budget inspects one return
-and at most eight wrappers and retains one result per eligible function. Unknown
-or over-budget bodies keep calls. Lowering preserves receiver effects, required
-second conversions, storage and cleanup; known conditionals emit only the selected
-arm. Actual explicit/address/root uses retain ordinary function emission through
-one deferred-list visit. No code cloning, growth, fixed-point pass or broader
-optimizer budget was introduced.
+Sources, semantic/constant/query facts and flat indexes are TU-owned. Worklist
+scratch is operation-local; function lowering resets its transient state at the
+existing boundary. The driver releases parser, semantic and lowering owners
+before the next input. The program/linkage owners survive through the explicit
+LowIR write. There is no internal textual IR roundtrip, hot per-node owning
+graph, process-global mutable cache, global invalidation or fake frontend node.
+The new handoff-85 source `semantic/discarded` is registered in the tool list;
+the audit adds no implementation translation unit.
 
-[Performance 82](performance82.md) checks compiler latency/RSS and executable
-runtime/payload size together against the previous reviewed compiler, over the
-union of all three handoff corpora and audit probes. Profitability is evaluated
-on checked executable work, not IR counts alone. Native selection, allocation,
-ELF/debug encoding and self-hosting are owned by later stages; the supplied
-backend is only an explicitly invoked test boundary. Existing ABI facts and
-source locations remain attached to the operations that execute.
+The useful bounded omission is an aggregate action group with no actions:
+legality comes from the checked group, profitability removes a helper body/call,
+and the budget is one O(1) head check with zero code growth. Object storage and
+required value-initialization zeroing remain. Nonempty/effectful groups retain
+the ordinary path. The cumulative benchmark measures actual checked executable
+work through final supplied-backend encoding, not just IR counts. The array
+image/copy is mandated by PA16 rather than an optional transformation. Its
+constant proof now includes temporary-lifetime legality before publication.
+Existing eight-lane initialization, eight-wrapper named-result summaries, and
+constant-evaluation work/depth budgets remain unchanged. No new fixed-point,
+inlining, code-cloning or allocator pass is introduced.
 
 ## Reference proof, validation and disposition
 
-The only accumulated oracle change is
-`300-function-template-result-first-lookup.ref.exit_status`. The
-[reducer and proof](reference-correction79.md) are sound: the nondependent
-`select(0)` expressions bind at their respective declarations, yield different
-return types, and define distinct equally viable function templates. The call
-is ambiguous. The dependent-name first-declaration rule cannot merge them.
-The retained positive prefix and dependent-name controls preserve those obligations.
-Fresh reference/student observations reproduce acceptance/rejection respectively;
-compiler agreement is not the proof. Bundle
-`c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, its payload, other sidecars and all
-comparison rules are unchanged. No new reference correction is made in audit 82.
-Earlier proofs 65, 67 and 69 remain preserved.
+All **23** accumulated corrections reproduce byte-for-byte from the independent
+transformers. [Proof 83](reference-correction83.md) covers 15 required PA16 array
+images (including two PA17 fixtures), constant union initialization and rejection
+of an empty unknown-bound array. [Proof 84](reference-correction84.md) restores
+five required PA11 one-byte zeroing operations in three oracles. [Proof 85](reference-correction85.md)
+removes two dormant static definitions and one forbidden discarded-reference
+load. The copied scalar values, complete extents, original call/deduction paths
+and all other oracle bytes remain. The pinned bundle remains
+`c2f713cd70d06170632bfde3e75dd6fe1aa44d98`. Reduced observations and every revised
+success oracle validate; the null-reference course source is not used as proof
+of defined C++ behavior. No new reference correction is made in audit 86.
 
 | Required check / evidence | Reviewed code result |
 |---|---|
-| `make test-pa18` | **396/420**, exit 2; identical **24** entry failure paths (one status failure, 23 LowIR comparisons). No extra passing case compensates for a new failure. |
-| `n=18; if [ "$n" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi` | **2609/2609**, exit 0. |
-| `perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src` | Exit 0; same three inherited header-division advisories. |
-| Coverage / comparison | **420** original sources; **1686** fixture/reference files unchanged from entry. Full range changes only the proved exit-status sidecar. |
-| Personal controls | **1137 inherited + 27 audit = 1164**, all pass. |
-| Structural / execution | Ten summary/budget/emission inspections, inherited ABI and scaling/completion checks, and all four source-to-native traces pass. |
-| Performance | Frozen cumulative A/A/ABBA evidence, checked outputs, compiler latency/RSS and runtime/size; stage-scoped assessment in performance82.md. |
+| `make test-pa18` | **417/420**, exit 2; exactly the same three entry failure paths. |
+| `n=18; if [ "$n" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi` | **2609/2609**, exit 0; PA1–PA17 all pass. |
+| `perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src` | Exit 0; the same three inherited header-division advisories. |
+| Coverage and comparison | **420** unchanged stage inputs and **1686** retained fixture paths. All PA1–PA18 fixture paths preserved; only the 23 proved accumulated corrections change bytes. No course or comparison change in the audit. |
+| Personal controls | **1355 inherited + 74 audit = 1429**, all pass; 34 PA16 initialization controls also pass. |
+| Structure / execution | Array-storage, object-entry, volatile-access, fixed-recipe, ABI, summary/budget and inherited scaling inspections pass; eight source-to-native traces pass. |
+| Performance | [Performance 86](performance86.md): full frozen cumulative A/A/ABBA corpus, checked output equivalence, compiler latency/RSS and executable runtime/size, with all historical observations retained. |
 
-Historical **+15%, +16 MiB and 5.5×** targets remain diagnostic, not exit gates.
-PA18/O0 specifies no numerical compiler-latency/RSS ceiling. Historical misses
-and later-stage native/self-hosting constraints add no gate. The audit preserves
-all measurements, correctness, coverage, mandated limits and the O0 proof/work/
-growth budgets. Necessary semantic costs are disclosed separately from optional
-optimization, whose repeatable runtime benefit remains required.
+Acceptance is **PA18/O0 LowIR**, spec §9. Historical **+15%, +16 MiB and 5.5×**
+targets remain diagnostics, not exit gates. PA18 mandates no numerical compiler
+latency/RSS ceiling. Required semantic/contract costs and later native/debug/
+self-hosting work add no gate. Correctness, coverage, mandated limits, work
+bounds and profitability of optional omissions remain requirements; an incorrect
+baseline is never accepted as a faster implementation.
 
-Remaining work is grouped in [plan.md](plan.md): array/aggregate initialization
-and constant materialization; object ABI/emission and scalar representation.
-All 24 failures and the inherited class-ellipsis reducer remain implementation
-obligations. Splitting signatures, scalar conversions and named-result summaries
-across three handoffs left shared query/lookup consumers unchecked together.
-That fragmentation and repeated packaging were avoidable. Future work should
-complete each owner's semantic, constant/query, lowering and emission consumers
-before handoff. PA19 still requires a passing root through-PA18 report.
+Remaining implementation is grouped in [plan.md](plan.md): coherent class-result
+ABI across definitions/calls/indirect signatures (the three course mismatches),
+and the inherited class-ellipsis representation. All remain obligations; PA19
+still requires a passing root through-PA18 report. Fragmenting the array,
+constructor and discarded-expression work into repeated handoffs left shared
+exception and constant-lifetime consumers unchecked together. That fragmentation
+was avoidable. Future groups should cover each fact's semantic, query, constant,
+lowering and emission consumers before packaging another handoff.
 
 | Checkpoint ledger | Range / fixes | Evidence / disposition |
 |---|---|---|
-| 82, accumulated audit | `82fca940` → entry `85ea42c0` → code `ecc308bc`; every commit across handoffs 79–81, shared conversion/query ownership and reusable parser scratch repaired | PA18 **396/420**, identical 24 failures; earlier **2609/2609**; file/coverage pass; **1164** controls; cumulative stage-scoped performance assessed. The reviewed code tip above is the next audit baseline; full-stage remains unfinished. |
+| 86, accumulated audit | `ecc308bc` → entry `890f810b` → code `f6eaf8ab`; every commit across 83–85 plus shared exception/constant-lifetime and brace-prediction repairs | PA18 **417/420**, identical three failures; earlier **2609/2609**, file/coverage pass; **1429** controls; cumulative stage-scoped performance assessed. The reviewed code tip above is the next audit baseline; full-stage remains unfinished. |

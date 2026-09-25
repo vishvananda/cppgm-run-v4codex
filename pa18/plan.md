@@ -1,93 +1,77 @@
 # PA18 implementation plan
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Last reviewed commit: `ecc308bc5ee33ed40fa773f7981961f3018a5867`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 85**.
-Entry `f953e42a`: **414/420**; current **417/420**, **6 → 3 failures**.
-The previous goal turn supplied committed implementation/audit evidence (progress).
-Entry inspection found no inherited live compiler/test process to resume.
+Last reviewed commit: `f6eaf8ab213c90eefffd48f5c47b1ac9a75bce8d`.
+Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 86 complete**.
+Entry `890f810b` and reviewed code: **417/420**, the same **three failures**.
+The preceding goal turn supplied committed progress; entry had no live job to resume.
 
-## Design/spec alignment
+## Accumulated review and ownership
 
-[Handoff 85](handoff85.md) completes discarded-expression demand and validates
-static-storage publication. Selected built-in source forms are retained in one
-packed semantic expression bit. Immediate child facts compose comma/conditional
-forms in O(1); lowering consumes that bit and value category. It no longer rebuilds
-a recursive syntax-classification cache. Expression records remain 36 bytes.
+[Audit 86](audit.md) covers every commit from previous review `ecc308bc` through
+handoffs 83–85 and the validated code tip above. [Audit 82](audit82.md) is preserved
+verbatim. Array-bound completion, constant images, constructor entries, empty
+transfers, discarded-value demand and static storage were reviewed together.
 
-Volatile class discards retain a checked copy recipe and a concrete NodeId-owned
-materialization/lifetime only when evaluated. Fixed template uses share selection;
-dependent queries return compact failure for unavailable copies without demanding
-bodies. Functional `void(expr)` queries use the same conversion rules. Normal and
-exceptional cleanup consume ordinary selected constructor/destructor facts.
-Storage, query, source-form and lifetime owners remain separate; no grammar replay,
-textual semantic keys, unrelated initializer/body demand or global retry is added.
+The audit repaired three connected gaps: exception queries now consume retained
+discarded-copy/default-argument effects; the shared constant evaluator checks
+canonical literal-type facts before accepting temporary lifetimes; cast prediction
+recognizes parenthesized braced constructions. Query recipes stay sparse and
+TU-owned, completion invalidation stays local, and evaluated uses own their
+materializations. No grammar replay, initializer syntax scan, eager body demand,
+textual semantic key or global retry was introduced. Eight source-to-native
+traces and inherited ownership/scaling inspections pass.
 
-[Reference proof 85](reference-correction85.md) corrects two dormant static
-member definitions and one forbidden discarded reference-call load. Its independent
-transformer reads entry oracles only. Pinned-bundle observations, standard anchors
-and old/new hashes are retained. All other oracle bytes, **420** course inputs,
-**1686** fixture paths, status sidecars and comparison rules are preserved.
-[Handoff 83](handoff83.md) and [handoff 84](handoff84.md) remain intact.
+## Evidence and acceptance
 
-## Validation and performance evidence
+The [loop86 manifest](../student.tests/pa18/loop86-evidence.json) binds the complete
+18-commit range, source/binary hashes, all checks and historical evidence.
+`make test-pa18`: **417/420**, exit 2, identical three entry failure paths.
+Earlier PAs: **2609/2609**. File audit passes. All **420** stage inputs and **1686**
+fixture paths remain; comparison rules are unchanged. All **23** accumulated
+oracle corrections reproduce from [proof 83](reference-correction83.md),
+[proof 84](reference-correction84.md) and [proof 85](reference-correction85.md).
+The audit changes no reference. Personal controls: **1355 inherited + 74 audit =
+1429**, all pass; the exact new corpus improves **23/74 → 74/74**. Another 34 PA16
+initialization controls pass.
 
-The [loop85 manifest](../student.tests/pa18/loop85-evidence.json) binds final required
-checks, **1355** explicitly run controls (**1279 inherited + 60 discard + 16 storage**),
-16 new volatile-access inspections, 15 fixed-recipe scaling checks, inherited ABI/scaling/summary checks, seven
-source-to-native traces and all three corrected-oracle validations. The frozen
-entry passes 31/60 new discard controls and 9/16 inspections; final results pass all.
-Earlier PAs pass **2609/2609** and file audit passes. No course failure is added.
+[Performance 86](performance86.md) preserves **869 observations / 36 workloads**
+and verifies **1990** historical observations. Frozen cumulative A/A/ABBA runs
+measure compiler latency/RSS and checked native runtime/payload. Empty-helper
+omission has a repeatable benefit with O(1) proof and zero growth; required array
+image/copy costs are disclosed. Acceptance is **PA18/O0 LowIR**, spec §9.
+Historical **+15%, +16 MiB and 5.5×** targets remain diagnostics: PA18 mandates no
+numeric compiler latency/RSS ceiling. Correctness, coverage, mandated limits,
+bounded work and optional-transform profitability remain requirements. Existing
+initialization, summary and constant-evaluation budgets remain. Later native,
+debug and self-hosting obligations do not add PA18 exit gates.
 
-[Performance 85](performance85.md) records frozen binaries/inputs, A/A calibration,
-four ABBA blocks, compiler latency/peak RSS and checked executable runtime/payload
-size. Incorrect entry class-copy behavior receives final-only costs. Template
-scaling checks one shared selection, materialization counts and linear emitted work.
-The initial measurements exposed repeated source-fixed copy selection; that defect
-was corrected, and both complete measurement sets are preserved.
+## Remaining implementation
 
-Acceptance is **PA18/O0 LowIR**, spec §9. Source-form checks, required volatile
-reads and legal class copies/lifetimes are necessary semantics. No optional pass,
-code cloning or code-growth budget is introduced. Existing initialization and
-summary budgets remain. PA18 has no mandated numeric compiler latency/RSS ceiling;
-historical +15%, +16 MiB and 5.5× targets remain diagnostics. Correctness, coverage,
-bounded work and optional-transform profitability remain requirements. Native
-optimization, source exceptions, debug and self-hosting remain later-stage work.
+**Class-result ABI:** resolve friend-function-template alias results,
+conversion-function-template object results and dependent defaulted non-type
+declaring-scope results together across definitions, calls and indirect signatures.
+These are the three course failures. Reduced bundle observations have not yet
+established a uniform canonical rule for the differences.
 
-## Remaining implementation and independent review
+**Class ellipsis:** finish the inherited representation across LowIR's scalar
+variadic boundary. Passing other controls does not waive this obligation.
 
-**Implementation:** three original class-result ABI mismatches remain: friend
-alias result, conversion-template object result and dependent defaulted result
-type. The inherited class-ellipsis reducer also remains unfinished. Calls,
-definitions and indirect signatures need a coherent result convention; class
-ellipsis needs a representation across LowIR's scalar variadic boundary. Reduced
-bundle observations do not yet establish a uniform canonical type rule for the
-ABI differences. The completed discard/static facts cannot make those decisions.
-This is a coherent incomplete handoff, not a waiver or advancement to PA19.
-
-**Independent review:** source-form fidelity through overloads and fixed/dependent
-queries; complete contextual keys and recipe reuse; one selected volatile copy
-and temporary; default-argument and normal/exceptional cleanup; the dormant-static
-and discarded-reference proofs. [Audit 82](audit.md) remains the last review.
-Handoffs 83–85 are unaudited; this third accepted implementation handoff preserves
-the accumulated-review boundary. Passing controls do not waive those questions.
-Stage-base and last-reviewed markers above are preserved.
+The separate array, constructor and discard handoffs left shared exception and
+constant-lifetime consumers unchecked together. This fragmentation was avoidable.
+Future groups should validate each fact through semantic/query/constant consumers,
+lowering and emission before handing it off. The accumulated review is complete;
+the remaining implementation above is not a waiver or advancement to PA19.
 
 ## Handoff ledger
 
-Stage entry **266/420**. Older ledgers remain in [audit66](audit66.md),
-[audit70](audit70.md), [audit74](audit74.md) and [audit78](audit78.md).
+Stage entry **266/420**. Older ledgers remain in [audit82](audit82.md) and its links.
 
 | Checkpoint | Range / disposition |
 |---|---|
-| 78 | `8dc4636d` → `82fca940`; accumulated audit 75–77, **388/420**, 32 failures; 922 controls; prior/file/coverage pass. |
-| 79 | `ef0e43c0` → `50407fc1`; [signature handoff](handoff79.md), **393/420**, 27 failures; one proved correction; reviewed in 82. |
-| 80 | `c5e2c271` → `ce7d3e7f`; [scalar/reference handoff](handoff80.md), **395/420**, 25 failures; reviewed in 82. |
-| 81 | `69247877` → `25b89fc2`; [named-result handoff](handoff81.md), **396/420**, 24 failures; reviewed/corrected in 82. |
-| 82 | `82fca940` → entry `85ea42c0` → code `ecc308bc`; accumulated audit, **396/420**, 24 failures; earlier **2609/2609**, file/coverage and **1164** controls pass. |
-| 83 | Entry `48c864ab` → code `ac354fad`; arrays/query/declaration repairs, **411/420**, nine failures; 17 proved oracle corrections. Earlier **2609/2609**, file/coverage and **1225** controls pass; independent review pending. |
-| 84 | Entry `09a77fca` → code `b4d66361`, proof `7a7ce959`; constructor/empty-value repairs, **414/420**, six failures; 51 new controls, 21 inspections, three proved oracle revisions. Earlier **2609/2609**, file/coverage pass; independent review pending. |
-| 85 | Entry `f953e42a` → code `53252879`, extensions `f1fae6ad`/`076eccdd`, proof `37c7c832`; demand/discard group, **417/420**, three failures; 76 new controls and 16 inspections, three proved oracle revisions. Earlier **2609/2609**, file/coverage pass; independent review pending. |
+| 82 | `82fca940` → entry `85ea42c0` → code `ecc308bc`; accumulated audit, **396/420**; earlier **2609/2609**, file/coverage and **1164** controls pass. |
+| 83–85 | Entry `48c864ab` → `890f810b`; [arrays](handoff83.md), [constructors](handoff84.md), [discard/storage](handoff85.md); **411 → 414 → 417/420**, 23 proved oracle corrections; reviewed and repaired in 86. |
+| 86 | `ecc308bc` → entry `890f810b` → code `f6eaf8ab`; accumulated audit and exception/constant-lifetime/brace fixes. **417/420**, identical three failures; earlier **2609/2609**, file/coverage and **1429** controls pass; cumulative stage-scoped performance accepted. The code tip is the next review baseline. |
 
 Required commands: `make test-pa18`, `make test-report-through-pa17`,
 `perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src`.
