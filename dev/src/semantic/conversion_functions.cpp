@@ -59,7 +59,10 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
 EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target, bool deduce)
 {
     if (!owner || scopes[owner].kind != ScopeKind::Class) return 0;
-    EntityId result = 0;
+    bool pattern = template_pattern_scopes.get(owner);
+    // Retained declarations have targets before layout or body demand.
+    // Their fixed signatures and conversion templates share one candidate set.
+    EntityId result = pattern ? conversion_bindings.get(key(owner,target)) : 0;
     for (auto e : conversion_candidates(entities[scopes[owner].entity].type)) {
         ++candidate_work;
         if (entities[e].template_info) {
@@ -70,7 +73,27 @@ EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target, bool deduce)
         // qualification alternatives for initialization do not change it.
         if (e && types[entities[e].type].child == target) result = merge_lookup(result,e);
     }
+    if (pattern && !result)
+        for (auto b = access_base(scopes[owner].entity); b; b = bases[b].next)
+            result = merge_lookup(result,conversion_lookup(entities[bases[b].base].scope,target,deduce));
     return result;
+}
+EntityId Analyzer::resolve_conversion_name(NodeId name, ScopeId use)
+{
+    auto type = ast[ast[name].last].detail;
+    bool qualified = ast[name].first != ast[name].last || ast[name].op == OP_COLON2;
+    auto owner = qualified ? name_owner(name,use) : naming_class(use);
+    TypeId target;
+    if (qualified) {
+        // [expr.prim.general]/12 constrains qualified conversion-function-ids.
+        // Use the same owner for ordinary expressions and unevaluated queries.
+        auto specs = ast[type].first;
+        auto at_use = declarator(ast[specs].next,specifiers(specs,use),use);
+        target = type_id(type,owner);
+        if (types.signature(at_use) != types.signature(target))
+            throw std::runtime_error("qualified conversion type differs in class and use scopes");
+    } else target = type_id(type,use);
+    return conversion_lookup(owner,target);
 }
 Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
 {

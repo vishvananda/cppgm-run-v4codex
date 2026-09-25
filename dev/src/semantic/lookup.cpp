@@ -343,6 +343,8 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
 {
     if (!n) return 0;
+    if (mode == Lookup::Ordinary && ast[ast[n].last].op == KW_OPERATOR && ast[ast[n].last].detail)
+        return resolve_conversion_name(n,s);
     // A decltype-specifier can be the complete class-or-decltype in a base,
     // not just an intermediate nested-name qualifier. Its query owns the
     // selected type; there is no terminal identifier to look up.

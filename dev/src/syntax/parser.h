@@ -27,6 +27,7 @@ private:
     bool member_name = false;
     unsigned angle_expression = 0;
     std::vector<std::size_t> angle_stack;
+    std::vector<Binding> angle_heads;
     std::vector<unsigned char> lexical_hints;
     std::vector<ScopeId> expression_scopes;
     unsigned char lexical_hint(IdentifierId id);

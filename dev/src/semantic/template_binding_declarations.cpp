@@ -234,6 +234,13 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (function && special_init && ast[special_init].op == KW_DELETE) entities[e].deleted_function = true;
             if (function) bind_template_defaults(d,s,0,defaults_allowed);
             if (function && type) bind_pattern_member(e,n,d);
+            if (function && type && ast[ast[name].last].op == KW_OPERATOR && ast[ast[name].last].detail) {
+                if (!entities[e].member_info) member_facts(e);
+                auto target = types[entities[e].type].child;
+                members[entities[e].member_info].conversion_target = target;
+                auto k = key(s,target);
+                conversion_bindings.put(k,merge_lookup(conversion_bindings.get(k),e));
+            }
             if (body) {
                 Body b{body,d,s,e,n}; if (deferred) deferred->push_back(b); else bind_template_body(b);
             } else if (init) {

@@ -28,6 +28,12 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
     auto owner = ast[n].op == OP_COLON2 ? global : s;
     bool qualified = ast[n].op == OP_COLON2;
     for (auto p = ast[n].first; p; p = ast[p].next) {
+        if (full && p == last && ast[p].op == KW_OPERATOR && ast[p].detail) {
+            r.entity = resolve_conversion_name(n,s);
+            auto target = facts[ast[p].detail].type;
+            r.dependent |= dependent_type(target) || (r.entity && entities[r.entity].template_pattern);
+            break;
+        }
         if (ast[p].detail && ast[ast[p].detail].kind == Kind::Decltype) {
             r.dependent |= bind_template_expression(ast[ast[p].detail].first,s);
             if (r.dependent) break;

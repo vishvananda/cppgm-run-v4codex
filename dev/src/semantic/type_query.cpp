@@ -286,7 +286,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
 }
 QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner)
 {
-    if (!query_fact(id).dependent) return id;
+    auto original = type_queries[id];
+    // A fixed declaration can still be named through the current instantiation.
+    // Its naming class must follow the frame even when its value/type is fixed.
+    bool remap_context = owner && original.naming && template_pattern_scopes.get(original.naming);
+    if (!query_fact(id).dependent && !remap_context) return id;
     auto cache_key = owner ? key(owner,id) : (std::uint64_t(1)<<63)|id;
     auto& results = owner ? specialization_query_cache : cache;
     if (auto old = results.get(cache_key)) return old;
@@ -341,7 +345,23 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     }
     if (owner && q.context) q.context = substitution_scope(owner,q.context);
     if (owner && q.naming) q.naming = substitution_scope(owner,q.naming);
-    if (owner && q.entity) q.entity = substitution_binding(owner,q.entity);
+    if (owner && q.entity) {
+        auto spec = specializations[entities[q.entity].specialization];
+        if (spec.pattern && entities[spec.pattern].template_pattern && entities[q.entity].kind == EntityKind::Function) {
+            // A source conversion-function template can already have a target-
+            // selected specialization. Project its template and arguments,
+            // retaining the selection without repeating target deduction.
+            auto pattern = substitution_binding(owner,spec.pattern);
+            auto pack = argument_packs[spec.arguments]; std::vector<ArgumentId> args;
+            for (unsigned j = 0; j < pack.count; ++j) {
+                auto arg = substitute_argument(argument_types[pack.offset+j],bindings,cache,owner);
+                if (!arg) return 0;
+                args.push_back(arg);
+            }
+            q.entity = specialize(pattern,args);
+            if (!q.entity) return 0;
+        } else q.entity = substitution_binding(owner,q.entity);
+    }
     if (q.type) {
         q.type = substitute_type(q.type,bindings,cache,owner);
         if (!q.type) return 0;

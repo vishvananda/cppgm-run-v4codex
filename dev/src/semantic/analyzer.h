@@ -163,6 +163,7 @@ private:
     Index conversion_results, conversion_result_requests;
     std::size_t conversion_result_work = 0;
     void prepare_conversion_result(EntityId e);
+    EntityId resolve_conversion_name(NodeId name, ScopeId scope);
     FactState completion_state = FactState::NotStarted;
     Index list_index, direct_list_index, empty_list_index, empty_direct_list_index;
     Index class_typedef_declarations;

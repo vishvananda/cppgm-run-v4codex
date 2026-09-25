@@ -139,12 +139,14 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     }
     if (callee.kind == QueryKind::Name && fn.entity && function_binding(fn.entity)) {
         for (auto e : candidates(fn.entity)) if (entities[e].member_info) {
+            auto context = template_object_context(q.context);
             auto implicit = q.type ? q.type : implicit_object_type(q.context);
-            if (implicit) object = types[implicit].child;
+            if (context.owner && context.available && template_pattern_scopes.get(entities[context.owner].scope))
+                object = types.qualify(entities[context.owner].type,context.cv);
+            else if (implicit) object = types[implicit].child;
             else {
                 // A retained member body has a symbolic object identity and
                 // cv, with fixed base edges, before its class has a layout.
-                auto context = template_object_context(q.context);
                 if (context.owner && context.available)
                     object = types.qualify(types.named(context.owner),context.cv);
             }

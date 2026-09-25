@@ -11,7 +11,10 @@ std::size_t Parser::probe_angles(std::size_t ahead)
     }
     angle_stack.clear();
     angle_stack.push_back(ahead);
-    std::vector<Binding> heads(1);
+    // Share the delimiter stack's parser lifetime instead of allocating a
+    // fresh binding stack for every probed template-id. Capacity follows only
+    // maximum active angle depth and is released with the parser.
+    angle_heads.clear(); angle_heads.push_back(Binding());
     Binding head;
     ScopeId owner = scope;
     bool qualified = false;
@@ -42,7 +45,7 @@ std::size_t Parser::probe_angles(std::size_t ahead)
                 prior.op == KW_REINTERPET_CAST || prior.op == KW_CONST_CAST;
             if (binding.category == Category::Unknown && identifier(i-1))
                 templated |= lexical_hint(prior.text) & 2;
-            if (templated) { angle_stack.push_back(i); heads.push_back(binding); }
+            if (templated) { angle_stack.push_back(i); angle_heads.push_back(binding); }
             head = Binding(); qualified = false;
         }
         else if (in.is(">", i) || in.is(">>", i)) {
@@ -50,7 +53,7 @@ std::size_t Parser::probe_angles(std::size_t ahead)
             while (pieces-- && !angle_stack.empty()) {
                 in.remember_angle(angle_stack.back(), i + 1);
                 angle_stack.pop_back();
-                head = heads.back(); heads.pop_back(); qualified = false;
+                head = angle_heads.back(); angle_heads.pop_back(); qualified = false;
             }
             if (angle_stack.empty()) return i + 1;
         }
