@@ -1,189 +1,203 @@
-# PA18 checkpoint audit 70
+# PA18 checkpoint audit 74
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Previous Last reviewed commit: `3a883d10a27e41d1b126eaef05eaf0b454de1646`.
-Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
-Entry: `15b34993c14b10a196c90b876b76d1658da129ba`.
+Previous Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
+Entry: `2433d6de4f40148d561a1aae89b586a007e9513c`.
+Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
 
-**Checkpoint audit passes; PA18 full-stage implementation remains incomplete.**
-All 13 accumulated commits since the previous reviewed code tip, their combined
-changes and cross-handoff interactions were reviewed, followed by the audit fix.
-The final combined range changes 42 implementation/registration files.
-[Evidence](../student.tests/pa18/loop70-evidence.json) records complete commit IDs,
-patch/source/fixture hashes, failure sets, commands and results. The first audit
-and earlier ledger remain in [audit66.md](audit66.md).
+**Checkpoint audit passes; PA18 full-stage remains incomplete.** This review
+covers every accumulated commit since the previous reviewed code tip, their
+combined changes, and interactions across handoffs 71–73. The final range changes
+52 implementation/registration files. The preceding audit is preserved verbatim
+in [audit70.md](audit70.md); [audit66.md](audit66.md) covers the first stage review.
+[Evidence](../student.tests/pa18/loop74-evidence.json) records full commit IDs,
+patch/source hashes, checks, failure sets, coverage, controls and frozen artifacts.
 
-## Accumulated range
+## Complete range
 
-| Commits, chronological within each group | Review and interactions |
+| Commits in chronological order | Review and interactions |
 |---|---|
-| `06211ad0` | Prior audit records; retains the reviewed source boundary, historical measurements and mandatory remaining work. |
-| `626b5809`, `d5497ec7`, `f2cd086f`, `0b60ca52` | Typed pointer/reference/function NTTPs, source-form restrictions, canonical storage identities, definition demand, lexical frames, ABI substitutions and cross-TU internal linkage. Reviewed the initial implementation and later cache/access correction together. Completed address facts include query, target and access modes; incomplete facts retain query dependencies. |
-| `047215cf` | Address handoff, controls and frozen performance; PA9 correction proof independently checked. |
-| `3c78f083`, `e0cc21b4`, `bd1d7b4c` | Partial explicit frames, deduction before defaults, non-deduced lists/pack lanes, constexpr temporary identity, isolated direct/base trials and array/reference cv. Reviewed canonical-primary filtering before allocating trial bindings and interactions with address signatures and ordering. |
-| `e09162fa` | Deduction handoff and measurements, including preserved pre-filter and prior-suite regression observations; final results supersede those attempts. |
-| `f2a9d7a3`, `6073dbc0` | Retained assignment/destructor queries, ordinary single-evaluation lowering, implicit destructor properties, template-id parsing, source ABI and corrected pseudo-destructor rejection. Findings A–C below repair interacting ownership gaps. |
-| `15b34993` | Query handoff, controls and frozen observations; all pending review obligations included here. |
-| `f59e8f67` | Audit fixes, 56 independent controls, combined architecture trace and benchmark harness. Required checks passed before committing this code tip; this record changes no compiler code. |
+| `2eb83de5` | Prior audit records and retained stage obligations; establishes the code/records boundary. |
+| `b6287928`, `ca314a72` | Context/signature implementation and handoff 71: lexical versus concrete frames, source-parameter identities, decltype query expansions, renamed definition attachment and structural signature keys. Reviewed body/access consumers and original measurements. |
+| `35afaec1`, `2539a319`, `57ee1f2e`, `12cbfe83` | All three alias/pack implementation commits, not just the final handoff: erased/default formation obligations, correlated captures, symbolic prefixes, transparent applied types, explicit argument roles and signature/ABI consumers. Reviewed substitutions across nested owner frames, pack length failure and ordinary call/query use. |
+| `9ebc507c`, `2433d6de` | Callable/prototype implementation and handoff 73: shared invocation selection, actual callee facts, source projection, constexpr function references, immediate conversion rejection, surrogate exception effects, prototype object contexts, using exposure/hiding and ABI identity. Findings below repair interacting ownership gaps. |
+| `f4b9020b`, `8dc4636d` | Audit repairs, independent controls, combined trace and benchmark harness. Code was validated before each commit. This record commit changes no implementation or test code. |
 
-## Findings and fixes
+Historical handoff source hashes were checked against their respective code tips,
+and record hashes against their record commits. Their check logs, fixture hashes
+and frozen binaries were also verified. Current files are not substituted for
+historical evidence. Handoffs 71–73 improved the stage from 353 to 379 passing
+fixtures; this audit retains all 26 repaired paths and adds no course failures.
 
-**A — builtin assignment candidates lost qualification and ranked the wrong types.**
-The new compound-assignment owner decayed class conversion results, erasing
-volatile on the modified lvalue. Arithmetic candidates ranked their RHS against
-the arithmetic result type, and pointer candidates used the RHS promotion
-instead of `ptrdiff_t`. This changed overload participation, not only metadata.
-It also offered a class-to-bool/reference plus pointer candidate absent from the
-builtin overload set. Reduced controls check ambiguity versus user overloads,
-volatile reference/result identity, pointer ranking and effects exactly once.
+## Findings and ownership repairs
 
-`builtin_operand_types_value` now preserves lvalue-reference result cv for the
-modifying consumer. `assignment_operators` records the promoted RHS parameter
-and arithmetic result separately; pointer candidates use the x86-64 `ptrdiff_t`
-type. The ordinary nonclass bool/pointer expression remains valid, while class
-operands only get the specified builtin candidates. Lowering consumes the selected
-conversion once, then converts values for the recorded arithmetic computation.
-No semantic search, fabricated source node or extra evaluated operand is added.
-Proof: N3485 §13.6 [over.built]/18,21,22 (`doc/n3485.txt:17132`), §5.17
-[expr.ass]/7 and §13.3.3 [over.match.best].
+**A — parentheses lost the implicit object and template-id in retained calls.**
+`query_call` treated the outer parenthesis as the callee, losing prototype-member
+receiver facts and explicit template arguments. Dependent `type_query` wrappers
+also failed to propagate selected facts, and constant execution could omit the
+member receiver. Consumers now unwrap parentheses to read canonical callee facts
+while retaining the expression's type/category and actual object. Only an
+unparenthesized ordinary name enables ADL. Reduced controls cover implicit and
+explicit objects, cv/ref qualification, explicit member template arguments,
+constexpr calls and suppressed ADL. N3485 §5.1.1 [expr.prim.general]/6 preserves
+the parenthesized expression's semantics; §3.4.2 [basic.lookup.argdep]/1 defines
+the unqualified-id ADL condition.
 
-**B — scalar pseudo-destruction dropped arrow effects; query arrow checks demanded too much.**
-Concrete scalar destructor binding returned before recording the selected arrow
-chain. Lowering consequently skipped `operator->` and its temporary cleanup;
-`noexcept` could also become true incorrectly. Retained query exception analysis
-ignored its existing arrow chain and intermediate result destruction.
-`expression` now retains the ordinary object-use record, lowering calls the
-ordinary `arrow_object` consumer, and query exception analysis consumes selected
-arrow functions/result types. Both concrete and retained controls check throwing,
-nonthrowing, nested, reference-return and temporary-return chains; execution checks
-call counts and exactly one temporary destructor.
+**B — exception specifications reconstructed incomplete prototype environments.**
+Ordinary member declarations with no named parameters had no prototype object
+context. Templates projected exception syntax and recreated scalar parameter
+bindings, losing pack identities, outer frames and declared cv. The ordinary
+path also used adjusted function signature types, incorrectly dropping top-level
+`const` from parameter names.
 
-The same audit found that query-only `prepare_arrow` used layout demand and C++
-exceptions for expected rejection. It now completes only required declarations,
-records declared base paths without laying them out, checks deletion/access as
-candidate state, and records incomplete-class query dependencies. Required class
-body errors remain hard errors. Missing/private/deleted/nonpointer/recursive arrow
-cases discard candidates; completing a forward class allows the affected query
-to succeed without retrying unrelated facts. N3485 §5.2.4 [expr.pseudo]/1,
-§13.5.6 [over.ref], §5.3.7 [expr.unary.noexcept]/3 and §14.8.2 [temp.deduct]/8
-establish the receiver effects and immediate-context boundary.
+The exception owner now retains a source `QueryId` per declaration exception
+fact. Projected member occurrences resolve their original declaration fact and
+reuse that query; substitution consumes the complete parent/source/local frame.
+Prototype parameters read their already-established raw declared types and
+ordinal/pack identities; `parameter_body_type` applies the array/function
+adjustments without erasing parameter cv. Ordinary declarations use the same
+raw-type rule. Prototype object context records class, cv and static availability.
+The existing exception fact retains not-started/active/success/failure state and
+memoizes each demanded specialization result. Bodies are never required merely
+to bind parameter names. A missing source declaration or type is an invariant
+violation, not a parsing or name-search fallback.
 
-**C — defaulted-destructor deletion cached caller privileges.**
-An out-of-class member's access override leaked into a supposedly
-context-independent deletion fact. The compiler accepted destruction of a class
-whose member's destructor was inaccessible to that class, or rejected the reverse
-case when the owning class was the friend. Two independent out-of-class reducers
-and their positive friend variants expose both directions at entry.
-`default_destructor_facts` now isolates ordinary and retained-pattern property
-computation from naming exemptions and caller access overrides, while keeping
-use-site access checks separate. The destructor's declaration remains the complete
-cache key; no global epoch, extra context variants or cache flush is needed.
-N3485 §12.4 [class.dtor]/5 (`doc/n3485.txt:14281`) specifies access from the
-**defaulted destructor**, not its caller.
+Controls cover ordinary/static/out-of-class functions, throwing versus nonthrowing
+cv overloads, raw cv, array adjustments, empty and correlated outer/inner packs,
+repeated specializations, and unused poison bodies. Proof: N3485 §5.1.1/3,
+§8.3.5 [dcl.fct]/5 (function-type cv removal does not alter parameter types),
+§14.5.3 [temp.variadic], and §15.4 [except.spec]. The new implementation source
+[exception_query.cpp](../dev/src/semantic/exception_query.cpp) is registered in
+`dev/frontend_source_sets.mk`.
 
-[Audit controls](../student.tests/pa18/audit70_controls.py): **56/56 pass**;
-**34 fail on the frozen entry**. All valid cases run through LowIR validation and
-native execution; rejection cases check status, never diagnostic text.
+**C — conversion using-declarations lost their access owner.**
+Using lookup did not recognize conversion-function-ids. Later conversion checks
+could also reject a publicly exposed conversion because the ABI object adjustment
+crossed a private base, even after member access had succeeded through the class
+introducing the using-declaration. `declaration` now uses typed conversion lookup,
+without deducing conversion-function-template specializations. The recorded using
+access owner governs member access; ordinary and query conversions consume the
+selected canonical declaration and base adjustment without repeating an unrelated
+derived-to-base language conversion check. Unexposed private bases, private or
+deleted declarations, and attempts to name conversion template specializations
+remain rejected. Native controls check scalar/pointer/surrogate conversion and
+side effects exactly once. N3485 §7.3.3 [namespace.udecl]/3–4,17–18 and
+§14.5.2 [temp.mem]/7 establish these lookup and access boundaries.
 
-## References and coverage
+**D — indirect and surrogate calls accepted abstract by-value parameters.**
+The shared direct callable path had the check; ordinary indirect/surrogate calls
+and retained query counterparts did not. Each selected-call consumer now rejects
+abstract by-value parameters. Query failure remains structured immediate-context
+rejection; ordinary invalid use is diagnosed. Abstract references remain valid,
+and abstract return types in `decltype` retain the unevaluated exception. Controls
+exercise both callable categories and positive reference/return neighbors.
+N3485 §10.4 [class.abstract]/3 and §14.8.2 [temp.deduct] define the distinction.
 
-Only two required oracle files changed in the accumulated review range. Both
-corrections retain their input, coverage and comparison rule, and are accepted:
+**E — namespace template conflicts reused the class hiding signature.**
+The handoff's canonical using shape always replaced the result type with `void`.
+This rejected two namespace function templates with matching parameter lists but
+different return types, including transparent alias results. Namespace template
+keys now retain return type; class hiding and ordinary function conflicts retain
+their different rules. Existing typed template-head/type keys own cached shapes,
+with no rendered signatures or global invalidation. Four reduced controls check
+both accepted distinct-return templates and rejected matching templates/plain
+functions; inherited member hiding is independently retained. The earlier
+reviewed binary accepts the distinct-return reducer, while audit entry rejects
+it; cumulative performance therefore compares equivalent correct output.
+N3485 §7.3.3/14 explicitly includes the return type for namespace templates;
+/15 excludes it from inherited member hiding. See [local C++11 draft](../doc/n3485.txt).
 
-- [PA9 external-entity substitution](reference-correction67.md): reduced typed ABI
-  and C++ input; PA9 explicitly requires Itanium substitution order. The ABI's
-  [compression rule](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-compression)
-  includes names inside expressions and inserts components before composites.
-  The reducer's `C` enters slot `S1_`, making the final reference `RS1_`.
-  The corrected exact symbol is exercised through the shared encoder.
-- [Scalar receiver noexcept](reference-correction69.md): the receiver's declared
-  potentially throwing call is evaluated; scalar destruction does not erase it.
-  N3485 §5.2.4/1, §5.3.7/3, §15.4/12 and §7/4 require rejecting the assertion.
-  The reduced and original inputs again show pinned-reference acceptance and
-  student rejection. The empty failed-output file remains informational.
-
-Both records pin bundle `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`; the bundle is
-unchanged. Compiler agreement is supplementary, never the proof. Audit 70 changes
-no required fixtures, references, harnesses or statuses. The earlier constant
-initialization correction is unchanged and was reviewed in audit 66.
+[Audit controls](../student.tests/pa18/audit74_controls.py): **60/60 pass**;
+**33 fail on frozen audit entry**. Every accepted case validates LowIR and executes
+the supplied native backend's output with a checked result. Rejection tests check
+status, not diagnostic text. Initial failed reducers and intermediate runs remain
+in scratch evidence, including the completed `f4b9020b` performance observation.
+No reference correction was needed or made in this range.
 
 ## Architecture and optimization trace
 
-[Combined source trace](../student.tests/pa18/audit70_trace.cpp) follows ordinary
-`main`, `advance<Proxy,&target>`, partial explicit array deduction and scalar
-destruction through the real pipeline. `lowering/driver.cpp` retains immutable
-preprocessor source buffers and streams `PostTokenCursor` into the syntax cursor;
-`translation_unit(&sem)` constructs source and semantic facts together.
-Template instantiation projects source/context occurrences from parsed regions;
-it never invokes the parser. Stable TypeId/EntityId/QueryId, canonical argument
-packs, immutable parent-linked frames and local overlay bindings own meaning.
+[Combined trace](../student.tests/pa18/audit74_trace.cpp) follows ordinary `main`
+and demanded `Processor<int,long>::run<int,int>` through correlated `Zip`, a
+prototype `this` exception query, parenthesized callable query, builtin invocation,
+forwarded function reference and a conversion exposed over a private base.
+The real driver retains immutable preprocessing buffers and streams the token
+cursor into integrated parser/semantic construction. Occurrence/context IDs
+project already parsed source regions; template substitution does not call the
+parser. Canonical types, entities, queries, packs and structural signature shapes
+are integer identities. Immutable parent-linked frames retain lexical and concrete
+owners. Applied alias recipes retain formation obligations even when the result
+erases an argument; pack captures use canonical correlated lanes and lengths.
 
-The NTTP address conversion records `target`'s canonical storage/declaration and
-queues its required definition. Partial deduction selects `length<int,2>` before
-the default 5. The assignment records its converted reference and computation;
-the destructor records the selected arrow action. Each demanded body has one
-monotonic state. Nondependent recipes reuse source facts; unused `dormant` has
-no emitted body. The trace has exactly seven function definitions, including
-one selected `advance`, `destroy`, `length`, reference conversion and arrow
-operator, and executes with checked exit zero.
+The trace has 319 tokens, 464 parsed nodes and 431 projected occurrences, 69
+substitution frames, 74 type-substitution computations, 39 query computations and
+one value-query computation. There are two template body transitions, six semantic
+body checks and exactly six emitted definitions: `main`, `sum`, the exposed
+conversion, fallback and selected `run`, and `forward_call`. The query-only `leaf`
+and unused poison body are absent. Completed queries are shared by full query/frame
+keys; signature shapes report 28 computations and 17 hits. Repeated completion
+controls at 32/128/512 unrelated edges each invalidate exactly one affected query.
+No global retry, generation flush, reparsing or rendered semantic key was added.
 
-The address cache includes access mode; successful entries are published only
-with complete prerequisites. Substitution uses complete query/frame keys.
-Query completion retains class→query→consumer reverse edges and local revisions
-from audit 66. Repeated 32/128/512 address uses inspect three candidates total;
-completion controls invalidate only the affected consumer. Base deduction walks
-explicit edges with a visited set and isolates trial bindings after primary
-identity filtering. No rendered type, symbol or serialized graph becomes a
-semantic key; no global retry or process-global mutable cache is introduced.
+Selected callable/conversion/object-use facts cross into typed lowering directly.
+The source ABI graph retains `this` and parameter identities (four ABI controls
+pass), and the shared symbol encoder owns per-symbol substitutions. LowIR contains
+69 instructions and 116 operands, validates explicitly, and the supplied backend
+produces an ELF whose checked result is zero. The receiver conversion increments
+`effects` exactly once. PA18 explicitly requires textual LowIR output; its writer
+and the external native harness are tool boundaries, not internal phase transport.
+Own machine selection/allocation/encoding belongs to later PAs.
 
-Direct typed LowIR consumes the recorded facts. ABI graph nodes consume entity,
-type, argument and source-expression identities; the shared encoder owns one
-symbol's substitution table. The LowIR writer is the required PA18 output adapter,
-not production phase transport. Full validation is explicit via `--validate-lowir`.
-The supplied native backend consumes this LowIR and produces the checked ELF.
-Own selection/allocation/object encoding and self-hosting remain PA24–PA34;
-this audit makes no claim of implementing those later phases.
+Allocation owners remain explicit: TU vectors/arenas own source facts, canonical
+types, occurrence graphs, immutable frames and dense indexes. Local candidate,
+substitution and signature scratch dies at the query/call boundary. The new query
+cache has TU lifetime and declaration-fact keys; exception results have complete
+specialization identity. The driver releases frontend/lowering scratch per TU;
+only required typed output and ABI/linkage facts survive to writing. Hot expression
+records remain 36 bytes. No per-node owning graph or process-global mutable cache
+was introduced. Work follows actual candidates, recipe operands, pack lanes and
+demanded declarations; fourfold source experiments check the resulting scaling.
 
-Storage: canonical facts, query/arrow records, frames, graph nodes and dense indexes
-belong to the TU. Candidate bindings, visited sets and worklists are local scratch.
-The driver releases frontend/semantic/lowering scratch at each TU boundary;
-only output LowIR, ABI/linkage and lifecycle facts survive to writing. No new
-per-node owning allocation or shared-pointer graph is introduced. Work follows
-required conversion candidates, type/query operands, base edges and demanded
-subobjects; arrow traversal detects repeated selected functions and rejects cycles.
+A useful preserved fact is the selected conversion/object identity and its
+observable effect. Lowering consumes it once, preserving access, ABI adjustment,
+volatile inputs, exception behavior and source locations. These fixes establish
+required semantics; they are not optional code transformations. O0 adds no
+fixed-point optimization, speculative rewrite, inlining or growth search. Unknown
+facts remain conservative. Semantic fact completion owns invalidation before
+lowering; lowering never redoes overload resolution. Existing bounded policies
+are unchanged. There is no optional transform whose profitability could justify
+violating semantics, nor an optimization benefit claimed from IR size alone.
+Actual loops/calls/memory/floating workloads and text/payload sizes are measured
+in [performance74.md](performance74.md), including checkpoint and cumulative costs.
+Native spills, register allocation quality, optimization levels and self-hosting
+are later-stage obligations, not fictitious PA18 gates.
 
-A useful fact is the selected lvalue reference and the receiver's observable
-arrow call. Lowering consumes their identities once and preserves effects,
-volatile accesses, cleanup, ABI and source locations. These repairs are mandatory
-semantics, not optional optimizations. O0 adds no fixed-point pass, inlining,
-speculation or code-growth search. Absent proof stays conservative; changed
-selection and access prerequisites belong to their semantic owners, and no
-cached completed lowering fact is rewritten by an optimization. Existing bounded
-array handling is unchanged. [Performance 70](performance70.md) reports the
-complete frozen checkpoint/review-range compiler and executable evidence.
+## Validation, coverage and remaining work
 
-## Required validation and remaining work
-
-| Check | Result at the reviewed code tip |
+| Check | Result at reviewed code tip |
 |---|---|
-| `make test-pa18` | **353/420**, exit 2; exactly entry's 67 failing paths: 43 status failures, 24 LowIR mismatches. |
-| Required prior-through command (`n=18; … make test-report-through-pa$((n - 1))`) | **2609/2609**, exit 0. |
+| `make test-pa18` | **379/420**, exit 2; exact same 41 entry failure paths: 16 status and 25 LowIR mismatches. |
+| Required prior-through command, `n=18; if …; else make test-report-through-pa$((n - 1)); fi` | **2609/2609**, exit 0. |
 | `perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src` | Pass, exit 0; same three inherited header-division advisories. |
-| Coverage/comparison | All 420 source inputs and entry fixture hashes unchanged; no audit changes to course/reference/harness files. |
-| Personal semantic controls | **330 inherited + 56 audit**, all pass. |
-| Accumulated repaired course checks | **26** pass: preserved native results or explicit compile-only contract, plus the corrected rejection; missing `cast` definition remains compile-only. |
-| ABI/linkage/cache | 13 address ABI, four conversion ABI and four query ABI identities; five merged-TU linkage and three repeated-address controls; precise completion controls all pass. |
-| Architecture trace | Validated typed LowIR, selected ABI symbols, absent dormant body, checked ELF exit zero. |
-| Performance | Stage-scoped PA18/O0 acceptance; see frozen observations and discussion in performance record. |
+| Coverage/comparison | All 420 inputs and fixture/reference hashes retained; no changes to course harness, references or comparison rules. |
+| Personal semantic controls | **587 inherited + 60 audit**, all pass. |
+| Accumulated repaired course paths | **26/26** retained: 25 checked executions and one compile-only contract with an undefined assignment operator; no stub or oracle relaxation. |
+| ABI/completion/trace | Four ABI controls, three precise completion controls and validated source-to-ELF trace pass. |
+| Performance | Frozen A/A/ABBA compiler/runtime/RSS/text evidence; PA18/O0 stage-scoped acceptance in performance74.md. |
 
-This checkpoint's exit gate is preservation, not PA18 completion. The unchanged
-67 failures remain mandatory work, grouped in [plan.md](plan.md): retained
-contexts/packs/expression validity; constructor/explicit deduction; LowIR
-initialization/result facts. None is waived by executable agreement. The earlier
-three handoffs split closely interacting query, access, ABI and execution work
-and repeated evidence packaging; those avoidable boundaries should be consolidated.
-Do not advance to PA19 before the root through-PA18 report passes.
+The earlier reference corrections in [65](reference-correction65.md),
+[67](reference-correction67.md) and [69](reference-correction69.md) retain their
+reducers, rule proofs and bundle `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`.
+There are no new reference changes to approve or justify.
+
+Remaining work stays broad in [plan.md](plan.md): declaration timing/lookup;
+constructor and explicit deduction/list-initialization queries; ordinary LowIR
+initialization/result policy. The class-ellipsis reducer also remains mandatory.
+All 41 course failures remain implementation obligations. Do not advance to PA19
+before the root through-PA18 report passes. Splitting context, alias and callable
+work across handoffs left closely coupled exception, prototype, access and using
+consumers unaudited together and duplicated packaging; those boundaries were
+avoidable and should not be repeated for the remaining ownership groups.
 
 | Checkpoint ledger | Range / fixes | Evidence / disposition |
 |---|---|---|
-| 70, accumulated audit | `3a883d10` → entry `15b34993` → `f59e8f67`; all three handoffs plus assignment, arrow/effect and destructor-property repairs | PA18 353/420, same 67 failures; prior 2609/2609; file audit pass; coverage/comparison preserved; performance accepted in PA18/O0 scope. Reviewed code tip above; full-stage advancement remains pending. |
+| 74, accumulated audit | `f59e8f67` → entry `2433d6de` → `8dc4636d`; every commit across three handoffs, plus five ownership repairs | PA18 379/420, exact same 41 failures; earlier 2609/2609; file audit and coverage pass; 647 semantic controls; stage-scoped performance accepted. Code tip above is the next review baseline; full-stage remains unfinished. |
