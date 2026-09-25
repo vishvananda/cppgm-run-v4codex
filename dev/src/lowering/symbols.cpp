@@ -122,7 +122,9 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (e.member_info) metadata.object_root |= base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
         metadata.object_root |= sem.member_fact(id).retained_root;
-        if (local_abi_scope(e.owner)) { metadata.object_root = true; metadata.binding = SBM_INTERNAL; }
+        if (local_abi_scope(e.owner) || (internal && e.specialization && local_abi_type(e.type))) {
+            metadata.object_root = true; metadata.binding = SBM_INTERNAL;
+        }
     }
     if (e.c_linkage) metadata.linkage = LLM_C;
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;

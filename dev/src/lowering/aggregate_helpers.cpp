@@ -29,6 +29,9 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
 {
     auto action = sem.initializers[plan];
     if (action.kind != InitKind::Group || sem.types[action.type].kind != TypeKind::Named) return false;
+    // An empty aggregate has no initialization actions. Its caller still owns
+    // distinct object storage, but there is no helper body or call to emit.
+    if (!action.first) return true;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         if (!item.field || (!type(item.type).scalar() && !item.helper_transfer) || (item.kind != InitKind::Scalar && item.kind != InitKind::Converted)) return false;
