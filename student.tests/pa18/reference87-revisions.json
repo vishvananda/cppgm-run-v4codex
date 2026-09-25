@@ -1,0 +1,44 @@
+{
+  "entry": "01b47c20b41f68d3142df6a8691fc905c20341a8",
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "revisions": [
+    {
+      "path": "pa18/tests/general/300-friend-function-template-alias-result-definition.ref",
+      "before_sha256": "4705bf7731d0895cec33759cfcc350da22ea9ac1fe2058128d8dc7f82954743e",
+      "after_sha256": "7016abccca314720821c7c6d691c2dc4d790c938d16a4d94c54a286cc9850af1",
+      "functions": {
+        "make_owner": [
+          4,
+          4
+        ],
+        "make_owner__ov2": [
+          4,
+          4
+        ]
+      }
+    },
+    {
+      "path": "pa18/tests/spec/300-conversion-function-template-object-result-copy-init.ref",
+      "before_sha256": "f42a6a328a6a5a9bfecabad716df519eb385d116b48336e96d8041db3bb12269",
+      "after_sha256": "10ff9a7364143f89746481bdb2071b95be3a363461ca83d8bc3506a8e3055a12",
+      "functions": {
+        "X__operatorT": [
+          4,
+          4
+        ]
+      }
+    },
+    {
+      "path": "pa18/tests/spec/300-dependent-result-defaulted-nontype-declaring-scope.ref",
+      "before_sha256": "d526d2067f69938a0944d152d6357ce796acf7788c622eddc8e5c7562ee3e1f8",
+      "after_sha256": "cf3f9b28a5c77ea48d67382168b349f03299d1061b3bf22dc81257c4da680034",
+      "functions": {
+        "units__operator_": [
+          8,
+          8
+        ]
+      }
+    }
+  ]
+}

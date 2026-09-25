@@ -11,17 +11,20 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
     %t1 = addr $value
     %t2 = addr @x
-    call void @X__operatorT(%t1, %t2)
+    %result87_X__operatorT_1 = call obj<4x4> @X__operatorT(%t2)
+    copyobj 4x4 %result87_X__operatorT_1, %t1
     %t3 = addr $value
     return i32 0
 }
-function @X__operatorT(%ret : ptr [pass=indirect_result, object_bytes=4], %this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZNK1Xcv1AIS0_EEv, inline_hint=yes] {
+function @X__operatorT(%this : ptr [object_bytes=4]) -> obj<4x4> [binding=weak, object=_ZNK1Xcv1AIS0_EEv, inline_hint=yes] {
   slot $this : ptr
+  slot $result87 : obj<4x4>
 
   block ^entry:
     store ptr %this, $this
+    %result87 = addr $result87
     %t1 = load ptr $this
     %t2 = index i8 [projection=field] %t1, 0
-    copyobj 4x4 %t2, %ret
-    return void
+    copyobj 4x4 %t2, %result87
+    return obj<4x4> $result87
 }
