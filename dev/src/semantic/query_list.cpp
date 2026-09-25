@@ -35,6 +35,9 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
         auto source = cursor < args.size() ? args[cursor] : omitted;
         auto value = query_fact(source).expression;
         auto c = conversion_value(value,type);
+        auto literal = type_queries[source];
+        if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,type))
+            c = query_list_conversion(intern_query(empty,{source}),type);
         if (c.valid()) { if (cursor < args.size()) ++cursor; }
         else if (type_queries[source].kind != QueryKind::List && aggregate_type(type)) {
             auto begin = cursor;
@@ -95,7 +98,11 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             complete_class(types[t].entity);
             if (!entities[types[t].entity].complete) return incomplete_query(t);
         }
-        if (aggregate_type(t)) {
+        auto literal = args.size() == 1 ? type_queries[args[0]] : TypeQuery();
+        if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,t)) {
+            plan.literal = literal.value; plan.aggregate = true;
+            if (types[t].bound && ast.literals[literal.value].elements <= types[t].bound) plan.rank = 0;
+        } else if (aggregate_type(t)) {
             unsigned cursor = 0; plan = list_plans[query_list_aggregate(args,cursor,t,q.context)];
             plan.target = q.type; plan.direct = q.value;
             if (cursor != args.size()) plan.rank = 255;
@@ -147,7 +154,7 @@ bool Analyzer::validate_query_list(std::uint32_t id)
                 access = members[entities[access].member_info].inherited_constructor;
             if (deleted_transfer(ctor) || !accessible(access,plan.scope,entities[access].owner) ||
                 (!plan.direct && members[entities[ctor].member_info].explicit_constructor)) return false;
-            check_default_constructor(ctor);
+            if (!default_constructor_valid(ctor)) return false;
             auto f = types[entities[ctor].type];
             std::vector<QueryId> args; std::vector<Conversion> chosen;
             for (unsigned i = 0; i < plan.call.argument_count; ++i) {
@@ -164,9 +171,13 @@ bool Analyzer::validate_query_list(std::uint32_t id)
             auto c = conversions[plan.call.conversions+i];
             if (!valid_fixed_conversion(value,0,c,plan.scope)) return false;
             if (i < plan.explicit_count && c.kind != Conversion::Kind::QueryList && !plan.direct_binding) {
-                Constant constant;
-                if (narrowing_needs_value(value.type,value_type(c.target))) constant = constants[query_value(source)];
-                if (narrowing_conversion(value.type,value_type(c.target),constant)) return false;
+                auto from = value.type; Constant constant;
+                if (c.kind == Conversion::Kind::User) from = value_type(types[entities[c.function].type].child);
+                if (narrowing_needs_value(from,value_type(c.target))) {
+                    if (c.kind == Conversion::Kind::User) { auto stage = c; stage.target = from; stage.reference = false; constant = constant_query_conversion(source,stage); }
+                    else constant = constants[query_value(source)];
+                }
+                if (narrowing_conversion(from,value_type(c.target),constant)) return false;
             }
             conversions[plan.call.conversions+i] = c;
         }
@@ -181,7 +192,19 @@ Constant Analyzer::constant_query_list(std::uint32_t id)
     auto argument = [&](unsigned i) { return constant_query_conversion(query_edges[plan.call.arguments+i],conversions[plan.call.conversions+i]); };
     if (plan.direct_binding) return argument(0);
     Constant value;
-    if (plan.aggregate) {
+    if (plan.literal) {
+        auto literal = plan.literal;
+        auto target = types[value_type(plan.target)]; std::vector<EvaluatedPart> parts;
+        for (unsigned i = 0; i < ast.literals[literal].elements; ++i) {
+            EvaluatedPart p; p.selector = i; p.value = literal_element(literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),i));
+            p.value = convert(p.value,target.child,true); parts.push_back(p);
+        }
+        if (ast.literals[literal].elements < target.bound) {
+            EvaluatedPart p; p.selector = ast.literals[literal].elements; p.count = target.bound-p.selector;
+            p.value = constant_zero(target.child); parts.push_back(p);
+        }
+        value = evaluated_object(value_type(plan.target),parts);
+    } else if (plan.aggregate) {
         std::vector<EvaluatedPart> parts;
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {
             auto field = list_fields[plan.fields+i]; EvaluatedPart p;

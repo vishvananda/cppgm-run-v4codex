@@ -5,6 +5,14 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
 {
     auto target = types[to];
     auto invalid = [&]() { Conversion c; c.target = to; return c; };
+    auto inverse = [&](TypeId derived, TypeId base) {
+        auto path = base_steps(derived,types[base].entity);
+        if (!base_adjustments[path].total) return 0u;
+        if (auto old = base_adjustments[path].inverse) return old;
+        BaseAdjustment reverse = base_adjustments[path]; reverse.total = 0-reverse.total;
+        auto result = base_adjustments.size(); base_adjustments[path].inverse = result;
+        base_adjustments.push_back(reverse); return unsigned(result);
+    };
     auto downcast = [&](TypeId derived, TypeId base) {
         auto path = base_path(derived,types[base].entity);
         if (!path || !base_adjustments[path].edge || base_adjustments[path].ambiguous) return false;
@@ -22,12 +30,14 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);
         if (!cv_cast && op != KW_REINTERPET_CAST && !(types[x.type].cv & ~types[target.child].cv)) {
             if (derived_from(x.type, target.child)) {
+                auto path = base_path(x.type,types[target.child].entity);
+                if (!path || base_adjustments[path].ambiguous) return invalid();
                 compatible = true; c.derived = true;
                 c.adjustment = base_steps(x.type, types[target.child].entity);
                 if (!cstyle && !base_accessible(types[x.type].entity,types[target.child].entity,s)) return invalid();
             } else if (derived_from(target.child, x.type)) {
                 if (!downcast(target.child,x.type)) return invalid();
-                compatible = true; c.derived = true;
+                compatible = true; c.derived = true; c.adjustment = inverse(target.child,x.type);
                 if (!cstyle && !base_accessible(types[target.child].entity,types[x.type].entity,s)) return invalid();
             }
         }
@@ -61,12 +71,16 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     bool pointer_cast = false;
     if (pointer(from) && pointer(to)) {
         TypeId a = types[from].child, b = types[to].child;
+        if (op != KW_REINTERPET_CAST && derived_from(a,b)) {
+            auto path = base_path(a,types[b].entity);
+            if (!path || base_adjustments[path].ambiguous) return invalid();
+        }
         bool preserves_cv = !(types[a].cv & ~types[b].cv);
         pointer_cast = (cstyle || preserves_cv) && (reinterpret ||
             (fundamental(a, FT_VOID) && types[b].kind != TypeKind::Function) || derived_from(b, a));
         if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(b, a)) {
             if (!downcast(b,a)) return invalid();
-            c.derived = true;
+            c.derived = true; c.adjustment = inverse(b,a);
             if (!cstyle && !base_accessible(types[b].entity,types[a].entity,s)) return invalid();
         }
     }

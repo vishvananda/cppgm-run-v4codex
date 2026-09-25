@@ -4,13 +4,18 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::check_default_constructor(EntityId e)
 {
+    if (!default_constructor_valid(e)) throw FailedSemanticFact(SemanticFact::DefaultConstructorProperties,e,entities[e].source);
+    return members[entities[e].member_info].default_properties == BooleanFact::True;
+}
+bool Analyzer::default_constructor_valid(EntityId e)
+{
     auto m = entities[e].member_info;
     if (!m || !members[m].constructor || transfer_member(e) || members[m].inherited_constructor || !members[m].synthetic)
-        return false;
+        return true;
     auto state = members[m].default_properties;
-    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
-    if (state == BooleanFact::Failure) throw FailedSemanticFact(SemanticFact::DefaultConstructorProperties,e,entities[e].source);
-    if (state == BooleanFact::Active) throw std::runtime_error("recursive default constructor properties");
+    if (state == BooleanFact::True || state == BooleanFact::False) return true;
+    if (state == BooleanFact::Failure) return false;
+    if (state == BooleanFact::Active) return false;
     members[m].default_properties = BooleanFact::Active;
     try {
         auto cls = scopes[entities[e].owner].entity;
@@ -18,21 +23,22 @@ bool Analyzer::check_default_constructor(EntityId e)
         if (!entities[cls].complete) throw UnavailableSemanticFact(SemanticFact::ClassDefinition,cls,entities[cls].source);
         auto scope = entities[cls].scope;
         auto info = entities[cls].class_info;
+        bool valid = true;
         bool trivial = !members[m].defaulted_late && !polymorphic(cls), const_default = true;
         auto subobject = [&](TypeId type, bool initialized, bool variant, bool mutable_field) {
             while (types[type].kind == TypeKind::Array) type = types[type].child;
-            default_destructor(type,scope,false);
+            if (!default_destruction_valid(type,scope)) { valid = false; return; }
             if (initialized) { trivial = false; return; }
             auto kind = types[type].kind;
             if (kind == TypeKind::LRef || kind == TypeKind::RRef)
-                throw std::runtime_error("default constructor has uninitialized reference");
+                { valid = false; return; }
             EntityId ctor = 0;
             if (class_value(type)) {
                 ctor = default_constructor(type,scope,false);
-                if (!ctor || deleted_transfer(ctor)) throw std::runtime_error("deleted default subobject constructor");
-                check_access(ctor,scope,entities[ctor].owner);
-                bool child_trivial = check_default_constructor(ctor);
-                if (variant && !child_trivial) throw std::runtime_error("nontrivial union variant default constructor");
+                if (!ctor || deleted_transfer(ctor) || !accessible(ctor,scope,entities[ctor].owner) || !default_constructor_valid(ctor))
+                    { valid = false; return; }
+                bool child_trivial = members[entities[ctor].member_info].default_properties == BooleanFact::True;
+                if (variant && !child_trivial) { valid = false; return; }
                 trivial &= child_trivial;
             }
             bool const_child = ctor && (!members[entities[ctor].member_info].synthetic ||
@@ -40,7 +46,7 @@ bool Analyzer::check_default_constructor(EntityId e)
             const_default &= const_child || mutable_field;
             if (!variant && (types[type].cv & 1) && (!ctor ||
                 !const_child))
-                throw std::runtime_error("default constructor has uninitialized const member");
+                valid = false;
         };
         for (auto b = class_facts[info].first_base; b; b = bases[b].next)
             subobject(entities[bases[b].base].type,false,false,false);
@@ -57,10 +63,10 @@ bool Analyzer::check_default_constructor(EntityId e)
             }
             subobject(type,entities[field].initializer != 0,variant,entities[field].mutable_field);
         }
-        if (has_variant && all_const) throw std::runtime_error("all default union variants are const");
+        if (has_variant && all_const) valid = false;
         members[m].const_default = const_default;
-        members[m].default_properties = trivial ? BooleanFact::True : BooleanFact::False;
-        return trivial;
+        members[m].default_properties = valid ? (trivial ? BooleanFact::True : BooleanFact::False) : BooleanFact::Failure;
+        return valid;
     } catch (const UnavailableSemanticFact&) {
         members[m].default_properties = BooleanFact::NotStarted; throw;
     } catch (...) { members[m].default_properties = BooleanFact::Failure; throw; }

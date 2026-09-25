@@ -52,21 +52,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     case Kind::PackExpression:
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
     case Kind::New: {
-        q.kind = QueryKind::New; q.context = s;
-        while (!template_object_context_index.get(q.context) &&
-            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
-            q.context = scopes[q.context].parent;
-        q.type = type_id(child(n,Kind::TypeId),s); q.value = child(n,Kind::Global) != 0;
-        TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
-        std::vector<QueryId> args(1,intern_query(type,{}));
-        auto init = child(n,Kind::Initializer);
-        auto list = ast[init].first;
-        for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
-        TypeQuery call; call.kind = QueryKind::Call; call.context = q.context;
-        children.push_back(intern_query(call,args));
-        auto placement = ast[child(n,Kind::Placement)].first;
-        for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
-        break;
+        auto id = new_query(n,s);
+        if (id) source_index.put(key(s,n),id);
+        return id;
     }
     case Kind::IdExpression: {
         auto name = node.detail;
@@ -543,11 +531,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         if (integral(q.type) && class_value(children[0].expression.type)) {
             auto c = conversion_function_value(children[0].expression,q.type,q.op != TOK_INVALID);
             if (!c.valid() || deleted_transfer(c.function)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
-            check_access(c.function,q.context,entities[c.function].owner,children[0].expression.type);
+            if (!valid_fixed_conversion(children[0].expression,0,c,q.context)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             r.selected = c.function; x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
         } else if (q.op != TOK_INVALID) {
             auto c = explicit_builtin_conversion(children[0].expression,q.type,q.op,q.context);
-            if (!c.valid()) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+            if (!valid_fixed_conversion(children[0].expression,0,c,q.context)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             x.conversions = conversions.size(); x.count = 1; conversions.push_back(c);
             if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))

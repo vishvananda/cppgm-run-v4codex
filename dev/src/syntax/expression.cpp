@@ -94,7 +94,7 @@ NodeId Parser::postfix(NodeId base)
         NodeId result;
         if (in.eat("(")) {
             result = wrap(Kind::Call, base);
-            ast.append(result, arguments(ast[base].kind == Kind::IdExpression && ast[base].op != TOK_INVALID ?
+            ast.append(result, arguments(ast[base].kind == Kind::IdExpression && ast[base].op != TOK_INVALID && ast[base].op != KW_TYPENAME ?
                                           Kind::ParenArguments : Kind::Arguments, ")"));
         } else if (in.is("{") && ast[base].kind == Kind::IdExpression) {
             result = wrap(Kind::Call, base);

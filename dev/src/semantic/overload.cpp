@@ -60,8 +60,8 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
         if (a[i].rank == 5) {
-            bool al = a[i].kind == Conversion::Kind::ListPlan || a[i].kind == Conversion::Kind::List;
-            bool bl = b[i].kind == Conversion::Kind::ListPlan || b[i].kind == Conversion::Kind::List;
+            bool al = a[i].kind == Conversion::Kind::ListPlan || a[i].kind == Conversion::Kind::List || a[i].kind == Conversion::Kind::QueryList;
+            bool bl = b[i].kind == Conversion::Kind::ListPlan || b[i].kind == Conversion::Kind::List || b[i].kind == Conversion::Kind::QueryList;
             if (al && bl && types.unqualified(value_type(a[i].target)) == types.unqualified(value_type(b[i].target)) &&
                 a[i].reference && b[i].reference) {
                 if (a[i].preference > b[i].preference) return false;
@@ -115,7 +115,7 @@ Conversion Analyzer::ellipsis_conversion(NodeId n)
 }
 Conversion Analyzer::ellipsis_conversion_value(Expression source)
 {
-    Conversion c; c.rank = 6;
+    Conversion c; if (!source.type) return c; c.rank = 6;
     c.target = promote(decay(source.type));
     if (fundamental(c.target, FT_FLOAT)) c.target = types.fundamental(FT_DOUBLE);
     if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
@@ -263,7 +263,12 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 return result;
             }
             if (args.size() > 1) throw std::runtime_error("scalar cast arity");
-            return cast_expression(n, s, cast_type, args.empty() ? 0 : args[0]);
+            result = cast_expression(n, s, cast_type, args.empty() ? 0 : args[0]);
+            if (ast[args_node].kind == Kind::BracedInit && !args.empty()) {
+                auto c = conversions[result.conversions];
+                list_conversion_from(args[0],expressions[args[0]].type,value_type(cast_type),&c);
+            }
+            return result;
         }
     }
     Expression fn;

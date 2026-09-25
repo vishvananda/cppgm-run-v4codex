@@ -8,6 +8,13 @@ Conversion Analyzer::list_element(NodeId& cursor, TypeId to, ScopeId s)
     NodeId source = cursor;
     expression(source,s);
     Conversion c = conversion(source,to);
+    if (string_initialization(source,to)) {
+        ListPlan plan; plan.source = source; plan.target = to; plan.scope = s;
+        plan.aggregate = true; plan.literal = ast[source].literal; plan.state = FactState::Success;
+        if (types[to].bound && ast.literals[plan.literal].elements <= types[to].bound) plan.rank = 0;
+        c.target = to; c.kind = Conversion::Kind::ListPlan; c.rank = plan.rank;
+        c.materialization = list_plans.size(); list_plans.push_back(plan);
+    }
     if (c.valid()) { cursor = ast[source].next; return c; }
     if (ast[source].kind != Kind::BracedInit && aggregate_type(to)) {
         auto id = list_aggregate(cursor,to,s);
@@ -84,7 +91,10 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 if (!entities[types[t].entity].complete)
                     throw UnavailableSemanticFact(SemanticFact::ClassDefinition,types[t].entity,n);
             }
-            if (aggregate_type(t)) {
+            if (first && first == ast[n].last && string_initialization(first,t)) {
+                plan.source = first; plan.literal = ast[first].literal; plan.aggregate = true;
+                if (types[t].bound && ast.literals[plan.literal].elements <= types[t].bound) plan.rank = 0;
+            } else if (aggregate_type(t)) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
                 plan = list_plans[group]; plan.source = n; plan.target = to; plan.direct = direct;
@@ -163,9 +173,9 @@ void Analyzer::validate_list_plan(std::uint32_t id)
             auto n = call_argument(plan.call,i);
             auto c = conversions[plan.call.conversions+i];
             if (n && ast[n].kind != Kind::BracedInit && i < plan.explicit_count)
-                list_conversion(n,value_type(c.target));
+                list_conversion_from(n,expressions[n].type,value_type(c.target),&c);
             if (!i && !plan.aggregate && !plan.constructor && n && ast[n].kind != Kind::BracedInit)
-                list_conversion(n,value_type(plan.target));
+                list_conversion_from(n,expressions[n].type,value_type(plan.target),&c);
             // Selected constructor defaults were checked in their own
             // declaration environment, not this list's calling scope.
             if (!plan.constructor || i < plan.explicit_count)
@@ -208,7 +218,10 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     for (unsigned i = 0; i < plan.call.count; ++i)
         selected.push_back(copy_conversion_recipe(conversions[plan.call.conversions+i]));
     record_call(object.call,args,selected);
-    if (plan.aggregate) {
+    if (plan.literal) {
+        InitAction root; root.kind = InitKind::String; root.type = t; root.source = plan.source;
+        object.initializer = initializers.size(); initializers.push_back(root);
+    } else if (plan.aggregate) {
         InitAction root; root.kind = InitKind::Group; root.type = t; root.source = plan.source;
         std::uint32_t tail = 0;
         for (unsigned j = 0; j < args.size(); ++j) {

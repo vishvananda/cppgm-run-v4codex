@@ -141,9 +141,12 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
         if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
     if (!class_value(type)) {
         if (ast[list].first != ast[list].last) throw std::runtime_error("fixed scalar cast arity");
-        if (ast[list].kind == Kind::BracedInit && ast[list].first)
-            list_conversion_from(ast[list].first,expressions[ast[list].first].type,value_type(type));
-        return check_fixed_cast(n,s,type,ast[list].first);
+        if (!check_fixed_cast(n,s,type,ast[list].first)) return false;
+        if (ast[list].kind == Kind::BracedInit && ast[list].first) {
+            auto c = conversions[expressions[n].conversions];
+            list_conversion_from(ast[list].first,expressions[ast[list].first].type,value_type(type),&c);
+        }
+        return true;
     }
     RecipeScope guard(unevaluated_depth);
     complete_class(types[type].entity); reject_abstract(type);

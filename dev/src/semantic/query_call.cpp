@@ -85,9 +85,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             auto access = ctor;
             while (members[entities[access].member_info].inherited_constructor)
                 access = members[entities[access].member_info].inherited_constructor;
-            check_access(access,q.context,entities[access].owner);
-            check_default_constructor(ctor);
-            default_destructor(constructed,q.context,false);
+            if (!accessible(access,q.context,entities[access].owner) || !default_constructor_valid(ctor) ||
+                !default_destruction_valid(constructed,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             auto f = types[entities[ctor].type];
             std::vector<Conversion> chosen;
             for (unsigned i = 0; i < args.size(); ++i) {
@@ -106,7 +105,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
                 auto c = conversion_function_value(args[0],constructed,true);
                 if (!c.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
                 if (deleted_transfer(c.function)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-                check_access(c.function,q.context,entities[c.function].owner,args[0].type);
+                if (!valid_fixed_conversion(args[0],0,c,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
                 TypeQueryFact result; result.expression.type = constructed; result.selected = c.function;
                 result.expression.conversions = conversions.size(); result.expression.count = 1;
                 conversions.push_back(c); return result;

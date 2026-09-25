@@ -328,7 +328,7 @@ struct Expression {
 };
 struct BaseAdjustment {
     std::uint64_t offset = 0, total = 0;
-    std::uint32_t next = 0, edge = 0;
+    std::uint32_t next = 0, edge = 0, inverse = 0;
     bool ambiguous = false, laid_out = false;
 };
 struct ObjectUse {
@@ -394,6 +394,7 @@ struct ExceptionSpecificationFact {
 struct ListPlan {
     NodeId source = 0; TypeId target = 0; ScopeId scope = 0;
     std::uint32_t query = 0; // Canonical formation query; arguments are QueryIds in query_edges.
+    std::uint32_t literal = 0; // Character-array initialization from an immutable literal.
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
     bool aggregate = false, direct_binding = false, direct = false, zero = false;

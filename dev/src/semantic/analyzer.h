@@ -277,8 +277,9 @@ private:
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
+    bool string_array_type(EFundamentalType from, TypeId t) const;
     void list_conversion(NodeId n, TypeId t);
-    void list_conversion_from(NodeId n, TypeId from, TypeId target);
+    void list_conversion_from(NodeId n, TypeId from, TypeId target, const Conversion* selected = 0);
     bool narrowing_conversion(TypeId from, TypeId target, Constant value);
     bool narrowing_needs_value(TypeId from, TypeId target);
     Index scalar_observations, scalar_consumption_index;
@@ -324,6 +325,7 @@ private:
     void bind_template_initializer(EntityId entity, ScopeId scope);
     void bind_template_default_initialization(EntityId entity, ScopeId scope);
     bool check_default_constructor(EntityId constructor);
+    bool default_constructor_valid(EntityId constructor);
     void check_default_destructor(EntityId destructor);
     bool default_destructor_valid(EntityId destructor);
     bool default_destruction_valid(TypeId type, ScopeId scope, bool variant = false);
@@ -628,6 +630,7 @@ private:
     TypeId fundamental_cast_type(ETokenType op);
     TypeId parameter_body_type(TypeId source);
     QueryId call_query(NodeId n, ScopeId s);
+    QueryId new_query(NodeId n, ScopeId s);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId destructor_target(NodeId name, TypeId object, ScopeId scope);
     TypeQueryFact query_destructor(const TypeQuery& query, const std::vector<TypeQueryFact>& children);

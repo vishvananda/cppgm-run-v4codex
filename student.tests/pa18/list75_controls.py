@@ -54,5 +54,34 @@ GOOD['cast_private_static']='struct B{};class D:private B{};template<class T,cla
 BAD['variadic_argument_must_be_constant']='int side();constexpr int f(...){return 1;}static_assert(f(side())==1,"");int main(){}'
 BAD['variadic_query_argument_must_be_constant']='int side();constexpr int f(...){return 1;}template<int>struct X{};X<f(side())> x;int main(){}'
 BAD['cast_virtual_ordinary']='struct B{};struct D:virtual B{};int main(){B*b=0;D*d=(D*)b;return d!=0;}'
+detect('implicit_deleted_default','struct A{int&r;A()=default;};struct B{int n;B()=default;};','T{}','B','A')
+detect('default_deleted_field','struct A{A()=delete;A(int);};struct B{A a;B()=default;};struct C{};','T{}','C','B')
+detect('default_ambiguous_field','struct A{A(int=0);A(double=0);};struct B{A a;B()=default;};struct C{};','T{}','C','B')
+detect('string_array_field','struct A{char a[3];};struct B{char a[2];};','T{"ab"}','A','B')
+detect('nested_string_array','struct A{char a[3];int n;};','T{{"ab"},4}','A')
+detect('user_conversion_narrow','struct X{operator double()const;};template<class T>T dv();struct A{A(int);};struct B{B(double);};','T{dv<X>()}','double;B','int;A')
+GOOD['cast_nonzero_base']='struct A{int a;};struct B{int b;};struct D:A,B{int c;};int main(){D d;B*b=&d;D*p=static_cast<D*>(b);D*q=(D*)b;D&r=static_cast<D&>(*b);B*z=0;return p!=&d||q!=&d||&r!=&d||static_cast<D*>(z)!=0;}'
+GOOD['query_string_value']='struct A{char a[5];};template<class T>struct X{static const int n=T{"ab"}.a[1]+T{"ab"}.a[4];};static_assert(X<A>::n==98,"");int main(){}'
+GOOD['typed_list_abi']='template<class T>auto f(T x)->decltype(T{x}){return T{x};}int main(){return f(3)!=3;}'
+GOOD['cast_private_upcast']='struct B{};class D:private B{};template<class T,class U>auto f(int)->decltype(static_cast<U*>((T*)0),char());template<class,class>long f(...);static_assert(sizeof(f<D,B>(0))==sizeof(long),"");int main(){}'
+GOOD['cast_private_constructor']='class A{A(int);};template<class T>auto f(int)->decltype(static_cast<T>(1),char());template<class>long f(...);static_assert(sizeof(f<A>(0))==sizeof(long),"");int main(){}'
+GOOD['cast_virtual_reference']='struct B{};struct D:virtual B{};template<class T>T&dv();template<class T,class U>auto f(int)->decltype(static_cast<U&>(dv<T>()),char());template<class,class>long f(...);static_assert(sizeof(f<B,D>(0))==sizeof(long),"");int main(){}'
+GOOD['cast_invalid_reference']='template<class T>T dv();template<class T>auto f(int)->decltype(const_cast<T&>(dv<T>()),char());template<class>long f(...);static_assert(sizeof(f<int>(0))==sizeof(long),"");int main(){}'
+GOOD['class_ctor_default_query']='struct A{int n;constexpr A(int x,int y=2):n(x+y){}};constexpr int f(A a){return a.n;}template<class T>struct X{static const int n=f(T{3});};static_assert(X<A>::n==5,"");int main(){}'
+
+BAD['ordinary_user_narrowing']=(Path(__file__).parent/'list75-ordinary-user-narrow.cpp').read_text()
+BAD['ordinary_scalar_brace_cast']='int main(){return int{0.5};}'
+BAD['ordinary_ctor_user_narrowing']='struct X{operator double()const{return 0.5;}};struct A{A(int){}};int main(){A a{X()};}'
+BAD['fixed_user_narrowing']='struct X{operator double()const{return 0.5;}};template<class T>void f(){int x{X()};}int main(){}'
+BAD['fixed_user_brace_cast']='struct X{operator double()const{return 0.5;}};template<class T>void f(){int x=int{X()};}int main(){}'
+BAD['ordinary_user_integer_narrow']='struct X{constexpr operator int()const{return 300;}};int main(){char x{X()};return x;}'
+GOOD['ordinary_user_integer_exact']='struct X{constexpr operator int()const{return 3;}};int main(){char x{X()};return x!=3;}'
+GOOD['query_user_integer_exact']='struct X{constexpr operator int()const{return 3;}};template<class T>auto f(int)->decltype(T{X()},char());template<class>long f(...);static_assert(sizeof(f<char>(0))==1,"");int main(){}'
+GOOD['query_user_integer_narrow']='struct X{constexpr operator int()const{return 300;}};template<class T>auto f(int)->decltype(T{X()},char());template<class>long f(...);static_assert(sizeof(f<char>(0))==sizeof(long),"");int main(){}'
+GOOD['braced_reference_ranking']='struct A{int n;};template<class T>char select(T&&);template<class T>long select(const T&);template<class T>auto f(int)->decltype(select<T>({1}));static_assert(sizeof(f<A>(0))==1,"");int main(){}'
+GOOD['braced_ellipsis_failure']='template<class T>char select(...);template<class T>auto f(int)->decltype(select<T>({1}));template<class>long f(...);static_assert(sizeof(f<int>(0))==sizeof(long),"");int main(){}'
+GOOD['cast_ambiguous_up_reference']='struct B{};struct L:B{};struct R:B{};struct D:L,R{};template<class T>T&dv();template<class T,class U>auto f(int)->decltype(static_cast<U&>(dv<T>()),char());template<class,class>long f(...);static_assert(sizeof(f<D,B>(0))==sizeof(long),"");int main(){}'
+GOOD['cast_ambiguous_up_cstyle']='struct B{};struct L:B{};struct R:B{};struct D:L,R{};template<class T,class U>auto f(int)->decltype((U*)((T*)0),char());template<class,class>long f(...);static_assert(sizeof(f<D,B>(0))==sizeof(long),"");int main(){}'
+GOOD['lazy_parameter_boundary']='template<class T>struct Box{T val;static T bad(){return T::missing_name;}};void f(Box<int>);int main(){}'
 runner.GOOD=GOOD;runner.BAD=BAD
 if __name__=='__main__':sys.exit(0 if runner.run(Path(sys.argv[1]).resolve(),Path(sys.argv[2])) else 1)

@@ -20,11 +20,16 @@ bool Analyzer::string_initialization(NodeId n, TypeId t) const
     if (types[t].kind != TypeKind::Array || ast[n].kind != Kind::Literal) return false;
     auto literal = ast.literals[ast[n].literal];
     if (literal.kind != LiteralKind::string || literal.suffix) return false;
+    return string_array_type(literal.type,t);
+}
+bool Analyzer::string_array_type(EFundamentalType from, TypeId t) const
+{
+    if (types[t].kind != TypeKind::Array) return false;
     Type element = types[types[t].child];
     if (element.kind != TypeKind::Fundamental) return false;
-    bool ordinary = literal.type == FT_CHAR && (element.fundamental == FT_CHAR ||
+    bool ordinary = from == FT_CHAR && (element.fundamental == FT_CHAR ||
         element.fundamental == FT_SIGNED_CHAR || element.fundamental == FT_UNSIGNED_CHAR);
-    return ordinary || element.fundamental == literal.type;
+    return ordinary || element.fundamental == from;
 }
 std::uint32_t Analyzer::initializer_plan(NodeId n, TypeId t) const
 {
@@ -70,10 +75,20 @@ bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
         fundamental(target,FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;
     return rounded != exact;
 }
-void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target)
+void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target, const Conversion* selected)
 {
+    // Reuse the chosen conversion, including definition-time initializer recipes.
+    // Narrowing applies to its final standard conversion, before rounding occurs.
+    auto id = expressions[n].incoming;
+    if (!id) id = template_initialization_conversions.get(ast.nodes.occurrences[n].source);
+    Conversion c = selected ? *selected : conversions[id];
+    if (value_type(c.target) != value_type(target)) c = Conversion();
+    if (c.kind == Conversion::Kind::User) from = value_type(types[entities[c.function].type].child);
     Constant value;
-    if (narrowing_needs_value(from,target)) value = evaluate(n,facts[n].scope);
+    if (narrowing_needs_value(from,target)) {
+        if (c.kind == Conversion::Kind::User) { c.target = from; c.reference = false; value = constant_node_conversion(n,c,facts[n].scope); }
+        else value = evaluate(n,facts[n].scope);
+    }
     if (narrowing_conversion(from,target,value)) throw std::runtime_error("narrowing list initialization");
 }
 std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)

@@ -1,6 +1,27 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+using syntax::Kind;
+QueryId Analyzer::new_query(NodeId n, ScopeId s)
+{
+    TypeQuery q; std::vector<QueryId> children;
+    q.kind = QueryKind::New; q.context = s;
+    while (!template_object_context_index.get(q.context) &&
+        (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
+        q.context = scopes[q.context].parent;
+    q.type = type_id(child(n,Kind::TypeId),s); q.value = child(n,Kind::Global) != 0;
+    TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
+    std::vector<QueryId> args(1,intern_query(type,{}));
+    auto init = child(n,Kind::Initializer);
+    auto list = ast[init].first;
+    for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
+    TypeQuery call; call.kind = QueryKind::Call; call.context = q.context;
+    children.push_back(intern_query(call,args));
+    auto placement = ast[child(n,Kind::Placement)].first;
+    for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+    if (template_type_probe) for (auto child : children) if (!child) return 0;
+    return intern_query(q,children);
+}
 TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQueryFact>& children)
 {
     // This unevaluated owner checks allocation and construction declarations;

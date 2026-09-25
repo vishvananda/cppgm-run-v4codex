@@ -84,7 +84,7 @@ bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, In
         auto c = conversions[result.conversions+i];
         check_fixed_conversion(values[i],expressions[args[i]].ready ? args[i] : 0,c,s);
         if (ast[list].kind == Kind::BracedInit && i < f.count)
-            list_conversion_from(args[i],values[i].type,value_type(types.parameters[f.offset+i]));
+            list_conversion_from(args[i],values[i].type,value_type(types.parameters[f.offset+i]),&c);
         selected.push_back(c);
     }
     for (unsigned i = supplied; i < f.count; ++i) {

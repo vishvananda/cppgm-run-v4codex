@@ -12,6 +12,11 @@ owners retain per-key success/failure and selected recipes; work follows actual
 initializer edges and candidates, with compressed omitted array tails. Validate
 required failures, nearby personal controls, prior suites and graph scaling;
 freeze entry/final compiler and checked executable measurements under spec §9.
+Implementation now repairs four original failures (383/420). The group includes
+ordinary/fixed narrowing after user conversions, default-constructor validity,
+string aggregate plans, cast adjustments, ABI/value/effect consumers and a
+representation-completion lifetime repair found by full validation. Seventy-one
+new semantic controls pass; final prior report/performance evidence are pending.
 Array pooling/result-policy mismatches remain separate implementation work:
 earlier fixtures require pooling for the same small scalar-array shapes. No
 stage-specific lowering switch or weakened comparison is authorized.
