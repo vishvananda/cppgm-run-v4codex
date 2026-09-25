@@ -38,17 +38,20 @@ trace['abi_symbols']=['_Z6resultIiEDTclL_Z5fixeddEstT_EES0_','_Z6resultIiEDTclL_
 assert all(symbol in ir.read_text() for symbol in trace['abi_symbols'])
 trace.update(lowir_sha256=sha(ir),executable_sha256=sha(exe))
 performance=root/'student.tests/pa18/loop79-performance.json';perf=read(performance)
+member_performance=root/'student.tests/pa18/loop79-performance-members.json';member_perf=read(member_performance)
+assert member_perf.get('finished_utc') and member_perf['binaries']==perf['binaries']
+workloads=dict(perf['workloads'],**member_perf['workloads'])
 assert perf.get('finished_utc') and sha(cc)==perf['binaries'][1]['sha256']==progress['compiler_sha256']
 bounds={}
-for name in ('first-signature','first-member','qualified-alias'):
+for name in ('first-signature','first-member','qualified-alias','member-arguments'):
  bounds[name]={}
  for n in (600,2400):
-  stats=perf['workloads'][name+'-'+str(n)]['outputs'][-1]['telemetry'][0]
-  bounds[name][str(n)]={k:stats[k] for k in ('semantic_type_substitution_work','semantic_type_query_work','semantic_template_signature_work','semantic_template_signature_uses','template_definition_signature_work','semantic_template_parameter_check_work','template_occurrences','semantic_template_signature_shape_work')}
+  stats=workloads[name+'-'+str(n)]['outputs'][-1]['telemetry'][0]
+  bounds[name][str(n)]={k:stats[k] for k in ('semantic_type_substitution_work','semantic_type_query_work','semantic_template_signature_work','semantic_template_signature_uses','template_definition_signature_work','semantic_template_parameter_check_work','template_occurrences','semantic_template_signature_shape_work','semantic_pack_expansion_work')}
 result=dict(entry_commit='ef0e43c0f1c1792590ca3e21b49b3e6a82bbd5f3',implementation_commits=['67c4f685','50407fc1'],
  current_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(cc),
  stage_progress=progress,checks=checks,personal_control_count=total,controls=controls,entry_controls=entry,
- trace=trace,work_bounds=bounds,performance=dict(path=str(performance),sha256=sha(performance)),
+ trace=trace,work_bounds=bounds,performance=[dict(path=str(p),sha256=sha(p)) for p in (performance,member_performance)],
  reference_correction=dict(proof='pa18/reference-correction79.md',observations_sha256=sha(root/'student.tests/pa18/loop79-reference.json')),
  boundary='Source signatures, declaration syntax, dependent explicit member arguments and their body/query/ABI consumers completed. PA18 remains unfinished: one unknown-bound empty-array rejection and 26 ordinary LowIR comparisons. The inherited nested-alias cast and class-ellipsis reducers remain implementation requirements.',
  independent_audit='Review equivalent declaration keys versus semantic lookup facts, source/occurrence recipes under renamed enclosing heads, and fixed-type value-dependent call binding/ABI. No audit question waives a known implementation defect.')

@@ -2,74 +2,74 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation 79 in progress**.
-Reviewed `8dc4636d` → entry `0ed4fe5f` → code `82fca940`, every commit and the
-combined changes across handoffs 75–77. [Audit](audit.md),
-[evidence](../student.tests/pa18/loop78-evidence.json); previous audit in [74](audit74.md).
+Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 79 complete**.
+Entry `ef0e43c0`: **388/420** → **393/420**, failures **32 → 27**, no new failures.
+Implementation `67c4f685`, `50407fc1`; [handoff](handoff79.md),
+[evidence](../student.tests/pa18/loop79-evidence.json). Ralph still owns acceptance
+and independent review. The prior accumulated [audit](audit.md) covered 75–77;
+its reviewed marker is unchanged.
 
-Implementation 79 entry: `ef0e43c0f1c1792590ca3e21b49b3e6a82bbd5f3`, **388/420**.
-Start with source-signature/template-argument ownership: retained declarator and
-argument syntax → canonical signature/substitution facts → specialization and
-ordinary lowering. Resolve related declaration, candidate, ABI and execution
-consumers together. Work must track parsed regions, argument counts and indexed
-candidates, without grammar replay or text-based identity. Validate focused
-positive/rejection controls, all inherited controls, course progress, prior stages
-and file audit; freeze entry/final compiler and equivalent performance workloads.
+## Design/spec alignment
 
-## Design/spec alignment and evidence
+Source-signature ownership is completed through its related consumers: scoped
+parser heads/typedef syntax → typed explicit member arguments → dependent-name
+comparison shapes and first-declaration lookup → renamed head/raw body recipes →
+query overload selection and ABI facts. Out-of-class member signatures bind
+before their bodies. Fixed-type, value-dependent calls retain their source
+selection and distinct ABI entities. Source lookup and comparison keys have
+separate owners; lowering reads selected facts. Parsed regions remain shared,
+frames immutable, caches keyed by typed identity, and work local to source heads,
+parameters, candidate sequences and demanded specializations. Owner/data-flow,
+complexity budgets and the source-to-native trace are in [handoff 79](handoff79.md).
 
-The list/cast, inherited-constructor and nested-class groups now have accumulated
-review, including their shared demand, conversion, lifetime and emission paths.
-Audit repairs preserve braced allocation queries and allocated-object lifetime;
-keep declaration-only class parameters incomplete with locally updated cross-TU
-signature views; and attach constexpr-created constructor actions' later emission
-dependencies to the constructor itself. Canonical keys retain all context, parsed
-regions remain shared, monotonic facts/worklists are local, and typed lowering
-consumes selected actions without semantic reconstruction or grammar replay.
+Validation: **2609/2609** earlier tests; file audit passes with the same three
+header advisories; **922 inherited + 65 new semantic controls** and four repaired
+course executions pass (**991** cases). ABI, completion/scaling, previous repaired
+course checks and both traces also pass. All **420 original inputs** are unchanged.
+Of **1,686** fixture/reference files, one expected exit status has a reduced
+[C++11 proof](reference-correction79.md); all other files and comparison rules are
+unchanged. Its positive prefix remains a separately executed control.
 
-Validation at the reviewed tip: **388/420**, the exact same **32 entry failures**;
-**2609/2609** earlier tests; file audit passes with three inherited header advisories.
-All **420 inputs and 1,686 tracked fixture/reference files** are unchanged.
-**875 inherited + 35 audit semantic + 12 multi-TU controls** pass, as do the ABI,
-completion/scaling and combined source-to-ELF checks. All nine course paths repaired
-across 75–77 retain checked execution. No comparison or reference rule changed.
+## Remaining implementation and review
 
-## Remaining required implementation
-
-| Ownership group | Required work / boundary |
+| Owner | Required work / concrete boundary |
 |---|---|
-| Source signatures and member/alias syntax | First-declaration function-result lookup; explicit member specialization deduction; pack-expanded explicit member-template arguments; alias/function argument cv syntax; using-directive function-template argument participation. These own five rejected cases. Retained source-expression ABI coverage remains part of the same signature obligation. |
-| Ordinary LowIR facts/policy | One empty-pack unknown-bound-array rejection and 26 comparisons: constant/array and empty-tag initialization, constructor object-root metadata, bool/result metadata, class-result conventions and discarded loads. Earlier fixtures require pooling for the same small scalar-array shapes; reconcile policy without a stage switch or weakened comparison. Preserve the nested-alias cast and class-ellipsis reducers as unfinished implementation. |
+| Array/aggregate initialization and constant materialization | Unknown-bound array after empty expansion (one rejection); constant/array and empty-tag comparisons. Reconcile shared pooling policy with earlier scalar-array fixtures. |
+| Ordinary object/result lowering | Object-root and bool/result metadata, class-result conventions, discarded loads; 26 comparisons across both rows remain required. Preserve the inherited nested-alias cast and class-ellipsis reducers as unfinished runtime implementation. |
+| Independent audit | Check dependent-name comparison versus semantic bindings, renamed enclosing/pack-head raw recipes, and fixed-type value-dependent call/ABI facts. These are review obligations with passing controls, not waivers for known failures. |
 
-All 32 failures remain requirements, including the inherited member-alias-pack
-case whose execution succeeds but empty-tag/root-metadata comparison still fails.
-This checkpoint audit does not certify the full stage. Future work should finish
-an ownership group through its source, query, constant, exception, lifetime, ABI
-and runtime consumers before handoff. Separating the previous three groups left
-shared consumer defects and repeated evidence packaging; that fragmentation was
-avoidable. No review finding is being substituted for an implementation waiver.
+The initial syntax/member-argument group was extended through declaration
+identity, first-lookup semantics, body queries and ABI before handoff. Its known
+defects are resolved. Remaining work needs object extent/materialization and
+result-convention facts from different initialization/emission owners; source
+signature rebinding cannot repair those policies. This is the coherent handoff
+boundary, not a claim that PA18 is complete. Every remaining failure stays an
+implementation requirement.
 
 ## Performance and references
 
-Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 78](performance78.md) records
-frozen checkpoint and cumulative A/A/ABBA compiler latency/peak RSS, checked runtime
-and generated size across the full handoff corpus, plus focused noise resolution.
-The combined trace verifies retained fact identity and required executable work.
-Newly accepted behavior has final-only costs when the earlier compiler rejects it.
-There is no new optional optimization or mandated numeric ceiling. Historical
-**+15%, +16 MiB, 5.5×** targets remain diagnostics, not exit gates; all measurements
-from 63–77 and the audit's original observations remain. Correctness, coverage,
-mandated limits and current-stage graph bounds remain gates. Native optimization
-and self-hosting belong to PA24–PA34, and do not excuse these PA18 failures.
+Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 79](performance79.md) retains
+frozen A/A/ABBA latency/RSS and checked runtime/size for **18 workloads**, including
+600/2400 source-signature, member-body and explicit-member-argument scales.
+Ten equivalent sources produce identical LowIR/native bytes. Heavy comparable
+compiler ratios are 0.978–1.019; ordering's small +1.9% paired cost is disclosed.
+Equivalent runtime ratios are 0.998–1.002. Compiler text grows **13,376 bytes
+(0.69%)**. Eight new-behavior workloads have final-only costs. Counters track
+source/demand size and reuse source checks; there is no optional optimizer.
 
-Reference corrections remain [65](reference-correction65.md),
-[67](reference-correction67.md), [69](reference-correction69.md), with reducers,
-standard proofs and pinned bundle. Loops 70–78 change no references.
+The [78 evidence](performance78.md) and historical measurements remain intact.
+There is no mandated numerical ceiling at this stage; historical **+15%, +16 MiB,
+5.5×** diagnostics remain non-gates. Correctness, coverage, mandated limits and
+current-stage work bounds remain gates. PA24–PA34 own native optimization and
+self-hosting. Prior reference corrections [65](reference-correction65.md),
+[67](reference-correction67.md), [69](reference-correction69.md) are preserved;
+[79](reference-correction79.md) adds one proven rejection with pinned bundle.
 
 ## Handoff ledger
 
 Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 **343**
-→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383** → 76 **385** → 77 **388**.
+→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383**
+→ 76 **385** → 77/78 **388** → 79 **393**.
 
 | Handoff | Range / disposition |
 |---|---|
@@ -83,6 +83,8 @@ Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 *
 | 76 | `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; [inherited forwarding handoff](handoff76.md), 385/420; 37 → 35 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop76-evidence.json). Reviewed and corrected in audit 78; full-stage remains unfinished. |
 | 77 | `2ce99c6a` → code `86e142ba`, `b6294394`, `975e6162`; [nested completion/lookup handoff](handoff77.md), 388/420; 35 → 32 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop77-evidence.json). Reviewed and corrected in audit 78; full-stage unfinished. |
 | 78 | `8dc4636d` → `0ed4fe5f` → code `82fca940`; [accumulated audit](audit.md), all three handoffs and interactions reviewed; allocation-query, declaration/representation and constexpr-emission owners repaired; unchanged 32 failures, prior 2609/2609, file audit/coverage pass, 922 controls and frozen performance accepted; [evidence](../student.tests/pa18/loop78-evidence.json). |
+
+| 79 | `ef0e43c0` → code `67c4f685`, `50407fc1`; [signature handoff](handoff79.md), 393/420; 32 → 27 original failures, prior 2609/2609, file audit/coverage pass, 991 controls and frozen performance; one proved reference correction. [Evidence](../student.tests/pa18/loop79-evidence.json). Independent acceptance/review pending. |
 
 Required checks: `make test-pa18`, `make test-report-through-pa17`, PA18 file audit.
 Root reports run sequentially because they share `.test_counts`.
