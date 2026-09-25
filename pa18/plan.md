@@ -2,10 +2,24 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `ecc308bc5ee33ed40fa773f7981961f3018a5867`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 83**.
-Entry `48c864ab`: **396/420**; current **411/420**, **24 → 9 failures**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 84**.
+Entry `09a77fca`: **411/420**, nine failures. Review markers above are preserved.
 The previous goal turn supplied committed implementation/audit evidence (progress).
 Entry inspection found no inherited live compiler/test process to resume.
+
+## Active work (84)
+
+Group the nine remaining failures by semantic ownership before editing:
+class value boundaries (three result ABI mismatches), constructor/action and
+root facts (empty objects), static-member definition demand (two declarations
+without storage), and scalar/discarded-expression consumption. Trace selected
+semantic facts into typed lowering; use indexed entity/type facts, with work
+proportional to demanded declarations, actions and emitted IR. Validate reduced
+source/native controls and the unchanged course suite, then extend related
+consumers while these ownership traces remain useful. Reference discrepancies
+require independent reduced proof from the standard/contract. Freeze entry/final
+binaries for A/A and ABBA latency/RSS and checked runtime/size evidence. Record
+implementation boundaries separately from independent review questions.
 
 ## Design/spec alignment and completed group
 
