@@ -417,7 +417,8 @@ void Procedural::function_body(EntityId e, bool base)
                 activate_temporary(parameter);
         }
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
-    else if (sem.constructor_member(e)) constructor_body(e);
+    else if (sem.constructor_member(e)) constructor_body(e,
+        base || (sem.member_fact(e).base_entry && !sem.member_fact(e).complete_entry));
     if (sem.destructor_member(e)) {
         destructor_prologue(e);
         vpointer_store(sem.scopes[sem.entities[e].owner].entity);

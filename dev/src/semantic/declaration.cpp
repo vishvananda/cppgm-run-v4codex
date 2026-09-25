@@ -98,6 +98,7 @@ void Analyzer::finish()
         chain.clear();
     }
     if (calls) { finish_allocations(); prepare_function_boundaries(); prepare_static_vptrs(); finish_closures(); }
+    if (calls) prepare_delegation_entries();
     // Semantic discovery order is independent of deterministic ABI publication.
     std::sort(vtable_emission.begin(), vtable_emission.end());
     for (EntityId e : jump_bodies) finish_body(e);

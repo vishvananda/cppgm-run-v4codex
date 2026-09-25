@@ -78,7 +78,13 @@ Conversion Analyzer::transfer_initialization(Expression value, TypeId target, In
 {
     Conversion c; c.target = target;
     if (types.unqualified(value.type) == types.unqualified(target) && empty_value(target)) {
-        c.rank = 0; c.empty_copy = true; return c;
+        auto info = entities[types[target].entity].class_info;
+        // Only the implicit, accessible, trivial transfers may bypass ordinary
+        // selection and lifetime materialization. Empty layout alone says
+        // nothing about deletion, access, volatile binding or destruction.
+        if (!class_facts[info].declared_transfers && !class_facts[info].user_destructor && !(types[value.type].cv & 2)) {
+            c.rank = 0; c.empty_copy = true; return c;
+        }
     }
     auto ctor = select_transfer(target,value.type,value.category,false,mode);
     if (ctor) {

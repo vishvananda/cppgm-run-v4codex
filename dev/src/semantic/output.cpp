@@ -254,6 +254,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_scalar_consumption_work\":" << scalar_consumption_work
         << ",\"semantic_parameter_queries\":" << parameter_queries
         << ",\"semantic_parameter_query_work\":" << parameter_query_work
+        << ",\"semantic_delegation_entry_work\":" << delegation_entry_work
         << ",\"semantic_destruction_actions\":" << destruction_actions.size()
         << ",\"semantic_transfer_actions\":" << transfers.size()
         << ",\"semantic_scalar_transfer_work\":" << scalar_transfer_work

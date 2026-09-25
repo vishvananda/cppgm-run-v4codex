@@ -136,6 +136,7 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
     bool offset = op == OP_PLUS || op == OP_MINUS;
     left.fold_widen = offset && fixed_layout_operand(bn);
     right.fold_widen = offset && fixed_layout_operand(an);
+    left.preserve_widen = right.preserve_widen = !offset && !compare;
     record_conversion(r, an, left);
     record_conversion(r, bn, right);
     if (shift) return ap;

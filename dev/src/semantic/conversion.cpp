@@ -211,11 +211,11 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     to = types.unqualified(to);
     from = decay(from);
-    if (class_value(to) && class_value(from) && (to == from || derived_from(from,to)) && (to != from || !empty_value(to))) {
+    if (class_value(to) && class_value(from) && (to == from || derived_from(from,to))) {
         c = transfer_initialization(x,c.target,InitializationMode::Copy);
         return c;
     }
-    if (to == from) { c.rank = 0; c.empty_copy = empty_value(to); return c; }
+    if (to == from) { c.rank = 0; return c; }
     if ((pointer(to) || types[to].kind == TypeKind::MemberPointer || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || x.null_pointer_constant || (n && null_constant(n)))) { c.rank = 2; return c; }
     if (types[from].kind == TypeKind::MemberPointer && types[to].kind == TypeKind::MemberPointer && types[from].entity == types[to].entity) {
         unsigned added = 0;

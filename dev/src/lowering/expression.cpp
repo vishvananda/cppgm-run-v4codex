@@ -264,8 +264,9 @@ Value Procedural::binary(NodeId n, bool location)
     }
     Value lhs = sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::User ? converted(a,sem.conversion_fact(fact.conversions)) : load(expression(a));
     Value rhs = sem.conversion_fact(fact.conversions+1).kind == semantic::Conversion::Kind::User ? converted(b,sem.conversion_fact(fact.conversions+1)) : load(expression(b));
-    lhs = convert(lhs, sem.conversion_fact(fact.conversions).target, sem.conversion_fact(fact.conversions).fold_widen);
-    rhs = convert(rhs, sem.conversion_fact(fact.conversions+1).target, sem.conversion_fact(fact.conversions+1).fold_widen);
+    auto left = sem.conversion_fact(fact.conversions), right = sem.conversion_fact(fact.conversions+1);
+    lhs = convert(lhs, left.target, left.fold_widen, left.preserve_widen);
+    rhs = convert(rhs, right.target, right.fold_widen, right.preserve_widen);
     if (sem.conversion_fact(fact.conversions).derived) lhs = pointer_projection(lhs, sem.conversion_fact(fact.conversions).adjustment);
     if (sem.conversion_fact(fact.conversions+1).derived) rhs = pointer_projection(rhs, sem.conversion_fact(fact.conversions+1).adjustment);
     return operation(op, lhs, rhs, fact.type);

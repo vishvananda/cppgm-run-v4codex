@@ -244,7 +244,11 @@ void Analyzer::constructor_actions(EntityId e)
         if (field == cls) {
             if (ast[list].first != ast[list].last) throw std::runtime_error("delegation must be the only initializer");
             NodeId init = ast[id].next;
+            // Delegation forwards the caller's entry kind. Do not invent a
+            // complete-object use while checking the common action graph.
+            base_initialization = true;
             initialize(init, entities[cls].type, scope);
+            base_initialization = saved_base;
             EntityId selected = facts[init].entity;
             if (!constructor_member(selected)) throw std::logic_error("missing delegation target");
             members[m].delegated_constructor = selected;
@@ -334,6 +338,36 @@ void Analyzer::constructor_actions(EntityId e)
 } }
 
 namespace cppgm { namespace semantic {
+void Analyzer::prepare_delegation_entries()
+{
+    // Constructor actions and all source uses are now complete. Each entry bit
+    // crosses its selected delegation edge at most once, including convergent
+    // chains and a target whose body was checked before a later base use.
+    struct Entry { EntityId entity; unsigned bits; };
+    std::vector<Entry> work;
+    Index scheduled;
+    auto enqueue = [&](EntityId entity, unsigned bits) {
+        auto known = scheduled.get(entity);
+        bits &= ~known;
+        if (!bits) return;
+        scheduled.put(entity,known | bits);
+        work.push_back({entity,bits});
+    };
+    for (auto e : demand_queue) {
+        auto m = members[entities[e].member_info];
+        if (m.constructor && m.delegated_constructor)
+            enqueue(e,unsigned(m.base_entry) | (unsigned(m.complete_entry) << 1) |
+                (unsigned(m.polymorphic_base_entry) << 2));
+    }
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        auto item = work[i]; ++delegation_entry_work;
+        auto& member = members[entities[item.entity].member_info];
+        member.base_entry |= item.bits & 1;
+        member.complete_entry |= item.bits & 2;
+        member.polymorphic_base_entry |= item.bits & 4;
+        if (member.delegated_constructor) enqueue(member.delegated_constructor,item.bits);
+    }
+}
 bool Analyzer::constructor_needed(EntityId e)
 {
     if (!e) return false;

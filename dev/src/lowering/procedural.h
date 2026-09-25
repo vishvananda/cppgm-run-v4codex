@@ -215,7 +215,7 @@ class Procedural {
     Value constant_operand(semantic::Constant value, TypeId t);
     Value string_element(NodeId source, TypeId element, std::uint64_t index);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
-    void constructor_body(EntityId e);
+    void constructor_body(EntityId e, bool base);
     void construct(EntityId ctor, NodeId init, Value object, bool base = false);
     void global_initialization();
     void global_finalization();

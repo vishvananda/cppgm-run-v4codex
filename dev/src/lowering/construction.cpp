@@ -38,7 +38,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin);
 }
-void Procedural::constructor_body(EntityId e)
+void Procedural::constructor_body(EntityId e, bool base)
 {
     initialized_units = semantic::Index();
     auto m = sem.member_fact(e);
@@ -46,7 +46,7 @@ void Procedural::constructor_body(EntityId e)
         auto action = sem.subobject_actions[m.action_begin];
         begin_full_expression(action.initializer);
         Value object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
-        construct(m.delegated_constructor, action.initializer, object);
+        construct(m.delegated_constructor, action.initializer, object, base);
         finish_full_expression(0); constructor_cleanup(action);
         return;
     }

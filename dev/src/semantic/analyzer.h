@@ -81,6 +81,7 @@ public:
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
+    void prepare_delegation_entries();
     bool destructor_needed(EntityId e);
     bool temporary_cleanup(EntityId object);
     Expression member_pointer_expression(NodeId n, ScopeId s);
@@ -297,6 +298,7 @@ private:
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;
     std::uint64_t parameter_queries = 0, parameter_query_work = 0;
+    std::uint64_t delegation_entry_work = 0;
     Index field_index, local_class_names, local_enum_functions, local_enum_ordinals;
     std::vector<Closure> closures = std::vector<Closure>(1);
     Index closure_entities, closure_functions, closure_occurrences, closure_adapters;
