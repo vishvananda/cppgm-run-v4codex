@@ -49,6 +49,7 @@ function @tuple_like_first__second__third___tuple_like_first__second__third___ov
     store ptr %args__pack3, $args__pack3
     %t1 = load ptr $this
     %t2 = addr $argobj__1
+    zeroinit 1x1 %t2
     %t3 = load ptr $args
     %t4 = load ptr $args__pack2
     %t5 = load ptr $args__pack3

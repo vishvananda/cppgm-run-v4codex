@@ -59,6 +59,7 @@ function @make_owner(%ret : ptr [pass=indirect_result, object_bytes=4], %args : 
     store ptr %args, $args
     store ptr %args__pack2, $args__pack2
     %t1 = addr $argobj__1
+    zeroinit 1x1 %t1
     %t2 = load ptr $args
     %t3 = load ptr $args__pack2
     call void @owner_int___owner_long_int___ov3(%ret, $argobj__1, %t2, %t3)
@@ -75,6 +76,7 @@ function @make_owner__ov2(%ret : ptr [pass=indirect_result, object_bytes=4], %ar
     store ptr %args__pack2, $args__pack2
     store ptr %args__pack3, $args__pack3
     %t1 = addr $argobj__1
+    zeroinit 1x1 %t1
     %t2 = load ptr $args
     %t3 = load ptr $args__pack2
     %t4 = load ptr $args__pack3

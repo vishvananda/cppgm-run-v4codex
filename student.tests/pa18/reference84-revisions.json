@@ -1,0 +1,59 @@
+{
+  "entry": "09a77fca41efaa8eefc7913bc49898e7cd81e660",
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "contract": "pa11/README.md: one zeroinit for an exact contiguous nonvolatile non-union value-initialized span",
+  "revisions": [
+    {
+      "path": "pa18/tests/general/300-adl-overload-set-argument-deduction.ref",
+      "before_sha256": "73fd9e032e30deaa13db46163d605593487b5463016cb43c1f44818478740661",
+      "after_sha256": "e6faeec375a9cb67f7f4ae53597c467167fa17459a6210d25f8513a0c84b52c9",
+      "insertions": [
+        {
+          "pointer": "%t1",
+          "slot": "$argobj__1",
+          "bytes": 1,
+          "alignment": 1
+        },
+        {
+          "pointer": "%t4",
+          "slot": "$argobj__2",
+          "bytes": 1,
+          "alignment": 1
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/300-friend-function-template-alias-result-definition.ref",
+      "before_sha256": "7f4f1451fc9d84b516160c8f6739cbd292c7be4168e434e3e4b3a4443e35e3ee",
+      "after_sha256": "4705bf7731d0895cec33759cfcc350da22ea9ac1fe2058128d8dc7f82954743e",
+      "insertions": [
+        {
+          "pointer": "%t1",
+          "slot": "$argobj__1",
+          "bytes": 1,
+          "alignment": 1
+        },
+        {
+          "pointer": "%t1",
+          "slot": "$argobj__1",
+          "bytes": 1,
+          "alignment": 1
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/500-inherited-constructor-template-member-alias-pack.ref",
+      "before_sha256": "8ce52837b38ce53147cf196e56ab654b2fa8cfdd8e3f44c53b9e8fbf208967bf",
+      "after_sha256": "551bf7acf33d3e9223b0935c8df7eda522dda655ea516131ca57fc94a835aec0",
+      "insertions": [
+        {
+          "pointer": "%t2",
+          "slot": "$argobj__1",
+          "bytes": 1,
+          "alignment": 1
+        }
+      ]
+    }
+  ]
+}
