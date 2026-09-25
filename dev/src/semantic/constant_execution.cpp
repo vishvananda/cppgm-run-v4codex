@@ -105,7 +105,9 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             bool valid = true;
             for (unsigned j = 0; valid && j < member.action_count; ++j) {
                 auto action = subobject_actions[member.action_begin+j];
-                auto v = constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
+                auto v = member.inherited_constructor && action.constructor == member.inherited_constructor ?
+                    constant_construct(action.constructor,args) :
+                    constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
                 if (!v.valid) { valid = false; break; }
                 if (member.delegated_constructor) { value = v; break; }
                 EvaluatedPart p; p.selector = action.field ? action.field : (0x80000000U | types[action.type].entity);

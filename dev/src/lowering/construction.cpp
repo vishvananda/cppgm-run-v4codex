@@ -102,7 +102,7 @@ void Procedural::constructor_body(EntityId e)
                 at.address = false; construct(sem.facts[action.initializer].entity, action.initializer, at, true);
             } else initialize(action.initializer, action.type, at);
         }
-        else if (!action.field && m.inherited_constructor) {
+        else if (!action.field && m.inherited_constructor && action.constructor == m.inherited_constructor) {
             std::size_t begin = call_work.size();
             call_work.push_back(Operand::symbol(symbol(m.inherited_constructor, true)));
             call_work.push_back(at.operand);

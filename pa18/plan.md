@@ -2,8 +2,21 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 75**.
-Entry `9fa23653` → code `de0f5228`, `6229b49a`; independent review is pending.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 76**.
+Entry `b87de70e` (383/420); handoff 75 remains pending independent review.
+
+## Active group 76
+
+Inherited constructor templates: class completion publishes a derived candidate
+with an explicit base-constructor edge. Deduction/substitution retains the base
+head, defaults and lexical environment; a canonical derived specialization owns
+forwarding actions, ABI and emission. Ordinary construction, conversion, query,
+noexcept and constant consumers must follow that edge without source replay.
+Work is proportional to inherited candidates, demanded specializations and
+subobjects, with identity-keyed reuse; no body is demanded for mere participation.
+Validate course failures, focused positive/rejection/runtime controls, graph
+scaling, frozen A/A+ABBA latency/RSS and runtime/size, then prior/file audit.
+Extend through defects exposed in those consumers before handoff.
 
 ## Design/spec alignment and current evidence
 

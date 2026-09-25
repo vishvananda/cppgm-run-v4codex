@@ -13,7 +13,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     if (args.size() == 1 && types[value(0).type].kind == TypeKind::Named &&
         (types.unqualified(value(0).type) == types.unqualified(t) || derived_from(value(0).type, t) || class_value(value(0).type)))
         ensure_transfers(t, false);
-    if (args.empty() && !class_facts[entities[cls].class_info].user_constructor && !class_facts[entities[cls].class_info].inherited_base)
+    if (args.empty() && !class_facts[entities[cls].class_info].user_constructor)
         return default_constructor(t, scope, !probe);
     EntityId binding = class_facts[entities[cls].class_info].constructor;
     if (!binding) {
@@ -106,7 +106,7 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
     if (definitions) complete_class(types[t].entity);
     EntityId cls = types[t].entity;
     auto c = entities[cls].class_info;
-    if (class_facts[c].constructor && (class_facts[c].user_constructor || class_facts[c].inherited_base)) return choose_constructor(t, {}, 0, s, true, !demand);
+    if (class_facts[c].constructor && class_facts[c].user_constructor) return choose_constructor(t, {}, 0, s, true, !demand);
     EntityId ctor = class_facts[c].implicit_constructor;
     if (!ctor) {
         ctor = make_entity(EntityKind::Function, entities[cls].scope, entities[cls].name, 0);
@@ -276,7 +276,7 @@ void Analyzer::constructor_actions(EntityId e)
     };
     for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
         EntityId base = bases[b].base;
-        if (inherited) {
+        if (inherited && base == scopes[entities[inherited].owner].entity) {
             default_destructor(entities[base].type, scope);
             members[entities[inherited].member_info].base_entry = true;
             demand_member(inherited);

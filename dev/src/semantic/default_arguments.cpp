@@ -148,6 +148,8 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
 }
 std::uint64_t Analyzer::default_argument_key(EntityId e, unsigned parameter) const
 {
+    while (members[entities[e].member_info].inherited_constructor)
+        e = members[entities[e].member_info].inherited_constructor;
     // Inherited constructors share their original declaration's slots/types.
     // Function template specializations additionally supply the substitution.
     return key(definitions && entities[e].specialization ? e : 0, entities[e].defaults+parameter);
@@ -161,6 +163,8 @@ NodeId Analyzer::default_argument_value(EntityId e, unsigned parameter) const
 }
 NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* converted, DefaultReason reason)
 {
+    while (members[entities[e].member_info].inherited_constructor)
+        e = members[entities[e].member_info].inherited_constructor;
     auto source = default_arguments[entities[e].defaults+parameter];
     if (!source) throw std::logic_error("missing default argument declaration");
     auto k = default_argument_key(e,parameter);

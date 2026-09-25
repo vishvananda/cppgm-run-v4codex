@@ -14,7 +14,8 @@ QueryId Analyzer::template_exception_query(EntityId function, std::uint32_t id)
         auto query = template_exception_query(source,source_fact);
         template_exception_queries.put(id,query); return query;
     }
-    auto scope = make_scope(ScopeKind::Block,fact.scope,0,0,false);
+    auto head = entities[function].template_info;
+    auto scope = make_scope(ScopeKind::Block,head ? templates[head].environment : fact.scope,0,0,false);
     auto owner = entities[function].owner;
     if (scopes[owner].kind == ScopeKind::Class) {
         TemplateObjectContext object; object.owner = scopes[owner].entity;

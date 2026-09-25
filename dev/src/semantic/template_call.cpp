@@ -287,6 +287,32 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     else specializations.push_back(spec);
     index_owner.put(key(pattern, pack), index);
     try {
+    auto inherited = members[entities[pattern].member_info].inherited_constructor;
+    if (inherited) {
+        auto target = specialize(inherited,args,explicit_head);
+        if (!target) { specializations[index].declaration = FactState::Failure; return 0; }
+        auto e = make_entity(EntityKind::Function,entities[pattern].owner,entities[pattern].name,0);
+        entities[e].type = entities[target].type;
+        entities[e].specialization = index;
+        entities[e].inline_function = true;
+        entities[e].constexpr_function = entities[target].constexpr_function;
+        entities[e].access = entities[target].access;
+        entities[e].defaults = entities[target].defaults;
+        if (partial) entities[e].template_info = entities[target].template_info;
+        member_facts(e);
+        auto source = members[entities[target].member_info];
+        auto& member = members[entities[e].member_info];
+        member.constructor = member.synthetic = true;
+        member.inherited_constructor = target;
+        member.explicit_constructor = source.explicit_constructor;
+        member.deleted = source.deleted;
+        specializations[index].entity = e;
+        specializations[index].declaration = FactState::Success;
+        // The definition is a typed forwarding action, not the base's body.
+        specializations[index].body = FactState::Success;
+        dependency.succeeded = true;
+        return e;
+    }
     Index bindings, cache;
     auto condition = members[entities[pattern].member_info].explicit_condition;
     auto frame = dependent_type(entities[pattern].type) || condition || t.parent_frame ?

@@ -27,8 +27,23 @@ void Analyzer::inherited_constructors(EntityId cls)
     // Class completion sees every locally declared signature, including ones
     // after the using-declaration. An inherited signature never replaces it.
     for (EntityId target : candidates(class_facts[entities[base].class_info].constructor)) {
-        if (!target || !types[entities[target].type].count) continue;
-        EntityId e = declare_function(entities[cls].scope, entities[cls].name, 0, entities[target].type, true);
+        if (!target) continue;
+        auto f = types[entities[target].type];
+        if (!entities[target].template_info && ((!f.count && !f.variadic) ||
+            (f.count == 1 && transfer_member(target)))) continue;
+        EntityId e;
+        if (entities[target].template_info) {
+            // The inherited declaration has a new owner, but the source head,
+            // parameter identities and default substitution environment remain
+            // those of the base constructor. No body or syntax is copied.
+            auto head = entities[target].template_info;
+            auto signature = template_declaration_shape(entities[target].type,templates[head].environment);
+            auto family = template_families.get(key(entities[cls].scope,entities[cls].name));
+            if (family && template_signatures.get(key(family,signature))) continue;
+            e = make_entity(EntityKind::Function,entities[cls].scope,entities[cls].name,0);
+            entities[e].type = entities[target].type;
+            entities[e].template_info = head;
+        } else e = declare_function(entities[cls].scope, entities[cls].name, 0, entities[target].type, true);
         if (entities[e].member_info) continue;
         member_facts(e);
         MemberFacts source = members[entities[target].member_info];
@@ -37,6 +52,8 @@ void Analyzer::inherited_constructors(EntityId cls)
         members[m].inherited_constructor = target;
         members[m].explicit_constructor = source.explicit_constructor;
         members[m].deleted = source.deleted;
+        entities[e].access = entities[target].access;
+        entities[e].constexpr_function = entities[target].constexpr_function;
         entities[e].inline_function = true;
         entities[e].defaults = entities[target].defaults;
         entities[e].exception_spec = entities[target].exception_spec;
