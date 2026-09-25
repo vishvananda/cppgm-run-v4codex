@@ -83,7 +83,9 @@ bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, 
     // Call deduction permits conversions/base matches. A class pattern must
     // reproduce the exact canonical argument tuple, including cv and values.
     auto parent = head.parent_frame ? head.parent_frame : template_lexical_frame(scopes[head.environment].parent);
-    auto frame = packs || parent ? substitution_frame(0,head.offset,head.count,parent,intern_arguments(deduced)) : 0;
+    auto argument_source = child(ast[ast[head.source].detail].last,Kind::TemplateArguments);
+    auto access = type_access_subtree(argument_source);
+    auto frame = packs || parent || access ? substitution_frame(0,head.offset,head.count,parent,intern_arguments(deduced)) : 0;
     struct Probe {
         bool& value; bool prior;
         bool& immediate; bool saved;
@@ -93,6 +95,9 @@ bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, 
     for (unsigned j = 0; j < source.count; ++j)
         if (argument_types[source.offset+j] != argument_types[actual.offset+j] &&
             substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;
+    // An alias may erase an argument's type from its result. Its source access
+    // obligation still belongs to this candidate, never to the selected body.
+    if (access && !substituted_type_access(argument_source,frame)) return false;
     return true;
 }
 void Analyzer::select_partial_pattern(std::uint32_t index)

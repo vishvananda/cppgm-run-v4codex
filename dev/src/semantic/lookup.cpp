@@ -207,7 +207,8 @@ EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_
                     result = merge_lookup(result, imported(edges[i].target, n, mode, visit));
     }
     qualified_work.resize(begin);
-    if (result == ~EntityId(0)) throw std::runtime_error("ambiguous lookup");
+    // Keep ambiguity as a compact result through the whole indexed traversal.
+    // Ordinary lookup diagnoses it; immediate substitution consumes failure.
     return result;
 }
 ScopeId Analyzer::common_ancestor(ScopeId a, ScopeId b) const
@@ -227,7 +228,11 @@ ScopeId Analyzer::common_ancestor(ScopeId a, ScopeId b) const
 EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified)
 {
     if (definitions && scopes[s].kind == ScopeKind::Class) complete_class(scopes[s].entity);
-    if (qualified) return imported(s, n, mode, ++walk);
+    if (qualified) {
+        auto found = imported(s, n, mode, ++walk);
+        if (found == ~EntityId(0)) throw std::runtime_error("ambiguous lookup");
+        return found;
+    }
     // Nominated declarations participate at the nearest common ancestor of
     // their namespace and the active directive, not at the directive's scope.
     // Scratch state visits only active edges; no snapshot or semantic cache.
@@ -238,7 +243,10 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
     for (; s; s = scopes[s].parent) {
         ++lookup_work;
         if (calls && scopes[s].kind == ScopeKind::Class) {
-            if (EntityId found = imported(s, n, mode, ++walk)) return found;
+            if (EntityId found = imported(s, n, mode, ++walk)) {
+                if (found == ambiguous) throw std::runtime_error("ambiguous lookup");
+                return found;
+            }
             continue;
         }
         work.clear();

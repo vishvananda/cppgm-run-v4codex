@@ -19,12 +19,17 @@ and demanded-valid/invalid nested definitions, shared identities, complete-class
 contexts and graph scaling, then the course/prior/file checks and frozen O0
 latency/RSS/runtime/size observations. Remaining lookup and ordinary LowIR groups
 remain implementation work; independent review markers above remain unchanged.
-Nested completion now repairs the two initial course failures (**387/420**, no
+Nested completion repairs two initial course failures (**387/420**, no
 new failures). 52 nested controls cover dormant/demanded definitions, identity,
 explicit instantiation and complete-class contexts. Extend the same class-query
 path to ambiguous inherited type lookup: preserve a compact ambiguous result
 through indexed base traversal and let substitution discard the candidate, while
 class-definition side effects and ordinary lookup retain hard diagnostics.
+That extension now repairs inherited ambiguous-type SFINAE (**388/420**, 32
+failures, no new failures). Partial matching also checks retained access recipes
+for erased alias arguments, without demanding the partial body. 27 lookup
+controls cover ambiguity, hidden names, shared base identity, private access and
+hard class-definition side effects. Required final and performance checks pending.
 
 ## Design/spec alignment and current evidence
 

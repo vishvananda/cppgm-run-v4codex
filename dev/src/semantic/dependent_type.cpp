@@ -9,7 +9,11 @@ EntityId Analyzer::qualified_type_member(TypeId owner, IdentifierId name)
     auto k = key(cls,name);
     if (auto member = qualified_type_members.get(k)) return member;
     complete_class(cls);
-    auto member = lookup(entities[cls].scope,name,Lookup::Ordinary,true);
+    auto member = imported(entities[cls].scope,name,Lookup::Ordinary,++walk);
+    // Ambiguity belongs to immediate type substitution, unlike errors from
+    // completing the class definition above. Neither misses nor ambiguity
+    // publish a completed member identity while the class can still grow.
+    if (member == ~EntityId(0)) return 0;
     // In-progress classes can still introduce members that hide a base name.
     // Only completed classes publish immutable selected-member facts.
     if (member && entities[cls].complete) qualified_type_members.put(k,member);

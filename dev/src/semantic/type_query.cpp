@@ -491,7 +491,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::QualifiedValue: {
         if (!class_value(q.type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         auto cls = types[q.type].entity; complete_class(cls);
-        auto entity = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
+        auto entity = imported(entities[cls].scope,q.name,Lookup::Ordinary,++walk);
+        if (entity == ~EntityId(0)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous); break; }
         if (!entity) { r = incomplete_query(q.type); break; }
         auto kind = entities[entity].kind;
         if (kind != EntityKind::Variable && kind != EntityKind::Enumerator && !function_binding(entity))
@@ -557,7 +558,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             cls = types[q.type].entity;
             if (class_value(q.type)) complete_class(cls);
         }
-        auto e = lookup(entities[cls].scope,q.name,Lookup::Ordinary,true);
+        auto e = imported(entities[cls].scope,q.name,Lookup::Ordinary,++walk);
+        if (e == ~EntityId(0)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous); break; }
         if (!e) {
             if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; break; }
             r = incomplete_query(type); break;
