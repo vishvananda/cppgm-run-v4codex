@@ -183,6 +183,7 @@ bool Analyzer::default_constructor_nonthrowing(EntityId e)
         auto inherited = members[entities[e].member_info].inherited_constructor;
         if (inherited) {
             inherited_forwarding(e);
+            inherited = members[entities[e].member_info].inherited_constructor;
             auto f = types[entities[inherited].type];
             auto first = members[entities[e].member_info].inherited_arguments;
             for (unsigned j = 0; j < f.count; ++j) {

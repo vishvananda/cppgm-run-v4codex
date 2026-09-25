@@ -289,18 +289,37 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     try {
     auto inherited = members[entities[pattern].member_info].inherited_constructor;
     if (inherited) {
-        auto target = specialize(inherited,args,explicit_head);
-        if (!target) {
+        auto original = types[entities[inherited].type], proxy = types[entities[pattern].type];
+        bool omitted = original.count != proxy.count && !partial;
+        // A notional signature does not contain its omitted parameter types.
+        // Forming the full base specialization is a forwarding-definition (or
+        // exception specification) demand, not an immediate-context obligation.
+        EntityId target = omitted ? inherited : specialize(inherited,args,explicit_head);
+        TypeId type = 0;
+        if (omitted) {
+            Index bindings, cache;
+            auto frame = substitution_frame(index,t.offset,t.count,t.parent_frame);
+            type = substitute_type(entities[pattern].type,bindings,cache,frame);
+            NodeId parameters = child(t.declarator,syntax::Kind::Parameters);
+            unsigned ordinal = 0;
+            for (auto p = ast[parameters].first; type && p && ordinal < proxy.count; p = ast[p].next) {
+                if (ast[p].kind != syntax::Kind::Parameter) continue;
+                ++ordinal;
+                if (!substituted_type_access(p,frame)) type = 0;
+            }
+        } else if (target) {
+            auto concrete = types[entities[target].type];
+            auto count = concrete.count - (original.count-proxy.count);
+            type = count == concrete.count ? entities[target].type : types.function(concrete.child,
+                std::vector<TypeId>(types.parameters.begin()+concrete.offset,types.parameters.begin()+concrete.offset+count),false);
+        }
+        if (!type) {
             specializations[index].declaration = FactState::Failure;
             if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
             return 0;
         }
         auto e = make_entity(EntityKind::Function,entities[pattern].owner,entities[pattern].name,0);
-        auto original = types[entities[inherited].type], proxy = types[entities[pattern].type];
-        auto concrete = types[entities[target].type];
-        auto count = concrete.count - (original.count-proxy.count);
-        entities[e].type = count == concrete.count ? entities[target].type : types.function(concrete.child,
-            std::vector<TypeId>(types.parameters.begin()+concrete.offset,types.parameters.begin()+concrete.offset+count),false);
+        entities[e].type = type;
         entities[e].specialization = index;
         entities[e].inline_function = true;
         entities[e].constexpr_function = entities[target].constexpr_function;

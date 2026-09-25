@@ -13,6 +13,12 @@ void Analyzer::inherited_forwarding(EntityId e)
     ++unevaluated_depth;
     try {
         auto target = members[m].inherited_constructor;
+        if (entities[target].template_info) {
+            auto args = specialization_arguments(e);
+            target = specialize(target,std::vector<ArgumentId>(argument_types.begin()+args.offset,argument_types.begin()+args.offset+args.count));
+            if (!target) throw std::runtime_error("invalid inherited base constructor specialization");
+            members[m].inherited_constructor = target;
+        }
         auto f = types[entities[e].type], base = types[entities[target].type];
         std::vector<InheritedArgument> arguments;
         for (unsigned j = 0; j < base.count; ++j) {

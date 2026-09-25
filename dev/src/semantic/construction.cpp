@@ -193,6 +193,7 @@ void Analyzer::constructor_actions(EntityId e)
     EntityId inherited = members[m].inherited_constructor;
     if (inherited) {
         inherited_forwarding(e);
+        inherited = members[m].inherited_constructor;
         Type f = types[entities[e].type];
         for (unsigned j = 0; j < f.count; ++j) {
             EntityId p = make_entity(EntityKind::Parameter, scope, 0, 0);

@@ -40,6 +40,9 @@ runner.GOOD={
  'list':'struct B{int n;template<class T>B(T n):n(n){}};struct D:B{using B::B;};int main(){D a{7};D b={9};return a.n!=7||b.n!=9;}',
 }
 runner.GOOD.update({
+ 'omitted_type_dormant':Q+'struct B{template<class T>B(T,typename T::type=0){}};struct D:B{using B::B;};static_assert(Has<D,int>::value,"");int main(){}',
+ 'omitted_type_valid':'struct A{using type=int;};struct B{int n;template<class T>B(T,typename T::type n=7):n(n){}};struct D:B{using B::B;};int main(){A a;D d(a);return d.n!=7;}',
+ 'omitted_access_dormant':Q+'class A{using type=int;};struct B{template<class T>B(T,typename T::type=0){}};struct D:B{using B::B;};static_assert(Has<D,A>::value,"");int main(){}',
  'default_local_template':'struct B{int n;template<class T>B(T,int=3):n(1){}};struct D:B{using B::B;template<class U>D(U):B(0){n=2;}};int main(){D a(7);D b(7,4);return a.n!=2||b.n!=1;}',
  'default_noexcept':'int def()noexcept(false){return 5;}struct B{template<class T>B(T,int=def())noexcept{}};struct D:B{using B::B;};static_assert(!noexcept(D(1))&&noexcept(D(1,2)),"");int main(){}',
  'default_unused':'struct B{template<class T>B(T,int=T::missing){}};struct D:B{using B::B;};int main(){D d(1,2);}',
@@ -54,6 +57,8 @@ runner.GOOD.update({
  'constexpr_member':'struct B{int n;template<class T>constexpr B(T n):n(n){}};struct D:B{using B::B;int m=9;};constexpr D d(7);static_assert(d.n==7&&d.m==9,"");int main(){}',
 })
 runner.BAD={
+ 'omitted_type_selected':'struct B{template<class T>B(T,typename T::type=0){}};struct D:B{using B::B;};int main(){D d(1);}',
+ 'omitted_access_selected':'class A{using type=int;};struct B{template<class T>B(T,typename T::type=0){}};struct D:B{using B::B;};int main(){A a;D d(a);}',
  'value_deleted_move':'struct A{A(){}A(const A&){}A(A&&)=delete;};struct B{template<class T>B(T){}};struct D:B{using B::B;};int main(){A a;D d(a);}',
  'default_used':'struct B{template<class T>B(T,int=T::missing){}};struct D:B{using B::B;};int main(){D d(1);}',
  'private':'class B{template<class T>B(T){}};struct D:B{using B::B;};int main(){D d(3);}',
