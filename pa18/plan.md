@@ -2,7 +2,21 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 79 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 80 active**.
+Loop 80 entry: `c5e2c2719f1ef004e6bddb86487e797c37471079`, **393/420**, 27 failures.
+Prior turn: progress (committed handoff 79 and its validation); no live test process.
+Current group: scalar conversion facts → reference temporary / constant storage →
+condition and value lowering. Entry trace confirmed competing pooled/store array
+contracts; this remains separate unfinished initialization policy. First fixes:
+**395/420**, no new failures; earlier **2609/2609** after retaining the null-to-pointer
+conversion boundary. Extended controls exposed query/ordinary cast divergence,
+bit-field aliasing and converted constexpr reference values; repairs in progress.
+Owners: `explicit_conversion.cpp` selects once for ordinary/query use; typed
+conversion records drive runtime/constant materialization. Work follows one
+conversion and one temporary per use, cached existing query identities; no scan,
+new optimizer or phase roundtrip. Validation includes native/query/constexpr,
+volatile, null/base and width/category controls plus frozen A/B evidence.
+Preserve the stage-base and reviewed markers above.
 Entry `ef0e43c0`: **388/420** → **393/420**, failures **32 → 27**, no new failures.
 Implementation `67c4f685`, `50407fc1`; [handoff](handoff79.md),
 [evidence](../student.tests/pa18/loop79-evidence.json). Ralph still owns acceptance

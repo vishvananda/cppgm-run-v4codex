@@ -104,9 +104,12 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
         TypeId referred = sem.types[to].child;
         if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
             SlotId existing = sem.types.unqualified(v.type) == sem.types.unqualified(referred) ? v.materialized : SlotId();
+            bool pointer_conversion = sem.types[referred].kind == TypeKind::Pointer &&
+                sem.types[v.type].kind != TypeKind::Pointer;
             v = convert(v, referred);
-            if (sem.types[referred].kind == TypeKind::Pointer && v.operand.literal())
-                v = emit(Opcode::Copy, IRType::Ptr, {v.operand});
+            // Retain a pointer conversion at a reference boundary. A value
+            // already typed as a pointer only needs its temporary's store.
+            if (pointer_conversion && v.operand.literal()) v = emit(Opcode::Copy, IRType::Ptr, {v.operand});
             SlotId slot = existing ? existing : builder->add_slot(0, type(referred));
             Value location(Operand::slot(slot), type(referred), referred, true);
             store(v, location); v = location;
@@ -174,7 +177,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)
 {
     if (c.derived) {
-        v = c.reference ? base_projection(!c.temporary ? address(v) : load(v), c.adjustment) : pointer_projection(load(v),c.adjustment);
+        v = c.reference && !c.temporary ? base_projection(address(v),c.adjustment) : pointer_projection(load(v),c.adjustment);
         if (c.temporary) { v.type = sem.types[c.target].child; return convert(v, c.target); }
         v.type = c.target; return v;
     }

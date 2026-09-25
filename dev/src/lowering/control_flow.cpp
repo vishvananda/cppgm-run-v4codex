@@ -84,7 +84,7 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
     // Semantic constant names carry the same boolean fact as a literal.
     // Consume that fact directly; this does not evaluate or rescan expressions.
     if (ast[n].kind == Kind::IdExpression && sem.facts[n].value &&
-        sem.types[sem.types.unqualified(sem.expression_fact(n).type)].fundamental == FT_BOOL &&
+        type(sem.expression_fact(n).type).integer() &&
         !(sem.types[sem.expression_fact(n).type].cv & 2)) {
         auto value = sem.constant_fact(n);
         if (value.valid) { jump(value.bits ? yes : no); return; }
