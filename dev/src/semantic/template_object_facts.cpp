@@ -5,6 +5,13 @@ bool Analyzer::check_fixed_member(NodeId n, ScopeId s)
 {
     auto operand = ast[n].first;
     if (!template_fixed_expressions.get(ast.nodes.occurrences[operand].source)) return false;
+    // A fixed receiver does not make its explicit template-id fixed. The
+    // retained argument facts are substituted by the occurrence/lane owner.
+    auto name = ast[ast[operand].next].detail;
+    for (auto p = ast[name].first; p; p = ast[p].next)
+        if (auto args = child(p,syntax::Kind::TemplateArguments))
+            for (auto a = ast[args].first; a; a = ast[a].next)
+                if (dependent_argument(template_argument_node(a,s))) return false;
     ++unevaluated_depth;
     try {
         expression(n,s);

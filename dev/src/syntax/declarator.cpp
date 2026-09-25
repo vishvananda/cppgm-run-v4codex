@@ -54,7 +54,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         } else break;
     }
     if (alignment) ast.alignment_owners.put(result, alignment);
-    if (!have_type) throw std::runtime_error("expected type specifier");
+    if (!have_type) throw std::runtime_error("expected type specifier at byte " + std::to_string(ast.locations[in.peek().location].begin));
     return result;
 }
 
@@ -92,7 +92,7 @@ bool Parser::parameter_clause_ahead()
     return true;
 }
 
-NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts)
+NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, bool typedef_name)
 {
     NodeId result = make(abstract ? Kind::AbstractDeclarator : Kind::Declarator);
     DeclaratorFacts parsed;
@@ -111,9 +111,9 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts)
         while (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
     }
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
-    if (nested_declarator_ahead()) {
+    if (nested_declarator_ahead() || (typedef_name && in.is("(") && identifier(1) && in.is(")",2))) {
         in.require("(");
-        ast.append(result, wrap(Kind::NestedDeclarator, declarator(abstract, false, &parsed)));
+        ast.append(result, wrap(Kind::NestedDeclarator, declarator(abstract, false, &parsed, typedef_name)));
         in.require(")");
     } else if (identifier() || in.is("::") || in.is("operator") || in.is("~")) {
         parsed.name = name();

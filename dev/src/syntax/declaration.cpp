@@ -54,9 +54,9 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     specs = specifiers(false,specs);
     ScopeId owner = scope;
     DeclaratorFacts facts;
-    NodeId decl = declarator(false, false, &facts);
     bool alias = false;
     for (NodeId s = ast[specs].first; s; s = ast[s].next) alias |= ast[s].op == KW_TYPEDEF;
+    NodeId decl = declarator(false, false, &facts, alias);
     Category category = alias ? Category::Type : Category::Value;
     bool is_function = facts.first_operator == OP_LPAREN;
     if (template_declaration && !alias) category = Category::TemplateValue;
@@ -102,7 +102,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
             ast.append(item, initializer());
             ast.append(list, item);
             if (!in.eat(",")) break;
-            decl = declarator();
+            decl = declarator(false, false, 0, alias);
             if (!decl) throw std::runtime_error("expected declarator after comma");
             bind_declarator(decl, category, owner, type_scope(specs));
             if (alias && declarator_name(decl))

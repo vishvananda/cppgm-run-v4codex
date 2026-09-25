@@ -173,7 +173,9 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         bool dependent = bind_template_expression(node.first,s);
         auto name = ast[ast[node.first].next].detail;
         for (auto p = ast[name].first; p; p = ast[p].next)
-            if (auto args = child(p,Kind::TemplateArguments)) dependent |= bind_template_expression(args,s);
+            if (auto args = child(p,Kind::TemplateArguments))
+                for (auto a = ast[args].first; a; a = ast[a].next)
+                    dependent |= dependent_argument(template_argument_node(a,s));
         auto receiver = node.first;
         while (ast[receiver].kind == Kind::Parenthesized) receiver = ast[receiver].first;
         bool current = node.op == OP_ARROW && ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;

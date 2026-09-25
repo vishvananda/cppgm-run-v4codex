@@ -11,32 +11,50 @@ std::size_t Parser::probe_angles(std::size_t ahead)
     }
     angle_stack.clear();
     angle_stack.push_back(ahead);
+    std::vector<Binding> heads(1);
+    Binding head;
+    ScopeId owner = scope;
+    bool qualified = false;
     for (std::size_t i = ahead + 1;; ++i) {
         if (ast.telemetry) ++angle_work;
         if (in.peek(i).kind == PostTokenKind::eof || in.is(";", i) || in.is("}", i)) return ahead;
-        if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
+        if (identifier(i)) {
+            head = qualified ? names.qualified(owner,in.peek(i).text) : names.lookup(scope,in.peek(i).text);
+            qualified = false;
+        }
+        else if (in.is("::",i)) {
+            owner = head.target ? head.target : identifier(i-1) || in.is(">",i-1) || in.is(">>",i-1) ? unknown_scope : 0;
+            qualified = true; head = Binding();
+        }
+        else if (in.is("template",i)) continue;
+        else if (in.is("(", i) || in.is("[", i) || in.is("{", i)) {
+            i = in.matching(i); head = Binding(); qualified = false;
+        }
         else if (in.is("<", i)) {
             // A relational '<' in a value argument does not add an angle
             // level. Classify nested template heads from the indexed names;
             // otherwise a typedef predeclaration can swallow its own name.
             auto prior = in.peek(i-1);
-            auto binding = identifier(i-1) ? names.lookup(scope,prior.text) : Binding();
+            auto binding = identifier(i-1) ? head : Binding();
             bool templated = template_category(binding.category) || (i >= 2 && in.is("template",i-2));
             // Named casts own an angle-delimited type-id inside value arguments.
             templated |= prior.op == KW_STATIC_CAST || prior.op == KW_DYNAMIC_CAST ||
                 prior.op == KW_REINTERPET_CAST || prior.op == KW_CONST_CAST;
             if (binding.category == Category::Unknown && identifier(i-1))
                 templated |= lexical_hint(prior.text) & 2;
-            if (templated) angle_stack.push_back(i);
+            if (templated) { angle_stack.push_back(i); heads.push_back(binding); }
+            head = Binding(); qualified = false;
         }
         else if (in.is(">", i) || in.is(">>", i)) {
             unsigned pieces = in.is(">>", i) ? 2 : 1;
             while (pieces-- && !angle_stack.empty()) {
                 in.remember_angle(angle_stack.back(), i + 1);
                 angle_stack.pop_back();
+                head = heads.back(); heads.pop_back(); qualified = false;
             }
             if (angle_stack.empty()) return i + 1;
         }
+        else { head = Binding(); qualified = false; }
     }
 }
 
@@ -158,8 +176,13 @@ void Parser::predeclare_class()
         }
         if ((in.is("class", i) || in.is("struct", i) || in.is("union", i) || in.is("enum", i)) && identifier(i + 1))
             names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
-        if (in.is("using", i) && identifier(i + 1) && in.is("=", i + 2))
-            names.bind(scope, in.peek(i + 1).text, Category::Type);
+        if (in.is("using", i) && identifier(i + 1) && in.is("=", i + 2)) {
+            names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
+            // An alias's type-id cannot declare further class members. In
+            // particular R(Args...) here is a function type, not a member R.
+            for (i += 3; !in.is(";",i) && in.peek(i).kind != PostTokenKind::eof; ++i)
+                if (in.is("(",i) || in.is("[",i) || in.is("{",i)) i = in.matching(i);
+        }
         if (in.is("typedef", i)) {
             // Find declaration names without constructing grammar. Delimiter
             // indexing skips initializers/array bounds/parameter lists; the
