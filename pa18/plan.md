@@ -2,61 +2,50 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation 76**.
-Entry `b87de70e` (383/420); handoff 75 remains pending independent review.
-
-## Active group 76
-
-Inherited constructor templates: class completion publishes a derived candidate
-with an explicit base-constructor edge. Deduction/substitution retains the base
-head, defaults and lexical environment; a canonical derived specialization owns
-forwarding actions, ABI and emission. Ordinary construction, conversion, query,
-noexcept and constant consumers must follow that edge without source replay.
-Work is proportional to inherited candidates, demanded specializations and
-subobjects, with identity-keyed reuse; no body is demanded for mere participation.
-Validate course failures, focused positive/rejection/runtime controls, graph
-scaling, frozen A/A+ABBA latency/RSS and runtime/size, then prior/file audit.
-Extend through defects exposed in those consumers before handoff.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 76**.
+Entry `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; independent review of 75–76 pending.
 
 ## Design/spec alignment and current evidence
 
-[Handoff 75](handoff75.md) completes immediate-context list/cast queries through
-ordinary/fixed initialization, constant execution, noexcept and typed ABI.
-Canonical query IDs/context/target types own formation and selected validation;
-consumers reuse conversions and plans. No fake syntax, replay, stage switch or
-host/reference implementation is introduced. Work follows initializer/candidate
-edges; omitted array tails are compressed. Default construction failures are
-structured facts. Cast adjustments and parameter representations are retained
-before lowering consumes them; unused bodies remain dormant.
+[Handoff 76](handoff76.md) completes inherited constructor template participation
+through notional default-omission signatures, local hiding, access/deletion,
+forwarding, constexpr/noexcept, value transfers/defaults and parameter destruction.
+Derived candidates retain the base head and typed constructor edge. Canonical
+specializations and forwarding recipes own selected conversions; consumers reuse
+those facts without source replay or overload resolution in lowering. Omitted parameter types remain dormant until forwarding is required. Work tracks
+candidate parameter edges and demanded recipes; repeated query work is cached.
+No unused body, host/reference implementation, stage switch or new tolerance.
 
-Required stage tests: **383/420**, entry **379/420**; original failures **41 → 37**,
-no new failures. All **420 inputs and 1,712 fixture/reference files** are unchanged.
-Earlier PAs: **2609/2609**. File audit passes with the same three inherited header
-advisories. **718 personal semantic controls** pass (71 new, 647 inherited), plus
-four repaired course executions, the cast reducer, six new graph controls,
-three inherited completion controls, seven ABI checks and the direct ABI API.
-Intermediate failures and repairs remain in the evidence; none is waived.
+Required stage tests: **385/420**, entry **383/420**; original failures **37 → 35**,
+no new failures. All **420 inputs and 1,686 tracked fixture/reference files** are unchanged.
+Earlier PAs: **2609/2609**. File audit passes with the three inherited header
+advisories. **778 personal semantic controls** pass (60 new, 718 inherited), plus
+three course executions, twelve forwarding graph controls and three inherited
+completion controls. [Evidence](../student.tests/pa18/loop76-evidence.json) retains
+checks, intermediate failures/repairs, and frozen performance observations.
+The prior 1,712 count also included 26 generated `.check*` observations; the
+tracked manifest is 1,686 files. This corrects accounting, with no coverage change.
 
 ## Remaining required implementation
 
 | Ownership group | Required next work / boundary |
 |---|---|
 | Declaration timing and lookup | Lazy nested classes, first-declaration result lookup, remaining member/alias syntax and visibility. Preserve the reviewed prototype/context/signature and completion edges. |
-| Constructor and explicit deduction | Inherited-constructor and explicit member-template participation. This needs declaration/candidate forwarding ownership, separate from the completed selected-list query consumer. |
-| Ordinary LowIR facts/policy | Constant/array initialization, bool/result metadata, class-result conventions and discarded loads. Earlier fixtures require pooling for the same small scalar-array shapes, so a blanket removal breaks prior stages. Reconcile the policy/contract without a stage switch or weakened comparison. Preserve the inherited nested-alias cast and class-ellipsis reducers as unfinished implementation. |
+| Constructor and explicit deduction | Explicit member-template participation and remaining alias argument syntax. Inherited forwarding is complete; its remaining course mismatch belongs to ordinary LowIR policy below. |
+| Ordinary LowIR facts/policy | Constant/array and empty-tag initialization, constructor object-root metadata, bool/result metadata, class-result conventions and discarded loads. Earlier fixtures require pooling for the same small scalar-array shapes, so a blanket removal breaks prior stages. Reconcile the policy/contract without a stage switch or weakened comparison. Preserve the previous nested-alias cast and class-ellipsis reducers as unfinished implementation. |
 
-The scope was extended through related consumers and defects before this handoff.
-The remaining groups require distinct declaration-state/candidate or lowering
-policy work; they are not remaining steps in the selected-query recipe.
-Independent audit questions concern source/query identity, validation, completion
-edges and cache lifetimes across consumers. These differ from the unfinished
-requirements above; neither category is waived. Consolidate further groups through
-their consumers rather than splitting at already-known ownership boundaries.
+The scope was extended through the forwarding consumers and exposed defects.
+The member-alias-pack inherited case now executes but still fails comparison on
+empty-tag zeroing/object-root policy; it is not counted as repaired. Remaining
+work needs distinct declaration-state or ordinary lowering-policy changes.
+Independent audit questions concern proxy/head identity, completion retries,
+notional signatures, lifetime/ABI facts and interactions with handoff 75. These
+are separate from the **35 unfinished course cases**; neither is waived.
 
 ## Performance and references
 
-Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 75](performance75.md) and
-[observations](../student.tests/pa18/loop75-performance.json) preserve frozen A/A,
+Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 76](performance76.md) and
+[observations](../student.tests/pa18/loop76-performance-final.json) preserve frozen A/A,
 ABBA compiler latency/RSS, checked runtime/size, output equivalence and graph
 scaling. New required behavior has final-only costs when the entry rejects it.
 No optional transform or mandated numeric ceiling is introduced. Historical
@@ -67,12 +56,12 @@ self-hosting belong to PA24–PA34; this does not excuse current course failures
 
 Reference corrections remain [65](reference-correction65.md),
 [67](reference-correction67.md), [69](reference-correction69.md), with reducers,
-rule proofs and pinned bundles. Loops 70–75 change no references.
+rule proofs and pinned bundles. Loops 70–76 change no references.
 
 ## Handoff ledger
 
 Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 **343**
-→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383**.
+→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383** → 76 **385**.
 
 | Handoff | Range / disposition |
 |---|---|
@@ -83,6 +72,7 @@ Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 *
 | 73 | `12cbfe83` → code `9ebc507c`; [callable handoff](handoff73.md), 379/420; 48 → 41 failures; prior/file audit pass; reviewed/corrected in audit 74. |
 | 74 | `f59e8f67` → `2433d6de` → code `8dc4636d`; [audit](audit.md), all three handoffs/interactions reviewed, five ownership findings repaired; unchanged 41 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop74-evidence.json). |
 | 75 | `9fa23653` → code `6229b49a`; [list/cast handoff](handoff75.md), 383/420; 41 → 37 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop75-evidence.json). Independent audit pending; full-stage remains unfinished. |
+| 76 | `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; [inherited forwarding handoff](handoff76.md), 385/420; 37 → 35 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop76-evidence.json). Independent audit pending; full-stage remains unfinished. |
 
 Required checks: `make test-pa18`, `make test-report-through-pa17`, PA18 file audit.
 Root reports run sequentially because they share `.test_counts`.
