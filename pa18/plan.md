@@ -2,96 +2,74 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation 77 in progress**.
-Entry `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; independent review of 75–76 pending.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 77**.
+Entry `2ce99c6a` → code `86e142ba`, `b6294394`, `975e6162`.
+Independent review of handoffs **75–77 remains pending**.
 
-## Active ownership group (77)
+## Design/spec alignment and evidence
 
-Entry `2ce99c6a` is clean, **385/420** (35 failures). Prior turn completed
-validated handoff 76: progress, with no live compiler/build process to resume.
-Work on lazy nested-class declaration/definition demand first, extending through
-related declaration timing consumers when the same ownership applies. Class
-identity and lexical substitution frames must survive declaration-only use;
-completion owns one monotonic definition state, and only demanded source regions
-may publish concrete members. Work must follow class/member edges, with no
-global retry, source replay or eager dormant definitions. Validate unused-invalid
-and demanded-valid/invalid nested definitions, shared identities, complete-class
-contexts and graph scaling, then the course/prior/file checks and frozen O0
-latency/RSS/runtime/size observations. Remaining lookup and ordinary LowIR groups
-remain implementation work; independent review markers above remain unchanged.
-Nested completion repairs two initial course failures (**387/420**, no
-new failures). 52 nested controls cover dormant/demanded definitions, identity,
-explicit instantiation and complete-class contexts. Extend the same class-query
-path to ambiguous inherited type lookup: preserve a compact ambiguous result
-through indexed base traversal and let substitution discard the candidate, while
-class-definition side effects and ordinary lookup retain hard diagnostics.
-That extension now repairs inherited ambiguous-type SFINAE (**388/420**, 32
-failures, no new failures). Partial matching also checks retained access recipes
-for erased alias arguments, without demanding the partial body. 27 lookup
-controls cover ambiguity, hidden names, shared base identity, private access and
-hard class-definition side effects. Explicit nested-class instantiation and specialization now reuse that declared
-identity as well; explicit outer definitions demand the nested member set, while
-extern declarations and specialized members retain their own timing. The nested
-controls now total 70. Final checks and frozen measurements are being refreshed
-for this completed extension.
+[Handoff 77](handoff77.md) separates nested member-class declarations from
+completeness demand. Source regions and class definitions have distinct retained
+identities; one monotonic definition state publishes members into the declared
+scope. Explicit nested instantiation/specialization, complete-class defaults,
+layout and ordinary consumers use that identity. Anonymous unions and ordinary
+local classes retain their required eager behavior. Source bodies remain shared;
+no grammar replay, unrelated retry, host/reference implementation or new tolerance.
 
-## Design/spec alignment and current evidence
+Indexed base lookup propagates a compact ambiguous result. Type/value queries
+consume it as substitution failure; class-definition side effects and ordinary
+lookup still diagnose. Partial matching checks retained access recipes even when
+an alias erases its argument. Work follows requested class members, source regions,
+lookup edges and candidate arguments; records have translation-unit ownership.
 
-[Handoff 76](handoff76.md) completes inherited constructor template participation
-through notional default-omission signatures, local hiding, access/deletion,
-forwarding, constexpr/noexcept, value transfers/defaults and parameter destruction.
-Derived candidates retain the base head and typed constructor edge. Canonical
-specializations and forwarding recipes own selected conversions; consumers reuse
-those facts without source replay or overload resolution in lowering. Omitted parameter types remain dormant until forwarding is required. Work tracks
-candidate parameter edges and demanded recipes; repeated query work is cached.
-No unused body, host/reference implementation, stage switch or new tolerance.
-
-Required stage tests: **385/420**, entry **383/420**; original failures **37 → 35**,
-no new failures. All **420 inputs and 1,686 tracked fixture/reference files** are unchanged.
+Required PA18 tests: **388/420**, entry **385/420**; failures **35 → 32**, no new
+failures. All **420 inputs and 1,686 tracked fixture/reference files** are unchanged.
 Earlier PAs: **2609/2609**. File audit passes with the three inherited header
-advisories. **778 personal semantic controls** pass (60 new, 718 inherited), plus
-three course executions, twelve forwarding graph controls and three inherited
-completion controls. [Evidence](../student.tests/pa18/loop76-evidence.json) retains
-checks, intermediate failures/repairs, and frozen performance observations.
-The prior 1,712 count also included 26 generated `.check*` observations; the
-tracked manifest is 1,686 files. This corrects accounting, with no coverage change.
+advisories. **875 personal semantic controls** pass (97 new, 778 inherited), plus
+18 nested demand/region controls, three nested completion-invalidation controls
+and three inherited completion controls. [Evidence](../student.tests/pa18/loop77-evidence.json)
+retains checks, intermediate failures/repairs, frozen binaries and observations.
 
 ## Remaining required implementation
 
 | Ownership group | Required next work / boundary |
 |---|---|
-| Declaration timing and lookup | Lazy nested classes, first-declaration result lookup, remaining member/alias syntax and visibility. Preserve the reviewed prototype/context/signature and completion edges. |
-| Constructor and explicit deduction | Explicit member-template participation and remaining alias argument syntax. Inherited forwarding is complete; its remaining course mismatch belongs to ordinary LowIR policy below. |
-| Ordinary LowIR facts/policy | Constant/array and empty-tag initialization, constructor object-root metadata, bool/result metadata, class-result conventions and discarded loads. Earlier fixtures require pooling for the same small scalar-array shapes, so a blanket removal breaks prior stages. Reconcile the policy/contract without a stage switch or weakened comparison. Preserve the previous nested-alias cast and class-ellipsis reducers as unfinished implementation. |
+| Source signatures and member/alias syntax | First-declaration function-result lookup; explicit member specialization deduction; pack-expanded explicit member-template arguments; alias/function argument cv syntax; using-directive function-template argument participation. These own five rejected cases, separate from nested class completion. |
+| Ordinary LowIR facts/policy | One empty-pack unknown-bound-array rejection and 26 comparisons: constant/array and empty-tag initialization, constructor object-root metadata, bool/result metadata, class-result conventions and discarded loads. Earlier fixtures require pooling for the same small scalar-array shapes; reconcile the policy without a stage switch or weakened comparison. Preserve the nested-alias cast and class-ellipsis reducers as unfinished implementation. |
 
-The scope was extended through the forwarding consumers and exposed defects.
-The member-alias-pack inherited case now executes but still fails comparison on
-empty-tag zeroing/object-root policy; it is not counted as repaired. Remaining
-work needs distinct declaration-state or ordinary lowering-policy changes.
-Independent audit questions concern proxy/head identity, completion retries,
-notional signatures, lifetime/ABI facts and interactions with handoff 75. These
-are separate from the **35 unfinished course cases**; neither is waived.
+The completed group was extended through explicit class demand, access checks,
+value queries and completion invalidation. The **32 unfinished course cases**
+require distinct signature/syntax or ordinary lowering owners; changing the
+completed class-demand path cannot repair them while preserving its timing rules.
+The inherited member-alias-pack source still executes but fails empty-tag/root
+metadata comparison, and is not counted as repaired.
+Independent review questions concern class declaration/definition identity,
+source-region boundaries, access environments and interactions with 75–76's
+constructor/lifetime facts. They are separate from unfinished implementation;
+neither category is waived.
 
 ## Performance and references
 
-Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 76](performance76.md) and
-[observations](../student.tests/pa18/loop76-performance-final.json) preserve frozen A/A,
-ABBA compiler latency/RSS, checked runtime/size, output equivalence and graph
-scaling. New required behavior has final-only costs when the entry rejects it.
-No optional transform or mandated numeric ceiling is introduced. Historical
-**+15%, +16 MiB, 5.5×** targets remain diagnostics, not exit gates; preserve all
-measurements in performance records 63–74, including unsuccessful attempts.
-Correctness, coverage and graph bounds remain gates. Native optimization and
-self-hosting belong to PA24–PA34; this does not excuse current course failures.
+Acceptance is **PA18/O0 LowIR**, spec §9. [Performance 77](performance77.md) and
+[final observations](../student.tests/pa18/loop77-performance-final.json) preserve
+frozen A/A and ABBA compiler latency/RSS, checked executable runtime/size and
+output equivalence. The first batch remains in [its original record](../student.tests/pa18/loop77-performance.json).
+Dormant definitions create zero member occurrences; demanded definitions are
+linear in their actual members, and repeated demand reuses one definition.
+Newly accepted behavior has final-only costs when the entry rejects it. No
+optional optimization or mandated numeric ceiling is introduced. Historical
+**+15%, +16 MiB, 5.5×** targets remain diagnostics, not exit gates; all measurements
+in records 63–76 remain. Correctness, coverage and graph bounds remain gates.
+Native optimization/self-hosting belongs to PA24–PA34 and does not excuse failures.
 
 Reference corrections remain [65](reference-correction65.md),
 [67](reference-correction67.md), [69](reference-correction69.md), with reducers,
-rule proofs and pinned bundles. Loops 70–76 change no references.
+rule proofs and pinned bundles. Loops 70–77 change no references.
 
 ## Handoff ledger
 
 Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 **343**
-→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383** → 76 **385**.
+→ 68 **348** → 69/70 **353** → 71 **367** → 72 **372** → 73/74 **379** → 75 **383** → 76 **385** → 77 **388**.
 
 | Handoff | Range / disposition |
 |---|---|
@@ -103,6 +81,7 @@ Stage entry **266/420** → 63 **282** → 64 **312** → 65/66 **327** → 67 *
 | 74 | `f59e8f67` → `2433d6de` → code `8dc4636d`; [audit](audit.md), all three handoffs/interactions reviewed, five ownership findings repaired; unchanged 41 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop74-evidence.json). |
 | 75 | `9fa23653` → code `6229b49a`; [list/cast handoff](handoff75.md), 383/420; 41 → 37 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop75-evidence.json). Independent audit pending; full-stage remains unfinished. |
 | 76 | `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; [inherited forwarding handoff](handoff76.md), 385/420; 37 → 35 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop76-evidence.json). Independent audit pending; full-stage remains unfinished. |
+| 77 | `2ce99c6a` → code `86e142ba`, `b6294394`, `975e6162`; [nested completion/lookup handoff](handoff77.md), 388/420; 35 → 32 failures, prior 2609/2609, file audit/coverage pass; [evidence](../student.tests/pa18/loop77-evidence.json). Independent review of 75–77 pending; full-stage unfinished. |
 
 Required checks: `make test-pa18`, `make test-report-through-pa17`, PA18 file audit.
 Root reports run sequentially because they share `.test_counts`.
