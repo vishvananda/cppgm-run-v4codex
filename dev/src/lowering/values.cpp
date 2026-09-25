@@ -172,6 +172,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         construct_value(n,c,pointer);
         return c.ellipsis_object ? pointer : Value(Operand::slot(slot), type(c.target), c.target);
     }
+    if (c.ellipsis_object) return address(expression(n));
     return converted_value(expression(n,c.reference && sem.expression_fact(n).category != ValueCategory::Prvalue),c);
 }
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)

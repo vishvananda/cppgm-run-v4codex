@@ -9,7 +9,7 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
 {
     if (!c.valid()) return false;
     ellipsis_query |= !n;
-    if (c.ellipsis_object && ellipsis_query && !c.empty_copy &&
+    if (c.ellipsis_object && ellipsis_query && source.category != ValueCategory::Prvalue && !c.empty_copy &&
         (!c.function || deleted_transfer(c.function) || !accessible(c.function,s,entities[c.function].owner) ||
         !default_destruction_valid(value_type(c.target),s))) {
         // An unevaluated lvalue-to-rvalue conversion does not copy its class

@@ -239,6 +239,7 @@ Constant Analyzer::constant_result_conversion(Constant value, const Conversion& 
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
     if (c.constant_forbidden || c.ellipsis_unavailable) return Constant();
+    if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
     // Implicit and braced argument conversions create temporaries too. Use
     // their recorded materialization, including reference-bound objects,
     // rather than scanning the source initializer for construction syntax.
@@ -261,7 +262,6 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return constant_result_conversion(execute_constant(c.function,{},object),c);
     }
     if (c.kind == Conversion::Kind::Construction) {
-        if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
         auto material = conversion_objects[c.materialization];
         auto call = material.call; std::vector<Constant> args;
         for (unsigned i = 0; i < call.argument_count; ++i) {

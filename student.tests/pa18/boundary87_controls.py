@@ -40,6 +40,12 @@ for name in ('ellipsis_copy_effect','ellipsis_move_effect','ellipsis_prvalue_lif
  prefix,body=source.split('int main()')
  runner.GOOD[name+'_template']=prefix+'template<class T>int use()'+body+'int main(){return use<int>();}'
 runner.GOOD.update({
+ 'ellipsis_prvalue_deleted':'struct A{A(){}A(const A&)=delete;A(A&&)=delete;};int f(...){return 7;}int main(){return f(A())!=7;}',
+ 'ellipsis_prvalue_private':'struct A{A(){}private:A(const A&);A(A&&);};int f(...){return 7;}int main(){return f(A())!=7;}',
+ 'ellipsis_prvalue_no_copy':'int copies,dead;struct A{A(){}A(const A&){++copies;}A(A&&){++copies;}~A(){++dead;}};int f(...)noexcept{return copies;}int main(){int n=f(A());return n||copies||dead!=1;}',
+ 'ellipsis_prvalue_noexcept':'struct A{A()noexcept;A(const A&)noexcept(false);A(A&&)noexcept(false);};int f(...)noexcept;static_assert(noexcept(f(A())),"no extra prvalue copy");int main(){}',
+ 'ellipsis_prvalue_template':'struct A{A(){}A(const A&)=delete;};int f(...){return 7;}template<class T>int use(){return f(T());}int main(){return use<A>()!=7;}',
+ 'ellipsis_prvalue_lambda':'int f(...){return 7;}int main(){return f([]{})!=7;}',
  'ellipsis_branch':'int copies,dead;struct A{A(){}A(const A&)noexcept{++copies;}~A()noexcept{++dead;}};A a;int f(...)noexcept{return 7;}int use(bool b){return b?f(a):3;}int main(){int x=use(false);int y=use(true);return x!=3||y!=7||copies!=1||dead!=1;}',
  'ellipsis_logical':'int copies,dead;struct A{A(){}A(const A&)noexcept{++copies;}~A()noexcept{++dead;}};A a;int f(...)noexcept{return 7;}bool use(bool b){return b&&f(a);}int main(){bool x=use(false);bool y=use(true);return x||!y||copies!=1||dead!=1;}',
  'ellipsis_multiple':'int copies,dead;struct A{A(){}A(const A&)noexcept{++copies;}~A()noexcept{++dead;}};A a;int f(...)noexcept{return copies-dead;}int main(){int x=f(a,a);return x!=2||copies!=2||dead!=2;}',

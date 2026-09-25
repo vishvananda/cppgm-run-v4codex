@@ -25,7 +25,7 @@ constant evaluation completes the recipe and enforces literal-type lifetime
 requirements. These facts are copied with the recipe,
 not inferred again in lowering. Scalar default promotions are unchanged.
 
-The LowIR variadic suffix accepts scalar lanes. A class value therefore uses a
+The LowIR variadic suffix accepts scalar lanes. A class glvalue therefore uses a
 pointer to private argument storage, with its selected copy/move and full
 expression lifetime. This is an internal LowIR transport, not an assertion about
 the later native platform's aggregate varargs ABI. Source `va_arg` and hosted
@@ -33,6 +33,11 @@ varargs interoperation are later surfaces. For nontrivial classes, PA18 chooses
 copy/move construction and caller destruction as its implementation-defined
 semantics under N3485 §5.2.2 [expr.call]/7. Trivial, empty and large classes use
 the same object model; no scalar payload is invented for an empty class.
+Prvalues already own a result object and pass its address without requesting an
+extra copy/move. Deleted/private transfers therefore do not reject a prvalue
+ellipsis argument, and a throwing copy does not affect its `noexcept` result.
+Its existing source lifetime still supplies destruction. This follows the
+lvalue-to-rvalue boundary in [expr.call]/7, rather than optional copy elision.
 
 `converted` consumes the flag to pass an address and activate cleanup. Branch
 cleanup queries include the converted temporary, so conditional and short-circuit

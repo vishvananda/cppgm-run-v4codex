@@ -118,6 +118,12 @@ Conversion Analyzer::ellipsis_conversion_value(Expression source)
     Conversion c; if (!source.type) return c; c.rank = 6;
     c.target = promote(decay(source.type));
     if (class_value(c.target)) {
+        if (source.category == ValueCategory::Prvalue) {
+            // A prvalue already owns its result object. [expr.call]/7 applies
+            // lvalue-to-rvalue conversion only to glvalues, so this boundary
+            // must not require an additional accessible copy/move constructor.
+            c.ellipsis_object = true; return c;
+        }
         // Ellipsis still passes a value: select its transfer in semantics,
         // retaining the source-language type for queries and constant evaluation.
         // LowIR's scalar variadic lane carries its private object's address.

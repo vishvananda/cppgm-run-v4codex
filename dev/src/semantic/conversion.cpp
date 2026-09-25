@@ -287,7 +287,8 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
             throw std::runtime_error("invalid unevaluated ellipsis argument");
         return;
     }
-    if (c.ellipsis_object && !c.empty_copy && c.kind != Conversion::Kind::Construction)
+    if (c.ellipsis_object && !c.empty_copy && c.kind != Conversion::Kind::Construction &&
+        expressions[n].category != ValueCategory::Prvalue)
         throw std::runtime_error("class ellipsis argument has no value transfer");
     if (n && c.reference && !c.temporary) observe_scalar(n);
     if (c.kind == Conversion::Kind::ListPlan) { prepare_list(n,c); return; }
