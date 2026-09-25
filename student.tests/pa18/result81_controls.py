@@ -56,7 +56,20 @@ runner.GOOD.update({
  'wrapped_name':'struct X{static const int value=7;operator int(){return (((value)));}};int main(){X x;return int(x)!=7;}',
  'separate_uses':'struct X{static const int value=7;operator int(){return value;}};int n;int f(){X x;n=x;return x.operator int();}int main(){return f()!=7||n!=7;}',
 })
+runner.GOOD.update({
+ 'conversion_scope_agree':'using T=long;struct X{using T=long;static const int n=7;operator T(){return n;}};int main(){X x;T(X::*p)()=&X::operator T;return (x.*p)()!=7;}',
+ 'alias_address':base+'using Y=X;int main(){Y x;bool(Y::*p)()const=&Y::operator bool;return !(x.*p)();}',
+ 'typedef_address':base+'typedef X Y;int main(){Y x;bool(Y::*p)()const=&Y::operator bool;return !(x.*p)();}',
+ 'alias_data_member':'struct X{int n;};using Y=X;int main(){Y x={7};int Y::*p=&Y::n;return x.*p!=7;}',
+ 'alias_ordinary_function':'struct X{int f(){return 7;}};using Y=X;int main(){Y x;int(Y::*p)()=&Y::f;return (x.*p)()!=7;}',
+ 'conversion_overload_address':'struct X{static const int n=7;operator int(){return n;}operator int()const{return 9;}};int main(){X x;int(X::*p)()=&X::operator int;int(X::*q)()const=&X::operator int;return (x.*p)()!=7||(x.*q)()!=9;}',
+ 'conversion_target_address':'struct X{static const int n=7;operator int(){return n;}operator long(){return 9;}};int main(){X x;int(X::*p)()=&X::operator int;long(X::*q)()=&X::operator long;return (x.*p)()!=7||(x.*q)()!=9;}',
+})
 runner.BAD.update({
+ 'conversion_scope_mismatch':'using T=int;struct X{using T=long;operator T(){return 7;}};long(X::*p)()=&X::operator T;',
+ 'alias_nonclass':'using Y=int;int Y::*p;',
+ 'address_deleted':'struct X{operator int()=delete;};int(X::*p)()=&X::operator int;',
+ 'address_private':'class X{operator int(){return 7;}};int(X::*p)()=&X::operator int;',
  'not_constexpr':base+'constexpr bool value=X();',
  'not_nttp':base+'template<bool>struct A{};A<X()> a;',
  'deleted':'struct X{static const int value=7;operator int()=delete;};int main(){X x;int n=x;}',

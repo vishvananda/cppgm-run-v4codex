@@ -6,6 +6,9 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     auto record = sem.user_conversions[c.materialization];
     if (!record.prepared) throw std::logic_error("missing selected user conversion");
     TypeId returned = sem.types[sem.entities[c.function].type].child;
+    bool supplied = destination.ir != IRType::Void;
+    if (!supplied && record.use == semantic::ConversionUse::Destination)
+        throw std::logic_error("user conversion lacks its existing destination");
     auto known = sem.conversion_result(c.function);
     if (known.valid && !record.virtual_slot && record.result.kind == semantic::Conversion::Kind::Standard) {
         // Calling the receiver can still construct temporaries, throw or have
@@ -22,9 +25,6 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     }
     bool class_result = sem.class_value(returned);
     SlotId result_slot = !class_result && type(returned) != IRType::Void && full_expression.enabled && !sem.function_nonthrowing(c.function) ? builder->add_slot(0,type(returned)) : SlotId();
-    bool supplied = destination.ir != IRType::Void;
-    if (!supplied && record.use == semantic::ConversionUse::Destination)
-        throw std::logic_error("user conversion lacks its existing destination");
     bool transfer = record.result.kind == semantic::Conversion::Kind::Construction;
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
     if ((class_result || transfer) && !supplied) destination = class_address(record.temporary,sem.entities[record.temporary].type);

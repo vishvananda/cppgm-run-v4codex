@@ -108,7 +108,18 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         NodeId name = ast[n].detail, part = ast[name].last;
         bool conversion_name = ast[part].op == KW_OPERATOR && ast[part].detail;
         ScopeId owner = conversion_name ? name_owner(name,s) : 0;
-        EntityId e = conversion_name ? conversion_lookup(owner,type_id(ast[part].detail,owner)) : resolve(name,s);
+        TypeId conversion_target = 0;
+        if (conversion_name) {
+            NodeId type = ast[part].detail, specs = ast[type].first;
+            // [expr.prim.general]/12 requires the qualified conversion type
+            // to agree in its use and class contexts. Check both lookups of
+            // this parsed type before publishing its single selected target.
+            TypeId at_use = declarator(ast[specs].next,specifiers(specs,s),s);
+            conversion_target = type_id(type,owner);
+            if (types.signature(at_use) != types.signature(conversion_target))
+                throw std::runtime_error("qualified conversion type differs in class and use scopes");
+        }
+        EntityId e = conversion_name ? conversion_lookup(owner,conversion_target) : resolve(name,s);
         if (!e) {
             auto name = terminal(ast[n].detail);
             if (!name) throw std::runtime_error("expression requires a value name");

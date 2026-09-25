@@ -188,6 +188,10 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 EntityId owner = resolve(ast[c].detail, s, Lookup::Qualifier);
                 if (template_type_probe && owner && (entities[owner].template_pattern ||
                     entities[owner].template_parameter || dependent_type(entities[owner].type))) return 0;
+                if (owner && entities[owner].kind == EntityKind::Alias) {
+                    auto named = types[entities[owner].type];
+                    owner = named.kind == TypeKind::Named ? named.entity : 0;
+                }
                 if (!owner || !entities[owner].class_info) throw std::runtime_error("invalid member pointer owner");
                 base = types.member_pointer(owner, base);
                 break;
