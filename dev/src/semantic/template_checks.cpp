@@ -22,7 +22,9 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
     std::vector<Work> work(1,Work{n,false}); Index seen;
     for (std::size_t i = 0; i < work.size(); ++i) {
         auto item = work[i]; auto node = ast[item.node];
-        if (!item.node || node.kind == Kind::Template || seen.get(item.node)) continue;
+        // Parsed template arguments may retain an identifier in expression
+        // syntax until their typed owner determines type/value/template kind.
+        if (!item.node || node.kind == Kind::Template || node.kind == Kind::TemplateArguments || seen.get(item.node)) continue;
         seen.put(item.node,1);
         ++template_parameter_check_work;
         IdentifierId declared = 0;

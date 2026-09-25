@@ -5,7 +5,7 @@ EntityId Analyzer::deduce_conversion(EntityId pattern, TypeId target)
     // [temp.deduct.conv]: the destination supplies A, and only the declared
     // conversion type supplies P. No body or token replay participates.
     auto head = templates[entities[pattern].template_info];
-    TypeId p = value_type(types[entities[pattern].type].child);
+    TypeId p = types.alias_target(value_type(types.alias_target(types[entities[pattern].type].child)));
     bool reference = types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef;
     TypeId a = reference ? types[target].child : types.unqualified(target);
     if (!reference) p = decay(p);

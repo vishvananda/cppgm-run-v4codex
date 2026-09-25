@@ -94,6 +94,26 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
 {
     if (ast[n].kind == Kind::PackExpression)
         return types.compound(TypeKind::PackExpansion,0,template_argument_node(ast[n].first,scope));
+    if (ast[n].kind == Kind::Call && ast[ast[n].first].kind == Kind::IdExpression) {
+        auto callee = ast[n].first, name = ast[callee].detail;
+        auto list = ast[callee].next;
+        if (ast[name].kind == Kind::Name && ast[list].kind != Kind::BracedInit) {
+            auto binding = bind_template_name(name,scope); auto e = binding.entity;
+            if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) {
+                // T(Args...) in a template argument is a function type when
+                // every operand denotes a type. The parsed parentheses are
+                // shared with functional-cast syntax; semantic construction
+                // resolves this ambiguity once, without replaying grammar.
+                std::vector<TypeId> parameters; bool function = true;
+                for (auto a = ast[list].first; a; a = ast[a].next) {
+                    auto arg = template_argument_node(a,scope);
+                    if (!arg || value_argument(arg)) { function = false; break; }
+                    parameters.push_back(arg);
+                }
+                if (function) return types.signature(types.function(type_name(name,scope),parameters,false));
+            }
+        }
+    }
     if (ast[n].kind == Kind::TypeId) {
         auto specs = ast[n].first, spec = ast[specs].first;
         if (!ast[spec].next && !ast[specs].next && ast[spec].detail) {

@@ -133,7 +133,7 @@ ArgumentId Analyzer::unexpanded_argument(std::uint32_t frame, EntityId parameter
 int Analyzer::expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame)
 {
     auto list = argument_packs[parameters]; int count = UnboundPack;
-    bool symbolic = false, concrete = false, single = true, unequal = false;
+    bool symbolic = false, concrete = false, single = true, unequal = false, captured = false;
     for (unsigned i = 0; i < list.count; ++i) {
         auto parameter = argument_types[list.offset+i];
         auto arg = frame ? unexpanded_argument(frame,parameter) : bindings.get(parameter);
@@ -144,7 +144,7 @@ int Analyzer::expansion_count(std::uint32_t parameters, const Index& bindings, s
             auto a = argument_types[pack.offset+j];
             expanded |= entities[parameter].template_parameter && !value_argument(a) && types[a].kind == TypeKind::PackExpansion;
             if (entities[parameter].template_parameter && !value_argument(a) && types[a].kind == TypeKind::PackExpansion)
-                single &= !types[a].entity;
+                { captured |= types[a].entity != 0; single &= !types[a].entity; }
         }
         symbolic |= expanded; concrete |= !expanded; single &= n == 1;
         if (count >= 0 && unsigned(count) != n) unequal = true;
@@ -152,6 +152,9 @@ int Analyzer::expansion_count(std::uint32_t parameters, const Index& bindings, s
     }
     // A symbolic pack is a sequence of unknown length, never one concrete
     // lane. Only all-single-symbolic packs can be renamed together immediately.
+    // One pack can expose a fixed prefix and retain a symbolic suffix without
+    // assuming any equality with another unknown sequence (partial ordering).
+    if (symbolic && list.count == 1 && !captured) return count;
     if (symbolic) return !concrete && single ? 1 : DeferredPacks;
     return unequal ? UnequalPacks : count;
 }

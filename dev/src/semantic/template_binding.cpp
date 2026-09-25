@@ -48,6 +48,12 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
             (entities[e].type && dependent_type(entities[e].type));
         if (args) {
             for (auto a = ast[args].first; a; a = ast[a].next) {
+                // An argument expansion can expand types as well as values.
+                // Its typed argument owner resolves that distinction; an
+                // expression-only walk would reject a type pack's identifier.
+                if (ast[a].kind == Kind::PackExpression) {
+                    r.dependent |= dependent_argument(template_argument_node(a,s)); continue;
+                }
                 // The parser retains unresolved template arguments as value
                 // syntax when the owning class's aliases are not yet visible.
                 if (ast[a].kind == Kind::IdExpression) {

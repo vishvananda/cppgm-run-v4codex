@@ -45,7 +45,14 @@ runner.GOOD.update({
  'alias_cast_failure':'template<class T>using Id=T;struct A{};template<class T>auto f(int)->decltype(Id<T>(3),char());template<class>long f(...);int main(){return sizeof(f<int>(0))!=1||sizeof(f<A>(0))!=sizeof(long);}',
  'template_argument_syntax':'template<class...>struct List{};template<class T>struct Q{template<class...A>using F=List<T,A...>;};template<template<class...>class F>struct X{using type=F<int>;};template<class T>using R=typename X<Q<T>::template F>::type;int main(){return sizeof(R<long>)!=1;}',
 })
+runner.GOOD.update({
+ 'function_type_argument':'template<class>struct R;template<class T,class...A>struct R<T(A...)>{using type=T;static const int n=sizeof...(A);};template<class T,class...A>using Fn=R<T(A...)>;int main(){return Fn<int,long,char>::n!=2||Fn<void>::n!=0;}',
+ 'cast_value_argument':'template<int N>struct Tag{static const int n=N;};template<class T>using X=Tag<T(3)>;int main(){return X<int>::n!=3;}',
+ 'template_type_expression_syntax':'template<class...>struct L{};template<class...T>L<T...>f(){return {};}int main(){return sizeof(f<int,long>())!=1;}',
+})
 runner.BAD={
+ 'type_as_value':'template<class T>int f(){return T;}int main(){return f<int>();}',
+ 'type_inside_value_argument':'template<int>struct Tag{};template<class T>using X=Tag<T+1>;X<int>x;int main(){}',
  'hard_erased_alias':FIRST+'using X=Void<typename int::type>;int main(){}',
  'hard_substitution':FIRST+'template<class T>using Check=Void<typename T::missing>;Check<int>*p;int main(){}',
  'class_side_effect':FIRST+'template<class T>struct Explode{using type=typename T::missing;};template<class T,class=Void<typename Explode<T>::type>>int f(T){return 1;}int f(...){return 2;}int main(){return f(0);}',
