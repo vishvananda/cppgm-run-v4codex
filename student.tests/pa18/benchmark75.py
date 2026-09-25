@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Loop 75 frozen PA18/O0 compiler and checked executable observations: A B WORK OUT."""
+"""Loop 75 frozen PA18/O0 compiler and checked executable observations: A B WORK OUT [PRIOR]."""
 from pathlib import Path
 import json,os,platform,statistics,subprocess,sys,time
 ROOT=Path(__file__).resolve().parents[2]
@@ -43,7 +43,7 @@ for n in (600,2400):
  corpus.append(('list-argument-'+str(n),source,False,False))
  source='template<class T>constexpr int f(typename T::type){return 3;}template<int N>struct R{struct type{};};template<class T>struct V{static const int n=f<T>(typename T::type{});};'
  source+=''.join(f'static_assert(V<R<{i}>>::n==3,"tag");' for i in range(n))+'int main(){}'
- corpus.append(('dependent-tag-'+str(n),source,False,False))
+ corpus.append(('dependent-tag-'+str(n),source,True,False))
  source='struct B{};template<int N>struct D:virtual B{};template<class,class>constexpr bool f(...){return true;}template<class T,class U,class=decltype((U*)((T*)0))>constexpr bool f(int){return false;}'
  source+=''.join(f'static_assert(f<B,D<{i}>>(0),"cast");' for i in range(n))+'int main(){}'
  corpus.append(('cast-failure-'+str(n),source,False,False))
@@ -51,6 +51,10 @@ n=24000000;expected=((n//1024)*sum(range(1024))+sum(range(n%1024)))%65536
 source='template<class T>void accept(T);template<class T>auto call(int n)->decltype(accept<T>({1}),int()){return n;}struct A{int x;};int main(){'
 source+=f'volatile int n={n};int s=0;for(int i=0;i<n;++i){{s=(s+call<A>(i&1023))&65535;}}return s!={expected};}}'
 corpus.append(('runtime-list-query',source,False,True))
+if len(sys.argv)>5:
+ prior_path=Path(sys.argv[5]);prior_data=json.loads(prior_path.read_text())
+ result['continued_from']=dict(path=str(prior_path),sha256=shared.sha(prior_path))
+ corpus=[case for case in corpus if case[0] not in prior_data['workloads']]
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
 empty=WORK/'empty.cpp';empty.write_text('int main(){}')
 result['startup']=measure({i:[cc,'--emit-lowir','-O0','-o',WORK/f'empty-{i}.lowir',empty] for i,cc in enumerate((A,B))});save()
