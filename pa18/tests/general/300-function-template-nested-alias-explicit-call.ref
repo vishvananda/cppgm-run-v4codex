@@ -1,3 +1,11 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i8 97
+  i8 98
+}
+global @__pa83_array_1 [binding=internal, storage=readonly] = {
+  i8 0
+  i8 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $src_buf : obj<2x1>
   slot $dst_buf : obj<2x1>
@@ -7,13 +15,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $src_buf
-    store i8 97, %t1
-    %t2 = index i8 %t1, 1
-    store i8 98, %t2
+    copyobj 2x1 @__pa83_array_0, %t1
     %t3 = addr $dst_buf
-    store i8 0, %t3
-    %t4 = index i8 %t3, 1
-    store i8 0, %t4
+    copyobj 2x1 @__pa83_array_1, %t3
     %t5 = addr $src_buf
     store ptr %t5, $src
     %t6 = addr $dst_buf

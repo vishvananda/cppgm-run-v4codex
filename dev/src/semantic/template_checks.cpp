@@ -325,6 +325,12 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
         auto type = template_member_signature(facts[node].type,environment,primary,facts[node].scope);
         if (!type) return std::uint32_t(0);
         auto e = facts[node].entity;
+        // Static data members cannot overload. An omitted outer array bound
+        // denotes the same member; keep element identity in the indexed key
+        // and check any two supplied bounds after selecting that declaration.
+        if (entities[e].kind == EntityKind::Variable &&
+            (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::DependentArray))
+            type = types.compound(TypeKind::Array,types[type].child,0);
         std::uint32_t shape = 0;
         if (entities[e].template_info) {
             Index bindings, cache;
@@ -366,8 +372,15 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
         auto prototype = template_prototypes[p];
         if (prototype.inline_definition) throw std::runtime_error("template member was already defined in its class");
         if (types[declared].kind != TypeKind::Function) {
-            if (!entities[facts[prototype.declarator].entity].is_static)
+            auto member = facts[prototype.declarator].entity;
+            if (!entities[member].is_static)
                 throw std::runtime_error("out-of-class data definition requires a static member");
+            auto previous = template_member_signature(entities[member].type,prototype.environment,primary,facts[prototype.declarator].scope);
+            auto current = template_member_signature(declared,head,primary,facts[d].scope);
+            if (types[previous].bound && types[current].bound &&
+                (types[previous].kind == TypeKind::Array || types[previous].kind == TypeKind::DependentArray) &&
+                template_signature_shape(previous) != template_signature_shape(current))
+                throw std::runtime_error("conflicting static array member bounds");
             return p;
         }
         auto current = template_exception(d,head);

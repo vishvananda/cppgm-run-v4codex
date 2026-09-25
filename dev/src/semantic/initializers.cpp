@@ -198,6 +198,36 @@ bool Analyzer::initializer_work(std::uint32_t plan)
     initializer_work_index.put(plan, work ? 2 : 1);
     return work;
 }
+TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern)
+{
+    if (types[t].bound) return t; // A prior declaration may supply the bound.
+    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    if (pattern) {
+        // Source checking records a fixed bound without demanding runtime
+        // construction. An expansion or dependent brace-elision shape waits
+        // for this declaration's substituted initializer, not a grammar replay.
+        std::uint64_t count = 0;
+        auto cursor = n;
+        if (!check_template_initializer_item(cursor,t,s,&count)) return t;
+        if (!count) throw std::runtime_error("empty initializer for unknown-bound array");
+        return types.compound(TypeKind::Array,types[t].child,count);
+    }
+    aggregate_initialization(n,t,s);
+    auto plan = initializer_plan(n,t);
+    auto action = initializers[plan];
+    std::uint64_t count = 0;
+    if (action.kind == InitKind::String)
+        count = ast.literals[ast[action.source].literal].elements;
+    else for (auto c = action.first; c; c = initializers[c].next)
+        count = initializers[c].index+initializers[c].count;
+    if (!count) throw std::runtime_error("empty initializer for unknown-bound array");
+    auto complete = types.compound(TypeKind::Array,types[t].child,count);
+    initializers[plan].type = complete;
+    initializer_index.put(key(n,complete),plan);
+    facts.edit(n).type = complete;
+    auto value = expressions[n]; value.type = complete; expressions.set(n,value);
+    return complete;
+}
 void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
 {
     if (initializer_plan(n, t)) return;

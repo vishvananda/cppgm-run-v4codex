@@ -89,10 +89,13 @@ void Analyzer::bind_template_initializer(EntityId e, ScopeId scope)
             template_initializer_bindings.put(e,unsigned(SourceBindingState::Complete)); return;
         }
         bool dependent = bind_template_expression(entities[e].initializer,scope);
-        if (dependent) template_pattern_entities.put(e,2);
-        if (entities[e].type)
-            check_template_initialization(entities[e].initializer,entities[e].type,scope);
         auto type = entities[e].type;
+        if (types[type].kind == TypeKind::Array && !types[type].bound) {
+            type = complete_array_initializer(entities[e].initializer,type,scope,true);
+            entities[e].type = type;
+            dependent |= !types[type].bound;
+        } else if (type) check_template_initialization(entities[e].initializer,type,scope);
+        if (dependent) template_pattern_entities.put(e,2);
         if (!dependent && type && integral(type) && types[type].cv == 1) {
             auto value = evaluate(entities[e].initializer,scope);
             if (value.valid) entities[e].constant = convert(value,type);

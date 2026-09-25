@@ -366,6 +366,9 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         q.type = substitute_type(q.type,bindings,cache,owner);
         if (!q.type) return 0;
     }
+    if (q.kind == QueryKind::Name && q.entity && !entities[q.entity].template_pattern &&
+        types[q.type].kind == TypeKind::Array && !types[q.type].bound)
+        q.type = entities[q.entity].type; // Bound completed by the instantiated declaration.
     if (q.arguments) {
         auto pack = argument_packs[q.arguments]; std::vector<TypeId> args;
         for (unsigned j = 0; j < pack.count; ++j)
@@ -454,6 +457,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         // still require substitution before value-sensitive queries complete.
         bool value_dependent = template_pattern_entities.get(q.entity) == 2 &&
             (field_fact(q.entity).bit_field || (types[q.type].cv & 1 && integral(q.type)));
+        value_dependent |= entity.kind == EntityKind::Variable && entity.initializer &&
+            types[q.type].kind == TypeKind::Array && !types[q.type].bound;
         value_dependent |= entity.kind == EntityKind::Variable && entity.is_static;
         r.dependent |= !q.type || (entity.kind != EntityKind::Variable && entity.kind != EntityKind::Parameter) || value_dependent;
     }
@@ -489,8 +494,13 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto callee = type_queries[query_edges[q.offset]];
         bool fixed_name = callee.kind == QueryKind::Name && !q.dependent_name && !children[0].dependent;
         inspect = family != 0 || fixed_name;
-        for (unsigned i = 1; inspect && i < children.size(); ++i)
-            inspect &= !children[i].dependent || (children[i].expression.type && !dependent_type(children[i].expression.type));
+        for (unsigned i = 1; inspect && i < children.size(); ++i) {
+            auto type = children[i].expression.type;
+            // An initialized source array may await an expansion's bound even
+            // when its element type is fixed. Deduction needs that bound.
+            bool incomplete_array = types[type].kind == TypeKind::Array && !types[type].bound;
+            inspect &= !children[i].dependent || (type && !dependent_type(type) && !incomplete_array);
+        }
         for (auto e : candidates(fixed_name ? 0 : family)) {
             auto f = types[entities[e].type];
             if (entities[e].template_info || f.kind != TypeKind::Function) { inspect = false; break; }

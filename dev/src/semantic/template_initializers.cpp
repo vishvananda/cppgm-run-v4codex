@@ -115,7 +115,7 @@ bool Analyzer::reuse_template_constructor(NodeId n, TypeId target, const std::ve
     if (!converting_transfer(selected,result)) demand_member(selected);
     return true;
 }
-bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId s)
+bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId s, std::uint64_t* bound)
 {
     // A dependent field can consume an unknown number of brace-elided clauses.
     // An explicit braced clause delimits one field even when its type is unknown.
@@ -136,6 +136,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         if (grouped && ast[inner].next) throw std::runtime_error("excess fixed string initializer");
         if (types[target].bound && ast.literals[ast[inner].literal].elements > types[target].bound)
             throw std::runtime_error("fixed string initializer exceeds array");
+        if (bound) *bound = ast.literals[ast[inner].literal].elements;
         cursor = ast[source].next; return true;
     }
     if (!template_aggregate_type(target)) {
@@ -163,9 +164,11 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     if (type.kind == TypeKind::Array) {
         std::uint64_t i = 0;
         while (inner && (!type.bound || i < type.bound)) {
+            if (ast[inner].kind == Kind::PackExpression) return false;
             if (!check_template_initializer_item(inner,type.child,s)) return false;
             ++i;
         }
+        if (bound) *bound = i;
         if (i < type.bound) { NodeId omitted = 0; if (!check_template_initializer_item(omitted,type.child,s)) return false; }
     } else {
         if (!template_pattern_aggregates.get(type.entity)) size(target);

@@ -1,15 +1,15 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i32 0
+  i32 0
+  i32 0
+  i32 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $value : obj<16x4>
 
   block ^entry:
     %t1 = addr $value
-    store i32 0, %t1
-    %t2 = index i8 [projection=array_element] %t1, 4
-    store i32 0, %t2
-    %t3 = index i8 [projection=array_element] %t1, 8
-    store i32 0, %t3
-    %t4 = index i8 [projection=array_element] %t3, 4
-    store i32 0, %t4
+    copyobj 16x4 @__pa83_array_0, %t1
     %t5 = addr $value
     call void @outer(%t5)
     return i32 0
@@ -30,13 +30,7 @@ function @inner(%__param0 : ptr [pass=by_address, object_bytes=16]) -> void [bin
   block ^entry:
     store ptr %__param0, $__param0
     %t1 = addr $copy
-    store i32 0, %t1
-    %t2 = index i8 [projection=array_element] %t1, 4
-    store i32 0, %t2
-    %t3 = index i8 [projection=array_element] %t1, 8
-    store i32 0, %t3
-    %t4 = index i8 [projection=array_element] %t3, 4
-    store i32 0, %t4
+    copyobj 16x4 @__pa83_array_0, %t1
     %t5 = addr $copy
     %t6 = binary mul i64 0, 8
     %t7 = index i8 [projection=array_element] %t5, %t6

@@ -282,6 +282,7 @@ private:
     Index zero_initialization_index;
     TypeId initialized_field_type(TypeId owner, EntityId field);
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
+    TypeId complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern = false);
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
@@ -350,7 +351,7 @@ private:
     void check_pattern_default_initialization(TypeId type, ScopeId scope, bool base = false);
     void check_template_initialization(NodeId n, TypeId target, ScopeId scope,
         InitializationMode mode = InitializationMode::Direct);
-    bool check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId scope);
+    bool check_template_initializer_item(NodeId& cursor, TypeId target, ScopeId scope, std::uint64_t* bound = nullptr);
     bool check_template_constructor(NodeId n, TypeId target, ScopeId scope, InitializationMode mode,
         const std::vector<NodeId>* operands = nullptr);
     bool reuse_template_constructor(NodeId n, TypeId target, const std::vector<NodeId>& args,

@@ -1,15 +1,15 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i8 97
+  i8 98
+  i8 99
+  i8 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $text : obj<4x1>
 
   block ^entry:
     %t1 = addr $text
-    store i8 97, %t1
-    %t2 = index i8 %t1, 1
-    store i8 98, %t2
-    %t3 = index i8 %t1, 2
-    store i8 99, %t3
-    %t4 = index i8 %t1, 3
-    store i8 0, %t4
+    copyobj 4x1 @__pa83_array_0, %t1
     %t5 = addr $text
     %t6 = call ptr @next(%t5, 2)
     %t7 = load i8 %t6

@@ -1,10 +1,13 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i32 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $a : obj<4x4>
   slot $cond__1 : i32
 
   block ^entry:
     %t1 = addr $a
-    store i32 0, %t1
+    copyobj 4x4 @__pa83_array_0, %t1
     %t2 = addr $a
     %t3 = call i32 @depth(%t2)
     %t4 = cmp eq i32 %t3, 2

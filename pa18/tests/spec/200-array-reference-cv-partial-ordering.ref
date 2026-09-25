@@ -1,3 +1,8 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i32 0
+  i32 0
+  i32 0
+}
 global @ns__selected : i32 [binding=strong, object=_ZN2ns8selectedE] = 0
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
@@ -6,17 +11,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $data
-    store i32 0, %t1
-    %t2 = index i8 %t1, 4
-    store i32 0, %t2
-    %t3 = index i8 %t1, 8
-    store i32 0, %t3
+    copyobj 12x4 @__pa83_array_0, %t1
     %t4 = addr $const_data
-    store i32 0, %t4
-    %t5 = index i8 %t4, 4
-    store i32 0, %t5
-    %t6 = index i8 %t4, 8
-    store i32 0, %t6
+    copyobj 12x4 @__pa83_array_0, %t4
     %t7 = addr $data
     %t8 = call ptr @ns__detail__range_begin__ov3(%t7)
     %t9 = load i32 @ns__selected

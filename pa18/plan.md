@@ -2,12 +2,37 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `ecc308bc5ee33ed40fa773f7981961f3018a5867`.
-Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 82 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 83**.
+Implementation entry: `48c864abc19c24c4e9f5706a86109c023e2da7f7`, **396/420**.
+Stage base and last-reviewed markers above are preserved.
+
+83 starts with array/aggregate initialization: the semantic initializer plan owns
+the bound and constant-value facts; lowering consumes a separate materialization
+policy and emits typed stores/data. Work must track explicit actions and emitted
+data, with bounded expansion for omitted elements. Validate existing course
+failures, personal constant/array controls, prior stages and frozen latency/RSS
+and executable runtime/size. Continue into related representation failures while
+the same ownership/data-flow analysis applies. Remaining ABI/emission work and
+independent review questions stay distinct at handoff.
 Entry `85ea42c0`: **396/420** → **396/420**, the **same 24 failure paths**.
 The [accumulated audit](audit.md) reviews every commit from `82fca940` through
 entry and the validated audit fix `ecc308bc`; [evidence](../student.tests/pa18/loop82-evidence.json).
 The previous goal turn supplied committed implementation/evidence (progress);
 the entry process check found no inherited compiler or test process to resume.
+
+## Implementation 83 progress
+
+Array ownership now runs through checked initializer plans, constant images,
+source-template shape checks, substituted queries and static member declarations.
+Unknown bounds count actual initialized elements (including brace elision and
+braced strings); empty expanded lists reject. Source declarations retain their
+spelled signatures while completed entity types supply bound queries. Static
+array definitions match by element identity with supplied-bound compatibility.
+The two PA17 constant-array exclusions violated PA16's inherited requirement and
+are removed. [Oracle proof](reference-correction83.md) and a deterministic
+independent transformer cover 17 reference revisions; sources and comparison
+rules are unchanged. Current course count **411/420**; earlier **2609/2609**.
+Cumulative controls and frozen performance are pending before handoff.
 
 ## Reviewed ownership and validation
 

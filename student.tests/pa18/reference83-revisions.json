@@ -1,0 +1,1184 @@
+{
+  "entry": "48c864abc19c24c4e9f5706a86109c023e2da7f7",
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "revisions": [
+    {
+      "path": "pa17/tests/general/200-alias-template-template-argument-use-scope.ref",
+      "before_sha256": "1f7752e44a8d28a9a0a7f8f7826c2bb6fd37f9b2cae7fbbe471030587661977d",
+      "after_sha256": "da8f46ef034aafec0c2d8493a52b1abfd4ef6356bb1dc5bceec9750f0480b58a",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa17/tests/general/400-local-value-shadows-template-relational.ref",
+      "before_sha256": "0fb296511fd34858425f65acf5b54209e032a59c6fee596046facc9d301d2355",
+      "after_sha256": "de1a7bcd3a20e5681b5f5e546b39caa75fed3a4b4a03da1f485a502cd99950fd",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "values",
+          "bytes": 16,
+          "alignment": 8,
+          "data": [
+            [
+              "i64",
+              "0"
+            ],
+            [
+              "i64",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              8,
+              "i64",
+              "0"
+            ],
+            [
+              8,
+              8,
+              "i64",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/100-forwarded-const-reference-multidimensional-array-deduction.ref",
+      "before_sha256": "3e6cac91a038ff205c1f17436ca3d3c41910e3704734c2d1d35eec03a4c299f5",
+      "after_sha256": "53b899f826ce62aff3b7c7302c0ca0e03a2506abf8b659ea5850b6a5290c026c",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "value",
+          "bytes": 16,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "copy",
+          "bytes": 16,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/100-function-template-fixed-over-trailing-pack-fallback.ref",
+      "before_sha256": "a65a3b8cc638baf7e63cf14618e6c4ab89e6c83e843b5fcaa5f4eb53b166bbe3",
+      "after_sha256": "b5cde2cc412a04f411002667505439edf77ca2885939cbadfcb8490802a7e6b9",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 3,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "97"
+            ],
+            [
+              "i8",
+              "98"
+            ],
+            [
+              "i8",
+              "97"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "97"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "98"
+            ],
+            [
+              2,
+              1,
+              "i8",
+              "97"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/200-nested-array-reference-partial-ordering.ref",
+      "before_sha256": "402d149898809f07da37abf0d1460933a131998c539a332195c95cc5ee29d98b",
+      "after_sha256": "e0fe09bc9c18371096a1aa3a117f08cb37167344fa2cfcb5768a1bd2027b5926",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 4,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/200-range-array-reference-mutable-begin.ref",
+      "before_sha256": "2e3486a08d26ce994dce409a97c8e1a7c618a5055228de9218de267ed5a70abb",
+      "after_sha256": "c4d35024abbf60f1b07c801b420c062f78f1848fb75f93a2ba86c3d6734fae4a",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 20,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ],
+            [
+              "i32",
+              "4"
+            ],
+            [
+              "i32",
+              "5"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "3"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "4"
+            ],
+            [
+              16,
+              4,
+              "i32",
+              "5"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/300-function-template-nested-alias-explicit-call.ref",
+      "before_sha256": "b030e64c3278a999e74a72994c0d690973b74b92ee5b24d1758a95c3c2af9a23",
+      "after_sha256": "99803980c1a51e882da4d38974f5d14ad3fea4070b79bebe06978e71b0678cc4",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "src_buf",
+          "bytes": 2,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "97"
+            ],
+            [
+              "i8",
+              "98"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "97"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "98"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "dst_buf",
+          "bytes": 2,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "0"
+            ],
+            [
+              "i8",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "0"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_1"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/400-array-bound-expression-is-nondeduced.ref",
+      "before_sha256": "47eb0c39a89da2385bf26a02bbdbf1ff0ee9114b84c1bafbf0817ac9a701fe6f",
+      "after_sha256": "3c67be591b1535cfdf64737c9a8312ff5c6253ade60cec7fe107fb9b0857f6eb",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "matrix",
+          "bytes": 36,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              16,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              20,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              24,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              28,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              32,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "vector",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_1"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/general/500-constructor-sfinae-namespace-constant-symbol.ref",
+      "before_sha256": "82a84f1a1b2cd0437b55a35e5fdca586a998f5a713086b4f4ff67eb71ad5b6c0",
+      "after_sha256": "61307c551d338293cbeabf5d837c6d0c74479e703d59eb92f8bd1f5fb68b4e11",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "text",
+          "bytes": 6,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "104"
+            ],
+            [
+              "i8",
+              "101"
+            ],
+            [
+              "i8",
+              "108"
+            ],
+            [
+              "i8",
+              "108"
+            ],
+            [
+              "i8",
+              "111"
+            ],
+            [
+              "i8",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "104"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "101"
+            ],
+            [
+              2,
+              1,
+              "i8",
+              "108"
+            ],
+            [
+              3,
+              1,
+              "i8",
+              "108"
+            ],
+            [
+              4,
+              1,
+              "i8",
+              "111"
+            ],
+            [
+              5,
+              1,
+              "i8",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/100-constructor-template-braced-array-bound-deduction.ref",
+      "before_sha256": "e97854911ac83449d102d89dfa31f719ba21991df75425c0654abfb54c678693",
+      "after_sha256": "36989eb17a4902347641dc6e226c30d1f25638ee3886c1906ddac5f6966a7b35",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "parser_buf",
+          "bytes": 17,
+          "alignment": 1,
+          "data": [
+            [
+              "zero",
+              "17"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              1,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              2,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              3,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              4,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              5,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              6,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              7,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              8,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              9,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              10,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              11,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              12,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              13,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              14,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              15,
+              1,
+              "u8",
+              "0"
+            ],
+            [
+              16,
+              1,
+              "u8",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/100-function-template-array-bound-deduction.ref",
+      "before_sha256": "bc8b8d0504cc8c3fd23f32995c5100753f5338ca01a3c1a8c0d2fe88bbe1aea4",
+      "after_sha256": "b4976082b8deebc021fb4446da9e4dcfe967a78c5a3b2f339f373d329648d28e",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "2"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/100-function-template-array-bound-shared-deduction.ref",
+      "before_sha256": "54c6663a16a89bdb8a77c9233b93af96e49ac8057635eeedcb876df8932b5a97",
+      "after_sha256": "453081022ea1318aae7ad2cc431e0bb2b55ff4b0a4bd3657cc72979bf117b9cb",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 16,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "3"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "b",
+          "bytes": 16,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "4"
+            ],
+            [
+              "i32",
+              "5"
+            ],
+            [
+              "i32",
+              "6"
+            ],
+            [
+              "i32",
+              "7"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "4"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "5"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "6"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "7"
+            ]
+          ],
+          "symbol": "@__pa83_array_1"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/200-array-reference-cv-partial-ordering.ref",
+      "before_sha256": "f119f5512c3f6c47847179600d7cb64b57e2c840b5826922087a6407a3c314ff",
+      "after_sha256": "13d45457bc5db75d5ad6d1429b8c3a375884d330f994e7e4f68461273fa82d24",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "const_data",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/200-nondeduced-qualified-member-type-allows-conversion.ref",
+      "before_sha256": "90267bf2f372eedc1d1da1bf71a93367b62a0a5f5ba1ec0baba0f00de1bc9235",
+      "after_sha256": "cfb83c3f08eef0b32399efe6ddb352d441f21ab7d0729e41d894ee021f0f0e5d",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "text",
+          "bytes": 4,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "97"
+            ],
+            [
+              "i8",
+              "98"
+            ],
+            [
+              "i8",
+              "99"
+            ],
+            [
+              "i8",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "97"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "98"
+            ],
+            [
+              2,
+              1,
+              "i8",
+              "99"
+            ],
+            [
+              3,
+              1,
+              "i8",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/300-defaulted-enable-if-after-array-bound-deduction.ref",
+      "before_sha256": "4f350965c36408429ab3e455a832477f08a43e4b3c8703515dc446722dced38b",
+      "after_sha256": "22f4a36666ddd355bb95cc738cabfdb256c71048e41714aba83256305eae28f8",
+      "proof": "PA16 README Assignment Boundary automatic scalar arrays",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 20,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "0"
+            ],
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ],
+            [
+              "i32",
+              "4"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "0"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "3"
+            ],
+            [
+              16,
+              4,
+              "i32",
+              "4"
+            ]
+          ],
+          "symbol": "@__pa83_array_0"
+        },
+        {
+          "slot": "b",
+          "bytes": 20,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "5"
+            ],
+            [
+              "i32",
+              "6"
+            ],
+            [
+              "i32",
+              "7"
+            ],
+            [
+              "i32",
+              "8"
+            ],
+            [
+              "i32",
+              "9"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "5"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "6"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "7"
+            ],
+            [
+              12,
+              4,
+              "i32",
+              "8"
+            ],
+            [
+              16,
+              4,
+              "i32",
+              "9"
+            ]
+          ],
+          "symbol": "@__pa83_array_1"
+        }
+      ]
+    },
+    {
+      "path": "pa18/tests/spec/100-constexpr-union-active-pack-constructor.ref",
+      "before_sha256": "6bba439df88d6084bfc84c42fa8139da927d24f86b8c322c87efcb9ad0e075c3",
+      "after_sha256": "29be4750063beea6ca488ad17c98068d323918e1aecff709428c5403b099cce5",
+      "proof": "N3485 3.6.2 [basic.start.init]/2; 7.1.5 [dcl.constexpr]/9"
+    },
+    {
+      "path": "pa18/tests/general/300-empty-pack-unknown-bound-array-lowir.ref.exit_status",
+      "before_sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+      "after_sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9",
+      "proof": "N3485 8.5.1 [dcl.init.aggr]/4 forbids empty unknown-bound initialization"
+    }
+  ]
+}

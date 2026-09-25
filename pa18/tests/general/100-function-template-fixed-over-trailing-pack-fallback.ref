@@ -1,3 +1,8 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i8 97
+  i8 98
+  i8 97
+}
 function @count_chars(%first : ptr, %last : ptr, %value : ptr [pass=by_address, object_bytes=1], %project : obj<1x1>) -> i64 [binding=strong, object=_Z11count_charsPcS_RKc8identity] {
   slot $first : ptr
   slot $last : ptr
@@ -59,11 +64,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $data
-    store i8 97, %t1
-    %t2 = index i8 %t1, 1
-    store i8 98, %t2
-    %t3 = index i8 %t1, 2
-    store i8 97, %t3
+    copyobj 3x1 @__pa83_array_0, %t1
     %t4 = addr $data
     %t5 = addr $data
     %t6 = index i8 %t5, 3

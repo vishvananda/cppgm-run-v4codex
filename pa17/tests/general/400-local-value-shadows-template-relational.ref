@@ -1,3 +1,7 @@
+global @__pa83_array_0 [binding=internal, storage=readonly] = {
+  i64 0
+  i64 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $buffer : obj<16x8>
   slot $values : obj<16x8>
@@ -5,9 +9,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
     %t1 = addr $buffer
     %t2 = addr $values
-    store i64 0, %t2
-    %t3 = index i8 %t2, 8
-    store i64 0, %t3
+    copyobj 16x8 @__pa83_array_0, %t2
     %t4 = addr $values
     %t5 = addr $buffer
     %t6 = index i8 [projection=field] %t5, 0
