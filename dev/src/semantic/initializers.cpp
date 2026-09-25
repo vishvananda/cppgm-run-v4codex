@@ -114,8 +114,10 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
             cursor = ast[source].next; return id;
         }
     }
+    if (types[t].kind == TypeKind::Array)
+        while (ast[inner].kind == Kind::Parenthesized) inner = ast[inner].first;
     if (string_initialization(inner, t)) {
-        if (braced && ast[inner].next) throw std::runtime_error("excess string initializer");
+        if (braced && ast[ast[source].first].next) throw std::runtime_error("excess string initializer");
         auto lit = ast.literals[ast[inner].literal];
         if (types[t].bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
         expression(inner, s);
@@ -200,8 +202,22 @@ bool Analyzer::initializer_work(std::uint32_t plan)
     initializer_work_index.put(plan, work ? 2 : 1);
     return work;
 }
+void Analyzer::check_array_initializer(NodeId n, TypeId t) const
+{
+    if (types[t].kind != TypeKind::Array) return;
+    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    if (ast[n].kind == Kind::BracedInit) return;
+    if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) {
+        n = ast[n].first;
+        if (!n) return; // Value initialization, with a separately required bound.
+        if (ast[n].next) throw std::runtime_error("multiple parenthesized array initializers");
+    }
+    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    if (!string_initialization(n,t)) throw std::runtime_error("array initializer requires braces or a string literal");
+}
 TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern)
 {
+    check_array_initializer(n,t);
     if (types[t].bound) return t; // A prior declaration may supply the bound.
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     if (pattern) {
@@ -232,6 +248,7 @@ TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool 
 }
 void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
 {
+    check_array_initializer(n,t);
     if (initializer_plan(n, t)) return;
     NodeId cursor = n;
     auto plan = initializer_item(cursor, t, s);

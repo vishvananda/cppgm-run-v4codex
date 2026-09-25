@@ -132,8 +132,10 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     bool grouped = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments ||
         ast[source].kind == Kind::ParenInitializer;
     auto inner = grouped ? ast[source].first : source;
+    if (types[target].kind == TypeKind::Array)
+        while (ast[inner].kind == Kind::Parenthesized) inner = ast[inner].first;
     if (string_initialization(inner,target)) {
-        if (grouped && ast[inner].next) throw std::runtime_error("excess fixed string initializer");
+        if (grouped && ast[ast[source].first].next) throw std::runtime_error("excess fixed string initializer");
         if (types[target].bound && ast.literals[ast[inner].literal].elements > types[target].bound)
             throw std::runtime_error("fixed string initializer exceeds array");
         if (bound) *bound = ast.literals[ast[inner].literal].elements;
@@ -197,6 +199,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
 void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     if (!target || ast.nodes.occurrences[n].context) return;
+    check_array_initializer(n,target);
     if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
     if (types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 3)
         throw std::runtime_error("initializer needs complete local class");

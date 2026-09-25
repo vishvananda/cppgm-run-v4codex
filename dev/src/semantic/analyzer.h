@@ -283,6 +283,7 @@ private:
     TypeId initialized_field_type(TypeId owner, EntityId field);
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
     TypeId complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern = false);
+    void check_array_initializer(NodeId n, TypeId t) const;
     std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
