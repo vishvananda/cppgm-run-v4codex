@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Loop 79 frozen PA18/O0 compiler and checked executable observations: A B WORK OUT."""
+"""Loop 79 frozen PA18/O0 compiler and checked executable observations: A B WORK OUT [PREFIX]."""
 from pathlib import Path
 import json,os,platform,statistics,subprocess,sys,time
 ROOT=Path(__file__).resolve().parents[2]
@@ -52,6 +52,14 @@ n=12000000;expected=((n//1024)*sum(range(1024))+sum(range(n%1024)))%65536
 source='long g(double);template<class T>auto f(T)->decltype(g(T()));int g(int);template<class U>auto f(U n)->decltype(g(U())){return n;}static_assert(sizeof(f(0))==sizeof(long),"");int main(){'
 source+=f'volatile int n={n};int s=0;for(int i=0;i<n;++i){{s=(s+f(i&1023))&65535;}}return s!={expected};}}'
 corpus.append(('runtime-first-signature',source,False,True))
+member_source='template<int I>struct A{using type=int;};template<class T>struct Result{using type=T;};struct P{template<class T>typename Result<T>::type get(int n){return n;}};int sum(int n){return n;}template<class...T>int f(P&p,int n){return sum(p.get<typename T::type>(n)...);}'
+for n in (600,2400):
+ source=member_source+''.join('int f'+str(i)+'(int n){P p;return f<A<'+str(i)+'>>(p,n);}' for i in range(n))+'int main(){return f0(7)!=7||f'+str(n-1)+'(8)!=8;}'
+ corpus.append(('member-arguments-'+str(n),source,False,False))
+n=12000000;expected=((n//1024)*sum(range(1024))+sum(range(n%1024)))%65536
+source=member_source+'int main(){P p;'+f'volatile int n={n};int s=0;for(int i=0;i<n;++i){{s=(s+f<A<0>>(p,i&1023))&65535;}}return s!={expected};}}'
+corpus.append(('member-arguments-runtime',source,False,True))
+if len(sys.argv)>5:corpus=[x for x in corpus if x[0].startswith(sys.argv[5])]
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
 empty=WORK/'empty.cpp';empty.write_text('int main(){}')
 result['startup']=measure({i:[cc,'--emit-lowir','-O0','-o',WORK/f'empty-{i}.lowir',empty] for i,cc in enumerate((A,B))});save()
