@@ -65,7 +65,7 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
         auto object = constant_query_object(source);
         object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);
         if (!object || members[entities[c.function].member_info].virtual_member) return Constant();
-        return constant_result_conversion(execute_constant(c.function,{},object),user_conversions[c.materialization].result);
+        return constant_result_conversion(execute_constant(c.function,{},object),c);
     }
     if (c.kind == Conversion::Kind::Construction) {
         auto material = conversion_objects[c.materialization];

@@ -226,7 +226,11 @@ Constant Analyzer::constant_result_conversion(Constant value, const Conversion& 
 {
     if (!value.valid || c.constant_forbidden) return Constant();
     auto target = types[c.target], source = types[value.type];
-    if (c.reference && (c.temporary || (source.kind != TypeKind::LRef && source.kind != TypeKind::RRef))) {
+    // A narrowing check can request the conversion function's unrounded
+    // return value by replacing c.target. Keep that requested boundary; use
+    // the recorded second sequence only to classify reference materialization.
+    if (c.reference && (user_conversions[c.materialization].result.temporary ||
+        (source.kind != TypeKind::LRef && source.kind != TypeKind::RRef))) {
         value = convert(value,target.child,true);
         return value.valid ? Constant(c.target,constant_storage_address(target.child,value)) : Constant();
     }
@@ -249,7 +253,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto object = constant_node_object(n);
         object = constant_base_address(object,entities[scopes[entities[c.function].owner].entity].type);
         if (!object || members[entities[c.function].member_info].virtual_member) return Constant();
-        return constant_result_conversion(execute_constant(c.function,{},object),user_conversions[c.materialization].result);
+        return constant_result_conversion(execute_constant(c.function,{},object),c);
     }
     if (c.kind == Conversion::Kind::Construction) {
         auto material = conversion_objects[c.materialization];
