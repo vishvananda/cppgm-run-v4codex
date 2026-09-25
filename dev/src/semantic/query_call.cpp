@@ -14,6 +14,7 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
     for (auto a = ast[ast[first].next].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
     if (!children.empty()) {
         auto callee = type_queries[children[0]];
+        while (callee.kind == QueryKind::Parenthesized) callee = type_queries[query_edges[callee.offset]];
         if (callee.kind == QueryKind::Name && function_binding(callee.entity))
             for (auto e : candidates(callee.entity)) if (scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static) {
                 q.type = implicit_object_type(s); break;
@@ -26,6 +27,10 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
 {
     if (children.empty()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
+    bool parenthesized = callee.kind == QueryKind::Parenthesized;
+    while (callee.kind == QueryKind::Parenthesized) {
+        callee_id = query_edges[callee.offset]; callee = type_queries[callee_id];
+    }
     Expression fn = children[0].expression;
     std::vector<Expression> args;
     for (unsigned i = 1; i < children.size(); ++i) args.push_back(children[i].expression);
@@ -38,7 +43,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         TypeQuery call = q; call.op = OP_LPAREN; call.name = operator_name(OP_LPAREN); call.entity = 0;
         return query_operator(call,children);
     }
-    if (q.name != invoke_builtin && callee.kind == QueryKind::Name && callee.name) {
+    if (!parenthesized && q.name != invoke_builtin && callee.kind == QueryKind::Name && callee.name) {
         bool adl = !fn.entity || function_binding(fn.entity);
         if (fn.entity && adl) for (auto e : candidates(fn.entity)) {
             auto kind = scopes[entities[e].owner].kind;
@@ -153,6 +158,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         auto f = types[function_type];
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
             return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+        for (unsigned i = 0; i < f.count; ++i)
+            if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         auto decay_conversion = standard_conversion(fn,decay(fn.type));
         if (!decay_conversion.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         record_object(r.expression,0,0,0);

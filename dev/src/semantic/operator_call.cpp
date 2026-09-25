@@ -119,6 +119,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         store_call(result,arguments,chosen); result.inputs = CallInputs::Source;
     };
     if (selected.surrogate) {
+        auto f = types[selected.surrogate];
+        for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
         Conversion callee = sequences[selected.offset];
         if (recipe) check_fixed_conversion(expressions[args[0]],args[0],callee,s);
         else apply_conversion(args[0],callee);

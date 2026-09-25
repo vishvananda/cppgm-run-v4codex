@@ -56,13 +56,16 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
     }
     return result;
 }
-EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target)
+EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target, bool deduce)
 {
     if (!owner || scopes[owner].kind != ScopeKind::Class) return 0;
     EntityId result = 0;
     for (auto e : conversion_candidates(entities[scopes[owner].entity].type)) {
         ++candidate_work;
-        if (entities[e].template_info) e = deduce_conversion(e,target);
+        if (entities[e].template_info) {
+            if (!deduce) continue; // [temp.mem]/7: using cannot name a conversion specialization.
+            e = deduce_conversion(e,target);
+        }
         // Explicit member calls name the exact conversion-type-id. The
         // qualification alternatives for initialization do not change it.
         if (e && types[entities[e].type].child == target) result = merge_lookup(result,e);
@@ -183,9 +186,10 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c, ConversionUse us
     if (deleted_transfer(c.function)) throw std::runtime_error("selected deleted conversion function");
     auto entity = user_conversions[c.materialization].object_entity;
     TypeId source = entity ? value_type(entities[entity].type) : expressions[n].type;
+    // Member access includes the path to the class that introduced a using
+    // declaration. The ABI adjustment to the original base is not a separate
+    // source-level derived-to-base conversion.
     check_access(c.function,facts[n].scope,entities[types[source].entity].scope,source);
-    TypeId owner = entities[scopes[entities[c.function].owner].entity].type;
-    if (user_conversions[c.materialization].adjustment) check_base_access(source,owner,facts[n].scope);
     demand_member(c.function);
     TypeId returned = types[entities[c.function].type].child;
     Conversion second = user_conversions[c.materialization].result;

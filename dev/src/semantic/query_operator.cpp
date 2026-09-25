@@ -175,6 +175,11 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         for (unsigned i = 0; i < f.count; ++i)
             if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     }
+    if (selected.surrogate) {
+        auto f = types[selected.surrogate];
+        for (unsigned i = 0; i < f.count; ++i)
+            if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    }
     r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
     conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     return r;

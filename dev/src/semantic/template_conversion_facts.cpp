@@ -40,7 +40,6 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
         auto record = user_conversions[c.materialization];
         auto from = record.object_entity ? value_type(entities[record.object_entity].type) : source.type;
         if (!accessible(c.function,s,entities[types[from].entity].scope,from)) return false;
-        if (record.adjustment && !base_accessible(types[from].entity,scopes[entities[c.function].owner].entity,s)) return false;
         auto returned = types[entities[c.function].type].child;
         if (class_value(returned) && !default_destruction_valid(returned,s)) return false;
         Expression value; value.type = value_type(returned);

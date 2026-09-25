@@ -58,28 +58,35 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
         unsigned spec = fact.specification;
         if (fact.expression) {
             auto node = fact.expression; auto scope = fact.scope;
+            Constant value;
             if (fact.pattern) {
                 auto index = entities[e].specialization;
                 auto head = templates[entities[fact.pattern].template_info];
-                // Exception, default and body demands project disjoint regions
-                // into the specialization's one declaration context. A private
-                // context here would give the same substitution frame two owners.
-                auto context = specializations[index].context;
-                if (!context) specializations[index].context = context = ast.new_context();
-                node = ast.instantiate(node,context);
-                auto frame = substitution_frame(index,head.offset,head.count);
-                attach_template_context(context,frame);
-                scope = default_environment(e,head.environment);
-                facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
-            }
+                auto parent = head.parent_frame;
+                if (head.source_count) parent = substitution_frame(index,head.source_parameters,head.source_count,parent);
+                auto frame = substitution_frame(index,head.offset,head.count,parent);
+                auto query = template_exception_query(fact.pattern,exception_specification_index.get(fact.pattern));
+                Index bindings, cache;
+                query = substitute_query(query,bindings,cache,frame);
+                if (!query) throw std::runtime_error("invalid substituted exception query");
+                auto conversion = boolean_conversion_value(query_fact(query).expression);
+                check_fixed_conversion(query_fact(query).expression,0,conversion,entities[e].owner);
+                value = constant_query_conversion(query,conversion);
+            } else {
             // Parameter names in exception specifications denote prototype
             // entities. They can supply types, but never runtime values.
             auto parameters = child(fact.declarator,Kind::Parameters);
             // A checked body already owns raw parameter types and pack
             // bindings. Do not shadow them with adjusted signature types.
             bool body_scope = scope == entities[e].scope && scopes[scope].kind == ScopeKind::Function;
-            if (ast[parameters].first && !body_scope) {
+            if ((ast[parameters].first || entities[e].member_info) && !body_scope) {
                 auto parent = scope; scope = make_scope(ScopeKind::Block,parent);
+                if (entities[e].member_info) {
+                    TemplateObjectContext object; object.owner = scopes[entities[e].owner].entity;
+                    object.available = !entities[e].is_static; object.cv = types[entities[e].type].cv;
+                    template_object_context_index.put(scope,template_object_contexts.size());
+                    template_object_contexts.push_back(object);
+                }
                 unsigned ordinal = 0; auto f = types[entities[e].type];
                 for (auto p = ast[parameters].first; p && ordinal < f.count; p = ast[p].next) {
                     if (ast[p].kind != Kind::Parameter) continue;
@@ -91,7 +98,8 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
             }
             expression(node,scope);
             auto conversion = boolean_conversion(node);
-            auto value = constant_node_conversion(node,conversion,scope);
+            value = constant_node_conversion(node,conversion,scope);
+            }
             if (!value.valid) throw std::runtime_error("nonconstant noexcept specification");
             spec = constant_truth(value) ? 3 : 2;
         }

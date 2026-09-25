@@ -456,7 +456,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             r.dependent = true;
         }
     }
-    bool inspect = !r.dependent;
+    bool inspect = !r.dependent || q.kind == QueryKind::Parenthesized;
     if (r.dependent && (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter || q.kind == QueryKind::TemplateValueParameter) && q.type) inspect = true;
     if (r.dependent && q.kind == QueryKind::Member && !children.empty()) {
         auto type = children[0].expression.type;

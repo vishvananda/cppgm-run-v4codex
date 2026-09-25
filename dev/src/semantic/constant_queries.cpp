@@ -87,6 +87,9 @@ Constant Analyzer::constant_query_call(QueryId id)
     auto q = type_queries[id]; auto fact = query_fact(id);
     auto e = fact.selected;
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
+    while (callee.kind == QueryKind::Parenthesized) {
+        callee_id = query_edges[callee.offset]; callee = type_queries[callee_id];
+    }
     if (!e || fact.surrogate) {
         auto conversion = fact.surrogate ? fact.expression.conversions : object_uses[fact.expression.object_use].callee_conversion;
         auto value = conversion ? constant_query_conversion(callee_id,conversions[conversion]) : constants[query_value(callee_id)];

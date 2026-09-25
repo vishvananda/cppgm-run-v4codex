@@ -386,6 +386,8 @@ private:
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     void demand_exception_specification(EntityId function);
     unsigned evaluate_exception_specification(EntityId function, std::uint32_t fact);
+    QueryId template_exception_query(EntityId function, std::uint32_t fact);
+    Index template_exception_queries;
     void check_exception_redeclaration(EntityId function, unsigned prior, unsigned current, bool destructor);
     Index exception_specification_index;
     std::vector<ExceptionSpecificationFact> exception_specifications = std::vector<ExceptionSpecificationFact>(1);
@@ -970,7 +972,7 @@ private:
     Conversion conversion_function_value(Expression source, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
     void prepare_user_conversion(NodeId n, Conversion& conversion, ConversionUse use = ConversionUse::Temporary);
     std::vector<EntityId> conversion_candidates(TypeId source);
-    EntityId conversion_lookup(ScopeId owner, TypeId target);
+    EntityId conversion_lookup(ScopeId owner, TypeId target, bool deduce = true);
     Index conversion_families, conversion_bindings;
     void builtin_operators(ETokenType op, const std::vector<NodeId>& arguments, std::vector<BuiltinOperator>& results);
     void builtin_operators_values(ETokenType op, const std::vector<Expression>& arguments, std::vector<BuiltinOperator>& results, const std::vector<NodeId>* nodes = 0);

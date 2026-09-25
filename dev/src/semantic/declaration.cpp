@@ -306,7 +306,10 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         if (calls && scopes[s].kind == ScopeKind::Class && inherit_using(name, s)) break;
         for (NodeId p = ast[name].first; p; p = ast[p].next)
             if (p == ast[name].last && child(p,Kind::TemplateArguments)) throw std::runtime_error("using declaration names template-id");
-        EntityId e = resolve(name, s);
+        auto part = ast[name].last;
+        bool conversion = calls && ast[part].op == KW_OPERATOR && ast[part].detail;
+        auto owner = conversion ? name_owner(name,s) : 0;
+        EntityId e = conversion ? conversion_lookup(owner,type_id(ast[part].detail,owner),false) : resolve(name,s);
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {
             for (EntityId member : candidates(e)) {
