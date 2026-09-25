@@ -104,8 +104,12 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         }
         auto callee = sem.type_query(sem.type_query_child(id,0)); args.clear();
         for (unsigned i = 1; i < q.count; ++i) args.push_back(child(i));
+        auto function = callee.kind == QueryKind::TypeValue ? 0 : child(0);
+        auto selected = sem.type_query_selection(id);
+        if (!q.dependent_name && callee.kind == QueryKind::Name && selected)
+            function = abi.make(Kind::EntityExpression,abi_function_context(selected));
         result = callee.kind == QueryKind::TypeValue ? abi.make(Kind::Conversion,abi_type(callee.type),0,0,0,args) :
-            abi.make(Kind::Call,child(0),0,0,0,args); break;
+            abi.make(Kind::Call,function,0,0,0,args); break;
     }
     case QueryKind::Expansion: result = abi.make(Kind::ExprPack,child(0)); break;
     case QueryKind::New: throw std::logic_error("new-expression ABI query is not yet represented");

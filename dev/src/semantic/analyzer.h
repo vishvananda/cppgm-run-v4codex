@@ -42,6 +42,7 @@ public:
     TypeId argument_type(ArgumentId a) { return value_argument(a) ? query_fact(argument_query(a)).expression.type : a; }
     unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
     const TypeQuery& type_query(QueryId id) const { return type_queries[id]; }
+    EntityId type_query_selection(QueryId id) const { return query_facts[id].selected; }
     QueryId type_query_child(QueryId id, unsigned i) const { return query_edges[type_queries[id].offset+i]; }
     TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
     ScopeId global = 0;
@@ -543,6 +544,8 @@ private:
     std::vector<ObjectAction> actions;
     Index object_actions, specialization_index, explicit_pack_index, parameter_ordinals;
     Index template_families, template_signatures;
+    Index template_first_signature_index;
+    std::vector<TemplateFirstSignature> template_first_signatures{1};
     std::vector<TypeId> canonical_parameters;
     Index canonical_value_parameters, canonical_template_parameters, canonical_nested_parameters;
     void declare_template_parameters(NodeId parameters, ScopeId scope, std::uint32_t source_head = 0, std::uint32_t frame = 0);
@@ -790,6 +793,9 @@ private:
     ScopeId member_template_environment(ScopeId head, ScopeId owner);
     Index member_template_environments;
     std::uint32_t template_declaration_shape(TypeId type, ScopeId environment, TypeId* normalized = 0);
+    TypeId first_template_signature(EntityId entity, NodeId source, ScopeId environment);
+    bool apply_template_signature(NodeId original, NodeId current, TypeId type, const Index& bindings, std::uint32_t original_frame = 0);
+    void retain_member_signature(NodeId original, ScopeId environment, NodeId current, ScopeId head, EntityId primary);
     bool equivalent_alias_template(EntityId entity, TypeId type, ScopeId environment);
     void merge_template_defaults(EntityId entity, ScopeId incoming, ScopeId previous = 0);
     Index alias_declaration_shapes;

@@ -25,6 +25,22 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
             }
     }
     if (template_type_probe) for (auto child : children) if (!child) return 0;
+    // [temp.dep]/1: a value-dependent argument with a fixed type (sizeof(T),
+    // for example) does not make the function name dependent. Preserve this
+    // source property through normalized signature queries without reevaluation.
+    if (!q.name && !children.empty()) {
+        auto callee = type_queries[children[0]];
+        if (callee.kind == QueryKind::Name && callee.name && (!callee.entity || function_binding(callee.entity))) {
+            auto supplied = argument_packs[callee.arguments];
+            for (unsigned j = 0; j < supplied.count; ++j)
+                q.dependent_name |= dependent_argument(argument_types[supplied.offset+j]);
+            for (unsigned j = 1; j < children.size(); ++j) {
+                auto fact = query_fact(children[j]);
+                q.dependent_name |= type_queries[children[j]].kind == QueryKind::Expansion ||
+                    (fact.dependent && (!fact.expression.type || dependent_type(fact.expression.type)));
+            }
+        }
+    }
     return intern_query(q,children);
 }
 TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQueryFact>& children)

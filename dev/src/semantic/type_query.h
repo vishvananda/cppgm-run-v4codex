@@ -8,6 +8,7 @@ enum class QueryKind : unsigned char { Value, This, String, Parameter, TemplateV
 struct TypeQuery {
     QueryKind kind = QueryKind::Value;
     bool null_pointer_constant = false;
+    bool dependent_name = false; // Source call/operator type dependence, distinct from value dependence.
     ETokenType op = TOK_INVALID;
     TypeId type = 0;
     EntityId entity = 0;

@@ -35,6 +35,13 @@ void Analyzer::instantiate_function(EntityId e)
     auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
     attach_template_context(context,frame);
     auto signature = template_signature_sources.get(ast.nodes.occurrences[pattern.declarator].source);
+    if (auto first = template_first_signature_index.get(spec.pattern)) {
+        // A redeclaration's callable type and body parameters share the first
+        // declaration's lookup. For a member template this recipe already
+        // includes its enclosing class substitution and renamed member head.
+        auto selected = template_first_signatures[first].selected_parameters;
+        if (selected) signature = selected;
+    }
     instantiate_parameters(signature ? signature : pattern.declarator,context,frame,environment);
     if (auto m = entities[e].member_info) {
         members[m].source = source; members[m].declarator = declarator;

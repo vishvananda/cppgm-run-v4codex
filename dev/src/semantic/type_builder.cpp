@@ -434,6 +434,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor) class_facts[entities[cls].class_info].constructor = e;
         else if (!block_extern) bind(owner, id, e);
     }
+    if (function && template_first_signature_index.get(e)) t = entities[e].type;
     if (source == explicit_specialization_source) {
         if (!function && entities[e].explicit_specialization && entities[e].definition && init)
             throw std::runtime_error("variable specialization redefinition");

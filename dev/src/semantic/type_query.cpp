@@ -7,7 +7,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     std::uint64_t hash = 1469598103934665603ULL;
     auto add = [&](std::uint64_t x) { hash = (hash ^ x) * 1099511628211ULL; };
     add(unsigned(q.kind)); add(q.op); add(q.type); add(q.entity); add(q.name);
-    add(q.context); add(q.naming); add(q.arguments); add(q.value); add(q.null_pointer_constant);
+    add(q.context); add(q.naming); add(q.arguments); add(q.value); add(q.null_pointer_constant); add(q.dependent_name);
     for (auto c : children) add(c);
     if (query_slots.empty() || type_queries.size()*2 >= query_slots.size()) {
         query_slots.assign(query_slots.empty() ? 32 : query_slots.size()*2,0);
@@ -23,7 +23,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
         bool same = query_hashes[id] == hash && p.kind == q.kind && p.op == q.op && p.type == q.type &&
             p.entity == q.entity && p.name == q.name && p.context == q.context && p.naming == q.naming &&
             p.arguments == q.arguments && p.value == q.value && p.count == children.size() &&
-            p.null_pointer_constant == q.null_pointer_constant;
+            p.null_pointer_constant == q.null_pointer_constant && p.dependent_name == q.dependent_name;
         for (unsigned i = 0; same && i < p.count; ++i) same = query_edges[p.offset+i] == children[i];
         if (same) return id;
         pos = (pos+1)&(query_slots.size()-1);
@@ -191,6 +191,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (node.kind == Kind::Postfix) {
             TypeQuery zero; zero.type = types.fundamental(FT_INT);
             children.push_back(intern_query(zero,{}));
+        }
+        for (auto c : children) if (c) {
+            auto fact = query_fact(c);
+            q.dependent_name |= fact.dependent && (!fact.expression.type || dependent_type(fact.expression.type));
         }
         break;
     case Kind::Call: {
@@ -462,9 +466,12 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         auto fn = children[0].expression;
         auto family = fn.form == ExpressionForm::Overload ? fn.entity : pattern_class_type(fn.type) ?
             lookup(entities[types[fn.type].entity].scope,operator_name(OP_LPAREN),Lookup::Ordinary,true) : 0;
-        inspect = family != 0;
-        for (unsigned i = 1; inspect && i < children.size(); ++i) inspect &= !children[i].dependent;
-        for (auto e : candidates(family)) {
+        auto callee = type_queries[query_edges[q.offset]];
+        bool fixed_name = callee.kind == QueryKind::Name && !q.dependent_name && !children[0].dependent;
+        inspect = family != 0 || fixed_name;
+        for (unsigned i = 1; inspect && i < children.size(); ++i)
+            inspect &= !children[i].dependent || (children[i].expression.type && !dependent_type(children[i].expression.type));
+        for (auto e : candidates(fixed_name ? 0 : family)) {
             auto f = types[entities[e].type];
             if (entities[e].template_info || f.kind != TypeKind::Function) { inspect = false; break; }
             for (unsigned i = 0; i < f.count; ++i) inspect &= !dependent_type(types.parameters[f.offset+i]);
@@ -576,7 +583,12 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         break;
     }
     case QueryKind::Unary: case QueryKind::Binary: r = query_operator(q,children); break;
-    case QueryKind::Call: r = query_call(q,children); break;
+    case QueryKind::Call: {
+        // Fixed argument types permit definition-time overload resolution,
+        // while dependent values still belong to the source decltype recipe.
+        bool dependent = r.dependent;
+        r = query_call(q,children); r.dependent |= dependent; break;
+    }
     case QueryKind::Sizeof:
         if (q.op != KW_NOEXCEPT && !size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF,true)) {
             r = incomplete_query(q.type ? q.type : children[0].expression.type); break;

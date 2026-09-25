@@ -284,6 +284,39 @@ TypeId Analyzer::template_member_signature(TypeId type, ScopeId head, EntityId p
     auto result = substitute_type(type,bindings,cache);
     Index aliases; return template_member_aliases(result,primary,aliases);
 }
+void Analyzer::retain_member_signature(NodeId original, ScopeId environment, NodeId current, ScopeId head, EntityId primary)
+{
+    Index before, after, incoming, bindings, cache;
+    template_signature_bindings(environment,primary,before);
+    template_signature_bindings(facts[original].scope,primary,before);
+    template_signature_bindings(head,primary,after);
+    template_signature_bindings(facts[current].scope,primary,after);
+    auto parameters = [&](ScopeId scope, bool defining) {
+        for (; scope; scope = scopes[scope].parent) {
+            if (scopes[scope].kind != ScopeKind::Template) continue;
+            for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
+                auto p = declarations[d].entity;
+                if (!entities[p].template_parameter) continue;
+                if (defining) {
+                    auto identity = after.get(p);
+                    // An out-of-class overlay renames the underlying class
+                    // head. Prefer the nearest source occurrence of an ordinal.
+                    if (!incoming.get(identity)) incoming.put(identity,p);
+                } else {
+                    auto selected = incoming.get(before.get(p));
+                    if (!selected) throw std::logic_error("missing corresponding member signature parameter");
+                    bindings.put(p,parameter_argument(selected));
+                }
+            }
+        }
+    };
+    parameters(facts[current].scope,true); parameters(head,true);
+    parameters(facts[original].scope,false); parameters(environment,false);
+    auto type = substitute_type(types.signature(facts[original].type),bindings,cache);
+    if (!type) throw std::logic_error("cannot retain first member signature");
+    apply_template_signature(original,current,type,bindings);
+    entities[facts[current].entity].type = type;
+}
 std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t path, IdentifierId name, ScopeId head, EntityId primary)
 {
     auto declared = facts[d].type;
@@ -341,6 +374,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
         auto previous = template_exception(prototype.declarator,prototype.environment);
         if (current >= 0 && previous >= 0 && current != previous)
             throw std::runtime_error("conflicting template member exception specifications");
+        retain_member_signature(prototype.declarator,prototype.environment,d,head,primary);
         return p;
     }
     // Special-member and not-yet-established declaration types retain their

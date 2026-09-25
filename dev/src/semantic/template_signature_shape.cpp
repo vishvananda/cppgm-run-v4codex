@@ -14,19 +14,34 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
     auto add = [&](ArgumentId arg) { shape.push_back(template_signature_shape(arg)); };
     if (value_argument(argument)) {
         auto q = type_queries[argument_query(argument)];
+        bool dependent = q.dependent_name;
         // [temp.over.link]: equivalent expressions refer to the same bound
         // names/parameters and operations. Access/evaluation context remains
         // on the semantic query, not on this separate declaration-shape key.
         // In-class and out-of-class declarations have different lexical
         // contexts even when both expressions denote the same signature.
-        shape = {1,unsigned(q.kind),unsigned(q.op),q.entity,q.name,q.naming,
+        auto entity = dependent && (q.kind == QueryKind::Unary || q.kind == QueryKind::Binary) ? 0 : q.entity;
+        shape = {1,unsigned(q.kind),unsigned(q.op),entity,q.name,q.naming,
             unsigned(q.value),unsigned(q.value>>32),unsigned(q.null_pointer_constant),unsigned(q.arguments!=0)};
         add(q.type);
         auto args = argument_packs[q.arguments];
         shape.push_back(args.count);
         for (unsigned j = 0; j < args.count; ++j) add(argument_types[args.offset+j]);
         shape.push_back(q.count);
-        for (unsigned j = 0; j < q.count; ++j) add(0x80000000U|query_edges[q.offset+j]);
+        for (unsigned j = 0; j < q.count; ++j) {
+            auto child = query_edges[q.offset+j]; auto callee = type_queries[child];
+            if (!j && dependent && q.kind == QueryKind::Call && !q.name &&
+                callee.kind == QueryKind::Name && callee.name && (!callee.entity || function_binding(callee.entity))) {
+                // [temp.over.link]/5 compares a dependent unqualified call's
+                // name, not the overload set found at this declaration. Keep
+                // that set on the semantic query for first-declaration lookup.
+                std::vector<ArgumentId> name = {3,callee.name,callee.naming,unsigned(callee.arguments!=0)};
+                auto supplied = argument_packs[callee.arguments];
+                for (unsigned k = 0; k < supplied.count; ++k)
+                    name.push_back(template_signature_shape(argument_types[supplied.offset+k]));
+                shape.push_back(intern_arguments(name));
+            } else add(0x80000000U|child);
+        }
     } else {
         auto t = types[argument];
         shape = {2,unsigned(t.kind),t.cv,unsigned(t.ref),unsigned(t.fundamental),unsigned(t.variadic)};

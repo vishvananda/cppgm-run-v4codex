@@ -203,7 +203,8 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         }
         if (!partial) bind_template_class(n,environment,nested);
     } else {
-        bind_template_declaration(n,environment,0,false);
+        std::vector<Body> deferred;
+        bind_template_declaration(n,environment,&deferred,false);
         if (member_template) {
             auto e = facts[d].entity;
             template_facts(e,environment);
@@ -211,6 +212,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
             template_source_heads.put(ast.nodes.occurrences[member_template].source,index);
         }
         if (d) prototype = check_template_member_definition(d,path,definition_name,owner_head,primary);
+        for (auto body : deferred) bind_template_body(body);
     }
     if (prototype) {
         auto special = child(def.initializer ? def.initializer : child(n,Kind::Initializer),Kind::SpecialInitializer);
