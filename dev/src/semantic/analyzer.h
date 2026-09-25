@@ -805,6 +805,10 @@ private:
     EntityId specialize_class(EntityId pattern, const std::vector<TypeId>& args);
     EntityId class_template_name(NodeId part, EntityId e, ScopeId s);
     void complete_class(EntityId e);
+    void class_attributes(NodeId source, ScopeId scope, EntityId entity, bool definition);
+    void define_class(NodeId source, ScopeId scope, EntityId entity, ScopeId owner, bool injected, bool static_union);
+    void complete_nested_class(EntityId entity);
+    std::size_t nested_class_declarations = 0, nested_class_definitions = 0;
     bool template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial = false);
     ScopeId specialization_environment(EntityId e);
     std::uint32_t template_owner_shape(ScopeId scope, const std::vector<ArgumentId>& arguments);

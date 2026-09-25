@@ -170,7 +170,10 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         }
         return;
     }
-    if (node.kind == Kind::StaticAssert) { bind_template_expression(node.first,s); return; }
+    if (node.kind == Kind::StaticAssert) {
+        if (!bind_template_expression(node.first,s)) declaration(n,s);
+        return;
+    }
     if (node.kind == Kind::SimpleDeclaration || node.kind == Kind::Function || node.kind == Kind::ConditionDeclaration ||
         node.kind == Kind::SpecialDefinition || node.kind == Kind::SpecialMember || node.kind == Kind::BitField) {
         auto specs = node.first;

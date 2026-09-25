@@ -107,6 +107,9 @@ struct Constant {
 enum class Access : unsigned char { Public, Protected, Private };
 enum class TransferKind : unsigned char { None = 0, CopyConstructor = 1, MoveConstructor = 2, CopyAssignment = 4, MoveAssignment = 8 };
 struct ClassFacts {
+    NodeId definition_source = 0;
+    ScopeId definition_scope = 0;
+    FactState definition_state = FactState::NotStarted;
     Access current_access = Access::Public;
     std::uint64_t size = 0, alignment = 0, requested_alignment = 0;
     unsigned char packing = 0;

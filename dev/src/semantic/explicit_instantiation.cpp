@@ -132,7 +132,8 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
                 if (members[m].constructor || members[m].destructor) members[m].complete_entry = true;
                 demand_member(member);
             } else if (entities[member].class_info) {
-                if (entities[member].complete || defined) work.push_back(member);
+                if (entities[member].complete || class_facts[entities[member].class_info].definition_source || defined)
+                    work.push_back(member);
             } else if (entities[member].is_static && defined) demand_template_storage(member);
         }
     }

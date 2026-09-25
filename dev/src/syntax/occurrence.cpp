@@ -64,7 +64,7 @@ std::uint32_t Ast::source_region(NodeId root)
     // Source topology is immutable after source ambiguity resolution. This cache retains IDs and
     // attribute references, never a second syntax tree or semantic decisions.
     auto& work = projection_work; work.clear(); work.push_back(root);
-    IdIndex seen;
+    IdIndex seen, template_classes;
     auto defer = [&](NodeId source) {
         if (seen.get(source)) return;
         seen.put(source,1); region_roots.push_back(source);
@@ -75,6 +75,16 @@ std::uint32_t Ast::source_region(NodeId root)
         seen.put(source,1); region_nodes.push_back(source);
         auto node = source_view(source);
         if (node.detail) work.push_back(node.detail);
+        if (node.kind == Kind::Template)
+            template_classes.put(source_view(node.first).next,1);
+        if (node.kind == Kind::Class && node.detail && source != root && !template_classes.get(source)) {
+            // A nested class declaration needs its name and class-key, but
+            // no concrete occurrences of its bases, attributes or members.
+            // Demand of this same root later projects its definition once.
+            work.push_back(node.first);
+            region_roots.push_back(source);
+            continue;
+        }
         bool function = node.kind == Kind::Function || node.kind == Kind::SpecialDefinition;
         if (function || node.kind == Kind::Parameter) {
             for (auto c = node.first; c; c = source_view(c).next) {
@@ -110,9 +120,12 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
     }
     for (std::uint32_t j = 0; j < region.roots_count; ++j) {
         auto n = region_roots[region.roots_begin+j];
-        if (projected(n,context)) continue;
-        auto id = nodes.occurrence(n,context);
-        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
+        auto id = projected(n,context);
+        if (id && deferred_occurrences.get(id)) continue;
+        if (!id) {
+            id = nodes.occurrence(n,context);
+            occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
+        }
         // Parsed source IDs exclude the reserved zero and maximum IDs.
         deferred_occurrences.put(id,n+1); ++deferred_regions;
     }

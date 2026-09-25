@@ -2,8 +2,29 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `8dc4636d23a38f2bbcc8662b88b07f7979715c2d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 76**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 77 in progress**.
 Entry `b87de70e` → code `e052e939`, `bff709db`, `c8a2aad8`; independent review of 75–76 pending.
+
+## Active ownership group (77)
+
+Entry `2ce99c6a` is clean, **385/420** (35 failures). Prior turn completed
+validated handoff 76: progress, with no live compiler/build process to resume.
+Work on lazy nested-class declaration/definition demand first, extending through
+related declaration timing consumers when the same ownership applies. Class
+identity and lexical substitution frames must survive declaration-only use;
+completion owns one monotonic definition state, and only demanded source regions
+may publish concrete members. Work must follow class/member edges, with no
+global retry, source replay or eager dormant definitions. Validate unused-invalid
+and demanded-valid/invalid nested definitions, shared identities, complete-class
+contexts and graph scaling, then the course/prior/file checks and frozen O0
+latency/RSS/runtime/size observations. Remaining lookup and ordinary LowIR groups
+remain implementation work; independent review markers above remain unchanged.
+Nested completion now repairs the two initial course failures (**387/420**, no
+new failures). 52 nested controls cover dormant/demanded definitions, identity,
+explicit instantiation and complete-class contexts. Extend the same class-query
+path to ambiguous inherited type lookup: preserve a compact ambiguous result
+through indexed base traversal and let substitution discard the candidate, while
+class-definition side effects and ordinary lookup retain hard diagnostics.
 
 ## Design/spec alignment and current evidence
 

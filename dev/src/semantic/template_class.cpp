@@ -322,7 +322,12 @@ void Analyzer::complete_class(EntityId e)
         throw FailedSemanticFact(SemanticFact::ClassDefinition,e,entities[e].source);
     if (entities[e].complete) return;
     if (entities[e].explicit_specialization) return;
-    if (!entities[e].specialization) { instantiate_member_definition(e); return; }
+    if (!entities[e].specialization) {
+        if (entities[e].class_info && class_facts[entities[e].class_info].definition_source)
+            complete_nested_class(e);
+        else instantiate_member_definition(e);
+        return;
+    }
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
     specializations[index].body = FactState::Active;
     ScopeId saved = active_template_scope;

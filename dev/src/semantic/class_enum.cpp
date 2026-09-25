@@ -61,16 +61,6 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     } else if (entities[e].kind != EntityKind::Type || entities[e].key == KW_ENUM ||
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
         throw std::runtime_error("incompatible class declaration");
-    if (calls) {
-        auto alignment = alignment_attributes(n, s);
-        auto& f = class_facts[entities[e].class_info];
-        if (alignment) {
-            if (f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
-            f.requested_alignment = alignment;
-        }
-        if (definition) f.final_class = ast[n].flags & 4;
-        if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
-    }
     TypeId t = entities[e].type;
     if (definitions && definition && ast.nodes.occurrences[n].context) {
         auto pattern = template_class_bindings.get(ast.nodes.occurrences[n].source);
@@ -85,99 +75,128 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         std::uint32_t d = record(owner, e, n, t, EntityKind::Type);
         declarations[d].key = key_op;
     }
-    if (definition) {
-        if (entities[e].complete) throw std::runtime_error("class redefinition");
-        std::size_t deferred_begin = bodies.size();
-        auto defaults_begin = declaration_defaults.size();
-        auto exceptions_begin = declaration_exceptions.size();
-        ++class_depth;
-        ScopeId cs = entities[e].scope;
-        if (member_definition_environment && s == member_definition_environment) {
-            // Complete the previously empty class scope with the defining
-            // head's lexical overlay; its declaration/entity identity is stable.
-            scopes[cs].parent = s; scopes[cs].depth = scopes[s].depth+1;
-            auto jump = scopes[s].jump, grandjump = scopes[jump].jump;
-            scopes[cs].jump = scopes[s].depth-scopes[jump].depth == scopes[jump].depth-scopes[grandjump].depth ? grandjump : s;
-        }
-        class_facts[entities[e].class_info].current_access = key_op == KW_CLASS ? Access::Private : Access::Public;
-        attach_scope(cs, owner);
-        if (calls) {
-            NodeId list = child(n, Kind::Bases);
-            expand_expression_list(list,owner);
-            std::uint32_t tail = 0;
-            for (NodeId b = ast[list].first; b; b = ast[b].next) {
-                EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, expanded_scope(b,owner), Lookup::Qualifier);
-                if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
-                if (definitions && base && entities[base].class_info) complete_class(base);
-                if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
-                if (!entities[base].complete || entities[base].key == KW_UNION || class_facts[entities[base].class_info].final_class)
-                    throw std::runtime_error("base must be a complete non-final non-union class");
-                std::uint32_t info = entities[e].class_info;
-                class_facts[info].aggregate = false;
-                NodeId access = child(b, Kind::Access);
-                Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
-                bases.push_back({base,0,level,child(b,Kind::Virtual)!=0});
-                auto relation = bases.size()-1;
-                if (tail) bases[tail].next = relation; else class_facts[info].first_base = relation;
-                tail = relation;
-                add_edge(cs, entities[base].scope);
-            }
-        }
-        for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
-        if (calls) { inherited_constructors(e); complete_virtuals(e); }
-        entities[e].complete = true;
-        complete_query_class(e);
-        entities[e].definition = n;
-        if (calls) check_constexpr_class(e);
-        if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);
-        if (!--class_depth) {
-            // Defaults are complete-class contexts, including names introduced
-            // later in an enclosing class. Drain only this root's consumers.
-            auto defaults_end = declaration_defaults.size();
-            for (auto i = defaults_begin; i < defaults_end; ++i) {
-                auto use = declaration_defaults[i];
-                default_argument(use.function,use.parameter,0,DefaultReason::Declaration);
-            }
-            declaration_defaults.resize(defaults_begin);
-            // Only complete-class contexts defer bodies. Each outermost class
-            // owns its queue interval; a local class can drain its own interval
-            // without delaying lookup past declarations following that class.
-            std::size_t end = bodies.size();
-            for (std::size_t i = deferred_begin; i < end; ++i) {
-                Body body = bodies[i];
-                if (entities[body.entity].template_info) bind_template_body(body);
-                else if (entities[body.entity].body_state != FactState::Success) function_body(body);
-            }
-            bodies.resize(deferred_begin);
-            auto exceptions_end = declaration_exceptions.size();
-            for (auto i = exceptions_begin; i < exceptions_end; ++i) demand_exception_specification(declaration_exceptions[i]);
-            declaration_exceptions.resize(exceptions_begin);
-        }
-        if (injected_class) {
-            if (scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
-            if (calls) {
-                const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
-                std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
-                EntityId storage = make_entity(EntityKind::Variable, s, ids.intern(TextView(label.data(), label.size())), n);
-                entities[storage].type = t;
-                entities[storage].definition = n;
-                entities[storage].is_static = static_union;
-                class_facts[entities[e].class_info].storage = storage;
-                anonymous_objects.put(n, storage);
-                record(s, storage, 0, t, EntityKind::Variable);
-                if (scopes[s].kind != ScopeKind::Class) {
-                    default_initialize(storage);
-                    register_destruction(storage);
-                }
-            }
-            for (std::uint32_t d = scopes[cs].first_decl; d; d = declarations[d].next) {
-                EntityId member = declarations[d].entity;
-                bind(s, entities[member].name, member);
-                if (!calls) record(s, member, 0, entities[member].type, entities[member].kind);
-            }
-        }
+    if (definition && definitions && !injected_class && ast.nodes.occurrences[n].context &&
+        scopes[s].kind == ScopeKind::Class && entities[e].template_member && !entities[e].explicit_specialization) {
+        // [temp.inst]: enclosing completion instantiates a member class's
+        // declaration. Its definition belongs to a separate completeness demand.
+        auto& f = class_facts[entities[e].class_info];
+        if (f.definition_source) throw std::runtime_error("class redefinition");
+        f.definition_source = n; f.definition_scope = s;
+        ++nested_class_declarations;
+    } else {
+        if (definition) demand_region(n);
+        class_attributes(n,s,e,definition);
+        if (definition) define_class(n,s,e,owner,injected_class,static_union);
     }
     return t;
+}
+void Analyzer::class_attributes(NodeId n, ScopeId s, EntityId e, bool definition)
+{
+    if (calls) {
+        auto alignment = alignment_attributes(n, s);
+        auto& f = class_facts[entities[e].class_info];
+        if (alignment) {
+            if (f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
+            f.requested_alignment = alignment;
+        }
+        if (definition) f.final_class = ast[n].flags & 4;
+        if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
+    }
+}
+void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool injected_class, bool static_union)
+{
+    auto t = entities[e].type;
+    auto key_op = entities[e].key;
+    if (entities[e].complete) throw std::runtime_error("class redefinition");
+    std::size_t deferred_begin = bodies.size();
+    auto defaults_begin = declaration_defaults.size();
+    auto exceptions_begin = declaration_exceptions.size();
+    ++class_depth;
+    ScopeId cs = entities[e].scope;
+    if (member_definition_environment && s == member_definition_environment) {
+        // Complete the previously empty class scope with the defining
+        // head's lexical overlay; its declaration/entity identity is stable.
+        scopes[cs].parent = s; scopes[cs].depth = scopes[s].depth+1;
+        auto jump = scopes[s].jump, grandjump = scopes[jump].jump;
+        scopes[cs].jump = scopes[s].depth-scopes[jump].depth == scopes[jump].depth-scopes[grandjump].depth ? grandjump : s;
+    }
+    class_facts[entities[e].class_info].current_access = key_op == KW_CLASS ? Access::Private : Access::Public;
+    attach_scope(cs, owner);
+    if (calls) {
+        NodeId list = child(n, Kind::Bases);
+        expand_expression_list(list,owner);
+        std::uint32_t tail = 0;
+        for (NodeId b = ast[list].first; b; b = ast[b].next) {
+            EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, expanded_scope(b,owner), Lookup::Qualifier);
+            if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
+            if (definitions && base && entities[base].class_info) complete_class(base);
+            if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
+            if (!entities[base].complete || entities[base].key == KW_UNION || class_facts[entities[base].class_info].final_class)
+                throw std::runtime_error("base must be a complete non-final non-union class");
+            std::uint32_t info = entities[e].class_info;
+            class_facts[info].aggregate = false;
+            NodeId access = child(b, Kind::Access);
+            Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
+            bases.push_back({base,0,level,child(b,Kind::Virtual)!=0});
+            auto relation = bases.size()-1;
+            if (tail) bases[tail].next = relation; else class_facts[info].first_base = relation;
+            tail = relation;
+            add_edge(cs, entities[base].scope);
+        }
+    }
+    for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
+    if (calls) { inherited_constructors(e); complete_virtuals(e); }
+    entities[e].complete = true;
+    complete_query_class(e);
+    entities[e].definition = n;
+    if (calls) check_constexpr_class(e);
+    if (calls && class_facts[entities[e].class_info].requested_alignment) size(t);
+    if (!--class_depth) {
+        // Defaults are complete-class contexts, including names introduced
+        // later in an enclosing class. Drain only this root's consumers.
+        auto defaults_end = declaration_defaults.size();
+        for (auto i = defaults_begin; i < defaults_end; ++i) {
+            auto use = declaration_defaults[i];
+            default_argument(use.function,use.parameter,0,DefaultReason::Declaration);
+        }
+        declaration_defaults.resize(defaults_begin);
+        // Only complete-class contexts defer bodies. Each outermost class
+        // owns its queue interval; a local class can drain its own interval
+        // without delaying lookup past declarations following that class.
+        std::size_t end = bodies.size();
+        for (std::size_t i = deferred_begin; i < end; ++i) {
+            Body body = bodies[i];
+            if (entities[body.entity].template_info) bind_template_body(body);
+            else if (entities[body.entity].body_state != FactState::Success) function_body(body);
+        }
+        bodies.resize(deferred_begin);
+        auto exceptions_end = declaration_exceptions.size();
+        for (auto i = exceptions_begin; i < exceptions_end; ++i) demand_exception_specification(declaration_exceptions[i]);
+        declaration_exceptions.resize(exceptions_begin);
+    }
+    if (injected_class) {
+        if (scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
+        if (calls) {
+            const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
+            std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
+            EntityId storage = make_entity(EntityKind::Variable, s, ids.intern(TextView(label.data(), label.size())), n);
+            entities[storage].type = t;
+            entities[storage].definition = n;
+            entities[storage].is_static = static_union;
+            class_facts[entities[e].class_info].storage = storage;
+            anonymous_objects.put(n, storage);
+            record(s, storage, 0, t, EntityKind::Variable);
+            if (scopes[s].kind != ScopeKind::Class) {
+                default_initialize(storage);
+                register_destruction(storage);
+            }
+        }
+        for (std::uint32_t d = scopes[cs].first_decl; d; d = declarations[d].next) {
+            EntityId member = declarations[d].entity;
+            bind(s, entities[member].name, member);
+            if (!calls) record(s, member, 0, entities[member].type, entities[member].kind);
+        }
+    }
 }
 TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bool emit)
 {
