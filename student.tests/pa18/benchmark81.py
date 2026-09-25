@@ -37,7 +37,9 @@ corpus=[]
 prior=json.loads((ROOT/'student.tests/pa18/loop66-performance.json').read_text())['workloads']
 for name in ('ordering-600','ordering-2400','member-head-600','member-head-2400','common-loop-float-1500','runtime-calls','runtime-memory','runtime-floating'):
  corpus.append((name,prior[name]['source'],True,name.startswith('runtime-')))
-changed=set()
+# Existing member-head inputs forward named non-type template constants too.
+# Their checked executable result, rather than identical IR, is the A/B oracle.
+changed={'member-head-600','member-head-2400'}
 for n in (600,2400):
  source='template<int N>struct V{static const int value=N;operator int()const{return value;}};'+''.join(f'int f{i}(){{V<{i}>v;return v;}}' for i in range(n))+'int main(){return f0()!=0||f'+str(n-1)+'()!='+str(n-1)+';}'
  name='named-result-'+str(n);changed.add(name);corpus.append((name,source,True,False))
