@@ -50,6 +50,8 @@ for n in (600,2400):
  source='template<int N>struct B{protected:operator int()const{return N;}};template<int N>class X:private B<N>{public:using B<N>::operator int;};int f(int n){return n;}'
  source+=''.join(f'int g{i}(){{X<{i}>x;return f(x);}}' for i in range(n))
  corpus_by_name['audit-exposure-'+str(n)]=('audit-exposure-'+str(n),source,False,False)
+ source=''.join(f'namespace A{i}{{template<class T>char f(T){{return 1;}}}}namespace B{i}{{using A{i}::f;template<class U>long f(U){{return 2;}}int g(){{char(*p)(int)=f;long(*q)(int)=f;return p(0)+q(0);}}}}' for i in range(n))
+ corpus_by_name['audit-namespace-'+str(n)]=('audit-namespace-'+str(n),source,MODE=='cumulative',False)
 n=24000000;expected=((n//1024)*sum(range(1024))+sum(range(n%1024)))%65536
 source='struct B{int n;protected:operator int()const{return n;}};struct X:B{using B::operator int;int leaf()const noexcept{return *this;}template<class T>auto f(T)const noexcept(noexcept(this->leaf()))->decltype((leaf)()){return leaf();}};int main(){X x;'
 source+=f'volatile int n={n};int s=0;for(int i=0;i<n;++i){{x.n=i&1023;s=(s+x.f(0))&65535;}}return s!={expected};}}'

@@ -78,8 +78,11 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
             auto shape = [&](EntityId e) {
                 Type t = types[entities[e].type];
                 std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
-                auto type = types.function(types.fundamental(FT_VOID),params,t.variadic,t.cv,t.ref);
                 auto head = entities[e].template_info;
+                // Namespace template conflicts include the return type;
+                // base-member hiding and ordinary function conflicts do not.
+                auto result = head && scopes[s].kind == ScopeKind::Namespace ? t.child : types.fundamental(FT_VOID);
+                auto type = types.function(result,params,t.variadic,t.cv,t.ref);
                 if (!head) return key(0,type);
                 auto identity = key(head,type);
                 auto shape = using_template_shapes.get(identity);

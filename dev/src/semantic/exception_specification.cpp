@@ -87,12 +87,13 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
                     template_object_context_index.put(scope,template_object_contexts.size());
                     template_object_contexts.push_back(object);
                 }
-                unsigned ordinal = 0; auto f = types[entities[e].type];
-                for (auto p = ast[parameters].first; p && ordinal < f.count; p = ast[p].next) {
+                for (auto p = ast[parameters].first; p; p = ast[p].next) {
                     if (ast[p].kind != Kind::Parameter) continue;
                     auto name = terminal(decl_name(ast[ast[p].first].next));
                     auto parameter = make_entity(EntityKind::Parameter,scope,name,p);
-                    entities[parameter].type = types.parameters[f.offset+ordinal++];
+                    auto type = facts[p].type;
+                    if (!type) throw std::logic_error("exception parameter lacks its declared type");
+                    entities[parameter].type = parameter_body_type(type);
                     bind(scope,name,parameter);
                 }
             }

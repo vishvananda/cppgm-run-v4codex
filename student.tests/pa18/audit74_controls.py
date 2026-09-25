@@ -69,4 +69,17 @@ r.GOOD.update({
  'exception_empty_pack':'template<class...T>int f(T...t)noexcept(sizeof...(t)==0){return 3;}int main(){static_assert(noexcept(f())&&!noexcept(f(1)),"");return f()!=3;}',
  'exception_raw_cv':S+'template<class T>int f(const T t)noexcept(Same<decltype(t),const T>::value){return t;}int main(){static_assert(noexcept(f(3)),"");return f(3)!=3;}',
 })
+r.GOOD.update({
+ 'namespace_using_distinct_return':'namespace N{template<class T>char f(T){return 1;}}using N::f;template<class T>long f(T){return 2;}int main(){char(*p)(int)=f;long(*q)(int)=f;return p(0)!=1||q(0)!=2;}',
+ 'namespace_using_distinct_alias_return':'template<class T>using I=T;namespace N{template<class T>I<char>f(T){return 1;}}using N::f;template<class U>I<long>f(U){return 2;}int main(){char(*p)(int)=f;long(*q)(int)=f;return p(0)!=1||q(0)!=2;}',
+})
+r.BAD.update({
+ 'namespace_using_same_template':'namespace N{template<class T>int f(T);}using N::f;template<class U>int f(U);int main(){}',
+ 'namespace_using_same_plain':'namespace N{int f(int);}using N::f;long f(int);int main(){}',
+})
+r.GOOD.update({
+ 'exception_ordinary_raw_cv':S+'int f(const int t)noexcept(Same<decltype(t),const int>::value){return t;}int main(){static_assert(noexcept(f(3)),"");return f(3)!=3;}',
+ 'exception_ordinary_pointer_cv':S+'struct X{int f(int*const p)const noexcept(Same<decltype(p),int*const>::value){return *p;}};int main(){X x;int n=3;static_assert(noexcept(x.f(&n)),"");return x.f(&n)!=3;}',
+ 'exception_ordinary_array_adjust':S+'int f(const int p[2])noexcept(Same<decltype(p),const int*>::value){return p[0];}int main(){int n[2]={3,4};static_assert(noexcept(f(n)),"");return f(n)!=3;}',
+})
 sys.exit(0 if r.run(Path(sys.argv[1]).resolve(),Path(sys.argv[2])) else 1)
