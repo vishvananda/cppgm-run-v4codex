@@ -89,6 +89,18 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             result.expression.conversions = conversions.size(); result.expression.count = 1;
             conversions.push_back(c); result.initialization = c.materialization; return result;
         }
+        if (fundamental(constructed,FT_VOID)) {
+            if (args.size() > 1) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            TypeQueryFact result; result.expression.type = constructed;
+            if (!args.empty()) {
+                auto c = explicit_builtin_conversion(args[0],constructed,KW_STATIC_CAST,q.context);
+                if (!valid_fixed_conversion(args[0],0,c,q.context))
+                    return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+                result.expression.conversions = conversions.size(); result.expression.count = 1;
+                conversions.push_back(c);
+            }
+            return result;
+        }
         if (class_value(constructed)) {
             complete_class(types[constructed].entity);
             if (!entities[types[constructed].entity].complete || abstract_value(constructed))

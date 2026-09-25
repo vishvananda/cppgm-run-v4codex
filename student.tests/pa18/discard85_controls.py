@@ -62,6 +62,16 @@ runner.GOOD.update({
 })
 # Source throw/catch execution belongs to PA21. PA18 checks emitted cleanup
 # edges and executes successful construction/destruction under the supplied backend.
+for name in ('name','member','functional'):
+ source={
+  'name':'struct A{};template<class T>T&&declval();template<class T>auto f(T&x)->decltype((void)x,char());long f(...);static_assert(sizeof(f(declval<volatile A&>()))==sizeof(long),"");int main(){}',
+  'member':'struct A{};struct B{volatile A a;};template<class T>auto f(T*p)->decltype((void)p->a,char());long f(...);static_assert(sizeof(f((B*)0))==sizeof(long),"");int main(){}',
+  'functional':'struct A{};template<class T>auto f(T*p)->decltype(void(*p),char());long f(...);static_assert(sizeof(f((volatile A*)0))==sizeof(long),"");int main(){}',
+ }[name]
+ runner.GOOD['query_'+name+'_invalid']=source
+ runner.GOOD['query_'+name+'_valid']=source.replace('struct A{};','struct A{A(volatile A&);};').replace('==sizeof(long)','==sizeof(char)')
+runner.GOOD['query_void_empty']='template<class T>auto f(T*)->decltype(void(),char());long f(...);static_assert(sizeof(f((int*)0))==sizeof(char),"");int main(){}'
+runner.GOOD['query_void_scalar']='template<class T>auto f(T*p)->decltype(void(*p),char());long f(...);static_assert(sizeof(f((int*)0))==sizeof(char),"");int main(){}'
 COUNTS={'volatile_reference_cast':0,'volatile_reference_statement':0,'volatile_id':1,'volatile_xvalue':0,'volatile_xvalue_member':0,'volatile_conditional_overload':0,'volatile_conditional_call':0,'volatile_conditional_builtin':2,'volatile_conditional_comma':0,'volatile_comma':1,'volatile_overload':0,'volatile_member_pointer':1,'volatile_pointer_member':1,'volatile_member_pointer_xvalue':0,'volatile_template_conditional':0,'volatile_template_fixed':0}
 runner.BAD={
  'class_no_volatile_copy':'struct A{};int main(){volatile A a;(void)a;}',
