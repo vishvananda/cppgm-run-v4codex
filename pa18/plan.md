@@ -2,7 +2,17 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `82fca940b1849d90deffbaba29ee162946f3e23c`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 80 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 81 active**.
+Entry HEAD: `6924787714fac6bdeb0b3df29df49bb7cbe5fa7e`, **395/420**.
+Previous goal turn: progress (committed handoff 80 and verified checks); no live inherited job.
+
+Current group: bounded runtime scalar conversion summaries. Semantic owner records
+a checked, effect-free constant return; lowering consumes the summary while
+evaluating receiver effects and preserving lifetimes, explicit calls and address
+uses. One bounded body inspection per completed conversion; no constexpr
+eligibility change or additional body demand. Validate native effects, emission,
+constant-expression rejection, prior suites, and frozen A/A/ABBA costs/profit.
+The group will extend through all discovered consumers before handoff.
 Entry `c5e2c271`: **393/420** → **395/420**, failures **27 → 25**; no new failures.
 Implementation `cec91d23`, `a87dd911`, `ce7d3e7f`; [handoff](handoff80.md),
 [evidence](../student.tests/pa18/loop80-evidence.json). Previous goal turn was
