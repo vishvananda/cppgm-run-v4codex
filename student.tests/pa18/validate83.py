@@ -35,15 +35,18 @@ files=subprocess.check_output(['git','ls-files','pa18/tests'],cwd=root,text=True
 assert len([p for p in files if p.endswith('.t')])==420
 revisions=json.loads((root/'student.tests/pa18/reference83-revisions.json').read_text())
 allowed={r['path']:r for r in revisions['revisions']}
-all_files=subprocess.check_output(['git','ls-files',*[f'pa{i}/tests' for i in range(1,19)]],cwd=root,text=True).splitlines()
-changed=[]
-for p in all_files:
- before=subprocess.check_output(['git','show','48c864ab:'+p],cwd=root)
- if (root/p).read_bytes()!=before:
-  changed.append(p);assert p in allowed,p
-  assert hashlib.sha256(before).hexdigest()==allowed[p]['before_sha256']
-  assert sha(root/p)==allowed[p]['after_sha256']
+suites=[f'pa{i}/tests' for i in range(1,19)]
+changed=subprocess.check_output(['git','diff','--name-only','48c864ab','--',*suites],cwd=root,text=True).splitlines()
 assert set(changed)==set(allowed) and len(changed)==17
+for p in changed:
+ before=subprocess.check_output(['git','show','48c864ab:'+p],cwd=root)
+ assert hashlib.sha256(before).hexdigest()==allowed[p]['before_sha256']
+ assert sha(root/p)==allowed[p]['after_sha256']
+# A complete tree diff proves all other tracked source/oracle bytes unchanged.
+# Compare paths too, so deletion or replacement cannot hide in coverage counts.
+original=subprocess.check_output(['git','ls-tree','-r','--name-only','48c864ab','--',*suites],cwd=root,text=True).splitlines()
+current=subprocess.check_output(['git','ls-files',*suites],cwd=root,text=True).splitlines()
+assert original==current
 assert not subprocess.check_output(['git','diff','48c864ab','--','scripts','Makefile','spec.md','AGENTS.md'],cwd=root)
 result=dict(entry_failures=a,final_failures=b,new_failures=sorted(set(b)-set(a)),inputs=420,files=len(files),resolved_failures=sorted(set(a)-set(b)),fixture_sha256={p:sha(root/p) for p in files},reference_revisions=allowed,compiler_sha256=sha(cc))
 (w/'stage-progress.json').write_text(json.dumps(result,indent=2)+'\n')
