@@ -14,6 +14,10 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
         if (!valid_discarded(source,n,s,selected)) return false;
         if (n && selected.valid()) {
             discarded_conversions.put(n,conversions.size()); conversions.push_back(selected);
+        } else if (selected.valid()) {
+            // A query has no source NodeId. Keep its checked copy recipe on
+            // the discarded conversion for exception-effect consumers.
+            c.materialization = conversions.size(); conversions.push_back(selected);
         }
         return true;
     }

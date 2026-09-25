@@ -626,7 +626,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;
     }
-    query_discarded(q,children,r);
+    query_discarded(id,q,children,r);
     if (incomplete_substitution) { r.incomplete = 1; incomplete_substitution = id; }
     if (r.state == FactState::Failure) {
         query_facts[id] = r;

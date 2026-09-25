@@ -46,7 +46,7 @@ bool Analyzer::valid_discarded(Expression x, NodeId n, ScopeId s, Conversion& c)
     c = conversion_value(x,types.unqualified(x.type),true,n);
     return c.valid() && c.kind == Conversion::Kind::Construction && valid_fixed_conversion(x,n,c,s);
 }
-void Analyzer::query_discarded(const TypeQuery& q, const std::vector<TypeQueryFact>& children, TypeQueryFact& r)
+void Analyzer::query_discarded(QueryId id, const TypeQuery& q, const std::vector<TypeQueryFact>& children, TypeQueryFact& r)
 {
     if (r.state == FactState::Failure || r.dependent) return;
     auto& x = r.expression;
@@ -58,6 +58,9 @@ void Analyzer::query_discarded(const TypeQuery& q, const std::vector<TypeQueryFa
         Conversion c;
         if (!valid_discarded(children[0].expression,0,q.context,c)) {
             r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); return;
+        }
+        if (c.valid()) {
+            query_discarded_conversions.put(id,conversions.size()); conversions.push_back(c);
         }
         x.discarded_form = children[1].expression.discarded_form;
     } else if (!r.selected) x.discarded_form = q.kind == QueryKind::Name || q.kind == QueryKind::Parameter ||

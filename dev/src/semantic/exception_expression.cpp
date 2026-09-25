@@ -3,16 +3,31 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
-bool Analyzer::conversion_nonthrowing(const Conversion& c)
+bool Analyzer::conversion_nonthrowing(Conversion c)
 {
+    // Exception demand can append conversions; retain the selected recipe by
+    // value across those calls, never a reference into the growing arena.
+    if (c.kind == Conversion::Kind::Discarded && c.materialization) {
+        auto copy = conversions[c.materialization]; return conversion_nonthrowing(copy);
+    }
     if (c.kind == Conversion::Kind::User) {
         if (!function_nonthrowing(c.function)) return false;
         if (class_value(types[entities[c.function].type].child) &&
             !type_destructor_nonthrowing(types[entities[c.function].type].child)) return false;
     }
     if (c.kind == Conversion::Kind::Construction) {
-        if (!function_nonthrowing(c.function)) return false;
-        if (!type_destructor_nonthrowing(value_type(c.target))) return false;
+        auto function = c.function, target = c.target;
+        auto call = conversion_objects[c.materialization].call;
+        if (!function_nonthrowing(function)) return false;
+        if (!type_destructor_nonthrowing(value_type(target))) return false;
+        // The first argument is the source expression, visited by the caller.
+        // Default arguments and their conversions belong to this selected
+        // constructor recipe even when no runtime temporary is materialized.
+        for (unsigned i = 1; i < call.argument_count; ++i) {
+            if (!expression_nonthrowing(call_argument(call,i))) return false;
+            auto argument = conversions[call.conversions+i];
+            if (!conversion_nonthrowing(argument)) return false;
+        }
     }
     if (c.kind == Conversion::Kind::List || c.kind == Conversion::Kind::ListPlan || c.kind == Conversion::Kind::QueryList) {
         auto plan = c.kind == Conversion::Kind::List ? list_objects[c.materialization].plan : c.materialization;
@@ -105,6 +120,8 @@ bool Analyzer::expression_nonthrowing(NodeId n)
         x.form == ExpressionForm::OperatorCall || (callee && constructor_member(callee));
     if (call && x.form != ExpressionForm::Expect) result &= callee && function_nonthrowing(callee);
     if (object_fact(n).temporary && class_value(x.type)) result &= type_destructor_nonthrowing(x.type);
+    auto discarded = discarded_conversion(n);
+    if (discarded.valid()) result &= conversion_nonthrowing(discarded);
     if (x.incoming) result &= conversion_nonthrowing(conversions[x.incoming]);
     for (unsigned i = 0; i < x.count; ++i) result &= conversion_nonthrowing(conversions[x.conversions+i]);
     for (unsigned i = 0; i < x.argument_count; ++i) {
@@ -136,6 +153,8 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
         if (class_value(step.result)) result &= type_destructor_nonthrowing(step.result);
     }
     auto x = fact.expression;
+    auto discarded = conversions[query_discarded_conversions.get(id)];
+    if (discarded.valid()) result &= conversion_nonthrowing(discarded);
     if (temporary && q.kind != QueryKind::TypeValue && x.category == ValueCategory::Prvalue && class_value(x.type))
         result &= type_destructor_nonthrowing(x.type);
     for (unsigned i = 0; i < x.count; ++i) result &= conversion_nonthrowing(conversions[x.conversions+i]);

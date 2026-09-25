@@ -53,6 +53,9 @@ void Analyzer::complete_query_class(EntityId entity)
         // evaluation: it has not published a result using an incomplete fact.
         if (query_facts[query].state == FactState::Active) continue;
         query_facts[query] = TypeQueryFact();
+        if (query_discarded_conversions.get(query)) query_discarded_conversions.put(query,0);
+        for (unsigned temporary = 0; temporary != 2; ++temporary)
+            if (query_exception_facts.get(key(query,temporary))) query_exception_facts.put(key(query,temporary),0);
         // A failed consumer must still observe this change if a different
         // consumer recomputes the query before it next probes its own cache.
         query_revisions.put(query,query_revisions.get(query)+1);

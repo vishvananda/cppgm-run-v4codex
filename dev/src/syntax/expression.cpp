@@ -187,7 +187,9 @@ NodeId Parser::unary()
     if (in.is("new") || in.is("delete") || (in.is("::") && (in.is("new", 1) || in.is("delete", 1))))
         return new_expression();
     auto cast_type_end = in.is("(") && type_start(1) ? probe_type(1) : 0;
-    if (cast_type_end && (!in.is("(", cast_type_end) ||
+    // A brace after the type starts a functional construction inside the
+    // parentheses; it cannot continue the type-id of a C-style cast.
+    if (cast_type_end && !in.is("{",cast_type_end) && (!in.is("(", cast_type_end) ||
         in.is("*",cast_type_end+1) || in.is("&",cast_type_end+1) || in.is("&&",cast_type_end+1))) {
         in.take();
         NodeId node = make(Kind::Cast);

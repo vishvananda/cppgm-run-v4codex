@@ -239,6 +239,11 @@ Constant Analyzer::constant_result_conversion(Constant value, const Conversion& 
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
     if (c.constant_forbidden) return Constant();
+    // Implicit and braced argument conversions create temporaries too. Use
+    // their recorded materialization, including reference-bound objects,
+    // rather than scanning the source initializer for construction syntax.
+    if (auto temporary = converted_temporary(c))
+        if (!literal_type(entities[temporary].type)) return Constant();
     if (c.reference) if (auto temporary = retained_scalar(n,c.target)) {
         auto value = entities[temporary].constant;
         return value.valid ? Constant(c.target,constant_temporary_address(value.type,value,temporary)) : Constant();
@@ -306,6 +311,11 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 Constant Analyzer::constant_call_result(NodeId n, ScopeId s)
 {
     auto x = expressions[n];
+    // Creating a non-literal temporary is not a C++11 constant expression.
+    // Its destructor cannot disappear when a surrounding scalar initializer
+    // is classified for static data. Named object initialization remains a
+    // separate operation and may still use a constexpr constructor.
+    if (x.category == ValueCategory::Prvalue && class_value(x.type) && !literal_type(x.type)) return Constant();
     if (x.form == ExpressionForm::Construction) return constant_initialize(n,x.type,s);
     if (x.form == ExpressionForm::ListValue) {
         auto args = ast[ast[n].first].next;

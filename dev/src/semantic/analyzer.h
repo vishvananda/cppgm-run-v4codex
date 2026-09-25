@@ -396,7 +396,7 @@ private:
     bool type_destructor_nonthrowing(TypeId type);
     bool expression_nonthrowing(NodeId node);
     bool query_nonthrowing(QueryId query, bool temporary = true);
-    bool conversion_nonthrowing(const Conversion& conversion);
+    bool conversion_nonthrowing(Conversion conversion);
     bool initializer_nonthrowing(std::uint32_t plan);
     bool list_nonthrowing(std::uint32_t plan);
     bool default_constructor_nonthrowing(EntityId function);
@@ -985,9 +985,9 @@ private:
     void bind_template_discarded(NodeId n, ScopeId s);
     void prepare_discarded(NodeId n);
     bool valid_discarded(Expression source, NodeId n, ScopeId s, Conversion& selected);
-    void query_discarded(const TypeQuery& query, const std::vector<TypeQueryFact>& children, TypeQueryFact& result);
+    void query_discarded(QueryId id, const TypeQuery& query, const std::vector<TypeQueryFact>& children, TypeQueryFact& result);
     void prepare_expression_discard(NodeId n);
-    Index discarded_conversions;
+    Index discarded_conversions, query_discarded_conversions;
     std::size_t discard_selections = 0, discard_recipe_uses = 0, discard_materializations = 0;
     Expression resolve_expression(NodeId n, ScopeId s);
     bool invoke_expression(NodeId n, ScopeId s);
