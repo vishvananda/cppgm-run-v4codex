@@ -407,7 +407,7 @@ struct ListPlan {
     std::uint32_t literal = 0; // Character-array initialization from an immutable literal.
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
-    bool aggregate = false, direct_binding = false, direct = false, zero = false;
+    bool aggregate = false, direct_binding = false, direct = false, zero = false, allocated = false;
     FactState state = FactState::NotStarted;
     unsigned char rank = 255;
     FactState validation = FactState::NotStarted;

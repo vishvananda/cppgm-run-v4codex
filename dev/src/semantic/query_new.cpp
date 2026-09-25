@@ -14,8 +14,10 @@ QueryId Analyzer::new_query(NodeId n, ScopeId s)
     std::vector<QueryId> args(1,intern_query(type,{}));
     auto init = child(n,Kind::Initializer);
     auto list = ast[init].first;
-    for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
-    TypeQuery call; call.kind = QueryKind::Call; call.context = q.context;
+    TypeQuery call; call.kind = QueryKind::Call; call.context = q.context; call.value = 1;
+    if (ast[list].kind == Kind::BracedInit) {
+        call.op = OP_LBRACE; args.push_back(expression_query(list,s));
+    } else for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
     children.push_back(intern_query(call,args));
     auto placement = ast[child(n,Kind::Placement)].first;
     for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
@@ -32,7 +34,8 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     auto name = operator_name(KW_NEW);
     EntityId family = 0;
     if (!q.value && class_value(allocated))
-        family = lookup(entities[types[allocated].entity].scope,name,Lookup::Ordinary,true);
+        family = imported(entities[types[allocated].entity].scope,name,Lookup::Ordinary,++walk);
+    if (family == ~EntityId(0)) return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
     if (!family) {
         if (children.size() == 1) global_allocation(KW_NEW,false);
         family = lookup(global,name);
@@ -43,7 +46,11 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     auto choice = select_call(family,args,0,0,ValueCategory::Prvalue,0,0,conversions);
     if (choice.failure != CallFailure::None || deleted_transfer(choice.entity))
         return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
-    check_access(choice.entity,q.context,entities[choice.entity].owner);
+    if (!accessible(choice.entity,q.context,entities[choice.entity].owner))
+        return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    for (unsigned i = 0; i < args.size(); ++i)
+        if (!valid_fixed_conversion(args[i],0,conversions[i],q.context))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     auto result = types[entities[choice.entity].type].child;
     if (!pointer(result) || !fundamental(types[result].child,FT_VOID))
         throw std::runtime_error("allocation function must return void pointer");

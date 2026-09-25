@@ -181,6 +181,14 @@ void Analyzer::constructor_actions(EntityId e)
     if (members[m].actions_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::ConstructorActions,e,members[m].source);
     if (members[m].actions_state != FactState::NotStarted) return;
+    // Constant evaluation can establish synthetic actions before runtime use.
+    // Their selected callees belong to this constructor's demand identity.
+    struct ActionOwner {
+        EntityId& function; unsigned& depth; EntityId saved_function; unsigned saved_depth;
+        ActionOwner(EntityId& f, unsigned& d, EntityId owner, unsigned level)
+            : function(f), depth(d), saved_function(f), saved_depth(d) { f = owner; d = level; }
+        ~ActionOwner() { function = saved_function; depth = saved_depth; }
+    } owner(current_function,body_evaluation_depth,e,unevaluated_depth);
     members[m].actions_state = FactState::Active;
     bool saved_base = base_initialization;
     try {

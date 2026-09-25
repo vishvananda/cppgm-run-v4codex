@@ -25,7 +25,7 @@ bool Analyzer::list_nonthrowing(std::uint32_t id)
     if (auto known = list_exception_facts.get(id)) return known == 2;
     auto plan = list_plans[id]; ++exception_work;
     bool result = !plan.constructor || function_nonthrowing(plan.constructor);
-    if (!plan.direct_binding) result &= type_destructor_nonthrowing(value_type(plan.target));
+    if (!plan.direct_binding && !plan.allocated) result &= type_destructor_nonthrowing(value_type(plan.target));
     for (unsigned i = 0; i < plan.call.argument_count; ++i) {
         result &= plan.call.inputs == CallInputs::Query ? query_nonthrowing(query_edges[plan.call.arguments+i]) :
             expression_nonthrowing(call_argument(plan.call,i));

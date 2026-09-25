@@ -64,7 +64,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     if (callee.kind == QueryKind::TypeValue) {
         auto constructed = fn.type;
         if (q.op == OP_LBRACE) {
-            auto c = query_list_conversion(query_edges[q.offset+1],constructed,true);
+            auto c = query_list_conversion(query_edges[q.offset+1],constructed,true,q.value != 0);
             if (!c.valid() || !valid_query_list(c.materialization))
                 return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             TypeQueryFact result; result.expression.type = value_type(constructed);
@@ -86,7 +86,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             while (members[entities[access].member_info].inherited_constructor)
                 access = members[entities[access].member_info].inherited_constructor;
             if (!accessible(access,q.context,entities[access].owner) || !default_constructor_valid(ctor) ||
-                !default_destruction_valid(constructed,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+                (!q.value && !default_destruction_valid(constructed,q.context))) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             auto f = types[entities[ctor].type];
             std::vector<Conversion> chosen;
             for (unsigned i = 0; i < args.size(); ++i) {

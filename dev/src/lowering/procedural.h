@@ -36,7 +36,7 @@ struct Value {
 // canonical typed ABI entities, never their rendered manglings.
 struct Linkage {
     abi_mangle::Graph abi;
-    semantic::Index external, native_names;
+    semantic::Index external, native_names, incomplete_signatures;
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge;

@@ -225,6 +225,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     if (member_owner) t = sem.types[t.child];
     auto return_type = sem.types[t.child];
     bool incomplete_result = return_type.kind == TypeKind::Named && sem.entities[return_type.entity].class_info && !sem.entities[return_type.entity].complete;
+    bool incomplete_signature = incomplete_result;
     bool indirect_result = sem.indirect_value(t.child);
     Signature sig; sig.result = incomplete_result || indirect_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
     sig.parameters.count = t.count + indirect_result + bool(member_owner);
@@ -242,11 +243,17 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     }
     for (unsigned j = 0; j < t.count; ++j) {
         TypeId pt = sem.types.parameters[t.offset+j];
-        Parameter param; param.type = sem.indirect_parameter(pt) ? IRType(IRType::Ptr) : type(pt);
+        bool incomplete = sem.class_value(pt) && !sem.entities[sem.types[pt].entity].complete;
+        incomplete_signature |= incomplete;
+        // Like an incomplete result above, this declaration has no callable
+        // value ABI yet. Keep an opaque pointer in the explicit LowIR view;
+        // every actual call/definition requires completeness in semantics.
+        Parameter param; param.type = incomplete || sem.indirect_parameter(pt) ? IRType(IRType::Ptr) : type(pt);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
         if (!owner) v.name = p.intern("%arg" + std::to_string(j));
         p.values.push_back(v); param.value = ValueId(p.values.size());
-        if (sem.indirect_parameter(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
+        if (incomplete) param.passing = PPM_BY_ADDRESS;
+        else if (sem.indirect_parameter(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
         else if (reference(pt)) {
             param.passing = PPM_BY_ADDRESS;
             auto referred = sem.types[pt].child;
@@ -257,6 +264,8 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         p.parameters.push_back(param);
     }
     p.signatures.push_back(sig);
+    if (owner && (incomplete_signature || linkage.incomplete_signatures.get(owner.index)))
+        linkage.incomplete_signatures.put(owner.index,incomplete_signature);
     SignatureId result(p.signatures.size());
     if (!owner) indirect_signatures[id] = result;
     return result;
@@ -304,8 +313,15 @@ void Procedural::run()
         Function f; f.symbol = symbol(e); f.declaration = !defined;
         auto& existing = p.symbols[f.symbol.index-1];
         if (existing.kind == Symbol::FunctionSymbol) {
-            if (!entity.body) continue;
             auto& prior = p.functions[existing.entity-1];
+            if (!entity.body) {
+                // A later TU can establish the value ABI of an earlier opaque
+                // declaration. Refresh that function identity before any call
+                // consumes its signature; unrelated declarations stay warm.
+                if (prior.declaration && linkage.incomplete_signatures.get(existing.entity))
+                    prior.signature = signature(sem.call_type(e),FunctionId(existing.entity));
+                continue;
+            }
             if (!prior.declaration) {
                 if (entity.inline_function) continue;
                 throw std::runtime_error("multiple function definitions");

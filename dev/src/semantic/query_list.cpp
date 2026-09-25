@@ -8,10 +8,10 @@ void Analyzer::store_query_arguments(Expression& call, const std::vector<QueryId
     call.conversions = conversions.size(); call.count = chosen.size();
     conversions.insert(conversions.end(),chosen.begin(),chosen.end());
 }
-Conversion Analyzer::query_list_conversion(QueryId list, TypeId to, bool direct)
+Conversion Analyzer::query_list_conversion(QueryId list, TypeId to, bool direct, bool allocated)
 {
     TypeQuery q; q.kind = QueryKind::ListInitialization; q.type = to;
-    q.context = type_queries[list].context; q.value = direct;
+    q.context = type_queries[list].context; q.value = unsigned(direct) | (unsigned(allocated) << 2);
     auto fact = query_fact(intern_query(q,{list}));
     Conversion c; c.target = to; c.kind = Conversion::Kind::QueryList;
     if (fact.state == FactState::Failure || !fact.initialization) return c;
@@ -74,7 +74,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
 {
     auto q = type_queries[id]; auto list = query_edges[q.offset];
     if (q.value & 2) {
-        q.value &= 1;
+        q.value &= ~2ULL;
         auto formation = query_fact(intern_query(q,{list}));
         if (formation.state == FactState::Failure) return formation;
         return validate_query_list(formation.initialization) ? formation :
@@ -84,7 +84,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
     bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
     auto list_query = type_queries[list];
     std::vector<QueryId> args(query_edges.begin()+list_query.offset,query_edges.begin()+list_query.offset+list_query.count);
-    ListPlan plan; plan.target = q.type; plan.scope = q.context; plan.direct = q.value;
+    ListPlan plan; plan.target = q.type; plan.scope = q.context; plan.direct = q.value & 1;
     if (args.size() == 1 && ref && type_queries[args[0]].kind != QueryKind::List) {
         auto c = standard_conversion(query_fact(args[0]).expression,q.type);
         if (c.valid() && c.reference && !c.temporary) {
@@ -104,7 +104,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             if (types[t].bound && ast.literals[literal.value].elements <= types[t].bound) plan.rank = 0;
         } else if (aggregate_type(t)) {
             unsigned cursor = 0; plan = list_plans[query_list_aggregate(args,cursor,t,q.context)];
-            plan.target = q.type; plan.direct = q.value;
+            plan.target = q.type; plan.direct = q.value & 1;
             if (cursor != args.size()) plan.rank = 255;
         } else if (class_value(t)) {
             std::vector<Expression> values;
@@ -127,7 +127,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             }
         }
     }
-    plan.query = id; plan.state = FactState::Success;
+    plan.query = id; plan.allocated = q.value & 4; plan.state = FactState::Success;
     TypeQueryFact result; result.expression.type = t;
     result.initialization = list_plans.size(); list_plans.push_back(plan); return result;
 }
@@ -147,7 +147,7 @@ bool Analyzer::validate_query_list(std::uint32_t id)
     auto check = [&]() {
         if (plan.rank == 255) return false;
         auto t = value_type(plan.target);
-        if (!plan.direct_binding && (abstract_value(t) || !default_destruction_valid(t,plan.scope))) return false;
+        if (!plan.direct_binding && (abstract_value(t) || (!plan.allocated && !default_destruction_valid(t,plan.scope)))) return false;
         if (plan.constructor) {
             auto ctor = plan.constructor, access = ctor;
             while (members[entities[access].member_info].inherited_constructor)

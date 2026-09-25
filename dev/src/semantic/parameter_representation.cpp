@@ -8,15 +8,10 @@ void Analyzer::schedule_parameter_bodies(EntityId& cursor)
         EntityId e = cursor++;
         if (entities[e].kind != EntityKind::Function || entities[e].template_info || entities[e].template_pattern) continue;
         Type f = types[entities[e].type];
-        bool published = scopes[entities[e].owner].kind == ScopeKind::Namespace &&
-            (!entities[e].specialization || entities[e].explicit_specialization || (entities[e].emission & Entity::Used));
         for (unsigned j = 0; j < f.count; ++j) {
             auto parameter = types.parameters[f.offset+j];
-            // Emitted by-value declarations need the class representation, but
-            // never an unused member body. Finish this before lowering sizes
-            // its entity-indexed tables; layout can introduce member entities.
-            if (published && class_value(parameter) && entities[types[parameter].entity].specialization)
-                complete_class(types[parameter].entity);
+            // A declaration alone does not require a complete parameter type.
+            // Calls and definitions establish completeness before ABI demand.
             query_parameter_representation(parameter);
         }
     }

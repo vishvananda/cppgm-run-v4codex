@@ -164,7 +164,7 @@ private:
     Conversion list_initialization(NodeId n, TypeId to, ScopeId s = 0, bool direct = false);
     Conversion list_element(NodeId& cursor, TypeId to, ScopeId s);
     std::uint32_t list_aggregate(NodeId& cursor, TypeId to, ScopeId s);
-    Conversion query_list_conversion(QueryId list, TypeId to, bool direct = false);
+    Conversion query_list_conversion(QueryId list, TypeId to, bool direct = false, bool allocated = false);
     TypeQueryFact query_list_initialization(QueryId id);
     std::uint32_t query_list_aggregate(const std::vector<QueryId>& args, unsigned& cursor, TypeId to, ScopeId scope);
     void store_query_arguments(Expression& call, const std::vector<QueryId>& args, const std::vector<Conversion>& chosen);
