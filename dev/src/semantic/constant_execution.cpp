@@ -159,25 +159,23 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         auto second = constant_node_conversion(call_argument(call,1),conversions[call.conversions+1],s);
         return second.valid ? first : Constant();
     }
-    auto member_pointer = object_uses[call.object_use].member_pointer;
+    auto use = object_fact(n);
+    auto member_pointer = use.member_pointer;
     if (member_pointer) {
         auto value = evaluate(member_pointer,s);
         if (!value.valid || !value.bits || types[value.type].kind != TypeKind::MemberPointer) return Constant();
         e = value.bits;
     }
     if (!e || entities[e].kind != EntityKind::Function) {
-        auto use = object_uses[call.object_use];
-        auto callee = ast[n].first;
-        auto v = use.callee_conversion ? constant_node_conversion(callee,conversions[use.callee_conversion],s) : evaluate(callee,s);
+        auto callee = use.callee ? use.callee : ast[n].first;
+        auto v = use.callee_conversion ? constant_node_conversion(callee,conversions[use.callee_conversion],s) : constant_node_conversion(callee,conversions[expressions[callee].incoming],s);
         if (!v.valid || !v.bits || !pointer(v.type)) return Constant();
         e = constant_storage[constant_addresses[v.bits].storage].entity;
     }
     if (!e || entities[e].kind != EntityKind::Function || !entities[e].constexpr_function) return Constant();
-    if (entities[e].is_static && object_uses[call.object_use].node &&
-        !constant_arrow(object_uses[call.object_use].node,object_uses[call.object_use].arrow)) return Constant();
+    if (entities[e].is_static && use.node && !constant_arrow(use.node,use.arrow)) return Constant();
     std::uint32_t object = 0;
     if (entities[e].member_info && !entities[e].is_static) {
-        auto use = object_uses[call.object_use];
         if (use.virtual_slot || members[entities[e].member_info].virtual_member) return Constant();
         if (use.node) {
             object = constant_arrow(use.node,use.arrow);

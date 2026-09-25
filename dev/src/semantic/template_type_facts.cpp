@@ -139,7 +139,7 @@ TypeId Analyzer::bind_template_type(NodeId specs, NodeId d, ScopeId scope)
     auto known = !occurrence.context ? template_type_sources.get(source) : 0;
     TypeId base = known ? known-1 : specifiers(specs,scope);
     if (!known && !occurrence.context) { template_type_sources.put(source,base+1); ++template_type_work; }
-    TypeId type = base ? declarator(d,base,scope,0,true) : 0;
+    TypeId type = base ? declarator(d,base,scope,0,true,specs) : 0;
     if (!occurrence.context && d && type) {
         auto source = ast.nodes.occurrences[d].source;
         if (types[type].kind == TypeKind::Function) {
@@ -184,7 +184,7 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         type = substitute_type(type,bindings,cache,frame);
         if (!type) throw std::runtime_error("invalid substituted declaration type");
     }
-    if (types[type].kind == TypeKind::Function &&
+    if (types[known-1].kind == TypeKind::Function &&
         (ast[node].kind == syntax::Kind::Declarator || ast[node].kind == syntax::Kind::AbstractDeclarator ||
          ast[node].kind == syntax::Kind::LambdaDeclarator)) {
         // The callable type alone is insufficient: a body consumes the raw

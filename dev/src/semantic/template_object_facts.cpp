@@ -26,6 +26,7 @@ ObjectUse Analyzer::project_object_use(ObjectUse use, NodeId n) const
         return node;
     };
     use.node = project(use.node); use.member_pointer = project(use.member_pointer);
+    use.callee = project(use.callee);
     use.source_owned = false; return use;
 }
 } }

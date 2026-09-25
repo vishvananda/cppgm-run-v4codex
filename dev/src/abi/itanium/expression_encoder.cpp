@@ -77,6 +77,7 @@ void Encoder::expression(Id id) {
     Nesting nesting(depth);
     ++g.stats.emitted_nodes;
     switch (n.kind) {
+    case Kind::ExprThis: output += "fpT"; break;
     case Kind::ExprParameter: parameter(n.value); break;
     case Kind::ExprFunctionParameter:
         output += "fp"; if (n.value) output += std::to_string(n.value - 1); output += '_'; break;

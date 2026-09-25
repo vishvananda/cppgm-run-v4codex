@@ -391,7 +391,7 @@ Value Procedural::call(NodeId n, Value destination)
         NodeId argument = sem.call_argument(fact,j);
         call_work.push_back(argument ? converted(argument, sem.conversion_fact(fact.conversions+j)).operand : Operand::integer(0));
     }
-    NodeId callee = node.first;
+    NodeId callee = object_use.callee ? object_use.callee : node.first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
     if (object_use.member_pointer) {

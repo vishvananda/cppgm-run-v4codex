@@ -77,6 +77,18 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
 {
     if (!accessible(e,context,naming,object)) throw std::runtime_error("inaccessible class member");
 }
+unsigned Analyzer::using_member_access(ScopeId scope, EntityId member) const
+{
+    // Exposure belongs to the declaration named by using, and applies to its
+    // specializations without copying access entries into every instance.
+    for (auto e = member; e;) {
+        if (auto access = using_access.get(key(scope,e))) return access;
+        auto spec = entities[e].specialization;
+        if (!spec) break;
+        e = specializations[spec].pattern;
+    }
+    return 0;
+}
 bool Analyzer::accessible(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
     if (explicit_instantiation_naming) return true;
@@ -89,7 +101,7 @@ bool Analyzer::accessible(EntityId e, ScopeId context, ScopeId naming, TypeId ob
     Access level = entities[e].access;
     EntityId introduced = owner;
     for (EntityId current = named; current;) {
-        auto exposed = using_access.get(key(entities[current].scope, e));
+        auto exposed = using_member_access(entities[current].scope,e);
         if (exposed) { introduced = current; level = Access(exposed-1); break; }
         if (current == owner) break;
         auto b = access_base(current); current = b ? bases[b].base : 0;

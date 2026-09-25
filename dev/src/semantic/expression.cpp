@@ -107,7 +107,9 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
         EntityId e = resolve(ast[n].detail, s);
         if (!e) {
-            auto text = ids.spelling(terminal(ast[n].detail));
+            auto name = terminal(ast[n].detail);
+            if (!name) throw std::runtime_error("expression requires a value name");
+            auto text = ids.spelling(name);
             throw std::runtime_error("unknown expression name: " + std::string(text.data,text.size));
         }
         if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);

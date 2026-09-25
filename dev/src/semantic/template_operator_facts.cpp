@@ -26,9 +26,11 @@ bool Analyzer::check_fixed_operator(NodeId n, ScopeId s)
     std::vector<NodeId> args;
     auto op = node.op;
     if (node.kind == Kind::Call) {
-        if (!expressions[node.first].ready || !class_value(expressions[node.first].type)) return false;
-        args.push_back(node.first); op = OP_LPAREN;
-        for (auto a = ast[ast[node.first].next].first; a; a = ast[a].next) args.push_back(a);
+        auto callee = node.first, first = ast[ast[callee].next].first;
+        if (invoke_expression(n,s)) { callee = first; first = ast[first].next; }
+        if (!expressions[callee].ready || !class_value(expressions[callee].type)) return false;
+        args.push_back(callee); op = OP_LPAREN;
+        for (auto a = first; a; a = ast[a].next) args.push_back(a);
     } else {
         if (node.kind == Kind::Subscript) op = OP_LSQUARE;
         for (auto a = node.first; a; a = ast[a].next) args.push_back(a);
@@ -53,6 +55,11 @@ bool Analyzer::check_fixed_operator(NodeId n, ScopeId s)
     if (!decltype_call_result(n) && class_value(result.type) && result.category == ValueCategory::Prvalue) {
         complete_class(types[result.type].entity); reject_abstract(result.type);
         default_destructor(result.type,s,false);
+    }
+    if (node.kind == Kind::Call && invoke_expression(n,s)) {
+        if (!result.object_use) record_object(result,0,0,0);
+        object_uses[result.object_use].callee = args[0];
+        object_uses[result.object_use].source_owned = true;
     }
     result.ready = true;
     expressions.set(n,result);
@@ -82,6 +89,7 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
     if (ast[source].kind == Kind::Call) {
         supplied = 0;
         for (auto a = ast[ast[ast[source].first].next].first; a; a = ast[a].next) ++supplied;
+        if (object_uses[expressions[source].object_use].callee) --supplied;
     }
     for (unsigned i = 0; i < result.argument_count; ++i) {
         if (i >= supplied && selected) default_argument(selected,i);

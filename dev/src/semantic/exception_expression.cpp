@@ -122,6 +122,7 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     ++exception_work;
     if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack) return true;
     bool result = true;
+    if (fact.surrogate) result = false; // The converted function pointer has a potentially-throwing call type.
     if (fact.selected) result &= function_nonthrowing(fact.selected);
     else if (q.kind == QueryKind::Call && fact.expression.form != ExpressionForm::PseudoDestructor &&
         type_queries[query_edges[q.offset]].kind != QueryKind::TypeValue) result = false;

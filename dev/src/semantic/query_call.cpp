@@ -1,8 +1,30 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+using syntax::Kind;
+QueryId Analyzer::call_query(NodeId n, ScopeId s)
+{
+    TypeQuery q; q.kind = QueryKind::Call; q.context = s;
+    std::vector<QueryId> children; auto first = ast[n].first;
+    while (!template_object_context_index.get(q.context) &&
+        (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
+        q.context = scopes[q.context].parent;
+    if (invoke_expression(n,s)) q.name = invoke_builtin;
+    else children.push_back(expression_query(first,s,true));
+    for (auto a = ast[ast[first].next].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+    if (!children.empty()) {
+        auto callee = type_queries[children[0]];
+        if (callee.kind == QueryKind::Name && function_binding(callee.entity))
+            for (auto e : candidates(callee.entity)) if (scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static) {
+                q.type = implicit_object_type(s); break;
+            }
+    }
+    if (template_type_probe) for (auto child : children) if (!child) return 0;
+    return intern_query(q,children);
+}
 TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQueryFact>& children)
 {
+    if (children.empty()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
     Expression fn = children[0].expression;
     std::vector<Expression> args;
@@ -16,7 +38,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         TypeQuery call = q; call.op = OP_LPAREN; call.name = operator_name(OP_LPAREN); call.entity = 0;
         return query_operator(call,children);
     }
-    if (callee.kind == QueryKind::Name && callee.name) {
+    if (q.name != invoke_builtin && callee.kind == QueryKind::Name && callee.name) {
         bool adl = !fn.entity || function_binding(fn.entity);
         if (fn.entity && adl) for (auto e : candidates(fn.entity)) {
             auto kind = scopes[entities[e].owner].kind;
@@ -51,7 +73,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             std::vector<Conversion> chosen;
             for (unsigned i = 0; i < args.size(); ++i) {
                 auto c = conversions[recipe.conversions+i];
-                check_fixed_conversion(args[i],0,c,q.context); chosen.push_back(c);
+                if (!valid_fixed_conversion(args[i],0,c,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            chosen.push_back(c);
             }
             for (unsigned i = args.size(); i < f.count; ++i) {
                 Conversion c; default_argument(ctor,i,&c,DefaultReason::Recipe); chosen.push_back(c);
@@ -82,7 +105,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     }
     if (callee.kind == QueryKind::Name && fn.entity && function_binding(fn.entity)) {
         for (auto e : candidates(fn.entity)) if (entities[e].member_info) {
-            auto implicit = implicit_object_type(q.context);
+            auto implicit = q.type ? q.type : implicit_object_type(q.context);
             if (implicit) object = types[implicit].child;
             else {
                 // A retained member body has a symbolic object identity and
@@ -106,7 +129,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         auto selected = choice.entity;
         if (deleted_transfer(selected))
             return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-        check_access(selected,q.context,naming,object);
+        if (!accessible(selected,q.context,naming,object)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {
             bool qualified = callee.kind == QueryKind::Destructor ? callee.count > 1 :
@@ -114,7 +137,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             record_member_receiver(r.expression,0,object,selected,naming,qualified,q.context,false);
         }
         for (unsigned i = 0; i < args.size(); ++i)
-            check_fixed_conversion(args[i],0,chosen[i+(object!=0)],q.context);
+            if (!valid_fixed_conversion(args[i],0,chosen[i+(object!=0)],q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         auto f = types[function_type];
         for (unsigned i = args.size(); i < f.count; ++i) {
             Conversion c; default_argument(selected,i,&c,DefaultReason::Recipe); chosen.push_back(c);
@@ -130,11 +153,17 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         auto f = types[function_type];
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
             return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+        auto decay_conversion = standard_conversion(fn,decay(fn.type));
+        if (!decay_conversion.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        record_object(r.expression,0,0,0);
+        object_uses[r.expression.object_use].callee_conversion = conversions.size();
+        conversions.push_back(decay_conversion);
         std::vector<Conversion> chosen;
         for (unsigned i = 0; i < args.size(); ++i) {
             auto c = i < f.count ? conversion_value(args[i],types.parameters[f.offset+i]) : ellipsis_conversion_value(args[i]);
             if (!c.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
-            check_fixed_conversion(args[i],0,c,q.context); chosen.push_back(c);
+            if (!valid_fixed_conversion(args[i],0,c,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            chosen.push_back(c);
         }
         r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());

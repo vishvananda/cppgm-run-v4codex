@@ -88,7 +88,8 @@ Constant Analyzer::constant_query_call(QueryId id)
     auto e = fact.selected;
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
     if (!e || fact.surrogate) {
-        auto value = fact.surrogate ? constant_query_conversion(callee_id,conversions[fact.expression.conversions]) : constants[query_value(callee_id)];
+        auto conversion = fact.surrogate ? fact.expression.conversions : object_uses[fact.expression.object_use].callee_conversion;
+        auto value = conversion ? constant_query_conversion(callee_id,conversions[conversion]) : constants[query_value(callee_id)];
         if (value.valid && pointer(value.type) && value.bits)
             e = constant_storage[constant_addresses[value.bits].storage].entity;
         else return Constant();

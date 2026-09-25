@@ -3,12 +3,15 @@
 namespace cppgm { namespace semantic {
 void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
 {
-    if (!c.valid()) throw std::runtime_error("invalid fixed call argument");
-    if (c.kind == Conversion::Kind::ListPlan) { validate_list_plan(c.materialization); return; }
+    if (!valid_fixed_conversion(source,n,c,s)) throw std::runtime_error("invalid fixed call argument");
+}
+bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s)
+{
+    if (!c.valid()) return false;
+    if (c.kind == Conversion::Kind::ListPlan) { validate_list_plan(c.materialization); return true; }
     if (c.kind == Conversion::Kind::Construction) {
-        if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed converting constructor");
-        check_access(c.function,s,entities[c.function].owner);
-        default_destructor(value_type(c.target),s,false);
+        if (deleted_transfer(c.function) || !accessible(c.function,s,entities[c.function].owner) ||
+            !default_destruction_valid(value_type(c.target),s)) return false;
         auto f = types[entities[c.function].type];
         std::vector<NodeId> args; std::vector<Conversion> chosen;
         for (unsigned i = 0; i < f.count; ++i) {
@@ -18,7 +21,7 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
                 auto target = types.parameters[f.offset+i];
                 argument = c.implicit_move ? transfer_conversion(source.type,ValueCategory::Xvalue,target) :
                     a ? conversion(a,target,false) : standard_conversion(source,target);
-                check_fixed_conversion(source,a,argument,s);
+                if (!valid_fixed_conversion(source,a,argument,s)) return false;
             }
             args.push_back(a); chosen.push_back(argument);
         }
@@ -30,33 +33,33 @@ void Analyzer::check_fixed_conversion(Expression source, NodeId n, Conversion& c
         ConversionObject recipe; recipe.constructor = c.function;
         store_call(recipe.call,args,chosen);
         c.materialization = conversion_objects.size(); conversion_objects.push_back(recipe);
-        return;
+        return true;
     }
     if (c.kind == Conversion::Kind::User) {
-        if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed conversion function");
+        if (deleted_transfer(c.function)) return false;
         auto record = user_conversions[c.materialization];
         auto from = record.object_entity ? value_type(entities[record.object_entity].type) : source.type;
-        check_access(c.function,s,entities[types[from].entity].scope,from);
-        if (record.adjustment) check_base_access(from,entities[scopes[entities[c.function].owner].entity].type,s);
+        if (!accessible(c.function,s,entities[types[from].entity].scope,from)) return false;
+        if (record.adjustment && !base_accessible(types[from].entity,scopes[entities[c.function].owner].entity,s)) return false;
         auto returned = types[entities[c.function].type].child;
-        if (class_value(returned)) default_destructor(returned,s,false);
+        if (class_value(returned) && !default_destruction_valid(returned,s)) return false;
         Expression value; value.type = value_type(returned);
         value.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
-        check_fixed_conversion(value,0,record.result,s);
+        if (!valid_fixed_conversion(value,0,record.result,s)) return false;
         user_conversions[c.materialization].result = record.result;
-        return;
+        return true;
     }
     if (c.derived && c.kind != Conversion::Kind::Explicit) {
         auto from = source.type, to = types[c.target].child;
         if (pointer(from)) from = types[from].child;
         if (pointer(to)) to = types[to].child;
-        check_base_access(from,to,s);
+        if (!base_accessible(types[from].entity,types[to].entity,s)) return false;
     }
     if (c.function) {
-        if (deleted_transfer(c.function)) throw std::runtime_error("deleted fixed conversion target");
-        check_access(c.function,s,object_uses[source.object_use].naming_scope);
+        if (deleted_transfer(c.function) || !accessible(c.function,s,object_uses[source.object_use].naming_scope)) return false;
     }
+    return true;
 }
 Conversion Analyzer::copy_conversion_recipe(Conversion c)
 {

@@ -390,7 +390,8 @@ private:
     Index exception_specification_index;
     std::vector<ExceptionSpecificationFact> exception_specifications = std::vector<ExceptionSpecificationFact>(1);
     std::vector<EntityId> declaration_exceptions;
-    Index friendships, using_access, using_functions, hidden_friends;
+    Index friendships, using_access, using_functions, using_template_shapes, hidden_friends;
+    unsigned using_member_access(ScopeId scope, EntityId member) const;
     bool friend_declaration(NodeId n, ScopeId s);
     void demand_friend_body(EntityId e);
     void demand_function_expression(const Expression& value);
@@ -417,7 +418,7 @@ private:
     unsigned unevaluated_depth = 0;
     struct SwitchContext { TypeId type = 0; bool has_default = false; Index labels; };
     std::vector<SwitchContext> switches;
-    IdentifierId constant_builtin = 0, abort_builtin = 0, expect_builtin = 0;
+    IdentifierId constant_builtin = 0, abort_builtin = 0, expect_builtin = 0, invoke_builtin = 0;
     Index ordinary, tags, namespaces, qualifiers, edge_index;
     std::vector<Constant> constants;
     // Floating payloads are interned separately; common constants and entity
@@ -615,6 +616,7 @@ private:
     TypeId query_decltype(QueryId id, bool direct);
     TypeId fundamental_cast_type(ETokenType op);
     TypeId parameter_body_type(TypeId source);
+    QueryId call_query(NodeId n, ScopeId s);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId destructor_target(NodeId name, TypeId object, ScopeId scope);
     TypeQueryFact query_destructor(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
@@ -856,6 +858,7 @@ private:
     Index template_class_patterns, template_class_contexts;
     std::vector<TemplateObjectContext> template_object_contexts = std::vector<TemplateObjectContext>(1);
     std::vector<TemplateMemberUse> template_member_uses = std::vector<TemplateMemberUse>(1);
+    bool valid_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
     void check_fixed_conversion(Expression source, NodeId n, Conversion& c, ScopeId s);
     Conversion copy_conversion_recipe(Conversion c);
     void reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& result);
@@ -941,6 +944,8 @@ private:
     Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);
     Expression resolve_expression(NodeId n, ScopeId s);
+    bool invoke_expression(NodeId n, ScopeId s);
+    Expression callable_expression(NodeId n, ScopeId s, NodeId callee, std::vector<NodeId> args, Expression fn);
     Expression call_expression(NodeId n, ScopeId s);
     Expression unary_expression(NodeId n, ScopeId s);
     Expression binary_expression(NodeId n, ScopeId s);
@@ -999,7 +1004,7 @@ private:
     TypeId enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name = 0, bool emit = true);
     TypeId specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name = 0);
     TypeId type_id(NodeId n, ScopeId s);
-    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false);
+    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false, NodeId specs = 0);
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
     void declaration_attributes(EntityId e, NodeId specs, NodeId source);

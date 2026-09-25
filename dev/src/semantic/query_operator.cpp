@@ -155,7 +155,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         if (q.op == OP_ASS || compound_operation(q.op) != TOK_INVALID) r.expression.entity = args[0].entity;
     } else {
         if (deleted_transfer(selected.entity)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-        check_access(selected.entity,q.context,naming,object);
+        if (!accessible(selected.entity,q.context,naming,object)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         auto returned = types[selected.surrogate ? selected.surrogate : entities[selected.entity].type].child;
         r.expression.type = value_type(returned);
         r.expression.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
@@ -164,7 +164,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     r.selected = selected.entity;
     r.surrogate = selected.surrogate;
     std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
-    for (unsigned i = 0; i < args.size(); ++i) check_fixed_conversion(args[i],0,chosen[i],q.context);
+    for (unsigned i = 0; i < args.size(); ++i)
+        if (!valid_fixed_conversion(args[i],0,chosen[i],q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     if (selected.entity && !selected.surrogate) {
         auto f = types[entities[selected.entity].type];
         bool member = entities[selected.entity].member_info && !entities[selected.entity].is_static;

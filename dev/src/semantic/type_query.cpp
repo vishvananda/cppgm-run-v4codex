@@ -49,7 +49,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
     case Kind::New: {
         q.kind = QueryKind::New; q.context = s;
-        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+        while (!template_object_context_index.get(q.context) &&
+            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
             q.context = scopes[q.context].parent;
         q.type = type_id(child(n,Kind::TypeId),s); q.value = child(n,Kind::Global) != 0;
         TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
@@ -76,7 +77,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             auto owner = type_name(name,s,last);
             if (!owner && template_type_probe) return 0;
             q.kind = QueryKind::QualifiedValue; q.type = owner; q.name = terminal(name); q.context = s;
-            while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+            while (!template_object_context_index.get(q.context) &&
+            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
                 q.context = scopes[q.context].parent;
             if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
                 std::vector<ArgumentId> args;
@@ -106,7 +108,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             if (function_binding(e)) q.naming = naming_class(name_owner(name,s));
             if (q.naming || (e && scopes[entity.owner].kind == ScopeKind::Class)) {
                 q.naming = naming_class(name_owner(name,s)); q.context = s;
-                while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+                while (!template_object_context_index.get(q.context) &&
+            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
                     q.context = scopes[q.context].parent;
             }
             if (!function_binding(e)) q.type = entity.type;
@@ -130,7 +133,14 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         break;
     }
     case Kind::Literal: case Kind::KeywordLiteral: {
-        if (template_type_probe && node.op == KW_THIS) return 0;
+        if (node.op == KW_THIS) {
+            q.kind = QueryKind::This; q.type = implicit_object_type(s);
+            if (!q.type) {
+                if (template_type_probe && !template_object_context(s).owner) return 0;
+                throw std::runtime_error("this outside nonstatic member declarator");
+            }
+            break;
+        }
         auto value = expression(n,s); q.type = value.type;
         if (node.kind == Kind::Literal && ast.literals[node.literal].kind == LiteralKind::string && !ast.literals[node.literal].suffix) {
             query_literal_sources.put(node.literal,n);
@@ -149,7 +159,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         q.kind = QueryKind::Parenthesized; children.push_back(expression_query(first,s,callee)); break;
     case Kind::Conditional:
         q.kind = QueryKind::Conditional; q.context = s;
-        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+        while (!template_object_context_index.get(q.context) &&
+            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
             q.context = scopes[q.context].parent;
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
@@ -174,7 +185,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
         q.name = operator_name(q.op); q.context = s;
-        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
+        while (!template_object_context_index.get(q.context) &&
+            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
             q.context = scopes[q.context].parent;
         if (q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW) {
             auto ordinary = lookup(s,q.name);
@@ -186,13 +198,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             children.push_back(intern_query(zero,{}));
         }
         break;
-    case Kind::Call:
-        q.kind = QueryKind::Call; q.context = s;
-        while (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block)
-            q.context = scopes[q.context].parent;
-        children.push_back(expression_query(first,s,true));
-        for (auto a = ast[ast[first].next].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
-        break;
+    case Kind::Call: {
+        auto id = call_query(n,s);
+        if (id) source_index.put(key(s,n),id);
+        return id;
+    }
     case Kind::Member: {
         q.kind = QueryKind::Member; q.op = node.op; q.context = s;
         auto name = ast[ast[first].next].detail;
@@ -469,6 +479,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
+    case QueryKind::This: x.type = q.type; break;
     case QueryKind::Value:
         x.type = value_type(q.type); x.null_pointer_constant = q.null_pointer_constant;
         if (types[q.type].kind == TypeKind::LRef) x.category = ValueCategory::Lvalue;

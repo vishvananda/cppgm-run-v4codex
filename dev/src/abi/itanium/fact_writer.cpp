@@ -130,6 +130,7 @@ std::string FactWriter::argument(Id id) {
 std::string FactWriter::expression(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
+    case Kind::ExprThis: return "this";
     case Kind::ExprParameter: return join_form({"template-param ", std::to_string(n.value)});
     case Kind::ExprFunctionParameter: return join_form({"function-param ", std::to_string(n.value)});
     case Kind::Value: return join_form({"value ", ref('t', n.a), " ", std::to_string(static_cast<std::int64_t>(n.value))});

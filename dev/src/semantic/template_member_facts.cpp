@@ -34,8 +34,11 @@ TypeId Analyzer::template_method_shape(NodeId parameters, ScopeId scope)
 }
 TemplateObjectContext Analyzer::template_object_context(ScopeId s) const
 {
-    while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
-    return template_object_contexts[template_object_context_index.get(s)];
+    for (; s; s = scopes[s].parent) {
+        if (auto id = template_object_context_index.get(s)) return template_object_contexts[id];
+        if (scopes[s].kind == ScopeKind::Function || scopes[s].kind == ScopeKind::Class) break;
+    }
+    return TemplateObjectContext();
 }
 void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
 {

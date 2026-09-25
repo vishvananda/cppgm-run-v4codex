@@ -9,6 +9,7 @@ Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_ca
     edges.push_back(Edge()); visited.push_back(0); constants.resize(2); class_facts.resize(1); members.resize(1); bases.push_back({0,0}); actions.push_back({0,0,0});
     constant_builtin = ids.intern(TextView("__builtin_constant_p", 20));
     abort_builtin = ids.intern(TextView("__builtin_abort", 15));
+    invoke_builtin = ids.intern(TextView("__builtin_invoke", 16));
     expect_builtin = ids.intern(TextView("__builtin_expect", 16));
     templates.resize(1); argument_packs.resize(1); specializations.resize(1);
     conversions.push_back(Conversion());
@@ -77,7 +78,16 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
             auto shape = [&](EntityId e) {
                 Type t = types[entities[e].type];
                 std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
-                return types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv);
+                auto type = types.function(types.fundamental(FT_VOID),params,t.variadic,t.cv,t.ref);
+                auto head = entities[e].template_info;
+                if (!head) return key(0,type);
+                auto identity = key(head,type);
+                auto shape = using_template_shapes.get(identity);
+                if (!shape) {
+                    shape = template_declaration_shape(type,templates[head].environment);
+                    using_template_shapes.put(identity,shape);
+                }
+                return key(1,shape);
             };
             std::vector<EntityId> all = candidates(id);
             Index owned;

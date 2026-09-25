@@ -4,7 +4,11 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
 {
-    auto callee = ast[n].first, designator = callee;
+    auto callee = ast[n].first;
+    auto first_argument = ast[ast[callee].next].first;
+    bool invoke = invoke_expression(n,s);
+    if (invoke) { callee = first_argument; first_argument = ast[callee].next; }
+    auto designator = callee;
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
     bool member = ast[designator].kind == Kind::Member;
     if (!member && ast[designator].kind != Kind::IdExpression) return false;
@@ -16,7 +20,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (binding.dependent) return false;
     bool direct = !binding.entity || function_binding(binding.entity);
     if (!direct && class_value(expressions[designator].type)) return false; // Callable-object/operator owner.
-    bool adl = direct && !member && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
+    bool adl = !invoke && direct && !member && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
     if (!binding.entity && !adl) return false;
     if (direct) {
         for (auto e : candidates(binding.entity)) {
@@ -26,7 +30,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
     } else if (!template_fixed_expressions.get(ast.nodes.occurrences[designator].source)) return false;
     std::vector<NodeId> args;
-    for (auto a = ast[ast[callee].next].first; a; a = ast[a].next) {
+    for (auto a = first_argument; a; a = ast[a].next) {
         if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
         args.push_back(a);
     }
@@ -94,6 +98,11 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         default_destructor(result.type,s,false);
     }
     // No argument application or result temporary belongs to the definition.
+    if (invoke) {
+        if (!result.object_use) record_object(result,0,0,0);
+        object_uses[result.object_use].callee = callee;
+        object_uses[result.object_use].source_owned = true;
+    }
     store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
     expressions.set(n,result); { auto& published = facts.edit(n); published.type = f.child; published.scope = s; published.entity = selected; }
     ++template_fixed_call_work;
@@ -106,12 +115,13 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     auto context = ast.nodes.occurrences[n].context;
     result = expressions[source]; result.incoming = 0;
     auto selected = facts[source].entity;
-    auto callee = ast[n].first;
+    auto original_callee = object_uses[result.object_use].callee;
+    auto callee = original_callee ? ast.projected(original_callee,context) : ast[n].first;
     if (selected) {
         auto receiver = object_uses[result.object_use];
         if (receiver.source_owned) receiver = project_object_use(receiver,n);
         if (receiver.node) expression(receiver.node,s);
-        auto pattern = ast[source].first;
+        auto pattern = original_callee ? original_callee : ast[source].first;
         for (auto c = callee;; c = ast[c].first, pattern = ast[pattern].first) {
             expressions.inherit(c,pattern);
             expressions.set(c,expressions[pattern]); expressions.evaluated(c,!unevaluated_depth);
@@ -121,13 +131,14 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
         use_selected_function(selected,!receiver.virtual_slot);
     } else {
         expression(callee,s);
-        auto incoming = expressions[ast[source].first].incoming;
+        auto incoming = expressions[original_callee ? original_callee : ast[source].first].incoming;
         auto conversion = conversions[incoming]; apply_conversion(callee,conversion);
         expressions.incoming(callee,incoming);
     }
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     bool materialize = false;
     auto explicit_argument = ast[ast[ast[source].first].next].first;
+    if (original_callee) explicit_argument = ast[explicit_argument].next;
     for (unsigned i = 0; i < result.argument_count; ++i) {
         if (explicit_argument) explicit_argument = ast[explicit_argument].next;
         else if (selected) default_argument(selected,i);

@@ -20,7 +20,7 @@ enum class Kind : std::uint8_t {
     ExprParameter, ExprFunctionParameter, Unary, Binary, Conditional, Call,
     Conversion, Cast, TemplateId, TypeTrait, SizeofType, Member, ObjectMember,
     ExprPack, UnresolvedName, SizeofPack, EntityExpression, FunctionEntity, VariableEntity, SymbolEntity,
-    AlignofType, DestructorName
+    AlignofType, DestructorName, ExprThis
 };
 struct Node {
     Kind kind = Kind::Name;

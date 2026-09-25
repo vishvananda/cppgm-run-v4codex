@@ -333,7 +333,7 @@ struct BaseAdjustment {
 };
 struct ObjectUse {
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
-    NodeId member_pointer = 0;
+    NodeId member_pointer = 0, callee = 0; // Actual callable of an intrinsic invocation.
     std::uint32_t arrow = 0;
     std::uint32_t virtual_slot = 0;
     unsigned adjustment = 0, qualifier_adjustment = 0; std::uint32_t callee_conversion = 0;

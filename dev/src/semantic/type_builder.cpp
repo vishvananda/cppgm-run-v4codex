@@ -165,7 +165,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
 }
-TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved)
+TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved, NodeId specs)
 {
     if (template_type_probe && !base) return 0;
     if (!n) return base;
@@ -264,6 +264,18 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             if (params.size() == 1 && types[params[0]].kind == TypeKind::Fundamental &&
                 types[params[0]].fundamental == FT_VOID && !variadic) params.clear();
             if (trailing) {
+                // The member declarator owns this/cv before a function entity
+                // or body exists. Keep that identity on its prototype scope.
+                auto owner = s;
+                while (scopes[owner].kind == ScopeKind::Template) owner = scopes[owner].parent;
+                if (scopes[owner].kind == ScopeKind::Class && name) {
+                    TemplateObjectContext object; object.owner = scopes[owner].entity;
+                    object.available = !spec_has(specs,KW_STATIC);
+                    object.cv = function_qualifiers(c).cv;
+                    if (spec_has(specs,KW_CONSTEXPR) && object.available) object.cv |= 1;
+                    template_object_context_index.put(parameter_scope,template_object_contexts.size());
+                    template_object_contexts.push_back(object);
+                }
                 base = type_id(ast[trailing].first, parameter_scope);
                 if (template_type_probe && !base) return 0;
             }

@@ -2,8 +2,8 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `f59e8f67cd8c832361130aef9af1a0337b25c45d`.
-Target: **PA18 full-stage**, unfinished. Phase: **implementation handoff 72**.
-Previous goal turn: **progress** (committed context group, validation and evidence).
+Target: **PA18 full-stage**, unfinished. Phase: **implementation loop 73**, in progress.
+Previous goal turn: **progress** (committed alias/pack group and complete validation); revalidated clean entry `12cbfe83`, 372/420, no live compiler job.
 Loop 72: **progress**, entry `ca314a72` → implementation `57ee1f2e`.
 [Handoff 72](handoff72.md) records owners, data flow, bounds, validation and the
 boundary to invocation/declaration/initialization work. Review markers above
@@ -12,10 +12,29 @@ are preserved; this implementation handoff is not independent certification.
 Stage entry **266/420** → handoffs 63 **282**, 64 **312**, 65 **327**;
 audit 66 **327** → handoff 67 **343** → 68 **348** → 69 **353** → audit 70
 **353** → handoff 71 **367** → handoff 72 **372/420**.
-This turn repairs five original failures with none added; **48 failures** remain
+Loop 72 repaired five original failures with none added; **48 failures** remain
 (23 status, 25 LowIR). All 420 inputs/references/comparison rules are retained.
 Earlier PAs: **2609/2609**. File audit passes with the same three inherited
 header advisories. [Audit 70](audit.md) and [audit 66](audit66.md) remain intact.
+
+Loop 73 active group: **callable invocation facts**. Semantic call/query owners
+consume the actual callable and argument identities, choose the operator/function
+and conversions once, then publish facts to constant execution and typed LowIR.
+The contract intrinsic `__builtin_invoke` uses the same call machinery; retained
+queries must preserve callable categories, context, pack expansion and failure
+state. Work is proportional to supplied operands, required overload candidates
+and demanded facts; no source replay, synthesized syntax, global retries or
+whole-program lookup. Validate detectors, cross-specialization identity, ordinary
+execution, defaults, access/deletion, cv/ref qualifiers, effects and constexpr
+forwarding together, then extend into related callable defects. Freeze entry/final
+binaries and use A/A plus ABBA latency/RSS and checked native runtime/size evidence.
+Current implementation checkpoint: **379/420**, seven original failures repaired,
+no new course failures; **100/100** invocation/prototype controls and four ABI
+checks pass. File audit passes. Prior and cumulative checks are running; two
+prior regressions were reduced and fixed in their original lookup owners.
+This is not a stopping boundary: finish cumulative validation and frozen
+performance, resolve any findings, and record the final handoff evidence.
+Known unfinished implementation and independent review remain separate below.
 
 | Ownership group | State and required next work |
 |---|---|

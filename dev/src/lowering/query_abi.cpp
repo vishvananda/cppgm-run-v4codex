@@ -40,6 +40,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     for (unsigned j = 0; j < pack.count; ++j)
         args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     switch (q.kind) {
+    case QueryKind::This: result = abi.make(Kind::ExprThis); break;
     case QueryKind::Value: result = abi.make(Kind::Value,abi_type(q.type),0,0,q.value); break;
     case QueryKind::TemplateValueParameter: result = abi.make(Kind::ExprParameter,0,0,0,sem.template_ordinal(q.entity)); break;
     case QueryKind::Parameter: result = abi.make(Kind::ExprFunctionParameter,0,0,0,q.value); break;
@@ -84,6 +85,12 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         break;
     }
     case QueryKind::Call: {
+        if (q.name) {
+            args.clear();
+            for (unsigned i = 0; i < q.count; ++i) args.push_back(child(i));
+            auto name = abi.make(Kind::UnresolvedName,abi.name(0,spelling(q.name)));
+            result = abi.make(Kind::Call,name,0,0,0,args); break;
+        }
         auto callee = sem.type_query(sem.type_query_child(id,0)); args.clear();
         for (unsigned i = 1; i < q.count; ++i) args.push_back(child(i));
         result = callee.kind == QueryKind::TypeValue ? abi.make(Kind::Conversion,abi_type(callee.type),0,0,0,args) :

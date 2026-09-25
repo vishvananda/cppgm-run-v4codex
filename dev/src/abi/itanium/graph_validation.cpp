@@ -10,7 +10,7 @@ bool accepts(Kind kind, Role role) {
     case Role::Type: return kind <= Kind::Lambda;
     case Role::Argument: return kind >= Kind::TypeArgument && kind <= Kind::EntityArgument;
     case Role::Expression:
-        return kind == Kind::Value || kind == Kind::AlignofType || kind == Kind::DestructorName || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Value || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -65,7 +65,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::MemberTemplateEntity: edge(a, Role::Type); text(b); break;
     case Kind::EntityArgument: case Kind::EntityExpression:
         edge(a, Role::Entity); require(b <= 1); break;
-    case Kind::ExprParameter: case Kind::ExprFunctionParameter: break;
+    case Kind::ExprParameter: case Kind::ExprFunctionParameter: case Kind::ExprThis: break;
     case Kind::SizeofPack:
         if (!a) { sequence(Role::Argument); return; }
         require((*this)[a].kind == Kind::ExprParameter || (*this)[a].kind == Kind::ExprFunctionParameter); break;

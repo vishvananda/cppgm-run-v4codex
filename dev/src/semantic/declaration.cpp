@@ -249,7 +249,7 @@ void Analyzer::simple(NodeId n, ScopeId s)
         if (auto object = anonymous_object(c)) anonymous_objects.put(n, object);
     if (ast[n].kind == Kind::Function) {
         NodeId d = ast[specs].next;
-        TypeId t = declarator(d, base, s);
+        TypeId t = declarator(d, base, s,0,false,specs);
         EntityId e = declare_object(d, 0, t, specs, s, n);
         access_override = saved_access;
         schedule_body({ast[d].next, d, entities[e].owner, e, n});
@@ -260,7 +260,7 @@ void Analyzer::simple(NodeId n, ScopeId s)
         NodeId d = ast[item].first;
         TypeId deduction = 0;
         TypeId t = calls && spec_has(specs,KW_AUTO) && !child(d,Kind::Parameters) ?
-            deduced_object_type(specs,d,ast[d].next,s,deduction) : declarator(d, base, s);
+            deduced_object_type(specs,d,ast[d].next,s,deduction) : declarator(d, base, s,0,false,specs);
         if (deduction) {
             if (shared_deduction && deduction != shared_deduction) throw std::runtime_error("inconsistent auto declaration types");
             shared_deduction = deduction;

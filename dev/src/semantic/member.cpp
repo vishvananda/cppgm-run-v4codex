@@ -12,7 +12,7 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
     EntityId cls = naming && scopes[naming].kind == ScopeKind::Class ? scopes[naming].entity : types[object].entity;
     while (cls && entities[cls].scope != entities[e].owner) {
         ScopeId scope = entities[cls].scope;
-        if (using_access.get(key(scope, e))) { wanted = types.qualify(entities[cls].type, f.cv); break; }
+        if (using_member_access(scope,e)) { wanted = types.qualify(entities[cls].type, f.cv); break; }
         auto edge = access_base(cls);
         cls = edge ? bases[edge].base : 0;
     }
@@ -86,6 +86,16 @@ unsigned Analyzer::base_steps(TypeId from, EntityId to)
 }
 TypeId Analyzer::implicit_object_type(ScopeId s)
 {
+    for (auto scope = s; scope; scope = scopes[scope].parent) {
+        if (auto id = template_object_context_index.get(scope)) {
+            auto context = template_object_contexts[id];
+            if (!context.available) return 0;
+            auto object = entities[context.owner].template_pattern ? entities[context.owner].type : injected_template_type(context.owner,s);
+            if (!object) object = entities[context.owner].type;
+            return types.compound(TypeKind::Pointer,types.qualify(object,context.cv));
+        }
+        if (scopes[scope].kind == ScopeKind::Function || scopes[scope].kind == ScopeKind::Class) break;
+    }
     EntityId e = 0;
     while (s) {
         while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
