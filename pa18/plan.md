@@ -2,7 +2,20 @@
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
 Last reviewed commit: `f6eaf8ab213c90eefffd48f5c47b1ac9a75bce8d`.
-Target: **PA18 full-stage**, unfinished. Phase: **checkpoint audit 86 complete**.
+Target: **PA18 full-stage**, unfinished. Phase: **implementation 87**.
+Turn entry: `01b47c20b41f68d3142df6a8691fc905c20341a8`, **417/420**.
+The existing stage/review markers above are preserved. Previous turn: progress
+(committed audit repairs and validation); no compiler/test job remains live.
+
+Current group: class-value call boundaries. Semantic class facts own return and
+parameter classification; selected conversions own ellipsis materialization;
+typed lowering consumes those facts for definitions, direct/indirect calls and
+conversion operators. First establish the three reference differences using
+reduced boundary matrices, then repair the shared owner and related ellipsis
+path. Classification is once per complete class; call work is linear in actual
+arguments. Validate native behavior, signature consistency, query/lifetime
+consumers, all earlier stages, coverage and file audit. Freeze entry/final
+binaries for latency/RSS and checked runtime/size evidence (PA18/O0 acceptance).
 Entry `890f810b` and reviewed code: **417/420**, the same **three failures**.
 The preceding goal turn supplied committed progress; entry had no live job to resume.
 

@@ -117,6 +117,15 @@ Conversion Analyzer::ellipsis_conversion_value(Expression source)
 {
     Conversion c; if (!source.type) return c; c.rank = 6;
     c.target = promote(decay(source.type));
+    if (class_value(c.target)) {
+        // Ellipsis still passes a value: select its transfer in semantics,
+        // retaining the source-language type for queries and constant evaluation.
+        // LowIR's scalar variadic lane carries its private object's address.
+        c = transfer_initialization(source,c.target,InitializationMode::Copy);
+        if (c.valid()) c.rank = 6;
+        c.ellipsis_object = true;
+        return c;
+    }
     if (fundamental(c.target, FT_FLOAT)) c.target = types.fundamental(FT_DOUBLE);
     if (fundamental(c.target, FT_NULLPTR_T)) c.target = types.compound(TypeKind::Pointer, types.fundamental(FT_VOID));
     return c;

@@ -46,7 +46,8 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
 {
     StaticValue r;
     if (!n) {
-        if (types[target].kind == TypeKind::MemberPointer) return constant_static_value(constant_zero(target));
+        if (types[target].kind == TypeKind::MemberPointer || floating_type(target))
+            return constant_static_value(constant_zero(target));
         r.kind = StaticValue::Integer; return r;
     }
     NodeId first = ast[n].first;

@@ -162,15 +162,15 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
         TypeId t = sem.entities[object].type;
         Value pointer = class_address(object,t), destination = class_temporary(object,t);
         construct_value(n,c,pointer);
-        if (c.reference) activate_temporary(object);
-        return c.reference || sem.indirect_parameter(t) ? pointer : Value(destination.operand,type(t),t);
+        if (c.reference || c.ellipsis_object) activate_temporary(object);
+        return c.reference || c.ellipsis_object || sem.indirect_parameter(t) ? pointer : Value(destination.operand,type(t),t);
     }
     if (c.empty_copy && !c.reference) {
         SlotId slot = builder->add_slot(0, type(c.target));
         Value destination(Operand::slot(slot), type(c.target), c.target, true);
         Value pointer = address(destination);
         construct_value(n,c,pointer);
-        return Value(Operand::slot(slot), type(c.target), c.target);
+        return c.ellipsis_object ? pointer : Value(Operand::slot(slot), type(c.target), c.target);
     }
     return converted_value(expression(n,c.reference && sem.expression_fact(n).category != ValueCategory::Prvalue),c);
 }

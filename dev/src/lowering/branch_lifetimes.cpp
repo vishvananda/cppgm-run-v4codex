@@ -33,7 +33,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
         auto c = sem.conversion_fact(incoming);
         if (c.kind == semantic::Conversion::Kind::User)
             needed |= sem.temporary_cleanup(sem.user_conversions[c.materialization].source_temporary);
-        if (c.reference && c.materialization) {
+        if ((c.reference || c.ellipsis_object) && c.materialization) {
             auto object = sem.converted_temporary(c);
             needed |= !sem.object_lifetime(object) && sem.temporary_cleanup(object);
         }
@@ -51,8 +51,11 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     arguments(expression);
     if (discarded.valid()) if (auto call = conversion_call(discarded)) arguments(*call);
     if (incoming) if (auto call = conversion_call(sem.conversion_fact(incoming))) arguments(*call);
-    for (unsigned i = 0; i < expression.count; ++i)
-        if (auto call = conversion_call(sem.conversion_fact(expression.conversions+i))) arguments(*call);
+    for (unsigned i = 0; i < expression.count; ++i) {
+        const auto& c = sem.conversion_fact(expression.conversions+i);
+        if (c.ellipsis_object) needed |= sem.temporary_cleanup(sem.converted_temporary(c));
+        if (auto call = conversion_call(c)) arguments(*call);
+    }
     if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
