@@ -62,21 +62,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         facts.edit(n).value = constants.size(); constants.push_back(entities[result.entity].constant);
     }
     if (storage && !substituted) demand_template_storage(result.entity);
-    // Record the built-in source form after overload resolution. Child facts
-    // are already complete, so each node does O(1) work, including conditional
-    // and comma wrappers. Fixed template uses retain the same immutable bit.
-    if (result.form == ExpressionForm::Ordinary) {
-        auto kind = ast[n].kind;
-        if (kind == Kind::Parenthesized) result.discarded_form = expressions[ast[n].first].discarded_form;
-        else if (kind == Kind::Conditional) {
-            auto second = ast[ast[n].first].next;
-            result.discarded_form = expressions[second].discarded_form && expressions[ast[second].next].discarded_form;
-        } else if (kind == Kind::Binary && ast[n].op == OP_COMMA)
-            result.discarded_form = expressions[ast[ast[n].first].next].discarded_form;
-        else result.discarded_form = kind == Kind::IdExpression || kind == Kind::Member || kind == Kind::Subscript ||
-            (kind == Kind::Unary && ast[n].op == OP_STAR) ||
-            (kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR));
-    }
+    record_discard_form(n,result);
     class_result(n,result,s);
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);

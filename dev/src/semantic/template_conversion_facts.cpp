@@ -9,7 +9,13 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
 {
     if (!c.valid()) return false;
     if (c.kind == Conversion::Kind::Discarded) {
-        Conversion selected; return valid_discarded(source,n,s,selected);
+        if (n && discarded_conversions.get(n)) return true;
+        Conversion selected;
+        if (!valid_discarded(source,n,s,selected)) return false;
+        if (n && selected.valid()) {
+            discarded_conversions.put(n,conversions.size()); conversions.push_back(selected);
+        }
+        return true;
     }
     if (c.kind == Conversion::Kind::QueryList) return valid_query_list(c.materialization);
     if (c.kind == Conversion::Kind::ListPlan) { validate_list_plan(c.materialization); return true; }

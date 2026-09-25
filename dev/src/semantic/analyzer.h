@@ -981,6 +981,8 @@ private:
     std::size_t statement_conversion_work = 0, statement_conversion_uses = 0;
     Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);
+    void record_discard_form(NodeId n, Expression& result) const;
+    void bind_template_discarded(NodeId n, ScopeId s);
     void prepare_discarded(NodeId n);
     bool valid_discarded(Expression source, NodeId n, ScopeId s, Conversion& selected);
     void query_discarded(const TypeQuery& query, const std::vector<TypeQueryFact>& children, TypeQueryFact& result);

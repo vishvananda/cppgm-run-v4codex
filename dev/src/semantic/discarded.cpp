@@ -2,6 +2,33 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+void Analyzer::record_discard_form(NodeId n, Expression& result) const
+{
+    // Record the built-in source form after overload resolution. Child facts
+    // are already complete, so each node does O(1) work, including conditional
+    // and comma wrappers. Fixed template uses retain the same immutable bit.
+    if (result.form == ExpressionForm::Ordinary) {
+        auto kind = ast[n].kind;
+        if (kind == Kind::Parenthesized) result.discarded_form = expressions[ast[n].first].discarded_form;
+        else if (kind == Kind::Conditional) {
+            auto second = ast[ast[n].first].next;
+            result.discarded_form = expressions[second].discarded_form && expressions[ast[second].next].discarded_form;
+        } else if (kind == Kind::Binary && ast[n].op == OP_COMMA)
+            result.discarded_form = expressions[ast[ast[n].first].next].discarded_form;
+        else result.discarded_form = kind == Kind::IdExpression || kind == Kind::Member || kind == Kind::Subscript ||
+            (kind == Kind::Unary && ast[n].op == OP_STAR) ||
+            (kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR));
+    }
+}
+void Analyzer::bind_template_discarded(NodeId n, ScopeId s)
+{
+    template_statement_value(n,s);
+    if (!expressions[n].ready) return;
+    ++unevaluated_depth;
+    try { prepare_discarded(n); }
+    catch (...) { --unevaluated_depth; throw; }
+    --unevaluated_depth;
+}
 void Analyzer::prepare_expression_discard(NodeId n)
 {
     auto x = expressions[n];

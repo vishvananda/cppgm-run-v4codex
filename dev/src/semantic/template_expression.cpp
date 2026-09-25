@@ -78,7 +78,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
             template_fixed_expressions.put(source,n); ++template_fixed_work; return;
         }
         for (auto c = first; c; c = ast[c].next)
-            if (!fixed(c) || class_value(expressions[fixed(c)].type)) return;
+            if (!fixed(c) || (class_value(expressions[fixed(c)].type) && node.op != OP_COMMA)) return;
         break;
     default: return;
     }

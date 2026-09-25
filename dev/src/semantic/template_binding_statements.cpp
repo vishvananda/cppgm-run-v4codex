@@ -47,7 +47,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         return;
     case Kind::ExpressionStatement: case Kind::Iteration:
         for (auto c = node.first; c; c = ast[c].next) {
-            bind_template_expression(c,s); template_statement_value(c,s);
+            bind_template_expression(c,s); bind_template_discarded(c,s);
         }
         return;
     case Kind::Case: {
@@ -73,7 +73,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
     case Kind::ForInit:
         for (auto c = node.first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) bind_template_declaration(c,s);
-            else { bind_template_expression(c,s); template_statement_value(c,s); }
+            else { bind_template_expression(c,s); bind_template_discarded(c,s); }
         }
         return;
     case Kind::Label: case Kind::Condition:

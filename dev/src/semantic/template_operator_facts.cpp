@@ -62,7 +62,7 @@ bool Analyzer::check_fixed_operator(NodeId n, ScopeId s)
         object_uses[result.object_use].source_owned = true;
     }
     result.ready = true;
-    expressions.set(n,result);
+    record_discard_form(n,result); expressions.set(n,result);
     { auto& f = facts.edit(n); f.scope = s; if (!f.type) f.type = result.type; }
     template_operator_expressions.put(ast.nodes.occurrences[n].source,n);
     ++template_fixed_call_work;
@@ -134,7 +134,7 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
         check_fixed_conversion(Expression(),list,conversion,s);
         Expression result; result.type = type; result.form = ExpressionForm::ListValue; result.ready = true;
         store_call(result,{list},{conversion}); result.inputs = CallInputs::Source;
-        expressions.set(n,result); facts.edit(n).type = type; facts.edit(n).scope = s;
+        record_discard_form(n,result); expressions.set(n,result); facts.edit(n).type = type; facts.edit(n).scope = s;
         template_operator_expressions.put(ast.nodes.occurrences[n].source,n); ++template_fixed_call_work; return true;
     }
     for (auto a = ast[list].first; a; a = ast[a].next)
@@ -152,7 +152,7 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
     complete_class(types[type].entity); reject_abstract(type);
     if (!check_template_constructor(list,type,s,InitializationMode::Direct)) return false;
     auto result = expressions[list]; result.form = ExpressionForm::Construction;
-    expressions.set(n,result);
+    record_discard_form(n,result); expressions.set(n,result);
     { auto& f = facts.edit(n); f.entity = facts[list].entity; f.type = type; f.scope = s; }
     return true;
 }
@@ -167,10 +167,10 @@ bool Analyzer::check_fixed_cast(NodeId n, ScopeId s, TypeId type, NodeId operand
         std::vector<NodeId> args(1,operand);
         if (!check_template_constructor(n,type,s,InitializationMode::Direct,&args)) return false;
         auto result = expressions[n]; result.form = ExpressionForm::Construction;
-        expressions.set(n,result); return true;
+        record_discard_form(n,result); expressions.set(n,result); return true;
     }
     auto result = cast_expression(n,s,type,operand,true);
-    result.ready = true; expressions.set(n,result); facts.edit(n).scope = s;
+    result.ready = true; record_discard_form(n,result); expressions.set(n,result); facts.edit(n).scope = s;
     template_operator_expressions.put(ast.nodes.occurrences[n].source,n); ++template_fixed_call_work; return true;
 }
 void Analyzer::reuse_fixed_construction(NodeId n, NodeId source, ScopeId s, Expression& result)
