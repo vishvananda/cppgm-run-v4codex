@@ -171,6 +171,7 @@ class Procedural {
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
+    void declare_function(EntityId e);
     void function_body(EntityId e, bool base = false);
     void reset_lifetime(EntityId e);
     void destroy(EntityId destructor, TypeId t, Value object);

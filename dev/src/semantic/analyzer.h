@@ -141,6 +141,8 @@ public:
     bool empty_value(TypeId t);
     bool initializer_work(std::uint32_t plan);
     std::uint32_t constant_array_plan(EntityId e) const { return constant_arrays.get(e); }
+    // Runtime-only result proof; never grants constant-expression eligibility.
+    Constant conversion_result(EntityId e) const { return constants[conversion_results.get(e)]; }
     std::vector<ConversionObject> conversion_objects = std::vector<ConversionObject>(1);
     std::vector<UserConversion> user_conversions = std::vector<UserConversion>(1);
     IdentifierId literal_suffix(EntityId e) const { return literal_functions.get(e); }
@@ -158,6 +160,9 @@ public:
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
     const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
 private:
+    Index conversion_results;
+    std::size_t conversion_result_work = 0;
+    void prepare_conversion_result(EntityId e);
     FactState completion_state = FactState::NotStarted;
     Index list_index, direct_list_index, empty_list_index, empty_direct_list_index;
     Index class_typedef_declarations;

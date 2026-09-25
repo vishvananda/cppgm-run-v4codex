@@ -105,7 +105,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::IdExpression: {
         auto op = operator_token(ast[n].detail);
         if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
-        EntityId e = resolve(ast[n].detail, s);
+        NodeId name = ast[n].detail, part = ast[name].last;
+        bool conversion_name = ast[part].op == KW_OPERATOR && ast[part].detail;
+        ScopeId owner = conversion_name ? name_owner(name,s) : 0;
+        EntityId e = conversion_name ? conversion_lookup(owner,type_id(ast[part].detail,owner)) : resolve(name,s);
         if (!e) {
             auto name = terminal(ast[n].detail);
             if (!name) throw std::runtime_error("expression requires a value name");

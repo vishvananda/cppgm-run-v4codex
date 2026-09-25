@@ -42,6 +42,7 @@ void Analyzer::prepare_function_boundaries()
         if (entities[e].template_pattern) continue;
         if (entities[e].initializer && local_scalar(e)) scalars.push_back(e);
         if (entities[e].kind != EntityKind::Function || entities[e].template_info || entities[e].template_pattern) continue;
+        prepare_conversion_result(e);
         Type f = types[entities[e].type];
         prepare_value_boundary(f.child);
         for (unsigned j = 0; j < f.count; ++j) {

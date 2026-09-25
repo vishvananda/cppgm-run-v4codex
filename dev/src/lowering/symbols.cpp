@@ -278,7 +278,7 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
 }
 void Procedural::run()
 {
-    std::vector<EntityId> reference_objects;
+    std::vector<EntityId> reference_objects, deferred_conversions;
     for (auto storage : sem.reference_storage) {
         if (!storage.reference || !sem.local_static(storage.reference) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
         auto next = local_static_references.get(storage.reference);
@@ -309,45 +309,11 @@ void Procedural::run()
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function || entity.template_info) continue;
-        bool defined = entity.body || sem.closure_adapter(e).function || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
-        Function f; f.symbol = symbol(e); f.declaration = !defined;
-        auto& existing = p.symbols[f.symbol.index-1];
-        if (existing.kind == Symbol::FunctionSymbol) {
-            auto& prior = p.functions[existing.entity-1];
-            if (!entity.body) {
-                // A later TU can establish the value ABI of an earlier opaque
-                // declaration. Refresh that function identity before any call
-                // consumes its signature; unrelated declarations stay warm.
-                if (prior.declaration && linkage.incomplete_signatures.get(existing.entity))
-                    prior.signature = signature(sem.call_type(e),FunctionId(existing.entity));
-                continue;
-            }
-            if (!prior.declaration) {
-                if (entity.inline_function) continue;
-                throw std::runtime_error("multiple function definitions");
-            }
-            prior.declaration = false;
-            prior.signature = signature(sem.call_type(e), FunctionId(existing.entity));
-            definitions.push_back(e);
-            continue;
+        if (sem.conversion_result(e).valid && entity.inline_function &&
+            !entity.instantiation_definition && !sem.member_fact(e).retained_root) {
+            deferred_conversions.push_back(e); continue;
         }
-        FunctionId id(p.functions.size()+1);
-        f.signature = signature(sem.call_type(e), id);
-        if (entity.stable_prefix) p.signatures[f.signature.index-1].boundary.query = CQM_STABLE_PREFIX;
-        if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
-        if (entity.member_info && !entity.is_static)
-            p.parameters[p.signatures[f.signature.index-1].parameters.begin + sem.indirect_value(sem.types[entity.type].child)].object_bytes = sem.object_size(sem.entities[sem.scopes[entity.owner].entity].type);
-        if (sem.constructor_member(e) && sem.transfer_member(e))
-            for (unsigned j = 0; j < 2; ++j) p.parameters[p.signatures[f.signature.index-1].parameters.begin+j].alias = PALM_NOALIAS;
-        if (entity.builtin != semantic::Entity::NoBuiltin) {
-            auto& sig = p.signatures[f.signature.index-1]; sig.boundary.unwind = CUM_NO;
-            if (entity.builtin == semantic::Entity::Strlen) sig.boundary.effects = CFXM_READONLY;
-            if (entity.builtin == semantic::Entity::Memcpy)
-                for (unsigned j = 0; j < 2; ++j) p.parameters[sig.parameters.begin+j].alias = PALM_NOALIAS;
-        }
-        p.functions.push_back(f);
-        auto& sym = p.symbols[f.symbol.index-1]; sym.kind = Symbol::FunctionSymbol; sym.entity = id.index;
-        if (defined) definitions.push_back(e);
+        declare_function(e);
     }
     // Inherited forwarding constructors retain a distinct rooted base entry.
     // Both entries consume the same semantic actions, with independent IR IDs.
@@ -395,6 +361,14 @@ void Procedural::run()
     emit_local_static_destructors();
     global_finalization();
     emit_string_literals();
+    // All ordinary calls, member-address constants and lifecycle bodies have
+    // now requested their symbol identities. A summarized leaf needs emission
+    // only when one of those consumers retained the actual function boundary.
+    for (EntityId e : deferred_conversions) {
+        if (!symbols[e]) continue;
+        auto before = definitions.size(); declare_function(e);
+        if (definitions.size() != before) function_body(e);
+    }
     order_lifecycle_entries();
 }
 void Procedural::function_body(EntityId e, bool base)

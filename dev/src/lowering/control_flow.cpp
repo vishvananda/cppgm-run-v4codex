@@ -123,13 +123,47 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     location |= sem.types[target].kind == TypeKind::Array || sem.types[target].kind == TypeKind::Function;
     IRType ir = location ? IRType(IRType::Ptr) : type(consumed_type);
     bool has_result = ir != IRType::Void;
+    NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
+    auto test_conversion = sem.conversion_fact(fact.conversions);
+    bool summarized = test_conversion.kind == semantic::Conversion::Kind::User &&
+        sem.conversion_result(test_conversion.function).valid;
+    Value test;
+    if (summarized) test = truth_operand(converted(a,test_conversion));
+    // The runtime body proof does not make the source a C++ constant
+    // expression. It does give this selected conversion a known branch after
+    // evaluating its receiver; selected-arm conversions/lifetimes still run.
+    if (summarized && test.operand.kind == Operand::Integer) {
+        bool yes = test.operand.data.integer != 0;
+        auto source = yes ? b : c;
+        auto conversion = sem.conversion_fact((branches ? branches : fact.conversions+1) + !yes);
+        auto common = live;
+        bool enclosing_branch = full_expression.terminal_branch;
+        full_expression.terminal_branch = terminal && object;
+        Value result;
+        if (object) {
+            if (!supplied) destination = class_address(sem.object_fact(n).temporary,target);
+            construct_value(source,conversion,destination,terminal);
+            result = destination; result.type = target; result.address = true;
+        } else {
+            result = location || conversion.kind == semantic::Conversion::Kind::User ? converted(source,conversion) : convert(expression(source),target);
+            if (consumption) result = converted_value(result,sem.conversion_fact(consumption->conversion));
+            if (consumption && supplied) { store(result,destination); result = destination; }
+            else { result.type = consumed_type; result.address = location; }
+        }
+        if (terminal) clean_inline(live,common);
+        if (object && !supplied) activate_temporary(sem.object_fact(n).temporary);
+        full_expression.terminal_branch = enclosing_branch;
+        full_expression.scalar_terminal = saved_scalar;
+        full_expression.scalar_unreachable = saved_unreachable;
+        return result;
+    }
     SlotId slot = has_result && !object && !supplied ? builder->add_slot(0, ir) : SlotId();
     if (object && !supplied) destination = class_address(sem.object_fact(n).temporary,target);
     BlockId yes = block(), no = block(), end = block();
-    NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
-    auto test_conversion = sem.conversion_fact(fact.conversions);
-    Value test = test_conversion.kind == semantic::Conversion::Kind::User ? converted(a,test_conversion) : load(expression(a));
-    test = truth_operand(test);
+    if (!summarized) {
+        test = test_conversion.kind == semantic::Conversion::Kind::User ? converted(a,test_conversion) : load(expression(a));
+        test = truth_operand(test);
+    }
     if (test.ir.floating()) test = emit(Opcode::Compare,test.ir,{test.operand,Operand::floating(0)},Operation::Ne);
     SlotId selector = cleanup_selector(test,!terminal && (cleanup_expression(b,object) || cleanup_expression(c,object)));
     auto common = live;
