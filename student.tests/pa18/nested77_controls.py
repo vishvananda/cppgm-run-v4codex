@@ -40,7 +40,29 @@ runner.GOOD = {
  'function_local': 'template<class T>int f(){struct N{T n;};N n={7};return n.n;}int main(){return f<int>()!=7;}',
  'local_nested': 'template<class T>int f(){struct L{struct N{T n;};N n;};L l={{7}};return l.n.n;}int main(){return f<int>()!=7;}',
 }
+runner.GOOD.update({
+ 'explicit_specialized_ignored': 'template<class T>struct O{struct N{T n;};};template<>struct O<int>::N{long n;};template struct O<int>::N;extern template struct O<int>::N;static_assert(sizeof(O<int>::N)==8,"");int main(){}',
+
+ 'explicit_nested': 'template<class T>struct O{struct N{T f(){return 7;}};};template struct O<int>::N;int main(){O<int>::N n;return n.f()!=7;}',
+ 'explicit_deep': 'template<class T>struct O{struct N{struct M{T f(){return 7;}};};};template struct O<int>::N::M;int main(){O<int>::N::M n;return n.f()!=7;}',
+ 'explicit_private_name': 'template<class T>class O{struct N{T n;};};template struct O<int>::N;int main(){}',
+ 'extern_nested': 'template<class T>struct O{struct N{using X=typename T::missing;};};extern template struct O<int>::N;int main(){}',
+ 'extern_then_definition': 'template<class T>struct O{struct N{T f(){return 7;}};};extern template struct O<int>::N;template struct O<int>::N;int main(){O<int>::N n;return n.f()!=7;}',
+ 'explicit_nested_member_template_dormant': 'template<class T>struct O{struct N{template<class U>void f(){typename U::missing x;}};};template struct O<int>::N;int main(){}',
+ 'specialized_nested': 'template<class T>struct O{struct N{using X=typename T::missing;};};template<>struct O<int>::N{int n;};int main(){O<int>::N n={7};return n.n!=7;}',
+ 'specialized_nested_forward': 'template<class T>struct O{struct N{using X=typename T::missing;};};template<>struct O<int>::N;O<int>::N*p;template<>struct O<int>::N{int n;};int main(){O<int>::N n={7};return n.n!=7||p!=0;}',
+ 'specialized_nested_sibling': 'template<class T>struct O{struct N{T n;};};template<>struct O<int>::N{long n;};static_assert(sizeof(O<int>::N)==8&&sizeof(O<char>::N)==1,"");int main(){}',
+})
 runner.BAD = {
+ 'explicit_nested_invalid': 'template<class T>struct O{struct N{using X=typename T::missing;};};template struct O<int>::N;',
+ 'explicit_nested_method_invalid': 'template<class T>struct O{struct N{void f(){typename T::missing n;}};};template struct O<int>::N;',
+ 'explicit_nested_no_definition': 'template<class T>struct O{struct N;};template struct O<int>::N;',
+ 'explicit_nested_duplicate': 'template<class T>struct O{struct N{};};template struct O<int>::N;template struct O<int>::N;',
+ 'explicit_non_template': 'struct O{struct N{};};template struct O::N;',
+ 'specialize_after_demand': 'template<class T>struct O{struct N{T n;};};O<int>::N n;template<>struct O<int>::N{};',
+ 'specialize_non_template': 'struct O{struct N{};};template<>struct O::N{};',
+ 'specialized_body_invalid': 'template<class T>struct O{struct N{};};template<>struct O<int>::N{using X=int::missing;};',
+
  'local_nested_required': 'template<class T>void f(){struct L{struct N{using X=typename T::missing;};};}int main(){f<int>();}',
  'demand_assert': 'template<class T>struct O{struct N{static_assert(sizeof(T)==0,"");};};O<int>::N n;',
  'demand_alias': 'template<class T>struct O{struct N{using X=typename T::missing;};};O<int>::N n;',

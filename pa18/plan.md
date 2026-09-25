@@ -29,7 +29,11 @@ That extension now repairs inherited ambiguous-type SFINAE (**388/420**, 32
 failures, no new failures). Partial matching also checks retained access recipes
 for erased alias arguments, without demanding the partial body. 27 lookup
 controls cover ambiguity, hidden names, shared base identity, private access and
-hard class-definition side effects. Required final and performance checks pending.
+hard class-definition side effects. Explicit nested-class instantiation and specialization now reuse that declared
+identity as well; explicit outer definitions demand the nested member set, while
+extern declarations and specialized members retain their own timing. The nested
+controls now total 70. Final checks and frozen measurements are being refreshed
+for this completed extension.
 
 ## Design/spec alignment and current evidence
 

@@ -104,9 +104,10 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         return;
     }
     auto e = resolve(ast[source].detail,s,Lookup::Qualifier);
-    if (!e || !entities[e].specialization || !entities[e].class_info)
-        throw std::runtime_error("explicit instantiation requires a class specialization");
-    auto owner = entities[specialization_pattern(e)].owner;
+    if (!e || !entities[e].class_info || (!entities[e].specialization &&
+        ((!entities[e].template_member && !entities[e].explicit_specialization) || entities[e].template_info)))
+        throw std::runtime_error("explicit instantiation requires a class specialization or member class");
+    auto owner = entities[e].specialization ? entities[specialization_pattern(e)].owner : entities[e].owner;
     auto name = ast[source].detail;
     check_namespace(owner,name);
     if ((ast[ast[source].first].op == KW_UNION) != (entities[e].key == KW_UNION))

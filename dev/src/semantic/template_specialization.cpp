@@ -36,6 +36,13 @@ EntityId Analyzer::declare_class_specialization(NodeId n, ScopeId s)
     auto owner = name_owner(name,s);
     auto list = child(ast[name].last,Kind::TemplateArguments);
     auto primary = local(owner,terminal(name),Lookup::Tag);
+    if (!list && primary && entities[primary].class_info && !entities[primary].template_info &&
+        (entities[primary].template_member || entities[primary].explicit_specialization) && encloses(s,owner)) {
+        // A member class specializes the declaration already published by its
+        // enclosing specialization. It has no independent template argument list.
+        select_explicit_specialization(primary,n);
+        return primary;
+    }
     if (!list || !primary || !entities[primary].template_info || !entities[primary].class_info || !encloses(s,owner))
         throw std::runtime_error("explicit class specialization requires an enclosing primary");
     std::vector<TypeId> args;
