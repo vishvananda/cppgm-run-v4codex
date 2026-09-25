@@ -31,6 +31,20 @@ runner.GOOD={
  'outer_member_alias':FIRST+'template<class T>struct A{template<class U>using Check=First<T,typename U::type>;template<class U>Check<U>f(U){return 3;}T f(...){return 8;}};struct G{using type=int;};int main(){A<int>a;A<long>b;return a.f(G())!=3||a.f(0)!=8||b.f(G())!=3||b.f(0)!=8;}',
  'erased_reference_identity':FIRST+'template<class T>First<int&,typename T::type>f(T,int&n){return n;}struct G{using type=int;};int main(){int n=3;f(G(),n)=7;return n!=7;}',
 }
+runner.GOOD.update({
+ 'alias_private_member':FIRST+'class Bad{using type=int;};struct Good{using type=int;};template<class T>using Member=typename T::type;template<class T,class=Void<Member<T>>>int f(int){return 1;}template<class>int f(...){return 2;}int main(){return f<Good>(0)!=1||f<Bad>(0)!=2;}',
+ 'alias_private_result':'class Bad{using type=int;};struct Good{using type=int;};template<class T>using Member=typename T::type;template<class T>Member<T>f(T){return 1;}int f(...){return 2;}int main(){return f(Good())!=1||f(Bad())!=2;}',
+ 'alias_function_adjustment':'template<class T>using Fn=T(int);template<class T>int f(Fn<T> x){return x(3);}int g(int n){return n;}int main(){return f(g)!=3;}',
+ 'alias_array_adjustment':'template<class T>using Arr=T[3];template<class T>int f(Arr<T>x){return x[0];}int main(){int a[3]={3};return f(a)!=3;}',
+})
+runner.GOOD.update({
+ 'alias_scalar_cast':'template<class T>struct X{using type=T;};template<class T>using Id=typename X<T>::type;int main(){return Id<long>(3)!=3||Id<double>(2)!=2.0;}',
+ 'alias_pointer_cast':'template<class T>using Ptr=T*;int main(){return Ptr<int>(0)!=nullptr||Ptr<long>(0)!=nullptr;}',
+ 'alias_reference_cast':'template<class T>using Ref=T&;int main(){int n=3;(Ref<int>(n))=7;return n!=7;}',
+ 'alias_cast_query':SAME+'template<class T>using Id=T;template<class T>auto f(T x)->decltype(Id<T>(x)){return Id<T>(x);}int main(){static_assert(Same<decltype(f(3)),int>::value,"");return f(3)!=3;}',
+ 'alias_cast_failure':'template<class T>using Id=T;struct A{};template<class T>auto f(int)->decltype(Id<T>(3),char());template<class>long f(...);int main(){return sizeof(f<int>(0))!=1||sizeof(f<A>(0))!=sizeof(long);}',
+ 'template_argument_syntax':'template<class...>struct List{};template<class T>struct Q{template<class...A>using F=List<T,A...>;};template<template<class...>class F>struct X{using type=F<int>;};template<class T>using R=typename X<Q<T>::template F>::type;int main(){return sizeof(R<long>)!=1;}',
+})
 runner.BAD={
  'hard_erased_alias':FIRST+'using X=Void<typename int::type>;int main(){}',
  'hard_substitution':FIRST+'template<class T>using Check=Void<typename T::missing>;Check<int>*p;int main(){}',

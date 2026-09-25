@@ -39,7 +39,20 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
         } else if (t.kind == TypeKind::Decltype) {
             add(0x80000000U|t.entity); shape.push_back(t.bound);
         } else if (t.kind == TypeKind::DependentArray) add(0x80000000U|t.bound);
-        else if (t.kind == TypeKind::PackExpansion) add(t.bound);
+        else if (t.kind == TypeKind::PackExpansion) {
+            if (!t.entity) add(t.bound);
+            else {
+                // Recipe parameters are local binders. Compare the pattern
+                // modulo those binders, followed by its captured sequences.
+                auto captures = argument_packs[t.entity]; Index bindings, cache;
+                for (unsigned j = 0; j < captures.count; j += 2) {
+                    auto p = argument_types[captures.offset+j];
+                    bindings.put(p,canonical_argument(p,j/2,bindings,cache));
+                }
+                add(substitute_argument(t.bound,bindings,cache));
+                for (unsigned j = 1; j < captures.count; j += 2) add(argument_types[captures.offset+j]);
+            }
+        }
         else if (t.kind == TypeKind::ArgumentPack) {
             auto args = argument_packs[t.bound];
             for (unsigned j = 0; j < args.count; ++j) add(argument_types[args.offset+j]);

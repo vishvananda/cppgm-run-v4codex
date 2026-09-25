@@ -167,7 +167,25 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
     auto t = types[type]; TypeId result = type;
     auto child = t.child ? template_member_aliases(t.child,primary,cache) : 0;
     if (t.child && !child) return 0;
-    if (t.kind == TypeKind::Decltype) {
+    if (t.kind == TypeKind::AliasApplication) {
+        // This owner computes declaration comparison types only. Formation
+        // obligations remain on the original semantic type.
+        result = types.qualify(child,t.cv);
+    } else if (t.kind == TypeKind::ArgumentPack) {
+        auto pack = argument_packs[t.bound]; std::vector<ArgumentId> args;
+        for (unsigned j = 0; j < pack.count; ++j) {
+            auto arg = argument_types[pack.offset+j];
+            auto value = value_argument(arg) ? arg : template_member_aliases(arg,primary,cache);
+            if (!value) return 0;
+            args.push_back(value);
+        }
+        result = make_argument_pack(args);
+    } else if (t.kind == TypeKind::PackExpansion) {
+        auto pattern = ArgumentId(t.bound);
+        auto value = value_argument(pattern) ? pattern : template_member_aliases(pattern,primary,cache);
+        if (!value) return 0;
+        result = types.pack_expansion(value,t.entity);
+    } else if (t.kind == TypeKind::Decltype) {
         result = types.qualify(types.decltype_type(template_signature_query(t.entity,primary,cache),t.bound),t.cv);
     } else if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(child,primary);

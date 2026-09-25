@@ -170,7 +170,11 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
         if (template_type_probe) return 0;
         throw std::runtime_error("invalid alias substitution");
     }
-    check_substituted_type_access(entities[e].source,frame);
+    if (!substituted_type_access(entities[e].source,frame)) {
+        alias_facts[id].state = FactState::Failure;
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid alias type access");
+    }
     // Alias transparency does not erase the obligation to form every argument
     // at substitution, even when the resulting type does not mention it.
     bool dependent = false;

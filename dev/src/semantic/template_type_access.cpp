@@ -61,6 +61,9 @@ bool Analyzer::substituted_type_access(NodeId node, std::uint32_t frame)
                     }
                     auto pack = unexpanded.empty() ? 0 : intern_arguments(unexpanded);
                     auto count = pack ? expansion_count(pack,bindings,frame) : 1;
+                    if (count == UnequalPacks) {
+                        template_type_access_states.put(k,unsigned(FactState::Failure)); return false;
+                    }
                     bool complete = count >= 0;
                     for (int lane = 0; lane < count; ++lane) {
                         auto environment = pack ? expansion_frame(frame,pack,lane) : frame;

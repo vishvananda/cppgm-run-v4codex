@@ -50,10 +50,17 @@ TypeId Types::alias_application(EntityId alias, TypeId result, std::uint32_t arg
 }
 TypeId Types::alias_target(TypeId id)
 {
-    while (records[id].kind == TypeKind::AliasApplication) {
-        auto t = records[id]; id = qualify(t.child,t.cv);
-    }
-    return id;
+    if (records[id].kind != TypeKind::AliasApplication) return id;
+    if (alias_targets.size() <= id) alias_targets.resize(id+1);
+    if (alias_targets[id]) return alias_targets[id];
+    auto t = records[id];
+    auto result = qualify(alias_target(t.child),t.cv);
+    alias_targets[id] = result; return result;
+}
+TypeId Types::pack_expansion(ArgumentId pattern, std::uint32_t captures)
+{
+    Type t; t.kind = TypeKind::PackExpansion; t.bound = pattern; t.entity = captures;
+    return intern(t,{});
 }
 TypeId Types::decltype_type(std::uint32_t expression, bool direct)
 {
@@ -116,7 +123,8 @@ TypeId Types::adjusted(TypeId id)
     if (adjustments.size() <= id) adjustments.resize(id + 1);
     if (adjustments[id]) return adjustments[id];
     Type t = records[id];
-    TypeId result = t.kind == TypeKind::PackExpansion ? compound(TypeKind::PackExpansion,0,adjusted(t.bound)) :
+    TypeId result = t.kind == TypeKind::AliasApplication ? alias_application(t.entity,adjusted(qualify(t.child,t.cv)),t.bound) :
+        t.kind == TypeKind::PackExpansion ? pack_expansion(adjusted(t.bound),t.entity) :
         t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray ? compound(TypeKind::Pointer, signature(t.child)) :
         t.kind == TypeKind::Function ? compound(TypeKind::Pointer, signature(id)) : unqualified(signature(id));
     adjustments[id] = result;

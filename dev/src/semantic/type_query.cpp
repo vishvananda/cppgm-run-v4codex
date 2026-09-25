@@ -93,7 +93,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (template_type_probe && entity.template_pattern && !entity.type) return 0;
         if (e && (entity.kind == EntityKind::Alias || entity.kind == EntityKind::Type)) {
             if (!callee) throw std::runtime_error("type name used as value in type query");
-            q.kind = QueryKind::TypeValue; q.type = entity.type;
+            bool applied_alias = entity.kind == EntityKind::Alias && entity.template_info &&
+                child(ast[name].last,Kind::TemplateArguments);
+            q.kind = QueryKind::TypeValue; q.type = applied_alias ? facts[ast[name].last].type : entity.type;
+            if (!q.type) throw std::logic_error("alias query has no applied type");
         } else if (entity.template_parameter) {
             q.kind = QueryKind::TemplateValueParameter; q.entity = e; q.type = entity.type;
         } else if (auto ordinal = signature_parameters.get(e)) {
@@ -346,16 +349,23 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         auto source = query_edges[q.offset+i]; auto child_query = type_queries[source];
         if (child_query.kind == QueryKind::Expansion) {
             auto pattern = query_edges[child_query.offset];
-            auto params = expansion_parameters(0x80000000U|pattern);
-            auto count = expansion_count(params,bindings,owner);
-            if (count >= 0 && owner) {
-                for (int j = 0; j < count; ++j) {
-                    auto child = substitute_query(pattern,bindings,cache,expansion_frame(owner,params,j));
-                    if (!child) return 0;
-                    children.push_back(child);
+            auto recipe = child_query.arguments ? argument_types[argument_packs[child_query.arguments].offset] :
+                types.pack_expansion(0x80000000U|pattern,0);
+            std::vector<ArgumentId> expanded;
+            substitute_arguments(recipe,bindings,cache,owner,expanded);
+            for (auto arg : expanded) {
+                if (!arg) return 0;
+                if (value_argument(arg)) children.push_back(argument_query(arg));
+                else {
+                    auto retained = types[arg];
+                    if (retained.kind != TypeKind::PackExpansion || !value_argument(retained.bound))
+                        throw std::logic_error("query expansion produced a type argument");
+                    TypeQuery expansion; expansion.kind = QueryKind::Expansion;
+                    expansion.arguments = intern_arguments({arg});
+                    children.push_back(intern_query(expansion,{argument_query(retained.bound)}));
                 }
-                continue;
             }
+            continue;
         }
         auto child = substitute_query(source,bindings,cache,owner);
         if (!child) return 0;

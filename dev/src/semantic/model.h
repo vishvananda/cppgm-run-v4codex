@@ -51,6 +51,7 @@ enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, A
 // The lookup obligation is part of a dependent name's canonical identity.
 enum class DependentNameKind : unsigned char { Type, Application, Template };
 enum class DeductionKind : unsigned char { Call, ClassPattern, PartialOrdering };
+enum ExpansionCount { UnboundPack = -1, UnequalPacks = -2, DeferredPacks = -3 };
 enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {
@@ -67,7 +68,7 @@ struct Type {
 class Types {
     std::vector<TypeId> slots;
     std::vector<std::uint64_t> hashes;
-    std::vector<TypeId> signatures, adjustments;
+    std::vector<TypeId> signatures, adjustments, alias_targets;
     TypeId intern(Type type, const std::vector<TypeId>& params);
 public:
     Types();
@@ -78,6 +79,7 @@ public:
     TypeId named(EntityId e);
     TypeId alias_application(EntityId alias, TypeId result, std::uint32_t arguments);
     TypeId alias_target(TypeId type);
+    TypeId pack_expansion(ArgumentId pattern, std::uint32_t captures);
     TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
     TypeId qualify(TypeId t, unsigned cv);
     TypeId unqualified(TypeId t);

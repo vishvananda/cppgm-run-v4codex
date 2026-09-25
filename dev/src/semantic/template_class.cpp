@@ -274,6 +274,10 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
         for (auto a = ast[list].first; a; a = ast[a].next)
             append_template_argument(a,s,template_argument_node(a,s),args);
         auto type = specialize_alias(e,args);
+        // A scalar/reference alias application has no distinct declaration
+        // entity. Publish its selected type on this name occurrence so calls
+        // and queries consume the applied type, not the alias pattern.
+        facts.edit(part).type = type;
         return types[type].kind == TypeKind::Named ? types[type].entity : e;
     }
     if (!entities[e].class_info) return e;

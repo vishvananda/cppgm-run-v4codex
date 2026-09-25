@@ -94,7 +94,9 @@ void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId pre
             auto p = declarations[d].entity;
             if (entities[p].template_parameter) {
                 auto arg = parameter_argument(p);
-                if (entities[p].parameter_pack) arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});
+                // This map renames a source head; an ellipsis in its retained
+                // type owns expansion. Bind the scalar symbol for both type
+                // and value packs, not a sequence where a scalar is required.
                 old_bindings.put(p,arg); new_bindings.put(p,arg);
             }
         }

@@ -132,16 +132,28 @@ ArgumentId Analyzer::unexpanded_argument(std::uint32_t frame, EntityId parameter
 }
 int Analyzer::expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame)
 {
-    auto list = argument_packs[parameters]; int count = -1;
+    auto list = argument_packs[parameters]; int count = UnboundPack;
+    bool symbolic = false, concrete = false, single = true, unequal = false;
     for (unsigned i = 0; i < list.count; ++i) {
         auto parameter = argument_types[list.offset+i];
         auto arg = frame ? unexpanded_argument(frame,parameter) : bindings.get(parameter);
-        if (!arg || !argument_pack(arg)) return -1;
-        auto n = pack_arguments(arg).count;
-        if (count >= 0 && unsigned(count) != n) throw std::runtime_error("pack expansion has unequal lengths");
+        if (!arg || !argument_pack(arg)) return UnboundPack;
+        auto pack = pack_arguments(arg); auto n = pack.count;
+        bool expanded = false;
+        for (unsigned j = 0; j < n; ++j) {
+            auto a = argument_types[pack.offset+j];
+            expanded |= entities[parameter].template_parameter && !value_argument(a) && types[a].kind == TypeKind::PackExpansion;
+            if (entities[parameter].template_parameter && !value_argument(a) && types[a].kind == TypeKind::PackExpansion)
+                single &= !types[a].entity;
+        }
+        symbolic |= expanded; concrete |= !expanded; single &= n == 1;
+        if (count >= 0 && unsigned(count) != n) unequal = true;
         count = n;
     }
-    return count;
+    // A symbolic pack is a sequence of unknown length, never one concrete
+    // lane. Only all-single-symbolic packs can be renamed together immediately.
+    if (symbolic) return !concrete && single ? 1 : DeferredPacks;
+    return unequal ? UnequalPacks : count;
 }
 std::uint32_t Analyzer::argument_frame(std::uint32_t parent, EntityId parameter, ArgumentId arg)
 {
@@ -181,23 +193,5 @@ std::uint32_t Analyzer::expansion_frame(std::uint32_t parent, std::uint32_t para
     TemplateSubstitutionFrame f; f.parent = parent; f.overlay = pack; f.expansion = true; f.symbolic = symbolic;
     auto id = substitution_frames.size(); substitution_frames.push_back(f);
     expansion_frame_index.put(k,id); ++expansion_lanes; return id;
-}
-void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache,
-    std::uint32_t frame, std::vector<ArgumentId>& out)
-{
-    if (!value_argument(arg) && types[arg].kind == TypeKind::PackExpansion) {
-        auto pattern = types[arg].bound;
-        auto params = expansion_parameters(pattern);
-        auto count = expansion_count(params,bindings,frame);
-        if (count >= 0 && frame) {
-            for (int j = 0; j < count; ++j) {
-                auto lane = expansion_frame(frame,params,j);
-                auto value = substitute_argument(pattern,bindings,cache,lane);
-                out.push_back(value && substitution_frames[lane].symbolic ? types.compound(TypeKind::PackExpansion,0,value) : value);
-            }
-            return;
-        }
-    }
-    out.push_back(substitute_argument(arg,bindings,cache,frame));
 }
 } }

@@ -102,6 +102,8 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
                 auto binding = bind_template_name(name,scope);
                 auto e = template_entity(binding.dependent ? binding.entity : resolve(name,scope));
                 if (e) { check_access(e,scope,name_owner(name,scope)); auto injected = injected_template_type(e,scope); return injected ? injected : types.named(e); }
+                if (binding.dependent && (ast[ast[name].last].flags & 1))
+                    return type_name(name,scope,0,false,true);
             }
         }
         auto type = types.signature(type_id(n,scope));

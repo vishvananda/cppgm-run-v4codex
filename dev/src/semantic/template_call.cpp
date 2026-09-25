@@ -93,8 +93,19 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             } else substitute_arguments(arg,bindings,cache,owner,args);
         }
         for (auto arg : args) if (!arg) return 0;
-        auto entity = owner && entities[p.entity].template_pattern ? substitution_binding(owner,p.entity) : p.entity;
-        result = specialize_alias(entity,args);
+        bool dependent = false;
+        for (auto arg : args) dependent |= dependent_argument(arg);
+        if (!owner && dependent) {
+            // Source-head normalization renames free enclosing parameters as
+            // well as the alias's arguments. Its already-substituted result
+            // carries those free variables; reopening the alias would restore
+            // its lexical outer parameters and lose the renaming.
+            result = substitute_type(p.child,bindings,cache);
+            if (result) result = types.alias_application(p.entity,result,intern_arguments(args));
+        } else {
+            auto entity = entities[p.entity].template_pattern ? substitution_binding(owner,p.entity) : p.entity;
+            result = specialize_alias(entity,args);
+        }
         if (result) result = types.qualify(result,p.cv);
         else complete_failure = true;
     } else if (p.kind == TypeKind::ArgumentPack) {
@@ -104,9 +115,10 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         for (auto value : values) if (!value) return 0;
         result = make_argument_pack(values);
     } else if (p.kind == TypeKind::PackExpansion) {
-        auto arg = substitute_argument(p.bound,bindings,cache,owner);
-        if (!arg) return 0;
-        result = types.compound(TypeKind::PackExpansion,0,arg);
+        std::vector<ArgumentId> args;
+        substitute_arguments(pattern,bindings,cache,owner,args);
+        for (auto arg : args) if (!arg) return 0;
+        result = args.size() == 1 ? args[0] : make_argument_pack(args);
     } else if (p.kind == TypeKind::DependentArray) {
         auto child = substitute_type(p.child,bindings,cache,owner);
         auto query = substitute_query(p.bound,bindings,cache,owner);
@@ -300,7 +312,9 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
         return 0;
     }
-    if (!partial) check_substituted_type_access(entities[pattern].source,frame);
+    if (!partial && !substituted_type_access(entities[pattern].source,frame)) {
+        specializations[index].declaration = FactState::Failure; return 0;
+    }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
     entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;

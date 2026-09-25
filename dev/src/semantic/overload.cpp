@@ -220,7 +220,12 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (ast[detail].kind == Kind::TypeId) cast_type = type_id(detail, s);
         else if (detail && ast[ast[detail].first].detail && ast[ast[ast[detail].first].detail].kind == Kind::Decltype)
             cast_type = expression_type(ast[ast[ast[detail].first].detail].first, s, true);
-        if (e && (entities[e].kind == EntityKind::Alias || entities[e].kind == EntityKind::Type)) cast_type = entities[e].type;
+        if (e && (entities[e].kind == EntityKind::Alias || entities[e].kind == EntityKind::Type)) {
+            bool applied_alias = entities[e].kind == EntityKind::Alias && entities[e].template_info &&
+                child(ast[detail].last,Kind::TemplateArguments);
+            cast_type = applied_alias ? facts[ast[detail].last].type : entities[e].type;
+            if (!cast_type) throw std::logic_error("alias call has no applied type");
+        }
         if (auto fundamental = fundamental_cast_type(ast[callee].op)) cast_type = fundamental;
         if (cast_type) {
             if (ast[args_node].kind == Kind::BracedInit && (class_value(cast_type) || types[cast_type].kind == TypeKind::Array)) {
