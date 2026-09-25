@@ -145,7 +145,9 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     if (target.kind == TypeKind::Array) {
         std::uint64_t index = 0;
         while (inner && (!target.bound || index < target.bound)) {
+            auto clause = inner;
             auto item = initializer_item(inner, target.child, s);
+            if (inner == clause) throw std::runtime_error("array element consumed no initializer");
             initializers[item].index = index++; append(item);
         }
         if (index < target.bound) {

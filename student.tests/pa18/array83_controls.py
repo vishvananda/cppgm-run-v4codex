@@ -51,6 +51,10 @@ runner.BAD={
  'unknown_braced_string_excess':'int main(){char a[]={"abc","def"};}',
  'template_static_array_conflict':'template<class T>struct X{static constexpr int a[]={1,2,3};};template<class T>constexpr int X<T>::a[2];int main(){return X<void>::a[0];}',
  'template_static_dependent_conflict':'template<int N>struct X{static const int a[N];};template<int N>const int X<N>::a[N+1]={7};',
+ 'empty_aggregate_scalar':'struct E{};int main(){E a[]={1};}',
+ 'empty_aggregate_template_scalar':'struct E{};template<class T>void f(){E a[]={1};}int main(){}',
+ 'trailing_narrow_after_pack':'template<int...N>void f(){int a[]={N...,1.5};}int main(){}',
+ 'narrow_pack_pattern':'template<int...N>void f(){int a[]={(N+0.5)...};}int main(){f<1>();}',
  'unknown_narrow':'int main(){int a[]={1.5};}',
  'union_inactive':'union U{int x;long y;constexpr U():y(7){}};constexpr U u;static_assert(u.x==7,"");',
 }

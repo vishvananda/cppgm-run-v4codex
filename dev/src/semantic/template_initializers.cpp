@@ -163,11 +163,22 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     auto type = types[target];
     if (type.kind == TypeKind::Array) {
         std::uint64_t i = 0;
+        bool complete = true;
         while (inner && (!type.bound || i < type.bound)) {
-            if (ast[inner].kind == Kind::PackExpression) return false;
+            if (ast[inner].kind == Kind::PackExpression) {
+                // Expansion length is unknown, but scalar element conversions
+                // and following fixed clauses still have definition-time rules.
+                if (dependent_type(type.child) || template_aggregate_type(type.child)) return false;
+                auto pattern = ast[inner].first;
+                check_template_initializer_item(pattern,type.child,s);
+                inner = ast[inner].next; complete = false; continue;
+            }
+            auto clause = inner;
             if (!check_template_initializer_item(inner,type.child,s)) return false;
+            if (inner == clause) throw std::runtime_error("array element consumed no fixed initializer");
             ++i;
         }
+        if (!complete) return false;
         if (bound) *bound = i;
         if (i < type.bound) { NodeId omitted = 0; if (!check_template_initializer_item(omitted,type.child,s)) return false; }
     } else {
