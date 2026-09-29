@@ -340,6 +340,12 @@ void Analyzer::demand_template_storage(EntityId e)
     if (e && entities[e].kind == EntityKind::Variable && entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class)
         record_default_dependency(DefaultDependencyKind::Storage,e);
     if (unevaluated_depth) return;
+    if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) {
+        if (entities[e].emission & Entity::Used) return;
+        entities[e].emission |= Entity::Used;
+        demand_constant_relocations(constant_entity_value(e));
+        return;
+    }
     if (!e || entities[e].kind != EntityKind::Variable || !entities[e].is_static ||
         scopes[entities[e].owner].kind != ScopeKind::Class || storage_requested.get(e)) return;
     if (!definition_owner(scopes[entities[e].owner].entity).specialization) return;

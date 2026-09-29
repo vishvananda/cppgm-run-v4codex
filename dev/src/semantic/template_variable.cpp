@@ -11,7 +11,7 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
     bool member = scopes[owner].kind == ScopeKind::Class;
     if ((scopes[owner].kind != ScopeKind::Namespace && !member) ||
         (member && !spec_has(ast[source].first,KW_STATIC)) || !init || !(types[type].cv & 1) ||
-        (!dependent_type(type) && !integral(type))) throw std::runtime_error("constant variable template required");
+        (!dependent_type(type) && !integral(type) && !class_value(type))) throw std::runtime_error("constant variable template required");
     auto list = child(ast[name].last,Kind::TemplateArguments);
     auto primary = local(owner,id);
     if (primary && (!list || !entities[primary].template_info || entities[primary].kind != EntityKind::Variable))
@@ -39,8 +39,19 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
         variable_partial_next.put(e,variable_partial_heads.get(primary)); variable_partial_heads.put(primary,e);
     } else { bind(s,id,e); bind(owner,id,e); }
     auto operand = ast[init].first;
-    if (ast[operand].kind == Kind::BracedInit || ast[operand].kind == Kind::ParenInitializer) operand = ast[operand].first;
-    variable_template_queries.put(e,expression_query(operand,s));
+    if (ast[operand].kind == Kind::ParenInitializer) operand = ast[operand].first;
+    auto occurrence = ast.nodes.occurrences[d];
+    QueryId query = 0;
+    if (occurrence.context) {
+        auto pattern = template_declaration_sources.get(occurrence.source);
+        query = variable_template_queries.get(pattern);
+        if (!query) throw std::logic_error("missing member variable initializer recipe");
+        // Class completion declares this member but does not instantiate its
+        // initializer. Keep the source query; the retained head composes its
+        // source parameters and enclosing frame only on value demand.
+    } else query = expression_query(operand,s);
+    if (!query) throw std::runtime_error("invalid member variable initializer substitution");
+    variable_template_queries.put(e,query);
     record(s,e,d,type,EntityKind::Variable);
     return e;
 }
@@ -56,24 +67,32 @@ EntityId Analyzer::variable_template_name(NodeId part, EntityId e, ScopeId s, bo
     }
     for (auto arg : args) dependent |= dependent_argument(arg);
     if (dependent) return e; // The source query retains the full argument slice.
-    return specialize_variable(e,args,initialize);
+    return specialize_variable(e,args,initialize && !unevaluated_depth);
 }
 EntityId Analyzer::specialize_variable(EntityId primary, const std::vector<TypeId>& input, bool initialize)
 {
     auto args = input;
-    if (!template_defaults(primary,args)) throw std::runtime_error("invalid variable template arguments");
+    if (!template_defaults(primary,args)) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid variable template arguments");
+    }
     auto pack = intern_arguments(args), index = specialization_index.get(key(primary,pack));
     if (!index) {
         Specialization spec; spec.pattern = primary; spec.arguments = pack;
         spec.entity = make_entity(EntityKind::Variable,entities[primary].owner,entities[primary].name,entities[primary].source);
         entities[spec.entity].access = entities[primary].access;
         entities[spec.entity].is_static = entities[primary].is_static;
-        spec.declaration = FactState::Success;
+        spec.declaration = FactState::Active;
         index = specializations.size(); specializations.push_back(spec);
         specialization_index.put(key(primary,pack),index); entities[spec.entity].specialization = index;
         auto head = templates[entities[primary].template_info]; Index bindings, cache;
-        for (unsigned j = 0; j < head.count; ++j) bindings.put(template_parameters[head.offset+j],args[j]);
-        entities[spec.entity].type = substitute_type(entities[primary].type,bindings,cache);
+        auto frame = substitution_frame(index,head.offset,head.count,head.parent_frame);
+        entities[spec.entity].type = substitute_type(entities[primary].type,bindings,cache,frame);
+        specializations[index].declaration = entities[spec.entity].type ? FactState::Success : FactState::Failure;
+    }
+    if (specializations[index].declaration != FactState::Success) {
+        if (template_type_probe) return 0;
+        throw std::runtime_error("invalid variable template declaration");
     }
     auto e = specializations[index].entity;
     if (initialize && specializations[index].body == FactState::Success) ++variable_reuses;
@@ -86,12 +105,19 @@ EntityId Analyzer::specialize_variable(EntityId primary, const std::vector<TypeI
         auto spec = specializations[index];
         auto selected = spec.definition_pattern;
         auto head = templates[entities[selected].template_info];
-        auto frame = substitution_frame(index,head.offset,head.count,head.parent_frame);
+        auto parent = head.parent_frame;
+        if (head.source_count) parent = substitution_frame(index,head.source_parameters,head.source_count,parent);
+        auto frame = substitution_frame(index,head.offset,head.count,parent);
         Index bindings, cache;
         auto type = substitute_type(entities[selected].type,bindings,cache,frame);
         auto query = substitute_query(variable_template_queries.get(selected),bindings,cache,frame);
-        auto value = convert(constants[query_value(query)],type);
-        if (!value.valid) throw std::runtime_error("nonconstant variable template initializer");
+        if (!type || !query || !literal_type(type)) throw std::runtime_error("invalid constant variable template type");
+        auto source = query_fact(query).expression;
+        auto conversion = conversion_value(source,type);
+        if (!valid_fixed_conversion(source,0,conversion,entities[e].owner))
+            throw std::runtime_error("invalid variable template initialization");
+        auto value = constant_query_conversion(query,conversion);
+        if (!value.valid || !constant_persistent(value)) throw std::runtime_error("nonconstant variable template initializer");
         entities[e].type = type; entities[e].constant = value; entities[e].definition = entities[selected].source;
         specializations[index].body = FactState::Success;
     } catch (...) { specializations[index].body = FactState::Failure; throw; }

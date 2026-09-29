@@ -536,6 +536,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         if (!accessible(entity,q.context,entities[cls].scope))
             { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+        if (kind == EntityKind::Variable && entities[entity].template_info && q.arguments) {
+            auto pack = argument_packs[q.arguments];
+            entity = specialize_variable(entity,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count),false);
+            if (!entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+        }
         x.type = value_type(entities[entity].type); x.entity = entity;
         r.declared_type = entities[entity].type;
         if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
@@ -551,7 +556,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Parameter: case QueryKind::Name:
         if (!r.dependent && q.entity && entities[q.entity].kind == EntityKind::Variable && entities[q.entity].template_info && q.arguments) {
             auto pack = argument_packs[q.arguments];
-            q.entity = specialize_variable(q.entity,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count));
+            q.entity = specialize_variable(q.entity,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count),false);
+            if (!q.entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             q.type = entities[q.entity].type;
         }
         x.type = value_type(q.type); r.declared_type = q.type;

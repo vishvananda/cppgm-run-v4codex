@@ -135,6 +135,12 @@ Constant Analyzer::constant_entity_value(EntityId e)
 {
     if (!e) return Constant();
     if (entities[e].constant.valid) return entities[e].constant;
+    if (entities[e].kind == EntityKind::Variable && entities[e].specialization && !entities[e].explicit_specialization) {
+        auto spec = specializations[entities[e].specialization];
+        auto pack = argument_packs[spec.arguments];
+        specialize_variable(spec.pattern,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count));
+        return entities[e].constant;
+    }
     auto state = constant_declaration_state.get(e);
     if (state == 1 || state == 3) return Constant();
     auto entity = entities[e]; auto t = entity.type;

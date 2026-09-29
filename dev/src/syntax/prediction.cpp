@@ -206,6 +206,13 @@ void Parser::predeclare_class()
             }
             i = p;
         }
+        if (templated && in.is("=",i)) {
+            // A variable-template initializer has expressions, not member
+            // declarations. In particular X(...) must not hide the class X
+            // with a spurious function-template category during lookahead.
+            for (++i; !in.is(";",i) && in.peek(i).kind != PostTokenKind::eof; ++i)
+                if (in.is("(",i) || in.is("[",i) || in.is("{",i)) i = in.matching(i);
+        }
         if (i && identifier(i) && !in.is("::", i - 1) &&
             !in.is("class",i-1) && !in.is("struct",i-1) && !in.is("union",i-1) && !in.is("enum",i-1) &&
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
