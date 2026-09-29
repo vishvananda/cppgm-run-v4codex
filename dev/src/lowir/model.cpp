@@ -46,12 +46,12 @@ Type Type::object(std::uint32_t bytes, std::uint32_t alignment)
 }
 std::uint32_t Type::bytes() const
 {
-    static const unsigned sizes[] = {0,1,1,1,2,2,4,4,8,4,8,16,8};
+    static const unsigned sizes[] = {0,1,1,1,2,2,4,4,8,16,4,8,16,8};
     return kind() == Object ? std::uint32_t(code_ >> 8) : sizes[kind()];
 }
 std::uint32_t Type::alignment() const
 {
-    return kind() == Object ? std::uint32_t(1) << (code_ >> 40) : bytes();
+    return kind() == Object ? std::uint32_t(1) << (code_ >> 40) : kind() == I128 ? 8 : bytes();
 }
 unsigned Type::width() const
 {

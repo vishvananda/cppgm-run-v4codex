@@ -37,7 +37,7 @@ namespace cppgm { namespace lowering {
 Value Procedural::constant_operand(semantic::Constant c, TypeId t)
 {
     auto v = sem.constant_static_value(c);
-    if (v.kind == semantic::StaticValue::MemberFunction) return member_pointer_value(v.entity,t);
+    if (v.kind == semantic::StaticValue::MemberFunction) return member_pointer_value(v.entity,t,v.addend);
     if (v.kind == semantic::StaticValue::Address || v.kind == semantic::StaticValue::String) {
         if (v.kind == semantic::StaticValue::String) string_literal(v.string);
         auto target = v.kind == semantic::StaticValue::Address ? symbol(v.entity) : strings[v.string];

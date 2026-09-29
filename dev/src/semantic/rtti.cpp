@@ -88,8 +88,10 @@ Conversion Analyzer::dynamic_cast_conversion(Expression x, TypeId to, ScopeId s,
     if (!use.reference && !pointer(from)) return c;
     use.source = use.reference ? from : types[from].child;
     use.type = target.child;
-    if (!class_value(use.type) || !class_value(use.source)) return c;
-    size(use.type); size(use.source);
+    bool to_void = !use.reference && fundamental(use.type,FT_VOID);
+    if ((!to_void && !class_value(use.type)) || !class_value(use.source)) return c;
+    if (!to_void) size(use.type);
+    size(use.source);
     if (types[use.source].cv & ~types[use.type].cv) return c;
     if (use.reference && (x.category == ValueCategory::Prvalue ||
         (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue))) return c;
@@ -97,7 +99,8 @@ Conversion Analyzer::dynamic_cast_conversion(Expression x, TypeId to, ScopeId s,
         return explicit_builtin_conversion(x,to,KW_STATIC_CAST,s);
     if (!polymorphic(types[use.source].entity)) return c;
     use.dynamic = true;
-    if (derived_from(use.type,use.source))
+    if (to_void) use.hint = -2;
+    else if (derived_from(use.type,use.source))
         use.hint = base_accessible(types[use.type].entity,types[use.source].entity,global) ?
             base_adjustments[base_steps(use.type,types[use.source].entity)].total : -2;
     c.rank = 0; c.reference = use.reference;

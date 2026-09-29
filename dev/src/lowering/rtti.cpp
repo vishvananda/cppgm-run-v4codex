@@ -70,6 +70,11 @@ SymbolId Procedural::rtti_type(TypeId id)
     auto info = abi_type_global(id,abi_mangle::TargetKind::Typeinfo);
     rtti_symbols.put(id,info.index);
     if (p.symbols[info.index-1].kind != Symbol::Unknown) return info;
+    if (t.kind == TypeKind::Fundamental && t.fundamental == FT_VOID) {
+        Global g; g.symbol = info; g.declaration = true; p.globals.push_back(g);
+        auto& symbol = p.symbols[info.index-1]; symbol.kind = Symbol::GlobalSymbol; symbol.entity = p.globals.size();
+        symbol.metadata.binding = SBM_STRONG; symbol.metadata.role = SR_RTTI_DATA; return info;
+    }
     unsigned role = 3, flags = 0;
     SymbolId dependency, owner;
     std::uint64_t offset = 0;
@@ -159,7 +164,8 @@ Value Procedural::rtti_expression(NodeId n)
     // public source subobject. A nonpublic source base therefore cannot pass
     // [expr.dynamic.cast]/8. Preserve operand evaluation, including its effects.
     // Multiple inheritance must replace this with the general crosscast search.
-    if (use.hint == -2) {
+    bool to_void = sem.types[use.type].kind == TypeKind::Fundamental && sem.types[use.type].fundamental == FT_VOID;
+    if (use.hint == -2 && !to_void) {
         if (use.reference) { rtti_failure(2); start(block()); }
         return Value(Operand::integer(0),IRType::Ptr,fact.type);
     }
@@ -169,6 +175,16 @@ Value Procedural::rtti_expression(NodeId n)
     auto scan = block(), end = block();
     emit(Opcode::Branch,IRType(),{null.operand,Operand::label(end),Operand::label(scan)});
     start(scan);
+    if (to_void) {
+        auto table = emit(Opcode::Load,IRType::Ptr,{object.operand});
+        auto offset = Operand::integer(-16); offset.negative_integer = true;
+        auto top = emit(Opcode::Index,IRType::I8,{table.operand,offset});
+        auto displacement = emit(Opcode::Load,IRType::I64,{top.operand});
+        auto complete = emit(Opcode::Index,IRType::I8,{object.operand,displacement.operand});
+        emit(Opcode::Store,IRType::Ptr,{complete.operand,Operand::slot(slot)}); jump(end);
+        // Retain the O0 cast continuation in the explicit course LowIR view.
+        start(block());
+    }
     auto from = emit(Opcode::Addr,IRType(),{Operand::symbol(rtti_type(use.source))});
     auto to = emit(Opcode::Addr,IRType(),{Operand::symbol(rtti_type(use.type))});
     auto hint = Operand::integer(use.hint); hint.negative_integer = use.hint < 0;

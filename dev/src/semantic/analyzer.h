@@ -85,6 +85,7 @@ public:
     const VirtualClass& virtual_class(EntityId e) const { return virtual_classes[class_facts[entities[e].class_info].virtual_info]; }
     std::uint32_t virtual_class_id(EntityId e) const { return class_facts[entities[e].class_info].virtual_info; }
     std::size_t virtual_class_count() const { return virtual_classes.size(); }
+    bool member_pointer_zero_adjustment(EntityId object) const;
     std::size_t class_count() const { return class_facts.size(); }
     std::size_t member_count() const { return members.size(); }
     const std::vector<EntityId>& demanded_vtables() const { return vtable_emission; }
@@ -252,7 +253,10 @@ private:
     void prepare_function_boundaries();
     bool local_scalar(EntityId object) const;
     bool private_scalar(EntityId object) const;
-    void observe_scalar(NodeId expression);
+    void observe_scalar(NodeId expression, bool write = false);
+    void record_member_pointer_write(NodeId destination, NodeId source);
+    void prepare_member_pointer_value(EntityId object, unsigned* remaining = nullptr);
+    bool prove_member_pointer_value(NodeId source, TypeId target, unsigned& budget);
     bool direct_class_call(NodeId expression);
     unsigned char scalar_truth(NodeId expression);
     void prepare_scalar_consumption(EntityId object);
@@ -360,6 +364,12 @@ private:
     bool narrowing_conversion(TypeId from, TypeId target, Constant value);
     bool narrowing_needs_value(TypeId from, TypeId target);
     Index scalar_observations, scalar_consumption_index;
+    // Built during checking, frozen before lowering. Each local fact is proven
+    // once; recursive value dependencies observe the active state.
+    struct MemberPointerWrite { NodeId source; std::uint32_t next; };
+    std::vector<MemberPointerWrite> member_pointer_writes = std::vector<MemberPointerWrite>(1);
+    Index member_pointer_write_heads, member_pointer_exposed, member_pointer_value_states;
+    std::size_t member_pointer_proof_work = 0, member_pointer_proof_hits = 0;
     std::vector<ScalarConsumption> scalar_consumptions = std::vector<ScalarConsumption>(1);
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;

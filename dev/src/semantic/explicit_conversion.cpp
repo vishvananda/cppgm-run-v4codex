@@ -88,6 +88,18 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         }
     }
     TypeId from = decay(x.type);
+    if (types[from].kind == TypeKind::MemberPointer && target.kind == TypeKind::MemberPointer) {
+        unsigned added = 0;
+        bool member_types = qualification(types[from].child,target.child,added);
+        if (cv_cast) return similar_type(from,to) && types[target.child].kind != TypeKind::Function ? c : invalid();
+        auto derived = entities[types[from].entity].type, base = entities[target.entity].type;
+        if (member_types && op != KW_REINTERPET_CAST && downcast(derived,base)) {
+            if (!cstyle && !base_accessible(types[from].entity,target.entity,s)) return invalid();
+            c.derived = true; c.adjustment = inverse(derived,base); return c;
+        }
+        if (op == KW_REINTERPET_CAST && member_types) return c;
+        return invalid();
+    }
     if (cv_cast) {
         if (!pointer(from) || !pointer(to) || types[types[from].child].kind == TypeKind::Function || !similar_type(from, to))
             return invalid();

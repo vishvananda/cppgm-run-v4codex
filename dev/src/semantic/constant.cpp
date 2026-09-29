@@ -46,8 +46,13 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
         if (fundamental(to,FT_VOID)) return Constant(to,0);
         if (types[v.type].kind == TypeKind::MemberPointer) {
             if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
-            if (target.kind == TypeKind::MemberPointer && types[v.type].entity == target.entity &&
-                types.unqualified(types[v.type].child) == types.unqualified(target.child)) return Constant(to,v.bits);
+            if (target.kind == TypeKind::MemberPointer) {
+                unsigned added = 0;
+                auto owner = entities[types[v.type].entity].type, destination = entities[target.entity].type;
+                if (qualification(types[v.type].child,target.child,added) &&
+                    (owner == destination || derived_from(destination,owner) || (explicit_cast && derived_from(owner,destination))))
+                    return Constant(to,v.bits);
+            }
             return Constant();
         }
         if (target.kind == TypeKind::MemberPointer)

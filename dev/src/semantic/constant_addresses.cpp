@@ -317,10 +317,20 @@ StaticValue Analyzer::constant_static_value(Constant v)
         r.kind = storage.literal ? StaticValue::String : StaticValue::Address; r.entity = storage.entity; r.string = storage.literal;
         r.addend = constant_offset(v.bits);
     } else if (k == TypeKind::MemberPointer) {
+        if (v.bits) {
+            auto declaration_owner = scopes[entities[v.bits].owner].entity;
+            auto target_owner = types[v.type].entity;
+            if (declaration_owner != target_owner) {
+                auto target = entities[target_owner].type, source = entities[declaration_owner].type;
+                if (derived_from(target,source)) r.addend = base_adjustments[base_steps(target,declaration_owner)].total;
+                else if (derived_from(source,target)) r.addend = 0-base_adjustments[base_steps(source,target_owner)].total;
+                else return StaticValue();
+            }
+        }
         if (types[types[v.type].child].kind == TypeKind::Function) {
             r.kind = StaticValue::MemberFunction; r.entity = v.bits;
         } else {
-            r.kind = StaticValue::Integer; r.bits = v.bits ? entities[v.bits].member_offset : ~std::uint64_t(0);
+            r.kind = StaticValue::Integer; r.bits = v.bits ? entities[v.bits].member_offset + 1 + r.addend : 0;
         }
     } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }

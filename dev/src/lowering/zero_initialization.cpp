@@ -52,7 +52,7 @@ void Procedural::zero_plan(std::uint32_t id, Value object, bool scalar_access)
         bool observed = scalar_access && (sem.types[plan.type].cv & 2);
         if (plan.bytes == 8) {
             Instruction store(Opcode::Store,IRType::I64); store.is_volatile = observed;
-            emit(store,{Operand::integer(~std::uint64_t(0)),object.operand});
+            emit(store,{Operand::integer(0),object.operand});
         } else if (observed) {
             Instruction store(Opcode::Store,IRType::Ptr); store.is_volatile = true;
             emit(store,{Operand::integer(0),object.operand});

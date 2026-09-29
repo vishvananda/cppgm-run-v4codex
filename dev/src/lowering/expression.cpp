@@ -306,21 +306,16 @@ Value Procedural::binary(NodeId n, bool location)
         }
         rhs = store(rhs, dest); dest.cached = true; dest.stored = rhs.operand; return dest;
     }
-    Value lhs = sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::User ? converted(a,sem.conversion_fact(fact.conversions)) : load(expression(a));
-    Value rhs = sem.conversion_fact(fact.conversions+1).kind == semantic::Conversion::Kind::User ? converted(b,sem.conversion_fact(fact.conversions+1)) : load(expression(b));
     auto left = sem.conversion_fact(fact.conversions), right = sem.conversion_fact(fact.conversions+1);
+    Value lhs = left.kind == semantic::Conversion::Kind::User || left.derived ? converted(a,left) : load(expression(a));
+    Value rhs = right.kind == semantic::Conversion::Kind::User || right.derived ? converted(b,right) : load(expression(b));
     lhs = convert(lhs, left.target, left.fold_widen, left.preserve_widen);
     rhs = convert(rhs, right.target, right.fold_widen, right.preserve_widen);
-    if (sem.conversion_fact(fact.conversions).derived) lhs = pointer_projection(lhs, sem.conversion_fact(fact.conversions).adjustment);
-    if (sem.conversion_fact(fact.conversions+1).derived) rhs = pointer_projection(rhs, sem.conversion_fact(fact.conversions+1).adjustment);
     return operation(op, lhs, rhs, fact.type);
 }
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 {
     Value v;
-    if ((op == OP_EQ || op == OP_NE) && sem.types[a.type].kind == TypeKind::MemberPointer && a.ir.kind() == IRType::Object) {
-        v = member_pointer_equal(a,b,op == OP_EQ); v.type = result; return v;
-    }
     if ((op == OP_PLUS || op == OP_MINUS) && (a.ir == IRType::Ptr || b.ir == IRType::Ptr)) {
         if (a.ir != IRType::Ptr) std::swap(a, b);
         TypeId pointer_type = a.type;

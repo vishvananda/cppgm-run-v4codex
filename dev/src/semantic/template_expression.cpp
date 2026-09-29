@@ -143,7 +143,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         auto incoming = expressions[template_fixed_expressions.get(ast.nodes.occurrences[c].source)].incoming;
         if (incoming >= result.conversions && incoming-result.conversions < result.count) {
             expressions.incoming(c,incoming);
-            if (conversions[incoming].reference && !conversions[incoming].temporary) observe_scalar(c);
+            if (conversions[incoming].reference && !conversions[incoming].temporary) observe_scalar(c,conversions[incoming].storage_write);
         }
     }
     } catch (...) { if (unevaluated) --unevaluated_depth; throw; }
@@ -160,7 +160,8 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         }
     }
     if (node.kind == Kind::Assignment || node.op == OP_INC || node.op == OP_DEC ||
-        (node.kind == Kind::Unary && node.op == OP_AMP)) observe_scalar(first);
+        (node.kind == Kind::Unary && node.op == OP_AMP)) observe_scalar(first,node.kind == Kind::Assignment);
+    if (node.kind == Kind::Assignment && node.op == OP_ASS) record_member_pointer_write(first,ast[first].next);
     auto& published = facts.edit(n);
     published.type = facts[source].type;
     if (!template_value_dependence.get(occurrence.source)) published.value = facts[source].value;

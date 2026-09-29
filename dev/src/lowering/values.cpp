@@ -8,7 +8,7 @@ IRType Procedural::type(TypeId id)
     switch (t.kind) {
     case TypeKind::Pointer: case TypeKind::LRef: case TypeKind::RRef: case TypeKind::Function: return IRType::Ptr;
     case TypeKind::Array: return IRType::object(sem.object_size(id), sem.object_alignment(id));
-    case TypeKind::MemberPointer: return sem.types[t.child].kind == TypeKind::Function ? IRType::object(16,8) : IRType(IRType::I64);
+    case TypeKind::MemberPointer: return sem.types[t.child].kind == TypeKind::Function ? IRType(IRType::I128) : IRType(IRType::I64);
     case TypeKind::Named:
         if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
         return IRType::object(sem.object_size(id), sem.object_alignment(id));
@@ -35,7 +35,8 @@ Value Procedural::emit(Instruction i, const Operand* args, std::size_t count)
     if (i.result_type() != IRType()) i.destination = builder->value(0);
     builder->append(i);
     if (lowir_model::terminator(i.opcode)) ended = true;
-    return Value(Operand::value(i.destination), i.result_type());
+    Value result(Operand::value(i.destination), i.result_type());
+    result.nonnull = i.opcode == Opcode::Addr; return result;
 }
 Value Procedural::emit(Instruction i, const std::vector<Operand>& args) { return emit(i, args.data(), args.size()); }
 Value Procedural::emit(Instruction i, std::initializer_list<Operand> args) { return emit(i, args.begin(), args.size()); }
@@ -48,11 +49,11 @@ Value Procedural::load(Value v)
 {
     if (!v.address) return v;
     if (v.bit_field) return load_bit_field(v);
-    if (sem.class_value(v.type) || (sem.types[v.type].kind == TypeKind::MemberPointer && type(v.type).kind() == IRType::Object)) { v.address = false; v.ir = type(v.type); return v; }
+    if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
-    Value r = emit(i, {v.operand}); r.type = v.type; return r;
+    Value r = emit(i, {v.operand}); r.type = v.type; r.member_zero_adjustment = v.member_zero_adjustment; return r;
 }
 Value Procedural::address(Value v)
 {
@@ -127,10 +128,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
     bool from_bool = from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_BOOL;
     if (sem.types[to].kind == TypeKind::Fundamental && sem.types[to].fundamental == FT_BOOL && !from_bool) {
         Operand zero = v.ir.floating() ? Operand::floating(0) : Operand::integer(0);
-        if (sem.types[from].kind == TypeKind::MemberPointer) {
-            if (v.ir.kind() == IRType::Object) v = emit(Opcode::Load,IRType::Ptr,{member_pointer_address(v).operand});
-            else zero = Operand::integer(~std::uint64_t(0));
-        }
+        if (sem.types[from].kind == TypeKind::MemberPointer) v = truth_operand(v);
         v = emit(Opcode::Compare, v.ir, {v.operand, zero}, Operation::Ne);
     }
     bool unsign = from && sem.unsigned_type(from);
@@ -178,6 +176,7 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)
 {
     if (c.derived) {
+        if (sem.types[c.target].kind == TypeKind::MemberPointer) return member_pointer_conversion(load(v),c);
         v = c.reference && !c.temporary ? base_projection(address(v),c.adjustment) : pointer_projection(load(v),c.adjustment);
         if (c.temporary) { v.type = sem.types[c.target].child; return convert(v, c.target); }
         v.type = c.target; return v;
@@ -202,8 +201,11 @@ Value Procedural::incoming(NodeId n)
 }
 Value Procedural::base_projection(Value base, unsigned steps)
 {
-    if (steps) base = emit(Opcode::Index, IRType::I8,
-        {base.operand, Operand::integer(sem.base_adjustments[steps].total)});
+    if (steps) {
+        bool nonnull = base.nonnull;
+        base = emit(Opcode::Index, IRType::I8,{base.operand, Operand::integer(sem.base_adjustments[steps].total)});
+        base.nonnull = nonnull;
+    }
     return base;
 }
 Value Procedural::field(Value base, EntityId e, unsigned steps)
@@ -254,7 +256,8 @@ Value Procedural::binding(EntityId e)
     }
     // Incomplete arrays are addressable without demanding a layout.
     IRType ir = sem.types[t].kind == TypeKind::Array ? IRType(IRType::Ptr) : type(t);
-    return Value(location, ir, t, true);
+    Value result(location, ir, t, true);
+    result.member_zero_adjustment = sem.member_pointer_zero_adjustment(e); return result;
 }
 BlockId Procedural::block() { return builder->block(0); }
 void Procedural::start(BlockId b) { builder->start_block(b); ended = false; }

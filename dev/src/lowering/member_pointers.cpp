@@ -1,22 +1,29 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
-Value Procedural::member_pointer_value(EntityId member, TypeId target)
+Value Procedural::member_pointer_value(EntityId member, TypeId target, std::int64_t adjustment)
 {
+    if (!member) { Value null(Operand::integer(0),type(target),target); null.member_zero_adjustment = true; return null; }
+    Value result;
     if (sem.types[sem.types[target].child].kind != TypeKind::Function)
-        return Value(Operand::integer(member ? sem.entities[member].member_offset : ~std::uint64_t(0)),IRType::I64,target);
-    SlotId slot = builder->add_slot(0,type(target));
-    Value storage(Operand::slot(slot),type(target),target,true);
-    Value pointer = address(storage);
-    Value function = member ? emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(member))}) : Value(Operand::integer(0),IRType::Ptr);
-    emit(Opcode::Store,IRType::Ptr,{function.operand,pointer.operand});
-    Value adjustment = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(8)});
-    emit(Opcode::Store,IRType::I64,{Operand::integer(0),adjustment.operand});
-    storage.address = false; return storage;
+        result = emit(Opcode::Const,IRType::I64,{Operand::integer(sem.entities[member].member_offset+1+adjustment)});
+    else {
+        result = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(member))});
+        result = emit(Opcode::Copy,IRType::I64,{result.operand});
+        result = coerce(result,IRType::I128,true,true);
+        if (adjustment) {
+            auto high = coerce(Value(Operand::integer(adjustment),IRType::I64),IRType::I128,true,true);
+            high = emit(Opcode::Binary,IRType::I128,{high.operand,Operand::integer(64)},Operation::Shl);
+            result = emit(Opcode::Binary,IRType::I128,{result.operand,high.operand},Operation::Or);
+        }
+    }
+    result.type = target; result.member_zero_adjustment = !adjustment; return result;
 }
 Value Procedural::truth_operand(Value value)
 {
-    return sem.types[value.type].kind == TypeKind::MemberPointer ? convert(value,sem.types.fundamental(FT_BOOL)) : value;
+    if (sem.types[value.type].kind == TypeKind::MemberPointer && value.ir == IRType::I128 && !value.member_zero_adjustment)
+        return coerce(value,IRType::I64,true,true);
+    return value;
 }
 void Procedural::member_pointer_data(const semantic::StaticValue& value)
 {
@@ -26,34 +33,29 @@ void Procedural::member_pointer_data(const semantic::StaticValue& value)
     else item.value = Operand::integer(0);
     p.data.push_back(item);
     item = lowir_model::DataItem(); item.kind = lowir_model::DataItem::Scalar;
-    item.type = IRType::I64; item.value = Operand::integer(0); p.data.push_back(item);
+    item.type = IRType::I64; item.value = Operand::integer(value.addend); p.data.push_back(item);
 }
-Value Procedural::member_pointer_equal(Value left, Value right, bool equal)
+Value Procedural::member_pointer_conversion(Value value, const semantic::Conversion& conversion)
 {
-    auto a = member_pointer_address(left), b = member_pointer_address(right);
-    auto af = emit(Opcode::Load,IRType::Ptr,{a.operand}), bf = emit(Opcode::Load,IRType::Ptr,{b.operand});
-    auto same = emit(Opcode::Compare,IRType::Ptr,{af.operand,bf.operand},Operation::Eq);
-    auto null = emit(Opcode::Compare,IRType::Ptr,{af.operand,Operand::integer(0)},Operation::Eq);
-    a = emit(Opcode::Index,IRType::I8,{a.operand,Operand::integer(8)});
-    b = emit(Opcode::Index,IRType::I8,{b.operand,Operand::integer(8)});
-    a = emit(Opcode::Load,IRType::I64,{a.operand}); b = emit(Opcode::Load,IRType::I64,{b.operand});
-    auto adjustment = emit(Opcode::Compare,IRType::I64,{a.operand,b.operand},Operation::Eq);
-    auto allowed = emit(Opcode::Binary,IRType::I64,{null.operand,adjustment.operand},Operation::Or);
-    auto result = emit(Opcode::Binary,IRType::I64,{same.operand,allowed.operand},Operation::And);
-    if (!equal) result = emit(Opcode::Compare,IRType::I64,{result.operand,Operand::integer(0)},Operation::Eq);
-    return result;
-}
-Value Procedural::member_pointer_address(Value value)
-{
-    if (value.address || value.operand.kind == Operand::Slot || value.operand.kind == Operand::Symbol) {
-        value.address = true; return address(value);
+    auto offset = sem.base_adjustments[conversion.adjustment].total;
+    value.type = conversion.target;
+    if (!offset) return value;
+    // Preserve canonical null even when adding a nonzero base displacement.
+    auto slot = builder->add_slot(0,value.ir);
+    auto test = emit(Opcode::Compare,value.ir,{value.operand,Operand::integer(0)},Operation::Eq);
+    auto null = block(), adjust = block(), end = block();
+    emit(Opcode::Branch,IRType(),{test.operand,Operand::label(null),Operand::label(adjust)});
+    start(null); emit(Opcode::Store,value.ir,{Operand::integer(0),Operand::slot(slot)}); jump(end);
+    start(adjust);
+    Value delta(Operand::integer(offset),IRType::I64);
+    if (value.ir == IRType::I128) {
+        delta = coerce(delta,IRType::I128,true,true);
+        delta = emit(Opcode::Binary,IRType::I128,{delta.operand,Operand::integer(64)},Operation::Shl);
     }
-    if (value.operand.kind == Operand::Temporary && p.values[value.operand.ref-1].type == IRType::Ptr)
-        return Value(value.operand,IRType::Ptr,value.type);
-    SlotId slot = builder->add_slot(0,type(value.type));
-    Value pointer = address(Value(Operand::slot(slot),type(value.type),value.type,true));
-    Instruction copy(Opcode::CopyObject); copy.bytes = 16; copy.alignment = 8;
-    emit(copy,{value.operand,pointer.operand}); return pointer;
+    auto result = emit(Opcode::Binary,value.ir,{value.operand,delta.operand},Operation::Add);
+    emit(Opcode::Store,value.ir,{result.operand,Operand::slot(slot)}); jump(end);
+    start(end); result = emit(Opcode::Load,value.ir,{Operand::slot(slot)});
+    result.type = conversion.target; return result;
 }
 Value Procedural::member_pointer_object(const semantic::ObjectUse& use, Value* function)
 {
@@ -61,11 +63,18 @@ Value Procedural::member_pointer_object(const semantic::ObjectUse& use, Value* f
     object = sem.types[sem.expression_fact(use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
     object = base_projection(object,use.adjustment);
     Value member = load(expression(use.member_pointer));
-    if (!function) return emit(Opcode::Index,IRType::I8,{object.operand,member.operand});
-    Value pointer = member_pointer_address(member);
-    *function = emit(Opcode::Load,IRType::Ptr,{pointer.operand});
-    Value at = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(8)});
-    Value adjustment = emit(Opcode::Load,IRType::I64,{at.operand});
-    return emit(Opcode::Index,IRType::I8,{object.operand,adjustment.operand});
+    if (!function) {
+        auto offset = emit(Opcode::Binary,IRType::I64,{member.operand,Operand::integer(1)},Operation::Sub);
+        Instruction index(Opcode::Index,IRType::I8); index.projection = ir_model::IPK_FIELD;
+        return emit(index,{object.operand,offset.operand});
+    }
+    *function = coerce(member,IRType::I64,true,true);
+    *function = emit(Opcode::Copy,IRType::Ptr,{function->operand});
+    if (!member.member_zero_adjustment) {
+        auto high = emit(Opcode::Binary,IRType::I128,{member.operand,Operand::integer(64)},Operation::Shr);
+        auto adjustment = coerce(high,IRType::I64,true,true);
+        object = emit(Opcode::Index,IRType::I8,{object.operand,adjustment.operand});
+    }
+    return object;
 }
 } }

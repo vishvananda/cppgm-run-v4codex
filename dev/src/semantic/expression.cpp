@@ -154,7 +154,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         }
         if (nonstatic_field(e)) {
             TypeId object = implicit_object_type(s);
-            if (object) {
+            auto owner = entities[scopes[entities[e].owner].entity].type;
+            bool related_object = object && (types.unqualified(types[object].child) == types.unqualified(owner) ||
+                derived_from(types[object].child,owner));
+            if (related_object) {
                 size(types[object].child);
                 record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
                 if (types[entities[e].type].kind != TypeKind::LRef && types[entities[e].type].kind != TypeKind::RRef)

@@ -242,7 +242,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     }
     if (member_owner) {
         Parameter param; param.type = IRType::Ptr; param.object_bytes = sem.object_size(sem.entities[member_owner].type);
-        lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true; v.name = p.intern("%this");
+        lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true; v.name = p.intern("%arg0");
         p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
     }
     for (unsigned j = 0; j < t.count; ++j) {
@@ -254,7 +254,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         // every actual call/definition requires completeness in semantics.
         Parameter param; param.type = incomplete || sem.indirect_parameter(pt) ? IRType(IRType::Ptr) : type(pt);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
-        if (!owner) v.name = p.intern("%arg" + std::to_string(j));
+        if (!owner) v.name = p.intern("%arg" + std::to_string(j + bool(member_owner)));
         p.values.push_back(v); param.value = ValueId(p.values.size());
         if (incomplete) param.passing = PPM_BY_ADDRESS;
         else if (sem.indirect_parameter(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }

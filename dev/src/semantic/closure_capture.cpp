@@ -49,6 +49,7 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     closures[id].last_capture = index;
     // Capturing an address invalidates the scalar's private-storage proof even
     // while checking an as-yet undemanded call operator.
+    if (object && !capture.by_copy && types[entities[object].type].kind == TypeKind::MemberPointer) member_pointer_exposed.put(object,1);
     if (object && !capture.by_copy && private_scalar(object)) { scalar_observations.put(object,1); ++scalar_observation_count; }
     return index;
 }

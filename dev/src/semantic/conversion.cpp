@@ -83,6 +83,26 @@ bool Analyzer::object_pointer(TypeId t)
 }
 TypeId Analyzer::composite_pointer(TypeId a, TypeId b)
 {
+    if (types[a].kind == TypeKind::MemberPointer && types[b].kind == TypeKind::MemberPointer) {
+        auto ac = types[a].child, bc = types[b].child;
+        TypeId child = 0;
+        if (types[ac].kind == TypeKind::Function || types[bc].kind == TypeKind::Function) {
+            if (ac != bc) return 0;
+            child = ac;
+        } else if (types.unqualified(ac) == types.unqualified(bc))
+            child = types.qualify(ac,types[ac].cv | types[bc].cv);
+        else if (pointer(ac) && pointer(bc)) {
+            child = composite_pointer(ac,bc);
+            if (child) child = types.qualify(child,types[ac].cv | types[bc].cv | 1);
+        }
+        if (!child) return 0;
+        unsigned added = 0;
+        if (!qualification(ac,child,added) || !qualification(bc,child,added)) return 0;
+        auto ae = types[a].entity, be = types[b].entity;
+        auto owner = ae == be || derived_from(entities[ae].type,entities[be].type) ? ae :
+            derived_from(entities[be].type,entities[ae].type) ? be : 0;
+        return owner ? types.member_pointer(owner,child) : 0;
+    }
     if (!pointer(a) || !pointer(b)) return 0;
     TypeId ac = types[a].child, bc = types[b].child, result = 0;
     unsigned cv = object_cv(types,ac) | object_cv(types,bc);
@@ -115,12 +135,14 @@ bool Analyzer::null_constant(NodeId n)
 bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const)
 {
     Type a = types[from], b = types[to];
+    if (a.kind == TypeKind::Function || b.kind == TypeKind::Function) return from == to;
     if (a.kind != b.kind || (a.cv & ~b.cv)) return false;
     if (a.cv != b.cv) {
         if (!intermediate_const) return false;
         added |= b.cv & ~a.cv;
     }
-    if (a.kind == TypeKind::Pointer || a.kind == TypeKind::Array) {
+    if (a.kind == TypeKind::Pointer || a.kind == TypeKind::Array || a.kind == TypeKind::MemberPointer) {
+        if (a.kind == TypeKind::MemberPointer && a.entity != b.entity) return false;
         if (a.kind == TypeKind::Array && a.bound != b.bound) return false;
         return qualification(a.child, b.child, added,
             intermediate_const && (a.kind == TypeKind::Array || (b.cv & 1)));
@@ -132,7 +154,8 @@ bool Analyzer::similar_type(TypeId a, TypeId b)
     if (types[a].kind != types[b].kind) return false;
     if (types[a].kind == TypeKind::Array)
         return types[a].bound == types[b].bound && similar_type(types[a].child,types[b].child);
-    if (pointer(a)) return similar_type(types[a].child, types[b].child);
+    if (pointer(a) || types[a].kind == TypeKind::MemberPointer)
+        return (pointer(a) || types[a].entity == types[b].entity) && similar_type(types[a].child, types[b].child);
     return types.unqualified(a) == types.unqualified(b);
 }
 Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
@@ -218,9 +241,18 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     if (to == from) { c.rank = 0; return c; }
     if ((pointer(to) || types[to].kind == TypeKind::MemberPointer || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || x.null_pointer_constant || (n && null_constant(n)))) { c.rank = 2; return c; }
-    if (types[from].kind == TypeKind::MemberPointer && types[to].kind == TypeKind::MemberPointer && types[from].entity == types[to].entity) {
+    if (types[from].kind == TypeKind::MemberPointer && types[to].kind == TypeKind::MemberPointer) {
         unsigned added = 0;
-        if (qualification(types[from].child,types[to].child,added)) { c.rank = 0; c.qualification = added; return c; }
+        if (!qualification(types[from].child,types[to].child,added)) return c;
+        if (types[from].entity == types[to].entity) { c.rank = 0; c.qualification = added; return c; }
+        auto derived = entities[types[to].entity].type, base = entities[types[from].entity].type;
+        if (!derived_from(derived,base)) return c;
+        auto path = base_path(derived,types[from].entity);
+        if (base_adjustments[path].ambiguous) return c;
+        for (auto at = path; at; at = base_adjustments[at].next)
+            if (bases[base_adjustments[at].edge].virtual_base) return c;
+        c.adjustment = base_steps(derived,types[from].entity);
+        c.rank = 2; c.derived = true; c.qualification = added; return c;
     }
     if (fundamental(to, FT_BOOL) && (pointer(from) || types[from].kind == TypeKind::MemberPointer)) { c.rank = 3; return c; }
     if (pointer(from) && pointer(to)) {
@@ -291,7 +323,7 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
     if (c.ellipsis_object && !c.empty_copy && c.kind != Conversion::Kind::Construction &&
         expressions[n].category != ValueCategory::Prvalue)
         throw std::runtime_error("class ellipsis argument has no value transfer");
-    if (n && c.reference && !c.temporary) observe_scalar(n);
+    if (n && c.reference && !c.temporary) observe_scalar(n,c.storage_write);
     if (c.kind == Conversion::Kind::ListPlan) { prepare_list(n,c); return; }
     if (c.kind == Conversion::Kind::List) return;
     if (c.kind == Conversion::Kind::User) { prepare_user_conversion(n,c); return; }
@@ -300,6 +332,9 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
         TypeId from = expressions[n].type, to = types[c.target].child;
         if (pointer(from)) from = types[from].child;
         if (pointer(to)) to = types[to].child;
+        if (types[c.target].kind == TypeKind::MemberPointer) {
+            to = entities[types[from].entity].type; from = entities[types[c.target].entity].type;
+        }
         check_base_access(from, to, facts[n].scope);
     }
     if (c.function) select_function(n, c.function);
@@ -322,7 +357,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 }
 void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
 {
-    if (n && c.reference && !c.temporary) observe_scalar(n);
+    if (n && c.reference && !c.temporary) observe_scalar(n,c.storage_write);
     if (!c.valid()) throw std::runtime_error("invalid operand conversion");
     if (c.kind == Conversion::Kind::ListPlan) prepare_list(n,c);
     if (n && c.kind == Conversion::Kind::Construction) materialize_conversion(n, c);
@@ -345,6 +380,9 @@ void Analyzer::record_conversion(Expression& owner, NodeId n, Conversion c)
             if (pointer(from)) from = types[from].child;
             TypeId to = types[c.target].child;
             if (pointer(to)) to = types[to].child;
+            if (types[c.target].kind == TypeKind::MemberPointer) {
+                to = entities[types[from].entity].type; from = entities[types[c.target].entity].type;
+            }
             check_base_access(from, to, facts[n].scope);
         }
         if (c.function && c.kind != Conversion::Kind::Construction && c.kind != Conversion::Kind::User && c.kind != Conversion::Kind::List) select_function(n, c.function);

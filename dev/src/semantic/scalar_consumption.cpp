@@ -11,12 +11,11 @@ bool Analyzer::local_scalar(EntityId object) const
     auto scope = scopes[e.owner].kind;
     return e.kind == EntityKind::Variable && !e.is_static && !e.external_decl && !e.thread_local_storage &&
         (scope == ScopeKind::Block || scope == ScopeKind::Control) && !class_value(e.type) &&
-        kind != TypeKind::Array && kind != TypeKind::Function && kind != TypeKind::LRef && kind != TypeKind::RRef &&
-        kind != TypeKind::MemberPointer;
+        kind != TypeKind::Array && kind != TypeKind::Function && kind != TypeKind::LRef && kind != TypeKind::RRef;
 }
 bool Analyzer::private_scalar(EntityId object) const
 { return local_scalar(object) && !(types[entities[object].type].cv & 2) && !scalar_observations.get(object); }
-void Analyzer::observe_scalar(NodeId n)
+void Analyzer::observe_scalar(NodeId n, bool write)
 {
     EntityId e = expressions[n].entity;
     if (auto capture = e ? capture_object(e) : 0) {
@@ -26,6 +25,7 @@ void Analyzer::observe_scalar(NodeId n)
         expressions.set(n,value);
     }
     if (unevaluated_depth) return;
+    if (!write && e && types[entities[e].type].kind == TypeKind::MemberPointer) member_pointer_exposed.put(e,1);
     if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) entities[e].emission |= Entity::Used;
     if (private_scalar(e)) { scalar_observations.put(e,1); ++scalar_observation_count; }
 }
@@ -72,6 +72,7 @@ unsigned char Analyzer::scalar_truth(NodeId n)
 }
 void Analyzer::prepare_scalar_consumption(EntityId object)
 {
+    if (types[entities[object].type].kind == TypeKind::MemberPointer) { prepare_member_pointer_value(object); return; }
     NodeId source = entities[object].initializer;
     std::uint32_t conversion_id = 0;
     while (source && (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer ||

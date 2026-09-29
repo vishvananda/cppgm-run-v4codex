@@ -25,7 +25,7 @@ struct Value {
     TypeId type = 0;
     EntityId bit_field = 0;
     std::uint64_t init_offset = 0;
-    bool address = false, cached = false;
+    bool address = false, cached = false, nonnull = false, member_zero_adjustment = false;
     bool initializing = false;
     Operand stored;
     SlotId materialized;
@@ -293,7 +293,7 @@ class Procedural {
     Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false, bool preserve_widen = false);
     Value converted(NodeId n, const semantic::Conversion& c);
     Value converted_value(Value value, const semantic::Conversion& conversion);
-    Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value());
+    Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value(), bool truth = false);
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
     bool discarded_access(NodeId n);
@@ -338,11 +338,10 @@ class Procedural {
     Value virtual_function(Value object, unsigned slot);
     SignatureId virtual_signature(EntityId e);
     std::vector<SignatureId> virtual_signatures;
-    Value member_pointer_value(EntityId member, TypeId type);
+    Value member_pointer_value(EntityId member, TypeId type, std::int64_t adjustment = 0);
+    Value member_pointer_conversion(Value value, const semantic::Conversion& conversion);
     void member_pointer_data(const semantic::StaticValue& value);
-    Value member_pointer_equal(Value left, Value right, bool equal);
     Value truth_operand(Value value);
-    Value member_pointer_address(Value value);
     Value member_pointer_object(const semantic::ObjectUse& use, Value* function = nullptr);
     void zero_object(TypeId type, Value object);
     void zero_plan(std::uint32_t plan, Value object, bool scalar_access = false);

@@ -80,6 +80,9 @@ bool Analyzer::valid_fixed_conversion(Expression source, NodeId n, Conversion& c
         auto from = source.type, to = types[c.target].child;
         if (pointer(from)) from = types[from].child;
         if (pointer(to)) to = types[to].child;
+        if (types[c.target].kind == TypeKind::MemberPointer) {
+            to = entities[types[from].entity].type; from = entities[types[c.target].entity].type;
+        }
         if (!base_accessible(types[from].entity,types[to].entity,s)) return false;
     }
     if (c.function) {

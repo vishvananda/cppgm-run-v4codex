@@ -88,7 +88,7 @@ void Reader::span(std::uint64_t& bytes, std::uint32_t& alignment)
 }
 Type Reader::type()
 {
-    static const char* const types[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","f32","f64","f80","ptr"};
+    static const char* const types[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
     std::string s = word();
     for (unsigned k = 0; k < sizeof(types)/sizeof(*types); ++k) if (s == types[k]) return Type(Type::Kind(k));
     if (s.size() > 6 && s.substr(0,4) == "obj<" && s.back() == '>') {

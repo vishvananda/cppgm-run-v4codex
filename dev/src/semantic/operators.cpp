@@ -6,7 +6,7 @@ using syntax::Kind;
 void Analyzer::modifiable(NodeId n)
 {
     Expression e = expressions[n];
-    observe_scalar(n);
+    observe_scalar(n,true);
     if (e.category != ValueCategory::Lvalue || (types[e.type].cv & 1) || types[e.type].kind == TypeKind::Array ||
         types[e.type].kind == TypeKind::Function) throw std::runtime_error("modifiable lvalue required");
 }
@@ -100,7 +100,7 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         TypeId common = 0;
         if (a == b && (scoped_enum(a) || (equality && fundamental(a, FT_NULLPTR_T)))) common = a;
         if (pointer(a) && pointer(b)) common = composite_pointer(a, b);
-        if (equality && a == b && types[a].kind == TypeKind::MemberPointer) common = a;
+        if (equality && types[a].kind == TypeKind::MemberPointer && types[b].kind == TypeKind::MemberPointer) common = composite_pointer(a,b);
         if (equality && types[a].kind == TypeKind::MemberPointer && null_constant(bn)) common = a;
         if (equality && types[b].kind == TypeKind::MemberPointer && null_constant(an)) common = b;
         if (equality && pointer(a) && null_constant(bn)) common = a;
@@ -186,7 +186,7 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Assignment) {
         modifiable(an);
         if (op == OP_ASS) {
-            Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0;
+            Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0; left.storage_write = true;
             record_conversion(r, an, left);
             // A specialized field has its final destination type; consume its
             // converted immediate just as its initializer does. Preserve the
@@ -200,6 +200,7 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
             auto index = expressions[bn].incoming;
             Conversion applied = conversions[index];
             apply_conversion(bn, applied); conversions[index] = applied;
+            record_member_pointer_write(an,bn);
         }
         else {
             ETokenType binary = compound_operation(op);

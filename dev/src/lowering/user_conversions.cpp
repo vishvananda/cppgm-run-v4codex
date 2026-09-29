@@ -1,7 +1,7 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
-Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value destination)
+Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value destination, bool truth)
 {
     auto record = sem.user_conversions[c.materialization];
     if (!record.prepared) throw std::logic_error("missing selected user conversion");
@@ -93,6 +93,7 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
         if (sem.indirect_parameter(target)) return destination;
         return Value(class_temporary(record.temporary,target).operand,type(target),target);
     }
+    if (truth && sem.types[result.type].kind == TypeKind::MemberPointer) return truth_operand(load(result));
     return converted_value(result,record.result);
 }
 } }
