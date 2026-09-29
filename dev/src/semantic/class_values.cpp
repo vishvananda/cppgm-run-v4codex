@@ -25,14 +25,17 @@ void Analyzer::prepare_value_boundary(TypeId t)
     if (class_facts[info].value_abi) return;
     class_facts[info].value_abi = class_facts[info].parameter_abi = 2;
     bool simple_destruction = trivial_destructor(t);
-    bool direct = false;
+    bool direct = false, direct_result = false;
     if (simple_destruction) {
-        direct = copy_storage_type(t);
+        direct = direct_result = copy_storage_type(t);
         EntityId move = select_transfer(t, types.unqualified(t), ValueCategory::Xvalue, false);
         direct |= move && !deleted_transfer(move) && trivial_transfer(move);
     }
     class_facts[info].parameter_abi = direct ? 1 : 2;
-    class_facts[info].value_abi = direct && size(t) <= 16 ? 1 : 2;
+    // The course's direct object result boundary requires copyable storage.
+    // A trivial move can transport an argument, but move-only results retain
+    // caller-owned destination storage throughout nested return expressions.
+    class_facts[info].value_abi = direct_result && size(t) <= 16 ? 1 : 2;
 }
 void Analyzer::prepare_function_boundaries()
 {
