@@ -74,7 +74,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             if (condition.valid && !scoped_enum(condition.type))
                 value = constant_query_conversion(query_edges[query.offset+(constant_truth(condition) ? 1 : 2)],conversions[begin+(constant_truth(condition) ? 1 : 2)]);
         } else if (!fact.selected && query.kind == QueryKind::Unary && query.op == OP_AMP && types[fact.expression.type].kind == TypeKind::MemberPointer) {
-            value = Constant(fact.expression.type,fact.expression.entity);
+            value = member_address_constant(fact.expression.type,fact.expression.entity);
         } else if (!fact.selected && query.kind == QueryKind::Unary) {
             if (query.op == OP_AMP) {
                 auto address = constant_query_object(query_edges[query.offset]);

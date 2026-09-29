@@ -1,0 +1,184 @@
+{
+  "stage_base": "a8482d768bd2dcede42ea63ef39e39cf3245c380",
+  "audit_entry": "853c44937b2648d4fe31754f03bfee56c4db2dcc",
+  "accumulated_review_manifest": "student.tests/pa22/audit117-validation.json",
+  "initial_audit_fixes": "015feb8d9c477017fa78fda5171d3773f1b82d68",
+  "reviewed_sources": {
+    "dev/frontend_source_sets.mk": "b6964aa46cc129a56be1c08fbce415a81375d65e239edcc1d079bba036813dfc",
+    "dev/src/lowering/constant_construction.cpp": "03528e33b933a7f76f6fb1227596b23bd0372a61ec1d3fb3707e787abe227212",
+    "dev/src/lowering/control_flow.cpp": "d8d07034cf79d67acba84d45a7fbb5dac45a406f90ba6dba70356c7d6e1f3290",
+    "dev/src/lowering/expression.cpp": "cff00340d625562849c2851bee200b29876bb782f766836f28e04024549d481a",
+    "dev/src/lowering/initializer_plan.cpp": "890a848adc11351cd474da6720834d4409c91becf126dc154e4c94be27a2601a",
+    "dev/src/lowering/local_abi.cpp": "dfde1faad9f9dff8826fe813d35e6fe03dadda5ad649115e93c89c6a1c167b8b",
+    "dev/src/lowering/member_pointers.cpp": "2b6023450366934734815a66ec173678ebde23ea88e3028890e6a951b75d7629",
+    "dev/src/lowering/procedural.h": "9df2ea12618888f8ef2f5211a65891566c89311013d8477fc528336dd4b9c0fc",
+    "dev/src/lowering/query_abi.cpp": "5d8d4f0a9d1fcfd37c04e0955119547cf1d0b9c2e49fab280f3f179a42a883e8",
+    "dev/src/lowering/rtti.cpp": "825df322fb0be16e1c56efad6f85fd816193636c08bc04cd1a0679469a7dbee3",
+    "dev/src/lowering/symbols.cpp": "d4c0be1972c82a31bd2b20a658f4199b17925405c7938fab606188d47ef4a5c0",
+    "dev/src/lowering/user_conversions.cpp": "d104a3795bd29777b9c1f0ff280eb229469599c3b61c86586c0c43ae10a1f14a",
+    "dev/src/lowering/values.cpp": "9e3de03b9bf65fe80d4078f094f43f1c9b4921b33508a04af96ad0ca43a72207",
+    "dev/src/lowering/virtuals.cpp": "ea8c4d44d3bde7443c2b15c15411bb897748169ac03b1b29787333583ff9679a",
+    "dev/src/lowering/zero_initialization.cpp": "73f5f322c36fad39d57be075b153ac0ca74ca76dfa25702f50922fb0b575c0e7",
+    "dev/src/lowir/model.cpp": "34e392711d145ad01e73d356e99059d2c564912771513ea5d029f1e1730558d5",
+    "dev/src/lowir/model.h": "b84f64947d07dbf6661a9add8d9ac3bad19c1af7cf9c20a8e9180980c43c7a9e",
+    "dev/src/lowir/reader.cpp": "ca9593e270b58cd5c3a56381a5d90fa8dca260eadd9f4c056e275273927696be",
+    "dev/src/lowir/writer.cpp": "89eb0361655f681c06a911a16cbd78e489c6ff698fd4d270464282d9c85c1bd4",
+    "dev/src/semantic/analyzer.h": "d868b5f1c1f68c3a3484addf08988cab666f2c8a74e22f2006f41aa28f0ffdb6",
+    "dev/src/semantic/callable.cpp": "2ca6ce4dc36f98b4b3174315d33c03a158b5132a6c86ea2c9324577cc1ddb4f2",
+    "dev/src/semantic/closure_capture.cpp": "627a0c4018922068cb2f5aa978cdd54026f8cdacb51a1d3d599df1a8d89d4341",
+    "dev/src/semantic/constant.cpp": "96aeb628d5f242e5be6bc68f248b55a2fc6e1733067d766831a0ff787f31a547",
+    "dev/src/semantic/constant_addresses.cpp": "c229a6adf11512b247bfb0d02074bb1ccb0d63ff5cc987f883144ec676a682f9",
+    "dev/src/semantic/constant_execution.cpp": "89294d1b8f24c22263c540e605d29862746e1a208fb097980bbbe048f098cb7f",
+    "dev/src/semantic/constant_objects.cpp": "812fc2d08f2aef63ddd5edbc96b16c71b3ae516d4e18cab3f0e46b56fe152296",
+    "dev/src/semantic/constant_queries.cpp": "c8790ade94085087111413281ac5f0651a12081a99c9ee1bb50c8059f16b5db2",
+    "dev/src/semantic/conversion.cpp": "916168cc9e7431b65e666ab5635090c7d58ff1f12afff544e242eac0216e335f",
+    "dev/src/semantic/conversion_functions.cpp": "671fbfbbc13968127f054f97fd1a48a3f736ed89af2a8c023e474b81633b810a",
+    "dev/src/semantic/dependent_type.cpp": "e3d17890f6a67c822b57da40802c36e079652e86480d718558657a7b8275b2f5",
+    "dev/src/semantic/explicit_conversion.cpp": "b158a1ffe264169525c3b9ce9494878b2783ca78eebca504ebf74fd93a04ef52",
+    "dev/src/semantic/expression.cpp": "bd78011fe5877f28d56ea10af94b05edb0e88c1305c1836c63a1832d37a5f4da",
+    "dev/src/semantic/friends.cpp": "035ff163dd2c31b2dc69878969816e98a13608d045b8120db4fdcde05122edb5",
+    "dev/src/semantic/lookup.cpp": "18233252dcf083f88a305689e5c6da87a7367cf2b3d7f732e1824331ece2008b",
+    "dev/src/semantic/member.cpp": "f2c9d726ae3de4b7d252ab7ad2a3677d69c2a5ccd24529eac167ab4e44bac634",
+    "dev/src/semantic/member_pointer_values.cpp": "009ecd1e33e3d4e36b509b08d978415a768fa411b1048df04ae8efc381ce3923",
+    "dev/src/semantic/member_pointers.cpp": "b80e8e54d29d55fb8f61534019e286778b0c65ce7fd2c3812d3382399c5e3f15",
+    "dev/src/semantic/model.cpp": "9adc563d4bfb56bdc77b1c99e232793f67662046501b3dbdc39568b8c6f1bb3c",
+    "dev/src/semantic/model.h": "8ea94918544ae1a474b07a00e9f265d0a0141999c6e21490c8f1857a37a344bb",
+    "dev/src/semantic/operators.cpp": "2f6e71de2da8dae160c619d883d28457824631c945fdd71c549c8fd3fabb8e28",
+    "dev/src/semantic/output.cpp": "ca470adcbc7580146c1255bcc880851a66f18f94be93c641f364ed5c0a45541b",
+    "dev/src/semantic/overload.cpp": "c4dcc5a16ce91d1638ba3bb891a9dc9fb4674fb8b9664516de6593a22c78af96",
+    "dev/src/semantic/query_call.cpp": "cb014c0f3ba2349378d802e91b86d45217c8d71c9c712042cd3d7cd1fdf0b70e",
+    "dev/src/semantic/query_operator.cpp": "901be2e77b14f9ea2cc4b7e67e3fa773ff16da86777feec3118c248ca969aea9",
+    "dev/src/semantic/rtti.cpp": "c5a03c79bb1c7e3e9438a48b7a1ad877cd11e1da5d47802e7a593fa198868b79",
+    "dev/src/semantic/scalar_consumption.cpp": "0e209b61ad27cded96997659332b4dfbb5ace583a918fac84d03823a920ac5d7",
+    "dev/src/semantic/template_arguments.cpp": "8fea2b3f0ac36452ac741a4a353880db7160300dc4d338b8717aba8ed24defc7",
+    "dev/src/semantic/template_binding.cpp": "9c01d5dfbc0433bc3c9dcbaa5c49fe2c7040e095c7e7fefd41e5c65d4e58a821",
+    "dev/src/semantic/template_call.cpp": "de6f629882d47c85e7f0a1a7c75f33c18456e63c52b1f15fb6442df2276bbf84",
+    "dev/src/semantic/template_checks.cpp": "494435c173cb5cec3ae148592583575059bbc6ea99cd4f0af0302a206c80185b",
+    "dev/src/semantic/template_conversion_facts.cpp": "b71a368778f70a8bbfcad16bcf8dad753cc67c292b1cd0b671bb2bab4b60079b",
+    "dev/src/semantic/template_deduction.cpp": "17f2ff46a93c453808e2c20b6d402282bed6ee8990595d37993613a32123b03a",
+    "dev/src/semantic/template_entities.cpp": "6f1c8c49cfb305f8bad75798373f993608cf899a7e2dd9f5d86298f3ab6f548c",
+    "dev/src/semantic/template_expression.cpp": "95516b71da68e9d1bdb3bd54d85d4535c011ecd31412dcfd29dfdc597e7e5e52",
+    "dev/src/semantic/template_member_arguments.cpp": "30408f1535d0ac0d328c04059ac076281cf2a03986e30811c84c316ef68183f9",
+    "dev/src/semantic/template_ordering.cpp": "3e11fb96e94d1e777bf0959967c5b2c5fb0d51ab97cd85ea0826754730e7e9cd",
+    "dev/src/semantic/template_packs.cpp": "1a95f28fe61c006c5c4d3a8317e0f9124d0809296a5eceb7cd0194dcd0f42660",
+    "dev/src/semantic/template_signature_shape.cpp": "5ba2650cff6eb7bbc4ae405e6ef7a4197e8a5420e0258d7a1696408d9259d60d",
+    "dev/src/semantic/template_value_facts.cpp": "419f55d05506879e60a6890dbe3eec3d0618338488620e39422b1068956c0455",
+    "dev/src/semantic/type_builder.cpp": "f334b6dededd02f37f89e373b6a6e06868a3166eeeb2200efd91b1d1003068b2",
+    "dev/src/semantic/type_query.cpp": "2ed5fbbe146e3ccc9219c837e39b8cb43082888a7059f387407d5ab4df628fd9",
+    "dev/src/semantic/value_initialization.cpp": "6a5caf680c725ea92cb740dd54e6085a5a9d12c3e1803f137de2d56c1e78f29d",
+    "dev/src/syntax/prediction.cpp": "62b7edffc7fbc46a1e9a4ea61c9efb3bbee5f33061cb67dba34fc56f64f997dc"
+  },
+  "compiler_sha256": "b0c10c42b6532a3ff00072a1c3ec02c768af51944246c81ffd82ad3f2e365c13",
+  "checks": [
+    {
+      "command": "make test-pa22",
+      "exit": 2,
+      "log": "/tmp/pa22-117/stage-sealed.log",
+      "log_sha256": "f07fbb60f3b3a21280e02a699d2820a1f13e0e9c7925bdf94212e4df3b4468b0"
+    },
+    {
+      "command": "n=22; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit": 0,
+      "log": "/tmp/pa22-117/prior-sealed.log",
+      "log_sha256": "60ec0cf4e51520e70a2c106887a9f3b1f44f3e6d0892530dcb85565c3c55c413"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa22 --paths dev/src",
+      "exit": 0,
+      "log": "/tmp/pa22-117/file-audit-sealed.log",
+      "log_sha256": "ec8092f3990057cf9bc11a63059dc83db68e873c5976907a572dec28b7140303"
+    }
+  ],
+  "stageProgressPreserved": {
+    "passed": true,
+    "entry_failures": [
+      "pa22/tests/general/300-const-member-function-pointer-address-call.t",
+      "pa22/tests/general/300-repeated-nested-owner-member-template-address.t",
+      "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.t",
+      "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.t",
+      "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.t"
+    ],
+    "final_failures": [
+      "pa22/tests/general/300-const-member-function-pointer-address-call.t",
+      "pa22/tests/general/300-repeated-nested-owner-member-template-address.t",
+      "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.t",
+      "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.t",
+      "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.t"
+    ],
+    "coverage_cases": 99,
+    "course_inventory_unchanged": true
+  },
+  "controls": {
+    "constants-entry": {
+      "passed": 1,
+      "total": 4,
+      "sha256": "1c806b417e13a524a7721a87749581c0bec4bf9e73e0a86e5d1fb227cec0cd4d"
+    },
+    "constants-final": {
+      "passed": 4,
+      "total": 4,
+      "sha256": "02c83908895b69bd0f5d698b44cedcd1405acad7aae6001c639d7fb99d40885d"
+    },
+    "constants-generic": {
+      "passed": 4,
+      "total": 4,
+      "sha256": "3b94435e35bfe8c136d9ce6c246f1eaefd7239f295c33d1793e6abab3a0b28c0"
+    },
+    "controls-sealed": {
+      "passed": 18,
+      "total": 18,
+      "sha256": "4175648854abf824136155e38759215e630a3eed0aefaa39510feec75306655e"
+    },
+    "generic-sealed": {
+      "passed": 18,
+      "total": 18,
+      "sha256": "92e8c2f2d5bc1005e230245beb306ded593afe82fb63f4548f1aed5fe95ad6b0"
+    },
+    "inherited114-sealed": {
+      "passed": 16,
+      "total": 16,
+      "sha256": "e174571357efa7883d75f573468837520fbd4981eabfd69e1b43bbca4eee121e"
+    },
+    "inherited115-sealed": {
+      "passed": 12,
+      "total": 12,
+      "sha256": "646a3b35809388c681b7e1e88f67f1949ad74edfcc76db7e324f1534aa5570bb"
+    },
+    "inherited116-sealed": {
+      "passed": 8,
+      "total": 8,
+      "sha256": "32dd8fc209f1bef73d874f85eba8320775a8823aa2b787da938bf3b9ab85144b"
+    }
+  },
+  "performance": [
+    {
+      "path": "student.tests/pa22/performance117-common-sealed.json",
+      "sha256": "416efb3a1e6bc74367d91fb63c62ebc7de1c314a5c40342dfaf34597c8459f77"
+    },
+    {
+      "path": "student.tests/pa22/performance117-hierarchy-sealed.json",
+      "sha256": "94bb12aa87bfd3f08264399717263c224277295c15c2f2b4f21df8d7149bae23"
+    },
+    {
+      "path": "student.tests/pa22/performance117-constants.json",
+      "sha256": "de45f6931a08b1119e2b0e7a65a1197963facf916fecbcbcd66f0efc647fb6f8"
+    },
+    {
+      "path": "student.tests/pa22/performance117-proof-sealed.json",
+      "sha256": "c3eae382bc6fcad4857dbb6b72752db653ddf5cbfeb2633efea9224a8533af82"
+    }
+  ],
+  "roundtrips": {
+    "accepted": 95,
+    "rejected": 4,
+    "sha256": "3badbabdd0c5bc1e9a1d442a232093754095882fd16c7cdf1117dc00bd8a2c77"
+  },
+  "references_changed": false,
+  "comparison_rules_changed": false,
+  "constant_sources": {
+    "student.tests/pa22/constants/static-chain.cpp": "e7542207f17f324e55471a4cef1fa474c6f422745c69380f2dcf433071f17f2f",
+    "student.tests/pa22/constants/repeated.cpp": "26fb63f5f5b103b764e6857daff40eb8704a3bef63e1297c2ebc2f328d6d080e",
+    "student.tests/pa22/constants/overloaded.cpp": "adfff8928ce0d904425e5982d8981c5da5f5d48f0ccfc90ab6417e49e874d71c",
+    "student.tests/pa22/constants/converted.cpp": "41d4e0fef4e074d0cbec2b6849936c8445787d37dfcf367ce7f7dc4d78dc161a"
+  }
+}

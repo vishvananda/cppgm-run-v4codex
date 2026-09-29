@@ -27,6 +27,14 @@ def measure(commands):
  return data
 prior=json.loads((ROOT/'student.tests/pa22/performance114.json').read_text())
 if mode=='common':sources={n:w['source'] for n,w in prior['workloads'].items()}
+elif mode=='constants':
+ sources={}
+ for count in (512,2048):
+  prefix='struct A{int a;};struct B{int b;int f()const{return b;}};struct D:A,B{};\n'
+  declarations=''.join('constexpr int(D::*p%d)()const=&B::f;\n'%i for i in range(count))
+  sources['constant-addresses-%d'%count]=prefix+declarations+'int main(){D d;d.a=1;d.b=7;return (d.*p0)()!=7;}\n'
+  prefix='struct A{int x;constexpr A():x(3){}};constexpr A a;constexpr int A::*p=&A::x;\n'
+  sources['constant-receivers-%d'%count]=prefix+'static_assert(a.*p==3,"receiver");\n'*count+'int main(){return 0;}\n'
 else:
  sources={}
  for depth in (8,32):

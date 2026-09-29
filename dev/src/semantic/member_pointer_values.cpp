@@ -1,5 +1,57 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
+Constant Analyzer::member_address_constant(TypeId type, EntityId member)
+{
+    if (!member) return Constant(type,0);
+    auto owner = scopes[entities[member].owner].entity;
+    auto declared = types.member_pointer(owner,entities[member].type);
+    return convert(member_constant(declared,member,0),type);
+}
+Constant Analyzer::member_constant(TypeId type, EntityId member, std::int64_t adjustment)
+{
+    if (!member) return Constant(type,0);
+    auto bits = std::uint64_t(adjustment);
+    auto key = intern_arguments({member,std::uint32_t(bits),std::uint32_t(bits >> 32)});
+    auto id = member_constant_index.get(key);
+    if (!id) {
+        id = member_constants.size();
+        MemberConstant value; value.member = member; value.adjustment = adjustment;
+        member_constants.push_back(value); member_constant_index.put(key,id);
+    }
+    return Constant(type,id);
+}
+std::uint32_t Analyzer::constant_member_receiver(std::uint32_t object, Constant member)
+{
+    if (!object || !member.bits) return 0;
+    auto identity = key(object,member.bits);
+    if (auto known = member_receiver_index.get(identity)) return known == ~std::uint32_t(0) ? 0 : known;
+    auto value = member_constant_value(member);
+    auto owner = scopes[entities[value.member].owner].entity;
+    // The receiver is already projected to the member-pointer's owner.
+    // Resolve the preserved displacement within this complete object's bases,
+    // including inverse conversions and distinct repeated base subobjects.
+    auto offset = constant_offset(object) + std::uint64_t(value.adjustment);
+    auto root = object;
+    while (constant_addresses[root].parent && class_value(constant_addresses[constant_addresses[root].parent].type) &&
+        constant_addresses[root].selector != ~std::uint64_t(0) && (constant_addresses[root].selector & 0x80000000U))
+        root = constant_addresses[root].parent;
+    std::vector<std::uint32_t> work(1,root);
+    while (!work.empty()) {
+        auto address = work.back(); work.pop_back(); ++member_receiver_work;
+        auto type = constant_addresses[address].type;
+        auto cls = types[type].entity;
+        if (cls == owner && constant_offset(address) == offset) {
+            member_receiver_index.put(identity,address); return address;
+        }
+        for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
+            auto base = bases[b].base;
+            work.push_back(constant_subobject(address,entities[base].type,0x80000000U | base));
+        }
+    }
+    if (entities[types[constant_addresses[root].type].entity].complete)
+        member_receiver_index.put(identity,~std::uint32_t(0));
+    return 0;
+}
 void Analyzer::record_member_pointer_write(NodeId destination, NodeId source)
 {
     auto object = expressions[destination].entity;

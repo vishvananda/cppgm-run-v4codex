@@ -193,10 +193,13 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     }
     if (ast[n].kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)) {
         auto member = evaluate(ast[first].next,s);
-        if (!member.valid || !member.bits || types[member.type].kind != TypeKind::MemberPointer || !nonstatic_field(member.bits)) return 0;
+        if (!member.valid || !member.bits || types[member.type].kind != TypeKind::MemberPointer) return 0;
+        auto entity = member_constant_value(member).member;
+        if (!nonstatic_field(entity)) return 0;
         auto base = constant_node_object(first);
         base = constant_base_address(base,entities[types[member.type].entity].type);
-        return constant_subobject(base,entities[member.bits].type,member.bits);
+        base = constant_member_receiver(base,member);
+        return constant_subobject(base,entities[entity].type,entity);
     }
     if (ast[n].kind == Kind::Subscript) {
         auto base = first, index = ast[first].next;
@@ -317,20 +320,12 @@ StaticValue Analyzer::constant_static_value(Constant v)
         r.kind = storage.literal ? StaticValue::String : StaticValue::Address; r.entity = storage.entity; r.string = storage.literal;
         r.addend = constant_offset(v.bits);
     } else if (k == TypeKind::MemberPointer) {
-        if (v.bits) {
-            auto declaration_owner = scopes[entities[v.bits].owner].entity;
-            auto target_owner = types[v.type].entity;
-            if (declaration_owner != target_owner) {
-                auto target = entities[target_owner].type, source = entities[declaration_owner].type;
-                if (derived_from(target,source)) r.addend = base_adjustments[base_steps(target,declaration_owner)].total;
-                else if (derived_from(source,target)) r.addend = 0-base_adjustments[base_steps(source,target_owner)].total;
-                else return StaticValue();
-            }
-        }
+        auto value = member_constant_value(v);
+        r.addend = value.adjustment;
         if (types[types[v.type].child].kind == TypeKind::Function) {
-            r.kind = StaticValue::MemberFunction; r.entity = v.bits;
+            r.kind = StaticValue::MemberFunction; r.entity = value.member;
         } else {
-            r.kind = StaticValue::Integer; r.bits = v.bits ? entities[v.bits].member_offset + 1 + r.addend : 0;
+            r.kind = StaticValue::Integer; r.bits = v.bits ? entities[value.member].member_offset + 1 + r.addend : 0;
         }
     } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }

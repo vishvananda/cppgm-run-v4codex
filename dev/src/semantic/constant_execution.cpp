@@ -181,10 +181,11 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     }
     auto use = object_fact(n);
     auto member_pointer = use.member_pointer;
+    Constant member_value;
     if (member_pointer) {
         auto value = evaluate(member_pointer,s);
         if (!value.valid || !value.bits || types[value.type].kind != TypeKind::MemberPointer) return Constant();
-        e = value.bits;
+        member_value = value; e = member_constant_value(value).member;
     }
     if (!e || entities[e].kind != EntityKind::Function) {
         auto callee = use.callee ? use.callee : ast[n].first;
@@ -203,7 +204,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         // Use the same selected subobjects as runtime lowering. Searching by
         // the declaring class would lose a qualified path through repeated bases.
         object = constant_base_projection(constant_base_projection(object,use.qualifier_adjustment),use.adjustment);
-        if (member_pointer) object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
+        if (member_pointer) object = constant_member_receiver(object,member_value);
         if (!object) return Constant();
     }
     std::vector<Constant> args;
@@ -308,7 +309,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         return value;
     }
     auto target = types[c.target];
-    if (c.function && target.kind == TypeKind::MemberPointer) return Constant(c.target,c.function);
+    if (c.function && target.kind == TypeKind::MemberPointer) return member_address_constant(c.target,c.function);
     if (fundamental(c.target,FT_BOOL) && (types[expressions[n].type].kind == TypeKind::Array || types[expressions[n].type].kind == TypeKind::Function)) {
         auto address = constant_address(n,s);
         return address ? Constant(c.target,1) : Constant();

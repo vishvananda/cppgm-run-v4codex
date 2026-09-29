@@ -1,0 +1,37 @@
+{
+  "compiler_sha256": "7d6e3b2880b9da9524957977af405d916d82e37e2b058aef7e581f387f1bbbae",
+  "cases": [
+    {
+      "source": "student.tests/pa22/constants/converted.cpp",
+      "compile_exit": 1,
+      "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+      "passed": false
+    },
+    {
+      "source": "student.tests/pa22/constants/overloaded.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa22/constants/repeated.cpp",
+      "compile_exit": 1,
+      "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+      "passed": false
+    },
+    {
+      "source": "student.tests/pa22/constants/static-chain.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": false,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": false
+    }
+  ]
+}

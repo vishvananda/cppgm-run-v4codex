@@ -52,7 +52,7 @@ ArgumentId Analyzer::member_address_template_argument(QueryId query, TypeId targ
             scopes[entities[e].owner].entity != types[target].entity || deleted_transfer(e) ||
             !accessible(e,q.context,object_uses[source.object_use].naming_scope,
                 entities[scopes[naming_class(object_uses[source.object_use].naming_scope)].entity].type)) return 0;
-        value = Constant(target,e);
+        value = member_address_constant(target,e);
     } else {
         unsigned added = 0;
         if (types[source.type].kind != TypeKind::MemberPointer || !qualification(source.type,target,added)) return 0;
@@ -66,7 +66,7 @@ ArgumentId Analyzer::member_address_template_argument(QueryId query, TypeId targ
             Evaluated(unsigned& d) : depth(d), saved(d) { depth = 0; }
             ~Evaluated() { depth = saved; }
         } evaluated(unevaluated_depth);
-        use_selected_function(value.bits,true);
+        use_selected_function(member_constant_value(value).member,true);
     }
     return publish(value.bits);
 }

@@ -17,7 +17,8 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
     if (query.kind == semantic::QueryKind::Value && query.value &&
         (sem.types[query.type].kind == TypeKind::Pointer || sem.types[query.type].kind == TypeKind::LRef || sem.types[query.type].kind == TypeKind::MemberPointer)) {
         auto address = sem.constant_static_value(semantic::Constant(query.type,query.value));
-        auto e = sem.types[query.type].kind == TypeKind::MemberPointer ? semantic::EntityId(query.value) : address.entity;
+        auto e = sem.types[query.type].kind == TypeKind::MemberPointer ?
+            sem.member_constant_value(semantic::Constant(query.type,query.value)).member : address.entity;
         auto entity = sem.entities[e].kind == semantic::EntityKind::Function ? abi_function_context(e) :
             abi.make(Kind::VariableEntity,abi_entity_name(e),internal_entity(e));
         return abi.make(Kind::EntityArgument,entity,sem.types[query.type].kind != TypeKind::LRef);
@@ -68,7 +69,7 @@ bool Procedural::local_abi_argument(semantic::ArgumentId arg)
         auto q = sem.type_query(semantic::argument_query(arg));
         if (q.kind != semantic::QueryKind::Value || !q.value ||
             (sem.types[q.type].kind != TypeKind::Pointer && sem.types[q.type].kind != TypeKind::LRef && sem.types[q.type].kind != TypeKind::MemberPointer)) return false;
-        auto e = sem.types[q.type].kind == TypeKind::MemberPointer ? semantic::EntityId(q.value) :
+        auto e = sem.types[q.type].kind == TypeKind::MemberPointer ? sem.member_constant_value(semantic::Constant(q.type,q.value)).member :
             sem.constant_static_value(semantic::Constant(q.type,q.value)).entity;
         return e && internal_entity(e);
     }

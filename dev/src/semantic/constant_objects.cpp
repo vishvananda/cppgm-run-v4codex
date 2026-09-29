@@ -221,7 +221,7 @@ void Analyzer::demand_constant_relocations(Constant value)
             auto object = evaluated_objects[v.bits];
             for (unsigned i = 0; i < object.count; ++i) work.push_back(evaluated_parts[object.first+i].value);
         } else if (kind == TypeKind::MemberPointer && v.bits && types[types[v.type].child].kind == TypeKind::Function) {
-            use_selected_function(v.bits,true);
+            use_selected_function(member_constant_value(v).member,true);
         } else if (kind == TypeKind::Pointer && v.bits && types[types[v.type].child].kind == TypeKind::Function) {
             use_selected_function(constant_storage[constant_addresses[v.bits].storage].entity,true);
         }

@@ -70,6 +70,10 @@ public:
     StaticValue static_value(NodeId n, TypeId target);
     StaticValue member_target_value(unsigned id) const { return id ? static_facts[id-1].value : StaticValue(); }
     StaticValue constant_static_value(Constant value);
+    struct MemberConstant { EntityId member = 0; std::int64_t adjustment = 0; };
+    Constant member_constant(TypeId type, EntityId member, std::int64_t adjustment);
+    Constant member_address_constant(TypeId type, EntityId member);
+    MemberConstant member_constant_value(Constant value) const { return member_constants[value.bits]; }
     bool local_static(EntityId e) const;
     bool constant_initializer(NodeId n, TypeId target, bool local = false);
     bool constant_plan(std::uint32_t plan, bool local = false);
@@ -372,7 +376,10 @@ private:
     struct MemberPointerWrite { NodeId source; std::uint32_t next; };
     std::vector<MemberPointerWrite> member_pointer_writes = std::vector<MemberPointerWrite>(1);
     Index member_pointer_write_heads, member_pointer_exposed, member_pointer_value_states;
-    std::size_t member_pointer_proof_work = 0, member_pointer_proof_hits = 0;
+    Index member_constant_index, member_receiver_index;
+    std::vector<MemberConstant> member_constants = std::vector<MemberConstant>(1);
+    std::uint32_t constant_member_receiver(std::uint32_t object, Constant member);
+    std::size_t member_pointer_proof_work = 0, member_pointer_proof_hits = 0, member_receiver_work = 0;
     std::vector<ScalarConsumption> scalar_consumptions = std::vector<ScalarConsumption>(1);
     std::uint64_t scalar_consumption_work = 0, scalar_observation_count = 0;
     std::uint64_t unit_transfer_fields = 0;

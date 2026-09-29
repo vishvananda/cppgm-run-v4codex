@@ -49,9 +49,16 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
             if (target.kind == TypeKind::MemberPointer) {
                 unsigned added = 0;
                 auto owner = entities[types[v.type].entity].type, destination = entities[target.entity].type;
-                if (qualification(types[v.type].child,target.child,added) &&
-                    (owner == destination || derived_from(destination,owner) || (explicit_cast && derived_from(owner,destination))))
-                    return Constant(to,v.bits);
+                if (qualification(types[v.type].child,target.child,added)) {
+                    std::uint64_t adjustment = 0;
+                    if (owner != destination) {
+                        if (derived_from(destination,owner)) adjustment = base_adjustments[base_steps(destination,types[v.type].entity)].total;
+                        else if (explicit_cast && derived_from(owner,destination)) adjustment = 0-base_adjustments[base_steps(owner,target.entity)].total;
+                        else return Constant();
+                    }
+                    auto value = member_constant_value(v);
+                    return member_constant(to,value.member,std::uint64_t(value.adjustment)+adjustment);
+                }
             }
             return Constant();
         }
@@ -242,7 +249,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (ast[n].op == OP_INC || ast[n].op == OP_DEC) return constant_mutation(n,s);
         if (ast[n].op == OP_AMP) {
             if (types[expressions[n].type].kind == TypeKind::MemberPointer)
-                return Constant(expressions[n].type,expressions[first].entity);
+                return member_address_constant(expressions[n].type,expressions[first].entity);
             auto a = constant_address(first,s); return a ? Constant(expressions[n].type,a) : Constant();
         }
         if (ast[n].op == OP_STAR) return constant_indirect(constant_read(constant_address(n,s)));
@@ -286,11 +293,12 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
         if (op != OP_EQ && op != OP_NE) return Constant();
         // Members of the same union compare equal; virtual function equality
         // is unspecified and is not a core constant expression in C++11.
-        if (a.bits && b.bits && (members[entities[a.bits].member_info].virtual_member ||
-            members[entities[b.bits].member_info].virtual_member)) return Constant();
+        auto av = member_constant_value(a), bv = member_constant_value(b);
+        if (a.bits && b.bits && (members[entities[av.member].member_info].virtual_member ||
+            members[entities[bv.member].member_info].virtual_member)) return Constant();
         bool same = a.bits == b.bits;
-        if (a.bits && b.bits && nonstatic_field(a.bits) && nonstatic_field(b.bits) &&
-            entities[a.bits].owner == entities[b.bits].owner && entities[scopes[entities[a.bits].owner].entity].key == KW_UNION) same = true;
+        if (a.bits && b.bits && av.adjustment == bv.adjustment && nonstatic_field(av.member) && nonstatic_field(bv.member) &&
+            entities[av.member].owner == entities[bv.member].owner && entities[scopes[entities[av.member].owner].entity].key == KW_UNION) same = true;
         return Constant(types.fundamental(FT_BOOL),op == OP_EQ ? same : !same);
     }
     if (floating_type(a.type) || floating_type(b.type)) return floating_binary(op,a,b,converted);
