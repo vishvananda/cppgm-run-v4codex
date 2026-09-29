@@ -1,0 +1,410 @@
+[
+  {
+    "name": "function_ellipsis",
+    "source": "template<class>struct P{static const int n=0;};template<class R>struct P<R(*)()>{static const int n=1;};template<class R>struct P<R(*)(...)>{static const int n=2;};static_assert(P<void(...)>::n==0,\"\");static_assert(P<void(*)(...)>::n==2,\"\");static_assert(P<void()>::n==0,\"\");static_assert(P<void(*)()>::n==1,\"\");int main(){}",
+    "source_sha256": "83ed4c635e0c8acadd1a1ec37a4d255afc771f0046de4b168e52712e26a7c39f",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found '...'\n",
+    "passed": false
+  },
+  {
+    "name": "function_reference",
+    "source": "template<class>struct P;template<class R,class...A>struct P<R(A...)>{static const int n=sizeof...(A);};template<class T>using F=T(int,long);static_assert(P<F<char>>::n==2,\"\");int main(){}",
+    "source_sha256": "523c279484acd8d56d7f88ea70b6775e31c7cc1d1691a45e1f08395f6ed93d43",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "function_type_value_disambiguation",
+    "source": "template<int>struct V{};template<class>struct P{};V<int(3)> v;P<void(...)> p;int main(){}",
+    "source_sha256": "3b9e6785f2aa6e01ac3cea94c7dd8ea3f1aaad98b1ed91bece94e853db04ce1c",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected expression, found '...'\n",
+    "passed": false
+  },
+  {
+    "name": "friend_template_scope",
+    "source": "template<class>struct Friend;template<class T>struct X{friend class Friend<T>;typedef Friend<T> type;};template<class T>struct Friend{};X<int>::type a;X<long>::type b;int main(){}",
+    "source_sha256": "dd4ab1855d7966c6cb4e57917f2fb619e1a0ca1bb0b29e92663073681b38cfd7",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected ';', found '<' at byte 92\n",
+    "passed": false
+  },
+  {
+    "name": "friend_injected_scope",
+    "source": "template<class>struct Ref;template<class T>struct X{friend class Ref<X>;typedef Ref<X> type;};template<class T>struct Ref{typedef typename T::type type;};X<int>::type a;int main(){}",
+    "source_sha256": "255c63c071a771f4e192ecc7eba361ffa026d9e421ae19a281b52058c4a87013",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected ';', found '<' at byte 83\n",
+    "passed": false
+  },
+  {
+    "name": "comma_optional_ellipsis",
+    "source": "template<class T>struct X{static char f(T ...);};static_assert(sizeof(X<int>::f(1,2,3))==1,\"\");int main(){}",
+    "source_sha256": "47ebcf2960677ecb5c258de5cea9da9b2bc49085f4aa1d88019f4ff588718380",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unbound function parameter pack\n",
+    "passed": false
+  },
+  {
+    "name": "ellipsis_and_pack",
+    "source": "template<class...T>struct X{static char f(T...);static long g(int ...);};static_assert(sizeof(X<int,long>::f(1,2))==1,\"\");static_assert(sizeof(X<int>::g(1,2))==sizeof(long),\"\");int main(){}",
+    "source_sha256": "d68954989370a10938bc5e9a0d9dc8ec537397f6e5201fc897d42846df1820b4",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unbound function parameter pack\n",
+    "passed": false
+  },
+  {
+    "name": "member_alias_identity",
+    "source": "template<class>struct N{};template<template<class...>class G>using A=G<char>;template<template<class...>class F,class...>using B=A<F>;template<class>struct O{template<class T>using M=N<T>;using R=B<M>;};template<class,class>struct Same;template<class T>struct Same<T,T>{};Same<O<int>::R,N<char>> a;Same<O<long>::R,N<char>> b;int main(){}",
+    "source_sha256": "cd9ad10e39bd73b16f5da58ae71914f806f7bfbd5a750f2c3064468b84855426",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid alias template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "member_alias_outer_argument",
+    "source": "template<class,class>struct Pair{};template<template<class...>class F>using Apply=F<char>;template<class T>struct O{template<class U>using M=Pair<T,U>;using R=Apply<M>;};template<class,class>struct Same;template<class T>struct Same<T,T>{};Same<O<int>::R,Pair<int,char>> a;Same<O<long>::R,Pair<long,char>> b;int main(){}",
+    "source_sha256": "0428d04a8aa782294165c0fe7c177ffeb880438bc765f98647d4ef4d017e3822",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid alias template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "member_function_type",
+    "source": "template<class T>T&& val();template<class>struct Result;template<class F,class...A>struct Result<F(A...)>{typedef decltype(val<F>()(val<A>()...)) type;};struct H{long operator()(int=0);};template<class T>struct B{template<class...A>typename Result<T(A...)>::type operator()(A&&...){return 7;}};int main(){B<H>b;return b()!=7||b(2)!=7;}",
+    "source_sha256": "845e056baff3045ba8518c220db5559b1f7bc8348faf41f9e632737da6d549f9",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "member_function_type_dormant",
+    "source": "template<class T>T&& val();template<class>struct Result;template<class F,class...A>struct Result<F(A...)>{typedef decltype(val<F>()(val<A>()...)) type;};template<class T>struct B{template<class...A>typename Result<T(A...)>::type operator()(A&&...);};struct H{};int main(){B<H>b;}",
+    "source_sha256": "ede6bd609449b5155f6975c6c62773b006c10566c98df32f70b784c9bfa8a73e",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid class template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "function_type_nested_argument",
+    "source": "template<class>struct N{};template<class>struct Fn;template<class R,class A>struct Fn<R(A)>{typedef A type;};template<class T>struct Outer{typedef typename Fn<N<T>(long)>::type type;};static_assert(sizeof(Outer<int>::type)==sizeof(long),\"\");int main(){}",
+    "source_sha256": "b10989d984cf774daf994606ea63c6e96a48992d9934065309fa0f21e8865764",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "fixed_head_pack_defaults",
+    "source": "template<class A=int,class B=long,class C=char>struct L{};template<class A,class...T>int f(L<A,T...>){return sizeof...(T);}int main(){return f(L<>())!=2||f(L<int>())!=2||f(L<int,long,char>())!=2;}",
+    "source_sha256": "16e848cf7d1ec9e4abbca5df30cd58fe8db2ae3c258763f669ca5ed2b1f8cb98",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_head_pack_nondefault",
+    "source": "template<class A,class B,class C>struct L{};template<class A,class...T>int f(L<A,T...>){return sizeof...(T);}int main(){return f(L<int,long,char>())!=2;}",
+    "source_sha256": "06f0e1c22067cd377136f723fbbb463506e5b1c2c357fdf8e158dd05f729aebf",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_head_pack_base",
+    "source": "template<class A=int,class B=long,class C=char>struct L{};struct D:L<>{};template<class A,class...T>int f(const L<A,T...>&){return sizeof...(T);}int main(){D d;return f(d)!=2;}",
+    "source_sha256": "fae90440cace71e7457948dae11fc1e6ab5af21cb8cdd2a4b087d5fc635b8191",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_value_head_pack",
+    "source": "template<int A=1,int B=2,int C=3>struct L{};template<int A,int...N>int f(L<A,N...>){return A+sizeof...(N);}int main(){return f(L<>())!=3||f(L<5>())!=7;}",
+    "source_sha256": "ba28bc78e99be20702a3889c60397d165aabaedf80b9e5517e0ab81c2c26fae8",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": false
+  },
+  {
+    "name": "cast_preserves_object",
+    "source": "int calls;struct X{int n;template<class T>operator T(){++calls;return T();}};template<class T>T&& f(T&x){return static_cast<T&&>(x);}int main(){X x;x.n=7;X&&r=f(x);r.n=9;return &r!=&x||x.n!=9||calls;}",
+    "source_sha256": "0e1efc06e4460c53570225bc75949e6e93f0427faea06547be1c5e83dc330bee",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 1
+  },
+  {
+    "name": "cast_preserves_base",
+    "source": "int calls;struct B{int n;};struct D:B{template<class T>operator T(){++calls;return T();}};template<class T>B&& f(T&x){return static_cast<B&&>(x);}int main(){D d;d.n=7;B&&b=f(d);b.n=9;return d.n!=9||calls;}",
+    "source_sha256": "345dab21d4dbd93491a1b46a11c90555e78eb1ed867e9eb6acd3cc69bac42674",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 1
+  },
+  {
+    "name": "cast_unrelated_conversion",
+    "source": "int calls;struct B{int n;};struct X{operator B(){++calls;B b;b.n=7;return b;}};int main(){X x;B&&b=static_cast<B&&>(x);return b.n!=7||calls!=1;}",
+    "source_sha256": "e49dd0b4731732f4fbc2432cbab3c191d0c257724595ae6e330aff0cf6229c5e",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "prefix_order_False",
+    "source": "template<class>struct Tag{};template<class T>int f(T,int=0){return 1;}template<class T,class...A>int f(Tag<T>,A&&...){return 2;}int main(){Tag<int> t;return f(t)!=2||f(1)!=1;}",
+    "source_sha256": "b47f27ce6cfdc3e53a6563fcac1531b99aeb015045a04f52e8ff42218549806e",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous overload\n",
+    "passed": false
+  },
+  {
+    "name": "constructor_prefix_False",
+    "source": "template<class>struct Tag{};struct X{template<class T>X(T&&,int=0):n(1){}template<class T,class...A>X(Tag<T>,A&&...):n(2){}int n;};int main(){Tag<int> t;X x(t);X y(1);return x.n!=2||y.n!=1;}",
+    "source_sha256": "a4c88f4ca15aef59465cbca59d9153efa7a727604caa709ecf8a2246cf3cafce",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous constructor\n",
+    "passed": false
+  },
+  {
+    "name": "prefix_order_True",
+    "source": "template<class>struct Tag{};template<class T,class...A>int f(Tag<T>,A&&...){return 2;}template<class T>int f(T,int=0){return 1;}int main(){Tag<int> t;return f(t)!=2||f(1)!=1;}",
+    "source_sha256": "cbb57837e3fd0d2e09764f011014dbbacb900364e9d3a4d3d5756331f1d51601",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous overload\n",
+    "passed": false
+  },
+  {
+    "name": "constructor_prefix_True",
+    "source": "template<class>struct Tag{};struct X{template<class T,class...A>X(Tag<T>,A&&...):n(2){}template<class T>X(T&&,int=0):n(1){}int n;};int main(){Tag<int> t;X x(t);X y(1);return x.n!=2||y.n!=1;}",
+    "source_sha256": "8471316b6f2adad3473bc1f1f969963f84f82a85a7df50a0708311d67ae85435",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous constructor\n",
+    "passed": false
+  },
+  {
+    "name": "prefix_cv_order",
+    "source": "template<class>struct Tag{};template<class T>int f(const T&,int=0){return 1;}template<class T,class...A>int f(Tag<T>&,A&&...){return 2;}int main(){Tag<int> t;return f(t)!=2;}",
+    "source_sha256": "9b076ea783cd6677054057c2413ca4b67b1a262f4ec2d44731f1ab7b3e1b3214",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "prefix_query",
+    "source": "template<class>struct Tag{};template<class T>long f(T,int=0);template<class T,class...A>char f(Tag<T>,A&&...);static_assert(sizeof(f(Tag<int>()))==1,\"\");int main(){}",
+    "source_sha256": "24407a6e63122c32b46b9c01c827cd9f36f7a9b035416939a5237210165e29dd",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: ambiguous overload\n",
+    "passed": false
+  },
+  {
+    "name": "fixed_pack_tie",
+    "source": "template<class T>int f(T){return 1;}template<class T,class...A>int f(T,A...){return 2;}int main(){return f(1)!=1||f(1,2)!=2;}",
+    "source_sha256": "560e702d335fd3e6fac02f51633174bbec497d3fa8e548c5c3da15e92edc785f",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "elaborated_namespace_identity",
+    "source": "template<class T>struct X{struct node*p;};struct node{int n;};int main(){X<int>a;X<long>b;node n;n.n=7;a.p=&n;b.p=a.p;return b.p->n!=7;}",
+    "source_sha256": "9a1f8851ac6d689568dc2371c0f42220bcb8d39c0334087a2b8cf8eac0f8bc53",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "elaborated_argument_identity",
+    "source": "template<bool B,class T,class U>struct If{typedef T type;};template<class T,class U>struct If<false,T,U>{typedef U type;};template<bool B>struct X{typename If<B,struct node,int>::type*p;};struct node{int n;};int main(){X<true>a;X<false>b;node n;n.n=7;int i=3;a.p=&n;b.p=&i;return a.p->n!=7||*b.p!=3;}",
+    "source_sha256": "6e0845cee7467faf3450a6b1cae01781c944761486d878ba0466dae7362a8544",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: missing substituted query declaration\n",
+    "passed": false
+  },
+  {
+    "name": "elaborated_existing_tag",
+    "source": "struct node{int n;};template<class T>struct X{struct node*p;};int main(){node n;n.n=7;X<int>x;x.p=&n;return x.p->n!=7;}",
+    "source_sha256": "34476c5aba87f6387f8a7ad3a3a8ed5d15c708e84f0f83fcb65e305203ab9d0a",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "adl_explicit_value",
+    "source": "namespace ns{struct A{};template<int N>int fetch(A){return N;}}int main(){return fetch<7>(ns::A())!=7;}",
+    "source_sha256": "74b1a629bfbf97346d82250f816bca2efe8e22f728e386cf2502fc58860c49a4",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: fetch\n",
+    "passed": false
+  },
+  {
+    "name": "adl_explicit_negative",
+    "source": "namespace ns{struct A{};template<int N>int fetch(A){return N;}}int main(){return fetch<-3>(ns::A())!=-3;}",
+    "source_sha256": "1c1cf6de8df9778e5da2c52bc38c46331a085977d0b0822d28d61519b7b2b547",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: fetch\n",
+    "passed": false
+  },
+  {
+    "name": "ordinary_relational",
+    "source": "int main(){int fetch=2;return (fetch<3)>(0)!=1;}",
+    "source_sha256": "8a3f8123589d5ec36ac7d8a0f399a2c85eafbd937759bbc7644309b286a116aa",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "raw_function_not_pointer",
+    "source": "template<class>struct P;template<class R>struct P<R(*)()>{};P<void()> p;",
+    "source_sha256": "ca83e16bd902a31800f9c138c4a98fbd367f156478136c6b986e6f5afb36fc64",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: semantic prerequisite unavailable\n",
+    "passed": true
+  },
+  {
+    "name": "variadic_not_nonvariadic",
+    "source": "template<class>struct P;template<class R>struct P<R(*)()>{};P<void(*)(...)> p;",
+    "source_sha256": "717f305f2ecfa53a9aedf25c11a38175fc6cc3f36e577aa1faf016599ac3a717",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: semantic prerequisite unavailable\n",
+    "passed": true
+  },
+  {
+    "name": "fixed_head_inconsistent_pack",
+    "source": "template<class A=int,class B=long>struct L{};template<class...T>void f(L<T...>,L<T...>);int main(){f(L<>(),L<int,char>());}",
+    "source_sha256": "0b9a9cf46d3d03264ee17bf99362deaf32fdcb4c0b1bf24198def56b8ca31da5",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: no viable function\n",
+    "passed": true
+  },
+  {
+    "name": "member_alias_kind_mismatch",
+    "source": "template<template<int>class F>using A=F<1>;template<class>struct O{template<class T>using M=T;using R=A<M>;};O<int> o;",
+    "source_sha256": "318e104e159d0cb5f9f1ea83acf3e30d89f4bf67369f27084ec5b74eb97b0951",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid alias template arguments\n",
+    "passed": true
+  },
+  {
+    "name": "cast_cannot_drop_const",
+    "source": "struct X{template<class T>operator T(){return T();}};int main(){const X x{};X&&r=static_cast<X&&>(x);}",
+    "source_sha256": "e8a9b08768eb7933c042feab453a34977263e0679f470b0695255f33e7149582",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid explicit cast\n",
+    "passed": true
+  },
+  {
+    "name": "cast_ambiguous_base",
+    "source": "struct B{};struct L:B{};struct R:B{};struct D:L,R{};int main(){D d;B&&b=static_cast<B&&>(d);}",
+    "source_sha256": "76c6b1c222c6fca45a81eed210c3ca63df3a81466acfb19fdd831d3622c49514",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid explicit cast\n",
+    "passed": true
+  },
+  {
+    "name": "adl_missing_template",
+    "source": "namespace ns{struct A{};}int main(){return fetch<7>(ns::A());}",
+    "source_sha256": "8392ec278391e02fe4643861ee3fdb77042fbc0763d216a1255bb816665f26cd",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unknown expression name: fetch\n",
+    "passed": true
+  },
+  {
+    "name": "elaborated_qualified_missing",
+    "source": "struct X{};struct X::missing*p;",
+    "source_sha256": "c913761bc3a4a38ed302e6f344c0afdd352b3dadb1f37a35a85e52f0101e151a",
+    "expected": "reject",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": false
+  },
+  {
+    "name": "elaborated_union_mismatch",
+    "source": "struct node{};template<class T>struct X{union node*p;};X<int>x;",
+    "source_sha256": "23ab1ad69e0d04a8129a020a71b8b2cc22caa949d9f23dd28c7d8c1fb9383db8",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: incompatible class declaration\n",
+    "passed": true
+  },
+  {
+    "name": "nested_forward_distinct",
+    "source": "template<class T>struct X{struct node;node*p;};int main(){X<int>a;X<long>b;a.p=b.p;}",
+    "source_sha256": "74ea633afc743d2268cc96858d7ad389d96b029f6bdf252b6dc6779857e5b292",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid operand conversion\n",
+    "passed": true
+  }
+]

@@ -1,0 +1,705 @@
+{
+  "protocol": "one warmup each, four A/A samples, four ABBA blocks; six final-only samples for new semantics",
+  "cpu": 31,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "flags": [
+    "--emit-lowir",
+    "-O0"
+  ],
+  "build_flags": "g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE",
+  "commits": [
+    "e5f4c3ed78972c8d161671d145bf525cb99033f4",
+    "57e27df26d081379580a7b2c08cc30fd39c0378c"
+  ],
+  "harness_sha256": "6f8c80c42ae621b45ced92b0122260778f46faf2e23d4de0fe20871d9266db2d",
+  "shared_harness_sha256": "cd6990443adeb672237e677a4e0d606dc3facb49784dfb4bde98c6842f82cc2a",
+  "binaries": [
+    {
+      "path": "/tmp/pa19-loop91/entry-cppgm++",
+      "sha256": "0f422d8c85e5da91c8f89188718cfb6394bb880a1cde06cf5183d35ca3d026ca",
+      "text_bytes": 2000006
+    },
+    {
+      "path": "/tmp/pa19-loop91/final-cppgm++",
+      "sha256": "d65826dd89e27b465ac9cf8bd61db6de565c5913b24856c5740345fbb73c6b02",
+      "text_bytes": 2004358
+    }
+  ],
+  "backend": {
+    "sha256": "c3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490",
+    "flags": [
+      "-O0"
+    ],
+    "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98"
+  },
+  "acceptance": "PA19/O0: correctness costs measured separately; no optional transforms or new growth budget. Argument projection/substitution is linear in consumed types/arguments; completed lookups use canonical keys. No mandated numeric latency/RSS gate. Native optimization/self-hosting belong to later stages.",
+  "text_metric": "compiler .text; supplied sectionless ELF executable payload proxy (includes static data)",
+  "workloads": {
+    "runtime-reference-cast": {
+      "source": "int calls;struct X{int n;template<class T>operator T(){++calls;return T();}};template<class T>T&& forward(T&x){return static_cast<T&&>(x);}int main(){volatile int n=8000000;X x;x.n=0;for(int i=0;i<n;++i){X&&r=forward(x);r.n=(x.n+1)&65535;}return calls||x.n!=4608;}",
+      "source_sha256": "7f22e4a778da224767fd4afb5b660a783d0ac648d607bfd64616dd728646bc55",
+      "outputs": [
+        {
+          "binary": 1,
+          "sha256": "7ef6abf8982e64ebd01c9fce6c37ae8a5f5c4d7fbd1c61d778efec12959a4c95",
+          "bytes": 1630,
+          "telemetry": [
+            {
+              "tokens": 125,
+              "max_pending": 23,
+              "node_growths": 8,
+              "delimiter_work": 125,
+              "semantic_ms": 0.964593,
+              "semantic_fact_slots": 255,
+              "semantic_fact_records": 92,
+              "semantic_fact_storage_bytes": 22256,
+              "semantic_template_declaration_work": 1,
+              "semantic_declaration_publications": 1,
+              "semantic_dependence_work": 8,
+              "semantic_specializations": 1,
+              "semantic_type_substitution_work": 10,
+              "semantic_type_substitution_hits": 2,
+              "semantic_type_substitution_records": 4,
+              "semantic_substitution_frames": 1,
+              "semantic_template_type_work": 0,
+              "semantic_template_type_access_work": 0,
+              "semantic_template_type_uses": 0,
+              "semantic_template_signature_work": 0,
+              "semantic_template_signature_uses": 0,
+              "semantic_parameter_publications": 1,
+              "semantic_template_default_binding_work": 0,
+              "semantic_template_default_binding_queued": 0,
+              "semantic_template_initializer_binding_work": 0,
+              "semantic_template_initializer_binding_queued": 0,
+              "template_body_transitions": 1,
+              "semantic_body_checks": 2,
+              "semantic_body_lifetime_checks": 2,
+              "semantic_statement_conversion_work": 0,
+              "semantic_statement_conversion_uses": 0,
+              "semantic_constant_array_work": 0,
+              "semantic_conversion_result_work": 0,
+              "semantic_base_adjustment_paths": 0,
+              "semantic_base_adjustment_work": 0,
+              "semantic_base_adjustment_hits": 0,
+              "semantic_static_initialization_work": 1,
+              "semantic_static_plan_work": 0,
+              "semantic_constant_array_index_entries": 0,
+              "semantic_floating_constants": 0,
+              "semantic_constant_bodies": 0,
+              "semantic_constant_activations": 0,
+              "semantic_constant_execution_steps": 0,
+              "semantic_constant_object_work": 0,
+              "semantic_constant_address_work": 0,
+              "semantic_constant_dependency_work": 0,
+              "semantic_constant_persistence_work": 0,
+              "semantic_constant_execution_hits": 0,
+              "semantic_initializer_recipe_work": 0,
+              "semantic_initializer_recipe_uses": 0,
+              "semantic_default_initialization_work": 0,
+              "semantic_default_initialization_uses": 0,
+              "template_class_completions": 0,
+              "nested_class_declarations": 0,
+              "nested_class_definitions": 0,
+              "explicit_specialization_selections": 0,
+              "variable_template_initializers": 0,
+              "variable_template_reuses": 0,
+              "variable_template_candidates": 0,
+              "function_ordering_work": 0,
+              "function_ordering_hits": 0,
+              "class_pattern_ordering_work": 0,
+              "class_pattern_ordering_hits": 0,
+              "template_definition_applications": 0,
+              "template_definition_direct_applications": 0,
+              "template_definition_requests": 0,
+              "template_definition_hits": 0,
+              "template_definition_edges": 0,
+              "template_definition_signature_requests": 0,
+              "template_definition_signature_work": 0,
+              "semantic_expression_bytes": 36,
+              "semantic_type_queries": 0,
+              "semantic_type_query_work": 0,
+              "semantic_candidate_substitutions": 1,
+              "semantic_candidate_cycles": 0,
+              "query_completion_edges": 0,
+              "query_completion_invalidations": 0,
+              "semantic_deferred_function_uses": 0,
+              "semantic_deferred_function_use_work": 0,
+              "semantic_template_binding_work": 28,
+              "semantic_template_parameter_check_work": 57,
+              "semantic_template_parameter_check_reuses": 0,
+              "semantic_template_bindings": 5,
+              "semantic_template_fixed_expressions": 2,
+              "semantic_template_fixed_uses": 0,
+              "semantic_template_fixed_calls": 0,
+              "semantic_template_fixed_call_uses": 0,
+              "semantic_template_object_contexts": 1,
+              "semantic_template_member_uses": 0,
+              "parsed_nodes": 221,
+              "template_occurrences": 34,
+              "template_deferred_regions": 1,
+              "template_demanded_regions": 1,
+              "template_source_regions": 2,
+              "template_region_nodes": 34,
+              "template_region_roots": 1,
+              "template_default_environment_work": 0,
+              "template_default_argument_work": 0,
+              "template_default_facts": 0,
+              "template_default_dependencies": 0,
+              "template_default_dependency_work": 0,
+              "template_default_demands": 0,
+              "semantic_pack_expansion_work": 0,
+              "semantic_pack_expansion_lanes": 0,
+              "semantic_argument_packs": 9,
+              "semantic_object_uses": 4,
+              "semantic_expression_facts": 36,
+              "semantic_expression_uses": 35,
+              "semantic_expression_slots": 255,
+              "semantic_expression_inherited": 0,
+              "semantic_expression_variants": 0,
+              "semantic_call_argument_edges": 1,
+              "semantic_constructor_actions": 0,
+              "semantic_inherited_arguments": 0,
+              "semantic_conversion_objects": 0,
+              "semantic_user_conversions": 0,
+              "semantic_list_plans": 0,
+              "semantic_list_fields": 0,
+              "semantic_query_edges": 0,
+              "semantic_list_objects": 0,
+              "semantic_value_initializations": 0,
+              "semantic_value_returns": 0,
+              "semantic_function_returns": 0,
+              "semantic_placement_objects": 0,
+              "semantic_constant_constructor_actions": 0,
+              "semantic_constant_fields": 0,
+              "semantic_initializer_actions": 0,
+              "semantic_zero_plans": 0,
+              "semantic_zero_parts": 0,
+              "semantic_field_descriptors": 0,
+              "semantic_transfer_unit_fields": 0,
+              "semantic_scalar_observations": 1,
+              "semantic_scalar_consumptions": 0,
+              "semantic_scalar_consumption_work": 0,
+              "semantic_parameter_queries": 0,
+              "semantic_parameter_query_work": 0,
+              "semantic_delegation_entry_work": 0,
+              "semantic_destruction_actions": 0,
+              "semantic_transfer_actions": 0,
+              "semantic_scalar_transfer_work": 0,
+              "semantic_scalar_transfer_cache_bytes": 0,
+              "semantic_lifetime_states": 0,
+              "semantic_reference_binding_work": 1,
+              "semantic_reference_alternatives": 0,
+              "semantic_lifetime_uses": 0,
+              "semantic_virtual_classes": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_declaration_work": 1,
+              "semantic_virtual_demands": 0,
+              "semantic_key_vtable_notifications": 0,
+              "semantic_key_vtable_processed": 0,
+              "semantic_vtable_emissions": 0,
+              "semantic_vtable_queue_bytes": 0,
+              "semantic_member_demands": 2,
+              "semantic_friend_definitions": 0,
+              "semantic_friend_demands": 0,
+              "semantic_friend_processed": 0,
+              "semantic_demand_processed": 2,
+              "semantic_expression_work": 33,
+              "semantic_discard_selections": 0,
+              "semantic_discard_recipe_uses": 0,
+              "semantic_discard_materializations": 0,
+              "semantic_candidate_work": 1,
+              "semantic_conversion_work": 22,
+              "semantic_conversions": 26,
+              "semantic_entity_bytes": 120,
+              "semantic_class_facts": 1,
+              "semantic_constants": 2,
+              "semantic_value_queries": 0,
+              "semantic_value_query_work": 0,
+              "semantic_template_value_sources": 0,
+              "semantic_template_value_uses": 0,
+              "semantic_value_conversion_variants": 0,
+              "semantic_value_conversion_records": 0,
+              "semantic_types": 26,
+              "semantic_entities": 21,
+              "semantic_scopes": 19,
+              "semantic_edges": 0,
+              "semantic_declarations": 14,
+              "semantic_regions": 13,
+              "semantic_lookup_work": 72,
+              "semantic_signature_work": 18,
+              "semantic_template_signature_shape_work": 5,
+              "semantic_template_signature_shape_hits": 4,
+              "semantic_type_probes": 52,
+              "semantic_constant_work": 2,
+              "constexpr_validity_work": 0,
+              "exception_work": 0,
+              "closures": 0,
+              "lower_virtual_cache_bytes": 44,
+              "lower_deleting_entries": 0,
+              "lower_local_statics": 0,
+              "lower_constant_data_records": 0,
+              "lower_constant_data_work": 0,
+              "lower_constant_data_hits": 0
+            },
+            {
+              "frontend_ms": 1.87012,
+              "lowering_ms": 0.43135,
+              "write_ms": 0.488565,
+              "peak_rss_kib": 23796,
+              "nodes": 255,
+              "static_requests": 0,
+              "static_hits": 0,
+              "control_work": 14,
+              "discard_work": 0,
+              "full_expression_work": 45,
+              "full_expression_regions": 0,
+              "linkage_requests": 0,
+              "linkage_hits": 0,
+              "initializer_units": 0,
+              "finalizer_units": 0,
+              "abi_nodes": 10,
+              "abi_bytes": 946,
+              "instructions": 44,
+              "operands": 68,
+              "ir_pool_growths": 49,
+              "ir_capacity_bytes": 10832
+            }
+          ],
+          "native": {
+            "sha256": "5cb36391f8a2fa743ad967273c7ca3b29f8ca91f5a175d7469f3551e3ab5e566",
+            "payload_bytes": 216,
+            "file_bytes": 336,
+            "checked_exit": 0
+          }
+        }
+      ],
+      "entry_wrong_execution": {
+        "exit": 1,
+        "ir_sha256": "32f92690da433948cac1b35ba92a3bf55bde8754621c8941906456d5a3b0e054"
+      },
+      "comparison": "new-behavior",
+      "compiler": {
+        "warmups": [
+          {
+            "binary": 1,
+            "wall_s": 0.012420818,
+            "rss_kib": 5964,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 1,
+            "wall_s": 0.012593555,
+            "rss_kib": 6028,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.013091476,
+            "rss_kib": 5900,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.013047851,
+            "rss_kib": 5880,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.013833186,
+            "rss_kib": 5932,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.01359695,
+            "rss_kib": 5908,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.013758631,
+            "rss_kib": 6008,
+            "user_s": 0.0,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "1": {
+          "median_wall_s": 0.013344213,
+          "wall_range_s": [
+            0.012593555,
+            0.013833186
+          ],
+          "peak_rss_kib": 6028
+        }
+      },
+      "runtime": {
+        "warmups": [
+          {
+            "binary": 1,
+            "wall_s": 0.074772799,
+            "rss_kib": 256,
+            "user_s": 0.06,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "observations": [
+          {
+            "binary": 1,
+            "wall_s": 0.074735371,
+            "rss_kib": 256,
+            "user_s": 0.06,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.078450251,
+            "rss_kib": 256,
+            "user_s": 0.07,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.078916271,
+            "rss_kib": 256,
+            "user_s": 0.07,
+            "system_s": 0.0,
+            "involuntary": 4,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.074821305,
+            "rss_kib": 256,
+            "user_s": 0.06,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.077162007,
+            "rss_kib": 256,
+            "user_s": 0.07,
+            "system_s": 0.0,
+            "involuntary": 1,
+            "voluntary": 1,
+            "checked_exit": 0
+          },
+          {
+            "binary": 1,
+            "wall_s": 0.079609737,
+            "rss_kib": 256,
+            "user_s": 0.07,
+            "system_s": 0.0,
+            "involuntary": 0,
+            "voluntary": 1,
+            "checked_exit": 0
+          }
+        ],
+        "1": {
+          "median_wall_s": 0.077806129,
+          "wall_range_s": [
+            0.074735371,
+            0.079609737
+          ],
+          "peak_rss_kib": 256
+        }
+      }
+    }
+  },
+  "startup": {
+    "warmups": [
+      {
+        "binary": 0,
+        "wall_s": 0.011658346,
+        "rss_kib": 5412,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.010061258,
+        "rss_kib": 5676,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      }
+    ],
+    "observations": [
+      {
+        "binary": 0,
+        "wall_s": 0.011127905,
+        "rss_kib": 5700,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.009652161,
+        "rss_kib": 5496,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.010564487,
+        "rss_kib": 5764,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.010844137,
+        "rss_kib": 5448,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.009768217,
+        "rss_kib": 5500,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.010016155,
+        "rss_kib": 5620,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.010704819,
+        "rss_kib": 5724,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 1,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.009709327,
+        "rss_kib": 5468,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.011232866,
+        "rss_kib": 5440,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.011180847,
+        "rss_kib": 5652,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.010493256,
+        "rss_kib": 5672,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.009742688,
+        "rss_kib": 5500,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.010366604,
+        "rss_kib": 5728,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.011634469,
+        "rss_kib": 5640,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.011707672,
+        "rss_kib": 5652,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.012338271,
+        "rss_kib": 5488,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.013700602,
+        "rss_kib": 5736,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 1,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.012878203,
+        "rss_kib": 5468,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 1,
+        "wall_s": 0.011568062,
+        "rss_kib": 5680,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 1,
+        "voluntary": 1,
+        "checked_exit": 0
+      },
+      {
+        "binary": 0,
+        "wall_s": 0.012138899,
+        "rss_kib": 5484,
+        "user_s": 0.0,
+        "system_s": 0.0,
+        "involuntary": 0,
+        "voluntary": 1,
+        "checked_exit": 0
+      }
+    ],
+    "aa_range_s": [
+      0.009652161,
+      0.011127905
+    ],
+    "paired_b_over_a": [
+      1.063839157544709,
+      1.0333030059658972,
+      1.028067364387604,
+      0.9460811569077902
+    ],
+    "median_b_over_a": 1.0306851851767505,
+    "0": {
+      "median_wall_s": 0.010799735,
+      "wall_range_s": [
+        0.009709327,
+        0.013700602
+      ],
+      "peak_rss_kib": 5736
+    },
+    "1": {
+      "median_wall_s": 0.0113744545,
+      "wall_range_s": [
+        0.010016155,
+        0.012878203
+      ],
+      "peak_rss_kib": 5724
+    }
+  },
+  "harness_source": "#!/usr/bin/env python3\n\"\"\"Frozen PA19/O0 evidence. Run A B WORK OUT [workload prefix].\"\"\"\nfrom pathlib import Path\nimport json, os, platform, statistics, subprocess, sys, time\nROOT = Path(__file__).resolve().parents[2]\nsys.path.insert(0, str(ROOT / 'student.tests/pa10'))\nimport benchmark as shared\nA, B, WORK, OUT = map(Path, sys.argv[1:5])\nA, B = A.resolve(), B.resolve()\nWORK.mkdir(parents=True, exist_ok=True)\nassert not OUT.exists(), 'Preserve all earlier observations'\nassert not shared.run(['git', 'diff', 'HEAD', '--', 'dev']).stdout\ncpu = max(os.sched_getaffinity(0)); os.sched_setaffinity(0, {cpu})\nresult = dict(protocol='one warmup each, four A/A samples, four ABBA blocks; six final-only samples for new semantics',\n    cpu=cpu, platform=platform.platform(), flags=['--emit-lowir', '-O0'],\n    build_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',\n    commits=['e5f4c3ed78972c8d161671d145bf525cb99033f4', shared.run(['git','rev-parse','HEAD']).stdout.strip()],\n    harness_sha256=shared.sha(__file__), shared_harness_sha256=shared.sha(ROOT/'student.tests/pa10/benchmark.py'),\n    binaries=[dict(path=str(p), sha256=shared.sha(p), text_bytes=shared.text_size(p)) for p in (A,B)],\n    backend=dict(sha256=shared.sha(ROOT/'reference-binaries/lowir2native'), flags=['-O0'], bundle='c2f713cd70d06170632bfde3e75dd6fe1aa44d98'),\n    acceptance='PA19/O0: correctness costs measured separately; no optional transforms or new growth budget. Argument projection/substitution is linear in consumed types/arguments; completed lookups use canonical keys. No mandated numeric latency/RSS gate. Native optimization/self-hosting belong to later stages.',\n    text_metric='compiler .text; supplied sectionless ELF executable payload proxy (includes static data)', workloads={})\n\ndef save(): OUT.write_text(json.dumps(result, indent=2)+'\\n')\ndef observe(command):\n    usage=WORK/'usage.txt'; start=time.perf_counter_ns()\n    shared.run(['/usr/bin/time','-f','%M %U %S %c %w','-o',usage,*command])\n    rss,user,system,iv,v=usage.read_text().split()\n    return dict(wall_s=(time.perf_counter_ns()-start)/1e9, rss_kib=int(rss), user_s=float(user), system_s=float(system), involuntary=int(iv), voluntary=int(v), checked_exit=0)\ndef measure(commands):\n    warmups=[dict(binary=i,**observe(c)) for i,c in commands.items()]\n    order=[0]*4+[0,1,1,0]*4 if len(commands)==2 else [1]*6\n    rows=[dict(binary=i,**observe(commands[i])) for i in order]\n    data=dict(warmups=warmups, observations=rows)\n    if len(commands)==2:\n        aa=[r['wall_s'] for r in rows[:4]]; data['aa_range_s']=[min(aa),max(aa)]\n        ratios=[statistics.mean(r['wall_s'] for r in rows[j:j+4] if r['binary']==1)/statistics.mean(r['wall_s'] for r in rows[j:j+4] if r['binary']==0) for j in range(4,len(rows),4)]\n        data['paired_b_over_a']=ratios; data['median_b_over_a']=statistics.median(ratios)\n    for i in commands:\n        samples=[r for r in rows[(4 if len(commands)==2 else 0):] if r['binary']==i]\n        data[str(i)]=dict(median_wall_s=statistics.median(r['wall_s'] for r in samples), wall_range_s=[min(r['wall_s'] for r in samples),max(r['wall_s'] for r in samples)], peak_rss_kib=max(r['rss_kib'] for r in samples))\n    return data\n\nsources={}\nfor n in (600,2400,9600):\n    tag='template<int>struct Tag{};'\n    mains='int main(){return f0()!=7||f'+str(n-1)+'()!=7;}'\n    sources['ordinary-ordering-'+str(n)]=tag+'template<class T>int g(T){return 7;}template<class T,class...A>int g(T,A...){return 3;}'+''.join('int f'+str(i)+'(){return g(Tag<'+str(i)+'>());}' for i in range(n))+mains\n    sources['member-alias-'+str(n)]=tag+'template<class,class>struct Pair{};template<template<class...>class F>using Apply=F<char>;template<class T>struct O{template<class U>using M=Pair<T,U>;using R=Apply<M>;};template<class,class>struct Same;template<class T>struct Same<T,T>{};'+''.join('Same<O<Tag<'+str(i)+'>>::R,Pair<Tag<'+str(i)+'>,char>> a'+str(i)+';' for i in range(n))+'int main(){}'\n    sources['function-result-'+str(n)]=tag+'template<class T>T&& val();template<class>struct Result;template<class F,class...A>struct Result<F(A...)>{typedef decltype(val<F>()(val<A>()...)) type;};template<class>struct H{long operator()(int=0);};template<class T>struct B{template<class...A>typename Result<T(A...)>::type operator()(A&&...){return 7;}};'+''.join('int f'+str(i)+'(){B<H<Tag<'+str(i)+'>>> b;return b();}' for i in range(n))+mains\n    sources['fixed-head-pack-'+str(n)]=tag+'template<class A,class B=int,class C=long>struct L{};template<class A,class...T>int g(L<A,T...>){return 5+sizeof...(T);}'+''.join('int f'+str(i)+'(){return g(L<Tag<'+str(i)+'>>());}' for i in range(n))+mains\n    sources['empty-tail-ordering-'+str(n)]='template<class>struct Tag{};template<int>struct V{};template<class T>int g(T,int=0){return 3;}template<class T,class...A>int g(Tag<T>,A&&...){return 7;}'+''.join('int f'+str(i)+'(){return g(Tag<V<'+str(i)+'>>());}' for i in range(n))+mains\nfor name,source in shared.runtimes(4): sources['runtime-'+name]=source\nsources['runtime-reference-cast']='int calls;struct X{int n;template<class T>operator T(){++calls;return T();}};template<class T>T&& forward(T&x){return static_cast<T&&>(x);}int main(){volatile int n=8000000;X x;x.n=0;for(int i=0;i<n;++i){X&&r=forward(x);r.n=(x.n+1)&65535;}return calls||x.n!=4608;}'\nif len(sys.argv)>5: sources={k:v for k,v in sources.items() if k.startswith(sys.argv[5])}\nempty=WORK/'empty.cpp';empty.write_text('int main(){}')\nresult['startup']=measure({i:[cc,'--emit-lowir','-O0','-o',WORK/f'empty-{i}.lowir',empty] for i,cc in enumerate((A,B))});save()\nfor name,source in sources.items():\n    src=WORK/(name+'.cpp');src.write_text(source)\n    item=dict(source=source,source_sha256=shared.sha(src),outputs=[]);result['workloads'][name]=item\n    commands={}; executables={}\n    for i,cc in enumerate((A,B)):\n        ir=WORK/(name+f'-{i}.lowir');cmd=[cc,'--emit-lowir','-O0','-o',ir,src]\n        r=subprocess.run([str(x) for x in [*cmd,'--validate-lowir','--stats']],capture_output=True,text=True,timeout=300)\n        if r.returncode:\n            assert i==0,(name,r.stderr)\n            item['entry_rejection']=dict(exit=r.returncode,diagnostic=r.stderr);continue\n        out=dict(binary=i,sha256=shared.sha(ir),bytes=ir.stat().st_size,telemetry=[json.loads(s) for s in r.stderr.splitlines()])\n        exe=WORK/(name+f'-{i}');shared.run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir])\n        native=subprocess.run([exe],capture_output=True,timeout=30)\n        if native.returncode:\n            assert i==0,(name,native.returncode)\n            item['entry_wrong_execution']=dict(exit=native.returncode,ir_sha256=shared.sha(ir));continue\n        out['native']=dict(sha256=shared.sha(exe),payload_bytes=shared.text_size(exe),file_bytes=exe.stat().st_size,checked_exit=0)\n        item['outputs'].append(out);commands[i]=cmd;executables[i]=[exe]\n    assert 1 in commands\n    if len(commands)==2:\n        same=item['outputs'][0]['sha256']==item['outputs'][1]['sha256']\n        item['comparison']='exact' if same else 'checked-execution'\n        if same: assert item['outputs'][0]['native']['sha256']==item['outputs'][1]['native']['sha256']\n    else: item['comparison']='new-behavior'\n    save();print(name,'preflight',flush=True)\n    item['compiler']=measure(commands)\n    if name.startswith('runtime-'): item['runtime']=measure(executables)\n    save();print(name,'complete',flush=True)\n"
+}

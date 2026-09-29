@@ -2,74 +2,96 @@
 
 Stage base commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
 Last reviewed commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
-Target: PA19 full-stage. Phase: implement; independent PA19 audit pending.
-Entry: 397/423 required cases pass (26 failures); earlier PA1–PA18 pass.
-The previous interrupted turn has no evidenced implementation or live job;
-this turn revalidated the clean checkout and failure log.
+Target: PA19 full-stage. Phase: implement; validated incomplete handoff 91.
+Entry: 397/423 required cases; handoff: **407/423**, 16 original failures remain.
+All 423 source inputs are byte-identical to entry; no coverage/comparison reduction.
 
-## Design and work groups
+## Design/spec alignment and completed group
 
-Retain the streaming parser, canonical typed graph, specialization fact owners,
-lazy demands and direct typed LowIR path. Group failures by their shared owner
-before editing; record concrete data flow and complexity with each repair.
+Preserve streaming syntax, canonical typed identities, immutable substitution
+frames, lazy fact demands and direct typed LowIR. No production reference calls,
+text transport, new source unit, cache, global search/retry or optional transform.
 
-- Type composition and deduction: function/reference/array shells, qualified
-  aliases, defaulted class packs, constructor ordering.
-- Dependent lookup/substitution: member aliases/variables, qualified results,
-  explicit-template ADL, default-argument queries and no-eager SFINAE.
-- LowIR mismatches: inspect selected semantic entities, demand and ABI facts;
-  distinguish implementation faults from independently proved oracle defects.
+| Owner | Data flow and completed behavior | Work bound / validation |
+|---|---|---|
+| Parser name/type classification | Function type arguments retain ellipses; friend template-ids retain indexed category; ADL-only explicit template-id call syntax follows the course contract | Bounded delimiter lookahead; no second grammar parse. Function/relational/ADL positive and negative controls |
+| Type/template substitution | Outer template identity → canonical TypeId/EntityId → one occurrence frame → qualified alias/result; inner function arguments are not substituted twice | Existing complete-key substitution caches; linear dependent argument projection. Alias forwarding, default queries and dormant-method controls |
+| Class declaration/lookup | Unqualified elaborated declaration → namespace/block tag identity; fixed/defaulted class arguments → complete deduction sequence, including base alternatives | Lexical/base edges and argument sequence work; namespace identity, fixed-head type/value pack and rejection controls |
+| Signature and ordering | Actual expansion parameters distinguish packs from comma-optional varargs; empty-tail call ordering projects unmatched trailing expansion before directional deduction | Existing cached ordering owner; linear sequence projection. Constructor/function/query permutations, fixed-pack tie and inherited ordering controls |
+| Explicit conversion | Related reference cast → existing glvalue binding fact → typed LowIR, without user conversion search | Existing relation/path checks; identity, base adjustment, unrelated conversion and rejection controls |
 
-## Performance and validation
+The implementation owns semantics and LowIR; the supplied backend only executes
+validation outputs, as required before PA24. Later native optimization/debug and
+self-hosting requirements remain in their owning stages.
 
-PA19/O0 has no mandated numerical latency/RSS ceiling. Preserve inherited
-measurements; their self-selected thresholds are diagnostics under spec §9.
-Freeze entry/final binaries and inputs; measure compiler wall time/RSS with
-A/A calibration and ABBA, verify equivalent output before comparison, and
-measure checked native runtime/payload size through the supplied backend.
-Newly correct behavior receives final-only costs, not spurious speedup claims.
-No optional optimization is planned. Record scaling and existing work bounds.
+## Remaining groups (requirements remain open)
 
-Required: `make test-pa19`, `make test-report-through-pa18`, file audit for
-`dev/src`; finish with the through-PA19 report when the stage passes. Personal
-controls live in `student.tests/pa19/` and run explicitly. Preserve all 423
-course cases and their comparison rules.
+1. **Member variable-template facts: two compilation failures.**
+   `declare_variable_template` rebuilds projected initializer queries;
+   `QueryKind::QualifiedValue` finds a member without applying its template
+   arguments. Correct flow must retain the original initializer query with its
+   composed environment, select the variable specialization, and separately
+   demand declaration, initializer and storage. Class-valued results also need
+   constant-object emission. Keep complete-key memoized success/failure and
+   compact SFINAE rejection; avoid eager initialization. Validate both failing
+   leaf-SFINAE/class-value cases plus defaults, dormant definitions, repeated
+   specializations and native storage identity.
+2. **Fourteen LowIR mismatches: implementation or independently proved oracle
+   corrections still required.** Group by owning fact: five automatic-array
+   initialization cases (PA16 readonly/copyobj contract); five static-member
+   demand/constant-storage cases; discarded-reference consumption; reference
+   constant initialization; explicit-specialization instantiation metadata;
+   function-pointer NTTP constant conversion. Historical PA18 corrections are
+   leads, not proof. Each needs a reducer and standard/LowIR contract review,
+   then an implementation repair or independently reconstructed pinned oracle
+   revision. Keep the existing comparisons. Exact cases are in the
+   [handoff manifest](../student.tests/pa19/handoff91.json).
+
+The completed group was extended through alias identity, defaulted argument
+packs, function-result queries, elaborated lookup, casts and constructor ordering.
+Further related work now crosses into a separate variable declaration/initializer/
+storage state owner and constant-object lowering; patching another projected
+query would leave that behavior group incomplete. This is the concrete handoff
+boundary, not a minimum-progress cutoff. No known correctness/spec defect in the
+completed group is deferred as an audit question. Whole-stage correctness,
+architecture and performance audit remains an **independent review obligation**;
+it does not replace either unfinished implementation group above.
+
+## Validation and performance
+
+- `make test-pa19`: **407/423**, exit 2 (two rejections, fourteen mismatches).
+  Ten entry failures fixed, no new failures; one proved reference revision below.
+- Required prior report: **3029/3029**, exit 0, plus 22 focused PA10–PA12 properties.
+  The through-PA19 report before the reference revision retained all prior passes
+  and reported 406/423; final stage check covers that revision.
+- File audit for `pa19 --paths dev/src`: exit 0, three inherited header advisories.
+- Explicit personal controls: **42/42** (32 checked native, ten required rejects),
+  versus **17/42** on the entry binary; inherited ordering controls **64/64**
+  (53 checked native, eleven rejects). Defaulted-pack reducer executes with exit 0;
+  independent oracle reconstruction passes.
+- [Frozen performance evidence](performance91.md): 22 completed workloads,
+  576 observations plus 68 warmups; compiler latency/RSS and checked native
+  runtime/payload sizes, A/A, ABBA and all spreads preserved. Nine shared inputs
+  have exact LowIR/native equality; thirteen report newly correct final-only
+  costs. Compiler text +4,352 bytes (0.218%). Largest new workload latency scales
+  unevenly despite proportional measured work; diagnostic and shared comparison
+  retained. No speedup claim. PA19/O0 stage-scoped acceptance passes; inherited
+  +15%, +16 MiB and 5.5× targets remain diagnostics under spec §9, not invented
+  exit gates. No mandated limit, correctness rule or coverage is waived.
 
 ## Handoff ledger
 
-First increment: retained type/declaration composition repairs in parser name
-classification, argument substitution, class deduction and explicit conversion.
-Data flow: parsed argument -> canonical TypeId/template EntityId -> one
-occurrence-frame substitution -> ordinary signature/conversion -> typed LowIR.
-Function types retain ellipses; friend template-ids retain indexed categories;
-comma-optional varargs do not become function packs; member alias templates keep
-declaration identity; dependent function arguments are substituted once; fixed
-class heads use sequence deduction; related reference casts bind their objects.
-Complexity: existing indexed lookups and type/frame caches; linear argument
-sequences and reachable base edges, with no new retries or ownership graph.
-Validation: 25 explicit controls pass (19 checked executions, six rejections).
-PA14/15/17/18 retain all 1,254 passes; PA19 improves to 403/423, without oracle
-or coverage changes. Performance measurement remains pending.
-
-Second increment extends the same group to elaborated-type namespace identity,
-ADL-only explicit template-id syntax required by the course, and empty-tail
-constructor/function ordering. Owners remain class declaration, token prediction
-and cached function ordering. Bounded delimiter lookahead constructs no grammar;
-ordering projects at most one argument sequence and caches the complete key.
-44 personal controls and 74 inherited ordering controls pass. The complete root
-report retains all 3,029 prior-stage passes plus 22 focused properties; PA19 is
-406/423. No course inputs, oracles or comparison rules have changed.
-
-Implementation unfinished: two member variable-template rejections. Their
-separate variable specialization owner rebuilds projected initializer queries,
-and qualified value queries do not apply the member variable-template argument
-list. Class-valued results additionally require declaration/initializer/storage
-demands and constant-object emission to compose. This is a new semantic state
-group, beyond the completed type/declaration substitution repairs. Fifteen
-output mismatches remain for demand, initialization, discarded-value behavior,
-explicit specialization metadata, NTTP conversion and defaulted-pack deduction.
-Some match historical oracle defects; no correction is claimed without the
-separate reducer/proof/bundle revision required by the contract.
-Independent review: whole-stage correctness/architecture/performance audit
-remains pending; review markers above must not move during implementation.
-No completed behavior group or handoff boundary yet.
+- `1747113b`: entry markers, ownership groups and performance protocol.
+- `dbe5e97c`: first type identity/substitution/deduction/conversion increment;
+  25 controls pass; PA19 403/423 and prior template stages 1254/1254.
+- `57e27df2`: related elaborated lookup, ADL syntax and empty-tail ordering;
+  final implementation frozen; 42 composition and 64 ordering controls pass.
+- `4dd6e737`: [defaulted-pack oracle proof](reference-correction91.md), reduced
+  cardinality/identity checks and independent revision transformer. Nine trailing
+  arguments include defaults per C++11; fixture input and comparison stay intact.
+- Final evidence commit: frozen observations, scope boundary, coverage/check
+  hashes and this compact plan. Changes committed and clean before handoff.
+  Implementation handoff is complete; **PA19 remains incomplete** pending the
+  two remaining groups and independent whole-stage audit. Preserve both review
+  markers above during further implementation. Run the through-PA19 report as
+  a full passing exit check before advancing.

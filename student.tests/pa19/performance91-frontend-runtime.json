@@ -1,0 +1,1640 @@
+{
+  "cpu": 31,
+  "harness_sha256": "66e3a45b0146d2c8810912997c77da07dc144a2cc58016366457cf5225a44da5",
+  "protocol": "one warmup each, four A/A samples, four ABBA blocks; six final-only samples",
+  "limitation": "Startup-dominated checked executions; no speedup or scaling claims.",
+  "workloads": {
+    "ordinary-ordering-600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "752e7edb1523428ad3c7b16d49ce64152fc185875dc00672d6b01901cf5209e2",
+          "payload_bytes": 33705,
+          "file_bytes": 33825,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "752e7edb1523428ad3c7b16d49ce64152fc185875dc00672d6b01901cf5209e2",
+          "payload_bytes": 33705,
+          "file_bytes": 33825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.002516949,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.002027707,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.001885993,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001864376,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001799059,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001828202,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001793049,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001819193,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001829727,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001819466,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001765513,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001791761,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001829698,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001812679,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001755789,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001774787,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001755187,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001833615,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001847056,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001732092,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001836839,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001726198,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.001799059,
+        0.001885993
+      ],
+      "paired_b_over_a": [
+        1.0100774668063661,
+        1.012091860917469,
+        0.9834429337015281,
+        0.9987901783640347
+      ],
+      "0": {
+        "median_wall_s": 0.001802864,
+        "wall_range_s": [
+          0.001726198,
+          0.001847056
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.001805477,
+        "wall_range_s": [
+          0.001732092,
+          0.001836839
+        ]
+      }
+    },
+    "member-alias-600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "db0789fcd74522a5113a1afad1cb41b0c254283d541e0ab1424e467316f91dfb",
+          "payload_bytes": 624,
+          "file_bytes": 744,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.002180603,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001880586,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001829071,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001722459,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001754739,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001960858,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.002032473,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0018548285,
+        "wall_range_s": [
+          0.001722459,
+          0.002032473
+        ]
+      }
+    },
+    "function-result-600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "9a2950a0f3a6501abcb4918e615d7efc9e8c002b30c90e2f5f95bdc01db1697d",
+          "payload_bytes": 27705,
+          "file_bytes": 27825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.002100034,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001899604,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001838164,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001786834,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.0017214,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001745066,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001760584,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.001773709,
+        "wall_range_s": [
+          0.0017214,
+          0.001899604
+        ]
+      }
+    },
+    "fixed-head-pack-600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "ff379eb0dbd76e5caa063793dd5f9acbd5e1378d2b26e11b21c32fc2a4d7a3eb",
+          "payload_bytes": 39705,
+          "file_bytes": 39825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001948779,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001700596,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001703948,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001658323,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001679811,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00164293,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00166781,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0016738105000000001,
+        "wall_range_s": [
+          0.00164293,
+          0.001703948
+        ]
+      }
+    },
+    "empty-tail-ordering-600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "752e7edb1523428ad3c7b16d49ce64152fc185875dc00672d6b01901cf5209e2",
+          "payload_bytes": 33705,
+          "file_bytes": 33825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001958215,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001756261,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001708216,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001684271,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001667348,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001644966,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001808431,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0016962435,
+        "wall_range_s": [
+          0.001644966,
+          0.001808431
+        ]
+      }
+    },
+    "ordinary-ordering-2400": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "78cc693f6370bba44f4e1bedf53cd400d79f323ca36b6c16ddf9e1cf96857c62",
+          "payload_bytes": 134505,
+          "file_bytes": 134625,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "78cc693f6370bba44f4e1bedf53cd400d79f323ca36b6c16ddf9e1cf96857c62",
+          "payload_bytes": 134505,
+          "file_bytes": 134625,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.001985619,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001809533,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.00179179,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001702781,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001672761,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001592284,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001605233,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001877873,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001747598,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001712149,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001663547,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001588035,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001615534,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001645181,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00158976,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001649807,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001700493,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001635367,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00166711,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001690094,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001676902,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001696739,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.001592284,
+        0.00179179
+      ],
+      "paired_b_over_a": [
+        1.0928711254838905,
+        0.9682176957428957,
+        1.0388118049304726,
+        1.000935535453583
+      ],
+      "0": {
+        "median_wall_s": 0.001654364,
+        "wall_range_s": [
+          0.00158976,
+          0.001712149
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.001683498,
+        "wall_range_s": [
+          0.001588035,
+          0.001877873
+        ]
+      }
+    },
+    "member-alias-2400": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "b038a50774645ba04eab669a4d98e4f1650b12dcdcda02ae268f17399d139719",
+          "payload_bytes": 2424,
+          "file_bytes": 2544,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.002029029,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001780844,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001676544,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001786969,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001650083,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001616915,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00161209,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0016633135000000002,
+        "wall_range_s": [
+          0.00161209,
+          0.001786969
+        ]
+      }
+    },
+    "function-result-2400": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "0caa4b2f34b4ad3bf0fb2d9c98c9f6095f1b93968a625a8ec7864701b737b5d0",
+          "payload_bytes": 110505,
+          "file_bytes": 110625,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.002057772,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001800051,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001766234,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00169133,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001695859,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00173199,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001747302,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.001739646,
+        "wall_range_s": [
+          0.00169133,
+          0.001800051
+        ]
+      }
+    },
+    "fixed-head-pack-2400": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "c8293dfb757768fa3b66f86cfdc091a02133f8114553a5b16e4e65a816c88a5f",
+          "payload_bytes": 158505,
+          "file_bytes": 158625,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001931315,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001843175,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001713558,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00165523,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001755184,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001737301,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001692225,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0017254294999999998,
+        "wall_range_s": [
+          0.00165523,
+          0.001843175
+        ]
+      }
+    },
+    "empty-tail-ordering-2400": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "78cc693f6370bba44f4e1bedf53cd400d79f323ca36b6c16ddf9e1cf96857c62",
+          "payload_bytes": 134505,
+          "file_bytes": 134625,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001950949,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001736297,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001684658,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001727295,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001756275,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001683179,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001695245,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.00171127,
+        "wall_range_s": [
+          0.001683179,
+          0.001756275
+        ]
+      }
+    },
+    "ordinary-ordering-9600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "08c71dfe25aceff12d65e5c2c312eadeac37debfc25406ecc665de3c4e48f185",
+          "payload_bytes": 537705,
+          "file_bytes": 537825,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "08c71dfe25aceff12d65e5c2c312eadeac37debfc25406ecc665de3c4e48f185",
+          "payload_bytes": 537705,
+          "file_bytes": 537825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.001893576,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00176287,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.001783775,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001665349,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001596074,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001590115,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001670586,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001765234,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001636914,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00160463,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001697543,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001634756,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001575763,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001569126,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001552558,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001594455,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00175991,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00163472,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00161554,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001588989,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001569003,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001572922,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.001590115,
+        0.001783775
+      ],
+      "paired_b_over_a": [
+        1.0387553065202417,
+        0.982811236767484,
+        1.0524231020952675,
+        0.9904436684520626
+      ],
+      "0": {
+        "median_wall_s": 0.0016100849999999998,
+        "wall_range_s": [
+          0.001552558,
+          0.001697543
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.0016146055,
+        "wall_range_s": [
+          0.001569003,
+          0.001765234
+        ]
+      }
+    },
+    "member-alias-9600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "731c39914de8e3daf9699e7b40854f2daff71bfc97b1370848e7707faaea294e",
+          "payload_bytes": 9624,
+          "file_bytes": 9744,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001774689,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001624063,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001677611,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001659793,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001558722,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001533826,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001566853,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0015954580000000001,
+        "wall_range_s": [
+          0.001533826,
+          0.001677611
+        ]
+      }
+    },
+    "function-result-9600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "807c65b75cfa29676746c0aacd0ebdbcb8693eb4b96d7cb65b5883dc63f0c81f",
+          "payload_bytes": 441705,
+          "file_bytes": 441825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001972554,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001896731,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001807918,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001655812,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001562542,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001608563,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001697414,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.001676613,
+        "wall_range_s": [
+          0.001562542,
+          0.001896731
+        ]
+      }
+    },
+    "fixed-head-pack-9600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "18a481807e027600b8f1de431bca7fe5442cc808f46c00e87b7b03ab3ec4e69c",
+          "payload_bytes": 633705,
+          "file_bytes": 633825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.001877104,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.001680518,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001593045,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001684827,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001739941,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00169625,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001739117,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0016905385,
+        "wall_range_s": [
+          0.001593045,
+          0.001739941
+        ]
+      }
+    },
+    "empty-tail-ordering-9600": {
+      "evidence": "performance91-initial.json",
+      "evidence_sha256": "a52fac6a775e52c300d2464d8bbc207d56e87701c73ecab414a4acf666f30dbe",
+      "native": [
+        {
+          "sha256": "08c71dfe25aceff12d65e5c2c312eadeac37debfc25406ecc665de3c4e48f185",
+          "payload_bytes": 537705,
+          "file_bytes": 537825,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 1,
+          "wall_s": 0.002005988,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 1,
+          "wall_s": 0.00183768,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001842154,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001678528,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001628043,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001628735,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001693695,
+          "checked_exit": 0
+        }
+      ],
+      "1": {
+        "median_wall_s": 0.0016861115,
+        "wall_range_s": [
+          0.001628043,
+          0.001842154
+        ]
+      }
+    },
+    "ordinary-member-600": {
+      "evidence": "performance91-member.json",
+      "evidence_sha256": "310a4339e2f0c135d50d695a26cc4ee7cedb732469fa1320d877748e10e4b0dd",
+      "native": [
+        {
+          "sha256": "db0789fcd74522a5113a1afad1cb41b0c254283d541e0ab1424e467316f91dfb",
+          "payload_bytes": 624,
+          "file_bytes": 744,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "db0789fcd74522a5113a1afad1cb41b0c254283d541e0ab1424e467316f91dfb",
+          "payload_bytes": 624,
+          "file_bytes": 744,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.001955752,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001853488,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.0016358,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001602514,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001647597,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001569032,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001581966,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001542974,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001523126,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001615343,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001713357,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001563458,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001502868,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001551333,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001506264,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001526743,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001533653,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001518723,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001517964,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00150237,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001510785,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001494231,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.001569032,
+        0.001647597
+      ],
+      "paired_b_over_a": [
+        0.9589626776767589,
+        0.9392395602645276,
+        1.0117055048501036,
+        1.0003187044663444
+      ],
+      "0": {
+        "median_wall_s": 0.001535028,
+        "wall_range_s": [
+          0.001494231,
+          0.001713357
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.0015249345,
+        "wall_range_s": [
+          0.00150237,
+          0.001563458
+        ]
+      }
+    },
+    "ordinary-member-2400": {
+      "evidence": "performance91-member.json",
+      "evidence_sha256": "310a4339e2f0c135d50d695a26cc4ee7cedb732469fa1320d877748e10e4b0dd",
+      "native": [
+        {
+          "sha256": "b038a50774645ba04eab669a4d98e4f1650b12dcdcda02ae268f17399d139719",
+          "payload_bytes": 2424,
+          "file_bytes": 2544,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "b038a50774645ba04eab669a4d98e4f1650b12dcdcda02ae268f17399d139719",
+          "payload_bytes": 2424,
+          "file_bytes": 2544,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.001752127,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001857689,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.001914543,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001794285,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001790743,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001725579,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001733664,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001764441,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001753419,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001627925,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001562435,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001545465,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001515311,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001532492,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001491848,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001536648,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00149896,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001554874,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.00152751,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001586018,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001494547,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001522854,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.001725579,
+        0.001914543
+      ],
+      "paired_b_over_a": [
+        1.0464872415991366,
+        0.9889654909469594,
+        0.9963521450266877,
+        1.00990078561116
+      ],
+      "0": {
+        "median_wall_s": 0.0015436830000000001,
+        "wall_range_s": [
+          0.001491848,
+          0.001733664
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.0015410565,
+        "wall_range_s": [
+          0.001494547,
+          0.001764441
+        ]
+      }
+    },
+    "ordinary-member-9600": {
+      "evidence": "performance91-member.json",
+      "evidence_sha256": "310a4339e2f0c135d50d695a26cc4ee7cedb732469fa1320d877748e10e4b0dd",
+      "native": [
+        {
+          "sha256": "731c39914de8e3daf9699e7b40854f2daff71bfc97b1370848e7707faaea294e",
+          "payload_bytes": 9624,
+          "file_bytes": 9744,
+          "checked_exit": 0
+        },
+        {
+          "sha256": "731c39914de8e3daf9699e7b40854f2daff71bfc97b1370848e7707faaea294e",
+          "payload_bytes": 9624,
+          "file_bytes": 9744,
+          "checked_exit": 0
+        }
+      ],
+      "warmups": [
+        {
+          "binary": 0,
+          "wall_s": 0.001674138,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001587204,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "binary": 0,
+          "wall_s": 0.00163036,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001651032,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001780498,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001718323,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001584168,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001546191,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001561179,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001705599,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001627428,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001738577,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001726497,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001747614,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001842637,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.00173084,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001785323,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001919513,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001743164,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001720354,
+          "checked_exit": 0
+        },
+        {
+          "binary": 1,
+          "wall_s": 0.001744041,
+          "checked_exit": 0
+        },
+        {
+          "binary": 0,
+          "wall_s": 0.001688628,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.00163036,
+        0.001780498
+      ],
+      "paired_b_over_a": [
+        0.9445562558077821,
+        1.0266758161824356,
+        0.934615313052377,
+        1.0095002843995207
+      ],
+      "0": {
+        "median_wall_s": 0.0017243814999999998,
+        "wall_range_s": [
+          0.001584168,
+          0.001919513
+        ]
+      },
+      "1": {
+        "median_wall_s": 0.0017286685,
+        "wall_range_s": [
+          0.001546191,
+          0.001785323
+        ]
+      }
+    }
+  }
+}
