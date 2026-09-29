@@ -1,0 +1,43 @@
+{
+  "null_target_nonzero_adjustment": true,
+  "checks": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "-o",
+        "/tmp/pa22-114/representation/truth.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/member-truth-word.source"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa22-114/representation/merged.lowir",
+        "/tmp/pa22-114/representation/truth.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/member-truth-word.lowir"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa22-114/representation/truth",
+        "/tmp/pa22-114/representation/merged.lowir"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "/tmp/pa22-114/representation/truth"
+      ],
+      "exit": 0
+    }
+  ]
+}

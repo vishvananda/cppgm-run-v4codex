@@ -1,0 +1,42 @@
+[
+  {
+    "source": "member-assigned-adjustment",
+    "stable": true
+  },
+  {
+    "source": "member-bool-conversion",
+    "stable": true
+  },
+  {
+    "source": "member-composite",
+    "stable": true
+  },
+  {
+    "source": "member-escaped-adjustment",
+    "stable": true
+  },
+  {
+    "source": "member-inverse-adjustment",
+    "stable": true
+  },
+  {
+    "source": "member-null-fields",
+    "stable": true
+  },
+  {
+    "source": "member-overloaded-address",
+    "stable": true
+  },
+  {
+    "source": "member-runtime",
+    "stable": true
+  },
+  {
+    "source": "member-values",
+    "stable": true
+  },
+  {
+    "source": "rtti-void",
+    "stable": true
+  }
+]

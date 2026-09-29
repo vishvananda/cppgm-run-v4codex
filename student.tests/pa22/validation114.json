@@ -1,0 +1,1712 @@
+{
+  "stage_base": "a8482d768bd2dcede42ea63ef39e39cf3245c380",
+  "implementation_commit": "e6316d050c2d86aea57d816e3130a4e2c82ef18f",
+  "entry_continuation_audit": "No PA22 implementation progress or live process was found from the interrupted entry; baseline revalidated and work resumed",
+  "priorThroughTests": {
+    "command": "make test-report-through-pa21",
+    "exit": 0,
+    "passed": 3712,
+    "total": 3712,
+    "log_sha256": "60ec0cf4e51520e70a2c106887a9f3b1f44f3e6d0892530dcb85565c3c55c413"
+  },
+  "stageTests": {
+    "command": "make test-pa22",
+    "exit": 2,
+    "passed": 47,
+    "total": 99,
+    "log_sha256": "679e9acf34f1057db5050909104c82f58505b3d0a52e7e85a58bd357161e9586"
+  },
+  "through22": {
+    "command": "make test-report-through-pa22",
+    "exit": 2,
+    "passed": 3759,
+    "total": 3811,
+    "log_sha256": "458727ddc3cc598270def58cab4cfe3778329b1fba66fbb344f64e15f8871a40"
+  },
+  "stageProgress": {
+    "entry_passed": 22,
+    "entry_failed": 77,
+    "final_passed": 47,
+    "final_failed": 52,
+    "unchanged_cases": 99,
+    "improved": [
+      "tests/general/100-base-specifier-lexical-lookup-after-inherited-type.t",
+      "tests/general/100-derived-nonprimary-base-pointer-equality.t",
+      "tests/general/100-dynamic-cast-void.t",
+      "tests/general/100-nonprimary-base-pointer-overload.t",
+      "tests/general/300-arrow-star-member-access.t",
+      "tests/general/300-const-member-function-pointer-field-initializer.t",
+      "tests/general/300-data-member-pointer-late-field-address.t",
+      "tests/general/300-data-member-pointer-prvalue-object.t",
+      "tests/general/300-data-member-pointer-xvalue-reference-return.t",
+      "tests/general/300-dot-star-member-access.t",
+      "tests/general/300-local-class-member-pointer-alias-pack.t",
+      "tests/general/300-member-function-pointer-call.t",
+      "tests/general/300-member-function-pointer-contextual-bool.t",
+      "tests/general/300-member-function-template-pointer-target-init.t",
+      "tests/general/300-member-object-pointer-init.t",
+      "tests/general/300-member-pointer-base-to-derived-conversion.t",
+      "tests/general/300-member-pointer-base-to-derived-data-access.t",
+      "tests/general/300-member-pointer-base-to-derived-function-access.t",
+      "tests/general/300-member-pointer-null-compare.t",
+      "tests/general/300-member-pointer-null-comparison.t",
+      "tests/general/300-member-pointer-qualification-conversion.t",
+      "tests/general/300-member-pointer-safe-bool-null-conversion.t",
+      "tests/general/300-overloaded-arrow-star-callee-call.t",
+      "tests/general/300-overloaded-member-function-pointer-target-init.t",
+      "tests/general/300-target-deduces-member-function-template-pointer.t"
+    ],
+    "regressed": [],
+    "criterion_met": true
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa22 --paths dev/src",
+    "exit": 0,
+    "output": "File audit passed for pa22 with 3 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "personal": {
+    "entry_passed": 9,
+    "final_passed": 16,
+    "total": 16
+  },
+  "remaining_failures": [
+    "tests/general/100-public-qualified-base-typedef-ambiguous-subobject.t",
+    "tests/general/100-qualified-sizeof-overload-static-const-nttp.t",
+    "tests/general/300-bind-typed-member-pointer-source-arg.t",
+    "tests/general/300-cached-result-nontype-sfinae-qualified-member.t",
+    "tests/general/300-const-member-function-pointer-address-call.t",
+    "tests/general/300-constexpr-forwarded-member-pointer-derived-object.t",
+    "tests/general/300-current-specialization-qualified-member-pointer.t",
+    "tests/general/300-data-member-pointer-reference-cast-address.t",
+    "tests/general/300-defaulted-dependent-member-function-pointer-nttp.t",
+    "tests/general/300-dependent-decltype-call-operator-member-pointer-type.t",
+    "tests/general/300-dependent-decltype-pack-call.t",
+    "tests/general/300-dependent-member-template-nontype-target-overload.t",
+    "tests/general/300-forwarded-data-member-pointer-nontype-base.t",
+    "tests/general/300-function-template-constructor-member-pointer-nontype.t",
+    "tests/general/300-function-template-member-function-pointer-const-param.t",
+    "tests/general/300-function-template-member-pointer-return-noexcept.t",
+    "tests/general/300-function-template-member-pointer-return.t",
+    "tests/general/300-inherited-explicit-bool-condition.t",
+    "tests/general/300-member-function-pointer-cv-partial-specialization.t",
+    "tests/general/300-member-function-pointer-nontype-partial-specialization-call.t",
+    "tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.t",
+    "tests/general/300-member-function-pointer-pack-partial-specialization.t",
+    "tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.t",
+    "tests/general/300-member-function-pointer-type-arg-qualified-void.t",
+    "tests/general/300-member-nttp-body-inherited-call-binding-lifetime.t",
+    "tests/general/300-member-pointer-access-substitution-failure.t",
+    "tests/general/300-member-pointer-nonclass-owner-sfinae.t",
+    "tests/general/300-member-pointer-pack-decltype-memfn.t",
+    "tests/general/300-nested-alias-dependent-member-pointer-argument.t",
+    "tests/general/300-nested-function-type-empty-pack-parameter.t",
+    "tests/general/300-overloaded-member-address-excludes-function-pointer-template.t",
+    "tests/general/300-qualified-dependent-function-pointer-nontype.t",
+    "tests/general/300-qualified-member-address-decltype-ref.t",
+    "tests/general/300-qualified-member-function-template-address-nttp.t",
+    "tests/general/300-qualified-template-id-owner-function-call-probe.t",
+    "tests/general/300-qualified-template-member-type-sfinae.t",
+    "tests/general/300-ref-qualified-member-function-pointer-nontype-call.t",
+    "tests/general/300-repeated-nested-owner-member-template-address.t",
+    "tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.t",
+    "tests/general/300-structured-bool-conditional-member-pointer-dead-branch.t",
+    "tests/general/300-template-member-function-template-nttp-dedup.t",
+    "tests/general/300-template-member-pointer-nttp-execute.t",
+    "tests/general/300-template-member-pointer-nttp-inline-method-reference.t",
+    "tests/general/300-using-directive-template-id-member-pointer-owner.t",
+    "tests/general/400-reference-reset-recollects-inclass-template.t",
+    "tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.t",
+    "tests/spec/300-ambiguous-member-nontype-arg-sfinae.t",
+    "tests/spec/300-dependent-member-function-pointer-nontype-detection.t",
+    "tests/spec/300-member-pointer-nontype-template-parameter.t",
+    "tests/spec/300-member-pointer-parameter-variadic-deduction.t",
+    "tests/spec/300-overloaded-member-pointer-function-template-deduction.t",
+    "tests/spec/300-using-member-operator-template-hides-inherited-instantiations.t"
+  ],
+  "contract_manifest": [
+    {
+      "path": "pa22/tests/general/100-bad-ambiguous-member.ref",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-bad-ambiguous-member.ref.exit_status",
+      "sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    {
+      "path": "pa22/tests/general/100-bad-ambiguous-member.ref.stdout",
+      "sha256": "096d2afed29bd83292a5279d4d6c788fc45a15dbdaf533b5009e83f1887eeb31"
+    },
+    {
+      "path": "pa22/tests/general/100-bad-ambiguous-member.t",
+      "sha256": "a61cd18c0113fb2a8343537ae90341a5caafe9284754bbfde4c5215df1b7f1f4"
+    },
+    {
+      "path": "pa22/tests/general/100-base-specifier-lexical-lookup-after-inherited-type.ref",
+      "sha256": "a40224d060e1c15178165f7f68d265f26d33cde7fa14ffb658b09aac10330c9e"
+    },
+    {
+      "path": "pa22/tests/general/100-base-specifier-lexical-lookup-after-inherited-type.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-base-specifier-lexical-lookup-after-inherited-type.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-base-specifier-lexical-lookup-after-inherited-type.t",
+      "sha256": "0cab69df473aab74c45ff0768834655b0dfa25c9c85985e216b5121779237ffd"
+    },
+    {
+      "path": "pa22/tests/general/100-constexpr-rejects-ambiguous-base-candidate.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/100-constexpr-rejects-ambiguous-base-candidate.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-constexpr-rejects-ambiguous-base-candidate.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-constexpr-rejects-ambiguous-base-candidate.t",
+      "sha256": "46c435b6efa65052320cc3e852affd6cba504e7c1737e8a200fc7eab14a8eb7b"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-nonprimary-base-pointer-equality.ref",
+      "sha256": "852ebb42d20278909e208c28e7a85ab18d9f5c4e00bc3792783e280943b36a7e"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-nonprimary-base-pointer-equality.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-nonprimary-base-pointer-equality.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-nonprimary-base-pointer-equality.t",
+      "sha256": "b058cebaba4f29a1c678e0139177c5b6614afaa6b40b9a6e20c96c50b9f4ded2"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-xvalue-binds-const-base-reference.ref",
+      "sha256": "feb7cdedfada3267f6b79e52b97ce0651dd4d61d2ad49cb5c20343d312247cb1"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-xvalue-binds-const-base-reference.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-xvalue-binds-const-base-reference.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-derived-xvalue-binds-const-base-reference.t",
+      "sha256": "cb4a541a34ac57a4c7eb6717bb2069efdfc195c1f854868baafac62c4a60aa63"
+    },
+    {
+      "path": "pa22/tests/general/100-duplicate-base-static-member-lookup.ref",
+      "sha256": "32df35cae9c347be538cbfc27ba08051c8680cc34c952c6901ba3aaad7408e6a"
+    },
+    {
+      "path": "pa22/tests/general/100-duplicate-base-static-member-lookup.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-duplicate-base-static-member-lookup.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-duplicate-base-static-member-lookup.t",
+      "sha256": "4ee4d5338cd0c099a6d352adfd03c38e47e1795158b12d068b97f3bfdf6c33c3"
+    },
+    {
+      "path": "pa22/tests/general/100-dynamic-cast-void.ref",
+      "sha256": "c218320b7cdf342743294ecfd360606bcb1acee486dbad2a3721e2c0f08b8db4"
+    },
+    {
+      "path": "pa22/tests/general/100-dynamic-cast-void.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-dynamic-cast-void.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-dynamic-cast-void.t",
+      "sha256": "09640fdc9583ec82a5f53e6fb92b78f22f72935611f2ab0548c28d322f17e22b"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-base-injected-class-name-qualified-type.ref",
+      "sha256": "e9318a8f575620aa6480b11b1a098cfe8e53baaab95540a51c66926d9618f092"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-base-injected-class-name-qualified-type.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-base-injected-class-name-qualified-type.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-base-injected-class-name-qualified-type.t",
+      "sha256": "6d20cd5a32512417bbe063e7d86ba1233c13b1ee43a17f60b609a802202c4ec1"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-copy.ref",
+      "sha256": "d3e5d93fb7f2861660e508a941d375854e69507d9e071ddd9afb19a6d836f4af"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-copy.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-copy.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-copy.t",
+      "sha256": "90c13fcd99f45c484ef30352729778f583a99ae7d234b0d344ae0db603946d26"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-fields.ref",
+      "sha256": "7ec9c9fa1e27ba9884ff90d4a4c2407db2589b181bf2beb09d4a828247939fbd"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-fields.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-fields.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-fields.t",
+      "sha256": "fae8b56a9cf6cf481460f79a7e4b183aec2643e4bb34b72ce0811b96fbe367b0"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-method-call.ref",
+      "sha256": "ff5a3ae369252c52d0b9ab07fb80f9cb8699bd7df28bedbd2a16519af28b1e39"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-method-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-method-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-multiple-inheritance-method-call.t",
+      "sha256": "d7f65caa50919282f64e8bd42a8cc7c59e8ab2e288c0ba0bafddb9191f4c4d93"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-function-template-deduction.ref",
+      "sha256": "9dbc35bb43de62f82e9ce0aa9171953b3f3df8e58775e5cafc8b5504cfeba5f2"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-function-template-deduction.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-function-template-deduction.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-function-template-deduction.t",
+      "sha256": "5b6d832bc3dd29281682d35ff942c289cf5cf986a1f1e46397fc21ccccde6ee7"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-pointer-overload.ref",
+      "sha256": "b4b7f7f436e62d86717c1b175dff0ea11a1e104c59003f94394f5d8aea16f1a3"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-pointer-overload.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-pointer-overload.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-nonprimary-base-pointer-overload.t",
+      "sha256": "442db1e43ffac8cc8f0359a24b89aa2439647c578c842a41c0ae947369c8aec1"
+    },
+    {
+      "path": "pa22/tests/general/100-overloaded-comparison-skips-ambiguous-builtin-conversion.ref",
+      "sha256": "a83d3d8fcb9fbcb6a2bbdaae5d64e6bd0cbd2b3237c00c30b8e6e5ec05098120"
+    },
+    {
+      "path": "pa22/tests/general/100-overloaded-comparison-skips-ambiguous-builtin-conversion.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-overloaded-comparison-skips-ambiguous-builtin-conversion.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-overloaded-comparison-skips-ambiguous-builtin-conversion.t",
+      "sha256": "2bca0b5b80d4e5d3de746d3daac90804d5d75fc76624b0879a3030a6888088b8"
+    },
+    {
+      "path": "pa22/tests/general/100-pack-expanded-base-template-parameter-lookup.ref",
+      "sha256": "7abba6663b5a045bd94195202115b7434ab1715d539a8022e0772a006bb6b80c"
+    },
+    {
+      "path": "pa22/tests/general/100-pack-expanded-base-template-parameter-lookup.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-pack-expanded-base-template-parameter-lookup.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-pack-expanded-base-template-parameter-lookup.t",
+      "sha256": "c15fb7c0d908166b3d46cf14a7480064941d88868cc0ba36dc8d4c1ddc90d290"
+    },
+    {
+      "path": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref",
+      "sha256": "feb47f616bcde7fb9f4dc8a1174d926c34935177587b93282ebd9e1669ca6e27"
+    },
+    {
+      "path": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.t",
+      "sha256": "24d30a52b36a6ea873e221211c150843b1ad9b7d4f8c5c50d2d3b866739a3608"
+    },
+    {
+      "path": "pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.ref",
+      "sha256": "ef8cf19390a5ae92572906f2c59178ea57b9893e187e152df8fae21ef0a21057"
+    },
+    {
+      "path": "pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.t",
+      "sha256": "ba9306ad7b19068e95c967aa977b91ecb821ce905a86401c04092a080ba1897e"
+    },
+    {
+      "path": "pa22/tests/general/100-static-assert-validation-inherited-nonprimary-member-template.ref",
+      "sha256": "a44e96fa66d4b4da900383ae483859042ffe307bfe07b5b3cf35ee6d6a0e4f06"
+    },
+    {
+      "path": "pa22/tests/general/100-static-assert-validation-inherited-nonprimary-member-template.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/100-static-assert-validation-inherited-nonprimary-member-template.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/100-static-assert-validation-inherited-nonprimary-member-template.t",
+      "sha256": "6e064f00f0d29e0d66f49a63a28bf2473dfbca390a2a89deef5f224137cccbe4"
+    },
+    {
+      "path": "pa22/tests/general/300-ambiguous-member-pointer-object-bad.ref",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-ambiguous-member-pointer-object-bad.ref.exit_status",
+      "sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    {
+      "path": "pa22/tests/general/300-ambiguous-member-pointer-object-bad.ref.stdout",
+      "sha256": "19507e0242ae358d7af5398a597e4bab7c691dfacd904caaa32f0982f11977ee"
+    },
+    {
+      "path": "pa22/tests/general/300-ambiguous-member-pointer-object-bad.t",
+      "sha256": "b2f34e9a8e77f858d8888951d2678d9f7cd04aa2d25a95d12b7e3e1d2f9ce32e"
+    },
+    {
+      "path": "pa22/tests/general/300-arrow-star-member-access.ref",
+      "sha256": "d84d116f3d134f743ee82b7f7a83c5a8e086ad323e37abd02441e815ab320336"
+    },
+    {
+      "path": "pa22/tests/general/300-arrow-star-member-access.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-arrow-star-member-access.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-arrow-star-member-access.t",
+      "sha256": "63918975d34256829c52db52f755186e5d821ac3236e606b48fce4c0a1358c6c"
+    },
+    {
+      "path": "pa22/tests/general/300-bind-typed-member-pointer-source-arg.ref",
+      "sha256": "e8fd6ff723c81b21d9a34971b1cb3bd5c7259fa1785d0ca8a406cb74f4135642"
+    },
+    {
+      "path": "pa22/tests/general/300-bind-typed-member-pointer-source-arg.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-bind-typed-member-pointer-source-arg.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-bind-typed-member-pointer-source-arg.t",
+      "sha256": "c903ee539b5eb101146958754e0dc4823abbe7cb27029b7316467de50df221b5"
+    },
+    {
+      "path": "pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.ref",
+      "sha256": "d935c5fa0ce560af30dd7a9d3dbdb4fad00504ac03029bff16cf32fb05fbedbf"
+    },
+    {
+      "path": "pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.t",
+      "sha256": "dfdaa1ef0029b33d74f7ae79a6a6d31aed23cdf9049eec38425357d410a93a9a"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-address-call.ref",
+      "sha256": "71648e26704db1cf67b72f9c6c0d1eae09432d5b6670863d1dce43f62253f301"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-address-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-address-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-address-call.t",
+      "sha256": "d9091f3b39a08d37e63abc5b9a8c634de2ee18297ec0581925b61801bab6db9a"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-field-initializer.ref",
+      "sha256": "d7421d4f1c9e8a07293ae8dacad5332b681ae68ca222ec6c014064bbdf4cbb62"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-field-initializer.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-field-initializer.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-field-initializer.t",
+      "sha256": "0bf2c7c92d21d359687910b93d2f5f38eb9b7b8e6c93e43a81d1aa37c571521d"
+    },
+    {
+      "path": "pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.ref",
+      "sha256": "a96acf872443aff9c35faf53f82aea896f372749dd98fa4664a0285f939dd1f5"
+    },
+    {
+      "path": "pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.t",
+      "sha256": "96104b3c6a0fa8a4793920583773993b5ca39ed10c5bb217ee839a0744066f00"
+    },
+    {
+      "path": "pa22/tests/general/300-current-specialization-qualified-member-pointer.ref",
+      "sha256": "d5f994accabeecfad5fada5da1c47bed972cc6e570cc475c5cb81d7ac740f649"
+    },
+    {
+      "path": "pa22/tests/general/300-current-specialization-qualified-member-pointer.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-current-specialization-qualified-member-pointer.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-current-specialization-qualified-member-pointer.t",
+      "sha256": "6e5c57fd0b33cca911160113050cb10eb5ee69a1ab4b7912ae2bf3428fccf243"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-late-field-address.ref",
+      "sha256": "461fcb6b56a4eaba40fd5ed19f709f94ad0ec69c9aa9b47f28322f6236cbf843"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-late-field-address.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-late-field-address.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-late-field-address.t",
+      "sha256": "0da56d2a2448f4d5a03256e2217973c73d23cff08329fb3df59d7523e3039b54"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-object-cv.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-object-cv.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-object-cv.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-object-cv.t",
+      "sha256": "cb8064da59958755ec8edb3ed73b0a5d4e8064f56e0f7b923e80d2b888ddc06a"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-prvalue-object.ref",
+      "sha256": "068a8cd9d9621496b7d4b0e74fec44473b2e0c7f14eec5d176d5c1c235e7ea2e"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-prvalue-object.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-prvalue-object.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-prvalue-object.t",
+      "sha256": "71a5a3b740653fc216adbb11a633ad3d1de7d42047859cc2913c21c3ae5704c8"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-reference-cast-address.ref",
+      "sha256": "e8e622ff6fa7daa7a9cb6ee72706f2fe4c982de108d0eb6655d61f6687cb2780"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-reference-cast-address.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-reference-cast-address.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-reference-cast-address.t",
+      "sha256": "8dd1f7650ab45f61521ab3e5adc2423472362a2a92c3ff7dea3bf77a8466ecc3"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-xvalue-reference-return.ref",
+      "sha256": "d447d80006dd931293c6f5350ef3d44dc2c7d0f31fa2b3fdec5885014010c2a7"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-xvalue-reference-return.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-xvalue-reference-return.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-data-member-pointer-xvalue-reference-return.t",
+      "sha256": "3f85c50c447fd92b3802b4712716709d26e404906bc4f65f2ec0ae2863ba7d8a"
+    },
+    {
+      "path": "pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.ref",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.t",
+      "sha256": "467143630bcaa569d7f404cf5c457e42de1b52cc771ee78ad32a75d11306a0b8"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.ref",
+      "sha256": "5c53231e37744c14feda5b109a429251ddc607d4a2cdd193c8f0a64e9e780333"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.t",
+      "sha256": "9af656f43c766816fb7f3f12e26bf5caefe6572c430049d0f40564a24dea6745"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-pack-call.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-pack-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-pack-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-decltype-pack-call.t",
+      "sha256": "757bc82d77865323a0be5c54b3eaf1aa94afb9279a96866b827766bc8216dd53"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-member-template-nontype-target-overload.ref",
+      "sha256": "b452e416cf798c42200e96e8676a8b8aea76bc5f6ab153fe0894b0b635414373"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-member-template-nontype-target-overload.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-member-template-nontype-target-overload.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-member-template-nontype-target-overload.t",
+      "sha256": "a4d62f8afed2d6992b29d1bc0e0a073cf175d64e5a76730a59154d3fbf03b00f"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-qualified-value-preserves-structured-member-pointer-type.ref",
+      "sha256": "d67539a2f67f69a9ef0808b552d30426d43e38c93c246940b3b8711f2aef20c6"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-qualified-value-preserves-structured-member-pointer-type.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-qualified-value-preserves-structured-member-pointer-type.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-dependent-qualified-value-preserves-structured-member-pointer-type.t",
+      "sha256": "1af911338d89e8c61851abad712c6374ab07eede897a2e7a4b1b0de8ee7b50e0"
+    },
+    {
+      "path": "pa22/tests/general/300-dot-star-member-access.ref",
+      "sha256": "b0fc89b2cd514a4d1d2144f1c5d00fe52929f4fe3dba57d06325d81b5138dfe7"
+    },
+    {
+      "path": "pa22/tests/general/300-dot-star-member-access.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-dot-star-member-access.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-dot-star-member-access.t",
+      "sha256": "f514aa1504c0f12468ab09f1251ab3fc39ed7d5c3c11cb1347b49f05fc842068"
+    },
+    {
+      "path": "pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.ref",
+      "sha256": "a514b576dcf5392406cb1ba3f5a111726e7a459e73c651d534ebffbeab01be27"
+    },
+    {
+      "path": "pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.t",
+      "sha256": "24a0f4c4eecfb4f534ab7c243b257a13dd6165daa2ac214ba8d2b4a29345dd50"
+    },
+    {
+      "path": "pa22/tests/general/300-friend-template-adl-existing-definition.ref",
+      "sha256": "ca095efdd543a65bddaa05adb3596b29cfb68a4f47d35d9b41e697a8f1fe3d7c"
+    },
+    {
+      "path": "pa22/tests/general/300-friend-template-adl-existing-definition.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-friend-template-adl-existing-definition.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-friend-template-adl-existing-definition.t",
+      "sha256": "45249d53e850476c7b9096c4a82bcf2ac6518e0e6336faf50e6a38530545194f"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-constructor-member-pointer-nontype.ref",
+      "sha256": "31331e5eda864a54338d93e6122c1217eccfef713f73f902d27a9a80ebea6e48"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-constructor-member-pointer-nontype.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-constructor-member-pointer-nontype.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-constructor-member-pointer-nontype.t",
+      "sha256": "3568d595910d33e2edb4363d48cb53d93a874a6e8f1055c8e55c5dab8aefde2d"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-function-pointer-const-param.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-function-pointer-const-param.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-function-pointer-const-param.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-function-pointer-const-param.t",
+      "sha256": "462ab5a3c443b1cc0198735b2199892ea218f3a74eac5b2d54609fc2b5cfc5b6"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return-noexcept.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return-noexcept.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return-noexcept.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return-noexcept.t",
+      "sha256": "92199a5e88969ce086240e0b1f06eb20eb0be22192559b5e049495c75dd18e3a"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-function-template-member-pointer-return.t",
+      "sha256": "398284f3817c44a0d8678ad20c233f0f23c7c0d5dd466967ff59805beb7b3d9b"
+    },
+    {
+      "path": "pa22/tests/general/300-inherited-explicit-bool-condition.ref",
+      "sha256": "3e0c65220ef28d337007553978ab60c0817cabc6b6ae0dd49ca85812f594a2d1"
+    },
+    {
+      "path": "pa22/tests/general/300-inherited-explicit-bool-condition.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-inherited-explicit-bool-condition.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-inherited-explicit-bool-condition.t",
+      "sha256": "96a195d343459195f31a978b2179a5660f1540ab25d6d74f417730aa00ff5004"
+    },
+    {
+      "path": "pa22/tests/general/300-local-class-member-pointer-alias-pack.ref",
+      "sha256": "dc46955ed7c120d8a4f0e70df6a74d0252c545af0129c3865ab71dd06f83ff20"
+    },
+    {
+      "path": "pa22/tests/general/300-local-class-member-pointer-alias-pack.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-local-class-member-pointer-alias-pack.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-local-class-member-pointer-alias-pack.t",
+      "sha256": "17c32863e1d76e9a928b5d84d5aac8de24e6ccd680911335fb898685e7a64cea"
+    },
+    {
+      "path": "pa22/tests/general/300-local-static-member-function-pointer-array-constant-init.ref",
+      "sha256": "e8d075f317226424c6b0c7debd607502aab021564e2ef5bfda8170e5a73c882c"
+    },
+    {
+      "path": "pa22/tests/general/300-local-static-member-function-pointer-array-constant-init.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-local-static-member-function-pointer-array-constant-init.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-local-static-member-function-pointer-array-constant-init.t",
+      "sha256": "7d6c8553d0de26f5771f7923f9896252db2aba7f3b2d65491a066099e4fb88ac"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-call.ref",
+      "sha256": "16d82a0198fc6c892576e7b61233f506fc05ce9d077690a9f45afc81c29bcdc4"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-call.t",
+      "sha256": "4fa0cd1bde78eb83bb04a49ef782dc225246283086cbdcfb061ad2c4ae7de55c"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-contextual-bool.ref",
+      "sha256": "4eb43cdda33ecd4813b8ed2fe3d7978856ecb2a1660912ae2718d3a178dc955a"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-contextual-bool.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-contextual-bool.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-contextual-bool.t",
+      "sha256": "d9289c026d8f926ed9ecaaf00eb120752372a4632d47550292e60ad5cfdc7e7c"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-cv-partial-specialization.ref",
+      "sha256": "4cf5916d88601180f714f2a34b0cde9226a369a703b5d4acf47d29050d578470"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-cv-partial-specialization.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-cv-partial-specialization.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-cv-partial-specialization.t",
+      "sha256": "5ebe4fe5c83db4b40589a6a719dad66c2242f2925d1b54d219ad1c36a3eb9e0e"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.ref",
+      "sha256": "e38dbc3c569a8eda1c70aeb05450f94efcfa858a3d1b6992fc04422a1631361e"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.t",
+      "sha256": "bf8ad462999933a7d5c55e3d0a1c9ec7f89215e159620db440e77bf34eda2b5f"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.ref",
+      "sha256": "a1a9586931f9dec06ab49a53fa6546d254266740e6b7fe293851d470605244cb"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.t",
+      "sha256": "1b9767b2f9cd9a4bc5d8098a8b8003f7e60854e591eaf8d8dad4374d607a8194"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-pack-partial-specialization.ref",
+      "sha256": "05cd3273ba89023e9f92ad2da830654ca75731941de4aac3f5f5355a11c3e9e2"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-pack-partial-specialization.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-pack-partial-specialization.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-pack-partial-specialization.t",
+      "sha256": "341c5693190859b9b3df4e01b91e04be061ccd0afafcf8ce9c9eb50d96bfe4d0"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.t",
+      "sha256": "48b9da88f727c10f85f6177faff8a539cf4bf93c23a7496db9822e2b24a4f1e6"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.ref",
+      "sha256": "f24dcd2f7d42d46b5f2f975ef2422207c8b40368331ed9d3ff127c44b2eeca58"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.t",
+      "sha256": "7dc938f9b9bf742ec941a6df54bad52aef1ef6b9d6ad55b0c650c049cdbc3e1c"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-template-pointer-target-init.ref",
+      "sha256": "59f35bb47aae45ccdf833f59e3fda1e6f6a503aec23dac48e28efb6167ebb853"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-template-pointer-target-init.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-template-pointer-target-init.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-function-template-pointer-target-init.t",
+      "sha256": "8af7be856335f82ba9b7cae1186cdb9d11d7d2c2a3ccf35a11e27565dc8e7527"
+    },
+    {
+      "path": "pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.ref",
+      "sha256": "3157a1d3501ff974d23220419b6d77fbf05c0c036aeb7bf2a7c90b53a8d97da9"
+    },
+    {
+      "path": "pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.t",
+      "sha256": "43ad6fd964b914a528a0c9ed1a84a6f946acef96019bc0a34ce82d73caebe6f7"
+    },
+    {
+      "path": "pa22/tests/general/300-member-object-pointer-init.ref",
+      "sha256": "ae2ebbf9a81da3a0bfd01da2538688ee9a4c30814afd8a6b1716381c5b782c29"
+    },
+    {
+      "path": "pa22/tests/general/300-member-object-pointer-init.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-object-pointer-init.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-object-pointer-init.t",
+      "sha256": "a179ba2e2f2c82aad10b5555e800b70e88d7284dd94111c935bcfb7c7bbdf225"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-access-substitution-failure.ref",
+      "sha256": "fead3d7f2064cd214b71e6dc4fd4ca117da63f989e3b9e935af0e422e8d7752f"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-access-substitution-failure.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-access-substitution-failure.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-access-substitution-failure.t",
+      "sha256": "9d31249573f5f00ed73bf3ea6502a267e3330df5f1814ab7c53897b434a88d0f"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-conversion.ref",
+      "sha256": "e5c346316a410cfffc70932eb85aa8d6a2f5568e6cb47b956d400393c0b8cb58"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-conversion.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-conversion.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-conversion.t",
+      "sha256": "0b8200e06bc8bf1d16d0ff63b90c7f90056a7eb8ce70d7a30ca1bde1cefd7dbb"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-data-access.ref",
+      "sha256": "811bfdc36dbe644b0e4da606c7166cb4279e1a772dfba80f66a591830ebfc927"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-data-access.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-data-access.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-data-access.t",
+      "sha256": "c69e132b95b4e36d793e24dbef1612a6cf8e2be39eb3a4b58a45683ca0bfdab2"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-function-access.ref",
+      "sha256": "73771f45573712024e2f3cfaf5687d46f3c3f97703ad2cb361ee25d2c749b3ea"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-function-access.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-function-access.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-base-to-derived-function-access.t",
+      "sha256": "9cf8bfd7d7a55664715e1ed67ec5d143b262e15e7f54f3bdff51102591de9e43"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.t",
+      "sha256": "e5e621e783775c4490b4a05819d009799d430ef99a00ef321721b6cdbd67bea6"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-compare.ref",
+      "sha256": "81f5cdb18983329b75507d1fed2a622b182c596061a4731732fdbeb7bc1ecb11"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-compare.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-compare.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-compare.t",
+      "sha256": "3ede04f30ee60d17dea13950ca690b12e2be963fc9e5653d31e89f1acbfcd9e4"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-comparison.ref",
+      "sha256": "8080c6ac4237f80ff2a0c1a31307febe570429c7922d254519e6c2b23c02f96b"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-comparison.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-comparison.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-null-comparison.t",
+      "sha256": "0273db90af81ce845c57017cc74e69c3e9a9ad0aa5548ede7fba82d160e66632"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-pack-decltype-memfn.ref",
+      "sha256": "d3388aeb5be6816f52739136777f5116cf1484f5e32b3824dd509a33a0df0371"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-pack-decltype-memfn.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-pack-decltype-memfn.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-pack-decltype-memfn.t",
+      "sha256": "30872ca60c25b1d148c78134fd8fd4902910d4161d69a76a1e95c689f5b08ec3"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-qualification-conversion.ref",
+      "sha256": "df097036eaaf28711b54601a6c9f57bff5708bd9f0a617997d930745b0fe60bf"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-qualification-conversion.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-qualification-conversion.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-qualification-conversion.t",
+      "sha256": "97252f3aae964ef35b1957503cb2471b30e1faa669f80089b5392def19ffe4be"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-safe-bool-null-conversion.ref",
+      "sha256": "d15aee8bb170e58cccaecb867bdf585bc65fe12c35b34cadbd1b3ba512131a89"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-safe-bool-null-conversion.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-safe-bool-null-conversion.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-member-pointer-safe-bool-null-conversion.t",
+      "sha256": "a870b94f8d36edbb9c8ee0bae0f3e0d33cd2718c4d03ef11fb0a455a5f6bb050"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.t",
+      "sha256": "589260f949dbc1fe60875fe1c75b68144ef869a3e0db7f3470fa4191f013a39c"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-function-type-empty-pack-parameter.ref",
+      "sha256": "b43d0c5ef5309d2ce709ce2106884725c8d3c99741ca5ca6f9805ec3bb9a2402"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-function-type-empty-pack-parameter.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-function-type-empty-pack-parameter.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-nested-function-type-empty-pack-parameter.t",
+      "sha256": "eb2028fc25f05c9d04785ef732ac71a97f3c78c5e65be97189fedc20ec780775"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-arrow-star-callee-call.ref",
+      "sha256": "fb00e55b7f57e47f7154db9a2be76ad840f395d4c409370ee79e0b5daf10c478"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-arrow-star-callee-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-arrow-star-callee-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-arrow-star-callee-call.t",
+      "sha256": "21878d823f1a38f70c37dd91a79a550c2e5024265726de5e7f02c54e27eca0f9"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.ref",
+      "sha256": "0ff0c0e18210468fa53a556a9ee3002fdbd560751f296a088709315ce2c6241b"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.t",
+      "sha256": "38e5a4a3e65150ebc555c0dd878fc2b79404dff03b124c0390546aa3e9431ee3"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-function-pointer-target-init.ref",
+      "sha256": "eee46fbacda21a5b42c4398d068fd89d0aee230aff01c1f9fa0852a42980a44a"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-function-pointer-target-init.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-function-pointer-target-init.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-overloaded-member-function-pointer-target-init.t",
+      "sha256": "298f105772a0e35ac9516b362f3b693b24da14ca2584d06426b59e15edf5b015"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-dependent-function-pointer-nontype.ref",
+      "sha256": "786174eec66ab77631e14044f54ca66e178752076970a168fad8d02845e63893"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-dependent-function-pointer-nontype.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-dependent-function-pointer-nontype.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-dependent-function-pointer-nontype.t",
+      "sha256": "24371a6bfeef04fe57bb6b076888ec3684cfff344baa962072713db6e80de643"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-address-decltype-ref.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-address-decltype-ref.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-address-decltype-ref.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-address-decltype-ref.t",
+      "sha256": "3375436d40b7b9b279ba96dbd8449829859e5e180f8be60e13f2706d61c45ae4"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-function-template-address-nttp.ref",
+      "sha256": "5a7a002d51534c644d2ea0d867d99419774e018458763c60a4d6f460878272ee"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-function-template-address-nttp.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-function-template-address-nttp.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-member-function-template-address-nttp.t",
+      "sha256": "59bdeb7ae2702f73c8b953badcb251728bca49d39017053b63b8e8e4d7ae5ba2"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-id-owner-function-call-probe.ref",
+      "sha256": "8cba87c31a6bb36e298a5679e4a070aacbf96c9afa25e0afb28ad79cc9acaacf"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-id-owner-function-call-probe.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-id-owner-function-call-probe.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-id-owner-function-call-probe.t",
+      "sha256": "3962f5ec693a279af2aa973a0b9d954a85ad42c9a98937ab070a94fa28421a8c"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-member-type-sfinae.ref",
+      "sha256": "ef8f6049d20e077b36eebd009b1768905b5e267aa25ec1cce71e56ff78b2325c"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-member-type-sfinae.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-member-type-sfinae.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-qualified-template-member-type-sfinae.t",
+      "sha256": "99a940c4d2d0fa4031d4fb313c23c037b005ff8d59ad2ee7540a76f20f05558b"
+    },
+    {
+      "path": "pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.ref",
+      "sha256": "54a7b53ad47d7e300bd59a5b6219d3a68d064acb1bdc6ff1edb7fb4e695b4996"
+    },
+    {
+      "path": "pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.t",
+      "sha256": "6674cf7aec05142d3c3b551b7f9671797d031661ef0274525363746856cb3d97"
+    },
+    {
+      "path": "pa22/tests/general/300-repeated-nested-owner-member-template-address.ref",
+      "sha256": "53697f8db4b096372772a286b853c8839ab27a517a20ec04b64e4b89b48159ef"
+    },
+    {
+      "path": "pa22/tests/general/300-repeated-nested-owner-member-template-address.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-repeated-nested-owner-member-template-address.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-repeated-nested-owner-member-template-address.t",
+      "sha256": "014f3c62444b0f7fdb9e23252e3cb69d20c285c79a5dcccb4796ac1b79649f02"
+    },
+    {
+      "path": "pa22/tests/general/300-replayed-nested-typedef-class-definition.ref",
+      "sha256": "415531a392849ab88a2bdd853f5d3708915e2d825cef9639330f966787f493f8"
+    },
+    {
+      "path": "pa22/tests/general/300-replayed-nested-typedef-class-definition.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-replayed-nested-typedef-class-definition.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-replayed-nested-typedef-class-definition.t",
+      "sha256": "ef8b1386b4db21419329dd9298ad0250f0b1a11a0a3cf3ab8f446bc0e9924920"
+    },
+    {
+      "path": "pa22/tests/general/300-rtti-canonical-type-categories.ref",
+      "sha256": "67e3e7ef8542f5896ab55905822b74a2739713b42d80d5cead55cf848b071a25"
+    },
+    {
+      "path": "pa22/tests/general/300-rtti-canonical-type-categories.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-rtti-canonical-type-categories.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-rtti-canonical-type-categories.t",
+      "sha256": "cec8455c24ef5749dbfda3a5bd3e021920d89b3686efd93f553ebea8e54b29cd"
+    },
+    {
+      "path": "pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.ref",
+      "sha256": "240dfdd782ad25ab184bc0767052554e41d071a4260d6bc00ffc33d08c490f93"
+    },
+    {
+      "path": "pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.t",
+      "sha256": "6edfbf354bba80d76ec4cfa049209a69739f00044ab0f2aefddf613cca5fc4e6"
+    },
+    {
+      "path": "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref",
+      "sha256": "c1c72872da254ac62714f970de7d8166b00192d633111a341f7403486b4a4737"
+    },
+    {
+      "path": "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.t",
+      "sha256": "6c72f3b2748ebc5cf09609f820bbce88f780bd0770769d053b090f7e556363e4"
+    },
+    {
+      "path": "pa22/tests/general/300-target-deduces-member-function-template-pointer.ref",
+      "sha256": "6dde88b11a0bdc00340bd5c173278b2ea1c3f3f9f459165aa044f37a314ff450"
+    },
+    {
+      "path": "pa22/tests/general/300-target-deduces-member-function-template-pointer.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-target-deduces-member-function-template-pointer.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-target-deduces-member-function-template-pointer.t",
+      "sha256": "ca28b8c249f89adf3f366edefb6015cc94660506eb971bb16b4e240ab33dd621"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-function-template-nttp-dedup.ref",
+      "sha256": "7413c81a1e5e2c7728fceb4e0686440baa924bf1068ef84ce7f63af043a57d99"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-function-template-nttp-dedup.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-function-template-nttp-dedup.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-function-template-nttp-dedup.t",
+      "sha256": "c9b636dd2254f6ba34d60bc29b96180b97a9c35e7109e28ce34b534db577063f"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-execute.ref",
+      "sha256": "3b04fd7205bf1fc1f745089426e2f0816982129b4793e8d00c67afd9abda33b7"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-execute.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-execute.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-execute.t",
+      "sha256": "4901fe0135433eb9e1ca9c9f9ae76ef5083ce2542b7fe51806756d630639c381"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.ref",
+      "sha256": "526587ce2e5534fdc551dd74048d0ff1e1936e5cb2cd32a96b7898a459a6cf54"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.t",
+      "sha256": "60274cad6d76dbc9a861b5e49cbeab008bf465d6cf12eb088a070aa1db655136"
+    },
+    {
+      "path": "pa22/tests/general/300-unknown-member-pointer-owner-bad.ref",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-unknown-member-pointer-owner-bad.ref.exit_status",
+      "sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    {
+      "path": "pa22/tests/general/300-unknown-member-pointer-owner-bad.ref.stdout",
+      "sha256": "a75a7f31e806e7280379c5025085ec575d61aae6e59ba371bde8b385b7fd913b"
+    },
+    {
+      "path": "pa22/tests/general/300-unknown-member-pointer-owner-bad.t",
+      "sha256": "bcd1aaf0c92317b60185a251734f408ebecc42d2c9676cee5bf480ed876faf13"
+    },
+    {
+      "path": "pa22/tests/general/300-using-directive-template-id-member-pointer-owner.ref",
+      "sha256": "4090b37f28c91b65a20a58ec09e96940acd5427be4840281c016e07e3bcdb10e"
+    },
+    {
+      "path": "pa22/tests/general/300-using-directive-template-id-member-pointer-owner.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/300-using-directive-template-id-member-pointer-owner.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/300-using-directive-template-id-member-pointer-owner.t",
+      "sha256": "4919833fd643bba367ac451d157c0aa225736ecd753c7ee5c7e72f8abdaff37a"
+    },
+    {
+      "path": "pa22/tests/general/400-reference-reset-recollects-inclass-template.ref",
+      "sha256": "6b39b7d27e79a63fcbae39e8322d08126c6540a768b635896a61e75905fc7430"
+    },
+    {
+      "path": "pa22/tests/general/400-reference-reset-recollects-inclass-template.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/400-reference-reset-recollects-inclass-template.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/400-reference-reset-recollects-inclass-template.t",
+      "sha256": "83e650f2657614d216993f7a4f799ebc463070447356ff98ab4f7cee37808f6c"
+    },
+    {
+      "path": "pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.ref",
+      "sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f"
+    },
+    {
+      "path": "pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.t",
+      "sha256": "49bcdf3a7b4d78c138a547e01dc8a67ddd884f26d74a103edc5366f9b071b826"
+    },
+    {
+      "path": "pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.ref",
+      "sha256": "b65b59ba904535d63eba863291b43aee7b8966dc170a83dae76138539d629ed9"
+    },
+    {
+      "path": "pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.t",
+      "sha256": "6706c375565a26ebafd37a3ebe18df191ebfa83607d2dc5240fa17d257ecb047"
+    },
+    {
+      "path": "pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.ref",
+      "sha256": "b0c078f4a398ac0f1053d6ffed463b987556a95e0e807229598f8eb895b70bcd"
+    },
+    {
+      "path": "pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.t",
+      "sha256": "d75b3999a2d0571199c9e710e8b866fe0057fb815e981fa75c0942c805656966"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-invalid-reverse-bad.ref",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-invalid-reverse-bad.ref.exit_status",
+      "sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-invalid-reverse-bad.ref.stdout",
+      "sha256": "e85c2026c0c12aff139a18704a6116c4982b3f264f5de53c6205b6b7c2df7352"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-invalid-reverse-bad.t",
+      "sha256": "eab3b2202f0efe258bdde98e46c3a551faadd98a6a1b5a3052ffcf85f40f8d37"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-nontype-template-parameter.ref",
+      "sha256": "4f4a8ca0f89cab1f3257efc5cd563a6f07e0be5f6e9e305ec3d50274ae9870c6"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-nontype-template-parameter.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-nontype-template-parameter.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-nontype-template-parameter.t",
+      "sha256": "146dad760a226d1b49b2ed8fa777afefcfcfa96c568898376638e56c3c77f0bc"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref",
+      "sha256": "f199dcd96bfd06b9f18e567991fb3922ebd8224f3ede134463f0ec490ecbb017"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.t",
+      "sha256": "7b71ead6e6586ad8aadae0ff7f8838ef9ea9713ef891a87ddb61ddb653bb5f9a"
+    },
+    {
+      "path": "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref",
+      "sha256": "177b359ab3e218cf68e1ebf94e3464dc5af649decb8d189e805b2555e8d68524"
+    },
+    {
+      "path": "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.t",
+      "sha256": "7fe2e7ef74e5970cd572af697611439a47baed25dd43295b411731f8ee0fda31"
+    },
+    {
+      "path": "pa22/tests/spec/300-template-comma-operator-return-construction.ref",
+      "sha256": "3753040753835f2f3864e3f49e1044460bfc9c0e67b654a5fc30e16be95aff12"
+    },
+    {
+      "path": "pa22/tests/spec/300-template-comma-operator-return-construction.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-template-comma-operator-return-construction.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-template-comma-operator-return-construction.t",
+      "sha256": "8f6c6511c643a68e82b47d4e5c9db87a8dd6b14a6d4d1f3a9d67591cf8ef921b"
+    },
+    {
+      "path": "pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.ref",
+      "sha256": "b9dc4ee995c5eaf80ca50312150e293ef85dbf9511d3d0bd5b63c13e697bfb0e"
+    },
+    {
+      "path": "pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.ref.exit_status",
+      "sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d"
+    },
+    {
+      "path": "pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.ref.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.t",
+      "sha256": "56bc945fafb9454db8f396ff1717c0bbfa12efcb594d0a4dbcd6d70c19509fe6"
+    }
+  ]
+}

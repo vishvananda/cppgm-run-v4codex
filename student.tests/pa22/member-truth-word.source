@@ -1,0 +1,4 @@
+struct S { int f(); };
+extern "C" int branch(int (S::*p)()) { return p ? 1 : 0; }
+extern "C" int boolean(int (S::*p)()) { return bool(p) ? 1 : 0; }
+extern "C" int negate(int (S::*p)()) { return !p ? 0 : 1; }

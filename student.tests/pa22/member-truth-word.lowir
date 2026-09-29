@@ -1,0 +1,11 @@
+function @main() -> i32 [role=entry] {
+  block ^entry:
+    %one = convert zext i128 i64 1
+    %null_target = binary shl i128 %one, 64
+    %a = call i32 @branch(%null_target)
+    %b = call i32 @boolean(%null_target)
+    %c = call i32 @negate(%null_target)
+    %ab = binary add i32 %a, %b
+    %result = binary add i32 %ab, %c
+    return i32 %result
+}

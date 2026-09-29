@@ -1,0 +1,123 @@
+[
+  {
+    "source": "student.tests/pa22/member-assigned-adjustment.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid explicit cast\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/member-bool-conversion.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: missing selected base path\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/member-composite.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid implicit conversion\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/member-escaped-adjustment.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid explicit cast\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/member-inverse-adjustment.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid explicit cast\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/member-null-fields.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-overloaded-address.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-reject-ambiguous.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid implicit conversion\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-reject-const.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: member pointer object qualifiers\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-reject-function-cv.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid implicit conversion\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-reject-private.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid implicit conversion\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-runtime.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/member-values.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid implicit conversion\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/rtti-void-reject-const.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid dynamic_cast\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/rtti-void-reject-nonpoly.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid dynamic_cast\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/rtti-void.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid dynamic_cast\n",
+    "reject": false,
+    "passed": false
+  }
+]
