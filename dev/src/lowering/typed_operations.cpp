@@ -13,6 +13,13 @@ Value Procedural::typed_conversion(Value value, const semantic::Conversion& c, V
         call.result.category = reference(call.returned) ? semantic::ValueCategory::Lvalue : semantic::ValueCategory::Prvalue;
         call.adjustment = record.adjustment; call.virtual_slot = record.virtual_slot;
         call.temporary = record.source_temporary;
+        // A conversion-function prvalue of the destination class constructs
+        // that object directly. Byte-copying a separate temporary would lose
+        // self-pointers and introduce an additional observable destruction.
+        if (supplied && sem.class_value(call.returned) && !c.reference &&
+            record.result.kind == semantic::Conversion::Kind::Standard &&
+            sem.types.unqualified(call.returned) == sem.types.unqualified(c.target))
+            return range_operation(call,{value},destination);
         auto result = range_operation(call,{value});
         return typed_conversion(result,record.result,destination);
     }

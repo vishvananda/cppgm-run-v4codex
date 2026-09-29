@@ -32,7 +32,9 @@ Conversion Analyzer::prepare_typed_conversion(Expression source, Conversion c, S
         Expression value; value.type = value_type(returned);
         value.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
-        if (class_value(returned)) record.source_temporary = range_object(returned,s,0);
+        bool direct = destination && !c.reference && record.result.kind == Conversion::Kind::Standard &&
+            types.unqualified(returned) == types.unqualified(c.target);
+        if (class_value(returned) && !direct) record.source_temporary = range_object(returned,s,0);
         record.result = prepare_typed_conversion(value,record.result,s,destination);
         if (c.reference) {
             record.temporary = converted_temporary(record.result);

@@ -264,6 +264,18 @@
     "native_exit": 0
   },
   {
+    "name": "value_conversion_identity",
+    "source": "int destroyed;struct V{int*p;int n;V(int n):p(&this->n),n(n){}V(V&&o):p(&n),n(o.n){}~V(){++destroyed;}};struct P{int n;operator V(){return V(n);}};int main(){P a[2]={{3},{4}};int total=0;for(V x:a){if(x.p!=&x.n)return 2;total+=*x.p;}return total!=7||destroyed!=2;}",
+    "source_sha256": "02eb49281b37d0dff239e417b25aff7facdc2c6a6793163b9f6547ad5eff9496",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
     "name": "reference_converted_temporary",
     "source": "int alive;struct V{int n;V(int n):n(n){++alive;}~V(){--alive;}};int main(){int a[2]={3,4};int n=0;for(const V&x:a){if(alive!=1)return 2;n+=x.n;}return n!=7||alive;}",
     "source_sha256": "d8b35b5c387809209f7d1fa2cee78ac8f61dc89738c24a2651f10f1f8d2350eb",
