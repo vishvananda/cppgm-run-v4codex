@@ -1,8 +1,8 @@
-# PA21 compact plan — checkpoint audit 109
+# PA21 compact plan — implementation 110
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
-Target: **PA21 full-stage**. Phase: **checkpointAudit complete; implementation remains**.
+Target: **PA21 full-stage**. Phase: **implementation**.
 Entry: clean `e6582e37`, **108/116 passing, eight failing**.
 Current: **108/116**, exactly the same eight failures. Earlier PAs **3596/3596**;
 through PA21 **3704/3712**. File audit passes; coverage and comparisons unchanged.
@@ -74,3 +74,22 @@ Native optimization/debug encoding and self-hosting remain later-stage owners.
 109: audit through `f57bdd3b`; complete accumulated range reviewed; protected
 jump ownership repaired; all checkpoint gates pass, eight failures unchanged.
 Record commit follows the code tip without further implementation edits.
+
+## Active implementation 110
+
+Entry HEAD: `d9528e585fd2823d25f9f3a3abaa8f0755f5832a`; 108/116.
+Previous turn classification: progress (audit repair and validation recorded in
+HEAD); no live implementation process is being resumed. Review markers above
+remain unchanged.
+
+Work together on exception continuations/static guards and initializer-list
+storage, then generated constructor/transfer facts and constant-array O0 policy.
+Semantic identities and lifetime snapshots flow directly to typed LowIR;
+continuation keys include complete context, support objects own storage duration,
+and construction actions retain selected declarations. Work must remain linear
+in demanded facts/emitted IR (expected constant-time interned lookup), with the
+existing eight-element expansion bound. Validate required comparisons, hosted
+throw/catch reducers and freestanding lifetime controls. Freeze entry/final
+binaries and fixed workloads for A/A plus ABBA compiler/RSS and executable
+runtime/text observations. Resolve demonstrated defects before handoff; record
+remaining implementation separately from independent audit questions.
