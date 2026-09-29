@@ -54,7 +54,9 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         if (!recorded) return;
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
         auto record_use = [&]() {
-            if (!(use.entry || use.exit || use.target || use.context)) return;
+            // Empty lifetimes need no record. Source EH context is owned by
+            // lowering; a lexical return context alone carries no cleanup.
+            if (!(use.entry || use.exit || use.target)) return;
             lifetime_index.put(n, lifetime_uses.size()); lifetime_uses.push_back(use);
         };
         if (k == Kind::Condition) { add_object(facts[n].entity); use.exit = live; record_use(); return; }
