@@ -41,7 +41,8 @@ struct Linkage {
     std::uint64_t disambiguator = 0;
     bool merge;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
-    SymbolId exception_functions[5];
+    SymbolId exception_functions[6];
+    SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
     void finish_lifecycle(lowir_model::Program& program);
     explicit Linkage(bool merge) : merge(merge) {}

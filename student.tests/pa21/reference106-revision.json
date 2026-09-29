@@ -1,0 +1,38 @@
+{
+  "revision": "pa21-nested-catch-106",
+  "base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "files": [
+    {
+      "path": "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.ref",
+      "original_sha256": "836aa1d9bd4648465621ef2925527856e4f0c6b1b29729f71dc620fdfe35468a",
+      "revised_sha256": "2f24336c62ba10f8eefeff0ce6e7d51b614d614334a2d1a9de3cd314dae4b2fe",
+      "replacements": [
+        [
+          "    eh_catch @__external_rtti__long_int, 1\n    jump ^catch_entry_5",
+          "    eh_catch @__external_rtti__long_int, 1\n    eh_cleanup\n    eh_catch @__external_rtti__int, 2\n    eh_end\n    jump ^catch_entry_5"
+        ],
+        [
+          "  block ^catch_next_8:\n    %t9 = addr $guard\n    call void @Guard___Guard(%t9)\n    jump ^catch_entry_2",
+          "  block ^catch_next_8:\n    %t9 = addr $guard\n    call void @Guard___Guard(%t9)\n    eh_end\n    jump ^catch_entry_2"
+        ]
+      ]
+    },
+    {
+      "path": "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.ref",
+      "original_sha256": "5ad2c777f4d2c5c1d6063d98184b74f4a198b876e0d955b42484021907906814",
+      "revised_sha256": "5315f2c910576033b230e1916fbed53a20c7d1fce4ee08eeb30ec48d88e21681",
+      "replacements": [
+        [
+          "    eh_catch @__external_rtti__long_int, 3\n    jump ^catch_entry_11",
+          "    eh_catch @__external_rtti__long_int, 3\n    eh_end\n    jump ^catch_entry_11"
+        ],
+        [
+          "  block ^catch_next_14:\n    %t14 = addr $guard\n    call void @Guard___Guard(%t14)\n    call void @__external_runtime____cxa_end_catch()\n    eh_end\n    jump ^catch_entry_2",
+          "  block ^catch_next_14:\n    %t14 = addr $guard\n    call void @Guard___Guard(%t14)\n    call void @__external_runtime____cxa_end_catch()\n    eh_end\n    eh_end\n    jump ^catch_entry_2"
+        ]
+      ]
+    }
+  ]
+}

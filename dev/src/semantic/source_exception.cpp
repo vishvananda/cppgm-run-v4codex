@@ -13,7 +13,22 @@ Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
     if (class_value(use.type)) {
         reject_abstract(use.type);
         use.destructor = destination_destructor(use.type,scope);
-        record_class_initialization(n,use.type,source);
+        auto id = source;
+        while (ast[id].kind == Kind::Parenthesized) id = ast[id].first;
+        auto local = ast[id].kind == Kind::IdExpression ? expressions[id].entity : 0;
+        // C++11 [class.copy]: only a nonvolatile automatic object whose
+        // scope ends within the innermost try can be implicitly moved here.
+        // Parameters (including exception declarations) are excluded.
+        auto boundary = scope;
+        while (boundary && !try_scopes.get(boundary) && scopes[boundary].kind != ScopeKind::Function)
+            boundary = scopes[boundary].parent;
+        bool eligible = local && entities[local].kind == EntityKind::Variable &&
+            ast[entities[local].source].kind != Kind::ExceptionDeclaration &&
+            !entities[local].is_static && !entities[local].external_decl &&
+            !(types[entities[local].type].cv & 2) && class_value(entities[local].type) &&
+            boundary && encloses(boundary,entities[local].owner);
+        auto selected = return_conversion(source,value,use.type,eligible);
+        record_class_initialization(n,use.type,source,&selected);
         use.conversion = class_initialization(n,use.type).conversion;
         auto c = conversions[use.conversion];
         if (c.kind == Conversion::Kind::Construction && !conversion_objects[c.materialization].elided)
@@ -53,7 +68,15 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern)
         if (!pattern) {
             if (name) bind(scope,name,e);
             publish_template_binding(parameter,e);
-            if (class_value(t)) register_destruction(e);
+            if (class_value(t)) {
+                reject_abstract(t);
+                Expression source; source.type = value; source.category = ValueCategory::Lvalue;
+                auto c = conversion_value(source,t);
+                if (!c.valid()) throw std::runtime_error("invalid catch parameter initialization");
+                c = prepare_typed_conversion(source,c,scope,true);
+                handler_initializations.put(n,conversions.size()); conversions.push_back(c);
+                register_destruction(e);
+            }
         }
     }
     auto body = ast[parameter].next;

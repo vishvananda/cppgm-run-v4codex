@@ -79,9 +79,14 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     if (definitions) resolve_angle_statement(n,s);
     switch (ast[n].kind) {
     case Kind::Throw: expression(n,s); return;
-    case Kind::Try:
-        for (auto c = ast[n].first; c; c = ast[c].next) resolve_statement(c,s);
+    case Kind::Try: {
+        auto body = ast[n].first;
+        auto scope = make_scope(ScopeKind::Block,s);
+        facts.edit(body).scope = scope; try_scopes.put(scope,1);
+        for (auto c = ast[body].first; c; c = ast[c].next) resolve_statement(c,scope);
+        for (auto h = ast[body].next; h; h = ast[h].next) resolve_handler(h,s);
         return;
+    }
     case Kind::Handler: resolve_handler(n,s); return;
     case Kind::RangeFor: resolve_range(n,s); return;
     case Kind::Compound: {

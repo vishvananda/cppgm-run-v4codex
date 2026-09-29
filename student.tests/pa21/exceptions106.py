@@ -16,6 +16,14 @@ cases = {
     'nested_handler_miss': 'int trace;struct G{~G(){++trace;}};void f(){throw 7L;}int main(){try{try{throw 1;}catch(...){G g;try{f();}catch(int){return 2;}}}catch(long n){return n!=7||trace!=1;}return 1;}',
     'template_capture_handler': 'template<class T>int f(T x){auto a=[&](){try{throw x;}catch(const T&n){return x+n;}};return a();}int main(){return f(4)!=8;}',
     'exception_object': 'int live;struct E{int n;E(int n):n(n){++live;}E(const E&e):n(e.n){++live;}~E(){--live;}};int main(){try{E e(7);throw e;}catch(const E&e){if(e.n!=7||live!=1)return 2;}return live;}',
+    'implicit_move': 'int moves;struct E{E(){}E(const E&)=delete;E(E&&){++moves;}};void f(){E e;throw e;}int main(){try{f();}catch(const E&){return moves!=1;}return 1;}',
+    'throw_outer_scope_copy': 'int copies,moves;struct E{E(){}E(const E&){++copies;}E(E&&){++moves;}};int main(){E e;try{throw e;}catch(const E&){return copies!=1||moves;}return 1;}',
+    'abort_role_and_catch': 'void fail(){__builtin_abort();}struct E{int n;E(int n):n(n){}E(const E&e):n(e.n){}};int main(){try{throw E(7);}catch(E e){return e.n!=7;}return 1;}',
+    'catch_value': 'int live,copies;struct E{int n;E(int n):n(n){++live;}E(const E&e):n(e.n){++live;++copies;}~E(){--live;}};int main(){try{throw E(7);}catch(E e){if(e.n!=7||live!=2||copies!=1)return 2;}return live;}',
+    'catch_unnamed_value': 'int live;struct E{E(){++live;}E(const E&){++live;}~E(){--live;}};int main(){try{throw E();}catch(E){if(live!=2)return 2;}return live;}',
+    'catch_value_rethrow': 'int live;struct E{E(){++live;}E(const E&){++live;}~E(){--live;}};void f(){try{throw E();}catch(E e){throw;}}int main(){try{f();}catch(const E&){if(live!=1)return 2;}return live;}',
+    'catch_initialization_terminates': 'extern "C" void exit(int);namespace std{typedef void(*H)();H set_terminate(H)noexcept;}void done(){exit(0);}struct E{E(){}E(const E&){throw 1;}};int main(){std::set_terminate(done);try{try{throw E();}catch(E){return 2;}}catch(int){return 3;}return 1;}',
+    'pointer_reference': 'int n;int main(){try{throw &n;}catch(int* const&p){*p=7;}return n!=7;}',
     'constructor_prefix': 'int trace;struct G{int n;G(int n):n(n){if(n==3)throw n;}~G(){trace=trace*10+n;}};struct B{G a,b,c;B():a(1),b(2),c(3){}};int main(){try{B b;}catch(int n){return n!=3||trace!=21;}return 1;}',
     'conditional_throw': 'int live;struct E{E(){++live;}~E(){--live;}};int f(bool yes){E e;return yes?3:(throw 7);}int main(){if(f(true)!=3||live)return 1;try{f(false);}catch(int n){return n!=7||live;}return 2;}',
 }
@@ -28,6 +36,7 @@ required = [
  '200-throw-operand-temporary-retired-before-sibling-unwind', '400-handler-context-cleanup-continuation',
  '200-conditional-init-throw-does-not-clean-destination', '200-guarded-local-static-initializer-temporary-cleanup',
 ]
+cases['nested_catch_reducer'] = (ROOT/'student.tests/pa21/nested_catch_reducer106.cpp').read_text()
 for name in required:
     cases[name] = (ROOT/'pa21/tests/general'/f'{name}.t').read_text()
 rows = []
@@ -40,6 +49,9 @@ def run(cmd):
 reference = run([ROOT/'dev/lowir2native-ref','-O0','-o',WORK/'reference-int',
                  ROOT/'pa21/tests/general/100-source-try-catch-int.ref'])
 backend_limitation = reference['exit'] == 1 and reference['stderr'].strip() == 'ERROR: duplicate native object-symbol label'
+class_reference = run([ROOT/'dev/lowir2native-ref','-O0','-o',WORK/'reference-class',
+                 ROOT/'pa21/tests/general/100-throw-class-template-move-constructor-definition.ref'])
+class_backend_limitation = class_reference['exit'] == 1 and class_reference['stderr'].startswith('ERROR: duplicate native symbol: ')
 for name, source in cases.items():
     src = WORK/(name+'.cpp'); src.write_text(source)
     ir = src.with_suffix('.lowir'); obj = src.with_suffix('.o'); exe = WORK/name
@@ -51,18 +63,23 @@ for name, source in cases.items():
             'native': [[ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir],[exe]],
             'host': [[ROOT/'dev/cppgm++-ref','-c','-O0','-o',obj,ir],['g++','-no-pie',obj,'-o',str(exe)+'-host'],[str(exe)+'-host']],
         }.items():
+            if name == 'catch_initialization_terminates' and mode == 'native': continue
             results = []
             for cmd in cmds:
                 results.append(run(cmd))
                 if results[-1]['exit']: break
             row['runtimes'][mode] = results
     native = row['runtimes'].get('native',[])
-    row['native_reference_limitation'] = bool(backend_limitation and native and len(native)==1 and
-        native[0]['exit']==1 and native[0]['stderr']==reference['stderr'])
+    row['native_reference_limitation'] = bool(native and len(native)==1 and native[0]['exit']==1 and (
+        (backend_limitation and native[0]['stderr']==reference['stderr']) or
+        (class_backend_limitation and native[0]['stderr'].startswith('ERROR: duplicate native symbol: '))))
     row['passed'] = len(row['runtimes']) == 2 and row['runtimes']['host'][-1]['exit']==0 and (
         native[-1]['exit']==0 or row['native_reference_limitation'])
+    if name == 'catch_initialization_terminates':
+        row['host_only_reason'] = 'C++ host set_terminate runtime control'
+        row['passed'] = row['runtimes'].get('host',[{'exit':1}])[-1]['exit'] == 0
     rows.append(row)
     print(name,'PASS' if row['passed'] else 'FAIL',commands[-1]['stderr'].strip(),{k:v[-1]['exit'] for k,v in row['runtimes'].items()},flush=True)
     (WORK/'results.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(CC.read_bytes()).hexdigest(),
-        native_reference_probe=reference,execution_requirement='Host runtime must pass every case; retain native failures reproduced on the checked-in reference',rows=rows),indent=2)+'\n')
+        native_reference_probe=reference,class_native_reference_probe=class_reference,execution_requirement='Host runtime must pass every case; retain native failures reproduced on the checked-in references',rows=rows),indent=2)+'\n')
 sys.exit(0 if all(r['passed'] for r in rows) else 1)

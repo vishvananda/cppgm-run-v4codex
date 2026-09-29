@@ -64,15 +64,17 @@ void Procedural::initialize_reference(EntityId e, Value location)
 }
 Value Procedural::abort_call()
 {
+    if (!abort_symbol) abort_symbol = linkage.abort_runtime;
     if (!abort_symbol) {
         Function f; f.symbol = fresh_symbol("@__builtin_abort"); f.declaration = true;
         auto t = sem.types.function(sem.types.fundamental(FT_VOID),{},false);
         FunctionId owner(p.functions.size()+1); f.signature = signature(t,owner);
         auto& boundary = p.signatures[f.signature.index-1].boundary;
         boundary.unwind = ir_model::CUM_NO; boundary.returns = ir_model::CRM_NORETURN;
-        p.functions.push_back(f); abort_symbol = f.symbol;
+        p.functions.push_back(f); abort_symbol = linkage.abort_runtime = f.symbol;
         auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
-        s.metadata.role = ir_model::SR_TERMINATE; s.metadata.object = p.intern("abort");
+        s.metadata.role = linkage.exception_functions[5] ? ir_model::SR_NONE : ir_model::SR_TERMINATE;
+        s.metadata.object = p.intern("abort");
     }
     emit(Opcode::Call,IRType::Void,{Operand::symbol(abort_symbol)});
     return emit(Opcode::Unreachable,IRType(),{});

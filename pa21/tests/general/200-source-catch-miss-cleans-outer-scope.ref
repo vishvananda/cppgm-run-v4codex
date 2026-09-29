@@ -45,6 +45,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^catch_dispatch_4:
     eh_catch @__external_rtti__long_int, 1
+    eh_cleanup
+    eh_catch @__external_rtti__int, 2
+    eh_end
     jump ^catch_entry_5
 
   block ^catch_entry_5:
@@ -73,6 +76,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^catch_next_8:
     %t9 = addr $guard
     call void @Guard___Guard(%t9)
+    eh_end
     jump ^catch_entry_2
 
   block ^try_end_6:

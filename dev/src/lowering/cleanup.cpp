@@ -71,14 +71,19 @@ void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
 }
 BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal, std::uint32_t stop)
 {
-    if (state == stop) return terminal;
-    if (!state) throw std::logic_error("unwind target is not a live ancestor");
-    auto key = (std::uint64_t(state) << 32) | terminal.index;
-    if (auto existing = cleanup_index.get(key)) return BlockId(existing);
-    BlockId tail = cleanup_suffix(lifetime_state(state).tail, terminal,stop);
-    BlockId head = block(); cleanup_index.put(key, head.index);
-    cleanup_blocks.push_back({state, tail, head});
-    return head;
+    std::vector<std::uint32_t> pending;
+    BlockId tail = terminal;
+    while (state != stop) {
+        if (!state) throw std::logic_error("unwind target is not a live ancestor");
+        auto key = (std::uint64_t(state) << 32) | terminal.index;
+        if (auto existing = cleanup_index.get(key)) { tail = BlockId(existing); break; }
+        pending.push_back(state); state = lifetime_state(state).tail;
+    }
+    for (auto i = pending.rbegin(); i != pending.rend(); ++i) {
+        BlockId head = block(); cleanup_index.put((std::uint64_t(*i) << 32) | terminal.index,head.index);
+        cleanup_blocks.push_back({*i,tail,head}); tail = head;
+    }
+    return tail;
 }
 Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t count)
 {
@@ -154,6 +159,7 @@ void Procedural::flush_cleanups()
 {
     bool saved_cleanup = emitting_cleanup; auto saved_live = live;
     emitting_cleanup = true; live = 0;
+    auto begin = p.block_order.size();
     flush_unwind_continuations();
     if (resume_terminal && !resume_emitted) { resume_emitted = true; start(resume_terminal); emit(Opcode::Resume, IRType(), {}); }
     while (cleanup_cursor < cleanup_blocks.size()) {
@@ -168,6 +174,10 @@ void Procedural::flush_cleanups()
             destroy_lifetime(entry.state); jump(entry.next);
         }
     }
+    // Continuations and destruction suffixes are separate queues. Present
+    // their completed blocks in their common creation order, without moving
+    // any instruction or reconstructing an already emitted block.
+    std::sort(p.block_order.begin()+begin,p.block_order.end(),[](BlockId a, BlockId b) { return a.index < b.index; });
     emitting_cleanup = saved_cleanup; live = saved_live;
 }
 void Procedural::emit_cleanups()

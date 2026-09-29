@@ -95,3 +95,13 @@ gates. Own native optimization/ELF and self-hosting retain their later owners.
 | 105 | `ac988ea3..f65eae8d`: full accumulated range reviewed, RTTI reuse and copied-subobject cleanup repaired, proof/trace/performance verified, prior/file/progress gates pass; 45 failures remain in the two broad groups above. |
 
 Audit records follow the committed code tip without further implementation edits.
+
+106 second increment: eligible local throws retain implicit-move selection;
+class catch parameters retain selected initialization and lexical destruction,
+including unnamed catches, rethrow and copy-failure termination. Pointer-reference
+catches bind through ABI pointer storage. Cleanup suffix creation is iterative;
+completed continuation blocks retain creation-order presentation. Two nested-catch
+references receive six independently reconstructed, contract-proved region fixes.
+Current required progress: **92/116**, with **24 failures**; no baseline case lost.
+The next validation records the full prior suite, explicit source/ABI controls,
+fixture inventory and frozen entry/final performance evidence.

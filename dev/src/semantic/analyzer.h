@@ -26,7 +26,7 @@ public:
     FactStore facts;
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
-    Index throw_index;
+    Index throw_index, try_scopes, handler_initializations;
     std::vector<ThrowUse> throws = std::vector<ThrowUse>(1);
     ThrowUse throw_use(NodeId n) const { return throws[throw_index.get(n)]; }
     Expression throw_expression(NodeId n, ScopeId scope);

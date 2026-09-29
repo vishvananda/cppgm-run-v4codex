@@ -6,8 +6,9 @@ using syntax::Kind;
 SymbolId Procedural::exception_function(unsigned role)
 {
     if (linkage.exception_functions[role]) return linkage.exception_functions[role];
-    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw"};
-    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW};
+    if (role == 5 && linkage.abort_runtime) p.symbols[linkage.abort_runtime.index-1].metadata.role = SR_NONE;
+    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw","_ZSt9terminatev"};
+    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW,SR_TERMINATE};
     auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
     std::vector<TypeId> params;
     if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
@@ -17,6 +18,7 @@ SymbolId Procedural::exception_function(unsigned role)
     Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
     FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
     if (role >= 3) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
+    if (role == 5) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     p.functions.push_back(f); linkage.exception_functions[role] = f.symbol;
     auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
     s.metadata.binding = SBM_STRONG; s.metadata.linkage = LLM_C;
@@ -90,10 +92,17 @@ Value Procedural::throw_expression(NodeId n)
         exception_object(use.type);
         Operand allocate[] = {Operand::symbol(exception_function(0)),Operand::integer(sem.object_size(use.type))};
         auto object = guarded_call(Instruction(Opcode::Call,IRType::Ptr),allocate,2);
+        if (full_expression.open) {
+            auto saved = builder->add_slot(0,IRType::Ptr);
+            emit(Opcode::Store,IRType::Ptr,{object.operand,Operand::slot(saved)});
+            close_expression_region();
+            object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(saved)});
+        }
         object.type = use.type; object.address = true;
         if (sem.class_value(use.type)) construct_value(use.source,sem.conversion_fact(use.conversion),object);
         else store(converted(use.source,sem.conversion_fact(use.conversion)),object);
         clean_inline(live,initial); close_expression_region();
+        if (full_expression.enabled && unwind_live()) open_expression_region();
         auto info = emit(Opcode::Addr,IRType(),{Operand::symbol(exception_type(use.type))});
         Value dtor(Operand::integer(0),IRType::Ptr);
         if (use.destructor && !sem.trivial_destructor(use.type)) dtor = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(use.destructor))});
@@ -147,15 +156,42 @@ void Procedural::try_statement(NodeId n)
             auto saved = builder->add_slot(0,IRType::Ptr); emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(saved)});
         }
         emit(Opcode::EhCleanup,IRType(),{Operand::label(cleanup)});
-        if (named) {
+        auto initialization = sem.handler_initializations.get(h);
+        if (named || initialization) {
             auto t = sem.entities[e].type; objects[e] = source_slot(e);
-            if (reference(t) || sem.types[t].kind == TypeKind::Pointer) emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(objects[e])});
+            if (initialization) {
+                auto failed = block(), ready = block();
+                emit(Opcode::EhTry,IRType(),{Operand::label(failed)});
+                // Failure while initializing the handler parameter terminates
+                // (C++11 [except.throw]/7), before that parameter is live.
+                auto suppress = emitting_cleanup; emitting_cleanup = true;
+                typed_conversion(Value(caught.operand,IRType::Ptr,sem.facts[h].type,true),sem.conversion_fact(initialization),
+                    address(Value(Operand::slot(objects[e]),type(t),t,true)));
+                emitting_cleanup = suppress;
+                emit(Opcode::EhEnd,IRType(),{}); jump(ready);
+                start(failed); emit(Opcode::EhCatchAll,IRType(),{Operand::integer(1)});
+                auto exception = emit(Opcode::Exception,IRType::Ptr,{});
+                emit(Opcode::Call,IRType::Ptr,{Operand::symbol(exception_function(1)),exception.operand});
+                emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(5))});
+                emit(Opcode::EhEnd,IRType(),{}); exception_fallback();
+                start(ready);
+                if (auto state = sem.object_lifetime(e)) live = state;
+            } else if (reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
+                // The Itanium runtime returns the adjusted pointer value for
+                // pointer exceptions. A reference parameter needs an address
+                // of pointer storage, not that pointee address.
+                auto pointer = builder->add_slot(0,IRType::Ptr);
+                emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(pointer)});
+                auto location = emit(Opcode::Addr,IRType(),{Operand::slot(pointer)});
+                emit(Opcode::Store,IRType::Ptr,{location.operand,Operand::slot(objects[e])});
+            } else if (reference(t) || sem.types[t].kind == TypeKind::Pointer) emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(objects[e])});
             else store(load(Value(caught.operand,IRType::Ptr,t,true)),Value(Operand::slot(objects[e]),type(t),t,true));
         }
         c.parent = parent; c.handler = true; c.node = h; c.live = initial;
         exception_context = exception_contexts.size(); exception_contexts.push_back(c);
         statement(ast[ast[h].first].next);
         if (!ended) {
+            clean_inline(live,initial);
             emit(Opcode::EhEnd,IRType(),{});
             emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))}); jump(end);
         }
