@@ -2,7 +2,7 @@
 
 Stage base commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
 Last reviewed commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
-Target: PA19 full-stage. Phase: implement; validated incomplete handoff 91.
+Target: PA19 full-stage. Phase: implement; loop 92 in progress (entry `065d6783`, 407/423).
 Entry: 397/423 required cases; handoff: **407/423**, 16 original failures remain.
 All 423 source inputs are byte-identical to entry; no coverage/comparison reduction.
 
@@ -95,3 +95,20 @@ it does not replace either unfinished implementation group above.
   two remaining groups and independent whole-stage audit. Preserve both review
   markers above during further implementation. Run the through-PA19 report as
   a full passing exit check before advancing.
+
+## Active loop 92
+
+Previous handoff is verified progress (407/423 versus 397/423); its two review
+markers above remain unchanged. Freeze entry binary and failure log in
+`/tmp/pa19-loop92`. Group owner: variable-template declaration, retained typed
+initializer, complete-key specialization and constant storage. Data flow:
+source query + enclosing frame → member declaration → selected arguments →
+separate declaration/initializer/storage demands → typed constant and LowIR.
+No grammar replay, rendered keys or eager unrelated definition demand. Bound
+work by demanded facts and dependent query edges, with cached success/failure.
+Validate both required compilation failures, default/partial/SFINAE/dormant
+controls and runtime storage identity; then extend into related constant-storage
+mismatches where the same owner applies. Inspect other mismatches by owner.
+Freeze final binary for A/A and ABBA latency/RSS and checked runtime/size
+evidence; required prior report, stage progress and file audit precede handoff.
+Implementation remains open; independent whole-stage audit is a separate duty.
