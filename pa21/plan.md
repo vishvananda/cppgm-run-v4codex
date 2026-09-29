@@ -93,3 +93,16 @@ throw/catch reducers and freestanding lifetime controls. Freeze entry/final
 binaries and fixed workloads for A/A plus ABBA compiler/RSS and executable
 runtime/text observations. Resolve demonstrated defects before handoff; record
 remaining implementation separately from independent audit questions.
+
+110 increment 1: stable fundamental support names, guarded initializer storage,
+complete nested catch-miss cleanup and remaining array-destructor prefixes.
+Lists retain exact small materialization addresses; partial cleanup expands only
+through eight elements. Completed local statics publish guard/finalization before
+observable temporary cleanup. New ownership controls improve **16/27 → 27/27**;
+existing list EH controls **27/27**; earlier report **3596/3596**; file audit passes.
+PA21 **111/116** after the proved active-handler reference correction (see
+`reference-corrections110.md`); five comparisons remain, with no coverage change.
+Performance measurement and the final handoff audit remain pending. This is an
+implementation increment, not a handoff. Independent review must assess the
+reference proof and complete context/address identities; these questions do not
+waive the remaining comparisons or architecture/performance acceptance.

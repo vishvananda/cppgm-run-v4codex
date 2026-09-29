@@ -1,0 +1,16 @@
+{
+  "revision": "pa21-active-handler-lifetime-110",
+  "base": "d9528e585fd2823d25f9f3a3abaa8f0755f5832a",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "path": "pa21/tests/general/400-handler-context-cleanup-continuation.ref",
+  "original_sha256": "6f081994c926bd65832c4425328a880a4eda178b8cb996e68c81402919c2d9f0",
+  "revised_sha256": "06641a90ed59bbb01979e7dd0714a079cb16d3345216f0490c1ccf70dd138d82",
+  "replacements": [
+    [
+      "  block ^cleanup_action_22:\n    call void @Value___Value(%t12)\n    jump ^cleanup_resume_19\n\n  block ^call_unwind_dispatch_23:\n    eh_end\n    call void @__external_runtime____cxa_end_catch()\n    eh_end\n    jump ^cleanup_action_22",
+      "  block ^cleanup_action_22:\n    call void @Value___Value(%t12)\n    jump ^call_unwind_dispatch_20\n\n  block ^call_unwind_dispatch_23:\n    jump ^cleanup_action_22"
+    ]
+  ],
+  "proof": "pa21/reference-corrections110.md"
+}

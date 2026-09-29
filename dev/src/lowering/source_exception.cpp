@@ -3,6 +3,19 @@
 namespace cppgm { namespace lowering {
 using namespace lowir_model;
 using syntax::Kind;
+std::string Procedural::support_type_name(TypeId id)
+{
+    // This spelling is output presentation only. All support caches retain
+    // canonical TypeId keys, independently of rendering or first-use order.
+    auto t = sem.types[id];
+    if (t.kind == TypeKind::Fundamental) {
+        std::string name = fundamental_name(t.fundamental);
+        for (auto& c : name) if (c == ' ') c = '_';
+        return name;
+    }
+    abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Type; target.type = abi_type(id);
+    return abi_mangle::mangle(abi,target);
+}
 SymbolId Procedural::exception_function(unsigned role)
 {
     if (linkage.exception_functions[role]) return linkage.exception_functions[role];
@@ -31,7 +44,7 @@ SymbolId Procedural::exception_type(TypeId t)
     if (sem.types[t].kind != TypeKind::Fundamental &&
         !(sem.types[t].kind == TypeKind::Pointer && sem.types[sem.types[t].child].kind == TypeKind::Fundamental)) return info;
     if (auto old = exception_rtti.get(t)) return SymbolId(old);
-    auto symbol = fresh_symbol("@exception_type");
+    auto symbol = fresh_symbol("@__external_rtti__"+support_type_name(t));
     Global g; g.symbol = symbol; g.declaration = true; p.globals.push_back(g);
     auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
     s.metadata.binding = SBM_STRONG; s.metadata.role = SR_RTTI_DATA;
@@ -41,7 +54,7 @@ SymbolId Procedural::exception_type(TypeId t)
 void Procedural::exception_object(TypeId t)
 {
     if (exception_storage.get(t)) return;
-    auto symbol = fresh_symbol("@exception_storage"); exception_storage.put(t,symbol.index);
+    auto symbol = fresh_symbol("@__ehobj_"+support_type_name(t)); exception_storage.put(t,symbol.index);
     Global g; g.symbol = symbol; g.structured = true; g.data.begin = p.data.size(); g.data.count = 1;
     DataItem item; item.kind = DataItem::Zero; item.zero_bytes = sem.object_size(t); p.data.push_back(item); p.globals.push_back(g);
     auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
@@ -69,8 +82,14 @@ bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
             else { emit(Opcode::EhCatchAll,IRType(),{Operand::integer(selector)}); all = true; }
         }
         if (cleanup) { emit(Opcode::EhCleanup,IRType(),{}); cleanup = false; has_cleanup = true; }
-        if (all) break;
+        if (all) return has_cleanup;
         first = false; crossed_handler = false; prior_live = c.live;
+    }
+    // A miss can escape the function without encountering another typed
+    // handler. Keep this landing pad reachable for the still-live lexical
+    // prefix and any active handler that must be finished before resuming.
+    if (!first && !has_cleanup && (crossed_handler || prior_live)) {
+        emit(Opcode::EhCleanup,IRType(),{}); has_cleanup = true;
     }
     return has_cleanup;
 }
@@ -135,7 +154,7 @@ void Procedural::try_statement(NodeId n)
 {
     auto parent = exception_context, initial = live;
     auto dispatch = block(), entry = block(), end = block();
-    ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry;
+    ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry; c.has_catches = true;
     auto context = exception_contexts.size(); exception_contexts.push_back(c); exception_context = context;
     emit(Opcode::EhTry,IRType(),{Operand::label(dispatch)});
     statement(ast[n].first);
@@ -194,6 +213,7 @@ void Procedural::try_statement(NodeId n)
             else store(load(Value(caught.operand,IRType::Ptr,t,true)),Value(Operand::slot(objects[e]),type(t),t,true));
         }
         c.parent = parent; c.handler = true; c.node = h; c.live = initial;
+        c.has_catches = parent && exception_contexts[parent].has_catches;
         exception_context = exception_contexts.size(); exception_contexts.push_back(c);
         statement(ast[ast[h].first].next);
         if (!ended) {

@@ -115,6 +115,45 @@ void Procedural::array_destroy(EntityId dtor, TypeId t, Value root, bool indirec
     auto target = sem.types[t];
     TypeId leaf = t; std::uint64_t elements = 1;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
+    if (!indirect && path.empty() && root.operand.kind == Operand::Temporary &&
+        sem.function_nonthrowing(dtor)) {
+        if (auto first = list_backing_addresses.get(root.operand.ref)) {
+            // Reuse the addresses of this exact materialization. A different
+            // occurrence, function, or branch cannot share its ValueId key.
+            for (std::uint64_t j = elements; j; --j)
+                destroy(dtor,leaf,Value(Operand::value(list_element_addresses[first+j-2]),IRType::Ptr));
+            return;
+        }
+    }
+    if (!emitting_cleanup && elements > 1 && !sem.function_nonthrowing(dtor)) {
+        // Destroying one element does not retire the rest of the array. Keep
+        // an explicit remaining prefix in every call's unwind snapshot, just
+        // as construction retains its completed prefix. The counter shrinks
+        // before the call so a throwing destructor is never called twice.
+        auto base = initialization_address(root,indirect,path); base.address = false;
+        auto remaining = builder->add_slot(0,IRType::I64);
+        emit(Opcode::Store,IRType::I64,{Operand::integer(elements),Operand::slot(remaining)});
+        auto initial = live;
+        semantic::Index retired;
+        activate_subobject(leaf,base,remaining,retired);
+        auto one = [&](Operand index) {
+            emit(Opcode::Store,IRType::I64,{index,Operand::slot(remaining)});
+            destroy(dtor,leaf,array_element(base,false,{},index,sem.object_size(leaf)));
+            close_expression_region();
+        };
+        if (elements <= array_unroll_limit) {
+            for (std::uint64_t j = elements; j; --j) one(Operand::integer(j-1));
+        } else {
+            auto test = block(), body = block(), end = block(); jump(test); start(test);
+            auto count = emit(Opcode::Load,IRType::I64,{Operand::slot(remaining)});
+            auto more = emit(Opcode::Compare,IRType::I64,{count.operand,Operand::integer(0)},Operation::Ne);
+            emit(Opcode::Branch,IRType(),{more.operand,Operand::label(body),Operand::label(end)});
+            start(body);
+            one(emit(Opcode::Binary,IRType::I64,{count.operand,Operand::integer(1)},Operation::Sub).operand);
+            jump(test); start(end);
+        }
+        live = initial; return;
+    }
     if (elements <= array_unroll_limit) {
         for (std::uint64_t j = target.bound; j; --j) {
             BlockId cleanup, next;

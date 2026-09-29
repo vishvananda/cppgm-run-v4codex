@@ -40,8 +40,13 @@ BlockId Procedural::unwind_suffix(std::uint32_t state, std::uint32_t context, bo
 BlockId Procedural::unwind_target()
 {
     auto state = return_unwind_state();
+    if (full_expression.lexical && state && !exception_context) {
+        auto entry = block(); cleanup_blocks.push_back({state,BlockId(),entry}); return entry;
+    }
     auto next = unwind_suffix(state,exception_context);
-    if (!exception_context) return next;
+    // A terminal with no live objects and no catch clauses is already the
+    // complete dispatch. Object-bearing paths retain their cleanup entry.
+    if (!exception_context || (!state && !exception_contexts[exception_context].has_catches)) return next;
     auto key = (std::uint64_t(exception_context)<<32)|state;
     if (auto old = unwind_dispatches.get(key)) return BlockId(old);
     auto dispatch = block(); unwind_dispatches.put(key,dispatch.index);

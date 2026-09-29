@@ -129,7 +129,9 @@ class Procedural {
     void activate_subobject(TypeId type, Value address, SlotId count, semantic::Index& retired);
     void complete_subobject(TypeId type, Value address, std::uint32_t before, bool retain, bool defaults, semantic::Index& retired);
     std::vector<TemporaryState> temporary_states;
-    struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false; };
+    semantic::Index list_backing_addresses;
+    std::vector<lowir_model::ValueId> list_element_addresses;
+    struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false, has_catches = false; };
     std::vector<ExceptionContext> exception_contexts = std::vector<ExceptionContext>(1);
     std::uint32_t exception_context = 0;
     semantic::Index exception_rtti, exception_storage, exception_selectors;
@@ -146,6 +148,7 @@ class Procedural {
     void resume_exception(std::uint32_t state, std::uint32_t context, bool pop);
     SymbolId exception_function(unsigned role);
     SymbolId exception_type(TypeId type);
+    std::string support_type_name(TypeId type);
     void exception_object(TypeId type);
     bool exception_clauses(std::uint32_t context, bool cleanup = false);
     unsigned exception_selector(TypeId type);
@@ -160,7 +163,7 @@ class Procedural {
     bool unwind_expression(NodeId n);
     struct FullExpression { NodeId root = 0, terminal_value = 0; bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
         EntityId result_temporary = 0;
-        bool argument_storage = false;
+        bool argument_storage = false, storage_boundary = false;
         bool scalar_terminal = false, scalar_unreachable = false; } full_expression;
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);

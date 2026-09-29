@@ -135,12 +135,9 @@ function @choose(%first : u8) -> i32 [binding=strong, object=_Z6chooseb] {
 
   block ^cleanup_action_22:
     call void @Value___Value(%t12)
-    jump ^cleanup_resume_19
+    jump ^call_unwind_dispatch_20
 
   block ^call_unwind_dispatch_23:
-    eh_end
-    call void @__external_runtime____cxa_end_catch()
-    eh_end
     jump ^cleanup_action_22
 
   block ^call_unwind_end_24:

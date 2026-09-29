@@ -1,0 +1,85 @@
+{
+  "host": "#include <cstdio>\nextern int trace asm(\"_Z5trace\");\nint choose(bool);\nstruct E { ~E() { trace = trace * 10 + 3; } };\nextern \"C\" int injected(const int *value) asm(\"_Z4readRK5Value\");\nextern \"C\" int injected(const int *value) {\n  if (*value == 7) throw E();\n  throw 9L;\n}\nint main() {\n  try { choose(true); } catch(long n) { std::printf(\"%d\\n\",trace); return n != 9 || trace != 813; }\n  return 2;\n}\n",
+  "rows": [
+    {
+      "name": "original",
+      "lowir_sha256": "cb4f58efb2ca01aa57d3b4f4dca307c5ae15a5cc34b0c6e3c94f521295f35289",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/original.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/original.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/driver.cpp",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/original.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/original"
+          ],
+          "exit": 1,
+          "stdout": "741\n",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "revised",
+      "lowir_sha256": "d40ed513860e1a809f8e589166d27dfb338231be2171f205ba10d7f01d359252",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/revised.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/revised.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/driver.cpp",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/revised.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/reference110/revised"
+          ],
+          "exit": 0,
+          "stdout": "813\n",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

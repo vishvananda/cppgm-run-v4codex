@@ -47,20 +47,36 @@ void Procedural::initialize_local_static(EntityId e)
     emit(Opcode::Branch,IRType(),{done.operand,Operand::label(end),Operand::label(run)}); start(run);
     auto saved_live = live;
     auto entity = sem.entities[e];
+    bool published = false;
+    auto publish = [&]() {
+        if (local.destructor) emit(Opcode::Call,IRType::I32,{Operand::symbol(atexit_symbol),Operand::symbol(local.destructor)});
+        emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::symbol(local.guard)});
+        published = true;
+    };
     if (local.dynamic) {
         initialized_units = semantic::Index();
         Value location = emit(Opcode::Addr,IRType(),{Operand::symbol(symbols[e])});
         location.type = entity.type; location.address = true;
+        full_expression.storage_boundary = true;
         begin_full_expression(entity.initializer);
         if (sem.reference_scalar(e)) initialize_reference(e,location);
         else if (entity.initializer) initialize(entity.initializer,entity.type,location);
         else if (sem.types[entity.type].kind == TypeKind::Array)
             array_construct(sem.object_constructor(e),entity.type,location,false,{});
         else construct(sem.object_constructor(e),0,address(location));
+        // The static object is initialized before full-expression temporary
+        // destruction. A destructor may throw or reenter this declaration;
+        // neither event may retry a completed initialization or lose its fini.
+        // Effect-free cleanup can retain the existing O0 call presentation.
+        bool observable = false;
+        for (auto state = live; state != saved_live; state = lifetime_state(state).tail) {
+            auto action = lifetime_state(state);
+            if (!action.object || sem.destructor_needed(action.destructor)) { observable = true; break; }
+        }
+        if (observable) publish();
         finish_full_expression(saved_live);
     }
-    if (local.destructor) emit(Opcode::Call,IRType::I32,{Operand::symbol(atexit_symbol),Operand::symbol(local.destructor)});
-    emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::symbol(local.guard)});
+    if (!published) publish();
     jump(end); start(end);
 }
 void Procedural::emit_local_static_destructors()

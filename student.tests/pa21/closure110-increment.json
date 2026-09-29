@@ -1,0 +1,1463 @@
+{
+  "compiler_sha256": "39d5b497c4ecbab71f862865f3b66d8650c12e6b49d162f6458d08ec4ab5aa24",
+  "rows": [
+    {
+      "name": "handler_temporary_precedes_exception",
+      "source": "int live,bad;struct E{E(){++live;}~E(){--live;}};struct G{G(int){}~G(){if(live!=1)bad=1;}};int use(const G&){throw 7;}int f(){try{throw E();}catch(...){return use(G(1));}}int main(){try{f();}catch(int n){return n!=7||live||bad;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_temporary_precedes_exception"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "handler_constructor_failure",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;}};struct G{G(int){throw 7;}~G(){++drops;}};int use(const G&){return 0;}int f(){try{throw E();}catch(...){return use(G(1));}}int main(){try{f();}catch(int n){return n!=7||live||drops;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_constructor_failure"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "handler_nested_mismatch_cleanup",
+      "source": "int live,bad;struct E{E(){++live;}~E(){--live;}};struct G{~G(){if(live!=1)bad=1;}};void f(){try{throw E();}catch(...){G g;try{throw 7L;}catch(int){}}}int main(){try{f();}catch(long n){return n!=7||live||bad;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_nested_mismatch_cleanup"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "handler_throwing_cleanup_order",
+      "source": "int live,trace;struct E{E(){++live;}~E(){--live;trace=trace*10+3;}};struct G{int n;G(int x):n(x){}~G()noexcept(false){trace=trace*10+n;if(n==2)throw 7;}};int f(){try{throw E();}catch(...){G a(1),b(2);return 0;}}int main(){try{f();}catch(int n){return n!=7||live||trace!=213;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/handler_throwing_cleanup_order"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_1_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=1;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{std::initializer_list<M> a{1};}catch(int n){return n!=7||live||bad||next||drops!=1;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_1_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_3_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=3;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3};}catch(int n){return n!=7||live||bad||next||drops!=3;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_3_3",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=3;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==3)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3};}catch(int n){return n!=7||live||bad||next||drops!=3;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_3_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_8_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=8;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8};}catch(int n){return n!=7||live||bad||next||drops!=8;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_8_8",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=8;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==8)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8};}catch(int n){return n!=7||live||bad||next||drops!=8;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_8_8"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_9_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=9;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8,9};}catch(int n){return n!=7||live||bad||next||drops!=9;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_9_9",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=9;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==9)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8,9};}catch(int n){return n!=7||live||bad||next||drops!=9;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_9_9"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_16_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=16;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};}catch(int n){return n!=7||live||bad||next||drops!=16;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "list_destructor_16_16",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=16;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==16)throw 7;}};int main(){try{std::initializer_list<M> a{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};}catch(int n){return n!=7||live||bad||next||drops!=16;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/list_destructor_16_16"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "static_retry_1",
+      "source": "int fail=1;int live,temps,attempts;struct G{int n;G(int x):n(x){if(fail==n)throw n;++temps;}~G(){--temps;}};struct S{S(const G&,const G&){++attempts;if(fail==3)throw 3;++live;}};int f(){static S s(G(1),G(2));return live;}int main(){try{f();}catch(int n){if(n!=fail||live||temps)return 1;}fail=0;if(f()!=1||temps||f()!=1||temps||live!=1)return 2;return attempts!=1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "static_retry_2",
+      "source": "int fail=2;int live,temps,attempts;struct G{int n;G(int x):n(x){if(fail==n)throw n;++temps;}~G(){--temps;}};struct S{S(const G&,const G&){++attempts;if(fail==3)throw 3;++live;}};int f(){static S s(G(1),G(2));return live;}int main(){try{f();}catch(int n){if(n!=fail||live||temps)return 1;}fail=0;if(f()!=1||temps||f()!=1||temps||live!=1)return 2;return attempts!=1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "static_retry_3",
+      "source": "int fail=3;int live,temps,attempts;struct G{int n;G(int x):n(x){if(fail==n)throw n;++temps;}~G(){--temps;}};struct S{S(const G&,const G&){++attempts;if(fail==3)throw 3;++live;}};int f(){static S s(G(1),G(2));return live;}int main(){try{f();}catch(int n){if(n!=fail||live||temps)return 1;}fail=0;if(f()!=1||temps||f()!=1||temps||live!=1)return 2;return attempts!=2;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_retry_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_1_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=1;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{M a[]{1};}catch(int n){return n!=7||live||bad||next||drops!=1;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_1_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_3_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=3;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{M a[]{1,2,3};}catch(int n){return n!=7||live||bad||next||drops!=3;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_3_3",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=3;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==3)throw 7;}};int main(){try{M a[]{1,2,3};}catch(int n){return n!=7||live||bad||next||drops!=3;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_3_3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_8_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=8;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8};}catch(int n){return n!=7||live||bad||next||drops!=8;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_8_8",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=8;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==8)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8};}catch(int n){return n!=7||live||bad||next||drops!=8;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_8_8"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_9_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=9;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8,9};}catch(int n){return n!=7||live||bad||next||drops!=9;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_9_9",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=9;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==9)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8,9};}catch(int n){return n!=7||live||bad||next||drops!=9;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_9_9"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_16_1",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=16;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==1)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};}catch(int n){return n!=7||live||bad||next||drops!=16;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_destructor_16_16",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,drops,bad,next=16;struct M{int n;M(int x):n(x){++live;}~M()noexcept(false){--live;++drops;if(n!=next--)bad=1;if(n==16)throw 7;}};int main(){try{M a[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};}catch(int n){return n!=7||live||bad||next||drops!=16;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/array_destructor_16_16"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "static_temporary_destructor_retry",
+      "source": "int live;bool fail=true;struct G{~G()noexcept(false){if(fail)throw 7;}};struct S{S(const G&){++live;}~S(){--live;}};int f(){static S s{G()};return live;}int main(){try{f();}catch(int n){if(n!=7||live!=1)return 1;}fail=false;return f()!=1||f()!=1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_temporary_destructor_retry"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "static_list_temporary_destructor_retry",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live;bool fail=true;struct G{~G()noexcept(false){if(fail)throw 7;}};struct S{S(const G&){++live;}~S(){--live;}};int f(){static std::initializer_list<S> s{G()};return live;}int main(){try{f();}catch(int n){if(n!=7||live!=1)return 1;}fail=false;return f()!=1||f()!=1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/closure-work/static_list_temporary_destructor_retry"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

@@ -26,7 +26,10 @@ SymbolId Procedural::abi_type_global(TypeId type, abi_mangle::TargetKind kind)
     internal |= kind == abi_mangle::TargetKind::Typeinfo && rtti_incomplete_flags(type);
     auto key = (std::uint64_t(16+unsigned(kind)) << 32) | target.type;
     if (!internal) if (auto prior = linkage.external.get(key)) return SymbolId(prior);
-    SymbolId sym = fresh_symbol(kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name");
+    std::string name = kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name";
+    if (sem.types[type].kind == TypeKind::Fundamental)
+        name = (kind == abi_mangle::TargetKind::Typeinfo ? "@__rtti_" : "@__typeinfo_name__")+support_type_name(type);
+    SymbolId sym = fresh_symbol(name);
     auto& meta = p.symbols[sym.index-1].metadata; meta.binding = internal ? SBM_INTERNAL : SBM_WEAK;
     std::string object = abi_mangle::mangle(abi,target);
     if (internal && linkage.merge) object += "." + std::to_string(sym.index);

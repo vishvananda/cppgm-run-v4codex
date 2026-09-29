@@ -77,6 +77,9 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
     if (ast[n].kind == Kind::Lambda && !unwind_expression(n) && !cleanup_expression(n)) return;
     while (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer)
         n = ast[n].first;
+    // Guarded initialization establishes temporary storage on its run edge.
+    // Storage cannot throw; argument construction/calls establish the region.
+    if (full_expression.storage_boundary && (!storage_ready || n == full_expression.root)) return;
     if (ast[n].kind == Kind::Conditional || (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR))) return;
     if (full_expression.terminal_branch && !storage_ready &&
         (ast[n].kind == Kind::Member || sem.expression_fact(n).form == semantic::ExpressionForm::Construction)) return;
@@ -93,6 +96,7 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
 void Procedural::open_expression_region()
 {
     if (full_expression.open || emitting_cleanup) return;
+    full_expression.storage_boundary = false;
     ++full_expression_regions;
     BlockId cleanup;
     if (full_expression.lexical && live) {
