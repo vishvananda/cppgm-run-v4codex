@@ -1,0 +1,118 @@
+[
+  {
+    "source": "pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/0.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/100-qualified-sizeof-overload-static-const-nttp.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/0.round.lowir",
+          "/tmp/pa22-116/roundtrip/0.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-data-member-pointer-reference-cast-address.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/1.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-data-member-pointer-reference-cast-address.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/1.round.lowir",
+          "/tmp/pa22-116/roundtrip/1.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-inherited-explicit-bool-condition.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/2.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-inherited-explicit-bool-condition.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-116/roundtrip/2.round.lowir",
+          "/tmp/pa22-116/roundtrip/2.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  }
+]
