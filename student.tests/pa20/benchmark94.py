@@ -9,14 +9,15 @@ import benchmark as shared
 A, B, WORK, OUT = [Path(p).resolve() for p in sys.argv[1:]]
 assert not OUT.exists(), 'Preserve previous measurements'
 WORK.mkdir(parents=True, exist_ok=True)
-cpu = max(os.sched_getaffinity(0))
+cpu = int(os.environ.get('PA20_BENCH_CPU',max(os.sched_getaffinity(0))))
+assert cpu in os.sched_getaffinity(0)
 os.sched_setaffinity(0, {cpu})
 history = json.loads((ROOT/'student.tests/pa19/performance92.json').read_text())
 backend = ROOT/'reference-binaries/lowir2native'
 result = dict(protocol='one warmup each, four A/A observations, four ABBA blocks; six final-only observations for new behavior',
     cpu=cpu, platform=platform.platform(), flags=['--emit-lowir','-O0'],
     build_flags='g++ -std=gnu++11 -Wall -O3; TEST_RUNNER_ENABLE',
-    entry_commit='a9b24ab68f1a75288df10161cb171fa239e1409a',
+    entry_commit=os.environ.get('PA20_ENTRY_COMMIT','a9b24ab68f1a75288df10161cb171fa239e1409a'),
     final_commit=shared.run(['git','rev-parse','HEAD']).stdout.strip(),
     harness_sha256=shared.sha(__file__), shared_harness_sha256=shared.sha(ROOT/'student.tests/pa10/benchmark.py'),
     backend=dict(path=str(backend),sha256=shared.sha(backend),flags=['-O0']),
@@ -57,6 +58,9 @@ for n in (2400,9600):
 for name in ('calls','memory','floating'):
     sources['runtime-'+name] = history['workloads']['runtime-'+name]['source']
 sources['new-array-pack'] = 'template<class...T>int sum(T...x){int s=0;using A=int[];(void)A{0,(s+=x,0)...};return s;}int main(){volatile int n=12000000;int s=0;for(int i=0;i<n;++i)s=(s+sum(i&7,3,5))&65535;return s!=46720;}'
+if os.environ.get('PA20_BENCH_CASES'):
+    selected = os.environ['PA20_BENCH_CASES'].split(',')
+    sources = {name:sources[name] for name in selected}
 for name, source in sources.items():
     src = WORK/(name+'.cpp'); src.write_text(source)
     item = dict(source=source,source_sha256=shared.sha(src),outputs=[],runtime_timing='startup-dominated control' if not name.startswith(('runtime-','new-')) else 'live checked loop')
