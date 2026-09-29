@@ -1,0 +1,330 @@
+{
+  "stage_base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+  "audit_entry": "f3af4630d9d37b156df39fcfac3ce02aec4fefb7",
+  "last_checkpoint": "f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114",
+  "reviewed_implementation": "30aec177a33f45e1cfb07d43a1790862704e8664",
+  "commits": [
+    {
+      "commit": "79204189b34cd8c54263481c3e70a79143628b95",
+      "subject": "Record PA21 base, semantic groups and validation plan",
+      "diff_sha256": "6ca454e159a06fa2508a5460d0f7619f9113525e5a9cf0f919dffdf5644df447"
+    },
+    {
+      "commit": "30fe63535155c809487fce60d59d63b56c14f857",
+      "subject": "Correct PA21 RTTI template substitution oracle with ABI proof",
+      "diff_sha256": "5779efe74462749538a7e32624de5ac8c217b71b490af4fb601d33206e300348"
+    },
+    {
+      "commit": "9f2181f90f53f6196332cad37420b4041db24a43",
+      "subject": "Implement typed RTTI queries and single-inheritance dynamic casts",
+      "diff_sha256": "0d1cef34b80347d479de3c21f5b1502fd2356bb493252056f6fba7f77952f9fc"
+    },
+    {
+      "commit": "f4224e0b73f6eca5e6c607fe119026f76e03e6f5",
+      "subject": "Record PA21 RTTI performance and validated implementation handoff",
+      "diff_sha256": "c89a05ee6711b725185511dfbf040a66831a88ff54288e4f314a46e7a79f8833"
+    },
+    {
+      "commit": "e835d6dcc297c7328bd18c2e1bf50df054da2e01",
+      "subject": "Implement typed value captures and closure construction lifetimes",
+      "diff_sha256": "fe00e19c6a3a1c84bdc1b03c0ec06c70efaa7df06de57683b86fa46f6411e5e4"
+    },
+    {
+      "commit": "1c541f8481f73fff5c0f148ff5db6d7cc95fc3f0",
+      "subject": "Clean up completed subobjects when generated closure copies unwind",
+      "diff_sha256": "1a43d6fa531c8f59779113e29d2a9acee78a97f27f0902a68f5409408ac5110f"
+    },
+    {
+      "commit": "fa079cdeffb19a1a69e92ff56f8bc154c4047c36",
+      "subject": "Record PA21 capture handoff, unchanged coverage and performance evidence",
+      "diff_sha256": "ae343d869e39e812fa62b6dbbdc853f0c5f6e42282c5b3801370fbd5e4029687"
+    },
+    {
+      "commit": "e2af89634fa9d272e75e6050f313c989e48b1071",
+      "subject": "Implement typed initializer-list storage, selection, deduction and lifetimes",
+      "diff_sha256": "0275e6d85add54a14ee2802b3b70c91070fefae3eec5584a327b6271e424a531"
+    },
+    {
+      "commit": "f03b9371d8a76eda02d3150fc969743f9c8fc787",
+      "subject": "Bound list backing dependencies and add stage performance instrumentation",
+      "diff_sha256": "1688481ac628a7a20244039767d1c4dab7172cf01a18ea1e4a8aca7b6bb058c8"
+    },
+    {
+      "commit": "511fe9b95fa31e9051e18354b32e806efce83388",
+      "subject": "Separate required inline constructor checking from emission demand",
+      "diff_sha256": "806a4c4faaf2e0efead31ad697e9a147c3265df648558b137531d434f9239f57"
+    },
+    {
+      "commit": "3b87e462701e268eeaaaa9c9ddeb4594ec74439b",
+      "subject": "Record PA21 list handoff, unchanged coverage and performance evidence",
+      "diff_sha256": "72f074f165cfe617a6553038903777df0e43fce77f3ac41d575995ff66c6c563"
+    },
+    {
+      "commit": "f65eae8d7d434735a0ce981173a347eb8f8a1e59",
+      "subject": "Retain RTTI recipes and preserve copied subobject unwind ownership",
+      "diff_sha256": "db57c176c7532f0618a237353bf9ff06a6d11dd9379aef4c0a704cf3f32e9b04"
+    },
+    {
+      "commit": "06b2d989e2937ab9fd0c6a4895be9ef23b82c89b",
+      "subject": "Record complete PA21 checkpoint audit and stage-scoped evidence",
+      "diff_sha256": "484e63c04a622a57f08df714037a097410af0e8db9a85bee05dbaad1fdc5fb47"
+    },
+    {
+      "commit": "9c4f64da58264a08c57706762f51f654381c5d60",
+      "subject": "Implement typed source exceptions and context-owned unwind continuations",
+      "diff_sha256": "a86f2795c0c556bbe12feb5f8cc630ea92e4c25cb2e768f9206a45f8aebd3210"
+    },
+    {
+      "commit": "301ef6fd575295e88ed480d1698315e67abcdec0",
+      "subject": "Complete exception parameter lifetimes and implicit moves; repair proved nested-catch references",
+      "diff_sha256": "ccfb222fa56193e66d6aad2ec47b6abb7e0e5b14fe3d7f6801d14e0ab37662ff"
+    },
+    {
+      "commit": "e80ad0c73233dfae160329116db8f86fd6ea3b41",
+      "subject": "Retire catch-initializer default-argument temporaries before handler entry",
+      "diff_sha256": "3da2783db7988d65d0de113bacf7b5ad2232d5829d269be7d7f25bd95a3baef3"
+    },
+    {
+      "commit": "c64e88fb49b4a5ef67a1c16d6190ec69713d27a1",
+      "subject": "Avoid retaining empty lifetime records for ordinary function returns",
+      "diff_sha256": "8b89b3ea53ac0d62a9b3a5c80f7ae19cc13d8cf72ccac32e4ca9654584cab30e"
+    },
+    {
+      "commit": "1422565795ca5d689fe63bbfbaaba7afa0607858",
+      "subject": "Record PA21 exception handoff validation, performance and remaining owners",
+      "diff_sha256": "2685939492b7fa2b6f6d586b2409ec7a3959050e1165d2ed5c6e1da61c75c71e"
+    },
+    {
+      "commit": "b821682bf72eb7408df6f1bea5745790e9577cce",
+      "subject": "Preserve full-expression cleanup regions and terminal logical results",
+      "diff_sha256": "97eedf4b6ee0a44504dc6699c3a344691567e78961d00d2e79a00c390654ec5e"
+    },
+    {
+      "commit": "20476a773e42aaf9f1eedd095b420f4acf2d0471",
+      "subject": "Carry destination defaults and final consumers through temporary cleanup",
+      "diff_sha256": "3411aa881cb6edb48772b668cb763912d46eca01a6da6767a6cfad3f0b5a377a"
+    },
+    {
+      "commit": "a2b9e823800997ebbe57263a6ea2306e529698be",
+      "subject": "Record PA21 full-expression handoff validation and performance",
+      "diff_sha256": "808244e06e283e2e3b39f194ed6560305a8f4a9f6101d54761965c8c51c17263"
+    },
+    {
+      "commit": "efcb52b176ee14397ef82cf559bcc1e9564e3832",
+      "subject": "Record PA21 loop 108 ownership groups and entry evidence",
+      "diff_sha256": "be3f42c1b0180c01df66517a91e193fb101e659dac923e9c8b76370392b13dc3"
+    },
+    {
+      "commit": "2e392cecdb6bf5ab86ff48f6de4fc7fcf9aae58b",
+      "subject": "Preserve PA21 result ownership and explicit nonthrowing boundaries",
+      "diff_sha256": "2b778db39a5e974a9b18c783aa135df303462be164e9dfd6edd988afbc8b4e7d"
+    },
+    {
+      "commit": "a30acab54131a7ae68b858f9a41f5c168a9bf25e",
+      "subject": "Track completed PA21 subobjects through partial construction and temporary cleanup",
+      "diff_sha256": "b4da46fe0bf6f389065480f0af02bb396500df39bdc97b0b7f742315cdf6405e"
+    },
+    {
+      "commit": "ac3a28e824004472cfb2038bcac0343c11d888cc",
+      "subject": "Record PA21 loop 108 validation, performance evidence and remaining owners",
+      "diff_sha256": "75fb595ad1179334eff26739649a102fae502cb28ff858baff06f0f5935417a7"
+    },
+    {
+      "commit": "e6582e3751084e80a41a12a623d2cd83e183b25c",
+      "subject": "Normalize performance driver archives while preserving executed hashes",
+      "diff_sha256": "b62229c35f01f707ff19c11310de9c25882d0b707d4512b911a6fc9c585a98c8"
+    },
+    {
+      "commit": "bd6bfd71f501a3b27870b372f430e535effa000a",
+      "subject": "Preserve exception-region ownership across all nonlocal jumps",
+      "diff_sha256": "610b7f5bd33994aaebfe971a7b145bdff89b7bad7bea4e738de7dc277929b920"
+    },
+    {
+      "commit": "f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114",
+      "subject": "Preserve cumulative audit measurements and correct source-EH baselines",
+      "diff_sha256": "a29991e95bdcda370b0ffc80f12e7b8b5ea5c5b1d6e773370f1d6a233a68b47f"
+    },
+    {
+      "commit": "d9528e585fd2823d25f9f3a3abaa8f0755f5832a",
+      "subject": "Record PA21 accumulated checkpoint audit, evidence and reviewed tip",
+      "diff_sha256": "a03cea0a27100526e500a8862c083a8ca3ff548bcf4dd2586c51910588ac88ac"
+    },
+    {
+      "commit": "f724bc43d08c98b82f95cbbbfe885598c0f1db90",
+      "subject": "docs(pa21): record implementation 110 scope and preserved review boundary",
+      "diff_sha256": "63c781df3c9e2a6fca7b11333b2ea718b637b38cb40db259950b7df4f2720919"
+    },
+    {
+      "commit": "6b3aecdb432facce86da37650f3c68ac69348a0a",
+      "subject": "fix(pa21): preserve handler, array and static initialization lifetimes",
+      "diff_sha256": "acd150d14d595f61a5e89cb918b365425bc27b6bd6796acff3104be76b8d9254"
+    },
+    {
+      "commit": "bdfdb31b649edbae17f96f453d3f19af46fa6103",
+      "subject": "fix(pa21): retain generated construction entries and omitted member ownership",
+      "diff_sha256": "1ef960939fbc8990ac916f51393bad52bbf5e362367a85404985459b13bc4cba"
+    },
+    {
+      "commit": "df6e8299f2b967541a52446a0ef50e362e32ded3",
+      "subject": "fix(pa21): share stateless omitted-constructor helpers within bounded ownership",
+      "diff_sha256": "81ddf6c5a09e17801de74f2ffe5ec703e603b0a543776f4eac674bafcca29ce8"
+    },
+    {
+      "commit": "0e5a32ddec4027d67d38aa98263f964b383dbed2",
+      "subject": "docs(pa21): record validated 113-case handoff and frozen performance evidence",
+      "diff_sha256": "da20daf45e3ed5dcd801a4a20db1cbf221940211146d3e0782c013d96f563834"
+    },
+    {
+      "commit": "d99f3ec17780aebfd177bc9e6a37e3aa3e30713c",
+      "subject": "Record PA21 remaining comparison groups and implementation 111 boundary",
+      "diff_sha256": "1cedf0c3c8d31332ed507348640f580888954fc91bfbad8a02830684c2fe0035"
+    },
+    {
+      "commit": "3028366da2a13376fd85d81945a6f23e2a1e7be5",
+      "subject": "Prove scalar body unwind effects without changing exception specifications",
+      "diff_sha256": "0562dadc99ca1d067f9fe563e31b97d54acc10a8fddaad019ab520f3d88c2d81"
+    },
+    {
+      "commit": "9457e2fca6bdb876eaee509b0481f631b13587b4",
+      "subject": "Record PA21 effect-proof validation and frozen performance handoff",
+      "diff_sha256": "a97c64f1e0f0dd10d6230fe233c40e496942b21ee33bdadbb97dbf8cdb6098bc"
+    },
+    {
+      "commit": "707b06d775550055bf7fe1161179dac9de6b78f6",
+      "subject": "docs(pa21): record implementation 112 owners and entry boundary",
+      "diff_sha256": "4f52f13b5913b2bcaf66f971db4543878f0d7252fa6c0472a608d247c1b0c007"
+    },
+    {
+      "commit": "e32e9f2fdc423f2110a9911682363b53710f1a56",
+      "subject": "fix(pa21): complete exhaustive dispatch and reconcile array and raw-region contracts",
+      "diff_sha256": "cdaf930bd9e4efa89b175a07e43bd06d6f1bdc6c4688df5589d7940f8b049c16"
+    },
+    {
+      "commit": "e70d2cee1ef8409d70f3a6d842877f33c88ed55e",
+      "subject": "test(pa21): measure bounded exhaustive-dispatch lowering",
+      "diff_sha256": "7ef33fb4f21789b6ea05ebc83c9bc51e349e5390b83c54f853cca2db42d6ea4c"
+    },
+    {
+      "commit": "f3af4630d9d37b156df39fcfac3ce02aec4fefb7",
+      "subject": "docs(pa21): close validated full-stage implementation handoff",
+      "diff_sha256": "5cd28f20d1bfae22366c41fe8724f887e7ec4bd344d11e99b87aa02d10e40577"
+    },
+    {
+      "commit": "30aec177a33f45e1cfb07d43a1790862704e8664",
+      "subject": "fix(pa21): complete cleanup ownership and dependent allocation paths",
+      "diff_sha256": "7e7c49737900ca748490ef06afafcd72e17edec317153c5a5e3007eac657d0a7"
+    }
+  ],
+  "since_checkpoint": [
+    "d9528e585fd2823d25f9f3a3abaa8f0755f5832a",
+    "f724bc43d08c98b82f95cbbbfe885598c0f1db90",
+    "6b3aecdb432facce86da37650f3c68ac69348a0a",
+    "bdfdb31b649edbae17f96f453d3f19af46fa6103",
+    "df6e8299f2b967541a52446a0ef50e362e32ded3",
+    "0e5a32ddec4027d67d38aa98263f964b383dbed2",
+    "d99f3ec17780aebfd177bc9e6a37e3aa3e30713c",
+    "3028366da2a13376fd85d81945a6f23e2a1e7be5",
+    "9457e2fca6bdb876eaee509b0481f631b13587b4",
+    "707b06d775550055bf7fe1161179dac9de6b78f6",
+    "e32e9f2fdc423f2110a9911682363b53710f1a56",
+    "e70d2cee1ef8409d70f3a6d842877f33c88ed55e",
+    "f3af4630d9d37b156df39fcfac3ce02aec4fefb7",
+    "30aec177a33f45e1cfb07d43a1790862704e8664"
+  ],
+  "source_paths": {
+    "dev/src/abi/itanium/encoder.cpp": "4a69f631da67b10a4b5d7a61c4b13f08275b4bf5f3d31bdaca3e086320b6861b",
+    "dev/src/abi/itanium/expression_encoder.cpp": "2d1c9d656240546f025894f32b7e0f26890044383da5a96e8a0fec1558f903f3",
+    "dev/src/abi/itanium/graph.h": "ed9683b71541f3e743e0a50cfa77164faf98750190fd857ad8fe022f97b8db50",
+    "dev/src/abi/itanium/graph_validation.cpp": "0ad6756e97f4450ebb2f1b4ca703c6f5f52283aa530bca8a85482dfa57fd29d9",
+    "dev/src/lowering/aggregate_helpers.cpp": "49e87f09453bc05b3d4ea80245fcf0d4151be72a77b2b9a759b3619ff51126c1",
+    "dev/src/lowering/aggregate_lifetimes.cpp": "852946226a290c46fab8a5af350d0f244e169757a061a196dbef74a2a75b09b5",
+    "dev/src/lowering/allocation_cleanup.cpp": "67f624e995b0055124064cfe23be2fa5a54825d91e6ea4381c684b1b764fdb4c",
+    "dev/src/lowering/array_allocation.cpp": "a67b06a2491722ef448784b6bfd2ca403d388178c2bb7a5333e098658c29bb75",
+    "dev/src/lowering/arrays.cpp": "beacd32f42d992819f088340c416aec3e672ac95580128ffb4eb8303ed15d859",
+    "dev/src/lowering/branch_lifetimes.cpp": "8cff4beb1ddf3af4f64d826994551d3b997cacbf0107ae98ad5ae3f88ecd293c",
+    "dev/src/lowering/class_values.cpp": "41dcd8b21cb4961ac50c504b320c80162d5902cc43ccd578ce0c9677125dfd57",
+    "dev/src/lowering/cleanup.cpp": "aab697531b7f4140cb4a0b4c82c235e93d055b6af7ed7612cb3c5067c3d9b3d2",
+    "dev/src/lowering/construction.cpp": "7c76c8a58fe42e580a1b9881b6d1d85a5048c23b5d5769c177f02898eaf86cf1",
+    "dev/src/lowering/control_flow.cpp": "79f799f755c6afe52e37d3c115affb00d76ef585fb1f3947fcf076b2c8588bac",
+    "dev/src/lowering/deallocation.cpp": "d780536907364f83a8f9f1f65a5af3b4686c3f5f3e623e380057046ef5a2723c",
+    "dev/src/lowering/destruction.cpp": "d3f033aa4e01cc13f196bb5436b0b46ea87f1d6e1ed3034c9a47af157c0f7b38",
+    "dev/src/lowering/driver.cpp": "d5bfa9b3ae597e979db8ceb669e0cfe71480d99c0c299f98f7cbf722948ddb38",
+    "dev/src/lowering/exception_boundary.cpp": "dba8d60ef98a835305f71f7bd6f22e2034e441992c4a3ec61f3d762fa2397960",
+    "dev/src/lowering/exception_continuation.cpp": "18b85b86821367b4cd4e6f8128e061327895360092c00a506b2affcf431c5d49",
+    "dev/src/lowering/expression.cpp": "67085c94ef528a86e8a4674b748dd596a5705e5ccdf65756f68e6f48f4a3db3e",
+    "dev/src/lowering/full_expression.cpp": "ed1486ce0a1f7eee781fd95e334b70951fe8ceda273f67c9a98de9b78d972db1",
+    "dev/src/lowering/initialization.cpp": "002e48c681d1972ffb0adb0c4aabb9be56c4f5cdc4905bf62163932c069b6516",
+    "dev/src/lowering/initializer_plan.cpp": "62e310e4974fc6bd45f38d3b39deda07b9dd57c9a4b5eadc9ad93f2610cbe72a",
+    "dev/src/lowering/lambda.cpp": "63833e0f89005d366a4b0f3a3aca6eb56819493b13439972696e8627e6dd67c2",
+    "dev/src/lowering/list_initialization.cpp": "f9ecb49feede582bda0236c0b66b7f2ad1c2a2a38b092d99e288131dc232ccdb",
+    "dev/src/lowering/local_static.cpp": "4b04d1a65725a639ddf4b584bd5408c166737854444bbd1df452157ae056c5c1",
+    "dev/src/lowering/placement_new.cpp": "1e3a8a9761dcd8979b33b0a317f0d7452bd276081ffde5a937bc39907b9642dd",
+    "dev/src/lowering/procedural.h": "03d5316fc877c1b746dd0635bf203e2c49bc03ebf2ecce723761d05d1d5ddce3",
+    "dev/src/lowering/query_abi.cpp": "28a3f6cb55d98caedddfc19322af818a010e63539c6a8ae1a97e537e8a57a762",
+    "dev/src/lowering/range_statement.cpp": "b2278c691b42c49c8e4159d997c889768cfded1b27787ee6e03a7259c76504fb",
+    "dev/src/lowering/reference_storage.cpp": "c8e131a395190dd1fb8fc889829f4b6b2a2e8400e9253f66f0035e27266c5e92",
+    "dev/src/lowering/rtti.cpp": "3714c4e84a2d9e030ce67104d09ec4452a9d0a98526c4851af5540f9c4d74175",
+    "dev/src/lowering/source_exception.cpp": "b519a0dfc74863692f529c7ad0b5b54a10d791d046ca3a386a95b4e4360ab55a",
+    "dev/src/lowering/symbols.cpp": "7cf4df55e02567c96acfe0f502028ce06dff4db17e568ba0c543397e8e81befa",
+    "dev/src/lowering/transfers.cpp": "bbc80264d6961f99b5ee40ddc6676c5582baa044c3939eb16b96ee8d1e1dd577",
+    "dev/src/lowering/typed_operations.cpp": "7b46cb7405e3a438ac0e8776ccbdc62bdab3e1c9ed22cb1ec3c9fa7a80882efd",
+    "dev/src/lowering/virtuals.cpp": "bd6313f9d79ccd6a241ff34ab085c5fc9cd86594ea66db5bb8e3a2b66f71c859",
+    "dev/src/lowir/validation_instructions.cpp": "1f6a0c4e846bdf7e7979592946faa4aaf65d652a64ca1a2a595cbda41a77d9a3",
+    "dev/src/semantic/allocation.cpp": "ca1e3ca3c82d67e21ce8c869232aa8be146e754adc227d82805337e4083add12",
+    "dev/src/semantic/allocation_cleanup.cpp": "d168ee5f844603db993781e0af4df4a831728c34eaa748ed5058f99e4e5efb4c",
+    "dev/src/semantic/analyzer.h": "c0ae796203445ec7a9d45eb67b1b67718dad61084ef7f4e9f0c7f553f3bb8f30",
+    "dev/src/semantic/callable.cpp": "0895c16d0266dc62536a5c6e46aca426ab4151c0360d7200367b0a6085bc3e00",
+    "dev/src/semantic/class_values.cpp": "739016256998505754070539f28993554a9a04ce41ac24a3060171878fe57ab8",
+    "dev/src/semantic/closure_capture.cpp": "1216458479c33baaab92bfb0ce394f6d8f8c02cde1241ff6bcdc10e993d871cf",
+    "dev/src/semantic/constant.cpp": "9de775a1982c2015ff0d1a0c315ec276b9cc6dc605372b457bc99c7ea0121db3",
+    "dev/src/semantic/constant_execution.cpp": "9e55f591bbf68a758dc8344500cbcb7cd6ea27defc61e2320f35fabe9d0c1684",
+    "dev/src/semantic/construction.cpp": "5453c59a179e4476f32c36e2f03ea8093edfcdbaaf7de3a2f9aea7dcc5a38128",
+    "dev/src/semantic/conversion_functions.cpp": "6e1b393b3c065b3fd3c97acd82409db9425584db3336249bf688a6b9a49ae9f2",
+    "dev/src/semantic/converting_constructors.cpp": "0a3b94957bd8be426ad9b94958aa6db98e7a90da69b6f3d25fd52a9aa496bbee",
+    "dev/src/semantic/declaration.cpp": "2aaf8ae04b75a075e394444106d3083ac63f7c19be90d4fa2fdc936a631abdaa",
+    "dev/src/semantic/destruction.cpp": "e58614eafcb5dea0912a229090d50a0df1d777ecdf1ccb8f6acd1908e5da56e5",
+    "dev/src/semantic/exception_expression.cpp": "019c8d39892d169686223a4a7910aa81f912d20de339c03c112408a28c402742",
+    "dev/src/semantic/expression.cpp": "6c0ea6088422c6cd3d39389aff331dccc3cdc7dfb4a73646a187336ae27d5b6e",
+    "dev/src/semantic/initializer_effects.cpp": "fbcc0d69048fe51f8fbe6227b63fc4c2f46fa3e88444ce7213b54c77a3acd37d",
+    "dev/src/semantic/initializer_list.cpp": "9270a8e66ca64c002bdc161dd285469478235435b967413007d198be09cec3c0",
+    "dev/src/semantic/jump_validation.cpp": "69705a46ae7c86fe83c29ae83f341d6eca37c340ba2864032f0d4a6ffebb05e2",
+    "dev/src/semantic/lambda.cpp": "3d1141dcf1ac1c78f639b7bce7766242cc58592826ac0b7bfa3d0f81659d87e2",
+    "dev/src/semantic/list_initialization.cpp": "941012bec137bc133940f590f46c4338864789f73fd7bef446641fcad292133f",
+    "dev/src/semantic/member.cpp": "8e877a3338c0e4f085deb5168cb762d0dd99df66345f6fa18c7983fd855b4db0",
+    "dev/src/semantic/model.cpp": "fe3268363ccfe706745bb7c107b552e7cbe71718ac20dad620ca215972362d25",
+    "dev/src/semantic/model.h": "793a0fcdd1ed302ebcab3ec4df4b10320dccdda9bb125367939b9ce296b30dcb",
+    "dev/src/semantic/operator_call.cpp": "b96be233e9240691c98349ee59a3106c0680c336dd191923aab877af98ea77c6",
+    "dev/src/semantic/operators.cpp": "b42f0b2b90288983bd7f90a428291a410f79f66e5f55b608b460dae8feef2a96",
+    "dev/src/semantic/overload.cpp": "53ed14371ba92c28189c45a2c20647419e403649835d530535bfa8c04830117e",
+    "dev/src/semantic/placeholder.cpp": "efa012928c7e9cca27cd7660a4af9e2bfa542037b3f2c3623b80cf10122d0b83",
+    "dev/src/semantic/placement_new.cpp": "64242f8062ada20aa73fd3533418cf37c17fa4c82125c7af46da210bc4586bb1",
+    "dev/src/semantic/query_list.cpp": "536cdf3e991b01c7cdba520afcf78d4a70c8235c08a804e134a955532faa6045",
+    "dev/src/semantic/query_new.cpp": "46530923d7930871f28b99b8ca2d14a02684ef056ee2cd76a2c907130a053c68",
+    "dev/src/semantic/range_operations.cpp": "91efcc02976e2bc9917dde95e5a7024fe51017b8ebe5198cc9ae740df583a067",
+    "dev/src/semantic/range_statement.cpp": "6db2337efe44589ef3cd39a1c8c2ec7b39d8c3b793638eea9797fca418a02d99",
+    "dev/src/semantic/reference_storage.cpp": "04451fb2ef01ddc073ce1ce8627d782a28b601ef0db71b4f869c0e464ae8cff5",
+    "dev/src/semantic/rtti.cpp": "05fa285d27bffaa6b94bc1f80f6862244b22a28c4ec9e5b710231db2c3b7225d",
+    "dev/src/semantic/scalar_consumption.cpp": "4d54445d489951366a5332e4bbc43a14137dde3260255a6447b863c43f476d46",
+    "dev/src/semantic/source_exception.cpp": "258174a0ba19e4957016926eb3b73c3b97b848cc376ff9af45844fce6a9e662a",
+    "dev/src/semantic/special_members.cpp": "ade2eb545f23dcdc6b9ccbd850a6e9b2fd20861ff1dd3bd5c0b9fcc15934b65f",
+    "dev/src/semantic/statement.cpp": "7a57be13d7d073c426b6fffebffa22cd5f7e2f67516d271c3245880efd67e0a2",
+    "dev/src/semantic/template_binding.cpp": "215f999f12d4bc417e63fb63f472f0b1bb920d7df2760d609fc27fde04fc9396",
+    "dev/src/semantic/template_binding_statements.cpp": "b917c09002cc5fe09e8b2ac4733ebdebfab9248bbd72cfa23131256fbfcfac68",
+    "dev/src/semantic/template_call.cpp": "70f25cbadf5018dcf9ab220ddfac9abcdedf43f431b8a9cbb8d1425d94810585",
+    "dev/src/semantic/template_call_facts.cpp": "5fa79b6a9cd596fe0eea5eea0082451f5176a03526a8205099feba5b38a22e40",
+    "dev/src/semantic/template_class.cpp": "764e44254a512f31776cd1d75e659147c140a4cb184ffb7e37caaca122977b7f",
+    "dev/src/semantic/template_expression.cpp": "e1c79b204f00a0b7356e0463a8e57ca5441cb153a8bcd59f9fcb0da623fc7830",
+    "dev/src/semantic/template_initializers.cpp": "58402166508a013859ab791662b7a763bc688590f29f656cc78e7a284b9c0d79",
+    "dev/src/semantic/template_operator_facts.cpp": "dab122dcc8b75eb1e61f6aa41fcded2af43803b4b32d37d36e4ce76f7f4e9e09",
+    "dev/src/semantic/template_value_facts.cpp": "d2331c44286131929c8243b87102495197ba941a297d871387468025696abc35",
+    "dev/src/semantic/transfer_actions.cpp": "b68ab893430be906b27d59f5cc1fa75d0e9be5d04e18b6a166a49d3d0d516b3e",
+    "dev/src/semantic/type_query.cpp": "3ca1e3d0b4e5ff6f56afefee0a3a14331971bed1cb3e6040a2dc2cfa41238716",
+    "dev/src/semantic/type_query.h": "933e2ea4fcdb06f38f44fae9f6c7066ad3f759d3c5ff059dba8679d04cc43d8b",
+    "dev/src/syntax/declarator.cpp": "562f23450f1b50552506e1b7706f88897367b7851e3100f03fe7a18156a78d02",
+    "dev/src/syntax/expression.cpp": "ac16ac8a3d8bbd46edc3280ec9cf506e6815fdf926b506681deff574ea1428ab",
+    "dev/src/syntax/parser.h": "af00434b105ebec918bc2a87c2eee75f444b4befd15c4f89635afa7339d00110",
+    "dev/src/syntax/prediction.cpp": "0d10597050a9b9a7a8ca58000d85635c045dc5c4ad79e206ac2963be4af53b90",
+    "dev/src/syntax/statement.cpp": "ec0eb28f20813358f83b8ad105ed0166e8cda70cc4ee5b70e4f4edf6b395cd8c"
+  },
+  "implementation_diff_sha256": "223d10c9c97ac7698c5ae17c8b1886f3e4c2376c467e61661b023f3e8ba5b14c"
+}

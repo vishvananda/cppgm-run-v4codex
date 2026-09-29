@@ -1,192 +1,170 @@
-# PA21 checkpoint audit 109
+# PA21 final whole-stage audit 113
 
-Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Previous review: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
-Audit entry: `e6582e3751084e80a41a12a623d2cd83e183b25c`.
-Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
-Target: **PA21 full-stage**. Phase: **checkpointAudit complete; implementation remains**.
+Target: **PA21 full-stage**, phase **audit**. Stage base
+`ac988ea33d4997b44e82baaca5a86623fff3127a`; clean entry `f3af4630`;
+reviewed implementation `30aec177`. This review reconstructs the current
+pipeline from the source and stage changes. The [105](audit105.md) and
+[109](audit109.md) checkpoints remain historical evidence, not substitutes
+for this review. The [manifest](../student.tests/pa21/audit113-review.json)
+retains all 42 stage commit identities, per-commit diff hashes and 93 current
+implementation source hashes. The [artifact manifest](../student.tests/pa21/audit113-artifacts.json)
+locates archived frozen binaries, complete logs, reducers and native/LowIR outputs.
 
-The checkpoint preserves progress: **108/116 pass, the same eight failures**;
-PA1–20 pass **3596/3596**. This accepts the accumulated checkpoint review and
-its repairs, not whole-stage completion. PA22 advancement remains blocked by
-the eight required PA21 comparisons. The [105 audit](audit105.md) is preserved.
+## Reconstructed design and Spec Alignment
 
-## Complete range and findings
+The PA21 production boundary is source → typed LowIR. `lowering/driver.cpp`
+creates one preprocessor/cursor/parser/analyzer per translation unit, finishes
+semantic demand, and passes those same owners directly to `Procedural`.
+`lowir_model::write_program` runs once at the explicitly requested output
+boundary. Source/semantic owners die after each translation unit; the shared
+typed program and linkage records survive until its required LowIR output.
+The supplied backend is used **only by validation and measurement** to inspect
+and execute that output. Student MIR, selection, register allocation, ELF/debug
+encoding and self-hosting are later-stage owners (PA24 onward, PA34 for inception).
 
-All **14 entry commits**, their combined **41 implementation paths**, the
-repair `bd6bfd71`, and measurement-driver completion `f57bdd3b` were reviewed, including interactions between handoffs. The
-[manifest](../student.tests/pa21/audit109-review.json) retains full IDs, per-commit
-review-diff hashes, entry and final source hashes, verified archived binaries,
-and entry controls. No range was narrowed to the latest handoff. The preceding
-turn is classified as **progress**, supported by committed implementation and
-validation; no live previous job was assumed. The entry worktree was clean.
-
-| Commits | Contribution and interaction reviewed |
+| Spec | Current owner and audit conclusion |
 |---|---|
-| `06b2d989` | Prior review records; establishes the inherited baseline. |
-| `9c4f64da`, `301ef6fd`, `e80ad0c7`, `c64e88fb`, `14225657` | Source exception facts, handler parameters, implicit moves, protected-context continuations, constructor prefixes, catch defaults, removal of empty lifetime records, reference proof and measurements. |
-| `b821682b`, `20476a77`, `a2b9e823` | Full-expression effects and result ownership, condition/logical joins, destination defaults, final consumers, range operations, display names and validation. |
-| `efcb52b1`, `2e392cec`, `a30acab5`, `ac3a28e8`, `e6582e37` | Result transfer, nonthrowing boundaries, partial aggregates/arrays, helper transfer proofs, constructor defaults, parser prediction, zero initialization, corrected prefix reference and archived evidence. |
-| `bd6bfd71`, `f57bdd3b` | Audit repair and reproducible measurement baselines: semantic jump destinations, ordered scope/handler exits, protected-entry rejection and reachable-label traversal. |
+| §1 source/parser | Immutable source buffers, interned identifiers and the streaming cursor feed a single source-faithful graph. Bounded lookahead scans delimiters rather than replaying grammar. Template source regions remain parsed once; context/occurrence edges project them without cloning a second semantic tree. |
+| §2 canonical facts | Types, declarations, scopes, template arguments, queries, conversions, layouts and ABI nodes use compact canonical identities. Fact slabs store selected operations and object/lifetime recipes. Manglings are output, never semantic keys. |
+| §3 lookup | Name/kind scope indices and explicit parent/base/ADL relationships select candidates. Shape filters precede expensive substitution; checked selected conversions reach lowering by ID. New/delete selection is owned by semantics, including saved placement argument recipes and access checks. |
+| §4 demand | `template_instantiation.cpp` uses monotonic declaration/body states, immutable substitution frames and deferred occurrence regions. Unrelated template bodies remain undemanded. The new delete query inspects destructor/deallocator declarations without requesting bodies. Implicit allocation declarations explicitly suspend the enclosing template head. |
+| §5 scheduling/caches | Member/body/default/completion queues have entity/fact identities. Query completion invalidates only explicit reverse dependencies and their exception/value facts. RTTI caches begin after semantic completion; expression-effect caches belong to the completed TU. Helper emission now drains its deduplicated growing queue by index. |
+| §6 direct typed lowering | Constructors, transfers, captures, list backing storage, RTTI/casts, cleanups and ABI entries consume retained facts. Required missing facts fail invariants. No text transport, semantic name recovery or fake source nodes were introduced. Full LowIR validation is explicit audit work. |
+| §7 O0 policy | There is no new optimizer pass. Local effect proofs justify only specific omitted unwind edges/helper argument ordering. Unknown effects retain ordered construction and cleanup. Native profitability and frame costs are measured through the supplied backend; no student allocator/debug claim is made. |
+| §8 ownership | Source nodes/facts use TU pools; candidate scratch is local. Lowering release actions/operands, temporary states, saved EH slots, continuation caches and list-address caches are function-owned and reset together. No process-global accumulating cache or owning per-node child graph was added. |
+| §9 evidence/budgets | Fixed template, loop/call, memory and floating workloads, affected heap execution, helper nesting and context growth supplement course fixtures. Frozen binaries, source hashes, A/A and ABBA observations are retained in [performance 113](performance113.md). Correctness and mandated limits remain gates; inherited numeric diagnostics do not. |
+| §10 self-containment | Source tracing observes exactly one `execve`, no reference reads and no implementation subprocess. All frontend/semantic/LowIR output is student-produced. Host linking and supplied native execution remain the handout's validation boundary. |
 
-**Nonlocal jumps omitted exception-region exits.** Return lowering had an EH
-exit path, while `goto`, `break` and `continue` only destroyed lexical objects
-and jumped. The supplied object backend rejects the resulting mismatched region
-stacks; catch exits also lose exception-object retirement. This affects nested
-handlers, loops, switches, ranges and template lambdas. The reduced
-[controls](../student.tests/pa21/audit109.py) improve **7/22 → 22/22**: thirteen
-execution defects and two missing required rejections are repaired.
+## End-to-end traces
 
-The existing semantic jump walk now records each target's lexical try/handler
-identity. Lowering consumes that fact, destroys each exited scope in order,
-closes its region and ends its handler before continuing outward. It updates
-the active context while emitting later destructors, so a throwing destructor
-outside an exited try cannot return to that try's handlers. Return uses this
-same owner. Targets inside the current handler retain it. Missing nonzero
-ancestor identities are invariant errors rather than textual recovery.
+The fresh [source-to-ELF record](../student.tests/pa21/audit113-trace-final.json)
+follows `Item`, polymorphic `Base`/`Derived`, and demanded `inspect<0>` and
+`inspect<1>`. Canonical `initializer_list<Item>` records select const backing
+element conversions and destruction; each occurrence owns its backing lifetime.
+Closure captures retain source object/conversion identities, while their call
+operators consume checked range, RTTI and cast recipes. The selected dynamic
+`typeid` reads the vptr; the static type operand supplies canonical RTTI. Throws,
+`continue` across a handler, normal returns and backing destruction share the
+complete lexical/handler continuation machinery.
 
-**Protected-scope entry and label traversal were incomplete.** The semantic
-initialization-prefix ancestry check now gives try bodies an entry barrier;
-existing handler barriers remain. Goto and switch entry into those scopes are
-rejected even when they contain no destructible local. The lowering entry walk
-now includes try/handler children, preserving labels reached past terminated
-fallthrough. The fix uses existing traversal/identity owners, not a second
-parser or a whole-function search for each jump.
+Observed: 362 tokens and delimiter visits, 47 maximum pending tokens, 550 parsed
+source nodes plus 472 projected occurrences, 37 fixed expressions reused 74
+times, two template body transitions for the two demanded `inspect` bodies,
+one list-type completion, 15 member demands/15 processed, three RTTI records
+and ten hits. The repeated `inspect<0>` call adds no body transition. The result
+is 385 typed LowIR instructions, valid native execution and 2,100 bytes of ELF
+`.text`. Plain and telemetry/audit output are byte-identical. Saved LowIR,
+syscalls and disassembly allow inspection through final encoding.
 
-The proof is C++11 [except]/3 (no goto/switch entry), [except.throw]/2,4 (nearest
-unexited try and exception-object retirement), [except.handle]/7,16 (active
-handler and catch-parameter lifetime), and [except.ctor]/1 (reverse unwinding):
-[local standard](../doc/n3485.txt:21326),
-[exception lifetime](../doc/n3485.txt:21421). LowIR's
-[handler-stack contract](../pa8/lowir.md#handler-stack-management) requires balanced
-regions. Tests check destruction counts/order, retained enclosing handlers,
-throwing outer cleanup, source/template composition and invalid-entry rejection.
+The allocation trace additionally follows an active-handler template through
+implicit global runtime declaration, canonical new/delete queries, selected
+constructor/deallocator, saved original allocation/arguments, a completed-array
+counter and the handler's exact incoming lifetime prefix. Failure destroys only
+completed elements, releases storage, ends any exited handler and reaches the
+correct catch. Successful initialization retires only the allocation guard.
+Throwing deletion decrements the remaining count **before** each destructor;
+remaining elements and storage still have owners if that call throws.
 
-## Architecture and ownership audit
+## Findings and repairs
 
-The [fresh trace source](../student.tests/pa21/audit109_trace.cpp) follows a
-polymorphic declaration and two demanded template specializations through class
-lists, captures, RTTI, throws and handler `continue` to checked native execution.
-The [trace](../student.tests/pa21/audit109-trace.json) retains LowIR, stats,
-syscalls, native hash and disassembly. Ordinary and instrumented/validated output
-are identical; compiler tracing contains one `execve`, with no host/reference
-frontend invocation. The authorized supplied object backend and host linker
-produce a checked **2244-byte `.text`** executable.
+1. Nested omitted aggregates could enqueue helpers during range-for traversal
+   of the helper vector, invalidating traversal or leaving a function body
+   absent. A stable-index drain emits every demanded helper once.
+2. Automatic-array raw unwind paths bypassed same-function handlers. Heap-array
+   construction discarded the live enclosing prefix, including active-handler
+   templates. Typed prefix ownership now composes those cases with default
+   arguments and source continuations. The existing raw whole-loop form remains
+   valid when it owns an empty prefix and no default-argument recipe.
+3. Failed scalar construction leaked its allocation. Throwing scalar/array
+   deletion skipped deallocation and sometimes remaining elements. A flat
+   release-action pool extends existing lifetime states; saved typed operands
+   prevent reevaluation. Placement matching uses the selected allocator's
+   parameter types; an absent matching function correctly means no release.
+   Access is checked even for nonthrowing initialization, while body demand
+   remains attached to a retained call. Sized delete retains the original size.
+4. Template allocation inherited the active template head when synthesizing
+   global runtime declarations. New-array type queries selected scalar allocation
+   and the wrong construction/result type; delete had no query owner. Declaration
+   scope isolation and typed query facts repair those paths. Dependent return
+   types also exposed a missing ABI handoff: typed new-expression nodes and
+   scalar/array/global delete operations now reach the shared encoder, following
+   [Itanium §5.1.6](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#expressions).
+5. `independent_initializer` assumed all type-trait operands were unevaluated.
+   Polymorphic `typeid(read())` observed an earlier aggregate member before it
+   was stored. Its evaluated operand now prevents helper hoisting. The reducer
+   uses placement construction and verifies the preceding member value;
+   C++11 [expr.typeid]/2–3 and [dcl.init.list]/4 establish the required evaluation.
 
-- Immutable source buffers and the streaming cursor feed retained source
-  occurrences. Declaration-prefix prediction inspects tokens without abandoned
-  parses. The trace has **550 parsed nodes**, **two template body transitions**,
-  **37 fixed expression recipes / 74 uses**, and **two closures**. Runtime catch
-  objects and lexical jump destinations remain specialization-specific facts;
-  fixed operands/conversions retain shared semantic recipes.
-- Canonical entity/type/node IDs key throw conversions, handler initialization,
-  exception facts, constructor/proof-mode independence, list plans and layouts.
-  Scope lookup and retained template environments use the earlier indexed owners.
-  There is **one list plan, two backing objects, one list representation**, and
-  **three RTTI expression records**. No rendered signature or name replaces
-  semantic identity. Symbol display changes do not change ABI identity.
-- Demand still distinguishes checking, completion and emission. Constructor
-  actions are classified only after completion; unavailable facts conservatively
-  prevent helper selection. Semantic exception/default/suffix caches see completed
-  recipes and have TU lifetimes. New jump facts are sparse per occurrence; they
-  do not restore the previously removed empty records for ordinary returns.
-- Typed lowering consumes selected conversions, exact destination addresses,
-  lifetime prefixes and active context IDs. Cleanup sharing keys include live
-  state and a terminal determined by the full parent-linked context. Raw
-  constructor-region changes get distinct resume identities. Conditional throw
-  arms restore sibling state; completed destinations are published before
-  argument-temporary destruction without mutating earlier unwind snapshots.
-- Function-owned context/prefix/continuation state resets between bodies;
-  instruction scratch for nonthrowing boundaries is released immediately after
-  the single function-slice rewrite. TU facts and program LowIR have their
-  existing explicit owners. No new per-node owning pointer, copied syntax graph,
-  process-global cache, global retry or production text roundtrip was introduced.
+The current [46 composition controls](../student.tests/pa21/audit113.py) improve
+**13/46 → 46/46**, preserving the frozen entry failures. Four access/demand
+controls pass. A separately compiled host caller links and executes **14**
+dependent allocation/deletion signatures. These controls supplement the
+unchanged contract sources and statuses.
 
-Student MIR selection/allocation, ELF encoding, debug-backend improvements and
-self-hosting belong to PA24–34. The supplied-backend trace checks their boundary;
-it does not claim those later implementations. O0 disassembly retains real calls,
-loop branches and frame traffic; no allocator or spill improvement is inferred.
+One inherited PA12 reference omitted exceptional release around an external
+constructor. [Correction 113](reference-corrections113.md) gives the reducer,
+C++11 [expr.new]/18–21 proof, pinned bundle revision, exact reconstruction from
+committed original bytes and executable original/revised observation. This is
+the only contract-path change from audit entry. All six accumulated correction
+scripts are checked; no comparison rule or source/status fixture is relaxed.
 
-## Legality, profitability and work budgets
+## Legality, invalidation and work/growth limits
 
-Named-result reuse requires the recorded eligible nonvolatile local and retained
-unwind ownership through successful return. Default-argument temporaries, partial
-member/array completion, delegated construction and parameter ownership are
-covered together by the 134 ownership controls. Helper transport requires
-storage-independent operands; early transfer additionally requires nonthrowing,
-single-argument, completed constructor actions with no external effects. Unknown
-proofs retain ordered destination construction. Aliases, self pointers, observable
-copies and throwing prefixes exercise those conservative paths.
+The completed leaf-constructor proof scans only zero-argument bodies with no
+subobject actions, once per constructor in the allocation-finalization pass.
+Only checked nonthrowing scalar statements qualify; calls, unknown bodies,
+default recipes and subobjects retain allocation cleanup. It does not change
+the declaration's exception specification or remove the constructor call.
+Its local cache dies when finalization ends. Empty-TU/sentinel handling is
+covered by the unchanged earlier-stage suite.
 
-Full-expression cleanup facts distinguish result omission and observable effects
-in two cache bytes per node. Work follows demanded facts, traversed edges and
-emitted regions. Prefix construction is memoized; helper/action traversal is
-linear, block presentation sorting is O(b log b), and nonthrowing-boundary
-insertion uses one function-sized scratch slice. Array expansion remains capped
-at **eight elements**, with counted loops above it. New jump lowering costs one
-sparse target fact and work proportional to the contexts/cleanup operations it
-must actually exit. It adds no fixed point, code cloning or unbounded search.
+Inherited scalar-return proofs, initializer independence, helper transfer
+commutation and suffix sharing were rechecked with their consumers. The
+`typeid` repair narrows a failed legality proof. Mutable/aliased/volatile or
+effectful sources keep ordered initialization; unknown or virtual call targets
+cannot borrow a direct-body proof. Suffix sharing keys include lifetime state,
+terminal and complete try/handler context, including exit operations. No global
+retry, global cache flush, iterative whole-body optimization or code cloning is
+used. Source type-query initializer form is now part of the canonical key and
+therefore remains distinct through substitution and ABI publication.
 
-[Performance 109](performance109.md) measures the entire accumulated range from
-the last-reviewed compiler to this code tip with frozen inputs/binaries, A/A
-calibration, ABBA pairs, compiler latency/RSS, checked runtime and text/payload
-size. Earlier [106](performance106.md), [107](performance107.md) and
-[108](performance108.md) evidence remains, including unfavorable observations and
-interrupted runs. Archived binary hashes and 108's executed-driver reconstruction
-were verified. Required O0 regions and completed-subobject cleanup costs are
-explicit; invalid earlier EH output is never used as a speedup baseline.
+Small automatic-array expansion and list-address reuse remain capped at eight;
+larger counts use constant-size loops. Aggregate repetition carries the same
+pipeline expansion budget. Deleting-destructor sharing delegates larger
+nontrivial member sets to the complete destructor instead of expanding quadratic
+suffixes. New release state is O(selected arguments + lifetime actions), and
+contextual heap loops add a constant number of owners irrespective of runtime
+extent. Helper emission is O(demanded helpers + emitted actions), including
+newly requested nested helpers. These are work/output bounds, not claims of
+faster executables. Conservative fallback retains valid ordered typed IR.
 
-Spec §9 acceptance is scoped to **PA21/O0**. Historical **+15%, +16 MiB, 5.5×**
-self-selected diagnostics remain evidence, not additional gates. The handout
-sets no numeric latency/RSS/text ceiling. Correctness, contract comparisons,
-coverage and mandated work/growth bounds remain binding. Later backend costs
-are identified rather than turned into a PA21 exit requirement.
+## Validation and handoff ledger
 
-## References, coverage and validation
+The final required file audit passes with the same three inherited header
+organization warnings. The root through report passes **3712/3712** comparisons
+and **21/21** stages, plus its separate PA10 **5**, PA11 **4** and PA12 **13**
+property checks. The root counter and these property counts are recorded
+separately; coverage hashes, rather than the entry prompt's aggregate count,
+establish that no test was removed. Final controls, gates, compiler hashes,
+reference observations and unchanged contract inventory are recorded in the
+[gate/coverage history](../student.tests/pa21/audit113-validation.json),
+[inherited rerun](../student.tests/pa21/validation113.json) and review manifest.
 
-No reference changed during this audit. The three changed references since 105
-are the proved [nested-handler correction](reference-corrections106.md) and
-[aggregate-prefix correction](reference-corrections108.md). Their reducers,
-C++11/LowIR proofs, bundle revision and exact reconstruction from original bytes
-were reviewed. Fresh reconstruction and execution pass; the
-[prefix replay](../student.tests/pa21/audit109-reference108.json) again shows the
-original reference/old implementation fail while the revised reference/current
-implementation pass. Compiler agreement is corroboration, not the proof.
-The historical [102 RTTI correction](reference-corrections102.md) is preserved.
+The complete inherited personal rerun passes **687/690** original lanes and
+**2/2** additional hosted lifecycle checks, retaining its three known supplied-backend
+limitations: one freestanding RTTI case passes its hosted counterpart; two
+PA16 multi-TU lifecycle cases retain byte-identical entry/final LowIR and pass
+the hosted lane, while the freestanding backend fails to resolve `__builtin_abort`
+despite the retained `object=abort` metadata. Their original failures are kept;
+no course failure is waived.
 
-[Validation](../student.tests/pa21/audit109-validation.json) records:
-
-- Required prior-through command: **3596/3596**, exit 0.
-- `make test-pa21`: **108/116**, exit 2, the **exact entry eight-failure set**.
-- `make test-report-through-pa21`: **3704/3712**, the same eight failures.
-- Required file audit: exit 0, the same three advisory header-body warnings.
-- **116 source identities** and the **15048-path contract/harness inventory**
-  exactly match checkpoint 108. Only the four proved historical reference paths
-  differ from the stage base. No status, comparison rule or coverage was reduced.
-- Personal suites: **580/581**, including **22/22 audit controls**. The sole
-  inherited freestanding RTTI discrepancy, `public_base_inside_private_derived`,
-  remains recorded; its host-runtime counterpart passes. No required course
-  failure is waived by that distinction.
-
-## Remaining work and ledger
-
-Two broad integration groups remain. **EH/lifetime and support identity** owns
-three source-handler/static/continuation comparisons and two initializer-list
-backing-storage/lifetime comparisons. **Generated construction and template
-lowering** owns two special-member/helper comparisons and the constant-array O0
-policy interaction with PA17. All eight remain required implementation work;
-native execution does not substitute for relaxed LowIR comparison.
-
-Handoffs 106–108 improved 71 → 92 → 101 → 108 cases, but splitting source exits,
-full-expression consumers and completed destinations left avoidable fragmentation
-across the same lifetime owners. The missed nonlocal jump paths demonstrate it.
-Finish each remaining ownership group with its handler/list/template compositions
-and integrated validation instead of another sequence of fixture-shaped repairs.
-
-| Audit | Range and disposition |
-|---|---|
-| 105 | `ac988ea3..f65eae8d`; RTTI recipe reuse and copied-subobject cleanup repaired; 45 failures retained. |
-| 109 | `f65eae8d..f57bdd3b`; all 14 entry commits and interactions reviewed; protected-scope jump ownership/rejection/labels repaired; accumulated performance, references and coverage verified; earlier/file/progress gates pass; eight unchanged failures remain. |
-
-The marker names the committed code tip. Audit, plan and evidence records follow
-in a separate commit with no further implementation edits.
+102–104 established RTTI/casts, captures/copies and list demand (71/116).
+105 reviewed through `f65eae8d`. 106–108 added EH, full-expression and destination
+ownership (108/116). 109 reviewed through `f57bdd3b`, repairing protected jumps.
+This review includes **all** subsequent handoffs: 110's `6b3aecdb`, `bdfdb31b`
+and `df6e8299` handler/static/array ownership and helper sharing; 111's
+`3028366d` completed-body effect proof; 112's `e32e9f2f` exhaustive-dispatch
+summary and reference alignment, plus their evidence/documentation commits
+through `f3af4630`. Audit 113 repairs the cross-owner defects above at `30aec177`.
+No PA21 implementation handoff remains unaudited. Later object-model, optimizer,
+native/debug and inception work remains assigned to its owning milestones.

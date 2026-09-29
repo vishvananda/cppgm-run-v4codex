@@ -1,0 +1,281 @@
+{
+  "protocol": "final-only different-input growth diagnostic, warmups then four A/A observations and four small/large/large/small blocks; no optimization speedup claim",
+  "cpu": 0,
+  "compiler_sha256": "8e06eea800b20675d8292fbc7346d58fac267693aa653c0569547db722e87c5d",
+  "inputs": [
+    {
+      "path": "/tmp/pa21-113/growth/contextual-new-512-final.cpp",
+      "sha256": "9f59f580d0247d78ca1a36854b6a3668678e217d5e7fd21c422da260e44effe4"
+    },
+    {
+      "path": "/tmp/pa21-113/growth/contextual-new-2048-final.cpp",
+      "sha256": "e2860b8a0ff176f07435f23c9f1877274a1993b6fbae09b7e5f7009f63707171"
+    }
+  ],
+  "commands": [
+    [
+      "/tmp/pa21-113/compiler-final",
+      "--emit-lowir",
+      "-O0",
+      "-o",
+      "/tmp/pa21-113/growth/contextual-new-512-final.lowir",
+      "/tmp/pa21-113/growth/contextual-new-512-final.cpp"
+    ],
+    [
+      "/tmp/pa21-113/compiler-final",
+      "--emit-lowir",
+      "-O0",
+      "-o",
+      "/tmp/pa21-113/growth/contextual-new-2048-final.lowir",
+      "/tmp/pa21-113/growth/contextual-new-2048-final.cpp"
+    ]
+  ],
+  "warmups": [
+    {
+      "size": 512,
+      "wall_s": 0.109329181,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 22988,
+      "user_s": 0.07,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.426217354,
+      "command_elapsed_s": 0.42,
+      "rss_kib": 70508,
+      "user_s": 0.32,
+      "system_s": 0.09,
+      "involuntary": 3,
+      "voluntary": 2
+    }
+  ],
+  "observations": [
+    {
+      "size": 512,
+      "wall_s": 0.106702643,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23028,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.110058791,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 22964,
+      "user_s": 0.08,
+      "system_s": 0.01,
+      "involuntary": 1,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.114235939,
+      "command_elapsed_s": 0.11,
+      "rss_kib": 22952,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.118087401,
+      "command_elapsed_s": 0.11,
+      "rss_kib": 22848,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.130654563,
+      "command_elapsed_s": 0.12,
+      "rss_kib": 22920,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 2
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.432958968,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70408,
+      "user_s": 0.32,
+      "system_s": 0.07,
+      "involuntary": 6,
+      "voluntary": 2
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.421183333,
+      "command_elapsed_s": 0.41,
+      "rss_kib": 70464,
+      "user_s": 0.33,
+      "system_s": 0.08,
+      "involuntary": 1,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.122036032,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23112,
+      "user_s": 0.08,
+      "system_s": 0.01,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.112606913,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23100,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.406166116,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70556,
+      "user_s": 0.31,
+      "system_s": 0.08,
+      "involuntary": 3,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.407977333,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70540,
+      "user_s": 0.31,
+      "system_s": 0.09,
+      "involuntary": 2,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.109543494,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 22808,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.107719436,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23108,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.4120482,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70324,
+      "user_s": 0.32,
+      "system_s": 0.08,
+      "involuntary": 3,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.407677735,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70716,
+      "user_s": 0.32,
+      "system_s": 0.08,
+      "involuntary": 1,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.127570029,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23168,
+      "user_s": 0.07,
+      "system_s": 0.02,
+      "involuntary": 2,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.107436718,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 22832,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.414967326,
+      "command_elapsed_s": 0.41,
+      "rss_kib": 70764,
+      "user_s": 0.31,
+      "system_s": 0.09,
+      "involuntary": 1,
+      "voluntary": 1
+    },
+    {
+      "size": 2048,
+      "wall_s": 0.40845186,
+      "command_elapsed_s": 0.4,
+      "rss_kib": 70400,
+      "user_s": 0.32,
+      "system_s": 0.08,
+      "involuntary": 2,
+      "voluntary": 1
+    },
+    {
+      "size": 512,
+      "wall_s": 0.643958912,
+      "command_elapsed_s": 0.1,
+      "rss_kib": 23108,
+      "user_s": 0.08,
+      "system_s": 0.02,
+      "involuntary": 0,
+      "voluntary": 1
+    }
+  ],
+  "paired_large_over_small": [
+    3.380190311396433,
+    3.664829878074453,
+    3.4839041135989657,
+    1.0958530408275065
+  ],
+  "summary": {
+    "512": {
+      "median_wall_s": 0.1173214725,
+      "wall_range_s": [
+        0.107436718,
+        0.643958912
+      ],
+      "peak_rss_kib": 23168
+    },
+    "2048": {
+      "median_wall_s": 0.41025003,
+      "wall_range_s": [
+        0.406166116,
+        0.432958968
+      ],
+      "peak_rss_kib": 70764
+    }
+  }
+}

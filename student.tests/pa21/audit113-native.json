@@ -1,0 +1,139 @@
+{
+  "compiler_sha256": "8e06eea800b20675d8292fbc7346d58fac267693aa653c0569547db722e87c5d",
+  "rows": [
+    {
+      "binary": 0,
+      "path": "/tmp/pa21-113/performance-hosted/runtime-heap-ownership-0",
+      "command": [
+        "objdump",
+        "-d",
+        "--disassemble=main",
+        "/tmp/pa21-113/performance-hosted/runtime-heap-ownership-0"
+      ],
+      "disassembly": "\n/tmp/pa21-113/performance-hosted/runtime-heap-ownership-0:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .plt:\n\nDisassembly of section .text:\n\n0000000000401150 <main>:\n  401150:\t55                   \tpush   %rbp\n  401151:\t48 89 e5             \tmov    %rsp,%rbp\n  401154:\t53                   \tpush   %rbx\n  401155:\t48 81 ec 98 00 00 00 \tsub    $0x98,%rsp\n  40115c:\tc7 45 f4 80 84 1e 00 \tmovl   $0x1e8480,-0xc(%rbp)\n  401163:\t45 31 c0             \txor    %r8d,%r8d\n  401166:\t4c 89 45 e8          \tmov    %r8,-0x18(%rbp)\n  40116a:\tc7 45 e4 00 00 00 00 \tmovl   $0x0,-0x1c(%rbp)\n  401171:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  401175:\t4c 63 4d f4          \tmovslq -0xc(%rbp),%r9\n  401179:\t45 39 c8             \tcmp    %r9d,%r8d\n  40117c:\t7c 05                \tjl     401183 <main+0x33>\n  40117e:\te9 5d 01 00 00       \tjmp    4012e0 <main+0x190>\n  401183:\t41 b8 2c 00 00 00    \tmov    $0x2c,%r8d\n  401189:\t4c 89 c7             \tmov    %r8,%rdi\n  40118c:\te8 9f fe ff ff       \tcall   401030 <_Znam@plt>\n  401191:\t48 89 c3             \tmov    %rax,%rbx\n  401194:\t48 89 5d a0          \tmov    %rbx,-0x60(%rbp)\n  401198:\t48 8d 5b 08          \tlea    0x8(%rbx),%rbx\n  40119c:\t48 89 5d 98          \tmov    %rbx,-0x68(%rbp)\n  4011a0:\t48 8b 4d a0          \tmov    -0x60(%rbp),%rcx\n  4011a4:\t48 c7 01 09 00 00 00 \tmovq   $0x9,(%rcx)\n  4011ab:\t48 c7 45 d0 00 00 00 \tmovq   $0x0,-0x30(%rbp)\n  4011b2:\t00 \n  4011b3:\t48 8b 5d d0          \tmov    -0x30(%rbp),%rbx\n  4011b7:\t48 89 5d 90          \tmov    %rbx,-0x70(%rbp)\n  4011bb:\t48 81 7d 90 09 00 00 \tcmpq   $0x9,-0x70(%rbp)\n  4011c2:\t00 \n  4011c3:\t72 02                \tjb     4011c7 <main+0x77>\n  4011c5:\teb 28                \tjmp    4011ef <main+0x9f>\n  4011c7:\t4c 8b 45 90          \tmov    -0x70(%rbp),%r8\n  4011cb:\t49 c1 e0 02          \tshl    $0x2,%r8\n  4011cf:\t48 8b 5d 98          \tmov    -0x68(%rbp),%rbx\n  4011d3:\t4c 01 c3             \tadd    %r8,%rbx\n  4011d6:\t48 89 df             \tmov    %rbx,%rdi\n  4011d9:\te8 52 01 00 00       \tcall   401330 <_ZN1MC1Ev>\n  4011de:\t4c 8b 45 90          \tmov    -0x70(%rbp),%r8\n  4011e2:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  4011e9:\t4c 89 45 d0          \tmov    %r8,-0x30(%rbp)\n  4011ed:\teb c4                \tjmp    4011b3 <main+0x63>\n  4011ef:\teb 50                \tjmp    401241 <main+0xf1>\n  4011f1:\t48 89 45 b0          \tmov    %rax,-0x50(%rbp)\n  4011f5:\t48 89 55 a8          \tmov    %rdx,-0x58(%rbp)\n  4011f9:\t48 8b 45 d0          \tmov    -0x30(%rbp),%rax\n  4011fd:\t48 89 45 c8          \tmov    %rax,-0x38(%rbp)\n  401201:\t4c 8b 45 c8          \tmov    -0x38(%rbp),%r8\n  401205:\t4d 85 c0             \ttest   %r8,%r8\n  401208:\t75 02                \tjne    40120c <main+0xbc>\n  40120a:\teb 23                \tjmp    40122f <main+0xdf>\n  40120c:\t4d 89 c1             \tmov    %r8,%r9\n  40120f:\t49 81 e9 01 00 00 00 \tsub    $0x1,%r9\n  401216:\t4c 89 4d c8          \tmov    %r9,-0x38(%rbp)\n  40121a:\t49 c1 e1 02          \tshl    $0x2,%r9\n  40121e:\t4c 8b 45 98          \tmov    -0x68(%rbp),%r8\n  401222:\t4d 01 c8             \tadd    %r9,%r8\n  401225:\t4c 89 c7             \tmov    %r8,%rdi\n  401228:\te8 2f 01 00 00       \tcall   40135c <_ZN1MD1Ev>\n  40122d:\teb d2                \tjmp    401201 <main+0xb1>\n  40122f:\t48 8b 7d a0          \tmov    -0x60(%rbp),%rdi\n  401233:\te8 08 fe ff ff       \tcall   401040 <_ZdaPv@plt>\n  401238:\t48 8b 7d b0          \tmov    -0x50(%rbp),%rdi\n  40123c:\te8 0f fe ff ff       \tcall   401050 <_Unwind_Resume@plt>\n  401241:\t48 8b 45 98          \tmov    -0x68(%rbp),%rax\n  401245:\t48 89 45 d8          \tmov    %rax,-0x28(%rbp)\n  401249:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  40124d:\t4c 8b 4d d8          \tmov    -0x28(%rbp),%r9\n  401251:\tbf 04 00 00 00       \tmov    $0x4,%edi\n  401256:\t48 c1 e7 02          \tshl    $0x2,%rdi\n  40125a:\t49 8d 34 39          \tlea    (%r9,%rdi,1),%rsi\n  40125e:\t4c 63 0e             \tmovslq (%rsi),%r9\n  401261:\t4d 01 c8             \tadd    %r9,%r8\n  401264:\t4c 89 45 e8          \tmov    %r8,-0x18(%rbp)\n  401268:\t48 8b 5d d8          \tmov    -0x28(%rbp),%rbx\n  40126c:\t48 89 5d 90          \tmov    %rbx,-0x70(%rbp)\n  401270:\t48 81 7d 90 00 00 00 \tcmpq   $0x0,-0x70(%rbp)\n  401277:\t00 \n  401278:\t75 02                \tjne    40127c <main+0x12c>\n  40127a:\teb 4d                \tjmp    4012c9 <main+0x179>\n  40127c:\t48 8b 5d 90          \tmov    -0x70(%rbp),%rbx\n  401280:\t48 8d 5b f8          \tlea    -0x8(%rbx),%rbx\n  401284:\t48 89 5d a0          \tmov    %rbx,-0x60(%rbp)\n  401288:\t48 89 d9             \tmov    %rbx,%rcx\n  40128b:\t48 8b 01             \tmov    (%rcx),%rax\n  40128e:\t48 89 45 c0          \tmov    %rax,-0x40(%rbp)\n  401292:\t4c 8b 45 c0          \tmov    -0x40(%rbp),%r8\n  401296:\t4d 85 c0             \ttest   %r8,%r8\n  401299:\t75 02                \tjne    40129d <main+0x14d>\n  40129b:\teb 23                \tjmp    4012c0 <main+0x170>\n  40129d:\t4d 89 c1             \tmov    %r8,%r9\n  4012a0:\t49 81 e9 01 00 00 00 \tsub    $0x1,%r9\n  4012a7:\t4c 89 4d c0          \tmov    %r9,-0x40(%rbp)\n  4012ab:\t49 c1 e1 02          \tshl    $0x2,%r9\n  4012af:\t4c 8b 45 90          \tmov    -0x70(%rbp),%r8\n  4012b3:\t4d 01 c8             \tadd    %r9,%r8\n  4012b6:\t4c 89 c7             \tmov    %r8,%rdi\n  4012b9:\te8 9e 00 00 00       \tcall   40135c <_ZN1MD1Ev>\n  4012be:\teb d2                \tjmp    401292 <main+0x142>\n  4012c0:\t48 8b 7d a0          \tmov    -0x60(%rbp),%rdi\n  4012c4:\te8 77 fd ff ff       \tcall   401040 <_ZdaPv@plt>\n  4012c9:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  4012cd:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  4012d4:\t4d 63 c0             \tmovslq %r8d,%r8\n  4012d7:\t44 89 45 e4          \tmov    %r8d,-0x1c(%rbp)\n  4012db:\te9 91 fe ff ff       \tjmp    401171 <main+0x21>\n  4012e0:\t4c 63 05 41 2d 00 00 \tmovslq 0x2d41(%rip),%r8        # 404028 <live>\n  4012e7:\t4c 89 c0             \tmov    %r8,%rax\n  4012ea:\t48 85 c0             \ttest   %rax,%rax\n  4012ed:\t75 28                \tjne    401317 <main+0x1c7>\n  4012ef:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  4012f3:\t41 b9 80 8d 5b 00    \tmov    $0x5b8d80,%r9d\n  4012f9:\t4d 39 c8             \tcmp    %r9,%r8\n  4012fc:\t41 0f 95 c0          \tsetne  %r8b\n  401300:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401304:\t31 d2                \txor    %edx,%edx\n  401306:\t49 39 d0             \tcmp    %rdx,%r8\n  401309:\t41 0f 95 c0          \tsetne  %r8b\n  40130d:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401311:\t4c 89 45 b8          \tmov    %r8,-0x48(%rbp)\n  401315:\teb 08                \tjmp    40131f <main+0x1cf>\n  401317:\t48 c7 45 b8 01 00 00 \tmovq   $0x1,-0x48(%rbp)\n  40131e:\t00 \n  40131f:\t4c 8b 45 b8          \tmov    -0x48(%rbp),%r8\n  401323:\t49 63 c0             \tmovslq %r8d,%rax\n  401326:\t48 81 c4 98 00 00 00 \tadd    $0x98,%rsp\n  40132d:\t5b                   \tpop    %rbx\n  40132e:\t5d                   \tpop    %rbp\n  40132f:\tc3                   \tret\n\nDisassembly of section .fini:\n",
+      "native": {
+        "sha256": "c9d263aad7b4374bdeaf8268c6a4765c003e0b34e81842c3be24156ab83ad3f6",
+        "text_bytes": 802,
+        "file_bytes": 16312,
+        "checked_exit": 0,
+        "metric": "ELF .text excluding shared runtime"
+      }
+    },
+    {
+      "binary": 1,
+      "path": "/tmp/pa21-113/performance-hosted/runtime-heap-ownership-1",
+      "command": [
+        "objdump",
+        "-d",
+        "--disassemble=main",
+        "/tmp/pa21-113/performance-hosted/runtime-heap-ownership-1"
+      ],
+      "disassembly": "\n/tmp/pa21-113/performance-hosted/runtime-heap-ownership-1:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .plt:\n\nDisassembly of section .text:\n\n0000000000401150 <main>:\n  401150:\t55                   \tpush   %rbp\n  401151:\t48 89 e5             \tmov    %rsp,%rbp\n  401154:\t53                   \tpush   %rbx\n  401155:\t48 81 ec b8 00 00 00 \tsub    $0xb8,%rsp\n  40115c:\tc7 45 f4 80 84 1e 00 \tmovl   $0x1e8480,-0xc(%rbp)\n  401163:\t45 31 c0             \txor    %r8d,%r8d\n  401166:\t4c 89 45 e8          \tmov    %r8,-0x18(%rbp)\n  40116a:\tc7 45 e4 00 00 00 00 \tmovl   $0x0,-0x1c(%rbp)\n  401171:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  401175:\t4c 63 4d f4          \tmovslq -0xc(%rbp),%r9\n  401179:\t45 39 c8             \tcmp    %r9d,%r8d\n  40117c:\t7c 05                \tjl     401183 <main+0x33>\n  40117e:\te9 cd 01 00 00       \tjmp    401350 <main+0x200>\n  401183:\t41 b8 2c 00 00 00    \tmov    $0x2c,%r8d\n  401189:\t4c 89 c7             \tmov    %r8,%rdi\n  40118c:\te8 9f fe ff ff       \tcall   401030 <_Znam@plt>\n  401191:\t48 89 c3             \tmov    %rax,%rbx\n  401194:\t48 89 5d 90          \tmov    %rbx,-0x70(%rbp)\n  401198:\t48 8d 5b 08          \tlea    0x8(%rbx),%rbx\n  40119c:\t48 89 5d 88          \tmov    %rbx,-0x78(%rbp)\n  4011a0:\t48 8b 4d 90          \tmov    -0x70(%rbp),%rcx\n  4011a4:\t48 c7 01 09 00 00 00 \tmovq   $0x9,(%rcx)\n  4011ab:\t48 c7 45 d0 00 00 00 \tmovq   $0x0,-0x30(%rbp)\n  4011b2:\t00 \n  4011b3:\t48 8b 5d d0          \tmov    -0x30(%rbp),%rbx\n  4011b7:\t48 89 5d 80          \tmov    %rbx,-0x80(%rbp)\n  4011bb:\t48 81 7d 80 09 00 00 \tcmpq   $0x9,-0x80(%rbp)\n  4011c2:\t00 \n  4011c3:\t72 02                \tjb     4011c7 <main+0x77>\n  4011c5:\teb 28                \tjmp    4011ef <main+0x9f>\n  4011c7:\t4c 8b 45 80          \tmov    -0x80(%rbp),%r8\n  4011cb:\t49 c1 e0 02          \tshl    $0x2,%r8\n  4011cf:\t48 8b 5d 88          \tmov    -0x78(%rbp),%rbx\n  4011d3:\t4c 01 c3             \tadd    %r8,%rbx\n  4011d6:\t48 89 df             \tmov    %rbx,%rdi\n  4011d9:\te8 cc 01 00 00       \tcall   4013aa <_ZN1MC1Ev>\n  4011de:\t4c 8b 45 80          \tmov    -0x80(%rbp),%r8\n  4011e2:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  4011e9:\t4c 89 45 d0          \tmov    %r8,-0x30(%rbp)\n  4011ed:\teb c4                \tjmp    4011b3 <main+0x63>\n  4011ef:\teb 4c                \tjmp    40123d <main+0xed>\n  4011f1:\t48 89 45 a0          \tmov    %rax,-0x60(%rbp)\n  4011f5:\t48 89 55 98          \tmov    %rdx,-0x68(%rbp)\n  4011f9:\t48 8b 45 d0          \tmov    -0x30(%rbp),%rax\n  4011fd:\t48 89 45 c8          \tmov    %rax,-0x38(%rbp)\n  401201:\t4c 8b 45 c8          \tmov    -0x38(%rbp),%r8\n  401205:\t4d 85 c0             \ttest   %r8,%r8\n  401208:\t75 02                \tjne    40120c <main+0xbc>\n  40120a:\teb 23                \tjmp    40122f <main+0xdf>\n  40120c:\t4d 89 c1             \tmov    %r8,%r9\n  40120f:\t49 81 e9 01 00 00 00 \tsub    $0x1,%r9\n  401216:\t4c 89 4d c8          \tmov    %r9,-0x38(%rbp)\n  40121a:\t49 c1 e1 02          \tshl    $0x2,%r9\n  40121e:\t4c 8b 45 88          \tmov    -0x78(%rbp),%r8\n  401222:\t4d 01 c8             \tadd    %r9,%r8\n  401225:\t4c 89 c7             \tmov    %r8,%rdi\n  401228:\te8 a9 01 00 00       \tcall   4013d6 <_ZN1MD1Ev>\n  40122d:\teb d2                \tjmp    401201 <main+0xb1>\n  40122f:\t48 8b 7d 90          \tmov    -0x70(%rbp),%rdi\n  401233:\te8 08 fe ff ff       \tcall   401040 <_ZdaPv@plt>\n  401238:\te9 63 01 00 00       \tjmp    4013a0 <main+0x250>\n  40123d:\t48 8b 45 88          \tmov    -0x78(%rbp),%rax\n  401241:\t48 89 45 d8          \tmov    %rax,-0x28(%rbp)\n  401245:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  401249:\t4c 8b 4d d8          \tmov    -0x28(%rbp),%r9\n  40124d:\tbf 04 00 00 00       \tmov    $0x4,%edi\n  401252:\t48 c1 e7 02          \tshl    $0x2,%rdi\n  401256:\t49 8d 34 39          \tlea    (%r9,%rdi,1),%rsi\n  40125a:\t4c 63 0e             \tmovslq (%rsi),%r9\n  40125d:\t4d 01 c8             \tadd    %r9,%r8\n  401260:\t4c 89 45 e8          \tmov    %r8,-0x18(%rbp)\n  401264:\t48 8b 5d d8          \tmov    -0x28(%rbp),%rbx\n  401268:\t48 89 5d 80          \tmov    %rbx,-0x80(%rbp)\n  40126c:\t48 81 7d 80 00 00 00 \tcmpq   $0x0,-0x80(%rbp)\n  401273:\t00 \n  401274:\t75 05                \tjne    40127b <main+0x12b>\n  401276:\te9 be 00 00 00       \tjmp    401339 <main+0x1e9>\n  40127b:\t48 8b 5d 80          \tmov    -0x80(%rbp),%rbx\n  40127f:\t48 8d 5b f8          \tlea    -0x8(%rbx),%rbx\n  401283:\t48 89 5d 90          \tmov    %rbx,-0x70(%rbp)\n  401287:\t48 89 d9             \tmov    %rbx,%rcx\n  40128a:\t4c 8b 01             \tmov    (%rcx),%r8\n  40128d:\t48 8b 45 90          \tmov    -0x70(%rbp),%rax\n  401291:\t48 89 45 c0          \tmov    %rax,-0x40(%rbp)\n  401295:\t4c 89 45 b8          \tmov    %r8,-0x48(%rbp)\n  401299:\t48 8b 45 80          \tmov    -0x80(%rbp),%rax\n  40129d:\t48 89 45 b0          \tmov    %rax,-0x50(%rbp)\n  4012a1:\t4c 8b 45 b8          \tmov    -0x48(%rbp),%r8\n  4012a5:\t4d 85 c0             \ttest   %r8,%r8\n  4012a8:\t75 05                \tjne    4012af <main+0x15f>\n  4012aa:\te9 81 00 00 00       \tjmp    401330 <main+0x1e0>\n  4012af:\t4d 89 c1             \tmov    %r8,%r9\n  4012b2:\t49 81 e9 01 00 00 00 \tsub    $0x1,%r9\n  4012b9:\t4c 89 4d b8          \tmov    %r9,-0x48(%rbp)\n  4012bd:\t49 c1 e1 02          \tshl    $0x2,%r9\n  4012c1:\t48 8b 5d 80          \tmov    -0x80(%rbp),%rbx\n  4012c5:\t4c 01 cb             \tadd    %r9,%rbx\n  4012c8:\t48 89 df             \tmov    %rbx,%rdi\n  4012cb:\te8 06 01 00 00       \tcall   4013d6 <_ZN1MD1Ev>\n  4012d0:\teb 59                \tjmp    40132b <main+0x1db>\n  4012d2:\te9 c9 00 00 00       \tjmp    4013a0 <main+0x250>\n  4012d7:\t4c 8b 45 c0          \tmov    -0x40(%rbp),%r8\n  4012db:\t4c 89 c7             \tmov    %r8,%rdi\n  4012de:\te8 5d fd ff ff       \tcall   401040 <_ZdaPv@plt>\n  4012e3:\teb ed                \tjmp    4012d2 <main+0x182>\n  4012e5:\t48 89 45 a0          \tmov    %rax,-0x60(%rbp)\n  4012e9:\t48 89 55 98          \tmov    %rdx,-0x68(%rbp)\n  4012ed:\t48 8b 5d b0          \tmov    -0x50(%rbp),%rbx\n  4012f1:\t48 89 9d 78 ff ff ff \tmov    %rbx,-0x88(%rbp)\n  4012f8:\t4c 8b 45 b8          \tmov    -0x48(%rbp),%r8\n  4012fc:\t4d 85 c0             \ttest   %r8,%r8\n  4012ff:\t75 02                \tjne    401303 <main+0x1b3>\n  401301:\teb 26                \tjmp    401329 <main+0x1d9>\n  401303:\t4d 89 c1             \tmov    %r8,%r9\n  401306:\t49 81 e9 01 00 00 00 \tsub    $0x1,%r9\n  40130d:\t4c 89 4d b8          \tmov    %r9,-0x48(%rbp)\n  401311:\t49 c1 e1 02          \tshl    $0x2,%r9\n  401315:\t4c 8b 85 78 ff ff ff \tmov    -0x88(%rbp),%r8\n  40131c:\t4d 01 c8             \tadd    %r9,%r8\n  40131f:\t4c 89 c7             \tmov    %r8,%rdi\n  401322:\te8 af 00 00 00       \tcall   4013d6 <_ZN1MD1Ev>\n  401327:\teb cf                \tjmp    4012f8 <main+0x1a8>\n  401329:\teb ac                \tjmp    4012d7 <main+0x187>\n  40132b:\te9 71 ff ff ff       \tjmp    4012a1 <main+0x151>\n  401330:\t48 8b 7d 90          \tmov    -0x70(%rbp),%rdi\n  401334:\te8 07 fd ff ff       \tcall   401040 <_ZdaPv@plt>\n  401339:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  40133d:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  401344:\t4d 63 c0             \tmovslq %r8d,%r8\n  401347:\t44 89 45 e4          \tmov    %r8d,-0x1c(%rbp)\n  40134b:\te9 21 fe ff ff       \tjmp    401171 <main+0x21>\n  401350:\t4c 63 05 d1 2c 00 00 \tmovslq 0x2cd1(%rip),%r8        # 404028 <live>\n  401357:\t4c 89 c0             \tmov    %r8,%rax\n  40135a:\t48 85 c0             \ttest   %rax,%rax\n  40135d:\t75 28                \tjne    401387 <main+0x237>\n  40135f:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  401363:\t41 b9 80 8d 5b 00    \tmov    $0x5b8d80,%r9d\n  401369:\t4d 39 c8             \tcmp    %r9,%r8\n  40136c:\t41 0f 95 c0          \tsetne  %r8b\n  401370:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401374:\t31 d2                \txor    %edx,%edx\n  401376:\t49 39 d0             \tcmp    %rdx,%r8\n  401379:\t41 0f 95 c0          \tsetne  %r8b\n  40137d:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401381:\t4c 89 45 a8          \tmov    %r8,-0x58(%rbp)\n  401385:\teb 08                \tjmp    40138f <main+0x23f>\n  401387:\t48 c7 45 a8 01 00 00 \tmovq   $0x1,-0x58(%rbp)\n  40138e:\t00 \n  40138f:\t4c 8b 45 a8          \tmov    -0x58(%rbp),%r8\n  401393:\t49 63 c0             \tmovslq %r8d,%rax\n  401396:\t48 81 c4 b8 00 00 00 \tadd    $0xb8,%rsp\n  40139d:\t5b                   \tpop    %rbx\n  40139e:\t5d                   \tpop    %rbp\n  40139f:\tc3                   \tret\n  4013a0:\t48 8b 7d a0          \tmov    -0x60(%rbp),%rdi\n  4013a4:\te8 a7 fc ff ff       \tcall   401050 <_Unwind_Resume@plt>\n\nDisassembly of section .fini:\n",
+      "native": {
+        "sha256": "20b1759c689dcb153c2383fe46b980c82aaa8226783ffee600920ce49bb6d6e9",
+        "text_bytes": 924,
+        "file_bytes": 16312,
+        "checked_exit": 0,
+        "metric": "ELF .text excluding shared runtime"
+      }
+    }
+  ],
+  "section_comparisons": [
+    {
+      "name": "startup",
+      "identical_text": true,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 248,
+          "text_sha256": "c5a33e0cbca7eda9769c3f509f84652fb22532e09cba37e1bc02a9d26c7d0579"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 248,
+          "text_sha256": "c5a33e0cbca7eda9769c3f509f84652fb22532e09cba37e1bc02a9d26c7d0579"
+        }
+      ]
+    },
+    {
+      "name": "auto-specializations-9600",
+      "identical_text": true,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 768286,
+          "text_sha256": "b0f57529b9220fa73d0d522ed7667afef3a825c342391c2d7ff40c53c432766c"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 768286,
+          "text_sha256": "b0f57529b9220fa73d0d522ed7667afef3a825c342391c2d7ff40c53c432766c"
+        }
+      ]
+    },
+    {
+      "name": "runtime-calls",
+      "identical_text": true,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 430,
+          "text_sha256": "53bbb1ae11a3a4a3b2be4a81cb51e1e346f45b0cf892d0530c8033b2feb8e7e6"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 430,
+          "text_sha256": "53bbb1ae11a3a4a3b2be4a81cb51e1e346f45b0cf892d0530c8033b2feb8e7e6"
+        }
+      ]
+    },
+    {
+      "name": "runtime-memory",
+      "identical_text": true,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 658,
+          "text_sha256": "9078782b04adf655bf9ab74ba1698ac489de6053a0508f7651e1275e0a240234"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 658,
+          "text_sha256": "9078782b04adf655bf9ab74ba1698ac489de6053a0508f7651e1275e0a240234"
+        }
+      ]
+    },
+    {
+      "name": "runtime-floating",
+      "identical_text": true,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 454,
+          "text_sha256": "dc81ac1d56166add729fa3bc5cd4717dc4918d20ef5f11806981518241c243ae"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 454,
+          "text_sha256": "dc81ac1d56166add729fa3bc5cd4717dc4918d20ef5f11806981518241c243ae"
+        }
+      ]
+    },
+    {
+      "name": "runtime-heap-ownership",
+      "identical_text": false,
+      "sections": [
+        {
+          "binary": 0,
+          "text_bytes": 802,
+          "text_sha256": "70ddb34761aa468ace514f42c6e1aeb0f7da71e836912c3aa469bbe40567f768"
+        },
+        {
+          "binary": 1,
+          "text_bytes": 924,
+          "text_sha256": "d0b9650489a1d9fa87d5c8cdfae037491c2aa6300a90bfd83a05a952bd665ecc"
+        }
+      ]
+    }
+  ]
+}

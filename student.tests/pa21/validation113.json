@@ -1,0 +1,723 @@
+{
+  "compiler_sha256": "8e06eea800b20675d8292fbc7346d58fac267693aa653c0569547db722e87c5d",
+  "entry_compiler_sha256": "3550213c5e30f9329593bec04df573e045b3ca4d74669e78f70c280eafdf114c",
+  "controls": {
+    "dispatch": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/dispatch112.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/dispatch"
+      ],
+      "exit": 0,
+      "total": 22,
+      "passed": 22,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/dispatch/results.json",
+      "evidence_sha256": "0e7b895dbf9a6bd66f631329639f2f330a99f5871ee29bb5ec2ea1499d050901",
+      "log_sha256": "f5dc689ab64ca3dcff64a4f1fa16f82819ce0d7780ed265088abc12b184a75a9"
+    },
+    "automatic_arrays": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/automatic_arrays"
+      ],
+      "exit": 1,
+      "total": 34,
+      "passed": 32,
+      "failed": [
+        "lifecycle_multitu_0",
+        "lifecycle_multitu_1"
+      ],
+      "evidence": "/tmp/pa21-113/validation-final/automatic_arrays/results.json",
+      "evidence_sha256": "8202f2ce8ef4282f2de67648a83cb49d39d60846403daa6ae4effb6506dc1cdc",
+      "log_sha256": "ab71f10240272df3c28893ebc3aaa395d706624fefb7d774c24c10062d2e1109"
+    },
+    "continuation": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/continuation111.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/continuation"
+      ],
+      "exit": 0,
+      "total": 13,
+      "passed": 13,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/continuation/results.json",
+      "evidence_sha256": "5293c8e21df3610109bc926659412f03bf3b29e74fffad1afd52d4603e8f9820",
+      "log_sha256": "6b5eac3d67a3ea9dcdc283ce4871180c0d138862658253585b6eb93db3f2d481"
+    },
+    "construction": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/construction110.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/construction"
+      ],
+      "exit": 0,
+      "total": 13,
+      "passed": 13,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/construction/results.json",
+      "evidence_sha256": "e222bb987a3b36d06980c6c6caa61f1eb2527e39dba7d81eab489464b1474f32",
+      "log_sha256": "e656a8366cec62f4e6bb6b4703bb4fee03583fe84016d1a30153c2da7f89f42a"
+    },
+    "closure": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/closure110.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/closure"
+      ],
+      "exit": 0,
+      "total": 27,
+      "passed": 27,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/closure/results.json",
+      "evidence_sha256": "e38859be91875a9c66c266bf5b49be24efc19ac39b39986c08bba427923ffc0c",
+      "log_sha256": "095137feb5a3d069276d8b7d09ea6645fa827b805dfec63a62f4166f6ab398d6"
+    },
+    "jumps": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit109.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/jumps"
+      ],
+      "exit": 0,
+      "total": 22,
+      "passed": 22,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/jumps/results.json",
+      "evidence_sha256": "ba41b747e33e1811d81ce0412f557cf5e59adaf0952f9034d0588f993c33b273",
+      "log_sha256": "df9076d94ccc07492189b2d9f9901f1519995108a844e71ab74ecb95e20f0134"
+    },
+    "ownership": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/ownership108.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/ownership"
+      ],
+      "exit": 0,
+      "total": 134,
+      "passed": 134,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/ownership/results.json",
+      "evidence_sha256": "5f1111b3e3bb4c07663f1e29d054ff9f578afbaea5902775c54914529564f870",
+      "log_sha256": "34db012bf83d41211845adf4866bfd94713141278ca4c7cb727da67bc4c54ba7"
+    },
+    "full_expression": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/full_expression107.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/full_expression"
+      ],
+      "exit": 0,
+      "total": 43,
+      "passed": 43,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/full_expression/results.json",
+      "evidence_sha256": "9bdaee70b07ed734369f31ab57ecb9e5a13d1a125092bf1ef9988b35764feae7",
+      "log_sha256": "9b8b9051d014387f3005c30694304a140a6a0a7f49e69bf92a22874dd65bdef2"
+    },
+    "exceptions": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/exceptions106.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/exceptions"
+      ],
+      "exit": 0,
+      "total": 36,
+      "passed": 36,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/exceptions/results.json",
+      "evidence_sha256": "d6e75a803745d8809984934deef23e2c171a0c256e515baa2c94a15b7d09a866",
+      "log_sha256": "be85bb1d62ee0235915dd73d3c984b8bdf6104fe775780b6fe47fe406443219e"
+    },
+    "composition": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit105.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/composition"
+      ],
+      "exit": 0,
+      "total": 16,
+      "passed": 16,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/composition/results.json",
+      "evidence_sha256": "0a4805fd4497c082734aa02ce912cfe60ddc5ace462ea6530015b35318564d84",
+      "log_sha256": "421c35d477fe38240a8f1928387bad07dce8e29b1ebcc56e5af90bd3125b4f56"
+    },
+    "prefix_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit105_eh.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/prefix_unwind"
+      ],
+      "exit": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/prefix_unwind/results.json",
+      "evidence_sha256": "df26d6a6305bc298db25614e1ccaccb3adb3775cdbd95d2e7736b7ce8fad10c7",
+      "log_sha256": "bd41ecaa2118a9a5d1cba746a58bed882c9fa874c9153f64766784d6baf95667"
+    },
+    "rtti": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/rtti102.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/rtti"
+      ],
+      "exit": 1,
+      "total": 60,
+      "passed": 59,
+      "failed": [
+        "public_base_inside_private_derived"
+      ],
+      "evidence": "/tmp/pa21-113/validation-final/rtti/results.json",
+      "evidence_sha256": "7ce8603af58b1794675cb72b861f151f17db3ae53d3f6d7bf3f8c893626642d0",
+      "log_sha256": "0300e1ff8eb5cb6a346736a965955886c8fac1e16d134a0ba88b5b47007a5382"
+    },
+    "host_rtti": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/host_rtti102.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/host_rtti"
+      ],
+      "exit": 0,
+      "total": 48,
+      "passed": 48,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/host_rtti/results.json",
+      "evidence_sha256": "30f8831891936d28ae7f56130870f4433e7c348595752fce5242862662dcd731",
+      "log_sha256": "3a37a038f4fb56e9ad7ea3d9076407c25c7da087091cd18d270ca96f68612b6b"
+    },
+    "captures": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/capture103.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/captures"
+      ],
+      "exit": 0,
+      "total": 64,
+      "passed": 64,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/captures/results.json",
+      "evidence_sha256": "abcb52c70c0287fc70131637750ca1be5b9e7b03417485b7b6b927c0f126072b",
+      "log_sha256": "3ee4ef83e737da5e158f4f9aca7feaa72aa5756a4f7e77ec473fb7cf24390425"
+    },
+    "capture_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/capture_eh103.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/capture_unwind"
+      ],
+      "exit": 0,
+      "total": 13,
+      "passed": 13,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/capture_unwind/results.json",
+      "evidence_sha256": "50594ea6c1e1eb7f44bb8bfd160b37e3570d59db7c610703b7e24e64446f5362",
+      "log_sha256": "7ed45638e85d5d8440de61dc520c6add066f57f6eb256a2995f4fa05d4f88de0"
+    },
+    "lists": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/list104.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/lists"
+      ],
+      "exit": 0,
+      "total": 51,
+      "passed": 51,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/lists/results.json",
+      "evidence_sha256": "c3f3d0b41c4b20e0a37508edd2c66cb03acd007757e8f03d009b3d6f7c68e389",
+      "log_sha256": "0b8b3f4337531a2d0f0b4841b08e27666f611b8c67c79edeb7536201f01d92a7"
+    },
+    "list_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/list_eh104.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/list_unwind"
+      ],
+      "exit": 0,
+      "total": 25,
+      "passed": 25,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/list_unwind/results.json",
+      "evidence_sha256": "a2dcdb49d840cc2c4f06015b40c75667c7ba87e4ad606dc5d442d6a3792679df",
+      "log_sha256": "e8e97bf455f88c66f93da7a5c3d8321f0499e49e647a7b6c543db34f54fea14f"
+    },
+    "inherited_captures": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/capture98.py",
+        "/tmp/pa21-113/compiler-final",
+        "/tmp/pa21-113/validation-final/inherited_captures"
+      ],
+      "exit": 0,
+      "total": 58,
+      "passed": 58,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/inherited_captures/results.json",
+      "evidence_sha256": "60fa95b08e125175414b81c42ffa9cce77ffbfb58e2a966fa664cec41186143c",
+      "log_sha256": "2d1446876a138b4903418a5a1f6f1679ddbb49d627a2af466f401abd3f7eb559"
+    },
+    "zero_slot": {
+      "exit": 0,
+      "total": 6,
+      "passed": 6,
+      "failed": [],
+      "evidence": "/tmp/pa21-113/validation-final/zero-slot/results.json",
+      "evidence_sha256": "93a0383e51ba06cb6f63889a0dca35f2cce8e30dba8a5d21d4b5a818b36242d7"
+    }
+  },
+  "automatic_array_backend_limits": [
+    {
+      "name": "lifecycle_multitu_0",
+      "entry_and_final_ir_sha256": "c6642142a0441a5b38e44997e8494abf704288906281cd7f358220e2eb0da198",
+      "commands": [
+        {
+          "argv": [
+            "/tmp/pa21-113/compiler-A",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0-entry.lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization/lifecycle_caller.cpp",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization/lifecycle_second.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0.o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0.o",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0.host"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_0.host"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "freestanding_exit": 1,
+      "freestanding_diagnostic": "ERROR: undefined native symbol: __builtin_abort referenced by _Z5leavei\n"
+    },
+    {
+      "name": "lifecycle_multitu_1",
+      "entry_and_final_ir_sha256": "b653dcc2ed466582a1db5b3ae00dcce0c42b79e3ed4311405e82794a35f6313b",
+      "commands": [
+        {
+          "argv": [
+            "/tmp/pa21-113/compiler-A",
+            "--emit-lowir",
+            "-O0",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1-entry.lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization/lifecycle_second.cpp",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization/lifecycle_caller.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1.o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1.o",
+            "-o",
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1.host"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-113/validation-final/automatic_arrays/lifecycle_multitu_1.host"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "freestanding_exit": 1,
+      "freestanding_diagnostic": "ERROR: undefined native symbol: __builtin_abort referenced by _Z5leavei\n"
+    }
+  ],
+  "reference102": {
+    "exit": 0,
+    "output_sha256": "a64336add1a382a235e71919976dde5e68a2cffb1d6630991d08fed74a666fab"
+  },
+  "reference106": {
+    "exit": 0,
+    "output_sha256": "9f343133cf8ae5148b399f99663e167c23caa1fb8072a26b19996783a9d7a1a4"
+  },
+  "reference108": {
+    "exit": 0,
+    "output_sha256": "5d4978876cb22c0b5acec47300e12bc51c21259c80dc76f2ffd141548950d50e"
+  },
+  "reference110": {
+    "exit": 0,
+    "output_sha256": "e4f78f4e9139d1698d513340de080e7dcb193b69cff743e7eec4d6138b7faf53"
+  },
+  "reference112": {
+    "exit": 0,
+    "output_sha256": "20803ecc931483988352c0fd355e4c9484c23430d0d6cbd5bc8785864288e46b"
+  },
+  "reference113": {
+    "exit": 0,
+    "output_sha256": "f00679b7c574705a09eef132efaac0ff23f92c6f49d9d5ae52bd2689dc862769"
+  },
+  "reference112_execution": {
+    "exit": 0,
+    "evidence": "/tmp/pa21-113/validation-final/reference112/results.json",
+    "evidence_sha256": "c56b3bfb7f6663edb484a83acaa700670aaea7d5c3a4bb6fcb0c81cf269c40c3",
+    "rows": {
+      "host": "void throw_long() { throw 7; }\nextern \"C\" void injected() { throw 9L; }\nextern \"C\" int fixture_main();\nint main() { return fixture_main(); }\n",
+      "rows": [
+        {
+          "name": "original",
+          "lowir_sha256": "c1e94dd58e85f7fe89ceefa11fbfd5ff2e869aca5f3f3e42b025190d22281f6e",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/original.o",
+                "/tmp/pa21-113/validation-final/reference112/original.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference112/driver.cpp",
+                "/tmp/pa21-113/validation-final/reference112/original.o",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/original"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference112/original"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "revised",
+          "lowir_sha256": "f3139d62012645822ffbc0949f4f496f6a53cbfd762a9e2556919f576a94abe5",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/revised.o",
+                "/tmp/pa21-113/validation-final/reference112/revised.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference112/driver.cpp",
+                "/tmp/pa21-113/validation-final/reference112/revised.o",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference112/revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "region-count-2",
+          "source": "declare function @may_throw() -> void\nfunction @reduced() -> void {\n block ^entry:\n  eh_try ^outer\n  eh_cleanup ^active_outer\n  eh_cleanup ^active_inner\n  call void @may_throw()\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_inner:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^active_outer:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^outer:\n  eh_catch_all, 1\n  return void\n}\n",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/region-count-2.o",
+                "/tmp/pa21-113/validation-final/reference112/region-count-2.lowir"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": "ERROR: host EH protected region remains active at function exit: reduced block active_inner\n"
+            }
+          ]
+        },
+        {
+          "name": "region-count-3",
+          "source": "declare function @may_throw() -> void\nfunction @reduced() -> void {\n block ^entry:\n  eh_try ^outer\n  eh_cleanup ^active_outer\n  eh_cleanup ^active_inner\n  call void @may_throw()\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_inner:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_outer:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^outer:\n  eh_catch_all, 1\n  return void\n}\n",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/region-count-3.o",
+                "/tmp/pa21-113/validation-final/reference112/region-count-3.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "array-original",
+          "lowir_sha256": "56b5ed682ebb9b04bc76e89e7a51ebc4fb60d28deb0103de055461b5b8cdbb1f",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/array-original.o",
+                "/tmp/pa21-113/validation-final/reference112/array-original.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference112/array-original.o",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/array-original"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference112/array-original"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "array-revised",
+          "lowir_sha256": "09dd94e19e98dbd5051417615e0f3498632424c7350cb27e59df20414567dcaa",
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/array-revised.o",
+                "/tmp/pa21-113/validation-final/reference112/array-revised.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference112/array-revised.o",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference112/array-revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference112/array-revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "reference113_execution": {
+    "exit": 0,
+    "evidence": "/tmp/pa21-113/validation-final/reference113/results.json",
+    "evidence_sha256": "7db4a7d9c71da3839d08d89f487a84fa5f2cd234405eaae2f31377e4fc6d9fb0",
+    "rows": {
+      "shim": "#include <cstdlib>\n#include <new>\nint allocations;\nvoid* operator new(std::size_t size) { ++allocations; return std::malloc(size); }\nvoid operator delete(void* p) noexcept { --allocations; std::free(p); }\nstruct S { S(); };\nS::S() { throw 7; }\nextern \"C\" int fixture_main();\nint main() { try { fixture_main(); } catch (int n) { return n!=7 || allocations; } return 2; }\n",
+      "rows": [
+        {
+          "name": "original",
+          "expected_exit": 1,
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference113/original.o",
+                "/tmp/pa21-113/validation-final/reference113/original.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-std=c++11",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference113/original.o",
+                "/tmp/pa21-113/validation-final/reference113/runtime.cpp",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference113/original"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference113/original"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "revised",
+          "expected_exit": 0,
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference113/revised.o",
+                "/tmp/pa21-113/validation-final/reference113/revised.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-std=c++11",
+                "-no-pie",
+                "/tmp/pa21-113/validation-final/reference113/revised.o",
+                "/tmp/pa21-113/validation-final/reference113/runtime.cpp",
+                "-o",
+                "/tmp/pa21-113/validation-final/reference113/revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/tmp/pa21-113/validation-final/reference113/revised"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

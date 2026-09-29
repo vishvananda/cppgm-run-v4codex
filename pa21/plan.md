@@ -1,105 +1,100 @@
-# PA21 compact plan — implementation 112
+# PA21 compact plan — final audit 113
 
-Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
-Target: **PA21 full-stage**. Phase: **implementation handoff complete; full audit pending**.
-Entry: clean `9457e2fca6bdb876eaee509b0481f631b13587b4`, **114/116**.
-Previous goal turn: **progress** (committed implementation and evidence).
-Current required checks: **116/116 PA21**, **3596/3596 earlier PAs**,
-**3712/3712 through PA21**; file audit passes with three inherited warnings.
-Both original failures are resolved. All required checks are recorded against
-the committed implementation and the frozen measured compiler.
+Target: **PA21 full-stage**. Phase: **audit complete**.
+Stage base: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
+Audit entry: clean `f3af4630` (completed implementation 112).
+Last independently reviewed implementation: `30aec177a33f45e1cfb07d43a1790862704e8664`.
+No PA21 implementation handoff remains unaudited; no advancement to PA22 was
+performed in this task.
 
-## Completed owners and spec alignment
+## Final design and Spec Alignment
 
-| Owner | Data flow, complexity and evidence |
-|---|---|
-| Exhaustive source dispatch | Checked handler types → catch-all fact plus parent context/live prefix → O0 miss-edge emission. A parent summary distinguishes catch-only entries from cleanup-bearing entries. Compute once with O(1) parent access and one additional scan of each try's handlers; no ancestor query, global scan or fixed point. |
-| Region and lifetime continuation | Real typed-catch misses retain the existing full live/handler/terminal identities. Exhaustive synthetic misses omit exits only for a parent catch-only entry or no parent; active-handler and cleanup-bearing joins retain balanced exits. Contexts are function-owned and reset between bodies; stable IDs survive vector growth. |
-| Constant automatic arrays | The inherited PA16 owner already consumes checked constant initializer plans, interns typed readonly images and copies into distinct automatic storage. PA16 explicitly mandates that form. The old PA21 reference's stores were an inconsistent contract example, not a legitimate reason for a template/name-specific materialization switch. |
+The cumulative compiler keeps immutable source buffers, a streaming token cursor
+and one parsed source graph with compact canonical semantic facts. Template
+specializations use retained regions, immutable substitution frames and demand
+states; fixed expressions are reused. Indexed lookup selects declarations and
+conversions once. Typed LowIR consumes construction, lifetime, RTTI, capture,
+initializer-list and ABI records directly. There is no production text roundtrip
+or host/reference implementation delegation.
 
-Implementation `e32e9f2f` resolves the exhaustive-dispatch mismatch and two
-reference defects documented in [reference corrections 112](reference-corrections112.md).
-The array correction follows the explicit inherited course rule. The raw
-nested-handler correction supplies three explicit exits for three retained
-regions, preserving all destructor/end-catch operations and the 106 correction.
-It does not claim that the supplied backend rejects the old full fixture: its
-shared-entry reconciliation masks the missing exit. The isolated IR reducer
-exposes it. Exact reconstruction uses committed input bytes, not student output.
+The [whole-stage audit](audit.md) reconstructs §§1–10 of `spec.md` from source,
+traces a nontrivial declaration and two demanded template bodies through LowIR
+and supplied ELF execution, and reviews all **42** stage commits / **93** changed
+implementation paths. The prior [105](audit105.md) and [109](audit109.md) reviews
+are preserved. Current evidence includes plain-versus-telemetry output identity,
+precise demand/work counters, native disassembly and one compiler `execve`.
 
-New controls cover scalar/class throws, direct calls, returns, rethrow,
-catch-all/typed dispatch, live outer handlers, goto, templates, local class
-specializations, distinct mutable arrays and arrays in handlers. **22/22 pass**.
-The initial overbroad catch-all omission broke one rethrow control; its
-observations are preserved, and the parent dispatch summary repairs it.
-No production text transport, semantic name matching, new owning graph,
-process-global cache, code cloning or host implementation delegation was added.
+## Completed audit repairs
 
-## Remaining implementation and independent review
+- Stable-index emission drains nested omitted-aggregate helper requests exactly
+  once, without invalidating vector traversal or leaving missing bodies.
+- Automatic and heap-array prefixes compose with source catches, enclosing live
+  objects, active handlers and default-argument temporaries.
+- Typed release actions retain failed-new and throwing-delete storage ownership;
+  remaining array elements are destroyed before storage is released. Placement
+  arguments are saved once; matching, sized delete, access and body demand stay
+  with the semantic owner.
+- Implicit runtime declarations no longer inherit an enclosing template head.
+  New-array/delete query facts and dependent allocation ABI expressions reach
+  lowering and encoding without reconstructing source semantics.
+- Dynamic `typeid` blocks aggregate-helper argument hoisting because its operand
+  can observe previously initialized members. Static type queries retain the
+  proven small form.
 
-No known required PA21 implementation group remains open. Accumulated controls
-and handoff evidence are complete. Required sources/statuses and comparison
-rules are unchanged.
-The only contract-path changes from entry are the two proved `.ref` revisions.
+The [one reference correction](reference-corrections113.md) supplies missing
+failed-constructor release in an inherited PA12 fixture. Its C++11 proof,
+reduced original/revised execution, bundle revision and exact reconstruction
+are recorded. Sources, exit statuses, comparisons and coverage are unchanged.
+All six accumulated reference-revision scripts pass.
 
-Independent **whole-stage audit remains required** before PA22. It must review
-the accumulated range since `f57bdd3b`, including prior callee-effect proofs,
-lifetime/handler identities and the reference-correction chain, as well as the
-new parent-summary validity and the distinction between an unreachable selector
-edge and a live raw cleanup. The existing [audit](audit.md) and [105 review](audit105.md)
-remain authoritative review records; neither marker moves during implementation.
-Passing course checks does not waive the independent architecture/spec review.
+## Performance acceptance and budgets
 
-## Performance and validation evidence
+[Performance 113](performance113.md) retains frozen binaries, inputs, flags,
+A/A calibration, ABBA samples, paired spreads, compiler latency/RSS, checked
+runtime and actual hosted ELF `.text`. Earlier campaigns and noisy observations
+are preserved. The five common workloads have identical LowIR and native
+instruction bytes. Compiler text adds 16,064 bytes (0.72%); template peak RSS
+is 108,212 versus 107,712 KiB. The affected heap executable adds 122 bytes and
+32 bytes of frame reservation; its hosted runtime medians are 194.16 / 195.51 ms,
+within paired variation. No general speedup is claimed.
 
-[Performance 112](performance112.md) records frozen A/A and ABBA compiler latency,
-peak RSS, checked runtime and native text. Compiler text adds **704 bytes
-(0.0317%)**. At 512/2048 handler functions the output removes exactly **one dead
-LowIR instruction per function**; native text and semantic/full-expression work
-are unchanged. Additional compiler work is O(handlers + contexts), with one
-boolean in each existing context record and no output growth. Timing spreads
-do not establish a general speedup. The five common workloads produce
-byte-identical executables; their runtime noise is retained explicitly.
+The independent growth controls retain each helper once and show proportional
+work/output for 512→2048 source-handler functions. Small array/list expansion
+remains capped at eight; larger counts use loops. Local completed-body proofs
+have bounded per-owner work and conservative fallbacks. Function-local release
+pools/caches are reset; complete context identities govern cleanup sharing.
 
-This is required PA21/O0 dispatch behavior, not an optional runtime transform.
-Historical +15%, +16 MiB and 5.5× diagnostic targets add no exit gate; mandated
-limits, correctness and coverage remain binding. Preserve [111](performance111.md),
-[110](performance110.md) and earlier measurements. Student native optimization,
-debug encoding and self-hosting remain later-stage owners.
+Historical +15%, +16 MiB and 5.5× targets remain diagnostics, not extra exit gates.
+That stage-scoped classification preserves every measurement and all mandated
+limits, correctness and coverage. Required ownership cost is disclosed; it does
+not license an unprofitable optional transform. Student native optimization,
+allocator/debug work and self-hosting remain with later stages.
 
-[Validation 112](../student.tests/pa21/validation112.json) records the required
-checks, the exact two-to-zero original failure reduction, 116 unchanged source
-identities and the 15048-path contract inventory. Personal suites record **687/690** passes on their original backend lanes,
-including **22/22** new controls. The three failures are retained supplied-backend
-limits: the previously recorded freestanding RTTI case passes its hosted
-counterpart, and two inherited PA16 multi-TU lifecycle cases cannot resolve
-`__builtin_abort` through the freestanding backend. Both latter cases have
-byte-identical entry/current LowIR with `object=abort`, and both pass through the
-supplied object backend and host runtime (**2/2** additional checks). No source,
-comparison, failure result or required check is removed to accommodate them.
-All five reference-revision scripts and all six new reference observations are
-verified. Native execution corroborates the cited proofs; it does not replace
-course LowIR comparisons.
+## Validation and ledger
 
-## Handoff ledger
+Final [required checks and coverage](../student.tests/pa21/audit113-validation.json):
+file audit **pass** (three inherited header-organization warnings),
+`make test-pa21` **116/116**, and `make test-report-through-pa21`
+**3712/3712**, **21/21 stages**, plus **22** separately reported property checks.
+The only contract-path change from entry is the proved PA12 `.ref` revision.
 
-102–104: RTTI/casts, captures/copies, lists/demand; **71/116**.
-105: audit through `f65eae8d`, record `06b2d989`; 45 failures retained.
-106: `9c4f64da` through `c64e88fb`; EH/lifetimes, **92/116**.
-107: `b821682b`, `20476a77`; expressions/defaults/consumers, **101/116**.
-108: `2e392cec`, `a30acab5`; destination/construction ownership, **108/116**;
-evidence through `e6582e37`.
-109: accumulated audit through `f57bdd3b`; protected jumps repaired;
-eight required comparisons retained; recorded at `d9528e58`.
-110: `f724bc43`, `6b3aecdb`, `bdfdb31b`, `df6e8299`; handler/static/list/array
-ownership, generated construction and bounded sharing; **113/116**;
-evidence `0e5a32dd`, **3596/3596** earlier cases.
-111: `3028366d` proves completed scalar-body effects, **114/116**;
-final evidence `9457e2fc`, **633/634** controls (one supplied-backend discrepancy).
-112: `707b06d7` records entry; `e32e9f2f` completes dispatch and reference
-alignment, **116/116**; `e70d2cee` retains frozen performance evidence.
-Final evidence records **116/116**, **3712/3712**, passing file audit and the
-complete personal/backend results above. The handoff boundary is the completed
-PA21 implementation, including the two formerly open owners. Stage base and
-last-reviewed commits are unchanged. Return to Ralph for independent full audit;
-this handoff does not certify that audit or advance to PA22.
+New controls improve **13/46 → 46/46**; **4/4** access/demand controls and a
+cross-object executable covering **14** allocation ABI signatures pass.
+The [inherited rerun](../student.tests/pa21/validation113.json) records
+**687/690** original lanes plus **2/2** hosted lifecycle controls. The three
+original failures are retained supplied-backend limitations: one freestanding
+RTTI case passes its hosted counterpart, and two lifecycle cases have identical
+entry/final LowIR and pass hosted execution. No required failure is waived.
+
+102–104: RTTI/casts, captures and list demand (71/116).
+105: checkpoint through `f65eae8d`.
+106–108: EH, full-expression and destination/construction ownership (108/116).
+109: checkpoint through `f57bdd3b`, protected-jump repair.
+110: `6b3aecdb`, `bdfdb31b`, `df6e8299` — handlers/statics/arrays, generated
+construction and bounded helper sharing (113/116).
+111: `3028366d` — completed scalar-body effect proof (114/116).
+112: `e32e9f2f` through `f3af4630` — exhaustive dispatch and reference alignment
+(116/116), frozen measurements and validation.
+113: `30aec177` — independently reconstructed whole-stage audit and ownership,
+query/ABI and optimization-legality repairs; final evidence and consolidation.
+All 110–112 handoffs since the last checkpoint are included in this review.

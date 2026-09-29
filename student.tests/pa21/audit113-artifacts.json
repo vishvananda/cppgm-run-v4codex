@@ -1,0 +1,16 @@
+{
+  "artifact_root": "/home/vishvananda/work/private/v4codex/artifacts/pa21-audit113",
+  "manifest_sha256": "d23a7cfcc292683169447497adf6c63fb9d818270479bba23ff4d38d192a7b6c",
+  "files": 6424,
+  "bytes": 105136853,
+  "frozen_binaries": {
+    "compiler-A": {
+      "bytes": 2750400,
+      "sha256": "3550213c5e30f9329593bec04df573e045b3ca4d74669e78f70c280eafdf114c"
+    },
+    "compiler-final": {
+      "bytes": 2772328,
+      "sha256": "8e06eea800b20675d8292fbc7346d58fac267693aa653c0569547db722e87c5d"
+    }
+  }
+}
