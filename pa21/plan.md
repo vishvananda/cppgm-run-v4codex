@@ -1,16 +1,31 @@
-# PA21 compact plan — implementation 111
+# PA21 compact plan — implementation 112 (in progress)
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
-Target: **PA21 full-stage**. Phase: **implementation handoff**.
-Entry: clean `0e5a32ddec4027d67d38aa98263f964b383dbed2`, **113/116**.
+Target: **PA21 full-stage**. Phase: **implement**.
+Entry 112: clean `9457e2fca6bdb876eaee509b0481f631b13587b4`, **114/116**.
+Frozen entry compiler: `/tmp/pa21-112/compiler-A`.
 Previous goal turn: **progress** (committed ownership fixes and validation).
 Current: **114/116**, one original failure resolved; earlier PAs **3596/3596**,
 through PA21 **3710/3712**, file audit passes with three inherited header warnings.
 All 116 required sources, references and comparison rules remain unchanged in 111.
 PA21 remains incomplete; a passing through report is still required to advance.
 
-## Completed group and spec alignment
+## Implementation 112 work map
+
+- Constant-array owner: checked initializer plan → typed materialization policy →
+  stores or pooled data. Reconcile both inherited contracts using general semantic
+  facts; no fixture/name/template switch. Work must stay linear in checked actions
+  and emitted bytes. Validate PA17/21 comparisons and explicit array controls.
+- Source-handler owner: lexical context plus actual retained LowIR regions →
+  ordered cleanup/handler exits → parent dispatch. Trace raw landing pads, catch
+  misses, active-handler destruction and catch-all reachability together; preserve
+  complete continuation identities. Validate executable nesting/jump controls.
+- Freeze A/B and inputs, measure compiler latency/RSS and checked runtime/text
+  with A/A and ABBA evidence; run prior-through, PA21, through-PA21 and file audit.
+- Independent review remains separate; do not move either review marker.
+
+## Previous completed group and spec alignment
 
 | Owner | Data flow, complexity and validation |
 |---|---|
