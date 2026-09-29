@@ -4,6 +4,12 @@ bool Analyzer::deduce_sequence(const std::vector<ArgumentId>& pattern, const std
     Index& bindings, DeductionKind kind, std::uint32_t prefix)
 {
     auto expansion = [&](ArgumentId arg) { return !value_argument(arg) && types[arg].kind == TypeKind::PackExpansion; };
+    // [temp.deduct.type]/9: a nonfinal template argument expansion makes the
+    // entire list non-deduced, including its fixed prefix and suffix. Function
+    // parameter lists handle their nonfinal packs in deduction_parameters.
+    // The completed specialization must still pass conversion/target matching.
+    for (unsigned j = 0; j+1 < pattern.size(); ++j)
+        if (expansion(pattern[j])) return true;
     unsigned fixed = pattern.size();
     bool pack = fixed && expansion(pattern.back());
     if (pack) --fixed;

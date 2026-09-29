@@ -7,6 +7,10 @@ import sys
 import ordering_controls as runner
 
 runner.GOOD = {
+    'template_list': 'template<class...T>struct L{};template<class...T>int f(L<T...,int>){return sizeof...(T);}int main(){return f<long>(L<long,int>())!=1||f(L<int>())!=0;}',
+    'template_list_other_argument': 'template<class...T>struct L{};template<class U,class...T>int f(L<T...,U>,U){return sizeof...(T);}int main(){return f<int,long>(L<long,int>(),3)!=1||f(L<int>(),3)!=0;}',
+    'template_list_query': 'template<class...T>struct L{};template<class...T>long f(L<T...,int>);template<class U>auto g(U)->decltype(f<int>(L<int,int>())){return 7;}int main(){return g(0)!=7;}',
+    'template_list_target': 'template<class...T>struct L{};template<class...T>int f(L<T...,int>){return sizeof...(T);}int main(){int(*p)(L<long,int>)=f<long>;return p(L<long,int>())!=1;}',
     'default_before_pack': 'template<class...T>int f(int x=7,T...v){return sizeof...(v)+x;}int main(){return f()!=7||f(3,1,2L)!=5;}',
     'defaults_surround_pack': 'template<class...T>int f(int x=3,T...v,int y=7){return sizeof...(v)+x+y;}int main(){return f()!=10||f<int,long>(3,1,2)!=12;}',
     'empty': 'template<class...T>int f(T...v,int x){return sizeof...(v)+x;}int main(){return f(3)!=3;}',
@@ -40,6 +44,9 @@ runner.GOOD = {
     'retained_default': 'template<class...T>int f(T...v,int x=7){return sizeof...(v)+x;}template<class U>int g(U){return f<int,long>(1,2);}int main(){return g(1)!=9||g(2L)!=9;}',
 }
 runner.BAD = {
+    'template_list_not_deduced': 'template<class...T>struct L{};template<class...T>int f(L<T...,int>){return 1;}int main(){return f(L<long,int>());}',
+    'template_list_suffix_not_deduced': 'template<class...T>struct L{};template<class U,class...T>int f(L<T...,U>){return 1;}int main(){return f(L<int>());}',
+    'template_list_prefix_mismatch': 'template<class...T>struct L{};template<class...T>int f(L<T...,int>){return 1;}int main(){return f<long>(L<int,int>());}',
     'default_on_pack': 'template<class...T>int f(T...v=0){return sizeof...(v);}int main(){return f();}',
     'no_pack_deduction': 'template<class...T>int f(T...,int){return 1;}int main(){return f(1,2);}',
     'short_explicit': 'template<class...T>int f(T...,int){return 1;}int main(){return f<int,long>(1,2);}',
