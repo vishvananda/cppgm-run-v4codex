@@ -1,73 +1,69 @@
-# PA20 compact plan — implementation handoff 100
+# PA20 compact plan — final audit 101
 
-Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
-Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
-Target: **PA20 full-stage**. Phase: **implementation handoff; stage tests pass**.
-Entry: `2e31ab57e7ba3371ca5c59057ede55b435d4a666`, clean, **143/144**.
-Implementation boundary: `7925464d` (following `db0f82f1`). Final records only
-follow this boundary. [Audit 97](audit.md) and its markers remain in force.
-Previous goal turn: **progress**, established by the aggregate/value changes
-and their validation. No previous task process remained live at entry.
+Stage base: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
+Audit entry: `8c86c298`. Last reviewed implementation: `806b38fb`.
+Target: **PA20 full-stage**. Phase: **final audit complete**.
+Previous handoff: **progress**, confirmed by commits and the primary log;
+this audit adds a verified correctness repair, controls, traces and measurements.
 
-## Design and spec alignment
+## Final Spec Alignment
 
-| Owner | Data flow and invariants | Complexity / lifetime |
-|---|---|---|
-| Retained grammar / declaration environment | Parser category alternatives and angle locations → actual statement scope → canonical specialization/member lookup → selected source grammar → ordinary typed facts/LowIR. The first local declaration changes the next lookup; the apparent second declaration becomes the hidden-friend comparison. | Linear names/parts/operand structure plus existing canonical demand. Source interpretation precedes publication, is shared across specializations and cannot mutate a published region. No replay, copied tree, textual key or lowering reconstruction. |
-| Delimiter prediction | Specialization categories remain alternatives independent of source order. A failed angle probe marks all its still-open prefixes on the live cursor. | Linear scanning; successful/failed lookahead is reused. Cursor-owned state disappears with consumed tokens. Lexical hiding remains separate from specialization alternatives. |
-| Inherited completed PA20 owners | Deduction, arrays, range lifetime/operations, lambda captures/callable entries, aggregate transport and separate argument/result ABI facts feed typed lowering. | Prior ownership, demand and expansion bounds remain; evidence and review obligations in handoffs 94–99 are preserved. |
+**Pass for PA20/O0.** [Independent source review](audit.md) reconstructs the
+whole stage, including all work since checkpoint 97. Streaming immutable-source
+input feeds one source graph with canonical semantic facts. Compact occurrence
+contexts reuse parsed template bodies and fixed facts; complete typed keys,
+monotonic states and targeted queues govern demand. Lowering consumes selected
+operations, capture IDs, initialization/lifetime plans, layout and ABI facts
+directly into typed LowIR. TU and function scratch have explicit release points.
+Only test tools invoke the supplied native backend.
 
-Inspection replaced the proposed body-scheduling change with the existing
-source-ambiguity boundary. The implementation extends that owner through
-specialization order, aliases, lexical/control scopes, functions, members,
-lambdas, template reuse, operator precedence, multiple arguments and ordinary
-operand forms. Interpretation uses the shared operator precedence table.
-Unknown/dependent facts retain the existing dependent-language checks; no
-specialization reparses grammar. No fixture or reference was changed this turn.
+| Owner | Final design / disposition |
+|---|---|
+| Deduction and initialization | Canonical cv/pointer/reference deduction, body-owned return deduction, complete array extents and shared query/evaluated conversion facts. |
+| Ranges and captures | Typed implicit operations and lifetime stacks; indexed reference/this capture environments. Audit repair binds captured range objects through their checked source expression, preserving original storage across arrays, member/ADL calls and specialization. |
+| Aggregate transport / result ABI | Completed immutable independence proofs, conservative ordered fallback, shared helper slots/keys, distinct parameter/result convention facts. |
+| Retained grammar | Scope-correct category selection before publication, original operands/precedence retained, published-node guards, live-cursor negative angle cache; no grammar replay or copied tree. |
 
-## Validation and performance
+The range shortcut defect affected 22 of 29 new controls at entry. All now pass.
+No PA20 defect is deferred. Student native optimization/allocation/debug/ELF and
+self-hosting remain their owning PA24–34 stages; advanced unsupported language
+features remain exactly those excluded by the PA20 handout.
 
-[Final validation](../student.tests/pa20/validation100.json): required PA20
-**144/144**; exact prior-through command **3452/3452**; through PA20
-**3596/3596**; file audit **pass**, same three inherited header warnings.
-Required failures fall **1→0**, with no new failures and unchanged coverage.
-The manifest checks all 639 fixture/contract/harness files; all 144 sources,
-statuses and comparisons are unchanged since entry. Historical reference
-revisions still match their preserved reducers and proofs.
+## Evidence and exit criteria
 
-Explicit personal controls **344/344** (303 inherited plus 41 new), four ABI
-checks, six source-to-native traces, historical reference proofs/executions
-and both versions of the repaired required program pass. The new trace checks
-one grammar interpretation reused by two specialization bodies, four calls,
-source-publication invariants and telemetry-independent output.
+[Current validation](../student.tests/pa20/audit101-validation.json): PA20
+**144/144**; `make test-report-through-pa20` **3596/3596**, **20/20 stages**, exit 0;
+required file audit **pass**, exit 0, same three advisory header warnings.
+The raw entry primary log has the same 3596 count; no coverage was reduced.
+All separately printed course controls also pass.
 
-[Performance evidence](performance100.md): frozen entry/final/input hashes,
-316 observations/34 warmups, A/A and four ABBA blocks, compiler latency/RSS and
-checked native runtime/payload. Qualified workloads show 1.2–4.2% median
-compiler growth and 160–224 KiB peak-RSS growth; compiler text grows 0.712%.
-Every equivalent A/B native executable is byte-identical. New grammar work is
-constant across 800/3200 body specializations; 40/600 negative angle controls
-show exactly proportional visits. No runtime optimization benefit is claimed.
-No new numeric gate replaces the stage-scoped acceptance or mandated bounds.
+Personal controls **373/373**; four ABI checks; six inherited traces plus
+[the current captured-range trace](../student.tests/pa20/audit101-trace.json).
+The latter records complete LowIR/native disassembly and compiler syscalls,
+checks two specialization bodies across three calls and verifies telemetry
+does not affect output. All reference reducers/reconstructions/executions pass:
+14 documented stage revisions, 639 fixture/contract/harness files unchanged
+since audit entry, no new reference correction.
 
-## Remaining implementation and independent review
+[Final performance](final-audit-performance.md): frozen stage-base/final and
+audit-entry/final binaries, fixed old/new workloads, A/A calibration and four
+ABBA blocks, compiler latency/RSS and checked native runtime/payload reported
+together. Required helper costs remain disclosed; repeated pointer-entry benefit
+is supported by runtime evidence. Incorrect baselines are excluded from A/B.
+**Stage-scoped acceptance passes**. Inherited +15%, +16 MiB and 5.5× targets are
+diagnostics under spec §9, as already classified by PA18/19; historical
+observations, correctness, coverage and mandated work/growth limits are preserved.
 
-**Unfinished implementation:** none identified under the shipped PA20 contract;
-no required failure or owner defect is deferred to PA21. This boundary completes
-the implementation handoff, not the assignment's independent audit.
+## Final ledger
 
-**Independent review, still mandatory:** review source grammar publication and
-projection, category alternatives/lexical hiding, argument reassociation and
-work bounds; review handoff 98 capture changes and handoff 99 transport/cache,
-helper sharing, result ABI and reference proof; resolve cumulative whole-stage
-architecture/performance findings before advancement. Passing tests does not
-waive these questions or change the preserved review markers.
+| Boundary | Reviewed outcome |
+|---|---|
+| 94–97, through `882cf523` | Architecture independently reconstructed; original review archived in [audit97.md](audit97.md); inherited controls/traces rerun. |
+| 98, through `a1faea7a` | Capture environments, packs, conversions and oracle proofs reviewed; composition repair completed here. |
+| 99, through `37f8300b` | Helper safety/cache/sharing, argument/result ABI and member-copy proof reviewed. |
+| 100, through `7925464d` | Grammar publication, lexical selection, operand reassociation and work bounds reviewed. |
+| 101, `806b38fb` | Captured range repair and complete validation committed; final measurements and consolidated records follow without production changes. |
 
-## Handoff ledger
-
-| Boundary | Completed work / evidence | Unfinished implementation | Independent review |
-|---|---|---|---|
-| Audit 97 | [Preserved ledger](audit.md#ledger), 121/144 | Original 23 failures | Reviewed through `882cf523`; markers retained |
-| Implementation 98, `e75e0d6c`→`a1faea7a` | Capture environments/conversions; 140/144, 264 controls; [measurements](performance98.md) | Aggregate/value and retained grammar (4 failures at that boundary) | Pending cumulative review |
-| Implementation 99, `16ac49da`→`37f8300b` | Aggregate transport/result ABI/member-copy proof; 143/144, 303 controls; [measurements](performance99.md) | Retained grammar (1 failure at that boundary) | Pending cumulative review |
-| Implementation 100, `2e31ab57`→`7925464d` | Semantic angle interpretation and related grammar; 144/144, through 3596/3596, 344 controls, six traces, file audit and [measurements](performance100.md) | None identified under the course contract | Full independent stage audit required; no advancement claimed |
+Outstanding PA20 implementation, independent review or unaudited handoff: **none**.
+All intended code, controls, evidence and records are committed before closure;
+the closing repository check must report an empty `git status --short`.
