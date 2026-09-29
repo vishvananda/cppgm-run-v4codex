@@ -4,7 +4,7 @@
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result,
-    ScopeId scope, bool direct, bool probe, const std::vector<Expression>* values)
+    ScopeId scope, bool direct, bool probe, const std::vector<Expression>* values, bool aggregate_fallback)
 {
     if (values && (!probe || values->size() != args.size())) throw std::logic_error("invalid constructor value probe");
     auto value = [&](unsigned i) { return values ? (*values)[i] : expressions[args[i]]; };
@@ -17,7 +17,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         return default_constructor(t, scope, !probe);
     EntityId binding = class_facts[entities[cls].class_info].constructor;
     if (!binding) {
-        if (!args.empty()) { if (probe) return 0; throw std::runtime_error("no matching constructor"); }
+        if (!args.empty()) { if (probe || aggregate_fallback) return 0; throw std::runtime_error("no matching constructor"); }
         return default_constructor(t, scope, !probe);
     }
     struct Viable { EntityId entity; std::size_t offset; };
@@ -50,7 +50,7 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
         }
         if (valid) viable.push_back({e, begin}); else sequences.resize(begin);
     }
-    if (viable.empty()) { if (probe) return 0; throw std::runtime_error("no viable constructor"); }
+    if (viable.empty()) { if (probe || aggregate_fallback) return 0; throw std::runtime_error("no viable constructor"); }
     auto preferred = [&](std::size_t a, std::size_t b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         if (better(x,y,args.size())) return true;

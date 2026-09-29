@@ -144,7 +144,19 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         return;
     }
     if (node.kind == Kind::UsingDeclaration) {
-        auto name = ast[node.first].detail; auto value = bind_template_name(name,s);
+        auto name = ast[node.first].detail, part = ast[name].last;
+        TemplateBinding value;
+        if (ast[part].op == KW_OPERATOR && ast[part].detail) {
+            // A using-declaration's conversion-type-id belongs to the using
+            // scope. It need not be a type name in the nominated base class.
+            auto type = ast[part].detail, specs = ast[type].first;
+            auto target = bind_template_type(specs,ast[specs].next,s);
+            auto previous = ast[name].first;
+            while (ast[previous].next && ast[previous].next != part) previous = ast[previous].next;
+            value = bind_template_name(name,s,previous);
+            value.dependent |= !target || dependent_type(target);
+            if (!value.dependent) value.entity = conversion_lookup(name_owner(name,s),target,false);
+        } else value = bind_template_name(name,s);
         if (value.dependent) {
             // A repeated terminal qualifier is an inherited-constructor using;
             // it does not introduce an ordinary name into the derived scope.

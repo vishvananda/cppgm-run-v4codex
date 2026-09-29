@@ -960,7 +960,7 @@ private:
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
     EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0,
-        bool direct = true, bool probe = false, const std::vector<Expression>* values = 0);
+        bool direct = true, bool probe = false, const std::vector<Expression>* values = 0, bool aggregate_fallback = false);
     bool converting_transfer(EntityId constructor, const Expression& call) const;
     Conversion result_conversion(EntityId constructor, const Expression& call, TypeId target);
     void constructor_actions(EntityId e);

@@ -157,6 +157,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     if (deleted_transfer(selected.entity))
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
+    require_deduced_return(selected.entity);
     if (!recipe) { demand_member(selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],

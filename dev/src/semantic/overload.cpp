@@ -254,16 +254,21 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         }
         if (auto fundamental = fundamental_cast_type(ast[callee].op)) cast_type = fundamental;
         if (cast_type) {
-            if (ast[args_node].kind == Kind::BracedInit && (class_value(cast_type) || types[cast_type].kind == TypeKind::Array)) {
+            if (class_value(cast_type)) complete_class(types[cast_type].entity);
+            auto list_value = [&]() {
                 auto c = list_initialization(args_node,cast_type,s,true);
+                cast_type = c.target;
                 result.type = cast_type; result.form = ExpressionForm::ListValue;
                 record_conversion(result,args_node,c); facts.edit(n).type = cast_type;
                 record_object(result,0,0,0);
                 object_uses[result.object_use].temporary = list_objects[conversions[result.conversions].materialization].temporary;
                 return result;
-            }
+            };
+            if ((ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) ||
+                types[cast_type].kind == TypeKind::Array) return list_value();
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
-                EntityId ctor = choose_constructor(cast_type, args, &result, s);
+                EntityId ctor = choose_constructor(cast_type,args,&result,s,true,false,0,aggregate_type(cast_type));
+                if (!ctor) return list_value();
                 if (converting_transfer(ctor,result)) {
                     auto c = result_conversion(ctor,result,cast_type);
                     result = Expression(); result.type = cast_type; result.form = ExpressionForm::Cast;

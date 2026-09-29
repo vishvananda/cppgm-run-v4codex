@@ -156,6 +156,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     } else {
         if (deleted_transfer(selected.entity)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
         if (!accessible(selected.entity,q.context,naming,object)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        if (!selected.surrogate) require_deduced_return(selected.entity);
         auto returned = types[selected.surrogate ? selected.surrogate : entities[selected.entity].type].child;
         r.expression.type = value_type(returned);
         r.expression.category = types[returned].kind == TypeKind::LRef ? ValueCategory::Lvalue :
@@ -179,6 +180,10 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         auto f = types[selected.surrogate];
         for (unsigned i = 0; i < f.count; ++i)
             if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    }
+    if (selected.builtin && builtins[selected.builtin-1].computation) {
+        Conversion computation; computation.target = builtins[selected.builtin-1].computation; computation.rank = 0;
+        chosen.push_back(computation);
     }
     r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
     conversions.insert(conversions.end(),chosen.begin(),chosen.end());

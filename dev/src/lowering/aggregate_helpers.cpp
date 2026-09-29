@@ -5,12 +5,23 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
     TypeId target = action.type;
-    if (auto known = aggregate_helpers.get(target)) return p.functions[known-1].symbol;
+    unsigned supplied = 0; bool transfer = false;
+    for (auto child = action.first; child; child = sem.initializers[child].next) {
+        supplied += sem.initializers[child].source != 0;
+        transfer |= sem.initializers[child].helper_transfer != 0;
+    }
+    // Scalar helpers differ by their explicit prefix; omitted trailing fields
+    // are initialized in the helper. Transfer recipes additionally own selected
+    // constructors and temporary identities, so those helpers belong to the
+    // complete semantic plan instead of being shared by target type alone.
+    auto identity = (std::uint64_t(target) << 32) | (transfer ? (std::uint32_t(1) << 31) | plan : supplied);
+    if (auto known = aggregate_helpers.get(identity)) return p.functions[known-1].symbol;
     AggregateHelper helper; helper.type = target; helper.actions = aggregate_actions.size(); helper.count = 0;
     std::vector<TypeId> parameters(1, sem.types.compound(TypeKind::Pointer, target));
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        aggregate_actions.push_back(child); ++helper.count; parameters.push_back(item.type);
+        aggregate_actions.push_back(child); ++helper.count;
+        if (item.source) parameters.push_back(item.type);
     }
     helper.function = FunctionId(p.functions.size()+1);
     lowir_model::Function f; f.symbol = fresh_symbol("@__aggregate_" + std::to_string(target));
@@ -22,7 +33,7 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     p.functions.push_back(f);
     auto& symbol = p.symbols[f.symbol.index-1]; symbol.kind = lowir_model::Symbol::FunctionSymbol;
     symbol.entity = helper.function.index; symbol.metadata.binding = ir_model::SBM_INTERNAL;
-    aggregate_helpers.put(target, helper.function.index); aggregate_definitions.push_back(helper);
+    aggregate_helpers.put(identity, helper.function.index); aggregate_definitions.push_back(helper);
     return f.symbol;
 }
 bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
@@ -34,13 +45,15 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     if (!action.first) return true;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (!item.field || (!type(item.type).scalar() && !item.helper_transfer) || (item.kind != InitKind::Scalar && item.kind != InitKind::Converted)) return false;
+        if (!item.field || (!type(item.type).scalar() && !item.helper_transfer) ||
+            (item.kind != InitKind::Scalar && item.kind != InitKind::Converted)) return false;
     }
     SymbolId callee = aggregate_helper(plan);
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(callee)); call_work.push_back(address(location).operand);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
+        if (!item.source) continue;
         call_work.push_back((item.kind == InitKind::Converted ? converted(item.source,sem.conversion_fact(item.conversion)) : initialization_value(item.source,item.type)).operand);
     }
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
@@ -73,7 +86,10 @@ void Procedural::emit_aggregate_helpers()
             auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
             Value value;
-            if (!action.helper_transfer) { value = emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}); value.type = t; }
+            if (!action.helper_transfer) {
+                value = action.source ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
+                value.type = t;
+            }
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slots[0])});
             Instruction index(Opcode::Index, IRType::I8); index.projection = ir_model::IPK_FIELD;
             Value at = emit(index, {base.operand, Operand::integer(sem.entities[field].member_offset)});

@@ -544,7 +544,13 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
     }
     // Target types retain references and array/function forms. The shared
     // function-type deduction owns both trailing and nonfinal pack positions.
-    if (!deduce_type(entities[pattern].type,target,bindings,DeductionKind::Call,prefix)) return 0;
+    auto shape = entities[pattern].type;
+    auto function = types[shape];
+    if (placeholder_type(function.child))
+        shape = types.function(types[target].child,
+            std::vector<TypeId>(types.parameters.begin()+function.offset,types.parameters.begin()+function.offset+function.count),
+            function.variadic,function.cv,function.ref);
+    if (!deduce_type(shape,target,bindings,DeductionKind::Call,prefix)) return 0;
     std::vector<TypeId> args;
     for (unsigned j = 0; j < t.count; ++j) {
         auto parameter = template_parameters[t.offset+j];

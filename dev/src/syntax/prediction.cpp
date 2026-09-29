@@ -143,6 +143,7 @@ bool Parser::type_operand()
 {
     if (!type_start()) return false;
     std::size_t end = probe_type(0);
+    if (in.is("{",end)) return false;
     // Function-style construction is an expression in unary/trait contexts.
     if (in.is("(", end) && !in.is("*", end + 1) && !in.is("&", end + 1)) return false;
     return true;

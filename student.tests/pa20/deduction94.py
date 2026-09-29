@@ -55,6 +55,8 @@ runner.BAD = {
  'condition_self_initializer': 'int n=7;int main(){if(auto n=n)return 1;}',
  'lambda_conflicting_returns': 'int main(){auto f=[](int n){if(n)return 1;return 2L;};}',
  'template_address_mismatch': 'template<class T>auto f(T x){return 3;}long(*p)(long)=f;int main(){}',
+ 'constexpr_nonliteral_parameter': 'struct X{~X(){}};template<class T>constexpr auto f(X x,T t){return t;}int main(){}',
+ 'constexpr_nonliteral_result': 'struct X{X(){};~X(){}};constexpr auto f(){return X();}int main(){}',
 }
 
 if __name__ == '__main__':

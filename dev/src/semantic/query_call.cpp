@@ -79,16 +79,23 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
     ValueCategory category = ValueCategory::Lvalue;
     if (callee.kind == QueryKind::TypeValue) {
         auto constructed = fn.type;
-        if (q.op == OP_LBRACE) {
-            auto c = query_list_conversion(query_edges[q.offset+1],constructed,true,q.value != 0);
+        if (class_value(constructed)) complete_class(types[constructed].entity);
+        auto list_value = [&]() {
+            auto list = q.op == OP_LBRACE ? query_edges[q.offset+1] : 0;
+            if (!list) {
+                TypeQuery input; input.kind = QueryKind::List; input.context = q.context;
+                list = intern_query(input,std::vector<QueryId>(query_edges.begin()+q.offset+1,query_edges.begin()+q.offset+q.count));
+            }
+            auto c = query_list_conversion(list,constructed,true,q.value != 0);
             if (!c.valid() || !valid_query_list(c.materialization))
                 return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-            TypeQueryFact result; result.expression.type = value_type(constructed);
+            TypeQueryFact result; result.expression.type = value_type(c.target);
             result.expression.category = types[constructed].kind == TypeKind::LRef ? ValueCategory::Lvalue :
                 types[constructed].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
             result.expression.conversions = conversions.size(); result.expression.count = 1;
             conversions.push_back(c); result.initialization = c.materialization; return result;
-        }
+        };
+        if (q.op == OP_LBRACE || types[constructed].kind == TypeKind::Array) return list_value();
         if (fundamental(constructed,FT_VOID)) {
             if (args.size() > 1) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             TypeQueryFact result; result.expression.type = constructed;
@@ -108,6 +115,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             std::vector<NodeId> nodes(args.size(),0);
             Expression recipe;
             auto ctor = choose_constructor(constructed,nodes,&recipe,q.context,true,true,&args);
+            if (!ctor && recipe.form != ExpressionForm::Overload && aggregate_type(constructed)) return list_value();
             if (!ctor) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
             if (deleted_transfer(ctor)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
             auto access = ctor;

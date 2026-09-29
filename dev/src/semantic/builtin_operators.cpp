@@ -33,9 +33,13 @@ std::vector<TypeId> Analyzer::builtin_operand_types_value(Expression expression,
 }
 void Analyzer::builtin_operators(ETokenType op, const std::vector<NodeId>& args, std::vector<BuiltinOperator>& results)
 {
-    if (args.empty() || args.size() > 2 || (args.size() == 2 && !args[1])) return;
+    if (args.empty() || args.size() > 2 || (args.size() == 2 && !args[1] && op != OP_INC && op != OP_DEC)) return;
     std::vector<Expression> values;
-    for (auto n : args) values.push_back(expressions[n]);
+    for (auto n : args) {
+        auto value = expressions[n];
+        if (!n) value.type = types.fundamental(FT_INT); // Postfix's implicit zero argument.
+        values.push_back(value);
+    }
     builtin_operators_values(op,values,results,&args);
 }
 void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Expression>& args, std::vector<BuiltinOperator>& results, const std::vector<NodeId>* nodes)
@@ -48,7 +52,7 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
     auto null = [&](unsigned i) { return nodes ? null_constant((*nodes)[i]) :
         args[i].null_pointer_constant || fundamental(args[i].type,FT_NULLPTR_T); };
     auto convert_argument = [&](unsigned i, TypeId target) {
-        return nodes ? conversion(node(i),target) : conversion_value(args[i],target);
+        return nodes && node(i) ? conversion(node(i),target) : conversion_value(args[i],target);
     };
     Index seen;
     auto add = [&](TypeId a, TypeId b, TypeId type, ValueCategory category = ValueCategory::Prvalue) {
@@ -63,17 +67,20 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
     if (op == OP_LNOT || op == OP_LAND || op == OP_LOR) {
         TypeId boolean = types.fundamental(FT_BOOL); add(boolean,boolean,boolean); return;
     }
-    auto left = builtin_operand_types_value(args[0]);
+    auto left = builtin_operand_types_value(args[0],op == OP_INC || op == OP_DEC);
     if (op == OP_INC || op == OP_DEC) {
         for (TypeId t : left) {
             if (types[t].kind != TypeKind::Named && (arithmetic(t) || object_pointer(t)) &&
                 !(op == OP_DEC && fundamental(t,FT_BOOL))) {
                 if (object_pointer(t) && !size(types[t].child,false,true)) continue;
                 auto target = class_value(args[0].type) ? t : args[0].type;
-                if (!(types[target].cv & 1))
+                if (!(types[target].cv & 1)) {
+                    auto before = results.size();
                     add(types.compound(TypeKind::LRef,target),types.fundamental(FT_INT),
                         args.size() == 1 ? target : types.unqualified(target),
                         args.size() == 1 ? ValueCategory::Lvalue : ValueCategory::Prvalue);
+                    if (results.size() != before) results.back().computation = pointer(target) ? target : promote(target);
+                }
             }
         }
         return;

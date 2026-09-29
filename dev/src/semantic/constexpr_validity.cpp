@@ -118,29 +118,32 @@ bool Analyzer::constexpr_constructor(EntityId e)
 }
 void Analyzer::check_constexpr_signature(EntityId e)
 {
-    if (!entities[e].constexpr_function || constexpr_signature_facts.get(e)) return;
+    auto checked = constexpr_signature_facts.get(e);
+    if (!entities[e].constexpr_function || checked == 1) return;
     // PA16 checks dependent declarations once. A concrete specialization may
     // have nonliteral types and still be called at runtime ([dcl.constexpr]/6).
     if (entities[e].specialization || entities[e].template_member ||
         definition_owner(scopes[entities[e].owner].entity).specialization) return;
     auto f = types[entities[e].type];
     if (!entities[e].type) return;
-    if (placeholder_type(f.child)) return;
+    bool pending = placeholder_type(f.child);
     bool pattern_constructor = entities[e].template_pattern && scopes[entities[e].owner].kind == ScopeKind::Class &&
         terminal(decl_name(entities[e].source)) == scopes[entities[e].owner].name;
-    bool valid = constructor_member(e) || pattern_constructor || literal_type(f.child);
-    for (unsigned i = 0; i < f.count; ++i) {
+    bool valid = constructor_member(e) || pattern_constructor || pending || literal_type(f.child);
+    for (unsigned i = 0; !checked && i < f.count; ++i) {
         ++constexpr_validity_work;
         valid &= literal_type(types.parameters[f.offset+i]);
     }
     auto m = entities[e].member_info;
-    if (m && !members[m].constructor && !entities[e].is_static) {
+    if (!checked && m && !members[m].constructor && !entities[e].is_static) {
         valid &= !members[m].virtual_member;
         auto cls = scopes[entities[e].owner].entity;
         if (entities[cls].class_info) valid &= literal_type(entities[cls].type);
     }
     if (!valid) throw std::runtime_error("constexpr function requires literal parameter, result and member owner types");
-    constexpr_signature_facts.put(e,1);
+    // Parameters/member owner are fixed before a placeholder result is known.
+    // Complete only the result obligation after return deduction.
+    constexpr_signature_facts.put(e,pending ? 2 : 1);
 }
 void Analyzer::check_constexpr_constructor(EntityId e)
 {

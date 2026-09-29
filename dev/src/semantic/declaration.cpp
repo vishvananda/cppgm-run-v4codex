@@ -310,7 +310,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         auto part = ast[name].last;
         bool conversion = calls && ast[part].op == KW_OPERATOR && ast[part].detail;
         auto owner = conversion ? name_owner(name,s) : 0;
-        EntityId e = conversion ? conversion_lookup(owner,type_id(ast[part].detail,owner),false) : resolve(name,s);
+        EntityId e = conversion ? conversion_lookup(owner,type_id(ast[part].detail,s),false) : resolve(name,s);
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {
             for (EntityId member : candidates(e)) {

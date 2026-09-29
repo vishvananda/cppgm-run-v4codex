@@ -41,8 +41,14 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     unsigned rank = class_value(to) ? 5 : 0;
     if (target.kind == TypeKind::Array) {
         std::uint64_t index = 0;
-        if (!target.bound) valid = false;
-        while (valid && cursor && index < target.bound) valid = add(target.child,0,index++,1);
+        while (valid && cursor && (!target.bound || index < target.bound)) {
+            auto before = cursor;
+            valid = add(target.child,0,index++,1) && cursor != before;
+        }
+        if (!target.bound) {
+            if (!index) valid = false;
+            else plan.target = types.compound(TypeKind::Array,target.child,index);
+        }
         if (valid && index < target.bound) valid = add(target.child,0,index,target.bound-index);
         for (auto c : selected) if (rank < c.rank) rank = c.rank;
     } else {
@@ -93,10 +99,13 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
             }
             if (first && first == ast[n].last && string_initialization(first,t)) {
                 plan.source = first; plan.literal = ast[first].literal; plan.aggregate = true;
+                if (!ref && !types[t].bound) t = to = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
+                plan.target = to;
                 if (types[t].bound && ast.literals[plan.literal].elements <= types[t].bound) plan.rank = 0;
             } else if (aggregate_type(t)) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
+                if (!ref) t = to = list_plans[group].target;
                 plan = list_plans[group]; plan.source = n; plan.target = to; plan.direct = direct;
                 if (cursor) plan.rank = 255;
             } else if (class_value(t)) {
@@ -122,6 +131,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
         } catch (...) { list_plans[id].state = FactState::Failure; throw; }
     }
     auto plan = list_plans[id];
+    to = plan.target;
     if (plan.state == FactState::Failure) throw FailedSemanticFact(SemanticFact::ListInitialization,0,n);
     Conversion c; c.target = to; c.kind = Conversion::Kind::ListPlan; c.materialization = id;
     if (plan.state != FactState::Success) return c;

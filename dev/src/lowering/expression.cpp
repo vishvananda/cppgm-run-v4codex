@@ -174,8 +174,11 @@ Value Procedural::unary(NodeId n)
         v.type = fact.type; v.address = true; return v;
     }
     if (op == OP_INC || op == OP_DEC) {
-        Value dest = expression(a, true), old = load(dest);
-        TypeId promoted = sem.conversion_fact(fact.conversions).target;
+        auto conversion = sem.conversion_fact(fact.conversions);
+        Value dest = conversion.reference ? converted(a,conversion) : expression(a, true);
+        if (conversion.reference) { dest.type = sem.types[conversion.target].child; dest.address = true; }
+        Value old = load(dest);
+        TypeId promoted = sem.conversion_fact(fact.conversions+(conversion.reference ? fact.count-1 : 0)).target;
         Value value;
         if (sem.types[dest.type].kind == TypeKind::Fundamental && sem.types[dest.type].fundamental == FT_BOOL)
             value = Value(Operand::integer(1), IRType::U8, dest.type);

@@ -17,6 +17,7 @@ Conversion Analyzer::query_list_conversion(QueryId list, TypeId to, bool direct,
     if (fact.state == FactState::Failure || !fact.initialization) return c;
     c.materialization = fact.initialization;
     auto plan = list_plans[c.materialization]; c.rank = plan.rank; c.function = plan.constructor;
+    c.target = plan.target;
     c.reference = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     c.temporary = c.reference && !plan.direct_binding;
     if (c.reference) {
@@ -52,9 +53,12 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
     };
     bool valid = true; auto target = types[to]; unsigned rank = class_value(to) ? 5 : 0;
     if (target.kind == TypeKind::Array) {
-        if (!target.bound) valid = false;
         std::uint64_t index = 0;
-        while (valid && cursor < args.size() && index < target.bound) valid = add(target.child,0,index++,1);
+        while (valid && cursor < args.size() && (!target.bound || index < target.bound)) valid = add(target.child,0,index++,1);
+        if (!target.bound) {
+            if (!index) valid = false;
+            else plan.target = types.compound(TypeKind::Array,target.child,index);
+        }
         if (valid && index < target.bound) valid = add(target.child,0,index,target.bound-index);
         for (auto c : chosen) if (rank < c.rank) rank = c.rank;
     } else {
@@ -101,9 +105,12 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
         auto literal = args.size() == 1 ? type_queries[args[0]] : TypeQuery();
         if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,t)) {
             plan.literal = literal.value; plan.aggregate = true;
+            if (!ref && !types[t].bound) t = q.type = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
+            plan.target = q.type;
             if (types[t].bound && ast.literals[literal.value].elements <= types[t].bound) plan.rank = 0;
         } else if (aggregate_type(t)) {
             unsigned cursor = 0; plan = list_plans[query_list_aggregate(args,cursor,t,q.context)];
+            if (!ref) t = q.type = plan.target;
             plan.target = q.type; plan.direct = q.value & 1;
             if (cursor != args.size()) plan.rank = 255;
         } else if (class_value(t)) {
