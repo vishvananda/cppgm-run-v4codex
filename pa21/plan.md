@@ -1,9 +1,17 @@
-# PA21 compact plan — implementation 110
+# PA21 compact plan — implementation 111
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
 Target: **PA21 full-stage**. Phase: **implementation**.
-Entry: clean `d9528e585fd2823d25f9f3a3abaa8f0755f5832a`, **108/116**.
+Entry 111: clean `0e5a32ddec4027d67d38aa98263f964b383dbed2`, **113/116**.
+Previous goal turn: progress (committed ownership fixes and validation).
+Current work: resolve remaining EH region retirement and backing-list continuation
+under the shared lifetime/exception-context owner; then constant-array O0 policy.
+Trace semantic lifetime IDs through region entry/exit and typed cleanup emission;
+preserve expected O(1) continuation keys and work proportional to emitted actions.
+Validate required comparisons, hosted nested-handler/list controls, all earlier
+PAs, file audit, and frozen A/B compiler/RSS plus runtime/text measurements.
+Stage/review markers above are preserved from the existing implementation ledger.
 Current: **113/116**, five original failures resolved; earlier PAs **3596/3596**,
 through PA21 **3709/3712**, file audit passes. All 116 sources and comparison
 rules remain intact. PA21 completion still requires a passing through report.
