@@ -68,6 +68,7 @@ public:
     NodeId default_argument_value(EntityId e, unsigned parameter) const;
     // Queries completed expression facts; keys are the expression and target.
     StaticValue static_value(NodeId n, TypeId target);
+    StaticValue member_target_value(unsigned id) const { return id ? static_facts[id-1].value : StaticValue(); }
     StaticValue constant_static_value(Constant value);
     bool local_static(EntityId e) const;
     bool constant_initializer(NodeId n, TypeId target, bool local = false);
@@ -103,6 +104,8 @@ public:
     void prepare_delegation_entries();
     bool destructor_needed(EntityId e);
     bool temporary_cleanup(EntityId object);
+    TypeId form_member_pointer(TypeId owner, TypeId member);
+    TypeQueryFact member_pointer_value(Expression object, Expression member, ETokenType op, ScopeId scope);
     Expression member_pointer_expression(NodeId n, ScopeId s);
     bool trivial_destructor(TypeId t);
     EntityId type_destructor(TypeId t) const;
@@ -696,6 +699,7 @@ private:
     bool dependent_argument(ArgumentId arg);
     ArgumentId convert_argument(ArgumentId arg, TypeId target);
     ArgumentId address_template_argument(QueryId query, TypeId target);
+    ArgumentId member_address_template_argument(QueryId query, TypeId target);
     EntityId bind_argument(ScopeId scope, EntityId parameter, ArgumentId arg);
     std::vector<TypeQuery> type_queries = std::vector<TypeQuery>(1);
     std::vector<QueryId> query_edges, query_slots;

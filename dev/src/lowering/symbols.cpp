@@ -68,7 +68,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::RRef: result = abi.make(abi_mangle::Kind::RvalueReference, abi_type(t.child)); break;
     case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, !t.bound, t.bound); break;
     case TypeKind::DependentArray: result = abi.make(abi_mangle::Kind::Array,abi_type(t.child),abi_query(t.bound)); break;
-    case TypeKind::MemberPointer: result = abi.make(abi_mangle::Kind::MemberPointer, abi_type(sem.entities[t.entity].type), abi_type(t.child)); break;
+    case TypeKind::MemberPointer: result = abi.make(abi_mangle::Kind::MemberPointer, abi_type(t.member_owner()), abi_type(t.child)); break;
     case TypeKind::Function: {
         std::vector<abi_mangle::Id> params;
         for (unsigned j = 0; j < t.count; ++j) params.push_back(abi_type(sem.types.parameters[t.offset+j]));

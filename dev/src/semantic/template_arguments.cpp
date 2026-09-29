@@ -179,6 +179,7 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
         q.op = TOK_INVALID;
         return value_argument_id(intern_query(q,{query}));
     }
+    if (types[target].kind == TypeKind::MemberPointer) return member_address_template_argument(query,target);
     if (pointer(target) || types[target].kind == TypeKind::LRef || fundamental(target,FT_NULLPTR_T))
         return address_template_argument(query,target);
     if (class_value(source_type)) {

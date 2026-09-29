@@ -100,6 +100,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
                 if (t.kind == TypeKind::PackExpansion) work.push_back(t.bound);
                 if (t.kind == TypeKind::Decltype) work.push_back(query_argument(t.entity));
                 if (t.kind == TypeKind::DependentArray) work.push_back(query_argument(t.bound));
+                if (t.kind == TypeKind::MemberPointer) work.push_back(t.member_owner());
                 if (t.child) work.push_back(t.child);
                 for (unsigned j = 0; j < t.count; ++j) work.push_back(types.parameters[t.offset+j]);
             }

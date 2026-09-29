@@ -15,12 +15,12 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
     auto q = semantic::argument_query(argument);
     auto query = sem.type_query(q);
     if (query.kind == semantic::QueryKind::Value && query.value &&
-        (sem.types[query.type].kind == TypeKind::Pointer || sem.types[query.type].kind == TypeKind::LRef)) {
+        (sem.types[query.type].kind == TypeKind::Pointer || sem.types[query.type].kind == TypeKind::LRef || sem.types[query.type].kind == TypeKind::MemberPointer)) {
         auto address = sem.constant_static_value(semantic::Constant(query.type,query.value));
-        auto e = address.entity;
+        auto e = sem.types[query.type].kind == TypeKind::MemberPointer ? semantic::EntityId(query.value) : address.entity;
         auto entity = sem.entities[e].kind == semantic::EntityKind::Function ? abi_function_context(e) :
             abi.make(Kind::VariableEntity,abi_entity_name(e),internal_entity(e));
-        return abi.make(Kind::EntityArgument,entity,sem.types[query.type].kind == TypeKind::Pointer);
+        return abi.make(Kind::EntityArgument,entity,sem.types[query.type].kind != TypeKind::LRef);
     }
     auto value = abi_query(q);
     return sem.type_query(q).kind == semantic::QueryKind::Value ? value : abi.make(Kind::ExpressionArgument,value);
@@ -67,8 +67,9 @@ bool Procedural::local_abi_argument(semantic::ArgumentId arg)
     if (semantic::value_argument(arg)) {
         auto q = sem.type_query(semantic::argument_query(arg));
         if (q.kind != semantic::QueryKind::Value || !q.value ||
-            (sem.types[q.type].kind != TypeKind::Pointer && sem.types[q.type].kind != TypeKind::LRef)) return false;
-        auto e = sem.constant_static_value(semantic::Constant(q.type,q.value)).entity;
+            (sem.types[q.type].kind != TypeKind::Pointer && sem.types[q.type].kind != TypeKind::LRef && sem.types[q.type].kind != TypeKind::MemberPointer)) return false;
+        auto e = sem.types[q.type].kind == TypeKind::MemberPointer ? semantic::EntityId(q.value) :
+            sem.constant_static_value(semantic::Constant(q.type,q.value)).entity;
         return e && internal_entity(e);
     }
     return local_abi_type(arg);
@@ -90,7 +91,7 @@ bool Procedural::local_abi_type(TypeId t)
         local |= local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
         for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));
-    } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(sem.entities[type.entity].type);
+    } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(type.member_owner());
     if (type.kind == TypeKind::Function)
         for (unsigned j = 0; j < type.count; ++j) local |= local_abi_type(sem.types.parameters[type.offset+j]);
     local_abi_types[t] = local ? 2 : 1; return local;

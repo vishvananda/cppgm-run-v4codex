@@ -86,6 +86,7 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
             auto bound = object_uses[fn.object_use];
             record_object(result,bound.node,bound.type,bound.adjustment);
             object_uses[result.object_use].member_pointer = bound.member_pointer;
+            object_uses[result.object_use].member_target = bound.member_target;
         } else require_conversion(callee, decay(fn.type));
         std::vector<Conversion> chosen;
         for (std::size_t i = 0; i < args.size(); ++i) {

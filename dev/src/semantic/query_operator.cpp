@@ -17,7 +17,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         auto e = args[0].entity;
         if (e && entities[e].kind == EntityKind::Function && !entities[e].template_info) {
             if (deleted_transfer(e)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-            if (!accessible(e,q.context,object_uses[args[0].object_use].naming_scope))
+            if (!accessible(e,q.context,object_uses[args[0].object_use].naming_scope,
+                q.value ? entities[scopes[naming_class(object_uses[args[0].object_use].naming_scope)].entity].type : 0))
                 return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             bool member = entities[e].member_info && !entities[e].is_static;
             if (member && !q.value) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
@@ -28,6 +29,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         }
         return result;
     }
+    if (q.op == OP_DOTSTAR) return member_pointer_value(args[0],args[1],q.op,q.context);
     auto object = args[0].type;
     ScopeId naming = 0; EntityId family = q.entity;
     if (class_value(object) || pattern_class_type(object)) {
@@ -103,6 +105,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     }
     TypeQueryFact r;
     if (viable.empty()) {
+        if (q.op == OP_ARROWSTAR) return member_pointer_value(args[0],args[1],q.op,q.context);
         if (compound_operation(q.op) != TOK_INVALID) for (auto arg : args) {
             if (arg.type && pointer(decay(arg.type))) {
                 auto pending = incomplete_query(types[decay(arg.type)].child);
@@ -115,7 +118,9 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         if (q.op == OP_AMP && args.size() == 1 && args[0].category != ValueCategory::Prvalue && !field_fact(args[0].entity).bit_field) {
             auto member = args[0].entity;
             if (q.value && member && nonstatic_field(member)) {
-                check_access(member,q.context,entities[member].owner);
+                if (!accessible(member,q.context,object_uses[args[0].object_use].naming_scope,
+                    entities[scopes[naming_class(object_uses[args[0].object_use].naming_scope)].entity].type))
+                    return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
                 r.expression.type = types.member_pointer(scopes[entities[member].owner].entity,entities[member].type);
                 r.expression.entity = member;
             } else r.expression.type = types.compound(TypeKind::Pointer,args[0].type);

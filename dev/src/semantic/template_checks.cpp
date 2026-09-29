@@ -235,8 +235,12 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
             params.push_back(parameter);
         }
         result = types.signature(types.function(child,params,t.variadic,t.cv,t.ref));
+    } else if (t.kind == TypeKind::MemberPointer) {
+        auto owner = template_member_aliases(t.member_owner(),primary,cache);
+        if (!owner) return 0;
+        result = types.qualify(types.member_pointer_type(owner,child),t.cv);
     } else if (t.child) {
-        result = t.kind == TypeKind::MemberPointer ? types.member_pointer(t.entity,child) : types.compound(t.kind,child,t.bound);
+        result = types.compound(t.kind,child,t.bound);
         result = types.qualify(result,t.cv);
     }
     cache.put(type,result); return result;

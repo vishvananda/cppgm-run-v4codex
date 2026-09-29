@@ -62,6 +62,11 @@ Value Procedural::member_pointer_object(const semantic::ObjectUse& use, Value* f
     Value object = expression(use.node,true);
     object = sem.types[sem.expression_fact(use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
     object = base_projection(object,use.adjustment);
+    if (function && use.member_target) {
+        auto target = sem.member_target_value(use.member_target);
+        if (target.addend) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(target.addend)});
+        return object;
+    }
     Value member = load(expression(use.member_pointer));
     if (!function) {
         auto offset = emit(Opcode::Binary,IRType::I64,{member.operand,Operand::integer(1)},Operation::Sub);

@@ -1,0 +1,51 @@
+[
+  {
+    "source": "student.tests/pa22/dependent/nttp.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid member pointer owner\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/dependent/owners.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: expected ';', found '<' at byte 215\n",
+    "reject": false,
+    "passed": false
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-base.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-integer.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-private.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-variable.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/sfinae.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid member pointer owner\n",
+    "reject": false,
+    "passed": false
+  }
+]

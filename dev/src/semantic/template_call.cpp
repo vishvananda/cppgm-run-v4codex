@@ -61,6 +61,7 @@ bool Analyzer::dependent_type(TypeId id)
         auto pack = specialization_arguments(t.entity);
         for (unsigned j = 0; j < pack.count; ++j) dependent |= dependent_argument(argument_types[pack.offset+j]);
     }
+    if (t.kind == TypeKind::MemberPointer) dependent |= dependent_type(t.member_owner());
     if (t.child) dependent |= dependent_type(t.child);
     if (t.kind == TypeKind::Function) {
         for (unsigned i = 0; i < t.count; ++i) dependent |= dependent_type(types.parameters[t.offset + i]);
@@ -237,6 +238,12 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             }
         }
         result = types.signature(types.function(returned, params, p.variadic, p.cv, p.ref));
+    } else if (p.kind == TypeKind::MemberPointer) {
+        auto cls = substitute_type(p.member_owner(),bindings,cache,owner);
+        auto member = substitute_type(p.child,bindings,cache,owner);
+        result = form_member_pointer(cls,member);
+        if (result) result = types.qualify(result,p.cv);
+        else complete_failure = cls && member;
     } else if (p.child) {
         TypeId child = substitute_type(p.child, bindings, cache,owner);
         if (!child) return 0;
@@ -244,7 +251,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (reference && (p.kind == TypeKind::Pointer || p.kind == TypeKind::Array || p.kind == TypeKind::MemberPointer)) return 0;
         if ((p.kind == TypeKind::LRef || p.kind == TypeKind::RRef) && fundamental(child, FT_VOID)) return 0;
         if (p.kind == TypeKind::Array && (fundamental(child, FT_VOID) || types[child].kind == TypeKind::Function || abstract_value(child))) return 0;
-        result = p.kind == TypeKind::MemberPointer ? types.member_pointer(p.entity, child) : types.compound(p.kind, child, p.bound);
+        result = types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
     }
     // A completed dependent-name failure belongs to the same immutable
@@ -481,7 +488,9 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
                 if (entities[candidate].template_info) { matches = 2; break; }
                 ++candidate_work;
                 TypeId actual = entities[candidate].type;
-                if (kind != TypeKind::LRef && kind != TypeKind::RRef) actual = decay(actual);
+                bool member = entities[candidate].member_info && !entities[candidate].is_static;
+                if (member) actual = types.member_pointer(scopes[entities[candidate].owner].entity,actual);
+                else if (kind != TypeKind::LRef && kind != TypeKind::RRef) actual = decay(actual);
                 Index trial;
                 if (!deduce_type(adjusted,actual,trial,DeductionKind::Call,prefix)) continue;
                 if (++matches > 1) break;

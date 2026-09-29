@@ -28,7 +28,7 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
             } else type = declarator(d,specifiers(specs,ts),ts);
             if (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::Function) type = decay(type);
             if (types[type].kind == TypeKind::RRef || (!dependent_type(type) && !integral(type) && !pointer(type) &&
-                types[type].kind != TypeKind::LRef && !fundamental(type,FT_NULLPTR_T)))
+                types[type].kind != TypeKind::LRef && types[type].kind != TypeKind::MemberPointer && !fundamental(type,FT_NULLPTR_T)))
                 throw std::runtime_error("invalid non-type template parameter type");
             auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
             entities[e].template_parameter = true;

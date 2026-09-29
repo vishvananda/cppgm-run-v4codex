@@ -179,11 +179,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (node.kind == Kind::Unary && node.op == OP_AMP && ast[first].kind == Kind::IdExpression)
             q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
-        q.name = operator_name(q.op); q.context = s;
+        q.name = q.op == OP_DOTSTAR ? 0 : operator_name(q.op); q.context = s;
         while (!template_object_context_index.get(q.context) &&
             (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
             q.context = scopes[q.context].parent;
-        if (q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW) {
+        if (q.name && q.op != OP_LSQUARE && q.op != OP_ASS && q.op != OP_ARROW) {
             auto ordinary = lookup(s,q.name);
             if (function_binding(ordinary)) q.entity = ordinary;
         }
@@ -407,7 +407,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     // conversion recipe. Signature/value consumers share this single result
     // instead of selecting an overload and validating linkage a second time.
     if (q.kind == QueryKind::Cast && q.op == TOK_INVALID && !dependent_type(q.type) &&
-        (pointer(q.type) || types[q.type].kind == TypeKind::LRef || fundamental(q.type,FT_NULLPTR_T)) &&
+        (pointer(q.type) || types[q.type].kind == TypeKind::LRef || types[q.type].kind == TypeKind::MemberPointer || fundamental(q.type,FT_NULLPTR_T)) &&
         !query_fact(children[0]).dependent) {
         auto arg = convert_argument(value_argument_id(children[0]),q.type);
         if (!arg) return 0;
@@ -548,6 +548,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         x.type = value_type(entities[entity].type); x.entity = entity;
         r.declared_type = entities[entity].type;
         if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
+        record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
         if (function_binding(entity)) {
             // A template overload family is a concrete lookup result. Its
             // dependent candidate signatures do not make the callee dependent.

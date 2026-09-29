@@ -43,7 +43,8 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
             if (member_type.kind == TypeKind::LRef || member_type.kind == TypeKind::RRef)
                 throw std::runtime_error("pointer to reference member");
             r.type = types.member_pointer(scopes[entities[a.entity].owner].entity, entities[a.entity].type);
-            check_access(a.entity,s,entities[a.entity].owner);
+            auto naming = name_owner(ast[operand].detail,s);
+            check_access(a.entity,s,naming,entities[scopes[naming_class(naming)].entity].type);
             size(entities[scopes[entities[a.entity].owner].entity].type);
             demand_member(a.entity);
         } else r.type = types.compound(TypeKind::Pointer, a.type);

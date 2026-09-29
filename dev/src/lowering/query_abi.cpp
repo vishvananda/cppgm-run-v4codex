@@ -20,6 +20,7 @@ const char* query_operation(ETokenType op, bool unary)
     case OP_LAND: return "aa"; case OP_LOR: return "oo";
     case OP_COMMA: return "cm"; case OP_ARROW: return "pt";
     case OP_DOT: return "dt";
+    case OP_DOTSTAR: return "ds"; case OP_ARROWSTAR: return "pm";
     case OP_LSQUARE: return "ix";
     case OP_ASS: return "aS"; case OP_PLUSASS: return "pL"; case OP_MINUSASS: return "mI";
     case OP_STARASS: return "mL"; case OP_DIVASS: return "dV"; case OP_MODASS: return "rM";

@@ -119,7 +119,13 @@ TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool va
 }
 TypeId Types::member_pointer(EntityId owner, TypeId child)
 {
-    Type t; t.kind = TypeKind::MemberPointer; t.entity = owner; t.child = child;
+    return member_pointer_type(named(owner),child);
+}
+TypeId Types::member_pointer_type(TypeId owner, TypeId child)
+{
+    owner = unqualified(signature(owner));
+    Type t; t.kind = TypeKind::MemberPointer; t.bound = owner; t.child = child;
+    t.entity = records[owner].kind == TypeKind::Named ? records[owner].entity : 0;
     return intern(t, {});
 }
 TypeId Types::adjusted(TypeId id)
@@ -150,7 +156,7 @@ TypeId Types::signature(TypeId id)
     TypeId result = id;
     if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
         result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
-    if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer(t.entity, signature(t.child)), t.cv);
+    if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer_type(t.member_owner(), signature(t.child)), t.cv);
     signatures[id] = result;
     return result;
 }

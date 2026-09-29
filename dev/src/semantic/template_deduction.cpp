@@ -81,7 +81,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     if (p.kind != a.kind) return false;
     if (kind != DeductionKind::Call && p.cv != a.cv) return false;
     if (p.kind == TypeKind::Array && p.bound != a.bound) return false;
-    if (p.kind == TypeKind::MemberPointer && p.entity != a.entity) return false;
+    if (p.kind == TypeKind::MemberPointer && !deduce_type(p.member_owner(),a.member_owner(),bindings,kind,prefix)) return false;
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization &&
         entities[specialization_pattern(p.entity)].template_parameter) {
         auto ps = specializations[entities[p.entity].specialization], as = specializations[entities[a.entity].specialization];

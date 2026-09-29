@@ -211,11 +211,14 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
         for (unsigned i = 0; i < f.count; ++i)
             if (abstract_value(types.parameters[f.offset+i])) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-        auto decay_conversion = standard_conversion(fn,decay(fn.type));
-        if (!decay_conversion.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-        record_object(r.expression,0,0,0);
-        object_uses[r.expression.object_use].callee_conversion = conversions.size();
-        conversions.push_back(decay_conversion);
+        if (fn.form == ExpressionForm::BoundMember) r.expression.object_use = fn.object_use;
+        else {
+            auto decay_conversion = standard_conversion(fn,decay(fn.type));
+            if (!decay_conversion.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            record_object(r.expression,0,0,0);
+            object_uses[r.expression.object_use].callee_conversion = conversions.size();
+            conversions.push_back(decay_conversion);
+        }
         std::vector<Conversion> chosen;
         for (unsigned i = 0; i < args.size(); ++i) {
             auto c = i < f.count ? conversion_value(args[i],types.parameters[f.offset+i]) : ellipsis_conversion_value(args[i]);

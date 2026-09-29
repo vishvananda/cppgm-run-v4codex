@@ -51,7 +51,8 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
             shape.push_back(spec.pattern);
             auto args = argument_packs[spec.arguments];
             for (unsigned j = 0; j < args.count; ++j) add(argument_types[args.offset+j]);
-        } else if (t.kind == TypeKind::Decltype) {
+        } else if (t.kind == TypeKind::MemberPointer) add(t.member_owner());
+        else if (t.kind == TypeKind::Decltype) {
             add(0x80000000U|t.entity); shape.push_back(t.bound);
         } else if (t.kind == TypeKind::DependentArray) add(0x80000000U|t.bound);
         else if (t.kind == TypeKind::PackExpansion) {

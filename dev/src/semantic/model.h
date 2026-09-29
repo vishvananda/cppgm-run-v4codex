@@ -62,7 +62,10 @@ struct Type {
     bool variadic = false;
     TypeId child = 0;
     EntityId entity = 0;
+    // MemberPointer uses this slot for its canonical owner TypeId. Its entity
+    // is only the Named owner projection consumed after substitution.
     std::uint64_t bound = 0;
+    TypeId member_owner() const { return TypeId(bound); }
     std::uint32_t offset = 0, count = 0;
 };
 class Types {
@@ -85,6 +88,7 @@ public:
     TypeId unqualified(TypeId t);
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
+    TypeId member_pointer_type(TypeId owner, TypeId child);
     TypeId dependent_name(TypeId owner, IdentifierId name, const std::vector<TypeId>& arguments, DependentNameKind kind);
     TypeId decltype_type(std::uint32_t expression, bool direct);
     TypeId adjusted(TypeId t);
@@ -357,6 +361,7 @@ struct ObjectUse {
     EntityId callable_entry = 0; // Receiver-free closure ABI; selected declaration stays on the call.
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0, callee = 0; // Actual callable of an intrinsic invocation.
+    std::uint32_t member_target = 0; // Completed StaticFact for an immediate member address.
     std::uint32_t arrow = 0;
     std::uint32_t virtual_slot = 0;
     unsigned adjustment = 0, qualifier_adjustment = 0; std::uint32_t callee_conversion = 0;

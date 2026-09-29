@@ -67,6 +67,7 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
             }
             if (t.kind == TypeKind::Decltype) work.push_back(0x80000000U|t.entity);
             if (t.kind == TypeKind::DependentArray) work.push_back(0x80000000U|t.bound);
+            if (t.kind == TypeKind::MemberPointer) work.push_back(t.member_owner());
             if (t.child) work.push_back(t.child);
             for (unsigned j = 0; j < t.count; ++j) work.push_back(types.parameters[t.offset+j]);
         }

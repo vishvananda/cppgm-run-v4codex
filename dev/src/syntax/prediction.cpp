@@ -211,6 +211,8 @@ void Parser::predeclare_class()
             for (; !in.is(";", p) && in.peek(p).kind != PostTokenKind::eof; ++p) {
                 if (in.is(",", p)) { need_name = true; continue; }
                 if (need_name && identifier(p)) {
+                    auto owner = probe_name(p);
+                    if (in.is("::",owner.end) && in.is("*",owner.end+1)) { p = owner.end+1; continue; }
                     names.bind(scope, in.peek(p).text, Category::Type);
                     need_name = false;
                 }
