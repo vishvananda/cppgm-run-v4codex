@@ -1,0 +1,2584 @@
+{
+  "priorThroughTests": {
+    "command": "n=21; if [ \"$n\" -le 1 ]; then echo \"===== ALL TESTS PASSED SUCCESSFULLY! (0/0) =====\"; else make test-report-through-pa$((n - 1)); fi",
+    "exit": 0,
+    "log_sha256": "6426bae2e5aff9cb089b612f8a20d85b592fbfe34f219b8f60c9535b17770663",
+    "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowir\n  LINK    lowiropt\n  LINK    lowir2native\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (3596 / 3596) =====\n"
+  },
+  "stageTests": {
+    "command": "make test-pa21",
+    "exit": 2,
+    "log_sha256": "20540cc2eeb7b6d7f7581f1eef4f31e366d82e5235ee1351207e581e16ff5f73",
+    "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowir\n  LINK    lowiropt\n  LINK    lowir2native\n===== pa21 =====\npa21/tests/general/100-class-array-constructor-failure-cleanup.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-function-template-local-class-specialization-identity.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-function-template-local-class-specialization-identity.my.lowir.compare.diff\npa21/tests/general/100-nested-class-template-local-class-argument.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-noreturn-direct-object-fallback.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-range-for-iteration-temporary-lifetime.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-range-for-iteration-temporary-lifetime.my.lowir.compare.diff\npa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-source-rethrow-through-function.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-source-try-catch-int.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-throw-class-template-move-constructor-definition.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-throw-function-decays-to-pointer.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/100-throw-string-literal-decays-to-pointer.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-aggregate-nontrivial-members-use-constructors.my.lowir.compare.diff\npa21/tests/general/200-auto-copy-list-initializer-list.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-auto-init-list-pack-expansion.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-braced-assignment-prefers-initializer-list.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-braced-construction-for-reference-argument.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-class-value-argument-transfers-caller-cleanup.my.lowir.compare.diff\npa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-constructor-early-return-cleanup-region.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-constructor-unwind-shares-generated-suffix.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-copy-list-const-reference-initializer-list-ctor.my.lowir.compare.diff\npa21/tests/general/200-copy-list-template-initializer-list-ctor.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-cross-function-unwind-cache-reset.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-cross-function-unwind-cache-reset.my.lowir.compare.diff\npa21/tests/general/200-default-reference-capture-local.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-destructor-unwind-shares-generated-suffix.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-direct-braced-construction-in-return.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-direct-braced-init-prefers-initializer-list-ctor.my.lowir.compare.diff\npa21/tests/general/200-empty-aggregate-return-through-switch.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-empty-aggregate-return-through-switch.my.lowir.compare.diff\npa21/tests/general/200-explicit-initializer-list-functional-cast.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-global-initializer-list-backing-storage-duration.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-conditional-expression-temp-cleanup.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-const-ref-bound-temp-dtor.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.my.lowir.compare.diff\npa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.my.lowir.compare.diff\npa21/tests/general/200-indirect-param-prologue-copy.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-indirect-param-prologue-copy.my.lowir.compare.diff\npa21/tests/general/200-initializer-list-backing-array-lifetime.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-initializer-list-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-initializer-list-const-char-pointer-range-for.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-initializer-list-const-reference-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-initializer-list-element-conversion-ranking.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-member-template-initializer-list-deduction.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-nested-logical-rhs-temporary-value-slot.my.lowir.compare.diff\npa21/tests/general/200-nested-short-circuit-temporary-cleanup.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-nested-short-circuit-temporary-cleanup.my.lowir.compare.diff\npa21/tests/general/200-parenthesized-throw-expression-statement.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-shared-call-unwind-hidden-temp.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-shared-call-unwind-hidden-temp.my.lowir.compare.diff\npa21/tests/general/200-source-base-ref-catch.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-source-catch-ellipsis.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-source-catch-miss-cleans-outer-scope.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/300-template-catch-variable-member-body.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa21/tests/general/400-handler-context-cleanup-continuation.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\n===== TEST SUMMARY: 49 / 116 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:483: test-pa21] Error 2\n"
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa21 --paths dev/src",
+    "exit": 0,
+    "log_sha256": "ca116831ff080c504689590615037e352808058d1435bfa7e24b43c4b617b01e",
+    "output": "File audit passed for pa21 with 3 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "stageProgress": {
+    "turn_start_failures": [
+      "pa21/tests/general/100-capturing-lambda-local.t",
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-lambda-capture-mutable.t",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/100-source-rethrow-through-function.t",
+      "pa21/tests/general/100-source-try-catch-int.t",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t",
+      "pa21/tests/general/200-class-copy-capture-local.t",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t",
+      "pa21/tests/general/200-default-reference-capture-local.t",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-initializer-list-call.t",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/200-source-base-ref-catch.t",
+      "pa21/tests/general/200-source-catch-ellipsis.t",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t",
+      "pa21/tests/general/300-template-catch-variable-member-body.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "current_failures": [
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/100-source-rethrow-through-function.t",
+      "pa21/tests/general/100-source-try-catch-int.t",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t",
+      "pa21/tests/general/200-default-reference-capture-local.t",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-initializer-list-call.t",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/200-source-base-ref-catch.t",
+      "pa21/tests/general/200-source-catch-ellipsis.t",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t",
+      "pa21/tests/general/300-template-catch-variable-member-body.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "resolved": [
+      "pa21/tests/general/100-capturing-lambda-local.t",
+      "pa21/tests/general/100-lambda-capture-mutable.t",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t",
+      "pa21/tests/general/200-class-copy-capture-local.t",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t"
+    ],
+    "new_failures": [],
+    "required_cases": 116,
+    "passed": true
+  },
+  "coverage": {
+    "unchanged_fixture_and_harness_diff": true,
+    "required_sources": {
+      "pa21/tests/general/100-bad-dynamic-cast-reference.t": "7c07c0428165a5f02e22bd670d1381fa584d01fa2a9cd3da9ca9dda07ec92536",
+      "pa21/tests/general/100-bad-reference-capture.t": "870d12ae48fb5c74f2060e0c9a1d0728870afd10489f87252bff1dc3ee1b9f25",
+      "pa21/tests/general/100-capturing-lambda-local.t": "de150939efa5dd90d4fdc2a186088e5428afda3d9ed2c290050f4f0527021dc4",
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t": "4b510c6574c7ea4edea7293b48990aac5f295c9df3657bce390352416e383db1",
+      "pa21/tests/general/100-dynamic-cast-fail.t": "7034c393b875cb003d207ee890d410c0d7a29d8b1860d1faba61fe42611f5ec3",
+      "pa21/tests/general/100-dynamic-cast-same-nonpolymorphic.t": "706e55ab05e827c2c36ec11b30cec57b9fa5d5ec439aa50f76be2e8669c07fc7",
+      "pa21/tests/general/100-dynamic-cast-success.t": "644ac58fd6b5e29cb95ffb1a2d85c3e976b5b83793ab2465c224503f683a30b5",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t": "066a1531adb9a67dcbffa75c5f6da4cf5579c8688e254558376bd5df9118cdef",
+      "pa21/tests/general/100-lambda-capture-mutable.t": "8742b294f9d1e35c6d6b769bd7cd42c44e0243432675ebbc9577d6d78e4fda46",
+      "pa21/tests/general/100-lambda-default-capture-ignores-global.t": "adbbc1ea8e7518d5055906a99291893366fb0e9d23b738f5cf368598aff52678",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t": "e786631f7c1a1c625df5acd4d9d5411c3b5c8ba03365e470700a014821805795",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t": "2a08fd996ee04ec405025e1b67131390f6c496f17159f37239ce122e4625c596",
+      "pa21/tests/general/100-placement-new-constructor-unwind-cleans-scope.t": "f52df309ca11c85e984793a643e5e85f50df9aeb85191307e015c94e367e3476",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t": "45268b9a96ac7b4390bc8ee30d3d9916dd077e61e367e2f16c8d7b5fd74bc179",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t": "71c8cad68b15825f0dfc9cea9a7f0c023a6d75ffdcc33c7958f3d0b0a7b2fb34",
+      "pa21/tests/general/100-source-rethrow-through-function.t": "ef2021870908e2e2b1cda60da759bfbfde6a975f90cb2f47e4193f34abf369a4",
+      "pa21/tests/general/100-source-try-catch-int.t": "97e93366b09d6271a1e7963262d63ded7141febdeb069f26036fa408aaa348b1",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t": "d957c7d34658959f711ae5c722440754e07ca1f4d724d1ce4ff9797f904c1005",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t": "77633897241bd054a635c7e9a0fdacc8dea3d4257eddf05219ae2bda634d54c9",
+      "pa21/tests/general/100-throw-protected-destructor-bad.t": "b82d410312ab8a4bfc24e10291b90fa41b0bc4dc782e19abf0b72aa4b62b0e1c",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t": "5522bf6c7a662949b66e9cbb7d3c1907c5f87c2c6c6c9c7167eb7d281fa6c4f3",
+      "pa21/tests/general/100-typeid-pointer-rtti-global.t": "891f5042fefce28cb7ee34f26b16a8087b35b877824d9ac589707830e8e2e043",
+      "pa21/tests/general/100-typeid-polymorphic.t": "9d5823db7b0a29e1e78dc2c895a09a8710abb129d589cdfc6902347d9b587cfa",
+      "pa21/tests/general/100-typeid-template-pointer-no-eager-complete.t": "24f998113856c304ff75c7fdc167f13af2d2a6662e706767f83bc313ac2faa99",
+      "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.t": "fa03082e9099a7f87b282d895d5b2cec212447aef747546addf3b2f015e62d56",
+      "pa21/tests/general/100-typeid-template-type-parameter.t": "45883e95566cdaf7eb14782da5961ca983673a72128c3954c8d509b1c30b15fc",
+      "pa21/tests/general/100-typeid-type.t": "e7b96957f33f55558cc82689fd6145e0fa2cadf2151d89e2b3ce5cbb5da2768b",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t": "12e59cd6906de85fcb6d903e5871eb9ef8c4741406290ec249d90a5ae6686e46",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t": "6f56623e3a11a196c57533eace0f18b1748be8a39399abf1da7793c5089fce66",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t": "d23a2626243c75ac125de97c0ae82e913be95d7c8f8c8551a4c1f6d653f220b1",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t": "1521e64b12170975dbbeb74e6887c31818d693290394e45682ebf0ca373fc2e0",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t": "08c4f37b57f715f638e26e190628825e18e367ac1a618f9339548cee9918e976",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t": "3d510ef25870433627d6fb6aca34eeda4d68e4b6162a9ccd9c51e2ed30e874a2",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t": "2edddb3535bf2ecd5c540826547016c5dcc14644cc331674a645e9caccd0918f",
+      "pa21/tests/general/200-builtin-initializer-list-special-members.t": "5cd0de728cea6574dd5327b44fba76cfc34fc1e940fcdf57ead157386c610e52",
+      "pa21/tests/general/200-captured-this-explicit-member-call.t": "5f2a6ecd4816f76172bb33178ebe23351fde053dbabcfba95704b3ac3aee6af5",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t": "4113492bf971be7430b689b8b75f70fb49af74c76e38e50d092bba8330207ec2",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t": "c406b196d8689fc585c9404974e86dea91e6c4fe67e974ac840b9fcab0b9a43a",
+      "pa21/tests/general/200-class-copy-capture-local.t": "f260aea7c9b3572670197f80180614ecdfa8af8b20c02fdad4e2cd16c896d222",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t": "e517bbe822dcf517c880daa239e4d23ee2c9649e33f6d82aa0a882f27d543b38",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t": "2be88e5962d4bd81670e2a0b0a33579dde5b503d08e805a2347afc6cc303c23b",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t": "d6739b5729ce9f37abad112c3fc084f68c1244c18845d3fa4a000bf4555fd482",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t": "8e76027f680b93bbb888cca9dd5652da2d24daf9803577eb64eb55521f2bf51b",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t": "160a9160d7bab671a8cb857338385f2cd85b38cd92e4457df19c8d63eae2fc50",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t": "4e2dee3f8b2e90e69cc4846906e2275bcc47131c138bf08aac37e983082c3d22",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t": "ffab851dc2a8993bcfd266705a0ae673e73f649a29bf29d719ca6e63d7fd2a31",
+      "pa21/tests/general/200-default-capture-this-explicit-member-call.t": "ef3419e84f339b3172db87274fb433b267374e0e128bd58f83b13a1b31f3d20b",
+      "pa21/tests/general/200-default-capture-this-implicit-member-call.t": "435ec62426ad94593eeddb9d2f581b9e17498e366f0df331d34619c34f9dd32c",
+      "pa21/tests/general/200-default-reference-capture-local.t": "edb3b11294786d432dd8831e50898c495c82fddb33adce32544cc47aa97af926",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t": "9308ecb4b4b85d5269531d7d2a04063abc65676b501bad30959f7365c1ffafb2",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t": "814db856b445edaf4043d3d612231ebcabc45a3adeef08a334fe416d547c123c",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t": "c1971a478dc83cd01fdd8e7be3df78afcc2faad665cf87e0b06f2d5bf70da585",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t": "259de3c1607f8a0dcce22e97ee490d0424d8633f81c2b4d3880d971e4d21643b",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t": "56b86646a5de12de811087817a3e5b26f2a9ba5878ac0a9fe9a00be5d19832da",
+      "pa21/tests/general/200-distinct-lambda-member-template-types.t": "da55f5410abdf9699701cd4b480fda457341991ca63898f1ec9d7453f66b84ea",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t": "f20da40ca082315244ac45185e1a08aa60ab2a2b4c97a5984cfedf3b8307a8c9",
+      "pa21/tests/general/200-empty-list-selects-default-constructor.t": "c8cc42eb7a243b953847c0ca6db25decc25058cca97e85124bc0e036ab8aa83b",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t": "369ad2b8f482d510d395106a0a16cdbb8e2f1de50bca0743ab1055a52eb7efda",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t": "10b467da76153201ae911885530251b8965f6fb86781b74716b3c1c537b484ba",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t": "a06b55eaa13330cc8f52ca638bd3be70c3e7d77f1623b36cde40ee1a4f878b6e",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t": "71aafa1145b135cc9a20ae8ef8dd6768acf3e64d69f995eddc653c4331750ae6",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t": "aabd977254cceb806adbb00865aca353f1a379ebb0abcbd8394f00728d32f1dd",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t": "be685c1b4357a1a6823f92fb2eff24ac228e3b505aba8d7e36523e9d18d72757",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t": "ecebbdefeb336de3ef9b15e1073ab6bd8c787d55ac1ea826bbdf4e292443ba53",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t": "0676bc66c832ab5b334eccf65e91aa7982661c15bffca1a9cc67d901f9714211",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t": "78e8f6baf417f252a4cef516df082f33ba444064f3c81178a83aa3fad377c56e",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t": "8f89c9346f4c00d29be5530611a7a77bc0b3bb6822f4dcca02d05cb82e3d05d0",
+      "pa21/tests/general/200-hidden-eh-default-constructor-protected-base-subobject-scope.t": "f0f095ac0530db5e34eb24cfc2f87b8602fefb1224a9d2c8786ceba5ff9769cf",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t": "25a070ece15af4d8109f37937f4413a2601fe3dc995c8876e890ff1f84be204b",
+      "pa21/tests/general/200-hidden-eh-nested-default-arg-temporary-cleanup.t": "57baaa33f100d2a2f77ecc8c0e19bf27f07145fec427dd741d3778958578a110",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t": "34b0b3d3383294798fc33ad71f3d36b7812000fd73c13d223a2c2f1d922cfda4",
+      "pa21/tests/general/200-hidden-eh-shared-dispatch-nonlifo-close.t": "94aaf94fe39d22c01300b3a084a5c04999dde8aadcf06cce348adb90eed0190d",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t": "d10fbdd76f8733db6684579c995540c5197ed2117180287490892912f6fca854",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t": "b3e7c170064fe936bee063cd1716c03f9a6bcd17715d3ffb32f3d237cdb8d012",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t": "92331763e70a7226f899ce272eed9a3de18b3cb52bacdaf8ae180ff242575dd4",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t": "d62b3f9379de747ef6172d605f3165e81dc71010ff84ff4db62420d01b0b840f",
+      "pa21/tests/general/200-initializer-list-call.t": "b05aa897bea59ec082ed96e93171b2f5851417abc093026fecc5752189bb4b1e",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t": "0230f70ff8dbc5aa111ca637c1a0a44686b17ddaf013ded0186ae4626c75c9f0",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t": "b1e5c8dd5db911bf8fa533b6168ffdd006833fd71731a67ff11099ca92009cb6",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t": "810fe47dadceee6888611fc74966769ff668b16e0ca77ee35b735c9e225d500b",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t": "e7e3c1d1796e5c88a432821b15c0c6e01af8f3a029cbc3b75ce6946dfe202256",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t": "34aa7d5f0ca59a19b59bc1bf45e97f9171697073b04d763f6bc342eaf830a1f6",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t": "eaea5b2d517d6ed6d4ab499959c156c2f2cb7505e3107bd3bad60015a1b21a43",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t": "6affcb5126487467580fba200a38d17ddb5f0a820fd46d818d2433d9e3ab2bb6",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t": "a7cbf96ac4ee43b350f9e29197724ad3bb677fe8bcbb7c4775ec9037a0f7d94f",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t": "9144ee421b51b743511d7ec85a37194b566c07497a4e03817d17c0ff61c5b972",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t": "b976a6665069e87ff2b46709f2840dcd3dfc8e8bf323d44464c1666f9ca39576",
+      "pa21/tests/general/200-nested-capturing-lambda-return-owner.t": "c57ac7957886ec585b2b497dd3b22668ac50bb31c52711c96a57b9bfbd3345dc",
+      "pa21/tests/general/200-nested-capturing-lambda-template-constructor-owner.t": "0d20613700b2940897de287df5f27abe4ff6aefa2c37506e1d131fec319c349b",
+      "pa21/tests/general/200-nested-lambda-local-shadow-capture.t": "aa889773dd241b72156922780b9ba024b323371d2c0f27f724a7ced0f7801cc7",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t": "c5f1cf6d8e02a7bf0b89057bd5bb483a0055e565740023c7c028ea5e2d4801d4",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t": "4c1514b57f544df705b08f56540ff4e82e4f788b9a6472d540d026df11d7f0ab",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t": "e65a122f9e6fa8b99966aaf893198f188d4fb04483b4be5ce93297350845e366",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t": "39994857ebf965883b164d92c768120f8016f9e08a16bb862718d817f2955857",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t": "4210d532dc5eb3e7d137ec83a8d5c2d5800313308d1bdc6f5a4127257e5a68b3",
+      "pa21/tests/general/200-recursive-template-destructor-construction-cleanup.t": "c24a25377d503878b09bc75dbde3fa9fe5039799cc1b2c241f43a8adc2884f10",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t": "02a1aa9ecbb2cf6b5826e91460b3f99250576c9c99f826ccdab66cf34958651d",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t": "e024827bebdf00f506ec51b2bfa0c9b7fe1c9b044014661c9e2b238afd5a4e1e",
+      "pa21/tests/general/200-source-base-ref-catch.t": "37db9991d5dd9ae54b42286044a239f742d09433a1b1530510024c820a537ead",
+      "pa21/tests/general/200-source-catch-ellipsis.t": "0815e58ab3cdbd039f381178d94647b025adc014c9ca5fcc7f7a1b67ac4a3bc7",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t": "e5316498b0d58dc6bf133f129c25b92e9594325b925bb7862b4739a543f4d3fc",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t": "0157a6041360ec6c9c7b6a18a8dc7333ce8b5def2a73b919b0b75a7fb51e6b09",
+      "pa21/tests/general/200-template-array-reference-cv-polymorphic-cleanup.t": "69d9ad3c02f7d97c555cfbc95af074b89f55fea782053641f9a5a771318f46e9",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t": "1dfe41a2c68955f183626a806e312dc6198d04efc5f9e7fdf81785d18c9849e4",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t": "41407dfa97f8c7fb4cf2927927df50a0cf998d0076d1be8ace156a375ffc9c07",
+      "pa21/tests/general/200-typeid-comparison-requires-operator-bad.t": "dfcd30e128f712a34eeec6d4666a17a528489e79c2be58de42901de54b6464a4",
+      "pa21/tests/general/200-typeid-expression-strips-cv-reference.t": "843981fbea4ab923493572c21a388d661a553047ae8a1091e260a99bddc3ff6f",
+      "pa21/tests/general/200-typeid-fundamental-distinct.t": "b686b301c089a4a5840ed170477ebb0db0e92f94e34a6a5cd184202f43b2d264",
+      "pa21/tests/general/200-typeid-rejects-unqualified-typeinfo-bad.t": "116da5217c570653ca94e9c81416a139a4f94505b34964c52d18f266b515c649",
+      "pa21/tests/general/200-typeid-requires-std-typeinfo-bad.t": "6d1aacfd593e903947bfca4eaa5227e3a1077d26e109dc20e75a21667007a56d",
+      "pa21/tests/general/300-dynamic-cast-inaccessible-upcast-bad.t": "26997255f2745c650803ac6309c18400005f566dda70928b7211d8c1fc9c0c67",
+      "pa21/tests/general/300-dynamic-cast-removes-cv-bad.t": "6e0d84223f4032f654010dd119244e73eb415bab5f1f712ccb6da2113796c93e",
+      "pa21/tests/general/300-rtti-evaluated-call-demand.t": "fb4de409815690d6a686973fd7e4f31013ab2fd0d45cc385f8a51bb05b66e13f",
+      "pa21/tests/general/300-template-catch-variable-member-body.t": "258cf0505e4c5cc52b69bfc5005f679526962ecbe9b353662edd23585e2cc516",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t": "4c6d70eb6a6afc9b2765073bd948249185f887c99108ce413dfefbc3e028858d",
+      "pa21/tests/spec/200-inline-namespace-forward-initlist-declaration.t": "99ebe8847cf22d86f289b745cf759b95ea1dd81fb7011763083f6ac23ff83330"
+    }
+  },
+  "capture_controls": {
+    "passed": 64,
+    "total": 64,
+    "evidence": [
+      {
+        "name": "copy",
+        "source": "int main(){int n=3;auto f=[n](){return n;};n=7;return f()!=3;}",
+        "source_sha256": "4b2c35056ac41206c797731ec2f50d24c9cd40c5eaaf6e55944e4ac1aa49adde",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "default_copy",
+        "source": "int main(){int n=3,m=4;auto f=[=](){return n+m;};n=9;return f()!=7;}",
+        "source_sha256": "8eb7b55b8fd2db7c5629f35dece34d2bd0948bf8b518aefd5254de5a2f78da70",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "mutable",
+        "source": "int main(){int n=3;auto f=[n]()mutable{return ++n;};return f()!=4||f()!=5||n!=3;}",
+        "source_sha256": "fbceb4b89508f5e63f37cec29fd02f6107d02b67e60c714f4c1e6a336194db76",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "mixed",
+        "source": "int main(){int n=3,m=4;auto f=[=,&m](){m+=n;};n=9;f();return m!=7;}",
+        "source_sha256": "31d48905d6ae3adad63eaae5491e732b5fb44a776386bf0c1ed212c85829374b",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "mixed_reference",
+        "source": "int main(){int n=3,m=4;auto f=[&,n](){m+=n;};n=9;f();return m!=7;}",
+        "source_sha256": "06f8d047dabd83ecee3e8a9f0443eb6ba31836b86d0370c3f50382fa828f7f98",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "reference_copy",
+        "source": "int main(){int n=3;int&r=n;auto f=[r]()mutable{return ++r;};return f()!=4||n!=3;}",
+        "source_sha256": "e2b7c6509a6f86b5d464d981cb8ace281293f6ce5a2b4aa3526e823ca9916559",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_copy",
+        "source": "int main(){int n=3;auto f=[n]()mutable{auto g=[n]()mutable{return ++n;};++n;return g()+n;};return f()!=8||n!=3;}",
+        "source_sha256": "3b7effa9cb100bb460c7f0c89c331fa7e8a55b83a680c66b46da8b537a00fa1f",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_reference",
+        "source": "int main(){int n=3;auto f=[n]()mutable{auto g=[&n](){return ++n;};return g();};return f()!=4||n!=3;}",
+        "source_sha256": "bef7f6daaea56f949d5ca44a464ec28f728205746cab9554a99b5e2407299c7f",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_copy_reference",
+        "source": "int main(){int n=3;auto f=[&n](){auto g=[n](){return n;};++n;return g();};return f()!=3||n!=4;}",
+        "source_sha256": "2c9df73ad4bc8921ddf60fc1a98eb5233d9e30fcf53d80a2ce91abb7f5986842",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_default",
+        "source": "int main(){int n=3;auto f=[=](){auto g=[=](){return n;};return g();};n=9;return f()!=3;}",
+        "source_sha256": "043319010bdc2948368970addb9518d416c07402d121d06abd5ab21718e7e43d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_shadow",
+        "source": "int main(){int n=3;auto f=[n](){int n=7;auto g=[n](){return n;};return g();};return f()!=7;}",
+        "source_sha256": "ebb52a9b15fc663eca4534b8feb3688927f7cc5a750f312a7792fc4e5fbf8115",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "default_this",
+        "source": "struct S{int n;int f(){auto g=[=](){return ++n;};return g();}};int main(){S s={3};return s.f()!=4||s.n!=4;}",
+        "source_sha256": "14e3edab22f6bca2e9a99e64d9c3c3b4aa6a4df15c1eba9c75c1d756b180d2e5",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "class_trivial",
+        "source": "struct S{int n;};int main(){S s={3};auto f=[s](){return s.n;};s.n=9;return f()!=3;}",
+        "source_sha256": "d30515d054ac7e9336163ce41bdca19e803a13a237d53c35dcb144a97c6fe929",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "class_mutable",
+        "source": "struct S{int n;};int main(){S s={3};auto f=[s]()mutable{return ++s.n;};return f()!=4||s.n!=3;}",
+        "source_sha256": "3cffd63d3b6c8e6389ca63b4db31595a3ef90bbd932d37125b1d2913915e1bce",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_dependency",
+        "source": "int count;struct S{S(){}S(const S&){++count;}};int main(){S s;auto f=[s](){};return count!=1;}",
+        "source_sha256": "0e258929a0f8ea1889b011282ffe2534c5c9ef635d8ca2c775023da018f78b26",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_template_dependency",
+        "source": "int count;template<class T>struct S{S(){}S(const S&){++count;}};int main(){S<int>s;auto f=[s](){};return count!=1;}",
+        "source_sha256": "887863fec962b331bcb5b4c5fc4f7502c357e0c16121bbdf1c32af8011fb0851",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_default_argument",
+        "source": "int count;int tick(){return ++count;}struct S{S(){}S(const S&,int n=tick()){count+=n;}};int main(){S s;auto f=[s](){};return count!=2;}",
+        "source_sha256": "4f6c877fc48559911ae79325c5178f5cbef32bfa0c75f94c47012d1d9c3bbcb8",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "destruction",
+        "source": "int count;struct S{int n;S(int x):n(x){}S(const S&s):n(s.n){++count;}~S(){count+=n;}};int main(){{S s(3);{auto f=[s](){};}if(count!=4)return 1;}return count!=7;}",
+        "source_sha256": "b024bcee5f69b7355a27ff1574cc6ae9d131bf23bae76d2dc3970daa6b475b21",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "closure_copy_destruction",
+        "source": "int count;struct S{S(){}S(const S&){++count;}~S(){count+=10;}};int main(){{S s;auto f=[s](){};{auto g=f;}}return count!=32;}",
+        "source_sha256": "a8cce5aaae60d23fe20262ed45280967c16c3eea96f552261df5d8a715fae523",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "class_reference",
+        "source": "int count;struct S{S(){}S(const S&){++count;}~S(){count+=10;}};int main(){{S s;auto f=[&s](){};}return count!=10;}",
+        "source_sha256": "72dc21af48fd3f4189fd7423847848761c1213cfb8471ff0e6cb182f77555edc",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "const_source",
+        "source": "int main(){const int n=3;auto f=[n]()mutable{return n;};return f()!=3;}",
+        "source_sha256": "8ec97a75ed8e5b7320547be7dca38b52d15420853761606c2915c3c48c1d0e95",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "const_address",
+        "source": "int main(){const int n=3;auto f=[n](){return &n;};return f()==&n||*f()!=3;}",
+        "source_sha256": "27272e10c571dc78698bea8160c62f8c752a136022210505e517aa92eb74a35b",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array",
+        "source": "int main(){int a[2]={3,4};auto f=[a]()mutable{a[0]+=a[1];return a[0];};return f()!=7||f()!=11||a[0]!=3;}",
+        "source_sha256": "600bac2213e75114dc8ed5b0fe1bc345570495087303e12abac477677fa1c17c",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array_nested",
+        "source": "int main(){int a[2][2]={{1,2},{3,4}};auto f=[a](){return a[1][1];};a[1][1]=9;return f()!=4;}",
+        "source_sha256": "7c79ee6918b7a87ba9897694e3ff43254f846a3937951a98856622bc10fd4b70",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array_large",
+        "source": "int main(){int a[32]={};a[31]=7;auto f=[a](){return a[31];};a[31]=9;return f()!=7;}",
+        "source_sha256": "370c0985f54489158b34249608e66bbe8516a48d3ed9420bcd78ecde4bde3d6f",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array_class",
+        "source": "int count;struct S{int n;S(int n=3):n(n){}S(const S&s):n(s.n){++count;}};int main(){S a[2];auto f=[a](){return a[1].n;};return count!=2||f()!=3;}",
+        "source_sha256": "bccc4541a3f68b39191897a2de6d5dcee7297d9bb2fa9688f672bf6135409ce7",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array_class_defaults",
+        "source": "int count;int tick(){return ++count;}struct S{S(){}S(const S&,int n=tick()){count+=n;}};int main(){S a[2];auto f=[a](){};return count!=6;}",
+        "source_sha256": "c18c09c271322d8bb94d84290044e9473ce98ef7f0a946275d85f24eb32d3000",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "function_reference",
+        "source": "int f(){return 7;}int main(){int(&r)()=f;auto g=[r](){return r();};return g()!=7;}",
+        "source_sha256": "e9cd99c3287436a32b303424a0988ff99a8a4ca64b51669b3c238627573efce3",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "function_template",
+        "source": "template<class T>int run(T n){auto f=[n](){return n+1;};return f();}int main(){return run(3)!=4||run(5L)!=6;}",
+        "source_sha256": "7a85840194b70aa87f56c2756763d11feeacaa06ae12707dc45b7244faeebe17",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "member_template",
+        "source": "struct S{template<class T>int run(T n){auto f=[n](){return n+1;};return f();}};int main(){S s;return s.run(3)!=4||s.run(5L)!=6;}",
+        "source_sha256": "93ffb2fafd2ab396f6ddda69de2b0e6a7aa67c7ff13cc6ea3882083a76195c9c",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "pack",
+        "source": "int sum(int a,long b){return a+b;}template<class...T>int f(T...args){auto g=[args...](){return sum(args...);};return g();}int main(){return f(3,4L)!=7;}",
+        "source_sha256": "8fc6a09a9e2575fa7c576481f9df862d29362cca3e13ed2ad20d91996fa29e3b",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "pack_empty",
+        "source": "template<class...T>int f(T...args){auto g=[args...](){return sizeof...(args);};return g();}int main(){return f();}",
+        "source_sha256": "c227f51fe06693995fa8d0675ae5766e5f891f6295978bb6c483d5a7e3516088",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "decltype",
+        "source": "template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};int main(){int n=3;auto f=[n](){static_assert(same<decltype(n),int>::value,\"declared\");static_assert(same<decltype((n)),const int&>::value,\"expression\");return n;};return f()!=3;}",
+        "source_sha256": "344b8a906cbc1eba399686d88189b9f154db40c7920a2f15108626617b8b69d2",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "reference_parameter_shadow",
+        "source": "int main(){int n=3;auto f=[n](){auto g=[&](int n){return n;};return g(7);};return f()!=7;}",
+        "source_sha256": "3dd0b8f92a03c82e1f75170e1109a47ba4755772afe20a2fd48575c8306d448c",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "destructible_argument",
+        "source": "int count;struct S{S(){}S(const S&){++count;}~S(){count+=10;}};template<class F>void run(F f){f();}int main(){{S s;run([s](){});}return count!=21;}",
+        "source_sha256": "0ed0adf8ccf0a61739aff02e762fdaea2d76fdd8e95abce4050b2b6fa25873e5",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "destructible_lvalue_argument",
+        "source": "int count;struct S{S(){}S(const S&){++count;}~S(){count+=10;}};template<class F>void run(F f){f();}int main(){{S s;auto f=[s](){};run(f);}return count!=32;}",
+        "source_sha256": "20f835bd83d994fcc23fdb32885cf876d6ebda7d037473da2286d26243103115",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "class_template_destruction",
+        "source": "int count;template<class T>struct S{S(){}S(const S&){++count;}~S(){count+=10;}};int main(){{S<int>s;auto f=[s](){};}return count!=21;}",
+        "source_sha256": "e1877cc078b59c7030876c94ba8aacd2fb5db7ea21ad8f0070b30b9b1fa2cb27",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_default_const_copy",
+        "source": "int main(){int n=3;auto f=[n](){auto g=[n]()mutable{return n;};return g();};return f()!=3;}",
+        "source_sha256": "07d8209ba6b4d58f932df388f430f11f19aea8a22d28bf5355c984e4b09b417b",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_reference_field",
+        "source": "struct S{int&n;};int main(){int n=3;S s={n};auto f=[s](){return ++s.n;};return f()!=4||n!=4;}",
+        "source_sha256": "153b9865b02ca1c2ece3b5c9f056a9e5359cfb7cebba5b990bf2acaf44ec9b88",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "mutable_field",
+        "source": "struct S{mutable int n;};int main(){S s={3};auto f=[s](){return ++s.n;};return f()!=4||f()!=5||s.n!=3;}",
+        "source_sha256": "a2d2212ecedb910638ba2def3f570f0f940e82ecc727a8310c802e3195e68cae",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "volatile_copy",
+        "source": "int main(){volatile int n=3;auto f=[n]()mutable{return ++n;};return f()!=4||n!=3;}",
+        "source_sha256": "8874b74b3d7cae2cb77a795c04541cd65e643630803738b4246051326fe45c58",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "decltype_without_capture",
+        "source": "template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};int main(){int n=3;auto f=[=](){static_assert(same<decltype((n)),const int&>::value,\"expression\");return 0;};return sizeof(f)!=1||f();}",
+        "source_sha256": "4bd5f92c3683a095ca0c05c1d7b8e6c67724710f0eafd3dc45fbb7e90c36528d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "decltype_template",
+        "source": "template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};template<class T>int f(T n){auto g=[n](){static_assert(same<decltype((n)),const T&>::value,\"expression\");return n;};return g();}int main(){return f(3)!=3;}",
+        "source_sha256": "d74455b734dea6307c18c97c997e3c263facea4ba97dd3bc51ffdca45843095d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "decltype_nested_reference",
+        "source": "template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};int main(){int n=3;auto f=[n](){auto g=[&n](){static_assert(same<decltype((n)),const int&>::value,\"expression\");return n;};return g();};return f()!=3;}",
+        "source_sha256": "bd07651c5fbfec0d4f5111bd08b574d4594774f853f6b30fa40d66d27c89ed6f",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "decltype_local_shadow",
+        "source": "template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};int main(){int n=3;auto f=[n](){int n=4;static_assert(same<decltype((n)),int&>::value,\"expression\");return n;};return f()!=4;}",
+        "source_sha256": "9c16199c519054c301fd88cd57a9f3966e2950dfc44ab1922f98ad47aa71c936",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array_default_temporaries",
+        "source": "int count,seen;struct G{G(){++count;}~G(){--count;}};struct S{S(){}S(const S&,const G& = G()){seen+=count;}};int main(){S s[3];auto f=[s](){};return seen!=3||count!=0;}",
+        "source_sha256": "281871d4919e15f10de8d3dead2b3fa527eae86aea777638c88e4cbbe36e4d47",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_ctor_template",
+        "source": "int count;struct S{S(){}S(S&){count+=1;}template<class T>S(const T&){count+=10;}};int main(){S s;auto f=[s](){};return count!=1;}",
+        "source_sha256": "d54d7c0e003ec30ef15fd3e3331d7ed6294f32a72f3f5611e568790a174a49e0",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy_deleted_move",
+        "source": "struct S{int n;S(int v):n(v){}S(const S&)=default;S(S&&)=delete;};int main(){S s(3);auto f=[s](){return s.n;};return f()!=3;}",
+        "source_sha256": "9418bc9c47f7d8635518848b04b192e0b76c414a3bcd7b6171232d07b935404d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "closure_copy_defaults",
+        "source": "int count;int tick(){return ++count;}struct S{S(){}S(const S&,int n=tick()){count+=n;}};int main(){S s;auto f=[s](){};auto g=f;return count!=6;}",
+        "source_sha256": "ba41d12f7cdea3a59a8853344fed4e3a1559bf2147d6434a30ae61878fb0dfb7",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "closure_move_template",
+        "source": "int count;struct S{S(){}S(S&){count+=1;}template<class T>S(const T&){count+=10;}};int main(){S s;auto f=[s](){};auto g=static_cast<decltype(f)&&>(f);return count!=11;}",
+        "source_sha256": "d6a30612254227048b8e6bd32090ac5d459fd32fd0bc10f7a2d1ae409ba5ddab",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "closure_copy_default_temp",
+        "source": "int count,seen;struct G{G(){++count;}~G(){--count;}};struct S{S(){}S(const S&,const G& = G()){seen+=count;}};int main(){S s;auto f=[s](){};auto g=f;return seen!=2||count!=0;}",
+        "source_sha256": "cfa84d6fdc19a920b70aaf51894919e3b73532bb13bdca480836d0efa00529ac",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "const_operator",
+        "source": "int main(){int n=3;auto f=[n](){return ++n;};}",
+        "source_sha256": "af7cfca5651a51c888ae2be004f180eaf47f73f7be6ce7718206d62329945ece",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: modifiable lvalue required\n",
+        "passed": true
+      },
+      {
+        "name": "const_source_mutable",
+        "source": "int main(){const int n=3;auto f=[n]()mutable{return ++n;};}",
+        "source_sha256": "488ecd968891785a86d8fe939f4f214f8245da4fd8636dda4a150cf8291e1d0d",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: modifiable lvalue required\n",
+        "passed": true
+      },
+      {
+        "name": "const_class_operator",
+        "source": "struct S{int n;};int main(){S s={3};auto f=[s](){++s.n;};}",
+        "source_sha256": "dedc38268da7a1c14d31b4cb070a0a5585152f15082ff95de360921640a54556",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: modifiable lvalue required\n",
+        "passed": true
+      },
+      {
+        "name": "nested_const",
+        "source": "int main(){int n=3;auto f=[n](){auto g=[&n](){return ++n;};};}",
+        "source_sha256": "b5708698139f56b60b58c585d26d17dbac2bd139e2bcff509d59db2c3fdd27d4",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: modifiable lvalue required\n",
+        "passed": true
+      },
+      {
+        "name": "deleted_copy",
+        "source": "struct S{S(){}S(const S&)=delete;};int main(){S s;auto f=[s](){};}",
+        "source_sha256": "35c807155b5a6e3e7eb233c71fd83ffdcd288653deb9a9ff5f0a7538c67861ee",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid fixed call argument\n",
+        "passed": true
+      },
+      {
+        "name": "private_copy",
+        "source": "class S{S(const S&);public:S(){}};int main(){S s;auto f=[s](){};}",
+        "source_sha256": "12b04a4b16e3339503bb988a66c572db30886f02c9445cbfa52aae8cb33bc73b",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid fixed call argument\n",
+        "passed": true
+      },
+      {
+        "name": "duplicate",
+        "source": "int main(){int n;auto f=[n,n](){};}",
+        "source_sha256": "ebef374cb9b0611c1cee96ce8f632c5dc160cf1b12f600c39ecf603e2c15faba",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: duplicate capture\n",
+        "passed": true
+      },
+      {
+        "name": "duplicate_mixed",
+        "source": "int main(){int n;auto f=[n,&n](){};}",
+        "source_sha256": "3ef465f567b1131bf61efe74e77f100f6436468060a3dbaf4ce0f5901322d038",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: duplicate capture\n",
+        "passed": true
+      },
+      {
+        "name": "redundant_copy",
+        "source": "int main(){int n;auto f=[=,n](){};}",
+        "source_sha256": "023ba2f60cbe8fa83e242f1558ea106c22c26cc3770c862825cbe50112731c51",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: redundant capture\n",
+        "passed": true
+      },
+      {
+        "name": "parameter_conflict",
+        "source": "int main(){int n;auto f=[n](int n){};}",
+        "source_sha256": "c62e3a1b22bb533718f623a056bf87369b87071a56399216a70e47ef89a2b033",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: capture conflicts with lambda parameter\n",
+        "passed": true
+      },
+      {
+        "name": "global_capture",
+        "source": "int n;int main(){auto f=[n](){};}",
+        "source_sha256": "a9d16c9b4bca418e68598e51da6e507544b38e51555925bd94446cd54fa10f06",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: capture requires automatic local\n",
+        "passed": true
+      },
+      {
+        "name": "static_capture",
+        "source": "int main(){static int n;auto f=[n](){};}",
+        "source_sha256": "2b4c0beaf79745b1932fd47c4cec05a668af8f42ca48abf9b39f80b7561c9ed0",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: capture requires automatic local\n",
+        "passed": true
+      },
+      {
+        "name": "missing_outer",
+        "source": "int main(){int n;auto f=[](){auto g=[n](){};};}",
+        "source_sha256": "22681ed5b99d81f5b53f4161f8a70d4788dd8ace77a0f1de3026040735cde8f2",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: object requires lambda capture\n",
+        "passed": true
+      }
+    ]
+  },
+  "capture_unwind": {
+    "passed": 13,
+    "total": 13,
+    "evidence": {
+      "compiler_sha256": "31dcf1518f4d31d34bcfadb6a4800d4a2295e5ba8edd193ff958143a4a179d8b",
+      "object_backend_sha256": "e32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70",
+      "rows": [
+        {
+          "name": "second_capture",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1),b(2);auto f=[a,b](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==102)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==102;}int expected[]={101,2,1};if(caught!=true||used!=3)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            101,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/second_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "a6e4158c684b1bc003a5e23f524babcf492f101ecbb6c3c9d49f7cbcebef9aea"
+        },
+        {
+          "name": "first_capture",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1),b(2);auto f=[a,b](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==101)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==101;}int expected[]={2,1};if(caught!=true||used!=2)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/first_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "a6e4158c684b1bc003a5e23f524babcf492f101ecbb6c3c9d49f7cbcebef9aea"
+        },
+        {
+          "name": "complete",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1),b(2);auto f=[a,b](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==0)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={102,101,2,1};if(caught!=false||used!=4)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            102,
+            101,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/complete"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "a6e4158c684b1bc003a5e23f524babcf492f101ecbb6c3c9d49f7cbcebef9aea"
+        },
+        {
+          "name": "array_small",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[3];auto f=[a](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==103)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==103;}int expected[]={102,101,3,2,1};if(caught!=true||used!=5)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            102,
+            101,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_small"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "33d15e6f9f5a647702d10ae9478472ea9ce677513bed371de4ba193e3f1b4bba"
+        },
+        {
+          "name": "array_large",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[12];auto f=[a](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==106)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==106;}int expected[]={105,104,103,102,101,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||used!=17)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            105,
+            104,
+            103,
+            102,
+            101,
+            12,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_large"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "1a1f5777f2fd96bd7d56650a729fce99682888ce084cd93fbcc97f93a8ced3cc"
+        },
+        {
+          "name": "array_then_scalar",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[3];S b(9);auto f=[a,b](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==109)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==109;}int expected[]={103,102,101,9,3,2,1};if(caught!=true||used!=7)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            103,
+            102,
+            101,
+            9,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_then_scalar"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "5a4f0eb2881ff1181babcd91fc27e5cba3586d3f5f519723a9349db6b1feb4a3"
+        },
+        {
+          "name": "nested_capture",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1);auto f=[a](){auto g=[a](){};};f();}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==201)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==201;}int expected[]={101,1};if(caught!=true||used!=2)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            101,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/nested_capture"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "45a621b2e18a2e274c9dcc6ce5726e720140aba79700ac282cac82e6655d17b6"
+        },
+        {
+          "name": "closure_copy_failure",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1),b(2);auto f=[a,b](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==202)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==202;}int expected[]={201,102,101,2,1};if(caught!=true||used!=5)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            201,
+            102,
+            101,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_copy_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "3ae66f4f5da3af7afdc93da40cf889e1b4219533ecebe8aa6bb5be8756f8ff64"
+        },
+        {
+          "name": "closure_array_copy_failure",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[3];auto f=[a](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==203)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==203;}int expected[]={202,201,103,102,101,3,2,1};if(caught!=true||used!=8)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            202,
+            201,
+            103,
+            102,
+            101,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_copy_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "6bdd77704190c6bbfa8c9b5a2e743d6be0ef1337a032cdcf6269d20ee59f7f59"
+        },
+        {
+          "name": "closure_array_large_failure",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[12];auto f=[a](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==206)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==206;}int expected[]={205,204,203,202,201,112,111,110,109,108,107,106,105,104,103,102,101,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||used!=29)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            205,
+            204,
+            203,
+            202,
+            201,
+            112,
+            111,
+            110,
+            109,
+            108,
+            107,
+            106,
+            105,
+            104,
+            103,
+            102,
+            101,
+            12,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/closure_array_large_failure"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "1abe50c4aac6fcf3d85ec3726b44333591825dad0f0bd6c3857e3a8bfeba9521"
+        },
+        {
+          "name": "empty_copy_prefix",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct S{int id;S(int n=next_id()):id(n){}S(const S&s):id(s.id+100){copied(id);}~S(){destroyed(id);}};struct E{~E(){destroyed(50);}};extern \"C\" void run(){E e;S s(1);auto f=[e,s](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==201)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==201;}int expected[]={50,101,50,1,50};if(caught!=true||used!=5)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            101,
+            50,
+            1,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/empty_copy_prefix"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "4bd9fc5968c03053b13e5e3fc5b5eb670e6c9fad8d6c93898f8e0b41118e0a38"
+        },
+        {
+          "name": "default_temp",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct G{G(){}~G(){destroyed(50);}};struct S{int id;S(int n=next_id()):id(n){}S(const S&s,const G& =G()):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a(1),b(2);auto f=[a,b](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==102)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==102;}int expected[]={50,101,50,2,1};if(caught!=true||used!=5)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            101,
+            50,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/default_temp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "bdb19082b5c9d2f3784e078d5d880a32862d53af75831820a5e6ac1711d90182"
+        },
+        {
+          "name": "array_defaults",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);extern \"C\" int next_id();struct G{G(){}~G(){destroyed(50);}};struct S{int id;S(int n=next_id()):id(n){}S(const S&s,const G& =G()):id(s.id+100){copied(id);}~S(){destroyed(id);}};extern \"C\" void run(){S a[3];auto f=[a](){};}",
+          "harness": "extern \"C\" void run();int seq[100],used,serial;extern \"C\" int next_id(){return ++serial;}extern \"C\" void copied(int n){if(n==103)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==103;}int expected[]={50,50,50,102,101,3,2,1};if(caught!=true||used!=8)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            50,
+            50,
+            102,
+            101,
+            3,
+            2,
+            1
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/eh-fifth/array_defaults"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": true,
+          "lowir_sha256": "e48f40593aa6a80275f33e91256d9ac7ce4bd481ba6825eba16eebc62c102ed0"
+        }
+      ]
+    }
+  },
+  "inherited_captures": {
+    "passed": 58,
+    "total": 58,
+    "evidence": [
+      {
+        "name": "reference",
+        "source": "int main(){int n=3;auto f=[&n](int x){n+=x;return n;};return f(4)!=7||n!=7;}",
+        "source_sha256": "b11a5475eb3b5ea86209f4e5638fd7d44a1925f2c34e130480e42be47d42f938",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "default_reference",
+        "source": "int main(){int n=3,m=4;auto f=[&](){return n+m;};n=8;return f()!=12;}",
+        "source_sha256": "f335994590bd9d49642878386beaad20d6b93c8e26538f99fa0d8a401c1b7303",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "reference_alias",
+        "source": "int main(){int n=3;int&r=n;auto f=[&](){++r;};f();return n!=4;}",
+        "source_sha256": "479b0e33550549ad900c4d487360033a78fd93f6a9fab6208b6377168099f768",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "array",
+        "source": "int main(){int a[2]={3,4};auto f=[&](){a[1]+=a[0];};f();return a[1]!=7;}",
+        "source_sha256": "df8fb4c78b61f167109abaabd708061df6332ce53ff0eb00ac13033e70973a29",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "class",
+        "source": "struct S{int n;};int main(){S s={3};auto f=[&](){s.n+=4;};f();return s.n!=7;}",
+        "source_sha256": "c170afeb60ac88dcf61df685b3ddf0d6f643a45cdadb651f7a2b64c3105d287d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "const_address",
+        "source": "int main(){const int n=3;auto f=[&]()->const int*{return &n;};return f()!=&n;}",
+        "source_sha256": "8147ab95fe0bda1f50142d70e51272ab4cb5bb56b6ad5839c7095060208dfc91",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "const_no_capture",
+        "source": "int main(){const int n=3;auto f=[](){return n;};return f()!=3;}",
+        "source_sha256": "46abdeaee5df48256d89839f8b7e658c9185f3d44a1ed6a5843cdd3ce7cec5e0",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "this_field",
+        "source": "struct S{int n;int f(){auto g=[this](){return ++n;};return g();}};int main(){S s={3};return s.f()!=4||s.n!=4;}",
+        "source_sha256": "6c90287037ab76dc90007a7955f9d68a6d327e8e6d9fe16b80d464732d96c8ad",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "this_explicit",
+        "source": "struct S{int n;int f(){return [this](){return this->n;}();}};int main(){S s={3};return s.f()!=3;}",
+        "source_sha256": "33e10fd77a7343e436c0dc2711ad7fbbae8f29828e111e72bbff23d00d7647e6",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "this_default",
+        "source": "struct S{int n;int read()const{return n;}int f()const{auto g=[&](){return read();};return g();}};int main(){S s={3};return s.f()!=3;}",
+        "source_sha256": "c29ac5dfa62da38b458922e18000a879ac39cfcca8750b00e7824997e7cc7308",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "this_equal_default",
+        "source": "struct S{int n;int f()const{return [=](){return n;}();}};int main(){S s={3};return s.f()!=3;}",
+        "source_sha256": "b9f06c9366bc2dcebfbd94b0079bd8e555ae59e0c1d42d972dc7b02a56b0bc56",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_reference",
+        "source": "int main(){int n=3;auto f=[&](){auto g=[&](){return ++n;};return g();};return f()!=4||n!=4;}",
+        "source_sha256": "c5e504ce353d65c0d70797e371b3754c7fff8db363a82829054aec7737014548",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_own_local",
+        "source": "int main(){auto f=[](){int n=3;auto g=[&](){return ++n;};return g();};return f()!=4;}",
+        "source_sha256": "cf31af0b8cf659be8b391cfc567465d696f81cb690e05a00402a039000a3219d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_parameter",
+        "source": "int main(){auto f=[](int n){auto g=[&](){return ++n;};return g();};return f(3)!=4;}",
+        "source_sha256": "caed663eed315bf2f08f043cc45ee2ec448c329e4a5f02e6cf6a73adbd58eb7b",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_this",
+        "source": "struct S{int n;int f(){auto a=[&](){auto b=[&](){return ++n;};return b();};return a();}};int main(){S s={3};return s.f()!=4||s.n!=4;}",
+        "source_sha256": "30c1fa7ee97647a6198af94894686aaf103d1feaa188b306d641a5cda16cbae3",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_this_and_local",
+        "source": "struct S{int n;int f(int x){auto a=[&,this](){int y=2;auto b=[&](){return n+x+y;};return b();};return a();}};int main(){S s={3};return s.f(4)!=9;}",
+        "source_sha256": "b965184561e5eb3c828cd25c6667bf4bfde4dd41596c553541f3b3d11cd40413",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "copy",
+        "source": "int main(){int n=3;auto a=[&](){return ++n;};auto b=a;auto c=static_cast<decltype(a)&&>(a);return b()!=4||c()!=5||a()!=6;}",
+        "source_sha256": "a1b9db013dcdafba52e3af4b405d6e07285ba75d79d7f614e9c33b064d5bad68",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "by_value_argument",
+        "source": "template<class F>int f(F g){return g();}int main(){int n=3;auto a=[&](){return ++n;};return f(a)!=4||n!=4;}",
+        "source_sha256": "492ddafda4533b42be466f1bbfdfd1181b1a9310e2cca6b11faf18eb3bbb68cb",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "immediate_argument",
+        "source": "template<class F>int f(F g){return g();}int main(){int n=3;return f([&](){return ++n;})!=4||n!=4;}",
+        "source_sha256": "e9a8851731f696787fac65f3c93618da12c4a27ec4735ecd537b5a2813fc059e",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "function_specializations",
+        "source": "template<class T>int f(T x){int n=3;auto a=[&](){return n+x;};return a();}int main(){return f(4)!=7||f(5L)!=8;}",
+        "source_sha256": "43e63d93097b7818fcd8306bc58524c912e436a662cfac802d9370d372c9d1c8",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "member_specializations",
+        "source": "template<class T>struct S{T n;int f(){auto a=[&](){return n;};return a();}};int main(){S<int>s={3};S<long>t={4};return s.f()!=3||t.f()!=4;}",
+        "source_sha256": "781cbac16c3c547c98979813fcfbb5bbce7f6384de4cf11ae6166a2fd3128b68",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "static_no_capture",
+        "source": "int main(){static int n=3;auto a=[&](){return ++n;};return a()!=4;}",
+        "source_sha256": "e00767a46a1cb56017c9af0a2f80f07e05aac8db9c756d109633f935fa837f3c",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "enum_no_capture",
+        "source": "enum E{N=3};int main(){auto a=[&](){return N;};return a()!=3;}",
+        "source_sha256": "1569a27457440c07c7fef61372476efae074ab154d8170b032d660b3a265a247",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "shadow",
+        "source": "int main(){int n=3;auto a=[&n](){int n=4;auto b=[&](){return n;};return b();};return a()!=4||n!=3;}",
+        "source_sha256": "f1fcb074547bcde6df65c33b269d1639c16aac6cd872bebdaa716517d3d83aab",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "repeated_evaluation",
+        "source": "int f(int n){auto a=[&](){return n;};return a();}int main(){return f(3)!=3||f(4)!=4;}",
+        "source_sha256": "17cb11f0b3dbbc7a14c6b7408d973b7bc6869d170d76f2996f772fe182d62dba",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "friend",
+        "source": "class S{friend struct R;int n;public:S():n(3){}};struct R{int f(S&s){auto a=[&](){return s.n;};return a();}};int main(){S s;R r;return r.f(s)!=3;}",
+        "source_sha256": "1aaac5b1414057aae67cad2cfcdce2a573c443270721b49c6b3be0166dbbf77c",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "returned_closure",
+        "source": "auto make(int&n){return [&n](){return ++n;};}int main(){int n=3;auto f=make(n);return f()!=4||n!=4;}",
+        "source_sha256": "ffd20b2cd85f001fb8fb1040783ce9a3afbb7cfa7a86ce76be8897dff2037ab9",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "explicit_pack",
+        "source": "int sink(int&a,long&b){++a;++b;return a+b;}template<class...T>int f(T&...args){auto a=[&args...](){return sink(args...);};return a();}int main(){int n=3;long m=4;return f(n,m)!=9||n!=4||m!=5;}",
+        "source_sha256": "4d06db10607741369890dd309ddbd7872dc0d7a7c03708b45b30514adbe998d1",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "explicit_empty_pack",
+        "source": "template<class...T>int f(T...args){auto a=[&args...](){return sizeof...(args);};return a();}int main(){return f();}",
+        "source_sha256": "cc7ca3df3b6e53215955105a99e8d6a6bc021331356836b764636b107b6a6526",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "explicit_nested_pack",
+        "source": "int sink(int&a,long&b){++a;++b;return a+b;}template<class...T>int f(T&...args){auto a=[&args...](){auto b=[&args...](){return sink(args...);};return b();};return a();}int main(){int n=3;long m=4;return f(n,m)!=9||n!=4||m!=5;}",
+        "source_sha256": "3db5ea50527f828dd79d8930161d2d223ab1e57ddddd21c938a66aa96bde3f98",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "template_constructor_closure_type",
+        "source": "template<class T>struct pointer{static const bool value=false;};template<class T>struct pointer<T*>{static const bool value=true;};struct S{int n;template<class F>S(F f):n(f(6)){static_assert(!pointer<F>::value,\"closure must remain a class\");}};int main(){S s=[](int x){return x+1;};return s.n!=7;}",
+        "source_sha256": "8b3b6b9111417153bedd97ecdb4cac533fc7925c99463fa07ae946554c2627e0",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "wrapper_direct",
+        "source": "struct W{int(*p)(int);W(int(*p)(int)):p(p){}};int main(){W w([](int n){return n+1;});return w.p(3)!=4;}",
+        "source_sha256": "df04d2ec227d5ed192bf1934d027a2c647bef24d4db7583a65839e4ff7b91c10",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "wrapper_explicit_pointer",
+        "source": "struct W{int(*p)(int);W(int(*p)(int)):p(p){}};int f(const W&w){return w.p(3);}int main(){return f(+[](int n){return n+1;})!=4;}",
+        "source_sha256": "147cd1d1e94f5667feaa91325483435b5edc2037d32e5e0f410a1dd10f08fb72",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "captured_constructor",
+        "source": "struct S{int n;template<class F>S(F f):n(f()){}};int main(){int n=3;S s=[&](){return n;};return s.n!=3;}",
+        "source_sha256": "61291589adbd65a376b620d70ca3541fefdc891cec01447005f62c8defc0b295",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_member_specializations",
+        "source": "template<class T>struct S{int n;int f(){auto a=[&](){return n;};return a();}};int main(){S<int>s={3};S<long>t={4};return s.f()!=3||t.f()!=4;}",
+        "source_sha256": "ed3da6dca5faf934d295cce1c4b8598eab71c554ea47229d53326e45c8a68ddd",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_fixed_member",
+        "source": "template<class T>struct S{int n;int read()const{return n;}int f()const{auto a=[&](){auto b=[&](){return read();};return b();};return a();}};int main(){S<int>s={3};return s.f()!=3;}",
+        "source_sha256": "ba1ecc877e83d7ed535e8348acf6a74a9988f58efa3cffc927bc7f8e321a3bb9",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_const_address",
+        "source": "int main(){const int n=3;auto a=[&](){auto b=[&]()->const int*{return &n;};return b();};return a()!=&n;}",
+        "source_sha256": "6c45c099399c77d156c84d07d38f698b2c15941770ed275c607051756b61df86",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "late_outer_capture",
+        "source": "int main(){int a=1,b=2,c=3;auto f=[&](){auto g=[&](){return b;};return a+g()+c;};return f()!=6;}",
+        "source_sha256": "6321bc01eac243ee9b74dd3aebab1faa3a5dea3c4ba5ae3be698525e458878fa",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "outer_reference_parameter",
+        "source": "template<class T>int f(T&n){auto a=[&](){auto b=[&](){return ++n;};return b();};return a();}int main(){int n=3;return f(n)!=4||n!=4;}",
+        "source_sha256": "365752a19c710c501c121ebbf69319a04809853af05720b0470cef7ae3e059f0",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "empty_default_parameter",
+        "source": "template<class F>int f(F g){return g();}int main(){return f([&](){return 3;})!=3;}",
+        "source_sha256": "002ddb56ece29a7c22c4e68addb17f16377a79700b747b518346a4073ed8483d",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "static_member_in_default",
+        "source": "struct S{static int read(){return 3;}int f(){auto a=[&](){return read();};return a();}};int main(){S s;return s.f()!=3;}",
+        "source_sha256": "14a03a92a3814fff9e978eed31183612c3e7d0a6890ab53f00d9b93b5c65f775",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "this_two_objects",
+        "source": "struct S{int n;int f(){auto a=[this](){return n;};return a();}};int main(){S s={3},t={4};return s.f()!=3||t.f()!=4;}",
+        "source_sha256": "53b3c6997ed5eea9878cd8251c3c906e1766f98bcef9124155534d43058128d8",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "namespace_capture_default",
+        "source": "auto f=[&](){return 3;};int main(){return f();}",
+        "source_sha256": "92255b0caeceaa15ac10c4bc9eb92a55d591684e8ed090ca3fca460f61341774",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: capture requires block scope\n",
+        "passed": true
+      },
+      {
+        "name": "value_default_explicit_this",
+        "source": "struct S{int n;int f(){return [=,this](){return n;}();}};",
+        "source_sha256": "f180b0ecef0fbf78ceaa921147e988c606d9419bf0a676f5526c0ff4d461d643",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: explicit this with value default is not C++11\n",
+        "passed": true
+      },
+      {
+        "name": "redundant_reference",
+        "source": "int main(){int n;auto a=[&,&n](){};}",
+        "source_sha256": "7b1d0722daeab37f597216bccd9bff0a6da3f9269698e3ab4a855c565a878463",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: redundant capture\n",
+        "passed": true
+      },
+      {
+        "name": "capture_parameter",
+        "source": "int main(){int n;auto a=[&n](int n){return n;};}",
+        "source_sha256": "53be025645bf246f9c656629b2c09a10a80d4e42e44fe9d9d724aadad9f83e58",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: capture conflicts with lambda parameter\n",
+        "passed": true
+      },
+      {
+        "name": "unexpanded_capture_pack",
+        "source": "template<class...T>void f(T...n){auto a=[&n](){};}int main(){f(3);}",
+        "source_sha256": "19737592ef7e6cf679c565fe81a11576697c5b949a6da0c08a7dbc90d9776f3f",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid capture pack expansion\n",
+        "passed": true
+      },
+      {
+        "name": "nonpack_expansion",
+        "source": "int main(){int n;auto a=[&n...](){};}",
+        "source_sha256": "71f02359b736c0ed671927f065bb334013d3fce1f6dc9970e7dadcfe5ee50363",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid capture pack expansion\n",
+        "passed": true
+      },
+      {
+        "name": "wrapper_two_conversions",
+        "source": "struct W{W(int(*)());};void f(const W&);int main(){f([](){return 1;});}",
+        "source_sha256": "e3f9063958354e4b441bb43b34817af1af8cba952a91a6f810ffa99d73508d9a",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: no viable function\n",
+        "passed": true
+      },
+      {
+        "name": "missing_local",
+        "source": "int main(){int n=3;auto a=[](){return n;};}",
+        "source_sha256": "74a8225976873e64f75b1b97584d89b5a02dad11d661eaa9eb0b4644e6ec78e4",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: object requires lambda capture\n",
+        "passed": true
+      },
+      {
+        "name": "missing_this",
+        "source": "struct S{int n;int f(){return [](){return n;}();}};",
+        "source_sha256": "058f8887dd8637248b1856bbc8f744a6b75798582c5fe2833e7bab972fcc28b3",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: object requires lambda capture\n",
+        "passed": true
+      },
+      {
+        "name": "missing_nested",
+        "source": "int main(){int n=3;auto a=[](){auto b=[&](){return n;};return b();};}",
+        "source_sha256": "b2ce3c5dc70ba8eb4892f0c0efd395ca5033309cce611a0f24a2193e0615362d",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: object requires lambda capture\n",
+        "passed": true
+      },
+      {
+        "name": "capturing_pointer",
+        "source": "int main(){int n=3;int(*p)()=[&](){return n;};}",
+        "source_sha256": "405679c9ac5603b0afc1b311ee184db5de95d755bde59b61ac6f596bd2da2f23",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid implicit conversion\n",
+        "passed": true
+      },
+      {
+        "name": "default_capture_pointer",
+        "source": "int main(){int(*p)()=[&](){return 3;};}",
+        "source_sha256": "8623120acb0299de3b49e36c9106f70aef03d03c15dd89c9dfa6ad95cb98ac5a",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid implicit conversion\n",
+        "passed": true
+      },
+      {
+        "name": "default_construct",
+        "source": "int main(){int n=3;auto a=[&](){return n;};decltype(a) b;}",
+        "source_sha256": "1e3441225642d18a771dc9a15c9b0a74fb161efea18f0c5c94b433aa787b37c7",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: deleted default constructor\n",
+        "passed": true
+      },
+      {
+        "name": "assignment",
+        "source": "int main(){int n=3;auto a=[&](){return n;};a=a;}",
+        "source_sha256": "c1cd89ed488ffedd8317d1220ad4a57f56d7e360d84d02d8b75f2fcf40ea5a6a",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: deleted operator\n",
+        "passed": true
+      },
+      {
+        "name": "this_nonmember",
+        "source": "int main(){auto a=[this](){};}",
+        "source_sha256": "0e8fd391267385c005f81e22f8647bb62f9ef9abc265c2c01f8c6e27c5b59df7",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: this outside nonstatic member\n",
+        "passed": true
+      },
+      {
+        "name": "duplicate",
+        "source": "int main(){int n;auto a=[&n,&n](){};}",
+        "source_sha256": "183f31353a28cf94295b1a70e807fcef7dc065dec9535962e92ff4c5e931d60b",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: duplicate capture\n",
+        "passed": true
+      }
+    ],
+    "compiler_sha256": "31dcf1518f4d31d34bcfadb6a4800d4a2295e5ba8edd193ff958143a4a179d8b"
+  },
+  "compiler_sha256": "31dcf1518f4d31d34bcfadb6a4800d4a2295e5ba8edd193ff958143a4a179d8b",
+  "implementation_commit": "1c541f8481f73fff5c0f148ff5db6d7cc95fc3f0",
+  "baseline_log_sha256": "a8ee9a0ee10ebbbbcd66e087b0438dfc9c4430e53fa39c778ab92b7b08d132ed",
+  "continuation_audit": {
+    "previous_turn": "no progress visible after interruption",
+    "evidence": "Entry was clean at f4224e0b with no live compiler or test process; resumed by inspecting requirements and implementing the capture group."
+  }
+}
