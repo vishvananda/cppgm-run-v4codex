@@ -1,4 +1,23 @@
-# PA22 compact plan — handoff 118
+# PA22 compact plan — implementation 119
+
+Entry 119: `17603c8a69e76820274b7bf849091d528f6ff261`, **95/99**, clean.
+Previous turn: progress (validated and committed handoff 118); no live process.
+Stage base and last-reviewed markers below are preserved.
+
+119 work groups:
+- **Unknown member parameters**: semantic value facts own knowledge; typed
+  lowering consumes the target and signed adjustment words. No closed-world
+  assumptions for external functions. Check reduced cross-TU/inverse conversions
+  and null representations against C++11 and LowIR before any oracle correction.
+  Constant work per application/truth operation; preserve generic fallback.
+- **Constant class condition**: semantic constant/effect and object-lifetime
+  facts must jointly authorize receiver elision; lowering consumes the recorded
+  decision. Investigate unneeded static-member demand separately from effects.
+  Bound proof work, preserve observable construction/destruction and reads, test
+  dependent and ordinary conditions together.
+Validation: full PA22/through-PA22, prior through-PA21, file audit, explicit
+personal reducers and controls; frozen A/A+ABBA latency/RSS/runtime/text evidence.
+Implementation obligations and independent review remain distinct below.
 
 Target: **PA22 full-stage**. Phase: **implementation handoff; stage incomplete**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
