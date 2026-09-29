@@ -32,6 +32,8 @@ runner.GOOD.update({
  'adl_local_shadow':'namespace N{struct R{int a[2];};int*begin(R&r){return r.a;}int*end(R&r){return r.a+2;}}int main(){N::R r={{3,4}};int begin=1,end=2,n=0;for(auto x:r)n+=x;return n!=7||begin!=1||end!=2;}',
  'static_endpoints':'int a[2]={3,4};struct R{static int*begin(){return a;}static int*end(){return a+2;}};int main(){R r;int n=0;for(auto x:r)n+=x;return n!=7;}',
  'adl_template':'namespace N{template<class T>struct R{T a[2];};template<class T>T*begin(R<T>&r){return r.a;}template<class T>T*end(R<T>&r){return r.a+2;}}template<class T>int f(T&r){int n=0;for(auto x:r)n+=x;return n;}int main(){N::R<long> r={{3,4}};return f(r)!=7;}',
+ 'reference_converted_temporary':'int alive;struct V{int n;V(int n):n(n){++alive;}~V(){--alive;}};int main(){int a[2]={3,4};int n=0;for(const V&x:a){if(alive!=1)return 2;n+=x.n;}return n!=7||alive;}',
+ 'reference_conversion_value':'int alive;struct V{int n;V(int n):n(n){++alive;}~V(){--alive;}};struct P{int n;operator V(){return V(n);}};int main(){P a[2]={{3},{4}};int n=0;for(const V&x:a){if(alive!=1)return 2;n+=x.n;}return n!=7||alive;}',
  'iteration_class_copy':'int alive,copies;struct V{int n;V(int n):n(n){++alive;}V(const V&o):n(o.n){++alive;++copies;}~V(){--alive;}};int main(){V a[2]={V(3),V(4)};int baseline=copies;for(V x:a){if(alive!=3)return 1;}return alive!=2||copies-baseline!=2;}',
 })
 ITER = """int copies;int living;int derefs;int increments;
@@ -40,6 +42,7 @@ int&operator*(){++derefs;return *p;}I&operator++(){++p;++increments;return *this
 struct R{int a[2];I begin(){return I(a);}I end(){return I(a+2);}};
 """
 runner.GOOD.update({
+ 'fixed_iterator_template':ITER+'template<class T>int f(R&r){int n=0;for(auto x:r)n+=x;return n;}int main(){R r={{3,4}};return f<int>(r)!=7||f<long>(r)!=7||living;}',
  'iterator_lifetime':ITER+'int main(){R r={{3,4}};int n=0;for(auto&x:r){if(living!=2)return 2;n+=x;}return n!=7||living||derefs!=2||increments!=2;}',
  'iterator_break':ITER+'int main(){R r={{3,4}};for(auto&x:r){break;}return living||derefs!=1||increments;}',
  'iterator_return':ITER+'int f(){R r={{3,4}};for(auto&x:r){return x;}return 0;}int main(){return f()!=3||living;}',
@@ -50,6 +53,10 @@ runner.GOOD.update({
  'element_temporary_lifetime':'int alive;struct V{int n;V(int n):n(n){++alive;}~V(){--alive;}};struct I{int*p;V operator*(){return V(*p);}I&operator++(){++p;return *this;}bool operator!=(I o){return p!=o.p;}};struct R{int a[2];I begin(){return I{a};}I end(){return I{a+2};}};int main(){R r={{3,4}};int n=0;for(const auto&x:r){if(alive!=1)return 2;n+=x.n;}return n!=7||alive;}',
 })
 runner.BAD = {
+ 'unused_template_list_ref':'template<class T>int f(){for(int&x:{1,2}){}}int main(){}',
+ 'unused_template_fixed_range':'struct R{};template<class T>int f(){R r;for(int x:r){}}int main(){}',
+ 'unused_template_const_ref':'template<class T>int f(){const int a[2]={1,2};for(int&x:a){}}int main(){}',
+ 'unused_template_bad_element':'struct V{};template<class T>int f(){V a[2];for(int x:a){}}int main(){}',
  'list_mixed':'int main(){for(auto x:{1,2L}){}}',
  'list_empty':'int main(){for(auto x:{}){}}',
  'list_mutable_reference':'int main(){for(int&x:{1,2}){}}',

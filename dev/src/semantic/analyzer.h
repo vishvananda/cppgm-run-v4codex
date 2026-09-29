@@ -165,11 +165,16 @@ public:
 private:
     Index range_index;
     std::vector<RangePlan> ranges = std::vector<RangePlan>(1);
+    Index range_pattern_index;
+    std::vector<RangePlan> range_patterns = std::vector<RangePlan>(1);
+    std::size_t range_pattern_uses = 0;
+    RangePlan range_shape(Expression range, ScopeId scope);
+    Expression range_initializer(NodeId source, ScopeId scope, bool pattern = false);
     void resolve_range(NodeId n, ScopeId s);
     void bind_template_range(NodeId n, ScopeId s);
     RangeOperation range_endpoint(Expression object, IdentifierId name, EntityId family, ScopeId naming, ScopeId scope);
     RangeOperation range_operator(ETokenType op, const std::vector<Expression>& args, ScopeId scope);
-    void prepare_range_operation(RangeOperation& operation, const std::vector<Expression>& args, ScopeId scope);
+    void prepare_range_operation(RangeOperation& operation, const std::vector<Expression>& args, ScopeId scope, bool evaluated = false);
     Conversion prepare_typed_conversion(Expression source, Conversion conversion, ScopeId scope, bool destination = false);
     EntityId range_object(TypeId type, ScopeId scope, NodeId source);
     Index conversion_results, conversion_result_requests;

@@ -10,8 +10,13 @@ EntityId Analyzer::range_object(TypeId type, ScopeId scope, NodeId source)
 }
 Conversion Analyzer::prepare_typed_conversion(Expression source, Conversion c, ScopeId s, bool destination)
 {
-    check_fixed_conversion(source,0,c,s);
+    // A checked constructor recipe already owns the selected argument conversions.
+    // Applying it creates storage and demand facts, without resolving it again.
+    if (!(c.kind == Conversion::Kind::Construction && c.materialization &&
+          conversion_objects[c.materialization].use == ConversionUse::Recipe))
+        check_fixed_conversion(source,0,c,s);
     if (c.kind == Conversion::Kind::Construction) {
+        destination &= !c.reference;
         auto recipe = conversion_objects[c.materialization];
         use_selected_function(c.function,true);
         recipe.use = destination ? ConversionUse::Destination : ConversionUse::Temporary;
@@ -29,26 +34,33 @@ Conversion Analyzer::prepare_typed_conversion(Expression source, Conversion c, S
             types[returned].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         if (class_value(returned)) record.source_temporary = range_object(returned,s,0);
         record.result = prepare_typed_conversion(value,record.result,s,destination);
+        if (c.reference) {
+            record.temporary = converted_temporary(record.result);
+            if (!record.temporary && record.result.reference && !record.result.temporary)
+                record.temporary = record.source_temporary;
+        }
         record.prepared = true;
         c.materialization = user_conversions.size(); user_conversions.push_back(record);
     }
     return c;
 }
-void Analyzer::prepare_range_operation(RangeOperation& op, const std::vector<Expression>& args, ScopeId s)
+void Analyzer::prepare_range_operation(RangeOperation& op, const std::vector<Expression>& args, ScopeId s, bool evaluated)
 {
-    std::vector<Conversion> selected;
-    for (unsigned i = 0; i < args.size(); ++i)
-        selected.push_back(prepare_typed_conversion(args[i],conversions[op.result.conversions+i],s));
-    // Default arguments are source expressions with their own recorded facts.
-    for (unsigned i = args.size(); i < op.result.count; ++i) {
-        if (!op.function) { selected.push_back(conversions[op.result.conversions+i]); continue; }
-        auto parameter = i-op.receiver;
-        Conversion c; default_argument(op.function,parameter,&c);
-        selected.push_back(c);
+    if (evaluated) {
+        std::vector<Conversion> selected;
+        for (unsigned i = 0; i < args.size(); ++i)
+            selected.push_back(prepare_typed_conversion(args[i],conversions[op.result.conversions+i],s));
+        // Default arguments retain their own source expression facts. The
+        // extra builtin increment entry instead records its computation type.
+        for (unsigned i = args.size(); i < op.result.count; ++i) {
+            if (!op.function) { selected.push_back(conversions[op.result.conversions+i]); continue; }
+            Conversion c; default_argument(op.function,i-op.receiver,&c);
+            selected.push_back(c);
+        }
+        op.result.conversions = conversions.size(); op.result.count = selected.size();
+        conversions.insert(conversions.end(),selected.begin(),selected.end());
     }
     op.supplied = args.size();
-    op.result.conversions = conversions.size(); op.result.count = selected.size();
-    conversions.insert(conversions.end(),selected.begin(),selected.end());
     if (op.function) {
         op.returned = types[entities[op.function].type].child;
         op.receiver = entities[op.function].member_info && !entities[op.function].is_static;
@@ -56,10 +68,12 @@ void Analyzer::prepare_range_operation(RangeOperation& op, const std::vector<Exp
             op.adjustment = base_steps(args[0].type,scopes[entities[op.function].owner].entity);
             op.virtual_slot = members[entities[op.function].member_info].virtual_slot;
         }
-        use_selected_function(op.function,!op.virtual_slot);
+        if (evaluated) use_selected_function(op.function,!op.virtual_slot);
     } else op.returned = op.result.type;
-    if (class_value(op.result.type) && op.result.category == ValueCategory::Prvalue)
-        op.temporary = range_object(op.result.type,s,0);
+    if (class_value(op.result.type) && op.result.category == ValueCategory::Prvalue) {
+        reject_abstract(op.result.type); default_destructor(op.result.type,s,evaluated);
+        if (evaluated) op.temporary = range_object(op.result.type,s,0);
+    }
 }
 RangeOperation Analyzer::range_endpoint(Expression object, IdentifierId name, EntityId family, ScopeId naming, ScopeId s)
 {
@@ -83,6 +97,7 @@ RangeOperation Analyzer::range_endpoint(Expression object, IdentifierId name, En
     op.result.type = value_type(f.child);
     op.result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[f.child].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+    for (unsigned i = 0; i < args.size(); ++i) check_fixed_conversion(args[i],0,selected[i],s);
     op.result.conversions = conversions.size(); op.result.count = selected.size();
     conversions.insert(conversions.end(),selected.begin(),selected.end());
     prepare_range_operation(op,args,s); return op;
