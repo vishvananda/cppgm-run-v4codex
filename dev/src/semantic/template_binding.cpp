@@ -148,6 +148,10 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     ++template_binding_work;
     auto node = ast[n];
     if (node.kind == Kind::Lambda) { bind_lambda_body(n,s); return true; }
+    if (node.kind == Kind::ClassForward && !(node.flags & 2)) {
+        if (bind_template_name(node.detail,s).dependent) return true;
+        class_type(n,s,0,false); return false;
+    }
     if (node.kind == Kind::Decltype) {
         struct Operand {
             NodeId& active; NodeId prior;

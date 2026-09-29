@@ -183,6 +183,8 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             if (ast[c].kind == Kind::Class || ast[c].kind == Kind::ClassForward || ast[c].kind == Kind::Enum)
             {
                 if (ast[c].kind == Kind::Enum) bind_template_declaration(c,s,deferred);
+                else if (ast[c].kind == Kind::ClassForward && !(ast[c].flags & 2))
+                    dependent |= bind_template_expression(c,s);
                 else bind_template_class(c,s,0,deferred);
                 if (!ast[c].detail && !ast[child(n,Kind::InitDeclarators)].first) {
                     auto cs = template_class_bindings.get(ast.nodes.occurrences[c].source);

@@ -94,6 +94,10 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
                 (!qualified || !in.is("<",ahead+2))) potential = type_start(ahead + 1);
             potential |= builtin(ahead + 1) || in.is("typename", ahead + 1) ||
                          in.is("const", ahead + 1) || in.is("volatile", ahead + 1);
+            if (!potential && in.is("<",ahead)) {
+                auto end = probe_angles(ahead);
+                potential = end != ahead && in.is("(",end);
+            }
         }
         if (in.is("<", ahead) && potential) {
             std::size_t end = probe_angles(ahead);

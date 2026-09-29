@@ -51,9 +51,25 @@ Validation: 25 explicit controls pass (19 checked executions, six rejections).
 PA14/15/17/18 retain all 1,254 passes; PA19 improves to 403/423, without oracle
 or coverage changes. Performance measurement remains pending.
 
-Implementation unfinished: five remaining rejections (ADL syntax, elaborated
-type identity, member variable-template substitution, constructor ordering) and
-15 output mismatches, including two newly exposed by corrected semantics.
+Second increment extends the same group to elaborated-type namespace identity,
+ADL-only explicit template-id syntax required by the course, and empty-tail
+constructor/function ordering. Owners remain class declaration, token prediction
+and cached function ordering. Bounded delimiter lookahead constructs no grammar;
+ordering projects at most one argument sequence and caches the complete key.
+44 personal controls and 74 inherited ordering controls pass. The complete root
+report retains all 3,029 prior-stage passes plus 22 focused properties; PA19 is
+406/423. No course inputs, oracles or comparison rules have changed.
+
+Implementation unfinished: two member variable-template rejections. Their
+separate variable specialization owner rebuilds projected initializer queries,
+and qualified value queries do not apply the member variable-template argument
+list. Class-valued results additionally require declaration/initializer/storage
+demands and constant-object emission to compose. This is a new semantic state
+group, beyond the completed type/declaration substitution repairs. Fifteen
+output mismatches remain for demand, initialization, discarded-value behavior,
+explicit specialization metadata, NTTP conversion and defaulted-pack deduction.
+Some match historical oracle defects; no correction is claimed without the
+separate reducer/proof/bundle revision required by the contract.
 Independent review: whole-stage correctness/architecture/performance audit
 remains pending; review markers above must not move during implementation.
 No completed behavior group or handoff boundary yet.

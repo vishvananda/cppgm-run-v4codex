@@ -35,5 +35,33 @@ runner.BAD = {
     'cast_ambiguous_base': 'struct B{};struct L:B{};struct R:B{};struct D:L,R{};int main(){D d;B&&b=static_cast<B&&>(d);}',
 }
 
+# Ordering must survive declaration order and both ordinary/constructor calls.
+for reverse in (False, True):
+    ordinary = ['template<class T>int f(T,int=0){return 1;}',
+                'template<class T,class...A>int f(Tag<T>,A&&...){return 2;}']
+    constructors = ['template<class T>X(T&&,int=0):n(1){}',
+                    'template<class T,class...A>X(Tag<T>,A&&...):n(2){}']
+    if reverse:
+        ordinary.reverse(); constructors.reverse()
+    runner.GOOD['prefix_order_'+str(reverse)] = 'template<class>struct Tag{};' + ''.join(ordinary) + 'int main(){Tag<int> t;return f(t)!=2||f(1)!=1;}'
+    runner.GOOD['constructor_prefix_'+str(reverse)] = 'template<class>struct Tag{};struct X{' + ''.join(constructors) + 'int n;};int main(){Tag<int> t;X x(t);X y(1);return x.n!=2||y.n!=1;}'
+runner.GOOD.update({
+    'prefix_cv_order': 'template<class>struct Tag{};template<class T>int f(const T&,int=0){return 1;}template<class T,class...A>int f(Tag<T>&,A&&...){return 2;}int main(){Tag<int> t;return f(t)!=2;}',
+    'prefix_query': 'template<class>struct Tag{};template<class T>long f(T,int=0);template<class T,class...A>char f(Tag<T>,A&&...);static_assert(sizeof(f(Tag<int>()))==1,"");int main(){}',
+    'fixed_pack_tie': 'template<class T>int f(T){return 1;}template<class T,class...A>int f(T,A...){return 2;}int main(){return f(1)!=1||f(1,2)!=2;}',
+    'elaborated_namespace_identity': 'template<class T>struct X{struct node*p;};struct node{int n;};int main(){X<int>a;X<long>b;node n;n.n=7;a.p=&n;b.p=a.p;return b.p->n!=7;}',
+    'elaborated_argument_identity': 'template<bool B,class T,class U>struct If{typedef T type;};template<class T,class U>struct If<false,T,U>{typedef U type;};template<bool B>struct X{typename If<B,struct node,int>::type*p;};struct node{int n;};int main(){X<true>a;X<false>b;node n;n.n=7;int i=3;a.p=&n;b.p=&i;return a.p->n!=7||*b.p!=3;}',
+    'elaborated_existing_tag': 'struct node{int n;};template<class T>struct X{struct node*p;};int main(){node n;n.n=7;X<int>x;x.p=&n;return x.p->n!=7;}',
+    'adl_explicit_value': 'namespace ns{struct A{};template<int N>int fetch(A){return N;}}int main(){return fetch<7>(ns::A())!=7;}',
+    'adl_explicit_negative': 'namespace ns{struct A{};template<int N>int fetch(A){return N;}}int main(){return fetch<-3>(ns::A())!=-3;}',
+    'ordinary_relational': 'int main(){int fetch=2;return (fetch<3)>(0)!=1;}',
+})
+runner.BAD.update({
+    'adl_missing_template': 'namespace ns{struct A{};}int main(){return fetch<7>(ns::A());}',
+    'elaborated_qualified_missing': 'struct X{};struct X::missing*p;',
+    'elaborated_union_mismatch': 'struct node{};template<class T>struct X{union node*p;};X<int>x;',
+    'nested_forward_distinct': 'template<class T>struct X{struct node;node*p;};int main(){X<int>a;X<long>b;a.p=b.p;}',
+})
+
 if __name__ == '__main__':
     sys.exit(0 if runner.run(Path(sys.argv[1]).resolve(), Path(sys.argv[2])) else 1)

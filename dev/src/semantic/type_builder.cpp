@@ -49,7 +49,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     EFundamentalType fundamental = FT_INT;
     for (NodeId c = ast[n].first; c; c = ast[c].next) {
         const syntax::Node node = ast[c];
-        if (template_type_probe && (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum)) return 0;
+        if (template_type_probe && (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum) && !facts[c].type) return 0;
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward) {
             result = class_type(c, s, anonymous_name, node.kind == Kind::Class, spec_has(n, KW_STATIC));
             continue;

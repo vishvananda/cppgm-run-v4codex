@@ -111,6 +111,13 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
         // An unresolved name with an explicit builtin type argument is unambiguous.
         if (!potential && in.is("<") && identifier(1) && (!qualified || !in.is("<",2))) potential = type_start(1);
         potential |= builtin(1) || in.is("typename", 1) || in.is("const", 1) || in.is("volatile", 1);
+        // The course admits an ADL-only explicit template-id call. Classify
+        // its balanced argument-list suffix without inventing a declaration;
+        // semantic lookup still owns whether an associated template exists.
+        if (!potential && in.is("<")) {
+            auto end = probe_angles(0);
+            potential = end && in.is("(",end);
+        }
     }
     if (in.is("<") && potential) ast.append(part, template_arguments());
     return part;

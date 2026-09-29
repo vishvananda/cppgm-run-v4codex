@@ -7,7 +7,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
 {
     if (facts[n].type) return facts[n].type;
     if (n == explicit_specialization_source) facts.edit(n).entity = declare_class_specialization(n,s);
-    if (definitions && active_template_scope == s) return declare_class_template(n,s);
+    if (definitions && active_template_scope == s && (ast[n].kind == Kind::Class || (ast[n].flags & 2)))
+        return declare_class_template(n,s);
     NodeId name = ast[n].detail;
     IdentifierId id = name ? terminal(name) : anonymous_name;
     ETokenType key_op = ast[ast[n].first].op;
@@ -39,6 +40,15 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     if (definition && !instance && !encloses(enclosing, owner)) throw std::runtime_error("class definition outside enclosing scope");
     EntityId e = instance ? instance : !name ? 0 : emit ? local(owner, id, Lookup::Tag) : lookup(owner, id, Lookup::Tag, owner != s);
     if (!e) {
+        // [basic.scope.pdecl]/6: an elaborated type use introduces an unknown
+        // unqualified tag in the nearest namespace/block, including templates.
+        // It is not a dependent member declaration requiring substitution.
+        if (!definition && !(ast[n].flags & 2) && name) {
+            if (ast[name].op == OP_COLON2 || ast[name].first != ast[name].last)
+                throw std::runtime_error("unknown qualified elaborated type");
+            while (scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Block &&
+                scopes[owner].kind != ScopeKind::Function) owner = scopes[owner].parent;
+        }
         e = make_entity(EntityKind::Type, owner, id, n);
         entities[e].class_info = class_facts.size();
         class_facts.push_back(ClassFacts());

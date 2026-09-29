@@ -107,10 +107,24 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
         }
         return true;
     };
+    auto tail_pack = [&](TypeId signature) {
+        auto f = types[signature];
+        return f.count && types[types.parameters[f.offset+f.count-1]].kind == TypeKind::PackExpansion;
+    };
+    auto accepts = [&](TypeId pattern, TypeId actual, Index& bindings) {
+        auto p = types[pattern], a = types[actual];
+        // A symbolic trailing pack with no corresponding call argument does
+        // not defeat a stricter fixed prefix. Keep the pack in the reverse
+        // deduction and for the otherwise-equivalent variadic tie below.
+        if (call && !tail_pack(pattern) && tail_pack(actual) && a.count == p.count+1)
+            actual = types.function(a.child,std::vector<TypeId>(types.parameters.begin()+a.offset,
+                types.parameters.begin()+a.offset+a.count-1),false);
+        return deduce_type(pattern,actual,bindings,DeductionKind::PartialOrdering) && complete(pattern,bindings);
+    };
     Index xy, yx;
-    bool accepts_a = deduce_type(ty,tx,yx,DeductionKind::PartialOrdering) && complete(ty,yx);
-    bool accepts_b = deduce_type(tx,ty,xy,DeductionKind::PartialOrdering) && complete(tx,xy);
+    bool accepts_a = accepts(ty,tx,yx), accepts_b = accepts(tx,ty,xy);
     bool result = accepts_a && !accepts_b;
+    if (call && accepts_a && accepts_b && !tail_pack(tx) && tail_pack(ty)) result = true;
     if (accepts_a && (call || conversion)) {
         auto left = types[x], right = types[y]; bool stricter = false, worse = false;
         auto cv = [&](TypeId p) {
