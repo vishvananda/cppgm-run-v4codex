@@ -48,6 +48,15 @@ void Analyzer::prepare_captures(unsigned id, ScopeId scope)
     using syntax::Kind;
     auto first = ast[child(closures[id].source,Kind::LambdaIntroducer)].first;
     closures[id].has_introducer = first != 0;
+    if (!first) return;
+    if (!closures[id].enclosing) throw std::runtime_error("capture requires block scope");
+    Index explicit_names, parameters;
+    auto d = child(closures[id].source,Kind::LambdaDeclarator);
+    for (auto p = ast[child(d,Kind::Parameters)].first; p; p = ast[p].next)
+        if (ast[p].kind == Kind::Parameter) {
+            auto name = terminal(decl_name(ast[ast[p].first].next));
+            if (name) parameters.put(name,1);
+        }
     for (auto n = first; n; n = ast[n].next) {
         auto op = ast[n].op;
         if ((op == OP_AMP && !ast[n].detail) || op == OP_ASS) {
@@ -55,18 +64,31 @@ void Analyzer::prepare_captures(unsigned id, ScopeId scope)
             closures[id].capture_default = op == OP_AMP ? 1 : 2; continue;
         }
         EntityId object = 0;
+        if (op == KW_THIS && closures[id].capture_default == 2)
+            throw std::runtime_error("explicit this with value default is not C++11");
         if (op != KW_THIS) {
             if (op != OP_AMP || !ast[n].detail) throw std::runtime_error("unsupported value capture");
-            object = lookup(scope,ast[ast[n].detail].text,Lookup::Ordinary);
+            auto name = ast[ast[n].detail].text;
+            if (parameters.get(name)) throw std::runtime_error("capture conflicts with lambda parameter");
+            if (closures[id].capture_default == 1) throw std::runtime_error("redundant reference capture");
+            object = lookup(scope,name,Lookup::Ordinary);
             if (!object || (entities[object].kind != EntityKind::Variable && entities[object].kind != EntityKind::Parameter) ||
-                entities[object].is_static || scopes[entities[object].owner].kind == ScopeKind::Namespace ||
+                entities[object].is_static || entities[object].external_decl || entities[object].thread_local_storage ||
+                scopes[entities[object].owner].kind == ScopeKind::Namespace ||
                 scopes[entities[object].owner].kind == ScopeKind::Class)
                 throw std::runtime_error("capture requires automatic local");
         }
-        if (closure_capture_index.get(key(id,object))) throw std::runtime_error("duplicate capture");
+        if (explicit_names.get(object)) throw std::runtime_error("duplicate capture");
+        explicit_names.put(object,1);
+        auto pack = entity_pack_arguments.get(object);
+        if (bool(pack) != bool(child(n,Kind::ParameterPack))) throw std::runtime_error("invalid capture pack expansion");
         auto saved = closures[id].capture_default;
         closures[id].capture_default = 1;
-        require_capture(id,object);
+        if (pack) {
+            auto elements = pack_arguments(pack);
+            for (unsigned lane = 0; lane < elements.count; ++lane)
+                require_capture(id,argument_types[elements.offset+lane]);
+        } else require_capture(id,object);
         closures[id].capture_default = saved;
     }
 }

@@ -33,6 +33,11 @@ runner.GOOD={
  'friend':'class S{friend struct R;int n;public:S():n(3){}};struct R{int f(S&s){auto a=[&](){return s.n;};return a();}};int main(){S s;R r;return r.f(s)!=3;}',
 }
 runner.GOOD.update({
+ 'returned_closure':'auto make(int&n){return [&n](){return ++n;};}int main(){int n=3;auto f=make(n);return f()!=4||n!=4;}',
+ 'explicit_pack':'int sink(int&a,long&b){++a;++b;return a+b;}template<class...T>int f(T&...args){auto a=[&args...](){return sink(args...);};return a();}int main(){int n=3;long m=4;return f(n,m)!=9||n!=4||m!=5;}',
+ 'explicit_empty_pack':'template<class...T>int f(T...args){auto a=[&args...](){return sizeof...(args);};return a();}int main(){return f();}',
+ 'explicit_nested_pack':'int sink(int&a,long&b){++a;++b;return a+b;}template<class...T>int f(T&...args){auto a=[&args...](){auto b=[&args...](){return sink(args...);};return b();};return a();}int main(){int n=3;long m=4;return f(n,m)!=9||n!=4||m!=5;}',
+
  'template_constructor_closure_type':'template<class T>struct pointer{static const bool value=false;};template<class T>struct pointer<T*>{static const bool value=true;};struct S{int n;template<class F>S(F f):n(f(6)){static_assert(!pointer<F>::value,"closure must remain a class");}};int main(){S s=[](int x){return x+1;};return s.n!=7;}',
  'wrapper_direct':'struct W{int(*p)(int);W(int(*p)(int)):p(p){}};int main(){W w([](int n){return n+1;});return w.p(3)!=4;}',
  'wrapper_explicit_pointer':'struct W{int(*p)(int);W(int(*p)(int)):p(p){}};int f(const W&w){return w.p(3);}int main(){return f(+[](int n){return n+1;})!=4;}',
@@ -48,6 +53,14 @@ runner.GOOD.update({
  'this_two_objects':'struct S{int n;int f(){auto a=[this](){return n;};return a();}};int main(){S s={3},t={4};return s.f()!=3||t.f()!=4;}',
 })
 runner.BAD={
+ 'namespace_capture_default':'auto f=[&](){return 3;};int main(){return f();}',
+ 'value_default_explicit_this':'struct S{int n;int f(){return [=,this](){return n;}();}};',
+
+ 'redundant_reference':'int main(){int n;auto a=[&,&n](){};}',
+ 'capture_parameter':'int main(){int n;auto a=[&n](int n){return n;};}',
+ 'unexpanded_capture_pack':'template<class...T>void f(T...n){auto a=[&n](){};}int main(){f(3);}',
+ 'nonpack_expansion':'int main(){int n;auto a=[&n...](){};}',
+
  'wrapper_two_conversions':'struct W{W(int(*)());};void f(const W&);int main(){f([](){return 1;});}',
 
  'missing_local':'int main(){int n=3;auto a=[](){return n;};}',
