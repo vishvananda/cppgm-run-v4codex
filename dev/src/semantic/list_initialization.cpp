@@ -293,6 +293,10 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
             }
             else item.helper_safe = (selected.kind == Conversion::Kind::Standard || selected.kind == Conversion::Kind::Explicit) &&
                 !selected.function && independent_initializer(item.source);
+            // An omitted class member is initialized in place by the helper,
+            // after its preceding fields. No argument evaluation is hoisted.
+            if (!item.source && class_value(item.type) && selected.kind == Conversion::Kind::List)
+                item.helper_safe = true;
             // Backing elements are constructed in their final array slots.
             // Only aggregate helpers transport a class argument across an
             // extra ABI boundary and need its otherwise elided transfer.

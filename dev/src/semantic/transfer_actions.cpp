@@ -104,7 +104,7 @@ void Analyzer::prepare_transfer(EntityId e)
         actions.clear(); TransferAction storage; storage.kind = TransferAction::Storage;
         storage.bytes = size(target); storage.alignment = size(target, true); actions.push_back(storage);
     } else {
-        std::size_t prefix = 0; std::uint64_t bytes = 0; bool storage_subobject = false;
+        std::size_t prefix = 0; std::uint64_t bytes = 0;
         for (const auto& action : actions) {
             TypeId element = action.type;
             while (types[element].kind == TypeKind::Array) element = types[element].child;
@@ -114,16 +114,14 @@ void Analyzer::prepare_transfer(EntityId e)
             // identities. Keep effectful destructor boundaries when a later
             // initialization can throw, even if this copy itself is trivial.
             if (!assignment && !no_throw && !trivial_destructor(action.type)) break;
-            storage_subobject |= action.function || types[action.type].kind == TypeKind::Array || types[element].kind == TypeKind::Pointer;
             bool ref = types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef;
             std::uint64_t end = (action.field ? entities[action.field].member_offset : 0) + (ref ? 8 : size(action.type));
             bytes = std::max(bytes, end); ++prefix;
         }
-        // O0 keeps ordinary scalar prefixes field-wise: the supplied backend's
-        // small bulk operation costs more than those accesses. Whole-object
-        // representation transfers and prefixes containing storage subobjects
-        // retain their bounded bulk form (and can remove nested helper calls).
-        if (!polymorphic(cls) && !empty_subobject && prefix && (prefix == actions.size() || storage_subobject)) {
+        // O0 keeps a proven representation prefix in one typed storage action.
+        // The prefix stops before every observable transfer/lifetime boundary;
+        // native small-copy selection belongs to the backend stage.
+        if (!polymorphic(cls) && !empty_subobject && prefix) {
             if (prefix == actions.size()) bytes = size(target);
             TransferAction storage; storage.kind = TransferAction::Storage; storage.bytes = bytes;
             storage.alignment = size(target, true);

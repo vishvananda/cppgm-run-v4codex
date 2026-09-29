@@ -7,7 +7,7 @@ bool Analyzer::transfer_member(EntityId e) const
 bool Analyzer::trivial_transfer(EntityId e) const
 { return transfer_member(e) && members[entities[e].member_info].transfer_trivial; }
 bool Analyzer::direct_transfer(EntityId e) const
-{ return transfer_member(e) && members[entities[e].member_info].transfer_direct; }
+{ return transfer_member(e) && members[entities[e].member_info].transfer_direct && !members[entities[e].member_info].retained_root; }
 bool Analyzer::copy_storage_type(TypeId t)
 {
     auto info = entities[types[t].entity].class_info;

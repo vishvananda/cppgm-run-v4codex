@@ -29,7 +29,8 @@ Value Procedural::typed_conversion(Value value, const semantic::Conversion& c, V
         Value storage;
         if (!supplied) { storage = class_temporary(recipe.temporary,target); destination = address(storage); }
         auto source = typed_conversion(value,sem.conversion_fact(recipe.call.conversions));
-        if (sem.trivial_transfer(recipe.constructor) || sem.direct_transfer(recipe.constructor)) {
+        if (!sem.member_fact(recipe.constructor).retained_root &&
+            (sem.trivial_transfer(recipe.constructor) || sem.direct_transfer(recipe.constructor))) {
             if (!sem.empty_class(target)) {
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
                 emit(copy,{source.operand,destination.operand});

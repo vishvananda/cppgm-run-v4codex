@@ -14,6 +14,7 @@ void Procedural::reset_lifetime(EntityId e)
     full_expression = FullExpression();
     constructor_block_boundary = 0;
     exception_contexts.resize(1); exception_context = 0;
+    nonthrowing_parameters = e && sem.function_nonthrowing(e) ? sem.lifetime_use(sem.entities[e].body).entry : 0;
     exception_selectors = semantic::Index(); exception_selector_count = 0;
     unwind_continuations.clear(); unwind_cursor = 0;
     unwind_terminals = semantic::Index(); unwind_dispatches = semantic::Index();

@@ -35,7 +35,8 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     bool all = full_parameters(sem,plan);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         supplied += all || sem.initializers[child].source != 0;
-        transfer |= sem.initializers[child].helper_transfer != 0;
+        transfer |= sem.initializers[child].helper_transfer != 0 ||
+            (!all && !sem.initializers[child].source && sem.class_value(sem.initializers[child].type));
     }
     // Scalar helpers differ by their explicit prefix; omitted trailing fields
     // are initialized in the helper. Transfer recipes additionally own selected
@@ -57,8 +58,10 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     lowir_model::Function f; f.symbol = fresh_symbol("@__aggregate_" + std::to_string(target));
     f.signature = signature(sem.types.function(sem.types.fundamental(FT_VOID), parameters, false), helper.function);
     bool throwing = false;
-    for (auto child = action.first; child; child = sem.initializers[child].next)
-        throwing |= sem.initializers[child].helper_transfer != 0;
+    for (auto child = action.first; child; child = sem.initializers[child].next) {
+        auto item = sem.initializers[child];
+        throwing |= item.helper_transfer != 0 || (!all && !item.source && !sem.initializer_nonthrowing(child));
+    }
     if (!throwing) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     p.functions.push_back(f);
     auto& symbol = p.symbols[f.symbol.index-1]; symbol.kind = lowir_model::Symbol::FunctionSymbol;
@@ -83,6 +86,8 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         if (!item.field) return false;
+        if (!all && !item.source && sem.class_value(item.type) && item.kind == InitKind::Converted &&
+            sem.conversion_fact(item.conversion).kind == semantic::Conversion::Kind::List) continue;
         // A by-value class argument is initialized before the helper call.
         // Its transfer into the member must precede later initializer clauses.
         // A transfer may precede later clauses only with a checked proof that
@@ -151,7 +156,9 @@ void Procedural::emit_aggregate_helpers()
             EntityId field = action.field; TypeId t = action.type;
             Value value;
             bool array = array_parameter(t);
-            if (!action.helper_transfer && !action.helper_copy && !array) {
+            bool defaulted = j+1 >= slots.size() && !action.source &&
+                sem.class_value(t) && action.kind == InitKind::Converted;
+            if (!action.helper_transfer && !action.helper_copy && !array && !defaulted) {
                 value = j+1 < slots.size() ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
                 value.type = t;
             }
@@ -160,7 +167,8 @@ void Procedural::emit_aggregate_helpers()
             Value at = emit(index, {base.operand, Operand::integer(sem.entities[field].member_offset)});
             at.type = t; at.address = true; at.init_offset = sem.entities[field].member_offset; at.initializing = true;
             if (sem.field_fact(field).bit_field) at.bit_field = field;
-            if (array) {
+            if (defaulted) initialize_plan(aggregate_actions[helper.actions+j],at);
+            else if (array) {
                 auto source = emit(Opcode::Load,IRType::Ptr,{Operand::slot(slots[j+1])});
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
                 emit(copy,{source.operand,at.operand});
@@ -192,6 +200,8 @@ void Procedural::emit_aggregate_helpers()
         // before this helper returns ownership to its caller.
         auto temporaries = live; live = 0;
         bool throwing_cleanup = false;
+        for (auto state = temporaries; state; state = lifetime_state(state).tail)
+            throwing_cleanup |= !sem.function_nonthrowing(lifetime_state(state).destructor);
         for (unsigned j = 0; j < helper.count; ++j) {
             auto item = sem.initializers[aggregate_actions[helper.actions+j]];
             throwing_cleanup |= item.helper_parameter && !sem.function_nonthrowing(sem.object_destructor(item.helper_parameter));

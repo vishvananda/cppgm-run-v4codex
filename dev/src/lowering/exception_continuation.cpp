@@ -25,7 +25,13 @@ BlockId Procedural::unwind_suffix(std::uint32_t state, std::uint32_t context, bo
 {
     if (!context) {
         if (!resume_terminal) resume_terminal = block();
-        return cleanup_suffix(state,resume_terminal);
+        // Crossing a nonthrowing function boundary terminates. Its incoming
+        // value parameters are destroyed on ordinary exit, but need not be
+        // unwound before terminate ([except.terminate]). Local expression
+        // ownership and all source catches remain inside that boundary.
+        auto stop = nonthrowing_parameters;
+        if (lifetime_state(state).depth < lifetime_state(stop).depth) stop = state;
+        return cleanup_suffix(state,resume_terminal,stop);
     }
     auto c = exception_contexts[context];
     auto key = std::uint64_t(context)*2+pop;

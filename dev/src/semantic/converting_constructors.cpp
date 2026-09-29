@@ -90,7 +90,14 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
             materialized.elided = true;
         }
     }
-    if (!defer && !materialized.elided) demand_member(ctor);
+    if (!defer && !materialized.elided) {
+        // An empty destination still begins a separately destructible lifetime.
+        // Preserve its selected O0 construction entry instead of treating its
+        // lack of representation bytes as absence of an object boundary.
+        if (use == ConversionUse::Destination && empty_class(t) && !trivial_destructor(t))
+            members[m].retained_root = true;
+        demand_member(ctor);
+    }
     members[m].complete_entry = true;
     Type f = types[entities[ctor].type];
     std::vector<NodeId> arguments;

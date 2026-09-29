@@ -116,7 +116,7 @@ void Procedural::transfer_body(EntityId e)
             Value value = load(src), dst = project(this_slot, action); dst.type = t; dst.address = true; dst.bit_field = src.bit_field;
             store(value, dst);
         }
-        if (!assignment) {
+        if (!assignment && (j+1 < m.transfer_count || live)) {
             close_expression_region();
             constructor_cleanup({action.field,action.type,0,action.function});
         }

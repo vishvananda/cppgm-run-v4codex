@@ -192,6 +192,8 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, Initializati
             list_conversion(args[j], value_type(types.parameters[f.offset+j]));
     }
     if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
+    if (trivial_transfer(ctor) && empty_class(target) && !trivial_destructor(target))
+        members[entities[ctor].member_info].retained_root = true;
     if (args.empty() && grouped && members[entities[ctor].member_info].synthetic && !members[entities[ctor].member_info].defaulted_late) {
         prepare_zero_initialization(entities[scopes[entities[ctor].owner].entity].type);
         record_object(result, 0, target, 0); object_uses[result.object_use].value_initialize = true;
@@ -406,7 +408,7 @@ bool Analyzer::constructor_needed(EntityId e)
             throw FailedSemanticFact(SemanticFact::Transfer,e,members[m].source);
         if (members[m].transfer_state != FactState::Success)
             throw UnavailableSemanticFact(SemanticFact::Transfer,e,members[m].source);
-        return !members[m].constructor || !members[m].transfer_direct;
+        return !members[m].constructor || !direct_transfer(e);
     }
     if (!members[m].synthetic || members[m].inherited_constructor) return true;
     // Omission needs a completed action plan; an external/user-provided entry

@@ -52,7 +52,8 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         call(n,destination); return;
     }
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
-    if (!construction || (!entry && (sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)))) {
+    if (!construction || (!entry && !sem.member_fact(materialized.constructor).retained_root &&
+        (sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)))) {
         Value source = construction ? converted(sem.call_argument(materialized.call),sem.conversion_fact(materialized.call.conversions)) : address(expression(n,true));
         if (!sem.empty_class(target)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
