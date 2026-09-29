@@ -22,6 +22,9 @@ ArgumentId Analyzer::member_address_template_argument(QueryId query, TypeId targ
     // [temp.arg.nontype]/1,5: null member values and nullptr are permitted;
     // integer zero and base-to-derived member conversions are not.
     if (value.valid && !value.bits && fundamental(value.type,FT_NULLPTR_T)) return publish(0);
+    // Parentheses around the complete address preserve its value and form.
+    // Parentheses around the qualified-id operand still prevent formation.
+    while (q.kind == QueryKind::Parenthesized) q = type_queries[query_edges[q.offset]];
     bool canonical = q.kind == QueryKind::Value;
     bool null = value.valid && !value.bits && types[value.type].kind == TypeKind::MemberPointer;
     if (!canonical && !null) {
