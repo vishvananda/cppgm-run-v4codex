@@ -1,0 +1,2134 @@
+{
+  "priorThroughTests": {
+    "command": "make test-report-through-pa20",
+    "exit": 0,
+    "log": "/tmp/pa21-loop104/prior-demand.log",
+    "sha256": "6426bae2e5aff9cb089b612f8a20d85b592fbfe34f219b8f60c9535b17770663",
+    "summary": [
+      "===== ALL TESTS PASSED SUCCESSFULLY! (3596 / 3596) ====="
+    ]
+  },
+  "stageTests": {
+    "command": "make test-pa21",
+    "exit": 2,
+    "log": "/tmp/pa21-loop104/stage-demand.log",
+    "sha256": "4c853f9052f475772b1915d60689bef4c10cb57a413170e268a312644d7f9fbd",
+    "summary": [
+      "===== TEST SUMMARY: 71 / 116 TESTS PASSED ====="
+    ]
+  },
+  "throughStageReport": {
+    "command": "make test-report-through-pa21",
+    "exit": 2,
+    "log": "/tmp/pa21-loop104/through-final.log",
+    "sha256": "eb491182c9d8a2c4a789d8d0474dc35968b12a4705cb3c419bd804b39311d0dc",
+    "summary": [
+      "===== TEST SUMMARY: 3667 / 3712 TESTS PASSED ====="
+    ]
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa21 --paths dev/src",
+    "exit": 0,
+    "log": "/tmp/pa21-loop104/audit-final.log",
+    "sha256": "ca116831ff080c504689590615037e352808058d1435bfa7e24b43c4b617b01e",
+    "summary": [
+      "File audit passed for pa21 with 3 warning(s).",
+      "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+      "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+      "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+    ]
+  },
+  "stageProgress": {
+    "passed": true,
+    "start_passes": 49,
+    "start_failures": 67,
+    "final_passes": 71,
+    "final_failures": 45,
+    "resolved": [
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-initializer-list-call.t",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t"
+    ],
+    "new_failures": [],
+    "remaining_failures": [
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/100-source-rethrow-through-function.t",
+      "pa21/tests/general/100-source-try-catch-int.t",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t",
+      "pa21/tests/general/200-default-reference-capture-local.t",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/200-source-base-ref-catch.t",
+      "pa21/tests/general/200-source-catch-ellipsis.t",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t",
+      "pa21/tests/general/300-template-catch-variable-member-body.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ]
+  },
+  "coverage": {
+    "required_tests": 116,
+    "changed_contract_paths": [],
+    "fixture_bundle_sha256": "e4093f502648f3c56df66f3935c89a6a64c0051256c82ef806c5470512f9d4ff",
+    "regression_fixtures_used": false
+  },
+  "list_controls": [
+    {
+      "name": "scalar_call",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(std::initializer_list<int>x){int s=0;for(auto n:x)s+=n;return s;}int main(){return f({2,3,4})!=9;}",
+      "source_sha256": "d54a6e157a5b665f37bf1b204bd614fde4657b7dee7aad30a28243b6375b02cc",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "scalar_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(const std::initializer_list<int>&x){return x.size();}int main(){return f({2,3})!=2;}",
+      "source_sha256": "42c70e8a41824699e92e5eb79cffe5c1e094788431d7d96f40e21b2005cfce51",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "empty",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(std::initializer_list<int>x){return x.size();}int main(){std::initializer_list<int>x{};return f({})||x.size();}",
+      "source_sha256": "adb14528660d4ee11b3e870249ac0892fa08af5e70735e4fda0ee9242e3a5e88",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "auto",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){auto x={2,3,4};return x.size()!=3||x.begin()[1]!=3;}",
+      "source_sha256": "1ad0f76ae3cbacc8b1a508fc3189b3e027b92c723df16df362e06304587a829e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "auto_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){const auto&x={2,3,4};return x.size()!=3||x.begin()[2]!=4;}",
+      "source_sha256": "a35f3d8e9e34e25dc8d9c699a38366701fb1b8967ec986d9deec685363e58d11",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "auto_rvalue_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){auto&&x={2,3,4};return x.size()!=3;}",
+      "source_sha256": "dfd9771c81f80312a55e1cc66e21aa956769cce864e9dcae0f6186ebdb22668e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "two_phase",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{int n;A(int,int):n(9){}A(std::initializer_list<int>x):n(x.size()){}};int main(){A a{2,3};return a.n!=2;}",
+      "source_sha256": "33ec84512786a2ccfa47a5543e411ec923d86166781f29fb36ebb97db97a0943",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "phase_two",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{int n;A(int,int):n(9){}A(std::initializer_list<const char*>):n(2){}};int main(){A a{2,3};return a.n!=9;}",
+      "source_sha256": "80531c954fde018f3e8c960af691e03d8b5f083a18defb6e7df380901f61dd94",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "empty_default",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{int n;A():n(9){}A(std::initializer_list<int>):n(2){}};int main(){A a{};return a.n!=9;}",
+      "source_sha256": "df6d1ce9c82a1d9c4eda1f5c67b34c524745968ba3f3f7ec775413aebdbf5103",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "empty_list_only",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{int n;A(std::initializer_list<int>x):n(x.size()){}};int main(){A a{};return a.n;}",
+      "source_sha256": "9a77054607d997a51d49d46fd8362ad67efe76b833572ae23cd714bf57faaf0e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "rank",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(std::initializer_list<int>){return 1;}int f(std::initializer_list<long>){return 2;}int main(){return f({1})!=1||f({1L})!=2;}",
+      "source_sha256": "f2168a23a52c6b8075b358707f3378fda8105caf8e338b8935c393214de8dce9",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "rank_pointer",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(const char*){return 1;}int f(std::initializer_list<char>){return 2;}int main(){return f({'a'})!=2;}",
+      "source_sha256": "7e877e96656fc9116ff9bcc9d85cb18c9af902aa385aafe3822fb01d6bbd14bd",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_deduction",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>int f(std::initializer_list<T>x){return sizeof(T)+x.size();}int main(){return f({1L,2L})!=10;}",
+      "source_sha256": "70e0a738d48d97d93799bdb2e96e5536baa2562bdea074f5869c3726329e2e6f",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>int f(const std::initializer_list<T>&x){return sizeof(T)+x.size();}int main(){return f({1,2,3})!=7;}",
+      "source_sha256": "2917c91c1e621a9504a8420370286e63215786502c985754aedd8d25bf961f1a",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_empty_explicit",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>int f(std::initializer_list<T>x){return x.size();}int main(){return f<int>({});}",
+      "source_sha256": "ccb89963f10b76451a6ddd82b026657971a704731cabcec2a9710075fd027e0b",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_fixed_body",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>int f(T){std::initializer_list<int>x{1,2};return x.size();}int main(){return f(1)!=2||f(1L)!=2;}",
+      "source_sha256": "1666367b9d137229e8af45bb49c746a72a659c688ed568c3144cda3a9c823bb0",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_dependent_body",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>int f(T n){std::initializer_list<T>x{n,n};return x.size();}int main(){return f(1)!=2||f(1L)!=2;}",
+      "source_sha256": "9825fdd9290558b4290f4f2118e20b4d77aa23846ee2a987712d5a67064ab7ce",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "pack",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class...T>int f(T...n){auto x={n...};return x.size();}int main(){return f(1,2,3)!=3;}",
+      "source_sha256": "ca6e0bada612aba9ba55a926303c6e89ef69de0508547234975b1f0caf56452f",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "nested",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){std::initializer_list<std::initializer_list<int>>x{{1,2},{3,4}};return x.size()!=2||x.begin()[1].begin()[0]!=3;}",
+      "source_sha256": "08fdcbc6aa11ff8c74764d59e0ec82f428a2274424dad949406a971f916cd469",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "class_call",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int f(std::initializer_list<S>x){return live+x.size();}int main(){if(f({1,2})!=4)return 1;return live||sequence!=21;}",
+      "source_sha256": "177e2a4e1b4badfb933b092ff5add0b46a0aec889a6cb5b9f2cd565f05b80a43",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "class_local",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int main(){{std::initializer_list<S>x{1,2};if(live!=2)return 1;}return live||sequence!=21;}",
+      "source_sha256": "84e673eb540d55a9329138c0ff7d085905026ba9faedf1254cd5a414d645b860",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "class_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int main(){{const std::initializer_list<S>&x={1,2};if(live!=2)return 1;}return live||sequence!=21;}",
+      "source_sha256": "eef98150c23480af9745e5fc6ba4b168e4e51a1c2758f2ed46862dc813654143",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "class_copy",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int main(){{std::initializer_list<S>x{1,2};{auto y=x;if(live!=2||y.size()!=2)return 1;}if(live!=2)return 2;}return live||sequence!=21;}",
+      "source_sha256": "11e468b120b1219a091a8ec090b43513007e39af31d015cda4e3e2597400f5cc",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "copied_element",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int main(){{S value(3);{std::initializer_list<S>x{value};if(live!=2||x.begin()[0].n!=3)return 1;}if(live!=1||sequence!=3)return 2;}return live||sequence!=33;}",
+      "source_sha256": "715a3c346abf0c23ea1717253307a878912535f28d362d737d83a164c36cdb98",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "unused_copy_external_call",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}void missing();struct S{int n;S(int v):n(v){}S(const S&){missing();}};int main(){std::initializer_list<S>x{1,2};return x.begin()[1].n!=2;}",
+      "source_sha256": "64933cbe82cb86ce60286a1518ef3cc511dc122a938fd781415096b3d92eba3a",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "class_global",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};std::initializer_list<S>x{1,2};int main(){return live!=2||x.begin()[1].n!=2;}",
+      "source_sha256": "7deb35402248b3d909b9d7fe374eb708cdb11cdef33e00d477eee131299f242e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "scalar_global",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}std::initializer_list<int>x{2,3};int main(){return x.begin()[1]!=3;}",
+      "source_sha256": "de3ab49c74c1a423030332a3208db4e13000be5097f9b42b5fdac5870d5f96e0",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "alias",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>using list=std::initializer_list<T>;int main(){list<int>x{1,2};return x.size()!=2;}",
+      "source_sha256": "c55b48283540abd88c14ea6d07bc19363598acc2566f01808c55676b589ad33a",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "capture",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){auto x={1,2};auto f=[x](){int n=0;for(auto v:x)n+=v;return n;};return f()!=3;}",
+      "source_sha256": "b0423bc64b4970cdf5a22764538ff2d54b58d9b670dcb1ceee07426a8e16870a",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "const_elements",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};int main(){std::initializer_list<int>x{1};static_assert(same<decltype(*x.begin()),const int&>::value,\"const\");return 0;}",
+      "source_sha256": "5ff5ef6271c81f4135a6cf990cc318c408ad7a12b535678b0af411560d2bac9f",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "query_constructor",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class A,class B>struct same{static const bool value=false;};template<class A>struct same<A,A>{static const bool value=true;};struct A{A(std::initializer_list<int>);};static_assert(same<decltype(A{1,2}),A>::value,\"query\");int main(){}",
+      "source_sha256": "5b2b44e40c60979e5d9813c52701be4d99b5315219787f583a3de0195688d743",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "scope_name",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}namespace other{template<class T>struct initializer_list{T n;};}int main(){other::initializer_list<int>x{3};return x.n!=3;}",
+      "source_sha256": "7cf5af245bf8e5e1513e12c1a70f84d5ab8e2e10e18e0a764ff98867c7186f54",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "constexpr_global",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}constexpr std::initializer_list<int>x{2,3};static_assert(x.size()==2,\"size\");static_assert(x.begin()[1]==3,\"element\");int main(){return x.begin()[0]!=2;}",
+      "source_sha256": "24d9781f003fe8d8dec7d097e8ee2d0d9420b6a248524aeb23d218d60e9c9469",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "constexpr_empty",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}constexpr std::initializer_list<int>x{};static_assert(x.size()==0,\"size\");int main(){return x.size();}",
+      "source_sha256": "342ed1e69d929fb5721a47c0fa00b8e9961e2f858efa2c2f2ffe6869327e15cb",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "constexpr_call",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}constexpr int f(std::initializer_list<int>x){return x.begin()[0]+x.size();}static_assert(f({3,4})==5,\"list call\");int main(){}",
+      "source_sha256": "edbed3275129dc7b79c42815c2fd7443c9b0fe6dc050ca1c1fccc217f146ebec",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "nested_class",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int live,sequence;struct S{int n;S(int v):n(v){++live;}S(const S&s):n(s.n){++live;}~S(){--live;sequence=sequence*10+n;}};int main(){{std::initializer_list<std::initializer_list<S>>x{{1,2},{3,4}};if(live!=4||x.begin()[1].begin()[0].n!=3)return 1;}return live||sequence!=4321;}",
+      "source_sha256": "ba2635bc1d3e02d7f29f647a7c5a967e90c1348f84c8fe88c0c301e8bdf5f5a0",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "forward_range",
+      "source": "namespace std{template<class T>class initializer_list;}int f(std::initializer_list<int>x){int s=0;for(auto n:x)s+=n;return s;}int main(){return f({2,3,4})!=9;}",
+      "source_sha256": "e9676723cf621e297044c23716f749a8ae3c273e0bd9a83ebbcf1f012f063fe3",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "unused_copy_body_checked",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct S{S(int){}S(const S&){missing();}};int main(){std::initializer_list<S>x{1};}",
+      "source_sha256": "a6f4c245a2c0000f700fba7eef5c0f84c3cb781c40ff48865dd3015d608492af",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: unknown expression name: missing\n",
+      "passed": true
+    },
+    {
+      "name": "auto_mismatch",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){auto x={1,2L};}",
+      "source_sha256": "b7c62ea9c5c3732438a40a8a40cf79d85cc60a5b518792a6c7a85fa44c8f0190",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: conflicting list element deduction\n",
+      "passed": true
+    },
+    {
+      "name": "auto_empty",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){auto x={};}",
+      "source_sha256": "f8438499f19403223bfd455b3ca09a965a794ab93adee5424288fb19c2374145",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: empty list cannot deduce auto\n",
+      "passed": true
+    },
+    {
+      "name": "narrowing",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){std::initializer_list<int>x{1.5};}",
+      "source_sha256": "282a47fc566eedfa39873c3776e360211318647889b623cf5b37f9ff284d4ffa",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: narrowing list initialization\n",
+      "passed": true
+    },
+    {
+      "name": "narrowing_selected",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{A(int,int);A(std::initializer_list<char>);};int main(){A x{1000,2000};}",
+      "source_sha256": "5efef493d068513b62bdc36850ea314a1c1bc4252e1e7f13e7aa1caefebbe77c",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: narrowing list initialization\n",
+      "passed": true
+    },
+    {
+      "name": "explicit_copy",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{explicit A(std::initializer_list<int>);};int main(){A x={1,2};}",
+      "source_sha256": "ed3db4443217f439c55fd1698111c430a746151fbefd72fb9d45422e5afccc2a",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: explicit constructor in copy-list initialization\n",
+      "passed": true
+    },
+    {
+      "name": "deleted_selected",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct A{A(std::initializer_list<int>)=delete;A(int,int);};int main(){A x{1,2};}",
+      "source_sha256": "2148788c7379f2441a559425b4eaefc2ec8dbe08f5a9db70289a04a07bcb3151",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: deleted list constructor\n",
+      "passed": true
+    },
+    {
+      "name": "private_selected",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}class A{A(std::initializer_list<int>);public:A(int,int);};int main(){A x{1,2};}",
+      "source_sha256": "c31d41a6686318c77483059f41ebe612b0333fb9a978e3cf941ade6e2caeecb3",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: inaccessible class member\n",
+      "passed": true
+    },
+    {
+      "name": "nonconst_reference",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}void f(std::initializer_list<int>&);int main(){f({1,2});}",
+      "source_sha256": "14a3a5ab8013cc06a3b1478ec9d818fdeda257c1cddeaaedc667b412f5e82ec5",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: no viable function\n",
+      "passed": true
+    },
+    {
+      "name": "ambiguous",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int f(std::initializer_list<long>);int f(std::initializer_list<unsigned>);int main(){return f({1});}",
+      "source_sha256": "2448d92fde2981dcf2d0f835989ca49d69bccc4b135b3697376e3160b56ec315",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: ambiguous overload\n",
+      "passed": true
+    },
+    {
+      "name": "deduction_mismatch",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>void f(std::initializer_list<T>);int main(){f({1,2L});}",
+      "source_sha256": "6d2b619fa4d04f115a017332bd1377a6555644ee9ef9e6cf84020ad723147c33",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: no viable function\n",
+      "passed": true
+    },
+    {
+      "name": "deduction_empty",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>void f(std::initializer_list<T>);int main(){f({});}",
+      "source_sha256": "bf5744ea132f516799756b502290bef52b5a32e5e87ff390c186fb2d6a6f3f2e",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: no viable function\n",
+      "passed": true
+    },
+    {
+      "name": "nonlist_deduction",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<class T>void f(T);int main(){f({1,2});}",
+      "source_sha256": "04859cb5435c32d0f9afbb72c8ab98b5cf43554b3cbe3e4e5843bd7b64412643",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: no viable function\n",
+      "passed": true
+    },
+    {
+      "name": "const_element_write",
+      "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){std::initializer_list<int>x{1};*x.begin()=2;}",
+      "source_sha256": "88b645acbb085ef84c094d229d4abe2dfbabf66abfca06530c164a5d5772e89d",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: modifiable lvalue required\n",
+      "passed": true
+    }
+  ],
+  "list_unwind": {
+    "compiler_sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3",
+    "object_backend_sha256": "e32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70",
+    "rows": [
+      {
+        "name": "local_1_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_1_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_1.o",
+              "/tmp/pa21-loop104/eh-demand/local_1_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_1_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_1_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_1_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "81cee3ecd60dd422e083a31b6fafe9b7d4d9d7563e35a19d5b289a537e0bbe68"
+      },
+      {
+        "name": "argument_1_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1.o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_1_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "a03ae1457c7dd63757ba92712069344024641f4fe4fdd5184926c8720c77b100"
+      },
+      {
+        "name": "local_1_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={1};if(caught!=true||count!=1)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_1_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_99.o",
+              "/tmp/pa21-loop104/eh-demand/local_1_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_1_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_1_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_1_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "81cee3ecd60dd422e083a31b6fafe9b7d4d9d7563e35a19d5b289a537e0bbe68"
+      },
+      {
+        "name": "argument_1_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={1};if(caught!=true||count!=1)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99.o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_1_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "a03ae1457c7dd63757ba92712069344024641f4fe4fdd5184926c8720c77b100"
+      },
+      {
+        "name": "local_1_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={1};if(caught!=false||count!=1)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_1_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_0.o",
+              "/tmp/pa21-loop104/eh-demand/local_1_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_1_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_1_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_1_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_1_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "81cee3ecd60dd422e083a31b6fafe9b7d4d9d7563e35a19d5b289a537e0bbe68"
+      },
+      {
+        "name": "argument_1_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={1};if(caught!=false||count!=1)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0.o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_1_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_1_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "a03ae1457c7dd63757ba92712069344024641f4fe4fdd5184926c8720c77b100"
+      },
+      {
+        "name": "local_3_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_3_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_1.o",
+              "/tmp/pa21-loop104/eh-demand/local_3_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_3_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_3_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_3_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "82989d657dcd85ca034ce74438e332bde5a3e84a2e3f4e3682efb51c6ad7183b"
+      },
+      {
+        "name": "argument_3_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1.o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_3_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "d758cc3e6249442fb0d27226d71680957868eff96eccacc71101a83ca4faed2f"
+      },
+      {
+        "name": "local_3_3",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==3)throw n;}extern \"C\" void used(){if(3==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==3;}int expected[]={2,1};if(caught!=true||count!=2)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_3.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_3_3.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_3.o",
+              "/tmp/pa21-loop104/eh-demand/local_3_3.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_3_3-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_3_3.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_3"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_3_3"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "82989d657dcd85ca034ce74438e332bde5a3e84a2e3f4e3682efb51c6ad7183b"
+      },
+      {
+        "name": "argument_3_3",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==3)throw n;}extern \"C\" void used(){if(3==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==3;}int expected[]={2,1};if(caught!=true||count!=2)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3.o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_3"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_3_3"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "d758cc3e6249442fb0d27226d71680957868eff96eccacc71101a83ca4faed2f"
+      },
+      {
+        "name": "local_3_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={3,2,1};if(caught!=true||count!=3)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_3_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_99.o",
+              "/tmp/pa21-loop104/eh-demand/local_3_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_3_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_3_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_3_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "82989d657dcd85ca034ce74438e332bde5a3e84a2e3f4e3682efb51c6ad7183b"
+      },
+      {
+        "name": "argument_3_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={3,2,1};if(caught!=true||count!=3)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99.o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_3_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "d758cc3e6249442fb0d27226d71680957868eff96eccacc71101a83ca4faed2f"
+      },
+      {
+        "name": "local_3_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={3,2,1};if(caught!=false||count!=3)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_3_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_0.o",
+              "/tmp/pa21-loop104/eh-demand/local_3_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_3_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_3_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_3_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_3_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "82989d657dcd85ca034ce74438e332bde5a3e84a2e3f4e3682efb51c6ad7183b"
+      },
+      {
+        "name": "argument_3_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={3,2,1};if(caught!=false||count!=3)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0.o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_3_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_3_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "d758cc3e6249442fb0d27226d71680957868eff96eccacc71101a83ca4faed2f"
+      },
+      {
+        "name": "local_16_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_16_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_1.o",
+              "/tmp/pa21-loop104/eh-demand/local_16_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_16_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_16_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_16_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "874897827f60a49ca4b5fb45708264424368227a0f2b82841fa9213443ef9343"
+      },
+      {
+        "name": "argument_16_1",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==1)throw n;}extern \"C\" void used(){if(1==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==1;}int expected[]={0};if(caught!=true||count!=0)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1.o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_16_1"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "dee810979c16f57cab936c730b0c1eb000202f32797327d98f6d2a4501584c05"
+      },
+      {
+        "name": "local_16_16",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==16)throw n;}extern \"C\" void used(){if(16==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==16;}int expected[]={15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||count!=15)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_16.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_16_16.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_16.o",
+              "/tmp/pa21-loop104/eh-demand/local_16_16.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_16_16-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_16_16.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_16"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_16_16"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "874897827f60a49ca4b5fb45708264424368227a0f2b82841fa9213443ef9343"
+      },
+      {
+        "name": "argument_16_16",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==16)throw n;}extern \"C\" void used(){if(16==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==16;}int expected[]={15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||count!=15)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16.o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_16"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_16_16"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "dee810979c16f57cab936c730b0c1eb000202f32797327d98f6d2a4501584c05"
+      },
+      {
+        "name": "local_16_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||count!=16)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_16_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_99.o",
+              "/tmp/pa21-loop104/eh-demand/local_16_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_16_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_16_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_16_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "874897827f60a49ca4b5fb45708264424368227a0f2b82841fa9213443ef9343"
+      },
+      {
+        "name": "argument_16_99",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=true||count!=16)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99.o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_16_99"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "dee810979c16f57cab936c730b0c1eb000202f32797327d98f6d2a4501584c05"
+      },
+      {
+        "name": "local_16_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){std::initializer_list<S>x{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=false||count!=16)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_16_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_0.o",
+              "/tmp/pa21-loop104/eh-demand/local_16_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_16_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_16_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_16_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_16_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "874897827f60a49ca4b5fb45708264424368227a0f2b82841fa9213443ef9343"
+      },
+      {
+        "name": "argument_16_0",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};void consume(std::initializer_list<S>){used();}extern \"C\" void run(){consume({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16});}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==0)throw n;}extern \"C\" void used(){if(0==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==0;}int expected[]={16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};if(caught!=false||count!=16)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0.lowir",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0.o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/argument_16_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/argument_16_0"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "dee810979c16f57cab936c730b0c1eb000202f32797327d98f6d2a4501584c05"
+      },
+      {
+        "name": "nested",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};extern \"C\" void run(){std::initializer_list<std::initializer_list<S>>x{{1,2},{3,4}};used();}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={4,3,2,1};if(caught!=true||count!=4)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/nested.lowir",
+              "/tmp/pa21-loop104/eh-demand/nested.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/nested.o",
+              "/tmp/pa21-loop104/eh-demand/nested.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/nested-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/nested.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/nested"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/nested"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "a947b5a82ea0d60f9c23c0ea781ff6561040c506992a46fd2ce2d50fa8661b4b"
+      },
+      {
+        "name": "constructor_argument",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};struct Box{Box(std::initializer_list<S>){used();}};extern \"C\" void run(){Box b{1,2,3};}",
+        "harness": "extern \"C\" void run();int seq[100],count;extern \"C\" void made(int n){if(n==99)throw n;}extern \"C\" void used(){if(99==99)throw 99;}extern \"C\" void destroyed(int n){seq[count++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==99;}int expected[]={3,2,1};if(caught!=true||count!=3)return 1;for(int i=0;i<count;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument.lowir",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument.o",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/constructor_argument"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/constructor_argument"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "2717029b33f69df688eb13f45673c2ad28b750e21a531a39bfae7f2da51c6562"
+      },
+      {
+        "name": "local_static_atexit",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}extern \"C\" void made(int);extern \"C\" void destroyed(int);extern \"C\" void used();struct S{int n;S(int n):n(n){made(n);}S(const S&s):n(s.n){made(n);}~S(){destroyed(n);}};extern \"C\" void run(){static std::initializer_list<S>x{1,2};}",
+        "harness": "#include <cstdlib>\nextern \"C\" void run();int count,seq;extern \"C\" void made(int){++count;}extern \"C\" void destroyed(int n){--count;seq=seq*10+n;}void verify(){if(count||seq!=21)std::_Exit(3);}int main(){std::atexit(verify);run();run();return count!=2;}",
+        "commands": [
+          {
+            "argv": [
+              "/tmp/pa21-loop104/final-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit.lowir",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit.o",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit-host.cpp",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit.o",
+              "-o",
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/tmp/pa21-loop104/eh-demand/local_static_atexit"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true,
+        "lowir_sha256": "3b189238ea2d9c373c5975a348ad3cbf8bbcb58034e8fff70130f87c61f89f5c"
+      }
+    ]
+  },
+  "compiler_sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3",
+  "implementation_commit": "511fe9b95fa31e9051e18354b32e806efce83388",
+  "entry_commit": "fa079cdeffb19a1a69e92ff56f8bc154c4047c36",
+  "baseline_log_sha256": "fd9dc1d1d658e143f956fdd02caf2ac075f6263283322127c1e99aaf2058b6d8",
+  "performance_record_sha256": "b81981c0c6f6cb404493e8c28478b0b6764cabde6975363bcdcf8523bcbf887e"
+}

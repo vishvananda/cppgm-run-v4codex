@@ -2,91 +2,85 @@
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Target: PA21 full-stage. Phase: implementation (loop 104).
-Loop 104 entry: clean at `fa079cdeffb19a1a69e92ff56f8bc154c4047c36`;
-49/116 pass, 67 fail. Previous handoff made verified progress (twelve resolved
-failures); no compiler/test process remained live on this entry.
-Current work: initialization owns canonical list element/storage plans;
-overload selection and deduction consume those plans, and lowering consumes
-checked element conversions and explicit backing-array lifetime facts. Extend
-through calls, constructors, assignment, returns, ranges and storage duration.
-Work must follow elements/candidates and emitted cleanup edges, with no repeated
-semantic reconstruction. Validate required fixtures, personal rejection/runtime
-controls, prior-through and file audit; freeze entry/final compilers for §9
-A/A and ABBA latency/RSS plus checked native runtime/size evidence.
-Loop 104 checkpoint: 71/116 on the second stage run; 22 original failures
-resolved. Prior-through now 3596/3596; file audit passes (three inherited
-advisories). Personal list controls 48/48 and external-unwind controls 27/27
-pass, including constexpr/nested storage and host-linked local-static atexit.
-Implementation continues: required class-list lifetime LowIR comparisons,
-scaling/evidence and related defects still need resolution before handoff.
-Loop 103 entry: clean at `f4224e0b`; 37/116 pass, 79 fail.
-Now: **49/116 pass, 67 fail**; twelve old failures resolved, no new failures or
-coverage reductions. Independent whole-stage audit remains pending.
+Target: PA21 full-stage. Phase: implementation handoff (loop 104).
+Entry: clean `fa079cdeffb19a1a69e92ff56f8bc154c4047c36`, 49/116 pass,
+67 fail. Now: **71/116 pass, 45 fail**; 22 original failures resolved, no new
+failures or coverage reduction. Earlier PAs: **3596/3596**. Independent
+whole-stage audit and the unfinished implementation below remain required.
 
 ## Design/spec alignment
 
-RTTI/casts: standalone group complete in loop 102. Typed formation/evaluated facts
-feed cached RTTI and ABI identities; lowering emits once per identity.
-[Ownership, bounds and external runtime limitation](rtti102.md).
+RTTI/casts (loop 102): typed formation/evaluation facts feed cached RTTI/ABI
+identities; lowering emits once per identity. [Ownership and bounds](rtti102.md).
 
-Closures: indexed capture edges retain mode, source type, forwarding field and
-checked conversion/default/destructor dependencies. Explicit/default copy and
-reference, `this`, mutable/cv, nested, array, template and RTTI compositions use
-this shared path. Template `decltype` preserves hypothetical capture cv without
-storage demand. Typed lowering constructs fields once and records completed
-subobjects for reverse unwind cleanup; generated closure copies share the fixed
-class-transfer path. [Design, bounds and validation boundary](captures103.md).
+Closures (loop 103): indexed capture edges retain source type, mode, forwarding
+field and checked conversion/destructor dependencies. Construction and generated
+copies record completed subobjects for reverse unwind cleanup. Template/query cv
+facts do not create storage demand. [Ownership and bounds](captures103.md).
+
+Lists (loop 104): initialization owns canonical library type/field identities,
+immutable element conversion plans and backing storage. Selection/deduction,
+constexpr evaluation and range lowering consume those facts. Local/reference,
+nested and static retention reuse the lifetime owner; class elements construct
+in their final slots. Mandatory inline body checking is separate from emission
+demand. [Data flow, complexity, validation and boundary](lists104.md).
 
 ## Remaining implementation groups
 
-Each current failure has one primary owner; compositions cross owners.
-
-| Group / owner | Data flow and complexity obligation | Remaining / validation |
+| Owner | Required data flow and bounds | Remaining validation |
 |---|---|---|
-| Initializer lists / initialization and overload selection | Canonical element/conversion plans own backing storage, list ranking and lifetime; lowering consumes those plans once. | 24; braced calls/construction/return, deduction, ranges, scalar/class elements and storage duration. |
-| EH and lifetime / source handlers and cleanup control flow | Typed active handler, exception-object and constructed-subobject facts own continuations; share only identical complete contexts. Work bounded by actual control/cleanup edges. | 43; source throw/try/catch (including two lambda compositions), subobject failure, argument ownership, conditional temporaries, destructor termination and local-class/recursive-template cleanup. |
+| EH regions and list-lifetime integration | Construction states feed full-expression/lexical regions; region exits and continuation keys must carry complete handler context. Reuse completed element addresses and bound prefix work. | Two list fixtures still differ in required LowIR shape despite native lifetime controls passing. |
+| Source EH, lifetime control flow and generated special members | Typed throw/exception object/catch binding facts feed matching, rethrow and handler exit. Share only identical complete cleanup contexts. Work follows actual control/dependency edges. | 43 inherited failures: source handlers (including two lambda compositions), subobject failure, conditional temporaries, destructor termination, argument/return ownership and local-class/recursive-template cleanup. |
 
-Handoff boundary: closure environments, capture initialization and generated
-copies—including partial construction—are implemented and validated. The two
-remaining lambda fixtures enter unsupported source `try` checking. Their catch
-bindings, exception objects, matching/rethrow and handler-exit facts require the
-source-EH representation shared with the other EH failures. List backing storage
-and overload ranking likewise have a separate owner. Further closure field/copy
-changes cannot supply these missing semantic states; both groups remain required
-implementation, not independent-review deferrals.
+Handoff boundary: list formation, two-phase selection, deduction, scalar storage,
+ranges and class-element constructor selection are complete. Work extended through
+constexpr/nested backing storage, template recipes, static finalization, partial
+construction and checking/emission separation. The two remaining list fixtures
+need the shared EH region/continuation owner, also required by the 43 other
+failures. Source `try` checking still lacks handler/exception-object facts.
+Further list ranking/storage changes cannot supply those states; fixture-specific
+cleanup shaping would duplicate that owner. These are **unfinished requirements**,
+not independent-review questions, and native success does not waive comparison.
+
+Independent review questions: list/query key completeness, dependent recipe reuse,
+nested storage ownership, constructor checking/emission separation, and the
+inherited RTTI/capture facts. Review is still owed; no requirement is waived.
 
 ## Performance evidence
 
-[Protocol/results](performance103.md), [final raw observations](../student.tests/pa21/performance103.json)
-and [preserved intermediate observations](../student.tests/pa21/performance103-first.json).
+[Protocol/results](performance104.md) and [raw observations](../student.tests/pa21/performance104.json).
 Frozen A/A + ABBA: all six equivalent inherited workloads have identical LowIR
-and executables. Compiler text +24,832 B (1.18%); heavy-template RSS essentially
-unchanged. No speedup claimed. 800→3200 closures yields exactly 4× capture edges,
-4× expression work, 116→477 ms compilation and 24,132→76,672 KiB RSS.
-32→4096 array elements retain constant-sized copy-loop LowIR. Checked live calls,
-memory, floating-point and capture loops include native runtime/payload evidence.
-PA21/O0 uses spec §9 bounds and eight-element expansion; no optional optimization
-or extra numerical gate. Historical self-selected ratios remain diagnostics.
-Own native optimization and self-hosting retain their later-stage owners.
+and native executables. Compiler text +20,800 B (0.97%); heavy-template RSS
++168 KiB. No speedup claimed. 800→3200 list specializations yield exactly 4×
+plans/objects, one library representation, 36,805→147,205 instructions,
+125→499 ms compilation and 25,288→82,656 KiB RSS. Explicit class-list growth
+is seven instructions per element; array cleanup uses the inherited eight-element
+expansion cap then a loop. Checked live list, calls, memory, floating-point and
+capture loops include separate runtime/payload measurements.
+PA21/O0 uses spec §9 bounds, with no optional optimization or extra numerical
+exit gate. Native size is explicitly a sectionless-ELF payload proxy. Historical
+self-selected ratios remain diagnostics; all earlier measurements are preserved
+in [loop 102](performance102.md) and [loop 103](performance103.md). Own native
+optimization/self-hosting retain their later-stage owners.
 
 ## Handoff ledger
 
 Loop 102: `30fe6353` proves/corrects one oracle substitution digit; `9f2181f9`
 implements RTTI/casts; `f4224e0b` records 37/116 and prior-through 3596/3596.
-[Preserved validation](../student.tests/pa21/validation102.json) and
-[performance](performance102.md); independent whole-stage review was still owed.
+[Validation](../student.tests/pa21/validation102.json).
 
-Loop 103: `e835d6dc` implements typed captures and construction lifetimes;
-`1c541f84` completes generated-copy unwind cleanup.
-[Validation](../student.tests/pa21/validation103.json): `make test-pa21` 49/116
-(exit 2); prior-through 3596/3596 (exit 0); file audit passes with three inherited
-advisory header warnings. Through-PA21 also reports 3645/3712. Personal controls:
-64/64 capture controls, 58/58 inherited controls, 13/13 external-unwind controls.
-Required fixture inputs, references and comparison rules are unchanged this loop.
-No known defect remains open in the completed group. The two unfinished groups
-above and independent whole-stage correctness/architecture review are both still
-required; neither is waived. Review questions include capture/query key completeness,
-retained-template cv/demand and lifetime-state ownership under the stage-wide spec.
-Review markers remain unchanged. This completes
-loop 103 implementation handoff, not PA21 or its independent audit.
+Loop 103: `e835d6dc` implements captures and construction lifetimes;
+`1c541f84` completes generated-copy unwind cleanup; `fa079cde` records 49/116,
+prior-through 3596/3596 and unchanged coverage.
+[Validation](../student.tests/pa21/validation103.json).
+
+Loop 104: `e2af8963` implements list selection, storage, deduction and lifetimes;
+`f03b9371` removes backing-helper dependencies and adds measurements;
+`511fe9b9` separates checking from inline emission demand.
+[Validation](../student.tests/pa21/validation104.json): `make test-pa21` 71/116
+(exit 2); prior-through 3596/3596 (exit 0); through-PA21 3667/3712 (exit 2);
+file audit passes with three inherited header advisories. Personal controls:
+51/51 semantic/rejection/native controls and 25/25 host-unwind/static controls.
+All 116 required inputs, references and comparison rules are unchanged.
+Review markers remain unchanged. This completes the implementation handoff;
+PA21 completion and its independent whole-stage audit are still outstanding.
