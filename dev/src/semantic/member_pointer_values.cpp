@@ -17,10 +17,14 @@ bool Analyzer::prove_member_pointer_value(NodeId source, TypeId target, unsigned
     if (!source || !budget) return false;
     --budget; ++member_pointer_proof_work;
     auto node = ast[source];
+    auto expression = expressions[source];
+    // A wrapper can own the conversion even when its child denotes an
+    // unadjusted local. Consume that fact before following the value edge.
+    auto conversion = conversions[expression.incoming];
+    if (conversion.derived && base_adjustments[conversion.adjustment].total) return false;
     if ((node.kind == syntax::Kind::Initializer || node.kind == syntax::Kind::ParenInitializer ||
          node.kind == syntax::Kind::BracedInit || node.kind == syntax::Kind::Parenthesized) && node.first == node.last)
         return node.first ? prove_member_pointer_value(node.first,target,budget) : true;
-    auto expression = expressions[source];
     if (node.kind == syntax::Kind::KeywordLiteral || node.kind == syntax::Kind::Literal ||
         (node.kind == syntax::Kind::Unary && node.op == OP_AMP && expression.form == ExpressionForm::Ordinary) ||
         (node.kind == syntax::Kind::IdExpression && entities[expression.entity].constant.valid)) {
@@ -30,8 +34,6 @@ bool Analyzer::prove_member_pointer_value(NodeId source, TypeId target, unsigned
     if (node.kind != syntax::Kind::IdExpression || !expression.entity) return false;
     auto from = expression.type;
     if (types[from].kind != TypeKind::MemberPointer) return false;
-    auto conversion = conversions[expression.incoming];
-    if (conversion.derived && base_adjustments[conversion.adjustment].total) return false;
     prepare_member_pointer_value(expression.entity,&budget);
     return member_pointer_zero_adjustment(expression.entity);
 }

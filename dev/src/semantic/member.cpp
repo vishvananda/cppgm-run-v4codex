@@ -205,6 +205,11 @@ bool Analyzer::derived_from(TypeId from, TypeId to)
     EntityId source = types[from].entity, target = types[to].entity;
     if (source == target) return false;
     if (definitions) complete_class(source);
+    // Completed base edges are immutable. Reuse the canonical path/miss fact
+    // shared by conversion checking and lowering instead of rediscovering the
+    // hierarchy for every candidate. An open class has no stable negative fact.
+    if (entities[source].complete)
+        return base_adjustments[base_path(from,target)].edge != 0;
     std::vector<EntityId> work(1, source);
     Index seen;
     while (!work.empty()) {

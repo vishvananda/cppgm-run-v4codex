@@ -104,6 +104,13 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
         bool transfer = a[i].rank == 2 &&
             (a[i].kind == Conversion::Kind::Construction || b[i].kind == Conversion::Kind::Construction);
         if (at != bt && (a[i].derived || b[i].derived || transfer)) {
+            // [over.ics.rank]/4: A::* -> B::* beats A::* -> C::* when
+            // C derives from B. Member conversions run opposite to pointers.
+            if (types[at].kind == TypeKind::MemberPointer && types[bt].kind == TypeKind::MemberPointer) {
+                auto ac = types[at].member_owner(), bc = types[bt].member_owner();
+                if (derived_from(ac,bc)) return false;
+                if (derived_from(bc,ac)) { strict = true; continue; }
+            }
             if (derived_from(bt, at) || (fundamental(at, FT_VOID) && types[bt].kind == TypeKind::Named)) return false;
             if (derived_from(at, bt) || (fundamental(bt, FT_VOID) && types[at].kind == TypeKind::Named)) { strict = true; continue; }
         }

@@ -157,6 +157,18 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
         if (better(&b.object,&a.object,1)) return false;
         if (better(&a.second,&b.second,1)) return true;
         if (better(&b.second,&a.second,1)) return false;
+        // These sequences can have different sources but the same target.
+        // [over.ics.rank]/4 prefers the shorter hierarchy conversion; the
+        // direction for member pointers is reversed from object conversions.
+        if (a.second.rank == 2 && b.second.rank == 2) {
+            auto at = value_type(types[entities[a.function].type].child);
+            auto bt = value_type(types[entities[b.function].type].child);
+            bool member = types[at].kind == TypeKind::MemberPointer && types[bt].kind == TypeKind::MemberPointer;
+            if (member) { at = types[at].member_owner(); bt = types[bt].member_owner(); }
+            else if (pointer(at) && pointer(bt)) { at = types[at].child; bt = types[bt].child; }
+            if (derived_from(at,bt)) return member;
+            if (derived_from(bt,at)) return !member;
+        }
         bool at = entities[a.function].specialization != 0, bt = entities[b.function].specialization != 0;
         return (!at && bt) || (at && bt && template_more_specialized(a.function,b.function,~0u,false,true));
     };
