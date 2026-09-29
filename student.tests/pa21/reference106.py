@@ -32,7 +32,15 @@ for name, replacements in changes.items():
     record = dict(path=path,original_sha256=sha(original),revised_sha256=sha(revised),replacements=replacements)
     manifest['files'].append(record)
     if '--write' in sys.argv: (ROOT/path).write_text(revised)
-    else: assert (ROOT/path).read_text()==revised
+    else:
+        # 112 preserves this four-replacement revision as its input and
+        # corrects a separate raw-handler continuation in the second file.
+        from reference112 import HANDLER,reconstruct
+        if path == HANDLER:
+            intermediate,latest = reconstruct(path)
+            assert intermediate == revised
+            assert (ROOT/path).read_text() == latest
+        else: assert (ROOT/path).read_text()==revised
 path = ROOT/'student.tests/pa21/reference106-revision.json'
 if '--write' in sys.argv: path.write_text(json.dumps(manifest,indent=2)+'\n')
 else: assert json.loads(path.read_text())==json.loads(json.dumps(manifest))

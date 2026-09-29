@@ -1,0 +1,201 @@
+{
+  "host": "void throw_long() { throw 7; }\nextern \"C\" void injected() { throw 9L; }\nextern \"C\" int fixture_main();\nint main() { return fixture_main(); }\n",
+  "rows": [
+    {
+      "name": "original",
+      "lowir_sha256": "c1e94dd58e85f7fe89ceefa11fbfd5ff2e869aca5f3f3e42b025190d22281f6e",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/original.o",
+            "/tmp/pa21-112/reference/original.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/reference/driver.cpp",
+            "/tmp/pa21-112/reference/original.o",
+            "-o",
+            "/tmp/pa21-112/reference/original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/reference/original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "revised",
+      "lowir_sha256": "f3139d62012645822ffbc0949f4f496f6a53cbfd762a9e2556919f576a94abe5",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/revised.o",
+            "/tmp/pa21-112/reference/revised.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/reference/driver.cpp",
+            "/tmp/pa21-112/reference/revised.o",
+            "-o",
+            "/tmp/pa21-112/reference/revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/reference/revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "region-count-2",
+      "source": "declare function @may_throw() -> void\nfunction @reduced() -> void {\n block ^entry:\n  eh_try ^outer\n  eh_cleanup ^active_outer\n  eh_cleanup ^active_inner\n  call void @may_throw()\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_inner:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^active_outer:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^outer:\n  eh_catch_all, 1\n  return void\n}\n",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/region-count-2.o",
+            "/tmp/pa21-112/reference/region-count-2.lowir"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "ERROR: host EH protected region remains active at function exit: reduced block active_inner\n"
+        }
+      ]
+    },
+    {
+      "name": "region-count-3",
+      "source": "declare function @may_throw() -> void\nfunction @reduced() -> void {\n block ^entry:\n  eh_try ^outer\n  eh_cleanup ^active_outer\n  eh_cleanup ^active_inner\n  call void @may_throw()\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_inner:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  eh_end\n  return void\n block ^active_outer:\n  eh_catch_all, 1\n  eh_end\n  eh_end\n  return void\n block ^outer:\n  eh_catch_all, 1\n  return void\n}\n",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/region-count-3.o",
+            "/tmp/pa21-112/reference/region-count-3.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "array-original",
+      "lowir_sha256": "56b5ed682ebb9b04bc76e89e7a51ebc4fb60d28deb0103de055461b5b8cdbb1f",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/array-original.o",
+            "/tmp/pa21-112/reference/array-original.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/reference/array-original.o",
+            "-o",
+            "/tmp/pa21-112/reference/array-original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/reference/array-original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "array-revised",
+      "lowir_sha256": "09dd94e19e98dbd5051417615e0f3498632424c7350cb27e59df20414567dcaa",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/reference/array-revised.o",
+            "/tmp/pa21-112/reference/array-revised.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/reference/array-revised.o",
+            "-o",
+            "/tmp/pa21-112/reference/array-revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/reference/array-revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

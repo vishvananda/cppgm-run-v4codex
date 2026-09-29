@@ -131,7 +131,7 @@ class Procedural {
     std::vector<TemporaryState> temporary_states;
     semantic::Index list_backing_addresses;
     std::vector<lowir_model::ValueId> list_element_addresses;
-    struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false, has_catches = false; };
+    struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false, has_catches = false, cleanup_dispatch = false; };
     std::vector<ExceptionContext> exception_contexts = std::vector<ExceptionContext>(1);
     std::uint32_t exception_context = 0, nonthrowing_parameters = 0;
     semantic::Index exception_rtti, exception_storage, exception_selectors;

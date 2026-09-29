@@ -100,10 +100,11 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^catch_cleanup_15:
     eh_catch @__external_rtti__long_int, 3
     call void @__external_runtime____cxa_end_catch()
+    eh_end
     %t13 = addr $guard
     call void @Guard___Guard(%t13)
-    eh_end
     call void @__external_runtime____cxa_end_catch()
+    eh_end
     eh_end
     jump ^catch_entry_2
 

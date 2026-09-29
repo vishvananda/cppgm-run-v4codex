@@ -1,0 +1,1173 @@
+{
+  "compiler_sha256": "9bfee8acc7f429ca6b49602a0e773fb7215ad5a73fa25a5469ad21a53805c2d4",
+  "rows": [
+    {
+      "name": "exhaustive_throw",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{G a(1);try{throw 7;}catch(...){G b(2);throw 9L;}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_throw.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_throw.o",
+            "/tmp/pa21-112/dispatch/exhaustive_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_throw.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_throw",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){throw 9L;}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_throw.lowir",
+            "/tmp/pa21-112/dispatch/raw_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_throw.o",
+            "/tmp/pa21-112/dispatch/raw_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_throw.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exhaustive_call",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{G a(1);try{throw 7;}catch(...){G b(2);fail();}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_call.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_call.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_call.o",
+            "/tmp/pa21-112/dispatch/exhaustive_call.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_call.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_call",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){fail();}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_call.lowir",
+            "/tmp/pa21-112/dispatch/raw_call.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_call.o",
+            "/tmp/pa21-112/dispatch/raw_call.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_call.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exhaustive_return",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{G a(1);try{throw 7;}catch(...){G b(2);return fail_value();}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_return.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_return.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_return.o",
+            "/tmp/pa21-112/dispatch/exhaustive_return.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_return.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_return",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){return fail_value();}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_return.lowir",
+            "/tmp/pa21-112/dispatch/raw_return.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_return.o",
+            "/tmp/pa21-112/dispatch/raw_return.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_return.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exhaustive_template_throw",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{G a(1);try{throw 7;}catch(...){G b(2);throw 9L;}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw.o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_template_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_template_throw",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){throw 9L;}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_throw.lowir",
+            "/tmp/pa21-112/dispatch/raw_template_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_throw.o",
+            "/tmp/pa21-112/dispatch/raw_template_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_template_throw.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_template_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exhaustive_template_call",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{G a(1);try{throw 7;}catch(...){G b(2);fail();}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call.o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_template_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_template_call",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){fail();}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_call.lowir",
+            "/tmp/pa21-112/dispatch/raw_template_call.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_call.o",
+            "/tmp/pa21-112/dispatch/raw_template_call.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_template_call.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_template_call"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exhaustive_template_return",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{G a(1);try{throw 7;}catch(...){G b(2);return fail_value();}}catch(long n){return n!=9||trace!=21;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return.lowir",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return.o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/exhaustive_template_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/exhaustive_template_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "raw_template_return",
+      "source": "int live,drops;struct E{E(){++live;}~E(){--live;++drops;}};void fail(){throw 9L;}int fail_value(){throw 9L;}template<class T>int run(){try{try{throw E();}catch(...){try{throw E();}catch(...){return fail_value();}}}catch(long n){return n!=9||live||drops!=2;}return 1;}int main(){return run<int>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_return.lowir",
+            "/tmp/pa21-112/dispatch/raw_template_return.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_return.o",
+            "/tmp/pa21-112/dispatch/raw_template_return.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/raw_template_return.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/raw_template_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/raw_template_return"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "typed_nested_int",
+      "source": "int live,bad;struct E{E(){++live;}~E(){--live;}};struct G{~G(){if(live!=1)bad=1;}};void fail(){throw 9L;}int main(){try{try{throw E();}catch(...){G g;try{throw 7;}catch(int){fail();}}}catch(long n){return n!=9||live||bad;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_int.lowir",
+            "/tmp/pa21-112/dispatch/typed_nested_int.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_int.o",
+            "/tmp/pa21-112/dispatch/typed_nested_int.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/typed_nested_int.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_int"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/typed_nested_int"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "typed_nested_allallall",
+      "source": "int live,bad;struct E{E(){++live;}~E(){--live;}};struct G{~G(){if(live!=1)bad=1;}};void fail(){throw 9L;}int main(){try{try{throw E();}catch(...){G g;try{throw 7;}catch(...){fail();}}}catch(long n){return n!=9||live||bad;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall.lowir",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall.o",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/typed_nested_allallall"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/typed_nested_allallall"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "mixed_12",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{throw 7;}catch(int){trace=trace*10+2;}catch(long){trace=trace*10+3;}catch(...){trace=trace*10+4;}}catch(...){return 1;}return trace!=21;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_12.lowir",
+            "/tmp/pa21-112/dispatch/mixed_12.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_12.o",
+            "/tmp/pa21-112/dispatch/mixed_12.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/mixed_12.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_12"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/mixed_12"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "mixed_13",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{throw 7L;}catch(int){trace=trace*10+2;}catch(long){trace=trace*10+3;}catch(...){trace=trace*10+4;}}catch(...){return 1;}return trace!=31;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_13.lowir",
+            "/tmp/pa21-112/dispatch/mixed_13.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_13.o",
+            "/tmp/pa21-112/dispatch/mixed_13.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/mixed_13.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_13"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/mixed_13"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "mixed_14",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{throw 7.0;}catch(int){trace=trace*10+2;}catch(long){trace=trace*10+3;}catch(...){trace=trace*10+4;}}catch(...){return 1;}return trace!=41;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_14.lowir",
+            "/tmp/pa21-112/dispatch/mixed_14.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_14.o",
+            "/tmp/pa21-112/dispatch/mixed_14.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/mixed_14.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/mixed_14"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/mixed_14"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "rethrow_outer_kept",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{try{throw 7;}catch(...){G b(2);throw;}}catch(long){return 1;}}catch(int n){return n!=7||trace!=21;}return 2;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/rethrow_outer_kept.lowir",
+            "/tmp/pa21-112/dispatch/rethrow_outer_kept.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/rethrow_outer_kept.o",
+            "/tmp/pa21-112/dispatch/rethrow_outer_kept.lowir"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 8 (existing state 1, incoming state 2, existing active 1, incoming active 2)\n"
+        }
+      ],
+      "passed": false
+    },
+    {
+      "name": "catchall_goto",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{throw 7;}catch(...){G b(2);goto done;}}catch(...){return 1;}done:return trace!=21;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/catchall_goto.lowir",
+            "/tmp/pa21-112/dispatch/catchall_goto.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/catchall_goto.o",
+            "/tmp/pa21-112/dispatch/catchall_goto.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/catchall_goto.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/catchall_goto"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/catchall_goto"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_local_specializations",
+      "source": "template<class T>void bump(T*p){*p+=sizeof(T);}template<class T>int run(){struct C{T*first;T*last;~C(){while(first!=last){bump(first);++first;}}};T a[2]={0,0};T b[2]={0,0};{C c={a,a+2};}return a==b||a[0]!=sizeof(T)||a[1]!=sizeof(T)||b[0]||b[1];}int main(){return run<int>()||run<long>();}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_local_specializations.lowir",
+            "/tmp/pa21-112/dispatch/array_local_specializations.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_local_specializations.o",
+            "/tmp/pa21-112/dispatch/array_local_specializations.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/array_local_specializations.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_local_specializations"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/array_local_specializations"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_distinct_mixed",
+      "source": "int main(){int a[2]={0,0},b[2]={0,0};long c[2]={0,0},d[2]={0,0};a[1]=9;c[1]=1L<<35;return a==b||c==d||a[1]!=9||b[1]||c[1]!=(1L<<35)||d[1];}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed.lowir",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed.o",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_distinct_mixed"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/array_distinct_mixed"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "array_in_handler",
+      "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{throw 7;}catch(...){long a[2]={0,0},b[2]={0,0};G g(2);a[1]=9;if(a==b||b[1]||a[1]!=9)return 1;}return trace!=2;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_in_handler.lowir",
+            "/tmp/pa21-112/dispatch/array_in_handler.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_in_handler.o",
+            "/tmp/pa21-112/dispatch/array_in_handler.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/tmp/pa21-112/dispatch/array_in_handler.o",
+            "-o",
+            "/tmp/pa21-112/dispatch/array_in_handler"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/tmp/pa21-112/dispatch/array_in_handler"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

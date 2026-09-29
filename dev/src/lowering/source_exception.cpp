@@ -155,6 +155,14 @@ void Procedural::try_statement(NodeId n)
     auto parent = exception_context, initial = live;
     auto dispatch = block(), entry = block(), end = block();
     ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry; c.has_catches = true;
+    bool catches_all = false;
+    for (auto h = ast[ast[n].first].next; h; h = ast[h].next) catches_all |= !sem.facts[h].type;
+    // Summarize the same parent-linked clauses emitted by exception_clauses.
+    // A catch-all ends the search; otherwise a changed live prefix or an
+    // active handler needs cleanup before forwarding to the parent's clauses.
+    c.cleanup_dispatch = !catches_all && (parent ?
+        exception_contexts[parent].handler || initial != exception_contexts[parent].live ||
+            exception_contexts[parent].cleanup_dispatch : initial != 0);
     auto context = exception_contexts.size(); exception_contexts.push_back(c); exception_context = context;
     emit(Opcode::EhTry,IRType(),{Operand::label(dispatch)});
     statement(ast[n].first);
@@ -227,7 +235,15 @@ void Procedural::try_statement(NodeId n)
         resume_exception(parent ? initial : 0,parent,true);
         start(next);
     }
-    resume_exception(initial,parent,false);
+    if (catches_all && (!parent || (!exception_contexts[parent].handler && !exception_contexts[parent].cleanup_dispatch))) {
+        // The catch-all selector exhausts this dispatch. Its syntactic miss
+        // edge cannot carry an exception or live cleanup state. Keep the O0
+        // dispatch skeleton. A catch-only parent entry already defines its
+        // retired region; cleanup-bearing joins still require balanced exits,
+        // even on this impossible edge. Real misses retain full live state.
+        if (parent) jump(exception_contexts[parent].entry);
+        else emit(Opcode::Resume,IRType(),{});
+    } else resume_exception(initial,parent,false);
     start(end); live = initial;
 }
 } }

@@ -1,6 +1,15 @@
 declare function @__external_runtime____cxa_begin_catch(%arg0 : ptr) -> ptr [role=eh_begin_catch, linkage=c, binding=strong, object=__cxa_begin_catch]
 declare function @std_terminate() -> void [unwind=no, return=noreturn, role=terminate, binding=strong, object=_ZSt9terminatev]
 
+global @__integers_image [binding=internal, storage=readonly] = {
+  i32 0
+  i32 0
+}
+global @__longs_image [binding=internal, storage=readonly] = {
+  i64 0
+  i64 0
+}
+
 function @cppgm_call_terminate(%exception_object : ptr) -> void [unwind=no, return=noreturn, binding=internal, no_inline=yes] {
   block ^entry:
     %t1 = call ptr @__external_runtime____cxa_begin_catch(%exception_object)
@@ -13,13 +22,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $integers
-    store i32 0, %t1
-    %t2 = index i8 %t1, 4
-    store i32 0, %t2
+    copyobj 8x4 @__integers_image, %t1
     %t3 = addr $longs
-    store i64 0, %t3
-    %t4 = index i8 %t3, 8
-    store i64 0, %t4
+    copyobj 16x8 @__longs_image, %t3
     %t5 = addr $integers
     %t6 = addr $integers
     %t7 = binary mul i64 2, 4

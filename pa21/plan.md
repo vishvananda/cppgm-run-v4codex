@@ -25,6 +25,14 @@ PA21 remains incomplete; a passing through report is still required to advance.
   with A/A and ABBA evidence; run prior-through, PA21, through-PA21 and file audit.
 - Independent review remains separate; do not move either review marker.
 
+112 progress: PA16's explicit readonly-copy rule resolves the array policy
+conflict; the exact contract correction and raw-region proof are in
+[reference corrections 112](reference-corrections112.md). Dispatch lowering
+records a constant-time parent summary and preserves balanced cleanup joins
+while handling exhaustive selector fallbacks. New composition controls pass
+**22/22** after repairing an overbroad initial omission. Required gates and
+frozen performance measurements remain in progress; no handoff claim yet.
+
 ## Previous completed group and spec alignment
 
 | Owner | Data flow, complexity and validation |
