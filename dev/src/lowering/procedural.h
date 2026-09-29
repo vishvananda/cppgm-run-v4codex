@@ -160,11 +160,12 @@ class Procedural {
     bool cleanup_expression(NodeId n, bool omit_result = false, bool effects_only = false);
     const semantic::Expression* conversion_call(const semantic::Conversion& conversion) const;
     std::vector<unsigned char> unwind_expressions;
-    bool unwind_expression(NodeId n);
+    std::vector<unsigned char> proven_unwind_expressions;
+    bool unwind_expression(NodeId n, bool body_proof = false);
     struct FullExpression { NodeId root = 0, terminal_value = 0; bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
         EntityId result_temporary = 0;
         bool argument_storage = false, storage_boundary = false;
-        bool scalar_terminal = false, scalar_unreachable = false; } full_expression;
+        bool scalar_terminal = false, scalar_unreachable = false, proven_nonthrowing = false; } full_expression;
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);
     void closure_adapter(EntityId e);

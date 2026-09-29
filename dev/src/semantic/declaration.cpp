@@ -524,6 +524,18 @@ void Analyzer::finish_body(EntityId e)
     ++body_lifetime_checks;
     try {
         check_jumps(entities[e].body);
+        // A completed scalar-return body can certify its implementation's
+        // unwind effects without changing the declaration's exception spec.
+        // Keep this O0 proof local: no recursive body demand, call-graph walk,
+        // or inspection of unrelated declarations. Unknown bodies stay unknown.
+        auto body = entities[e].body;
+        auto result = types[entities[e].type].child;
+        auto statement = ast[body].first;
+        if (ast[body].kind == Kind::Compound && statement && !ast[statement].next &&
+            ast[statement].kind == Kind::Return && !class_value(result) &&
+            !constructor_member(e) && !destructor_member(e) &&
+            !lifetime_use(body).entry && expression_nonthrowing(ast[statement].first))
+            scalar_body_exception_facts.put(e,1);
         entities[e].lifetime_state = FactState::Success;
     } catch (...) {
         entities[e].lifetime_state = FactState::Failure;

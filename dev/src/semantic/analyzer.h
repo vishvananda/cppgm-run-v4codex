@@ -109,6 +109,7 @@ public:
     EntityId bound_temporary(NodeId n) const;
     bool destructor_member(EntityId e) const;
     bool function_nonthrowing(EntityId e);
+    bool scalar_body_nonthrowing(EntityId e) const { return scalar_body_exception_facts.get(e) != 0; }
     bool initializer_nonthrowing(std::uint32_t plan);
     bool default_construction_nonthrowing(EntityId constructor);
     bool initializer_suffix_nonthrowing(std::uint32_t plan);
@@ -471,6 +472,7 @@ private:
     bool implicit_destructor_nonthrowing(EntityId cls);
     bool type_destructor_nonthrowing(TypeId type);
     bool expression_nonthrowing(NodeId node);
+    Index scalar_body_exception_facts;
     bool query_nonthrowing(QueryId query, bool temporary = true);
     bool conversion_nonthrowing(Conversion conversion);
     bool list_nonthrowing(std::uint32_t plan);

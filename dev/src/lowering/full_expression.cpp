@@ -2,11 +2,12 @@
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
-bool Procedural::unwind_expression(NodeId n)
+bool Procedural::unwind_expression(NodeId n, bool body_proof)
 {
     if (!n) return false;
-    if (unwind_expressions.empty()) unwind_expressions.resize(ast.nodes.size());
-    if (unwind_expressions[n]) return unwind_expressions[n] == 2;
+    auto& cache = body_proof ? proven_unwind_expressions : unwind_expressions;
+    if (cache.empty()) cache.resize(ast.nodes.size());
+    if (cache[n]) return cache[n] == 2;
     ++full_expression_work;
     bool result = ast[n].kind == Kind::Throw;
     auto x = sem.expression_fact(n);
@@ -15,12 +16,14 @@ bool Procedural::unwind_expression(NodeId n)
         x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor) ||
         x.form == semantic::ExpressionForm::OperatorCall || (callee && sem.constructor_member(callee));
     if (call && x.form != semantic::ExpressionForm::Expect) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
+    if (call && body_proof && callee && !sem.object_fact(n).virtual_slot &&
+        !sem.object_fact(n).member_pointer && sem.scalar_body_nonthrowing(callee)) result = false;
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) result |= !sem.function_nonthrowing(sem.arrow_steps[arrow.first+j].function);
     auto arguments = [&](const semantic::Expression& call) {
         for (unsigned i = 0; i < call.argument_count; ++i) {
             auto a = sem.call_argument(call,i);
-            if (a && a != n) result |= unwind_expression(a);
+            if (a && a != n) result |= unwind_expression(a,body_proof);
         }
     };
     arguments(x);
@@ -29,6 +32,7 @@ bool Procedural::unwind_expression(NodeId n)
         if (c.kind == semantic::Conversion::Kind::Construction && c.materialization && !sem.conversion_objects[c.materialization].elided)
             result |= !sem.trivial_transfer(c.function) && !sem.function_nonthrowing(c.function);
         if (c.kind == semantic::Conversion::Kind::List) {
+            if (body_proof) result = true;
             auto object = sem.list_objects[c.materialization];
             auto plan = sem.list_plans[object.plan];
             if (plan.constructor) result |= sem.constructor_needed(plan.constructor) && !sem.function_nonthrowing(plan.constructor);
@@ -43,15 +47,20 @@ bool Procedural::unwind_expression(NodeId n)
         for (auto i = sem.closure(sem.types[x.type].entity).first_capture; i; i = sem.closure_captures[i].next)
             if (sem.closure_captures[i].conversion) conversion(sem.conversion_fact(sem.closure_captures[i].conversion));
     if (x.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
-        result |= unwind_expression(ast[n].first);
+        result |= unwind_expression(ast[n].first,body_proof);
     if (ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Sizeof && ast[n].kind != Kind::TypeTrait)
-        for (NodeId child = ast[n].first; child; child = ast[child].next) result |= unwind_expression(child);
-    unwind_expressions[n] = result ? 2 : 1; return result;
+        for (NodeId child = ast[n].first; child; child = ast[child].next) result |= unwind_expression(child,body_proof);
+    // These operations own additional allocation/initialization recipes. The
+    // O0 scalar proof does not inspect or demand those recipes.
+    if (body_proof && (ast[n].kind == Kind::New || ast[n].kind == Kind::Delete ||
+        sem.class_initialization(n,sem.facts[n].type).source)) result = true;
+    cache[n] = result ? 2 : 1; return result;
 }
 void Procedural::begin_full_expression(NodeId n, bool omit_result)
 {
     if (full_expression.enabled) throw std::logic_error("nested full-expression owner");
     full_expression.enabled = cleanup_expression(n,omit_result) || (unwind_live() && unwind_expression(n));
+    if (full_expression.enabled) full_expression.proven_nonthrowing = !unwind_expression(n,true) && !cleanup_expression(n,omit_result);
     if (full_expression.enabled && !omit_result) {
         auto result = n;
         while (ast[result].kind == Kind::Parenthesized || ast[result].kind == Kind::Initializer || ast[result].kind == Kind::ParenInitializer)
@@ -99,7 +108,12 @@ void Procedural::open_expression_region()
     full_expression.storage_boundary = false;
     ++full_expression_regions;
     BlockId cleanup;
-    if (full_expression.lexical && live) {
+    if (full_expression.proven_nonthrowing && !exception_context) {
+        // Retain the O0 protected-region view, but no destruction actions are
+        // reachable on an edge whose complete expression cannot unwind.
+        if (!resume_terminal) resume_terminal = block();
+        cleanup = resume_terminal;
+    } else if (full_expression.lexical && live) {
         // A condition declaration already owns its complete lexical prefix;
         // there are no intermediate temporary suffixes needing a resume join.
         cleanup = block(); cleanup_blocks.push_back({live,BlockId(),cleanup});
