@@ -1,8 +1,23 @@
-# PA22 compact plan — implementation handoff 115
+# PA22 compact plan — implementation 116
 
-Target: **PA22 full-stage**. Phase: **implementation; incomplete handoff**.
+Target: **PA22 full-stage**. Phase: **implementation in progress**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Last reviewed commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
+116 entry HEAD: `7b3685fc18c6e392465f733b40a9aca7f4aaad74`, **91/99**, 8 failures.
+The previous turn was progress: its completed type/query group and evidence are
+committed. No live validation process remains. Both review markers are preserved.
+
+116 work ownership (before stage edits): conversion candidate collection owns
+path-sensitive hiding across indexed base edges; standard conversion ranking
+owns target hierarchy preferences; selected conversions retain adjustments for
+lowering. Work must track visited base/candidate edges, with no registry scans.
+Next, initialization plans own recursive zero-initialization and constant
+condition lifetime effects. Member-pointer value proofs own parameter/storage
+provenance, with conservative unknowns at exposure boundaries; no owner-layout
+shortcut may erase possible inverse adjustments. Extend each group through its
+related defects. Validate controls explicitly, unchanged PA22 fixtures, prior
+through report and file audit; freeze A/B binaries and measure compiler/runtime
+costs under spec §9. Reference corrections require reducers and normative proof.
 115 entry HEAD: `5a21daff2c280c8b3a55000e253c50773fe6a6da`, **47/99**, 52 failures.
 Current: **91/99**, 8 failures; 44 entry failures repaired, zero regressions.
 All 99 contract cases, oracles and comparison rules remain unchanged.
