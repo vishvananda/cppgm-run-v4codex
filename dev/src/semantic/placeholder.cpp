@@ -35,6 +35,13 @@ TypeId Analyzer::deduce_placeholder(TypeId pattern, Expression value, TypeId& de
         if (p.kind == TypeKind::RRef && p.child == placeholder_type() && value.category == ValueCategory::Lvalue)
             actual = types.compound(TypeKind::LRef,actual);
     } else actual = types.unqualified(decay(actual));
+    // The common by-value placeholder has no declarator structure to unify.
+    // Its adjusted initializer type is the binding; avoid two scratch hash
+    // tables and a substitution traversal for this already-complete fact.
+    if (p.kind == TypeKind::Named && p.entity == placeholder_parameter) {
+        deduced = actual;
+        return types.qualify(actual,p.cv);
+    }
     Index bindings, cache;
     if (!deduce_type(deduction,actual,bindings) || !bindings.get(placeholder_parameter))
         throw std::runtime_error("auto deduction failed");
