@@ -1,0 +1,1286 @@
+{
+  "base": "f65eae8d7d434735a0ce981173a347eb8f8a1e59",
+  "entry": "e6582e3751084e80a41a12a623d2cd83e183b25c",
+  "commits": [
+    {
+      "commit": "06b2d989e2937ab9fd0c6a4895be9ef23b82c89b",
+      "subject": "Record complete PA21 checkpoint audit and stage-scoped evidence",
+      "review_diff_sha256": "ecfdba2beb55086bceb56305da349a593bd1e429c842cf8f1367031a4c185dda",
+      "paths": [
+        "pa21/audit.md",
+        "pa21/performance105.md",
+        "pa21/plan.md",
+        "student.tests/pa21/audit105-performance.json",
+        "student.tests/pa21/audit105-prefix-cost.json",
+        "student.tests/pa21/audit105-review.json",
+        "student.tests/pa21/audit105-trace.json",
+        "student.tests/pa21/audit105-validation.json"
+      ]
+    },
+    {
+      "commit": "9c4f64da58264a08c57706762f51f654381c5d60",
+      "subject": "Implement typed source exceptions and context-owned unwind continuations",
+      "review_diff_sha256": "10f2a9e474f4d0ada7f2f1cb2d027d68ac6ef7ea5a8ad105f97f8af9aa0eb64c",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/array_allocation.cpp",
+        "dev/src/lowering/class_values.cpp",
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/control_flow.cpp",
+        "dev/src/lowering/destruction.cpp",
+        "dev/src/lowering/exception_continuation.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/full_expression.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/source_exception.cpp",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/jump_validation.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/operators.cpp",
+        "dev/src/semantic/source_exception.cpp",
+        "dev/src/semantic/statement.cpp",
+        "dev/src/semantic/template_binding_statements.cpp",
+        "dev/src/syntax/expression.cpp",
+        "pa21/plan.md",
+        "student.tests/pa21/exceptions106.py"
+      ]
+    },
+    {
+      "commit": "301ef6fd575295e88ed480d1698315e67abcdec0",
+      "subject": "Complete exception parameter lifetimes and implicit moves; repair proved nested-catch references",
+      "review_diff_sha256": "934ae7b7c797b01e4fbe8d99252eee20b5f072806249a0b989ead2a6282c7a09",
+      "paths": [
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/reference_storage.cpp",
+        "dev/src/lowering/source_exception.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/source_exception.cpp",
+        "dev/src/semantic/statement.cpp",
+        "pa21/plan.md",
+        "pa21/reference-corrections106.md",
+        "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.ref",
+        "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.ref",
+        "student.tests/pa21/exceptions106.py",
+        "student.tests/pa21/nested_catch_reducer106.cpp",
+        "student.tests/pa21/reference106-revision.json",
+        "student.tests/pa21/reference106.py",
+        "student.tests/pa21/reference106_execution.py"
+      ]
+    },
+    {
+      "commit": "e80ad0c73233dfae160329116db8f86fd6ea3b41",
+      "subject": "Retire catch-initializer default-argument temporaries before handler entry",
+      "review_diff_sha256": "32d65262094b5831d91d238c2cecd2061bdf7c3ec4af75d77de4f391c2c296e5",
+      "paths": [
+        "dev/src/lowering/source_exception.cpp",
+        "student.tests/pa21/catch_default106.cpp",
+        "student.tests/pa21/exceptions106.py"
+      ]
+    },
+    {
+      "commit": "c64e88fb49b4a5ef67a1c16d6190ec69713d27a1",
+      "subject": "Avoid retaining empty lifetime records for ordinary function returns",
+      "review_diff_sha256": "8b89b3ea53ac0d62a9b3a5c80f7ae19cc13d8cf72ccac32e4ca9654584cab30e",
+      "paths": [
+        "dev/src/semantic/jump_validation.cpp"
+      ]
+    },
+    {
+      "commit": "1422565795ca5d689fe63bbfbaaba7afa0607858",
+      "subject": "Record PA21 exception handoff validation, performance and remaining owners",
+      "review_diff_sha256": "d143c8ea0a76aacbd67e9f71c0793b9d1f775188b9cb4a2ea8e165ad1a6da3f9",
+      "paths": [
+        "pa21/performance106.md",
+        "pa21/plan.md",
+        "student.tests/pa21/benchmark106.py",
+        "student.tests/pa21/benchmark106_prefix.py",
+        "student.tests/pa21/performance106-before-catch-default.json",
+        "student.tests/pa21/performance106-before-empty-lifetimes.json",
+        "student.tests/pa21/performance106-prefix-before-catch-default.json",
+        "student.tests/pa21/performance106-prefix-before-empty-lifetimes.json",
+        "student.tests/pa21/performance106-prefix.json",
+        "student.tests/pa21/performance106.json",
+        "student.tests/pa21/through106-before-empty-lifetimes.json",
+        "student.tests/pa21/through106.json",
+        "student.tests/pa21/validate106.py",
+        "student.tests/pa21/validation106-before-catch-default.json",
+        "student.tests/pa21/validation106-before-empty-lifetimes.json",
+        "student.tests/pa21/validation106.json"
+      ]
+    },
+    {
+      "commit": "b821682bf72eb7408df6f1bea5745790e9577cce",
+      "subject": "Preserve full-expression cleanup regions and terminal logical results",
+      "review_diff_sha256": "72b1edd6cbfcd9cb654eb5ff0c1cdf2cad0661ba7924a70c7e853afba586160a",
+      "paths": [
+        "dev/src/lowering/branch_lifetimes.cpp",
+        "dev/src/lowering/control_flow.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/full_expression.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/typed_operations.cpp",
+        "pa21/plan.md",
+        "student.tests/pa21/full_expression107.py"
+      ]
+    },
+    {
+      "commit": "20476a773e42aaf9f1eedd095b420f4acf2d0471",
+      "subject": "Carry destination defaults and final consumers through temporary cleanup",
+      "review_diff_sha256": "11ad70bf1e4ecd3fd13d97d40200dee98e2cc6d8ed8403a77113ef315244c08d",
+      "paths": [
+        "dev/src/lowering/branch_lifetimes.cpp",
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/full_expression.cpp",
+        "dev/src/lowering/initialization.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/semantic/scalar_consumption.cpp",
+        "pa21/plan.md",
+        "student.tests/pa21/full_expression107.py"
+      ]
+    },
+    {
+      "commit": "a2b9e823800997ebbe57263a6ea2306e529698be",
+      "subject": "Record PA21 full-expression handoff validation and performance",
+      "review_diff_sha256": "2e5317ffa16e67e9acc74af69c15f5050f4d5873ee92f2c87afb5a63643aca68",
+      "paths": [
+        "pa21/performance107.md",
+        "pa21/plan.md",
+        "student.tests/pa21/benchmark107.py",
+        "student.tests/pa21/benchmark107_startup_sensitive.py",
+        "student.tests/pa21/full_expression107.py",
+        "student.tests/pa21/performance107-startup-sensitive.json",
+        "student.tests/pa21/performance107.json",
+        "student.tests/pa21/through107.json",
+        "student.tests/pa21/validate107.py",
+        "student.tests/pa21/validation107.json"
+      ]
+    },
+    {
+      "commit": "efcb52b176ee14397ef82cf559bcc1e9564e3832",
+      "subject": "Record PA21 loop 108 ownership groups and entry evidence",
+      "review_diff_sha256": "be3f42c1b0180c01df66517a91e193fb101e659dac923e9c8b76370392b13dc3",
+      "paths": [
+        "pa21/plan.md"
+      ]
+    },
+    {
+      "commit": "2e392cecdb6bf5ab86ff48f6de4fc7fcf9aae58b",
+      "subject": "Preserve PA21 result ownership and explicit nonthrowing boundaries",
+      "review_diff_sha256": "b10f44ddcc08f2aa00763830448d6d7aab3e4aa804967979faf8ab8a464dc60a",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/branch_lifetimes.cpp",
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/deallocation.cpp",
+        "dev/src/lowering/exception_boundary.cpp",
+        "dev/src/lowering/exception_continuation.cpp",
+        "dev/src/lowering/list_initialization.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/lowir/validation_instructions.cpp",
+        "dev/src/semantic/class_values.cpp",
+        "dev/src/semantic/list_initialization.cpp",
+        "dev/src/syntax/statement.cpp",
+        "student.tests/pa21/ownership108.py"
+      ]
+    },
+    {
+      "commit": "a30acab54131a7ae68b858f9a41f5c168a9bf25e",
+      "subject": "Track completed PA21 subobjects through partial construction and temporary cleanup",
+      "review_diff_sha256": "4bff7933bdd43b7578036cda7503f1b861b88e2b8db6e37cf30711ce04ac1ab1",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/aggregate_helpers.cpp",
+        "dev/src/lowering/aggregate_lifetimes.cpp",
+        "dev/src/lowering/array_allocation.cpp",
+        "dev/src/lowering/arrays.cpp",
+        "dev/src/lowering/branch_lifetimes.cpp",
+        "dev/src/lowering/construction.cpp",
+        "dev/src/lowering/destruction.cpp",
+        "dev/src/lowering/exception_boundary.cpp",
+        "dev/src/lowering/initialization.cpp",
+        "dev/src/lowering/initializer_plan.cpp",
+        "dev/src/lowering/lambda.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/exception_expression.cpp",
+        "dev/src/semantic/initializer_effects.cpp",
+        "dev/src/semantic/list_initialization.cpp",
+        "dev/src/semantic/model.h",
+        "pa21/plan.md",
+        "pa21/reference-corrections108.md",
+        "pa21/tests/general/200-indirect-param-prologue-copy.ref",
+        "student.tests/pa21/aggregate_prefix_probe108.cpp",
+        "student.tests/pa21/aggregate_prefix_reducer108.cpp",
+        "student.tests/pa21/ownership108.py",
+        "student.tests/pa21/reference108-execution.json",
+        "student.tests/pa21/reference108-revision.json",
+        "student.tests/pa21/reference108.py",
+        "student.tests/pa21/reference108_execution.py"
+      ]
+    },
+    {
+      "commit": "ac3a28e824004472cfb2038bcac0343c11d888cc",
+      "subject": "Record PA21 loop 108 validation, performance evidence and remaining owners",
+      "review_diff_sha256": "cbab98812b42bec9cd82b90baf7960dd67d092dc6b20f274ae4e23f391511f46",
+      "paths": [
+        "pa21/performance108.md",
+        "pa21/plan.md",
+        "student.tests/pa21/benchmark108.py",
+        "student.tests/pa21/benchmark108_initial.py",
+        "student.tests/pa21/performance108-initial.json",
+        "student.tests/pa21/performance108.json",
+        "student.tests/pa21/through108.json",
+        "student.tests/pa21/validate108.py",
+        "student.tests/pa21/validation108.json",
+        "student.tests/pa21/zero_slot108.py"
+      ]
+    },
+    {
+      "commit": "e6582e3751084e80a41a12a623d2cd83e183b25c",
+      "subject": "Normalize performance driver archives while preserving executed hashes",
+      "review_diff_sha256": "05da6d914a964dc9f9d0d60cc2bb1edbc39b81d312e7c65b3c7e0df75fa78347",
+      "paths": [
+        "pa21/performance108.md",
+        "student.tests/pa21/benchmark108.py",
+        "student.tests/pa21/benchmark108_initial.py",
+        "student.tests/pa21/performance108-initial.json",
+        "student.tests/pa21/performance108.json"
+      ]
+    }
+  ],
+  "implementation_paths": {
+    "dev/frontend_source_sets.mk": "de92a1d777000bf79e19515f3ef7b5b8fc24b6e93ee55e9540af0c2d0a852ae9",
+    "dev/src/lowering/aggregate_helpers.cpp": "372336aa3a633d53fc9cc3a2b164f3bcf205a4a595ecaa6ab7c8df758fb57006",
+    "dev/src/lowering/aggregate_lifetimes.cpp": "852946226a290c46fab8a5af350d0f244e169757a061a196dbef74a2a75b09b5",
+    "dev/src/lowering/array_allocation.cpp": "83756fb94f51d2f6ff9c03d180bc88a79c7f8c919b071ea7058d0723ac02ac48",
+    "dev/src/lowering/arrays.cpp": "98c8f13f936cdca31445adb6a94be6c926f225271814a243fd09fd2b69c32f7f",
+    "dev/src/lowering/branch_lifetimes.cpp": "fc80dab3c3ecfc25e5d5e8ea930343be66d89a349e0a93cfe8b6ff43bd4e4a5b",
+    "dev/src/lowering/class_values.cpp": "fe08d629e3c04ab15d87610b963eb553a21101efd2f0adc09f559d52a63ff2f9",
+    "dev/src/lowering/cleanup.cpp": "f82fd29bac7ae3683386c403689bec3e1422993994d53cb14b8924cb55fafebc",
+    "dev/src/lowering/construction.cpp": "7c76c8a58fe42e580a1b9881b6d1d85a5048c23b5d5769c177f02898eaf86cf1",
+    "dev/src/lowering/control_flow.cpp": "abd1987d60d8c9788e47c278a86d4ea60cc0d094baa6e09725f63bd6ba1d5d3a",
+    "dev/src/lowering/deallocation.cpp": "ad907441cb54aa57c68dad8a66ecafcd8dc4af8c6b20ad70a602c12fb004f7f6",
+    "dev/src/lowering/destruction.cpp": "d3f033aa4e01cc13f196bb5436b0b46ea87f1d6e1ed3034c9a47af157c0f7b38",
+    "dev/src/lowering/exception_boundary.cpp": "dba8d60ef98a835305f71f7bd6f22e2034e441992c4a3ec61f3d762fa2397960",
+    "dev/src/lowering/exception_continuation.cpp": "e35469a4fdbd684b5b71e7af0512905413894e1230cf92e379347d1f20c36595",
+    "dev/src/lowering/expression.cpp": "67085c94ef528a86e8a4674b748dd596a5705e5ccdf65756f68e6f48f4a3db3e",
+    "dev/src/lowering/full_expression.cpp": "d8f38d5c3fae7b458feae77a765ca488450916e6af75d590d6bbf268b7d8d665",
+    "dev/src/lowering/initialization.cpp": "002e48c681d1972ffb0adb0c4aabb9be56c4f5cdc4905bf62163932c069b6516",
+    "dev/src/lowering/initializer_plan.cpp": "62e310e4974fc6bd45f38d3b39deda07b9dd57c9a4b5eadc9ad93f2610cbe72a",
+    "dev/src/lowering/lambda.cpp": "63833e0f89005d366a4b0f3a3aca6eb56819493b13439972696e8627e6dd67c2",
+    "dev/src/lowering/list_initialization.cpp": "74427e0c97eed129afbcd1df587f884d3d5c3029ee281236c3abe76fb23af832",
+    "dev/src/lowering/procedural.h": "6c1dbad8cad3cd12857c15c86e40831a32b2ac47f5c4103ea5dcf882361a5908",
+    "dev/src/lowering/reference_storage.cpp": "c8e131a395190dd1fb8fc889829f4b6b2a2e8400e9253f66f0035e27266c5e92",
+    "dev/src/lowering/source_exception.cpp": "f3ad8062674710a1386a6e72f126b92f3604a3866ecb23c2ff8cb32fa6da4f0b",
+    "dev/src/lowering/symbols.cpp": "7cf4df55e02567c96acfe0f502028ce06dff4db17e568ba0c543397e8e81befa",
+    "dev/src/lowering/typed_operations.cpp": "7ab5bd30e3f5f61a62c7d17242a9c5983318543b1306be99569aa93eaf6cafcf",
+    "dev/src/lowir/validation_instructions.cpp": "1f6a0c4e846bdf7e7979592946faa4aaf65d652a64ca1a2a595cbda41a77d9a3",
+    "dev/src/semantic/analyzer.h": "dfc00ac44c05758b23b1fdf19f685d722bbc0a6016895692637e38d59eb6fb0b",
+    "dev/src/semantic/class_values.cpp": "739016256998505754070539f28993554a9a04ce41ac24a3060171878fe57ab8",
+    "dev/src/semantic/exception_expression.cpp": "60c86ad70cce7b318c5a8c66224ec9ce04cc29988ec3b507e3177cce89d67fb5",
+    "dev/src/semantic/expression.cpp": "6c0ea6088422c6cd3d39389aff331dccc3cdc7dfb4a73646a187336ae27d5b6e",
+    "dev/src/semantic/initializer_effects.cpp": "2e1052c2b520a7b3aba0565d2d46ed3766e2e33abc5a0369c49df368d3aab500",
+    "dev/src/semantic/jump_validation.cpp": "2421c6c72c43886d59df64cb43d063aad9bb9eb74358f85a9036ed50635d5b61",
+    "dev/src/semantic/list_initialization.cpp": "213af8350a50da4d8544ae898e497f7709b416493d9134ab1f61a4745970d316",
+    "dev/src/semantic/model.h": "793a0fcdd1ed302ebcab3ec4df4b10320dccdda9bb125367939b9ce296b30dcb",
+    "dev/src/semantic/operators.cpp": "b42f0b2b90288983bd7f90a428291a410f79f66e5f55b608b460dae8feef2a96",
+    "dev/src/semantic/scalar_consumption.cpp": "4d54445d489951366a5332e4bbc43a14137dde3260255a6447b863c43f476d46",
+    "dev/src/semantic/source_exception.cpp": "258174a0ba19e4957016926eb3b73c3b97b848cc376ff9af45844fce6a9e662a",
+    "dev/src/semantic/statement.cpp": "7a57be13d7d073c426b6fffebffa22cd5f7e2f67516d271c3245880efd67e0a2",
+    "dev/src/semantic/template_binding_statements.cpp": "b917c09002cc5fe09e8b2ac4733ebdebfab9248bbd72cfa23131256fbfcfac68",
+    "dev/src/syntax/expression.cpp": "ac16ac8a3d8bbd46edc3280ec9cf506e6815fdf926b506681deff574ea1428ab",
+    "dev/src/syntax/statement.cpp": "ec0eb28f20813358f83b8ad105ed0166e8cda70cc4ee5b70e4f4edf6b395cd8c"
+  },
+  "previous_turn": "progress: accepted commits plus preserved validation evidence; no previous live job observed",
+  "last_reviewed_commit": "f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114",
+  "audited_source_hashes": {
+    "dev/frontend_source_sets.mk": "de92a1d777000bf79e19515f3ef7b5b8fc24b6e93ee55e9540af0c2d0a852ae9",
+    "dev/src/lowering/aggregate_helpers.cpp": "372336aa3a633d53fc9cc3a2b164f3bcf205a4a595ecaa6ab7c8df758fb57006",
+    "dev/src/lowering/aggregate_lifetimes.cpp": "852946226a290c46fab8a5af350d0f244e169757a061a196dbef74a2a75b09b5",
+    "dev/src/lowering/array_allocation.cpp": "83756fb94f51d2f6ff9c03d180bc88a79c7f8c919b071ea7058d0723ac02ac48",
+    "dev/src/lowering/arrays.cpp": "98c8f13f936cdca31445adb6a94be6c926f225271814a243fd09fd2b69c32f7f",
+    "dev/src/lowering/branch_lifetimes.cpp": "fc80dab3c3ecfc25e5d5e8ea930343be66d89a349e0a93cfe8b6ff43bd4e4a5b",
+    "dev/src/lowering/class_values.cpp": "fe08d629e3c04ab15d87610b963eb553a21101efd2f0adc09f559d52a63ff2f9",
+    "dev/src/lowering/cleanup.cpp": "f82fd29bac7ae3683386c403689bec3e1422993994d53cb14b8924cb55fafebc",
+    "dev/src/lowering/construction.cpp": "7c76c8a58fe42e580a1b9881b6d1d85a5048c23b5d5769c177f02898eaf86cf1",
+    "dev/src/lowering/control_flow.cpp": "79f799f755c6afe52e37d3c115affb00d76ef585fb1f3947fcf076b2c8588bac",
+    "dev/src/lowering/deallocation.cpp": "ad907441cb54aa57c68dad8a66ecafcd8dc4af8c6b20ad70a602c12fb004f7f6",
+    "dev/src/lowering/destruction.cpp": "d3f033aa4e01cc13f196bb5436b0b46ea87f1d6e1ed3034c9a47af157c0f7b38",
+    "dev/src/lowering/exception_boundary.cpp": "dba8d60ef98a835305f71f7bd6f22e2034e441992c4a3ec61f3d762fa2397960",
+    "dev/src/lowering/exception_continuation.cpp": "e35469a4fdbd684b5b71e7af0512905413894e1230cf92e379347d1f20c36595",
+    "dev/src/lowering/expression.cpp": "67085c94ef528a86e8a4674b748dd596a5705e5ccdf65756f68e6f48f4a3db3e",
+    "dev/src/lowering/full_expression.cpp": "d8f38d5c3fae7b458feae77a765ca488450916e6af75d590d6bbf268b7d8d665",
+    "dev/src/lowering/initialization.cpp": "002e48c681d1972ffb0adb0c4aabb9be56c4f5cdc4905bf62163932c069b6516",
+    "dev/src/lowering/initializer_plan.cpp": "62e310e4974fc6bd45f38d3b39deda07b9dd57c9a4b5eadc9ad93f2610cbe72a",
+    "dev/src/lowering/lambda.cpp": "63833e0f89005d366a4b0f3a3aca6eb56819493b13439972696e8627e6dd67c2",
+    "dev/src/lowering/list_initialization.cpp": "74427e0c97eed129afbcd1df587f884d3d5c3029ee281236c3abe76fb23af832",
+    "dev/src/lowering/procedural.h": "b155b2ba663f203d7054f7b157422e4d9869f21229a5f8139479af505c86f165",
+    "dev/src/lowering/reference_storage.cpp": "c8e131a395190dd1fb8fc889829f4b6b2a2e8400e9253f66f0035e27266c5e92",
+    "dev/src/lowering/source_exception.cpp": "da696af3f86d5427d3b105780e7fb8620b1d4ea6edb301ef32da4b825746780e",
+    "dev/src/lowering/symbols.cpp": "7cf4df55e02567c96acfe0f502028ce06dff4db17e568ba0c543397e8e81befa",
+    "dev/src/lowering/typed_operations.cpp": "7ab5bd30e3f5f61a62c7d17242a9c5983318543b1306be99569aa93eaf6cafcf",
+    "dev/src/lowir/validation_instructions.cpp": "1f6a0c4e846bdf7e7979592946faa4aaf65d652a64ca1a2a595cbda41a77d9a3",
+    "dev/src/semantic/analyzer.h": "89dd88d5d30801fa2588ffe1f354ecac4da7ef889d1f4e695f5b4c04d3c96958",
+    "dev/src/semantic/class_values.cpp": "739016256998505754070539f28993554a9a04ce41ac24a3060171878fe57ab8",
+    "dev/src/semantic/exception_expression.cpp": "60c86ad70cce7b318c5a8c66224ec9ce04cc29988ec3b507e3177cce89d67fb5",
+    "dev/src/semantic/expression.cpp": "6c0ea6088422c6cd3d39389aff331dccc3cdc7dfb4a73646a187336ae27d5b6e",
+    "dev/src/semantic/initializer_effects.cpp": "2e1052c2b520a7b3aba0565d2d46ed3766e2e33abc5a0369c49df368d3aab500",
+    "dev/src/semantic/jump_validation.cpp": "69705a46ae7c86fe83c29ae83f341d6eca37c340ba2864032f0d4a6ffebb05e2",
+    "dev/src/semantic/list_initialization.cpp": "213af8350a50da4d8544ae898e497f7709b416493d9134ab1f61a4745970d316",
+    "dev/src/semantic/model.h": "793a0fcdd1ed302ebcab3ec4df4b10320dccdda9bb125367939b9ce296b30dcb",
+    "dev/src/semantic/operators.cpp": "b42f0b2b90288983bd7f90a428291a410f79f66e5f55b608b460dae8feef2a96",
+    "dev/src/semantic/scalar_consumption.cpp": "4d54445d489951366a5332e4bbc43a14137dde3260255a6447b863c43f476d46",
+    "dev/src/semantic/source_exception.cpp": "258174a0ba19e4957016926eb3b73c3b97b848cc376ff9af45844fce6a9e662a",
+    "dev/src/semantic/statement.cpp": "7a57be13d7d073c426b6fffebffa22cd5f7e2f67516d271c3245880efd67e0a2",
+    "dev/src/semantic/template_binding_statements.cpp": "b917c09002cc5fe09e8b2ac4733ebdebfab9248bbd72cfa23131256fbfcfac68",
+    "dev/src/syntax/expression.cpp": "ac16ac8a3d8bbd46edc3280ec9cf506e6815fdf926b506681deff574ea1428ab",
+    "dev/src/syntax/statement.cpp": "ec0eb28f20813358f83b8ad105ed0166e8cda70cc4ee5b70e4f4edf6b395cd8c"
+  },
+  "fix_commit": {
+    "commit": "bd6bfd71f501a3b27870b372f430e535effa000a",
+    "subject": "Preserve exception-region ownership across all nonlocal jumps"
+  },
+  "entry_controls": {
+    "compiler_sha256": "abd714cb160ef33277d1c95f03bcab7f877bd936fa7cb6012790537761263708",
+    "rows": [
+      {
+        "name": "break_try",
+        "source": "int main(){for(int i=0;i<2;++i){try{break;}catch(...){return 1;}}return 0;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 10 (existing state 0, incoming state 1, existing active 0, incoming active 1)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "continue_try",
+        "source": "int n;int main(){for(int i=0;i<2;++i){try{++n;continue;}catch(...){return 1;}}return n!=2;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_try.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_try.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_try.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_try.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 1 (existing state 0, incoming state 1, existing active 0, incoming active 1)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "break_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){while(true){try{throw E();}catch(...){break;}}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected region remains active at function exit: main block b6\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "continue_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){for(int i=0;i<3;++i){try{throw E();}catch(...){continue;}}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/continue_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 1 (existing state 0, incoming state 4, existing active 0, incoming active 4)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "goto_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){try{throw E();}catch(...){goto done;}done:return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected region remains active at function exit: main block b13\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "inner_loop_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){try{throw E();}catch(...){for(int i=0;i<2;++i){if(i)break;continue;}if(live!=1)return 1;}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/inner_loop_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "goto_within_try",
+        "source": "int main(){try{goto label;return 1;label:throw 7;}catch(int n){return n!=7;}}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_try"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "goto_within_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){try{throw E();}catch(...){goto label;return 1;label:if(live!=1)return 2;}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_within_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "outer_cleanup_throw_on_return",
+        "source": "int live;struct G{~G()noexcept(false){throw 9;}};struct E{E(){++live;}~E(){--live;}};int f(){G g;try{throw E();}catch(...){return 0;}}int main(){try{f();}catch(int n){return n!=9||live;}return 1;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_cleanup_throw_on_return"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "conditional_glvalue_throw",
+        "source": "int main(){int n=0;try{(false?n:throw 7);return 1;}catch(int x){return x!=7;}}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/conditional_glvalue_throw"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "break_try_outer_destructor",
+        "source": "struct G{~G()noexcept(false){throw 9;}};int f(){while(true){G g;try{break;}catch(int){return 2;}}return 3;}int main(){try{f();}catch(int n){return n!=9;}return 1;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try_outer_destructor.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_try_outer_destructor.cpp"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: unwind target is not a live ancestor\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "break_nested_handlers",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){while(true){try{throw E();}catch(...){try{throw E();}catch(...){break;}}}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_nested_handlers.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_nested_handlers.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_nested_handlers.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_nested_handlers.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected region remains active at function exit: main block b6\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "break_to_enclosing_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){try{throw E();}catch(...){while(true){try{throw E();}catch(...){break;}}if(live!=1)return 1;}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_to_enclosing_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_to_enclosing_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_to_enclosing_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/break_to_enclosing_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected region remains active at function exit: main block b25\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "switch_break_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){switch(1){case 1:try{throw E();}catch(...){break;}}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_break_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_break_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_break_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_break_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 12 (existing state 0, incoming state 4, existing active 0, incoming active 4)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "range_continue_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){int a[3]={1,2,3};for(int n:a){try{throw E();}catch(...){continue;}}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_continue_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_continue_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_continue_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_continue_handler.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in main at MIR block 1 (existing state 0, incoming state 4, existing active 0, incoming active 4)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "range_inside_handler",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};int main(){int a[3]={1,2,3};try{throw E();}catch(...){for(int n:a){if(n==2)break;continue;}if(live!=1)return 1;}return live;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler.lowir"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "g++",
+              "-no-pie",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler.o",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/range_inside_handler"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "name": "goto_nested_cleanup_order",
+        "source": "int trace;struct G{int n;G(int x):n(x){}~G(){trace=trace*10+n;}};int main(){try{G a(1);try{throw 7;}catch(int){G b(2);goto done;}}catch(...){return 1;}done:return trace!=21;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_nested_cleanup_order.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_nested_cleanup_order.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_nested_cleanup_order.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_nested_cleanup_order.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected region remains active at function exit: main block b18\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "lambda_template_jump",
+        "source": "int live;struct E{E(){++live;}~E(){--live;}};template<int N>int f(){auto l=[&](){for(int i=0;i<N;++i){try{throw E();}catch(...){continue;}}return live;};return l();}int main(){return f<2>()||f<3>();}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/lambda_template_jump.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/lambda_template_jump.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+              "-c",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/lambda_template_jump.o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/lambda_template_jump.lowir"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: host EH protected-region state mismatch in operator__ at MIR block 1 (existing state 0, incoming state 4, existing active 0, incoming active 4)\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "outer_early_label_in_handler",
+        "source": "int main(){try{throw 7;}catch(int n){goto again;if(n){again:return n!=7;}}return 1;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "--validate-lowir",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_early_label_in_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/outer_early_label_in_handler.cpp"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: undefined block target\n"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "name": "goto_into_try",
+        "source": "int main(){try{goto ready;try{ready:throw 7;}catch(int n){return n!=7;}}catch(...){return 1;}return 2;}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_into_try.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_into_try.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": false,
+        "expected": "reject"
+      },
+      {
+        "name": "goto_into_handler",
+        "source": "int main(){goto label;try{throw 7;}catch(...){label:return 0;}}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_into_handler.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/goto_into_handler.cpp"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "ERROR: goto bypasses initialization\n"
+          }
+        ],
+        "passed": true,
+        "expected": "reject"
+      },
+      {
+        "name": "switch_into_try",
+        "source": "int main(){switch(1){try{case 1:break;}catch(...){}}}",
+        "commands": [
+          {
+            "argv": [
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-cppgm++",
+              "--emit-lowir",
+              "-O0",
+              "-o",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_into_try.lowir",
+              "/home/vishvananda/work/private/v4codex/artifacts/audit109/entry-controls-expanded/switch_into_try.cpp"
+            ],
+            "exit": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "passed": false,
+        "expected": "reject"
+      }
+    ]
+  },
+  "prior_audit": "pa21/audit105.md",
+  "validation": "student.tests/pa21/audit109-validation.json",
+  "contract_inventory_identical_to": "student.tests/pa21/validation108.json",
+  "frozen_binary_verification": [
+    {
+      "record": "audit105-performance",
+      "path": "/tmp/pa21-102/cppgm-base",
+      "sha256": "a8a4702950de9694b4e9e269dc6f84c834d9acfded8232a0a10bebdbf1619faf",
+      "text_bytes": 2090694,
+      "verified_sha256": "a8a4702950de9694b4e9e269dc6f84c834d9acfded8232a0a10bebdbf1619faf"
+    },
+    {
+      "record": "audit105-performance",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+      "sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3",
+      "text_bytes": 2154950,
+      "verified_sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3"
+    },
+    {
+      "record": "audit105-performance",
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit105/final-cppgm++",
+      "sha256": "e0fd82ba6417eb9b6e5659e386a1450c48e396d7046592753e89de6e2a154b3c",
+      "text_bytes": 2155654,
+      "verified_sha256": "e0fd82ba6417eb9b6e5659e386a1450c48e396d7046592753e89de6e2a154b3c"
+    },
+    {
+      "record": "performance106",
+      "path": "/tmp/pa21-102/cppgm-base",
+      "sha256": "a8a4702950de9694b4e9e269dc6f84c834d9acfded8232a0a10bebdbf1619faf",
+      "text_bytes": 2090694,
+      "verified_sha256": "a8a4702950de9694b4e9e269dc6f84c834d9acfded8232a0a10bebdbf1619faf"
+    },
+    {
+      "record": "performance106",
+      "path": "/tmp/pa21-loop106/cppgm-entry",
+      "sha256": "e0fd82ba6417eb9b6e5659e386a1450c48e396d7046592753e89de6e2a154b3c",
+      "text_bytes": 2155654,
+      "verified_sha256": "e0fd82ba6417eb9b6e5659e386a1450c48e396d7046592753e89de6e2a154b3c"
+    },
+    {
+      "record": "performance106",
+      "path": "/tmp/pa21-loop106/cppgm-final3",
+      "sha256": "06f399cbae7da9e5676088ce6a433c60e3ee11215f52f899545ac1b28ff4bbd4",
+      "text_bytes": 2188550,
+      "verified_sha256": "06f399cbae7da9e5676088ce6a433c60e3ee11215f52f899545ac1b28ff4bbd4"
+    },
+    {
+      "record": "performance107",
+      "path": "/tmp/pa21-107/entry-cppgm",
+      "sha256": "06f399cbae7da9e5676088ce6a433c60e3ee11215f52f899545ac1b28ff4bbd4",
+      "text_bytes": 2188550,
+      "verified_sha256": "06f399cbae7da9e5676088ce6a433c60e3ee11215f52f899545ac1b28ff4bbd4"
+    },
+    {
+      "record": "performance107",
+      "path": "/tmp/pa21-107/final-cppgm",
+      "sha256": "f191ff0c7a00c85419b7d1e3f4a7398e0dfab17b41e127442e482aba81631d37",
+      "text_bytes": 2190854,
+      "verified_sha256": "f191ff0c7a00c85419b7d1e3f4a7398e0dfab17b41e127442e482aba81631d37"
+    },
+    {
+      "record": "performance108",
+      "path": "/tmp/pa21-108/entry-cppgm++",
+      "sha256": "f191ff0c7a00c85419b7d1e3f4a7398e0dfab17b41e127442e482aba81631d37",
+      "text_bytes": 2190854,
+      "verified_sha256": "f191ff0c7a00c85419b7d1e3f4a7398e0dfab17b41e127442e482aba81631d37"
+    },
+    {
+      "record": "performance108",
+      "path": "/tmp/pa21-108/final-cppgm++",
+      "sha256": "abd714cb160ef33277d1c95f03bcab7f877bd936fa7cb6012790537761263708",
+      "text_bytes": 2212422,
+      "verified_sha256": "abd714cb160ef33277d1c95f03bcab7f877bd936fa7cb6012790537761263708"
+    }
+  ],
+  "measurement_driver_commit": "f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114",
+  "reviewed_commit_count": 16,
+  "performance_interruption": "startup complete\nauto-specializations-9600 complete\nruntime-calls complete\nruntime-memory complete\nruntime-floating complete\nruntime-reference-captures complete\nruntime-class-lists complete\ncomposition complete\nruntime-logical-temporaries complete\nruntime-private-scalar-member complete\nlogical-functions-256 complete\nlogical-functions-1024 complete\nruntime-nrvo complete\nTraceback (most recent call last):\n  File \"/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/benchmark109.py\", line 67, in <module>\n    stats=run([*cmd,'--stats','--validate-lowir'])\n  File \"/home/vishvananda/work/private/v4codex/checkout/student.tests/pa10/benchmark.py\", line 55, in run\n    assert r.returncode==0,(cmd,r.returncode,r.stderr,r.stdout)\n           ^^^^^^^^^^^^^^^\nAssertionError: ([PosixPath('/home/vishvananda/work/private/v4codex/artifacts/audit105/final-cppgm++'), '--emit-lowir', '-O0', '-o', PosixPath('/home/vishvananda/work/private/v4codex/artifacts/audit109/performance/runtime-member-prefix-0.lowir'), PosixPath('/home/vishvananda/work/private/v4codex/artifacts/audit109/performance/runtime-member-prefix.cpp'), '--stats', '--validate-lowir'], 1, 'ERROR: unsupported statement\\n', '')\n",
+  "performance_records": {
+    "audit109-performance-initial.json": "0fd516b92adc0318bbd3388e772a881266e7cb9ff56ef3f9d8d1825563616a3b",
+    "audit109-performance.json": "ae3e31bf8d47c09065d78020232e87db02fdc02e0d584419e62ee52a70ed0644",
+    "audit109-performance-diagnostics.json": "8bf13c99c022e5db4f93adefc0eb26ec00b1acf6bf0948bd1bf6e7e75b812f38"
+  },
+  "hosted_text_sections": {
+    "runtime-member-prefix": {
+      "command": "objcopy --dump-section .text=OUTPUT EXECUTABLE",
+      "sha256": [
+        "4a31ac7909ab46a8940cf55d23924b78148a77349bae2df62d5ca48b55709e47",
+        "4a31ac7909ab46a8940cf55d23924b78148a77349bae2df62d5ca48b55709e47"
+      ]
+    },
+    "construction-functions-256": {
+      "command": "objcopy --dump-section .text=OUTPUT EXECUTABLE",
+      "sha256": [
+        "8fa272b1322b2140eb0485aeb54ad03769e9c533c25240648a7e2ec0576b9f12",
+        "8fa272b1322b2140eb0485aeb54ad03769e9c533c25240648a7e2ec0576b9f12"
+      ]
+    },
+    "construction-functions-1024": {
+      "command": "objcopy --dump-section .text=OUTPUT EXECUTABLE",
+      "sha256": [
+        "ce4bb3d2c6a932412154aac56d6161f4b0086e7e52cc32bd07887d7a14c20116",
+        "ce4bb3d2c6a932412154aac56d6161f4b0086e7e52cc32bd07887d7a14c20116"
+      ]
+    }
+  },
+  "completion_checks": {
+    "required_gates": {
+      "priorThroughTests": 0,
+      "stageTests": 2,
+      "fileAudit": 0
+    },
+    "unchanged_failure_set": [
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "cases": 116,
+    "contract_paths": 15048,
+    "compiler_sha256": "d9e59d64bb1560cf34d86b1236324597e0baeb54ff1bc8cdbbf52966403b1c57",
+    "personal_passed": 580,
+    "personal_total": 581,
+    "source_unchanged_since_validated_fix": true,
+    "markers_match_code_tip": true
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "revision": "pa21-aggregate-prefix-108",
+  "rows": [
+    {
+      "name": "original",
+      "expected_exit": 1,
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/original.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/original.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-std=c++11",
+            "-O0",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/original.o",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_probe108.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/original"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/original"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "lowir_sha256": "47efd8927ca54849be2f6a6f907ca661694385036dda1ad6bff7a2e43a3922fa",
+      "compiler_sha256": null
+    },
+    {
+      "name": "revised",
+      "expected_exit": 0,
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/revised.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/revised.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-std=c++11",
+            "-O0",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/revised.o",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_probe108.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/revised"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "lowir_sha256": "fb32a284956883987d45806f706db66f67116bbdc468161605f695a93433af75",
+      "compiler_sha256": null
+    },
+    {
+      "name": "entry",
+      "expected_exit": 1,
+      "commands": [
+        {
+          "argv": [
+            "/tmp/pa21-108/entry-cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry.lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_reducer108.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-std=c++11",
+            "-O0",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry.o",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_probe108.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/entry"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "lowir_sha256": "ebdb9afebd3dc062b39f342a438ad760255c441e58b9726fecf4074331d4ed9b",
+      "compiler_sha256": "f191ff0c7a00c85419b7d1e3f4a7398e0dfab17b41e127442e482aba81631d37"
+    },
+    {
+      "name": "final",
+      "expected_exit": 0,
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final.lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_reducer108.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-std=c++11",
+            "-O0",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final.o",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/aggregate_prefix_probe108.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit109/reference108/final"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "lowir_sha256": "2699b1ddc5d827a3ef89301976077c36c6b8fa021683b261108cc93669e578fb",
+      "compiler_sha256": "d9e59d64bb1560cf34d86b1236324597e0baeb54ff1bc8cdbbf52966403b1c57"
+    }
+  ]
+}

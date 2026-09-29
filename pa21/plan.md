@@ -1,97 +1,76 @@
-# PA21 compact plan — implementation 108
+# PA21 compact plan — checkpoint audit 109
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Last reviewed commit: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
-Target: **PA21 full-stage**. Phase: **implementation**.
-Entry: clean `a2b9e823800997ebbe57263a6ea2306e529698be`, **101/116**.
-Current: **108/116**, **8 remaining**, **7 original failures resolved**.
-Earlier PAs: **3596/3596**; through PA21: **3704/3712**. File audit passes.
-No source cases or comparison rules removed.
-This is an implementation handoff, not whole-stage completion or advancement.
+Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
+Target: **PA21 full-stage**. Phase: **checkpointAudit complete; implementation remains**.
+Entry: clean `e6582e37`, **108/116 passing, eight failing**.
+Current: **108/116**, exactly the same eight failures. Earlier PAs **3596/3596**;
+through PA21 **3704/3712**. File audit passes; coverage and comparisons unchanged.
+PA21 completion and advancement still require a passing through-stage report.
 
-## Design/spec alignment and completed group
+## Reviewed design and repair
 
-The cumulative typed semantic graph feeds the direct LowIR builder. Required
-output is generated here; supplied native backends are validation tools only.
-The [105 audit](audit.md) and all 102–107 evidence remain applicable records.
+[Audit 109](audit.md) reviews the entire `f65eae8d..f57bdd3b` range: 14 entry
+commits, 41 implementation paths and the audit fix. The [105 record](audit105.md)
+and all 102–108 correctness/performance evidence are preserved.
 
-| Owner / data flow | Complexity and validation |
+| Owner | Facts and bounded work |
 |---|---|
-| Class returns, cleanup: eligible local identity → caller result storage with callee unwind ownership until successful return. | Linear return edges; cached remaining-prefix/result cleanup. Observable/const/polymorphic results, multiple returns, handlers, and earlier/later throwing destructors execute correctly. |
-| Function body, `exception_boundary`: selected call signatures and deallocation boundary → explicit outer termination region and one program-owned adapter. | One scan/rebuild of the current function's contiguous instruction slice; scratch dies immediately. Implicit/explicit `noexcept`, templates, defaults, parameters, subobjects and nested handlers checked. |
-| Initializer plans, `aggregate_lifetimes`: completed canonical subobject type/address → immutable reverse cleanup prefix; retire only after aggregate completion. | Exception facts cached by retained plan/constructor identity; suffix facts avoid unnecessary saved addresses. Existing eight-element expansion cap; counted loops above it. Member, nested, copy and array failures, including reverse order and the 8/9 boundary. |
-| Object/array/constructor/helper lowering: successful destination → cleanup ownership before argument-temporary destruction. | Rebase only the new temporary suffix; old constructor-failure snapshots remain valid. Default array temporaries end before the next element. Constructor raw-region changes get distinct resume identities. Local, heap, member, delegated and helper failure controls. |
-| Semantic helper eligibility: completed constructor actions + proof mode → private-object operand proof and commuting transfer fact. | Cached by canonical constructor plus mode; linear action/operand traversal. Real copies preserve self pointers; aliases, external effects and throwing early transfers retain ordered lowering. |
-| Parser/list/LowIR owners: declaration prefix → correct `T(*this)()` expression; empty aggregate plan → checked zero initialization; slot layout → bounded `zeroinit`. | No fixture recognition. Nested local-template fixture, empty switch returns, volatile/pointer/member-pointer initialization and LowIR validation checked. |
+| Source EH and jumps | Selected exception conversions, handler objects and lexical destinations feed typed regions. Audit repair records sparse jump target identities, closes exited try/handler scopes in order and uses the remaining context for throwing outer cleanup. Illegal protected entry is rejected; nested labels remain reachable. |
+| Full expressions and destinations | Final consumers, default arguments, named results and completed subobject prefixes retain explicit ownership. Immutable rebasing preserves earlier failure snapshots; complete context/terminal identities govern suffix sharing. |
+| Construction and helper transport | Canonical initializer/constructor identities own nonthrowing and independence facts. Alias/effect/throwing uncertainty keeps ordered lowering; arrays expand only through eight elements, then use loops. |
+| Phase boundaries | Streaming source cursor, retained template occurrences, typed semantic facts and direct LowIR remain the production path. TU/function owners release transient state; supplied native backends are validation only. |
 
-[134 execution controls](../student.tests/pa21/ownership108.py) pass, including
-failures discovered during the extension from result ownership through partial
-construction and default-argument cleanup. [Reference correction 108](reference-corrections108.md)
-proves the missing completed-member cleanup using C++11 [except.ctor], a reduced
-source and original/revised native execution. Reconstruction never reads student
-output. Earlier corrections [102](reference-corrections102.md) and
-[106](reference-corrections106.md), bundle identity and all input coverage remain.
+New execution/rejection controls improve **7/22 → 22/22**. They cover ordinary
+and nested try/handler exits, loops/switches/ranges, catch-object retirement,
+throwing outer destruction, template lambdas and labels. Semantic jump ancestry
+supplies the facts once; lowering does not rediscover them from names or searches.
+The source-to-ELF trace checks two demanded template bodies, lists, captures,
+RTTI and handler `continue`; ordinary/instrumented LowIR is identical.
 
-## Remaining implementation and concrete boundary
+## Remaining implementation
 
-- **Source handler composition/support identity (3):** nested catch-miss,
-  guarded-static initializer, and handler-context continuation comparisons still
-  need region/handler-exit placement and RTTI support-global pairing changes.
-- **Initializer-list backing ownership (2):** global backing-storage duration
-  and local backing-array lifetime need retained backing views/addresses and
-  matching construction/cleanup region placement.
-- **Generated special-member transfer (2):** template-member temporary cleanup
-  and shared-call hidden temporary need inherited member/prologue and omitted
-  trailing-class helper action changes.
-- **Constant-array O0 policy (1):** function-template/local-class specialization
-  output uses a readonly aggregate copy where this fixture expects stores.
-  Earlier PA17 requires the same readonly-copy shape for a similar ordinary
-  array; a global replacement would regress the cumulative contract.
+- **EH/lifetime and support identity (five comparisons):** source nested
+  catch-miss, guarded-static initialization and handler-context continuations;
+  global and local initializer-list backing storage/lifetimes. Complete region,
+  handler-exit and concrete backing/support identities together.
+- **Generated construction and template lowering (three comparisons):**
+  template-member temporary cleanup and shared-call hidden temporary actions;
+  constant-array O0 policy for function-template/local-class specialization,
+  preserving the PA17 ordinary-array contract.
 
-108 completed the destination lifetime group and extended it through aggregate
-helpers, small/counting arrays, allocation, constructor members and delegation.
-The remaining owners retain different facts: backing-object identities, generated
-special-member actions, source-handler continuations and constant-array policy.
-Changing the completed prefix or result scheduler cannot supply those facts.
-Further fixes require new owner-specific data-flow and contract baselines; this
-is the coherent boundary, not a waiver of the eight failures or spec requirements.
+The [validation record](../student.tests/pa21/audit109-validation.json) retains
+all eight exact failing paths. Passing execution controls do not waive required
+LowIR comparisons. The accepted handoffs improved 71 → 92 → 101 → 108 cases,
+but split closely related exit/consumer/destination owners too often. The missed
+jump paths expose avoidable fragmentation. Complete these broad groups with
+cross-feature validation rather than separate fixture-shaped handoffs.
 
-Independent review questions: audit helper independence/commutation legality,
-exception-fact key completeness, immutable prefix rebasing, result transfer and
-constructor-region terminal identity. These differ from the known implementation
-failures above. Preserve the review marker; Ralph owns the independent audit.
+## Validation and stage-scoped performance
 
-## Validation and performance
+Required earlier/file/progress gates pass. All **116** source cases and the
+**15048-path** contract/harness inventory match checkpoint 108. Personal controls
+pass **580/581**, with only the inherited supplied freestanding RTTI discrepancy;
+its host-runtime counterpart passes. Proved reference corrections 102, 106 and
+108 were reconstructed and checked; no reference changed in this audit.
 
-[Validation](../student.tests/pa21/validation108.json) records sequential required
-gates, all 116 original inputs, exact failure subsets and 15,048 fixture/harness
-hashes. [Through report](../student.tests/pa21/through108.json) retains the final
-scope. Explicit personal suites pass **558/559**: all 134 new ownership controls,
-six `zeroinit` acceptance/rejection checks and inherited controls except the known
-freestanding RTTI backend discrepancy; its host-runtime counterpart passes.
-No course failure is waived by this inherited personal-suite distinction.
-
-[Performance](performance108.md) pins A/B binaries, sources, A/A calibration,
-four ABBA blocks, compiler latency/peak RSS and checked runtime/size. Twelve
-established native outputs are byte-identical. Named-result runtime B/A is
-0.476–0.501; default-array runtime 0.624–0.710. Required member-prefix `.text`
-growth and noisy compiler observations are disclosed. Work/growth is linear on
-the measured 256/1024-function curve. Supplied sectionless ELF payload is labelled
-as a proxy; compiler and hosted executable `.text` are measured directly. The
-interrupted freestanding RTTI attempt and continuation are preserved. No optional
-optimizer is introduced. Historical +15%, +16 MiB and 5.5× diagnostics remain
-evidence, not extra PA21 exit gates. Coverage and the eight-element expansion
-bound are unchanged. Native optimization/self-hosting belong to later stages.
+[Performance 109](performance109.md) freezes the last-reviewed and final binaries
+and inputs, with A/A noise calibration, four ABBA blocks, separate compiler/RSS
+and checked executable runtime/text measurements. It also measures new jump
+semantics independently of invalid entry output. Required O0 costs and later
+backend constraints are disclosed; prior measurements remain intact. Historical
+**+15%, +16 MiB, 5.5×** diagnostics add no exit gate under spec §9. Correctness,
+coverage, comparison rules and the eight-element expansion bound remain binding.
+Native optimization/debug encoding and self-hosting remain later-stage owners.
 
 ## Handoff ledger
 
-102: `30fe6353`, `9f2181f9`, `f4224e0b` — RTTI/casts, 37/116.
-103: `e835d6dc`, `1c541f84`, `fa079cde` — captures/copies, 49/116.
-104: `e2af8963`, `f03b9371`, `511fe9b9`, `3b87e462` — lists/demand, 71/116.
+102–104: RTTI/casts, captures/copies, lists/demand; **71/116**.
 105: audit through `f65eae8d`, recorded by `06b2d989`; 45 failures retained.
-106: `9c4f64da`, `301ef6fd`, `e80ad0c7`, `c64e88fb` — EH/lifetimes, 92/116.
-107: `b821682b`, `20476a77`, evidence `a2b9e823` — full expressions, 101/116.
-108: `efcb52b1` entry/owners; `2e392cec` result/boundary/parser/empty aggregate,
-106/116; `a30acab5` construction ownership/defaults/reference proof, **108/116**.
-Final evidence/plan commit follows without changing the compiler. Handoff goal:
-implementation progress; stage acceptance and independent review remain Ralph's.
+106: `9c4f64da` through `c64e88fb`; EH/lifetimes, **92/116**.
+107: `b821682b`, `20476a77`; full expressions/defaults/consumers, **101/116**.
+108: `2e392cec`, `a30acab5`; destination and partial-construction ownership,
+**108/116**; evidence through `e6582e37`.
+109: audit through `f57bdd3b`; complete accumulated range reviewed; protected
+jump ownership repaired; all checkpoint gates pass, eight failures unchanged.
+Record commit follows the code tip without further implementation edits.
