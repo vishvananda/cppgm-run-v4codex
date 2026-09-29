@@ -419,10 +419,12 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     // Explicit pack arguments constrain a prefix, not a completed deduction.
     // Keep them in an immutable frame so every expansion can extend that prefix
     // while bindings records (and reconciles) complete deductions only.
-    auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+    std::uint32_t prefix = 0;
     for (unsigned i = 0; i < explicit_args.count; ++i) {
         auto parameter = template_parameters[t.offset+i];
-        if (!entities[parameter].parameter_pack) bindings.put(parameter,argument_types[explicit_args.offset+i]);
+        if (entities[parameter].parameter_pack) {
+            if (t.primary && !prefix) prefix = substitution_frame(entities[pattern].specialization,t.offset,t.count);
+        } else bindings.put(parameter,argument_types[explicit_args.offset+i]);
     }
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
         TypeId p = types.alias_target(types.parameters[f.offset+i]), a = args[i].type;
@@ -520,10 +522,12 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
     bool pack = shape.count && types[types.parameters[shape.offset+shape.count-1]].kind == TypeKind::PackExpansion;
     auto explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
-    auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+    std::uint32_t prefix = 0;
     for (unsigned j = 0; j < explicit_args.count; ++j) {
         auto parameter = template_parameters[t.offset+j];
-        if (!entities[parameter].parameter_pack) bindings.put(parameter,argument_types[explicit_args.offset+j]);
+        if (entities[parameter].parameter_pack) {
+            if (t.primary && !prefix) prefix = substitution_frame(entities[pattern].specialization,t.offset,t.count);
+        } else bindings.put(parameter,argument_types[explicit_args.offset+j]);
     }
     if (pack) {
         // A target signature supplies types, not call expressions: preserve
