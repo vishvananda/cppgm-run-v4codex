@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'pa18'))
 import ordering_controls as runner
 
 runner.GOOD = {
+ 'dependent_member_value': 'template<int N>struct V{int n;V():n(N){}};template<int N>struct S{int a;V<N>v;};template<int N>S<N>f(int n){return {n};}int main(){S<3>a=f<3>(1),b=f<3>(2);S<4>c=f<4>(3);return a.a!=1||b.a!=2||c.a!=3||a.v.n!=3||b.v.n!=3||c.v.n!=4;}',
  'omitted_tail': 'struct V{int n;V():n(7){}};struct S{int n;V v;};S f(int n){return {n};}int main(){S a=f(3),b=S{};return a.n!=3||a.v.n!=7||b.n||b.v.n!=7;}',
  'multiple_omitted': 'struct V{int n;V():n(7){}};struct S{int a;V x;int b;V y;};S f(int n){return {n};}int main(){S a=f(3);return a.a!=3||a.x.n!=7||a.b||a.y.n!=7;}',
  'class_holes': 'struct V{int n;V():n(7){}};struct S{V x;int a;V y;};S f(int n){return {{},n,{}};}int main(){S a=f(3);return a.a!=3||a.x.n!=7||a.y.n!=7;}',

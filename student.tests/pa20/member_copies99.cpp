@@ -1,4 +1,7 @@
-int copies, moves;
+int copies, moves, returned_copies, returned_moves;
+struct Monitor {
+    ~Monitor() { returned_copies = copies; returned_moves = moves; }
+};
 struct Value {
     Value* self;
     int n;
@@ -7,11 +10,14 @@ struct Value {
     Value(Value&& v) noexcept : self(this), n(v.n) { ++moves; }
 };
 struct Aggregate { int prefix; Value first; Value second; };
-Aggregate make(Value& first, Value& second) { return {1, first, second}; }
+Aggregate make(Value& first, Value& second) {
+    Monitor monitor;
+    return {1, first, second};
+}
 int main() {
     Value a(3), b(4);
     Aggregate result = make(a,b);
-    return copies != 2 || moves != 0 || result.prefix != 1 ||
+    return returned_copies != 2 || returned_moves != 0 || result.prefix != 1 ||
         result.first.n != 3 || result.second.n != 4 ||
         result.first.self != &result.first || result.second.self != &result.second;
 }

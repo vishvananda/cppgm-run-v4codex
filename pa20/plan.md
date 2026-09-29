@@ -1,117 +1,83 @@
-# PA20 compact plan — implementation 99 in progress
+# PA20 compact plan — implementation handoff 99
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
 Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Entry: `e75e0d6ce1e26a2d50bc0857cd620974c6ee451d`, **121/144**.
-Implementation boundary: `a1faea7a` (following `f2bfec21`, `b669fc55`);
-subsequent records commit contains validation/performance evidence only.
-The [checkpoint audit 97](audit.md) and its review markers remain in force.
+Entry: `16ac49da1339edaa4a5f96bf4efab731a30c65e1`, clean, **140/144**.
+Implementation boundary: `37f8300b` (following `a7265134`, `b8b9e1ff`).
+The final records commit adds controls/evidence only; no implementation follows
+that boundary. [Audit 97](audit.md) and its review markers remain in force.
 
-## Current work (99)
+## Completed owners and spec alignment
 
-Entry `16ac49da1339edaa4a5f96bf4efab731a30c65e1`: clean, 140/144.
-The previous implementation made verified progress; no compiler job remains live.
-The stage base/review markers above are preserved, not reset at this entry.
-Frozen entry compiler: `/tmp/pa20-loop99/entry`.
-
-| Semantic owner | Data flow / implementation investigation | Complexity / validation |
+| Owner | Data flow and invariants | Complexity / lifetime |
 |---|---|---|
-| Aggregate initialization | Selected list/value actions → safety/transport facts → helper or ordered destination stores. Extend omitted-class transport only with a checked independence/representation proof; investigate extra reference moves. | One summary per constructor/expression identity, linear field work; ordering, self-address, copy/move effects, omitted tails and native controls. |
-| Class value boundary | Completed transfer/destructor facts → parameter/result ABI → typed signatures/calls. Establish the concrete defaulted-move contract before changing classification. | Cached per canonical class; reduced ABI controls, dependent owner fixture and earlier PAs. |
-| Retained declaration environment | Class specialization lookup and local shadowing → template versus relational expression parsing. Trace actual ownership before selecting a repair. | No grammar replay or spelling-based semantic keys; repeated-local and adjacent lookup controls. |
+| Aggregate initialization | Completed constructor/expression summaries plus selected list conversions → explicit representation-transport fact → shared helper or ordered destination construction. Excludes self-addresses, aliases/member reads, volatile state, nontrivial copies/destruction and unknown effects. No extra language moves. | One summary per completed canonical constructor / expression occurrence; average O(1) lookup, linear fields/arguments. TU-owned flat facts; helper slots are local LowIR identities, independent of caller temporaries. |
+| Class value boundary | Completed copy/move/destructor facts → separate parameter and result conventions → signatures/calls/destinations. Small copyable results stay direct; a trivial move alone only permits direct argument transport. | Existing once-per-class facts and demand states; no new query, body demand, cache invalidation or semantic reconstruction. |
 
-Required final evidence: stage and through reports, file audit, explicit personal
-controls, frozen A/A + ABBA compiler latency/RSS and checked native runtime/size.
-All four failures remain implementation work; independent audit is a separate
-handoff obligation. No reference or coverage change has yet been authorized by
-a demonstrated standard/contract proof.
+These extend the initial aggregate group through nested returns, defaulted
+special members, template owners, defaults, lambda results, omitted class tails
+and the preserved audit-97 sequencing proof. Constructor summaries reject
+`this`; the new native control exposed and verified that correction. Unknown
+or not-yet-completed facts retain ordered construction. No token replay, copied
+semantic tree, rendered identity key or optional optimizer was added.
 
-Current evidence: **143/144**, prior PA1–19 **3452/3452**, file audit passes.
-Aggregate controls **25/25**, value-boundary controls **13/13** plus four ABI
-shape checks pass. The representation proof excludes `this`, alias/member
-reads, volatile state, nontrivial copies/destruction and opaque effects;
-helpers share canonical type/parameter shape without caller temporary identity.
-The [proved member-copy oracle correction](reference-corrections99.md) is the
-only fixture change. Remaining parser failure requires semantic specialization
-lookup while local declarations are still being parsed: the second apparent
-declaration is actually a relational expression invoking the hidden friend.
-`Parser::translation_unit` currently consumes a whole declaration/function at
-a time, and the category table merges specialization member categories. Fixing
-this requires a new parse/semantic cooperation boundary, independent of the
-completed initializer/ABI facts. No parser workaround or grammar replay added.
-
-## Completed owner and spec alignment
-
-Closure occurrence plus enclosing specialization owns canonical closure and
-call-operator identities. TU-owned flat `(closure, declaration)` capture indexes
-publish one reference/this pointer field per capture, with explicit lexical
-forwarding edges for nested closures. Explicit parameter packs consume retained
-parameter-entity sequences, including empty packs. Checked expression/receiver
-facts carry capture IDs through fixed template-fact reuse. Lowering consumes
-those IDs/layouts directly for initialization and loads, with ordinary special
-members for copies. There is no syntax replay, name reconstruction, broad cache
-invalidation or duplicate body checking. Captureless conversion entries remain
-available only for empty capture lists; invalid C++11 lists are rejected.
-
-Work follows actual capture edges, parameters and expressions: average O(1)
-completed capture lookup, linear field construction, required lexical traversal
-for first nested demand. Facts live through TU lowering; emitted storage belongs
-to each function. Existing deduction, range and initializer-ordering owners are
-preserved. Source-to-native tracing verifies repeated specialization demand,
-mixed local/this fields, nested rebinding and copying.
-
-Two adjacent conversion oracles were independently proved wrong and corrected:
-implicit closure→pointer→wrapper needs two user-defined conversions; constructor
-template deduction must retain the closure class. [Proofs, reducers and bundle
-revision](reference-corrections98.md) preserve the original sources and comparison
-rules. Positive direct-wrapper/pointer and constructor-type controls remain.
+One oracle inserted two observable moves after the required two member copies.
+The [C++11 proof, reducer and bundle revision](reference-corrections99.md) correct
+that `.ref` only. Its source, success status and comparison rules remain intact.
+The correction is separate from the two implemented course-shape fixes.
 
 ## Validation and performance
 
-[Final evidence](../student.tests/pa20/validation98.json): PA1–19 **3452/3452**;
-file audit **pass**, with the same three inherited header warnings; PA20
-**140/144**; through PA20 **3592/3596**. Failures fall **23→4**: **17 real capture
-implementation fixes**, plus the two proved conversion corrections. All 144
-sources and comparison rules remain; the coverage manifest checks 639 files.
-Personal controls **264/264** (206 inherited, 58 capture/composition controls),
-three inherited source-to-native traces, and the [new capture trace](../student.tests/pa20/trace98.json)
-pass. Ten repaired required programs match reference executable results; one
-fixture declares but does not define `std::forward`, and both native attempts
-report that unresolved external. Its required LowIR comparison passes.
+[Final validation](../student.tests/pa20/validation99.json): PA1–19 **3452/3452**;
+file audit **pass** (same three inherited header warnings); PA20 **143/144**;
+through PA20 **3595/3596**. Required failures fall **4→1**, with no new failures.
+All 144 fixture sources and comparison rules remain; the coverage manifest
+checks 639 files and verifies every stage reference revision against its proof.
+Personal controls **303/303**, four explicit ABI checks, five inherited/current
+source-to-native traces, all reference reducers and all three repaired required
+program executions pass. The independent assignment audit is not implied.
 
-[Performance acceptance and all observations](performance98.md): frozen binaries,
-A/A and ABBA, compiler latency/RSS plus checked executable runtime/payload size.
-Comparable native files are byte-identical; new captures have final-only cost
-measurements. Counters scale 3200→12800 capture edges at 800→3200 specializations.
-No optional optimizer or work/growth limit changes. Historical percentages are
-diagnostics under spec §9; no mandated limit, correctness or coverage is waived.
+[Performance evidence](performance99.md): frozen entry/final compiler and inputs,
+400 observations / 40 warmups, A/A plus four ABBA blocks, compiler latency/RSS
+and checked native runtime/payload size. Compiler text grows 1728 bytes (0.083%).
+The required aggregate helper costs runtime and output size; repeated helper
+occurrences share one body, and work/output remain linear in demanded identities.
+Result storage removes copies but noisy timings support no strong speed claim.
+Unchanged call/memory/floating controls produce identical native bytes. Existing
+expansion bound 8 and stage-scoped acceptance apply; historical diagnostic
+percentages waive neither correctness, coverage nor mandated limits.
 
 ## Remaining implementation (mandatory)
 
-| Owner | Remaining work | Failures |
-|---|---|---:|
-| Aggregate initialization/helper ABI | Class-member copy construction and omitted-class-tail helper representation, preserving audit 97's destination sequencing proof | 2 |
-| Class lifecycle/value ABI | Dependent-owner completion and direct versus indirect result decisions | 1 |
-| Parser/retained declaration environment | Repeated local declaration versus relational-expression/template-name probe | 1 |
+**Parser / retained declaration environment: one required failure**,
+`400-repeated-local-declaration-template-probe.t`. The first declaration changes
+`sizeof(local_args)` and thus the selected specialization. The second apparent
+declaration is actually a relational expression calling the hidden friend:
+its `cmp1` is an integer, not a template. The oracle correctly contains one
+local object and an `operator>` call.
 
-This handoff finishes capture environments and their constructor-conversion
-composition, including explicit packs beyond the initially failing fixtures.
-No known capture implementation defect is left open. Continuing these four
-failures requires different owners: aggregate constructor plans and helper
-signatures, class transfer/return ABI classification, or lookup-sensitive grammar
-probing. Capture identities cannot establish their needed facts. Those are
-concrete new implementation groups, not related capture follow-ups or PA21
-deferrals; they remain required before stage completion/advancement.
+`Parser::translation_unit` currently delivers a whole declaration/function to
+semantic consumption, while its category table merges specialization member
+categories. Resolving this requires semantic specialization and local-entity
+facts during grammatical classification (or a retained structural ambiguity),
+with one grammar pass and correct lexical scope publication. The completed
+initializer/ABI owners run after that decision and cannot supply those facts.
+A repair inside them would mask the parser defect; correct work requires a new
+parse/semantic cooperation boundary. This is the concrete boundary of this
+handoff, not a PA21 deferral or a waived exit criterion. No further known
+correctness defect remains in the completed aggregate/value groups.
 
-Independent review questions: verify nested forwarding/occurrence isolation,
-pack and special-member composition, the two standard proofs and performance
-interpretation across the full base-to-tip range. This handoff does not perform
-or waive that independent review, nor supersede the audit-97 marker.
+Independent review questions, separate from that implementation: validate the
+transport proof/cache stability, helper sharing across occurrences, the result
+ABI envelope and the reference proof; review capture changes from handoff 98
+and the cumulative base-to-tip performance interpretation. All remain pending
+Ralph's independent review, with no assignment advancement claim.
 
 ## Handoff ledger
 
-| Boundary | Completed implementation/evidence | Unfinished implementation | Independent review |
+| Boundary | Completed work / evidence | Unfinished implementation | Independent review |
 |---|---|---|---|
-| Audit 97 | [Preserved audit ledger](audit.md#ledger), 121/144 | Original 23 failures | Reviewed through `882cf523`; markers retained |
-| Implementation 98, `e75e0d6c`→`a1faea7a` | Reference/this/nested/pack capture ownership; conversion proofs; 140/144, 264 controls, required prior/audit checks, performance evidence | Four failures in the three owners above | Pending Ralph's independent audit; no advancement claim |
+| Audit 97 | [Preserved ledger](audit.md#ledger), 121/144 | Original 23 failures | Reviewed through `882cf523`; markers retained |
+| Implementation 98, `e75e0d6c`→`a1faea7a` | Reference/this/nested/pack captures and conversion proofs; 140/144, 264 controls; [evidence](performance98.md) | Aggregate initialization, class ABI and retained grammar (4 failures) | Pending; not superseded by this handoff |
+| Implementation 99, `16ac49da`→`37f8300b` | Proven class representation transport, separate result ABI, member-copy proof; 143/144, 303 controls, required prior/audit checks and [measurements](performance99.md) | Lookup-sensitive parser/semantic cooperation (1 failure) | Pending cumulative audit; full stage audit still required before advancement |

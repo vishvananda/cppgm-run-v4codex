@@ -16,6 +16,7 @@ to omit certain copies permits introducing two new observable moves.
 
 Sources: [aggregate member initialization](https://timsong-cpp.github.io/cppwp/n3337/dcl.init.aggr#2),
 [list sequencing](https://timsong-cpp.github.io/cppwp/n3337/dcl.init.list#4),
+[braced return initialization](https://timsong-cpp.github.io/cppwp/n3337/stmt.return#2),
 [copy elision and implicit move](https://timsong-cpp.github.io/cppwp/n3337/class.copy#31).
 The corresponding clauses are also in [the local standard draft](../doc/n3485.txt).
 This establishes the required behavior independently of compiler agreement.
@@ -23,6 +24,9 @@ This establishes the required behavior independently of compiler agreement.
 The old oracle constructs two temporary copies, then moves them into the
 aggregate through a helper. The [reducer](../student.tests/pa20/member_copies99.cpp)
 defines those moves, counts copies/moves and checks self-pointers and values.
+Its local monitor records the counts during return cleanup, before any optional
+caller-side move of the complete returned aggregate. The check therefore does
+not require C++11 copy elision at the caller.
 The pinned reference executable fails its two-copies/zero-moves check; the
 student executable passes. On the unchanged required fixture, the extra move
 even causes an unresolved native symbol, because the source only declares it.
