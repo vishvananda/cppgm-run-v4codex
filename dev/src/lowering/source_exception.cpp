@@ -167,6 +167,7 @@ void Procedural::try_statement(NodeId n)
                 auto suppress = emitting_cleanup; emitting_cleanup = true;
                 typed_conversion(Value(caught.operand,IRType::Ptr,sem.facts[h].type,true),sem.conversion_fact(initialization),
                     address(Value(Operand::slot(objects[e]),type(t),t,true)));
+                clean_inline(live,initial);
                 emitting_cleanup = suppress;
                 emit(Opcode::EhEnd,IRType(),{}); jump(ready);
                 start(failed); emit(Opcode::EhCatchAll,IRType(),{Operand::integer(1)});

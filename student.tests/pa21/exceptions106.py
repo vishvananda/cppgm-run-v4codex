@@ -37,6 +37,7 @@ required = [
  '200-conditional-init-throw-does-not-clean-destination', '200-guarded-local-static-initializer-temporary-cleanup',
 ]
 cases['nested_catch_reducer'] = (ROOT/'student.tests/pa21/nested_catch_reducer106.cpp').read_text()
+cases['catch_default_temporary'] = (ROOT/'student.tests/pa21/catch_default106.cpp').read_text()
 for name in required:
     cases[name] = (ROOT/'pa21/tests/general'/f'{name}.t').read_text()
 rows = []
