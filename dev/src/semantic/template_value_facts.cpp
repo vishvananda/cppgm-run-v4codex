@@ -157,6 +157,13 @@ bool Analyzer::reuse_template_value(NodeId node, ScopeId scope, Expression& resu
 bool Analyzer::fixed_layout_operand(NodeId node) const
 {
     if (!facts[node].value) return false;
+    // sizeof(T) remains a substituted layout fact at O0. Its concrete scalar
+    // result does not turn the source operand into a fixed layout expression
+    // eligible to fold the other operand's widening conversion.
+    auto source = template_value_queries.get(ast.nodes.occurrences[node].source);
+    auto query = type_queries[source];
+    if (query.kind == QueryKind::Sizeof && types[query.type].kind == TypeKind::Named &&
+        entities[types[query.type].entity].template_parameter) return false;
     if (expressions[node].form == ExpressionForm::ConstantQuery) return true;
     if (ast[node].kind != Kind::Sizeof) return false;
     auto operand = facts[ast[node].first].type;
