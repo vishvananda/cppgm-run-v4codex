@@ -1,6 +1,6 @@
-# PA22 compact plan — implementation handoff 114
+# PA22 compact plan — implementation 115 in progress
 
-Target: **PA22 full-stage**. Phase: **implementation; incomplete handoff**.
+Target: **PA22 full-stage**. Phase: **implementation**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Last reviewed commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Entry: **22/99 passing, 77 failures**. Current: **47/99, 52 failures**.
@@ -84,3 +84,20 @@ value/alias proof coverage, canonical constant/base identities and the performan
 acceptance evidence, then resolve whole-stage findings before advancement.
 These review tasks are separate from the known unfinished implementation above.
 Both review markers remain unchanged; neither implementation nor audit is waived.
+
+## Implementation 115 work ledger
+
+Entry HEAD `5a21daff2c280c8b3a55000e253c50773fe6a6da`: clean; 47/99,
+52 failures. Prior turn supplied a validated implementation checkpoint (progress);
+the subsequent unchanged progress check provides no new implementation. No live
+build/test process exists. Stage/review markers above are preserved.
+
+Owner: canonical `Types` plus template substitution/deduction. Store the member
+owner as a canonical TypeId alongside the concrete entity projection; parsed
+owner types flow through dependent-type facts, immutable substitution frames,
+pack capture, partial ordering and finally the existing typed lowering facts.
+Walk only affected type/query edges, memoizing per type/frame; no token replay,
+name-key cache or body demand for mere type formation. Coordinate these related
+paths before extending member-address NTTP/query handling. Validation: unchanged
+99-case contract, explicit positive/negative owner/cv/pack controls, earlier PAs,
+file audit and frozen A/B compiler/runtime evidence under spec §9.
