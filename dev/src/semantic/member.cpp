@@ -151,7 +151,13 @@ void Analyzer::require_member_definition(EntityId e)
     if (members[m].demand == DemandState::Complete &&
         !(members[m].demand_reasons & static_cast<unsigned char>(MemberDemandReason::LocalDefinition)))
         members[m].demand = DemandState::Dormant;
-    demand_member(e, MemberDemandReason::LocalDefinition);
+    if (members[m].in_class_body && !members[m].referenced) {
+        // Checking an ordinary in-class definition is mandatory even when
+        // it is unused. That requirement does not request an emitted entry
+        // (for example an elided backing-element copy constructor).
+        members[m].demand_reasons |= static_cast<unsigned char>(MemberDemandReason::LocalDefinition);
+        require_member_body(e);
+    } else demand_member(e, MemberDemandReason::LocalDefinition);
 }
 void Analyzer::require_member_body(EntityId e)
 {

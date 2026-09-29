@@ -32,6 +32,8 @@ GOOD={
  'class_local':OBJ+'int main(){{std::initializer_list<S>x{1,2};if(live!=2)return 1;}return live||sequence!=21;}',
  'class_reference':OBJ+'int main(){{const std::initializer_list<S>&x={1,2};if(live!=2)return 1;}return live||sequence!=21;}',
  'class_copy':OBJ+'int main(){{std::initializer_list<S>x{1,2};{auto y=x;if(live!=2||y.size()!=2)return 1;}if(live!=2)return 2;}return live||sequence!=21;}',
+ 'copied_element':OBJ+'int main(){{S value(3);{std::initializer_list<S>x{value};if(live!=2||x.begin()[0].n!=3)return 1;}if(live!=1||sequence!=3)return 2;}return live||sequence!=33;}',
+ 'unused_copy_external_call':'void missing();struct S{int n;S(int v):n(v){}S(const S&){missing();}};int main(){std::initializer_list<S>x{1,2};return x.begin()[1].n!=2;}',
  'class_global':OBJ+'std::initializer_list<S>x{1,2};int main(){return live!=2||x.begin()[1].n!=2;}',
  'class_local_static':OBJ+'int f(){static std::initializer_list<S>x{1,2};return x.size();}int main(){return f()!=2||f()!=2||live!=2;}',
  'scalar_global':'std::initializer_list<int>x{2,3};int main(){return x.begin()[1]!=3;}',
@@ -42,6 +44,7 @@ GOOD={
  'scope_name':'namespace other{template<class T>struct initializer_list{T n;};}int main(){other::initializer_list<int>x{3};return x.n!=3;}',
 }
 BAD={
+ 'unused_copy_body_checked':'struct S{S(int){}S(const S&){missing();}};int main(){std::initializer_list<S>x{1};}',
  'auto_mismatch':'int main(){auto x={1,2L};}',
  'auto_empty':'int main(){auto x={};}',
  'narrowing':'int main(){std::initializer_list<int>x{1.5};}',
