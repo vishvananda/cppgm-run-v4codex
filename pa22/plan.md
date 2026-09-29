@@ -1,10 +1,30 @@
-# PA22 compact plan — checkpoint audit 117
+# PA22 compact plan — implementation 118
 
-Target: **PA22 full-stage**. Phase: **checkpoint audit complete; implementation incomplete**.
+Target: **PA22 full-stage**. Phase: **implementation**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Last reviewed commit: `e90fa3fa514e2990bbe5ea4716252d8c42ae782a`.
 Entry `853c4493`: **94/99**, five failures. Current: **94/99**, the same five.
 All 99 contract cases, references, statuses and comparison rules remain unchanged.
+
+## Active ownership group (118)
+
+Entry HEAD: `0c710f745f1341536992f43b24ba325578a2fad3`; frozen compiler
+`/tmp/pa22-118/entry`. Previous goal turn was progress: audit 117 repaired
+canonical member constants and preserved its independent review findings.
+The stage/review markers above remain unchanged.
+
+Finish runtime member-value provenance for local object storage: semantic
+checking owns canonical local projection identities and per-use zero-adjustment
+facts; typed lowering consumes those facts without reconstructing aliases.
+Use one bounded, conservative flow traversal of demanded bodies, no grammar
+replay, global retry or parameter assumptions. Calls, unknown writes, lifetime
+and control boundaries end local facts. Preserve generic parameter/escaped/
+adjusted paths. Validate positive nested-template and sibling-storage cases,
+inverse conversions, aliases, calls, branches, loops and lifetimes. Measure
+frozen entry/final compiler latency/RSS and checked runtime/text with A/A+ABBA;
+measure scaling and justify any optional analysis using a correct generic lane.
+Then revisit the adjacent parameter/truth and constant-condition failures with
+the established ownership evidence; no reference correction is assumed.
 
 ## Reviewed ownership and evidence
 
