@@ -936,8 +936,8 @@ private:
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args, bool explicit_head = false);
     bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner = 0);
-    bool deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind = DeductionKind::Call);
-    bool deduce_sequence(const std::vector<ArgumentId>& pattern, const std::vector<ArgumentId>& actual, Index& bindings, DeductionKind kind);
+    bool deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind = DeductionKind::Call, std::uint32_t prefix = 0);
+    bool deduce_sequence(const std::vector<ArgumentId>& pattern, const std::vector<ArgumentId>& actual, Index& bindings, DeductionKind kind, std::uint32_t prefix = 0);
     EntityId deduce_function(EntityId pattern, const std::vector<NodeId>& args, unsigned begin = 0);
     EntityId deduce_function(EntityId pattern, const std::vector<Expression>& args, unsigned begin = 0);
     template<class Arguments> EntityId deduce_function_values(EntityId pattern, const Arguments& args);

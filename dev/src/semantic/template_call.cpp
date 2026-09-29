@@ -416,8 +416,14 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     TemplateFunction t = templates[entities[pattern].template_info];
     TypeArguments explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
-    for (unsigned i = 0; i < explicit_args.count; ++i)
-        bindings.put(template_parameters[t.offset+i],argument_types[explicit_args.offset+i]);
+    // Explicit pack arguments constrain a prefix, not a completed deduction.
+    // Keep them in an immutable frame so every expansion can extend that prefix
+    // while bindings records (and reconciles) complete deductions only.
+    auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+    for (unsigned i = 0; i < explicit_args.count; ++i) {
+        auto parameter = template_parameters[t.offset+i];
+        if (!entities[parameter].parameter_pack) bindings.put(parameter,argument_types[explicit_args.offset+i]);
+    }
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
         TypeId p = types.alias_target(types.parameters[f.offset+i]), a = args[i].type;
         if (types[p].kind == TypeKind::PackExpansion) {
@@ -433,7 +439,6 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
                 actual.push_back(type);
             }
             if (types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef) element = types[element].child;
-            auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
             if (!deduce_expansion(element,actual,bindings,prefix)) return 0;
             break;
         }
@@ -456,7 +461,7 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
                 TypeId actual = entities[candidate].type;
                 if (kind != TypeKind::LRef && kind != TypeKind::RRef) actual = decay(actual);
                 Index trial;
-                if (!deduce_type(adjusted,actual,trial)) continue;
+                if (!deduce_type(adjusted,actual,trial,DeductionKind::Call,prefix)) continue;
                 if (++matches > 1) break;
                 selected = std::move(trial);
             }
@@ -476,13 +481,14 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
             a = types.compound(TypeKind::LRef,a);
         if (param.kind == TypeKind::LRef || param.kind == TypeKind::RRef) p = param.child;
         else a = decay(a);
-        if (!deduce_type(p,a,bindings)) return 0;
+        if (!deduce_type(p,a,bindings,DeductionKind::Call,prefix)) return 0;
     }
     std::vector<TypeId> arguments;
     for (unsigned i = 0; i < t.count; ++i) {
         auto parameter = template_parameters[t.offset+i];
         TypeId a = bindings.get(parameter);
-        if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
+        if (!a && entities[parameter].parameter_pack)
+            a = i < explicit_args.count ? argument_types[explicit_args.offset+i] : make_argument_pack({});
         arguments.push_back(a);
     }
     auto primary = t.primary ? t.primary : pattern;
@@ -514,26 +520,29 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
     bool pack = shape.count && types[types.parameters[shape.offset+shape.count-1]].kind == TypeKind::PackExpansion;
     auto explicit_args = argument_packs[t.explicit_arguments];
     Index bindings;
-    for (unsigned j = 0; j < explicit_args.count; ++j)
-        bindings.put(template_parameters[t.offset+j],argument_types[explicit_args.offset+j]);
+    auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
+    for (unsigned j = 0; j < explicit_args.count; ++j) {
+        auto parameter = template_parameters[t.offset+j];
+        if (!entities[parameter].parameter_pack) bindings.put(parameter,argument_types[explicit_args.offset+j]);
+    }
     if (pack) {
         // A target signature supplies types, not call expressions: preserve
         // references and arrays/functions behind references during deduction.
         auto actual = types[target];
         auto fixed = shape.count-1;
         if (actual.kind != TypeKind::Function || actual.count < fixed || shape.variadic != actual.variadic ||
-            !deduce_type(shape.child,actual.child,bindings)) return 0;
+            !deduce_type(shape.child,actual.child,bindings,DeductionKind::Call,prefix)) return 0;
         for (unsigned j = 0; j < fixed; ++j)
-            if (!deduce_type(types.parameters[shape.offset+j],types.parameters[actual.offset+j],bindings)) return 0;
+            if (!deduce_type(types.parameters[shape.offset+j],types.parameters[actual.offset+j],bindings,DeductionKind::Call,prefix)) return 0;
         std::vector<TypeId> tail(types.parameters.begin()+actual.offset+fixed,types.parameters.begin()+actual.offset+actual.count);
-        auto prefix = t.primary ? substitution_frame(entities[pattern].specialization,t.offset,t.count) : 0;
         if (!deduce_expansion(types[types.parameters[shape.offset+fixed]].bound,tail,bindings,prefix)) return 0;
-    } else if (!deduce_type(entities[pattern].type,target,bindings)) return 0;
+    } else if (!deduce_type(entities[pattern].type,target,bindings,DeductionKind::Call,prefix)) return 0;
     std::vector<TypeId> args;
     for (unsigned j = 0; j < t.count; ++j) {
         auto parameter = template_parameters[t.offset+j];
         auto a = bindings.get(parameter);
-        if (!a && entities[parameter].parameter_pack) a = make_argument_pack({});
+        if (!a && entities[parameter].parameter_pack)
+            a = j < explicit_args.count ? argument_types[explicit_args.offset+j] : make_argument_pack({});
         args.push_back(a);
     }
     auto primary = t.primary ? t.primary : pattern;

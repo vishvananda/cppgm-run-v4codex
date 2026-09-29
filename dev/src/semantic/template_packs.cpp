@@ -106,8 +106,8 @@ bool Analyzer::deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& a
         // A braced list is a non-deduced lane. An explicit pack prefix may
         // already supply its complete target; otherwise deduction cannot bind it.
         if (!a && element && dependent_argument(element)) return false;
-        if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings,kind))) return false;
-        if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings,kind)) return false;
+        if (!element || (dependent_argument(element) && !deduce_type(element,a,bindings,kind,prefix_frame))) return false;
+        if (!frame && !dependent_argument(element) && !deduce_type(element,a,bindings,kind,prefix_frame)) return false;
         ++lane;
         for (unsigned j = 0; j < list.count; ++j) {
             auto value = bindings.get(argument_types[list.offset+j]);

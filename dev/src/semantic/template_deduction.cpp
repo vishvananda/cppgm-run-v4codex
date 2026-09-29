@@ -1,7 +1,7 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
 bool Analyzer::deduce_sequence(const std::vector<ArgumentId>& pattern, const std::vector<ArgumentId>& actual,
-    Index& bindings, DeductionKind kind)
+    Index& bindings, DeductionKind kind, std::uint32_t prefix)
 {
     auto expansion = [&](ArgumentId arg) { return !value_argument(arg) && types[arg].kind == TypeKind::PackExpansion; };
     unsigned fixed = pattern.size();
@@ -9,17 +9,17 @@ bool Analyzer::deduce_sequence(const std::vector<ArgumentId>& pattern, const std
     if (pack) --fixed;
     if (actual.size() < fixed || (!pack && actual.size() != fixed)) return false;
     for (unsigned j = 0; j < fixed; ++j) {
-        if (expansion(actual[j]) || !deduce_type(pattern[j],actual[j],bindings,kind)) return false;
+        if (expansion(actual[j]) || !deduce_type(pattern[j],actual[j],bindings,kind,prefix)) return false;
     }
     return !pack || deduce_expansion(types[pattern.back()].bound,
-        std::vector<ArgumentId>(actual.begin()+fixed,actual.end()),bindings,0,kind);
+        std::vector<ArgumentId>(actual.begin()+fixed,actual.end()),bindings,prefix,kind);
 }
-bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind)
+bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind, std::uint32_t prefix)
 {
     if (!value_argument(pattern) && types[pattern].kind == TypeKind::AliasApplication)
-        return deduce_type(types.qualify(types[pattern].child,types[pattern].cv),actual,bindings,kind);
+        return deduce_type(types.qualify(types[pattern].child,types[pattern].cv),actual,bindings,kind,prefix);
     if (!value_argument(actual) && types[actual].kind == TypeKind::AliasApplication)
-        return deduce_type(pattern,types.qualify(types[actual].child,types[actual].cv),bindings,kind);
+        return deduce_type(pattern,types.qualify(types[actual].child,types[actual].cv),bindings,kind,prefix);
     if (value_argument(pattern) || value_argument(actual)) {
         if (!value_argument(pattern) || !value_argument(actual)) return false;
         auto q = type_queries[argument_query(pattern)];
@@ -36,7 +36,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         if (a.kind != TypeKind::ArgumentPack) return false;
         auto x = argument_packs[p.bound], y = argument_packs[a.bound];
         return deduce_sequence(std::vector<ArgumentId>(argument_types.begin()+x.offset,argument_types.begin()+x.offset+x.count),
-            std::vector<ArgumentId>(argument_types.begin()+y.offset,argument_types.begin()+y.offset+y.count),bindings,kind);
+            std::vector<ArgumentId>(argument_types.begin()+y.offset,argument_types.begin()+y.offset+y.count),bindings,kind,prefix);
     }
     if (p.kind == TypeKind::DependentArray) {
         if (a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) return false;
@@ -51,7 +51,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
             bound = convert_argument(bound,query.type);
             if (!bound) return false;
         }
-        return deduce_type(value_argument_id(p.bound),bound,bindings,kind) && deduce_type(p.child,a.child,bindings,kind);
+        return deduce_type(value_argument_id(p.bound),bound,bindings,kind,prefix) && deduce_type(p.child,a.child,bindings,kind,prefix);
     }
     if (p.kind == TypeKind::DependentName || p.kind == TypeKind::Decltype) return true; // non-deduced context
     if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
@@ -79,7 +79,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization &&
         entities[specialization_pattern(p.entity)].template_parameter) {
         auto ps = specializations[entities[p.entity].specialization], as = specializations[entities[a.entity].specialization];
-        if (!deduce_type(entities[ps.pattern].type,types.named(as.pattern),bindings,kind)) return false;
+        if (!deduce_type(entities[ps.pattern].type,types.named(as.pattern),bindings,kind,prefix)) return false;
         auto flatten = [&](std::uint32_t id) {
             std::vector<ArgumentId> out; auto pack = argument_packs[id];
             for (unsigned j = 0; j < pack.count; ++j) {
@@ -94,7 +94,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         auto x = flatten(ps.arguments), y = flatten(as.arguments);
         bool pack = !x.empty() && !value_argument(x.back()) && types[x.back()].kind == TypeKind::PackExpansion;
         if (!pack && y.size() > x.size()) y.resize(x.size()); // compatible head supplied the omitted defaults
-        return deduce_sequence(x,y,bindings,kind);
+        return deduce_sequence(x,y,bindings,kind,prefix);
     }
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].class_info) {
         auto ps = specializations[entities[p.entity].specialization];
@@ -106,7 +106,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
             auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
             if (x.count != y.count) return false;
             for (unsigned j = 0; j < x.count; ++j)
-                if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],trial,kind)) return false;
+                if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],trial,kind,prefix)) return false;
             return true;
         };
         if (same_primary(a.entity)) {
@@ -140,9 +140,9 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     if (p.kind == TypeKind::Function) {
         if (p.variadic != a.variadic || p.cv != a.cv || p.ref != a.ref) return false;
         if (!deduce_sequence(std::vector<ArgumentId>(types.parameters.begin()+p.offset,types.parameters.begin()+p.offset+p.count),
-            std::vector<ArgumentId>(types.parameters.begin()+a.offset,types.parameters.begin()+a.offset+a.count),bindings,kind)) return false;
+            std::vector<ArgumentId>(types.parameters.begin()+a.offset,types.parameters.begin()+a.offset+a.count),bindings,kind,prefix)) return false;
     }
-    if (p.child) return deduce_type(p.child, a.child, bindings,kind);
+    if (p.child) return deduce_type(p.child, a.child, bindings,kind,prefix);
     return types.unqualified(pattern) == types.unqualified(actual);
 }
 } }
