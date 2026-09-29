@@ -26,6 +26,11 @@ public:
     FactStore facts;
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
+    Index throw_index;
+    std::vector<ThrowUse> throws = std::vector<ThrowUse>(1);
+    ThrowUse throw_use(NodeId n) const { return throws[throw_index.get(n)]; }
+    Expression throw_expression(NodeId n, ScopeId scope);
+    void resolve_handler(NodeId n, ScopeId scope, bool pattern = false);
     Index rtti_expression_index;
     std::vector<RttiExpression> rtti_expressions = std::vector<RttiExpression>(1);
     RttiExpression rtti_expression(NodeId n) const;

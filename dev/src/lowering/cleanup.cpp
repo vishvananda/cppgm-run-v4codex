@@ -1,5 +1,6 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
+#include <algorithm>
 namespace cppgm { namespace lowering {
 using namespace lowir_model;
 void Procedural::reset_lifetime(EntityId e)
@@ -10,6 +11,11 @@ void Procedural::reset_lifetime(EntityId e)
     local_reference_guards = semantic::Index();
     temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
     full_expression = FullExpression();
+    constructor_block_boundary = 0;
+    exception_contexts.resize(1); exception_context = 0;
+    exception_selectors = semantic::Index(); exception_selector_count = 0;
+    unwind_continuations.clear(); unwind_cursor = 0;
+    unwind_terminals = semantic::Index(); unwind_dispatches = semantic::Index();
 }
 semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
 {
@@ -63,12 +69,13 @@ void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
     }
     live = stop;
 }
-BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal)
+BlockId Procedural::cleanup_suffix(std::uint32_t state, BlockId terminal, std::uint32_t stop)
 {
-    if (!state) return terminal;
+    if (state == stop) return terminal;
+    if (!state) throw std::logic_error("unwind target is not a live ancestor");
     auto key = (std::uint64_t(state) << 32) | terminal.index;
     if (auto existing = cleanup_index.get(key)) return BlockId(existing);
-    BlockId tail = cleanup_suffix(lifetime_state(state).tail, terminal);
+    BlockId tail = cleanup_suffix(lifetime_state(state).tail, terminal,stop);
     BlockId head = block(); cleanup_index.put(key, head.index);
     cleanup_blocks.push_back({state, tail, head});
     return head;
@@ -81,10 +88,9 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
         if (s.kind == Symbol::FunctionSymbol)
             no_throw = p.signatures[p.functions[s.entity-1].signature.index-1].boundary.unwind == ir_model::CUM_NO;
     }
-    if (!live || emitting_cleanup || no_throw || full_expression.scalar_unreachable) return emit(i, args, count);
+    if ((!unwind_live() && !(exception_context && full_expression.enabled)) || emitting_cleanup || no_throw || full_expression.scalar_unreachable) return emit(i, args, count);
     if (full_expression.enabled) { open_expression_region(); return emit(i,args,count); }
-    if (!resume_terminal) resume_terminal = block();
-    auto cleanup = cleanup_suffix(live, resume_terminal);
+    auto cleanup = unwind_target();
     emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)});
     Value result = emit(i, args, count);
     emit(Opcode::EhEnd, IRType(), {});
@@ -125,7 +131,7 @@ void Procedural::return_statement(NodeId n)
         if (!destructor_epilogue) destructor_epilogue = block();
         jump(destructor_epilogue); return;
     }
-    if (life.entry && sem.return_count(life.entry, life.context) > 1) {
+    if (!exception_context && life.entry && sem.return_count(life.entry, life.context) > 1) {
         if (has_value) {
             if (!cleanup_return) cleanup_return = builder->add_slot(0, result_type());
             if (type(returned).kind() == IRType::Object) {
@@ -138,7 +144,9 @@ void Procedural::return_statement(NodeId n)
         if (!terminal) { terminal = block(); return_terminals.put(life.context, terminal.index); cleanup_blocks.push_back({0, BlockId(), terminal}); }
         jump(cleanup_suffix(life.entry, terminal)); flush_cleanups(); return;
     }
-    clean_inline(life.entry, 0); finish_constructor_handlers();
+    if (exception_context) exit_exception_contexts();
+    else clean_inline(life.entry, 0);
+    finish_constructor_handlers();
     if (has_value) emit(Opcode::Return, result_type(), {value.operand});
     else emit(Opcode::Return, IRType(), {});
 }
@@ -146,6 +154,7 @@ void Procedural::flush_cleanups()
 {
     bool saved_cleanup = emitting_cleanup; auto saved_live = live;
     emitting_cleanup = true; live = 0;
+    flush_unwind_continuations();
     if (resume_terminal && !resume_emitted) { resume_emitted = true; start(resume_terminal); emit(Opcode::Resume, IRType(), {}); }
     while (cleanup_cursor < cleanup_blocks.size()) {
         auto entry = cleanup_blocks[cleanup_cursor++];
@@ -164,13 +173,17 @@ void Procedural::flush_cleanups()
 void Procedural::emit_cleanups()
 {
     flush_cleanups(); emitting_cleanup = true; live = 0;
+    auto begin = p.block_order.size();
+    BlockId previous;
     for (auto entry : constructed_subobjects) {
         start(entry.handler);
         auto action = entry.action;
         if (sem.types[action.type].kind == TypeKind::Array) {
             array_destroy(sem.type_destructor(action.type), action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
                 {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0}});
-            emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); continue;
+            if (previous) jump(previous);
+            else { emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); }
+            previous = entry.handler; continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
@@ -178,7 +191,13 @@ void Procedural::emit_cleanups()
         EntityId dtor = sem.type_destructor(action.type);
         Operand args[] = {Operand::symbol(symbol(dtor,!action.field)),at.operand};
         guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
-        emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {});
+        if (previous) jump(previous);
+        else { emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); }
+        previous = entry.handler;
     }
+    // Presentation follows the constructor preamble's source ordinals. The
+    // blocks still own one immutable instruction slice, emitted only once.
+    if (constructor_block_boundary && begin < p.block_order.size())
+        std::rotate(p.block_order.begin()+constructor_block_boundary,p.block_order.begin()+begin,p.block_order.end());
 }
 } }

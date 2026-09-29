@@ -106,13 +106,18 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
         Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
         emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(index)}); jump(cond);
         start(end); jump(continuation); start(cleanup);
+        exception_clauses(exception_context,true);
         current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
         bool saved_cleanup = emitting_cleanup; emitting_cleanup = true;
         heap_array_destroy(use.destructor,use.leaf,data,current.operand);
         Operand args[] = {Operand::symbol(symbol(use.deallocation)),allocation.operand,bytes};
         guarded_call(Instruction(Opcode::Call,IRType::Void),args,sem.types[sem.entities[use.deallocation].type].count+1);
         emitting_cleanup = saved_cleanup;
-        emit(Opcode::Resume,IRType(),{}); start(continuation);
+        if (exception_context) {
+            emit(Opcode::EhEnd,IRType(),{});
+            resume_exception(live,exception_context,false);
+        } else emit(Opcode::Resume,IRType(),{});
+        start(continuation);
     }
     if (nullable_end) {
         emit(Opcode::Store,IRType::Ptr,{data.operand,Operand::slot(nullable_result)}); jump(nullable_end); start(nullable_end);

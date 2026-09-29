@@ -163,40 +163,47 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     auto common = live;
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);
+    auto branch_expression = full_expression;
     bool enclosing_branch = full_expression.terminal_branch;
     full_expression.terminal_branch = terminal && object;
     full_expression.scalar_unreachable = saved_unreachable || (consumption && consumption->truth == 1);
     if (object) construct_value(b,sem.conversion_fact(branches ? branches : fact.conversions+1),destination,terminal);
     else {
         auto conversion = sem.conversion_fact(fact.conversions+1);
-        Value y = location || conversion.kind == semantic::Conversion::Kind::User ? converted(b,conversion) : convert(expression(b),target);
-        if (consumption) y = converted_value(y,sem.conversion_fact(consumption->conversion));
-        if (has_result) {
+        Value y = location || conversion.kind == semantic::Conversion::Kind::User ? converted(b,conversion) : expression(b);
+        if (!ended && !location && conversion.kind != semantic::Conversion::Kind::User) y = convert(y,target);
+        if (consumption && !ended) y = converted_value(y,sem.conversion_fact(consumption->conversion));
+        if (has_result && !ended) {
             if (consumption && supplied) store(y,destination);
             else if (ir.kind() == IRType::Object) store(y,Value(Operand::slot(slot),ir,target,true));
             else emit(Opcode::Store,ir,{y.operand,Operand::slot(slot)});
         }
     }
-    if (terminal) clean_inline(live,common);
-    auto yes_live = live; jump(end);
+    if (terminal && !ended) clean_inline(live,common);
+    auto yes_live = live; bool yes_ended = ended; jump(end);
     start(no); live = common;
+    full_expression = branch_expression;
+    full_expression.terminal_branch = terminal && object;
     full_expression.scalar_unreachable = saved_unreachable || (consumption && consumption->truth == 2);
     if (object) construct_value(c,sem.conversion_fact(branches ? branches+1 : fact.conversions+2),destination,terminal);
     else {
         auto conversion = sem.conversion_fact(fact.conversions+2);
-        Value z = location || conversion.kind == semantic::Conversion::Kind::User ? converted(c,conversion) : convert(expression(c),target);
-        if (consumption) z = converted_value(z,sem.conversion_fact(consumption->conversion));
-        if (has_result) {
+        Value z = location || conversion.kind == semantic::Conversion::Kind::User ? converted(c,conversion) : expression(c);
+        if (!ended && !location && conversion.kind != semantic::Conversion::Kind::User) z = convert(z,target);
+        if (consumption && !ended) z = converted_value(z,sem.conversion_fact(consumption->conversion));
+        if (has_result && !ended) {
             if (consumption && supplied) store(z,destination);
             else if (ir.kind() == IRType::Object) store(z,Value(Operand::slot(slot),ir,target,true));
             else emit(Opcode::Store,ir,{z.operand,Operand::slot(slot)});
         }
     }
-    if (terminal) clean_inline(live,common);
-    auto no_live = live; jump(end); start(end);
+    if (terminal && !ended) clean_inline(live,common);
+    auto no_live = live; bool no_ended = ended; jump(end); start(end);
+    full_expression = branch_expression;
     full_expression.terminal_branch = enclosing_branch;
     full_expression.scalar_terminal = saved_scalar; full_expression.scalar_unreachable = saved_unreachable;
-    merge_temporaries(common,yes_live,no_live,selector);
+    if (yes_ended || no_ended) live = yes_ended ? no_live : yes_live;
+    else merge_temporaries(common,yes_live,no_live,selector);
     if (object) {
         if (!supplied) activate_temporary(sem.object_fact(n).temporary);
         destination.type = target; destination.address = true; return destination;
@@ -327,6 +334,8 @@ void Procedural::statement(NodeId n)
         start(block());
     }
     switch (k) {
+    case Kind::Try: try_statement(n); return;
+    case Kind::Throw: begin_full_expression(n); throw_expression(n); return;
     case Kind::RangeFor: range_statement(n); return;
     case Kind::Class:
         if (auto e = sem.anonymous_object(n)) object(e);

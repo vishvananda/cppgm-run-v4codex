@@ -155,6 +155,22 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
         NodeId cn = ast[bn].next;
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
+        auto is_throw = [&](NodeId node) {
+            while (ast[node].kind == Kind::Parenthesized) node = ast[node].first;
+            return ast[node].kind == Kind::Throw;
+        };
+        if (is_throw(bn) || is_throw(cn)) {
+            auto value = is_throw(bn) ? c : b;
+            r.type = value.type; r.category = value.category;
+            for (auto operand : {bn,cn}) {
+                Conversion conversion;
+                if (is_throw(operand)) { conversion.target = types.fundamental(FT_VOID); conversion.rank = 0; }
+                else conversion = this->conversion(operand,value.category == ValueCategory::Prvalue ? value.type :
+                    types.compound(value.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,value.type));
+                record_conversion(r,operand,conversion);
+            }
+            return r;
+        }
         b.null_pointer_constant = null_constant(bn); c.null_pointer_constant = null_constant(cn);
         std::vector<Conversion> selected;
         auto value = conditional_value(b,c,selected);

@@ -49,11 +49,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::Iteration ||
             k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
             k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
-            k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default;
+            k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default ||
+            k == Kind::Throw || k == Kind::Try || k == Kind::Handler;
         if (!recorded) return;
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
         auto record_use = [&]() {
-            if (!(use.entry || use.exit || use.target)) return;
+            if (!(use.entry || use.exit || use.target || use.context)) return;
             lifetime_index.put(n, lifetime_uses.size()); lifetime_uses.push_back(use);
         };
         if (k == Kind::Condition) { add_object(facts[n].entity); use.exit = live; record_use(); return; }
@@ -73,11 +74,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             auto key_id = key(live, body); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
         if (k == Kind::Break || k == Kind::Continue) { use.target = k == Kind::Break ? break_live : continue_live; record_use(); return; }
-        if (k == Kind::ExpressionStatement || k == Kind::Iteration) { record_use(); return; }
+        if (k == Kind::ExpressionStatement || k == Kind::Iteration || k == Kind::Throw) { record_use(); return; }
         if (k == Kind::Case || k == Kind::Default) cases.push_back({active, switch_entry});
         unsigned saved = active, saved_switch = switch_entry;
         auto saved_live = live, saved_break = break_live, saved_continue = continue_live;
         NodeId saved_context = context;
+        if (k == Kind::Handler) { enter_initialization(); add_object(facts[n].entity); }
         if (k == Kind::RangeFor) {
             break_live = live; context = n;
             if (binding_only) {
@@ -103,7 +105,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         if (loop || k == Kind::Switch) { break_live = live; context = n; }
         if (loop) continue_live = live;
         bool scope = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::If ||
-            k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do;
+            k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do || k == Kind::Try || k == Kind::Handler;
         if (k == Kind::Switch) switch_entry = active;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             visit(c);

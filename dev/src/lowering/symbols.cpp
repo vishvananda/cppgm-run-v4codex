@@ -429,13 +429,17 @@ void Procedural::function_body(EntityId e, bool base)
         vpointer_store(sem.scopes[sem.entities[e].owner].entity);
     }
     mark_control_entries(sem.entities[e].body);
+    constructor_block_boundary = p.block_order.size();
     statement(sem.entities[e].body);
     if (destructor_handler) destructor_finish(e);
     if (!ended) {
         clean_inline(live,0);
         finish_constructor_handlers();
         if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
-        else if (sem.class_value(returned)) emit(Opcode::Unreachable,IRType(),{});
+        else if (sem.class_value(returned)) {
+            if (exception_contexts.size() > 1) exception_fallback();
+            else emit(Opcode::Unreachable,IRType(),{});
+        }
         else emit(Opcode::Return, result_type(), {result_type().floating() ? Operand::floating(0) : Operand::integer(0)});
     }
     emit_cleanups();

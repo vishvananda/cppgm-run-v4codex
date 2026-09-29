@@ -27,6 +27,12 @@ int expression_precedence(ETokenType op)
 
 NodeId Parser::expression(int minimum)
 {
+    if (in.is("throw")) {
+        NodeId node = leaf(Kind::Throw);
+        if (!in.is(";") && !in.is(")") && !in.is(":") && !in.is(",") && !in.is("}"))
+            ast.append(node, expression(2));
+        return node;
+    }
     NodeId left = unary();
     for (;;) {
         Token op = in.peek();

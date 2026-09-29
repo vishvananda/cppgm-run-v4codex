@@ -107,6 +107,7 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = emit(Opcode::Const, type(c.type), {(type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits))}); v.type = c.type; return v;
     }
     switch (node.kind) {
+    case Kind::Throw: return throw_expression(n);
     case Kind::Lambda: {
         auto value = class_address(sem.object_fact(n).temporary,fact.type);
         initialize_closure(n,value);

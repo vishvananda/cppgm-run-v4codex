@@ -1,9 +1,9 @@
-# PA21 compact plan — checkpoint audit 105
+# PA21 compact plan — implementation 106
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
-Target: **PA21 full-stage**. Phase: **checkpointAudit complete; implementation remains**.
-Entry: clean `3b87e462`, **71/116 pass, 45 fail**. Current: the same **71/116**
+Target: **PA21 full-stage**. Phase: **implementation**.
+Entry: clean `06b2d989`, **71/116 pass, 45 fail**. Current: the same **71/116**
 and exact **45 failures**, with no coverage reduction. Earlier PAs: **3596/3596**.
 PA21 completion and advancement to PA22 still require the unfinished work.
 
@@ -24,6 +24,30 @@ Historical details remain in [RTTI](rtti102.md), [captures](captures103.md)
 and [lists](lists104.md); this audit supersedes their pending-review wording.
 
 ## Remaining implementation groups
+
+106 starts from the completed 105 audit (verified progress, no live build/test
+process). Preserve both review markers above. Source exception semantic facts
+will own selected initialization, adjusted exception types and catch bindings;
+typed lowering will consume these facts and function-local region identities.
+Lifetime continuations must include their stopping prefix, active handler/try
+context, region exits and terminal. Work should track syntax, demanded facts and
+emitted cleanup edges, with average O(1) identity lookup; retain bounded arrays.
+Validate source exceptions together with conditional temporaries, constructor
+prefixes, handler escapes and templates before setting a handoff boundary.
+Freeze entry/final binaries and inputs for §9 A/A and ABBA latency/RSS and
+separate checked executable runtime/size evidence. This is required O0 semantic
+work; no optional optimization or additional numerical exit gate is planned.
+
+106 increment: typed throw initialization/catch binding, retained template
+handlers, source EH regions and context-keyed cleanup continuations; constructor
+prefixes share one reverse chain. Conditional throw arms do not publish a result
+lifetime. Earlier stages **3596/3596**, file audit passes (three inherited
+advisories), initial stage progress **89/116** before the latest region repair.
+All 26 source/native-ABI execution controls pass with the host exception runtime.
+The freestanding backend rejects even the checked-in scalar-throw reference
+with duplicate RTTI object labels; preserve that separate tooling evidence.
+Nested catch reference corrections still require reduced proof and reviewable
+minimal changes. Full-expression shape/value ownership and identity groups remain.
 
 | Owner | Required next work and validation |
 |---|---|

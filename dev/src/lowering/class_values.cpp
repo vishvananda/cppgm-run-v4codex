@@ -28,6 +28,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
     if (c.kind == semantic::Conversion::Kind::User) { user_conversion(n,c,destination); return; }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    if (ast[n].kind == Kind::Throw) { throw_expression(n); return; }
     auto fact = sem.expression_fact(n);
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
     auto materialized = construction ? sem.conversion_objects[c.materialization] : semantic::ConversionObject();

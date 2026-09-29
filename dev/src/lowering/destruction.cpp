@@ -30,12 +30,13 @@ void Procedural::constructor_cleanup(semantic::SubobjectAction action)
     auto member = sem.member_fact(active_function);
     bool structural_default = member.synthetic && member.constructor && member.transfer == semantic::TransferKind::None;
     if ((!structural_default && sem.function_nonthrowing(active_function)) || sem.trivial_destructor(action.type)) return;
+    if (!constructed_subobjects.empty()) emit(Opcode::EhEnd,IRType(),{});
     BlockId handler = block(); constructed_subobjects.push_back({action, handler});
     emit(Opcode::EhCleanup, IRType(), {Operand::label(handler)});
 }
 void Procedural::finish_constructor_handlers()
 {
-    for (std::size_t j = 0; j < constructed_subobjects.size(); ++j) emit(Opcode::EhEnd, IRType(), {});
+    if (!constructed_subobjects.empty()) emit(Opcode::EhEnd, IRType(), {});
 }
 void Procedural::destructor_prologue(EntityId e)
 {

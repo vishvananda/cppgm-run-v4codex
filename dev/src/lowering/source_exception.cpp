@@ -1,0 +1,171 @@
+#include "lowering/procedural.h"
+#include <stdexcept>
+namespace cppgm { namespace lowering {
+using namespace lowir_model;
+using syntax::Kind;
+SymbolId Procedural::exception_function(unsigned role)
+{
+    if (linkage.exception_functions[role]) return linkage.exception_functions[role];
+    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw"};
+    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW};
+    auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
+    std::vector<TypeId> params;
+    if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
+    if (role == 1) params.push_back(ptr);
+    if (role == 4) params = {ptr,ptr,ptr};
+    auto sig = sem.types.function(role < 2 ? ptr : sem.types.fundamental(FT_VOID),params,false);
+    Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
+    FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
+    if (role >= 3) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
+    p.functions.push_back(f); linkage.exception_functions[role] = f.symbol;
+    auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
+    s.metadata.binding = SBM_STRONG; s.metadata.linkage = LLM_C;
+    s.metadata.role = roles[role]; s.metadata.object = p.intern(names[role]);
+    return f.symbol;
+}
+SymbolId Procedural::exception_type(TypeId t)
+{
+    auto info = rtti_type(t);
+    if (sem.types[t].kind != TypeKind::Fundamental &&
+        !(sem.types[t].kind == TypeKind::Pointer && sem.types[sem.types[t].child].kind == TypeKind::Fundamental)) return info;
+    if (auto old = exception_rtti.get(t)) return SymbolId(old);
+    auto symbol = fresh_symbol("@exception_type");
+    Global g; g.symbol = symbol; g.declaration = true; p.globals.push_back(g);
+    auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
+    s.metadata.binding = SBM_STRONG; s.metadata.role = SR_RTTI_DATA;
+    s.metadata.object = p.symbols[info.index-1].metadata.object;
+    exception_rtti.put(t,symbol.index); return symbol;
+}
+void Procedural::exception_object(TypeId t)
+{
+    if (exception_storage.get(t)) return;
+    auto symbol = fresh_symbol("@exception_storage"); exception_storage.put(t,symbol.index);
+    Global g; g.symbol = symbol; g.structured = true; g.data.begin = p.data.size(); g.data.count = 1;
+    DataItem item; item.kind = DataItem::Zero; item.zero_bytes = sem.object_size(t); p.data.push_back(item); p.globals.push_back(g);
+    auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
+    s.metadata.binding = SBM_INTERNAL; s.metadata.object = s.name;
+}
+unsigned Procedural::exception_selector(TypeId t)
+{
+    if (auto old = exception_selectors.get(t+1)) return old;
+    auto value = ++exception_selector_count; exception_selectors.put(t+1,value); return value;
+}
+bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
+{
+    bool first = true, crossed_handler = false;
+    bool has_cleanup = false;
+    std::uint32_t prior_live = 0;
+    for (auto i = context; i; i = exception_contexts[i].parent) {
+        auto c = exception_contexts[i];
+        if (c.handler) { crossed_handler = true; continue; }
+        if (!first && (crossed_handler || prior_live != c.live)) { emit(Opcode::EhCleanup,IRType(),{}); has_cleanup = true; }
+        bool all = false;
+        for (auto h = ast[ast[c.node].first].next; h; h = ast[h].next) {
+            auto t = sem.facts[h].type;
+            auto selector = exception_selector(t);
+            if (t) emit(Opcode::EhCatch,IRType(),{Operand::symbol(exception_type(t)),Operand::integer(selector)});
+            else { emit(Opcode::EhCatchAll,IRType(),{Operand::integer(selector)}); all = true; }
+        }
+        if (cleanup) { emit(Opcode::EhCleanup,IRType(),{}); cleanup = false; has_cleanup = true; }
+        if (all) break;
+        first = false; crossed_handler = false; prior_live = c.live;
+    }
+    return has_cleanup;
+}
+void Procedural::exception_fallback()
+{
+    auto result = result_type();
+    if (result == IRType::Void) emit(Opcode::Return,IRType(),{});
+    else if (result.kind() == IRType::Object) {
+        if (!class_return_slot) class_return_slot = builder->add_slot(0,result);
+        Instruction zero(Opcode::ZeroInit); zero.bytes = result.bytes(); zero.alignment = result.alignment();
+        emit(zero,{Operand::slot(class_return_slot)}); emit(Opcode::Return,result,{Operand::slot(class_return_slot)});
+    } else emit(Opcode::Return,result,{result.floating() ? Operand::floating(0) : Operand::integer(0)});
+}
+Value Procedural::throw_expression(NodeId n)
+{
+    auto use = sem.throw_use(n);
+    auto initial = live;
+    if (use.source) {
+        exception_object(use.type);
+        Operand allocate[] = {Operand::symbol(exception_function(0)),Operand::integer(sem.object_size(use.type))};
+        auto object = guarded_call(Instruction(Opcode::Call,IRType::Ptr),allocate,2);
+        object.type = use.type; object.address = true;
+        if (sem.class_value(use.type)) construct_value(use.source,sem.conversion_fact(use.conversion),object);
+        else store(converted(use.source,sem.conversion_fact(use.conversion)),object);
+        clean_inline(live,initial); close_expression_region();
+        auto info = emit(Opcode::Addr,IRType(),{Operand::symbol(exception_type(use.type))});
+        Value dtor(Operand::integer(0),IRType::Ptr);
+        if (use.destructor && !sem.trivial_destructor(use.type)) dtor = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(use.destructor))});
+        Operand args[] = {Operand::symbol(exception_function(4)),object.operand,info.operand,dtor.operand};
+        guarded_call(Instruction(Opcode::Call,IRType::Void),args,4);
+    } else {
+        Operand arg = Operand::symbol(exception_function(3));
+        guarded_call(Instruction(Opcode::Call,IRType::Void),&arg,1);
+    }
+    if (full_expression.open) { full_expression.open = false; emit(Opcode::EhEnd,IRType(),{}); }
+    full_expression = FullExpression(); live = initial;
+    if (exception_context && !exception_contexts[exception_context].handler) emit(Opcode::EhEnd,IRType(),{});
+    exception_fallback(); return Value();
+}
+void Procedural::exit_exception_contexts()
+{
+    for (auto i = exception_context; i; i = exception_contexts[i].parent) {
+        auto c = exception_contexts[i]; clean_inline(live,c.live);
+        emit(Opcode::EhEnd,IRType(),{});
+        if (c.handler) emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});
+    }
+    clean_inline(live,0);
+}
+void Procedural::try_statement(NodeId n)
+{
+    auto parent = exception_context, initial = live;
+    auto dispatch = block(), entry = block(), end = block();
+    ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry;
+    auto context = exception_contexts.size(); exception_contexts.push_back(c); exception_context = context;
+    emit(Opcode::EhTry,IRType(),{Operand::label(dispatch)});
+    statement(ast[n].first);
+    if (!ended) { emit(Opcode::EhEnd,IRType(),{}); jump(end); }
+    exception_context = parent;
+    start(dispatch);
+    // A cleanup-bearing landing pad retains its protected region while it
+    // runs. Retire that region before entering ordinary source catch matching.
+    if (exception_clauses(context)) emit(Opcode::EhEnd,IRType(),{});
+    jump(entry);
+    start(entry);
+    auto object = emit(Opcode::Exception,IRType::Ptr,{});
+    auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
+    for (auto h = ast[ast[n].first].next; h; h = ast[h].next) {
+        auto body = block(), next = block(), cleanup = block();
+        auto match = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(exception_selector(sem.facts[h].type))},Operation::Eq);
+        emit(Opcode::Branch,IRType(),{match.operand,Operand::label(body),Operand::label(next)});
+        start(body); live = initial;
+        auto caught = emit(Opcode::Call,IRType::Ptr,{Operand::symbol(exception_function(1)),object.operand});
+        auto e = sem.facts[h].entity;
+        bool named = e && sem.entities[e].name;
+        if (named) {
+            auto saved = builder->add_slot(0,IRType::Ptr); emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(saved)});
+        }
+        emit(Opcode::EhCleanup,IRType(),{Operand::label(cleanup)});
+        if (named) {
+            auto t = sem.entities[e].type; objects[e] = source_slot(e);
+            if (reference(t) || sem.types[t].kind == TypeKind::Pointer) emit(Opcode::Store,IRType::Ptr,{caught.operand,Operand::slot(objects[e])});
+            else store(load(Value(caught.operand,IRType::Ptr,t,true)),Value(Operand::slot(objects[e]),type(t),t,true));
+        }
+        c.parent = parent; c.handler = true; c.node = h; c.live = initial;
+        exception_context = exception_contexts.size(); exception_contexts.push_back(c);
+        statement(ast[ast[h].first].next);
+        if (!ended) {
+            emit(Opcode::EhEnd,IRType(),{});
+            emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))}); jump(end);
+        }
+        exception_context = parent;
+        start(cleanup); exception_clauses(parent);
+        emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});
+        resume_exception(parent ? initial : 0,parent,true);
+        start(next);
+    }
+    resume_exception(initial,parent,false);
+    start(end); live = initial;
+}
+} }

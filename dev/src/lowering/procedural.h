@@ -41,6 +41,7 @@ struct Linkage {
     std::uint64_t disambiguator = 0;
     bool merge;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
+    SymbolId exception_functions[5];
     std::vector<FunctionId> initializers, finalizers;
     void finish_lifecycle(lowir_model::Program& program);
     explicit Linkage(bool merge) : merge(merge) {}
@@ -118,6 +119,30 @@ class Procedural {
     std::vector<Cleanup> cleanup_blocks;
     struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed; std::uint32_t yes = 0, no = 0; };
     std::vector<TemporaryState> temporary_states;
+    struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false; };
+    std::vector<ExceptionContext> exception_contexts = std::vector<ExceptionContext>(1);
+    std::uint32_t exception_context = 0;
+    semantic::Index exception_rtti, exception_storage, exception_selectors;
+    unsigned exception_selector_count = 0;
+    enum class UnwindKind { TryExit, HandlerExit, Dispatch };
+    struct UnwindContinuation { UnwindKind kind; std::uint32_t context; BlockId block, next; bool pop; };
+    std::vector<UnwindContinuation> unwind_continuations;
+    std::size_t unwind_cursor = 0;
+    semantic::Index unwind_terminals, unwind_dispatches;
+    BlockId unwind_suffix(std::uint32_t state, std::uint32_t context, bool pop = true);
+    BlockId unwind_target();
+    bool unwind_live() const;
+    void flush_unwind_continuations();
+    void resume_exception(std::uint32_t state, std::uint32_t context, bool pop);
+    SymbolId exception_function(unsigned role);
+    SymbolId exception_type(TypeId type);
+    void exception_object(TypeId type);
+    bool exception_clauses(std::uint32_t context, bool cleanup = false);
+    unsigned exception_selector(TypeId type);
+    void try_statement(NodeId n);
+    Value throw_expression(NodeId n);
+    void exit_exception_contexts();
+    void exception_fallback();
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false);
     const semantic::Expression* conversion_call(const semantic::Conversion& conversion) const;
@@ -151,6 +176,7 @@ class Procedural {
     Value abort_call();
     struct Constructed { semantic::SubobjectAction action; BlockId handler; };
     std::vector<Constructed> constructed_subobjects;
+    std::uint32_t constructor_block_boundary = 0;
     EntityId active_function = 0;
     NodeId child(NodeId n, syntax::Kind k) const;
     std::string spelling(IdentifierId id) const;
@@ -180,7 +206,7 @@ class Procedural {
     void destroy_object(EntityId object, EntityId destructor);
     void destroy_subobject(const semantic::DestructionAction& action);
     void clean_inline(std::uint32_t state, std::uint32_t stop);
-    BlockId cleanup_suffix(std::uint32_t state, BlockId terminal);
+    BlockId cleanup_suffix(std::uint32_t state, BlockId terminal, std::uint32_t stop = 0);
     void emit_cleanups();
     void flush_cleanups();
     SlotId source_slot(EntityId e);

@@ -8,7 +8,7 @@ bool Procedural::unwind_expression(NodeId n)
     if (unwind_expressions.empty()) unwind_expressions.resize(ast.nodes.size());
     if (unwind_expressions[n]) return unwind_expressions[n] == 2;
     ++full_expression_work;
-    bool result = false;
+    bool result = ast[n].kind == Kind::Throw;
     auto x = sem.expression_fact(n);
     EntityId callee = sem.facts[n].entity;
     bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
@@ -51,7 +51,7 @@ bool Procedural::unwind_expression(NodeId n)
 void Procedural::begin_full_expression(NodeId n, bool omit_result)
 {
     if (full_expression.enabled) throw std::logic_error("nested full-expression owner");
-    full_expression.enabled = cleanup_expression(n,omit_result) || (live && unwind_expression(n));
+    full_expression.enabled = cleanup_expression(n,omit_result) || (unwind_live() && unwind_expression(n));
     if (full_expression.enabled && !omit_result) {
         auto result = n;
         while (ast[result].kind == Kind::Parenthesized || ast[result].kind == Kind::Initializer || ast[result].kind == Kind::ParenInitializer)
@@ -90,8 +90,7 @@ void Procedural::open_expression_region()
         // there are no intermediate temporary suffixes needing a resume join.
         cleanup = block(); cleanup_blocks.push_back({live,BlockId(),cleanup});
     } else {
-        if (!resume_terminal) resume_terminal = block();
-        cleanup = cleanup_suffix(live,resume_terminal);
+        cleanup = unwind_target();
     }
     full_expression.open = true;
     emit(Opcode::EhTry,IRType(),{Operand::label(cleanup)});
@@ -101,7 +100,7 @@ void Procedural::close_expression_region()
     if (!full_expression.open) return;
     full_expression.open = false;
     emit(Opcode::EhEnd,IRType(),{});
-    if ((resume_terminal && !resume_emitted) || cleanup_cursor < cleanup_blocks.size()) {
+    if ((resume_terminal && !resume_emitted) || cleanup_cursor < cleanup_blocks.size() || unwind_cursor < unwind_continuations.size()) {
         auto continuation = block(); jump(continuation); flush_cleanups(); start(continuation);
     }
 }
