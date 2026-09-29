@@ -21,7 +21,7 @@ bool full_parameters(semantic::Analyzer& sem, std::uint32_t plan)
     bool omitted = false;
     for (auto c = sem.initializers[plan].first; c; c = sem.initializers[c].next) {
         auto item = sem.initializers[c];
-        if (sem.types[item.type].kind == TypeKind::Array || (omitted && item.source)) return true;
+        if (item.helper_copy || sem.types[item.type].kind == TypeKind::Array || (omitted && item.source)) return true;
         omitted |= !item.source;
     }
     return false;
@@ -41,6 +41,8 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     // are initialized in the helper. Transfer recipes additionally own selected
     // constructors and temporary identities, so those helpers belong to the
     // complete semantic plan instead of being shared by target type alone.
+    // Proven representation copies use function-local slots, so their full
+    // parameter shape is shared across initializer occurrences of this type.
     auto identity = (std::uint64_t(target) << 32) | (transfer ? (std::uint32_t(1) << 31) | plan : supplied);
     if (auto known = aggregate_helpers.get(identity)) return p.functions[known-1].symbol;
     AggregateHelper helper; helper.type = target; helper.actions = aggregate_actions.size(); helper.count = 0;
@@ -86,7 +88,7 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
         // multiple class members use their ordered destination construction.
         if (item.helper_transfer && item.next) return false;
         if (array_parameter(item.type)) continue;
-        if ((!type(item.type).scalar() && !item.helper_transfer) ||
+        if ((!type(item.type).scalar() && !item.helper_transfer && !item.helper_copy) ||
             (item.kind != InitKind::Scalar && item.kind != InitKind::Converted && !(all && item.kind == InitKind::Value))) return false;
     }
     SymbolId callee = aggregate_helper(plan);
@@ -117,7 +119,13 @@ void Procedural::emit_aggregate_helpers()
             auto parameter = p.parameters[signature.parameters.begin+j];
             auto action = j ? sem.initializers[aggregate_actions[helper.actions+j-1]] : semantic::InitAction();
             auto slot = builder->add_slot(0, j && !array_parameter(action.type) ? type(action.type) : parameter.type); slots.push_back(slot);
-            if (action.helper_parameter) {
+            if (action.helper_copy) {
+                if (!sem.empty_class(action.type)) {
+                    Value at = address(Value(Operand::slot(slot),type(action.type),action.type,true));
+                    Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(action.type); copy.alignment = sem.object_alignment(action.type);
+                    emit(copy,{Operand::value(parameter.value),at.operand});
+                }
+            } else if (action.helper_parameter) {
                 objects[action.helper_parameter] = slot;
                 object_addresses[action.helper_parameter] = lowir_model::ValueId();
                 if (sem.indirect_parameter(action.type)) object_addresses[action.helper_parameter] = parameter.value;
@@ -134,7 +142,7 @@ void Procedural::emit_aggregate_helpers()
             EntityId field = action.field; TypeId t = action.type;
             Value value;
             bool array = array_parameter(t);
-            if (!action.helper_transfer && !array) {
+            if (!action.helper_transfer && !action.helper_copy && !array) {
                 value = j+1 < slots.size() ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
                 value.type = t;
             }
@@ -147,9 +155,10 @@ void Procedural::emit_aggregate_helpers()
                 auto source = emit(Opcode::Load,IRType::Ptr,{Operand::slot(slots[j+1])});
                 Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
                 emit(copy,{source.operand,at.operand});
-            } else if (action.helper_transfer) {
-                Value source = address(binding(action.helper_parameter));
-                if (sem.direct_transfer(action.helper_transfer)) {
+            } else if (action.helper_transfer || action.helper_copy) {
+                Value source = action.helper_copy ? address(Value(Operand::slot(slots[j+1]),type(t),t,true)) :
+                    address(binding(action.helper_parameter));
+                if (action.helper_copy || sem.direct_transfer(action.helper_transfer)) {
                     if (!sem.empty_class(t)) {
                         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
                         emit(copy,{source.operand,at.operand});

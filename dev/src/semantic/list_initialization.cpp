@@ -243,6 +243,25 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
                 auto nested = list_objects[selected.materialization];
                 item.helper_safe = nested.initializer ? initializers[nested.initializer].helper_safe :
                     !nested.call.argument_count && !class_value(item.type);
+                auto constructor = list_plans[nested.plan].constructor;
+                // This transports a representation, not an extra language
+                // copy/move. Prove that early construction cannot observe the
+                // destination or escape its temporary address, and that no
+                // destructor or transfer side effects are introduced.
+                if (class_value(item.type) && nested.temporary && !(types[item.type].cv & 2) &&
+                    constructor && independent_constructor(constructor) &&
+                    copy_storage_type(item.type) && trivial_destructor(item.type)) {
+                    bool safe = true;
+                    for (unsigned i = 0; safe && i < nested.call.argument_count; ++i) {
+                        auto c = conversions[nested.call.conversions+i];
+                        safe = c.kind == Conversion::Kind::Standard && !c.function &&
+                            independent_initializer(call_argument(nested.call,i));
+                    }
+                    if (safe) {
+                        item.helper_safe = item.helper_copy = true;
+                        prepare_value_boundary(item.type);
+                    }
+                }
             }
             else item.helper_safe = (selected.kind == Conversion::Kind::Standard || selected.kind == Conversion::Kind::Explicit) &&
                 !selected.function && independent_initializer(item.source);

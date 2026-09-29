@@ -292,6 +292,7 @@ private:
     Index independent_initializers;
     std::size_t initializer_independence_work = 0, initializer_independence_hits = 0;
     bool independent_initializer(NodeId source);
+    bool independent_constructor(EntityId constructor);
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
     Index static_initialization_facts, static_plan_facts;

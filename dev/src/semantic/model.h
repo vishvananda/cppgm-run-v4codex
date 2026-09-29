@@ -163,6 +163,7 @@ struct InitAction {
     std::uint64_t index = 0, count = 1;
     InitKind kind = InitKind::Scalar;
     bool helper_safe = true; // Evaluating arguments cannot observe delayed destination stores.
+    bool helper_copy = false; // Proven independent, trivially copyable class representation.
 };
 struct Entity {
     Access access = Access::Public;

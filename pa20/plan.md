@@ -1,4 +1,4 @@
-# PA20 compact plan — implementation handoff 98
+# PA20 compact plan — implementation 99 in progress
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
@@ -7,6 +7,39 @@ Entry: `e75e0d6ce1e26a2d50bc0857cd620974c6ee451d`, **121/144**.
 Implementation boundary: `a1faea7a` (following `f2bfec21`, `b669fc55`);
 subsequent records commit contains validation/performance evidence only.
 The [checkpoint audit 97](audit.md) and its review markers remain in force.
+
+## Current work (99)
+
+Entry `16ac49da1339edaa4a5f96bf4efab731a30c65e1`: clean, 140/144.
+The previous implementation made verified progress; no compiler job remains live.
+The stage base/review markers above are preserved, not reset at this entry.
+Frozen entry compiler: `/tmp/pa20-loop99/entry`.
+
+| Semantic owner | Data flow / implementation investigation | Complexity / validation |
+|---|---|---|
+| Aggregate initialization | Selected list/value actions → safety/transport facts → helper or ordered destination stores. Extend omitted-class transport only with a checked independence/representation proof; investigate extra reference moves. | One summary per constructor/expression identity, linear field work; ordering, self-address, copy/move effects, omitted tails and native controls. |
+| Class value boundary | Completed transfer/destructor facts → parameter/result ABI → typed signatures/calls. Establish the concrete defaulted-move contract before changing classification. | Cached per canonical class; reduced ABI controls, dependent owner fixture and earlier PAs. |
+| Retained declaration environment | Class specialization lookup and local shadowing → template versus relational expression parsing. Trace actual ownership before selecting a repair. | No grammar replay or spelling-based semantic keys; repeated-local and adjacent lookup controls. |
+
+Required final evidence: stage and through reports, file audit, explicit personal
+controls, frozen A/A + ABBA compiler latency/RSS and checked native runtime/size.
+All four failures remain implementation work; independent audit is a separate
+handoff obligation. No reference or coverage change has yet been authorized by
+a demonstrated standard/contract proof.
+
+Current evidence: **143/144**, prior PA1–19 **3452/3452**, file audit passes.
+Aggregate controls **25/25**, value-boundary controls **13/13** plus four ABI
+shape checks pass. The representation proof excludes `this`, alias/member
+reads, volatile state, nontrivial copies/destruction and opaque effects;
+helpers share canonical type/parameter shape without caller temporary identity.
+The [proved member-copy oracle correction](reference-corrections99.md) is the
+only fixture change. Remaining parser failure requires semantic specialization
+lookup while local declarations are still being parsed: the second apparent
+declaration is actually a relational expression invoking the hidden friend.
+`Parser::translation_unit` currently consumes a whole declaration/function at
+a time, and the category table merges specialization member categories. Fixing
+this requires a new parse/semantic cooperation boundary, independent of the
+completed initializer/ABI facts. No parser workaround or grammar replay added.
 
 ## Completed owner and spec alignment
 
