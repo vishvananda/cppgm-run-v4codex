@@ -1,3 +1,6 @@
+global @__pa92_array_0 [binding=internal, storage=readonly] = {
+  i32 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $c : obj<1x1>
   slot $values : obj<4x4>
@@ -5,7 +8,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:
     %t1 = addr $c
     %t2 = addr $values
-    store i32 0, %t2
+    copyobj 4x4 @__pa92_array_0, %t2
     %t3 = addr $c
     %t4 = addr $values
     %t5 = addr $values

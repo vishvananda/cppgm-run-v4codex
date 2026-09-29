@@ -1,6 +1,6 @@
-global @__cppgm_class_template_identity_0_0_0__value : u8 [storage=readonly, binding=weak, object=_ZN5bool_ILb0EE5valueE] = 0
-global @__cppgm_class_template_identity_0_1_0__value : u8 [storage=readonly, binding=weak, object=_ZN5bool_ILb1EE5valueE] = 1
-global @__cppgm_class_template_identity_1_6_0__value : u8 [storage=readonly, binding=weak, object=_ZN17integral_constantIbLb0EE5valueE] = 0
+declare global @from : ptr [binding=weak, object=_ZN19is_convertible_implIP13version_2_tagP13case_fold_tagE4fromE]
+declare function @pick_false(%arg : obj<1x1>) -> i8 [binding=strong, object=_Z4pick5bool_ILb0EE]
+declare function @pick_true(%arg : obj<1x1>) -> i32 [binding=strong, object=_Z4pick5bool_ILb1EE]
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   block ^entry:

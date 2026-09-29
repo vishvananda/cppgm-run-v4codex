@@ -26,8 +26,3 @@ function @prop_0___static_query() -> obj<1x1> [binding=weak, object=_ZN4propILi0
     %t1 = addr $retobj__1
     return obj<1x1> $retobj__1
 }
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @__cppgm_class_template_identity_1_2_0__static_query_v_ex____cppgm_class_template_identity_1_2_0_
-    return void
-}

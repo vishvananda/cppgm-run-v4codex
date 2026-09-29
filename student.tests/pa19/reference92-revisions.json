@@ -1,0 +1,90 @@
+{
+  "entry": "065d67835340af14fc3f154f3f314e552d0b3f69",
+  "bundle": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "revisions": [
+    {
+      "path": "pa19/tests/general/100-inherited-using-alias-out-of-class-specialization-member.ref",
+      "before_sha256": "c62be14924b638c551d697d86d9d70167ecfb35a1da223a14b34f2a40a2f8c7a",
+      "after_sha256": "2a2f26e394c8e96a40c885051885be23e8cc3a16f0b85f23694286f1cce304da",
+      "proof": "PA16 automatic scalar array contract; N3485 [dcl.init.aggr], [dcl.init.string]"
+    },
+    {
+      "path": "pa19/tests/general/200-array-reference-deduction.ref",
+      "before_sha256": "e54e43c269a239c16fab99bd4c22afa12683f1272a693eb0a11b5009b0100e93",
+      "after_sha256": "10332e0ab02a5a2a7dff052b5a27e6356584917162c49ab45441431c9893822e",
+      "proof": "PA16 automatic scalar array contract; N3485 [dcl.init.aggr], [dcl.init.string]"
+    },
+    {
+      "path": "pa19/tests/general/300-array-qualified-member-type-sfinae.ref",
+      "before_sha256": "e62c5348ed4e752ba2e06ba1070d3e485b50a115e036731f772f3547231a14f1",
+      "after_sha256": "a75714912af5bfc3f5a74374edfb952b8b5fbb2212ca604f683623e1271fa406",
+      "proof": "PA16 automatic scalar array contract; N3485 [dcl.init.aggr], [dcl.init.string]"
+    },
+    {
+      "path": "pa19/tests/spec/400-out-of-class-overloaded-member-template-definition.ref",
+      "before_sha256": "96a2f32bd54ae93c58a5bc51b42a96cef1648f616b830944f88552404e953089",
+      "after_sha256": "507d18268a56a70a05d77f6fe035fe7ea202615f8fbc04aa625bacccf4e267e7",
+      "proof": "PA16 automatic scalar array contract; N3485 [dcl.init.aggr], [dcl.init.string]"
+    },
+    {
+      "path": "pa19/tests/spec/500-nondeduced-qualified-member-type-allows-conversion.ref",
+      "before_sha256": "01e63cbcc55103a403fe766d357b583818f957892faf51182027dfe666267953",
+      "after_sha256": "9e47072ccd3e775e515acaeca66d8b52d41a097d8fe3718064b7a880bca210cb",
+      "proof": "PA16 automatic scalar array contract; N3485 [dcl.init.aggr], [dcl.init.string]"
+    },
+    {
+      "path": "pa19/tests/general/100-intermediate-type-transform-value-nontype.ref",
+      "before_sha256": "189350a689b9d7b317c6fb0362ad854a0e23ee29fe5e9c9246976a73ed61e5c2",
+      "after_sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f",
+      "proof": "N3485 [temp.inst]/1,8,10; [basic.def.odr]/2"
+    },
+    {
+      "path": "pa19/tests/general/100-structured-bool-boost-convertible-mpl-overload.ref",
+      "before_sha256": "644bb87ccdf433b63a33e0323d8d42db711aff421f5890dc32b6b3b8e33171be",
+      "after_sha256": "96bb3068fd83d54e2201fb4448c8975cfce20c3fccf80f46320384ae1c6011f6",
+      "proof": "N3485 [temp.inst]/1,8,10; [expr.sizeof]/1; retain source declarations"
+    },
+    {
+      "path": "pa19/tests/general/500-dependent-qualified-sizeof-static-member.ref",
+      "before_sha256": "bcc45dcb6f928f9048787d35848a41e2e488a8d7106c97997f66ae766f681d2d",
+      "after_sha256": "c0babc3222c34ab41bfa9453f1af0351da1f3ef50144d2d7c805765f7080b3b2",
+      "proof": "N3485 [temp.inst]/1,8,10; [expr.sizeof]/1"
+    },
+    {
+      "path": "pa19/tests/general/500-source-owner-member-template-sfinae-default.ref",
+      "before_sha256": "19513ac568446f9deaaa8ae60b94122d9b0d29e62244431a65a2eec1692a9b0b",
+      "after_sha256": "8d0d9f06805b098e381bce1b0e3a4d6049125ddf0360b431c5b496a2a3d30571",
+      "proof": "N3485 [temp.inst]/1,8,10: unused npos definition remains dormant"
+    },
+    {
+      "path": "pa19/tests/general/500-member-template-conditional-alias-trailing-return.ref",
+      "before_sha256": "895a401eadba97840c1bbf31bedfe867b8ec45b3e8050709518799e3a196eb93",
+      "after_sha256": "2ef9639d3482064ebad467384aa437f5c7763c8494bec35297dbb7b8fff2acef",
+      "proof": "N3485 [temp.inst]/1,8,10: unused npos definition remains dormant"
+    },
+    {
+      "path": "pa19/tests/general/300-deleted-return-sfinae-same-parameter-list.ref",
+      "before_sha256": "8dbfc51f0a731d91003f4013aa6dcf955ef4bdd10f23c9a437b9be07a3db885e",
+      "after_sha256": "77659484bd4c4ce09cd699f7c088f121402fb430b7147c7129ed540932a33542",
+      "proof": "N3485 [expr]/11 and [expr.static.cast]/6"
+    },
+    {
+      "path": "pa19/tests/general/400-nonmember-template-compound-assignment-const-lhs.ref",
+      "before_sha256": "d093dca85b927e4831251c1031dd29131c8c23a504e1f03bb5ae03fcd2b16c90",
+      "after_sha256": "3f0f7681e17c69349e6801d669731c2d6399b9452afb5c61f71806aefb087708",
+      "proof": "N3485 [basic.start.init]/2; [expr.const]"
+    },
+    {
+      "path": "pa19/tests/spec/100-explicit-instantiation-after-explicit-specialization-no-effect.ref",
+      "before_sha256": "08f0cd24ada922d025131c15eda96cd84b3bad76932cf8b4eeeaa71c83797488",
+      "after_sha256": "65421f3edea40590fb93ea028f672a02dbe1f09fc5347cfdbc3bf60a7d903d8a",
+      "proof": "N3485 [temp.explicit]/5"
+    },
+    {
+      "path": "pa19/tests/general/400-qualified-member-variable-template-class-value.ref",
+      "before_sha256": "5dfb11512048c4801768af6ed4d5bac0e2713a2ce50034bcb36814885aff7d9b",
+      "after_sha256": "55e9fb1139b6401dabc5d8ba0693418bcb7f0c074cc33b869ffb1233331ff6d6",
+      "proof": "PA16 constant object initialization; N3485 [basic.start.init]/2"
+    }
+  ]
+}

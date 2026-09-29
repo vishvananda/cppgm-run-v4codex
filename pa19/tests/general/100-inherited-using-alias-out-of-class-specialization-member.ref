@@ -1,3 +1,6 @@
+global @__pa92_array_0 [binding=internal, storage=readonly] = {
+  u16 0
+}
 function @lib__traits_char16_t___compare(%lhs : ptr, %rhs : ptr, %n : i64) -> i32 [binding=weak, object=_ZN3lib6traitsIDsE7compareEPKDsS3_m, inline_hint=yes] {
   slot $lhs : ptr
   slot $rhs : ptr
@@ -68,9 +71,9 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $lhs
-    store u16 0, %t1
+    copyobj 2x2 @__pa92_array_0, %t1
     %t2 = addr $rhs
-    store u16 0, %t2
+    copyobj 2x2 @__pa92_array_0, %t2
     %t3 = addr $lhs
     %t4 = addr $rhs
     %t5 = convert sext i64 i32 1

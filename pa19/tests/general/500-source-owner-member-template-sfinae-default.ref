@@ -1,4 +1,4 @@
-global @__cppgm_class_template_identity_2_0_0__npos : i32 [storage=readonly, binding=weak, object=_ZN11string_likeIcE4nposE] = 0
+declare global @__cppgm_class_template_identity_2_0_0__npos : i32 [storage=readonly, binding=weak, object=_ZN11string_likeIcE4nposE]
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $s : obj<1x1>

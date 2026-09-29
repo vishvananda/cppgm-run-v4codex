@@ -1,6 +1,6 @@
+declare global @__cppgm_class_template_identity_5_1_0__npos : i32 [storage=readonly, binding=weak, object=_ZN7wrapperI19basic_stream_socketI3tcp8executorEE4nposE]
 declare function @declval__ov2() -> ptr [binding=weak, object=_Z7declvalIiEOT_v]
 
-global @__cppgm_class_template_identity_5_1_0__npos : i32 [storage=readonly, binding=weak, object=_ZN7wrapperI19basic_stream_socketI3tcp8executorEE4nposE] = 0
 
 function @handler(%__param0 : i32) -> void [binding=strong, object=_Z7handleri] {
   slot $__param0 : i32

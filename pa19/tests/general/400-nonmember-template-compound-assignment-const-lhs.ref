@@ -1,7 +1,7 @@
 global @free1 [binding=internal, object=_Z5free1] = {
   zero 1
 }
-global @_1 : ptr [binding=strong, object=_Z2_1] = zero
+global @_1 : ptr [binding=strong, object=_Z2_1] = addr @free1
 
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $cond__1 : i32
@@ -35,10 +35,4 @@ function @operator__(%__param0 : ptr [pass=by_address, object_bytes=1], %__param
     store ptr %__param0, $__param0
     store ptr %__param1, $__param1
     return i32 7
-}
-function @__cppgm_init() -> void [role=init, binding=internal] {
-  block ^entry:
-    %t1 = addr @free1
-    store ptr %t1, @_1
-    return void
 }
