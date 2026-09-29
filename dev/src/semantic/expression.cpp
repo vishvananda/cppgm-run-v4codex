@@ -48,6 +48,22 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
+    // Reused fixed template facts share type/conversions, but capture storage
+    // belongs to this checked occurrence and enclosing closure specialization.
+    unsigned capture = 0;
+    if (ast[n].kind == Kind::KeywordLiteral && ast[n].op == KW_THIS) capture = capture_object(0);
+    if (ast[n].kind == Kind::IdExpression && result.entity) {
+        if (nonstatic_field(result.entity)) capture = capture_object(0);
+        else if (!entities[result.entity].constant.valid) capture = capture_object(result.entity);
+    }
+    if (ast[n].kind == Kind::Call && result.object_use) {
+        auto use = object_uses[result.object_use];
+        if (use.type && !use.node) capture = capture_object(0);
+    }
+    if (capture) {
+        auto use = object_uses[result.object_use]; use.capture = capture;
+        result.object_use = object_uses.size(); object_uses.push_back(use);
+    }
     demand_function_expression(result);
     bool storage = (!unevaluated_depth || active_default_fact) && definitions;
     bool substituted = ast.nodes.occurrences[n].context != 0;
@@ -98,8 +114,6 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     }
     case Kind::KeywordLiteral:
         if (ast[n].op == KW_THIS) {
-            if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth)
-                throw std::runtime_error("this requires lambda capture");
             r.type = implicit_object_type(s);
             if (!r.type) throw std::runtime_error("this outside nonstatic member");
             return r;
@@ -128,12 +142,6 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
         r.type = value_type(entities[e].type);
-        if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth &&
-            (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Parameter) &&
-            !entities[e].is_static && !entities[e].external_decl && !entities[e].constant.valid &&
-            scopes[entities[e].owner].kind != ScopeKind::Namespace && scopes[entities[e].owner].kind != ScopeKind::Class &&
-            !encloses(entities[current_function].scope,entities[e].owner))
-            throw std::runtime_error("automatic variable requires lambda capture");
         if (entities[e].constant.valid && scopes[entities[e].owner].kind != ScopeKind::Namespace &&
             scopes[entities[e].owner].kind != ScopeKind::Class) {
             ScopeId use = s;
@@ -143,8 +151,6 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             }
         }
         if (nonstatic_field(e)) {
-            if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth)
-                throw std::runtime_error("member use requires lambda capture");
             TypeId object = implicit_object_type(s);
             if (object) {
                 size(types[object].child);

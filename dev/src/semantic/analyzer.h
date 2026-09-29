@@ -159,7 +159,16 @@ public:
         NodeId source = 0;
         TypeId signature = 0;
         unsigned ordinal = 0;
+        unsigned first_capture = 0, last_capture = 0, parent = 0;
+        TypeId this_type = 0;
+        unsigned char capture_default = 0;
+        bool has_introducer = false;
     };
+    struct ClosureCapture {
+        EntityId object = 0, field = 0;
+        unsigned source = 0, next = 0;
+    };
+    std::vector<ClosureCapture> closure_captures = std::vector<ClosureCapture>(1);
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
     const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
 private:
@@ -321,6 +330,10 @@ private:
     Index field_index, local_class_names, local_enum_functions, local_enum_ordinals;
     std::vector<Closure> closures = std::vector<Closure>(1);
     Index closure_entities, closure_functions, closure_occurrences, closure_adapters;
+    Index closure_capture_index;
+    unsigned require_capture(unsigned closure, EntityId object);
+    unsigned capture_object(EntityId object);
+    void prepare_captures(unsigned closure, ScopeId scope);
     Expression lambda_expression(NodeId n, ScopeId s);
     void bind_lambda_body(NodeId n, ScopeId s);
     void finish_closures();

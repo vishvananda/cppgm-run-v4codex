@@ -80,6 +80,7 @@ Value Procedural::expression(NodeId n, bool location)
     switch (node.kind) {
     case Kind::Lambda: {
         auto value = class_address(sem.object_fact(n).temporary,fact.type);
+        initialize_closure(n,value);
         value.type = fact.type; value.address = true; return value;
     }
     case Kind::New: return placement_new(n);
@@ -96,11 +97,17 @@ Value Procedural::expression(NodeId n, bool location)
     }
     case Kind::KeywordLiteral:
         if (node.op == KW_THIS) {
-            Value v = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}); v.type = fact.type; return v;
+            auto capture = sem.object_fact(n).capture;
+            Value v = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}); v.type = fact.type; return v;
         }
         return Value(node.op == KW_NULLPTR ? Operand::null() : Operand::integer(node.op == KW_TRUE),
         node.op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);
     case Kind::IdExpression:
+        if (auto capture = sem.object_fact(n).capture) {
+            if (!sem.nonstatic_field(fact.entity)) {
+                auto value = captured_address(capture); value.type = fact.type; value.address = true; return value;
+            }
+        }
         if (sem.entities[fact.entity].constant.valid && reference(sem.entities[fact.entity].constant.type))
             return constant_operand(sem.entities[fact.entity].constant,fact.type);
         if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
@@ -115,7 +122,8 @@ Value Procedural::expression(NodeId n, bool location)
             auto storage = sem.injected_storage(fact.entity);
             while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
             if (storage) { Value v = binding(fact.entity); v.type = fact.type; return v; }
-            Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            auto capture = sem.object_fact(n).capture;
+            Value base = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
             Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
         }
         return binding(fact.entity);
@@ -359,7 +367,7 @@ Value Procedural::call(NodeId n, Value destination)
     for (unsigned j = 0; j < fact.argument_count; ++j) {
         auto arg = sem.call_argument(fact,j), target = sem.conversion_fact(fact.conversions+j).target;
         if (reference(target)) target = sem.types[target].child;
-        storage_only &= ast[arg].kind == Kind::Lambda && sem.types.unqualified(target) == sem.types.unqualified(sem.expression_fact(arg).type);
+        storage_only &= ast[arg].kind == Kind::Lambda && !sem.closure(sem.types[sem.expression_fact(arg).type].entity).first_capture && sem.types.unqualified(target) == sem.types.unqualified(sem.expression_fact(arg).type);
     }
     // Captureless arguments only require addressable storage. Finish receiver
     // activation before allocating those slots; the actual call opens its
@@ -380,7 +388,7 @@ Value Procedural::call(NodeId n, Value destination)
                 object = expression(object_use.node, true);
                 object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
             }
-        } else object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+        } else object = object_use.capture ? captured_address(object_use.capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         object = base_projection(object,object_use.qualifier_adjustment);
         call_work.push_back(base_projection(object,object_use.adjustment).operand);
     } else if (object_use.node) {

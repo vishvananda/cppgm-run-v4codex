@@ -104,7 +104,6 @@ TypeId Analyzer::implicit_object_type(ScopeId s)
         // A closure's ABI receiver is not source-language `this`. An
         // unevaluated use observes the enclosing lexical member context;
         // an evaluated use would need a capture.
-        if (unevaluated_depth == body_evaluation_depth) return 0;
         s = scopes[s].parent; e = 0;
     }
     if (!e || !entities[e].member_info || entities[e].is_static) return 0;

@@ -344,6 +344,7 @@ struct BaseAdjustment {
     bool ambiguous = false, laid_out = false;
 };
 struct ObjectUse {
+    unsigned capture = 0; // Checked closure field containing an object address or source this.
     EntityId callable_entry = 0; // Receiver-free closure ABI; selected declaration stays on the call.
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0, callee = 0; // Actual callable of an intrinsic invocation.

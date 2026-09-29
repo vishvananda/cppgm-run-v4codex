@@ -130,6 +130,8 @@ class Procedural {
     void begin_full_expression(NodeId n, bool omit_result = false);
     void finish_full_expression(std::uint32_t stop);
     void closure_adapter(EntityId e);
+    void initialize_closure(NodeId n, Value destination);
+    Value captured_address(unsigned capture);
     void guard_expression(NodeId n, bool storage_ready = false);
     void open_expression_region();
     void close_expression_region();

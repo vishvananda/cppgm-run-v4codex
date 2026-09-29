@@ -3,6 +3,15 @@
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
 Target: **PA20 full-stage**. Phase: **checkpoint audit complete; stage incomplete**.
+Implementation 98 entry: `e75e0d6ce1e26a2d50bc0857cd620974c6ee451d`,
+121/144 passing. Capture environments are the initial shared owner (17 failures):
+closure occurrence plus enclosing specialization owns pointer fields and indexed
+capture edges; checked expressions publish field/receiver identities for direct
+typed lowering. Nested closures forward those edges through lexical parents.
+Work/storage must track captures and actual lexical edges, with no syntax replay
+or name lookup in lowering. Validate required fixtures, executable local/this,
+nested/pack/copy/access controls, and frozen compiler/native performance evidence.
+Extend into adjacent conversion/lifecycle groups where the same facts suffice.
 Reviewed the entire base-to-tip range: all ten implementation commits across
 handoffs 94–96, their four boundary/evidence commits, and audit fix `882cf523`.
 The following records-only commit is outside that code boundary.

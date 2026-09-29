@@ -19,12 +19,12 @@ bool Analyzer::private_scalar(EntityId object) const
 void Analyzer::observe_scalar(NodeId n)
 {
     EntityId e = expressions[n].entity;
-    if (closure_functions.get(current_function) && unevaluated_depth == body_evaluation_depth && e &&
-        (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Parameter) &&
-        !entities[e].is_static && !entities[e].external_decl &&
-        scopes[entities[e].owner].kind != ScopeKind::Namespace && scopes[entities[e].owner].kind != ScopeKind::Class &&
-        !encloses(entities[current_function].scope,entities[e].owner))
-        throw std::runtime_error("odr-use requires lambda capture");
+    if (auto capture = e ? capture_object(e) : 0) {
+        auto value = expressions[n];
+        if (!value.object_use) record_object(value,0,0,0);
+        object_uses[value.object_use].capture = capture;
+        expressions.set(n,value);
+    }
     if (unevaluated_depth) return;
     if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) entities[e].emission |= Entity::Used;
     if (private_scalar(e)) { scalar_observations.put(e,1); ++scalar_observation_count; }

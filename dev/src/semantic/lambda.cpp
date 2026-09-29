@@ -49,7 +49,6 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     if (auto known = closure_occurrences.get(n)) {
         Expression result; result.type = entities[closures[known].entity].type; return result;
     }
-    if (ast[child(n,Kind::LambdaIntroducer)].first) throw std::runtime_error("capturing lambda outside implemented surface");
     auto d = child(n,Kind::LambdaDeclarator), body = child(n,Kind::Compound);
     demand_region(body);
     check_declarator(ast,d);
@@ -82,9 +81,12 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     closure.signature = types.function(types.fundamental(FT_VOID),params,variadic);
     for (auto scope = s; scope; scope = scopes[scope].parent)
         if (scopes[scope].kind == ScopeKind::Function) { closure.enclosing = scopes[scope].entity; break; }
+    closure.parent = closure_functions.get(closure.enclosing);
+    closure.this_type = implicit_object_type(s);
     class_facts[info].local_function = closure.enclosing;
     auto id = closures.size(); closures.push_back(closure);
     closure_entities.put(cls,id); closure_functions.put(fn,id); closure_occurrences.put(n,id);
+    prepare_captures(id,s);
     function_defaults(fn,d,s,n);
     // Check the retained body immediately, but keep its odr-use edges dormant
     // until the call operator is selected. This is a body scope, never a copy
@@ -99,6 +101,9 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     // contextual-bool/constant rules, independently of runtime body demand.
     exception_specification(fn,d,entities[fn].scope);
     demand_exception_specification(fn);
+    if (closures[id].has_introducer) {
+        Expression result; result.type = entities[cls].type; return result;
+    }
     auto call_type = types[entities[fn].type];
     auto pointer = types.compound(TypeKind::Pointer,types.function(call_type.child,params,variadic));
     auto conversion_name = ids.intern(TextView("__closure_conversion",20));
