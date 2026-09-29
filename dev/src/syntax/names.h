@@ -11,6 +11,7 @@ struct Binding {
     ScopeId owner = 0, target = 0;
     IdentifierId name = 0;
     Category category = Category::Unknown;
+    bool alternatives = false;
 };
 
 // TU-owned flat table keyed by (scope identity, interned identifier).

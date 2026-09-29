@@ -119,7 +119,7 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
             potential = end && in.is("(",end);
         }
     }
-    if (in.is("<") && potential) {
+    if (in.is("<") && potential && (!binding.alternatives || force_template || probe_angles(0))) {
         if (qualified && !explicit_template) ++qualified_angles;
         ast.append(part, template_arguments());
     }

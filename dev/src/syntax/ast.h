@@ -217,7 +217,7 @@ public:
     const Node& operator[](NodeId id) const { return nodes[id]; }
     // A view projects structural edges through a context without copying syntax.
     Node view(NodeId id) const {
-        if (!nodes.occurrences[id].context && paren_roles.empty() && source_resolutions.empty()) return nodes[id];
+        if (!nodes.occurrences[id].context && paren_roles.empty()) return nodes[id];
         return project_view(id);
     }
     Node source_view(NodeId id) const;
@@ -227,10 +227,10 @@ public:
     struct ParenResolution { NodeId parameters, before, name; };
     std::vector<ParenResolution> paren_resolutions = std::vector<ParenResolution>(1);
     IdIndex paren_roles;
-    // Only grammar-ambiguous wrappers get an interpretation. Children retain
-    // source identity; this is not a second syntax/semantic tree.
-    IdIndex source_resolutions;
-    std::vector<Node> resolved_nodes = std::vector<Node>(1);
+    // Grammar interpretation finishes before source-region publication. A bit
+    // per published source node guards that boundary without a lookup on every
+    // subsequent AST read or a duplicate graph of resolved wrappers.
+    std::vector<std::uint64_t> published_source;
     void resolve_source_node(NodeId id, Node node);
     Node project_view(NodeId id) const;
     void expanded_children(NodeId parent, const std::vector<NodeId>& children);
@@ -296,6 +296,7 @@ public:
 };
 
 const char* kind_name(Kind kind);
+int expression_precedence(ETokenType op);
 void write_ast(std::ostream& out, const Ast& ast, NodeId root, const IdentifierTable& ids);
 void write_inline(std::ostream& out, const Ast& ast, NodeId node, const IdentifierTable& ids);
 

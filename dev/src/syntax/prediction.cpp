@@ -5,6 +5,10 @@ namespace cppgm { namespace syntax {
 std::size_t Parser::probe_angles(std::size_t ahead)
 {
     std::size_t cached = in.angle_end(ahead);
+    if (cached == std::size_t(-1)) {
+        if (ast.telemetry) ++angle_hits;
+        return ahead;
+    }
     if (cached != ahead) {
         if (ast.telemetry) ++angle_hits;
         return cached;
@@ -20,7 +24,13 @@ std::size_t Parser::probe_angles(std::size_t ahead)
     bool qualified = false;
     for (std::size_t i = ahead + 1;; ++i) {
         if (ast.telemetry) ++angle_work;
-        if (in.peek(i).kind == PostTokenKind::eof || in.is(";", i) || in.is("}", i)) return ahead;
+        if (in.peek(i).kind == PostTokenKind::eof || in.is(";", i) || in.is("}", i)) {
+            // Each still-open prefix has the same terminal failure. Remember
+            // it on the live cursor tokens so a chain of relational candidates
+            // does not repeatedly scan the rest of the statement.
+            for (auto open : angle_stack) in.remember_angle(open,std::size_t(-1));
+            return ahead;
+        }
         if (identifier(i)) {
             head = qualified ? names.qualified(owner,in.peek(i).text) : names.lookup(scope,in.peek(i).text);
             qualified = false;

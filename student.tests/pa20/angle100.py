@@ -45,5 +45,25 @@ runner.BAD = {
     'explicit_template_is_not_relational': PREFIX + 'int main(){' + DECL + '{' + DECL.replace('::pick','::template pick') + '}}',
     'missing_rhs': PREFIX + 'int main(){box<>value;' + DECL.replace('> value;', '> absent;') + '}',
 }
+runner.GOOD.update({
+    'qualified_relation': PREFIX + 'int main(){box<>value;select<sizeof(value)>::pick<0> value;return hits!=1;}',
+    'unclosed_relation': PREFIX + 'int main(){return select<sizeof(box<>)>::pick < 1 ? 0 : 1;}',
+    'unclosed_statement': PREFIX + 'int main(){select<sizeof(box<>)>::pick < 1;}',
+    'dereferenced_operand': PREFIX + 'int main(){' + DECL + 'box<>*p=&value;{' + DECL.replace('> value;','> *p;') + '}return hits!=1;}',
+    'parenthesized_operand': PREFIX + 'int main(){' + DECL + '{' + DECL.replace('> value;','> (value);') + '}return hits!=1;}',
+    'subscript_operand': PREFIX + 'int main(){' + DECL + 'box<>a[2];{' + DECL.replace('> value;','> a[1];') + '}return hits!=1;}',
+    'call_operand': PREFIX + 'box<> object;box<>&get(){return object;}int main(){' + DECL + '{' + DECL.replace('> value;','> get();') + '}return hits!=1;}',
+    'multiple_arguments': (PREFIX + 'int main(){' + BODY.replace('pick<0>','pick<0,1>') + 'return hits!=1;}').replace('template<int = 0>','template<int = 0,int = 0>').replace('template<int>struct pick','template<int,int>struct pick'),
+})
+for name, operand, value, expected in (
+    ('logical_or','0||1',2,2), ('logical_and','0&&0',-1,1),
+    ('bitwise_or','0|1',2,2), ('equality','0==0',2,2),
+    ('conditional','0?0:1',2,2), ('relational','0<1',2,2),
+    ('arithmetic','1+2',2,2), ('parenthesized','(0||1)',2,1),
+):
+    head = PREFIX.replace('template<int = 0>','template<int N = 0>').replace('member = 0','member = N').replace('int, const box&','int x, const box&').replace('++hits','hits+=x+1').replace('int pick=0','int pick='+str(value))
+    runner.GOOD['precedence_'+name] = head+'int main(){'+DECL+'{'+DECL.replace('pick<0>','pick<'+operand+'>')+'}return hits!='+str(expected)+';}'
+for n in (40,600):
+    runner.GOOD['unclosed_chain_'+str(n)] = PREFIX+'int main(){return !('+' && '.join('select<sizeof(box<>)>::pick < 1' for _ in range(n))+');}'
 if __name__ == '__main__':
     sys.exit(0 if runner.run(Path(sys.argv[1]).resolve(),Path(sys.argv[2])) else 1)

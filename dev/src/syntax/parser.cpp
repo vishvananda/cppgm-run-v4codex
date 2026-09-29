@@ -59,6 +59,7 @@ bool Parser::type_start(std::size_t ahead)
     }
     NameProbe probe = probe_name(ahead);
     if (!probe.valid || !probe.terminal || probe.special) return false;
+    if (probe.binding.alternatives && in.is("<",probe.end)) return false;
     if (probe.binding.category != Category::Unknown) return type_category(probe.binding.category);
     return lexical_hint(probe.terminal) & 1;
 }

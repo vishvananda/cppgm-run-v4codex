@@ -111,12 +111,13 @@ std::size_t Cursor::matching(std::size_t ahead)
 std::size_t Cursor::angle_end(std::size_t ahead)
 {
     Token token = peek(ahead);
+    if (token.angle_end == std::size_t(-1)) return token.angle_end;
     return token.angle_end ? token.angle_end - consumed : ahead;
 }
 
 void Cursor::remember_angle(std::size_t open, std::size_t end)
 {
-    pending_[(head_ + open) % pending_.size()].angle_end = consumed + end;
+    pending_[(head_ + open) % pending_.size()].angle_end = end == std::size_t(-1) ? end : consumed + end;
 }
 
 void Cursor::close_angle()

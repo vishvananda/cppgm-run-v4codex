@@ -6,11 +6,9 @@ void Ast::resolve_source_node(NodeId id, Node node)
     if (nodes.occurrences[id].context)
         throw std::logic_error("source grammar interpretation during instantiation");
     auto source = nodes.occurrences[id].source;
-    auto index = source_resolutions.get(source);
-    if (!index) {
-        index = resolved_nodes.size(); resolved_nodes.push_back(node);
-        source_resolutions.put(source,index);
-    } else resolved_nodes[index] = node;
+    if (source/64 < published_source.size() && (published_source[source/64] & (std::uint64_t(1) << (source%64))))
+        throw std::logic_error("source grammar interpretation after publication");
+    nodes[id] = node;
 }
 void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId before)
 {
@@ -25,7 +23,6 @@ void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId
 Node Ast::source_view(NodeId id) const
 {
     Node result = nodes[id];
-    if (auto resolution = source_resolutions.get(nodes.occurrences[id].source)) result = resolved_nodes[resolution];
     if (auto role = paren_roles.get(nodes.occurrences[id].source)) {
         auto r = paren_resolutions[role/8];
         switch (role%8) {
@@ -47,7 +44,7 @@ NodeId Ast::projected(NodeId source, std::uint32_t context) const
 }
 Node Ast::project_view(NodeId id) const
 {
-    Node result = paren_roles.empty() && source_resolutions.empty() ? nodes[id] : source_view(id);
+    Node result = paren_roles.empty() ? nodes[id] : source_view(id);
     auto context = nodes.occurrences[id].context;
     if (context) {
         result.first = projected(result.first,context); result.last = projected(result.last,context);
@@ -85,6 +82,9 @@ std::uint32_t Ast::source_region(NodeId root)
         auto source = work[i];
         if (!source || seen.get(source)) continue;
         seen.put(source,1); region_nodes.push_back(source);
+        auto identity = nodes.occurrences[source].source;
+        if (published_source.size() <= identity/64) published_source.resize(identity/64+1);
+        published_source[identity/64] |= std::uint64_t(1) << (identity%64);
         auto node = source_view(source);
         if (node.detail) work.push_back(node.detail);
         if (node.kind == Kind::Template)

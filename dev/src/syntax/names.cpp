@@ -149,8 +149,11 @@ void Names::bind(ScopeId scope, IdentifierId name, Category category, ScopeId ta
     // Specialization selection belongs to semantics. Keep a possible template
     // category regardless of which specialization was parsed most recently.
     // Ordinary lexical scopes still replace a hidden declaration normally.
-    if (scopes_[scope].alternatives && template_category(entry.category) && !template_category(category))
-        category = entry.category;
+    if (scopes_[scope].alternatives && entry.category != Category::Unknown &&
+        template_category(entry.category) != template_category(category)) {
+        entry.alternatives = true;
+        if (template_category(entry.category)) category = entry.category;
+    }
     entry.owner = scope;
     entry.name = name;
     entry.category = category;

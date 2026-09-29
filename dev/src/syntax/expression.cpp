@@ -2,8 +2,7 @@
 #include <stdexcept>
 
 namespace cppgm { namespace syntax {
-namespace {
-int precedence(ETokenType op)
+int expression_precedence(ETokenType op)
 {
     switch (op) {
     case OP_COMMA: return 1;
@@ -25,14 +24,13 @@ int precedence(ETokenType op)
     default: return 0;
     }
 }
-}
 
 NodeId Parser::expression(int minimum)
 {
     NodeId left = unary();
     for (;;) {
         Token op = in.peek();
-        int p = precedence(op.op);
+        int p = expression_precedence(op.op);
         if (p < minimum || (angle_expression && (op.op == OP_GT || op.op == OP_RSHIFT))) break;
         in.take();
         NodeId node = ast.make(p == 2 ? Kind::Assignment : Kind::Binary, op);
