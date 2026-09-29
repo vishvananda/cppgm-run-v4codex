@@ -151,7 +151,7 @@ class Procedural {
     unsigned exception_selector(TypeId type);
     void try_statement(NodeId n);
     Value throw_expression(NodeId n);
-    void exit_exception_contexts();
+    void exit_exception_contexts(NodeId target = 0, std::uint32_t stop = 0);
     void exception_fallback();
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false, bool effects_only = false);

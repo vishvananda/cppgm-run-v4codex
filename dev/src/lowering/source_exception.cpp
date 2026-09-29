@@ -117,14 +117,19 @@ Value Procedural::throw_expression(NodeId n)
     if (exception_context && !exception_contexts[exception_context].handler) emit(Opcode::EhEnd,IRType(),{});
     exception_fallback(); return Value();
 }
-void Procedural::exit_exception_contexts()
+void Procedural::exit_exception_contexts(NodeId target, std::uint32_t stop)
 {
-    for (auto i = exception_context; i; i = exception_contexts[i].parent) {
+    auto saved = exception_context;
+    for (auto i = exception_context; i && exception_contexts[i].node != target; i = exception_contexts[i].parent) {
         auto c = exception_contexts[i]; clean_inline(live,c.live);
         emit(Opcode::EhEnd,IRType(),{});
         if (c.handler) emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});
+        exception_context = c.parent;
     }
-    clean_inline(live,0);
+    if (target && (!exception_context || exception_contexts[exception_context].node != target))
+        throw std::logic_error("jump exception target is not an active ancestor");
+    clean_inline(live,stop);
+    exception_context = saved;
 }
 void Procedural::try_statement(NodeId n)
 {

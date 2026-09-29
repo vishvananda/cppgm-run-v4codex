@@ -9,7 +9,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
     // may leave prefixes but cannot enter a prefix absent at its origin.
     // DFS intervals answer that ancestor test in O(1) per control-flow edge.
     struct Frame { unsigned child = 0, next = 0, enter = 0, leave = 0; };
-    struct Label { NodeId node; unsigned frame; std::uint32_t live; };
+    struct Label { NodeId node; unsigned frame; std::uint32_t live; NodeId exception; };
     struct Jump { NodeId node; unsigned frame; };
     std::vector<Frame> frames(1);
     std::vector<Label> labels(1);
@@ -18,6 +18,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
     unsigned active = 0, switch_entry = 0;
     std::uint32_t live = 0, break_live = 0, continue_live = 0;
     NodeId context = 0;
+    NodeId exception = 0, break_exception = 0, continue_exception = 0;
     auto enter_initialization = [&]() {
         unsigned parent = active;
         Frame frame; frame.next = frames[parent].child;
@@ -68,22 +69,37 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         }
         if (k == Kind::Label) {
             if (names.get(ast[n].text)) throw std::runtime_error("duplicate label");
-            names.put(ast[n].text, labels.size()); labels.push_back({n, active, live});
+            names.put(ast[n].text, labels.size()); labels.push_back({n, active, live, exception});
         }
         if (k == Kind::Goto) { jumps.push_back({n, active}); record_use(); return; }
         if (k == Kind::Return) {
             use.context = body;
             auto key_id = key(live, body); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
-        if (k == Kind::Break || k == Kind::Continue) { use.target = k == Kind::Break ? break_live : continue_live; record_use(); return; }
+        if (k == Kind::Break || k == Kind::Continue) {
+            use.target = k == Kind::Break ? break_live : continue_live;
+            auto target = k == Kind::Break ? break_exception : continue_exception;
+            if (target) jump_exception_targets.put(n,target);
+            record_use(); return;
+        }
         if (k == Kind::ExpressionStatement || k == Kind::Iteration || k == Kind::Throw) { record_use(); return; }
         if (k == Kind::Case || k == Kind::Default) cases.push_back({active, switch_entry});
         unsigned saved = active, saved_switch = switch_entry;
         auto saved_live = live, saved_break = break_live, saved_continue = continue_live;
         NodeId saved_context = context;
-        if (k == Kind::Handler) { enter_initialization(); add_object(facts[n].entity); }
+        auto saved_exception = exception, saved_break_exception = break_exception, saved_continue_exception = continue_exception;
+        if (k == Kind::Try) {
+            // A jump may leave a protected body, but may not enter it. The
+            // target's lexical owner is retained once for direct lowering.
+            enter_initialization(); exception = n; visit(ast[n].first);
+            active = saved; live = saved_live; exception = saved_exception;
+            for (auto h = ast[ast[n].first].next; h; h = ast[h].next) visit(h);
+            record_use(); return;
+        }
+        if (k == Kind::Handler) { exception = n; enter_initialization(); add_object(facts[n].entity); }
         if (k == Kind::RangeFor) {
             break_live = live; context = n;
+            break_exception = continue_exception = exception;
             if (binding_only) {
                 enter_initialization();
                 visit(ast[n].last);
@@ -101,11 +117,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             }
             record_use(); active = saved; live = saved_live;
             break_live = saved_break; continue_live = saved_continue; context = saved_context;
+            break_exception = saved_break_exception; continue_exception = saved_continue_exception;
             return;
         }
         bool loop = k == Kind::While || k == Kind::For || k == Kind::Do;
-        if (loop || k == Kind::Switch) { break_live = live; context = n; }
-        if (loop) continue_live = live;
+        if (loop || k == Kind::Switch) { break_live = live; context = n; break_exception = exception; }
+        if (loop) { continue_live = live; continue_exception = exception; }
         bool scope = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::If ||
             k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do || k == Kind::Try || k == Kind::Handler;
         if (k == Kind::Switch) switch_entry = active;
@@ -117,6 +134,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         use.exit = live; record_use();
         if (scope) { active = saved; live = saved_live; }
         break_live = saved_break; continue_live = saved_continue; context = saved_context;
+        exception = saved_exception; break_exception = saved_break_exception; continue_exception = saved_continue_exception;
         switch_entry = saved_switch;
     };
     ScopeId owner = scopes[facts[body].scope].parent;
@@ -141,6 +159,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         if (!label) throw std::runtime_error("undefined goto label");
         if (!ancestor(labels[label].frame, j.frame)) throw std::runtime_error("goto bypasses initialization");
         facts.edit(j.node).target = labels[label].node;
+        if (labels[label].exception) jump_exception_targets.put(j.node,labels[label].exception);
         if (auto use = lifetime_index.get(j.node)) lifetime_uses[use].target = labels[label].live;
     }
     for (const Jump& j : cases)

@@ -275,6 +275,7 @@ bool Procedural::mark_control_entries(NodeId n)
     case Kind::Compound: case Kind::Then: case Kind::Else: case Kind::Label:
     case Kind::Case: case Kind::Default: case Kind::If: case Kind::Switch:
     case Kind::While: case Kind::Do: case Kind::For: case Kind::RangeFor:
+    case Kind::Try: case Kind::Handler:
         for (NodeId c = ast[n].first; c; c = ast[c].next)
             entry |= mark_control_entries(c);
         break;
@@ -365,11 +366,11 @@ void Procedural::statement(NodeId n)
     case Kind::Goto: {
         NodeId target = sem.facts[n].target;
         if (!labels[target] || p.blocks[labels[target].index-1].owner.index != function.index) labels[target] = block();
-        clean_inline(lifetime.entry, lifetime.target);
+        exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target);
         jump(labels[target]); return;
     }
-    case Kind::Break: clean_inline(lifetime.entry, lifetime.target); jump(break_target); return;
-    case Kind::Continue: clean_inline(lifetime.entry, lifetime.target); jump(continue_target); return;
+    case Kind::Break: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(break_target); return;
+    case Kind::Continue: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(continue_target); return;
     case Kind::If: {
         BlockId yes = block(), no = block(), end;
         condition(child(n, Kind::Condition), yes, no);
