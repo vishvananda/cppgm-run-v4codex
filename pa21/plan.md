@@ -67,10 +67,15 @@ or unproved reference rewrite is used to manufacture completion.
 ## Performance and validation
 
 Current required gate logs are in validation110. Cumulative personal controls
-pass **615/616**; the only failure is the inherited supplied freestanding RTTI
+pass **620/621**; the only failure is the inherited supplied freestanding RTTI
 discrepancy, whose hosted counterpart passes. The **15048-path** contract
-inventory changes only the proved reference above. The frozen performance
-campaign is being finalized before handoff. Preserve
+inventory changes only the proved reference above. The
+[frozen performance campaign](performance110.md) records A/A and ABBA compiler/RSS and
+checked executable runtime/text. Compiler text adds **8064 bytes (0.364%)**;
+zero-argument helpers share one entry (1024-occurrence host text **57885 →
+16965 bytes** from the intermediate implementation). Required copy/helper call
+costs and normal-path-only list observations are disclosed. Larger throwing
+arrays retain **148 instructions** at extents 9/64/1024. Preserve
 [performance109](performance109.md) and all earlier observations. Spec §9 applies
 to PA21/O0: historical **+15%, +16 MiB, 5.5×** diagnostics add no exit gate.
 Required O0 costs must be measured separately from optimization benefits; no
@@ -92,4 +97,10 @@ repaired; eight required comparisons unchanged; recorded at `d9528e58`.
 110: `f724bc43` preserves review boundary; `6b3aecdb` completes catch-miss,
 static/list/array ownership and proved reference correction, **111/116**.
 `bdfdb31b` completes generated construction ownership, **113/116**.
-A measured 256/1024 duplicate-helper growth was removed for zero-argument constructor recipes; argument-bearing recipes remain occurrence-owned. Five additional prvalue controls pass. Final performance/evidence record and clean committed handoff remain pending.
+`df6e8299` removes measured 256/1024 duplicate-helper growth for zero-argument
+constructor recipes; argument-bearing recipes remain occurrence-owned. Five
+additional prvalue controls pass. Final evidence records **620/621** personal
+controls (one inherited backend limitation), **113/116** required cases,
+**3596/3596** earlier cases and a passing file audit. The evidence commit closes
+this implementation handoff; PA21 remains incomplete and returns to Ralph for
+the three groups above. Review markers remain unchanged.

@@ -1,0 +1,434 @@
+{
+  "entry": "d9528e585fd2823d25f9f3a3abaa8f0755f5832a",
+  "compiler_sha256": "518f14eed8235f50811e3cd8b3992e3ccf827154e2a90e2d2f392fbb034b0344",
+  "gates": {
+    "priorThroughTests": {
+      "command": "make test-report-through-pa20",
+      "exit": 0,
+      "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowiropt\n  LINK    lowir2native\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (3596 / 3596) =====\n",
+      "log_sha256": "624a01b82d4df3672b6c38f8f714ce090f3401a8a6b8de0070478c61c95aa37e"
+    },
+    "stageTests": {
+      "command": "make test-pa21",
+      "exit": 2,
+      "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowiropt\n  LINK    lowir2native\n===== pa21 =====\npa21/tests/general/100-function-template-local-class-specialization-identity.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-function-template-local-class-specialization-identity.my.lowir.compare.diff\npa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-source-nested-catch-miss-cleans-active-handler.my.lowir.compare.diff\npa21/tests/general/200-initializer-list-backing-array-lifetime.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-initializer-list-backing-array-lifetime.my.lowir.compare.diff\n===== TEST SUMMARY: 113 / 116 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:483: test-pa21] Error 2\n",
+      "log_sha256": "c49e20a71fa0eaf25b699d3c7acbe6ab9a8f9530900e38d4b27db46c37f736ad"
+    },
+    "throughStageTests": {
+      "command": "make test-report-through-pa21",
+      "exit": 2,
+      "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowiropt\n  LINK    lowir2native\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\npa21/tests/general/100-function-template-local-class-specialization-identity.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-function-template-local-class-specialization-identity.my.lowir.compare.diff\npa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-source-nested-catch-miss-cleans-active-handler.my.lowir.compare.diff\npa21/tests/general/200-initializer-list-backing-array-lifetime.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/200-initializer-list-backing-array-lifetime.my.lowir.compare.diff\n===== TEST SUMMARY: 3709 / 3712 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:276: test-report-through-pa21] Error 2\n",
+      "log_sha256": "e4406e1779a558da2406058d4219bb596f14d983d2d6f1098738f151d05df709"
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa21 --paths dev/src",
+      "exit": 0,
+      "output": "File audit passed for pa21 with 3 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n",
+      "log_sha256": "ca116831ff080c504689590615037e352808058d1435bfa7e24b43c4b617b01e"
+    }
+  },
+  "controls": {
+    "construction": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/construction110.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/construction"
+      ],
+      "exit": 0,
+      "total": 8,
+      "passed": 8,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/construction/results.json",
+      "evidence_sha256": "14974f537441602f14562946b5fa53d574507f29ab57f0217d01d4ae8471c763",
+      "log_sha256": "bff5ba2e0b4d912d12bedb3f142c1f31755921b5e76df7e67d35a8ec5db6cd29"
+    },
+    "closure": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/closure110.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/closure"
+      ],
+      "exit": 0,
+      "total": 27,
+      "passed": 27,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/closure/results.json",
+      "evidence_sha256": "e802c0372ccfeec4755e55a72adbe1b9cc8b9a519ea778df8b8203a81165a0f4",
+      "log_sha256": "095137feb5a3d069276d8b7d09ea6645fa827b805dfec63a62f4166f6ab398d6"
+    },
+    "jumps": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit109.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/jumps"
+      ],
+      "exit": 0,
+      "total": 22,
+      "passed": 22,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/jumps/results.json",
+      "evidence_sha256": "7f46feec537c3f24bf2c624937d727d30fe94478fa5f571f11828774d4eed5b5",
+      "log_sha256": "df9076d94ccc07492189b2d9f9901f1519995108a844e71ab74ecb95e20f0134"
+    },
+    "ownership": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/ownership108.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/ownership"
+      ],
+      "exit": 0,
+      "total": 134,
+      "passed": 134,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/ownership/results.json",
+      "evidence_sha256": "1a0420f8811afc230090d2515ee3c5ab0dd82e9444ea1e9bc7f7a281587bc2a1",
+      "log_sha256": "34db012bf83d41211845adf4866bfd94713141278ca4c7cb727da67bc4c54ba7"
+    },
+    "full_expression": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/full_expression107.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/full_expression"
+      ],
+      "exit": 0,
+      "total": 43,
+      "passed": 43,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/full_expression/results.json",
+      "evidence_sha256": "a1025f691ae7f7b54b194576b0ffba964feaefe1c530607a16fb41f0edbf13be",
+      "log_sha256": "9b8b9051d014387f3005c30694304a140a6a0a7f49e69bf92a22874dd65bdef2"
+    },
+    "exceptions": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/exceptions106.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/exceptions"
+      ],
+      "exit": 0,
+      "total": 36,
+      "passed": 36,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/exceptions/results.json",
+      "evidence_sha256": "99300354b1c7331dcd69d7d8145159407343ef21c840649e88eb6071e778b5ad",
+      "log_sha256": "be85bb1d62ee0235915dd73d3c984b8bdf6104fe775780b6fe47fe406443219e"
+    },
+    "composition": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit105.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/composition"
+      ],
+      "exit": 0,
+      "total": 16,
+      "passed": 16,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/composition/results.json",
+      "evidence_sha256": "0a4805fd4497c082734aa02ce912cfe60ddc5ace462ea6530015b35318564d84",
+      "log_sha256": "421c35d477fe38240a8f1928387bad07dce8e29b1ebcc56e5af90bd3125b4f56"
+    },
+    "prefix_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/audit105_eh.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/prefix_unwind"
+      ],
+      "exit": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/prefix_unwind/results.json",
+      "evidence_sha256": "a565722e84f78e65c21332ef051eb433f0efd076de4ee5f3a5ed9b000bed4fa7",
+      "log_sha256": "bd41ecaa2118a9a5d1cba746a58bed882c9fa874c9153f64766784d6baf95667"
+    },
+    "rtti": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/rtti102.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/rtti"
+      ],
+      "exit": 1,
+      "total": 60,
+      "passed": 59,
+      "failed": [
+        "public_base_inside_private_derived"
+      ],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/rtti/results.json",
+      "evidence_sha256": "7ce8603af58b1794675cb72b861f151f17db3ae53d3f6d7bf3f8c893626642d0",
+      "log_sha256": "0300e1ff8eb5cb6a346736a965955886c8fac1e16d134a0ba88b5b47007a5382"
+    },
+    "host_rtti": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/host_rtti102.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/host_rtti"
+      ],
+      "exit": 0,
+      "total": 48,
+      "passed": 48,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/host_rtti/results.json",
+      "evidence_sha256": "af82136b4fb995110e71c14b822307e3fb8d753331d3768b3ba06666d587afa7",
+      "log_sha256": "3a37a038f4fb56e9ad7ea3d9076407c25c7da087091cd18d270ca96f68612b6b"
+    },
+    "captures": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/capture103.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/captures"
+      ],
+      "exit": 0,
+      "total": 64,
+      "passed": 64,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/captures/results.json",
+      "evidence_sha256": "abcb52c70c0287fc70131637750ca1be5b9e7b03417485b7b6b927c0f126072b",
+      "log_sha256": "3ee4ef83e737da5e158f4f9aca7feaa72aa5756a4f7e77ec473fb7cf24390425"
+    },
+    "capture_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/capture_eh103.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/capture_unwind"
+      ],
+      "exit": 0,
+      "total": 13,
+      "passed": 13,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/capture_unwind/results.json",
+      "evidence_sha256": "c226f610a2214c0b5d933f53666b84e93fa4506d1939e8c6790676ee9dec9f75",
+      "log_sha256": "7ed45638e85d5d8440de61dc520c6add066f57f6eb256a2995f4fa05d4f88de0"
+    },
+    "lists": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/list104.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/lists"
+      ],
+      "exit": 0,
+      "total": 51,
+      "passed": 51,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/lists/results.json",
+      "evidence_sha256": "c3f3d0b41c4b20e0a37508edd2c66cb03acd007757e8f03d009b3d6f7c68e389",
+      "log_sha256": "0b8b3f4337531a2d0f0b4841b08e27666f611b8c67c79edeb7536201f01d92a7"
+    },
+    "list_unwind": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/list_eh104.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/list_unwind"
+      ],
+      "exit": 0,
+      "total": 25,
+      "passed": 25,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/list_unwind/results.json",
+      "evidence_sha256": "c4ce2882a0b18e74b8d933d2fbad507ae40316bd1ad9858331d654bd1415c861",
+      "log_sha256": "e8e97bf455f88c66f93da7a5c3d8321f0499e49e647a7b6c543db34f54fea14f"
+    },
+    "inherited_captures": {
+      "command": [
+        "/usr/bin/python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/capture98.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/inherited_captures"
+      ],
+      "exit": 0,
+      "total": 58,
+      "passed": 58,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/inherited_captures/results.json",
+      "evidence_sha256": "60fa95b08e125175414b81c42ffa9cce77ffbfb58e2a966fa664cec41186143c",
+      "log_sha256": "2d1446876a138b4903418a5a1f6f1679ddbb49d627a2af466f401abd3f7eb559"
+    },
+    "zero_slot": {
+      "exit": 0,
+      "total": 6,
+      "passed": 6,
+      "failed": [],
+      "evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/validation/zero-slot/results.json",
+      "evidence_sha256": "ea643d9ad0e2185bf07839b7427f5ca8f9c9abc51052a11629d7c54b18f30323"
+    }
+  },
+  "stageProgress": {
+    "entry_failures": [
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "current_failures": [
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t"
+    ],
+    "resolved": [
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "cases": 116
+  },
+  "coverage": {
+    "contract_paths": 15048,
+    "only_changes": [
+      "pa21/tests/general/400-handler-context-cleanup-continuation.ref"
+    ],
+    "required_sources": {
+      "pa21/tests/general/100-bad-dynamic-cast-reference.t": "7c07c0428165a5f02e22bd670d1381fa584d01fa2a9cd3da9ca9dda07ec92536",
+      "pa21/tests/general/100-bad-reference-capture.t": "870d12ae48fb5c74f2060e0c9a1d0728870afd10489f87252bff1dc3ee1b9f25",
+      "pa21/tests/general/100-capturing-lambda-local.t": "de150939efa5dd90d4fdc2a186088e5428afda3d9ed2c290050f4f0527021dc4",
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t": "4b510c6574c7ea4edea7293b48990aac5f295c9df3657bce390352416e383db1",
+      "pa21/tests/general/100-dynamic-cast-fail.t": "7034c393b875cb003d207ee890d410c0d7a29d8b1860d1faba61fe42611f5ec3",
+      "pa21/tests/general/100-dynamic-cast-same-nonpolymorphic.t": "706e55ab05e827c2c36ec11b30cec57b9fa5d5ec439aa50f76be2e8669c07fc7",
+      "pa21/tests/general/100-dynamic-cast-success.t": "644ac58fd6b5e29cb95ffb1a2d85c3e976b5b83793ab2465c224503f683a30b5",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t": "066a1531adb9a67dcbffa75c5f6da4cf5579c8688e254558376bd5df9118cdef",
+      "pa21/tests/general/100-lambda-capture-mutable.t": "8742b294f9d1e35c6d6b769bd7cd42c44e0243432675ebbc9577d6d78e4fda46",
+      "pa21/tests/general/100-lambda-default-capture-ignores-global.t": "adbbc1ea8e7518d5055906a99291893366fb0e9d23b738f5cf368598aff52678",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t": "e786631f7c1a1c625df5acd4d9d5411c3b5c8ba03365e470700a014821805795",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t": "2a08fd996ee04ec405025e1b67131390f6c496f17159f37239ce122e4625c596",
+      "pa21/tests/general/100-placement-new-constructor-unwind-cleans-scope.t": "f52df309ca11c85e984793a643e5e85f50df9aeb85191307e015c94e367e3476",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t": "45268b9a96ac7b4390bc8ee30d3d9916dd077e61e367e2f16c8d7b5fd74bc179",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t": "71c8cad68b15825f0dfc9cea9a7f0c023a6d75ffdcc33c7958f3d0b0a7b2fb34",
+      "pa21/tests/general/100-source-rethrow-through-function.t": "ef2021870908e2e2b1cda60da759bfbfde6a975f90cb2f47e4193f34abf369a4",
+      "pa21/tests/general/100-source-try-catch-int.t": "97e93366b09d6271a1e7963262d63ded7141febdeb069f26036fa408aaa348b1",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t": "d957c7d34658959f711ae5c722440754e07ca1f4d724d1ce4ff9797f904c1005",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t": "77633897241bd054a635c7e9a0fdacc8dea3d4257eddf05219ae2bda634d54c9",
+      "pa21/tests/general/100-throw-protected-destructor-bad.t": "b82d410312ab8a4bfc24e10291b90fa41b0bc4dc782e19abf0b72aa4b62b0e1c",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t": "5522bf6c7a662949b66e9cbb7d3c1907c5f87c2c6c6c9c7167eb7d281fa6c4f3",
+      "pa21/tests/general/100-typeid-pointer-rtti-global.t": "891f5042fefce28cb7ee34f26b16a8087b35b877824d9ac589707830e8e2e043",
+      "pa21/tests/general/100-typeid-polymorphic.t": "9d5823db7b0a29e1e78dc2c895a09a8710abb129d589cdfc6902347d9b587cfa",
+      "pa21/tests/general/100-typeid-template-pointer-no-eager-complete.t": "24f998113856c304ff75c7fdc167f13af2d2a6662e706767f83bc313ac2faa99",
+      "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.t": "fa03082e9099a7f87b282d895d5b2cec212447aef747546addf3b2f015e62d56",
+      "pa21/tests/general/100-typeid-template-type-parameter.t": "45883e95566cdaf7eb14782da5961ca983673a72128c3954c8d509b1c30b15fc",
+      "pa21/tests/general/100-typeid-type.t": "e7b96957f33f55558cc82689fd6145e0fa2cadf2151d89e2b3ce5cbb5da2768b",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t": "12e59cd6906de85fcb6d903e5871eb9ef8c4741406290ec249d90a5ae6686e46",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t": "6f56623e3a11a196c57533eace0f18b1748be8a39399abf1da7793c5089fce66",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t": "d23a2626243c75ac125de97c0ae82e913be95d7c8f8c8551a4c1f6d653f220b1",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t": "1521e64b12170975dbbeb74e6887c31818d693290394e45682ebf0ca373fc2e0",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t": "08c4f37b57f715f638e26e190628825e18e367ac1a618f9339548cee9918e976",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t": "3d510ef25870433627d6fb6aca34eeda4d68e4b6162a9ccd9c51e2ed30e874a2",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t": "2edddb3535bf2ecd5c540826547016c5dcc14644cc331674a645e9caccd0918f",
+      "pa21/tests/general/200-builtin-initializer-list-special-members.t": "5cd0de728cea6574dd5327b44fba76cfc34fc1e940fcdf57ead157386c610e52",
+      "pa21/tests/general/200-captured-this-explicit-member-call.t": "5f2a6ecd4816f76172bb33178ebe23351fde053dbabcfba95704b3ac3aee6af5",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t": "4113492bf971be7430b689b8b75f70fb49af74c76e38e50d092bba8330207ec2",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t": "c406b196d8689fc585c9404974e86dea91e6c4fe67e974ac840b9fcab0b9a43a",
+      "pa21/tests/general/200-class-copy-capture-local.t": "f260aea7c9b3572670197f80180614ecdfa8af8b20c02fdad4e2cd16c896d222",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t": "e517bbe822dcf517c880daa239e4d23ee2c9649e33f6d82aa0a882f27d543b38",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t": "2be88e5962d4bd81670e2a0b0a33579dde5b503d08e805a2347afc6cc303c23b",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t": "d6739b5729ce9f37abad112c3fc084f68c1244c18845d3fa4a000bf4555fd482",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t": "8e76027f680b93bbb888cca9dd5652da2d24daf9803577eb64eb55521f2bf51b",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t": "160a9160d7bab671a8cb857338385f2cd85b38cd92e4457df19c8d63eae2fc50",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t": "4e2dee3f8b2e90e69cc4846906e2275bcc47131c138bf08aac37e983082c3d22",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t": "ffab851dc2a8993bcfd266705a0ae673e73f649a29bf29d719ca6e63d7fd2a31",
+      "pa21/tests/general/200-default-capture-this-explicit-member-call.t": "ef3419e84f339b3172db87274fb433b267374e0e128bd58f83b13a1b31f3d20b",
+      "pa21/tests/general/200-default-capture-this-implicit-member-call.t": "435ec62426ad94593eeddb9d2f581b9e17498e366f0df331d34619c34f9dd32c",
+      "pa21/tests/general/200-default-reference-capture-local.t": "edb3b11294786d432dd8831e50898c495c82fddb33adce32544cc47aa97af926",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t": "9308ecb4b4b85d5269531d7d2a04063abc65676b501bad30959f7365c1ffafb2",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t": "814db856b445edaf4043d3d612231ebcabc45a3adeef08a334fe416d547c123c",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t": "c1971a478dc83cd01fdd8e7be3df78afcc2faad665cf87e0b06f2d5bf70da585",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t": "259de3c1607f8a0dcce22e97ee490d0424d8633f81c2b4d3880d971e4d21643b",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t": "56b86646a5de12de811087817a3e5b26f2a9ba5878ac0a9fe9a00be5d19832da",
+      "pa21/tests/general/200-distinct-lambda-member-template-types.t": "da55f5410abdf9699701cd4b480fda457341991ca63898f1ec9d7453f66b84ea",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t": "f20da40ca082315244ac45185e1a08aa60ab2a2b4c97a5984cfedf3b8307a8c9",
+      "pa21/tests/general/200-empty-list-selects-default-constructor.t": "c8cc42eb7a243b953847c0ca6db25decc25058cca97e85124bc0e036ab8aa83b",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t": "369ad2b8f482d510d395106a0a16cdbb8e2f1de50bca0743ab1055a52eb7efda",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t": "10b467da76153201ae911885530251b8965f6fb86781b74716b3c1c537b484ba",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t": "a06b55eaa13330cc8f52ca638bd3be70c3e7d77f1623b36cde40ee1a4f878b6e",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t": "71aafa1145b135cc9a20ae8ef8dd6768acf3e64d69f995eddc653c4331750ae6",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t": "aabd977254cceb806adbb00865aca353f1a379ebb0abcbd8394f00728d32f1dd",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t": "be685c1b4357a1a6823f92fb2eff24ac228e3b505aba8d7e36523e9d18d72757",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t": "ecebbdefeb336de3ef9b15e1073ab6bd8c787d55ac1ea826bbdf4e292443ba53",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t": "0676bc66c832ab5b334eccf65e91aa7982661c15bffca1a9cc67d901f9714211",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t": "78e8f6baf417f252a4cef516df082f33ba444064f3c81178a83aa3fad377c56e",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t": "8f89c9346f4c00d29be5530611a7a77bc0b3bb6822f4dcca02d05cb82e3d05d0",
+      "pa21/tests/general/200-hidden-eh-default-constructor-protected-base-subobject-scope.t": "f0f095ac0530db5e34eb24cfc2f87b8602fefb1224a9d2c8786ceba5ff9769cf",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t": "25a070ece15af4d8109f37937f4413a2601fe3dc995c8876e890ff1f84be204b",
+      "pa21/tests/general/200-hidden-eh-nested-default-arg-temporary-cleanup.t": "57baaa33f100d2a2f77ecc8c0e19bf27f07145fec427dd741d3778958578a110",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t": "34b0b3d3383294798fc33ad71f3d36b7812000fd73c13d223a2c2f1d922cfda4",
+      "pa21/tests/general/200-hidden-eh-shared-dispatch-nonlifo-close.t": "94aaf94fe39d22c01300b3a084a5c04999dde8aadcf06cce348adb90eed0190d",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t": "d10fbdd76f8733db6684579c995540c5197ed2117180287490892912f6fca854",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t": "b3e7c170064fe936bee063cd1716c03f9a6bcd17715d3ffb32f3d237cdb8d012",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t": "92331763e70a7226f899ce272eed9a3de18b3cb52bacdaf8ae180ff242575dd4",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t": "d62b3f9379de747ef6172d605f3165e81dc71010ff84ff4db62420d01b0b840f",
+      "pa21/tests/general/200-initializer-list-call.t": "b05aa897bea59ec082ed96e93171b2f5851417abc093026fecc5752189bb4b1e",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t": "0230f70ff8dbc5aa111ca637c1a0a44686b17ddaf013ded0186ae4626c75c9f0",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t": "b1e5c8dd5db911bf8fa533b6168ffdd006833fd71731a67ff11099ca92009cb6",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t": "810fe47dadceee6888611fc74966769ff668b16e0ca77ee35b735c9e225d500b",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t": "e7e3c1d1796e5c88a432821b15c0c6e01af8f3a029cbc3b75ce6946dfe202256",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t": "34aa7d5f0ca59a19b59bc1bf45e97f9171697073b04d763f6bc342eaf830a1f6",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t": "eaea5b2d517d6ed6d4ab499959c156c2f2cb7505e3107bd3bad60015a1b21a43",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t": "6affcb5126487467580fba200a38d17ddb5f0a820fd46d818d2433d9e3ab2bb6",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t": "a7cbf96ac4ee43b350f9e29197724ad3bb677fe8bcbb7c4775ec9037a0f7d94f",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t": "9144ee421b51b743511d7ec85a37194b566c07497a4e03817d17c0ff61c5b972",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t": "b976a6665069e87ff2b46709f2840dcd3dfc8e8bf323d44464c1666f9ca39576",
+      "pa21/tests/general/200-nested-capturing-lambda-return-owner.t": "c57ac7957886ec585b2b497dd3b22668ac50bb31c52711c96a57b9bfbd3345dc",
+      "pa21/tests/general/200-nested-capturing-lambda-template-constructor-owner.t": "0d20613700b2940897de287df5f27abe4ff6aefa2c37506e1d131fec319c349b",
+      "pa21/tests/general/200-nested-lambda-local-shadow-capture.t": "aa889773dd241b72156922780b9ba024b323371d2c0f27f724a7ced0f7801cc7",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t": "c5f1cf6d8e02a7bf0b89057bd5bb483a0055e565740023c7c028ea5e2d4801d4",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t": "4c1514b57f544df705b08f56540ff4e82e4f788b9a6472d540d026df11d7f0ab",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t": "e65a122f9e6fa8b99966aaf893198f188d4fb04483b4be5ce93297350845e366",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t": "39994857ebf965883b164d92c768120f8016f9e08a16bb862718d817f2955857",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t": "4210d532dc5eb3e7d137ec83a8d5c2d5800313308d1bdc6f5a4127257e5a68b3",
+      "pa21/tests/general/200-recursive-template-destructor-construction-cleanup.t": "c24a25377d503878b09bc75dbde3fa9fe5039799cc1b2c241f43a8adc2884f10",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t": "02a1aa9ecbb2cf6b5826e91460b3f99250576c9c99f826ccdab66cf34958651d",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t": "e024827bebdf00f506ec51b2bfa0c9b7fe1c9b044014661c9e2b238afd5a4e1e",
+      "pa21/tests/general/200-source-base-ref-catch.t": "37db9991d5dd9ae54b42286044a239f742d09433a1b1530510024c820a537ead",
+      "pa21/tests/general/200-source-catch-ellipsis.t": "0815e58ab3cdbd039f381178d94647b025adc014c9ca5fcc7f7a1b67ac4a3bc7",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t": "e5316498b0d58dc6bf133f129c25b92e9594325b925bb7862b4739a543f4d3fc",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t": "0157a6041360ec6c9c7b6a18a8dc7333ce8b5def2a73b919b0b75a7fb51e6b09",
+      "pa21/tests/general/200-template-array-reference-cv-polymorphic-cleanup.t": "69d9ad3c02f7d97c555cfbc95af074b89f55fea782053641f9a5a771318f46e9",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t": "1dfe41a2c68955f183626a806e312dc6198d04efc5f9e7fdf81785d18c9849e4",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t": "41407dfa97f8c7fb4cf2927927df50a0cf998d0076d1be8ace156a375ffc9c07",
+      "pa21/tests/general/200-typeid-comparison-requires-operator-bad.t": "dfcd30e128f712a34eeec6d4666a17a528489e79c2be58de42901de54b6464a4",
+      "pa21/tests/general/200-typeid-expression-strips-cv-reference.t": "843981fbea4ab923493572c21a388d661a553047ae8a1091e260a99bddc3ff6f",
+      "pa21/tests/general/200-typeid-fundamental-distinct.t": "b686b301c089a4a5840ed170477ebb0db0e92f94e34a6a5cd184202f43b2d264",
+      "pa21/tests/general/200-typeid-rejects-unqualified-typeinfo-bad.t": "116da5217c570653ca94e9c81416a139a4f94505b34964c52d18f266b515c649",
+      "pa21/tests/general/200-typeid-requires-std-typeinfo-bad.t": "6d1aacfd593e903947bfca4eaa5227e3a1077d26e109dc20e75a21667007a56d",
+      "pa21/tests/general/300-dynamic-cast-inaccessible-upcast-bad.t": "26997255f2745c650803ac6309c18400005f566dda70928b7211d8c1fc9c0c67",
+      "pa21/tests/general/300-dynamic-cast-removes-cv-bad.t": "6e0d84223f4032f654010dd119244e73eb415bab5f1f712ccb6da2113796c93e",
+      "pa21/tests/general/300-rtti-evaluated-call-demand.t": "fb4de409815690d6a686973fd7e4f31013ab2fd0d45cc385f8a51bb05b66e13f",
+      "pa21/tests/general/300-template-catch-variable-member-body.t": "258cf0505e4c5cc52b69bfc5005f679526962ecbe9b353662edd23585e2cc516",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t": "4c6d70eb6a6afc9b2765073bd948249185f887c99108ce413dfefbc3e028858d",
+      "pa21/tests/spec/200-inline-namespace-forward-initlist-declaration.t": "99ebe8847cf22d86f289b745cf759b95ea1dd81fb7011763083f6ac23ff83330"
+    },
+    "inventory_sha256": "267fa5fb15338b0e5414e3ff2f800530333e717ce18119fa796aeb404df75a36"
+  },
+  "reference102": {
+    "exit": 0,
+    "output_sha256": "a64336add1a382a235e71919976dde5e68a2cffb1d6630991d08fed74a666fab"
+  },
+  "reference106": {
+    "exit": 0,
+    "output_sha256": "9f343133cf8ae5148b399f99663e167c23caa1fb8072a26b19996783a9d7a1a4"
+  },
+  "reference108": {
+    "exit": 0,
+    "output_sha256": "5d4978876cb22c0b5acec47300e12bc51c21259c80dc76f2ffd141548950d50e"
+  },
+  "reference110": {
+    "exit": 0,
+    "output_sha256": "7a3f252dd11f8a80c24d92ad2130ac7457d687c5057d9a142ef4e5f8350fb5fd"
+  },
+  "implementation_diff_sha256": "0360b660e5c8d919a408dbf4d743043c10d644820d0ee1a9d6846103e687a94e"
+}
