@@ -52,6 +52,9 @@ runner.GOOD.update({
  'endpoint_defaults':'int calls;int f(){return ++calls;}struct R{int a[2];int*begin(int n=f()){return a;}int*end(int n=f()){return a+2;}};int main(){R r={{3,4}};int n=0;for(auto x:r)n+=x;return n!=7||calls!=2;}',
  'element_temporary_lifetime':'int alive;struct V{int n;V(int n):n(n){++alive;}~V(){--alive;}};struct I{int*p;V operator*(){return V(*p);}I&operator++(){++p;return *this;}bool operator!=(I o){return p!=o.p;}};struct R{int a[2];I begin(){return I{a};}I end(){return I{a+2};}};int main(){R r={{3,4}};int n=0;for(const auto&x:r){if(alive!=1)return 2;n+=x.n;}return n!=7||alive;}',
 })
+for scalar in ('int','short','volatile short','double','bool'):
+    bound=1 if scalar=='bool' else 3
+    runner.GOOD['builtin_iterator_increment_'+scalar.replace(' ','_')]=('struct I{'+scalar+'n;operator '+scalar+'&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{'+str(bound)+'};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!='+str(bound*(bound+1)//2)+';}').replace(scalar+'n;',scalar+' n;')
 runner.BAD = {
  'unused_template_list_ref':'template<class T>int f(){for(int&x:{1,2}){}}int main(){}',
  'unused_template_fixed_range':'struct R{};template<class T>int f(){R r;for(int x:r){}}int main(){}',

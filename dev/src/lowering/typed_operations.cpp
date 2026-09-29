@@ -69,9 +69,13 @@ Value Procedural::range_operation(const semantic::RangeOperation& op, const std:
                 location = Value(pointer.operand,IRType::Ptr,sem.types[c.target].child,true);
             }
             auto prior = load(location);
-            auto stride = emit(Opcode::Binary,IRType::I64,{Operand::integer(1),Operand::integer(sem.object_size(sem.types[prior.type].child))},Operation::Mul);
-            auto next = emit(Opcode::Index,IRType::I8,{prior.operand,stride.operand}); next.type = prior.type;
-            store(next,location); return location;
+            auto computation = sem.conversion_fact(op.result.conversions+op.result.count-1).target;
+            Value next;
+            if (sem.types[location.type].kind == TypeKind::Fundamental && sem.types[location.type].fundamental == FT_BOOL)
+                next = Value(Operand::integer(1),IRType::U8,location.type);
+            else next = operation(OP_PLUS,convert(prior,computation),
+                Value(Operand::integer(1),IRType::I32,sem.types.fundamental(FT_INT)),computation);
+            store(convert(next,location.type),location); return location;
         }
         throw std::logic_error("missing typed range operation");
     }

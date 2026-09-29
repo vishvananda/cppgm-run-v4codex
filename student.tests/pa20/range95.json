@@ -408,6 +408,66 @@
     "native_exit": 0
   },
   {
+    "name": "builtin_iterator_increment_int",
+    "source": "struct I{int n;operator int&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{3};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!=6;}",
+    "source_sha256": "7f8df4319c3251b088fbbeed16974fb80010e051f4144e593f4fd65e879a3956",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "builtin_iterator_increment_short",
+    "source": "struct I{short n;operator short&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{3};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!=6;}",
+    "source_sha256": "cd09d9197312f2a55adf2e0b2657d7cbd2f60e2f4b790b660fbae571e791e08b",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "builtin_iterator_increment_volatile_short",
+    "source": "struct I{volatile short n;operator volatile short&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{3};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!=6;}",
+    "source_sha256": "de949fef25e2e692b26fc75e8cf838929e38a7df556ed286027c00598aacbf14",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "builtin_iterator_increment_double",
+    "source": "struct I{double n;operator double&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{3};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!=6;}",
+    "source_sha256": "8547fea2e4abe65bd91f2c52a2fd37d15377e545f6c7e5832373d9c97fd2eb89",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "builtin_iterator_increment_bool",
+    "source": "struct I{bool n;operator bool&(){return n;}int operator*(){return int(n)+1;}bool operator!=(const I&o){return n!=o.n;}};struct R{I begin(){return I{0};}I end(){return I{1};}};int main(){R r;int total=0;for(int n:r)total+=n;return total!=1;}",
+    "source_sha256": "022ae37e653ed0a794d27bc3669e1c60ee4ee48a508e058d8c0f7d9c3015b193",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
     "name": "unused_template_list_ref",
     "source": "template<class T>int f(){for(int&x:{1,2}){}}int main(){}",
     "source_sha256": "595ccce141afb4610f89aeeb4ec0bac74d4e39f812f913e279bddf547c8717e0",
