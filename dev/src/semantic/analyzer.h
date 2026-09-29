@@ -19,6 +19,7 @@ public:
     void write_semantics(std::ostream& out, NodeId root) const;
     void telemetry(std::ostream& out) const;
     Types types;
+    const RangePlan& range_plan(NodeId n) const { return ranges[range_index.get(n)]; }
     std::vector<Entity> entities;
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
@@ -162,6 +163,15 @@ public:
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
     const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
 private:
+    Index range_index;
+    std::vector<RangePlan> ranges = std::vector<RangePlan>(1);
+    void resolve_range(NodeId n, ScopeId s);
+    void bind_template_range(NodeId n, ScopeId s);
+    RangeOperation range_endpoint(Expression object, IdentifierId name, EntityId family, ScopeId naming, ScopeId scope);
+    RangeOperation range_operator(ETokenType op, const std::vector<Expression>& args, ScopeId scope);
+    void prepare_range_operation(RangeOperation& operation, const std::vector<Expression>& args, ScopeId scope);
+    Conversion prepare_typed_conversion(Expression source, Conversion conversion, ScopeId scope, bool destination = false);
+    EntityId range_object(TypeId type, ScopeId scope, NodeId source);
     Index conversion_results, conversion_result_requests;
     std::size_t conversion_result_work = 0;
     void prepare_conversion_result(EntityId e);

@@ -77,6 +77,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
 {
     if (!n) return;
     switch (ast[n].kind) {
+    case Kind::RangeFor: resolve_range(n,s); return;
     case Kind::Compound: {
         ScopeId bs = make_scope(ScopeKind::Block, s);
         facts.edit(n).scope = bs;

@@ -261,7 +261,7 @@ bool Procedural::mark_control_entries(NodeId n)
     switch (k) {
     case Kind::Compound: case Kind::Then: case Kind::Else: case Kind::Label:
     case Kind::Case: case Kind::Default: case Kind::If: case Kind::Switch:
-    case Kind::While: case Kind::Do: case Kind::For:
+    case Kind::While: case Kind::Do: case Kind::For: case Kind::RangeFor:
         for (NodeId c = ast[n].first; c; c = ast[c].next)
             entry |= mark_control_entries(c);
         break;
@@ -327,6 +327,7 @@ void Procedural::statement(NodeId n)
         start(block());
     }
     switch (k) {
+    case Kind::RangeFor: range_statement(n); return;
     case Kind::Class:
         if (auto e = sem.anonymous_object(n)) object(e);
         return;

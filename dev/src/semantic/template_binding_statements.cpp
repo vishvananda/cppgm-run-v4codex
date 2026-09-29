@@ -8,6 +8,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
     ++template_binding_work;
     auto node = ast[n];
     switch (node.kind) {
+    case Kind::RangeFor: bind_template_range(n,s); return;
     case Kind::Compound: {
         auto block = make_scope(ScopeKind::Block,s,0,0,false); template_pattern_scopes.put(block,1); facts.edit(n).scope = block;
         for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,block);

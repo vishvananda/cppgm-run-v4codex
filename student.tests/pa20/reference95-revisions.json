@@ -1,0 +1,466 @@
+{
+  "entry": "ef897177cd34e8bf1e878a7eb94208237240c0f1",
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "local_revision": "pa20-array-images-95",
+  "proof": "pa20/reference-corrections95.md",
+  "revisions": [
+    {
+      "path": "pa20/tests/general/100-array-brace-init.ref",
+      "before_sha256": "d53b29a6d4bb3083ed18af4114c5c9a647adb26605cf31754d8e74d7a8a41815",
+      "after_sha256": "7a658b7c42e091ce28bf2b2b15b504f84913e7913fb57bebc0510c194a78ba8b",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "3"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "f4f5f5876958b31aaf732755f97b83203b117bb6ae339ddbee31c327f15e8398"
+    },
+    {
+      "path": "pa20/tests/general/100-array-brace-string-literal.ref",
+      "before_sha256": "4e5775fcf97c9096eef022fdd8a7a34b188f4a85212e131b19fbf7ea5162bca9",
+      "after_sha256": "d88f824c11294469f13887dff174dceec5474c8090b628544a65e162d321c8c6",
+      "arrays": [
+        {
+          "slot": "value",
+          "bytes": 2,
+          "alignment": 1,
+          "data": [
+            [
+              "i8",
+              "97"
+            ],
+            [
+              "i8",
+              "0"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              1,
+              "i8",
+              "97"
+            ],
+            [
+              1,
+              1,
+              "i8",
+              "0"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "d11d1e965a67ecd93a07d23974f2beb1647a9ed8bc0f74717560f66711bff294"
+    },
+    {
+      "path": "pa20/tests/general/100-range-for-array.ref",
+      "before_sha256": "dd417f9ff77d622df3fa8025e6be98c2c6f551f8c27b703ed105588bd457b6ed",
+      "after_sha256": "38ac5a87b0a6014978af3d7e101a16e736c88ccc202d3849e64a9e03ff0c0ea3",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "3"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "075850575e5149fe9293ffffb52c27e1c291d6bcd87a51bd2b3864c7bddadd1f"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-adl-begin-end.ref",
+      "before_sha256": "95e768097438bdaeb9a41c55823ecdc0f4ee7da12c55f5b5cab026f245461475",
+      "after_sha256": "0a77c3af777facec0eeb9bfa4ea845f1b7afcf998dd7c4112ed69918ac783443",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "2be1b664dcb66a7b77a1d5cdb6bda49e1718e835e205399d83a9788eac9ab53d"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-adl-ignores-enclosing-member-begin.ref",
+      "before_sha256": "f81c8b95c3378507fe18af7317d944f12222e33662e075c537e592bc72637d83",
+      "after_sha256": "d55ab937382a8bfb73b26bb390e804fb9de762fc71f0e35e45674b589f22fc26",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "3"
+            ],
+            [
+              "i32",
+              "4"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "3"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "4"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "7fc0cb837bf574293079324f410da8437049528d536ff99c771153c81ad7c6b3"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-array-const-auto-ref.ref",
+      "before_sha256": "145f7724a40fa2b3ec81cc1dd2359122b78aa9c90e57fb0ca7bbfaff379bb117",
+      "after_sha256": "74ecea04ba3f127db4c3827b2540e6dee78b5714588cd7b9d5fde1b8fb0de232",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "3"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "08db5e6f9077e0e9bb81ef9088f1051f59993ec285a41f01d3a2292ffef54072"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-array-const-ref.ref",
+      "before_sha256": "145f7724a40fa2b3ec81cc1dd2359122b78aa9c90e57fb0ca7bbfaff379bb117",
+      "after_sha256": "74ecea04ba3f127db4c3827b2540e6dee78b5714588cd7b9d5fde1b8fb0de232",
+      "arrays": [
+        {
+          "slot": "a",
+          "bytes": 12,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ],
+            [
+              "i32",
+              "3"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ],
+            [
+              8,
+              4,
+              "i32",
+              "3"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "e31ba364acad6eff6225f1853c09dcad73cb579f4fbe9598b3f6ce8cb1ec086d"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-array-value-categories.ref",
+      "before_sha256": "8a873bff0b330f9a54ab16e9aea70cb2d7623ae55e5be753fdd0b3ffdade82ed",
+      "after_sha256": "93006e078e6d0c4852f52d35a2189127339d249022bfa4c965fd1bc85d97a486",
+      "arrays": [
+        {
+          "slot": "values",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "3"
+            ],
+            [
+              "i32",
+              "4"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "3"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "4"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "09ebd33619e4a8dba3238a8d0c4271b029277e7cbe7786ff50d9058e5ef2258d"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-inherited-member-begin-end.ref",
+      "before_sha256": "43481d63f41d320fd3bc83befb89d008b3e751b188f5ebe768e0f56ef25082d8",
+      "after_sha256": "85f336818d07133f49224ae21546c979fb46c92721aaf5b64458f5d182967eb0",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "5"
+            ],
+            [
+              "i32",
+              "6"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "5"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "6"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "e5811a7221ffdbcc36d13697106f7959e51556583d0a39f6b6edb02c70dec210"
+    },
+    {
+      "path": "pa20/tests/general/200-range-for-member-begin-end.ref",
+      "before_sha256": "79cb2a92fb2e335113c1a5394ef95ad16b8b782adb26cb1cdb6de1098bbf823f",
+      "after_sha256": "dde4b3990c7212eb2ae85ccae18add698e8b8b5e58b6beb9c7f9d6f5297c0164",
+      "arrays": [
+        {
+          "slot": "data",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "28cebbf249fd0043b2a2661fd8568e84e3e614a676c516f1ab36199d7063b043"
+    },
+    {
+      "path": "pa20/tests/general/200-template-member-range-for-local.ref",
+      "before_sha256": "352a70b5d706c62a9b3d2a434d8df885ef2e1d3c2b3d316c19d557113f647a9f",
+      "after_sha256": "ee0ba2fc8b2449e5b1529002e989f3be8a8f500784dfb01adb06e597639e4bb6",
+      "arrays": [
+        {
+          "slot": "xs",
+          "bytes": 8,
+          "alignment": 4,
+          "data": [
+            [
+              "i32",
+              "1"
+            ],
+            [
+              "i32",
+              "2"
+            ]
+          ],
+          "extracted_stores": [
+            [
+              0,
+              4,
+              "i32",
+              "1"
+            ],
+            [
+              4,
+              4,
+              "i32",
+              "2"
+            ]
+          ],
+          "symbol": "@__pa95_array_0"
+        }
+      ],
+      "source_sha256": "d1a1c02657c23d4815f4c3f85c2f04f9e6a9bbf14465cb5caf98a63cb289cf50"
+    }
+  ]
+}

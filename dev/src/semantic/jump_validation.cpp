@@ -47,7 +47,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         if (!n) return;
         Kind k = ast[n].kind;
         bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::Iteration ||
-            k == Kind::If || k == Kind::For || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
+            k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
             k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default;
         if (!recorded) return;
@@ -78,6 +78,27 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         unsigned saved = active, saved_switch = switch_entry;
         auto saved_live = live, saved_break = break_live, saved_continue = continue_live;
         NodeId saved_context = context;
+        if (k == Kind::RangeFor) {
+            break_live = live; context = n;
+            if (binding_only) {
+                enter_initialization();
+                visit(ast[n].last);
+            } else {
+                auto index = range_index.get(n);
+                auto plan = ranges[index];
+                if (plan.initialize_range) add_object(plan.range);
+                add_object(plan.begin); add_object(plan.end);
+                enter_initialization();
+                break_live = continue_live = live; ranges[index].loop_live = live;
+                use.exit = live;
+                add_object(plan.variable); enter_initialization();
+                ranges[index].body_live = live;
+                visit(plan.body);
+            }
+            record_use(); active = saved; live = saved_live;
+            break_live = saved_break; continue_live = saved_continue; context = saved_context;
+            return;
+        }
         bool loop = k == Kind::While || k == Kind::For || k == Kind::Do;
         if (loop || k == Kind::Switch) { break_live = live; context = n; }
         if (loop) continue_live = live;

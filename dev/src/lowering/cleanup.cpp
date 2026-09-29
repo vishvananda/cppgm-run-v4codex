@@ -43,6 +43,7 @@ void Procedural::activate_temporary(EntityId e)
 }
 SlotId Procedural::source_slot(EntityId e)
 {
+    if (!sem.entities[e].name) return builder->add_slot(0,type(sem.entities[e].type));
     auto name = p.intern("$" + spelling(sem.entities[e].name));
     if (slot_names.get(name)) name = p.intern("$" + spelling(sem.entities[e].name) + "__" + std::to_string(e));
     slot_names.put(name, 1);

@@ -290,6 +290,10 @@ class Procedural {
     void initialize_scalar(const semantic::ScalarConsumption& consumption, Value location);
     void object(EntityId e);
     void statement(NodeId n);
+    void range_statement(NodeId n);
+    Value range_operation(const semantic::RangeOperation& operation, const std::vector<Value>& args, Value destination = Value());
+    Value typed_conversion(Value value, const semantic::Conversion& conversion, Value destination = Value());
+    void range_initialize(EntityId object, const semantic::RangeOperation& operation, const std::vector<EntityId>& args, std::uint32_t conversion);
     bool mark_control_entries(NodeId n);
     void condition(NodeId n, BlockId yes, BlockId no);
     void switch_statement(NodeId n);

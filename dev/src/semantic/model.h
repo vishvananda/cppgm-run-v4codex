@@ -377,6 +377,26 @@ struct CallSelection {
     EntityId entity = 0, conflicting = 0;
     CallFailure failure = CallFailure::NoViable;
 };
+// Implicit language operations consume typed values, never manufactured AST
+// nodes. Conversions include the receiver first for a nonstatic member call.
+struct RangeOperation {
+    Expression result;
+    EntityId function = 0, temporary = 0;
+    TypeId returned = 0;
+    ETokenType op = TOK_INVALID;
+    std::uint32_t adjustment = 0, virtual_slot = 0;
+    unsigned supplied = 0;
+    bool receiver = false;
+};
+struct RangePlan {
+    NodeId source = 0, body = 0;
+    EntityId range = 0, begin = 0, end = 0, variable = 0;
+    TypeId array = 0, index_type = 0;
+    RangeOperation first, last, test, next, element;
+    std::uint32_t begin_conversion = 0, end_conversion = 0, element_conversion = 0, condition_conversion = 0;
+    std::uint32_t loop_live = 0, body_live = 0;
+    bool initialize_range = false;
+};
 // Declaration slots identify defaults; a function specialization supplies the
 // concrete parameter/environment component of a default's fact key.
 enum class DefaultReason : unsigned char { Declaration = 1, Argument = 2, Recipe = 4 };

@@ -1,3 +1,7 @@
+global @__pa95_array_0 [binding=internal, storage=readonly] = {
+  i32 3
+  i32 4
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $prvalue_sum : i32
   slot $__range1 : ptr
@@ -47,9 +51,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^for_end_4:
     %t14 = addr $values
-    store i32 3, %t14
-    %t15 = index i8 %t14, 4
-    store i32 4, %t15
+    copyobj 8x4 @__pa95_array_0, %t14
     store i32 0, $xvalue_sum
     %t16 = addr $values
     store ptr %t16, $__range3

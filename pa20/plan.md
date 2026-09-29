@@ -1,9 +1,22 @@
-# PA20 implementation plan — handoff 94
+# PA20 implementation plan — implementation 95
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
-Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Entry: **73/144 pass, 71 failures**; PA1–19 and file audit pass.
+Target: **PA20 full-stage**. Phase: **implementation; stage incomplete**.
+Turn entry: `ef897177cd34e8bf1e878a7eb94208237240c0f1`, **91/144 pass,
+53 failures**; PA1–19 and file audit pass. Previous turn made verified progress
+(18 original failures fixed); no background process is assumed live.
+
+Current group: range statements. Owner: semantic range plan keyed by source
+occurrence/enclosing specialization. Data flow: one checked range initializer →
+hidden range/iterator identities, selected member-or-ADL calls and conversions,
+iteration binding and lexical lifetime facts → direct typed LowIR. Work budget:
+constant plan size per loop plus actual overload candidates and initializer/body
+work; no rewritten syntax or repeated lowering lookup. Validate arrays/lists,
+references/value categories, member/ADL/inherited lookup, template composition,
+single evaluation and normal/abrupt lifetime exits. Extend related initialization
+and closure composition defects as this owner exposes them. Freeze entry binary
+at `/tmp/pa20-entry95-cppgm`; collect compiler and native evidence before handoff.
 
 ## Design and remaining groups
 

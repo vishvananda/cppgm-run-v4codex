@@ -1,12 +1,14 @@
+global @__pa95_array_0 [binding=internal, storage=readonly] = {
+  i8 97
+  i8 0
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $value : obj<2x1>
   slot $cond__1 : i32
 
   block ^entry:
     %t1 = addr $value
-    store i8 97, %t1
-    %t2 = index i8 %t1, 1
-    store i8 0, %t2
+    copyobj 2x1 @__pa95_array_0, %t1
     %t3 = addr $value
     %t4 = index i8 [projection=array_element] %t3, 0
     %t5 = load i8 %t4

@@ -1,3 +1,7 @@
+global @__pa95_array_0 [binding=internal, storage=readonly] = {
+  i32 1
+  i32 2
+}
 function @begin(%r : ptr [pass=by_address, object_bytes=8]) -> obj<8x8> [binding=strong, object=_Z5beginR5Range] {
   slot $r : ptr
   slot $retobj__1 : obj<8x8>
@@ -36,9 +40,7 @@ function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
 
   block ^entry:
     %t1 = addr $data
-    store i32 1, %t1
-    %t2 = index i8 %t1, 4
-    store i32 2, %t2
+    copyobj 8x4 @__pa95_array_0, %t1
     %t3 = addr $r
     %t4 = addr $data
     call void @Range__Range(%t3, %t4)
