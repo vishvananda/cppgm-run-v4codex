@@ -68,8 +68,14 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
     range = range_initializer(plan.source,control);
     auto direct = plan.source;
     while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
-    if (ast[direct].kind == Kind::IdExpression && range.entity &&
-        !nonstatic_field(range.entity) && range.category == ValueCategory::Lvalue) plan.range = range.entity;
+    bool direct_object = ast[direct].kind == Kind::IdExpression && range.entity &&
+        !nonstatic_field(range.entity) && range.category == ValueCategory::Lvalue;
+    if (direct_object) observe_scalar(direct); // Iteration uses the object's storage, even when const.
+    // A captured declaration keeps its original entity identity, but its
+    // storage is reached through this closure's environment. Bind a hidden
+    // reference through the checked source expression instead of reusing the
+    // enclosing function's declaration as a local range object.
+    if (direct_object && !object_uses[expressions[direct].object_use].capture) plan.range = range.entity;
     else {
         // A class/array prvalue is constructed directly in its lifetime-extended
         // storage. Other glvalues bind a hidden reference, evaluated only once.
