@@ -1,85 +1,66 @@
-# PA18 implementation plan
+# PA18 compact completion plan
 
 Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Last reviewed commit: `f6eaf8ab213c90eefffd48f5c47b1ac9a75bce8d`.
-Target: **PA18 full-stage**. Phase: **implementation 87 handoff complete; independent audit pending**.
-Turn entry: `01b47c20b41f68d3142df6a8691fc905c20341a8`, **417/420**.
-Validated implementation: `7000a4de`; course **420/420**, through **3029/3029**.
-Previous turn: progress (committed audit repairs/evidence); no live job remained.
+Last reviewed commit: `f2558ff473410f95de7af49469f404ebf8362e34`.
+Target: **PA18 full-stage**. Phase: **final independent audit complete**.
+Spec Alignment: **aligned for PA18/O0**. PA19 has not been started.
+Previous turn: progress (committed the pending pack-prefix repair); no inherited
+live job remained. [Final audit](audit.md) and
+[evidence manifest](../student.tests/pa18/loop89-evidence.json) record the proof.
 
-## Design and spec alignment
+## Findings and completed work
 
-[Handoff 87](handoff87.md) records owners, data flow, complexity and scope.
-Class-result passing stays a completed canonical class fact shared by definitions,
-direct calls, conversion functions and indirect signatures. Source-dependent
-aliases never become ABI keys. Three bundle result-boundary exceptions are
-corrected by [proof 87](reference-correction87.md), with executable reducers and
-an oracle transformation that reads only entry references. Isolated old direct
-calls execute correctly; the demonstrated defect is incompatible access routes
-to the same specialized function type. The proof preserves this distinction.
-
-Class ellipsis uses selected value transfers and caller-owned materializations
-across LowIR's scalar variadic boundary. Packed conversion facts carry the
-representation and unavailable evaluated-transfer state. Unevaluated class
-lvalue-to-rvalue conversions suppress copying; type queries retain the source
-binding and defer defaults until hypothetical effects or constant/evaluated use.
-Prvalues pass their existing result object without an extra copy/move.
-Conditional and short-circuit cleanup consumes the same temporary identity.
-Floating default zero now uses the canonical floating constant fact.
-
-No parsing replay, textual semantic key, host delegation, global retry or cache
-invalidation was introduced. Recipes and canonical class facts are TU-owned;
-evaluated storage is contextual. Work follows candidates, actual arguments,
-selected defaults and emitted transfers. Existing work/depth bounds remain.
+- Completed class-result identity, class ellipsis transfer/default/effect demand,
+  prvalue storage, branch lifetimes and canonical floating zero were independently
+  reviewed across ordinary, retained-template, query, constant and lowering paths.
+- Explicit pack prefixes now extend through call, target and nested deduction;
+  completed deductions still agree or discard the candidate. The 51 controls
+  improve **38 → 51** on identical sources. Scalar explicit arguments no longer
+  allocate unnecessary prefix frames; no-argument calls retain packs directly.
+- The actual streaming frontend, canonical typed graph, immutable frames,
+  separate demand states, localized dependency edges, selected conversion facts,
+  typed lowering and owner release boundaries satisfy the relevant spec sections.
+  Nine source-to-native traces and inherited work/representation checks pass.
+- All **29** accumulated reference corrections have documented reducers and
+  cited language/contract proofs. The canonical class-result correction is
+  accepted with its direct-call versus indirect-call distinction. No new oracle
+  correction, changed input, weakened comparison or removed fixture was needed.
 
 ## Validation and performance
 
-Final stage **420/420**, earlier **2609/2609**, through **3029/3029**; file audit
-passes with the same three header warnings. The **53** new controls improve
-**30 → 53** on identical sources; accumulated personal checks, native reducers,
-coverage and proof composition are recorded in [handoff 87](handoff87.md) and
-[the evidence manifest](../student.tests/pa18/loop87-evidence.json). All **420**
-course inputs and **1,686** fixture paths remain; only three proved oracles change.
+Final PA18 **420/420**; earlier stages **2609/2609**; root through report
+**3029/3029**, all **18 stages**; **22** separately reported focused properties.
+File audit passes with three inherited header advisories. The final explicit
+validation contains **65 checks**, including **1,556 personal cases**, nine
+execution traces, ABI/scaling/inspection controls and oracle reconstruction.
+All **420** PA18 sources and **1,686** fixture paths remain. The audit explains
+why the earlier all-tracked-input count of 3053 exceeds the course report.
 
-[Performance 87](performance87.md) binds the final frozen code to **438** compiler/
-native observations across **17** workloads; both preceding runs remain, **1,314**
-observations total. Compiler text grows **7,424 bytes (0.374%)**; unaffected
-executable output is identical. Required copy costs and complete spread remain.
-[Audit 86 performance](performance86.md) and
-historical measurements remain intact. Acceptance is **PA18/O0 LowIR**, spec §9:
-no mandated numeric compiler latency/RSS ceiling. Historical +15%, +16 MiB and
-5.5× targets remain diagnostics. Correctness, coverage, work bounds and optional
-transform profitability remain requirements; no new optional optimization or
-code-growth policy was introduced. Native payload is reported separately from
-compiler `.text`; the sectionless backend output is not isolated native `.text`.
+[Performance 89](performance89.md) freezes entry/final binaries over the union
+of audit-86 and handoff-87 corpora plus pack-prefix scaling/runtime inputs:
+**54 workloads**, compiler latency/RSS and executable runtime/payload together,
+A/A noise calibration, ABBA blocks, checked outputs and all observations retained.
+The unnecessary scalar-prefix frames are removed; new required pack deduction
+has proportional work. Existing bounded O0 summaries/omissions retain their
+profitability evidence and exact output. No new optional transform is introduced.
 
-## Remaining implementation and independent review
+Acceptance is **PA18/O0**, spec §9. No mandated numeric compiler latency/RSS
+ceiling applies. Historical +15%, +16 MiB and 5.5× targets remain diagnostics;
+correctness, coverage, work bounds and optional-transform profitability remain
+requirements. Native optimization/debug, hosted aggregate-varargs retrieval,
+source try/catch and self-hosting remain later-stage ownership.
 
-No unfinished implementation is identified in the completed class-boundary group.
-The implementation handoff is complete; this does not certify the full stage.
-Native source try/catch, class `va_arg`/host varargs interoperation, native
-optimization/debug and self-hosting remain their later stages' responsibilities.
-Two exploratory PA21 inputs remain in personal controls as `LATER`, with their
-failed observations preserved, and are not counted as PA18 passes.
+## Exit and history
 
-**Independent review remains required:** whole-stage spec/architecture findings,
-all accumulated oracle corrections, especially the canonical class-result proof,
-and stage-scoped performance acceptance. These questions are not waived or
-represented as unfinished implementation. [Audit 86](audit.md) and
-[audit 82](audit82.md) remain unchanged; neither review marker above advances.
+Required `make test-pa18`, `make test-report-through-pa18` and
+`perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src` pass on reviewed
+code. Root reports run sequentially because they share counts. Intended changes
+and final evidence are committed; `git status --short` is checked empty at close.
+There is no remaining PA18 implementation or audit obligation.
 
-## Handoff ledger
-
-Stage entry **266/420**. Earlier history remains in audit 82 and its links.
-
-| Checkpoint | Range / disposition |
+| Checkpoint | Disposition |
 |---|---|
-| 83–85 | `48c864ab` → `890f810b`; arrays, constructors, discard/storage; **411 → 414 → 417/420**, 23 proved oracle corrections; reviewed/repaired in 86. |
-| 86 | `ecc308bc` → `f6eaf8ab`; accumulated audit and shared exception/constant-lifetime fixes; **417/420**, earlier **2609/2609**, file/coverage and **1429** controls pass. Preserved review baseline. |
-| 87 | `01b47c20` → `7000a4de`; class ellipsis, prvalues, unevaluated/effect/default demand, branch lifetimes, typed floating zero; three proved result-oracle repairs. **417 → 420/420**, earlier **2609/2609**, file/coverage pass; final evidence linked above. |
-
-Required commands: `make test-pa18`, `make test-report-through-pa17`,
-`make test-report-through-pa18`,
-`perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src`.
-Root reports run sequentially because they share `.test_counts`.
-**Do not advance to PA19 before the independent full-stage audit is resolved.**
+| 82 | [Preserved audit](audit82.md): signatures, conversions and result summaries. |
+| 83–86 | Arrays, constructors, discard/storage and shared effect/lifetime repairs; [audit 86](audit86.md) preserved verbatim, **417/420** at that checkpoint. |
+| 87 | [Handoff](handoff87.md): class boundaries and three proved result-oracle repairs, **420/420**. |
+| 88–89 | `56e17b79`, `d2980f04`, `f2558ff4`: extensible pack deduction and demand-only frame creation; whole-stage independent audit, full validation and final performance evidence complete. |

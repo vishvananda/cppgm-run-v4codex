@@ -1,0 +1,2158 @@
+{
+  "stage_base": "94dcb8ad21664137e87d574e878c14a4a047348a",
+  "previous_review": "f6eaf8ab213c90eefffd48f5c47b1ac9a75bce8d",
+  "reviewed_code": "f2558ff473410f95de7af49469f404ebf8362e34",
+  "compiler_sha256": "0a0af72176162ed0678f25cb8899c5812e74809d1f6cef34a22058f9ee735099",
+  "checks": {
+    "stage": {
+      "command": [
+        "make",
+        "test-pa18"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/stage.log",
+      "sha256": "cb664dfca7798fda7947f8e541cf77a85e4f7ec167916985f13c8fb2c4d3632d"
+    },
+    "prior": {
+      "command": [
+        "bash",
+        "-c",
+        "n=18; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/prior.log",
+      "sha256": "3baef05220ee75a639009d268a2f94ed14055ce2c92bae7ab1893d51b8631a52"
+    },
+    "through": {
+      "command": [
+        "make",
+        "test-report-through-pa18"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/through.log",
+      "sha256": "2c3586bd184852130db75ace15e358292f7f09c25307e920d4060e1926efd326"
+    },
+    "file-audit": {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa18",
+        "--paths",
+        "dev/src"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/file-audit.log",
+      "sha256": "12faa7a5bed8bd6d000828942d7f1064351b88544085aadac5048e06fd054ae0"
+    },
+    "inherit76_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/inherit76_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/inherit76_controls.log",
+      "sha256": "38532539b070975178a53178613f0729d696326224b4d514f64de3901b33565c"
+    },
+    "audit74_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit74_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit74_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit74_controls.log",
+      "sha256": "0a236f73dfc27c0c9fc2a69e6e8624e331cac5df3ca6000ec477c06235d244bf"
+    },
+    "list75_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/list75_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/list75_controls.log",
+      "sha256": "d95a89c121d3bb177cb84ad694cd0238cbac0f07d8e8157a48b65b7e6194fe6a"
+    },
+    "lookup77_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/lookup77_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/lookup77_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/lookup77_controls.log",
+      "sha256": "ac950410297c2eb745794a6ef6a69cfe7f5ab9e08a0b16c14c7fe714581da06b"
+    },
+    "audit78_declarations": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit78_declarations.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit78_declarations"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit78_declarations.log",
+      "sha256": "aac896a203ad021089d50eb5df6d7cbedbfa9bb8021193f7c24e3b6685efbb0b"
+    },
+    "nested77_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/nested77_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/nested77_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/nested77_controls.log",
+      "sha256": "a9e8096d928728103907c6fd92f674202305d3bab36d3ac4dd86a0dcd742ccc0"
+    },
+    "audit78_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit78_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit78_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit78_controls.log",
+      "sha256": "0067d0fe0fef1deec12933e9a1952417bce2ce13a3fbeca16d47c97dfe514502"
+    },
+    "course79": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/course79.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/course79"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/course79.log",
+      "sha256": "36b0985f092b29f5c824796b26ceb708dd1c12fa8ef7c8cca47662741b298947"
+    },
+    "syntax79_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/syntax79_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/syntax79_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/syntax79_controls.log",
+      "sha256": "4ad693b02ed0e77b3d2259c4d925421135de811fc7ce2b7cabb9a3c5184df846"
+    },
+    "signature79_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/signature79_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/signature79_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/signature79_controls.log",
+      "sha256": "983800022ce06ff0a4c950389bf0dd5a63408720a52a9c764f3c2af497b0d1d4"
+    },
+    "audit82_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit82_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit82_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit82_controls.log",
+      "sha256": "487a28e9844978cb522d495ec239d1088dc5ed4feeb84876cf6d1c20171153c0"
+    },
+    "scalar80_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/scalar80_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/scalar80_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/scalar80_controls.log",
+      "sha256": "1bf63ff8d5f8f4ecf34833cd4f66dd27c082d3159ca06006655fe0df8209418d"
+    },
+    "result81_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/result81_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/result81_controls.log",
+      "sha256": "bc738ac83483b616b64f97fd25c8ad1b561624ebda47d0381f6c6a8e11047e0e"
+    },
+    "array83_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/array83_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/array83_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/array83_controls.log",
+      "sha256": "9a18a64d145279a49cd2ba35bcd2d12dcf5957a1a5db78ab05a89e75103fddae"
+    },
+    "storage85_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/storage85_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/storage85_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/storage85_controls.log",
+      "sha256": "76ec4f10d0062c9b6ee4bbf57f4f5590144794d72769623568e7b92a0aa7db7e"
+    },
+    "object84_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/object84_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/object84_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/object84_controls.log",
+      "sha256": "373c3e208948210d527f91b0a071225fbac495879148ad227dc7aa64044296b4"
+    },
+    "discard85_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/discard85_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/discard85_controls.log",
+      "sha256": "249247e0832bc147f03df6a8f2876f231befe9affb7e1b72ea6db29b201290d0"
+    },
+    "boundary87_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/boundary87_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/boundary87_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/boundary87_controls.log",
+      "sha256": "9df3e4e15c79a3ebdc5e86bcdf8e60cd0555e56771eb6054aad3efe3dd83e911"
+    },
+    "audit88_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit88_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit88_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit88_controls.log",
+      "sha256": "e5c2096e05454be51b92d929eaaea02230b1a5eada35a0f73c85609459641a92"
+    },
+    "discard85_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/discard85_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/discard85_scaling.log",
+      "sha256": "ca285a1a0ffa5d72f8afbc12ce952d09f3e1e9014d4179267d8fd8495bdd2080"
+    },
+    "list75_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/list75_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/list75_scaling.log",
+      "sha256": "f37a6b7f044e9695aa8d0306f3afab8b9eff6ec67a47ea4f0a545ea75dc65827"
+    },
+    "audit86_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit86_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/audit86_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit86_controls.log",
+      "sha256": "7dd4e94d9919e17d7b9b48b9faafe38bc3eb5264bd706acb340fec63b6579a6c"
+    },
+    "inherit76_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/inherit76_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/inherit76_scaling.log",
+      "sha256": "02e185d97bfcb0634216f536e134ac15e69c7d7632aa77d1c72a0f19139c2f02"
+    },
+    "nested77_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/nested77_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/nested77_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/nested77_scaling.log",
+      "sha256": "14a004d15bdfcbe3f523a446ed227826f78c91446877f088694fd53431bb62f1"
+    },
+    "result81_inspection": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_inspection.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/result81_inspection"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/result81_inspection.log",
+      "sha256": "45f58729a52455bb68e9f18ec28a6760d610ae633004745bb13b765d6b0fd462"
+    },
+    "list75_course": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_course.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/list75_course"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/list75_course.log",
+      "sha256": "028117584b9f7fbb1902006e3c1e8ff2c8a40b63d5a47de152dd79d58029f5c2"
+    },
+    "inherit76_course": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_course.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/inherit76_course"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/inherit76_course.log",
+      "sha256": "8ef9562349fab65b19b4da80c822d915b951dc834b96a015388dfbd3fdc2772f"
+    },
+    "validate73_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/validate73_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/validate73_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/validate73_controls.log",
+      "sha256": "8dd4c4c8b0e6fc81070f490d87e93b514742bb0b47fd885428cfb761e5ec33ea"
+    },
+    "pa16-array-controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation-complete/pa16-array-controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/pa16-array-controls.log",
+      "sha256": "cd1724096290c956bab960ca3f348bd1f5958a11ef192ef9a417cbdedf4e6ac5"
+    },
+    "reference-proof-83": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference83.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/reference-proof-83.log",
+      "sha256": "ac728e7b839396fccaedb61c15367308e35f4d0606c8290096a1a8ec518aac60"
+    },
+    "reference-proof-85": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference85.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/reference-proof-85.log",
+      "sha256": "b21947e01bc98e6edfd212cd543045d38c83304319ed34e833ef80f9aa5156ab"
+    },
+    "reference-proof-87": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference87.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/reference-proof-87.log",
+      "sha256": "383a5cba52ce6bf6a10cec03e3dc985be3e04007aa29262cdec5fd617ead2233"
+    },
+    "reference-proof-84-chain": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference87_chain.py",
+        "/tmp/pa18-loop89/validation-complete/reference84-chain"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/reference-proof-84-chain.log",
+      "sha256": "a4b5060d41cdc813d80205246564371a4155eb305c43fb08c2d5125d1cec74fd"
+    },
+    "signature79-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/signature79.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/signature79_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/signature79-trace.log",
+      "sha256": "1db1479d5c60fc81260baa3d375f4d272a79ef413c10b4c774bfa66fcc8c2cde"
+    },
+    "signature79-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/signature79.exe",
+        "/tmp/pa18-loop89/validation-complete/signature79.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/signature79-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "signature79-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/signature79.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/signature79-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scalar80-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/scalar80.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/scalar80_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/scalar80-trace.log",
+      "sha256": "769df2f9696ee7387ba477b75915586dcbb9a29ad0b6863a8b1c12b11d400c1f"
+    },
+    "scalar80-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/scalar80.exe",
+        "/tmp/pa18-loop89/validation-complete/scalar80.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/scalar80-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scalar80-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/scalar80.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/scalar80-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result81-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/result81.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/result81-trace.log",
+      "sha256": "c222e6d1f0d540e5d83bd864728e6d6fb4b262ecbe403c3519d7e94e47c81787"
+    },
+    "result81-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/result81.exe",
+        "/tmp/pa18-loop89/validation-complete/result81.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/result81-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result81-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/result81.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/result81-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit82-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit82.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit82_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit82-trace.log",
+      "sha256": "0cb15e11ae8d56d8c0a2959ca559c92b0c063291cb81f0c316a41bb9f5247cc0"
+    },
+    "audit82-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit82.exe",
+        "/tmp/pa18-loop89/validation-complete/audit82.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit82-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit82-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/audit82.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit82-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "array83-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/array83.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/array83_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/array83-trace.log",
+      "sha256": "85e33f5bbea8d76fff3cbe457380091527f747e3bedaa80bc6db059e9cfff546"
+    },
+    "array83-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/array83.exe",
+        "/tmp/pa18-loop89/validation-complete/array83.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/array83-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "array83-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/array83.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/array83-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "object84-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/object84.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/object84_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/object84-trace.log",
+      "sha256": "7b9fd703e912bb4817f73f0a581843d434da1f5c421b1efa3f5c76fe85ebfc32"
+    },
+    "object84-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/object84.exe",
+        "/tmp/pa18-loop89/validation-complete/object84.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/object84-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "object84-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/object84.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/object84-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "discard85-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/discard85.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/discard85-trace.log",
+      "sha256": "65a450416c81c8dad5f39b9d79eee415f4d489b76508436a14781394251bc9c4"
+    },
+    "discard85-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/discard85.exe",
+        "/tmp/pa18-loop89/validation-complete/discard85.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/discard85-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "discard85-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/discard85.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/discard85-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit86-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit86.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit86_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit86-trace.log",
+      "sha256": "550eb8ee38de025027e585e09700629fa53eb672c3564c52d50088ec8f96132a"
+    },
+    "audit86-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit86.exe",
+        "/tmp/pa18-loop89/validation-complete/audit86.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit86-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit86-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/audit86.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit86-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit88-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit88.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit88_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit88-trace.log",
+      "sha256": "152f97ed81cfa06572fd27e28e6319d9ef116eb3ba526cdf06f7e2a00c2e3b90"
+    },
+    "audit88-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation-complete/audit88.exe",
+        "/tmp/pa18-loop89/validation-complete/audit88.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit88-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit88-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation-complete/audit88.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/audit88-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "abi": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_abi.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/abimangle",
+        "/tmp/pa18-loop75/check-api",
+        "/tmp/pa18-loop89/validation-complete/list75_controls",
+        "/tmp/pa18-loop89/validation-complete/abi"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation-complete/abi.log",
+      "sha256": "af754076d5a37c81a3acf5d2d7c9f97bc285d1ad2dd0e9292485146ecb97ec1b"
+    }
+  },
+  "personal": {
+    "abi": {
+      "count": 7,
+      "sha256": "203f6750c54d0b874e87d0027bddee56d22c1355680c17cc3cf68e42a7133685"
+    },
+    "array83_controls": {
+      "count": 61,
+      "sha256": "a5649df2694dfa30696d1fd41dc9dfc997237affdf6a134e5efafec1c17723f2"
+    },
+    "audit74_controls": {
+      "count": 60,
+      "sha256": "3c990534f34695100b941a5b2cc536361f211c5923aa735740a6bab058c6a51c"
+    },
+    "audit78_controls": {
+      "count": 35,
+      "sha256": "f2b5139205f723f22c647de526c72d8734a966e01ba95296f4987926504abf8a"
+    },
+    "audit78_declarations": {
+      "count": 12,
+      "sha256": "6b42954ad1df0fde04e1a6d5536b1986a1620b7958a82b12550c5f4856c6cb52"
+    },
+    "audit82_controls": {
+      "count": 27,
+      "sha256": "f65f0c157d2709e82f837885dfc58e3f4a3f3c761a290154b382168510e206f8"
+    },
+    "audit86_controls": {
+      "count": 74,
+      "sha256": "b8b3c4bd197c08aa05c780d7b205ace8111b913aeff56485e17f1105a64c71c8"
+    },
+    "audit88_controls": {
+      "count": 51,
+      "sha256": "77f57944f6689907885f7665be3e61f043c76f75b37b0df291b24bd4dc82e43d"
+    },
+    "boundary87_controls": {
+      "count": 53,
+      "sha256": "792d7d1bd982827509986011e5d3a51ffa439c0841cc70cfe96da0863607027c"
+    },
+    "course79": {
+      "count": 4,
+      "sha256": "9c8cd081ba12d5ba13413c5e3b22210620ebe66898fac5c6df6c2c105815bc3c"
+    },
+    "discard85_controls": {
+      "count": 60,
+      "sha256": "e004b2ad02e8d2d02e5d0dc5560861dadf1ff17aa3afcdb448d2ee8fc6f3c812"
+    },
+    "discard85_scaling": {
+      "count": 15,
+      "sha256": "3713c755db3f6d3e624c75e8b8c07c6531df385f017f4ed29db896efa41a5f4e"
+    },
+    "inherit76_controls": {
+      "count": 60,
+      "sha256": "717c40d74e4965e77f9b87330e4898c28c1ea247f0070f56a6c2f842546d5b86"
+    },
+    "inherit76_course": {
+      "count": 3,
+      "sha256": "a4add6633b671e7ea6a0e74faed491f3412711b4ed55e8277f24d36730a46959"
+    },
+    "list75_controls": {
+      "count": 71,
+      "sha256": "f24050cad8281df931675faf9f568f95f22543b16a684ed1c98c101f9aacb6f3"
+    },
+    "list75_course": {
+      "count": 5,
+      "sha256": "2137e64c1efa1f60ff7abe0d74c4fd7b4eb70b80c1bcce811ade8cbbb698bbd4"
+    },
+    "lookup77_controls": {
+      "count": 27,
+      "sha256": "59a76da391f952f0bd17714ff8aa81f7209b2f7bae19cc9999bc352942243111"
+    },
+    "nested77_controls": {
+      "count": 70,
+      "sha256": "b6e55c0884956750ca618a4c9a902775ac1d7678e81ce5dcc2421eb3632a9b7d"
+    },
+    "object84_controls": {
+      "count": 51,
+      "sha256": "dee42001de7f7ed73faac47f4d7d394469fa5d64e3c4370894fd8463d74ef2ae"
+    },
+    "result81_controls": {
+      "count": 74,
+      "sha256": "147af1fed134c9d9d5293f29b72c8b27fbbb64ec9a15ffb7c2778657ccb9fb30"
+    },
+    "scalar80_controls": {
+      "count": 68,
+      "sha256": "b5624494db790aafe1deeef88c4615a864ef34e2e02c472a933232bed857beaa"
+    },
+    "signature79_controls": {
+      "count": 33,
+      "sha256": "bc001db1cda505cc43452be13e661bed182df130d62216978cf7a133eca629df"
+    },
+    "storage85_controls": {
+      "count": 16,
+      "sha256": "bd0708bde0e7fc6e5c10c7b55f2f6cd7f0c557dba58c4d8cdbbbde4855f7815d"
+    },
+    "syntax79_controls": {
+      "count": 32,
+      "sha256": "20b2378dee3534ae5de9c7d162d76a462b4b4b428d4d446aab8b2059734ec3a0"
+    },
+    "validate73_controls/address": {
+      "count": 63,
+      "sha256": "f673adf52457608fb3909e557c8b5aa115df8e0b9251e9ac8150d74f5650c2db"
+    },
+    "validate73_controls/alias": {
+      "count": 43,
+      "sha256": "14bb8c632f4fb55f8ab342ee633547684f6a8409f574ef5197c94ffcee023272"
+    },
+    "validate73_controls/audit": {
+      "count": 56,
+      "sha256": "b33565a2cb38f6443c1b9017ab3eea71ed0cf3d03768bec4971c9ff1b7dae39b"
+    },
+    "validate73_controls/context": {
+      "count": 29,
+      "sha256": "cbab2948a9df0c407a691b70da84d143ccea9b431f8b2e06f3ac9211168ebdbf"
+    },
+    "validate73_controls/conversion": {
+      "count": 51,
+      "sha256": "16037d853bc943278640099840f803f0dbbb416ae32dc697063643d9ebe1db17"
+    },
+    "validate73_controls/deduction": {
+      "count": 56,
+      "sha256": "7ad0a8c9c3c29d037c336648f80082467a228d1e2d6aa4ae931fab16dac86282"
+    },
+    "validate73_controls/invoke": {
+      "count": 64,
+      "sha256": "32a1ff5dd687c01b8ca104d5d084098a57f1225c3bd2b91abffa648ddeb2ff52"
+    },
+    "validate73_controls/ordering": {
+      "count": 64,
+      "sha256": "61a28f34dcef7b0f2387ef71b0e2374913e05ceb76f4545e9ca858e23d5fbd7d"
+    },
+    "validate73_controls/pack": {
+      "count": 34,
+      "sha256": "e5dd7b831cb79ddd4905bbb72a5be558241dcca7a46e5863ccbc369255fbc820"
+    },
+    "validate73_controls/prototype": {
+      "count": 36,
+      "sha256": "e87e8faeb45dd3b8aee77a724917530dfda2912011e718872b99f76ec929f4db"
+    },
+    "validate73_controls/query": {
+      "count": 58,
+      "sha256": "f9a3913d2e3639f360b213be5dc09f430c397823aa50f58760366f81b6cc550d"
+    },
+    "validate73_controls/substitution": {
+      "count": 33,
+      "sha256": "1bbce4ca91603c6c07a6f3c311f2a6aa188635b7f18d45fa77e00dd950950701"
+    }
+  },
+  "new_controls": {
+    "entry_passed": 38,
+    "final_passed": 51,
+    "entry_results_sha256": "f3e203dd02063a564d0a4dfffdf352782063e8cb78c5435a0ea1d8f5ba0cb508",
+    "final_results_sha256": "77f57944f6689907885f7665be3e61f043c76f75b37b0df291b24bd4dc82e43d"
+  },
+  "course": {
+    "stage": "420/420",
+    "prior": "2609/2609",
+    "through": "3029/3029",
+    "stages": 18,
+    "separate_properties": 22,
+    "tracked_inputs": 3053,
+    "excluded_from_default_roots": {
+      "pa8_later_debug": 18,
+      "pa9_top_level": 6
+    },
+    "pa18_fixture_paths": 1686
+  },
+  "fixture_paths": 12174,
+  "fixture_path_list_sha256": "53dde4a1523eaa06998bc45119819418d13a2de19adbef954787905cdbb8d44c",
+  "reference_corrections": {
+    "pa17/tests/general/200-alias-template-template-argument-use-scope.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "da8f46ef034aafec0c2d8493a52b1abfd4ef6356bb1dc5bceec9750f0480b58a"
+    },
+    "pa17/tests/general/400-local-value-shadows-template-relational.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "de1a7bcd3a20e5681b5f5e546b39caa75fed3a4b4a03da1f485a502cd99950fd"
+    },
+    "pa18/tests/general/100-forwarded-const-reference-multidimensional-array-deduction.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "53b899f826ce62aff3b7c7302c0ca0e03a2506abf8b659ea5850b6a5290c026c"
+    },
+    "pa18/tests/general/100-function-template-fixed-over-trailing-pack-fallback.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "b5cde2cc412a04f411002667505439edf77ca2885939cbadfcb8490802a7e6b9"
+    },
+    "pa18/tests/general/200-nested-array-reference-partial-ordering.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "e0fe09bc9c18371096a1aa3a117f08cb37167344fa2cfcb5768a1bd2027b5926"
+    },
+    "pa18/tests/general/200-range-array-reference-mutable-begin.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "c4d35024abbf60f1b07c801b420c062f78f1848fb75f93a2ba86c3d6734fae4a"
+    },
+    "pa18/tests/general/300-adl-overload-set-argument-deduction.ref": {
+      "proofs": [
+        84
+      ],
+      "final_sha256": "e6faeec375a9cb67f7f4ae53597c467167fa17459a6210d25f8513a0c84b52c9"
+    },
+    "pa18/tests/general/300-boost-enable-if-type-condition-static-keyword-overload.ref": {
+      "proofs": [
+        85
+      ],
+      "final_sha256": "264be62b2927277aab05973c79afb5dc3f0841c80ebdb41656da6b0d944ccb1d"
+    },
+    "pa18/tests/general/300-empty-pack-unknown-bound-array-lowir.ref.exit_status": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    "pa18/tests/general/300-explicit-template-call-transitive-base-deduction.ref": {
+      "proofs": [
+        85
+      ],
+      "final_sha256": "a5593b7580e5052491e9b9cbaed6c68b014c3035a5ec52cb0d9c6b7f84d731ee"
+    },
+    "pa18/tests/general/300-friend-function-template-alias-result-definition.ref": {
+      "proofs": [
+        84,
+        87
+      ],
+      "final_sha256": "7016abccca314720821c7c6d691c2dc4d790c938d16a4d94c54a286cc9850af1"
+    },
+    "pa18/tests/general/300-function-template-nested-alias-explicit-call.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "99803980c1a51e882da4d38974f5d14ad3fea4070b79bebe06978e71b0678cc4"
+    },
+    "pa18/tests/general/300-function-template-result-first-lookup.ref.exit_status": {
+      "proofs": [
+        79
+      ],
+      "final_sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    "pa18/tests/general/400-array-bound-expression-is-nondeduced.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "3c67be591b1535cfdf64737c9a8312ff5c6253ade60cec7fe107fb9b0857f6eb"
+    },
+    "pa18/tests/general/500-constructor-sfinae-namespace-constant-symbol.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "61307c551d338293cbeabf5d837c6d0c74479e703d59eb92f8bd1f5fb68b4e11"
+    },
+    "pa18/tests/general/500-inherited-constructor-template-member-alias-pack.ref": {
+      "proofs": [
+        84
+      ],
+      "final_sha256": "551bf7acf33d3e9223b0935c8df7eda522dda655ea516131ca57fc94a835aec0"
+    },
+    "pa18/tests/general/500-source-owner-member-template-sfinae-default.ref": {
+      "proofs": [
+        85
+      ],
+      "final_sha256": "8d0d9f06805b098e381bce1b0e3a4d6049125ddf0360b431c5b496a2a3d30571"
+    },
+    "pa18/tests/spec/100-constexpr-union-active-pack-constructor.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "29be4750063beea6ca488ad17c98068d323918e1aecff709428c5403b099cce5"
+    },
+    "pa18/tests/spec/100-constructor-template-braced-array-bound-deduction.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "36989eb17a4902347641dc6e226c30d1f25638ee3886c1906ddac5f6966a7b35"
+    },
+    "pa18/tests/spec/100-function-template-array-bound-deduction.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "b4976082b8deebc021fb4446da9e4dcfe967a78c5a3b2f339f373d329648d28e"
+    },
+    "pa18/tests/spec/100-function-template-array-bound-shared-deduction.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "453081022ea1318aae7ad2cc431e0bb2b55ff4b0a4bd3657cc72979bf117b9cb"
+    },
+    "pa18/tests/spec/200-array-reference-cv-partial-ordering.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "13d45457bc5db75d5ad6d1429b8c3a375884d330f994e7e4f68461273fa82d24"
+    },
+    "pa18/tests/spec/200-nondeduced-qualified-member-type-allows-conversion.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "cfb83c3f08eef0b32399efe6ddb352d441f21ab7d0729e41d894ee021f0f0e5d"
+    },
+    "pa18/tests/spec/300-conversion-function-template-object-result-copy-init.ref": {
+      "proofs": [
+        87
+      ],
+      "final_sha256": "10ff9a7364143f89746481bdb2071b95be3a363461ca83d8bc3506a8e3055a12"
+    },
+    "pa18/tests/spec/300-defaulted-enable-if-after-array-bound-deduction.ref": {
+      "proofs": [
+        83
+      ],
+      "final_sha256": "22f4a36666ddd355bb95cc738cabfdb256c71048e41714aba83256305eae28f8"
+    },
+    "pa18/tests/spec/300-dependent-result-defaulted-nontype-declaring-scope.ref": {
+      "proofs": [
+        87
+      ],
+      "final_sha256": "cf3f9b28a5c77ea48d67382168b349f03299d1061b3bf22dc81257c4da680034"
+    },
+    "pa18/tests/spec/300-scalar-pseudo-destructor-noexcept.ref.exit_status": {
+      "proofs": [
+        69
+      ],
+      "final_sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    "pa18/tests/spec/500-conversion-function-template-reference-conditional-auto-ref.ref": {
+      "proofs": [
+        65
+      ],
+      "final_sha256": "11bd43881bc72f8e8a53b1881a706226884697737ff345793861cad91632af28"
+    },
+    "pa9/tests/abi/300-function-owner-member-pointer-nttp-data.ref": {
+      "proofs": [
+        67
+      ],
+      "final_sha256": "65269de1f64c56f9b44a0e5203e1d1f885e14656c1d935146aa42aa3187f002d"
+    }
+  },
+  "reference_checks": {
+    "65": {
+      "command": [
+        "python3",
+        "student.tests/pa18/reference65.py",
+        "/tmp/pa18-loop89/references/65",
+        "/tmp/pa18-loop89/references/65.json"
+      ],
+      "exit": 0,
+      "output": "Reference violates constant initialization; student reducer exits zero.\n"
+    },
+    "69": {
+      "command": [
+        "python3",
+        "student.tests/pa18/reference69.py",
+        "/tmp/pa18-loop89/references/69",
+        "/tmp/pa18-loop89/references/69.json"
+      ],
+      "exit": 0,
+      "output": "Pinned reference accepts both ill-formed static assertions; student rejects both.\n"
+    },
+    "79": {
+      "command": [
+        "python3",
+        "student.tests/pa18/reference79.py",
+        "/tmp/pa18-loop89/references/79",
+        "/tmp/pa18-loop89/references/79.json"
+      ],
+      "exit": 0,
+      "output": "Pinned reference accepts both ambiguous nondependent-result calls; student rejects both.\n"
+    }
+  },
+  "reference_observations": {
+    "path": "student.tests/pa18/loop89-reference-complete.json",
+    "sha256": "ebc78857ff0d71a990a72f898e2601f818f19a0e57d1df271b5af404eec99a23"
+  },
+  "architecture_trace": [
+    {
+      "tokens": 253,
+      "max_pending": 44,
+      "node_growths": 9,
+      "delimiter_work": 253,
+      "semantic_ms": 0.653824,
+      "semantic_fact_slots": 587,
+      "semantic_fact_records": 198,
+      "semantic_fact_storage_bytes": 25112,
+      "semantic_template_declaration_work": 4,
+      "semantic_declaration_publications": 5,
+      "semantic_dependence_work": 16,
+      "semantic_specializations": 3,
+      "semantic_type_substitution_work": 17,
+      "semantic_type_substitution_hits": 2,
+      "semantic_type_substitution_records": 10,
+      "semantic_substitution_frames": 13,
+      "semantic_template_type_work": 2,
+      "semantic_template_type_access_work": 0,
+      "semantic_template_type_uses": 4,
+      "semantic_template_signature_work": 0,
+      "semantic_template_signature_uses": 0,
+      "semantic_parameter_publications": 3,
+      "semantic_template_default_binding_work": 0,
+      "semantic_template_default_binding_queued": 0,
+      "semantic_template_initializer_binding_work": 2,
+      "semantic_template_initializer_binding_queued": 0,
+      "template_body_transitions": 2,
+      "semantic_body_checks": 9,
+      "semantic_body_lifetime_checks": 9,
+      "semantic_statement_conversion_work": 1,
+      "semantic_statement_conversion_uses": 1,
+      "semantic_constant_array_work": 0,
+      "semantic_conversion_result_work": 0,
+      "semantic_base_adjustment_paths": 0,
+      "semantic_base_adjustment_work": 0,
+      "semantic_base_adjustment_hits": 0,
+      "semantic_static_initialization_work": 2,
+      "semantic_static_plan_work": 0,
+      "semantic_constant_array_index_entries": 0,
+      "semantic_floating_constants": 0,
+      "semantic_constant_bodies": 0,
+      "semantic_constant_activations": 0,
+      "semantic_constant_execution_steps": 0,
+      "semantic_constant_object_work": 0,
+      "semantic_constant_address_work": 2,
+      "semantic_constant_dependency_work": 0,
+      "semantic_constant_persistence_work": 0,
+      "semantic_constant_execution_hits": 0,
+      "semantic_initializer_recipe_work": 1,
+      "semantic_initializer_recipe_uses": 1,
+      "semantic_default_initialization_work": 0,
+      "semantic_default_initialization_uses": 0,
+      "template_class_completions": 0,
+      "nested_class_declarations": 0,
+      "nested_class_definitions": 0,
+      "explicit_specialization_selections": 0,
+      "variable_template_initializers": 0,
+      "variable_template_reuses": 0,
+      "variable_template_candidates": 0,
+      "function_ordering_work": 0,
+      "function_ordering_hits": 0,
+      "class_pattern_ordering_work": 0,
+      "class_pattern_ordering_hits": 0,
+      "template_definition_applications": 0,
+      "template_definition_direct_applications": 0,
+      "template_definition_requests": 0,
+      "template_definition_hits": 0,
+      "template_definition_edges": 0,
+      "template_definition_signature_requests": 0,
+      "template_definition_signature_work": 0,
+      "semantic_expression_bytes": 36,
+      "semantic_type_queries": 8,
+      "semantic_type_query_work": 8,
+      "semantic_candidate_substitutions": 1,
+      "semantic_candidate_cycles": 0,
+      "query_completion_edges": 0,
+      "query_completion_invalidations": 0,
+      "semantic_deferred_function_uses": 0,
+      "semantic_deferred_function_use_work": 0,
+      "semantic_template_binding_work": 56,
+      "semantic_template_parameter_check_work": 116,
+      "semantic_template_parameter_check_reuses": 0,
+      "semantic_template_bindings": 14,
+      "semantic_template_fixed_expressions": 11,
+      "semantic_template_fixed_uses": 9,
+      "semantic_template_fixed_calls": 2,
+      "semantic_template_fixed_call_uses": 1,
+      "semantic_template_object_contexts": 0,
+      "semantic_template_member_uses": 0,
+      "parsed_nodes": 445,
+      "template_occurrences": 142,
+      "template_deferred_regions": 2,
+      "template_demanded_regions": 2,
+      "template_source_regions": 6,
+      "template_region_nodes": 129,
+      "template_region_roots": 2,
+      "template_default_environment_work": 0,
+      "template_default_argument_work": 0,
+      "template_default_facts": 0,
+      "template_default_dependencies": 0,
+      "template_default_dependency_work": 0,
+      "template_default_demands": 0,
+      "semantic_pack_expansion_work": 4,
+      "semantic_pack_expansion_lanes": 4,
+      "semantic_argument_packs": 33,
+      "semantic_object_uses": 5,
+      "semantic_expression_facts": 57,
+      "semantic_expression_uses": 63,
+      "semantic_expression_slots": 587,
+      "semantic_expression_inherited": 10,
+      "semantic_expression_variants": 0,
+      "semantic_call_argument_edges": 16,
+      "semantic_constructor_actions": 3,
+      "semantic_inherited_arguments": 0,
+      "semantic_conversion_objects": 6,
+      "semantic_user_conversions": 0,
+      "semantic_list_plans": 0,
+      "semantic_list_fields": 0,
+      "semantic_query_edges": 6,
+      "semantic_list_objects": 0,
+      "semantic_value_initializations": 1,
+      "semantic_value_returns": 1,
+      "semantic_function_returns": 1,
+      "semantic_placement_objects": 0,
+      "semantic_constant_constructor_actions": 0,
+      "semantic_constant_fields": 0,
+      "semantic_initializer_actions": 0,
+      "semantic_zero_plans": 0,
+      "semantic_zero_parts": 0,
+      "semantic_field_descriptors": 0,
+      "semantic_transfer_unit_fields": 0,
+      "semantic_scalar_observations": 0,
+      "semantic_scalar_consumptions": 0,
+      "semantic_scalar_consumption_work": 0,
+      "semantic_parameter_queries": 0,
+      "semantic_parameter_query_work": 0,
+      "semantic_delegation_entry_work": 0,
+      "semantic_destruction_actions": 0,
+      "semantic_transfer_actions": 2,
+      "semantic_scalar_transfer_work": 8,
+      "semantic_scalar_transfer_cache_bytes": 587,
+      "semantic_lifetime_states": 1,
+      "semantic_reference_binding_work": 0,
+      "semantic_reference_alternatives": 0,
+      "semantic_lifetime_uses": 4,
+      "semantic_virtual_classes": 0,
+      "semantic_virtual_slot_work": 0,
+      "semantic_virtual_declaration_work": 4,
+      "semantic_virtual_demands": 0,
+      "semantic_key_vtable_notifications": 0,
+      "semantic_key_vtable_processed": 0,
+      "semantic_vtable_emissions": 0,
+      "semantic_vtable_queue_bytes": 0,
+      "semantic_member_demands": 5,
+      "semantic_friend_definitions": 0,
+      "semantic_friend_demands": 0,
+      "semantic_friend_processed": 0,
+      "semantic_demand_processed": 5,
+      "semantic_expression_work": 47,
+      "semantic_discard_selections": 0,
+      "semantic_discard_recipe_uses": 0,
+      "semantic_discard_materializations": 0,
+      "semantic_candidate_work": 36,
+      "semantic_conversion_work": 64,
+      "semantic_conversions": 54,
+      "semantic_entity_bytes": 120,
+      "semantic_class_facts": 2,
+      "semantic_constants": 2,
+      "semantic_value_queries": 1,
+      "semantic_value_query_work": 1,
+      "semantic_template_value_sources": 1,
+      "semantic_template_value_uses": 1,
+      "semantic_value_conversion_variants": 0,
+      "semantic_value_conversion_records": 0,
+      "semantic_types": 50,
+      "semantic_entities": 58,
+      "semantic_scopes": 41,
+      "semantic_edges": 0,
+      "semantic_declarations": 38,
+      "semantic_regions": 26,
+      "semantic_lookup_work": 130,
+      "semantic_signature_work": 26,
+      "semantic_template_signature_shape_work": 6,
+      "semantic_template_signature_shape_hits": 4,
+      "semantic_type_probes": 164,
+      "semantic_constant_work": 3,
+      "constexpr_validity_work": 0,
+      "exception_work": 3,
+      "closures": 0,
+      "lower_virtual_cache_bytes": 80,
+      "lower_deleting_entries": 0,
+      "lower_local_statics": 0,
+      "lower_constant_data_records": 0,
+      "lower_constant_data_work": 0,
+      "lower_constant_data_hits": 0
+    },
+    {
+      "frontend_ms": 1.20388,
+      "lowering_ms": 0.225515,
+      "write_ms": 0.130402,
+      "peak_rss_kib": 20656,
+      "nodes": 587,
+      "static_requests": 0,
+      "static_hits": 0,
+      "control_work": 22,
+      "discard_work": 0,
+      "full_expression_work": 74,
+      "full_expression_regions": 2,
+      "linkage_requests": 0,
+      "linkage_hits": 0,
+      "initializer_units": 0,
+      "finalizer_units": 0,
+      "abi_nodes": 23,
+      "abi_bytes": 2116,
+      "instructions": 117,
+      "operands": 172,
+      "ir_pool_growths": 76,
+      "ir_capacity_bytes": 25984
+    }
+  ],
+  "historical_performance": [
+    {
+      "path": "student.tests/pa18/loop89-performance.json",
+      "sha256": "5ca47967288aee80987353f0fe277578b590b4548fca5dae5f2fd2db7063afb6",
+      "binaries": [
+        {
+          "path": "/tmp/pa18-loop88/entry-cppgm",
+          "sha256": "be6a3c1b75c72e2c2606e4a6b32bd746569d0b76a218dd8f3ff1b864bcdfcb9c",
+          "text_bytes": 1991942
+        },
+        {
+          "path": "/tmp/pa18-loop89/final-cppgm",
+          "sha256": "b0acf14e9e620f0c0b146867ede206c03de8947e573cc0db7b5190ae27dfb2ee",
+          "text_bytes": 1992262
+        }
+      ]
+    },
+    {
+      "path": "student.tests/pa18/loop89-performance-ordering-repeat.json",
+      "sha256": "9e1e4e7f3070ef01c780e878800c6c435ad8980163429b839a7b03d1184627c9",
+      "binaries": [
+        {
+          "path": "/tmp/pa18-loop88/entry-cppgm",
+          "sha256": "be6a3c1b75c72e2c2606e4a6b32bd746569d0b76a218dd8f3ff1b864bcdfcb9c",
+          "text_bytes": 1991942
+        },
+        {
+          "path": "/tmp/pa18-loop89/final-cppgm",
+          "sha256": "b0acf14e9e620f0c0b146867ede206c03de8947e573cc0db7b5190ae27dfb2ee",
+          "text_bytes": 1992262
+        }
+      ]
+    },
+    {
+      "path": "student.tests/pa18/loop89-performance-final.json",
+      "sha256": "ebd8476eaf414333b8d36f1bcfbb534f0178af66111f26c03a92cd1f6ffd65db",
+      "binaries": [
+        {
+          "path": "/tmp/pa18-loop88/entry-cppgm",
+          "sha256": "be6a3c1b75c72e2c2606e4a6b32bd746569d0b76a218dd8f3ff1b864bcdfcb9c",
+          "text_bytes": 1991942
+        },
+        {
+          "path": "/tmp/pa18-loop89/final-reviewed-cppgm",
+          "sha256": "819a0e73d37c502124f98bd8db1f56fa845e0e1fefd644a111e4926fe3734197",
+          "text_bytes": 1992646
+        }
+      ]
+    }
+  ],
+  "historical_reference_observations": [
+    {
+      "path": "student.tests/pa18/loop89-reference.json",
+      "sha256": "491e7a1f96c189b793f411046cff3194ab18389b258fc2baa02e0d920a9be53f"
+    },
+    {
+      "path": "student.tests/pa18/loop89-reference-final.json",
+      "sha256": "ab560d91d78f1ca44987d2c94aea699327bb2ea605aa395221ef07ac39c5c0f9"
+    }
+  ],
+  "initial_checks": {
+    "stage": {
+      "command": [
+        "make",
+        "test-pa18"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/stage.log",
+      "sha256": "cb664dfca7798fda7947f8e541cf77a85e4f7ec167916985f13c8fb2c4d3632d"
+    },
+    "prior": {
+      "command": [
+        "bash",
+        "-c",
+        "n=18; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/prior.log",
+      "sha256": "3baef05220ee75a639009d268a2f94ed14055ce2c92bae7ab1893d51b8631a52"
+    },
+    "through": {
+      "command": [
+        "make",
+        "test-report-through-pa18"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/through.log",
+      "sha256": "2c3586bd184852130db75ace15e358292f7f09c25307e920d4060e1926efd326"
+    },
+    "file-audit": {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa18",
+        "--paths",
+        "dev/src"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/file-audit.log",
+      "sha256": "12faa7a5bed8bd6d000828942d7f1064351b88544085aadac5048e06fd054ae0"
+    },
+    "inherit76_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/inherit76_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/inherit76_controls.log",
+      "sha256": "38532539b070975178a53178613f0729d696326224b4d514f64de3901b33565c"
+    },
+    "audit74_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit74_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit74_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit74_controls.log",
+      "sha256": "0a236f73dfc27c0c9fc2a69e6e8624e331cac5df3ca6000ec477c06235d244bf"
+    },
+    "list75_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/list75_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/list75_controls.log",
+      "sha256": "d95a89c121d3bb177cb84ad694cd0238cbac0f07d8e8157a48b65b7e6194fe6a"
+    },
+    "lookup77_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/lookup77_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/lookup77_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/lookup77_controls.log",
+      "sha256": "ac950410297c2eb745794a6ef6a69cfe7f5ab9e08a0b16c14c7fe714581da06b"
+    },
+    "audit78_declarations": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit78_declarations.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit78_declarations"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit78_declarations.log",
+      "sha256": "aac896a203ad021089d50eb5df6d7cbedbfa9bb8021193f7c24e3b6685efbb0b"
+    },
+    "nested77_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/nested77_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/nested77_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/nested77_controls.log",
+      "sha256": "a9e8096d928728103907c6fd92f674202305d3bab36d3ac4dd86a0dcd742ccc0"
+    },
+    "audit78_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit78_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit78_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit78_controls.log",
+      "sha256": "0067d0fe0fef1deec12933e9a1952417bce2ce13a3fbeca16d47c97dfe514502"
+    },
+    "course79": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/course79.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/course79"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/course79.log",
+      "sha256": "36b0985f092b29f5c824796b26ceb708dd1c12fa8ef7c8cca47662741b298947"
+    },
+    "syntax79_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/syntax79_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/syntax79_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/syntax79_controls.log",
+      "sha256": "4ad693b02ed0e77b3d2259c4d925421135de811fc7ce2b7cabb9a3c5184df846"
+    },
+    "signature79_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/signature79_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/signature79_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/signature79_controls.log",
+      "sha256": "983800022ce06ff0a4c950389bf0dd5a63408720a52a9c764f3c2af497b0d1d4"
+    },
+    "audit82_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit82_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit82_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit82_controls.log",
+      "sha256": "487a28e9844978cb522d495ec239d1088dc5ed4feeb84876cf6d1c20171153c0"
+    },
+    "scalar80_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/scalar80_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/scalar80_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/scalar80_controls.log",
+      "sha256": "1bf63ff8d5f8f4ecf34833cd4f66dd27c082d3159ca06006655fe0df8209418d"
+    },
+    "result81_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/result81_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/result81_controls.log",
+      "sha256": "bc738ac83483b616b64f97fd25c8ad1b561624ebda47d0381f6c6a8e11047e0e"
+    },
+    "array83_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/array83_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/array83_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/array83_controls.log",
+      "sha256": "9a18a64d145279a49cd2ba35bcd2d12dcf5957a1a5db78ab05a89e75103fddae"
+    },
+    "storage85_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/storage85_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/storage85_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/storage85_controls.log",
+      "sha256": "76ec4f10d0062c9b6ee4bbf57f4f5590144794d72769623568e7b92a0aa7db7e"
+    },
+    "object84_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/object84_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/object84_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/object84_controls.log",
+      "sha256": "373c3e208948210d527f91b0a071225fbac495879148ad227dc7aa64044296b4"
+    },
+    "discard85_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/discard85_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/discard85_controls.log",
+      "sha256": "249247e0832bc147f03df6a8f2876f231befe9affb7e1b72ea6db29b201290d0"
+    },
+    "boundary87_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/boundary87_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/boundary87_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/boundary87_controls.log",
+      "sha256": "9df3e4e15c79a3ebdc5e86bcdf8e60cd0555e56771eb6054aad3efe3dd83e911"
+    },
+    "audit88_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit88_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit88_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit88_controls.log",
+      "sha256": "e5c2096e05454be51b92d929eaaea02230b1a5eada35a0f73c85609459641a92"
+    },
+    "discard85_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/discard85_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/discard85_scaling.log",
+      "sha256": "ca285a1a0ffa5d72f8afbc12ce952d09f3e1e9014d4179267d8fd8495bdd2080"
+    },
+    "audit86_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit86_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/audit86_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit86_controls.log",
+      "sha256": "7dd4e94d9919e17d7b9b48b9faafe38bc3eb5264bd706acb340fec63b6579a6c"
+    },
+    "list75_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/list75_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/list75_scaling.log",
+      "sha256": "f37a6b7f044e9695aa8d0306f3afab8b9eff6ec67a47ea4f0a545ea75dc65827"
+    },
+    "inherit76_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/inherit76_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/inherit76_scaling.log",
+      "sha256": "02e185d97bfcb0634216f536e134ac15e69c7d7632aa77d1c72a0f19139c2f02"
+    },
+    "nested77_scaling": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/nested77_scaling.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/nested77_scaling"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/nested77_scaling.log",
+      "sha256": "14a004d15bdfcbe3f523a446ed227826f78c91446877f088694fd53431bb62f1"
+    },
+    "result81_inspection": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_inspection.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/result81_inspection"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/result81_inspection.log",
+      "sha256": "45f58729a52455bb68e9f18ec28a6760d610ae633004745bb13b765d6b0fd462"
+    },
+    "list75_course": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_course.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/list75_course"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/list75_course.log",
+      "sha256": "028117584b9f7fbb1902006e3c1e8ff2c8a40b63d5a47de152dd79d58029f5c2"
+    },
+    "inherit76_course": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/inherit76_course.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/inherit76_course"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/inherit76_course.log",
+      "sha256": "8ef9562349fab65b19b4da80c822d915b951dc834b96a015388dfbd3fdc2772f"
+    },
+    "validate73_controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/validate73_controls.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/validate73_controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/validate73_controls.log",
+      "sha256": "8dd4c4c8b0e6fc81070f490d87e93b514742bb0b47fd885428cfb761e5ec33ea"
+    },
+    "pa16-array-controls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa16/initialization.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa18-loop89/validation/pa16-array-controls"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/pa16-array-controls.log",
+      "sha256": "cd1724096290c956bab960ca3f348bd1f5958a11ef192ef9a417cbdedf4e6ac5"
+    },
+    "reference-proof-83": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference83.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/reference-proof-83.log",
+      "sha256": "ac728e7b839396fccaedb61c15367308e35f4d0606c8290096a1a8ec518aac60"
+    },
+    "reference-proof-85": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference85.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/reference-proof-85.log",
+      "sha256": "b21947e01bc98e6edfd212cd543045d38c83304319ed34e833ef80f9aa5156ab"
+    },
+    "reference-proof-87": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference87.py"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/reference-proof-87.log",
+      "sha256": "383a5cba52ce6bf6a10cec03e3dc985be3e04007aa29262cdec5fd617ead2233"
+    },
+    "reference-proof-84-chain": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/reference87_chain.py",
+        "/tmp/pa18-loop89/validation/reference84-chain"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/reference-proof-84-chain.log",
+      "sha256": "a4b5060d41cdc813d80205246564371a4155eb305c43fb08c2d5125d1cec74fd"
+    },
+    "signature79-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/signature79.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/signature79_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/signature79-trace.log",
+      "sha256": "f852116049e7973c8db4988e3221796783533cb87a500662d18770f835aac78c"
+    },
+    "signature79-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/signature79.exe",
+        "/tmp/pa18-loop89/validation/signature79.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/signature79-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "signature79-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/signature79.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/signature79-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scalar80-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/scalar80.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/scalar80_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/scalar80-trace.log",
+      "sha256": "b9decdd1d9106634ae90acc3a85039c19ac9673d28b6efd9767728edfc6e23a9"
+    },
+    "scalar80-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/scalar80.exe",
+        "/tmp/pa18-loop89/validation/scalar80.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/scalar80-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scalar80-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/scalar80.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/scalar80-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result81-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/result81.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/result81_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/result81-trace.log",
+      "sha256": "081e06f64635d60e4250a4966fb0d943c26596c15d64441bb7fc8131480384a7"
+    },
+    "result81-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/result81.exe",
+        "/tmp/pa18-loop89/validation/result81.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/result81-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "result81-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/result81.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/result81-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit82-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit82.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit82_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit82-trace.log",
+      "sha256": "f5637a15cb4df881aca5fc23da0da2ee559d46b2ec85080997f9ef4591142511"
+    },
+    "audit82-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit82.exe",
+        "/tmp/pa18-loop89/validation/audit82.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit82-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit82-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/audit82.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit82-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "array83-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/array83.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/array83_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/array83-trace.log",
+      "sha256": "74697efdbcb588c826ac21f776c685ff0b38da320ff8366876ec332ef0dab04a"
+    },
+    "array83-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/array83.exe",
+        "/tmp/pa18-loop89/validation/array83.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/array83-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "array83-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/array83.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/array83-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "object84-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/object84.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/object84_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/object84-trace.log",
+      "sha256": "ffcaae35a3d7cf8e7268e596c25cd4044795843da95653f5b3f9e5ebfd0f2a17"
+    },
+    "object84-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/object84.exe",
+        "/tmp/pa18-loop89/validation/object84.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/object84-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "object84-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/object84.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/object84-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "discard85-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/discard85.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/discard85_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/discard85-trace.log",
+      "sha256": "b820e4bee6287b8b8774c95bd285558911aeb9f755976c82dbb633f32ff07cb0"
+    },
+    "discard85-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/discard85.exe",
+        "/tmp/pa18-loop89/validation/discard85.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/discard85-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "discard85-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/discard85.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/discard85-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit86-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit86.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit86_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit86-trace.log",
+      "sha256": "4b468e358b8d2c497e61555f640745c0e710b78235667bda27e22dcb7ed0d059"
+    },
+    "audit86-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit86.exe",
+        "/tmp/pa18-loop89/validation/audit86.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit86-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit86-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/audit86.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit86-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit88-trace": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "--validate-lowir",
+        "--stats",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit88.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/audit88_trace.cpp"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit88-trace.log",
+      "sha256": "afd97f6db39d0a67d7392a9c31d6b1703f00934d2571046198a3bd3a5f626a3d"
+    },
+    "audit88-backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa18-loop89/validation/audit88.exe",
+        "/tmp/pa18-loop89/validation/audit88.lowir"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit88-backend.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit88-execution": {
+      "command": [
+        "/tmp/pa18-loop89/validation/audit88.exe"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/audit88-execution.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "abi": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa18/list75_abi.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/abimangle",
+        "/tmp/pa18-loop75/check-api",
+        "/tmp/pa18-loop89/validation/list75_controls",
+        "/tmp/pa18-loop89/validation/abi"
+      ],
+      "exit": 0,
+      "path": "/tmp/pa18-loop89/validation/abi.log",
+      "sha256": "af754076d5a37c81a3acf5d2d7c9f97bc285d1ad2dd0e9292485146ecb97ec1b"
+    }
+  },
+  "performance": {
+    "path": "student.tests/pa18/loop89-performance-complete.json",
+    "sha256": "49598ba20aa81b69c1834e56c2cf254229fa88b244f1d9699511025723ac7f79",
+    "observations": 1398,
+    "workloads": 54,
+    "binaries": [
+      {
+        "path": "/tmp/pa18-loop88/entry-cppgm",
+        "sha256": "be6a3c1b75c72e2c2606e4a6b32bd746569d0b76a218dd8f3ff1b864bcdfcb9c",
+        "text_bytes": 1991942
+      },
+      {
+        "path": "/tmp/pa18-loop89/complete-reviewed-cppgm",
+        "sha256": "0a0af72176162ed0678f25cb8899c5812e74809d1f6cef34a22058f9ee735099",
+        "text_bytes": 1992710
+      }
+    ]
+  },
+  "reviewed_source_sha256": {
+    "dev/src/lowering/branch_lifetimes.cpp": "916d0db13242ce3497e2616464ac2d6b866e71b87f32cd91d87b8bf12e1b8b8a",
+    "dev/src/lowering/values.cpp": "7c6f01c1771696932ad3afc2f2ce4525c1c64e3f16dfd6b6f4fa6eb7da76fd15",
+    "dev/src/semantic/analyzer.h": "a88057d2ef6161c8c48e567a10a93c2d40a3b443720c25546e8244318c7f3ce9",
+    "dev/src/semantic/constant_execution.cpp": "46500eb9f22e97fd5e7d12ba72a3b0b33ef147525e8c590ad6db0c3fbb4eb97e",
+    "dev/src/semantic/constant_queries.cpp": "0fa324aaf7316c2361b138636570b146797963c464b4c35dfe855b231a7ad1d6",
+    "dev/src/semantic/conversion.cpp": "2701dda625b8066098225c8dee7bb2aafb4909f5def2885b695c519d70df21c2",
+    "dev/src/semantic/converting_constructors.cpp": "90e4913405ded0052de401081334d36b0eeee32cd9b1b0c7588a2186e58915ed",
+    "dev/src/semantic/exception_expression.cpp": "31217ed8a247975ef198b12e11bd0070e07ce3e3df6467a3656b8c1c5a024b4b",
+    "dev/src/semantic/model.h": "612bb21f450aaa4774f99d5034024c2d2520ada89ac895d4f6b35cdb6ce33b0e",
+    "dev/src/semantic/overload.cpp": "2ca97ca873db11f31d91d4b0e62eb1f186ab2e8dcb1a02556b41bda82e77ed94",
+    "dev/src/semantic/static_initializer.cpp": "166319019fbfc0f7daf819f8d64853901c45bc3d5ba106610ee057312b34f2ee",
+    "dev/src/semantic/template_call.cpp": "77fe164f67dfa82daeebed888ce106662915c7ffd6d550c725317f141d8002fb",
+    "dev/src/semantic/template_conversion_facts.cpp": "64b29173e2463802bd92b6dae3a2672e4e8daa8e8d0c676a641895e51170387b",
+    "dev/src/semantic/template_deduction.cpp": "045e640831a9cad58ff78cf2c2d9724d0ae5b18baed614b0f3ccd2b7c59a9136",
+    "dev/src/semantic/template_packs.cpp": "c7ce5656960c5546afa3479d3e770932710ee5e3bf846f71d65678716ec7caaa"
+  },
+  "disposition": "PA18 full-stage audit passes; PA19 was not started."
+}
