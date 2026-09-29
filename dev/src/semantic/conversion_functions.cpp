@@ -40,19 +40,30 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
 {
     std::vector<EntityId> result;
     if (!class_value(source)) return result;
-    Index hidden;
-    EntityId cls = types[source].entity;
-    while (cls) {
+    Index hidden, seen;
+    struct Visit { EntityId cls; bool leave; };
+    std::vector<Visit> work(1,{types[source].entity,false});
+    while (!work.empty()) {
+        auto visit = work.back(); work.pop_back();
+        auto cls = visit.cls;
         auto info = entities[cls].class_info;
-        std::vector<TypeId> targets;
         for (EntityId e = class_facts[info].first_conversion; e; e = members[entities[e].member_info].next_conversion) {
             TypeId t = members[entities[e].member_info].conversion_target;
             if (auto canonical = members[entities[e].member_info].conversion_hiding_target) t = canonical;
-            if (!hidden.get(t)) result.push_back(e);
-            targets.push_back(t);
+            if (visit.leave) { hidden.put(t,hidden.get(t)-1); continue; }
+            if (!hidden.get(t) && !seen.get(e)) { result.push_back(e); seen.put(e,1); }
         }
-        for (TypeId t : targets) hidden.put(t,1);
-        auto base = class_facts[info].first_base; cls = base ? bases[base].base : 0;
+        if (visit.leave) continue;
+        // Hiding applies along each inheritance path, never across siblings.
+        // Enter all overloads before hiding their target for base traversal.
+        for (EntityId e = class_facts[info].first_conversion; e; e = members[entities[e].member_info].next_conversion) {
+            auto m = members[entities[e].member_info];
+            TypeId t = m.conversion_hiding_target ? m.conversion_hiding_target : m.conversion_target;
+            hidden.put(t,hidden.get(t)+1);
+        }
+        work.push_back({cls,true});
+        for (auto base = class_facts[info].first_base; base; base = bases[base].next)
+            work.push_back({bases[base].base,false});
     }
     return result;
 }

@@ -99,7 +99,11 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
         // Compare the complete qualification signatures, not an OR of cv bits
         // that loses which indirection level acquired the qualifier.
         unsigned added = 0;
-        if (at != bt && (a[i].derived || b[i].derived)) {
+        // A class-value transfer has a standard derived-to-base rank even
+        // though its construction record owns the actual subobject binding.
+        bool transfer = a[i].rank == 2 &&
+            (a[i].kind == Conversion::Kind::Construction || b[i].kind == Conversion::Kind::Construction);
+        if (at != bt && (a[i].derived || b[i].derived || transfer)) {
             if (derived_from(bt, at) || (fundamental(at, FT_VOID) && types[bt].kind == TypeKind::Named)) return false;
             if (derived_from(at, bt) || (fundamental(bt, FT_VOID) && types[at].kind == TypeKind::Named)) { strict = true; continue; }
         }
