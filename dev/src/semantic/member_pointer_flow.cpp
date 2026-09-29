@@ -118,6 +118,7 @@ struct Analyzer::MemberPointerFlow {
             // Ordinary indirect callees are evaluated after arguments. Member
             // pointers instead capture receiver/target before argument effects.
             if (use.node) visit(use.node);
+            if (use.arrow) { barrier(); cleanup = true; }
             if (use.member_pointer) visit(use.member_pointer);
             for (unsigned j = 0; j < x.argument_count && remaining; ++j)
                 visit(sem.call_argument(x,j));

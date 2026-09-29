@@ -90,6 +90,15 @@ struct Arrow{Box& b;P p;Arrow(Box& x,P y):b(x),p(y){}
 Target* operator->(){b.p=p;return &target;}};\n''', 'generic')
 add('bounded-function', 'box.p=&S::f;\n'+'d.x=3;\n'*4200, shape='generic')
 add('bounded-depth', 'box.p=&S::f;\n'+'('*70+'d.x'+')'*70+';', shape='generic')
+cases['reject-ambiguous-qualifier'] = ('''struct Root{int n;};struct A:Root{};
+struct B:Root{};struct D:A,B{};int main(){D d;return d.Root::n;}\n''', 'reject')
+cases['reject-private-qualifier'] = ('''struct Root{int n;};struct A:Root{};
+struct B:Root{};struct D:private A,B{};int main(){D d;return d.A::n;}\n''', 'reject')
+cases['arrow-call-effect'] = (prefix+'''struct Target{int take(int n){return n;}};Target target;
+struct Arrow{Box& b;P p;Arrow(Box& x,P y):b(x),p(y){}
+Target* operator->(){b.p=p;return &target;}};
+'''+setup+'''Arrow a(box,back);box.p=&S::f;
+return a->take((d.*box.p)())!=7;}\n''', 'generic')
 rows = []
 for name, (source, shape) in cases.items():
     src = WORK/(name+'.cpp'); src.write_text(source)
@@ -98,7 +107,7 @@ for name, (source, shape) in cases.items():
     result = subprocess.run(command,capture_output=True,text=True)
     row = dict(name=name,source=source,source_sha256=hashlib.sha256(source.encode()).hexdigest(),
                compile_exit=result.returncode,diagnostic=result.stderr,expected_shape=shape)
-    if not result.returncode:
+    if not result.returncode and shape != 'reject':
         text = ir.read_text(); raw = ir.read_bytes()
         stats = subprocess.run(command+['--stats'],capture_output=True,text=True)
         row['telemetry'] = [json.loads(s) for s in stats.stderr.splitlines() if s.startswith('{')]
@@ -109,7 +118,8 @@ for name, (source, shape) in cases.items():
         backend = subprocess.run([str(ROOT/'dev/lowir2native-ref'),'-O0','-o',str(exe),str(ir)],capture_output=True,text=True)
         row.update(backend_exit=backend.returncode,backend_diagnostic=backend.stderr)
         if not backend.returncode: row['runtime_exit'] = subprocess.run([str(exe)],timeout=20).returncode
-    row['passed'] = row.get('runtime_exit') == 0 and row.get('stats_identical',False) and row.get('shape_passed',False)
+    row['passed'] = bool(result.returncode) if shape == 'reject' else (
+        row.get('runtime_exit') == 0 and row.get('stats_identical',False) and row.get('shape_passed',False))
     rows.append(row)
 print(json.dumps(dict(compiler=str(CC),compiler_sha256=hashlib.sha256(CC.read_bytes()).hexdigest(),cases=rows),indent=2))
 sys.exit(not all(r['passed'] for r in rows))
