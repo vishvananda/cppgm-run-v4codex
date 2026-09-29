@@ -239,12 +239,21 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
             InitAction item; item.kind = InitKind::Converted; item.type = field.type; item.field = field.field;
             item.index = field.index; item.count = field.count; item.source = args[j]; item.conversion = object.call.conversions+j;
             auto selected = conversions[item.conversion];
+            if (selected.kind == Conversion::Kind::List) {
+                auto nested = list_objects[selected.materialization];
+                item.helper_safe = nested.initializer ? initializers[nested.initializer].helper_safe :
+                    !nested.call.argument_count && !class_value(item.type);
+            }
+            else item.helper_safe = (selected.kind == Conversion::Kind::Standard || selected.kind == Conversion::Kind::Explicit) &&
+                !selected.function && independent_initializer(item.source);
             if (class_value(item.type) && selected.kind == Conversion::Kind::Construction && conversion_objects[selected.materialization].elided) {
                 item.helper_transfer = selected.function;
                 item.helper_parameter = conversion_objects[selected.materialization].temporary;
                 demand_member(item.helper_transfer);
                 prepare_value_boundary(item.type);
+                item.helper_safe = independent_initializer(item.source);
             }
+            root.helper_safe &= item.helper_safe;
             auto next = initializers.size(); initializers.push_back(item);
             if (tail) initializers[tail].next = next; else root.first = next;
             tail = next;

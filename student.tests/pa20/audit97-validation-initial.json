@@ -1,0 +1,56 @@
+{
+  "base": "a9b24ab68f1a75288df10161cb171fa239e1409a",
+  "entry": "7eca0738b6e949ea32da7c8959b8d41c28fba7c2",
+  "compiler_sha256": "93d18abcc4c3adaa5c52c6d052763f4810886c45368c8c13870ad6120cb72ab7",
+  "checks": {
+    "stageTests": {
+      "command": [
+        "make",
+        "test-pa20"
+      ],
+      "exit": 2,
+      "elapsed_s": 5.2753066550940275,
+      "log": "/tmp/pa20-audit97/checks/stageTests.log",
+      "log_sha256": "2e1c5714fb9bcf8382a332a366953c8ed813574e5bf73640c95798b8e6614f43",
+      "summaries": [
+        "===== pa20 =====",
+        "===== TEST SUMMARY: 121 / 144 TESTS PASSED ====="
+      ]
+    },
+    "priorThroughTests": {
+      "command": [
+        "bash",
+        "-c",
+        "n=20; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "exit": 2,
+      "elapsed_s": 15.368489321321249,
+      "log": "/tmp/pa20-audit97/checks/priorThroughTests.log",
+      "log_sha256": "6b3b655baeefce423279bdf47d0899a2cd2d5cb8e391a9aaf7f056fc864b571e",
+      "summaries": [
+        "===== pa1 =====",
+        "===== pa2 =====",
+        "===== pa3 =====",
+        "===== pa4 =====",
+        "===== pa5 =====",
+        "===== pa6 =====",
+        "===== pa7 =====",
+        "===== pa8 =====",
+        "===== pa9 =====",
+        "===== pa10 =====",
+        "===== pa11 =====",
+        "===== pa12 =====",
+        "===== pa13 =====",
+        "===== pa14 =====",
+        "===== pa15 =====",
+        "===== pa16 =====",
+        "===== pa17 =====",
+        "===== pa18 =====",
+        "===== pa19 =====",
+        "===== TEST SUMMARY: 3449 / 3452 TESTS PASSED ====="
+      ]
+    }
+  },
+  "controls": {},
+  "traces": {}
+}

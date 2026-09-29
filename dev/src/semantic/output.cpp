@@ -146,6 +146,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"semantic_body_checks\":" << body_checks
         << ",\"semantic_range_plans\":" << ranges.size()-1
+        << ",\"semantic_initializer_independence_work\":" << initializer_independence_work
+        << ",\"semantic_initializer_independence_hits\":" << initializer_independence_hits
         << ",\"semantic_range_storage_bytes\":" << ranges.capacity()*sizeof(RangePlan)
         << ",\"semantic_range_patterns\":" << range_patterns.size()-1
         << ",\"semantic_range_pattern_uses\":" << range_pattern_uses

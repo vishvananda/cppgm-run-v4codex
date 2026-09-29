@@ -55,6 +55,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/lambda
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/lambda
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/placeholder
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/placeholder_return
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/initializer_effects
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/range_statement semantic/range_operations lowering/range_statement lowering/typed_operations
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/conversion_functions lowering/user_conversions
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_operators

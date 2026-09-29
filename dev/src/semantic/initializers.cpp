@@ -111,6 +111,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         if (c.valid()) {
             record_class_initialization(source,t,source,&c);
             initializers[id].kind = InitKind::Constructor;
+            initializers[id].helper_safe = false;
             cursor = ast[source].next; return id;
         }
     }
@@ -128,18 +129,21 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     if (!aggregate) {
         if (types[t].kind == TypeKind::Named && entities[types[t].entity].class_info) {
             initialize(source, t, s, InitializationMode::Copy); initializers[id].kind = InitKind::Constructor;
+            initializers[id].helper_safe = false;
         } else {
             initialize(source, t, s, InitializationMode::Copy);
             NodeId scalar = source;
             while (ast[scalar].kind == Kind::BracedInit || ast[scalar].kind == Kind::ParenArguments || ast[scalar].kind == Kind::ParenInitializer) scalar = ast[scalar].first;
             if (scalar) list_conversion(scalar, t);
             initializers[id].source = scalar;
+            initializers[id].helper_safe = independent_initializer(scalar);
         }
         cursor = ast[source].next; return id;
     }
     initializers[id].kind = InitKind::Group;
     std::uint32_t tail = 0;
     auto append = [&](std::uint32_t item) {
+        initializers[id].helper_safe &= initializers[item].helper_safe;
         if (tail) initializers[tail].next = item; else initializers[id].first = item;
         tail = item;
     };

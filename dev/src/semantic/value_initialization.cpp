@@ -25,6 +25,7 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
     auto add = [&](TypeId child, EntityId field, std::uint64_t count) {
         prepare_value_initialization(child, s);
         InitAction item = initializers[initializer_plan(0, child)];
+        action.helper_safe &= item.helper_safe;
         item.field = field; item.count = count; children.push_back(item);
     };
     if (type.kind == TypeKind::Array) {
@@ -38,6 +39,7 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
             if (members[entities[ctor].member_info].explicit_constructor)
                 throw std::runtime_error("explicit constructor for omitted aggregate element");
             class_facts[c].value_constructor = ctor;
+            action.helper_safe = false;
             if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
         } else {
             action.kind = InitKind::Group;

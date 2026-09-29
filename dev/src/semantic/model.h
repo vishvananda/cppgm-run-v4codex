@@ -162,6 +162,7 @@ struct InitAction {
     std::uint32_t first = 0, next = 0;
     std::uint64_t index = 0, count = 1;
     InitKind kind = InitKind::Scalar;
+    bool helper_safe = true; // Evaluating arguments cannot observe delayed destination stores.
 };
 struct Entity {
     Access access = Access::Public;

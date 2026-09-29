@@ -1,0 +1,11 @@
+{
+  "completed_range_workloads": 23,
+  "range_process_exit": 1,
+  "failed_before_timing": true,
+  "invalid_workload_source": "struct S{int a[2];int b;};int main(){volatile int limit=4000000;int sum=0;for(int i=0;i<limit;++i){S s[]={{{i&7,s[0].a[0]+1},s[0].a[1]}};sum=(sum+s[0].b)&65535;}return sum!=43264;}",
+  "observed_native_exit": 1,
+  "incorrect_expected": 43264,
+  "correct_expected": 43136,
+  "proof": "Each group of eight iterations sums 1+2+3+4+5+6+7+8=36; 500000*36 modulo 65536 is 43136.",
+  "resolution": "All 23 preceding workloads have complete checks and raw observations; preserve them. Correct only the new personal benchmark expectation and measure that workload separately."
+}

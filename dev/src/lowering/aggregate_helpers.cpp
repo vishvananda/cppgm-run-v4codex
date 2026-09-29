@@ -68,6 +68,11 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
 {
     auto action = sem.initializers[plan];
     if (action.kind != InitKind::Group || sem.types[action.type].kind != TypeKind::Named) return false;
+    // A single scalar/reference argument precedes its sole destination store;
+    // there is no earlier field initialization for it to observe. Array
+    // arguments still need the proof for their own element stores.
+    auto first = sem.initializers[action.first];
+    if (!action.helper_safe && (first.next || sem.types[first.type].kind == TypeKind::Array)) return false;
     // An empty aggregate has no initialization actions. Its caller still owns
     // distinct object storage, but there is no helper body or call to emit.
     if (!action.first) return true;

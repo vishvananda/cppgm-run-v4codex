@@ -280,6 +280,9 @@ private:
     Expression numeric_literal_call(NodeId n, ScopeId s);
     Constant literal_element(std::uint32_t literal, Constant index);
     Index initializer_work_index;
+    Index independent_initializers;
+    std::size_t initializer_independence_work = 0, initializer_independence_hits = 0;
+    bool independent_initializer(NodeId source);
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
     Index static_initialization_facts, static_plan_facts;
