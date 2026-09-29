@@ -122,6 +122,9 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_angle_names\":" << angle_name_work
+        << ",\"semantic_angle_parts\":" << angle_part_work
+        << ",\"semantic_angle_interpretations\":" << angle_interpretations
         << ",\"semantic_fact_slots\":" << facts.slot_count()
         << ",\"semantic_fact_records\":" << facts.fact_count()
         << ",\"semantic_fact_storage_bytes\":" << facts.storage_bytes()

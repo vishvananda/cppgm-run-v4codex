@@ -2,12 +2,12 @@
 
 namespace cppgm { namespace syntax {
 
-Names::Names(bool telemetry) : telemetry_(telemetry), scopes_(1, Scope{0, 0, 0, 0}),
+Names::Names(bool telemetry) : telemetry_(telemetry), scopes_(1),
     imports_(1), entries_(1), slots_(32) {}
 
 ScopeId Names::enter(ScopeId parent)
 {
-    Scope next{parent, 0, 0, 0}; next.depth = scopes_[parent].depth + 1;
+    Scope next; next.parent = parent; next.imports = next.unnamed = 0; next.depth = scopes_[parent].depth + 1;
     scopes_.push_back(next);
     return scopes_.size() - 1;
 }
@@ -146,6 +146,11 @@ void Names::bind(ScopeId scope, IdentifierId name, Category category, ScopeId ta
         entries_.push_back(Binding());
     }
     Binding& entry = entries_[slots_[i]];
+    // Specialization selection belongs to semantics. Keep a possible template
+    // category regardless of which specialization was parsed most recently.
+    // Ordinary lexical scopes still replace a hidden declaration normally.
+    if (scopes_[scope].alternatives && template_category(entry.category) && !template_category(category))
+        category = entry.category;
     entry.owner = scope;
     entry.name = name;
     entry.category = category;

@@ -27,6 +27,7 @@ NodeId Parser::class_specifier()
     if (template_declaration && owner == saved_scope && previous.category == Category::Unknown)
         previous = names.local(names.parent(owner),final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);
+    if (n && ast[ast[n].last].first) names.specialization_alternatives(child);
     auto category = template_declaration || previous.category == Category::TemplateType ? Category::TemplateType : Category::Type;
     // Tags remain available as qualifiers while an existing ordinary value
     // keeps terminal lookup, independent of declaration order [basic.scope].

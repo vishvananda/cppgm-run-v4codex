@@ -22,6 +22,7 @@ public:
     ScopeId unnamed_namespace(ScopeId parent);
     ScopeId parent(ScopeId scope) const;
     void definition_parent(ScopeId scope, ScopeId parent);
+    void specialization_alternatives(ScopeId scope) { scopes_[scope].alternatives = true; }
     Binding local(ScopeId scope, IdentifierId name) const;
     Binding lookup(ScopeId scope, IdentifierId name) const;
     Binding qualified(ScopeId scope, IdentifierId name) const;
@@ -32,7 +33,7 @@ public:
     mutable std::size_t probes = 0, lookup_scopes = 0;
 private:
     bool telemetry_;
-    struct Scope { ScopeId parent; std::uint32_t imports; ScopeId unnamed; std::uint32_t depth; };
+    struct Scope { ScopeId parent; std::uint32_t imports; ScopeId unnamed; std::uint32_t depth; bool alternatives = false; };
     struct Import { ScopeId target; std::uint32_t next; bool directive; };
     std::vector<Scope> scopes_;
     std::vector<Import> imports_;

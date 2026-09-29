@@ -119,12 +119,16 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
             potential = end && in.is("(",end);
         }
     }
-    if (in.is("<") && potential) ast.append(part, template_arguments());
+    if (in.is("<") && potential) {
+        if (qualified && !explicit_template) ++qualified_angles;
+        ast.append(part, template_arguments());
+    }
     return part;
 }
 
 NodeId Parser::name(bool force_template)
 {
+    auto angles_before = qualified_angles;
     NodeId result = make(Kind::Name);
     ScopeId owner = scope;
     bool qualified = in.eat("::");
@@ -142,13 +146,16 @@ NodeId Parser::name(bool force_template)
         qualified = true;
         force_template = false;
     }
+    // Category lookahead cannot select a class specialization. Preserve that
+    // uncertainty for semantic interpretation in the declaration's own scope.
+    if (qualified_angles != angles_before) ast[result].flags |= 4;
     return result;
 }
 
 NodeId Parser::template_arguments()
 {
-    in.require("<");
     NodeId args = make(Kind::TemplateArguments);
+    in.require("<");
     unsigned saved = angle_expression;
     angle_expression = 1;
     if (!in.is(">") && !in.is(">>")) {
@@ -169,6 +176,8 @@ NodeId Parser::template_arguments()
             ast.append(args, arg);
         } while (in.eat(","));
     }
+    // The two delimiter locations survive a possible relational interpretation.
+    ast[args].literal = in.peek().location;
     in.close_angle();
     angle_expression = saved;
     return args;

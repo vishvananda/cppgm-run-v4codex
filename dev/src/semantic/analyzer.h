@@ -780,6 +780,10 @@ private:
     TypeId source_type(EntityId e) const;
     ScopeId current_instantiation_scope(TypeId type, ScopeId use);
     void resolve_parenthesized_declaration(NodeId declaration, ScopeId scope);
+    void resolve_angle_statement(NodeId statement, ScopeId scope);
+    struct AngleRemainder { bool relational = false; NodeId suffix = 0, last = 0; std::uint32_t close = 0; };
+    AngleRemainder resolve_angle_name(NodeId name, NodeId expression, ScopeId scope);
+    std::size_t angle_name_work = 0, angle_part_work = 0, angle_interpretations = 0;
     TypeId type_name(NodeId n, ScopeId s, NodeId last = 0, bool require_typename = false, bool template_name = false);
     TypeId injected_template_type(EntityId e, ScopeId use);
     TypeId qualified_type(TypeId owner, IdentifierId name, const std::vector<TypeId>& args, DependentNameKind kind);

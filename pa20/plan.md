@@ -1,7 +1,24 @@
-# PA20 compact plan — implementation handoff 99
+# PA20 compact plan — implementation 100 (in progress)
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
+Implementation 100 entry: `2e31ab57e7ba3371ca5c59057ede55b435d4a666`, clean,
+143/144; previous turn classified **progress** (aggregate/value boundary and
+validated evidence). Frozen entry compiler: `/tmp/pa20-loop100/entry`.
+Current owner: parser / retained declaration environment. Inspection found an
+existing source-ambiguity boundary, so body scheduling remains unchanged.
+Data flow: category alternatives + retained angle locations → statement's real
+semantic scope → indexed specialization/member lookup → monotonic source-node
+interpretation → ordinary typed facts and lowering. Original nodes and children
+retain identity; specialization views share the selected interpretation. No
+reparse, copied tree or lowering reconstruction. Work is linear in candidate
+names/parts plus existing canonical specialization demand, owned by the TU.
+First increment: required suite **144/144**, through PA20 **3596/3596**, file
+audit passes (three inherited warnings); 23/23 new native/rejection controls
+cover declaration order, scopes, aliases, functions/classes/templates/lambdas
+and for-init. Expanding operand/qualification controls and collecting final
+performance and cumulative validation remain implementation work.
+
 Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
 Entry: `16ac49da1339edaa4a5f96bf4efab731a30c65e1`, clean, **140/144**.
 Implementation boundary: `37f8300b` (following `a7265134`, `b8b9e1ff`).

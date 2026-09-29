@@ -1,6 +1,17 @@
 #include "syntax/ast.h"
 #include <stdexcept>
 namespace cppgm { namespace syntax {
+void Ast::resolve_source_node(NodeId id, Node node)
+{
+    if (nodes.occurrences[id].context)
+        throw std::logic_error("source grammar interpretation during instantiation");
+    auto source = nodes.occurrences[id].source;
+    auto index = source_resolutions.get(source);
+    if (!index) {
+        index = resolved_nodes.size(); resolved_nodes.push_back(node);
+        source_resolutions.put(source,index);
+    } else resolved_nodes[index] = node;
+}
 void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId before)
 {
     if (nodes.occurrences[d].context || paren_roles.get(nodes.occurrences[d].source))
@@ -14,6 +25,7 @@ void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId
 Node Ast::source_view(NodeId id) const
 {
     Node result = nodes[id];
+    if (auto resolution = source_resolutions.get(nodes.occurrences[id].source)) result = resolved_nodes[resolution];
     if (auto role = paren_roles.get(nodes.occurrences[id].source)) {
         auto r = paren_resolutions[role/8];
         switch (role%8) {
@@ -35,7 +47,7 @@ NodeId Ast::projected(NodeId source, std::uint32_t context) const
 }
 Node Ast::project_view(NodeId id) const
 {
-    Node result = paren_roles.empty() ? nodes[id] : source_view(id);
+    Node result = paren_roles.empty() && source_resolutions.empty() ? nodes[id] : source_view(id);
     auto context = nodes.occurrences[id].context;
     if (context) {
         result.first = projected(result.first,context); result.last = projected(result.last,context);

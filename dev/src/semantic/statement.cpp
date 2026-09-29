@@ -76,6 +76,7 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
 void Analyzer::resolve_statement(NodeId n, ScopeId s)
 {
     if (!n) return;
+    if (definitions) resolve_angle_statement(n,s);
     switch (ast[n].kind) {
     case Kind::RangeFor: resolve_range(n,s); return;
     case Kind::Compound: {
@@ -148,7 +149,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         resolve_statement(ast[n].first, s); return;
     case Kind::ExpressionStatement: case Kind::ForInit: case Kind::Iteration:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            if (ast[c].kind == Kind::SimpleDeclaration) declaration(c, s);
+            if (ast[c].kind == Kind::SimpleDeclaration) resolve_statement(c, s);
             else {
                 if (expression(c, s).form == ExpressionForm::Overload) throw std::runtime_error("unresolved discarded overload");
                 prepare_discarded(c);

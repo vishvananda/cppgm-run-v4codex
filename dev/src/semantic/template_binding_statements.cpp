@@ -5,6 +5,7 @@ using syntax::Kind;
 void Analyzer::bind_template_statement(NodeId n, ScopeId s)
 {
     if (!n) return;
+    resolve_angle_statement(n,s);
     ++template_binding_work;
     auto node = ast[n];
     switch (node.kind) {
@@ -73,7 +74,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         bind_template_statement(node.first,s); return;
     case Kind::ForInit:
         for (auto c = node.first; c; c = ast[c].next) {
-            if (ast[c].kind == Kind::SimpleDeclaration) bind_template_declaration(c,s);
+            if (ast[c].kind == Kind::SimpleDeclaration) bind_template_statement(c,s);
             else { bind_template_expression(c,s); bind_template_discarded(c,s); }
         }
         return;

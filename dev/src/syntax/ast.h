@@ -217,7 +217,7 @@ public:
     const Node& operator[](NodeId id) const { return nodes[id]; }
     // A view projects structural edges through a context without copying syntax.
     Node view(NodeId id) const {
-        if (!nodes.occurrences[id].context && paren_roles.empty()) return nodes[id];
+        if (!nodes.occurrences[id].context && paren_roles.empty() && source_resolutions.empty()) return nodes[id];
         return project_view(id);
     }
     Node source_view(NodeId id) const;
@@ -227,6 +227,11 @@ public:
     struct ParenResolution { NodeId parameters, before, name; };
     std::vector<ParenResolution> paren_resolutions = std::vector<ParenResolution>(1);
     IdIndex paren_roles;
+    // Only grammar-ambiguous wrappers get an interpretation. Children retain
+    // source identity; this is not a second syntax/semantic tree.
+    IdIndex source_resolutions;
+    std::vector<Node> resolved_nodes = std::vector<Node>(1);
+    void resolve_source_node(NodeId id, Node node);
     Node project_view(NodeId id) const;
     void expanded_children(NodeId parent, const std::vector<NodeId>& children);
     IdIndex expanded_first, expanded_last, expanded_next;
@@ -277,6 +282,8 @@ public:
     bool children_expanded(NodeId parent) const { return tree.expanded_first.get(parent) != 0; }
     void resolve_paren_initializer(NodeId item, NodeId declarator, NodeId parameters, NodeId before)
         { tree.resolve_paren_initializer(item,declarator,parameters,before); }
+    void resolve_source_node(NodeId id, Node node) { tree.resolve_source_node(id,node); }
+    NodeId make_source(Kind kind, Token token = Token()) { return tree.make(kind,token); }
     std::uint32_t new_context() { return tree.new_context(); }
     bool& telemetry;
     NodePool& nodes;
