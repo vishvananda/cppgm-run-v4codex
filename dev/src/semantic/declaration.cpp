@@ -438,6 +438,7 @@ void Analyzer::function_body(const Body& body)
     current_function = body.entity;
     body_evaluation_depth = unevaluated_depth;
     return_type = types[entities[body.entity].type].child;
+    if (placeholder_type(return_type)) placeholder_returns.put(body.entity,return_type);
     auto restore = [&]() {
         return_type = saved_return; current_function = saved_function;
         body_evaluation_depth = saved_evaluation_depth;
@@ -490,6 +491,7 @@ void Analyzer::function_body(const Body& body)
     if (calls && constructor_member(body.entity)) constructor_actions(body.entity);
     if (calls) check_constexpr_constructor(body.entity);
     statements(body.node, fs);
+    if (calls) finish_deduced_return(body.entity);
     if (calls) finish_class_returns(body.entity);
     if (calls && (constructor_member(body.entity) || destructor_member(body.entity)))
         require_member_definition(body.entity);

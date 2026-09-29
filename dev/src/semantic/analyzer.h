@@ -155,7 +155,7 @@ public:
     std::vector<ConstantField> constant_fields;
     struct Closure {
         EntityId entity = 0, function = 0, enclosing = 0, conversion = 0, thunk = 0;
-        NodeId source = 0, inferred_return = 0;
+        NodeId source = 0;
         TypeId signature = 0;
         unsigned ordinal = 0;
     };
@@ -309,6 +309,14 @@ private:
     EntityId placeholder_parameter = 0;
     Index placeholder_objects;
     bool deducing_placeholder = false;
+    TypeId placeholder_type();
+    bool placeholder_type(TypeId type);
+    std::vector<unsigned char> placeholder_types;
+    TypeId deduce_placeholder(TypeId pattern, Expression value, TypeId& deduction);
+    Index placeholder_returns;
+    void deduce_return(NodeId source, ScopeId scope);
+    void finish_deduced_return(EntityId function);
+    void require_deduced_return(EntityId function);
     TypeId deduced_object_type(NodeId specs, NodeId declarator, NodeId initializer, ScopeId scope, TypeId& deduction);
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
@@ -981,6 +989,7 @@ private:
     void bind_template_return(NodeId n, ScopeId s);
     Index template_statement_conversions;
     std::size_t body_checks = 0, body_lifetime_checks = 0;
+    std::size_t return_deductions = 0, return_deduction_uses = 0, placeholder_type_work = 0;
     std::size_t statement_conversion_work = 0, statement_conversion_uses = 0;
     Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);

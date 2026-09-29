@@ -148,6 +148,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         for (EntityId e : candidates(x.entity)) {
             ++candidate_work;
             if (definitions && entities[e].template_info) e = deduce_target(e,ft);
+            if (e) require_deduced_return(e);
             if (!e || entities[e].type != ft) continue;
             bool member = entities[e].member_info && !entities[e].is_static;
             if (member != (target.kind == TypeKind::MemberPointer)) continue;

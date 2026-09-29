@@ -67,6 +67,7 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
         }
     auto begin = viable[best].offset;
     selected.assign(sequences.begin()+begin,sequences.begin()+begin+count+(object!=0));
+    require_deduced_return(result.entity);
     result.failure = CallFailure::None; return result;
 }
 } }

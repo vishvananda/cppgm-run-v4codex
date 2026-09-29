@@ -21,12 +21,6 @@ void check_declarator(const syntax::AstView& ast, NodeId d)
         }
     }
 }
-NodeId inferred_return(const syntax::AstView& ast, NodeId body)
-{
-    auto first = ast[body].first;
-    return first == ast[body].last && ast[first].kind == Kind::Return && ast[first].first &&
-        ast[ast[first].first].kind != Kind::BracedInit ? first : 0;
-}
 }
 void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
 {
@@ -44,7 +38,7 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
     auto f = types[signature];
     std::vector<TypeId> params(types.parameters.begin()+f.offset,types.parameters.begin()+f.offset+f.count);
     auto trailing = child(d,Kind::TrailingReturn);
-    TypeId result = !trailing && inferred_return(ast,body) ? 0 : f.child;
+    TypeId result = !trailing ? placeholder_type() : f.child;
     auto fn = make_entity(EntityKind::Function,s,0,body);
     entities[fn].type = types.function(result,params,f.variadic);
     entities[fn].template_pattern = true;
@@ -69,7 +63,7 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     bool variadic = f.variadic;
     unsigned cv = child(d,Kind::LambdaSpecifier) ? 0 : 1;
     auto trailing = child(d,Kind::TrailingReturn);
-    auto result_type = f.child;
+    auto result_type = trailing ? f.child : placeholder_type();
     auto label = "__lambda_"+std::to_string(n);
     auto name = ids.intern(TextView(label.data(),label.size()));
     auto cls = make_entity(EntityKind::Type,s,name,n);
@@ -90,7 +84,6 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     for (auto scope = s; scope; scope = scopes[scope].parent)
         if (scopes[scope].kind == ScopeKind::Function) { closure.enclosing = scopes[scope].entity; break; }
     class_facts[info].local_function = closure.enclosing;
-    if (!trailing) closure.inferred_return = inferred_return(ast,body);
     auto id = closures.size(); closures.push_back(closure);
     closure_entities.put(cls,id); closure_functions.put(fn,id); closure_occurrences.put(n,id);
     // Check the retained body immediately, but keep its odr-use edges dormant

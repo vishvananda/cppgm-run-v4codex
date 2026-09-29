@@ -145,6 +145,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_template_initializer_binding_queued\":" << template_initializer_binding_queued
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"semantic_body_checks\":" << body_checks
+        << ",\"semantic_return_deductions\":" << return_deductions
+        << ",\"semantic_return_deduction_uses\":" << return_deduction_uses
+        << ",\"semantic_placeholder_type_work\":" << placeholder_type_work
         << ",\"semantic_body_lifetime_checks\":" << body_lifetime_checks
         << ",\"semantic_statement_conversion_work\":" << statement_conversion_work
         << ",\"semantic_statement_conversion_uses\":" << statement_conversion_uses

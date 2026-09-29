@@ -125,6 +125,7 @@ void Analyzer::check_constexpr_signature(EntityId e)
         definition_owner(scopes[entities[e].owner].entity).specialization) return;
     auto f = types[entities[e].type];
     if (!entities[e].type) return;
+    if (placeholder_type(f.child)) return;
     bool pattern_constructor = entities[e].template_pattern && scopes[entities[e].owner].kind == ScopeKind::Class &&
         terminal(decl_name(entities[e].source)) == scopes[entities[e].owner].name;
     bool valid = constructor_member(e) || pattern_constructor || literal_type(f.child);

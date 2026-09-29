@@ -155,6 +155,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             entities[types[qualifier].entity].complete;
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_parameter) {
         result = owner ? substitution_argument(owner,p.entity) : bindings.get(p.entity);
+        // The placeholder is deduced by its declaration/return owner, never
+        // by an enclosing template substitution frame.
+        if (!result && p.entity == placeholder_parameter) return pattern;
         if (!result) return 0;
         result = types.qualify(result, p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].template_pattern) {
@@ -552,6 +555,7 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
     }
     auto primary = t.primary ? t.primary : pattern;
     auto instance = deduced_specialization(primary,args);
+    if (instance) require_deduced_return(instance);
     return instance && entities[instance].type == target ? instance : 0;
 }
 EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)

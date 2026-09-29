@@ -35,7 +35,9 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
     TypeId t;
     if (ast[c].kind == Kind::ConditionDeclaration) {
         NodeId specs = ast[c].first, d = ast[specs].next;
-        t = declarator(d, specifiers(specs, s), s);
+        TypeId deduction = 0;
+        t = spec_has(specs,KW_AUTO) ? deduced_object_type(specs,d,ast[d].next,s,deduction) :
+            declarator(d, specifiers(specs, s), s);
         facts.edit(n).entity = declare_object(d, ast[d].next, t, specs, s, c);
     } else t = expression(c, s).type;
     Expression value; value.type = t;
@@ -106,15 +108,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::NamespaceAlias: case Kind::StaticAssert: case Kind::Class: case Kind::ClassForward: case Kind::Enum:
         declaration(n, s); return;
     case Kind::Return:
-        if (auto id = closure_functions.get(current_function)) {
-            if (closures[id].inferred_return == n) {
-                return_type = types.unqualified(decay(expression(ast[n].first,s).type));
-                auto f = types[entities[current_function].type];
-                std::vector<TypeId> params(types.parameters.begin()+f.offset,types.parameters.begin()+f.offset+f.count);
-                entities[current_function].type = types.function(return_type,params,f.variadic,f.cv);
-                member_facts(current_function);
-            }
-        }
+        if (placeholder_returns.get(current_function)) deduce_return(n,s);
         if (class_value(return_type)) { record_class_return(n,s); return; }
         if (ast[n].first) {
             NodeId value_node = ast[n].first;

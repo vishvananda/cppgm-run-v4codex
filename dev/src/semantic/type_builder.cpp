@@ -88,6 +88,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         case KW_FLOAT: fundamental = FT_FLOAT; break;
         case KW_DOUBLE: fundamental = FT_DOUBLE; break;
         case KW_VOID: fundamental = FT_VOID; break;
+        case KW_AUTO: if (calls) result = placeholder_type(); break;
         default: break;
         }
     }
