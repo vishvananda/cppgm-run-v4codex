@@ -22,7 +22,7 @@ bool Analyzer::prove_member_pointer_value(NodeId source, TypeId target, unsigned
         return node.first ? prove_member_pointer_value(node.first,target,budget) : true;
     auto expression = expressions[source];
     if (node.kind == syntax::Kind::KeywordLiteral || node.kind == syntax::Kind::Literal ||
-        (node.kind == syntax::Kind::Unary && node.op == OP_AMP) ||
+        (node.kind == syntax::Kind::Unary && node.op == OP_AMP && expression.form == ExpressionForm::Ordinary) ||
         (node.kind == syntax::Kind::IdExpression && entities[expression.entity].constant.valid)) {
         auto value = static_value(source,target);
         return value.kind == StaticValue::MemberFunction && !value.addend;
