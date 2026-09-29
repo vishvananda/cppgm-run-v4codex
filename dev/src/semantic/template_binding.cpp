@@ -41,7 +41,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
             owner = types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;
             qualified = true; continue;
         }
-        auto e = lookup(owner,full && p == last ? terminal(n) : ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,full && p == last ? terminal(n) : ast[p].text,child(p,Kind::TemplateArguments) ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
         if (p != last && entities[e].parameter_pack) r.qualifier_pack = e;

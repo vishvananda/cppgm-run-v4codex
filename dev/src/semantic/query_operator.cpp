@@ -121,7 +121,8 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
                 if (!accessible(member,q.context,object_uses[args[0].object_use].naming_scope,
                     entities[scopes[naming_class(object_uses[args[0].object_use].naming_scope)].entity].type))
                     return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-                r.expression.type = types.member_pointer(scopes[entities[member].owner].entity,entities[member].type);
+                r.expression.type = form_member_pointer(entities[scopes[entities[member].owner].entity].type,entities[member].type);
+                if (!r.expression.type) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
                 r.expression.entity = member;
             } else r.expression.type = types.compound(TypeKind::Pointer,args[0].type);
             return r;

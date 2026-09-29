@@ -146,9 +146,15 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
                 result.expression.conversions = conversions.size(); result.expression.count = 1;
                 conversions.push_back(c); return result;
             }
-            if (args.size() > 1 || (!args.empty() && !standard_conversion(args[0],constructed).valid()))
-                return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-            TypeQueryFact result; result.expression.type = constructed; return result;
+            if (args.size() > 1) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            TypeQueryFact result; result.expression.type = constructed;
+            if (!args.empty()) {
+                auto c = explicit_builtin_conversion(args[0],constructed,OP_LPAREN,q.context);
+                if (!valid_fixed_conversion(args[0],0,c,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+                result.expression.conversions = conversions.size(); result.expression.count = 1;
+                conversions.push_back(c);
+            }
+            return result;
         }
     }
     if (callee.kind == QueryKind::Member || callee.kind == QueryKind::Destructor) {

@@ -141,6 +141,7 @@ EntityId Analyzer::associated_type_lookup(IdentifierId name, std::vector<TypeId>
         if (seen_types.get(id)) continue;
         seen_types.put(id, 1); auto type = types[id];
         if (type.kind == TypeKind::Pointer || type.kind == TypeKind::LRef || type.kind == TypeKind::RRef || type.kind == TypeKind::Array) work.push_back(type.child);
+        else if (type.kind == TypeKind::MemberPointer) { work.push_back(type.member_owner()); work.push_back(type.child); }
         else if (type.kind == TypeKind::ArgumentPack) {
             auto pack = pack_arguments(id);
             for (unsigned j = 0; j < pack.count; ++j)

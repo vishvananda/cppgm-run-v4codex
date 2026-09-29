@@ -823,7 +823,7 @@ private:
     std::vector<EntityId> friend_definition_demand;
     std::size_t friend_definition_cursor = 0;
     unsigned class_depth = 0;
-    enum class Lookup { Ordinary, Tag, Namespace, Qualifier };
+    enum class Lookup { Ordinary, Tag, Namespace, Qualifier, Template };
     std::uint64_t key(ScopeId s, IdentifierId n) const;
     EntityId local(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary) const;
     EntityId lookup(ScopeId s, IdentifierId n, Lookup mode = Lookup::Ordinary, bool qualified = false);

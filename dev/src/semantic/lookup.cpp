@@ -23,7 +23,14 @@ Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_ca
 std::uint64_t Analyzer::key(ScopeId s, IdentifierId n) const { return (std::uint64_t(s) << 32) | n; }
 EntityId Analyzer::local(ScopeId s, IdentifierId n, Lookup mode) const
 {
-    return (mode == Lookup::Tag ? tags : mode == Lookup::Namespace ? namespaces : mode == Lookup::Qualifier ? qualifiers : ordinary).get(key(s, n));
+    auto e = (mode == Lookup::Tag ? tags : mode == Lookup::Namespace ? namespaces : mode == Lookup::Qualifier ? qualifiers : ordinary).get(key(s, n));
+    // [temp.local]/4: inherited injected names of different specializations
+    // denote one primary when used as a template-name. Normalize at the local
+    // producer, before merging base lookup sets; ordinary type lookup stays
+    // ambiguous. No unrelated declarations or specializations are searched.
+    if (mode == Lookup::Template && e && scopes[s].kind == ScopeKind::Class &&
+        scopes[s].entity == e && entities[e].specialization) return specialization_pattern(e);
+    return e;
 }
 ScopeId Analyzer::make_scope(ScopeKind k, ScopeId parent, IdentifierId name, EntityId e, bool visible)
 {
@@ -326,7 +333,7 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
             if (types[t].kind != TypeKind::Named) throw std::runtime_error("decltype qualifier is not a class");
             s = entities[types[t].entity].scope; qualified = true; continue;
         }
-        EntityId e = lookup(s, ast[p].text, Lookup::Qualifier, qualified);
+        EntityId e = lookup(s, ast[p].text, child(p,Kind::TemplateArguments) ? Lookup::Template : Lookup::Qualifier, qualified);
         if (definitions) e = class_template_name(p,e,context);
         if (definitions && e) {
             auto type = entities[e].kind == EntityKind::Alias ? source_type(e) : entities[e].type;
@@ -378,7 +385,7 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
         ScopeId cls = naming_class(owner);
         if (cls) ensure_transfers(entities[scopes[cls].entity].type, true);
     }
-    EntityId result = lookup(owner, terminal(n), mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
+    EntityId result = lookup(owner, terminal(n), child(ast[n].last,Kind::TemplateArguments) ? Lookup::Template : mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
     if (definitions) result = class_template_name(ast[n].last,result,s);
     if (definitions) result = variable_template_name(ast[n].last,result,s);
     if (calls && result && !function_binding(result)) check_access(result, s, owner);

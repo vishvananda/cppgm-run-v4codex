@@ -190,7 +190,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
             complete_class(types[prefix].entity);
             owner = entities[types[prefix].entity].scope; qualified = true; continue;
         }
-        auto e = lookup(owner,ast[p].text,p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,ast[p].text,list ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         auto template_target = template_entity(e);
         if (list && template_target && entities[template_target].kind == EntityKind::Alias) {
             check_access(template_target,s,owner);
