@@ -46,6 +46,7 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
     while (!work.empty()) {
         auto visit = work.back(); work.pop_back();
         auto cls = visit.cls;
+        if (!visit.leave) ++lookup_work;
         auto info = entities[cls].class_info;
         for (EntityId e = class_facts[info].first_conversion; e; e = members[entities[e].member_info].next_conversion) {
             TypeId t = members[entities[e].member_info].conversion_target;
