@@ -14,6 +14,14 @@ cases={
  'empty_copy_lifetime':'int drops;struct I{~I(){++drops;}};template<class T>struct Pair{T a,b;Pair(const T&x):a(x),b(x){}};int main(){I i;{Pair<I> p(i);}return drops!=2;}',
  'throwing_return_transfer':'int live;struct P{P(){++live;}P(P&&){throw 7;}~P(){--live;}};struct A{int n;P p;};A f(bool b){A a={1};A c={2};return b?static_cast<A&&>(a):static_cast<A&&>(c);}int main(){try{A a=f(true);}catch(int n){return n!=7||live;}return 1;}',
 }
+for label,member in {
+ 'throw':'struct M{M(){++live;}~M(){--live;}};struct X{X(){throw 7;}};struct A{int n;M m;X x;};',
+ 'argument_throw':'struct G{G(){throw 7;}};struct M{M(){++live;}~M(){--live;}};struct X{X(const G&g=G()){};};struct A{int n;M m;X x;};',
+ 'temporary_cleanup_throw':'struct G{~G()noexcept(false){throw 7;}};struct M{M(const G&g=G()){++live;}~M(){--live;}};struct A{int n;M m;};',
+}.items():
+ cases['prvalue_omitted_'+label]='int live;'+member+'A make(){return A{1};}int main(){try{A a=make();}catch(int n){return n!=7||live;}return 1;}'
+cases['prvalue_shared_plain_constructor']='int live;struct M{M*self;M():self(this){++live;}~M(){--live;}};struct A{int n;M m;};A f(){return A{7};}A g(){return A{9};}int main(){{A a=f();A b=g();if(a.n!=7||b.n!=9||a.m.self!=&a.m||b.m.self!=&b.m||live!=2)return 1;}return live;}'
+cases['prvalue_default_argument_identity']='int live,drops;struct G{G(){++live;}~G(){--live;++drops;}};struct M{int seen;M(const G&g=G()):seen(live){}};struct A{int n;M m;};A f(){return A{7};}A g(){return A{9};}int main(){A a=f();A b=g();return a.n!=7||b.n!=9||a.m.seen!=1||b.m.seen!=1||live||drops!=2;}'
 name='200-hidden-eh-reference-prvalue-template-member-temp-cleanup'
 cases[name]=(ROOT/'pa21/tests/general'/(name+'.t')).read_text()
 rows=[]

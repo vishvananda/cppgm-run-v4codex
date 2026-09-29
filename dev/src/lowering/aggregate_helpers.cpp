@@ -34,13 +34,25 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     unsigned supplied = 0; bool transfer = false;
     bool all = full_parameters(sem,plan);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
-        supplied += all || sem.initializers[child].source != 0;
-        transfer |= sem.initializers[child].helper_transfer != 0 ||
-            (!all && !sem.initializers[child].source && sem.class_value(sem.initializers[child].type));
+        auto item = sem.initializers[child];
+        supplied += all || item.source != 0;
+        bool owned = !all && !item.source && sem.class_value(item.type);
+        if (owned && item.kind == InitKind::Converted) {
+            auto conversion = sem.conversion_fact(item.conversion);
+            if (conversion.kind == semantic::Conversion::Kind::List) {
+                auto object = sem.list_objects[conversion.materialization];
+                // Empty-list selection of a zero-argument constructor is
+                // fixed by the canonical field type. Its call creates no
+                // helper-local argument temporaries or occurrence state.
+                if (sem.list_plans[object.plan].constructor && !object.call.argument_count)
+                    owned = false;
+            }
+        }
+        transfer |= item.helper_transfer != 0 || owned;
     }
     // Scalar helpers differ by their explicit prefix; omitted trailing fields
-    // are initialized in the helper. Transfer recipes additionally own selected
-    // constructors and temporary identities, so those helpers belong to the
+    // are initialized in the helper. Transfers and omitted argument recipes own
+    // selected constructors and temporary identities, so those helpers belong to the
     // complete semantic plan instead of being shared by target type alone.
     // Proven representation copies use function-local slots, so their full
     // parameter shape is shared across initializer occurrences of this type.

@@ -14,14 +14,14 @@ rules remain intact. PA21 completion still requires a passing through report.
 |---|---|
 | EH contexts/support | Canonical TypeIds render stable fundamental support names. Lexical lifetime snapshots and handler ancestry retain cleanup on typed catch misses. Complete context/terminal identities still key shared suffixes. Hosted nested misses, rethrows and caught-object ordering controls exercise these paths. |
 | Array/list destruction | Construction retains exact addresses for at most eight backing elements, keyed by the emitted backing ValueId and released per function. Throwing destruction decrements a remaining-prefix counter before each call; a second exception terminates through the existing cleanup boundary. Above eight elements, counted loops bound emitted growth. Controls cover ordinary/list arrays, first/last throws and 1/3/8/9/16 elements. |
-| Local statics | The initializer owns its expression boundary. A successfully completed object publishes its guard/finalizer before observable initializer-temporary cleanup; a failed constructor remains retryable. Controls check reentry/retry and throwing temporary cleanup. |
-| Generated construction | Canonical initializer actions distinguish omitted in-place members from arguments already supplied by the caller. Omitted recipes own their helper key, exception effects and temporary cleanup. Required empty copy entries override cached representation-transfer eligibility. Proven scalar representation prefixes retain the required O0 form; transfer cleanup stops at the final action unless temporaries remain. |
+| Local statics | The initializer owns its expression boundary. A successfully completed object publishes its guard/finalizer before observable initializer-temporary cleanup; a failed constructor remains retryable. Controls check construction retry and completion before throwing temporary cleanup. |
+| Generated construction | Canonical initializer actions distinguish omitted in-place members from arguments already supplied by the caller. Omitted recipes with argument state own their helper key, exception effects and temporary cleanup; zero-argument constructor calls share by canonical type and supplied-prefix arity. Required empty copy entries override cached representation-transfer eligibility. Proven scalar representation prefixes retain the required O0 form; transfer cleanup stops at the final action unless temporaries remain. |
 | Function boundary | Nonthrowing functions retain normal parameter destruction and inner source catches; the uncaught unwind suffix stops at incoming parameters before termination. No parameter ABI or lifetime fact is reconstructed from text. |
 
 Work is proportional to demanded facts and emitted actions, with expected O(1)
 ID lookups and existing O(b log b) final block ordering. There is no new source
 reparse, textual phase transport, host implementation dependency or unbounded
-optimization. New construction and closure controls pass **35/35**; closure
+optimization. New construction and closure controls pass **40/40**; closure
 controls improve **16/27 → 27/27**. Full validation is recorded in
 [validation110](../student.tests/pa21/validation110.json).
 
@@ -66,8 +66,11 @@ or unproved reference rewrite is used to manufacture completion.
 
 ## Performance and validation
 
-Current required gate logs are in validation110. The cumulative personal suites
-and frozen performance campaign are being finalized before handoff. Preserve
+Current required gate logs are in validation110. Cumulative personal controls
+pass **615/616**; the only failure is the inherited supplied freestanding RTTI
+discrepancy, whose hosted counterpart passes. The **15048-path** contract
+inventory changes only the proved reference above. The frozen performance
+campaign is being finalized before handoff. Preserve
 [performance109](performance109.md) and all earlier observations. Spec §9 applies
 to PA21/O0: historical **+15%, +16 MiB, 5.5×** diagnostics add no exit gate.
 Required O0 costs must be measured separately from optimization benefits; no
@@ -88,5 +91,5 @@ evidence through `e6582e37`.
 repaired; eight required comparisons unchanged; recorded at `d9528e58`.
 110: `f724bc43` preserves review boundary; `6b3aecdb` completes catch-miss,
 static/list/array ownership and proved reference correction, **111/116**.
-The second increment completes generated construction ownership, **113/116**.
-Final performance/evidence record and clean committed handoff remain pending.
+`bdfdb31b` completes generated construction ownership, **113/116**.
+A measured 256/1024 duplicate-helper growth was removed for zero-argument constructor recipes; argument-bearing recipes remain occurrence-owned. Five additional prvalue controls pass. Final performance/evidence record and clean committed handoff remain pending.

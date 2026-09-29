@@ -1,0 +1,707 @@
+{
+  "compiler_sha256": "ac7e58d3cf0c63016f0abf773b5f7cbab104459088aae1b18d6351b1892dc418",
+  "rows": [
+    {
+      "name": "omitted_order",
+      "source": "int trace;struct M{M(){trace=trace*10+2;}~M(){trace=trace*10+3;}};struct A{int n;M m;};int f(){trace=1;return 7;}int main(){{A a={f()};if(a.n!=7||trace!=12)return 1;}return trace!=123;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_order"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "omitted_throw",
+      "source": "int live;struct M{M(){++live;}~M(){--live;}};struct X{X(){throw 7;}};struct A{int n;M m;X x;};int main(){try{A a={1};}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "omitted_argument_throw",
+      "source": "int live;struct G{G(){throw 7;}};struct M{M(){++live;}~M(){--live;}};struct X{X(const G& g=G()){};};struct A{int n;M m;X x;};int main(){try{A a={1};}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_argument_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "omitted_temporary_cleanup_throw",
+      "source": "int live;struct G{~G()noexcept(false){throw 7;}};struct M{M(const G&g=G()){++live;}~M(){--live;}};struct A{int n;M m;};int main(){try{A a={1};}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/omitted_temporary_cleanup_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "noexcept_parameter_catch",
+      "source": "int live;struct P{P(){++live;}P(const P&){++live;}~P(){--live;}};int f(P p)noexcept{try{throw 7;}catch(int n){return n!=7||live!=2;}}int main(){P p;return f(p)||live!=1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/noexcept_parameter_catch"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "empty_copy_lifetime",
+      "source": "int drops;struct I{~I(){++drops;}};template<class T>struct Pair{T a,b;Pair(const T&x):a(x),b(x){}};int main(){I i;{Pair<I> p(i);}return drops!=2;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/empty_copy_lifetime"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "throwing_return_transfer",
+      "source": "int live;struct P{P(){++live;}P(P&&){throw 7;}~P(){--live;}};struct A{int n;P p;};A f(bool b){A a={1};A c={2};return b?static_cast<A&&>(a):static_cast<A&&>(c);}int main(){try{A a=f(true);}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/throwing_return_transfer"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "prvalue_omitted_throw",
+      "source": "int live;struct M{M(){++live;}~M(){--live;}};struct X{X(){throw 7;}};struct A{int n;M m;X x;};A make(){return A{1};}int main(){try{A a=make();}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "prvalue_omitted_argument_throw",
+      "source": "int live;struct G{G(){throw 7;}};struct M{M(){++live;}~M(){--live;}};struct X{X(const G&g=G()){};};struct A{int n;M m;X x;};A make(){return A{1};}int main(){try{A a=make();}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_argument_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "prvalue_omitted_temporary_cleanup_throw",
+      "source": "int live;struct G{~G()noexcept(false){throw 7;}};struct M{M(const G&g=G()){++live;}~M(){--live;}};struct A{int n;M m;};A make(){return A{1};}int main(){try{A a=make();}catch(int n){return n!=7||live;}return 1;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_omitted_temporary_cleanup_throw"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "prvalue_shared_plain_constructor",
+      "source": "int live;struct M{M*self;M():self(this){++live;}~M(){--live;}};struct A{int n;M m;};A f(){return A{7};}A g(){return A{9};}int main(){{A a=f();A b=g();if(a.n!=7||b.n!=9||a.m.self!=&a.m||b.m.self!=&b.m||live!=2)return 1;}return live;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_shared_plain_constructor"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "prvalue_default_argument_identity",
+      "source": "int live,drops;struct G{G(){++live;}~G(){--live;++drops;}};struct M{int seen;M(const G&g=G()):seen(live){}};struct A{int n;M m;};A f(){return A{7};}A g(){return A{9};}int main(){A a=f();A b=g();return a.n!=7||b.n!=9||a.m.seen!=1||b.m.seen!=1||live||drops!=2;}",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/prvalue_default_argument_identity"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "200-hidden-eh-reference-prvalue-template-member-temp-cleanup",
+      "source": "// VALIDATION: compile-pass\n// N3485 focus: 12.2 [class.temporary], 13.3.3.1.4 [over.ics.ref]\n\nstruct Iterator\n{\n  static int destroyed;\n\n  ~Iterator() noexcept { ++destroyed; }\n};\n\nint Iterator::destroyed = 0;\n\ntemplate<class It, class Alloc>\nstruct AssignRange\n{\n  It first;\n  It last;\n  Alloc & alloc;\n\n  AssignRange(const It & f, const It & l, Alloc & a) noexcept\n    : first(f), last(l), alloc(a)\n  {\n  }\n\n  void operator()(int *) const noexcept\n  {\n  }\n};\n\ntemplate<class It, class Alloc>\nAssignRange<It, Alloc> make_assign_range(const It & first,\n                                         const It & last,\n                                         Alloc & alloc) noexcept\n{\n  return AssignRange<It, Alloc>(first, last, alloc);\n}\n\nstruct Buffer\n{\n  int alloc;\n\n  Buffer() noexcept : alloc(0)\n  {\n  }\n\n  Iterator begin() noexcept\n  {\n    return Iterator();\n  }\n\n  Iterator end() noexcept\n  {\n    return Iterator();\n  }\n\n  template<class Functor>\n  void assign_n(int, int, const Functor & fnc) noexcept\n  {\n    fnc(0);\n  }\n\n  template<class It>\n  void assign(It first, It last) noexcept\n  {\n    assign_n(1, 1, make_assign_range(first, last, alloc));\n  }\n};\n\nint main()\n{\n  {\n    Buffer buffer;\n    buffer.assign(buffer.begin(), buffer.end());\n  }\n  return Iterator::destroyed > 0 ? 0 : 1;\n}\n",
+      "commands": [
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "--emit-lowir",
+            "-O0",
+            "--validate-lowir",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.lowir",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.cpp"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+            "-c",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.lowir"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "g++",
+            "-no-pie",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "argv": [
+            "/home/vishvananda/work/private/v4codex/artifacts/pa21-110/construction-refinement/200-hidden-eh-reference-prvalue-template-member-temp-cleanup"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ]
+}
