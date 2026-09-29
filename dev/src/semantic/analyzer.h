@@ -149,6 +149,15 @@ public:
     std::vector<InitAction> initializers = std::vector<InitAction>(1);
     std::vector<ListPlan> list_plans = std::vector<ListPlan>(1);
     std::vector<ListObject> list_objects = std::vector<ListObject>(1);
+    EntityId initializer_list_template = 0;
+    Index initializer_list_type_index;
+    std::vector<InitializerListType> initializer_list_types = std::vector<InitializerListType>(1);
+    TypeId initializer_list_element(TypeId type) const;
+    InitializerListType initializer_list_type(TypeId type);
+    bool complete_builtin_list(EntityId entity);
+    TypeId deduce_initializer_list(NodeId source, ScopeId scope);
+    std::vector<Expression> list_elements(Expression list);
+    void retain_list_backing(EntityId object);
     std::uint32_t initializer_plan(NodeId n, TypeId t) const;
     bool zero_value(TypeId t);
     std::uint32_t prepare_zero_initialization(TypeId t);
@@ -1018,7 +1027,8 @@ private:
     void prepare_value_initialization(TypeId t, ScopeId s = 0);
     EntityId default_constructor(TypeId t, ScopeId s = 0, bool demand = true);
     EntityId choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result = 0, ScopeId scope = 0,
-        bool direct = true, bool probe = false, const std::vector<Expression>* values = 0, bool aggregate_fallback = false);
+        bool direct = true, bool probe = false, const std::vector<Expression>* values = 0, bool aggregate_fallback = false,
+        bool list_only = false);
     bool converting_transfer(EntityId constructor, const Expression& call) const;
     Conversion result_conversion(EntityId constructor, const Expression& call, TypeId target);
     void constructor_actions(EntityId e);

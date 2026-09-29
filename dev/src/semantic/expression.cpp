@@ -172,7 +172,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     }
     case Kind::BracedInit:
         for (NodeId c = first; c; c = ast[c].next) expression(c,s);
-        r.form = ExpressionForm::InitializerList; return r;
+        r.form = ExpressionForm::InitializerList; r.arguments = n; return r;
     case Kind::Parenthesized: return value_fact(expression(first, s));
     case Kind::Call: return call_expression(n, s);
     case Kind::Unary: case Kind::Postfix: return unary_expression(n, s);

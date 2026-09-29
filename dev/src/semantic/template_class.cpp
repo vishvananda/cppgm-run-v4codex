@@ -60,6 +60,15 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
     auto index = entities[e].template_info;
     if (previous.environment && previous.count != templates[index].count) throw std::runtime_error("different template parameter count");
     auto current = templates[index];
+    // [dcl.init.list] names one standard library template. Resolve and retain
+    // its declaration identity; all later operations use this identity.
+    auto ns = scopes[owner].entity;
+    if (ns && entities[ns].kind == EntityKind::Namespace && entities[ns].owner == global &&
+        entities[ns].name == ids.intern(TextView("std",3)) && id == ids.intern(TextView("initializer_list",16))) {
+        if (current.count != 1 || entities[template_parameters[current.offset]].kind != EntityKind::Type)
+            throw std::runtime_error("invalid initializer_list template declaration");
+        initializer_list_template = e;
+    }
     if (previous_index) {
         entities[e].template_info = previous_index; auto old_shape = template_head_shape(e);
         entities[e].template_info = index;
@@ -327,6 +336,7 @@ void Analyzer::complete_class(EntityId e)
         return;
     }
     if (specializations[index].body == FactState::Active || dependent_type(entities[e].type)) return;
+    if (complete_builtin_list(e)) return;
     specializations[index].body = FactState::Active;
     ScopeId saved = active_template_scope;
     auto saved_depth = class_depth;

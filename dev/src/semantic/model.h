@@ -401,7 +401,8 @@ struct RangeOperation {
 struct RangePlan {
     NodeId source = 0, body = 0;
     EntityId range = 0, begin = 0, end = 0, variable = 0;
-    TypeId array = 0, index_type = 0;
+    TypeId array = 0, index_type = 0, list_element = 0;
+    EntityId list_begin = 0, list_size = 0;
     RangeOperation first, last, test, next, element;
     std::uint32_t begin_conversion = 0, end_conversion = 0, element_conversion = 0, condition_conversion = 0;
     std::uint32_t loop_live = 0, body_live = 0;
@@ -438,13 +439,16 @@ struct ListPlan {
     std::uint32_t literal = 0; // Character-array initialization from an immutable literal.
     EntityId constructor = 0; Expression call;
     std::uint32_t fields = 0, explicit_count = 0;
+    TypeId backing_element = 0;
+    EntityId backing_begin = 0, backing_size = 0;
     bool aggregate = false, direct_binding = false, direct = false, zero = false, allocated = false;
     FactState state = FactState::NotStarted;
     unsigned char rank = 255;
     FactState validation = FactState::NotStarted;
 };
 struct ListField { EntityId field = 0; TypeId type = 0; std::uint64_t index = 0, count = 1; };
-struct ListObject { EntityId temporary = 0; std::uint32_t plan = 0, initializer = 0; Expression call; };
+struct ListObject { EntityId temporary = 0, backing = 0; std::uint32_t plan = 0, initializer = 0; Expression call; };
+struct InitializerListType { TypeId element = 0; EntityId begin = 0, size = 0; };
 struct UserConversion {
     Conversion object, result;
     EntityId temporary = 0, source_temporary = 0, object_entity = 0;

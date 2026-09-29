@@ -57,7 +57,7 @@ TypeId Analyzer::deduced_object_type(NodeId specs, NodeId d, NodeId init, ScopeI
         if (ast[first].next) throw std::runtime_error("auto requires a single initializer");
         source = first;
     }
-    if (!source || ast[source].kind == Kind::BracedInit) throw std::runtime_error("auto requires an expression initializer");
+    if (!source) throw std::runtime_error("auto requires an initializer");
     auto name = decl_name(d), owner = name_owner(name,s,true);
     auto id = terminal(name), previous = local(owner,id);
     if (previous && entities[previous].kind != EntityKind::Type) throw std::runtime_error("duplicate auto declaration");
@@ -66,7 +66,9 @@ TypeId Analyzer::deduced_object_type(NodeId specs, NodeId d, NodeId init, ScopeI
     // name cannot supply a spurious successful self-deduction.
     auto object = make_entity(EntityKind::Variable,owner,id,d);
     placeholder_objects.put(object,d); bind(owner,id,object);
-    auto value = expression(source,s);
+    Expression value;
+    if (ast[source].kind == Kind::BracedInit) value.type = deduce_initializer_list(source,s);
+    else value = expression(source,s);
     placeholder_type();
     unsigned cv = (spec_has(specs,KW_CONST) ? 1 : 0) | (spec_has(specs,KW_VOLATILE) ? 2 : 0);
     auto base = types.qualify(entities[placeholder_parameter].type,cv);

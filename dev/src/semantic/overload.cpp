@@ -57,6 +57,13 @@ bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t coun
 {
     bool strict = false;
     for (std::size_t i = 0; i < count; ++i) {
+        auto list = [&](const Conversion& c) {
+            auto id = c.kind == Conversion::Kind::List ? list_objects[c.materialization].plan :
+                c.kind == Conversion::Kind::ListPlan || c.kind == Conversion::Kind::QueryList ? c.materialization : 0;
+            return list_plans[id].backing_element != 0;
+        };
+        bool alist = list(a[i]), blist = list(b[i]);
+        if (alist != blist) { if (!alist) return false; strict = true; continue; }
         if (a[i].rank > b[i].rank) return false;
         if (a[i].rank < b[i].rank) { strict = true; continue; }
         if (a[i].rank == 5) {

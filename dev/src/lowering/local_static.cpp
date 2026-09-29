@@ -69,7 +69,8 @@ void Procedural::emit_local_static_destructors()
         if (!local.destructor) continue;
         reset_lifetime(0); function = FunctionId(p.symbols[local.destructor.index-1].entity);
         builder.reset(new FunctionBuilder(p,function)); this_slot = SlotId(); start(block());
-        if (auto destructor = sem.object_destructor(local.object)) destroy_object(local.object,destructor);
+        auto destructor = sem.object_destructor(local.object);
+        if (sem.destructor_needed(destructor)) destroy_object(local.object,destructor);
         for (auto id = local_static_references.get(local.object); id; id = local_static_reference_objects[id].next) {
             auto object = local_static_reference_objects[id].object;
             BlockId end;

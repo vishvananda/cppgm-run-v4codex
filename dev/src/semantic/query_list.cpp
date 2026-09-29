@@ -108,6 +108,16 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             if (!ref && !types[t].bound) t = q.type = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
             plan.target = q.type;
             if (types[t].bound && ast.literals[literal.value].elements <= types[t].bound) plan.rank = 0;
+        } else if (auto element = initializer_list_element(t)) {
+            auto info = initializer_list_type(t); plan.backing_begin = info.begin; plan.backing_size = info.size;
+            plan.backing_element = types.qualify(element,1); plan.rank = 0;
+            std::vector<Conversion> chosen;
+            for (auto a : args) {
+                auto c = conversion_value(query_fact(a).expression,plan.backing_element);
+                if (c.rank > plan.rank) plan.rank = c.rank;
+                chosen.push_back(c);
+            }
+            store_query_arguments(plan.call,args,chosen); plan.explicit_count = args.size();
         } else if (aggregate_type(t)) {
             unsigned cursor = 0; plan = list_plans[query_list_aggregate(args,cursor,t,q.context)];
             if (!ref) t = q.type = plan.target;
@@ -117,7 +127,15 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             std::vector<Expression> values;
             for (auto a : args) values.push_back(query_fact(a).expression);
             Expression recipe;
-            plan.constructor = choose_constructor(types.unqualified(t),std::vector<NodeId>(args.size(),0),&recipe,q.context,true,true,&values);
+            if (args.empty()) plan.constructor = choose_constructor(types.unqualified(t),{},&recipe,q.context,true,true);
+            if (!plan.constructor && recipe.form != ExpressionForm::Overload) {
+                auto list_value = query_fact(list).expression;
+                std::vector<Expression> one{list_value};
+                plan.constructor = choose_constructor(types.unqualified(t),{0},&recipe,q.context,true,true,&one,false,true);
+                if (plan.constructor) args = {list};
+            }
+            if (!plan.constructor && recipe.form != ExpressionForm::Overload)
+                plan.constructor = choose_constructor(types.unqualified(t),std::vector<NodeId>(args.size(),0),&recipe,q.context,true,true,&values);
             if (plan.constructor || recipe.form == ExpressionForm::Overload) plan.rank = 5;
             std::vector<Conversion> chosen;
             if (plan.constructor) {
@@ -172,7 +190,7 @@ bool Analyzer::validate_query_list(std::uint32_t id)
                 args.push_back(expression_query(n,facts[n].scope)); chosen.push_back(c);
             }
             store_query_arguments(plan.call,args,chosen); list_plans[id].call = plan.call;
-        } else if (class_value(t) && !plan.aggregate && !plan.direct_binding) return false;
+        } else if (class_value(t) && !plan.aggregate && !plan.direct_binding && !plan.backing_element) return false;
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {
             auto source = query_edges[plan.call.arguments+i]; auto value = query_fact(source).expression;
             auto c = conversions[plan.call.conversions+i];
@@ -211,6 +229,20 @@ Constant Analyzer::constant_query_list(std::uint32_t id)
             p.value = constant_zero(target.child); parts.push_back(p);
         }
         value = evaluated_object(value_type(plan.target),parts);
+    } else if (plan.backing_element) {
+        std::vector<EvaluatedPart> parts;
+        for (unsigned i = 0; i < plan.call.argument_count; ++i) {
+            EvaluatedPart p; p.selector = i; p.value = argument(i); parts.push_back(p);
+        }
+        std::uint32_t address = 0;
+        if (!parts.empty()) {
+            auto array = types.compound(TypeKind::Array,plan.backing_element,parts.size());
+            auto backing = evaluated_object(array,parts); if (!backing.valid) return Constant();
+            address = constant_subobject(constant_storage_address(array,backing),plan.backing_element,0);
+        }
+        EvaluatedPart begin; begin.selector = plan.backing_begin; begin.value = Constant(entities[plan.backing_begin].type,address);
+        EvaluatedPart count; count.selector = plan.backing_size; count.value = Constant(entities[plan.backing_size].type,parts.size());
+        value = evaluated_object(value_type(plan.target),{begin,count});
     } else if (plan.aggregate) {
         std::vector<EvaluatedPart> parts;
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {

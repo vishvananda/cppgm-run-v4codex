@@ -4,12 +4,16 @@
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args, Expression* result,
-    ScopeId scope, bool direct, bool probe, const std::vector<Expression>* values, bool aggregate_fallback)
+    ScopeId scope, bool direct, bool probe, const std::vector<Expression>* values, bool aggregate_fallback, bool list_only)
 {
     if (values && (!probe || values->size() != args.size())) throw std::logic_error("invalid constructor value probe");
     auto value = [&](unsigned i) { return values ? (*values)[i] : expressions[args[i]]; };
     EntityId cls = types[t].entity;
     if (definitions) complete_class(cls);
+    if (args.size() == 1 && value(0).form == ExpressionForm::InitializerList) {
+        auto elements = list_elements(value(0));
+        if (elements.size() == 1 && class_value(elements[0].type)) ensure_transfers(t,false);
+    }
     if (args.size() == 1 && types[value(0).type].kind == TypeKind::Named &&
         (types.unqualified(value(0).type) == types.unqualified(t) || derived_from(value(0).type, t) || class_value(value(0).type)))
         ensure_transfers(t, false);
@@ -24,6 +28,9 @@ EntityId Analyzer::choose_constructor(TypeId t, const std::vector<NodeId>& args,
     std::vector<Viable> viable;
     std::vector<Conversion> sequences;
     for (EntityId e : candidates(binding)) {
+        auto signature = types[entities[e].type];
+        if (list_only && (!signature.count || !initializer_list_element(types.parameters[signature.offset]) ||
+            (signature.count > 1 && (!entities[e].defaults || !default_arguments[entities[e].defaults+1])))) continue;
         ++candidate_work;
         if (entities[e].template_info) {
             e = values ? deduce_function(e,*values) : deduce_function(e,args);
@@ -129,6 +136,24 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, Initializati
     NodeId list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
     bool copy = mode == InitializationMode::Copy;
     auto info = entities[types[target].entity].class_info;
+    if (ast[list].kind == Kind::BracedInit && (initializer_list_element(target) || !class_facts[info].aggregate)) {
+        expression(list,s);
+        auto retained = retained_initialization(list,target);
+        auto c = retained ? copy_conversion_recipe(conversions[retained]) : list_initialization(list,target,s,!copy);
+        auto plan = list_plans[c.materialization];
+        if (plan.constructor && c.valid()) {
+            prepare_list(list,c);
+            Expression result = list_objects[c.materialization].call;
+            result.type = target; result.ready = result.evaluated = true;
+            if (plan.zero) {
+                prepare_zero_initialization(entities[scopes[entities[plan.constructor].owner].entity].type);
+                record_object(result,0,target,0); object_uses[result.object_use].value_initialize = true;
+            }
+            facts.edit(n).entity = plan.constructor; facts.edit(n).type = target; facts.edit(n).scope = s;
+            expressions.set(n,result); return true;
+        }
+        return record_class_initialization(n,target,list,&c);
+    }
     if (ast[list].kind == Kind::BracedInit && class_facts[info].aggregate) return false;
     if (!copy && ast[list].kind == Kind::Call) {
         NodeId callee = ast[list].first;

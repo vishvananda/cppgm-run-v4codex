@@ -32,6 +32,11 @@ RangePlan Analyzer::range_shape(Expression range, ScopeId s)
         plan.array = range.type;
         plan.index_type = types.fundamental(types[range.type].bound <= 0x7fffffffULL ? FT_INT : FT_UNSIGNED_LONG_INT);
         plan.element.result.type = types[range.type].child; plan.element.result.category = ValueCategory::Lvalue;
+    } else if (auto element = initializer_list_element(range.type)) {
+        auto info = initializer_list_type(range.type);
+        plan.list_element = element; plan.list_begin = info.begin; plan.list_size = info.size;
+        plan.index_type = types.fundamental(FT_INT);
+        plan.element.result.type = types.qualify(element,1); plan.element.result.category = ValueCategory::Lvalue;
     } else {
         ScopeId naming = 0; EntityId first = 0, last = 0;
         auto begin_name = ids.intern(TextView("begin",5)), end_name = ids.intern(TextView("end",3));
@@ -95,9 +100,10 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
     auto shape = retained ? range_patterns[retained] : range_shape(range,control);
     if (retained) ++range_pattern_uses;
     plan.array = shape.array; plan.index_type = shape.index_type;
+    plan.list_element = shape.list_element; plan.list_begin = shape.list_begin; plan.list_size = shape.list_size;
     plan.first = shape.first; plan.last = shape.last; plan.test = shape.test;
     plan.next = shape.next; plan.element = shape.element;
-    if (!plan.array) {
+    if (!plan.array && !plan.list_element) {
         auto endpoint = [&](RangeOperation& op) {
             prepare_range_operation(op,op.supplied ? std::vector<Expression>{range} : std::vector<Expression>(),control,true);
         };

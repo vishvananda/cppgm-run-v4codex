@@ -2,7 +2,24 @@
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Target: PA21 full-stage. Phase: implementation handoff (loop 103).
+Target: PA21 full-stage. Phase: implementation (loop 104).
+Loop 104 entry: clean at `fa079cdeffb19a1a69e92ff56f8bc154c4047c36`;
+49/116 pass, 67 fail. Previous handoff made verified progress (twelve resolved
+failures); no compiler/test process remained live on this entry.
+Current work: initialization owns canonical list element/storage plans;
+overload selection and deduction consume those plans, and lowering consumes
+checked element conversions and explicit backing-array lifetime facts. Extend
+through calls, constructors, assignment, returns, ranges and storage duration.
+Work must follow elements/candidates and emitted cleanup edges, with no repeated
+semantic reconstruction. Validate required fixtures, personal rejection/runtime
+controls, prior-through and file audit; freeze entry/final compilers for §9
+A/A and ABBA latency/RSS plus checked native runtime/size evidence.
+Loop 104 checkpoint: 71/116 on the second stage run; 22 original failures
+resolved. Prior-through now 3596/3596; file audit passes (three inherited
+advisories). Personal list controls 48/48 and external-unwind controls 27/27
+pass, including constexpr/nested storage and host-linked local-static atexit.
+Implementation continues: required class-list lifetime LowIR comparisons,
+scaling/evidence and related defects still need resolution before handoff.
 Loop 103 entry: clean at `f4224e0b`; 37/116 pass, 79 fail.
 Now: **49/116 pass, 67 fail**; twelve old failures resolved, no new failures or
 coverage reductions. Independent whole-stage audit remains pending.

@@ -284,7 +284,20 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto object = list_objects[c.materialization]; auto plan = list_plans[object.plan];
         if (plan.direct_binding) return constant_node_conversion(call_argument(object.call),conversions[object.call.conversions],s);
         Constant value;
-        if (plan.aggregate) value = constant_init_plan(object.initializer,s);
+        if (plan.backing_element) {
+            auto pointer = entities[plan.backing_begin].type;
+            std::uint32_t address = 0;
+            if (object.backing) {
+                auto backing = constant_init_plan(object.initializer,s);
+                if (!backing.valid) return Constant();
+                address = constant_temporary_address(entities[object.backing].type,backing,object.backing);
+                address = constant_subobject(address,plan.backing_element,0);
+            }
+            EvaluatedPart begin; begin.selector = plan.backing_begin; begin.value = Constant(pointer,address);
+            EvaluatedPart count; count.selector = plan.backing_size;
+            count.value = Constant(entities[plan.backing_size].type,object.call.argument_count);
+            value = evaluated_object(value_type(c.target),{begin,count});
+        } else if (plan.aggregate) value = constant_init_plan(object.initializer,s);
         else if (plan.constructor) {
             std::vector<Constant> args;
             for (unsigned i = 0; i < object.call.argument_count; ++i) args.push_back(constant_node_conversion(call_argument(object.call,i),conversions[object.call.conversions+i],s));

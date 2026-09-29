@@ -209,6 +209,12 @@ void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s,
     auto list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
     if (class_value(target)) {
         complete_class(types[target].entity); reject_abstract(target);
+        if (ast[list].kind == Kind::BracedInit && (initializer_list_element(target) || !aggregate_type(target))) {
+            if (!fixed_initializer_operands(list)) return;
+            expression(list,s);
+            auto c = list_initialization(list,target,s,mode != InitializationMode::Copy);
+            check_fixed_conversion(Expression(),list,c,s); remember_initialization(list,c); return;
+        }
         if (!aggregate_type(target) || ast[list].kind != Kind::BracedInit) {
             check_template_constructor(n,target,s,mode); return;
         }

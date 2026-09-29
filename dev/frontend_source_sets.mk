@@ -15,6 +15,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ := $(FRONTEND_OBJ_BASENAMES_preproc) syntax/ast s
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_lexical_frame semantic/template_definition_environment
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_address_arguments
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/query_list
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/initializer_list
 FRONTEND_OBJ_BASENAMES_lowiropt :=
 FRONTEND_OBJ_BASENAMES_lowir := preprocess/source preprocess/identifier_table lowir/model lowir/opcode lowir/instruction_shape lowir/reader lowir/metadata lowir/metadata_vocabulary lowir/top_level lowir/instruction_reader lowir/writer lowir/instruction_writer lowir/signature_validation lowir/validator lowir/validation_values lowir/validation_instructions lowir/exercises
 FRONTEND_OBJ_BASENAMES_lowir2native :=

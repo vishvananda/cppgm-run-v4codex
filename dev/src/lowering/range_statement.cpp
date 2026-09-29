@@ -5,7 +5,7 @@ void Procedural::range_statement(NodeId n)
     auto plan = sem.range_plan(n); auto lifetime = sem.lifetime_use(n);
     if (plan.initialize_range) object(plan.range);
     SlotId index;
-    if (plan.array) {
+    if (plan.array || plan.list_element) {
         index = builder->add_slot(0,type(plan.index_type));
         emit(Opcode::Store,type(plan.index_type),{Operand::integer(0),Operand::slot(index)});
     } else {
@@ -19,9 +19,15 @@ void Procedural::range_statement(NodeId n)
     break_target = end; continue_target = step;
     jump(cond); start(cond); live = plan.loop_live;
     Value test;
-    if (plan.array) {
+    if (plan.array || plan.list_element) {
         auto current = emit(Opcode::Load,type(plan.index_type),{Operand::slot(index)});
-        test = emit(Opcode::Compare,current.ir,{current.operand,Operand::integer(sem.types[plan.array].bound)},Operation::Lt);
+        Operand bound = Operand::integer(sem.types[plan.array].bound);
+        if (plan.list_element) {
+            auto base = address(binding(plan.range));
+            auto count = load(field(base,plan.list_size)); bound = count.operand;
+            current = coerce(current,IRType::I64,false);
+        }
+        test = emit(Opcode::Compare,current.ir,{current.operand,bound},Operation::Lt);
     } else {
         full_expression.enabled = full_expression.lexical = live != 0;
         test = range_operation(plan.test,{binding(plan.begin),binding(plan.end)});
@@ -35,10 +41,11 @@ void Procedural::range_statement(NodeId n)
     auto exit = end;
     emit(Opcode::Branch,IRType(),{test.operand,Operand::label(body),Operand::label(exit)});
     start(body); live = plan.loop_live;
-    if (plan.array) {
+    if (plan.array || plan.list_element) {
         auto base = address(binding(plan.range));
+        if (plan.list_element) base = load(field(base,plan.list_begin));
         auto current = emit(Opcode::Load,type(plan.index_type),{Operand::slot(index)});
-        auto t = sem.types[plan.array].child;
+        auto t = plan.list_element ? sem.types[sem.entities[plan.list_begin].type].child : sem.types[plan.array].child;
         auto element_type = type(t);
         if (element_type.kind() == IRType::Object) {
             current = coerce(current,IRType::I64,sem.unsigned_type(plan.index_type));
@@ -60,7 +67,7 @@ void Procedural::range_statement(NodeId n)
     live = plan.body_live; statement(plan.body);
     if (!ended) clean_inline(live,plan.loop_live);
     jump(step); start(step); live = plan.loop_live;
-    if (plan.array) {
+    if (plan.array || plan.list_element) {
         auto current = emit(Opcode::Load,type(plan.index_type),{Operand::slot(index)});
         auto next = emit(Opcode::Binary,current.ir,{current.operand,Operand::integer(1)},Operation::Add);
         emit(Opcode::Store,current.ir,{next.operand,Operand::slot(index)});

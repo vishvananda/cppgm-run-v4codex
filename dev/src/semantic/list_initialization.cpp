@@ -102,6 +102,16 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 if (!ref && !types[t].bound) t = to = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
                 plan.target = to;
                 if (types[t].bound && ast.literals[plan.literal].elements <= types[t].bound) plan.rank = 0;
+            } else if (auto element = initializer_list_element(t)) {
+                auto info = initializer_list_type(t); plan.backing_begin = info.begin; plan.backing_size = info.size;
+                plan.backing_element = types.qualify(element,1); plan.rank = 0;
+                std::vector<NodeId> args; std::vector<Conversion> selected;
+                for (auto a = first; a; a = ast[a].next) {
+                    expression(a,s); auto c = conversion(a,plan.backing_element);
+                    if (c.rank > plan.rank) plan.rank = c.rank;
+                    args.push_back(a); selected.push_back(c);
+                }
+                store_call(plan.call,args,selected); plan.explicit_count = args.size();
             } else if (aggregate_type(t)) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
@@ -111,8 +121,12 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
             } else if (class_value(t)) {
                 std::vector<NodeId> args;
                 for (NodeId a = first; a; a = ast[a].next) { expression(a,s); args.push_back(a); }
-                plan.constructor = choose_constructor(types.unqualified(t),args,&plan.call,s,true,true);
-                plan.explicit_count = args.size();
+                if (args.empty()) plan.constructor = choose_constructor(types.unqualified(t),{},&plan.call,s,true,true);
+                if (!plan.constructor && plan.call.form != ExpressionForm::Overload)
+                    plan.constructor = choose_constructor(types.unqualified(t),{n},&plan.call,s,true,true,0,false,true);
+                if (!plan.constructor && plan.call.form != ExpressionForm::Overload)
+                    plan.constructor = choose_constructor(types.unqualified(t),args,&plan.call,s,true,true);
+                plan.explicit_count = plan.call.argument_count;
                 if (plan.constructor || plan.call.form == ExpressionForm::Overload) plan.rank = 5;
                 if (plan.constructor) {
                     auto m = members[entities[plan.constructor].member_info];
@@ -176,7 +190,7 @@ void Analyzer::validate_list_plan(std::uint32_t id)
                 }
                 store_call(plan.call,args,chosen); list_plans[id].call = plan.call;
             }
-        } else if (class_value(t) && !plan.aggregate && !plan.direct_binding)
+        } else if (class_value(t) && !plan.aggregate && !plan.direct_binding && !plan.backing_element)
             throw std::runtime_error("ambiguous list constructor");
         if (!plan.direct_binding) default_destructor(t,plan.scope,false);
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {
@@ -208,6 +222,11 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
         for (unsigned i = plan.explicit_count; i < plan.call.argument_count; ++i) default_argument(plan.constructor,i);
     }
     ListObject object; object.plan = c.materialization;
+    if (plan.backing_element && plan.call.argument_count) {
+        object.backing = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,plan.scope),0,n);
+        entities[object.backing].type = types.compound(TypeKind::Array,plan.backing_element,plan.call.argument_count);
+        register_destruction(object.backing);
+    }
     if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array)) {
         object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,n ? facts[n].scope : plan.scope),0,n);
         entities[object.temporary].type = t; register_destruction(object.temporary);
@@ -231,11 +250,13 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
     if (plan.literal) {
         InitAction root; root.kind = InitKind::String; root.type = t; root.source = plan.source;
         object.initializer = initializers.size(); initializers.push_back(root);
-    } else if (plan.aggregate) {
-        InitAction root; root.kind = InitKind::Group; root.type = t; root.source = plan.source;
+    } else if (plan.aggregate || plan.backing_element) {
+        InitAction root; root.kind = InitKind::Group; root.type = plan.backing_element ? entities[object.backing].type : t; root.source = plan.source;
         std::uint32_t tail = 0;
         for (unsigned j = 0; j < args.size(); ++j) {
-            auto field = list_fields[plan.fields+j];
+            ListField field;
+            if (plan.backing_element) { field.type = plan.backing_element; field.index = j; }
+            else field = list_fields[plan.fields+j];
             InitAction item; item.kind = InitKind::Converted; item.type = field.type; item.field = field.field;
             item.index = field.index; item.count = field.count; item.source = args[j]; item.conversion = object.call.conversions+j;
             auto selected = conversions[item.conversion];

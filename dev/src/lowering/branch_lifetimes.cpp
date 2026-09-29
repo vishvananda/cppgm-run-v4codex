@@ -29,6 +29,12 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     for (unsigned j = 0; j < arrow.count; ++j) needed |= sem.temporary_cleanup(sem.arrow_steps[arrow.first+j].temporary);
     auto expression = sem.expression_fact(n);
     auto incoming = expression.incoming;
+    auto backing_cleanup = [&](const semantic::Conversion& c) {
+        if (c.kind != semantic::Conversion::Kind::List) return false;
+        auto backing = sem.list_objects[c.materialization].backing;
+        return backing && !sem.object_lifetime(backing) && !sem.static_temporary(backing).object && sem.temporary_cleanup(backing);
+    };
+    if (incoming) needed |= backing_cleanup(sem.conversion_fact(incoming));
     if (incoming && !omit_result) {
         auto c = sem.conversion_fact(incoming);
         if (c.kind == semantic::Conversion::Kind::User)
@@ -53,6 +59,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     if (incoming) if (auto call = conversion_call(sem.conversion_fact(incoming))) arguments(*call);
     for (unsigned i = 0; i < expression.count; ++i) {
         const auto& c = sem.conversion_fact(expression.conversions+i);
+        needed |= backing_cleanup(c);
         if (c.ellipsis_object) needed |= sem.temporary_cleanup(sem.converted_temporary(c));
         if (auto call = conversion_call(c)) arguments(*call);
     }

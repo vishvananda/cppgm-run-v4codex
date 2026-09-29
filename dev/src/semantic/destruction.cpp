@@ -69,6 +69,8 @@ EntityId Analyzer::destination_destructor(TypeId t, ScopeId s)
 }
 void Analyzer::register_destruction(EntityId e)
 {
+    retain_list_backing(e);
+    if (reference_temporary(e) || reference_choices(e)) return;
     auto kind = types[entities[e].type].kind;
     if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && (scopes[entities[e].owner].kind == ScopeKind::Namespace || local_static(e)) && !entities[e].thread_local_storage)
         static_reference(e);

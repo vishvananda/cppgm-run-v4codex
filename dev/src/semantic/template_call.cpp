@@ -460,10 +460,15 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
             break;
         }
         if (!dependent_type(p)) continue;
-        // A braced-init-list has no argument type. Outside initializer_list
-        // deduction (not part of this stage), the parameter is non-deduced;
-        // other arguments, explicit arguments or defaults supply its type.
-        if (args[i].form == ExpressionForm::InitializerList) continue;
+        // [temp.deduct.call]: deduce each list element only for the standard
+        // initializer_list parameter. Other parameter forms are non-deduced.
+        if (args[i].form == ExpressionForm::InitializerList) {
+            if (auto element = initializer_list_element(p))
+                for (auto value : list_elements(args[i])) {
+                    if (!value.type || !deduce_type(element,decay(value.type),bindings,DeductionKind::Call,prefix)) return 0;
+                }
+            continue;
+        }
         if (args[i].form == ExpressionForm::Overload) {
             auto kind = types[p].kind;
             auto adjusted = kind == TypeKind::LRef || kind == TypeKind::RRef ? types[p].child : p;

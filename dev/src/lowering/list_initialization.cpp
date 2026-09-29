@@ -10,7 +10,48 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
     if (plan.direct_binding) return converted(sem.call_argument(call),sem.conversion_fact(call.conversions));
     Value value;
     if (object.temporary && !supplied) destination = class_address(object.temporary,t);
-    if (plan.aggregate) {
+    if (plan.backing_element) {
+        Value backing(Operand::integer(0),IRType::Ptr);
+        if (object.backing) {
+            auto array = sem.entities[object.backing].type;
+            backing = class_address(object.backing,array);
+            auto initial = live;
+            semantic::Index retired;
+            bool cleanup = sem.temporary_cleanup(object.backing);
+            for (unsigned j = 0; j < call.argument_count; ++j) {
+                auto conversion = sem.conversion_fact(call.conversions+j);
+                Value scalar;
+                if (!sem.class_value(plan.backing_element)) scalar = converted(sem.call_argument(call,j),conversion);
+                Instruction projection(Opcode::Index,IRType::I8);
+                projection.projection = sem.class_value(plan.backing_element) ? ir_model::IPK_ARRAY_ELEMENT : ir_model::IPK_NONE;
+                auto offset = j*sem.object_size(plan.backing_element);
+                Value at = offset ? emit(projection,{backing.operand,Operand::integer(offset)}) : backing;
+                at.type = plan.backing_element; at.address = true;
+                if (sem.class_value(plan.backing_element))
+                    construct_value(sem.call_argument(call,j),conversion,address(at));
+                else store(scalar,at);
+                if (cleanup) {
+                    close_expression_region();
+                    TemporaryState state; state.object = sem.types[plan.backing_element].entity;
+                    state.destructor = sem.object_destructor(object.backing);
+                    state.location = lowir_model::ValueId(at.operand.ref);
+                    state.tail = live; state.depth = lifetime_state(live).depth+1;
+                    temporary_states.push_back(state); live = 0x80000000u | temporary_states.size();
+                    retired.put(live,1);
+                }
+            }
+            if (cleanup) {
+                close_expression_region();
+                semantic::Index cache; live = retire_construction(live,initial,retired,cache);
+            }
+            activate_temporary(object.backing);
+        }
+        auto begin_offset = sem.entities[plan.backing_begin].member_offset;
+        auto begin = begin_offset ? emit(Opcode::Index,IRType::I8,{destination.operand,Operand::integer(begin_offset)}) : destination;
+        emit(Opcode::Store,IRType::Ptr,{backing.operand,begin.operand});
+        auto size = emit(Opcode::Index,IRType::I8,{destination.operand,Operand::integer(sem.entities[plan.backing_size].member_offset)});
+        emit(Opcode::Store,IRType::I64,{Operand::integer(call.argument_count),size.operand});
+    } else if (plan.aggregate) {
         Value at = destination; at.address = true; at.type = t;
         if (!call_aggregate_helper(object.initializer,at)) initialize_plan(object.initializer,at);
     } else if (plan.constructor) {

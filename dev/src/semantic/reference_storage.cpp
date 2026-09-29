@@ -3,6 +3,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::retain_initializer_references(EntityId e)
 {
+    retain_list_backing(e);
     auto entity = entities[e];
     if ((!entity.is_static && scopes[entity.owner].kind != ScopeKind::Namespace) || entity.thread_local_storage) return;
     auto bound_plan = [&](NodeId n) {
