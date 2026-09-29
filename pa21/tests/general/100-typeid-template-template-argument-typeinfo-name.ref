@@ -1,6 +1,6 @@
 declare global @__external_rtti_vtable____class_type_info [role=rtti_class, binding=strong, object=_ZTVN10__cxxabiv117__class_type_infoE]
 
-global @__typeinfo_name__struct___cppgm_class_template_identity_9_2_0 [binding=weak, object=_ZTS12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS5_IhJEEEvEEE] = {
+global @__typeinfo_name__struct___cppgm_class_template_identity_9_2_0 [binding=weak, object=_ZTS12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS4_IhJEEEvEEE] = {
   i8 49
   i8 50
   i8 106
@@ -130,7 +130,7 @@ global @__typeinfo_name__struct___cppgm_class_template_identity_9_2_0 [binding=w
   i8 69
   i8 78
   i8 83
-  i8 53
+  i8 52
   i8 95
   i8 73
   i8 104
@@ -144,7 +144,7 @@ global @__typeinfo_name__struct___cppgm_class_template_identity_9_2_0 [binding=w
   i8 69
   i8 0
 }
-global @__rtti_struct___cppgm_class_template_identity_9_2_0 [binding=weak, object=_ZTI12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS5_IhJEEEvEEE] = {
+global @__rtti_struct___cppgm_class_template_identity_9_2_0 [binding=weak, object=_ZTI12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS4_IhJEEEvEEE] = {
   ptr addr @__external_rtti_vtable____class_type_info + 16
   ptr addr @__typeinfo_name__struct___cppgm_class_template_identity_9_2_0
 }

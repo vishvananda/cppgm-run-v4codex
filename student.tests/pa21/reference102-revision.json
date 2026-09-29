@@ -1,0 +1,17 @@
+{
+  "revision": "pa21-rtti-name-102",
+  "base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+  "path": "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.ref",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "original_sha256": "46f55a13480d6a006ae9bc913b8d4dd6c5d26bdb9eb4fb528da033a4c0eb4a65",
+  "revised_sha256": "b2624ad7f25a8985532777074ace8feba0904f6dcefaaf729b81f6adf77cbec4",
+  "original_name": "12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS5_IhJEEEvEEE",
+  "revised_name": "12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS4_IhJEEEvEEE",
+  "changed_bytes": [
+    {
+      "offset": 129,
+      "old": 53,
+      "new": 52
+    }
+  ]
+}
