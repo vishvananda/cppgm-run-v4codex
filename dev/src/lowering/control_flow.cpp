@@ -216,6 +216,9 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
 Value Procedural::logical(NodeId n)
 {
     bool land = ast[n].op == OP_LAND;
+    // Only a terminal logical result may retire its RHS before the join.
+    // Nested operands keep their lifetimes until the enclosing consumer ends.
+    bool terminal = n == full_expression.terminal_value;
     NodeId a = ast[n].first, b = ast[a].next;
     // Value context materializes a canonical truth slot. Condition context is
     // handled independently by condition(), without introducing that storage.
@@ -226,16 +229,18 @@ Value Procedural::logical(NodeId n)
     if (lhs.operand.kind == Operand::Integer && (land ? !lhs.operand.data.integer : bool(lhs.operand.data.integer)))
         return Value(Operand::integer(!land), IRType::I64, sem.expression_fact(n).type);
     if (lhs.operand.kind == Operand::Integer) {
+        auto common = live;
         Value rhs = second_conversion.kind == semantic::Conversion::Kind::User ? converted(b,second_conversion) : load(expression(b));
         rhs = truth_operand(rhs);
         IRType comparison = rhs.ir.floating() || rhs.ir == IRType::Ptr ? rhs.ir : IRType(IRType::I64);
         auto result = emit(Opcode::Compare,comparison,{rhs.operand,rhs.ir.floating() ? Operand::floating(0) : Operand::integer(0)},Operation::Ne);
+        if (terminal) clean_inline(live,common);
         result.type = fact.type; return result;
     }
     SlotId slot = builder->add_slot(0, IRType::I64);
     BlockId rhs = block(), short_path = block(), end = block();
     if (lhs.ir.floating()) lhs = emit(Opcode::Compare, lhs.ir, {lhs.operand, Operand::floating(0)}, Operation::Ne);
-    SlotId selector = cleanup_selector(lhs,cleanup_expression(b));
+    SlotId selector = cleanup_selector(lhs,!terminal && cleanup_expression(b));
     auto common = live;
     emit(Opcode::Branch, IRType(), {lhs.operand, Operand::label(land ? rhs : short_path), Operand::label(land ? short_path : rhs)});
     start(rhs);
@@ -244,6 +249,7 @@ Value Procedural::logical(NodeId n)
     IRType comparison = value.ir.floating() || value.ir == IRType::Ptr ? value.ir : IRType(IRType::I64);
     value = emit(Opcode::Compare, comparison, {value.operand, value.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Ne);
     emit(Opcode::Store, IRType::I64, {value.operand, Operand::slot(slot)});
+    if (terminal) clean_inline(live,common);
     auto rhs_live = live; jump(end);
     start(short_path); live = common;
     emit(Opcode::Store, IRType::I64, {Operand::integer(!land), Operand::slot(slot)}); jump(end);

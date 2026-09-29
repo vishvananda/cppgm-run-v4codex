@@ -14,34 +14,37 @@ const semantic::Expression* Procedural::conversion_call(const semantic::Conversi
         return &sem.list_objects[c->materialization].call;
     return nullptr;
 }
-bool Procedural::cleanup_expression(NodeId n, bool omit_result)
+bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_only)
 {
     if (!n) return false;
-    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size()*2);
-    auto key = n*2+omit_result;
+    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size()*4);
+    auto key = n*4+omit_result*2+effects_only;
+    auto cleanup = [&](EntityId object) {
+        return sem.temporary_cleanup(object) && (!effects_only || sem.destructor_needed(sem.object_destructor(object)));
+    };
     if (cleanup_expressions[key]) return cleanup_expressions[key] == 2;
     ++full_expression_work;
     auto temporary = sem.object_fact(n).temporary;
-    bool needed = !omit_result && !sem.object_lifetime(temporary) && sem.temporary_cleanup(temporary);
+    bool needed = !omit_result && !sem.object_lifetime(temporary) && cleanup(temporary);
     const auto& discarded = sem.discarded_conversion(n);
-    if (discarded.valid()) needed |= sem.temporary_cleanup(sem.converted_temporary(discarded));
+    if (discarded.valid()) needed |= cleanup(sem.converted_temporary(discarded));
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
-    for (unsigned j = 0; j < arrow.count; ++j) needed |= sem.temporary_cleanup(sem.arrow_steps[arrow.first+j].temporary);
+    for (unsigned j = 0; j < arrow.count; ++j) needed |= cleanup(sem.arrow_steps[arrow.first+j].temporary);
     auto expression = sem.expression_fact(n);
     auto incoming = expression.incoming;
     auto backing_cleanup = [&](const semantic::Conversion& c) {
         if (c.kind != semantic::Conversion::Kind::List) return false;
         auto backing = sem.list_objects[c.materialization].backing;
-        return backing && !sem.object_lifetime(backing) && !sem.static_temporary(backing).object && sem.temporary_cleanup(backing);
+        return backing && !sem.object_lifetime(backing) && !sem.static_temporary(backing).object && cleanup(backing);
     };
     if (incoming) needed |= backing_cleanup(sem.conversion_fact(incoming));
     if (incoming && !omit_result) {
         auto c = sem.conversion_fact(incoming);
         if (c.kind == semantic::Conversion::Kind::User)
-            needed |= sem.temporary_cleanup(sem.user_conversions[c.materialization].source_temporary);
+            needed |= cleanup(sem.user_conversions[c.materialization].source_temporary);
         if ((c.reference || c.ellipsis_object) && c.materialization) {
             auto object = sem.converted_temporary(c);
-            needed |= !sem.object_lifetime(object) && sem.temporary_cleanup(object);
+            needed |= !sem.object_lifetime(object) && cleanup(object);
         }
     }
     // Default arguments are semantic call edges outside the caller's syntax.
@@ -51,7 +54,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
             auto a = sem.call_argument(call,i);
             bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
                 (ast[n].kind == syntax::Kind::Conditional && a != ast[n].first));
-            if (a && a != n) needed |= cleanup_expression(a,omit);
+            if (a && a != n) needed |= cleanup_expression(a,omit,effects_only);
         }
     };
     arguments(expression);
@@ -60,19 +63,19 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
     for (unsigned i = 0; i < expression.count; ++i) {
         const auto& c = sem.conversion_fact(expression.conversions+i);
         needed |= backing_cleanup(c);
-        if (c.ellipsis_object) needed |= sem.temporary_cleanup(sem.converted_temporary(c));
+        if (c.ellipsis_object) needed |= cleanup(sem.converted_temporary(c));
         if (auto call = conversion_call(c)) arguments(*call);
     }
     if (ast[n].kind == syntax::Kind::Lambda)
         for (auto i = sem.closure(sem.types[expression.type].entity).first_capture; i; i = sem.closure_captures[i].next)
             if (auto call = conversion_call(sem.conversion_fact(sem.closure_captures[i].conversion))) arguments(*call);
     if (expression.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
-        needed |= cleanup_expression(ast[n].first,false);
+        needed |= cleanup_expression(ast[n].first,false,effects_only);
     if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
             (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
-        needed |= cleanup_expression(child,omit);
+        needed |= cleanup_expression(child,omit,effects_only);
     }
     cleanup_expressions[key] = needed ? 2 : 1;
     return needed;

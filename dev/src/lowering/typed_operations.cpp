@@ -88,6 +88,13 @@ Value Procedural::range_operation(const semantic::RangeOperation& op, const std:
     }
     bool class_result = sem.class_value(op.returned), indirect = sem.indirect_value(op.returned);
     bool own = class_result && destination.ir == IRType::Void;
+    // Synthesized range operations have no syntax node for begin_full_expression.
+    // Their retained temporary identity supplies the same resource boundary.
+    if (own && sem.temporary_cleanup(op.temporary)) {
+        full_expression.enabled = true;
+        if (unwind_live() || sem.destructor_needed(sem.object_destructor(op.temporary)))
+            open_expression_region();
+    }
     if (own) destination = class_address(op.temporary,op.result.type);
     std::vector<Operand> operands{Operand::symbol(symbol(op.function))};
     if (indirect) operands.push_back(destination.operand);

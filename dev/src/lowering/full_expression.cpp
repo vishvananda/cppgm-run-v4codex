@@ -60,6 +60,9 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
         if (!incoming || sem.conversion_fact(incoming).kind == semantic::Conversion::Kind::Discarded)
             full_expression.result_temporary = sem.object_fact(result).temporary;
     }
+    auto root = n;
+    while (root && (ast[root].kind == Kind::Parenthesized || ast[root].kind == Kind::Initializer || ast[root].kind == Kind::ParenInitializer)) root = ast[root].first;
+    full_expression.terminal_value = root;
     if (full_expression.enabled) guard_expression(n);
 }
 void Procedural::guard_expression(NodeId n, bool storage_ready)
@@ -75,10 +78,10 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
     // for the first resource-owning expression to establish the region.
     if (full_expression.scalar_terminal && !live && !resume_terminal &&
         !sem.temporary_cleanup(sem.object_fact(n).temporary)) return;
-    // O0 keeps the structural region for an intermediate class temporary,
-    // even when its selected calls are nonthrowing. Activation changes the
-    // live cleanup suffix consumed by the remainder of the expression.
-    if (unwind_expression(n) || (live && cleanup_expression(n))) open_expression_region();
+    // O0 retains the region for an observable intermediate cleanup, even
+    // when its calls are nonthrowing. Empty destructors retain their existing
+    // call presentation without introducing a new empty unwind boundary.
+    if (unwind_expression(n) || (cleanup_expression(n,false,!live))) open_expression_region();
 }
 void Procedural::open_expression_region()
 {

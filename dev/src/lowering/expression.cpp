@@ -387,7 +387,7 @@ Value Procedural::call(NodeId n, Value destination)
         return value;
     }
     bool class_result = sem.class_value(sem.facts[n].type);
-    SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && unwind_expression(n) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();
+    SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && (unwind_expression(n) || cleanup_expression(n,false,true)) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();
     bool indirect_result = sem.indirect_value(sem.facts[n].type);
     bool own_result = class_result && destination.ir == IRType();
     if (own_result) destination = class_address(sem.object_fact(n).temporary,fact.type);

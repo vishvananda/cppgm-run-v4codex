@@ -1,9 +1,9 @@
-# PA21 compact plan — implementation 106
+# PA21 compact plan — implementation 107
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
 Target: **PA21 full-stage**. Phase: **implementation**.
-Entry: clean `06b2d989`, **71/116 pass, 45 fail**. Current: **92/116 pass,
+107 entry: clean `1422565795ca5d689fe63bbfbaaba7afa0607858`, **92/116 pass, 24 fail**. Current: **92/116 pass,
 24 fail**; all 116 original inputs retained, no new required failures.
 Earlier PAs: **3596/3596**. This is an implementation handoff, not PA21 completion.
 
@@ -89,3 +89,19 @@ nested-catch corrections; **21 original failures resolved**, **24 remain**.
 The measured empty-lifetime-record regression is removed (9602 → 0 records
 on the fixed template workload, identical LowIR). Validation/performance records follow the implementation tip without further
 compiler edits. Ralph still owns acceptance and whole-stage review.
+
+107 work in progress: full-expression/value lowering is the initial owner.
+Cached cleanup/effect facts feed one function-local region scheduler; argument
+activation and branch live prefixes feed shared immutable unwind suffixes. Keep
+work linear in visited expressions plus emitted regions/suffixes. Validate
+condition/logical/default/static/range behavior together, PA12 elision, all prior
+stages, explicit executed lifetime controls, and frozen entry/final performance.
+Prior turn classification: progress (committed source-EH implementation and
+validated 71→92 passing tests); entry check here confirms 24 failures remain.
+
+107 first group: observable temporary regions, scalar call result slots, terminal
+logical branch cleanup and synthesized range result regions. Prior stages pass
+3596/3596; PA12 257/257; 32 executed controls cover evaluated branches, nested
+results, later operands, defaults, static-once and range lifetimes. Stage result
+98/116 (18 failures) is checked sequentially: root reports share scratch, so
+concurrent report totals were discarded. Further related work remains active.
