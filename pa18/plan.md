@@ -1,66 +1,71 @@
 # PA18 compact completion plan
 
-Stage base commit: `94dcb8ad21664137e87d574e878c14a4a047348a`.
-Last reviewed commit: `f2558ff473410f95de7af49469f404ebf8362e34`.
+Stage base: `94dcb8ad21664137e87d574e878c14a4a047348a`.
+Entry: `f5c942ff`; reviewed implementation: `fe4a11f0` (also `34b49cab`).
 Target: **PA18 full-stage**. Phase: **final independent audit complete**.
-Spec Alignment: **aligned for PA18/O0**. PA19 has not been started.
-Previous turn: progress (committed the pending pack-prefix repair); no inherited
-live job remained. [Final audit](audit.md) and
-[evidence manifest](../student.tests/pa18/loop89-evidence.json) record the proof.
+Spec Alignment: **aligned for PA18/O0**.
+PA19 has not been started. The previous goal turn was progress; no inherited
+live job remained. [Audit 90](audit.md) reconstructs the actual source pipeline;
+[audit 89](audit89.md) preserves the entry record unchanged.
 
-## Findings and completed work
+## Findings and completed changes
 
-- Completed class-result identity, class ellipsis transfer/default/effect demand,
-  prvalue storage, branch lifetimes and canonical floating zero were independently
-  reviewed across ordinary, retained-template, query, constant and lowering paths.
-- Explicit pack prefixes now extend through call, target and nested deduction;
-  completed deductions still agree or discard the candidate. The 51 controls
-  improve **38 → 51** on identical sources. Scalar explicit arguments no longer
-  allocate unnecessary prefix frames; no-argument calls retain packs directly.
-- The actual streaming frontend, canonical typed graph, immutable frames,
-  separate demand states, localized dependency edges, selected conversion facts,
-  typed lowering and owner release boundaries satisfy the relevant spec sections.
-  Nine source-to-native traces and inherited work/representation checks pass.
-- All **29** accumulated reference corrections have documented reducers and
-  cited language/contract proofs. The canonical class-result correction is
-  accepted with its direct-call versus indirect-call distinction. No new oracle
-  correction, changed input, weakened comparison or removed fixture was needed.
+- Nonfinal function packs now contribute only explicit, non-deduced argument
+  lanes. Calls, queries, constructors/operators and function-type targets share
+  the rule. Nonfinal template argument expansions suppress deduction for the
+  whole list; completed types still undergo conversion/target matching.
+- Completed specializations map default slots to concrete parameter positions,
+  retaining source identity and lazy fact/demand ownership. Defaults before
+  packs are accepted; defaults on packs are rejected.
+- The 49 standard-derived controls improve **13 → 49** on identical inputs.
+  One representative declaration/template trace checks shared body identity,
+  one default evaluation, class copy/destruction and canonical indirect results.
+- The validation harness builds its ABI API check from current sources, removing
+  its dependency on an old scratch executable. The implementation source is
+  registered in `dev/frontend_source_sets.mk`.
+- The review covers the whole streaming/canonical pipeline, fixed/dependent fact
+  sharing, complete cache keys, local invalidation, monotonic demand, typed
+  lowering, bounded O0 transformations and allocation/release boundaries.
+  Handoffs since checkpoint 86 and audit 89 were reviewed in combined source form.
+- No new oracle correction is needed. All 29 historical corrections retain
+  documented reducers, cited standard/contract proof and bundle provenance.
+  All 420 PA18 sources / 1,686 fixture paths and comparison rules remain.
 
 ## Validation and performance
 
-Final PA18 **420/420**; earlier stages **2609/2609**; root through report
-**3029/3029**, all **18 stages**; **22** separately reported focused properties.
-File audit passes with three inherited header advisories. The final explicit
-validation contains **65 checks**, including **1,556 personal cases**, nine
-execution traces, ABI/scaling/inspection controls and oracle reconstruction.
-All **420** PA18 sources and **1,686** fixture paths remain. The audit explains
-why the earlier all-tracked-input count of 3053 exceeds the course report.
+Final reviewed code passes **71 explicit checks**, including **1,605 personal
+cases in 37 result-bearing suites**, ten execution traces, ABI/API checks,
+scaling/representation inspections and oracle reconstruction. Required commands:
 
-[Performance 89](performance89.md) freezes entry/final binaries over the union
-of audit-86 and handoff-87 corpora plus pack-prefix scaling/runtime inputs:
-**54 workloads**, compiler latency/RSS and executable runtime/payload together,
-A/A noise calibration, ABBA blocks, checked outputs and all observations retained.
-The unnecessary scalar-prefix frames are removed; new required pack deduction
-has proportional work. Existing bounded O0 summaries/omissions retain their
-profitability evidence and exact output. No new optional transform is introduced.
+- `make test-pa18`: **420/420**, exit 0.
+- `make test-report-through-pa18`: **3029/3029**, **18/18 stages**, exit 0;
+  PA10–PA12 also report **22 focused properties**. Earlier stages: **2609/2609**.
+- `perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src`: exit 0,
+  three inherited header advisories, no errors.
 
-Acceptance is **PA18/O0**, spec §9. No mandated numeric compiler latency/RSS
-ceiling applies. Historical +15%, +16 MiB and 5.5× targets remain diagnostics;
-correctness, coverage, work bounds and optional-transform profitability remain
-requirements. Native optimization/debug, hosted aggregate-varargs retrieval,
-source try/catch and self-hosting remain later-stage ownership.
+[Frozen performance verification](performance90.md) covers **99 workloads**: all 88 distinct
+inputs from audits 82/89 plus eleven nonfinal-pack scaling/runtime cases.
+Compiler latency/RSS and checked native runtime/size are reported together,
+with A/A calibration, ABBA and spread: **2,563 full-run observations, 308 repeat
+observations and 330 preserved interrupted-run observations**. The 89 comparable
+inputs retain exact LowIR/native output; ten previously rejected inputs report
+final-only costs and proportional work. No consistent compiler slowdown is
+established by the targeted repeats; no precise speedup is claimed. Compiler
+text grows 7,296 bytes (0.366%). Inherited optional-transform profitability and
+all historical measurements remain. Stage-scoped acceptance passes.
 
-## Exit and history
+Acceptance is spec §9's **PA18/O0** policy. Historical +15%, +16 MiB and 5.5×
+targets remain diagnostics, not added exit gates. Correctness, coverage,
+mandated limits and work/growth/profitability requirements are unchanged.
+Native optimization/debug, hosted varargs and self-hosting remain later stages.
 
-Required `make test-pa18`, `make test-report-through-pa18` and
-`perl scripts/cppgm_file_audit.pl --stage pa18 --paths dev/src` pass on reviewed
-code. Root reports run sequentially because they share counts. Intended changes
-and final evidence are committed; `git status --short` is checked empty at close.
-There is no remaining PA18 implementation or audit obligation.
+## Exit and ledger
 
-| Checkpoint | Disposition |
-|---|---|
-| 82 | [Preserved audit](audit82.md): signatures, conversions and result summaries. |
-| 83–86 | Arrays, constructors, discard/storage and shared effect/lifetime repairs; [audit 86](audit86.md) preserved verbatim, **417/420** at that checkpoint. |
-| 87 | [Handoff](handoff87.md): class boundaries and three proved result-oracle repairs, **420/420**. |
-| 88–89 | `56e17b79`, `d2980f04`, `f2558ff4`: extensible pack deduction and demand-only frame creation; whole-stage independent audit, full validation and final performance evidence complete. |
+[The evidence manifest](../student.tests/pa18/loop90-evidence.json) binds the
+current sources and binaries to checks, controls, traces, coverage and measurements.
+`34b49cab` owns the function-pack/default repair and portable validation;
+`fe4a11f0` owns the whole-list non-deduced rule. The first repair's passing checks
+and interrupted timing remain recorded; all required checks were repeated on
+final code. The final documentation/evidence commit consolidates this review.
+A clean `git status --short` is verified after committing. There is no remaining
+PA18 implementation, unaudited handoff or audit obligation before advancement.
