@@ -1,13 +1,34 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
 using semantic::InitKind;
+namespace {
+bool array_parameter(semantic::Analyzer& sem, TypeId type)
+{
+    if (sem.types[type].kind != TypeKind::Array) return false;
+    while (sem.types[type].kind == TypeKind::Array) type = sem.types[type].child;
+    // The helper transports the representation of scalar array members only.
+    // Class construction and volatile element accesses keep their ordered path.
+    return !(sem.types[type].cv & 2) && !sem.class_value(type);
+}
+bool full_parameters(semantic::Analyzer& sem, std::uint32_t plan)
+{
+    bool omitted = false;
+    for (auto c = sem.initializers[plan].first; c; c = sem.initializers[c].next) {
+        auto item = sem.initializers[c];
+        if (sem.types[item.type].kind == TypeKind::Array || (omitted && item.source)) return true;
+        omitted |= !item.source;
+    }
+    return false;
+}
+}
 SymbolId Procedural::aggregate_helper(std::uint32_t plan)
 {
     auto action = sem.initializers[plan];
     TypeId target = action.type;
     unsigned supplied = 0; bool transfer = false;
+    bool all = full_parameters(sem,plan);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
-        supplied += sem.initializers[child].source != 0;
+        supplied += all || sem.initializers[child].source != 0;
         transfer |= sem.initializers[child].helper_transfer != 0;
     }
     // Scalar helpers differ by their explicit prefix; omitted trailing fields
@@ -21,7 +42,8 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         aggregate_actions.push_back(child); ++helper.count;
-        if (item.source) parameters.push_back(item.type);
+        if (all || item.source) parameters.push_back(array_parameter(sem,item.type) ?
+            sem.types.compound(TypeKind::Pointer,item.type) : item.type);
     }
     helper.function = FunctionId(p.functions.size()+1);
     lowir_model::Function f; f.symbol = fresh_symbol("@__aggregate_" + std::to_string(target));
@@ -43,18 +65,32 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     // An empty aggregate has no initialization actions. Its caller still owns
     // distinct object storage, but there is no helper body or call to emit.
     if (!action.first) return true;
+    bool all = full_parameters(sem,plan);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (!item.field || (!type(item.type).scalar() && !item.helper_transfer) ||
-            (item.kind != InitKind::Scalar && item.kind != InitKind::Converted)) return false;
+        if (!item.field) return false;
+        // A by-value class argument is initialized before the helper call.
+        // Its transfer into the member must precede later initializer clauses.
+        // Keep the established single trailing transfer ABI; interleaved or
+        // multiple class members use their ordered destination construction.
+        if (item.helper_transfer && item.next) return false;
+        if (array_parameter(sem,item.type)) continue;
+        if ((!type(item.type).scalar() && !item.helper_transfer) ||
+            (item.kind != InitKind::Scalar && item.kind != InitKind::Converted && !(all && item.kind == InitKind::Value))) return false;
     }
     SymbolId callee = aggregate_helper(plan);
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(callee)); call_work.push_back(address(location).operand);
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
-        if (!item.source) continue;
-        call_work.push_back((item.kind == InitKind::Converted ? converted(item.source,sem.conversion_fact(item.conversion)) : initialization_value(item.source,item.type)).operand);
+        if (!all && !item.source) continue;
+        if (array_parameter(sem,item.type)) {
+            auto slot = builder->add_slot(0,type(item.type));
+            Value at = address(Value(Operand::slot(slot),type(item.type),item.type,true));
+            at.address = true; at.type = item.type;
+            initialize_plan(child,at);
+            call_work.push_back(at.operand);
+        } else call_work.push_back((item.kind == InitKind::Converted ? converted(item.source,sem.conversion_fact(item.conversion)) : initialization_value(item.source,item.type)).operand);
     }
     guarded_call(Instruction(Opcode::Call, IRType::Void), call_work.data()+begin, call_work.size()-begin);
     call_work.resize(begin); return true;
@@ -69,7 +105,7 @@ void Procedural::emit_aggregate_helpers()
         for (unsigned j = 0; j < signature.parameters.count; ++j) {
             auto parameter = p.parameters[signature.parameters.begin+j];
             auto action = j ? sem.initializers[aggregate_actions[helper.actions+j-1]] : semantic::InitAction();
-            auto slot = builder->add_slot(0, j ? type(action.type) : parameter.type); slots.push_back(slot);
+            auto slot = builder->add_slot(0, j && !array_parameter(sem,action.type) ? type(action.type) : parameter.type); slots.push_back(slot);
             if (action.helper_parameter) {
                 objects[action.helper_parameter] = slot;
                 object_addresses[action.helper_parameter] = lowir_model::ValueId();
@@ -86,8 +122,9 @@ void Procedural::emit_aggregate_helpers()
             auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
             Value value;
-            if (!action.helper_transfer) {
-                value = action.source ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
+            bool array = array_parameter(sem,t);
+            if (!action.helper_transfer && !array) {
+                value = j+1 < slots.size() ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
                 value.type = t;
             }
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slots[0])});
@@ -95,7 +132,11 @@ void Procedural::emit_aggregate_helpers()
             Value at = emit(index, {base.operand, Operand::integer(sem.entities[field].member_offset)});
             at.type = t; at.address = true; at.init_offset = sem.entities[field].member_offset; at.initializing = true;
             if (sem.field_fact(field).bit_field) at.bit_field = field;
-            if (action.helper_transfer) {
+            if (array) {
+                auto source = emit(Opcode::Load,IRType::Ptr,{Operand::slot(slots[j+1])});
+                Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(t); copy.alignment = sem.object_alignment(t);
+                emit(copy,{source.operand,at.operand});
+            } else if (action.helper_transfer) {
                 Value source = address(binding(action.helper_parameter));
                 if (sem.direct_transfer(action.helper_transfer)) {
                     if (!sem.empty_class(t)) {

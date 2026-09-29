@@ -1,11 +1,21 @@
-# PA20 implementation plan — handoff 95
+# PA20 implementation plan — implementation 96
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Turn entry: `ef897177cd34e8bf1e878a7eb94208237240c0f1`, **91/144**,
-53 failures. Previous turn made verified progress (18 original failures fixed);
-its [ledger](../student.tests/pa20/validation94.json) remains preserved.
+Turn entry: `e59e46fa8ccef7dda44cbf57f5d9f4075801861a`, **110/144**,
+34 failures. Previous turn made verified progress (19 original failures fixed);
+its [ledger](../student.tests/pa20/validation95.json) remains preserved.
+
+Current work starts with the aggregate helper owner: semantic initialization
+actions and selected transfers must feed typed helper parameters and ordered
+member construction, including nested array members and omitted class tails.
+Work and storage should track initializer actions and emitted helper bodies;
+validate required fixtures, executable identity/lifetime controls, prior stages,
+and frozen entry/final compiler and executable costs. Extend into related
+transfer/default construction behavior while this ownership remains useful.
+Closure capture/access and retained-declaration groups remain implementation
+work; the independent review obligations below remain pending separately.
 
 ## Design/spec alignment and remaining groups
 
