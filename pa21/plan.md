@@ -1,8 +1,26 @@
-# PA21 compact plan — implementation 107
+# PA21 compact plan — implementation 108 (in progress)
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
-Target: **PA21 full-stage**. Phase: **implementation handoff**.
+Target: **PA21 full-stage**. Phase: **implementation**.
+108 entry: clean `a2b9e823800997ebbe57263a6ea2306e529698be`, **101/116**, 15 failures.
+Previous goal turn: **progress** (107 implementation, gates and frozen evidence).
+
+108 work: finish result/parameter ownership and function exception boundaries,
+then extend through their shared construction/handler paths. The table below
+records the inherited completed group; current owner ledger:
+
+| Group / owner | Data flow, complexity, validation |
+|---|---|
+| Result ownership / semantic class returns, lowering cleanup | Checked local/result identity → caller destination; retain local unwind lifetime until successful return. Linear return edges, O(1) identity checks. Native destructor counts and throwing returns. |
+| Function exception boundary / semantic exception facts, lowering function body | Declared exception fact + body effects → one outer termination region; no name reconstruction. Body traversal once, cached expression effects. Native termination, nested catches, parameter/subobject cleanup. |
+| Construction / aggregate plans and helper transfers | Selected member constructors + completed prefix → ordered construction and reverse cleanup. Work follows member edges and output, bounded array expansion. Native self pointers, throwing copies and partial construction. |
+| Deferred owners | List backing identities, nested local template bindings, source handler continuation composition; inspect while shared ownership knowledge applies. |
+
+Entry compiler and failure log frozen in `/tmp/pa21-108`; no course inputs or
+comparison rules changed. Performance will use frozen A/B, A/A and ABBA, compiler
+latency/RSS plus checked supplied-backend runtime/text evidence under spec §9.
+
 107 entry: clean `1422565795ca5d689fe63bbfbaaba7afa0607858`, **92/116**.
 Current: **101/116**, **15 remaining**, **9 original failures resolved**.
 Earlier PAs: **3596/3596**; through PA21: **3697/3712**. All 116 original
