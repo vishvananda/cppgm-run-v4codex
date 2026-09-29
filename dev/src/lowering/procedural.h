@@ -149,7 +149,7 @@ class Procedural {
     const semantic::Expression* conversion_call(const semantic::Conversion& conversion) const;
     std::vector<unsigned char> unwind_expressions;
     bool unwind_expression(NodeId n);
-    struct FullExpression { NodeId terminal_value = 0; bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
+    struct FullExpression { NodeId root = 0, terminal_value = 0; bool enabled = false, open = false, lexical = false, terminal_branch = false, suppress_guard = false;
         EntityId result_temporary = 0;
         bool argument_storage = false;
         bool scalar_terminal = false, scalar_unreachable = false; } full_expression;

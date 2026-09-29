@@ -105,3 +105,12 @@ logical branch cleanup and synthesized range result regions. Prior stages pass
 results, later operands, defaults, static-once and range lifetimes. Stage result
 98/116 (18 failures) is checked sequentially: root reports share scratch, so
 concurrent report totals were discarded. Further related work remains active.
+
+107 extension: destination-initializer default edges, private constant scalar
+member consumption, and storage-before-evaluation ordering now pass two more
+original cases. Source spelling presentation also disambiguates ordinary globals
+from exception support storage, with canonical/native identities unchanged.
+Logical retirement excludes subsequent constructor/user conversions: executed
+controls exposed and repaired that edge before handoff. The lazy observable
+cleanup bit shares the existing cache byte; no doubled AST-index allocation.
+Current through report: **3697/3712**, earlier **3596/3596**, PA21 **101/116**.

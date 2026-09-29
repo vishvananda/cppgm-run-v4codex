@@ -34,6 +34,11 @@ bool Analyzer::direct_class_call(NodeId n)
     if (!n || (expressions[n].ready && !expressions[n].evaluated)) return false;
     ++scalar_consumption_work;
     auto x = expressions[n]; EntityId callee = facts[n].entity;
+    // A scalar member result can consume an observable class temporary just
+    // as a direct class-returning call does. Retain the existing proof that
+    // the selector is a private, unmodified constant before retiring an arm.
+    auto temporary = object_fact(n).temporary;
+    if (temporary_cleanup(temporary) && destructor_needed(object_destructor(temporary))) return true;
     if ((ast[n].kind == Kind::Call || x.form == ExpressionForm::OperatorCall) &&
         x.form != ExpressionForm::Construction && x.form != ExpressionForm::Cast && callee &&
         entities[callee].kind == EntityKind::Function) {

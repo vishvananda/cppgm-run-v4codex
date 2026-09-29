@@ -62,7 +62,13 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
     }
     auto root = n;
     while (root && (ast[root].kind == Kind::Parenthesized || ast[root].kind == Kind::Initializer || ast[root].kind == Kind::ParenInitializer)) root = ast[root].first;
-    full_expression.terminal_value = root;
+    full_expression.root = full_expression.terminal_value = root;
+    // A selected constructor/conversion can observe argument temporaries after
+    // the logical result is computed. That result is not the terminal consumer.
+    auto incoming = sem.conversion_fact(sem.expression_fact(root).incoming);
+    if (incoming.kind == semantic::Conversion::Kind::Construction || incoming.kind == semantic::Conversion::Kind::User ||
+        incoming.kind == semantic::Conversion::Kind::List || sem.class_initialization(n,sem.facts[n].type).source)
+        full_expression.terminal_value = 0;
     if (full_expression.enabled) guard_expression(n);
 }
 void Procedural::guard_expression(NodeId n, bool storage_ready)
@@ -81,7 +87,8 @@ void Procedural::guard_expression(NodeId n, bool storage_ready)
     // O0 retains the region for an observable intermediate cleanup, even
     // when its calls are nonthrowing. Empty destructors retain their existing
     // call presentation without introducing a new empty unwind boundary.
-    if (unwind_expression(n) || (cleanup_expression(n,false,!live))) open_expression_region();
+    if ((unwind_expression(n) && (unwind_live() || n == full_expression.root)) ||
+        cleanup_expression(n,false,!live)) open_expression_region();
 }
 void Procedural::open_expression_region()
 {

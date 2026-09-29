@@ -17,12 +17,17 @@ const semantic::Expression* Procedural::conversion_call(const semantic::Conversi
 bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_only)
 {
     if (!n) return false;
-    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size()*4);
-    auto key = n*4+omit_result*2+effects_only;
+    if (cleanup_expressions.empty()) cleanup_expressions.resize(ast.nodes.size()*2);
+    auto key = n*2+omit_result;
+    // Both lazy facts fit in the existing byte per result-omission mode.
+    // A proven absence of cleanup also proves absence of observable cleanup.
+    auto shift = effects_only ? 2 : 0;
+    auto cached = (cleanup_expressions[key] >> shift) & 3;
+    if (cached) return cached == 2;
+    if (effects_only && (cleanup_expressions[key] & 3) == 1) return false;
     auto cleanup = [&](EntityId object) {
         return sem.temporary_cleanup(object) && (!effects_only || sem.destructor_needed(sem.object_destructor(object)));
     };
-    if (cleanup_expressions[key]) return cleanup_expressions[key] == 2;
     ++full_expression_work;
     auto temporary = sem.object_fact(n).temporary;
     bool needed = !omit_result && !sem.object_lifetime(temporary) && cleanup(temporary);
@@ -58,6 +63,12 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
         }
     };
     arguments(expression);
+    // Destination initialization owns its selected conversion independently of
+    // the source expression (for example a converting constructor from a
+    // string literal). Its defaults are full-expression lifetime edges too.
+    auto initialization = sem.class_initialization(n,sem.facts[n].type);
+    if (initialization.source)
+        if (auto call = conversion_call(sem.conversion_fact(initialization.conversion))) arguments(*call);
     if (discarded.valid()) if (auto call = conversion_call(discarded)) arguments(*call);
     if (incoming) if (auto call = conversion_call(sem.conversion_fact(incoming))) arguments(*call);
     for (unsigned i = 0; i < expression.count; ++i) {
@@ -77,7 +88,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
             (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
         needed |= cleanup_expression(child,omit,effects_only);
     }
-    cleanup_expressions[key] = needed ? 2 : 1;
+    cleanup_expressions[key] |= (needed ? 2 : 1) << shift;
     return needed;
 }
 SlotId Procedural::cleanup_selector(Value test, bool required)

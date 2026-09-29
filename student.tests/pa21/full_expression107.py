@@ -23,6 +23,13 @@ cases['sibling_short_throw']=prefix+'bool fail(const G&){throw 7;}int main(){try
 cases['nested_default']=prefix+'int f(const G&g=G(1)){return live;}int outer(int n=f()){return n;}int main(){int n=outer();return n!=1||live||trace!=1;}'
 cases['static_once']=prefix+'int f(){static int n=use(G(1),true);return n;}int main(){return f()!=1||f()!=1||live||trace!=1;}'
 cases['conditional_sibling']=prefix+'int main(){bool yes=false;int n=yes?use(G(1),true):use(G(2),true);return !n||live||trace!=2;}'
+cases['converting_destination']=prefix+'int observed;struct R{R(bool){observed=live;}};int main(){bool gate=true;R r=gate&&use(G(1),true);return observed!=1||live||trace!=1;}'
+cases['returned_conversion']=prefix+'int observed;struct R{R(bool){observed=live;}};R f(bool gate){return gate&&use(G(1),true);}int main(){f(true);return observed!=1||live||trace!=1;}'
+cases['default_destination_unwind']=prefix+'struct R{R(const char*,const G&g=G(1)){throw 7;}};int main(){try{R r="x";}catch(int n){return n!=7||live||trace!=1;}return 2;}'
+cases['default_destination_normal']=prefix+'struct R{R(const char*,const G&g=G(1)){if(live!=1)throw 7;}};int main(){R r="x";return live||trace!=1;}'
+for change,decl,body in [('known_true','bool flag=true;',''),('known_false','bool flag=false;',''),('modified','bool flag=false;','flag=true;'),('aliased','bool flag=false;','bool*p=&flag;*p=true;'),('volatile','volatile bool flag=true;','')]:
+ expected=0 if change=='known_false' else 1
+ cases['scalar_member_'+change]='int live,drops;struct Box{Box(){++live;}~Box(){--live;++drops;}int get()const noexcept{return live;}};int main(){'+decl+body+'int n=flag?Box().get():0;return n!='+str(expected)+'||drops!='+str(expected)+'||live;}'
 required=['200-hidden-eh-condition-call-argument-temporary-cleanup','200-hidden-eh-short-circuit-condition-rhs-temp-cleanup','200-hidden-eh-short-circuit-rhs-temp-cleanup','200-nested-logical-rhs-temporary-value-slot','200-nested-short-circuit-temporary-cleanup','100-range-for-iteration-temporary-lifetime','200-guarded-local-static-initializer-temporary-cleanup']
 for name in required:cases[name]=(ROOT/'pa21/tests/general'/f'{name}.t').read_text()
 rows=[]

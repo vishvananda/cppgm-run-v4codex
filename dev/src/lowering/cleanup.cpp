@@ -112,6 +112,7 @@ void Procedural::return_statement(NodeId n)
     bool omit = class_return.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
     begin_full_expression(ast[n].first,omit);
     if (class_return.source) {
+        full_expression.terminal_value = 0;
         Value destination = return_destination;
         if (has_value) {
             if (!class_return_slot) class_return_slot = builder->add_slot(0,type(returned));

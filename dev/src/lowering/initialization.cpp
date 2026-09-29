@@ -167,6 +167,11 @@ void Procedural::object(EntityId e)
     auto conversion = sem.conversion_fact(selected.conversion);
     bool omit = selected.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
     const auto& scalar = sem.scalar_consumption(e);
+    // Destination storage exists before the initializer's protected evaluation.
+    // Its address is also shared by every selected construction branch.
+    if (selected.source) {
+        location = address(location); location.type = t; location.address = true;
+    }
     begin_full_expression(scalar.expression ? scalar.expression : init,omit);
     if (sem.constant_array_plan(e)) initialize_constant_array(e,location);
     else if (scalar.expression && full_expression.enabled) initialize_scalar(scalar,location);

@@ -184,7 +184,9 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
             metadata.role = e.key == KW_NEW ? SR_ALLOCATE_MEMORY : SR_FREE_MEMORY;
         }
     }
-    std::string display = e.kind == semantic::EntityKind::Variable ? "@__global_" + name : "@" + name;
+    // Use source spellings for both declaration kinds. SymbolId and the
+    // collision allocator still own identity; native ABI names remain separate.
+    std::string display = "@" + name;
     for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
     if (metadata.object && p.name(metadata.object) != display.substr(1)) linkage.native_names.put(metadata.object, 1);
     SymbolId sid = fresh_symbol(display); (base ? base_symbols[id] : symbols[id]) = sid;
