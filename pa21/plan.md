@@ -1,108 +1,85 @@
-# PA21 compact plan — implementation 112 (in progress)
+# PA21 compact plan — implementation 112
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `f57bdd3b0e5c7dd2dd87aacaecc73c9ddc96d114`.
-Target: **PA21 full-stage**. Phase: **implement**.
-Entry 112: clean `9457e2fca6bdb876eaee509b0481f631b13587b4`, **114/116**.
-Frozen entry compiler: `/tmp/pa21-112/compiler-A`.
-Previous goal turn: **progress** (committed ownership fixes and validation).
-Current: **114/116**, one original failure resolved; earlier PAs **3596/3596**,
-through PA21 **3710/3712**, file audit passes with three inherited header warnings.
-All 116 required sources, references and comparison rules remain unchanged in 111.
-PA21 remains incomplete; a passing through report is still required to advance.
+Target: **PA21 full-stage**. Phase: **implementation handoff complete; full audit pending**.
+Entry: clean `9457e2fca6bdb876eaee509b0481f631b13587b4`, **114/116**.
+Previous goal turn: **progress** (committed implementation and evidence).
+Current required checks: **116/116 PA21**, **3596/3596 earlier PAs**,
+**3712/3712 through PA21**; file audit passes with three inherited warnings.
+Both original failures are resolved. All required checks are recorded against
+the committed implementation and the frozen measured compiler.
 
-## Implementation 112 work map
+## Completed owners and spec alignment
 
-- Constant-array owner: checked initializer plan → typed materialization policy →
-  stores or pooled data. Reconcile both inherited contracts using general semantic
-  facts; no fixture/name/template switch. Work must stay linear in checked actions
-  and emitted bytes. Validate PA17/21 comparisons and explicit array controls.
-- Source-handler owner: lexical context plus actual retained LowIR regions →
-  ordered cleanup/handler exits → parent dispatch. Trace raw landing pads, catch
-  misses, active-handler destruction and catch-all reachability together; preserve
-  complete continuation identities. Validate executable nesting/jump controls.
-- Freeze A/B and inputs, measure compiler latency/RSS and checked runtime/text
-  with A/A and ABBA evidence; run prior-through, PA21, through-PA21 and file audit.
-- Independent review remains separate; do not move either review marker.
-
-112 progress: PA16's explicit readonly-copy rule resolves the array policy
-conflict; the exact contract correction and raw-region proof are in
-[reference corrections 112](reference-corrections112.md). Dispatch lowering
-records a constant-time parent summary and preserves balanced cleanup joins
-while handling exhaustive selector fallbacks. New composition controls pass
-**22/22** after repairing an overbroad initial omission. Required gates and
-frozen performance measurements remain in progress; no handoff claim yet.
-
-## Previous completed group and spec alignment
-
-| Owner | Data flow, complexity and validation |
+| Owner | Data flow, complexity and evidence |
 |---|---|
-| Semantic function effects | After body/lifetime completion, a sole scalar return with no owned parameter cleanup may prove the implementation nonthrowing. It reuses checked expression/conversion/exception facts, records a positive fact by EntityId, and never changes the declaration's exception specification. One classification per completed body; memoized expression work; no recursive body demand or call-graph fixed point. |
-| Full-expression continuation | Two cached views retain declared effects and bounded body proofs. Arguments, defaults, conversions and temporary ownership remain part of the proof. Indirect/virtual calls and unknown allocation/initialization retain conservative cleanup. With no active source handler, a completely proved expression retains its O0 protected region but needs only the resume terminal on its impossible exceptional edge. |
-| Lifetime boundaries | Normal destruction and all actually throwing paths retain the same lifetime identities. Constructor/list recipes and owned return/parameter cleanup are not inferred from a callee spelling or reconstructed during emission. Thirteen hosted controls cover declaration `noexcept`, templates, direct/indirect/virtual calls, conversion/allocation failure, throwing argument/temporary/parameter cleanup, and source-handler composition. |
+| Exhaustive source dispatch | Checked handler types → catch-all fact plus parent context/live prefix → O0 miss-edge emission. A parent summary distinguishes catch-only entries from cleanup-bearing entries. Compute once with O(1) parent access and one additional scan of each try's handlers; no ancestor query, global scan or fixed point. |
+| Region and lifetime continuation | Real typed-catch misses retain the existing full live/handler/terminal identities. Exhaustive synthetic misses omit exits only for a parent catch-only entry or no parent; active-handler and cleanup-bearing joins retain balanced exits. Contexts are function-owned and reset between bodies; stable IDs survive vector growth. |
+| Constant automatic arrays | The inherited PA16 owner already consumes checked constant initializer plans, interns typed readonly images and copies into distinct automatic storage. PA16 explicitly mandates that form. The old PA21 reference's stores were an inconsistent contract example, not a legitimate reason for a template/name-specific materialization switch. |
 
-Implementation `3028366d` resolves
-`200-initializer-list-backing-array-lifetime`: the scalar accessor's checked body
-proves that the `held.size()` edge cannot throw, without omitting cleanup from
-other potentially throwing calls. The same mechanism covers ordinary scalar
-functions and instantiated templates. No library-name recognition, reference
-revision, host implementation dependency, source replay or textual phase transport
-was introduced. Body facts and expression caches are TU-owned; full-expression
-flags reset at their boundary. Queries use the existing flat identity index.
+Implementation `e32e9f2f` resolves the exhaustive-dispatch mismatch and two
+reference defects documented in [reference corrections 112](reference-corrections112.md).
+The array correction follows the explicit inherited course rule. The raw
+nested-handler correction supplies three explicit exits for three retained
+regions, preserving all destructor/end-catch operations and the 106 correction.
+It does not claim that the supplied backend rejects the old full fixture: its
+shared-entry reconciliation masks the missing exit. The isolated IR reducer
+exposes it. Exact reconstruction uses committed input bytes, not student output.
 
-## Remaining implementation, not waived
+New controls cover scalar/class throws, direct calls, returns, rethrow,
+catch-all/typed dispatch, live outer handlers, goto, templates, local class
+specializations, distinct mutable arrays and arrays in handlers. **22/22 pass**.
+The initial overbroad catch-all omission broke one rethrow control; its
+observations are preserved, and the parent dispatch summary repairs it.
+No production text transport, semantic name matching, new owning graph,
+process-global cache, code cloning or host implementation delegation was added.
 
-- **Automatic constant-array O0 policy** —
-  `100-function-template-local-class-specialization-identity` requires stores,
-  while PA17 `400-local-value-shadows-template-relational` requires a pooled
-  image for the same `long[2] = {0, 0}`. The current typed-image owner preserves
-  behavior but fails the former comparison. A template/name/fixture switch is
-  not acceptable; reconcile the general materialization policy with both
-  contracts. No C++11/LowIR violation proving either reference wrong is asserted.
-- **Raw source-handler region continuation** —
-  `100-source-nested-catch-miss-cleans-active-handler` executes correctly but
-  differs in `eh_end` ordering/count in a raw nested-handler cleanup and on the
-  catch-all miss edge. Account for automatic versus explicit region retirement
-  before changing those edges. Preserve the proved 106 reference correction and
-  complete handler/terminal identities; execution success alone does not settle
-  the required LowIR shape.
+## Remaining implementation and independent review
 
-The handoff boundary is the completed **callee-effect/full-expression proof**
-group, expanded beyond the initial list accessor to argument, conversion,
-dispatch and lifetime composition. Further related cleanup deletion is
-impractical: body-effect facts cannot prove which *source-handler stack entry*
-a raw landing pad retains, and cannot choose between the inherited constant
-array materialization forms. Those require separate region/materialization
-owners, not a broader scalar proof or removal of real cleanup. Both remain
-unfinished implementation, not independent-review questions or waived checks.
+No known required PA21 implementation group remains open. Accumulated controls
+and handoff evidence are complete. Required sources/statuses and comparison
+rules are unchanged.
+The only contract-path changes from entry are the two proved `.ref` revisions.
 
-Independent audit must review the completed proof's immutable publication,
-complete expression inputs, conservative dispatch/recipe boundaries and the
-measured work/cache bounds. Existing whole-stage audit questions and review
-markers remain in force; this handoff does not certify the assignment.
+Independent **whole-stage audit remains required** before PA22. It must review
+the accumulated range since `f57bdd3b`, including prior callee-effect proofs,
+lifetime/handler identities and the reference-correction chain, as well as the
+new parent-summary validity and the distinction between an unreachable selector
+edge and a live raw cleanup. The existing [audit](audit.md) and [105 review](audit105.md)
+remain authoritative review records; neither marker moves during implementation.
+Passing course checks does not waive the independent architecture/spec review.
 
 ## Performance and validation evidence
 
-[Performance 111](performance111.md) retains frozen A/A and ABBA compiler/RSS and
-checked executable runtime/text evidence. Compiler text adds **1920 bytes
-(0.086%)**. At 1024/4096 repeated functions, emitted instructions fall by **4 per
-function**, native text by **36 bytes per function**, and peak RSS by
-**2204/9224 KiB**. An additional memoized proof view costs one byte per TU node
-and seven node visits per generated function; semantic exception work adds
-18 operations at both sizes. Source graph, checked-body and protected-region
-counts are unchanged. Runtime and compiler latency spreads do **not** justify
-a general speedup claim. Required O0 output work is distinguished from optional
-optimization. Historical +15%, +16 MiB and 5.5× diagnostics add no exit gate;
-all mandated limits, correctness and coverage remain binding. Preserve
-[110](performance110.md) and all earlier measurements.
+[Performance 112](performance112.md) records frozen A/A and ABBA compiler latency,
+peak RSS, checked runtime and native text. Compiler text adds **704 bytes
+(0.0317%)**. At 512/2048 handler functions the output removes exactly **one dead
+LowIR instruction per function**; native text and semantic/full-expression work
+are unchanged. Additional compiler work is O(handlers + contexts), with one
+boolean in each existing context record and no output growth. Timing spreads
+do not establish a general speedup. The five common workloads produce
+byte-identical executables; their runtime noise is retained explicitly.
 
-[Validation 111](../student.tests/pa21/validation111.json) records required gates,
-progress from three failures to two, all **15048** unchanged contract-path hashes,
-**633/634** explicit personal controls and reconstruction of every inherited
-reference correction. The new controls pass **13/13**. The
-existing freestanding RTTI backend discrepancy remains separately disclosed;
-its hosted counterpart passes. Native optimization/debug encoding and
-self-hosting remain later-stage owners.
+This is required PA21/O0 dispatch behavior, not an optional runtime transform.
+Historical +15%, +16 MiB and 5.5× diagnostic targets add no exit gate; mandated
+limits, correctness and coverage remain binding. Preserve [111](performance111.md),
+[110](performance110.md) and earlier measurements. Student native optimization,
+debug encoding and self-hosting remain later-stage owners.
+
+[Validation 112](../student.tests/pa21/validation112.json) records the required
+checks, the exact two-to-zero original failure reduction, 116 unchanged source
+identities and the 15048-path contract inventory. Personal suites record **687/690** passes on their original backend lanes,
+including **22/22** new controls. The three failures are retained supplied-backend
+limits: the previously recorded freestanding RTTI case passes its hosted
+counterpart, and two inherited PA16 multi-TU lifecycle cases cannot resolve
+`__builtin_abort` through the freestanding backend. Both latter cases have
+byte-identical entry/current LowIR with `object=abort`, and both pass through the
+supplied object backend and host runtime (**2/2** additional checks). No source,
+comparison, failure result or required check is removed to accommodate them.
+All five reference-revision scripts and all six new reference observations are
+verified. Native execution corroborates the cited proofs; it does not replace
+course LowIR comparisons.
 
 ## Handoff ledger
 
@@ -112,14 +89,17 @@ self-hosting remain later-stage owners.
 107: `b821682b`, `20476a77`; expressions/defaults/consumers, **101/116**.
 108: `2e392cec`, `a30acab5`; destination/construction ownership, **108/116**;
 evidence through `e6582e37`.
-109: [accumulated audit](audit.md) through `f57bdd3b`; protected jumps repaired;
+109: accumulated audit through `f57bdd3b`; protected jumps repaired;
 eight required comparisons retained; recorded at `d9528e58`.
-110: `f724bc43`, `6b3aecdb`, `bdfdb31b`, `df6e8299`; catch-miss/static/list/array
-ownership, generated construction and bounded helper sharing; **113/116**.
-Final evidence `0e5a32dd`: **620/621** controls, **3596/3596** earlier cases.
-111: `d99f3ec1` records entry/review boundary; `3028366d` proves completed scalar
-body effects and resolves the backing-list comparison, **114/116**. Final
-evidence records **633/634** controls (one inherited backend discrepancy),
-**3596/3596** earlier cases, **114/116** current cases and a passing file audit.
-It closes this implementation handoff with the two groups above still open.
-Stage base and last-reviewed commits are unchanged.
+110: `f724bc43`, `6b3aecdb`, `bdfdb31b`, `df6e8299`; handler/static/list/array
+ownership, generated construction and bounded sharing; **113/116**;
+evidence `0e5a32dd`, **3596/3596** earlier cases.
+111: `3028366d` proves completed scalar-body effects, **114/116**;
+final evidence `9457e2fc`, **633/634** controls (one supplied-backend discrepancy).
+112: `707b06d7` records entry; `e32e9f2f` completes dispatch and reference
+alignment, **116/116**; `e70d2cee` retains frozen performance evidence.
+Final evidence records **116/116**, **3712/3712**, passing file audit and the
+complete personal/backend results above. The handoff boundary is the completed
+PA21 implementation, including the two formerly open owners. Stage base and
+last-reviewed commits are unchanged. Return to Ralph for independent full audit;
+this handoff does not certify that audit or advance to PA22.
