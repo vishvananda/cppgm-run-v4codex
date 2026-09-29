@@ -423,7 +423,9 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
     for (unsigned i = 0; i < explicit_args.count; ++i) {
         auto parameter = template_parameters[t.offset+i];
         if (entities[parameter].parameter_pack) {
-            if (t.primary && !prefix) prefix = substitution_frame(entities[pattern].specialization,t.offset,t.count);
+            // With no call arguments there is no deduction; the supplied pack
+            // is retained below without constructing a substitution frame.
+            if (t.primary && !prefix && args.size()) prefix = substitution_frame(entities[pattern].specialization,t.offset,t.count);
         } else bindings.put(parameter,argument_types[explicit_args.offset+i]);
     }
     for (unsigned i = 0; i < std::min<std::size_t>(f.count,args.size()); ++i) {
