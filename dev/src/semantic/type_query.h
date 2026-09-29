@@ -2,7 +2,7 @@
 #include "semantic/model.h"
 namespace cppgm { namespace semantic {
 using QueryId = std::uint32_t;
-enum class QueryKind : unsigned char { Value, This, String, Parameter, TemplateValueParameter, Name, TypeValue, Unary, Binary, Call, Member, Parenthesized, Sizeof, SizeofPack, Expansion, New, QualifiedValue, Conditional, Cast, Destructor, List, ListInitialization, Typeid };
+enum class QueryKind : unsigned char { Value, This, String, Parameter, TemplateValueParameter, Name, TypeValue, Unary, Binary, Call, Member, Parenthesized, Sizeof, SizeofPack, Expansion, New, QualifiedValue, Conditional, Cast, Destructor, List, ListInitialization, Typeid, Delete };
 // Canonical semantic type queries. Source locations remain on their source
 // nodes; these records retain resolved declaration/type/operation identities.
 struct TypeQuery {
@@ -21,6 +21,7 @@ struct TypeQueryFact {
     Expression expression;
     TypeId declared_type = 0;
     EntityId selected = 0; // Unevaluated call/operator choice; no body demand.
+    EntityId deallocation = 0;
     std::uint32_t arrow = 0;
     TypeId surrogate = 0;
     std::uint32_t initialization = 0;

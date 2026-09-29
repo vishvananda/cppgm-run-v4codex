@@ -112,7 +112,25 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
             abi.make(Kind::Call,function,0,0,0,args); break;
     }
     case QueryKind::Expansion: result = abi.make(Kind::ExprPack,child(0)); break;
-    case QueryKind::New: throw std::logic_error("new-expression ABI query is not yet represented");
+    case QueryKind::New: {
+        args.clear();
+        for (unsigned i = 1; i < q.count; ++i) args.push_back(child(i));
+        auto placement = args.size();
+        auto construction = sem.type_query_child(id,0);
+        if (q.op == OP_LBRACE) {
+            auto list = sem.type_query_child(construction,1);
+            for (unsigned i = 0; i < sem.type_query(list).count; ++i)
+                args.push_back(abi_query(sem.type_query_child(list,i)));
+        } else if (q.op == OP_LPAREN)
+            for (unsigned i = 1; i < sem.type_query(construction).count; ++i)
+                args.push_back(abi_query(sem.type_query_child(construction,i)));
+        auto flags = (sem.types[q.type].kind == semantic::TypeKind::Array ? 1 : 0) |
+            (q.value ? 2 : 0) | (q.op != TOK_INVALID ? 4 : 0) | (q.op == OP_LBRACE ? 8 : 0);
+        result = abi.make(Kind::NewExpression,abi_type(q.type),placement,flags,0,args); break;
+    }
+    case QueryKind::Delete:
+        result = abi.make(Kind::Unary,child(0),abi_mangle::operation(q.value & 2 ?
+            (q.value & 1 ? "gsda" : "gsdl") : (q.value & 1 ? "da" : "dl"))); break;
     case QueryKind::SizeofPack: {
         if (q.entity) {
             bool parameter = sem.entities[q.entity].template_parameter;

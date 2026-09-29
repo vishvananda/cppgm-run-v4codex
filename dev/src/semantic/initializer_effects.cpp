@@ -106,7 +106,10 @@ bool Analyzer::independent_initializer(NodeId n)
     case Kind::KeywordLiteral:
         safe &= ast[n].op != KW_THIS; break;
     case Kind::Sizeof: case Kind::SizeofPack: case Kind::TypeTrait:
-        safe = true; break; // C++11 operands are unevaluated.
+        // A polymorphic typeid evaluates its operand. It may observe earlier
+        // aggregate members, so it cannot be hoisted into helper arguments.
+        safe = ast[n].op != KW_TYPEID || !rtti_expression(n).dynamic;
+        break;
     case Kind::IdExpression: {
         auto kind = types[entities[value.entity].type].kind;
         safe &= value.entity && !nonstatic_field(value.entity) &&

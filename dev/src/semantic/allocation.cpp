@@ -5,8 +5,30 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::finish_allocations()
 {
+    Index leaf_bodies;
+    auto leaf_nonthrowing = [&](EntityId e) {
+        if (!e || !constructor_member(e)) return false;
+        if (auto known = leaf_bodies.get(e)) return known == 2;
+        auto m = members[entities[e].member_info];
+        auto body = entities[e].body;
+        // A completed zero-argument leaf constructor can have observable
+        // scalar work without an unwind edge. Keep declaration noexcept and
+        // construction calls intact; unknown/subobject/default recipes retain
+        // the deallocation owner. No body demand or call-graph search occurs.
+        bool safe = entities[e].body_state == FactState::Success && m.actions_state == FactState::Success &&
+            !m.action_count && !types[entities[e].type].count && body && ast[body].kind == Kind::Compound;
+        for (auto n = ast[body].first; safe && n; n = ast[n].next)
+            safe = (ast[n].kind == Kind::Return && !ast[n].first) ||
+                (ast[n].kind == Kind::ExpressionStatement && expression_nonthrowing(ast[n].first));
+        leaf_bodies.put(e,safe ? 2 : 1); return safe;
+    };
     for (auto& use : placements) {
-        if (!use.array) continue;
+        if (!use.array) {
+            if (!use.deallocation) continue;
+            auto ctor = use.constructor ? use.constructor : facts[use.initializer].entity;
+            if (leaf_nonthrowing(ctor)) use.deallocation = 0;
+            continue;
+        }
         if (use.bound && !constant_fact(use.bound).valid) {
             // Retain the source-width O0 extent arithmetic only with a
             // completed, constant-return bound proof. Otherwise widen before
@@ -36,6 +58,14 @@ void Analyzer::finish_allocations()
 }
 EntityId Analyzer::global_allocation(ETokenType op, bool array)
 {
+    // Implicit runtime declarations belong to the global namespace even when
+    // a retained template body first needs them. They have no source template
+    // head and must not inherit that body's currently active parameters.
+    struct RuntimeDeclaration {
+        ScopeId& scope; ScopeId saved;
+        explicit RuntimeDeclaration(ScopeId& s) : scope(s), saved(s) { scope = 0; }
+        ~RuntimeDeclaration() { scope = saved; }
+    } runtime(active_template_scope);
     TypeId v = types.fundamental(FT_VOID), ptr = types.compound(TypeKind::Pointer,v);
     TypeId size_type = types.fundamental(FT_UNSIGNED_LONG_INT);
     TypeId type = types.function(op == KW_NEW ? ptr : v,{op == KW_NEW ? size_type : ptr},false);
@@ -45,7 +75,7 @@ EntityId Analyzer::global_allocation(ETokenType op, bool array)
     if (op == KW_DELETE && !(entities[e].exception_spec & 3)) entities[e].exception_spec = 129;
     return e;
 }
-EntityId Analyzer::select_deallocation(TypeId t, bool array, bool force_global, ScopeId s)
+EntityId Analyzer::select_deallocation(TypeId t, bool array, bool force_global, ScopeId s, bool demand, bool required)
 {
     EntityId family = 0;
     IdentifierId name = operator_name(KW_DELETE,array);
@@ -60,18 +90,19 @@ EntityId Analyzer::select_deallocation(TypeId t, bool array, bool force_global, 
         if (entities[e].template_info || f.variadic || !f.count || types.parameters[f.offset] != ptr) continue;
         if (f.count == 1) { if (unsized) throw std::runtime_error("ambiguous deallocation"); unsized = e; }
         if (f.count == 2 && fundamental(types.parameters[f.offset+1],FT_UNSIGNED_LONG_INT)) {
-            if (sized) throw std::runtime_error("ambiguous sized deallocation"); sized = e;
+            if (sized) throw std::runtime_error("ambiguous sized deallocation");
+            sized = e;
         }
     }
     EntityId selected = unsized ? unsized : sized;
+    if (!selected && !required) return 0;
     if (!selected || deleted_transfer(selected)) throw std::runtime_error("no usable deallocation function");
-    check_access(selected,s,entities[selected].owner); demand_member(selected);
+    check_access(selected,s,entities[selected].owner);
+    if (demand) demand_member(selected);
     return selected;
 }
-Expression Analyzer::delete_expression(NodeId n, ScopeId s)
+TypeId Analyzer::delete_operand_type(Expression x)
 {
-    DeleteExpression use; use.array = child(n,Kind::ArrayDelete); use.operand = ast[n].last;
-    Expression x = expression(use.operand,s);
     TypeId pointer_type = decay(x.type);
     if (class_value(x.type)) {
         pointer_type = 0;
@@ -83,6 +114,12 @@ Expression Analyzer::delete_expression(NodeId n, ScopeId s)
         }
     }
     if (!pointer_type || !object_pointer(pointer_type)) throw std::runtime_error("delete requires object pointer");
+    return pointer_type;
+}
+Expression Analyzer::delete_expression(NodeId n, ScopeId s)
+{
+    DeleteExpression use; use.array = child(n,Kind::ArrayDelete); use.operand = ast[n].last;
+    TypeId pointer_type = delete_operand_type(expression(use.operand,s));
     use.type = types[pointer_type].child; size(use.type);
     use.leaf = use.type;
     while (types[use.leaf].kind == TypeKind::Array) use.leaf = types[use.leaf].child;

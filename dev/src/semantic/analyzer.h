@@ -242,7 +242,10 @@ private:
     bool array_operator(NodeId name) const;
     Expression delete_expression(NodeId n, ScopeId s);
     void finish_allocations();
-    EntityId select_deallocation(TypeId t, bool array, bool global, ScopeId s);
+    EntityId select_deallocation(TypeId t, bool array, bool global, ScopeId s, bool demand = true, bool required = true);
+    TypeId delete_operand_type(Expression operand);
+    EntityId new_deallocation(const PlacementNew& use, bool global, ScopeId scope);
+    TypeQueryFact query_delete(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     Index delete_index;
     std::vector<DeleteExpression> deletions = std::vector<DeleteExpression>(1);
     void prepare_value_boundary(TypeId t);
@@ -725,7 +728,7 @@ private:
     TypeId fundamental_cast_type(ETokenType op);
     TypeId parameter_body_type(TypeId source);
     QueryId call_query(NodeId n, ScopeId s);
-    QueryId new_query(NodeId n, ScopeId s);
+    QueryId allocation_query(NodeId n, ScopeId s);
     TypeQueryFact query_call(const TypeQuery& query, const std::vector<TypeQueryFact>& children);
     TypeId destructor_target(NodeId name, TypeId object, ScopeId scope);
     TypeQueryFact query_destructor(const TypeQuery& query, const std::vector<TypeQueryFact>& children);

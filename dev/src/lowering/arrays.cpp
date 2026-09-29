@@ -19,10 +19,12 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
     bool temporary_defaults = false;
     for (unsigned i = 0; i < sem.types[sem.entities[ctor].type].count; ++i)
         temporary_defaults |= cleanup_expression(sem.default_argument_value(ctor,i));
-    if (temporary_defaults) {
+    if (temporary_defaults || exception_context) {
         // Default-argument temporaries and the completed element use the same
         // immutable prefix owner. Mixing raw array regions with those suffixes
         // would share a resume block across different protected-region stacks.
+        // A source handler also needs this owner: raw prefix cleanup followed
+        // by resume cannot dispatch to a catch in the same function.
         auto initial = live;
         semantic::Index retired;
         if (count <= array_unroll_limit) {
@@ -30,7 +32,7 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
                 auto before = live;
                 Value at = array_element(root,indirect,path,Operand::integer(j),stride);
                 construct(ctor,0,at);
-                complete_subobject(t,at,before,j+1 < count && may_throw,true,retired);
+                complete_subobject(t,at,before,j+1 < count && may_throw,temporary_defaults,retired);
             }
         } else {
             SlotId index = builder->add_slot(0,IRType::I64);

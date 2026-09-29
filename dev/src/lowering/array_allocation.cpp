@@ -6,6 +6,10 @@ void Procedural::heap_array_destroy(EntityId destructor, TypeId leaf, Value data
     if (!destructor || (sem.synthetic_member(destructor) && !sem.destructor_needed(destructor))) return;
     SlotId index = builder->add_slot(0,IRType::I64);
     emit(Opcode::Store,IRType::I64,{count,Operand::slot(index)});
+    auto initial = live;
+    semantic::Index retired;
+    if (!emitting_cleanup && !sem.function_nonthrowing(destructor))
+        activate_subobject(leaf,data,index,retired);
     BlockId cond = block(), body = block(), end = block(); jump(cond); start(cond);
     Value current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
     Value test = emit(Opcode::Compare,IRType::I64,{current.operand,Operand::integer(0)},Operation::Ne);
@@ -16,7 +20,9 @@ void Procedural::heap_array_destroy(EntityId destructor, TypeId leaf, Value data
         {next.operand,Operand::integer(sem.object_size(leaf))},Operation::Mul).operand;
     Value at = emit(Opcode::Index,IRType::I8,{data.operand,offset});
     Operand args[] = {Operand::symbol(symbol(destructor)),at.operand};
-    guarded_call(Instruction(Opcode::Call,IRType::Void),args,2); jump(cond); start(end);
+    guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
+    if (!retired.empty()) close_expression_region();
+    jump(cond); start(end); live = initial;
 }
 Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
 {
@@ -46,6 +52,18 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
     for (unsigned j = 0; j < use.call.argument_count; ++j)
         call_work.push_back(converted(sem.call_argument(use.call,j),sem.conversion_fact(use.call.conversions+j)).operand);
     Value allocation = guarded_call(Instruction(Opcode::Call,IRType::Ptr),call_work.data()+begin,call_work.size()-begin);
+    std::vector<Operand> placement_release;
+    if (use.deallocation && use.call.argument_count) {
+        placement_release.push_back(Operand::symbol(symbol(use.deallocation)));
+        placement_release.push_back(allocation.operand);
+        auto signature = sem.types[sem.entities[use.deallocation].type];
+        for (unsigned j = 0; j < use.call.argument_count; ++j) {
+            auto t = type(sem.types.parameters[signature.offset+j+1]);
+            auto slot = builder->add_slot(0,t);
+            emit(Opcode::Store,t,{call_work[begin+j+2],Operand::slot(slot)});
+            placement_release.push_back(Operand::slot(slot));
+        }
+    }
     call_work.resize(begin);
     BlockId nullable_end; SlotId nullable_result;
     if (sem.function_nonthrowing(use.allocation) && (use.cookie || use.zero || use.construct)) {
@@ -92,39 +110,71 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
         auto stride = sem.object_size(use.leaf);
         SlotId index = builder->add_slot(0,IRType::I64);
         emit(Opcode::Store,IRType::I64,{Operand::integer(0),Operand::slot(index)});
-        BlockId cond = block(), body = block(), end = block(), cleanup = block(), continuation = block();
+        auto initial = live;
+        semantic::Index retired;
+        // A raw loop owns the whole unwind state only with an empty incoming
+        // prefix and no default-argument recipe. Otherwise retain typed owners
+        // so nested expression cleanups can reach the actual source handler.
+        bool contextual = exception_context && (live || sem.types[sem.entities[use.constructor].type].count);
+        if (contextual) {
+            if (use.deallocation) {
+                std::vector<Operand> args{allocation.operand};
+                auto signature = sem.types[sem.entities[use.deallocation].type];
+                if (!placement_release.empty()) {
+                    for (unsigned j = 0; j < use.call.argument_count; ++j)
+                        args.push_back(emit(Opcode::Load,type(sem.types.parameters[signature.offset+j+1]),{placement_release[j+2]}).operand);
+                } else if (signature.count == 2) args.push_back(bytes);
+                retired.put(protect_deallocation(use.deallocation,args.data(),args.size()),1);
+            }
+            activate_subobject(use.leaf,data,index,retired);
+        }
+        auto prefix = live;
+        BlockId cond = block(), body = block(), end = block();
+        BlockId cleanup = contextual ? BlockId() : block(), continuation = contextual ? BlockId() : block();
         jump(cond); start(cond);
         Value current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
         Value test = emit(Opcode::Compare,IRType::I64,{current.operand,elements},Operation::Ult);
         emit(Opcode::Branch,IRType(),{test.operand,Operand::label(body),Operand::label(end)}); start(body);
         Operand offset = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(stride)},Operation::Mul).operand;
         Value at = emit(Opcode::Index,IRType::I8,{data.operand,offset});
-        emit(Opcode::EhTry,IRType(),{Operand::label(cleanup)});
-        auto saved_live = live; live = 0;
+        if (!contextual) emit(Opcode::EhTry,IRType(),{Operand::label(cleanup)});
+        auto saved_live = live;
+        if (!contextual) live = 0;
         construct(use.constructor,0,at);
-        bool temporaries = live != 0;
+        bool temporaries = live != (contextual ? prefix : 0);
         auto advance = [&]() {
             Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
             emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(index)});
         };
         if (temporaries) advance();
-        clean_inline(live,0); live = saved_live;
-        emit(Opcode::EhEnd,IRType(),{});
+        clean_inline(live,contextual ? prefix : 0); live = saved_live;
+        if (contextual) close_expression_region();
+        else emit(Opcode::EhEnd,IRType(),{});
         if (!temporaries) advance();
         jump(cond);
-        start(end); jump(continuation); start(cleanup);
-        exception_clauses(exception_context,true);
-        current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
-        bool saved_cleanup = emitting_cleanup; emitting_cleanup = true;
-        heap_array_destroy(use.destructor,use.leaf,data,current.operand);
-        Operand args[] = {Operand::symbol(symbol(use.deallocation)),allocation.operand,bytes};
-        guarded_call(Instruction(Opcode::Call,IRType::Void),args,sem.types[sem.entities[use.deallocation].type].count+1);
-        emitting_cleanup = saved_cleanup;
-        if (exception_context) {
-            emit(Opcode::EhEnd,IRType(),{});
-            resume_exception(live,exception_context,false);
-        } else emit(Opcode::Resume,IRType(),{});
-        start(continuation);
+        start(end);
+        if (contextual) {
+            close_expression_region(); semantic::Index cache;
+            live = retire_construction(live,initial,retired,cache);
+        } else {
+            jump(continuation); start(cleanup);
+            exception_clauses(exception_context,true);
+            current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
+            bool saved_cleanup = emitting_cleanup; emitting_cleanup = true;
+            heap_array_destroy(use.destructor,use.leaf,data,current.operand);
+            if (!placement_release.empty())
+                guarded_call(Instruction(Opcode::Call,IRType::Void),placement_release.data(),placement_release.size());
+            else if (use.deallocation) {
+                Operand args[] = {Operand::symbol(symbol(use.deallocation)),allocation.operand,bytes};
+                guarded_call(Instruction(Opcode::Call,IRType::Void),args,sem.types[sem.entities[use.deallocation].type].count+1);
+            }
+            emitting_cleanup = saved_cleanup;
+            if (exception_context) {
+                emit(Opcode::EhEnd,IRType(),{});
+                resume_exception(live,exception_context,false);
+            } else emit(Opcode::Resume,IRType(),{});
+            start(continuation);
+        }
     }
     if (nullable_end) {
         emit(Opcode::Store,IRType::Ptr,{data.operand,Operand::slot(nullable_result)}); jump(nullable_end); start(nullable_end);

@@ -1,0 +1,23 @@
+{
+  "revision": "pa21-failed-new-113",
+  "base": "f3af4630",
+  "path": "pa12/tests/general/300-class-new-expression-default-constructor.ref",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "original_sha256": "d5d908e62e913e03705ca46b267d461fa0ce7ab9a154e1c15cbe9ec482a48836",
+  "revised_sha256": "b663b491b50c596c4d442b26da7bf3e846b39750eb4369cee0184710919ad698",
+  "replacements": [
+    [
+      "\nfunction @main()",
+      "\ndeclare function @operatordelete(%arg0 : ptr) -> void [unwind=no, role=free_memory, binding=strong, object=cppgm_builtin_operator_delete]\n\nfunction @main()"
+    ],
+    [
+      "  slot $p : ptr\n",
+      "  slot $p : ptr\n  slot $allocation : ptr\n"
+    ],
+    [
+      "    call void @S__S(%t2)\n",
+      "    store ptr %t2, $allocation\n    eh_try ^release\n    call void @S__S(%t2)\n    eh_end\n    jump ^constructed\n  block ^resume:\n    resume\n  block ^release:\n    %allocation = load ptr $allocation\n    call void @operatordelete(%allocation)\n    jump ^resume\n  block ^constructed:\n"
+    ]
+  ]
+}

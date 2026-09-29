@@ -61,20 +61,29 @@ Value Procedural::delete_expression(NodeId n)
     }
     Value allocation = pointer;
     Operand bytes = Operand::integer(sem.object_size(use.type));
+    auto initial = live; std::uint32_t release = 0;
+    auto protect = [&]() {
+        if (!use.destructor || sem.function_nonthrowing(use.destructor)) return;
+        Operand args[] = {allocation.operand,bytes};
+        release = protect_deallocation(use.deallocation,args,use.sized ? 2 : 1);
+    };
     if (use.cookie) {
         Operand back = Operand::integer(-use.cookie); back.negative_integer = true;
         allocation = emit(Opcode::Index,IRType::I8,{pointer.operand,back});
         Value count = emit(Opcode::Load,IRType::I64,{allocation.operand});
         Operand elements = count.operand;
-        heap_array_destroy(use.destructor,use.leaf,pointer,elements);
         if (use.sized) {
             bytes = emit(Opcode::Binary,IRType::I64,{count.operand,Operand::integer(sem.object_size(use.leaf))},Operation::Mul).operand;
             bytes = emit(Opcode::Binary,IRType::I64,{bytes,Operand::integer(use.cookie)},Operation::Add).operand;
         }
+        protect();
+        heap_array_destroy(use.destructor,use.leaf,pointer,elements);
     } else if (!use.array && use.destructor && (!sem.synthetic_member(use.destructor) || sem.destructor_needed(use.destructor))) {
+        protect();
         Operand args[] = {Operand::symbol(symbol(use.destructor)),pointer.operand};
         guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
     }
+    if (release) retire_deallocation(release,initial);
     Operand args[] = {Operand::symbol(symbol(use.deallocation)),allocation.operand,bytes};
     guarded_call(Instruction(Opcode::Call,IRType::Void),args,use.sized ? 3 : 2);
     if (end) { jump(end); start(end); }

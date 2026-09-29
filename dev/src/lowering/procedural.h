@@ -125,7 +125,14 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
-    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed, saved_location; std::uint32_t yes = 0, no = 0; TypeId destroyed_type = 0; };
+    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed, saved_location; std::uint32_t yes = 0, no = 0, release = 0; TypeId destroyed_type = 0; };
+    struct ReleaseAction { EntityId function; std::uint32_t begin, count; };
+    struct ReleaseOperand { SlotId slot; IRType type; };
+    std::vector<ReleaseAction> release_actions;
+    std::vector<ReleaseOperand> release_operands;
+    std::uint32_t protect_deallocation(EntityId function, const Operand* operands, unsigned count);
+    void release_allocation(std::uint32_t action);
+    void retire_deallocation(std::uint32_t state, std::uint32_t initial);
     void activate_subobject(TypeId type, Value address, SlotId count, semantic::Index& retired);
     void complete_subobject(TypeId type, Value address, std::uint32_t before, bool retain, bool defaults, semantic::Index& retired);
     std::vector<TemporaryState> temporary_states;

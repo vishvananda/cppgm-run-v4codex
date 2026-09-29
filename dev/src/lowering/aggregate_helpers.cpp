@@ -134,7 +134,11 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
 }
 void Procedural::emit_aggregate_helpers()
 {
-    for (auto helper : aggregate_definitions) {
+    // An omitted aggregate member may demand another helper while emitting
+    // this one. Consume the deduplicated queue by index and copy its record;
+    // vector growth must neither invalidate traversal nor leave bodies pending.
+    for (std::size_t cursor = 0; cursor < aggregate_definitions.size(); ++cursor) {
+        auto helper = aggregate_definitions[cursor];
         function = helper.function; reset_lifetime(0); initialized_units = semantic::Index();
         builder.reset(new lowir_model::FunctionBuilder(p, function)); start(block());
         auto signature = p.signatures[p.functions[function.index-1].signature.index-1];

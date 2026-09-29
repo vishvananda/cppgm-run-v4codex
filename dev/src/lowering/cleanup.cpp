@@ -10,6 +10,7 @@ void Procedural::reset_lifetime(EntityId e)
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
     local_reference_guards = semantic::Index();
     temporary_states.clear(); cleanup_blocks.clear(); constructed_subobjects.clear();
+    release_actions.clear(); release_operands.clear();
     list_backing_addresses = semantic::Index(); list_element_addresses.clear();
     full_expression = FullExpression();
     constructor_block_boundary = 0;

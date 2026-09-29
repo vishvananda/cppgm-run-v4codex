@@ -111,6 +111,7 @@ void Procedural::destroy_lifetime(std::uint32_t id)
 {
     auto action = lifetime_state(id);
     auto temporary = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1] : TemporaryState();
+    if (temporary.release) { release_allocation(temporary.release); return; }
     if (action.object || temporary.destroyed_type) {
         if (!emitting_cleanup && returning_object && action.object == returning_object) return;
         auto location = temporary.location;

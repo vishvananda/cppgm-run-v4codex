@@ -1,13 +1,27 @@
 declare function @operatornew(%arg0 : i64) -> ptr [role=allocate_memory, binding=strong, object=cppgm_builtin_operator_new]
 declare function @S__S(%arg0 : ptr [object_bytes=1]) -> void [binding=strong, object=_ZN1SC1Ev]
 
+declare function @operatordelete(%arg0 : ptr) -> void [unwind=no, role=free_memory, binding=strong, object=cppgm_builtin_operator_delete]
+
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $p : ptr
+  slot $allocation : ptr
 
   block ^entry:
     %t1 = convert sext i64 i32 1
     %t2 = call ptr @operatornew(%t1)
+    store ptr %t2, $allocation
+    eh_try ^release
     call void @S__S(%t2)
+    eh_end
+    jump ^constructed
+  block ^resume:
+    resume
+  block ^release:
+    %allocation = load ptr $allocation
+    call void @operatordelete(%allocation)
+    jump ^resume
+  block ^constructed:
     store ptr %t2, $p
     %t3 = load ptr $p
     %t4 = cmp eq ptr %t3, 0

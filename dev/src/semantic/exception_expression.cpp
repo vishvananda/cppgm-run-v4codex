@@ -183,6 +183,7 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     if (fact.selected) result &= function_nonthrowing(fact.selected);
     else if (q.kind == QueryKind::Call && fact.expression.form != ExpressionForm::PseudoDestructor &&
         type_queries[query_edges[q.offset]].kind != QueryKind::TypeValue) result = false;
+    if (fact.deallocation) result &= function_nonthrowing(fact.deallocation);
     auto arrow = arrow_chains[fact.arrow];
     for (unsigned i = 0; i < arrow.count; ++i) {
         auto step = arrow_steps[arrow.first+i];

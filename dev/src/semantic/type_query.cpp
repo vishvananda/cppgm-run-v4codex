@@ -51,8 +51,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         throw std::runtime_error("lambda in unevaluated operand");
     case Kind::PackExpression:
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
-    case Kind::New: {
-        auto id = new_query(n,s);
+    case Kind::New: case Kind::Delete: {
+        auto id = allocation_query(n,s);
         if (id) source_index.put(key(s,n),id);
         return id;
     }
@@ -517,6 +517,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::ListInitialization: r = query_list_initialization(id); break;
     case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
+    case QueryKind::Delete: r = query_delete(q,children); break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
     case QueryKind::This: x.type = q.type; break;
     case QueryKind::Value:

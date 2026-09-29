@@ -8,7 +8,8 @@ const char* const operations[] = {
     "ad", "de", "ps", "ng", "co", "nt", "pl", "mi", "ml", "dv", "rm",
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
     "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az",
-    "pp", "mm", "pp_", "mm_", "aS", "pL", "mI", "mL", "dV", "rM", "aN", "oR", "eO", "lS", "rS", "nx"
+    "pp", "mm", "pp_", "mm_", "aS", "pL", "mI", "mL", "dV", "rM", "aN", "oR", "eO", "lS", "rS", "nx",
+    "dl", "da", "gsdl", "gsda"
 };
 }
 Id operation(const std::string& code) {
@@ -99,6 +100,16 @@ void Encoder::expression(Id id) {
     case Kind::Call:
         output += "cl"; expression(n.a);
         for (Id i = 0; i < n.count; ++i) expression(g.child(n, i));
+        output += 'E'; break;
+    case Kind::NewExpression:
+        if (n.c & 2) output += "gs";
+        output += n.c & 1 ? "na" : "nw";
+        for (Id i = 0; i < n.b; ++i) expression(g.child(n,i));
+        output += '_'; type(n.a);
+        if (n.c & 4) {
+            output += n.c & 8 ? "il" : "pi";
+            for (Id i = n.b; i < n.count; ++i) expression(g.child(n,i));
+        }
         output += 'E'; break;
     case Kind::Conversion:
         output += "cv"; type(n.a); output += '_';

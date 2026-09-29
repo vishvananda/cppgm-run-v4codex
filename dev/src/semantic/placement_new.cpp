@@ -71,7 +71,8 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
         }
         if (use.zero) use.zero_plan = prepare_zero_initialization(use.leaf);
         if (use.constructor) members[entities[use.constructor].member_info].array_entry = true;
-        if (use.constructor) use.deallocation = select_deallocation(use.leaf,true,child(n,Kind::Global),s);
+        auto release = new_deallocation(use,child(n,Kind::Global),s);
+        if (use.constructor && release) { use.deallocation = release; demand_member(release); }
     } else if (use.initializer) {
         initialize(use.initializer, use.type, s);
         auto ctor = facts[use.initializer].entity;
@@ -91,6 +92,19 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     else {
         use.constructor = default_constructor(use.type, s);
         if (use.constructor) members[entities[use.constructor].member_info].complete_entry = true;
+    }
+    if (!use.array) {
+        bool throwing = !use.initializer && use.constructor && !default_construction_nonthrowing(use.constructor);
+        if (use.initializer) {
+            auto init = class_initialization(use.initializer,use.type);
+            if (init.source) throwing |= !conversion_nonthrowing(conversions[init.conversion]) || !expression_nonthrowing(init.source);
+            else if (auto plan = initializer_plan(use.initializer,use.type)) throwing |= !initializer_nonthrowing(plan);
+            else throwing |= !expression_nonthrowing(use.initializer);
+        }
+        // Access and matching are required even when initialization cannot
+        // unwind. Body demand belongs only to a retained cleanup call.
+        auto release = new_deallocation(use,child(n,Kind::Global),s);
+        if (throwing && release) { use.deallocation = release; demand_member(release); }
     }
     placement_index.put(n, placements.size()); placements.push_back(use);
     Expression result; result.type = types.compound(TypeKind::Pointer, use.type); return result;
