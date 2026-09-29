@@ -40,6 +40,9 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
                 throw std::runtime_error("explicit constructor for omitted aggregate element");
             class_facts[c].value_constructor = ctor;
             action.helper_safe = false;
+            auto member = members[entities[ctor].member_info];
+            action.zero = member.synthetic && !member.defaulted_late;
+            if (action.zero) prepare_zero_initialization(t);
             if (!base_initialization) members[entities[ctor].member_info].complete_entry = true;
         } else {
             action.kind = InitKind::Group;

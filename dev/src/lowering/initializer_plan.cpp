@@ -82,6 +82,7 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     if (action.kind == InitKind::Value) {
         if (auto ctor = sem.value_constructor(action.type)) {
+            if (action.zero) zero_object(action.type,address(location));
             construct(ctor, 0, address(location));
         }
         else store(initialization_value(0, action.type), location);
