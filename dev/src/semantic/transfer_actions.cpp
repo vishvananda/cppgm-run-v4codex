@@ -58,6 +58,12 @@ void Analyzer::prepare_transfer(EntityId e)
                 trivial &= simple;
                 representation_copy &= simple && copy_storage_type(element);
                 no_throw &= function_nonthrowing(selected);
+                auto signature = types[entities[selected].type];
+                for (unsigned i = 1; i < signature.count; ++i) {
+                    Conversion c;
+                    auto node = default_argument(selected,i,&c,DefaultReason::Recipe);
+                    no_throw &= expression_nonthrowing(node) && conversion_nonthrowing(c);
+                }
                 if (is_union && !simple) deleted = true;
             }
             action.kind = TransferAction::Subobject;

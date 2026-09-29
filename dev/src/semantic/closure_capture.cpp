@@ -19,10 +19,11 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     auto identity = key(id,object);
     if (auto known = closure_capture_index.get(identity)) return known;
     auto closure = closures[id];
-    if (!closure.capture_default || (object && closure.capture_default != 1))
+    if (!closure.capture_default)
         throw std::runtime_error("object requires lambda capture");
     if (!object && !closure.this_type) throw std::runtime_error("this outside nonstatic member");
     ClosureCapture capture; capture.object = object;
+    capture.by_copy = object && closure.capture_default == 2;
     if (closure.parent && (!object || !encloses(entities[closure.enclosing].scope,entities[object].owner)))
         capture.source = require_capture(closure.parent,object);
     auto scope = entities[closure.entity].scope;
@@ -30,7 +31,15 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     // declaration; each evaluated use records its capture identity separately.
     auto name = ids.intern(TextView("__capture",9));
     capture.field = make_entity(EntityKind::Variable,scope,name,0);
-    auto type = object ? types.compound(TypeKind::LRef,value_type(entities[object].type)) : closure.this_type;
+    capture.source_type = object ? value_type(entities[object].type) : closure.this_type;
+    if (capture.source && object) {
+        auto outer = closure_captures[capture.source];
+        capture.source_type = value_type(entities[outer.field].type);
+        if (outer.by_copy) capture.source_type = types.qualify(capture.source_type,types[entities[closure.enclosing].type].cv);
+    }
+    auto type = !object || capture.by_copy ? capture.source_type : types.compound(TypeKind::LRef,capture.source_type);
+    if (capture.by_copy && types[type].kind == TypeKind::Function)
+        type = types.compound(TypeKind::LRef,type);
     entities[capture.field].type = type;
     record(scope,capture.field,0,type,EntityKind::Variable);
     auto index = closure_captures.size(); closure_captures.push_back(capture);
@@ -40,8 +49,33 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     closures[id].last_capture = index;
     // Capturing an address invalidates the scalar's private-storage proof even
     // while checking an as-yet undemanded call operator.
-    if (object && private_scalar(object)) { scalar_observations.put(object,1); ++scalar_observation_count; }
+    if (object && !capture.by_copy && private_scalar(object)) { scalar_observations.put(object,1); ++scalar_observation_count; }
     return index;
+}
+TypeId Analyzer::capture_type(unsigned id)
+{
+    auto capture = closure_captures[id];
+    auto type = value_type(entities[capture.field].type);
+    if (capture.by_copy) type = types.qualify(type,types[entities[current_function].type].cv);
+    return type;
+}
+void Analyzer::prepare_capture_initializers(unsigned id, ScopeId scope)
+{
+    // Construction belongs to evaluation of the lambda expression, independently
+    // of whether its call operator is ever demanded. Nested expressions record
+    // the dependency on their enclosing operator through the normal demand owner.
+    for (auto i = closures[id].first_capture; i; i = closure_captures[i].next) {
+        auto capture = closure_captures[i];
+        if (!capture.by_copy) continue;
+        Expression source; source.type = capture.source_type; source.category = ValueCategory::Lvalue;
+        TypeId target = entities[capture.field].type;
+        while (types[target].kind == TypeKind::Array) { target = types[target].child; source.type = types[source.type].child; }
+        auto c = class_value(target) ? transfer_initialization(source,target,InitializationMode::Direct) : standard_conversion(source,target);
+        if (!c.valid()) throw std::runtime_error("invalid copy capture");
+        c = prepare_typed_conversion(source,c,scope,true);
+        if (class_value(target)) default_destructor(target,scope);
+        closure_captures[i].conversion = conversions.size(); conversions.push_back(c);
+    }
 }
 void Analyzer::prepare_captures(unsigned id, ScopeId scope)
 {
@@ -67,10 +101,11 @@ void Analyzer::prepare_captures(unsigned id, ScopeId scope)
         if (op == KW_THIS && closures[id].capture_default == 2)
             throw std::runtime_error("explicit this with value default is not C++11");
         if (op != KW_THIS) {
-            if (op != OP_AMP || !ast[n].detail) throw std::runtime_error("unsupported value capture");
-            auto name = ast[ast[n].detail].text;
+            auto name = op == OP_AMP ? ast[ast[n].detail].text : ast[n].text;
+            if (!name) throw std::runtime_error("invalid capture");
             if (parameters.get(name)) throw std::runtime_error("capture conflicts with lambda parameter");
-            if (closures[id].capture_default == 1) throw std::runtime_error("redundant reference capture");
+            if ((op == OP_AMP && closures[id].capture_default == 1) ||
+                (op != OP_AMP && closures[id].capture_default == 2)) throw std::runtime_error("redundant capture");
             object = lookup(scope,name,Lookup::Ordinary);
             if (!object || (entities[object].kind != EntityKind::Variable && entities[object].kind != EntityKind::Parameter) ||
                 entities[object].is_static || entities[object].external_decl || entities[object].thread_local_storage ||
@@ -83,7 +118,7 @@ void Analyzer::prepare_captures(unsigned id, ScopeId scope)
         auto pack = entity_pack_arguments.get(object);
         if (bool(pack) != bool(child(n,Kind::ParameterPack))) throw std::runtime_error("invalid capture pack expansion");
         auto saved = closures[id].capture_default;
-        closures[id].capture_default = 1;
+        closures[id].capture_default = op == OP_AMP || op == KW_THIS ? 1 : 2;
         if (pack) {
             auto elements = pack_arguments(pack);
             for (unsigned lane = 0; lane < elements.count; ++lane)

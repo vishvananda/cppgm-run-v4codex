@@ -56,6 +56,9 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
         if (c.ellipsis_object) needed |= sem.temporary_cleanup(sem.converted_temporary(c));
         if (auto call = conversion_call(c)) arguments(*call);
     }
+    if (ast[n].kind == syntax::Kind::Lambda)
+        for (auto i = sem.closure(sem.types[expression.type].entity).first_capture; i; i = sem.closure_captures[i].next)
+            if (auto call = conversion_call(sem.conversion_fact(sem.closure_captures[i].conversion))) arguments(*call);
     if (expression.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
         needed |= cleanup_expression(ast[n].first,false);
     if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
@@ -87,7 +90,21 @@ void Procedural::destroy_lifetime(std::uint32_t id)
 {
     auto action = lifetime_state(id);
     if (action.object) {
-        auto location = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1].location : lowir_model::ValueId();
+        auto temporary = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1] : TemporaryState();
+        auto location = temporary.location;
+        if (temporary.constructed) {
+            auto leaf = sem.entities[action.object].type;
+            while (sem.types[leaf].kind == TypeKind::Array) leaf = sem.types[leaf].child;
+            auto test = block(), body = block(), end = block(); jump(test); start(test);
+            auto count = emit(Opcode::Load,IRType::I64,{Operand::slot(temporary.constructed)});
+            auto more = emit(Opcode::Compare,IRType::I64,{count.operand,Operand::integer(0)},Operation::Ne);
+            emit(Opcode::Branch,IRType(),{more.operand,Operand::label(body),Operand::label(end)});
+            start(body);
+            auto next = emit(Opcode::Binary,IRType::I64,{count.operand,Operand::integer(1)},Operation::Sub);
+            emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(temporary.constructed)});
+            destroy(action.destructor,leaf,array_element(Value(Operand::value(location),IRType::Ptr),false,{},next.operand,sem.object_size(leaf)));
+            jump(test); start(end); return;
+        }
         if (location) destroy(action.destructor,sem.entities[action.object].type,Value(Operand::value(location),IRType::Ptr));
         else destroy_object(action.object,action.destructor);
         return;

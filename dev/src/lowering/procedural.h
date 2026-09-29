@@ -116,7 +116,7 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
-    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector; std::uint32_t yes = 0, no = 0; };
+    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed; std::uint32_t yes = 0, no = 0; };
     std::vector<TemporaryState> temporary_states;
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false);
@@ -131,6 +131,7 @@ class Procedural {
     void finish_full_expression(std::uint32_t stop);
     void closure_adapter(EntityId e);
     void initialize_closure(NodeId n, Value destination);
+    std::uint32_t retire_construction(std::uint32_t state, std::uint32_t stop, const semantic::Index& retired, semantic::Index& cache);
     Value captured_address(unsigned capture);
     void guard_expression(NodeId n, bool storage_ready = false);
     void open_expression_region();

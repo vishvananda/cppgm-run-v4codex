@@ -63,6 +63,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     if (capture) {
         auto use = object_uses[result.object_use]; use.capture = capture;
         result.object_use = object_uses.size(); object_uses.push_back(use);
+        if (closure_captures[capture].object) result.type = capture_type(capture);
     }
     demand_function_expression(result);
     bool storage = (!unevaluated_depth || active_default_fact) && definitions;

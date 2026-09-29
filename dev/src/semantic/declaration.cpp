@@ -74,6 +74,16 @@ void Analyzer::finish()
                     else members[entities[action.function].member_info].base_entry = true;
                 }
                 demand_member(action.function, MemberDemandReason::Transfer);
+                auto signature = types[entities[action.function].type];
+                std::vector<Conversion> defaults;
+                for (unsigned k = 1; k < signature.count; ++k) {
+                    Conversion c; auto node = default_argument(action.function,k,&c);
+                    apply_conversion(node,c); defaults.push_back(c);
+                }
+                if (!defaults.empty()) {
+                    transfers[members[m].transfer_begin+j].default_conversions = conversions.size();
+                    conversions.insert(conversions.end(),defaults.begin(),defaults.end());
+                }
             }
         } else if (members[m].constructor && (members[m].synthetic || members[m].body)) constructor_actions(e);
         if (members[m].destructor && (members[m].synthetic || members[m].body)) destructor_actions(e);

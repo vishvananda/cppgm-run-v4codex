@@ -153,6 +153,9 @@ Value Procedural::expression(NodeId n, bool location)
             if (storage) { Value v = binding(fact.entity); v.type = fact.type; return v; }
             auto capture = sem.object_fact(n).capture;
             Value base = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            // Preserve the captured receiver's object projection separately
+            // from the selected member projection in the O0 LowIR view.
+            if (capture) base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(0)});
             Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
         }
         return binding(fact.entity);

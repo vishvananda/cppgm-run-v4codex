@@ -97,7 +97,13 @@ bool Analyzer::expression_nonthrowing(NodeId n)
         return !rtti_expression(n).reference && expression_nonthrowing(ast[node.first].next);
     // These operands are unevaluated, including nested noexcept. Their type
     // and validity have already been checked by semantic construction.
-    if (node.kind == Kind::Lambda || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
+    if (node.kind == Kind::Lambda) {
+        bool result = true;
+        for (auto i = closure(types[x.type].entity).first_capture; i; i = closure_captures[i].next)
+            if (closure_captures[i].conversion) result &= conversion_nonthrowing(conversions[closure_captures[i].conversion]);
+        expression_exception_facts.put(n,result ? 2 : 1); return result;
+    }
+    if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
     bool result = node.kind != Kind::Throw;
     auto arrow = arrow_chains[object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) {

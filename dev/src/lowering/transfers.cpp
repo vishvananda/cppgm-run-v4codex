@@ -34,8 +34,11 @@ void Procedural::transfer_action(const semantic::TransferAction& action, Value s
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(action.type); copy.alignment = sem.object_alignment(action.type);
             emit(copy, {source.operand, target.operand});
         } else {
-            Operand args[] = {Operand::symbol(symbol(action.function, !action.field)), target.operand, source.operand};
-            guarded_call(Instruction(Opcode::Call, assignment ? type(sem.types[sem.entities[action.function].type].child) : IRType::Void), args, 3);
+            std::vector<Operand> args{Operand::symbol(symbol(action.function, !action.field)), target.operand, source.operand};
+            auto signature = sem.types[sem.entities[action.function].type];
+            for (unsigned j = 1; j < signature.count; ++j)
+                args.push_back(converted(sem.default_argument_value(action.function,j),sem.conversion_fact(action.default_conversions+j-1)).operand);
+            guarded_call(Instruction(Opcode::Call, assignment ? type(signature.child) : IRType::Void), args.data(), args.size());
         }
         return;
     }

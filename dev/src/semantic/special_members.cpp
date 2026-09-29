@@ -101,8 +101,18 @@ void Analyzer::ensure_transfers(TypeId t, bool assignment)
     auto accepts_const = [&](TypeId subobject) {
         while (types[subobject].kind == TypeKind::Array) subobject = types[subobject].child;
         if (types[subobject].kind != TypeKind::Named || !entities[types[subobject].entity].class_info) return;
-        EntityId selected = select_transfer(subobject, types.qualify(subobject, 1), ValueCategory::Lvalue, assignment);
-        if (!selected) const_source = false;
+        ensure_transfers(subobject,assignment);
+        auto cls = types[subobject].entity;
+        auto family = assignment ? local(entities[cls].scope,operator_name(OP_ASS)) : class_facts[entities[cls].class_info].constructor;
+        bool accepts = false;
+        for (auto e : candidates(family)) {
+            auto m = members[entities[e].member_info];
+            if (m.transfer != (assignment ? TransferKind::CopyAssignment : TransferKind::CopyConstructor)) continue;
+            auto f = types[entities[e].type];
+            auto parameter = types[types.parameters[f.offset]];
+            accepts |= parameter.kind != TypeKind::LRef || (types[parameter.child].cv & 1);
+        }
+        const_source &= accepts;
     };
     unsigned copy = assignment ? 4 : 1, move = assignment ? 8 : 2;
     if (!(declared & copy)) {
@@ -142,6 +152,12 @@ EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory c
         Type f = types[entities[e].type];
         if (!f.count || (f.count > 1 && (!entities[e].defaults || !default_arguments[entities[e].defaults+1]))) continue;
         ++candidate_work;
+        if (entities[e].template_info) {
+            Expression value; value.type = source; value.category = category;
+            e = deduce_function(e,std::vector<Expression>{value});
+            if (!e) continue;
+            f = types[entities[e].type];
+        }
         Candidate c; c.entity = e;
         c.sequence[0] = assignment ? object_conversion(e, target, ValueCategory::Lvalue) : Conversion();
         if (!assignment) c.sequence[0].rank = 0;
@@ -153,10 +169,17 @@ EntityId Analyzer::select_transfer(TypeId target, TypeId source, ValueCategory c
         viable.push_back(c);
     }
     if (viable.empty()) return 0;
+    auto preferred = [&](unsigned a,unsigned b) {
+        if (better(viable[a].sequence,viable[b].sequence,2)) return true;
+        for (unsigned i = 0; i < 2; ++i)
+            if (better(viable[b].sequence+i,viable[a].sequence+i,1)) return false;
+        auto x = viable[a].entity, y = viable[b].entity;
+        return (!entities[x].specialization && entities[y].specialization) || template_more_specialized(x,y,1);
+    };
     unsigned best = 0;
-    for (unsigned j = 1; j < viable.size(); ++j) if (better(viable[j].sequence, viable[best].sequence, 2)) best = j;
+    for (unsigned j = 1; j < viable.size(); ++j) if (preferred(j,best)) best = j;
     for (unsigned j = 0; j < viable.size(); ++j)
-        if (j != best && !better(viable[best].sequence, viable[j].sequence, 2)) return 0;
+        if (j != best && !preferred(best,j)) return 0;
     return viable[best].entity;
 }
 bool Analyzer::deleted_transfer(EntityId e)

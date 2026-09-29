@@ -2,8 +2,9 @@
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
 Last reviewed commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Target: PA21 full-stage. Phase: implementation handoff (loop 102).
-Entry: clean; 24/116 pass, 92 fail. Now: **37/116 pass, 79 fail**, no regressions
+Target: PA21 full-stage. Phase: implementation (loop 103).
+Loop 102 entry: clean; 24/116 pass, 92 fail. Loop 103 entry: clean at
+`f4224e0b`; 37/116 pass, 79 fail. Now: **37/116 pass, 79 fail**, no regressions
 or reduced coverage. Independent whole-stage audit is still pending.
 
 ## Design/spec alignment
@@ -16,6 +17,15 @@ access, incomplete types and cross-TU linkage. Lowering emits once per identity;
 work is bounded by type/dependency edges and produced IR/name bytes. Related
 fixes cover function/member-pointer parsing and allocated-copy constructor entry.
 [Design, work bounds and runtime limitation](rtti102.md).
+
+## Active work
+
+Loop 103 starts with closure environments: capture mode/type and typed copy
+recipes belong to the semantic capture edge; closure construction consumes those
+facts and existing transfer/destructor machinery. Extend explicit/default value,
+reference, nested, class, template and RTTI compositions together. Validate
+required fixtures, personal execution/rejection controls, earlier stages, and
+frozen A/A + ABBA compiler/runtime evidence. EH compositions remain visible.
 
 ## Remaining implementation groups
 

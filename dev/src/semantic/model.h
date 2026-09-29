@@ -254,6 +254,7 @@ struct TransferAction {
     enum Kind : unsigned char { Scalar, Reference, Subobject, Unit, Storage, Empty } kind = Scalar;
     EntityId field = 0, function = 0;
     TypeId type = 0;
+    std::uint32_t default_conversions = 0;
     std::uint64_t bytes = 0, alignment = 1;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };

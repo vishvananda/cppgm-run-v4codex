@@ -40,6 +40,15 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
     auto fn = make_entity(EntityKind::Function,s,0,body);
     entities[fn].type = types.function(result,params,f.variadic);
     entities[fn].template_pattern = true;
+    unsigned mode = 0;
+    for (auto c = ast[child(n,Kind::LambdaIntroducer)].first; c; c = ast[c].next) {
+        auto op = ast[c].op;
+        if ((op == OP_AMP && !ast[c].detail) || op == OP_ASS) { mode = op == OP_AMP ? 1 : 2; continue; }
+        if (op == KW_THIS) continue;
+        auto name = op == OP_AMP ? ast[ast[c].detail].text : ast[c].text;
+        if (auto object = lookup(s,name,Lookup::Ordinary)) closure_pattern_captures.put(key(fn,object),op == OP_AMP ? 1 : 2);
+    }
+    closure_patterns.put(fn,1 | (mode << 1) | (child(d,Kind::LambdaSpecifier) ? 0 : 8));
     bind_template_defaults(d,s,0);
     bind_template_body({body,d,s,fn,body});
 }
@@ -96,6 +105,7 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     try { function_body({body,d,entities[cls].scope,fn,body}); }
     catch (...) { --unevaluated_depth; body_evaluation_depth = saved_depth; throw; }
     --unevaluated_depth; body_evaluation_depth = saved_depth;
+    prepare_capture_initializers(id,s);
     // The checked operator scope owns the actual parameter identities (and
     // expanded packs). Exception expressions use that scope and the ordinary
     // contextual-bool/constant rules, independently of runtime body demand.

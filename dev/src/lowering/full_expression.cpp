@@ -39,6 +39,9 @@ bool Procedural::unwind_expression(NodeId n)
     if (discarded.valid()) conversion(discarded);
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));
+    if (ast[n].kind == Kind::Lambda)
+        for (auto i = sem.closure(sem.types[x.type].entity).first_capture; i; i = sem.closure_captures[i].next)
+            if (sem.closure_captures[i].conversion) conversion(sem.conversion_fact(sem.closure_captures[i].conversion));
     if (x.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
         result |= unwind_expression(ast[n].first);
     if (ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Sizeof && ast[n].kind != Kind::TypeTrait)

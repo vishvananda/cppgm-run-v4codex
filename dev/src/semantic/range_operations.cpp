@@ -23,7 +23,16 @@ Conversion Analyzer::prepare_typed_conversion(Expression source, Conversion c, S
         if (!destination) recipe.temporary = range_object(value_type(c.target),s,0);
         recipe.elided = !c.reference && source.category == ValueCategory::Prvalue &&
             types.unqualified(source.type) == types.unqualified(c.target);
-        for (unsigned i = 1; i < recipe.call.argument_count; ++i) default_argument(c.function,i);
+        std::vector<Conversion> arguments;
+        if (recipe.call.argument_count) arguments.push_back(conversions[recipe.call.conversions]);
+        for (unsigned i = 1; i < recipe.call.argument_count; ++i) {
+            Conversion argument;
+            auto node = default_argument(c.function,i,&argument);
+            apply_conversion(node,argument); arguments.push_back(argument);
+        }
+        recipe.call.conversions = conversions.size();
+        conversions.insert(conversions.end(),arguments.begin(),arguments.end());
+        members[entities[c.function].member_info].complete_entry = true;
         c.materialization = conversion_objects.size(); conversion_objects.push_back(recipe);
     } else if (c.kind == Conversion::Kind::User) {
         auto record = user_conversions[c.materialization];

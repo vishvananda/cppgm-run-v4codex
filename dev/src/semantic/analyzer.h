@@ -181,6 +181,9 @@ public:
     struct ClosureCapture {
         EntityId object = 0, field = 0;
         unsigned source = 0, next = 0;
+        TypeId source_type = 0;
+        unsigned conversion = 0;
+        bool by_copy = false;
     };
     std::vector<ClosureCapture> closure_captures = std::vector<ClosureCapture>(1);
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
@@ -346,9 +349,12 @@ private:
     std::vector<Closure> closures = std::vector<Closure>(1);
     Index closure_entities, closure_functions, closure_occurrences, closure_adapters;
     Index closure_capture_index;
+    Index closure_patterns, closure_pattern_captures;
     unsigned require_capture(unsigned closure, EntityId object);
     unsigned capture_object(EntityId object);
     void prepare_captures(unsigned closure, ScopeId scope);
+    void prepare_capture_initializers(unsigned closure, ScopeId scope);
+    TypeId capture_type(unsigned capture);
     Expression lambda_expression(NodeId n, ScopeId s);
     void bind_lambda_body(NodeId n, ScopeId s);
     void finish_closures();

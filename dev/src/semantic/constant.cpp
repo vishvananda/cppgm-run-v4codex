@@ -77,7 +77,7 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
-    if (definitions && decltype_form && (active_template_scope || scopes[s].kind == ScopeKind::Template ||
+    if (definitions && decltype_form && (closure_functions.get(current_function) || active_template_scope || scopes[s].kind == ScopeKind::Template ||
         (scopes[s].kind == ScopeKind::Block && template_object_context_index.get(s)))) return dependent_decltype(n,s);
     if (calls) {
         if (decltype_form) ++unevaluated_depth;

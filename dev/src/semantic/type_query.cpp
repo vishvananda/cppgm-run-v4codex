@@ -675,6 +675,33 @@ TypeId Analyzer::dependent_decltype(NodeId n, ScopeId s)
 {
     auto query = expression_query(n,s);
     if (!query && template_type_probe) return 0;
-    return query_decltype(query,ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member);
+    auto result = query_decltype(query,ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member);
+    // [expr.prim.lambda]/18 applies the hypothetical member access only to
+    // parenthesized id-expressions. It must neither capture nor demand storage.
+    if (ast[n].kind != Kind::Parenthesized) return result;
+    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    if (ast[n].kind != Kind::IdExpression) return result;
+    auto object = resolve(ast[n].detail,s);
+    if (!object || (entities[object].kind != EntityKind::Variable && entities[object].kind != EntityKind::Parameter) ||
+        entities[object].is_static || entities[object].external_decl || entities[object].thread_local_storage ||
+        scopes[entities[object].owner].kind == ScopeKind::Namespace || scopes[entities[object].owner].kind == ScopeKind::Class)
+        return result;
+    std::vector<unsigned> qualifiers;
+    for (auto scope = s; scope; scope = scopes[scope].parent) {
+        if (scopes[scope].kind != ScopeKind::Function) continue;
+        if (encloses(scope,entities[object].owner)) break;
+        auto fn = scopes[scope].entity;
+        auto id = closure_functions.get(fn), pattern = closure_patterns.get(fn);
+        if (!id && !pattern) break;
+        unsigned mode = pattern ? (pattern >> 1) & 3 : closures[id].capture_default;
+        if (pattern) {
+            if (auto explicit_mode = closure_pattern_captures.get(key(fn,object))) mode = explicit_mode;
+        } else if (auto capture = closure_capture_index.get(key(id,object))) mode = closure_captures[capture].by_copy ? 2 : 1;
+        qualifiers.push_back(mode == 2 ? pattern ? pattern >> 3 : types[entities[fn].type].cv : 0);
+    }
+    auto type = value_type(entities[object].type);
+    if (!type) return result;
+    for (auto cv : qualifiers) if (types[type].kind != TypeKind::Function) type = types.qualify(type,cv);
+    return qualifiers.empty() ? result : types.compound(TypeKind::LRef,type);
 }
 } }
