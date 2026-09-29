@@ -1,0 +1,202 @@
+{
+  "stage": "pa19",
+  "handoff": 92,
+  "status": "validated full-stage implementation handoff; independent whole-stage audit pending",
+  "stage_base_commit": "e5f4c3ed78972c8d161671d145bf525cb99033f4",
+  "last_reviewed_commit": "e5f4c3ed78972c8d161671d145bf525cb99033f4",
+  "entry_commit": "065d67835340af14fc3f154f3f314e552d0b3f69",
+  "implementation_commit": "5763cf6c",
+  "reference_commit": "946c651b",
+  "commits": [
+    "42251d951dcb7a1dd78dfa589b5499bd1fe43df9 docs(pa19): record loop 92 variable fact ownership and validation",
+    "ea5c1d821509cc7e8000b660501a71621065b488 fix(pa19): compose lazy member variable template facts and constant storage",
+    "5763cf6c56490aac91430f1090777f47fd835880 fix(pa19): retain dependent layout provenance for O0 conversions",
+    "946c651bb8005a1b4e6aff0caa5d6ee2da685838 test(pa19): correct constant storage and demand contract oracles"
+  ],
+  "frozen_binaries": [
+    {
+      "path": "/tmp/pa19-loop92/entry-cppgm++",
+      "sha256": "d65826dd89e27b465ac9cf8bd61db6de565c5913b24856c5740345fbb73c6b02",
+      "text_bytes": 2004358
+    },
+    {
+      "path": "/tmp/pa19-loop92/final-cppgm++",
+      "sha256": "1a181c95ee97d646d41c1009780200049e776d67e1d715840d5526b3d10e1d40",
+      "text_bytes": 2005958
+    }
+  ],
+  "dev_source_count": 280,
+  "dev_source_hashes_sha256": "12e1c9c6f867a6a25512721ae7553c7fdec3625f4693971e53b69eb15454f5b6",
+  "coverage": {
+    "original_inputs": 423,
+    "final_inputs": 423,
+    "source_bytes_identical": true,
+    "status_sidecars_identical": true,
+    "comparison_rules_unchanged": true,
+    "source_hashes_sha256": "cf7c18a59dc74d2f5c36f2adbd694b7ce48adc04f4cd510ca40745ad940b6441",
+    "revised_oracles": [
+      "pa19/tests/general/100-inherited-using-alias-out-of-class-specialization-member.ref",
+      "pa19/tests/general/100-intermediate-type-transform-value-nontype.ref",
+      "pa19/tests/general/100-structured-bool-boost-convertible-mpl-overload.ref",
+      "pa19/tests/general/200-array-reference-deduction.ref",
+      "pa19/tests/general/300-array-qualified-member-type-sfinae.ref",
+      "pa19/tests/general/300-deleted-return-sfinae-same-parameter-list.ref",
+      "pa19/tests/general/400-nonmember-template-compound-assignment-const-lhs.ref",
+      "pa19/tests/general/400-qualified-member-variable-template-class-value.ref",
+      "pa19/tests/general/500-dependent-qualified-sizeof-static-member.ref",
+      "pa19/tests/general/500-member-template-conditional-alias-trailing-return.ref",
+      "pa19/tests/general/500-source-owner-member-template-sfinae-default.ref",
+      "pa19/tests/spec/100-explicit-instantiation-after-explicit-specialization-no-effect.ref",
+      "pa19/tests/spec/400-out-of-class-overloaded-member-template-definition.ref",
+      "pa19/tests/spec/500-nondeduced-qualified-member-type-allows-conversion.ref"
+    ]
+  },
+  "checks": {
+    "stage": {
+      "command": "make test-pa19",
+      "exit_code": 0,
+      "passed": 423,
+      "total": 423,
+      "log_path": "/tmp/pa19-loop92/stage-final-candidate.log",
+      "log_sha256": "0eb6ceb4cd42a36e7192d6f4f16265d5e2c0a21fa750201e13c8f878377710b5"
+    },
+    "through": {
+      "command": "make test-report-through-pa19",
+      "exit_code": 0,
+      "passed": 3452,
+      "total": 3452,
+      "log_path": "/tmp/pa19-loop92/through-final.log",
+      "log_sha256": "6dadcc955ee05b1dfd92c28d10e8ff305478123a9efe6c1f8d11bd32f75c0e3d"
+    },
+    "prior": {
+      "command": "n=19; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "passed": 3029,
+      "total": 3029,
+      "log_path": "/tmp/pa19-loop92/prior-final.log",
+      "log_sha256": "604d6bdb7e243b9b52c8506e0fa49ab5f4bcfcd06fe14c3aad2f8ceaf335830d"
+    },
+    "file_audit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa19 --paths dev/src",
+      "exit_code": 0,
+      "passed": null,
+      "total": null,
+      "log_path": "/tmp/pa19-loop92/file-audit-final.log",
+      "log_sha256": "b20e2dfcf5f476659dc74de3cb992ec8f672f6fd99037175cac085650147bfff"
+    }
+  },
+  "stage_progress": {
+    "original_failures": [
+      "pa19/tests/general/100-inherited-using-alias-out-of-class-specialization-member.t",
+      "pa19/tests/general/100-intermediate-type-transform-value-nontype.t",
+      "pa19/tests/general/100-structured-bool-boost-convertible-mpl-overload.t",
+      "pa19/tests/general/200-array-reference-deduction.t",
+      "pa19/tests/general/300-array-qualified-member-type-sfinae.t",
+      "pa19/tests/general/300-deleted-return-sfinae-same-parameter-list.t",
+      "pa19/tests/general/400-member-variable-template-leaf-sfinae.t",
+      "pa19/tests/general/400-nonmember-template-compound-assignment-const-lhs.t",
+      "pa19/tests/general/400-qualified-member-variable-template-class-value.t",
+      "pa19/tests/general/500-dependent-qualified-sizeof-static-member.t",
+      "pa19/tests/general/500-member-template-conditional-alias-trailing-return.t",
+      "pa19/tests/general/500-source-owner-member-template-sfinae-default.t",
+      "pa19/tests/spec/100-explicit-instantiation-after-explicit-specialization-no-effect.t",
+      "pa19/tests/spec/100-function-template-nontype-function-pointer-specialization-call.t",
+      "pa19/tests/spec/400-out-of-class-overloaded-member-template-definition.t",
+      "pa19/tests/spec/500-nondeduced-qualified-member-type-allows-conversion.t"
+    ],
+    "remaining_failures": [],
+    "fixed_failures": [
+      "pa19/tests/general/100-inherited-using-alias-out-of-class-specialization-member.t",
+      "pa19/tests/general/100-intermediate-type-transform-value-nontype.t",
+      "pa19/tests/general/100-structured-bool-boost-convertible-mpl-overload.t",
+      "pa19/tests/general/200-array-reference-deduction.t",
+      "pa19/tests/general/300-array-qualified-member-type-sfinae.t",
+      "pa19/tests/general/300-deleted-return-sfinae-same-parameter-list.t",
+      "pa19/tests/general/400-member-variable-template-leaf-sfinae.t",
+      "pa19/tests/general/400-nonmember-template-compound-assignment-const-lhs.t",
+      "pa19/tests/general/400-qualified-member-variable-template-class-value.t",
+      "pa19/tests/general/500-dependent-qualified-sizeof-static-member.t",
+      "pa19/tests/general/500-member-template-conditional-alias-trailing-return.t",
+      "pa19/tests/general/500-source-owner-member-template-sfinae-default.t",
+      "pa19/tests/spec/100-explicit-instantiation-after-explicit-specialization-no-effect.t",
+      "pa19/tests/spec/100-function-template-nontype-function-pointer-specialization-call.t",
+      "pa19/tests/spec/400-out-of-class-overloaded-member-template-definition.t",
+      "pa19/tests/spec/500-nondeduced-qualified-member-type-allows-conversion.t"
+    ],
+    "new_failures": [],
+    "gate_pass": true,
+    "adding_tests_used_as_progress": false
+  },
+  "controls": {
+    "variable92-entry.json": {
+      "path": "student.tests/pa19/variable92-entry.json",
+      "sha256": "9218a2be237d370413925a7387a4febde90f5f3788bda5a9d198b6e71a681986",
+      "passed": 13,
+      "total": 29,
+      "native": 22,
+      "reject": 7
+    },
+    "variable92-final.json": {
+      "path": "student.tests/pa19/variable92-final.json",
+      "sha256": "7838abdec9ce4a24e05c02cd8c5b91d40bef090e728e152b7099553aa06e46af",
+      "passed": 29,
+      "total": 29,
+      "native": 22,
+      "reject": 7
+    },
+    "composition92-final.json": {
+      "path": "student.tests/pa19/composition92-final.json",
+      "sha256": "ce4b28431bdf29eb261fe57c0874d873aaa09c974705d8c9be31551aec1556fb",
+      "passed": 42,
+      "total": 42,
+      "native": 32,
+      "reject": 10
+    },
+    "reference92-controls.json": {
+      "path": "student.tests/pa19/reference92-controls.json",
+      "sha256": "ba6e34d9a5afdfc1e83ae9736aac534358adfcc1fd0f1b1d6641aa8ff8673b19",
+      "passed": 13,
+      "total": 13,
+      "native": 13,
+      "reject": 0
+    }
+  },
+  "explicit_control_commands": [
+    "python3 student.tests/pa19/variable92.py dev/cppgm++ /tmp/pa19-loop92/controls-final",
+    "python3 student.tests/pa19/variable92.py /tmp/pa19-loop92/entry-cppgm++ /tmp/pa19-loop92/controls-entry-final",
+    "python3 student.tests/pa19/composition91.py dev/cppgm++ /tmp/pa19-loop92/composition-final",
+    "python3 student.tests/pa19/reference_controls92.py dev/cppgm++ /tmp/pa19-loop92/reference-controls-final",
+    "python3 student.tests/pa19/reference92.py"
+  ],
+  "performance": {
+    "report": "pa19/performance92.md",
+    "raw": "student.tests/pa19/performance92.json",
+    "initial_attempt": "student.tests/pa19/performance92-initial.json",
+    "completed_workloads": 16,
+    "shared_exact": 9,
+    "new_behavior": 7,
+    "observations": 464,
+    "warmups": 52,
+    "compiler_text_growth_bytes": 1600,
+    "optional_transforms": 0,
+    "acceptance": "PA19/O0 spec section 9; necessary checked-conversion cost retained, self-selected legacy targets diagnostic, no mandated limits weakened"
+  },
+  "artifact_sha256": {
+    "student.tests/pa19/reference_controls92.py": "3cd87c091a2bf8785ccd5d5d8faad4ac97ba9a03b2267070050e32bff48476c9",
+    "student.tests/pa19/benchmark92.py": "a73abe4e78bc7da6d9d3068eee9d01e5f4c44011573f6a622379be37af6b612a",
+    "student.tests/pa19/reference92.py": "ab9f9e5b2807c9daf31bcfc4fd03c0eba928adea7fba9082614de5c81eaac14a",
+    "student.tests/pa19/performance92.json": "3e1ba5a7e1120750dda0e3a61fa05716a7d0fcff47dcc71eb623affbba856759",
+    "student.tests/pa19/performance92-initial.json": "73d16caf7a94f6ef072678fc5a0e41f51c456a1812e3e77877dadd3c537db24a",
+    "student.tests/pa19/variable92-final.json": "7838abdec9ce4a24e05c02cd8c5b91d40bef090e728e152b7099553aa06e46af",
+    "student.tests/pa19/variable92-entry.json": "9218a2be237d370413925a7387a4febde90f5f3788bda5a9d198b6e71a681986",
+    "student.tests/pa19/reference92-revisions.json": "0b14a7c8fccc89299de54732f79183ef742ab3dfbc13a3d5e472a77db79a7176",
+    "student.tests/pa19/reference92-controls.json": "ba6e34d9a5afdfc1e83ae9736aac534358adfcc1fd0f1b1d6641aa8ff8673b19",
+    "student.tests/pa19/composition92-final.json": "ce4b28431bdf29eb261fe57c0874d873aaa09c974705d8c9be31551aec1556fb",
+    "student.tests/pa19/variable92.py": "16fe607cd7e5c9a5789afd8f9d756f3cb8716b8ff9ca191002db16441b4573e6",
+    "pa19/plan.md": "c5cf10d153233e84e10c6a09f47b7e87df11023cd15ade43a2a8fcfcb9253f8d",
+    "pa19/performance92.md": "5beae6c15a302b1d036d88eb24eea42b6992dca97b7479ab8bfa4455e8aafa24",
+    "pa19/reference-correction92.md": "2b3dd169dc54c5a7d5a3e5cf90862d2bfdd0d15cfd58b749854cf87edf88a1e0"
+  },
+  "handoff_boundary": "All PA19 required cases pass after completing variable declaration/value/storage facts, inherited constant-demand contract corrections, and O0 layout provenance. No known implementation group remains; no advancement to PA20.",
+  "independent_review": "Whole-stage correctness, architecture, performance and reference-correction proofs remain for independent audit; both review markers preserved."
+}

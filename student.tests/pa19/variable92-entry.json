@@ -1,0 +1,281 @@
+[
+  {
+    "name": "outer_inner_values",
+    "source": "template<int N>struct O{template<int M>static constexpr int v=N+M;};static_assert(O<3>::v<4> == 7,\"\");static_assert(O<9>::v<2> == 11,\"\");int main(){return O<3>::v<4> != 7;}",
+    "source_sha256": "6ea6c00240f2be724a7e0063878d8d8fa6e0ccc0a17103e3f38f99aa93a399bf",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inner_default",
+    "source": "template<int N>struct O{template<int M=N>static constexpr int v=N+M;};static_assert(O<3>::v<> == 6,\"\");static_assert(O<9>::v<> == 18,\"\");int main(){}",
+    "source_sha256": "efc332fe9af3b5303f70827f9df120b2f3e43fbcfcb4469bb157494c70d6a24b",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "type_default",
+    "source": "template<class T>struct O{template<class U=T>static constexpr int v=sizeof(T)+sizeof(U);};static_assert(O<int>::v<> == 8,\"\");static_assert(O<long>::v<char> == 9,\"\");int main(){}",
+    "source_sha256": "c0a71c5c4b23c096dd59d0a7e56ca9ef5b4d04c2504f35d930652df1933f089b",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "inner_pack",
+    "source": "template<int N>struct O{template<class...T>static constexpr int v=N+sizeof...(T);};static_assert(O<3>::v<> == 3,\"\");static_assert(O<4>::v<int,long> == 6,\"\");int main(){}",
+    "source_sha256": "85a53d6b1deb7d57e9e58b4761bd8d4e47f098bd66a43cebaebfa7eb1dfe55a1",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "outer_pack",
+    "source": "template<class...T>struct O{template<class...U>static constexpr int v=sizeof...(T)+sizeof...(U);};static_assert(O<int,long>::v<char> == 3,\"\");static_assert(O<>::v<> == 0,\"\");int main(){}",
+    "source_sha256": "1323360b625ae7aa562ffca0adc81efc10899a73b77cd5c7bc48ff97baedd2ed",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "dormant_outer_initializer",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=T::missing;};O<int> o;static_assert(sizeof(O<int>::v<long>)==sizeof(int),\"\");int main(){}",
+    "source_sha256": "245305bb81ec82759c74e308ad01474204f7579bf9b321f495f82366d03bd448",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": false
+  },
+  {
+    "name": "dormant_initializer",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=U::missing;};O<int> o;int main(){}",
+    "source_sha256": "8559de18bdc1d282025d32ab5d8b15a16dcf89a3b382c0e85c733e9403d574f8",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": false
+  },
+  {
+    "name": "unevaluated_initializer",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=U::missing;};static_assert(sizeof(O<int>::v<long>)==sizeof(int),\"\");int main(){}",
+    "source_sha256": "0424cdd9cf6d2063435ba964b9511a20da224c7d3a81171c65b7bb2e25d15f72",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": false
+  },
+  {
+    "name": "namespace_unevaluated",
+    "source": "template<class T>constexpr int v=T::missing;static_assert(sizeof(v<int>)==sizeof(int),\"\");int main(){}",
+    "source_sha256": "5ccd7058a37596956d0d6e5454d5f7754449e0ac72ed76586f6b24d3b11b1e41",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid type-query expression\n",
+    "passed": false
+  },
+  {
+    "name": "qualified_unevaluated",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=U::missing;};template<class T>using R=decltype(T::template v<int>);R<O<int>> n=3;int main(){return n!=3;}",
+    "source_sha256": "c6ba7666947c53d38e20fd5fb2cef1b1aa14d0fcd0a1a570fd6a4ebaf75e1576",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": false
+  },
+  {
+    "name": "partial_selection",
+    "source": "template<class T>constexpr int v=1;template<class T>constexpr int v<T* > =2;static_assert(v<int> == 1,\"\");static_assert(v<int*> == 2,\"\");int main(){return v<int*> != 2;}",
+    "source_sha256": "ea54ca63200f609af43c2c9df6cd941f848adccdb77ed3ba23223ea98d11d988",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "scalar_identity",
+    "source": "template<int N>struct O{template<int M>static constexpr int v=N+M;};const int* a(){return &O<3>::v<4>;}const int* b(){return &O<3>::v<4>;}int main(){return a()!=b()||*a()!=7||a()==&O<4>::v<3>;}",
+    "source_sha256": "f93fb4553e14ec8264b9b31b71d95756420501d9aa0c8c11e16c0c6be2f0ea45",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "object_braces",
+    "source": "struct X{int n;};template<class>struct O{template<int N>static constexpr X v={N};};int main(){return O<int>::v<7>.n!=7;}",
+    "source_sha256": "aa2fed98d88eafc2a3cc78bdcc324a020d6c12f66f8ceaa08873ef7c72af6dc7",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: constant variable template required\n",
+    "passed": false
+  },
+  {
+    "name": "object_conversion",
+    "source": "struct X{int n;constexpr X(int v):n(v){}};template<class>struct O{template<int N>static constexpr X v=N;};int main(){return O<int>::v<7>.n!=7;}",
+    "source_sha256": "73ffe4b220efb8ad39dee28b98ba9c7c7ad700da696fa1c6850ba9407f9f4378",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: constant variable template required\n",
+    "passed": false
+  },
+  {
+    "name": "scalar_conversion",
+    "source": "struct X{constexpr operator int()const{return 7;}};template<class>struct O{template<int N>static constexpr int v=X();};int main(){return O<int>::v<3>!=7;}",
+    "source_sha256": "ba0a5fd4de7c85d796431bd284fa64672c214fe8d44284d66cd64778d2b48306",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: nonconstant variable template initializer\n",
+    "passed": false
+  },
+  {
+    "name": "object_value",
+    "source": "struct X{int n;constexpr X(int v):n(v){}};template<int N>struct O{template<int M>static constexpr X v=X(N+M);};int main(){X x=O<3>::v<4>;return x.n!=7;}",
+    "source_sha256": "52fa94dbb5c63a67e45398752c9e284e416e4090eff44b55e726b039a8a932d2",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier at byte 98\n",
+    "passed": false
+  },
+  {
+    "name": "object_identity",
+    "source": "struct X{int n;constexpr X(int v):n(v){}};template<int N>struct O{template<int M>static constexpr X v=X(N+M);};const X* a(){return &O<3>::v<4>;}const X* b(){return &O<3>::v<4>;}int main(){return a()!=b()||a()->n!=7||a()==&O<4>::v<3>;}",
+    "source_sha256": "957b6cca61e56ee7a4fd636a967be5d137b39fb69d0483ee2ebce44adf49e688",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier at byte 98\n",
+    "passed": false
+  },
+  {
+    "name": "object_static_assert",
+    "source": "struct X{int n;constexpr X(int v):n(v){}};template<int N>struct O{template<int M>static constexpr X v=X(N+M);};static_assert(O<3>::v<4>.n==7,\"\");int main(){}",
+    "source_sha256": "395a6f7dc97e1b5990db6f7ad9e06f32fdf4a60f848fe1766e100f004378ff1b",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier at byte 98\n",
+    "passed": false
+  },
+  {
+    "name": "object_default_result",
+    "source": "template<int N>struct O{int n;constexpr O(int v):n(v){} template<int M>static constexpr O make(){return O(N+M);} template<int M,class U=decltype(make<M>())>static constexpr U v=make<M>();};int main(){O<3>x=O<3>::v<4>;return x.n!=7;}",
+    "source_sha256": "18bf91a1b1c750ab2a5698b93bc3cf8c31d306f60dd6381d9da9a5ca4f306bf6",
+    "expected": "native",
+    "compiler_exit": 0,
+    "diagnostic": "",
+    "passed": true,
+    "backend_exit": 0,
+    "backend_diagnostic": "",
+    "native_exit": 0
+  },
+  {
+    "name": "default_sfinae",
+    "source": "template<class...>struct V{typedef void type;};template<class...T>using Void=typename V<T...>::type;template<class T>struct O{template<class U,class R=typename U::type>static constexpr int v=sizeof(R);};template<class T,class=void>struct Has{static const int n=0;};template<class T>struct Has<T,Void<decltype(O<int>::template v<T>)>>{static const int n=1;};struct Yes{typedef int type;};static_assert(Has<int>::n==0,\"\");static_assert(Has<Yes>::n==1,\"\");int main(){}",
+    "source_sha256": "86bf356f48babc2bb7e9cbc9b98189e41fc5818c2472103f0bee976badf28979",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: invalid variable template arguments\n",
+    "passed": false
+  },
+  {
+    "name": "qualified_default_sfinae",
+    "source": "template<class...>struct V{typedef void type;};template<class...T>using Void=typename V<T...>::type;template<class T>struct O{template<class U,class R=typename U::type>static constexpr int v=sizeof(R);};template<class T,class U,class=void>struct Has{static const int n=0;};template<class T,class U>struct Has<T,U,Void<decltype(T::template v<U>)>>{static const int n=1;};struct Yes{typedef int type;};static_assert(Has<O<int>,int>::n==0,\"\");static_assert(Has<O<int>,Yes>::n==1,\"\");int main(){}",
+    "source_sha256": "beaa2048c5c1b9a53b78277c1d3bb46e919da6e8ff8ff4fd377fa162dbbd3046",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": false
+  },
+  {
+    "name": "leaf_boolean",
+    "source": "template<class T>struct Is{static const bool value=false;};template<>struct Is<int>{static const bool value=true;};template<int>struct O{template<class T>static constexpr bool v=Is<T>::value;};template<bool,class T=void>struct Enable{};template<class T>struct Enable<true,T>{typedef T type;};template<class O,class T,class=void>struct Has{static const int n=0;};template<class O,class T>struct Has<O,T,typename Enable<O::template v<T>>::type>{static const int n=1;};static_assert(Has<O<1>,int>::n==1,\"\");static_assert(Has<O<1>,long>::n==0,\"\");int main(){}",
+    "source_sha256": "7a0ffd1b7021d43bbd9998cfa89f5a2450eb8f110b4055bffb7be9048ad92202",
+    "expected": "native",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: unbound name in type query\n",
+    "passed": false
+  },
+  {
+    "name": "demand_invalid_initializer",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=U::missing;};int main(){return O<int>::v<long>;}",
+    "source_sha256": "c89db2e4e810f4eb20d727f2d4d2608d1a8d3f197bf0171a3df0e4c2b2d1e27d",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: name qualifier has no scope\n",
+    "passed": true
+  },
+  {
+    "name": "demand_invalid_default",
+    "source": "template<class T>struct O{template<class U,class R=typename U::type>static constexpr int v=sizeof(R);};int main(){return O<int>::v<long>;}",
+    "source_sha256": "5158ab275e999a32b441e45b12e2d9ae2156da2704ebf64a385aaf3334cb54f2",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: type qualifier is not a class\n",
+    "passed": true
+  },
+  {
+    "name": "wrong_value",
+    "source": "template<int N>struct O{template<int M>static constexpr int v=N+M;};static_assert(O<3>::v<4> == 8,\"\");",
+    "source_sha256": "b8361f88c7149db359b63d26bc50f53f00417096515a15392e6779bbe3b5e47d",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: static assertion is not a true integral constant\n",
+    "passed": true
+  },
+  {
+    "name": "explicit_copy_initializer",
+    "source": "struct X{int n;explicit constexpr X(int v):n(v){}};template<class>struct O{template<int N>static constexpr X v=N;};int main(){return O<int>::v<7>.n;}",
+    "source_sha256": "37ff2314f933e07166afdf12a85f780d00c6f1e493b55bd5d708ee48d60faf0a",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: constant variable template required\n",
+    "passed": true
+  },
+  {
+    "name": "deleted_copy_initializer",
+    "source": "struct X{int n;constexpr X(int v):n(v){} X(const X&)=delete;};template<class>struct O{template<int N>static constexpr X v=X(N);};int main(){return O<int>::v<7>.n;}",
+    "source_sha256": "e7de8f059652686bce61bcc4b0f2fec4ad508e8f91eb2870f8c22080645089d1",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier at byte 118\n",
+    "passed": true
+  },
+  {
+    "name": "bad_class_initializer",
+    "source": "struct X{X(int){}};template<class>struct O{template<int N>static constexpr X v=X(N);};int main(){return O<int>::v<3>,0;}",
+    "source_sha256": "a5132b0752c682d24f8bbf029fa203489761a7123a2cff218585aa7aec7cc075",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: expected type specifier at byte 75\n",
+    "passed": true
+  },
+  {
+    "name": "recursive_initializer",
+    "source": "template<class T>struct O{template<class U>static constexpr int v=O<T>::template v<U>;};int main(){return O<int>::v<long>;}",
+    "source_sha256": "90c1aea2bedd62e4bc2f251c7707743f8de251b59a76fd2a2e865fc20a3a5fd3",
+    "expected": "reject",
+    "compiler_exit": 1,
+    "diagnostic": "ERROR: recursive or failed variable initializer\n",
+    "passed": true
+  }
+]
