@@ -30,7 +30,7 @@ cases['default_destination_normal']=prefix+'struct R{R(const char*,const G&g=G(1
 for change,decl,body in [('known_true','bool flag=true;',''),('known_false','bool flag=false;',''),('modified','bool flag=false;','flag=true;'),('aliased','bool flag=false;','bool*p=&flag;*p=true;'),('volatile','volatile bool flag=true;','')]:
  expected=0 if change=='known_false' else 1
  cases['scalar_member_'+change]='int live,drops;struct Box{Box(){++live;}~Box(){--live;++drops;}int get()const noexcept{return live;}};int main(){'+decl+body+'int n=flag?Box().get():0;return n!='+str(expected)+'||drops!='+str(expected)+'||live;}'
-required=['200-hidden-eh-condition-call-argument-temporary-cleanup','200-hidden-eh-short-circuit-condition-rhs-temp-cleanup','200-hidden-eh-short-circuit-rhs-temp-cleanup','200-nested-logical-rhs-temporary-value-slot','200-nested-short-circuit-temporary-cleanup','100-range-for-iteration-temporary-lifetime','200-guarded-local-static-initializer-temporary-cleanup']
+required=['200-hidden-eh-conditional-expression-temp-cleanup','200-hidden-eh-managed-arg-nested-default-arg-cleanup','200-hidden-eh-condition-call-argument-temporary-cleanup','200-hidden-eh-short-circuit-condition-rhs-temp-cleanup','200-hidden-eh-short-circuit-rhs-temp-cleanup','200-nested-logical-rhs-temporary-value-slot','200-nested-short-circuit-temporary-cleanup','100-range-for-iteration-temporary-lifetime','200-guarded-local-static-initializer-temporary-cleanup']
 for name in required:cases[name]=(ROOT/'pa21/tests/general'/f'{name}.t').read_text()
 rows=[]
 for i,(name,source) in enumerate(cases.items()):
