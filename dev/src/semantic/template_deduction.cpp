@@ -110,10 +110,8 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         auto match = [&](EntityId entity, Index& trial) {
             auto as = specializations[entities[entity].specialization];
             auto x = argument_packs[ps.arguments], y = argument_packs[as.arguments];
-            if (x.count != y.count) return false;
-            for (unsigned j = 0; j < x.count; ++j)
-                if (!deduce_type(argument_types[x.offset+j],argument_types[y.offset+j],trial,kind,prefix)) return false;
-            return true;
+            return deduce_sequence(std::vector<ArgumentId>(argument_types.begin()+x.offset,argument_types.begin()+x.offset+x.count),
+                std::vector<ArgumentId>(argument_types.begin()+y.offset,argument_types.begin()+y.offset+y.count),trial,kind,prefix);
         };
         if (same_primary(a.entity)) {
             Index direct = bindings;

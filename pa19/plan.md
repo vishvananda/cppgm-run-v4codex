@@ -37,7 +37,23 @@ course cases and their comparison rules.
 
 ## Handoff ledger
 
-Implementation unfinished: all 26 entry failures pending diagnosis.
+First increment: retained type/declaration composition repairs in parser name
+classification, argument substitution, class deduction and explicit conversion.
+Data flow: parsed argument -> canonical TypeId/template EntityId -> one
+occurrence-frame substitution -> ordinary signature/conversion -> typed LowIR.
+Function types retain ellipses; friend template-ids retain indexed categories;
+comma-optional varargs do not become function packs; member alias templates keep
+declaration identity; dependent function arguments are substituted once; fixed
+class heads use sequence deduction; related reference casts bind their objects.
+Complexity: existing indexed lookups and type/frame caches; linear argument
+sequences and reachable base edges, with no new retries or ownership graph.
+Validation: 25 explicit controls pass (19 checked executions, six rejections).
+PA14/15/17/18 retain all 1,254 passes; PA19 improves to 403/423, without oracle
+or coverage changes. Performance measurement remains pending.
+
+Implementation unfinished: five remaining rejections (ADL syntax, elaborated
+type identity, member variable-template substitution, constructor ordering) and
+15 output mismatches, including two newly exposed by corrected semantics.
 Independent review: whole-stage correctness/architecture/performance audit
 remains pending; review markers above must not move during implementation.
 No completed behavior group or handoff boundary yet.

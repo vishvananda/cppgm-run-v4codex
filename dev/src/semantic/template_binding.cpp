@@ -68,6 +68,15 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
                         r.dependent |= argument.dependent; continue;
                     }
                 }
+                if (ast[a].kind == Kind::Call && ast[ast[a].first].kind == Kind::IdExpression) {
+                    auto target = bind_template_name(ast[ast[a].first].detail,s).entity;
+                    if (target && (entities[target].kind == EntityKind::Type || entities[target].kind == EntityKind::Alias)) {
+                        auto argument = template_argument_node(a,s);
+                        if (argument && !value_argument(argument)) {
+                            r.dependent |= dependent_argument(argument); continue;
+                        }
+                    }
+                }
                 r.dependent |= bind_template_expression(a,s);
             }
             if (r.dependent && entities[e].template_info)

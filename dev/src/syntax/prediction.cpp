@@ -177,7 +177,7 @@ void Parser::predeclare_class()
                 templated = true;
             }
         }
-        if ((in.is("class", i) || in.is("struct", i) || in.is("union", i) || in.is("enum", i)) && identifier(i + 1))
+        if (!friend_declaration && (in.is("class", i) || in.is("struct", i) || in.is("union", i) || in.is("enum", i)) && identifier(i + 1))
             names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
         if (in.is("using", i) && identifier(i + 1) && in.is("=", i + 2)) {
             names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);

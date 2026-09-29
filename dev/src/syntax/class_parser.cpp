@@ -20,6 +20,10 @@ NodeId Parser::class_specifier()
     ScopeId owner = n ? qualified_owner(n) : scope;
     if (owner == unknown_scope) owner = scope;
     Binding previous = names.local(owner, final_name(n));
+    // An elaborated template-id can name a template from an enclosing scope
+    // (notably in a friend declaration). Retain its category and target.
+    if (previous.category == Category::Unknown && n && ast[ast[n].last].first)
+        previous = name_binding(n);
     if (template_declaration && owner == saved_scope && previous.category == Category::Unknown)
         previous = names.local(names.parent(owner),final_name(n));
     ScopeId child = previous.target ? previous.target : names.enter(owner);

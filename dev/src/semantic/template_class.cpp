@@ -287,11 +287,9 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     std::vector<TypeId> args;
     for (NodeId a = ast[list].first; a; a = ast[a].next) {
         auto type = template_argument_node(a,s);
-        auto context = ast.nodes.occurrences[a].context;
-        if (context && !value_argument(type) && types[type].kind == TypeKind::Function && dependent_argument(type)) {
-            Index bindings, cache;
-            type = substitute_argument(type,bindings,cache,template_type_contexts.get(context));
-        }
+        // template_argument_node already applies this occurrence's frame.
+        // A dependent result can contain the newly declared inner head;
+        // applying the source frame again would try to substitute it twice.
         if (template_type_probe && !type) return 0;
         append_template_argument(a,s,type,args);
     }

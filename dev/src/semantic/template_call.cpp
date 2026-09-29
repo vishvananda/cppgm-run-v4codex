@@ -168,7 +168,9 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
             if (!concrete_owner) return pattern;
         }
         auto entity = substitution_binding(owner,p.entity);
-        result = types.qualify(entities[entity].type,p.cv);
+        // A template-template argument denotes the alias template declaration,
+        // not its result type (which still contains the alias's own parameters).
+        result = types.qualify(entities[p.entity].template_info ? types.named(entity) : entities[entity].type,p.cv);
     } else if (p.kind == TypeKind::Named && entities[p.entity].specialization) {
         auto spec = specializations[entities[p.entity].specialization];
         auto pack = argument_packs[spec.arguments];

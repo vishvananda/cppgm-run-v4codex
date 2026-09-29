@@ -72,7 +72,11 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
         auto type = facts[p].type;
         check_substituted_type_access(p,frame);
-        if (child(ast[ast[p].first].next,syntax::Kind::ParameterPack)) {
+        auto params = child(ast[ast[p].first].next,syntax::Kind::ParameterPack) ? expansion_parameters(type) : 0;
+        // The signature distinguishes an actual pack from the comma-optional
+        // C ellipsis after an unnamed ordinary parameter. Preserve that rule
+        // when publishing its body/declaration occurrences as well.
+        if (argument_packs[params].count) {
             if (!has_pack) {
                 // Ordinary parameter lists retain their projected source edges;
                 // allocate an override only when a pack changes the topology.
@@ -80,7 +84,6 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
                     if (ast[q].kind == syntax::Kind::Parameter) expanded.push_back(ast.projected(q,context));
                 has_pack = true;
             }
-            auto params = expansion_parameters(type);
             auto count = expansion_count(params,bindings,frame);
             if (count < 0) throw std::runtime_error("unbound function parameter pack");
             for (int j = 0; j < count; ++j) {
