@@ -19,6 +19,14 @@ cases={
  'array_then_scalar':(common+obj+'extern "C" void run(){S a[3];S b(9);auto f=[a,b](){};}',109,[103,102,101,9,3,2,1]),
  'nested_capture':(common+obj+'extern "C" void run(){S a(1);auto f=[a](){auto g=[a](){};};f();}',201,[101,1]),
 }
+cases.update({
+ 'closure_copy_failure':(common+obj+'extern "C" void run(){S a(1),b(2);auto f=[a,b](){};auto g=f;}',202,[201,102,101,2,1]),
+ 'closure_array_copy_failure':(common+obj+'extern "C" void run(){S a[3];auto f=[a](){};auto g=f;}',203,[202,201,103,102,101,3,2,1]),
+})
+cases.update({
+ 'closure_array_large_failure':(common+obj+'extern "C" void run(){S a[12];auto f=[a](){};auto g=f;}',206,list(range(205,200,-1))+list(range(112,100,-1))+list(range(12,0,-1))),
+ 'empty_copy_prefix':(common+obj+'struct E{~E(){destroyed(50);}};extern "C" void run(){E e;S s(1);auto f=[e,s](){};auto g=f;}',201,[50,101,50,1,50]),
+})
 g='struct G{G(){}~G(){destroyed(50);}};'
 s='struct S{int id;S(int n=next_id()):id(n){}S(const S&s,const G&=G()):id(s.id+100){copied(id);}~S(){destroyed(id);}};'
 cases.update({

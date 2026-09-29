@@ -60,6 +60,7 @@ runner.GOOD.update({
 'closure_copy_defaults':'int count;int tick(){return ++count;}struct S{S(){}S(const S&,int n=tick()){count+=n;}};int main(){S s;auto f=[s](){};auto g=f;return count!=6;}',
 'closure_move_template':'int count;struct S{S(){}S(S&){count+=1;}template<class T>S(const T&){count+=10;}};int main(){S s;auto f=[s](){};auto g=static_cast<decltype(f)&&>(f);return count!=11;}',
 })
+runner.GOOD['closure_copy_default_temp']='int count,seen;struct G{G(){++count;}~G(){--count;}};struct S{S(){}S(const S&,const G& = G()){seen+=count;}};int main(){S s;auto f=[s](){};auto g=f;return seen!=2||count!=0;}'
 runner.BAD={
 'const_operator':'int main(){int n=3;auto f=[n](){return ++n;};}',
 'const_source_mutable':'int main(){const int n=3;auto f=[n]()mutable{return ++n;};}',

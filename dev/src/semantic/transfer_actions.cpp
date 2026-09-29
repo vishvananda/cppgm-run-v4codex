@@ -88,7 +88,7 @@ void Analyzer::prepare_transfer(EntityId e)
         // field (members); do not turn these actions into a whole-storage copy.
         if (action.function && trivial_transfer(action.function) && class_facts[entities[types[element].entity].class_info].empty) {
             empty_subobject = true; representation_copy = false;
-            if (copy_storage_type(element)) return;
+            if (copy_storage_type(element) && (assignment || trivial_destructor(element))) return;
             action.kind = TransferAction::Empty; action.function = 0;
         }
         actions.push_back(action);

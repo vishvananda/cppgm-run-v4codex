@@ -9,22 +9,51 @@ void Procedural::transfer_array(const semantic::TransferAction& action, Value so
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
     std::vector<InitProjection> path;
     if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0, action.field});
+    auto dtor = sem.type_destructor(leaf);
+    bool partial = !assignment && !sem.function_nonthrowing(active_function) && sem.destructor_needed(dtor);
+    SlotId cursor;
+    if (partial || elements > 8) {
+        cursor = builder->add_slot(0,IRType::I64);
+        emit(Opcode::Store,IRType::I64,{Operand::integer(0),Operand::slot(cursor)});
+    }
+    auto cleanup = partial ? block() : BlockId();
+    if (partial) emit(Opcode::EhCleanup,IRType(),{Operand::label(cleanup)});
     auto one = [&](Operand index) {
         Value dst = array_element(target, member_root, path, index, sem.object_size(leaf));
         Value src = array_element(source, member_root, path, index, sem.object_size(leaf));
         auto element = action; element.type = leaf;
+        auto initial = live;
         transfer_action(element, src, dst, assignment);
+        if (cursor) {
+            auto next = emit(Opcode::Binary,IRType::I64,{index,Operand::integer(1)},Operation::Add);
+            emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(cursor)});
+        }
+        clean_inline(live,initial); close_expression_region();
     };
-    if (elements <= 8) { for (std::uint64_t j = 0; j < elements; ++j) one(Operand::integer(j)); return; }
-    SlotId cursor = builder->add_slot(0, IRType::I64);
-    emit(Opcode::Store, IRType::I64, {Operand::integer(0), Operand::slot(cursor)});
-    BlockId test = block(), body = block(), end = block(); jump(test); start(test);
-    Value index = emit(Opcode::Load, IRType::I64, {Operand::slot(cursor)});
-    Value more = emit(Opcode::Compare, IRType::I64, {index.operand, Operand::integer(elements)}, Operation::Ult);
-    emit(Opcode::Branch, IRType(), {more.operand, Operand::label(body), Operand::label(end)});
-    start(body); one(index.operand);
-    Value next = emit(Opcode::Binary, IRType::I64, {index.operand, Operand::integer(1)}, Operation::Add);
-    emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(cursor)}); jump(test); start(end);
+    if (elements <= 8) {
+        for (std::uint64_t j = 0; j < elements; ++j) one(Operand::integer(j));
+    } else {
+        BlockId test = block(), body = block(), end = block(); jump(test); start(test);
+        Value index = emit(Opcode::Load,IRType::I64,{Operand::slot(cursor)});
+        Value more = emit(Opcode::Compare,IRType::I64,{index.operand,Operand::integer(elements)},Operation::Ult);
+        emit(Opcode::Branch,IRType(),{more.operand,Operand::label(body),Operand::label(end)});
+        start(body); one(index.operand); jump(test); start(end);
+    }
+    if (partial) {
+        emit(Opcode::EhEnd,IRType(),{});
+        auto end = block(), body = block(), resume = block(); jump(end); start(cleanup);
+        auto count = emit(Opcode::Load,IRType::I64,{Operand::slot(cursor)});
+        auto more = emit(Opcode::Compare,IRType::I64,{count.operand,Operand::integer(0)},Operation::Ne);
+        emit(Opcode::Branch,IRType(),{more.operand,Operand::label(body),Operand::label(resume)});
+        start(body);
+        auto next = emit(Opcode::Binary,IRType::I64,{count.operand,Operand::integer(1)},Operation::Sub);
+        emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(cursor)});
+        bool saved = emitting_cleanup; emitting_cleanup = true;
+        destroy(dtor,leaf,array_element(target,member_root,path,next.operand,sem.object_size(leaf)));
+        emitting_cleanup = saved; jump(cleanup);
+        start(resume); emit(Opcode::EhEnd,IRType(),{}); emit(Opcode::Resume,IRType(),{});
+        start(end);
+    }
 }
 void Procedural::transfer_action(const semantic::TransferAction& action, Value source, Value target, bool assignment)
 {
@@ -62,7 +91,10 @@ void Procedural::transfer_body(EntityId e)
     for (unsigned j = 0; j < m.transfer_count; ++j) {
         auto action = sem.transfers[m.transfer_begin+j];
         if (action.field && !vptr_written) { vpointer_store(cls); vptr_written = true; }
-        if (action.kind == semantic::TransferAction::Empty) continue;
+        if (action.kind == semantic::TransferAction::Empty) {
+            if (!assignment) constructor_cleanup({action.field,action.type,0,0});
+            continue;
+        }
         if (action.kind == semantic::TransferAction::Storage) {
             Value dst = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
             Value src = emit(Opcode::Load, IRType::Ptr, {Operand::slot(other)});
@@ -84,6 +116,11 @@ void Procedural::transfer_body(EntityId e)
             Value value = load(src), dst = project(this_slot, action); dst.type = t; dst.address = true; dst.bit_field = src.bit_field;
             store(value, dst);
         }
+        if (!assignment) {
+            close_expression_region();
+            constructor_cleanup({action.field,action.type,0,action.function});
+        }
+        clean_inline(live,0); close_expression_region();
     }
     if (!vptr_written) vpointer_store(cls);
     if (assignment) {
