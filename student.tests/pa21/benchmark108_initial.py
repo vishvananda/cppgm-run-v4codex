@@ -70,4 +70,3 @@ for name,(baseline,source) in sources.items():
     for output in item['outputs']:assert sha(WORK/(name+f"-{output['binary']}.lowir"))==output['lowir_sha256']
     save();print(name,'complete',flush=True)
 assert [sha(p) for p in (ENTRY,FINAL)]==[b['sha256'] for b in result['binaries']]
-

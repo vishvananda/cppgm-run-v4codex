@@ -13342,5 +13342,11 @@
     "exit": 1,
     "diagnostic": "ERROR: duplicate native object-symbol label",
     "timed": false
+  },
+  "archived_driver": {
+    "path": "student.tests/pa21/benchmark108_initial.py",
+    "sha256": "acdf577c70fefb4c5c07a83cf3066780df8a60127d0eddbd30ebe23f11030c79",
+    "restore_executed_suffix": "\n",
+    "note": "Trailing blank line removed from archive only; append restore_executed_suffix to reconstruct the measured harness hash."
   }
 }

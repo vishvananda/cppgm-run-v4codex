@@ -17437,8 +17437,14 @@
   },
   "continuation": {
     "prior_path": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/performance108-initial.json",
-    "prior_sha256": "7f5eeb0d1cefa393108c4b8e0b668b804f6099399f0b86017ccb2dd75a08bb80",
+    "prior_sha256": "ffea44ba43289eaa7c7c8dc851a4ef911e7c816ae35924af8ef3e2f77bccbeb3",
     "harness_sha256": "ad150089f44ddd8962c42a6f3e9c542e2599bf2303cf9252996f068cd7f173d8",
-    "reason": "Supplied freestanding backend rejects RTTI labels in member-prefix control; affected throwing-source controls use supplied object backend and host linking. Existing completed observations are retained unchanged."
+    "reason": "Supplied freestanding backend rejects RTTI labels in member-prefix control; affected throwing-source controls use supplied object backend and host linking. Existing completed observations are retained unchanged.",
+    "archived_driver": {
+      "path": "student.tests/pa21/benchmark108.py",
+      "sha256": "08f647c9a4fc4343f39ef64c3ee6ccec10ef8a69dcd97bdf0a81ff879436c1b5",
+      "restore_executed_suffix": "\n",
+      "note": "Trailing blank line removed from archive only; append restore_executed_suffix to reconstruct the measured harness hash."
+    }
   }
 }

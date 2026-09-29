@@ -7,7 +7,8 @@ implementation `a30acab5`, compiler/backend hashes, complete source strings,
 warmup per binary, four A/A observations and four ABBA blocks. Compilation and
 execution are timed separately, with `/usr/bin/time` peak RSS and checked exits.
 All observations, paired ratios and spreads remain in the raw record. Telemetry
-runs separately from timing. No compiler change occurred during measurement.
+runs separately from timing. No compiler change occurred during measurement. Driver archive hashes and the
+removed trailing newline needed to reconstruct their executed hashes are recorded.
 
 Times are median milliseconds; RSS is peak KiB. Size is the sectionless supplied
 backend's ELF payload proxy, including data/EH tables, except **member-prefix**
@@ -74,7 +75,7 @@ controls and the reference reducer.
   excluded from timing and documented by the independent reference proof.
 
 The [initial observations](../student.tests/pa21/performance108-initial.json)
-and [exact initial driver](../student.tests/pa21/benchmark108_initial.py) retain
+and [initial driver](../student.tests/pa21/benchmark108_initial.py) retain
 the interrupted attempt: the supplied freestanding backend rejected duplicate
 RTTI object labels in member-prefix before execution. The continuation reuses
 completed observations unchanged and uses the supplied object backend plus
