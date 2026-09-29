@@ -127,15 +127,3 @@ result['template_repeat']=measure(commands)
 for i in (0,1):
     assert sha(WORK/(name+f'-repeat-{i}.lowir'))==result['workloads'][name]['outputs'][i]['lowir_sha256']
 save()
-
-# Isolate the audit repair from the accumulated stage changes on the long
-# template workload, then collect phase telemetry outside timing observations.
-if len(sys.argv)>5:
-    commands=[[cc,'--emit-lowir','-O0','-o',WORK/(name+f'-repair-{i}.lowir'),src] for i,cc in enumerate((post_eh,FINAL))]
-    result['template_repair']=measure(commands)
-    result['template_phase_samples']=[]
-    for i in [0,1,1,0]*2:
-        cc=(ENTRY,FINAL)[i]
-        stats=run([cc,'--emit-lowir','-O0','--stats','-o',WORK/'template-phases.lowir',src])
-        result['template_phase_samples'].append(dict(binary=i,telemetry=[json.loads(s) for s in stats.stderr.splitlines()]))
-    save()

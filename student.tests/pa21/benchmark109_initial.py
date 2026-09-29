@@ -19,14 +19,6 @@ result=dict(protocol='one warmup each; four A/A samples; four ABBA blocks; separ
     harness_sha256=sha(__file__),backend_sha256=sha(ROOT/'reference-binaries/lowir2native'),object_backend_sha256=sha(ROOT/'reference-binaries/cppgm++'),
     size_metric='compiler .text; sectionless native ELF payload proxy includes static data and EH tables',
     acceptance='PA21/O0 spec section 9; required semantic work and bounds, no optional optimizer or numeric gate',workloads={})
-if len(sys.argv)>5:
-    previous,post_eh=[Path(p).resolve() for p in sys.argv[5:7]]
-    initial=result
-    result=json.loads(previous.read_text())
-    assert result['binaries']==initial['binaries']
-    result['continuation']=dict(prior_path=str(previous),prior_sha256=sha(previous),
-        harness_sha256=sha(__file__),post_eh_baseline=dict(path=str(post_eh),sha256=sha(post_eh),text_bytes=text_size(post_eh)),
-        reason='Last-reviewed compiler predates source throw; three throwing-source rows compare checkpoint entry with final. Completed cumulative observations are unchanged.')
 def save():OUT.write_text(json.dumps(result,indent=2)+'\n')
 def observe(cmd):
     usage=WORK/'usage.txt';start=time.perf_counter_ns()
@@ -65,13 +57,8 @@ for name,(baseline,source) in sources.items():
     if name in result['workloads'] and 'runtime' in result['workloads'][name]:
         assert result['workloads'][name]['source']==source
         continue
-    if len(sys.argv)>5 and (name=='runtime-member-prefix' or name.startswith('construction-functions-')):
-        baseline=post_eh
-    if name in result['workloads'] and 'runtime' in result['workloads'][name]:
-        assert result['workloads'][name]['source']==source
-        continue
     src=WORK/(name+'.cpp');src.write_text(source)
-    item=dict(source=source,source_sha256=sha(src),baseline=str(baseline),baseline_sha256=sha(baseline),outputs=[],
+    item=dict(source=source,source_sha256=sha(src),baseline=str(baseline),outputs=[],
               comparison='equivalent checked behavior',runtime_timing='live checked loop' if name.startswith('runtime-') else 'startup control')
     result['workloads'][name]=item;commands=[];executables=[];save()
     for i,cc in enumerate((baseline,FINAL)):
@@ -117,25 +104,3 @@ run([ROOT/'dev/cppgm++-ref','-c','-O0','-o',obj,ir]);run(['g++','-no-pie',obj,'-
 result['new_semantics']['runtime']=dict(source=source,source_sha256=sha(src),compiler_samples=[observe(cmd) for _ in range(4)],
     runtime_samples=[observe([exe]) for _ in range(4)],host_text_bytes=text_size(exe),checked_exit=0)
 save()
-
-# Repeat the cumulative template measurement because the first wall pairs
-# were slower despite nearly equal separately observed phase times.
-name='auto-specializations-9600'
-src=WORK/(name+'.cpp')
-commands=[[cc,'--emit-lowir','-O0','-o',WORK/(name+f'-repeat-{i}.lowir'),src] for i,cc in enumerate((ENTRY,FINAL))]
-result['template_repeat']=measure(commands)
-for i in (0,1):
-    assert sha(WORK/(name+f'-repeat-{i}.lowir'))==result['workloads'][name]['outputs'][i]['lowir_sha256']
-save()
-
-# Isolate the audit repair from the accumulated stage changes on the long
-# template workload, then collect phase telemetry outside timing observations.
-if len(sys.argv)>5:
-    commands=[[cc,'--emit-lowir','-O0','-o',WORK/(name+f'-repair-{i}.lowir'),src] for i,cc in enumerate((post_eh,FINAL))]
-    result['template_repair']=measure(commands)
-    result['template_phase_samples']=[]
-    for i in [0,1,1,0]*2:
-        cc=(ENTRY,FINAL)[i]
-        stats=run([cc,'--emit-lowir','-O0','--stats','-o',WORK/'template-phases.lowir',src])
-        result['template_phase_samples'].append(dict(binary=i,telemetry=[json.loads(s) for s in stats.stderr.splitlines()]))
-    save()
