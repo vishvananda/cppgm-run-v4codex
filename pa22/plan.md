@@ -1,79 +1,94 @@
-# PA22 compact plan — implementation 118
+# PA22 compact plan — handoff 118
 
-Target: **PA22 full-stage**. Phase: **implementation**.
+Target: **PA22 full-stage**. Phase: **implementation handoff; stage incomplete**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Last reviewed commit: `e90fa3fa514e2990bbe5ea4716252d8c42ae782a`.
-Entry `853c4493`: **94/99**, five failures. Current: **94/99**, the same five.
-All 99 contract cases, references, statuses and comparison rules remain unchanged.
+Entry HEAD: `0c710f745f1341536992f43b24ba325578a2fad3`, **94/99**.
+Handoff implementation: `e10bdd7f`, **95/99**; the nested-owner member-template
+storage case is fixed. All 99 cases, references, statuses and comparison rules
+are unchanged. The previous goal turn was progress (audit 117's constant-owner
+repairs and evidence); it had no live build/test process at entry.
 
-## Active ownership group (118)
+## Design/spec alignment and completed group
 
-Entry HEAD: `0c710f745f1341536992f43b24ba325578a2fad3`; frozen compiler
-`/tmp/pa22-118/entry`. Previous goal turn was progress: audit 117 repaired
-canonical member constants and preserved its independent review findings.
-The stage/review markers above remain unchanged.
+Semantics owns a bounded forward proof for local member-pointer storage.
+A function request is deduplicated at member application; completed demanded
+bodies are visited once, without parsing, instantiation or callee demand.
+Local declaration identity plus canonical byte offset identifies storage;
+recorded field/base projections distinguish repeated bases and unify equivalent
+field paths. Per-occurrence read facts feed typed lowering directly. Calls,
+unknown writes, overloaded arrows, control boundaries and temporary destruction
+expire facts. Parameters, references, unions, volatile and unsupported forms
+retain generic adjustment. Facts do not change target-word truth semantics.
 
-Finish runtime member-value provenance for local object storage: semantic
-checking owns canonical local projection identities and per-use zero-adjustment
-facts; typed lowering consumes those facts without reconstructing aliases.
-Use one bounded, conservative flow traversal of demanded bodies, no grammar
-replay, global retry or parameter assumptions. Calls, unknown writes, lifetime
-and control boundaries end local facts. Preserve generic parameter/escaped/
-adjusted paths. Validate positive nested-template and sibling-storage cases,
-inverse conversions, aliases, calls, branches, loops and lifetimes. Measure
-frozen entry/final compiler latency/RSS and checked runtime/text with A/A+ABBA;
-measure scaling and justify any optional analysis using a correct generic lane.
-Then revisit the adjacent parameter/truth and constant-condition failures with
-the established ownership evidence; no reference correction is assumed.
+The shared receiver owner also repairs qualified repeated-base field access:
+select the qualifier subobject before the field's declaring base. Lowering and
+constant evaluation consume that path; dependent queries already use the same
+owner. Unqualified ambiguous names and inaccessible qualifiers remain rejected.
+No rendered identity, new global cache, textual transport or grammar replay.
 
-## Reviewed ownership and evidence
+Work is bounded by **4096 visits/function**, **64 traversal depth**, and the
+existing **64-node value proof** per attempted value. Conservative fallback emits
+ordinary correct IR. Function-local flat indexes are released after each body;
+only requested-function IDs and proven occurrence IDs survive to lowering.
+There is no IR duplication or growth: a proven call removes three operations.
+The effect epoch is local to one flow region, not a global cache generation.
 
-The [audit](audit.md) reviews all 15 commits across handoffs 114–116 from the
-stage base, their combined source changes, and both audit fixes. No handoff is
-left unreviewed. `015feb8d` fixes wrapper-aware adjustment proofs, member-pointer
-and conversion-result hierarchy ranking, and completed base-path reuse.
-`e90fa3fa` replaces declaration-only member constants with canonical
-member/displacement values shared by constexpr evaluation, NTTP/ABI identity,
-static data and typed lowering. Lowering no longer reconstructs their hierarchy.
+## Validation and performance
 
-The [final gate record](../student.tests/pa22/audit117-final-validation.json)
-records PA1–PA21 **3712/3712**, file audit pass (three inherited header warnings),
-**58/58** personal controls and **95** stable accepted LowIR roundtrips plus
-**four** preserved rejection statuses. Audit controls improve **9/22→22/22**;
-inherited controls remain **36/36**. Final runtime and compile measurements are
-in [performance117.md](performance117.md), with all historical 114–116 evidence
-preserved. Fourteen common correct inputs retain identical LowIR/native text.
-The local proof has repeatable runtime/text benefit against its correct generic
-lane; final timing noise and median regressions are disclosed without speed claims.
+[Validation](../student.tests/pa22/validation118.json): PA1–PA21 **3712/3712**,
+PA22 **95/99**, file audit pass (three inherited header warnings), **94/94**
+personal controls plus the ABI target-word truth probe, **95** stable accepted
+LowIR roundtrips and **four** preserved rejections. New controls are **36/36**;
+the preceding implementation fails the overloaded-arrow call control, repaired
+before handoff. The entry compiler also rejects four valid qualified-field
+controls. No fixture or oracle correction was made.
+The through-PA22 report is **3807/3811**, failing only those four PA22 cases.
 
-Spec §9's PA22/O0 acceptance applies. Inherited +15%, +16 MiB and 5.5× diagnostics
-remain non-gating. Correctness, coverage, comparison rules, the 64-node proof
-budget, constant per-operation lowering growth and eight-element initializer
-expansion cap are preserved. Later native/debug/self-host work adds no PA22 gate.
+[Performance](performance118.md) retains both A/A+ABBA campaigns, frozen hashes,
+all observations, compilation latency/RSS, checked runtime and native text.
+Flow visits scale **6656→26624** for **512→2048** functions. The initial two
+live-loop comparisons improve about 30% with eight improving paired blocks;
+the final campaign's noise and regressions are disclosed. Both campaigns emit
+identical native work. Six common inputs retain identical LowIR/native text.
+Spec §9's PA22/O0 acceptance applies: inherited +15%, +16 MiB and 5.5× targets
+remain diagnostic, not gates. Preserve all historical 114–117 evidence and
+mandated correctness, comparison, work/growth and initializer-expansion bounds.
 
-## Remaining implementation groups
+## Remaining implementation and boundary
 
-1. **Runtime member-value provenance and required lowering.** Finish the general
-   cases `300-const-member-function-pointer-address-call` and
-   `300-repeated-nested-owner-member-template-address`, and spec cases
-   `300-member-pointer-parameter-variadic-deduction` and
-   `300-overloaded-member-pointer-function-template-deduction`. Parameters and
-   indirect storage need sound value/exposure facts; owner layout alone cannot
-   prove zero adjustment. Retain inverse, assigned and escaped-value controls.
-   Any reference correction needs the authorized reducer and standard/contract
-   proof, with its bundle revision; none was made in this audit.
-2. **Constant-condition materialization and demand.** Finish
-   `300-structured-bool-conditional-member-pointer-dead-branch` with coordinated
-   receiver effects, temporary lifetime and static constant emission.
+1. **Parameter member values and required shape**: general
+   `300-const-member-function-pointer-address-call`, spec
+   `300-member-pointer-parameter-variadic-deduction`, and
+   `300-overloaded-member-pointer-function-template-deduction`. Unknown parameter
+   values require receiver adjustment/target-word extraction. The completed
+   local storage proof cannot establish facts for externally callable functions;
+   the inverse-adjustment and noncanonical-null ABI controls demonstrate why.
+   Resolving these requires a separate sound call-boundary/value owner or a
+   reduced, contract/standard-proven oracle correction. No correction is assumed.
+2. **Constant-condition materialization/demand**: general
+   `300-structured-bool-conditional-member-pointer-dead-branch`. Its remaining
+   receiver temporary and static-constant emission differ from the oracle.
+   Resolving it requires coordinated receiver effects, lifetime and emission
+   demand, beyond the completed local member-storage owner.
 
-These five failures remain implementation obligations, not waived review issues.
-Virtual inheritance, polymorphic multiple inheritance and broader RTTI remain
-PA23 work. Pass the full PA22 through report before advancing.
+These are four unfinished implementation obligations, not waived audit questions.
+Further local proof expansion cannot discharge them; crossing those ownership
+boundaries requires a new semantic design and validation group. The completed
+handoff includes the related qualified-field defect and every discovered flow
+effect defect, not just the minimum one-test progress. PA23's virtual inheritance,
+polymorphic multiple inheritance and broader RTTI remain deferred. Do not advance
+before the full PA22 through report passes and independent audit resolves findings.
 
-## Handoff discipline
+## Handoff ledger and independent review
 
-The audit ledger has one row covering the complete range and both fixes.
-114–116 made progress but split adjacent fixes, controls and telemetry into
-avoidable small follow-ups. Future handoffs should complete a broad ownership
-group with its interaction controls and measurements. This audit's code tip was
-validated and committed before these records; the records commit changes no code.
+| Range | Status | Evidence / boundary |
+|---|---|---|
+| Stage base through `e90fa3fa` (114–117) | Independently reviewed | [audit117](audit.md), including both audit fixes; historical measurements preserved |
+| `f18dfb62..d649b4b5` | Implemented; independent review pending | Local storage proof, canonical projections, qualified field runtime/constant/template paths |
+| `e10bdd7f` | Implemented; independent review pending | Overloaded-arrow receiver effect boundary; 35/36→36/36 controls |
+
+Independent review must assess path identity, conservative effect boundaries,
+proof budgets/profitability and the accumulated whole-stage design. Those review
+questions are distinct from the four known implementation failures above;
+neither category is waived. Review markers remain unchanged for Ralph.
