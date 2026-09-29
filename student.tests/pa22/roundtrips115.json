@@ -1,0 +1,1828 @@
+[
+  {
+    "source": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/0.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/0.round.lowir",
+          "/tmp/pa22-115/roundtrip/0.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-bind-typed-member-pointer-source-arg.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/1.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-bind-typed-member-pointer-source-arg.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/1.round.lowir",
+          "/tmp/pa22-115/roundtrip/1.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/2.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-cached-result-nontype-sfinae-qualified-member.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/2.round.lowir",
+          "/tmp/pa22-115/roundtrip/2.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/3.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-constexpr-forwarded-member-pointer-derived-object.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/3.round.lowir",
+          "/tmp/pa22-115/roundtrip/3.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-current-specialization-qualified-member-pointer.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/4.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-current-specialization-qualified-member-pointer.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/4.round.lowir",
+          "/tmp/pa22-115/roundtrip/4.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/5.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-defaulted-dependent-member-function-pointer-nttp.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/5.round.lowir",
+          "/tmp/pa22-115/roundtrip/5.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  },
+  {
+    "source": "pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/6.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-dependent-decltype-call-operator-member-pointer-type.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/6.round.lowir",
+          "/tmp/pa22-115/roundtrip/6.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-dependent-decltype-pack-call.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/7.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-dependent-decltype-pack-call.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/7.round.lowir",
+          "/tmp/pa22-115/roundtrip/7.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-dependent-member-template-nontype-target-overload.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/8.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-dependent-member-template-nontype-target-overload.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/8.round.lowir",
+          "/tmp/pa22-115/roundtrip/8.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/9.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-forwarded-data-member-pointer-nontype-base.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/9.round.lowir",
+          "/tmp/pa22-115/roundtrip/9.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-function-template-constructor-member-pointer-nontype.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/10.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-function-template-constructor-member-pointer-nontype.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/10.round.lowir",
+          "/tmp/pa22-115/roundtrip/10.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-function-template-member-function-pointer-const-param.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/11.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-function-template-member-function-pointer-const-param.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/11.round.lowir",
+          "/tmp/pa22-115/roundtrip/11.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-function-template-member-pointer-return-noexcept.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/12.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-function-template-member-pointer-return-noexcept.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/12.round.lowir",
+          "/tmp/pa22-115/roundtrip/12.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-function-template-member-pointer-return.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/13.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-function-template-member-pointer-return.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/13.round.lowir",
+          "/tmp/pa22-115/roundtrip/13.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-cv-partial-specialization.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/14.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-cv-partial-specialization.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/14.round.lowir",
+          "/tmp/pa22-115/roundtrip/14.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/15.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-nontype-partial-specialization-call.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/15.round.lowir",
+          "/tmp/pa22-115/roundtrip/15.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/16.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-nttp-inherited-type-collision-sfinae.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/16.round.lowir",
+          "/tmp/pa22-115/roundtrip/16.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-pack-partial-specialization.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/17.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-pack-partial-specialization.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/17.round.lowir",
+          "/tmp/pa22-115/roundtrip/17.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/18.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-ref-qualified-invocation-sfinae.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/18.round.lowir",
+          "/tmp/pa22-115/roundtrip/18.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/19.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-function-pointer-type-arg-qualified-void.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/19.round.lowir",
+          "/tmp/pa22-115/roundtrip/19.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/20.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-nttp-body-inherited-call-binding-lifetime.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/20.round.lowir",
+          "/tmp/pa22-115/roundtrip/20.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  },
+  {
+    "source": "pa22/tests/general/300-member-pointer-access-substitution-failure.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/21.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-pointer-access-substitution-failure.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/21.round.lowir",
+          "/tmp/pa22-115/roundtrip/21.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/22.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-pointer-nonclass-owner-sfinae.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/22.round.lowir",
+          "/tmp/pa22-115/roundtrip/22.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-member-pointer-pack-decltype-memfn.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/23.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-member-pointer-pack-decltype-memfn.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/23.round.lowir",
+          "/tmp/pa22-115/roundtrip/23.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/24.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-nested-alias-dependent-member-pointer-argument.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/24.round.lowir",
+          "/tmp/pa22-115/roundtrip/24.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-nested-function-type-empty-pack-parameter.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/25.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-nested-function-type-empty-pack-parameter.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/25.round.lowir",
+          "/tmp/pa22-115/roundtrip/25.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  },
+  {
+    "source": "pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/26.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-overloaded-member-address-excludes-function-pointer-template.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/26.round.lowir",
+          "/tmp/pa22-115/roundtrip/26.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "backend_exit": 1,
+        "stderr": "ERROR: undefined native symbol: f referenced by main\n"
+      },
+      {
+        "lane": "reference",
+        "backend_exit": 1,
+        "stderr": "ERROR: undefined native symbol: X__f referenced by main\n"
+      }
+    ],
+    "execution_note": "Both lanes lack definitions for externally declared native symbols; LowIR validation/roundtrip passed"
+  },
+  {
+    "source": "pa22/tests/general/300-qualified-dependent-function-pointer-nontype.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/27.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-qualified-dependent-function-pointer-nontype.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/27.round.lowir",
+          "/tmp/pa22-115/roundtrip/27.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  },
+  {
+    "source": "pa22/tests/general/300-qualified-member-address-decltype-ref.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/28.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-qualified-member-address-decltype-ref.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/28.round.lowir",
+          "/tmp/pa22-115/roundtrip/28.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-qualified-member-function-template-address-nttp.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/29.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-qualified-member-function-template-address-nttp.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/29.round.lowir",
+          "/tmp/pa22-115/roundtrip/29.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution_note": "declaration-only fixture: no executable entry"
+  },
+  {
+    "source": "pa22/tests/general/300-qualified-template-id-owner-function-call-probe.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/30.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-qualified-template-id-owner-function-call-probe.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/30.round.lowir",
+          "/tmp/pa22-115/roundtrip/30.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-qualified-template-member-type-sfinae.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/31.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-qualified-template-member-type-sfinae.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/31.round.lowir",
+          "/tmp/pa22-115/roundtrip/31.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/32.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-ref-qualified-member-function-pointer-nontype-call.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/32.round.lowir",
+          "/tmp/pa22-115/roundtrip/32.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/33.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-static-cast-overloaded-member-template-pointer-call-argument.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/33.round.lowir",
+          "/tmp/pa22-115/roundtrip/33.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-template-member-function-template-nttp-dedup.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/34.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-template-member-function-template-nttp-dedup.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/34.round.lowir",
+          "/tmp/pa22-115/roundtrip/34.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-template-member-pointer-nttp-execute.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/35.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-template-member-pointer-nttp-execute.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/35.round.lowir",
+          "/tmp/pa22-115/roundtrip/35.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/36.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-template-member-pointer-nttp-inline-method-reference.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/36.round.lowir",
+          "/tmp/pa22-115/roundtrip/36.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/300-using-directive-template-id-member-pointer-owner.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/37.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-using-directive-template-id-member-pointer-owner.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/37.round.lowir",
+          "/tmp/pa22-115/roundtrip/37.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/400-reference-reset-recollects-inclass-template.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/38.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/400-reference-reset-recollects-inclass-template.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/38.round.lowir",
+          "/tmp/pa22-115/roundtrip/38.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/39.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/400-top-level-cv-function-pointer-partial-specialization-ordering.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/39.round.lowir",
+          "/tmp/pa22-115/roundtrip/39.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/40.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-ambiguous-member-nontype-arg-sfinae.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/40.round.lowir",
+          "/tmp/pa22-115/roundtrip/40.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/41.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-dependent-member-function-pointer-nontype-detection.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/41.round.lowir",
+          "/tmp/pa22-115/roundtrip/41.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/spec/300-member-pointer-nontype-template-parameter.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/42.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-nontype-template-parameter.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/42.round.lowir",
+          "/tmp/pa22-115/roundtrip/42.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "source": "pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.t",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "--validate-lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/43.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-using-member-operator-template-hides-inherited-instantiations.t"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-115/roundtrip/43.round.lowir",
+          "/tmp/pa22-115/roundtrip/43.lowir"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "stable_roundtrip": true,
+    "execution": [
+      {
+        "lane": "student",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "lane": "reference",
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  }
+]

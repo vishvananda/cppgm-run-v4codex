@@ -1,38 +1,53 @@
 [
   {
     "source": "student.tests/pa22/dependent/associated.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: unknown expression name: find\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/injected.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: ambiguous lookup\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/nttp.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: invalid member pointer owner\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/owners.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: expected ';', found '<' at byte 215\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/protected.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: invalid member pointer owner\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/reject-injected-type.cpp",
@@ -44,43 +59,46 @@
   {
     "source": "student.tests/pa22/dependent/reject-nttp-base.cpp",
     "compile_exit": 1,
-    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "stderr": "ERROR: invalid class template arguments\n",
     "reject": true,
     "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/reject-nttp-integer.cpp",
     "compile_exit": 1,
-    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "stderr": "ERROR: invalid class template arguments\n",
     "reject": true,
     "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/reject-nttp-private.cpp",
     "compile_exit": 1,
-    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "stderr": "ERROR: inaccessible class member\n",
     "reject": true,
     "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/reject-nttp-variable.cpp",
     "compile_exit": 1,
-    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "stderr": "ERROR: invalid class template arguments\n",
     "reject": true,
     "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/reject-parenthesized-member.cpp",
     "compile_exit": 1,
-    "stderr": "ERROR: invalid non-type template parameter type\n",
+    "stderr": "ERROR: invalid class template arguments\n",
     "reject": true,
     "passed": true
   },
   {
     "source": "student.tests/pa22/dependent/sfinae.cpp",
-    "compile_exit": 1,
-    "stderr": "ERROR: invalid member pointer owner\n",
+    "compile_exit": 0,
+    "stderr": "",
     "reject": false,
-    "passed": false
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
   }
 ]

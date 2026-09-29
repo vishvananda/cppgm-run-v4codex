@@ -1,103 +1,109 @@
-# PA22 compact plan — implementation 115 in progress
+# PA22 compact plan — implementation handoff 115
 
-Target: **PA22 full-stage**. Phase: **implementation**.
+Target: **PA22 full-stage**. Phase: **implementation; incomplete handoff**.
 Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
 Last reviewed commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
-Entry: **22/99 passing, 77 failures**. Current: **47/99, 52 failures**.
-No earlier passing PA22 case regressed; the same 99 contract cases remain.
+115 entry HEAD: `5a21daff2c280c8b3a55000e253c50773fe6a6da`, **47/99**, 52 failures.
+Current: **91/99**, 8 failures; 44 entry failures repaired, zero regressions.
+All 99 contract cases, oracles and comparison rules remain unchanged.
 
-## Design/spec alignment and completed work
+## Design/spec alignment and ownership
 
-`87ee0e07` implements the member-value representation and conversion group:
-canonical member/declaration/type identities and recorded base paths feed typed
-LowIR `i64` offset-plus-one data pointers and packed `i128` function pointers.
-Null initialization, static/constexpr values, local storage, qualification,
-base/derived conversions, mixed-owner comparisons/conditionals, `.*`/`->*`, and
-contextual truth share that representation. Nonzero and inverse adjustments
-preserve null semantics and receiver identity. The LowIR model/reader/writer
-support the emitted scalar form directly. Known non-null addresses retain their
-fact through ordinary base projection.
+114's member representation, conversions, bounded local value proof and single-vptr
+void cast remain in place ([prior evidence](performance114.md)). `277c1c44`,
+`7336cd8d`, `2fd83db0` complete the dependent member-pointer type/argument/query
+group and adjacent owner lookup, ADL, access and parser obligations:
 
-A TU-owned, entity-keyed proof records all local writes and address exposure.
-Its active/proven/unknown states, shared 64-node budget and conservative fallback
-avoid a false assumption that an owner's layout determines every member-pointer
-value. Lowering reads the completed fact; it performs no member lookup or
-semantic reconstruction. `e6316d05` keeps overloaded address calls out of this
-proof. Work/storage are O(relevant objects + writes), with constant-size lowering
-per operation and cached canonical base paths. No production text roundtrip,
-reference delegation, source replay or global cache was introduced.
+- `Types` owns canonical owner TypeId + member TypeId; the owner reuses the
+  existing bound slot, with a Named entity projection for concrete consumers.
+  Formation, signatures, substitution, deduction, partial ordering and pack
+  traversal all preserve that identity, including nested aliases and owner packs.
+- Template argument queries retain canonical member declarations, null values,
+  qualifiers, lexical/naming access context and explicit-instantiation context.
+  Completed address arguments cache success by query/target/access identity;
+  type/frame substitution memoizes completed success and invalid-type failure.
+  Non-class owners, void/reference members and invalid NTTP conversions reject
+  through compact substitution results. Body demand remains separately owned.
+- Ordinary and unevaluated `.*`/`->*` share operand/ref/cv/base-path checking.
+  Concrete bound calls retain receiver and member identity. Immediate NTTP
+  targets publish one static fact consumed directly by typed LowIR; no lowering
+  lookup, invented AST, textual phase transport or new optimization pass.
+- Template-name lookup merges inherited injected names of one primary before
+  ambiguity resolution ([temp.local]/4); ordinary type lookup stays ambiguous.
+  ADL walks member owner/result edges. Typedef lookahead skips member-pointer
+  qualifiers instead of accidentally predeclaring them as new typedef names.
 
-The single-vptr `dynamic_cast<void*>` path now preserves null and consumes the
-vtable offset-to-top. The explicit O0 view retains the contract's unreachable
-cast continuation. Broader virtual layouts remain PA23 work.
+TU arenas/flat indexes own the new facts. Work is O(affected type/query edges +
+required candidates), memoized per type/environment; packs visit unique graph
+edges. Known NTTP targets add O(1) recorded facts and bounded constant lowering,
+with zero code growth over generic lowering. Non-dependent nodes are reused;
+no source region is reparsed. Function-local traversal scratch is released by
+its owner; no global cache, broad retry or unrelated-body demand was added.
 
-## Unfinished implementation and concrete boundary
+## Unfinished implementation and handoff boundary
 
-- Dependent owner types, member-pointer NTTP formation, address substitution,
-  deduction, packs and partial specialization remain the dominant failure group.
-  `TypeKind::MemberPointer` currently carries a concrete class entity; accepting
-  dependent syntax alone cannot preserve canonical owner identity or SFINAE.
-  The next coherent change must coordinate type formation/interning, dependence,
-  substitution frames, deduction and pack traversal before enabling those cases.
-- Dependent `.*`/`->*` callable queries, inherited conversion functions, template
-  member lookup/access and ambiguous subobject/type lookup remain unfinished.
-- `300-const-member-function-pointer-address-call` still differs because generic
-  parameter calls consume the adjustment word, while the reference omits it.
-  Reverse casts and unknown parameter values require that adjustment. Contract
-  parity needs a sound parameter-value proof or a proved reference correction;
-  restoring the layout-only shortcut is incorrect. No oracle has been changed.
-- `300-ambiguous-member-nontype-arg-sfinae` still selects the wrong result until
-  the NTTP/query group is implemented. All 52 failures are listed in the ledger
-  linked below; they are implementation obligations, not waived audit questions.
+The remaining eight cases belong to three owners:
 
-This handoff finishes local member values/conversions and the single-vptr void
-cast, including related receiver, qualifier and truth fixes. Further progress
-now crosses the dependent-type/query ownership boundary or requires a separate
-parameter-value proof. Those changes cannot be supplied safely as another local
-representation edit. The full-stage target remains active for Ralph's next run.
+1. Runtime member-pointer value proofs: `300-const-member-function-pointer-address-call`,
+   `300-repeated-nested-owner-member-template-address`, and spec cases
+   `300-member-pointer-parameter-variadic-deduction` /
+   `300-overloaded-member-pointer-function-template-deduction`. Their templates
+   now form/deduce correctly; mismatches concern adjustment/truth extraction from
+   unknown parameters or indirect storage. A class-layout shortcut is unsound
+   for inverse conversions. Required completion needs a sound call/storage value
+   analysis with ABI/exposure boundaries, or a proved contract correction. No
+   reference was changed and this obligation is not waived.
+2. Multi-base conversion lookup and ranking: `300-inherited-explicit-bool-condition`
+   and `100-qualified-sizeof-overload-static-const-nttp`. The conversion candidate
+   collector still follows only the first base; ranking also lacks the required
+   preference between base targets in the composite hierarchy.
+3. Initialization/lifetime output: `300-data-member-pointer-reference-cast-address`
+   lacks zero-initialization of a nested nonaggregate base-bearing object;
+   `300-structured-bool-conditional-member-pointer-dead-branch` materializes an
+   unnecessary condition temporary instead of the contract's constant storage.
+
+This boundary follows completion of the dependent-type/query group, extended
+through all directly related parser, access, ADL and injected-name fixes.
+Further fixes require runtime value provenance across callers/indirect storage,
+base-path conversion candidate/ranking ownership, or initialization/lifetime
+plans; another type-substitution change cannot supply those facts. All remain
+implementation work for the full-stage objective, separate from review below.
 
 ## Performance and validation
 
-[Performance evidence](performance114.md) preserves frozen binaries, inputs,
-A/A calibration, ABBA samples, compiler latency/RSS, checked executable runtime
-and actual `.text`, plus the analysis-off proof experiment. Required `i128`
-backend costs are disclosed. The 64-node proof has measured runtime/text benefit
-and linear work growth; no unprofitable optional pass was added. Inherited
-numeric diagnostic targets remain diagnostics under spec §9, not extra gates.
+[115 performance evidence](performance115.md) records frozen binaries/inputs,
+A/A calibration, ABBA observations, compiler latency/RSS and checked runtime/text.
+The immediate-target comparison includes generic correct lowering as a baseline;
+mandatory O0 target shape and bounded fact/lowering costs are distinguished from
+optional optimization claims. Inherited numeric diagnostic targets remain
+non-gating under spec §9; mandated correctness, coverage and bounds are retained.
 
-[Validation and unchanged contract manifest](../student.tests/pa22/validation114.json):
-PA1–PA21 **3712/3712**, file audit **pass** (three inherited header warnings),
-`make test-pa22` **47/99**, root through-PA22 **3759/3811**. Existing failures
-fall **77 → 52**, with **25 repaired and zero regressions**. Personal controls
-improve **9/16 → 16/16**; explicit LowIR roundtrips, target-word truth and bounded
-proof growth/cycle controls pass. References, harnesses and coverage are unchanged.
+Validation is recorded in
+[`validation115.json`](../student.tests/pa22/validation115.json).
+Stage result: `make test-pa22` **91/99**. Prior isolated report: **3712/3712**.
+File audit passes with the same three inherited header warnings. Personal
+controls cover canonical owners, owner-only packs, cv/ref signatures, NTTP
+forwarding/nulls, ADL, protected access and rejection: **12/12** (entry **6/12**);
+all **16/16** inherited controls also pass. All **44** repaired fixtures validate
+and roundtrip stably; **38** executable comparisons match, five are declaration
+only, and one lacks the same external definition in both lanes. None substitutes
+for the unchanged course checks. Stage progress is **52→8** original failures.
 
 ## Handoff ledger and independent review
 
-114 entry: interrupted PA22 work had no surviving process or uncommitted change;
-its no-progress state was revalidated before implementation. `cfcbacab` records
-the base/review markers. `87ee0e07`, `e6316d05` implement the group above; final
-handoff commits retain the experiments, checks and remaining-failure ledger.
+114 was progress, not an abandoned implementation. 115 resumed a clean HEAD;
+`d0c76b40` recorded ownership before edits and preserved both review markers.
+The later continuation preserved committed work; missing process handles and
+process inspection established that interrupted validation jobs had stopped.
+Concurrent root reports share `.test_counts`; contaminated counts were discarded
+and final required reports were rerun sequentially. No harness was modified.
+Production behavior is committed through `2fd83db0`; the final evidence commit
+records the completed handoff. PA22 remains incomplete; Ralph owns the next
+implementation/audit scheduling decision.
 
-Independent review has **not** audited these commits. Review must verify stored
-value/alias proof coverage, canonical constant/base identities and the performance
-acceptance evidence, then resolve whole-stage findings before advancement.
-These review tasks are separate from the known unfinished implementation above.
-Both review markers remain unchanged; neither implementation nor audit is waived.
-
-## Implementation 115 work ledger
-
-Entry HEAD `5a21daff2c280c8b3a55000e253c50773fe6a6da`: clean; 47/99,
-52 failures. Prior turn supplied a validated implementation checkpoint (progress);
-the subsequent unchanged progress check provides no new implementation. No live
-build/test process exists. Stage/review markers above are preserved.
-
-Owner: canonical `Types` plus template substitution/deduction. Store the member
-owner as a canonical TypeId alongside the concrete entity projection; parsed
-owner types flow through dependent-type facts, immutable substitution frames,
-pack capture, partial ordering and finally the existing typed lowering facts.
-Walk only affected type/query edges, memoizing per type/frame; no token replay,
-name-key cache or body demand for mere type formation. Coordinate these related
-paths before extending member-address NTTP/query handling. Validation: unchanged
-99-case contract, explicit positive/negative owner/cv/pack controls, earlier PAs,
-file audit and frozen A/B compiler/runtime evidence under spec §9.
+Independent review remains pending for 114 and 115. Review must inspect canonical
+owner and argument identities, access-sensitive cache keys, demand boundaries,
+NTTP target-fact consumption, inherited local write/alias proof coverage and
+performance acceptance. These are review questions, not substitutes for the
+known unfinished implementation. Whole-stage findings must be resolved before
+advancement. Neither review marker nor any implementation obligation is waived.
