@@ -1,100 +1,73 @@
-# PA20 compact plan — implementation 100 (in progress)
+# PA20 compact plan — implementation handoff 100
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `882cf5236a8ddb756403105cd50135440920e2a4`.
-Implementation 100 entry: `2e31ab57e7ba3371ca5c59057ede55b435d4a666`, clean,
-143/144; previous turn classified **progress** (aggregate/value boundary and
-validated evidence). Frozen entry compiler: `/tmp/pa20-loop100/entry`.
-Current owner: parser / retained declaration environment. Inspection found an
-existing source-ambiguity boundary, so body scheduling remains unchanged.
-Data flow: category alternatives + retained angle locations → statement's real
-semantic scope → indexed specialization/member lookup → monotonic source-node
-interpretation → ordinary typed facts and lowering. Original nodes and children
-retain identity; specialization views share the selected interpretation. No
-reparse, copied tree or lowering reconstruction. Work is linear in candidate
-names/parts plus existing canonical specialization demand, owned by the TU.
-First increment: required suite **144/144**, through PA20 **3596/3596**, file
-audit passes (three inherited warnings); 23/23 new native/rejection controls
-cover declaration order, scopes, aliases, functions/classes/templates/lambdas
-and for-init. Expanding operand/qualification controls and collecting final
-performance and cumulative validation remain implementation work.
+Target: **PA20 full-stage**. Phase: **implementation handoff; stage tests pass**.
+Entry: `2e31ab57e7ba3371ca5c59057ede55b435d4a666`, clean, **143/144**.
+Implementation boundary: `7925464d` (following `db0f82f1`). Final records only
+follow this boundary. [Audit 97](audit.md) and its markers remain in force.
+Previous goal turn: **progress**, established by the aggregate/value changes
+and their validation. No previous task process remained live at entry.
 
-Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Entry: `16ac49da1339edaa4a5f96bf4efab731a30c65e1`, clean, **140/144**.
-Implementation boundary: `37f8300b` (following `a7265134`, `b8b9e1ff`).
-The final records commit adds controls/evidence only; no implementation follows
-that boundary. [Audit 97](audit.md) and its review markers remain in force.
-
-## Completed owners and spec alignment
+## Design and spec alignment
 
 | Owner | Data flow and invariants | Complexity / lifetime |
 |---|---|---|
-| Aggregate initialization | Completed constructor/expression summaries plus selected list conversions → explicit representation-transport fact → shared helper or ordered destination construction. Excludes self-addresses, aliases/member reads, volatile state, nontrivial copies/destruction and unknown effects. No extra language moves. | One summary per completed canonical constructor / expression occurrence; average O(1) lookup, linear fields/arguments. TU-owned flat facts; helper slots are local LowIR identities, independent of caller temporaries. |
-| Class value boundary | Completed copy/move/destructor facts → separate parameter and result conventions → signatures/calls/destinations. Small copyable results stay direct; a trivial move alone only permits direct argument transport. | Existing once-per-class facts and demand states; no new query, body demand, cache invalidation or semantic reconstruction. |
+| Retained grammar / declaration environment | Parser category alternatives and angle locations → actual statement scope → canonical specialization/member lookup → selected source grammar → ordinary typed facts/LowIR. The first local declaration changes the next lookup; the apparent second declaration becomes the hidden-friend comparison. | Linear names/parts/operand structure plus existing canonical demand. Source interpretation precedes publication, is shared across specializations and cannot mutate a published region. No replay, copied tree, textual key or lowering reconstruction. |
+| Delimiter prediction | Specialization categories remain alternatives independent of source order. A failed angle probe marks all its still-open prefixes on the live cursor. | Linear scanning; successful/failed lookahead is reused. Cursor-owned state disappears with consumed tokens. Lexical hiding remains separate from specialization alternatives. |
+| Inherited completed PA20 owners | Deduction, arrays, range lifetime/operations, lambda captures/callable entries, aggregate transport and separate argument/result ABI facts feed typed lowering. | Prior ownership, demand and expansion bounds remain; evidence and review obligations in handoffs 94–99 are preserved. |
 
-These extend the initial aggregate group through nested returns, defaulted
-special members, template owners, defaults, lambda results, omitted class tails
-and the preserved audit-97 sequencing proof. Constructor summaries reject
-`this`; the new native control exposed and verified that correction. Unknown
-or not-yet-completed facts retain ordered construction. No token replay, copied
-semantic tree, rendered identity key or optional optimizer was added.
-
-One oracle inserted two observable moves after the required two member copies.
-The [C++11 proof, reducer and bundle revision](reference-corrections99.md) correct
-that `.ref` only. Its source, success status and comparison rules remain intact.
-The correction is separate from the two implemented course-shape fixes.
+Inspection replaced the proposed body-scheduling change with the existing
+source-ambiguity boundary. The implementation extends that owner through
+specialization order, aliases, lexical/control scopes, functions, members,
+lambdas, template reuse, operator precedence, multiple arguments and ordinary
+operand forms. Interpretation uses the shared operator precedence table.
+Unknown/dependent facts retain the existing dependent-language checks; no
+specialization reparses grammar. No fixture or reference was changed this turn.
 
 ## Validation and performance
 
-[Final validation](../student.tests/pa20/validation99.json): PA1–19 **3452/3452**;
-file audit **pass** (same three inherited header warnings); PA20 **143/144**;
-through PA20 **3595/3596**. Required failures fall **4→1**, with no new failures.
-All 144 fixture sources and comparison rules remain; the coverage manifest
-checks 639 files and verifies every stage reference revision against its proof.
-Personal controls **303/303**, four explicit ABI checks, five inherited/current
-source-to-native traces, all reference reducers and all three repaired required
-program executions pass. The independent assignment audit is not implied.
+[Final validation](../student.tests/pa20/validation100.json): required PA20
+**144/144**; exact prior-through command **3452/3452**; through PA20
+**3596/3596**; file audit **pass**, same three inherited header warnings.
+Required failures fall **1→0**, with no new failures and unchanged coverage.
+The manifest checks all 639 fixture/contract/harness files; all 144 sources,
+statuses and comparisons are unchanged since entry. Historical reference
+revisions still match their preserved reducers and proofs.
 
-[Performance evidence](performance99.md): frozen entry/final compiler and inputs,
-400 observations / 40 warmups, A/A plus four ABBA blocks, compiler latency/RSS
-and checked native runtime/payload size. Compiler text grows 1728 bytes (0.083%).
-The required aggregate helper costs runtime and output size; repeated helper
-occurrences share one body, and work/output remain linear in demanded identities.
-Result storage removes copies but noisy timings support no strong speed claim.
-Unchanged call/memory/floating controls produce identical native bytes. Existing
-expansion bound 8 and stage-scoped acceptance apply; historical diagnostic
-percentages waive neither correctness, coverage nor mandated limits.
+Explicit personal controls **344/344** (303 inherited plus 41 new), four ABI
+checks, six source-to-native traces, historical reference proofs/executions
+and both versions of the repaired required program pass. The new trace checks
+one grammar interpretation reused by two specialization bodies, four calls,
+source-publication invariants and telemetry-independent output.
 
-## Remaining implementation (mandatory)
+[Performance evidence](performance100.md): frozen entry/final/input hashes,
+316 observations/34 warmups, A/A and four ABBA blocks, compiler latency/RSS and
+checked native runtime/payload. Qualified workloads show 1.2–4.2% median
+compiler growth and 160–224 KiB peak-RSS growth; compiler text grows 0.712%.
+Every equivalent A/B native executable is byte-identical. New grammar work is
+constant across 800/3200 body specializations; 40/600 negative angle controls
+show exactly proportional visits. No runtime optimization benefit is claimed.
+No new numeric gate replaces the stage-scoped acceptance or mandated bounds.
 
-**Parser / retained declaration environment: one required failure**,
-`400-repeated-local-declaration-template-probe.t`. The first declaration changes
-`sizeof(local_args)` and thus the selected specialization. The second apparent
-declaration is actually a relational expression calling the hidden friend:
-its `cmp1` is an integer, not a template. The oracle correctly contains one
-local object and an `operator>` call.
+## Remaining implementation and independent review
 
-`Parser::translation_unit` currently delivers a whole declaration/function to
-semantic consumption, while its category table merges specialization member
-categories. Resolving this requires semantic specialization and local-entity
-facts during grammatical classification (or a retained structural ambiguity),
-with one grammar pass and correct lexical scope publication. The completed
-initializer/ABI owners run after that decision and cannot supply those facts.
-A repair inside them would mask the parser defect; correct work requires a new
-parse/semantic cooperation boundary. This is the concrete boundary of this
-handoff, not a PA21 deferral or a waived exit criterion. No further known
-correctness defect remains in the completed aggregate/value groups.
+**Unfinished implementation:** none identified under the shipped PA20 contract;
+no required failure or owner defect is deferred to PA21. This boundary completes
+the implementation handoff, not the assignment's independent audit.
 
-Independent review questions, separate from that implementation: validate the
-transport proof/cache stability, helper sharing across occurrences, the result
-ABI envelope and the reference proof; review capture changes from handoff 98
-and the cumulative base-to-tip performance interpretation. All remain pending
-Ralph's independent review, with no assignment advancement claim.
+**Independent review, still mandatory:** review source grammar publication and
+projection, category alternatives/lexical hiding, argument reassociation and
+work bounds; review handoff 98 capture changes and handoff 99 transport/cache,
+helper sharing, result ABI and reference proof; resolve cumulative whole-stage
+architecture/performance findings before advancement. Passing tests does not
+waive these questions or change the preserved review markers.
 
 ## Handoff ledger
 
 | Boundary | Completed work / evidence | Unfinished implementation | Independent review |
 |---|---|---|---|
 | Audit 97 | [Preserved ledger](audit.md#ledger), 121/144 | Original 23 failures | Reviewed through `882cf523`; markers retained |
-| Implementation 98, `e75e0d6c`→`a1faea7a` | Reference/this/nested/pack captures and conversion proofs; 140/144, 264 controls; [evidence](performance98.md) | Aggregate initialization, class ABI and retained grammar (4 failures) | Pending; not superseded by this handoff |
-| Implementation 99, `16ac49da`→`37f8300b` | Proven class representation transport, separate result ABI, member-copy proof; 143/144, 303 controls, required prior/audit checks and [measurements](performance99.md) | Lookup-sensitive parser/semantic cooperation (1 failure) | Pending cumulative audit; full stage audit still required before advancement |
+| Implementation 98, `e75e0d6c`→`a1faea7a` | Capture environments/conversions; 140/144, 264 controls; [measurements](performance98.md) | Aggregate/value and retained grammar (4 failures at that boundary) | Pending cumulative review |
+| Implementation 99, `16ac49da`→`37f8300b` | Aggregate transport/result ABI/member-copy proof; 143/144, 303 controls; [measurements](performance99.md) | Retained grammar (1 failure at that boundary) | Pending cumulative review |
+| Implementation 100, `2e31ab57`→`7925464d` | Semantic angle interpretation and related grammar; 144/144, through 3596/3596, 344 controls, six traces, file audit and [measurements](performance100.md) | None identified under the course contract | Full independent stage audit required; no advancement claimed |
