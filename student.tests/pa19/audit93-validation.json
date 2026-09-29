@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "command": "make test-pa19",
+      "exit_code": 0,
+      "log_path": "/tmp/pa19-audit93/stage.log",
+      "log_sha256": "d5e0aec68246d4ac105c7865108582f3b9525165312fab0ca2e54202a6f6dee7",
+      "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowir\n  LINK    lowiropt\n  LINK    lowir2native\n  LINK    cppgm++\n===== pa19 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (423 / 423) =====\n"
+    },
+    {
+      "command": "make test-report-through-pa19",
+      "exit_code": 0,
+      "log_path": "/tmp/pa19-audit93/through.log",
+      "log_sha256": "6dadcc955ee05b1dfd92c28d10e8ff305478123a9efe6c1f8d11bd32f75c0e3d",
+      "output": "  LINK    pptoken\n  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowir\n  LINK    lowiropt\n  LINK    lowir2native\n  LINK    cppgm++\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (3452 / 3452) =====\n"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa19 --paths dev/src",
+      "exit_code": 0,
+      "log_path": "/tmp/pa19-audit93/file-audit.log",
+      "log_sha256": "b20e2dfcf5f476659dc74de3cb992ec8f672f6fd99037175cac085650147bfff",
+      "output": "File audit passed for pa19 with 3 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+    }
+  ],
+  "compiler_sha256": "1a181c95ee97d646d41c1009780200049e776d67e1d715840d5526b3d10e1d40",
+  "reviewed_commit": "228d7fc74327a4e2461e6162cce22f5ce054b882",
+  "focused_properties": 22,
+  "stages": 19,
+  "artifact_hashes": {
+    "student.tests/pa19/audit93-evidence.json": "b73069b4c2c57cffa84a58203c5454c0dbe9d571483473bd360d3788012f4aa5",
+    "student.tests/pa19/audit93-performance.json": "93aa818ac12c03df3a2cf4a17a120282623285fcb40eb8cdb9554218e3f6fa28"
+  }
+}

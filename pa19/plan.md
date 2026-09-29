@@ -1,79 +1,81 @@
-# PA19 implementation plan
+# PA19 compact plan — final audit 93
 
-Stage base commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
-Last reviewed commit: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
-Target: PA19 full-stage. Phase: implement; validated full-stage implementation handoff 92.
-Loop entry: `065d6783`, **407/423**; current: **423/423**, zero failures.
-All 423 input sources and exit-status sidecars remain byte-identical to entry;
-comparison and coverage rules are unchanged. Independent stage audit is pending.
+Stage base: `e5f4c3ed78972c8d161671d145bf525cb99033f4`.
+Last reviewed commit: `228d7fc7` (complete implementation and both handoffs).
+Target: **PA19 full-stage**. Phase: **audit complete**.
+**Spec Alignment: aligned for PA19/O0.** [Independent audit](audit.md).
 
-## Design/spec alignment
+## Final design
 
-Preserve the prior type/alias/deduction/ordering work and streaming parser,
-canonical identity, immutable substitution frames and direct typed LowIR.
-
-| Owner | Data flow and completed behavior | Complexity / validation |
+| Owner | Data flow / invariant | Review evidence |
 |---|---|---|
-| Variable declaration | Source initializer QueryId is retained through member declaration; source head + enclosing frame compose only on value demand. Declaration types substitute through complete specialization keys; expected signature failure stays compact | One source query, dependent edges per demanded frame; no grammar replay, initializer projection, global scan or retry. Defaults, packs, dormant outer/inner initializers, SFINAE controls |
-| Variable value | Selected partial/primary + composed frame → typed query → checked initialization conversion → persistent literal value. Declaration and initializer facts have separate monotonic states | One initializer per specialization; existing conversion and constant caches. Class values, braced/implicit conversions, invalid/deleted/explicit construction, recursion, leaf-SFINAE |
-| Variable storage | Evaluated use → distinct emission demand → initializer and relocation facts → existing constant-object LowIR | Canonical EntityId identity, once-only emission demand; native scalar/class value and repeated-address controls |
-| Parser lookahead | Skip a template variable's initializer during class declaration classification; a constructor expression cannot hide the class name | Bounded delimiter lookahead; no second grammar parse; class-valued literal controls |
-| O0 conversion provenance | Retained sizeof type parameter remains a substituted layout fact after instantiation; the neighboring widening keeps its explicit O0 conversion | O(1) identity lookup; no new optimization, graph, cache or search. NTTP call fixture, negative-value reducer, all earlier stages |
+| Source/parser | Immutable buffers → streaming PP/post/syntax cursor → one source graph with attached semantic facts. Templates keep parsed bodies; compact occurrences project demanded regions | Actual parser/semantic entry, source regions and lifetime boundaries reviewed; trace has 612 parsed nodes / 497 occurrences |
+| Types, aliases, arguments | Canonical declaration/type/argument IDs retain alias-template identity, complete defaulted packs, function/ellipsis forms and dependent owners | Handoff 91 source review; 42 composition controls; native alias/pack/ADL/reference controls |
+| Deduction and ordering | Relevant indexed candidates → immediate-context substitution → recorded selected declaration/conversions; defaults only after selection | Fixed-prefix/empty-tail ordering and declaration-order/ambiguity cases; independent selected/unselected default controls |
+| Variable declaration/value/storage | Source initializer QueryId + immutable outer/inner frames → distinct declaration and initializer states → checked persistent literal constant → separate storage demand | Handoff 92 source review; 29 variable controls; two initializer transitions and one object per demanded key in the combined trace |
+| Demand and invalidation | Canonical fact keys, active/success/failure states, precise owner queues and reverse query dependencies; nondependent facts shared | Source inspection of frame composition, body/default/constant owners and completion scheduling; stress counters scale with actual keys/edges |
+| LowIR and ABI | Recorded layout/calls/conversions/cleanup → direct typed LowIR and PA9 ABI graph; serialize once as required output | `Pair<short>` is 16x8 with fields at 0/8; emitted calls, storage, signed widening and pack ABI inspected; native trace returns zero |
+| O0 work and lifetime | Bounded named-constant forwarding, required constant-array images, at most four source conversion variants; conservative fallback and no new optimization pass | Receiver effects, volatile/effectful fallbacks, array identity and negative NTTP controls; TU pools/function scratch release reviewed |
 
-Class-valued and scalar initializers use ordinary semantic conversions and typed
-constant storage; lowering does not reconstruct template semantics. No new source
-unit, optional transform, process-global cache, host compilation or reference
-output is used in implementation. Supplied native backend execution is validation
-only, as required before PA24. Native optimization/debug/self-hosting acceptance
-remains in those later stages.
+Production remains self-contained; supplied native backend calls occur only in
+validation. No new source unit or source-set registration is needed. Native
+MIR/allocation/object encoding, optimized modes, native debug and self-hosting
+remain with PA24/PA32–34, outside PA19's explicit output/acceptance boundary.
 
-## Reference contract corrections
+## Findings and changes
 
-[Proof and reducers](reference-correction92.md) and the
-[independent reconstruction](../student.tests/pa19/reference92.py) cover fourteen
-oracles: five PA16 automatic-array copies; five static-definition demand cases;
-discarded-reference consumption; constant reference initialization; constant class
-initialization; and explicit-instantiation metadata after specialization. The pinned
-bundle is unchanged. Original inputs/statuses and all comparisons remain. The
-sizeof/NTTP conversion case was repaired in implementation, without an oracle edit.
-Prior [defaulted-pack correction 91](reference-correction91.md) is preserved.
+- Independently reviewed every stage implementation commit and its full owning
+  paths. No additional compiler defect or unfinished PA19 behavior group found.
+- Added 16 cross-handoff controls, a combined source-to-LowIR/native trace,
+  reproducible verification and a frozen full-stage performance comparison.
+  The compiler remains byte-identical to the validated handoff 92 binary.
+- Reconstructed all 15 reference revisions from original oracles and cited
+  standard/contract rules: [91](reference-correction91.md),
+  [92](reference-correction92.md). No further reference edit. All 423 source
+  inputs/status sidecars, coverage and comparisons remain unchanged.
+- The audit verifier's initial mixed-manifest schema assumption was corrected;
+  final verification passes. No compiler change was needed for that tool issue.
 
-## Validation and performance
+## Performance acceptance
 
-- `make test-pa19`: **423/423**, exit 0. All sixteen loop-entry failures resolved.
-- `make test-report-through-pa19`: **3452/3452**, exit 0, plus 22 focused properties.
-- Required prior report: **3029/3029**, exit 0; file audit passes with three
-  inherited header advisories and no errors.
-- Personal controls: variable facts **29/29** (22 native, seven rejected), versus
-  **13/29** on frozen entry; inherited composition **42/42**; reference reducers
-  **13/13** native plus structural checks. Independent oracle reconstruction passes.
-- [Frozen performance evidence](performance92.md): 16 completed workloads, 464
-  observations plus 52 warmups; A/A, ABBA, latency/RSS, checked runtime/payload
-  size, all spreads and the malformed-generator attempt retained. Nine shared
-  outputs are byte-identical. Seven inputs measure new final-only behavior.
-  Compiler text +1,600 bytes (0.080%). Largest namespace-variable paired latency
-  +5.5%, with one required extra initialization-conversion check per key; largest
-  new workloads scale with demanded facts. No speedup or optional transform.
-  PA19/O0 stage-scoped acceptance passes. Inherited +15%, +16 MiB, 5.5× targets
-  remain diagnostics; no mandated limit, correctness or coverage is waived.
+[Final report](final-audit-performance.md): nine fixed workloads, 324 observations
+and 34 warmups; frozen stage-entry/final hashes, separate compiler/executable
+measurements, A/A and four ABBA blocks, checked results and all spreads.
+Seven shared workloads have identical LowIR/native bytes; two are final-only
+new behavior. Compiler text +5,952 bytes (+0.298%). Largest namespace-variable
+paired latency +2.8%, peak RSS +2,328 KiB, with one required conversion check per
+initializer. Runtime loop paired medians 1.003 / 1.000 / 1.004; no speedup claim.
 
-## Handoff ledger and boundary
+[91](performance91.md) and [92](performance92.md) retain their broader corpus,
+raw measurements and incomplete attempts. No historical observation is removed.
+Spec §9 stage-scoped acceptance passes: inherited +15%, +16 MiB and 5.5× values
+are diagnostic targets, not mandated PA19 gates. Required semantic costs and
+later native ownership are documented; no correctness, coverage, work bound or
+mandated limit is waived. No avoidable regression or new unprofitable optional
+transform was found.
 
-- Handoff 91: `1747113b`, `dbe5e97c`, `57e27df2`, `4dd6e737`, `065d6783`:
-  type/declaration identity, alias/default composition, deduction/ordering and
-  proved defaulted-pack oracle; 397 → 407/423. Evidence preserved in
-  [handoff91.json](../student.tests/pa19/handoff91.json) and [performance91.md](performance91.md).
-- `42251d95`: loop 92 ownership and evidence plan, preserving both review markers.
-- `ea5c1d82`: lazy variable declaration/value/storage composition and 29 controls;
-  both required compilation failures compile; earlier template stages pass.
-- `5763cf6c`: O0 dependent layout provenance and thirteen defined reducers.
-- `946c651b`: fourteen independently proved contract-oracle revisions; all stage
-  fixtures pass. No input, exit status, comparison rule or required behavior removed.
-- Final evidence commit: performance, check/coverage hashes and this compact plan.
+## Validation and ledger
 
-**Unfinished implementation:** no known PA19 behavior group remains. Required checks
-and frozen performance evidence are complete. This is a full-stage
-implementation handoff, not advancement to PA20 or certification of the assignment.
-**Independent review:** whole-stage correctness, architecture and performance,
-including the reference proofs, remain audit obligations. Neither review marker
-moves during implementation; a green suite does not waive whole-stage review.
+[Current validation](../student.tests/pa19/audit93-validation.json),
+[controls/trace/coverage](../student.tests/pa19/audit93-evidence.json):
+
+- `make test-pa19`: **423/423**, exit 0.
+- `make test-report-through-pa19`: **3452/3452**, **19/19 stages**, exit 0,
+  plus the harnesses' **22 focused properties**.
+- Required file audit: **pass**, exit 0; three inherited header advisories,
+  no errors. Source ownership is reviewed in the audit.
+- Personal controls: **100/100** (79 native, 21 required rejections), plus
+  the native combined trace and defaulted-pack reducer; all 15 oracle
+  reconstructions and unchanged source/status/comparison checks pass.
+- Instrumentation parity and optional syscall self-containment inspection pass.
+
+Handoff 91 (`1747113b` → `065d6783`) covers type/declaration identity,
+alias/default composition, deduction/ordering and the proved pack oracle.
+Handoff 92 (`42251d95` → `228d7fc7`) covers lazy variable facts/storage,
+O0 dependent layout provenance, fourteen proved oracle revisions and frozen
+validation/performance evidence. Both are fully reviewed in [audit 93](audit.md).
+This audit commit consolidates their record and adds independent evidence.
+
+**Open findings / unaudited handoffs: none through `228d7fc7`.**
+Commit the cohesive audit artifacts and verify `git status --short` is empty.
+PA20 work has not started.
