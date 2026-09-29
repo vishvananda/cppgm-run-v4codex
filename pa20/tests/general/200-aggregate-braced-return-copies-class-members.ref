@@ -1,17 +1,13 @@
-declare function @member_value__member_value__ov3(%arg0 : ptr [alias=noalias, object_bytes=16], %arg1 : ptr [pass=by_address, alias=noalias, object_bytes=16]) -> void [unwind=no, binding=strong, object=_ZN12member_valueC1EOS_]
-
 function @make_aggregate(%ret : ptr [pass=indirect_result, object_bytes=40], %first : ptr [pass=by_address, object_bytes=16], %second : ptr [pass=by_address, object_bytes=16]) -> void [binding=strong, object=_Z14make_aggregate12member_valueS_] {
   slot $first : obj<16x8>
   slot $second : obj<16x8>
-  slot $arg__1 : obj<16x8>
-  slot $arg__2 : obj<16x8>
-
   block ^entry:
-    %t1 = addr $arg__1
-    call void @member_value__member_value__ov2(%t1, %first)
-    %t2 = addr $arg__2
-    call void @member_value__member_value__ov2(%t2, %second)
-    call void @aggregate_value__aggregate_value__aggregate(%ret, 1, %t1, %t2)
+    %prefix = index i8 [projection=field] %ret, 0
+    store i32 1, %prefix
+    %a = index i8 [projection=field] %ret, 8
+    call void @member_value__member_value__ov2(%a, %first)
+    %b = index i8 [projection=field] %ret, 24
+    call void @member_value__member_value__ov2(%b, %second)
     return void
 }
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
@@ -38,25 +34,22 @@ function @member_value__member_value__ov2(%this : ptr [alias=noalias, object_byt
     store i32 %t7, %t9
     return void
 }
-function @aggregate_value__aggregate_value__aggregate(%this : ptr, %prefix : i32, %first : ptr [pass=by_address], %second : ptr [pass=by_address]) -> void [unwind=no, binding=internal] {
+function @member_value__member_value(%this : ptr [object_bytes=16], %input : i32) -> void [unwind=no, binding=weak, object=_ZN12member_valueC1Ei, inline_hint=yes] {
   slot $this : ptr
-  slot $prefix : i32
-  slot $first : obj<16x8>
-  slot $second : obj<16x8>
-
+  slot $input : i32
   block ^entry:
     store ptr %this, $this
-    store i32 %prefix, $prefix
-    %t1 = load i32 $prefix
-    %t2 = load ptr $this
-    %t3 = index i8 [projection=field] %t2, 0
-    store i32 %t1, %t3
-    %t4 = load ptr $this
-    %t5 = index i8 [projection=field] %t4, 8
-    call void @member_value__member_value__ov3(%t5, %first)
-    %t6 = load ptr $this
-    %t7 = index i8 [projection=field] %t6, 24
-    call void @member_value__member_value__ov3(%t7, %second)
+    store i32 %input, $input
+    %a = load ptr $this
+    %local = index i8 [projection=field] %a, 8
+    %b = load ptr $this
+    %pointer = index i8 [projection=field] %b, 0
+    store ptr %local, %pointer
+    %value = load i32 $input
+    %c = load ptr $this
+    %target = index i8 [projection=field] %c, 8
+    store i32 %value, %target
     return void
 }
+alias object _ZN12member_valueC2Ei = @member_value__member_value
 alias object _ZN12member_valueC2ERKS_ = @member_value__member_value__ov2

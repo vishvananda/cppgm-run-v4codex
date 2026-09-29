@@ -1,0 +1,14 @@
+{
+  "entry": "16ac49da1339edaa4a5f96bf4efab731a30c65e1",
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "local_revision": "pa20-aggregate-member-copies-99",
+  "proof": "pa20/reference-corrections99.md",
+  "revisions": [
+    {
+      "path": "pa20/tests/general/200-aggregate-braced-return-copies-class-members.ref",
+      "before_sha256": "37b14185020171b9176e73955fbbcf9f32ca2fc1727a436f19d66b5782ad6fbe",
+      "after_sha256": "48f6e92071a771708cc9881a5d6ea137f262889a52fc15ab5e16bd5f76d3d665",
+      "source_sha256": "d9f995f248bf7be5e889ed67796270c33a4a3893862d89f875d3e8925c129482"
+    }
+  ]
+}
