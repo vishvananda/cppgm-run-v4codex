@@ -1,0 +1,439 @@
+{
+  "entry": "17603c8a69e76820274b7bf849091d528f6ff261",
+  "compiler_sha256": "d2cac90074d5f8c4c9a73201e6b3bd1f6274b925146ec8879fe5491b7eda9b65",
+  "lowir_sha256": "4692dec307c3ae813ad30f15c63575aff6e9ceb5d85e25da39ae50a9c625f097",
+  "manifest": "# cppgm reference binary manifest\nversion\t1\nsource_sha\tc2f713cd70d06170632bfde3e75dd6fe1aa44d98\nplatform\tlinux-x86_64\nbundle_name\tcppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz\nbundle_url\thttps://github.com/vishvananda/cppgm-extended/releases/download/reference-binaries/cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz\nbundle_sha256\tc532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7\nbinary\tabimangle\tead797305075401fb24ce38fb96839cedf8d9898768290bb8f3e5970824c1ca3\nbinary\tpptoken\td9ecfba3ff149d37dd4bd1d09ccd27b819350cb7219695806e641ef3dade31cc\nbinary\tposttoken\t4c3ffd4da1f698b256fba45d27d28a2006727670ee7abdda66265359bcdbfce0\nbinary\tppexpr\ta2a4529077cdce1c8df1155a60d14651291cbf33a5dc36567b4a1bdae9c6b29a\nbinary\tpreproc\td4f0d481a747930219faecb600de0398669adfa5ce86c6019ff64cb239726c2f\nbinary\tcppgm++\te32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70\nbinary\tlowir\tf3c389e4218c962b20e4e55dd3eddf87501977e32af0f7d77665e5f4b492a700\nbinary\tlowir2native\tc3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490\nbinary\tlowiropt\t6b0a8da0990c1f33c23c3e47553c12bd18b76799235b31add771b34dd2ae59b5\n",
+  "reducers": {
+    "student.tests/pa22/reference119/wide-truth.lowir": "2fcaf5b9bd9ee80a5941ae7fdca07701a76af445081be94d7b5141ea07176166",
+    "student.tests/pa22/reference119/unused-static.cpp": "ff35cab3ee645168bf2260dfe00529afc55c945edf32fb6eb0e84b7700b16d2d",
+    "student.tests/pa22/reference119/adjustment-caller.cpp": "9d5bbef7434186fa9f1caa9ffcc219839bd86209c914aab0586fbcc96887aa39",
+    "student.tests/pa22/reference119/narrow-truth.lowir": "b392b4b08f341ec42070ed0c0429174aca04d9ad5abb77f25dc2d6456e351b91",
+    "student.tests/pa22/reference119/adjustment-callee.cpp": "68df23d9c0be75b50c8fc8ee1d2bb96df1559bd5774c618d662e9ca483193932",
+    "student.tests/pa22/reference119/adjustment.h": "dc87272413d89389a6e74a6ff7453f9d1a0a0511348eba67771cdba8dbde94e8"
+  },
+  "fixtures": [
+    {
+      "path": "pa22/tests/general/300-const-member-function-pointer-address-call.ref",
+      "original_sha256": "71648e26704db1cf67b72f9c6c0d1eae09432d5b6670863d1dce43f62253f301",
+      "corrected_sha256": "8e9383989be0d5856f7568e1d6a8fab2bff5242e21d8654b1576928eb0acb725",
+      "original_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-final/300-const-member-function-pointer-address-call.original.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_native": {
+        "backend": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.exe",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.ref"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "execution": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.exe"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "path": "pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref",
+      "original_sha256": "f199dcd96bfd06b9f18e567991fb3922ebd8224f3ede134463f0ec490ecbb017",
+      "corrected_sha256": "a749a8f4ba8beedff4ebac9557d7a531c2403cfd6e303a40c0c41e9315bf366f",
+      "original_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-final/300-member-pointer-parameter-variadic-deduction.original.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_native": {
+        "backend": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.exe",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "execution": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.exe"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "path": "pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref",
+      "original_sha256": "177b359ab3e218cf68e1ebf94e3464dc5af649decb8d189e805b2555e8d68524",
+      "corrected_sha256": "43aefa1245d19c21fbf003c534f89ab63a903e37ed983e7b23c0517aaf66e8f2",
+      "original_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-final/300-overloaded-member-pointer-function-template-deduction.original.lowir"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "ERROR: truth comparison requires explicit truncation\n"
+      },
+      "corrected_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_native": {
+        "backend": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.exe",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "execution": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.exe"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "path": "pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref",
+      "original_sha256": "c1c72872da254ac62714f970de7d8166b00192d633111a341f7403486b4a4737",
+      "corrected_sha256": "b5f8af2895bf4d2378dc51db5d58ff598f2869b94d9d160791f07e8fc3a4c061",
+      "original_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-final/300-structured-bool-conditional-member-pointer-dead-branch.original.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-119/references-final/checked.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "corrected_native": {
+        "backend": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+            "-O0",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.exe",
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "execution": {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.exe"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    }
+  ],
+  "adjustment_caller": {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-O0",
+      "-o",
+      "/tmp/pa22-119/references-final/caller.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-caller.cpp"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "adjustment": [
+    {
+      "lane": "original",
+      "lowir_sha256": "d66723b38a9c569dea086bad3c8a48c32f5be35be19abfb9533fd5ad660954d0",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/original-adjustment.exe",
+          "/tmp/pa22-119/references-final/original-adjustment.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/pa22-119/references-final/original-adjustment.exe"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "lane": "corrected",
+      "lowir_sha256": "21e4e2f9474aaf60d763e492548ac2aea69fdb3082c318a70d2bcfefae0bc2b2",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/corrected-adjustment.exe",
+          "/tmp/pa22-119/references-final/corrected-adjustment.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/pa22-119/references-final/corrected-adjustment.exe"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "reference_callee": {
+    "command": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/tmp/pa22-119/references-final/ref-callee.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-callee.cpp"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "lowir_sha256": "3ff3de756da5e4044713a1834739b7182933e04a45ad1bd3ade44f82cbbbec4e",
+    "matches_original": true
+  },
+  "null_target": [
+    {
+      "lane": "original",
+      "lowir_sha256": "1bdaed7d86feb21ac6a5b6a21201c94887127e80688c36647f50d8c8f834b553",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/original-truth.exe",
+          "/tmp/pa22-119/references-final/original-truth.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/pa22-119/references-final/original-truth.exe"
+        ],
+        "exit": 7,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "lane": "corrected",
+      "lowir_sha256": "7dc7ffe22c940197b42b69b6cd8e7b4b379a9b02bfb2c4ccec7513b4da710b13",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/corrected-truth.exe",
+          "/tmp/pa22-119/references-final/corrected-truth.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/pa22-119/references-final/corrected-truth.exe"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "wide_truth": {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "-o",
+      "/tmp/pa22-119/references-final/wide.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/wide-truth.lowir"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ERROR: truth comparison requires explicit truncation\n"
+  },
+  "narrow_truth": {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "-o",
+      "/tmp/pa22-119/references-final/narrow.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/narrow-truth.lowir"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "unused_static": [
+    {
+      "lane": "reference",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/reference-unused.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/unused-static.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "emitted_static": true,
+      "lowir_sha256": "d439eda3907b09bbd8419ff29631eff32214374b9a70edbc5b832e73d95440d0"
+    },
+    {
+      "lane": "student",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/tmp/pa22-119/references-final/student-unused.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/unused-static.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "emitted_static": false,
+      "lowir_sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+    }
+  ],
+  "source_adjustment": {
+    "compile": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/tmp/pa22-119/references-final/source-adjustment.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-callee.cpp",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-caller.cpp"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "backend": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+        "-O0",
+        "-o",
+        "/tmp/pa22-119/references-final/source-adjustment.exe",
+        "/tmp/pa22-119/references-final/source-adjustment.lowir"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "execution": {
+      "command": [
+        "/tmp/pa22-119/references-final/source-adjustment.exe"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "passed": true
+}

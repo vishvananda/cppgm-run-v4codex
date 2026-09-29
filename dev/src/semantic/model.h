@@ -463,7 +463,7 @@ struct UserConversion {
     EntityId temporary = 0, source_temporary = 0, object_entity = 0;
     unsigned adjustment = 0;
     std::uint32_t virtual_slot = 0;
-    bool prepared = false;
+    bool prepared = false, omit_receiver = false;
     ConversionUse use = ConversionUse::Recipe;
 };
 struct BuiltinOperator { TypeId type = 0, computation = 0; ValueCategory category = ValueCategory::Prvalue; Conversion arguments[2]; };

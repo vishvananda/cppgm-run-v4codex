@@ -1,0 +1,5 @@
+function @logical(%p : i8) -> i64 {
+  block ^entry:
+    %truth = cmp ne i64 %p, 0
+    return i64 %truth
+}

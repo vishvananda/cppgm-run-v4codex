@@ -245,7 +245,11 @@ void Analyzer::prepare_user_conversion(NodeId n, Conversion& c, ConversionUse us
     // The O0 result proof is useful only at materialized conversion uses.
     // Explicit-only calls and address uses retain their ordinary boundary
     // without allocating a result summary or deferred emission record.
-    if (integral(returned) || floating_type(returned)) conversion_result_requests.put(c.function,1);
+    if (integral(returned) || floating_type(returned)) {
+        auto next = conversion_result_requests.get(c.function);
+        conversion_result_requests.put(c.function,conversion_result_uses.size());
+        conversion_result_uses.push_back({c.materialization,n,next});
+    }
     Conversion second = user_conversions[c.materialization].result;
     if (second.function) {
         if (deleted_transfer(second.function)) throw std::runtime_error("deleted conversion result transfer");

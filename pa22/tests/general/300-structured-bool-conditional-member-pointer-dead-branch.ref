@@ -1,5 +1,3 @@
-global @__cppgm_class_template_identity_0_0_0__value : u8 [storage=readonly, binding=weak, object=_ZN5bool_ILb0EE5valueE] = 0
-
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
   slot $h : obj<16x8>
 

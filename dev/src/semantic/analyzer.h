@@ -228,8 +228,11 @@ private:
     Conversion prepare_typed_conversion(Expression source, Conversion conversion, ScopeId scope, bool destination = false);
     EntityId range_object(TypeId type, ScopeId scope, NodeId source);
     Index conversion_results, conversion_result_requests;
-    std::size_t conversion_result_work = 0;
+    struct ConversionResultUse { std::uint32_t conversion; NodeId source; std::uint32_t next; };
+    std::vector<ConversionResultUse> conversion_result_uses = std::vector<ConversionResultUse>(1);
+    std::size_t conversion_result_work = 0, conversion_receiver_work = 0, conversion_receivers_omitted = 0;
     void prepare_conversion_result(EntityId e);
+    bool inert_conversion_receiver(NodeId source);
     EntityId resolve_conversion_name(NodeId name, ScopeId scope);
     FactState completion_state = FactState::NotStarted;
     Index list_index, direct_list_index, empty_list_index, empty_direct_list_index;

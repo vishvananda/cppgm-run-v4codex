@@ -58,8 +58,10 @@ void Validator::instruction(const Instruction& i) const
         // The procedural contract materializes scalar truth with cmp ne i64
         // against zero, including a narrow integral input. No nonzero test
         // depends on how that input is extended. Other comparisons stay strict.
-        if (i.type == Type::I64 && i.operation == Operation::Ne && arg(1).kind == Operand::Integer && !arg(1).data.integer)
+        if (i.type == Type::I64 && i.operation == Operation::Ne && arg(1).kind == Operand::Integer && !arg(1).data.integer) {
             integer(arg(0));
+            require(value_type(arg(0)).width() <= i.type.width(), "truth comparison requires explicit truncation");
+        }
         else { value(arg(0), i.type); value(arg(1), i.type); }
         break;
     case Opcode::Convert: count(1); conversion(i, arg(0)); break;

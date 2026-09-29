@@ -72,7 +72,8 @@ function @boost__bind(%f : i128, %object : ptr, %bound : obj<8x8>) -> i32 [bindi
 
   block ^land_rhs_7:
     %t3 = load i128 $f
-    %t4 = cmp ne i64 %t3, 0
+    %target = convert trunc i64 i128 %t3
+    %t4 = cmp ne i64 %target, 0
     store i64 %t4, $land__3
     jump ^land_end_9
 

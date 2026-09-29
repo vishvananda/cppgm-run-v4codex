@@ -20,9 +20,9 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     }
     auto known = sem.conversion_result(c.function);
     if (known.valid && !record.virtual_slot && record.result.kind == semantic::Conversion::Kind::Standard) {
-        // Calling the receiver can still construct temporaries, throw or have
-        // effects. Only the checked conversion body is replaced by its value.
-        if (!record.object_entity) discard(n,false);
+        // The semantic use fact separately proves receiver construction and
+        // destruction inert. Otherwise preserve its ordinary evaluation.
+        if (!record.object_entity && !record.omit_receiver) discard(n,false);
         Value value = constant_operand(known,returned);
         if (destination.ir != IRType::Void) {
             auto second = record.result; second.reference = second.temporary = false;

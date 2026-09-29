@@ -9,7 +9,10 @@ function @call0(%p : i128, %s : ptr [pass=by_address, object_bytes=4]) -> i32 [b
     %t2 = load i128 $p
     %t3 = convert trunc i64 i128 %t2
     %t4 = copy ptr %t3
-    %t5 = call i32 %t4(%t1) as (%arg0 : ptr [object_bytes=4]) -> i32
+    %adjustment_bits = binary shr i128 %t2, 64
+    %adjustment = convert trunc i64 i128 %adjustment_bits
+    %receiver = index i8 %t1, %adjustment
+    %t5 = call i32 %t4(%receiver) as (%arg0 : ptr [object_bytes=4]) -> i32
     return i32 %t5
 }
 function @call1(%p : i128, %s : ptr [pass=by_address, object_bytes=4]) -> i32 [binding=strong, object=_Z5call1M1SKFiiERKS_] {
@@ -23,7 +26,10 @@ function @call1(%p : i128, %s : ptr [pass=by_address, object_bytes=4]) -> i32 [b
     %t2 = load i128 $p
     %t3 = convert trunc i64 i128 %t2
     %t4 = copy ptr %t3
-    %t5 = call i32 %t4(%t1, 5) as (%arg0 : ptr [object_bytes=4], %arg1 : i32) -> i32
+    %adjustment_bits = binary shr i128 %t2, 64
+    %adjustment = convert trunc i64 i128 %adjustment_bits
+    %receiver = index i8 %t1, %adjustment
+    %t5 = call i32 %t4(%receiver, 5) as (%arg0 : ptr [object_bytes=4], %arg1 : i32) -> i32
     return i32 %t5
 }
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
