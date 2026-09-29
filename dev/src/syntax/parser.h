@@ -49,7 +49,7 @@ private:
     NameProbe probe_name(std::size_t ahead = 0);
     std::size_t probe_angles(std::size_t ahead);
     std::size_t probe_type(std::size_t ahead);
-    bool type_operand();
+    bool type_operand(bool function_type = false);
     bool special_ahead();
     void predeclare_class();
     bool declaration_start();
@@ -85,7 +85,7 @@ private:
     NodeId parameters(ScopeId& parameter_scope);
     NodeId parameter(Kind kind = Kind::Parameter);
     void function_suffix(NodeId owner);
-    bool parameter_clause_ahead();
+    bool parameter_clause_ahead(std::size_t ahead = 0);
     ScopeId qualified_owner(NodeId name);
     ScopeId type_scope(NodeId specifiers);
     bool nested_declarator_ahead();

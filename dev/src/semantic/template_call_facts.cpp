@@ -104,6 +104,8 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         object_uses[result.object_use].source_owned = true;
     }
     store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
+    if (selected && typeinfo_comparison(selected,OP_EQ)) result.form = ExpressionForm::TypeinfoEqual;
+    if (selected && typeinfo_comparison(selected,OP_NE)) result.form = ExpressionForm::TypeinfoUnequal;
     expressions.set(n,result); { auto& published = facts.edit(n); published.type = f.child; published.scope = s; published.entity = selected; }
     ++template_fixed_call_work;
     } catch (...) { --unevaluated_depth; throw; }
@@ -128,7 +130,8 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
             { auto& published = facts.edit(c); published.type = facts[pattern].type; published.entity = selected; published.scope = s; }
             if (ast[c].kind != Kind::Parenthesized) break;
         }
-        use_selected_function(selected,!receiver.virtual_slot);
+        if (result.form != ExpressionForm::TypeinfoEqual && result.form != ExpressionForm::TypeinfoUnequal)
+            use_selected_function(selected,!receiver.virtual_slot);
     } else {
         expression(callee,s);
         auto incoming = expressions[original_callee ? original_callee : ast[source].first].incoming;

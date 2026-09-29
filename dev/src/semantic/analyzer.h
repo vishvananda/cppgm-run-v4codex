@@ -26,6 +26,19 @@ public:
     FactStore facts;
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
+    Index rtti_expression_index;
+    std::vector<RttiExpression> rtti_expressions = std::vector<RttiExpression>(1);
+    RttiExpression rtti_expression(NodeId n) const {
+        auto id = rtti_expression_index.get(n);
+        if (!id) id = rtti_expression_index.get(template_fixed_expressions.get(ast.nodes.occurrences[n].source));
+        return rtti_expressions[id];
+    }
+    TypeId typeinfo_result_type();
+    Expression rtti_operand(QueryId query);
+    Expression typeid_expression(NodeId n, ScopeId s);
+    Expression dynamic_cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand);
+    Conversion dynamic_cast_conversion(Expression source, TypeId to, ScopeId scope, RttiExpression& use);
+    bool typeinfo_comparison(EntityId function, ETokenType op);
     NodeId call_argument(const Expression& call, unsigned i = 0) const;
     ObjectUse object_fact(NodeId n) const {
         auto use = object_uses[expressions[n].object_use];
@@ -81,6 +94,7 @@ public:
     Index base_adjustment_index;
     std::size_t base_adjustment_work = 0, base_adjustment_hits = 0;
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
+    bool public_direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b && bases[b].access == Access::Public; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
     void prepare_delegation_entries();

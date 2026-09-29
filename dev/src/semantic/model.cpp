@@ -100,6 +100,10 @@ TypeId Types::qualify(TypeId id, unsigned cv)
 TypeId Types::unqualified(TypeId id)
 {
     Type t = records[id];
+    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
+        return compound(t.kind,unqualified(t.child),t.bound);
+    // Member-function cv is part of its signature, not top-level object cv.
+    if (t.kind == TypeKind::Function) return id;
     if (!t.cv) return id;
     t.cv = 0;
     if (t.kind == TypeKind::DependentName)

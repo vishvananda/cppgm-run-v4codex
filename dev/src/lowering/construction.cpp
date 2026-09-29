@@ -2,14 +2,14 @@
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
-void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
+void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base, bool entry)
 {
     guard_expression(init,true);
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
         zero_object(sem.entities[cls].type,object);
     }
-    if (sem.direct_transfer(ctor) || (sem.trivial_transfer(ctor) && !sem.entities[ctor].source && !sem.member_fact(ctor).retained_root)) {
+    if (!entry && (sem.direct_transfer(ctor) || (sem.trivial_transfer(ctor) && !sem.entities[ctor].source && !sem.member_fact(ctor).retained_root))) {
         TypeId target = sem.entities[sem.scopes[sem.entities[ctor].owner].entity].type;
         auto fact = sem.expression_fact(init);
         if (sem.empty_class(target)) {
@@ -22,7 +22,7 @@ void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base)
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
         emit(copy, {source.operand, object.operand}); return;
     }
-    if (!sem.constructor_needed(ctor)) return;
+    if (!entry && !sem.constructor_needed(ctor)) return;
     std::size_t begin = call_work.size();
     call_work.push_back(Operand::symbol(symbol(ctor, base))); call_work.push_back(object.operand);
     if (init) {

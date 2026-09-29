@@ -40,7 +40,7 @@ struct Linkage {
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge;
-    SymbolId allocation_roles[2], rtti_roles[3];
+    SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
     std::vector<FunctionId> initializers, finalizers;
     void finish_lifecycle(lowir_model::Program& program);
     explicit Linkage(bool merge) : merge(merge) {}
@@ -95,7 +95,7 @@ class Procedural {
     TypeId returned = 0;
     Value return_destination;
     IRType result_type() const;
-    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false, bool base = false);
+    void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false, bool base = false, bool entry = false);
     Value list_conversion(const semantic::Conversion& conversion, Value destination = Value());
     Value class_temporary(EntityId object, TypeId type);
     Value class_address(EntityId object, TypeId type);
@@ -218,7 +218,7 @@ class Procedural {
     Value string_element(NodeId source, TypeId element, std::uint64_t index);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
     void constructor_body(EntityId e, bool base);
-    void construct(EntityId ctor, NodeId init, Value object, bool base = false);
+    void construct(EntityId ctor, NodeId init, Value object, bool base = false, bool entry = false);
     void global_initialization();
     void global_finalization();
     void global(EntityId e);
@@ -265,7 +265,7 @@ class Procedural {
     Value field(Value base, EntityId e, unsigned steps = 0);
     Value base_projection(Value base, unsigned steps);
     Value pointer_projection(Value base, unsigned adjustment);
-    std::vector<SymbolId> vtables, typeinfos, deleting_symbols;
+    std::vector<SymbolId> vtables, deleting_symbols;
     std::vector<EntityId> deleting_entries;
     SymbolId pure_virtual;
     void emit_vtables();
@@ -274,6 +274,16 @@ class Procedural {
     void emit_deleting_entries();
     void order_lifecycle_entries();
     SymbolId typeinfo(EntityId cls);
+    SymbolId rtti_type(TypeId type);
+    SymbolId rtti_runtime(unsigned role);
+    SymbolId rtti_function(unsigned role);
+    Value rtti_expression(NodeId n);
+    void rtti_failure(unsigned role);
+    semantic::Index rtti_symbols;
+    semantic::Index rtti_internal_types, rtti_incomplete_types;
+    bool internal_rtti_type(TypeId type);
+    unsigned rtti_incomplete_flags(TypeId type);
+    SymbolId abi_type_global(TypeId type, abi_mangle::TargetKind kind);
     SymbolId abi_global(EntityId cls, abi_mangle::TargetKind kind);
     void vpointer_store(EntityId cls);
     Value virtual_function(Value object, unsigned slot);
@@ -306,7 +316,7 @@ class Procedural {
     void jump(BlockId b);
 public:
     std::size_t virtual_cache_bytes() const {
-        return (vtables.capacity()+typeinfos.capacity()+deleting_symbols.capacity())*sizeof(SymbolId)
+        return (vtables.capacity()+deleting_symbols.capacity())*sizeof(SymbolId)
             + virtual_signatures.capacity()*sizeof(SignatureId) + deleting_entries.capacity()*sizeof(EntityId);
     }
     std::size_t deleting_entry_count() const { return deleting_entries.size(); }
@@ -316,6 +326,7 @@ public:
     std::size_t aggregate_array_work = 0, aggregate_array_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
+    std::size_t rtti_work = 0, rtti_hits = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };

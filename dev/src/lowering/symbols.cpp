@@ -66,7 +66,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     }
     case TypeKind::LRef: result = abi.make(abi_mangle::Kind::Reference, abi_type(t.child)); break;
     case TypeKind::RRef: result = abi.make(abi_mangle::Kind::RvalueReference, abi_type(t.child)); break;
-    case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, 0, t.bound); break;
+    case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, !t.bound, t.bound); break;
     case TypeKind::DependentArray: result = abi.make(abi_mangle::Kind::Array,abi_type(t.child),abi_query(t.bound)); break;
     case TypeKind::MemberPointer: result = abi.make(abi_mangle::Kind::MemberPointer, abi_type(sem.entities[t.entity].type), abi_type(t.child)); break;
     case TypeKind::Function: {
@@ -276,7 +276,7 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
     : ast(a), sem(s), identifiers(ids), p(out), linkage(links), abi(links.abi), abi_types(s.types.records.size()), abi_scopes(s.scopes.size()),
       symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {
     virtual_signatures.resize(s.member_count()); vtables.resize(s.virtual_class_count());
-    typeinfos.resize(s.class_count()); deleting_symbols.resize(s.member_count());
+    deleting_symbols.resize(s.member_count());
 }
 void Procedural::run()
 {

@@ -1,0 +1,1783 @@
+{
+  "stage_base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+  "compiler_sha256": "5b9f28835bb9146c40a064b662e9507fedd5598c6d51e4e79dc1172f88d505ee",
+  "checks": {
+    "stageTests": {
+      "command": [
+        "make",
+        "test-pa21"
+      ],
+      "exit": 2,
+      "elapsed_s": 5.264768466353416,
+      "log": "/tmp/pa21-102/validation1/stageTests.log",
+      "log_sha256": "8fba859efae9c8f9bc45e90b34f3569f0f42e3c73e10fe13bf5f13f17ea70377",
+      "summaries": [
+        "===== pa21 =====",
+        "===== TEST SUMMARY: 37 / 116 TESTS PASSED ====="
+      ]
+    },
+    "priorThroughTests": {
+      "command": [
+        "make",
+        "test-report-through-pa20"
+      ],
+      "exit": 0,
+      "elapsed_s": 10.277846463024616,
+      "log": "/tmp/pa21-102/validation1/priorThroughTests.log",
+      "log_sha256": "6426bae2e5aff9cb089b612f8a20d85b592fbfe34f219b8f60c9535b17770663",
+      "summaries": [
+        "===== pa1 =====",
+        "===== pa2 =====",
+        "===== pa3 =====",
+        "===== pa4 =====",
+        "===== pa5 =====",
+        "===== pa6 =====",
+        "===== pa7 =====",
+        "===== pa8 =====",
+        "===== pa9 =====",
+        "===== pa10 =====",
+        "===== pa11 =====",
+        "===== pa12 =====",
+        "===== pa13 =====",
+        "===== pa14 =====",
+        "===== pa15 =====",
+        "===== pa16 =====",
+        "===== pa17 =====",
+        "===== pa18 =====",
+        "===== pa19 =====",
+        "===== pa20 =====",
+        "===== ALL TESTS PASSED SUCCESSFULLY! (3596 / 3596) ====="
+      ]
+    },
+    "fileAudit": {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa21",
+        "--paths",
+        "dev/src"
+      ],
+      "exit": 0,
+      "elapsed_s": 3.1410655584186316,
+      "log": "/tmp/pa21-102/validation1/fileAudit.log",
+      "log_sha256": "ca116831ff080c504689590615037e352808058d1435bfa7e24b43c4b617b01e",
+      "summaries": [
+        "File audit passed for pa21 with 3 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    },
+    "freestandingControls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/rtti102.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa21-102/validation1/native"
+      ],
+      "exit": 1,
+      "elapsed_s": 5.6354810036718845,
+      "log": "/tmp/pa21-102/validation1/freestandingControls.log",
+      "log_sha256": "0300e1ff8eb5cb6a346736a965955886c8fac1e16d134a0ba88b5b47007a5382",
+      "summaries": []
+    },
+    "hostRttiControls": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/host_rtti102.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa21-102/validation1/host"
+      ],
+      "exit": 0,
+      "elapsed_s": 19.30307563394308,
+      "log": "/tmp/pa21-102/validation1/hostRttiControls.log",
+      "log_sha256": "3a37a038f4fb56e9ad7ea3d9076407c25c7da087091cd18d270ca96f68612b6b",
+      "summaries": []
+    },
+    "referenceProof": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa21/reference102.py"
+      ],
+      "exit": 0,
+      "elapsed_s": 0.06667250581085682,
+      "log": "/tmp/pa21-102/validation1/referenceProof.log",
+      "log_sha256": "a64336add1a382a235e71919976dde5e68a2cffb1d6630991d08fed74a666fab",
+      "summaries": []
+    }
+  },
+  "controls": [
+    {
+      "name": "fundamental_distinct",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int)==typeid(long)||typeid(double)!=typeid(double);}",
+      "source_sha256": "a39e0c77d18ed55b0309b851a9e17e96c6fdf507ca37eb055bdd6298331991cd",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "strip_top_cv_ref",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const volatile int x=3;return typeid(x)!=typeid(int)||typeid(const int&)!=typeid(int);}",
+      "source_sha256": "369c24776436452e39b68aebd15cb21750a20fdc4717119bfc40f8bd87d0424c",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "pointer_nested_cv",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int*)==typeid(const int*)||typeid(int*const)!=typeid(int*);}",
+      "source_sha256": "0c770fa67bfe631cc57993a2224b9caf33f87da2eced20c457795e679d2c3ec6",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "array_no_decay",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){int a[3];return typeid(a)!=typeid(int[3])||typeid(a)==typeid(int*);}",
+      "source_sha256": "d281631e394a5fc3e1237337fde72cff21aa1d1c32d1a62ea9c8d434d8525006",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "function_no_decay",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int f(int);int main(){return typeid(f)!=typeid(int(int))||typeid(f)==typeid(int(*)(int));}",
+      "source_sha256": "6be9c861fc6f7caf37743b465b4b1d036e3d927a27bde921f60a092b9db00afd",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "scalar_unevaluated",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;int f(){++calls;return 0;}int main(){return typeid(f())!=typeid(int)||calls;}",
+      "source_sha256": "8fb014db7e5feaca55012593749329dacd12ef01e8b83b818a3744bbc8d41c59",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_body_unevaluated",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int bad(){return T::missing;}int main(){return typeid(bad<int>())!=typeid(int);}",
+      "source_sha256": "780eb1e82fd20ece3db419827b8362ad122b8407ce8c801e857d8692acba0ef2",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "static_class_unevaluated",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A{};template<class T>A bad(){return T::missing;}int main(){return typeid(bad<int>())!=typeid(A);}",
+      "source_sha256": "216407a9ff534d4b33599ad011573aa69c6a5f5ba936ab1bbf8c54850f7bda20",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "dynamic_reference",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){D d;B&b=d;return typeid(b)!=typeid(D);}",
+      "source_sha256": "c034e2eafcdad9bc1d1fcd86d37cd18dbd0572395b99914b57420533d8306f73",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "dynamic_evaluated_once",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int calls;template<class T>B&select(T&x){++calls;return x;}int main(){D d;return typeid(select(d))!=typeid(D)||calls!=1;}",
+      "source_sha256": "a9d5c3d143a3366a5a74739bb47522c6322f1e9f0ce339efc107d4863deae2c1",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_types",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int f(){return typeid(T)==typeid(int);}int main(){return !f<int>()||f<long>()||!f<int>();}",
+      "source_sha256": "6899ea86822ecee6b23d827557d7448788ce44da5c2543d07c189b9c82b55110",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "template_fixed_type",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int f(){return typeid(int)==typeid(int);}int main(){return !f<int>()||!f<long>();}",
+      "source_sha256": "6167456e0062dc9ded23a369782f8dfff422e807e0879714f5a25d9c1da50e8f",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "reference_alias",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const auto&x=typeid(int);return x!=typeid(int);}",
+      "source_sha256": "5e0eeb7b92062c4e1fffbd8e4ac4ad51a43bb29a160b7c17b08d36ef2f15b3e4",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "enum_identity",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}enum E{a};enum F{b};int main(){return typeid(E)==typeid(F)||typeid(a)!=typeid(E);}",
+      "source_sha256": "1999f553e737928dca9f6a257299160666173b84116ccd087892554cb5e6879e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "incomplete_pointer",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A;int main(){return typeid(A*)!=typeid(A*)||typeid(A*)==typeid(void*);}",
+      "source_sha256": "6ff029fa41aa734c036a2b2baa785d9baa35b1573ad791931224118a8e075e25",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "no_eager_layout",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>struct A{typename T::missing x;};int main(){return typeid(A<int>*)!=typeid(A<int>*);}",
+      "source_sha256": "424ba3409043f640250e2d9fae45a1d4e184000f3f28cf37ac601f771037b390",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "lambda_identity",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){auto a=[](){return 1;};auto b=[](){return 1;};return typeid(a)==typeid(b)||typeid(a)!=typeid(a);}",
+      "source_sha256": "0bc288783d81689393b9c6d815c5c501501642bb20cad1d8fc36aaf8b76c488b",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_success",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){D d;B*p=&d;return dynamic_cast<D*>(p)!=&d;}",
+      "source_sha256": "24fb22fabec124aa6f8034bf560171dfd3264094768a907235dc9bc57b9ac4d3",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_failure",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B b;return dynamic_cast<D*>(&b)!=0;}",
+      "source_sha256": "28cd5ec20b114eb6a677bff2db26a71997b61ab8300bc65409925dd8ae7ecab6",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_null",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return dynamic_cast<D*>(p)!=0;}",
+      "source_sha256": "782d0858c2998dd9fb70ad95e9d14fb0d25d1a9c50ea1309ae3f89ecab3ed240",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_cross_failure",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};struct U{virtual int g(){return 0;}};int main(){D d;B*p=&d;return dynamic_cast<U*>(p)!=0;}",
+      "source_sha256": "cf78f8ece016748f005b4dc96f66ba2d4acbdf2808ec403251ed53144783b10f",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_same_nonpolymorphic",
+      "source": "struct A{};int main(){A a;return dynamic_cast<const A*>(&a)!=&a;}",
+      "source_sha256": "ede1c6388b4f677a92022e3f9ea270e8c8b27389e9b796289676418dc8934729",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_up_nonpolymorphic",
+      "source": "struct A{int x;};struct D:A{};int main(){D d;A*a=dynamic_cast<A*>(&d);return a!=static_cast<A*>(&d);}",
+      "source_sha256": "fd3b2bf2d7c3ce6fccf4b64caed9a43da0cae0b0fb6766b9d83598e9b8bb2105",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "cast_template",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};template<class T>T*cast(B*p){return dynamic_cast<T*>(p);}int main(){D d;B b;return cast<D>(&d)!=&d||cast<D>(&b)!=0;}",
+      "source_sha256": "7ed4e961d939ca5d17cc9776970d0d0c87f8f8ebd8736ba6eec05e5b87bf79d2",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "noexcept_typeid_static",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int f();int main(){return !noexcept(typeid(f()));}",
+      "source_sha256": "faf11a41fb7f118e614d62764af4ca66642aac93df00133f0150d1b28a6fda1b",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "noexcept_typeid_dynamic",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return noexcept(typeid(*p));}",
+      "source_sha256": "a09b3a1e2b4d7364ef51d320da840dbcfc01ffaab0254a7cd1ac7f4a68b6d8af",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "noexcept_cast_pointer",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return !noexcept(dynamic_cast<D*>(p));}",
+      "source_sha256": "0571ec7e01e9d736d8f4c652015f632dd3074124af68c385fab71eb67cc82b66",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "member_pointer_rtti",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A{int f()const;int x;};struct B{int x;};int main(){return typeid(int A::*)==typeid(int B::*)||typeid(int(A::*)()const)==typeid(int(A::*)());}",
+      "source_sha256": "ccfd01258bf6746978032f5981df1c7f08e6d1260dd19a9a2218647597a460cf",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "typeid_function_syntax",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int())==typeid(int)||typeid(int(3))!=typeid(int);}",
+      "source_sha256": "bcf522599b33873f8656e8f3fcbadbba5d210af0a8cca19bca50794161695c40",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "explicit_comparison",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const auto&p=typeid(int);return !p.operator==(typeid(int))||(&p)->operator!=(typeid(int));}",
+      "source_sha256": "d43569fba1fd90150ed8363469f3f934e4287aeb974122894bf3a70321e8b56e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "comparison_conversion",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;struct A{operator const std::type_info&(){++calls;return typeid(int);}};int main(){A a;return !(typeid(int)==a)||calls!=1;}",
+      "source_sha256": "a73cd7372cacf73cc701498b768b312a81e3e268c17aeda2abc8fe6770a6b962",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "private_downcast",
+      "source": "struct B{virtual int f(){return 1;}};struct D:private B{B*get(){return this;}};int main(){D d;B*p=d.get();return dynamic_cast<D*>(p)!=0;}",
+      "source_sha256": "8f7a13a36f6ff0cf88cccdba53f7f44ba67c510e34fe7b0c08c2ab0bb65e23ff",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "private_cast_evaluated_once",
+      "source": "int calls;struct B{virtual int f(){return 1;}};struct D:private B{B*get(){++calls;return this;}};int main(){D d;return dynamic_cast<D*>(d.get())!=0||calls!=1;}",
+      "source_sha256": "9c1b9e446ac3a5b62a6ae5094dd3505aab17b39ecdcc5af1e37f3abf0229278a",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "protected_base_chain",
+      "source": "struct B{virtual int f(){return 1;}};struct C:protected B{B*get(){return this;}};struct D:C{};int main(){D d;B*p=d.get();return dynamic_cast<D*>(p)!=0||dynamic_cast<C*>(p)!=0;}",
+      "source_sha256": "b4216c6f22ee1b55bb4847cd96d64c8d27dcdecdddf2e0861b926d2d5965bd97",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "public_base_inside_private_derived",
+      "source": "struct B{virtual int f(){return 1;}};struct C:B{};struct D:private C{B*get(){return this;}C*mid(){return this;}};int main(){D d;return dynamic_cast<C*>(d.get())!=d.mid();}",
+      "source_sha256": "110b0a2aad522c72ea480a017709ef537980bbf8a69a723611104cb3b5229608",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": false,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 1
+    },
+    {
+      "name": "comparison_arrow_chain",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;struct A{const std::type_info*operator->(){++calls;return &typeid(int);}};int main(){A a;return !a->operator==(typeid(int))||calls!=1;}",
+      "source_sha256": "784340afd390d02745a3216d58df5bd57d8e8c4214c3bba86b752f87bec43702",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "comparison_implicit_this",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool same(const type_info&x)const{return operator==(x);}};}int main(){return !typeid(int).same(typeid(int))||typeid(int).same(typeid(long));}",
+      "source_sha256": "9772457b89ed5ec3543e47a06c50224b6699bc763df62cef5b6d856b4838b202",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "comparison_template_explicit",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>bool same(const T&a,const T&b){return a.operator==(b);}int main(){return !same(typeid(int),typeid(int))||same(typeid(int),typeid(long));}",
+      "source_sha256": "f9f4b10b8393c7c27ecb701044218802f4f90e7101e2146b504289d2b9e9ea54",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "local_type_identity",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>const std::type_info& f(){struct A{};return typeid(A);}int main(){return f<int>()==f<long>()||f<int>()!=f<int>();}",
+      "source_sha256": "ca2ff1d161c13cc56cecb49bf72785d331b4d25c7931dc06ba059aa7d70cbc9e",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "typeid_decltype_lvalue",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}decltype(typeid(int)) f(){return typeid(int);}int main(){return f()!=typeid(int);}",
+      "source_sha256": "595a710cc4b258196431cec5832b19b3b05ba56be5d2ab82225c8e8a00cae667",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "typeid_array_cv",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const int a[2]={};return typeid(a)!=typeid(int[2])||typeid(const int[2])!=typeid(int[2]);}",
+      "source_sha256": "f1f5d351a457a08bbce4ebbbb4f0e222a3b512461c74e366f9c96ecd50aea283",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "function_template_identity",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>long f(T){return 1;}int main(){return typeid(f<int>)!=typeid(long(int))||typeid((f<long>))!=typeid(long(long));}",
+      "source_sha256": "ebe358095b0af6a8782bb2db8ae977e41208eb119cd4d8f52af2494bdcda3b43",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "function_template_type_query",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>long f(T){return 1;}decltype(typeid(f<int>)) g(){return typeid(long(int));}int main(){return g()!=typeid(f<int>);}",
+      "source_sha256": "a5f343b554b38fea09d1c51bd88a4cc2321653213d6b8fd1462f070af0b270bd",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "rtti_template_member_dormant",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>struct A{virtual int f(){return T::missing;}};int main(){return typeid(A<int>)!=typeid(A<int>);}",
+      "source_sha256": "de3e0ba50f40cfc483984e6eb206c12eafdd20c8b971b46d4ab04d1d603959bf",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "new_trivial_copy",
+      "source": "struct A{int n;A(int x):n(x){}};template<class T>int f(const T&x){T*p=new T(x);int n=p->n;delete p;return n;}int main(){A a(7);return f(a)!=7;}",
+      "source_sha256": "ea0c0cdaf1b01eacaf7dbe4acdb994df53052f125cc7cf247ecba4cd01f14a82",
+      "expected": "native",
+      "compiler_exit": 0,
+      "diagnostic": "",
+      "passed": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "native_exit": 0
+    },
+    {
+      "name": "typeinfo_missing",
+      "source": "int main(){typeid(int);}",
+      "source_sha256": "5a17f9135426b9f5425657d144e1b5b478eb1b7f8fb4ea44bc9c1269c298be43",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid requires std::type_info\n",
+      "passed": true
+    },
+    {
+      "name": "typeinfo_global_only",
+      "source": "class type_info;int main(){typeid(int);}",
+      "source_sha256": "9d5107d3932c0f95819bda861a49a27e914efb07de75805b42610e9473e3c835",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid requires std::type_info\n",
+      "passed": true
+    },
+    {
+      "name": "comparison_missing",
+      "source": "namespace std{class type_info{};}int main(){return typeid(int)==typeid(int);}",
+      "source_sha256": "4a353923fc67ebbfba855bade9f5c11e35b0226256de4b7f06fd0c973064a839",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: no viable builtin operator\n",
+      "passed": true
+    },
+    {
+      "name": "comparison_private",
+      "source": "namespace std{class type_info{bool operator==(const type_info&)const;};}int main(){return typeid(int)==typeid(int);}",
+      "source_sha256": "a1fe8a5d3c1591ed1e9c6d8e995a91e452216fc1e0abdc6a83ea06cba5437626",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: inaccessible class member\n",
+      "passed": true
+    },
+    {
+      "name": "comparison_deleted",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const=delete;};}int main(){return typeid(int)==typeid(int);}",
+      "source_sha256": "f96f87eb976b5a4082cdb177e00f199d3e2f1bd3d9394213a2949f4a77fd96a9",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: deleted operator\n",
+      "passed": true
+    },
+    {
+      "name": "incomplete_object",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A;int main(){typeid(A);}",
+      "source_sha256": "8b39ed6ea26265eafdf53e0180c519101e4769908add4b10c92ef0e1fc54964c",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: sizeof unsupported or incomplete type\n",
+      "passed": true
+    },
+    {
+      "name": "cast_nonpolymorphic",
+      "source": "struct B{};struct D:B{};int main(){B b;dynamic_cast<D*>(&b);}",
+      "source_sha256": "0db5eb06730b93c06fa686e6b9d691d73fb19c02beda58d186e9eebfd118f4f0",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: invalid dynamic_cast\n",
+      "passed": true
+    },
+    {
+      "name": "cast_remove_const",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){const D d;const B*p=&d;dynamic_cast<D*>(p);}",
+      "source_sha256": "f3bd2ce5f8eaac2508eb1fe4a25debdd7ad5a9d34b7fa29caed166d8e0aa432c",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: invalid dynamic_cast\n",
+      "passed": true
+    },
+    {
+      "name": "cast_private_base",
+      "source": "struct B{};struct D:private B{};int main(){D d;dynamic_cast<B*>(&d);}",
+      "source_sha256": "35e2e4fc4526f0fdb215cc947ca73c84a6efdbf8f0d50b62ab2da85a2066a499",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: inaccessible base conversion\n",
+      "passed": true
+    },
+    {
+      "name": "cast_incomplete_target",
+      "source": "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};struct U;int main(){B b;dynamic_cast<U*>(&b);}",
+      "source_sha256": "ab1c78842251ea832957aa763dfa63390ae11a60e3775ae26e8ba589d91c75b2",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: sizeof unsupported or incomplete type\n",
+      "passed": true
+    },
+    {
+      "name": "dynamic_body_required",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};template<class T>B&bad(){return T::missing;}int main(){return typeid(bad<int>())==typeid(B);}",
+      "source_sha256": "93546f03c163586894e04b05c20520d5614b8054c2978415005a80aa07e7be09",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: name qualifier has no scope\n",
+      "passed": true
+    },
+    {
+      "name": "unresolved_function",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}void f(int);void f(long);int main(){typeid(f);}",
+      "source_sha256": "cb674a44f4ffee2c706c0b18c267fdaff37b827d36dc3ba6e103b8319c640a96",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid requires a resolved type\n",
+      "passed": true
+    },
+    {
+      "name": "query_unresolved_function",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}void f(int);void f(long);decltype(typeid(f)) bad();int main(){}",
+      "source_sha256": "cdb3c5ae5f24ed3d1db1a36f2b8301f91420f6f96baafeab97f9abcd1915945b",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid requires a resolved type\n",
+      "passed": true
+    },
+    {
+      "name": "typeid_deleted_function",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}void f()=delete;int main(){typeid(f);}",
+      "source_sha256": "475abd38c69e2864be815b839e223f83b3669094dc1b2164bf3ed7950061a578",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid refers to a deleted function\n",
+      "passed": true
+    },
+    {
+      "name": "typeid_nonstatic_function",
+      "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A{void f();};int main(){typeid(A::f);}",
+      "source_sha256": "3945a75848550fa8048b731b7a409320ca282fe084d4e51bf1a8f64bbe2215b8",
+      "expected": "reject",
+      "compiler_exit": 1,
+      "diagnostic": "ERROR: typeid requires a resolved type\n",
+      "passed": true
+    }
+  ],
+  "host_controls": {
+    "compiler_sha256": "5b9f28835bb9146c40a064b662e9507fedd5598c6d51e4e79dc1172f88d505ee",
+    "object_backend_sha256": "e32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70",
+    "host": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "rows": [
+      {
+        "name": "fundamental_distinct",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int)==typeid(long)||typeid(double)!=typeid(double);}"
+        ],
+        "lowir_sha256": [
+          "77955a9b1cf70ebb210d3714a6ea08762b0a114b615aba97c8da72f188e92c2b"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "strip_top_cv_ref",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const volatile int x=3;return typeid(x)!=typeid(int)||typeid(const int&)!=typeid(int);}"
+        ],
+        "lowir_sha256": [
+          "c283c44d3d90136163af11b97e489bbcf455ba42311850d8b6afe7eabcc7373d"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "pointer_nested_cv",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int*)==typeid(const int*)||typeid(int*const)!=typeid(int*);}"
+        ],
+        "lowir_sha256": [
+          "47c34ac6b910fc3313735e7ed5b44bfb002b17e06c72c0de8b2a548d7708f003"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "array_no_decay",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){int a[3];return typeid(a)!=typeid(int[3])||typeid(a)==typeid(int*);}"
+        ],
+        "lowir_sha256": [
+          "46bbae299bd00ff9424cd9897b151bceb124c72d07dc664285896478c96def3c"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "function_no_decay",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int f(int);int main(){return typeid(f)!=typeid(int(int))||typeid(f)==typeid(int(*)(int));}"
+        ],
+        "lowir_sha256": [
+          "a4a60c0e01dca9420abc26b2b3e7867e087e593cf9fb474a4f42ffe9529f13be"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "scalar_unevaluated",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;int f(){++calls;return 0;}int main(){return typeid(f())!=typeid(int)||calls;}"
+        ],
+        "lowir_sha256": [
+          "e84f05eb610c108913d6d2d7d5a1b998a3fae4421ba9925b4113aeebfcb21bea"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "template_body_unevaluated",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int bad(){return T::missing;}int main(){return typeid(bad<int>())!=typeid(int);}"
+        ],
+        "lowir_sha256": [
+          "1730461459a79c68fd3b0ce119243f2998b7c8f530376676b35b24d56ba8ccd3"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "static_class_unevaluated",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A{};template<class T>A bad(){return T::missing;}int main(){return typeid(bad<int>())!=typeid(A);}"
+        ],
+        "lowir_sha256": [
+          "4d377aa5a924fba5c3254045ae4e32da11dc91c5095d839e3a8150fabef1b4e6"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "dynamic_reference",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){D d;B&b=d;return typeid(b)!=typeid(D);}"
+        ],
+        "lowir_sha256": [
+          "e8133fa44de3c5595551a2507f6de6d0cf86d0117d4af7c81d59188f3dcd534b"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "dynamic_evaluated_once",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int calls;template<class T>B&select(T&x){++calls;return x;}int main(){D d;return typeid(select(d))!=typeid(D)||calls!=1;}"
+        ],
+        "lowir_sha256": [
+          "a733ee0b8a136be30f6f12426f46beddefcea53621c3fad88e4798c31c7f7683"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "template_types",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int f(){return typeid(T)==typeid(int);}int main(){return !f<int>()||f<long>()||!f<int>();}"
+        ],
+        "lowir_sha256": [
+          "1970364c7ddcc7e108c0dbef1b716492ccdd394a1a5f2820d84a1f0dd734d0f3"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "template_fixed_type",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>int f(){return typeid(int)==typeid(int);}int main(){return !f<int>()||!f<long>();}"
+        ],
+        "lowir_sha256": [
+          "89ca9ab014476ce826fb61550339607ae927697bb56d6b0c53efe83eeb97dcde"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "reference_alias",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const auto&x=typeid(int);return x!=typeid(int);}"
+        ],
+        "lowir_sha256": [
+          "fd8cd06f458a55bbb97a2d5377671471c8ef81d74e7f31f380381645e4d7670d"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "enum_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}enum E{a};enum F{b};int main(){return typeid(E)==typeid(F)||typeid(a)!=typeid(E);}"
+        ],
+        "lowir_sha256": [
+          "67e45ebc287d034db5c8ca3b91c68fbf84edac3b55d4987f26e9a85e6d10ce92"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "incomplete_pointer",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A;int main(){return typeid(A*)!=typeid(A*)||typeid(A*)==typeid(void*);}"
+        ],
+        "lowir_sha256": [
+          "077dd72af8dc3835d1ee56211b2f24980d001db6a7cb0266e80dd3896a03b06e"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "no_eager_layout",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>struct A{typename T::missing x;};int main(){return typeid(A<int>*)!=typeid(A<int>*);}"
+        ],
+        "lowir_sha256": [
+          "cb67de8ba99a832622f4de9878990afa8617d9fbf9419abbf379b40019d866f8"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "lambda_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){auto a=[](){return 1;};auto b=[](){return 1;};return typeid(a)==typeid(b)||typeid(a)!=typeid(a);}"
+        ],
+        "lowir_sha256": [
+          "21318e5866632b3dcc5c2fa78224d272dd561e10b787997e1a1574de2a236a74"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_success",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){D d;B*p=&d;return dynamic_cast<D*>(p)!=&d;}"
+        ],
+        "lowir_sha256": [
+          "f42db136d12264b8fca223ed2d4a51a5998aba7bfbdb6fb8609a17687362f682"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_failure",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B b;return dynamic_cast<D*>(&b)!=0;}"
+        ],
+        "lowir_sha256": [
+          "106a7ab8fd814bd8edd745c5cbda7c104fed3c1806a201c3b4703054a8c2dc2e"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_null",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return dynamic_cast<D*>(p)!=0;}"
+        ],
+        "lowir_sha256": [
+          "668851f4ebd4d054f0b028efa88fe32a7aa132f8ae95a15d8fca0a6da9d75552"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_cross_failure",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};struct U{virtual int g(){return 0;}};int main(){D d;B*p=&d;return dynamic_cast<U*>(p)!=0;}"
+        ],
+        "lowir_sha256": [
+          "5703f2fe7569280a727111835f6fae844fde04adf2b7e66e55b7bfb8acf109a4"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_same_nonpolymorphic",
+        "sources": [
+          "struct A{};int main(){A a;return dynamic_cast<const A*>(&a)!=&a;}"
+        ],
+        "lowir_sha256": [
+          "5b0b03a2aa1ad08d9af686c2a418c47125ea5aa6dd9e2d3cbedae225f16e2c3c"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_up_nonpolymorphic",
+        "sources": [
+          "struct A{int x;};struct D:A{};int main(){D d;A*a=dynamic_cast<A*>(&d);return a!=static_cast<A*>(&d);}"
+        ],
+        "lowir_sha256": [
+          "b10e1841d614a7ab8acb66d675bd6eeaa571ac257ccaf2ef1f875ca39098d9c7"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "cast_template",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};template<class T>T*cast(B*p){return dynamic_cast<T*>(p);}int main(){D d;B b;return cast<D>(&d)!=&d||cast<D>(&b)!=0;}"
+        ],
+        "lowir_sha256": [
+          "67d627d9cbaef8d90fa5611413e76f72504261737f603346674c700f82916f47"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "noexcept_typeid_static",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int f();int main(){return !noexcept(typeid(f()));}"
+        ],
+        "lowir_sha256": [
+          "563f435d4e04239a7ce3445b5b3327a77620efa200757cdb95e62abf966b2080"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "noexcept_typeid_dynamic",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return noexcept(typeid(*p));}"
+        ],
+        "lowir_sha256": [
+          "0772143139477f8b028b88cd16c1af5c4a719976ee2c2a458a19026215543d0b"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "noexcept_cast_pointer",
+        "sources": [
+          "struct B{virtual int f(){return 3;}};struct D:B{int f(){return 7;}};int main(){B*p=0;return !noexcept(dynamic_cast<D*>(p));}"
+        ],
+        "lowir_sha256": [
+          "df4df4d8393060cfd764aad1744bf85018ce590d1c049e2093156cd3c3a05746"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "member_pointer_rtti",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A{int f()const;int x;};struct B{int x;};int main(){return typeid(int A::*)==typeid(int B::*)||typeid(int(A::*)()const)==typeid(int(A::*)());}"
+        ],
+        "lowir_sha256": [
+          "fa838cbdaffe5b95ff1c55b8dff8d658a5723aa2ee89c6fd4440984c0905fad5"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "typeid_function_syntax",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){return typeid(int())==typeid(int)||typeid(int(3))!=typeid(int);}"
+        ],
+        "lowir_sha256": [
+          "8858254ce0b2ed4fd8b0fdfcb726d2663f05b4f39ef4e3526d571ac1558cff8d"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "explicit_comparison",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const auto&p=typeid(int);return !p.operator==(typeid(int))||(&p)->operator!=(typeid(int));}"
+        ],
+        "lowir_sha256": [
+          "9de98bd38c648a69c0865b4f318a281f0f20e8b994950a600a4c2ff5c203a77c"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "comparison_conversion",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;struct A{operator const std::type_info&(){++calls;return typeid(int);}};int main(){A a;return !(typeid(int)==a)||calls!=1;}"
+        ],
+        "lowir_sha256": [
+          "492660a0cab46f54e3eaf459b3ec41508420c52fac4a76fe231c4de0fed84ce0"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "private_downcast",
+        "sources": [
+          "struct B{virtual int f(){return 1;}};struct D:private B{B*get(){return this;}};int main(){D d;B*p=d.get();return dynamic_cast<D*>(p)!=0;}"
+        ],
+        "lowir_sha256": [
+          "8de511b52d5e219e73dba2fe1c379f635095dded06fae9c6531aa24369509d40"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "private_cast_evaluated_once",
+        "sources": [
+          "int calls;struct B{virtual int f(){return 1;}};struct D:private B{B*get(){++calls;return this;}};int main(){D d;return dynamic_cast<D*>(d.get())!=0||calls!=1;}"
+        ],
+        "lowir_sha256": [
+          "0c201c82ca6784e7caaa57f05e596176cee2c79ed9e7a3d2948c0e00747e5af8"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "protected_base_chain",
+        "sources": [
+          "struct B{virtual int f(){return 1;}};struct C:protected B{B*get(){return this;}};struct D:C{};int main(){D d;B*p=d.get();return dynamic_cast<D*>(p)!=0||dynamic_cast<C*>(p)!=0;}"
+        ],
+        "lowir_sha256": [
+          "375d90504e35243ec03b603286c4635b0507f387f0b974e9f554475280504afb"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "public_base_inside_private_derived",
+        "sources": [
+          "struct B{virtual int f(){return 1;}};struct C:B{};struct D:private C{B*get(){return this;}C*mid(){return this;}};int main(){D d;return dynamic_cast<C*>(d.get())!=d.mid();}"
+        ],
+        "lowir_sha256": [
+          "cb1ae2078f02b044c358f2a0ffd536106b16f0c920368865f2816ecc539c15f7"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "comparison_arrow_chain",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;struct A{const std::type_info*operator->(){++calls;return &typeid(int);}};int main(){A a;return !a->operator==(typeid(int))||calls!=1;}"
+        ],
+        "lowir_sha256": [
+          "98cd95b1c433f479c0d70add136f2eeeaab9ea0f62f1e6316e00c78b5c281ed7"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "comparison_implicit_this",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool same(const type_info&x)const{return operator==(x);}};}int main(){return !typeid(int).same(typeid(int))||typeid(int).same(typeid(long));}"
+        ],
+        "lowir_sha256": [
+          "a7edbc1c0c4e7e972e67a1c56ca5a09050aec05bc8182c6babdc9d1af344e58a"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "comparison_template_explicit",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>bool same(const T&a,const T&b){return a.operator==(b);}int main(){return !same(typeid(int),typeid(int))||same(typeid(int),typeid(long));}"
+        ],
+        "lowir_sha256": [
+          "1e769fed0041497916602e24174842042cafedfb8d8f175287bb817198693fe8"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "local_type_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>const std::type_info& f(){struct A{};return typeid(A);}int main(){return f<int>()==f<long>()||f<int>()!=f<int>();}"
+        ],
+        "lowir_sha256": [
+          "9848dd920ffbd5c3b3564263eb529ab8521c679195777d59cf83be6b0c35b7be"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "typeid_decltype_lvalue",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}decltype(typeid(int)) f(){return typeid(int);}int main(){return f()!=typeid(int);}"
+        ],
+        "lowir_sha256": [
+          "b09fe80fc3b5a6d3d115ddbee5339f28b4ac7e98fbfcfd28346fd1128289d645"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "typeid_array_cv",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int main(){const int a[2]={};return typeid(a)!=typeid(int[2])||typeid(const int[2])!=typeid(int[2]);}"
+        ],
+        "lowir_sha256": [
+          "1b308c8ab9f3b34c50bcc0f34af6f6de8b5a396179cc88faceee56e1f2a6ec7a"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "function_template_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>long f(T){return 1;}int main(){return typeid(f<int>)!=typeid(long(int))||typeid((f<long>))!=typeid(long(long));}"
+        ],
+        "lowir_sha256": [
+          "3ce3958eac8881304b7bb611a22b6ad9935cd241dee65172e78d7cddfb08985b"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "function_template_type_query",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>long f(T){return 1;}decltype(typeid(f<int>)) g(){return typeid(long(int));}int main(){return g()!=typeid(f<int>);}"
+        ],
+        "lowir_sha256": [
+          "f7a73074c46ff5c8416e3c10ebc815a5c19d378ce4488f91631b010069b9771a"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "rtti_template_member_dormant",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<class T>struct A{virtual int f(){return T::missing;}};int main(){return typeid(A<int>)!=typeid(A<int>);}"
+        ],
+        "lowir_sha256": [
+          "be4bfc979036afd9e7b3dcca103db6b5faa54e846332814310adabcf65440e33"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "new_trivial_copy",
+        "sources": [
+          "struct A{int n;A(int x):n(x){}};template<class T>int f(const T&x){T*p=new T(x);int n=p->n;delete p;return n;}int main(){A a(7);return f(a)!=7;}"
+        ],
+        "lowir_sha256": [
+          "9fd6b49c1bb2ac5b8e491b5a4291264b37d6a2d993d5292aabfb902c1ba52480"
+        ],
+        "host_exit": 0
+      },
+      {
+        "name": "translation_unit_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct Shared{};inline const std::type_info&local_type(){struct Local{};return typeid(Local);}namespace{struct Hidden{};}const std::type_info&shared_a(){return typeid(Shared);}const std::type_info&hidden_a(){return typeid(Hidden);}const std::type_info&local_a(){return local_type();}",
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct Shared{};inline const std::type_info&local_type(){struct Local{};return typeid(Local);}namespace{struct Hidden{};}const std::type_info&shared_a();const std::type_info&hidden_a();const std::type_info&local_a();int main(){return shared_a()!=typeid(Shared)||hidden_a()==typeid(Hidden)||local_a()!=local_type();}"
+        ],
+        "lowir_sha256": [
+          "35923e6173eaab0b5cc2c53b5e1e5b1ddf0ea454894464afe20709d7711b1cdb",
+          "35669891b1a827f35edc8d0ea7f12ff12e614c05e612ca5f494014fd8956153d"
+        ],
+        "host_exit": 0,
+        "freestanding_exit": 0
+      },
+      {
+        "name": "incomplete_complete_identity",
+        "sources": [
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct A;const std::type_info&ptr_a(){return typeid(A*);}",
+          "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct R{virtual int f(){return 1;}};struct B:R{};struct A:B{};const std::type_info&ptr_a();int main(){A a;R*p=&a;return ptr_a()!=typeid(A*)||dynamic_cast<B*>(p)!=static_cast<B*>(&a);}"
+        ],
+        "lowir_sha256": [
+          "b0216fdc1c31e3176dd8ab61cb5bd8d834a92b3db9a1cdd429f13e9e3c8089b3",
+          "a2f8f62804bab981c74a5ef122edad553138d6d454727cbd15f75b16e6eac966"
+        ],
+        "host_exit": 0,
+        "freestanding_exit": 0
+      },
+      {
+        "name": "name_reducer",
+        "sources": [
+          "namespace std { class type_info {}; }\nnamespace n { \ntemplate<class T, class... U> struct V {};\ntemplate<class K, class T, class C, class A> struct M {};\ntemplate<template<class, class, class, class> class O = M, template<class, class...> class X = V, class Z = V<int>> struct W {};\nusing Test = W<n::M>;\n}\ntemplate<class T> struct O {};\nconst std::type_info& probe() { return typeid(O<n::Test>); }\nint main() { return &probe() ? 0 : 1; }\n"
+        ],
+        "lowir_sha256": [
+          "d02f671c862d7895e5da49113a9f7966e0635939075afb24d30b3e2e2b223a8c"
+        ],
+        "host_exit": 0,
+        "expected_rtti_name": "1OIN1n1WINS0_1MENS0_1VENS3_IiJEEEEEE"
+      }
+    ]
+  },
+  "external_limitation": {
+    "name": "public_base_inside_private_derived",
+    "same_lowir": true,
+    "freestanding_exit": 1,
+    "host_exit": 0,
+    "owner": "supplied freestanding dynamic_cast runtime; compiler emits ABI-correct VMI RTTI"
+  },
+  "progress": {
+    "entry_log_sha256": "4ae2fbc2078d418c0da0c3db3c3e3e4eed3736cc190d86ff37cd80e8258a34c3",
+    "initial_failures": [
+      "pa21/tests/general/100-bad-dynamic-cast-reference.t",
+      "pa21/tests/general/100-capturing-lambda-local.t",
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t",
+      "pa21/tests/general/100-dynamic-cast-fail.t",
+      "pa21/tests/general/100-dynamic-cast-success.t",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-lambda-capture-mutable.t",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/100-source-rethrow-through-function.t",
+      "pa21/tests/general/100-source-try-catch-int.t",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t",
+      "pa21/tests/general/100-typeid-pointer-rtti-global.t",
+      "pa21/tests/general/100-typeid-polymorphic.t",
+      "pa21/tests/general/100-typeid-template-pointer-no-eager-complete.t",
+      "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.t",
+      "pa21/tests/general/100-typeid-template-type-parameter.t",
+      "pa21/tests/general/100-typeid-type.t",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t",
+      "pa21/tests/general/200-class-copy-capture-local.t",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t",
+      "pa21/tests/general/200-default-reference-capture-local.t",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-initializer-list-call.t",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/200-source-base-ref-catch.t",
+      "pa21/tests/general/200-source-catch-ellipsis.t",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t",
+      "pa21/tests/general/200-typeid-comparison-requires-operator-bad.t",
+      "pa21/tests/general/200-typeid-expression-strips-cv-reference.t",
+      "pa21/tests/general/200-typeid-fundamental-distinct.t",
+      "pa21/tests/general/300-rtti-evaluated-call-demand.t",
+      "pa21/tests/general/300-template-catch-variable-member-body.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "current_failures": [
+      "pa21/tests/general/100-capturing-lambda-local.t",
+      "pa21/tests/general/100-class-array-constructor-failure-cleanup.t",
+      "pa21/tests/general/100-function-template-local-class-specialization-identity.t",
+      "pa21/tests/general/100-lambda-capture-mutable.t",
+      "pa21/tests/general/100-nested-class-template-local-class-argument.t",
+      "pa21/tests/general/100-noreturn-direct-object-fallback.t",
+      "pa21/tests/general/100-range-for-iteration-temporary-lifetime.t",
+      "pa21/tests/general/100-source-nested-catch-miss-cleans-active-handler.t",
+      "pa21/tests/general/100-source-rethrow-through-function.t",
+      "pa21/tests/general/100-source-try-catch-int.t",
+      "pa21/tests/general/100-throw-class-template-move-constructor-definition.t",
+      "pa21/tests/general/100-throw-function-decays-to-pointer.t",
+      "pa21/tests/general/100-throw-string-literal-decays-to-pointer.t",
+      "pa21/tests/general/200-aggregate-nontrivial-members-use-constructors.t",
+      "pa21/tests/general/200-auto-copy-list-initializer-list.t",
+      "pa21/tests/general/200-auto-init-list-pack-expansion.t",
+      "pa21/tests/general/200-braced-assignment-prefers-initializer-list.t",
+      "pa21/tests/general/200-braced-construction-for-reference-argument.t",
+      "pa21/tests/general/200-braced-list-prefers-initializer-list-exact-rank.t",
+      "pa21/tests/general/200-builtin-initializer-list-private-ctor-argument.t",
+      "pa21/tests/general/200-capturing-lambda-reference-parameter-name.t",
+      "pa21/tests/general/200-capturing-lambda-template-argument-trivial-dtor.t",
+      "pa21/tests/general/200-class-copy-capture-local.t",
+      "pa21/tests/general/200-class-value-argument-transfers-caller-cleanup.t",
+      "pa21/tests/general/200-conditional-init-throw-does-not-clean-destination.t",
+      "pa21/tests/general/200-constructor-early-return-cleanup-region.t",
+      "pa21/tests/general/200-constructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-copy-list-const-reference-initializer-list-ctor.t",
+      "pa21/tests/general/200-copy-list-template-initializer-list-ctor.t",
+      "pa21/tests/general/200-cross-function-unwind-cache-reset.t",
+      "pa21/tests/general/200-default-reference-capture-local.t",
+      "pa21/tests/general/200-destructor-body-unwind-runs-base-destruction.t",
+      "pa21/tests/general/200-destructor-subobject-unwind-runs-later-base-destruction.t",
+      "pa21/tests/general/200-destructor-unwind-shares-generated-suffix.t",
+      "pa21/tests/general/200-direct-braced-construction-in-return.t",
+      "pa21/tests/general/200-direct-braced-init-prefers-initializer-list-ctor.t",
+      "pa21/tests/general/200-empty-aggregate-return-through-switch.t",
+      "pa21/tests/general/200-explicit-initializer-list-functional-cast.t",
+      "pa21/tests/general/200-explicit-this-capture-implicit-return.t",
+      "pa21/tests/general/200-explicit-this-capture-lambda-local.t",
+      "pa21/tests/general/200-function-template-lambda-decltype-eh-fallback.t",
+      "pa21/tests/general/200-functional-direct-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-global-initializer-list-backing-storage-duration.t",
+      "pa21/tests/general/200-guarded-local-static-initializer-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-condition-call-argument-temporary-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-conditional-expression-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-const-ref-bound-temp-dtor.t",
+      "pa21/tests/general/200-hidden-eh-managed-arg-nested-default-arg-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-reference-prvalue-template-member-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-condition-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-hidden-eh-short-circuit-rhs-temp-cleanup.t",
+      "pa21/tests/general/200-indirect-param-prologue-copy.t",
+      "pa21/tests/general/200-initializer-list-backing-array-lifetime.t",
+      "pa21/tests/general/200-initializer-list-call.t",
+      "pa21/tests/general/200-initializer-list-class-elements-use-constructor-template.t",
+      "pa21/tests/general/200-initializer-list-const-char-pointer-range-for.t",
+      "pa21/tests/general/200-initializer-list-const-reference-call.t",
+      "pa21/tests/general/200-initializer-list-element-conversion-ranking.t",
+      "pa21/tests/general/200-lambda-rtti-typeinfo-name.t",
+      "pa21/tests/general/200-member-call-braced-init-prefers-initializer-list.t",
+      "pa21/tests/general/200-member-template-explicit-capturing-lambda-call.t",
+      "pa21/tests/general/200-member-template-initializer-list-deduction.t",
+      "pa21/tests/general/200-nested-braced-aggregate-argument-vs-copy.t",
+      "pa21/tests/general/200-nested-braced-constructor-prefers-initializer-list.t",
+      "pa21/tests/general/200-nested-logical-rhs-temporary-value-slot.t",
+      "pa21/tests/general/200-nested-short-circuit-temporary-cleanup.t",
+      "pa21/tests/general/200-nontrivial-copy-capture-dependency.t",
+      "pa21/tests/general/200-parenthesized-throw-expression-statement.t",
+      "pa21/tests/general/200-qualified-function-template-dual-capturing-lambda-call.t",
+      "pa21/tests/general/200-return-braced-list-selects-initializer-list-constructor.t",
+      "pa21/tests/general/200-shared-call-unwind-hidden-temp.t",
+      "pa21/tests/general/200-source-base-ref-catch.t",
+      "pa21/tests/general/200-source-catch-ellipsis.t",
+      "pa21/tests/general/200-source-catch-miss-cleans-outer-scope.t",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.t",
+      "pa21/tests/general/200-template-lambda-rtti-capture.t",
+      "pa21/tests/general/200-throw-operand-temporary-retired-before-sibling-unwind.t",
+      "pa21/tests/general/300-template-catch-variable-member-body.t",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.t"
+    ],
+    "resolved": [
+      "pa21/tests/general/100-bad-dynamic-cast-reference.t",
+      "pa21/tests/general/100-dynamic-cast-fail.t",
+      "pa21/tests/general/100-dynamic-cast-success.t",
+      "pa21/tests/general/100-typeid-pointer-rtti-global.t",
+      "pa21/tests/general/100-typeid-polymorphic.t",
+      "pa21/tests/general/100-typeid-template-pointer-no-eager-complete.t",
+      "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.t",
+      "pa21/tests/general/100-typeid-template-type-parameter.t",
+      "pa21/tests/general/100-typeid-type.t",
+      "pa21/tests/general/200-typeid-comparison-requires-operator-bad.t",
+      "pa21/tests/general/200-typeid-expression-strips-cv-reference.t",
+      "pa21/tests/general/200-typeid-fundamental-distinct.t",
+      "pa21/tests/general/300-rtti-evaluated-call-demand.t"
+    ],
+    "initial_passed": 24,
+    "current_passed": 37,
+    "test_count": 116
+  },
+  "coverage": {
+    "files": 526,
+    "manifest_sha256": "e3a81c742561b0d59b7b212eae191a284946151922520ce28cd7198d40df8893",
+    "unchanged_except_proved_reference": [
+      "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.ref"
+    ]
+  },
+  "source_hashes": {
+    "dev/src/abi/itanium/abi_mangle.h": "29ea1e8425360a83c430db5a852f53e0e64d753ce2300aa34a1316fd5e1c5324",
+    "dev/src/abi/itanium/abi_mangle_expression.h": "a4e920321996aab81d2ad1989f0f7de63e0412335b56fd69f4a280e98ba16b9c",
+    "dev/src/abi/itanium/abi_mangle_facts.h": "db370f01e2a3fc2896d94bb54740e02b622131e8a94e2354dcffad3489039e3f",
+    "dev/src/abi/itanium/abi_mangle_reference.h": "66ae169f4a785d078213ce98b242ba64460eddaa34c400c010f6f06223aee38a",
+    "dev/src/abi/itanium/abi_mangle_stats.h": "0a5cfe6aa3a3d748d2d01c27f05e1bdbacde4fb8541989a4d16fe8e562744093",
+    "dev/src/abi/itanium/abi_mangle_terminal.h": "fae27b217c5144e86c6bbfa9bd93c65f4b7e0e2606892910062e5b90a9d158e0",
+    "dev/src/abi/itanium/abi_mangle_type_vocabulary.h": "7ae4435f05cfb410225f6c7412ff9038a0957212ff20bb596bd15f6c60065555",
+    "dev/src/abi/itanium/argument_reader.cpp": "a33ccb477dc725ff464b5783a3f5b82e06fa0f537d74c2feef15d2ecbaa2965f",
+    "dev/src/abi/itanium/encoder.cpp": "4a69f631da67b10a4b5d7a61c4b13f08275b4bf5f3d31bdaca3e086320b6861b",
+    "dev/src/abi/itanium/encoder.h": "15ea363fdde57a133f3484bcde2facefa056d0e6f94e2cca1dce1af76fffd48a",
+    "dev/src/abi/itanium/expression_encoder.cpp": "c1f86e5a2727ad8ef9f025763408506156e5c47163c9bb4e10cbf9a3f91040a9",
+    "dev/src/abi/itanium/fact_reader.cpp": "1b65557957f5fb28a09083aa2f31b4c5d62f9d659f00bec77873e27161547dd5",
+    "dev/src/abi/itanium/fact_reader.h": "25081323833b467baac22c4a39e13e6e27d52a92c1fcdc967101713b1190f450",
+    "dev/src/abi/itanium/fact_writer.cpp": "ab2569642e49b39838274e537c912c77de02ae184db41544391f02afc600afe4",
+    "dev/src/abi/itanium/fact_writer.h": "3df05c2570f55b4cee7c19f538b0ca3ec30aa3129f2b253e75004d703eb914ab",
+    "dev/src/abi/itanium/function_encoder.cpp": "6c0112b4f8fc1b162386fe562114c94e9efd2312f03287fb04c4a57cd55a0393",
+    "dev/src/abi/itanium/function_reader.cpp": "19293cbae06bba53e2a724bb040ab47b835bc15453ae22130dc6bb37ead4e9fb",
+    "dev/src/abi/itanium/graph.cpp": "0214ce753ef00f683799e9cbdef382882f7131f9645add437d9f95bd72aa0c9c",
+    "dev/src/abi/itanium/graph.h": "c2e2b2a3ec5fbbe605a5755ce49c65a0ebd1788877c6db866bcae49c72239a4a",
+    "dev/src/abi/itanium/graph_validation.cpp": "af3d7eb8bc85eb0bc898a005e5e62a246718ed7d4d90907b01fab66c86466a0e",
+    "dev/src/abi/itanium/nesting.h": "6f2ba74e69bfed6c72b958ead81dbbbb0c35db7b1d044dae96da122388ded1dc",
+    "dev/src/abi/itanium/operations.h": "6fa26274bf9db8925450c34f773946ce73d53013671925b355bfd07a94b06b20",
+    "dev/src/abi/itanium/type_reader.cpp": "e01cfec3c2ccc0c83286ddca342b3b753d5aa5869b43baee94b6ce7321563002",
+    "dev/src/abi/itanium/vocabulary.cpp": "296ecac4027701ed4309dcb1a30a470b98b2a803e3efb5b8e089cf011e74200a",
+    "dev/src/ir_symbol_model.h": "faf12fda84e08b518612973b518b415ae4e634259293e164f63c6ca98c884e0e",
+    "dev/src/lowering/aggregate_helpers.cpp": "e4e86b1e3dae66a39ebe56699164a188a315f92044d74387895e455e0d075cad",
+    "dev/src/lowering/array_allocation.cpp": "fa3ee09f0b539f000d44277d5b66308cffe5a076cbe4b1c9bf70f10b9ae96d53",
+    "dev/src/lowering/arrays.cpp": "ca2999490f1a40724abcea01eb1ea2733e64382b643aed2bbca8138cc7c7079a",
+    "dev/src/lowering/arrow.cpp": "0827a269c3e63cb0c71a704e855237df9c59567444dbdf0a1f5bf7e321e78662",
+    "dev/src/lowering/bit_fields.cpp": "967fe7f0b0f3205fef6cf798eab45dc1be2f77cf85dfd116e0bf0f25c3223ec3",
+    "dev/src/lowering/branch_lifetimes.cpp": "0f0d31b3f81dfee7ef03fd4b982d22f5e90cd052f820dc67a78c17c171a80b80",
+    "dev/src/lowering/class_values.cpp": "d2be88ba08ec5d683834c0ccf8f6d6d40926a54c73b676c3eb1be59e22b7b5e4",
+    "dev/src/lowering/cleanup.cpp": "39ba788c973c8edbbb29f388e3fca405203d248135747112fd05b28bc7021fa2",
+    "dev/src/lowering/constant_array.cpp": "53b699cf3201ca5ed7eb48ba967097936eaf5733da36a63795b74a9b86f11dc6",
+    "dev/src/lowering/constant_construction.cpp": "3e8c5c7754b50fde01c53f7ea333d204d0bd448434dbc5eb75dd75ffa6cbf897",
+    "dev/src/lowering/construction.cpp": "5d85df49655cfe87234787062a385c7c15a288ba428b758c7c3cdc2c02703973",
+    "dev/src/lowering/control_flow.cpp": "8cdc1b2e1c9cb0879a6107546107c375d5fcf8813dc736b2db321c8aa7f5d276",
+    "dev/src/lowering/deallocation.cpp": "571a34baf6b0eabef3ec828f08de7b40700484753cfc6e0fef86e68ba411c69d",
+    "dev/src/lowering/destruction.cpp": "94d144dbfebbdb903c2815fdf6027c21135cb2dd5ab247c1e9c702b3980c5a84",
+    "dev/src/lowering/driver.cpp": "4273f0811c1c7477fd301c37fafcb5c3a9e43241a602924b239ab05d6da28dd9",
+    "dev/src/lowering/expression.cpp": "59f4eaf8843aa387e14a295b020b81d578a7fb7b0ccfc60d365db212e002a14e",
+    "dev/src/lowering/floating_builtins.cpp": "c2dd036db2690385cef6d39a39771765e8203cdd7d77714b9b7c3bf6478cbe34",
+    "dev/src/lowering/full_expression.cpp": "daaaeeb8ce5a77ffa2c2126a0ec4d64452c5eff23024643f6cc22fbebd1d2f2c",
+    "dev/src/lowering/function_declaration.cpp": "0ae3e4ba7e086b50b1a49140e2b6d0e1a73e6fb672b143a7454577a3d231a59c",
+    "dev/src/lowering/global_initialization.cpp": "b95b7c11eae7aa8ba6b3d7da2694267b48f174a79e9e64e98b347da1ba170cf1",
+    "dev/src/lowering/inherited_forwarding.cpp": "1750dbc1950919eeedd6f0752570619321acab7d4ced2fad54aaf3fb567318ed",
+    "dev/src/lowering/initialization.cpp": "0e1c92beb1c32353b79ef63f76e41849bd08fa1fac7d618369676e4fbdb21c45",
+    "dev/src/lowering/initializer_plan.cpp": "fed50632d98c64118d129039f3daa2ecbe23e3b93efe343537ac7a19fa24a8f9",
+    "dev/src/lowering/lambda.cpp": "571f0815a41e0903371974d57c6798eab9fec037379378ecec17613ffe09e9c9",
+    "dev/src/lowering/lifecycle_order.cpp": "ddd8a6a0da19f95204f259171cbf08c9e3b717f557bccd88d828609e13b3a770",
+    "dev/src/lowering/list_initialization.cpp": "e0cadad6a08de397c4d88eb2c7d969c335928843991043a858a51a62e9e62522",
+    "dev/src/lowering/literal_calls.cpp": "39e1cb74e19857e99234b6ce23c4d6034382511799f902a02618f963eba43159",
+    "dev/src/lowering/local_abi.cpp": "d7080ab0d7210709244b6a5cdaf20e389e72e2bfe7bdd4a248cdd3cece5b9fdb",
+    "dev/src/lowering/local_static.cpp": "4efbfabca787a88ac1c9f652e27bef980815a0d34bbc7332dd0a34206266263f",
+    "dev/src/lowering/member_pointers.cpp": "1059fc916b3b453c57efc64f6dfd9ec173a21153d915933c45e69490130b20a9",
+    "dev/src/lowering/operator_abi.cpp": "9a7da33388c2f33b98435648b50d2dc72d713c9a15ab51e39f77ae13adfc484f",
+    "dev/src/lowering/placement_new.cpp": "3c8bab10cfad1853a6d2caa7a00567d41b545bf80e64bca37b849bd00e8568fa",
+    "dev/src/lowering/procedural.h": "c23332b98f6641ed959fe4d1bc2d514394cc4683a16a9c40260dbe65ac1b985a",
+    "dev/src/lowering/program_lifecycle.cpp": "711a36572d046067dd6c502283063787ea0c9038c0a380cb8a31624348dead41",
+    "dev/src/lowering/query_abi.cpp": "628124355ed822f4dbcbbeb8cdefd4cabf5ee21720799069986ac8461a26440c",
+    "dev/src/lowering/range_statement.cpp": "772f09e6d8f2cd6c2fe7f96f4ce3f757cd006570ae192a269c08b572a450e83f",
+    "dev/src/lowering/reference_storage.cpp": "b964c5cb490542de85ccab3f4b7e97b6fc2a2cbdb20ed6be5ca470a24034b678",
+    "dev/src/lowering/rtti.cpp": "3714c4e84a2d9e030ce67104d09ec4452a9d0a98526c4851af5540f9c4d74175",
+    "dev/src/lowering/scalar_consumption.cpp": "284b4fc3b9d5161ca72bbd2f00dd737d3532b54c53d60908856c63733ba094cd",
+    "dev/src/lowering/static_bit_fields.cpp": "692b82782bc659fc8270ba20379f310ebfb6f72dfc6fc85a6793ecc58d51318e",
+    "dev/src/lowering/symbols.cpp": "7ad928af1a296978e488ac5250ccbf7c3bd73f1c0c6e21454cfe2d1fdbf8a656",
+    "dev/src/lowering/tls_initialization.cpp": "0918b86fabe600d9d154ba3210bafd9ad8d97d6cf430ecf8056bf69e14e19e3b",
+    "dev/src/lowering/transfers.cpp": "498bfd006a97d4257049ce8b23b007a0af4a8a7821054abba8d7fdd20ffb0cd5",
+    "dev/src/lowering/typed_operations.cpp": "03976c2e156fb7fe9585c8fd0fde248bcccb8511ff7001dea44cd85abe9ee31f",
+    "dev/src/lowering/user_conversions.cpp": "47aedb7654a0537d3304f5a1a6330eb58293a5b726783c6489a48c42d15fc365",
+    "dev/src/lowering/values.cpp": "7c6f01c1771696932ad3afc2f2ce4525c1c64e3f16dfd6b6f4fa6eb7da76fd15",
+    "dev/src/lowering/virtuals.cpp": "7029ed7eaf9faf1a145498b370489866f7533141717443c4d3db76f0ecd7ddba",
+    "dev/src/lowering/zero_initialization.cpp": "e03edc356ebbcb59921c9d90ccd2c0dfb311f9f14a8a15a6469a71984dd43151",
+    "dev/src/lowir/exercises.cpp": "699ba9e76ade495bd3f6a6bec7c57e64b71a5fb3197b76280d637d7037d7b57e",
+    "dev/src/lowir/instruction_reader.cpp": "16b5ba2151be97f65a98eb5c25c704dac42ac158b5958c21738b6fddcf32f42e",
+    "dev/src/lowir/instruction_shape.cpp": "5453dfdf812f5d5ad9fc829c3e6393df922df7f80dba718e953f6a90c01a58e6",
+    "dev/src/lowir/instruction_writer.cpp": "8cc270bf136dc39198f7f60ab5d3d83d701300618f2fcda52a7b509f1c994f2e",
+    "dev/src/lowir/metadata.cpp": "f691f01ff4f5a7f99c858b2b2429304e167ba05e0476f925ffdd44d30ab3df05",
+    "dev/src/lowir/metadata.h": "f2263c1cac236373ba73da321889d410345791e6ad4bf8c853b5dacb2db9882e",
+    "dev/src/lowir/metadata_vocabulary.cpp": "286136ea7be12efb94039a0157186918671dfc922628710cd40aa05b586ba93c",
+    "dev/src/lowir/model.cpp": "07ed2df0d78f91e798b6b59b81c6a6ccf947ee3c47ff997776c1768d4010823d",
+    "dev/src/lowir/model.h": "c45d767f05dc5655285b828c6d2b8a0f40687f478eda45bc7abbc83c2a954889",
+    "dev/src/lowir/opcode.cpp": "fac39d9598c2241a9ea1d5c9d0b5c2038b1b39c7fab7f887f6db4ded571c9376",
+    "dev/src/lowir/reader.cpp": "ce1045d43344260ef6fbe58f04dcbdec13471d2ad91da136c0e9f54fab701a28",
+    "dev/src/lowir/reader.h": "b9d5873eb28e7339d4ce0d2f2984fc602d06fef53c5ee49bb15b4c00ad573775",
+    "dev/src/lowir/signature_validation.cpp": "77d66a2242ce6b337e2090974fce317a95f90000adb2b3bbd11ed8e4d99956fa",
+    "dev/src/lowir/top_level.cpp": "a06ba3635220f5ac3be43be658b478ba40f9fe437e0f92fb575caeb751fd091c",
+    "dev/src/lowir/validation_instructions.cpp": "c63e35ed5e928785f5ce279f6dc05debda68f20b9662362c38345fa87b884ff8",
+    "dev/src/lowir/validation_values.cpp": "e8643f6cc7369e90e468705e128cf8b1f9e326bf6bf39ecde4ae587195a3c474",
+    "dev/src/lowir/validator.cpp": "29f05c692168450e0218220aff32ef6a2152879f2b9889317f9ceade817bf696",
+    "dev/src/lowir/validator.h": "3ed19cc698ff62c45f91d62dc171c68014bca9eef3e723e2334a117db70c0ed0",
+    "dev/src/lowir/writer.cpp": "8f88ca1ed72782075b295a472d3eac50523a137bc4defe86bd50dbce47e16faf",
+    "dev/src/lowir/writer.h": "b28f6cfee1ae1e59234b6a7e383bcdc1382512977c7a67bc2b25ca80d40e6b15",
+    "dev/src/lowir_model.h": "c1b17a400c1c649e20b1d9a49c54314688f4e25faae78b606104394c7d5fbfab",
+    "dev/src/mir_model.h": "8a4392a5e6287e8b21144e455ff2513786aaaad562e33ae5ca43e25880f59747",
+    "dev/src/native/mir/registers.h": "3f613a768375c1238b9a67ff67aa186d5944abe61e380485f07de4862d0bcd34",
+    "dev/src/posttoken/cursor.cpp": "1dc2bf5cb41a712260a52b06d92ae498b4fa79cfbf513aee456ee8420efa1489",
+    "dev/src/posttoken/cursor.h": "a902d060f2cc91c48ac9de79b07f48b109d5ec3a515cba4e38b486e643c1eae3",
+    "dev/src/posttoken/literal.cpp": "9a902ac0432d924184701dfbc3b54a722bc96ce6e76d14067f0b0ffd0312eda3",
+    "dev/src/posttoken/literal.h": "d4ec95a84cd98b1946fd391ee701b02c8a8125aa80c5691c2ec73e97a8595abf",
+    "dev/src/posttoken/number.cpp": "6ad674e478876640d13fe5f91ee31f0925aec7bcf17bbd8ff5694e25fb1b8bbe",
+    "dev/src/posttoken/number.h": "d07b3b18bc3cbf04ce7c1612bb1ed58a1d60e98f5c5331c973b93708aefce2a5",
+    "dev/src/posttoken/output.cpp": "6a9cab69e45c7f3a7b5c8ba682f21dc93a97cb558c4802ddf71b6b38c7d3ba54",
+    "dev/src/posttoken/output.h": "8e43cc9eb6f9e4736bc4b34ad37f3f957ffa99a717c1ab84b8a5c19ef3d22ae9",
+    "dev/src/posttoken/token.h": "2eb7b5c46ee8814b79d474a7c18fadfd3a0aa0ca9f04287b1d4a819152c72363",
+    "dev/src/posttoken/token_types.cpp": "5b02b37b204bd63501c309d8ceb61d4e9455ff3b9ee7909add9cd4099cb1aef0",
+    "dev/src/posttoken/token_types.h": "871b468fd872ed348f791f462a7c9ac080b9a70afe29763514dc3faa1d2a7dd9",
+    "dev/src/preprocess/directive.cpp": "fb4fe6367cf561a9155165a6f7751f6b44cf78e5b52625d58b3b135ad40647f5",
+    "dev/src/preprocess/expression.cpp": "268d074167952b63048d7bb55e34691a97efa1ec163a5e27a0540a7e38f808dd",
+    "dev/src/preprocess/expression.h": "0634d59413601c74aeb6ce54b4f192171a5ccc78b7bb0eb7717f2431ab96bd6b",
+    "dev/src/preprocess/expression_value.cpp": "69b3408a42d8838078257e964bf3e2ad11c6acd7ccc52578c776c12b107d23c5",
+    "dev/src/preprocess/expression_value.h": "50af831c9abf79fe1484e6c15fa0a218f400a717d30cc1e7f166e182e38e8a63",
+    "dev/src/preprocess/identifier_table.cpp": "764d4d03d621453864641d7dda74cd2d2663c6330435ba520f2569ef4f3b7daa",
+    "dev/src/preprocess/identifier_table.h": "38508fcd71f6d38258282f3689e5ef9311bee3657d69488260ea7ee38d3a349c",
+    "dev/src/preprocess/macro.cpp": "2fce6ea8987e25f62be861497234d51d1492d453b7bd50477bad547a529a1704",
+    "dev/src/preprocess/preprocessor.cpp": "dba974f9316e77a436fd014a490b45c22390866b63208aa087b7a7e95235fb49",
+    "dev/src/preprocess/preprocessor.h": "a87d6de75d531fb146c6e77949e50a4b252446b55cf506ed4ab29c16760c1143",
+    "dev/src/preprocess/source.cpp": "31eb06899595ffba05063c8c4e68d430ac4855be8c90946eb58571eaaa052ac5",
+    "dev/src/preprocess/source.h": "19643d89fb93d777fd07609e1d2cbead69003ea5cbfa5b487a789a262d78540e",
+    "dev/src/preprocess/token_cursor.cpp": "ac44b31a131300a8d73a6a90aba9327c6e702419a4dd3b69fed816495ef25253",
+    "dev/src/preprocess/token_cursor.h": "b3d2a027a810e447a2c97248a302561e1488ecdb152ed95f498140d2f3dc0ec3",
+    "dev/src/preprocess/token_output.cpp": "391539c3e91e7acf73ad7982326b78e357faac938277372205aab8b4f5745dde",
+    "dev/src/preprocess/token_output.h": "c5e994a22437cc25b0c02fc56b83c482668391e023ed831196d87f3e84fdad22",
+    "dev/src/preprocess/tokens/DebugPPTokenStream.h": "551ef7a80e2f07463e3490d6c9aeb6bbd8ce7baacf32aa82a9912506808182d0",
+    "dev/src/preprocess/tokens/IPPTokenStream.h": "62dc9a44a0c29f1ad0413d14e8537c68a16e538040d463fefbc339377114a35f",
+    "dev/src/semantic/access.cpp": "cad09c5736e4c063a2d2c8ecb746a8294fa8ef10cd75b0d5e153ff1c082ca22a",
+    "dev/src/semantic/allocation.cpp": "735a4565a2ca3020ed2603784feb87747ca50aba8c567da8a5df701ba3168a8e",
+    "dev/src/semantic/analyzer.h": "33e620e054f938766588775533c347d9c942c804d558e1fd7f76bded1e14ae39",
+    "dev/src/semantic/angle_interpretation.cpp": "1b82cb3b7078cee6a0ee07e80b76bfa31cae77f94a3164f1750f415ffadf0f56",
+    "dev/src/semantic/arrow.cpp": "29df49a3d25da026942539069c0cd444d7d86e28f64b0630ff65e459772d04a3",
+    "dev/src/semantic/assignment_operators.cpp": "8b1ca308bbd55960171dc415a2a6c30d397c96a612bac5c7420583ae31a6729a",
+    "dev/src/semantic/builtin_operators.cpp": "e49b316e0358f52429b69d3226a0f7a9dabc8bdef1caec6ece390b37a4ba508f",
+    "dev/src/semantic/call_selection.cpp": "e9394abb2140d545f587d9963da7fed1a33fbcc430f45a02500b2c590d63abc0",
+    "dev/src/semantic/callable.cpp": "0895c16d0266dc62536a5c6e46aca426ab4151c0360d7200367b0a6085bc3e00",
+    "dev/src/semantic/candidate_substitution.cpp": "27f0d852e3b62752c747139ce04830fc7063bc1d84da85e91e5beb644b09b724",
+    "dev/src/semantic/class_enum.cpp": "2b20a4d3303d4a9c7fa2b139ca693088099e9e5d60c8adeeefd40ec1609b32ef",
+    "dev/src/semantic/class_pattern_selection.cpp": "ec6e2827ae8e5c934e10ba4f04ebc33dc62c1d2b9865fa5b0a9c2e7a5c60ac5b",
+    "dev/src/semantic/class_values.cpp": "261dc6ab1ccb4f79956440116702c8c1f4c1e637f6e637597cc014adb4022805",
+    "dev/src/semantic/closure_capture.cpp": "b6bbb7aede7ae7dad57508dc77dcb6abdb7dfd432de6e7effbdf2f9d7946d823",
+    "dev/src/semantic/constant.cpp": "e97b75797e35fce199de80c6e0456f53771023ff59125203a438aac391e7bc1b",
+    "dev/src/semantic/constant_addresses.cpp": "b01f9b0b6f2d399786f405ba55834f39c8a9d08ef525ebf24b829d3bdd168b97",
+    "dev/src/semantic/constant_array.cpp": "4438bbcfe54577c6996fa30fb15bb210da68f99769884cd563fd9af89bd65136",
+    "dev/src/semantic/constant_construction.cpp": "fc662e7a4727bbc1ddcb8aaa65ce68d49744febaee88cbb3da0bafe5b95f5ee0",
+    "dev/src/semantic/constant_execution.cpp": "46500eb9f22e97fd5e7d12ba72a3b0b33ef147525e8c590ad6db0c3fbb4eb97e",
+    "dev/src/semantic/constant_floating.cpp": "d3b34b5c7af44a51d155e8fc4374c886f65d3c280ed0a02453094b4b746e4726",
+    "dev/src/semantic/constant_objects.cpp": "42e54ca4fcc68160272c85f2cf9dae7702b8fd0d0ca3cc934e017fb6349ed824",
+    "dev/src/semantic/constant_queries.cpp": "0fa324aaf7316c2361b138636570b146797963c464b4c35dfe855b231a7ad1d6",
+    "dev/src/semantic/constant_statements.cpp": "91c56c2320806d1879ca14a89b58bed1fe747d4a1fb23fd1c4dbecb572821f8f",
+    "dev/src/semantic/constexpr_validity.cpp": "7d5f78f1fe5620135f42a14369f87344cd111bfbb259903f4d88ed07b40ad1be",
+    "dev/src/semantic/construction.cpp": "c75f794703933a089a30e2daad44b3e13ab2282f26e273483fad065b917418a6",
+    "dev/src/semantic/conversion.cpp": "5a2199ef8b8f3259322631bafafa9d0f452a4408bb2536f4345d07ab8effe43e",
+    "dev/src/semantic/conversion_functions.cpp": "13d81f85bcc68449ae72f5d9f7b053d4304eb7dcb0eb7e09e236da1a2ba07546",
+    "dev/src/semantic/conversion_result.cpp": "705a7fcd759222c3324587a1006a225286b908e3868649326cd223129beb47e1",
+    "dev/src/semantic/converting_constructors.cpp": "0b4938a546a4364c8377fb269a3a807770a2e035c6efcb3b779d9a80fd5205d0",
+    "dev/src/semantic/declaration.cpp": "77b92c835efbcdde60571cb6deae8b908cc9b8fd4a1ad0e7d912ec770643fb53",
+    "dev/src/semantic/deduction_parameters.cpp": "58e786bf7bec5dcedee66dafacad00c81690bcdc3e16cdb38324c1cf4268b253",
+    "dev/src/semantic/default_arguments.cpp": "4834a7fb9b7855b446beb02642bdddd2be7c24983e3d5945171aa6a2f593ef47",
+    "dev/src/semantic/default_destructor_facts.cpp": "2a95f179c59f69a11cc686140a16bdb1f20d681c3c34a4ab8a32aec3aa6c7010",
+    "dev/src/semantic/default_initialization_facts.cpp": "5374893f2abbd583c95baaf1b8184645f0d9559176a18689fd87eba7f23a6dbb",
+    "dev/src/semantic/deferred_function_uses.cpp": "28929ca1eae41004d7c763d8bd46309cbe26a2b0f8fd3f396cfea19a31ea1412",
+    "dev/src/semantic/dependent_type.cpp": "59de0306232bf3ab00b27deaf0520342fa122aa534f7084d2afe41eb6cddb570",
+    "dev/src/semantic/destruction.cpp": "52775d4cb699fda1092cf7b234e74fd7647bcb8536063d026af4c7cbb46a88ad",
+    "dev/src/semantic/destructor_exception.cpp": "c004fa42f4910bc15bddc49223025a2e49314fddbb1dc8f63a7d38169d086505",
+    "dev/src/semantic/discarded.cpp": "ab3f03d55905f82e08610e670d50cba6a477351bda5e3d11cd405bc1aa1570ec",
+    "dev/src/semantic/exception_expression.cpp": "e5c96a87cc60681f890e90b703bdf4ca2862b367cab514e683a81628c71fecba",
+    "dev/src/semantic/exception_query.cpp": "b246827479ba785d5c2221dde7b51aaefa5d8c18b6b97d5a5bb9a9b87d8beda6",
+    "dev/src/semantic/exception_specification.cpp": "9140961e219e98ae164818e4fbdb454cf53365c8542dd9c61307f3f1f159629e",
+    "dev/src/semantic/explicit_conversion.cpp": "cf7866fc6fb5a835ca307b39a84b904fa9ddc9314896bd7d200013b6f09aa411",
+    "dev/src/semantic/explicit_instantiation.cpp": "c5f2b2e351e1b9e13926af270a4592dce673b92972d5c1feb266bd1a0d97539c",
+    "dev/src/semantic/explicit_specifier.cpp": "c5bb6587b51e92601fdb94da5cde6d32d573764a13c46481daaace82ec5cb7ac",
+    "dev/src/semantic/expression.cpp": "3a7c509ac4a5e04fa7daa7068201a88da84db76c2d7966abf18cdc0bfaee05f9",
+    "dev/src/semantic/expression_store.cpp": "f4af24d8c81174ce5a8d7266daee871be35db8cf3cb4c8ded93dfe3b283acdd3",
+    "dev/src/semantic/expression_store.h": "294b41f51dcede8857db5cafa730f20b14409b14b3ad0d6f7a9abdce83d4d2be",
+    "dev/src/semantic/fact_store.cpp": "05e34e9cd86f651debfa1fdff2aed82fc7430be8c252ecd7449d04f3f73587ba",
+    "dev/src/semantic/fact_store.h": "05eb0a3ae24e5de007b6a9d4b878d8e152de1f28958375fd587da9e16ac97e37",
+    "dev/src/semantic/fields.cpp": "b0fb2d48ffc4431c390281d078a74b5a882838720e4987d0a4c330b030e3f14a",
+    "dev/src/semantic/friends.cpp": "6ce47344f78397af53be8f652f48ac581b6b0041717f6f87121f0fa984dea505",
+    "dev/src/semantic/inherited_constructors.cpp": "59639d13cfd95838e91d21589031142cbd0f41063830fd18d860f17762108cb2",
+    "dev/src/semantic/inherited_forwarding.cpp": "7035e728e4581861293a0442f687f0f4feed7db285b645c3744c1bc9a15b0028",
+    "dev/src/semantic/initializer_effects.cpp": "ceb25218017cf968803a31325564194404d60a6b263f29ba7b09ddc88991d827",
+    "dev/src/semantic/initializers.cpp": "ab20a57f5f891c60ccad1efd4094ea4393912f7d107ea5a5da958200228ac05b",
+    "dev/src/semantic/jump_validation.cpp": "be4e221ec469648c2f06c891094a3159abc534f950f8c38c76c501a30ff528ec",
+    "dev/src/semantic/lambda.cpp": "04897df842830f49f195e5d0a2c3c7f5ec0cc65065c8fb5ebd89b93ef7ef0b9b",
+    "dev/src/semantic/layout.cpp": "587aacb69f54edf94ef27957ea346c8070fa83426971eb89163ccd10f37be841",
+    "dev/src/semantic/list_initialization.cpp": "87a41978ee5df9149bdfb5c0f25f752a4ff263bf0192982158759462f9db45a2",
+    "dev/src/semantic/literal_calls.cpp": "1914a2c21daf4535997e6cebd36ea62e520103ff5f1c5bd10ec8f28124ba7abc",
+    "dev/src/semantic/literal_constants.cpp": "1fcbf0d5473ffdd91391bee0b32d167e392a6896e1281248e41cfeae0f8d9404",
+    "dev/src/semantic/lookup.cpp": "7a9e481d3be902beb4ab9b83aa44c85afe05c784f567104540ea3dc92743babc",
+    "dev/src/semantic/member.cpp": "97dbd163960436c4ec6a3a1f5cd23597b40ebddbcbc1e343aea3c8f0f0c78135",
+    "dev/src/semantic/member_pointers.cpp": "8e5f5f747814c766b1d75d20d1e55ce074c6f2296936a00950d0b81a9cd6b301",
+    "dev/src/semantic/member_receiver.cpp": "2486b20291d1066fcce1ea3bcb43f5c6ebc8dcaca319a53fab4b2423729d3714",
+    "dev/src/semantic/member_value.cpp": "8517880e04d82ebe50ca5e0cb1aa80c3470678ac6730a098be1debf666bf37db",
+    "dev/src/semantic/model.cpp": "fe3268363ccfe706745bb7c107b552e7cbe71718ac20dad620ca215972362d25",
+    "dev/src/semantic/model.h": "1f28a9cfdbbb213ff266f600835471dad7cc4b2866878635c50cd5d54133bb96",
+    "dev/src/semantic/nested_class.cpp": "e710461213ddc06d6a592dd9dfe7820b1a2430ddcad90b24b90dc66b2c726337",
+    "dev/src/semantic/numeric_literal_calls.cpp": "9156a248fb91154ae34d27c5ca4f254e92ec1209057f0d26bdfecd723cadb9f3",
+    "dev/src/semantic/operator_call.cpp": "b96be233e9240691c98349ee59a3106c0680c336dd191923aab877af98ea77c6",
+    "dev/src/semantic/operator_names.cpp": "175555b6d64daed076ea426dbd730ad8e89b14d2fc8123d36ac5126373c87069",
+    "dev/src/semantic/operators.cpp": "d69964c8b585fa1af4ce7b6033d004da536890505fcece1429190a65f46b989e",
+    "dev/src/semantic/output.cpp": "e281ca7a531fab601b4b6b05e0eab369016bd12839bc920594f25b0e85b681fc",
+    "dev/src/semantic/overload.cpp": "1dcfef1f88419bae1130165b49b20da2c38f740c7303cdf51b9a4fe8d658b75c",
+    "dev/src/semantic/parameter_representation.cpp": "5138da26b686be37735fb93dfb9dd8b7c1a4773386da1654f1e525b3eff99f80",
+    "dev/src/semantic/placeholder.cpp": "71c66e0282f2cef830776f3bf4d195703a6ee05c0bd561199c82ff5b68799ab5",
+    "dev/src/semantic/placeholder_return.cpp": "bca0c0593f963067bdce8435f5e51fedd3f3c7626b578a68c2c2ac3d1f593fb3",
+    "dev/src/semantic/placement_new.cpp": "21970496011aafe95c9b0f8d08f80a863a6525d8be63d68fe3df21fff124b100",
+    "dev/src/semantic/query_call.cpp": "1f5e021e7b8e0e0de06f845bbd009092bd64d59b5bcaaba063d2626c2f834f02",
+    "dev/src/semantic/query_dependencies.cpp": "17a0e49fdc8a5a80e7a092324665a8e7e8bcf01613baa80ac08a382206edee81",
+    "dev/src/semantic/query_destructor.cpp": "709bc3d2070dee2ab8153d2da523d634fed0e2e93e13daae3cc24954770c2f15",
+    "dev/src/semantic/query_list.cpp": "41032a7592f6440448f4b0fb707fc1d4fddda7828831993e8456f881ab9cd4fd",
+    "dev/src/semantic/query_new.cpp": "dee4e2f8141d63c35473420988bfc385637fba5bddaa5cea3fc79ede84ecb2e0",
+    "dev/src/semantic/query_operator.cpp": "4bb358b248873dbb0b6247b10eb55895c9d9c5be1e7e0dfd1e05edf81a031055",
+    "dev/src/semantic/range_operations.cpp": "62b2b4111c7f1c855190540636d9303221beac996c8a7307ae39613e9f5251f7",
+    "dev/src/semantic/range_statement.cpp": "cde7488bd847b750012f800fc6c841fb6bf0a4291cc894e97be859b146c0ed33",
+    "dev/src/semantic/reference_storage.cpp": "abd39a201f5f61feac17d2d6bc1007cabb3a2775f2a28206440ebe9ffa86419c",
+    "dev/src/semantic/resolved_output.cpp": "6f179f48cc490d4ad3528fd2d996db3d809cb785cc5fd48b6a33bfa5e9cb5f81",
+    "dev/src/semantic/rtti.cpp": "0404408f46b39733771adfe2bdfb6c87c6bcc07a86bb96dbc24b05bab5b2d0e7",
+    "dev/src/semantic/scalar_consumption.cpp": "260b6c604abcea92030591d6a8dbd6371086389fb01c31bf4f898aef87572303",
+    "dev/src/semantic/scalar_transfer.cpp": "b2530cbcc5e1239abff32618a2fb96f8f38b68d0c0b64654d20b92821951bd4a",
+    "dev/src/semantic/special_members.cpp": "3dbec886e57a02e047fd9b93e14aa698eff7d15309da3e53092e9ea34f848586",
+    "dev/src/semantic/statement.cpp": "42b3da99c45d70e5dfdd4113cb5bf8f8df94f2595c1dabea34873d00418e894f",
+    "dev/src/semantic/static_initialization.cpp": "eaaed560813d45a7a7f9e146be62c9a9189ba3d0aed69d6033d2c88976c2170a",
+    "dev/src/semantic/static_initializer.cpp": "166319019fbfc0f7daf819f8d64853901c45bc3d5ba106610ee057312b34f2ee",
+    "dev/src/semantic/template_address_arguments.cpp": "f397509e6976923877d9529be5425d773e53162ed8176e1df75133816745fc39",
+    "dev/src/semantic/template_arguments.cpp": "bd83fd047e7f1bb9ce081b59258f920c3bf51dc622ef1b9d22af87bd5fd8fcca",
+    "dev/src/semantic/template_binding.cpp": "ad6ad08634601b4b6407a8e6ce4e8f8dd039388499e2f0042234b81d774cb352",
+    "dev/src/semantic/template_binding.h": "655b0ac6f304af6bdbf302e8d9ba019763fc8e42f6c718bc7be93fae45882a47",
+    "dev/src/semantic/template_binding_declarations.cpp": "0b25215f4de5c6213b07244eb963f9251bab7391a4622fc75d8efaab254d0729",
+    "dev/src/semantic/template_binding_statements.cpp": "a9a78a2570e6f21a6728893090673c66f297ce0b3570f8814a4d01f2387bec04",
+    "dev/src/semantic/template_call.cpp": "b6f4af2ff2287f046305bd5b9d7be32a5dcad358f51eceeb337a0c3bd1d0a77b",
+    "dev/src/semantic/template_call_facts.cpp": "5fa79b6a9cd596fe0eea5eea0082451f5176a03526a8205099feba5b38a22e40",
+    "dev/src/semantic/template_checks.cpp": "a8d3e829e8e24a15605170159ee2f0b565d8bbeb6b0825132810bb6b23e6ae1c",
+    "dev/src/semantic/template_class.cpp": "edef0d9212fb6776e5cc28c0a41e02a07c5808f3439ca985e9c4171f80edeb2e",
+    "dev/src/semantic/template_conversion_deduction.cpp": "fc43b64a9747729f9357306f774b7ecc682e3c8ec2ab3355b3d03b8edb66a728",
+    "dev/src/semantic/template_conversion_facts.cpp": "64b29173e2463802bd92b6dae3a2672e4e8daa8e8d0c676a641895e51170387b",
+    "dev/src/semantic/template_declaration.cpp": "471daf61b10e329d77cb2106ad3dd6f0800702431410cbea96b0338bdfc63802",
+    "dev/src/semantic/template_deduction.cpp": "64431cf7f90561ac07787d6df599cf6a41be7c7160248d1b06dac0b056295cb7",
+    "dev/src/semantic/template_definition.cpp": "40e9bede6c619df1d6f0d1f5b2a8a3edb14bacb5e632c5cf5c8cf7f8b228666f",
+    "dev/src/semantic/template_definition_environment.cpp": "33fae886d9d569f15cfc4f22902d574f3b6db60d2dd40613a0ea7dfa4bc6bbb0",
+    "dev/src/semantic/template_definition_owner.cpp": "c1730977b6ddc9af7cd901a2e0e8cc292d5397b9585479bef5bb75448041ae23",
+    "dev/src/semantic/template_entities.cpp": "6746d283ed7530d53d13f147028e1b768ab9d8cd1b7e3613d46d2d7c39ae3409",
+    "dev/src/semantic/template_expression.cpp": "6d170b0d17fa150e50e31642051d82540633acf2e2f2a5be5b636f2f8829824d",
+    "dev/src/semantic/template_initializers.cpp": "c3b6a87ba059f588609513cacca93c1ec93146f10073324c4805c11e29f3488c",
+    "dev/src/semantic/template_instantiation.cpp": "ac538aea1758ceedb38b439f895728a9c430c3b50b91737bb70bd679e75e3dad",
+    "dev/src/semantic/template_lexical_frame.cpp": "67e5784b4ba0d2890db423f53fb3fb227b9feaeab63d19431a4cd709d94feb4b",
+    "dev/src/semantic/template_member_facts.cpp": "b0ec2a0a663900bb3b9eef168ba3c3f97503ffd39ac292d916882b3e31f039e2",
+    "dev/src/semantic/template_object_facts.cpp": "018fb4dfa9550705e30e34fc8b43a09f37b1cc3c0121a09bc5051ca649e95d91",
+    "dev/src/semantic/template_operator_facts.cpp": "dab122dcc8b75eb1e61f6aa41fcded2af43803b4b32d37d36e4ce76f7f4e9e09",
+    "dev/src/semantic/template_ordering.cpp": "5609483c536ab29fa4d21545250a3e650cd64affdbe3a5b00bea138d8679dd25",
+    "dev/src/semantic/template_pack_expansion.cpp": "7c8e4bede4e4f946d886a12f64634ad276f4b237021c5bc25533945691cf50f2",
+    "dev/src/semantic/template_pack_recipe.cpp": "cf682d162ffe3d8c8356d97421163e8811d8345477307d26131ee3f253a8de5a",
+    "dev/src/semantic/template_packs.cpp": "c7ce5656960c5546afa3479d3e770932710ee5e3bf846f71d65678716ec7caaa",
+    "dev/src/semantic/template_signature_shape.cpp": "fb11f8254c45a4da71e225df65a45a34e724324e6809cc2846c175b3657a31e0",
+    "dev/src/semantic/template_specialization.cpp": "cf8dbfc934ca9f4aafbb189b714b924204ffa037bf6ff1ae3effb847c175ae00",
+    "dev/src/semantic/template_statement_facts.cpp": "b47a5fc8583526591d764ef463eb5b836653b77d2f6d451ca910cbcd710cb8c2",
+    "dev/src/semantic/template_type_access.cpp": "725d711b8548f00711bf5ab23c3bf5f272bda37eefba38e5f263111329083422",
+    "dev/src/semantic/template_type_facts.cpp": "b03d7ac94f47ebe844db7e937f9ff3fc051ae85217d7dfa2e4d5b60579e9040e",
+    "dev/src/semantic/template_value_facts.cpp": "d2331c44286131929c8243b87102495197ba941a297d871387468025696abc35",
+    "dev/src/semantic/template_variable.cpp": "476c91940fab9f759124f573f373e90cf7e1cad180a0a54694c2e92305c09649",
+    "dev/src/semantic/transfer_actions.cpp": "7d993b01bb3bc3bd6ffa624810c4e82715fb5fd2f74b3fbd439a29c0b90ef488",
+    "dev/src/semantic/type_builder.cpp": "ad3d3135cede74c41570d0ddaadc937f325d7bbea356a7ddda39c23598ded768",
+    "dev/src/semantic/type_query.cpp": "6ffa089f4029a55a6eae724ca407a023c35a87e6c0d0b68aef5259dde7109ce1",
+    "dev/src/semantic/type_query.h": "dd401c3226b997871b68c983657c110264adb8f9f9aa56ea639aba87b552e818",
+    "dev/src/semantic/value_initialization.cpp": "99e5bdeabc564cec0d1d8b977d5a663e6666f603019d6ca5bed2ab1ac7b2a71d",
+    "dev/src/semantic/virtuals.cpp": "42a9716fa18a5912abddeb7eea2b409ee3c66c64920d1f02ea8443bd0587bf0a",
+    "dev/src/semantic/zero_initialization.cpp": "c3d5edb82dca0c6724e078109d89ebc93fff550a5784ad70b947209d6274a639",
+    "dev/src/support/id_index.cpp": "8b6a3552c316a419797e12da02f2152d4ccd77141a830abea86c363526b6d0a5",
+    "dev/src/support/id_index.h": "2428fe49e7d52cbc3b3e2cf9292069a22245fcedc1fb8fb239b3341ec1551ac7",
+    "dev/src/support/not_implemented.h": "8a2f10e099f558d82a6876385a76aab5d5f9e35f776499f089e054db6b5f6e0b",
+    "dev/src/support/testing/test_runner.cpp": "d33cbae9c8265d8e128650871a43961e20063cd1b3c386ee20dfa0f23c50ae61",
+    "dev/src/support/tool_help_text.h": "ee5b739ac7af9ff8b61b1e0440ebdfc40c2c28f191a7eae405e931ac5e14515f",
+    "dev/src/syntax/ast.cpp": "c63d637098e4e68a71409f5ba2c4d6030125cdc54cc227926d3ab0a94ffa1373",
+    "dev/src/syntax/ast.h": "8d319e9f31e10e4527d7d8b454bc1ed648c9fde8c27a56416db7232087fdd3f9",
+    "dev/src/syntax/class_parser.cpp": "8565b9c2cf54ee47a797ce0b3532d9ad87a14758d6cc4394d2b6532dd6f5c5bd",
+    "dev/src/syntax/cursor.cpp": "b43f8ee7a241403f74b48ddcb3c3cd97af199764d116db33eabeb916f1f1c0b2",
+    "dev/src/syntax/cursor.h": "fee1aee355021d719b211321fd22a7635efd980ba385f7b3bb5b94bf18da25d4",
+    "dev/src/syntax/declaration.cpp": "639a081d0b4ebedbf0e44d682e6cafed4ee59615bdb7b8d308644efa407020fd",
+    "dev/src/syntax/declarator.cpp": "562f23450f1b50552506e1b7706f88897367b7851e3100f03fe7a18156a78d02",
+    "dev/src/syntax/driver.cpp": "f71a031dcd5fcd1863518a55cbfccc26065f3f154588edb8704aa97f1ed61d76",
+    "dev/src/syntax/driver.h": "eb1776fc146f3037794c1d00eae14434423a47efa63b172be18eb6ff8403001e",
+    "dev/src/syntax/expression.cpp": "d5a97002a6666aaaa214edb8c1e410b7d18b3567e2da2d4c967add111cfe08e9",
+    "dev/src/syntax/name_parser.cpp": "b8836c61f4aea96f670bb5d20b5415d03aa9fdb396df6d24aa1284f1f2fe6df6",
+    "dev/src/syntax/names.cpp": "1614841f20b1c0db3401d9ce828e9877656736f8c19f79b9705e55361f709592",
+    "dev/src/syntax/names.h": "8745c1758836cc0f288167a628ed69cea2e9b1e67341bae62ecc258725af03ba",
+    "dev/src/syntax/occurrence.cpp": "b0863020216119e8a5a544bf4d451c1ac15d85ba39507d1acc58ac0ff5a433d5",
+    "dev/src/syntax/output.cpp": "c73bde74e18273426e5395e1843e26b8d22062d99935a9ba2dd602058927ee47",
+    "dev/src/syntax/parser.cpp": "842e17deb7f34807a37f8ccdee122b63f21c207165c0cb7aceaa8e9edbeec351",
+    "dev/src/syntax/parser.h": "af00434b105ebec918bc2a87c2eee75f444b4befd15c4f89635afa7339d00110",
+    "dev/src/syntax/prediction.cpp": "0d10597050a9b9a7a8ca58000d85635c045dc5c4ad79e206ac2963be4af53b90",
+    "dev/src/syntax/statement.cpp": "122a49aaa9c34c880cb1e535c8d49d8d209a947d830ddb14dbfe5bf7bb47e816",
+    "dev/src/syntax/template_parser.cpp": "8ad0e6e39f39ce416a08cfcbb872aa076ff6a24a5d4e70e5138c4a884b0256ec"
+  }
+}

@@ -10,6 +10,35 @@ Value Procedural::expression(NodeId n, bool location)
     auto node = ast[n];
     auto fact = sem.expression_fact(n);
     NodeId a = node.first;
+    if (fact.form == semantic::ExpressionForm::Typeid || fact.form == semantic::ExpressionForm::DynamicCast)
+        return rtti_expression(n);
+    if (fact.form == semantic::ExpressionForm::TypeinfoEqual || fact.form == semantic::ExpressionForm::TypeinfoUnequal) {
+        auto receiver = sem.object_fact(n);
+        Value left;
+        if (receiver.node) {
+            if (receiver.arrow) left = arrow_object(receiver.node,receiver.arrow);
+            else {
+                left = expression(receiver.node,true);
+                left = sem.types[sem.expression_fact(receiver.node).type].kind == TypeKind::Pointer ? load(left) : address(left);
+            }
+        } else left = receiver.capture ? captured_address(receiver.capture) : emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
+        left = base_projection(left,receiver.qualifier_adjustment);
+        left = base_projection(left,receiver.adjustment);
+        auto right = converted(sem.call_argument(fact),sem.conversion_fact(fact.conversions));
+        // Direct queries in one TU share the canonical RTTI object. General
+        // references may designate TU-local incomplete placeholders, whose
+        // external name identities remain equal to the complete type's name.
+        if (sem.expression_fact(receiver.node).form != semantic::ExpressionForm::Typeid ||
+            sem.expression_fact(sem.call_argument(fact)).form != semantic::ExpressionForm::Typeid) {
+            auto a = emit(Opcode::Index,IRType::I8,{left.operand,Operand::integer(8)});
+            auto b = emit(Opcode::Index,IRType::I8,{right.operand,Operand::integer(8)});
+            left = emit(Opcode::Load,IRType::Ptr,{a.operand});
+            right = emit(Opcode::Load,IRType::Ptr,{b.operand});
+        }
+        auto value = emit(Opcode::Compare,IRType::Ptr,{left.operand,right.operand},
+            fact.form == semantic::ExpressionForm::TypeinfoEqual ? Operation::Eq : Operation::Ne);
+        value.type = fact.type; return value;
+    }
     if (fact.form == semantic::ExpressionForm::ListValue) {
         auto c = sem.conversion_fact(fact.conversions);
         EntityId e = sem.list_objects[c.materialization].temporary;

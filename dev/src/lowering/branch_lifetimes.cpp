@@ -56,6 +56,8 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result)
         if (c.ellipsis_object) needed |= sem.temporary_cleanup(sem.converted_temporary(c));
         if (auto call = conversion_call(c)) arguments(*call);
     }
+    if (expression.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
+        needed |= cleanup_expression(ast[n].first,false);
     if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||

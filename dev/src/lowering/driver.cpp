@@ -39,6 +39,9 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
                 << ",\"node_growths\":" << ast.node_growths << ",\"delimiter_work\":" << cursor.delimiter_work;
             sem.telemetry(std::cerr);
             std::cerr << ",\"lower_virtual_cache_bytes\":" << lower.virtual_cache_bytes()
+                << ",\"rtti_expressions\":" << sem.rtti_expressions.size()-1
+                << ",\"rtti_records\":" << lower.rtti_work
+                << ",\"rtti_cache_hits\":" << lower.rtti_hits
                 << ",\"lower_deleting_entries\":" << lower.deleting_entry_count();
             std::cerr << ",\"lower_local_statics\":" << lower.local_static_count()
                 << ",\"lower_constant_data_records\":" << lower.constant_data_count()

@@ -131,3 +131,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_conversion_deduction
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/function_declaration
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/closure_capture
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/rtti lowering/rtti

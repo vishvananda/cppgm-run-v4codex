@@ -69,7 +69,12 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
             args.push_back(a); chosen.push_back(c);
         }
         record_call(result, args, chosen);
-        select_function(callee, selected, !result.object_use || !object_uses[result.object_use].virtual_slot);
+        bool equal = typeinfo_comparison(selected,OP_EQ), unequal = typeinfo_comparison(selected,OP_NE);
+        if (equal || unequal) {
+            if (deleted_transfer(selected)) throw std::runtime_error("deleted type_info comparison");
+            check_access(selected,s,object_uses[fn.object_use].naming_scope,object_type);
+            result.form = equal ? ExpressionForm::TypeinfoEqual : ExpressionForm::TypeinfoUnequal;
+        } else select_function(callee, selected, !result.object_use || !object_uses[result.object_use].virtual_slot);
     } else {
         ft = fn.type;
         if (pointer(ft)) ft = types[ft].child;

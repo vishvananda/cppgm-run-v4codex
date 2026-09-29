@@ -1,0 +1,125 @@
+#include "semantic/analyzer.h"
+#include <stdexcept>
+namespace cppgm { namespace semantic {
+using syntax::Kind;
+Expression Analyzer::rtti_operand(QueryId id)
+{
+    auto fact = query_fact(id);
+    auto operand = fact.expression;
+    if (operand.type || fact.dependent || fact.state == FactState::Failure) return operand;
+    // An explicit function template-id can name a unique signature without a
+    // target pointer type. Complete only those signatures, never their bodies.
+    while (type_queries[id].kind == QueryKind::Parenthesized) id = query_edges[type_queries[id].offset];
+    auto q = type_queries[id]; auto entity = operand.entity;
+    if (q.arguments && function_binding(entity)) {
+        auto pack = argument_packs[q.arguments];
+        std::vector<TypeId> args(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count);
+        EntityId selected = 0;
+        for (auto candidate : candidates(entity)) {
+            if (!entities[candidate].template_info) continue;
+            auto instance = specialize(candidate,args,true);
+            if (instance && (entities[instance].kind != EntityKind::Function || entities[instance].template_info || selected)) return operand;
+            if (instance) selected = instance;
+        }
+        entity = selected;
+    }
+    if (entity && entities[entity].kind == EntityKind::Function && !entities[entity].template_info) {
+        if (deleted_transfer(entity)) throw std::runtime_error("typeid refers to a deleted function");
+        if (entities[entity].member_info && !entities[entity].is_static) return operand;
+        require_deduced_return(entity);
+        operand.type = entities[entity].type; operand.entity = entity;
+    }
+    return operand;
+}
+TypeId Analyzer::typeinfo_result_type()
+{
+    // [expr.typeid] requires the library declaration in namespace std. Resolve
+    // that declaration normally; no unqualified or fabricated substitute.
+    auto ns = lookup(global,ids.intern(TextView("std",3)),Lookup::Ordinary,true);
+    auto e = ns && entities[ns].kind == EntityKind::Namespace ?
+        lookup(entities[ns].scope,ids.intern(TextView("type_info",9)),Lookup::Ordinary,true) : 0;
+    if (!e || !class_value(entities[e].type)) throw std::runtime_error("typeid requires std::type_info");
+    return types.qualify(entities[e].type,1);
+}
+Expression Analyzer::typeid_expression(NodeId n, ScopeId s)
+{
+    auto first = ast[n].first;
+    RttiExpression use;
+    if (ast[first].kind == Kind::TypeId) use.type = value_type(type_id(first,s));
+    else {
+        // Formation queries check the operand without materialization or body
+        // demand. Only a polymorphic glvalue promotes it to evaluated work.
+        auto operand = rtti_operand(expression_query(first,s));
+        use.type = operand.type;
+        if (class_value(use.type)) size(use.type);
+        use.dynamic = operand.category != ValueCategory::Prvalue && class_value(use.type) && polymorphic(types[use.type].entity);
+        if (use.dynamic) expression(first,s);
+    }
+    if (!use.type) throw std::runtime_error("typeid requires a resolved type");
+    if (class_value(use.type)) size(use.type);
+    if (!unevaluated_depth && class_value(use.type) && !entities[types[use.type].entity].specialization)
+        demand_vtable(types[use.type].entity,VtableReason::Rtti);
+    use.type = types.unqualified(use.type);
+    Expression result; result.type = typeinfo_result_type();
+    result.category = ValueCategory::Lvalue; result.form = ExpressionForm::Typeid;
+    rtti_expression_index.put(n,rtti_expressions.size()); rtti_expressions.push_back(use);
+    return result;
+}
+Conversion Analyzer::dynamic_cast_conversion(Expression x, TypeId to, ScopeId s, RttiExpression& use)
+{
+    Conversion c; c.target = to;
+    auto target = types[to];
+    use.reference = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
+    if (!use.reference && target.kind != TypeKind::Pointer) return c;
+    auto from = use.reference ? x.type : decay(x.type);
+    if (!use.reference && !pointer(from)) return c;
+    use.source = use.reference ? from : types[from].child;
+    use.type = target.child;
+    if (!class_value(use.type) || !class_value(use.source)) return c;
+    size(use.type); size(use.source);
+    if (types[use.source].cv & ~types[use.type].cv) return c;
+    if (use.reference && (x.category == ValueCategory::Prvalue ||
+        (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue))) return c;
+    if (types.unqualified(use.type) == types.unqualified(use.source) || derived_from(use.source,use.type))
+        return explicit_builtin_conversion(x,to,KW_STATIC_CAST,s);
+    if (!polymorphic(types[use.source].entity)) return c;
+    use.dynamic = true;
+    if (derived_from(use.type,use.source))
+        use.hint = base_accessible(types[use.type].entity,types[use.source].entity,global) ?
+            base_adjustments[base_steps(use.type,types[use.source].entity)].total : -2;
+    c.rank = 0; c.reference = use.reference;
+    return c;
+}
+Expression Analyzer::dynamic_cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand)
+{
+    auto x = expression(operand,s);
+    RttiExpression use;
+    auto c = dynamic_cast_conversion(x,to,s,use);
+    if (!c.valid()) throw std::runtime_error("invalid dynamic_cast");
+    Expression result; result.type = value_type(to);
+    result.category = types[to].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+        types[to].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+    facts.edit(n).type = to;
+    if (!use.dynamic) { result.form = ExpressionForm::Cast; record_conversion(result,operand,c); return result; }
+    result.form = ExpressionForm::DynamicCast;
+    if (!unevaluated_depth) {
+        if (!entities[types[use.source].entity].specialization) demand_vtable(types[use.source].entity,VtableReason::Rtti);
+        if (!entities[types[use.type].entity].specialization) demand_vtable(types[use.type].entity,VtableReason::Rtti);
+    }
+    rtti_expression_index.put(n,rtti_expressions.size()); rtti_expressions.push_back(use);
+    return result;
+}
+bool Analyzer::typeinfo_comparison(EntityId e, ETokenType op)
+{
+    if ((op != OP_EQ && op != OP_NE) || entities[e].body || !entities[e].member_info) return false;
+    if (entities[e].name != operator_name(op)) return false;
+    auto owner = entities[e].owner;
+    if (scopes[owner].name != ids.intern(TextView("type_info",9))) return false;
+    auto ns = scopes[owner].parent;
+    if (scopes[ns].kind != ScopeKind::Namespace || scopes[ns].parent != global || scopes[ns].name != ids.intern(TextView("std",3))) return false;
+    auto f = types[entities[e].type];
+    return fundamental(f.child,FT_BOOL) && f.count == 1 && f.cv == 1 &&
+        types[types.parameters[f.offset]].kind == TypeKind::LRef &&
+        types[types.parameters[f.offset]].child == typeinfo_result_type();
+}
+} }

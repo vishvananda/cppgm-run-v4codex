@@ -129,7 +129,7 @@ bool Encoder::modifier(const Node& n) {
     case Kind::Vendor: output += 'U'; source(n.b); break;
     case Kind::Array:
         output += 'A';
-        if (n.b) expression(n.b); else output += std::to_string(n.value);
+        if (n.b) expression(n.b); else if (!n.c) output += std::to_string(n.value);
         output += '_'; break;
     case Kind::Vector: output += "Dv" + std::to_string(n.value) + '_'; break;
     default: return false;

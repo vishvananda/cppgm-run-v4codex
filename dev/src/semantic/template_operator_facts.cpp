@@ -83,7 +83,8 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
         receiver.node = 0;
         receiver.callee_conversion = conversions.size(); conversions.push_back(c);
         result.object_use = object_uses.size(); object_uses.push_back(receiver);
-    } else if (selected) use_selected_function(receiver.callable_entry ? receiver.callable_entry : selected,!receiver.virtual_slot);
+    } else if (selected && result.form != ExpressionForm::TypeinfoEqual && result.form != ExpressionForm::TypeinfoUnequal)
+        use_selected_function(receiver.callable_entry ? receiver.callable_entry : selected,!receiver.virtual_slot);
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     unsigned supplied = result.argument_count;
     if (ast[source].kind == Kind::Call) {

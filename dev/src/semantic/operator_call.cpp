@@ -163,7 +163,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     auto closure = this->closure(types[object].entity);
     EntityId entry = op == OP_LPAREN && closure.thunk && selected.entity == closure.function &&
         ast[receiver].kind == syntax::Kind::Lambda ? closure.thunk : 0;
-    if (!recipe) { demand_member(entry ? entry : selected.entity); demand_specialization(selected.entity); }
+    bool rtti_compare = typeinfo_comparison(selected.entity,op);
+    if (!recipe && !rtti_compare) { demand_member(entry ? entry : selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
             base_steps(object, scopes[entities[selected.entity].owner].entity));
@@ -172,6 +173,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         object_uses[result.object_use].callable_entry = entry;
     }
     result.form = ExpressionForm::OperatorCall;
+    if (rtti_compare) result.form = op == OP_EQ ? ExpressionForm::TypeinfoEqual : ExpressionForm::TypeinfoUnequal;
     std::vector<NodeId> arguments;
     std::vector<Conversion> selected_arguments;
     for (std::size_t i = selected.member; i < args.size(); ++i) {

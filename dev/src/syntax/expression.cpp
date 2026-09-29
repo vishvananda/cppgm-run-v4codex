@@ -215,7 +215,7 @@ NodeId Parser::type_trait()
     } else if (in.eat("(")) {
         unsigned saved = angle_expression;
         angle_expression = 0;
-        ast.append(result, keyword.op != KW_NOEXCEPT && type_operand() ? type_id() : expression());
+        ast.append(result, keyword.op != KW_NOEXCEPT && type_operand(keyword.op == KW_TYPEID) ? type_id() : expression());
         in.require(")");
         angle_expression = saved;
     } else {

@@ -58,7 +58,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::Parenthesized: result = child(0); break;
     case QueryKind::Conditional: result = abi.make(Kind::Conditional,child(0),child(1),child(2)); break;
     case QueryKind::Cast:
-        result = q.op == KW_STATIC_CAST ? abi.make(Kind::Cast,abi_type(q.type),child(0),abi_mangle::operation("sc")) :
+        result = q.op == KW_STATIC_CAST || q.op == KW_DYNAMIC_CAST ? abi.make(Kind::Cast,abi_type(q.type),child(0),abi_mangle::operation(q.op == KW_DYNAMIC_CAST ? "dc" : "sc")) :
             abi.make(Kind::Conversion,abi_type(q.type),0,0,0,{child(0)}); break;
     case QueryKind::Unary: {
         // The query's postfix dummy argument participates in overload
@@ -130,6 +130,9 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::Sizeof:
         result = q.type ? abi.make(q.op == KW_ALIGNOF ? Kind::AlignofType : Kind::SizeofType,abi_type(q.type)) :
             abi.make(Kind::Unary,child(0),abi_mangle::operation(q.op == KW_NOEXCEPT ? "nx" : q.op == KW_ALIGNOF ? "az" : "sz")); break;
+    case QueryKind::Typeid:
+        result = q.type ? abi.make(Kind::TypeidType,abi_type(q.type)) :
+            abi.make(Kind::TypeidExpression,child(0)); break;
     case QueryKind::String: throw std::logic_error("string literal is not a type-dependent ABI expression");
     case QueryKind::TypeValue: throw std::logic_error("type-query type used as ABI expression");
     }

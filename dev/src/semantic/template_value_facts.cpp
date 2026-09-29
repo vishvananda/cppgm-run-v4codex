@@ -4,6 +4,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
 {
+    if (ast[node].op == KW_TYPEID) return false;
     auto source = ast.nodes.occurrences[node].source;
     if (template_value_queries.get(source)) return true;
     struct Probe {

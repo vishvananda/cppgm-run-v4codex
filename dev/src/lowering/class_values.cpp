@@ -22,7 +22,7 @@ Value Procedural::class_address(EntityId object, TypeId t)
     if (!sem.static_temporary(object).object) object_addresses[object] = lowir_model::ValueId(pointer.operand.ref);
     return pointer;
 }
-void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal, bool base)
+void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal, bool base, bool entry)
 {
     if (!terminal) guard_expression(n);
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
@@ -51,7 +51,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         call(n,destination); return;
     }
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;
-    if (!construction || sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)) {
+    if (!construction || (!entry && (sem.trivial_transfer(materialized.constructor) || sem.direct_transfer(materialized.constructor)))) {
         Value source = construction ? converted(sem.call_argument(materialized.call),sem.conversion_fact(materialized.call.conversions)) : address(expression(n,true));
         if (!sem.empty_class(target)) {
             Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);

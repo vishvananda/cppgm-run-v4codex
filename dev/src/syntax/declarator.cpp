@@ -65,12 +65,12 @@ bool Parser::nested_declarator_ahead()
            (identifier(1) && (!type_start(1) || (in.is("::",probe_name(1).end) && in.is("*",probe_name(1).end+1))));
 }
 
-bool Parser::parameter_clause_ahead()
+bool Parser::parameter_clause_ahead(std::size_t ahead)
 {
     if (ast.telemetry) ++decisions;
-    if (!in.is("(")) return false;
-    std::size_t end = in.matching(0);
-    for (std::size_t i = 1; i < end; ++i) {
+    if (!in.is("(",ahead)) return false;
+    std::size_t end = in.matching(ahead);
+    for (std::size_t i = ahead+1; i < end; ++i) {
         if (in.is("...", i)) return true;
         if (!type_start(i)) return false;
         i = probe_type(i);
@@ -168,6 +168,7 @@ NodeId Parser::type_id(bool new_type)
     NodeId result = make(Kind::TypeId);
     ast.append(result, specifiers(true));
     if (in.is("*") || in.is("&") || in.is("&&") || in.is("[") ||
+        (identifier() && in.is("::",probe_name().end) && in.is("*",probe_name().end+1)) ||
         (!new_type && (nested_declarator_ahead() || parameter_clause_ahead())))
         ast.append(result, declarator(true, new_type));
     return result;

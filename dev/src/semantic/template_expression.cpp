@@ -42,6 +42,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     }
     case Kind::Cast: {
+        if (node.op == KW_DYNAMIC_CAST) return;
         auto target = type_id(first,s);
         if (dependent_type(target)) return;
         first = ast[first].next;
@@ -65,6 +66,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     }
     case Kind::Sizeof: case Kind::TypeTrait:
+        if (node.op == KW_TYPEID && ast[first].kind != Kind::TypeId) return;
         if (ast[first].kind == Kind::TypeId) {
             if (types[type_id(first,s)].kind != TypeKind::Fundamental) return;
         } else if (!fixed(first)) return;

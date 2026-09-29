@@ -25,7 +25,12 @@ Value Procedural::placement_new(NodeId n)
         emit(Opcode::Branch,IRType(),{valid.operand,Operand::label(initialize_block),Operand::label(end)}); start(initialize_block);
     }
     Value location(result.operand, type(use.type), use.type, true);
-    if (use.initializer) {
+    if (use.construct) {
+        auto init = sem.class_initialization(use.initializer,use.type);
+        if (init.source) construct_value(init.source,sem.conversion_fact(init.conversion),result,false,false,true);
+        else construct(use.constructor,use.initializer,result,false,true);
+    }
+    else if (use.initializer) {
         auto plan = sem.initializer_plan(use.initializer, use.type);
         if (!plan || !call_aggregate_helper(plan, location)) initialize(use.initializer, use.type, location);
     } else if (use.constructor) construct(use.constructor, 0, result);

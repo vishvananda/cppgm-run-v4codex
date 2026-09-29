@@ -146,6 +146,8 @@ void Encoder::expression(Id id) {
         output += 'E'; break;
     case Kind::SizeofType: output += "st"; type(n.a); break;
     case Kind::AlignofType: output += "at"; type(n.a); break;
+    case Kind::TypeidType: output += "ti"; type(n.a); break;
+    case Kind::TypeidExpression: output += "te"; expression(n.a); break;
     case Kind::Member:
         output += "sr"; type(n.a); if (n.c) output += 'E'; source(n.b);
         if (n.count) args(n);

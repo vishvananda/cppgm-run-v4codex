@@ -161,7 +161,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         break;
     case Kind::Cast: {
         if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST &&
-            node.op != KW_CONST_CAST && node.op != KW_REINTERPET_CAST) {
+            node.op != KW_CONST_CAST && node.op != KW_REINTERPET_CAST && node.op != KW_DYNAMIC_CAST) {
             if (template_type_probe) return 0;
             throw std::runtime_error("cast is not supported in a constant type query");
         }
@@ -267,7 +267,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         break;
     }
     case Kind::Sizeof: case Kind::TypeTrait:
-        q.kind = QueryKind::Sizeof; q.op = node.op;
+        q.kind = node.op == KW_TYPEID ? QueryKind::Typeid : QueryKind::Sizeof; q.op = node.op;
         if (ast[first].kind == Kind::TypeId) {
             q.type = type_id(first,s);
             if (template_type_probe && !q.type) return 0;
@@ -469,6 +469,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     auto& x = r.expression;
     if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
+    if (q.kind == QueryKind::Typeid) {
+        x.type = typeinfo_result_type(); x.category = ValueCategory::Lvalue;
+    }
     // Layout changes the value of sizeof, not its type. Fixed arithmetic
     // operands still impose definition-time obligations, including operands
     // that a later constant evaluation will short-circuit.
@@ -572,7 +575,13 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Parenthesized: r = children[0]; r.declared_type = 0; break;
     case QueryKind::Conditional: r = query_conditional(q,children); break;
     case QueryKind::Cast:
-        if (q.op == TOK_INVALID && integral(q.type) && class_value(children[0].expression.type)) {
+        if (q.op == KW_DYNAMIC_CAST) {
+            RttiExpression use;
+            auto c = dynamic_cast_conversion(children[0].expression,q.type,q.context,use);
+            if (!c.valid()) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+            x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue :
+                types[q.type].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
+        } else if (q.op == TOK_INVALID && integral(q.type) && class_value(children[0].expression.type)) {
             auto c = conversion_function_value(children[0].expression,q.type,q.op != TOK_INVALID);
             if (!c.valid() || deleted_transfer(c.function)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             if (!valid_fixed_conversion(children[0].expression,0,c,q.context)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
@@ -625,6 +634,14 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         // while dependent values still belong to the source decltype recipe.
         bool dependent = r.dependent;
         r = query_call(q,children); r.dependent |= dependent; break;
+    }
+    case QueryKind::Typeid: {
+        auto operand = q.type;
+        if (!operand) operand = rtti_operand(query_edges[q.offset]).type;
+        operand = value_type(operand);
+        if (!operand) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
+        if (class_value(operand)) size(operand);
+        break;
     }
     case QueryKind::Sizeof:
         if (q.op != KW_NOEXCEPT && !size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF,true)) {

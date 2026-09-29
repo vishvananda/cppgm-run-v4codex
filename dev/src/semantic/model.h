@@ -241,7 +241,7 @@ struct MemberFacts {
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
 };
-enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4 };
+enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4, Rtti = 8 };
 struct VirtualClass {
     std::vector<EntityId> slots; // Complete, then deleting destructor occupies two entries.
     Index signatures;
@@ -320,7 +320,12 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false, injected_member = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
+struct RttiExpression {
+    TypeId type = 0, source = 0;
+    std::int64_t hint = -1;
+    bool dynamic = false, reference = false;
+};
 enum class CallInputs : unsigned char { Concrete, Source, Context, Query };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.

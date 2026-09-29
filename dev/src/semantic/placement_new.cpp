@@ -72,7 +72,22 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
         if (use.zero) use.zero_plan = prepare_zero_initialization(use.leaf);
         if (use.constructor) members[entities[use.constructor].member_info].array_entry = true;
         if (use.constructor) use.deallocation = select_deallocation(use.leaf,true,child(n,Kind::Global),s);
-    } else if (use.initializer) initialize(use.initializer, use.type, s);
+    } else if (use.initializer) {
+        initialize(use.initializer, use.type, s);
+        auto ctor = facts[use.initializer].entity;
+        auto init = class_initialization(use.initializer,use.type);
+        if (init.source && conversions[init.conversion].kind == Conversion::Kind::Construction) {
+            auto object = conversion_objects[conversions[init.conversion].materialization];
+            if (!object.elided) ctor = object.constructor;
+        }
+        // An explicitly allocated copy uses its complete constructor entry.
+        // Keep that choice on this allocation; local transfers can still use
+        // their recorded direct representation-copy convention.
+        if (ctor && constructor_member(ctor) && (trivial_transfer(ctor) || direct_transfer(ctor))) {
+            use.constructor = ctor; use.construct = true;
+            members[entities[ctor].member_info].retained_root = true;
+        }
+    }
     else {
         use.constructor = default_constructor(use.type, s);
         if (use.constructor) members[entities[use.constructor].member_info].complete_entry = true;

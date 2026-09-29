@@ -15,8 +15,15 @@ void publish(Program& p, SymbolId symbol, const std::vector<DataItem>& data)
 }
 SymbolId Procedural::abi_global(EntityId cls, abi_mangle::TargetKind kind)
 {
-    abi_mangle::Target target; target.kind = kind; target.type = abi_type(sem.entities[cls].type);
-    bool internal = internal_scope(sem.entities[cls].owner);
+    return abi_type_global(sem.entities[cls].type,kind);
+}
+SymbolId Procedural::abi_type_global(TypeId type, abi_mangle::TargetKind kind)
+{
+    abi_mangle::Target target; target.kind = kind; target.type = abi_type(type);
+    bool internal = internal_rtti_type(type);
+    // Incomplete placeholders must not preempt another translation unit's
+    // complete RTTI. Their name objects still share the canonical ABI identity.
+    internal |= kind == abi_mangle::TargetKind::Typeinfo && rtti_incomplete_flags(type);
     auto key = (std::uint64_t(16+unsigned(kind)) << 32) | target.type;
     if (!internal) if (auto prior = linkage.external.get(key)) return SymbolId(prior);
     SymbolId sym = fresh_symbol(kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name");
@@ -29,31 +36,7 @@ SymbolId Procedural::abi_global(EntityId cls, abi_mangle::TargetKind kind)
 }
 SymbolId Procedural::typeinfo(EntityId cls)
 {
-    auto id = sem.entities[cls].class_info;
-    if (typeinfos[id]) return typeinfos[id];
-    auto base = sem.direct_base(cls);
-    SymbolId base_info = base ? typeinfo(base) : SymbolId();
-    SymbolId info = typeinfos[id] = abi_global(cls,abi_mangle::TargetKind::Typeinfo);
-    if (p.symbols[info.index-1].kind != Symbol::Unknown) return info;
-    SymbolId name = abi_global(cls,abi_mangle::TargetKind::TypeinfoName);
-    abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Type; target.type = abi_type(sem.entities[cls].type);
-    std::string encoded = abi_mangle::mangle(abi,target);
-    std::vector<DataItem> data;
-    for (unsigned char c : encoded) data.push_back(scalar(IRType::I8,c));
-    data.push_back(scalar(IRType::I8,0)); publish(p,name,data);
-    unsigned role = !base ? 0 : sem.base_offset(sem.entities[cls].type) ? 2 : 1;
-    if (!linkage.rtti_roles[role]) {
-        const char* names[] = {"_ZTVN10__cxxabiv117__class_type_infoE", "_ZTVN10__cxxabiv120__si_class_type_infoE", "_ZTVN10__cxxabiv121__vmi_class_type_infoE"};
-        SymbolRole roles[] = {SR_RTTI_CLASS,SR_RTTI_SI,SR_RTTI_VMI};
-        auto sym = fresh_symbol("@rtti_runtime"); linkage.rtti_roles[role] = sym;
-        Global g; g.symbol = sym; g.declaration = true; p.globals.push_back(g);
-        auto& s = p.symbols[sym.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
-        s.metadata.binding = SBM_STRONG; s.metadata.role = roles[role]; s.metadata.object = p.intern(names[role]);
-    }
-    data = {relocation(linkage.rtti_roles[role],16),relocation(name)};
-    if (role == 1) data.push_back(relocation(base_info));
-    if (role == 2) { data.push_back(scalar(IRType::I32,0)); data.push_back(scalar(IRType::I32,1)); data.push_back(relocation(base_info)); data.push_back(scalar(IRType::I64,(sem.base_offset(sem.entities[cls].type)<<8)|2)); }
-    publish(p,info,data); return info;
+    return rtti_type(sem.entities[cls].type);
 }
 SymbolId Procedural::vtable_symbol(EntityId cls)
 {
