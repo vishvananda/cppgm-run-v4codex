@@ -128,8 +128,10 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
     bool seen = false;
     for (NodeId p = ast[params].first; p && i < f.count; p = ast[p].next, ++i) {
         NodeId a = child(p, Kind::DefaultArgument);
+        bool pack = child(ast[ast[p].first].next,Kind::ParameterPack) != 0;
         unsigned index = entities[e].defaults + i;
         if (a) {
+            if (pack) throw std::runtime_error("function parameter pack cannot have a default argument");
             if (head && source != entities[e].source)
                 throw std::runtime_error("function template default added by a later declaration");
             if (default_arguments[index]) throw std::runtime_error("duplicate default argument");
@@ -146,7 +148,7 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
             else default_argument(e,i,0,DefaultReason::Declaration);
         }
         if (default_arguments[index]) seen = true;
-        else if (seen) throw std::runtime_error("missing trailing default argument");
+        else if (seen && !pack) throw std::runtime_error("missing trailing default argument");
     }
 }
 std::uint64_t Analyzer::default_argument_key(EntityId e, unsigned parameter) const

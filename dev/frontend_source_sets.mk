@@ -77,6 +77,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_packs semantic/template_pack
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_pack_recipe
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_pattern_selection semantic/template_deduction semantic/template_ordering
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/deduction_parameters
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dependent_type
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_binding semantic/template_binding_declarations semantic/template_binding_statements semantic/template_checks

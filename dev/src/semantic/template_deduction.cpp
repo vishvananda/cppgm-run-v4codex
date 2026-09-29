@@ -139,7 +139,17 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     }
     if (p.kind == TypeKind::Function) {
         if (p.variadic != a.variadic || p.cv != a.cv || p.ref != a.ref) return false;
-        if (!deduce_sequence(std::vector<ArgumentId>(types.parameters.begin()+p.offset,types.parameters.begin()+p.offset+p.count),
+        std::vector<DeductionParameter> parameters;
+        if (!deduction_parameters(p,prefix,parameters)) return false;
+        if (!parameters.empty()) {
+            bool pack = types[parameters.back().type].kind == TypeKind::PackExpansion;
+            auto fixed = parameters.size()-unsigned(pack);
+            if (a.count < fixed || (!pack && a.count != fixed)) return false;
+            for (unsigned j = 0; j < fixed; ++j)
+                if (!parameters[j].nondeduced && !deduce_type(parameters[j].type,types.parameters[a.offset+j],bindings,kind,prefix)) return false;
+            if (pack && !deduce_expansion(types[parameters.back().type].bound,
+                std::vector<TypeId>(types.parameters.begin()+a.offset+fixed,types.parameters.begin()+a.offset+a.count),bindings,prefix,kind)) return false;
+        } else if (!deduce_sequence(std::vector<ArgumentId>(types.parameters.begin()+p.offset,types.parameters.begin()+p.offset+p.count),
             std::vector<ArgumentId>(types.parameters.begin()+a.offset,types.parameters.begin()+a.offset+a.count),bindings,kind,prefix)) return false;
     }
     if (p.child) return deduce_type(p.child, a.child, bindings,kind,prefix);

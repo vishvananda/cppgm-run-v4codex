@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Final PA18 audit validation: WORK. Keep performance runs separate."""
+"""Cumulative final PA18 audit validation: WORK. Keep performance runs separate."""
 from pathlib import Path
 import concurrent.futures,hashlib,json,re,subprocess,sys
 ROOT=Path(__file__).resolve().parents[2];W=Path(sys.argv[1]).resolve();W.mkdir(parents=True,exist_ok=True)
@@ -22,18 +22,20 @@ for name,command in (
  ('through',['make','test-report-through-pa18']),
  ('file-audit',['perl','scripts/cppgm_file_audit.pl','--stage','pa18','--paths','dev/src'])):
  record(check(name,command))
-scripts=('validate73_controls','audit74_controls','list75_controls','inherit76_controls','nested77_controls','lookup77_controls','audit78_controls','audit78_declarations','syntax79_controls','signature79_controls','course79','scalar80_controls','result81_controls','audit82_controls','array83_controls','object84_controls','discard85_controls','storage85_controls','audit86_controls','boundary87_controls','audit88_controls','discard85_scaling','result81_inspection','list75_scaling','inherit76_scaling','nested77_scaling','list75_course','inherit76_course')
+scripts=('validate73_controls','audit74_controls','list75_controls','inherit76_controls','nested77_controls','lookup77_controls','audit78_controls','audit78_declarations','syntax79_controls','signature79_controls','course79','scalar80_controls','result81_controls','audit82_controls','array83_controls','object84_controls','discard85_controls','storage85_controls','audit86_controls','boundary87_controls','audit88_controls','audit90_controls','discard85_scaling','result81_inspection','list75_scaling','inherit76_scaling','nested77_scaling','list75_course','inherit76_course')
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
  futures=[pool.submit(check,s,['python3',ROOT/'student.tests/pa18'/(s+'.py'),cc,W/s]) for s in scripts]
  for f in concurrent.futures.as_completed(futures):record(f.result())
 record(check('pa16-array-controls',['python3',ROOT/'student.tests/pa16/initialization.py',cc,W/'pa16-array-controls']))
 for number in (83,85,87):record(check('reference-proof-'+str(number),['python3',ROOT/f'student.tests/pa18/reference{number}.py']))
 record(check('reference-proof-84-chain',['python3',ROOT/'student.tests/pa18/reference87_chain.py',W/'reference84-chain']))
-for name in ('signature79','scalar80','result81','audit82','array83','object84','discard85','audit86','audit88'):
+for name in ('signature79','scalar80','result81','audit82','array83','object84','discard85','audit86','audit88','audit90'):
  record(check(name+'-trace',[cc,'--emit-lowir','-O0','--validate-lowir','--stats','-o',W/(name+'.lowir'),ROOT/'student.tests/pa18'/(name+'_trace.cpp')]))
  record(check(name+'-backend',[ROOT/'dev/lowir2native-ref','-O0','-o',W/(name+'.exe'),W/(name+'.lowir')]))
  record(check(name+'-execution',[W/(name+'.exe')]))
-record(check('abi',['python3',ROOT/'student.tests/pa18/list75_abi.py',ROOT/'dev/abimangle','/tmp/pa18-loop75/check-api',W/'list75_controls',W/'abi']))
+record(check('abi-build',['python3',ROOT/'student.tests/pa9/build_checks.py','--output',W/'check-api']))
+record(check('abi-direct',[W/'check-api']))
+record(check('abi',['python3',ROOT/'student.tests/pa18/list75_abi.py',ROOT/'dev/abimangle',W/'check-api',W/'list75_controls',W/'abi']))
 files=subprocess.check_output(['git','ls-files','pa18/tests'],cwd=ROOT,text=True).splitlines()
 assert len(files)==1686 and sum(p.endswith('.t') for p in files)==420
 suites=[f'pa{i}/tests' for i in range(1,19)]
