@@ -269,7 +269,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
                 // copy/move. Prove that early construction cannot observe the
                 // destination or escape its temporary address, and that no
                 // destructor or transfer side effects are introduced.
-                if (class_value(item.type) && nested.temporary && !(types[item.type].cv & 2) &&
+                if (!plan.backing_element && class_value(item.type) && nested.temporary && !(types[item.type].cv & 2) &&
                     constructor && independent_constructor(constructor) &&
                     copy_storage_type(item.type) && trivial_destructor(item.type)) {
                     bool safe = true;
@@ -286,7 +286,10 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
             }
             else item.helper_safe = (selected.kind == Conversion::Kind::Standard || selected.kind == Conversion::Kind::Explicit) &&
                 !selected.function && independent_initializer(item.source);
-            if (class_value(item.type) && selected.kind == Conversion::Kind::Construction && conversion_objects[selected.materialization].elided) {
+            // Backing elements are constructed in their final array slots.
+            // Only aggregate helpers transport a class argument across an
+            // extra ABI boundary and need its otherwise elided transfer.
+            if (!plan.backing_element && class_value(item.type) && selected.kind == Conversion::Kind::Construction && conversion_objects[selected.materialization].elided) {
                 item.helper_transfer = selected.function;
                 item.helper_parameter = conversion_objects[selected.materialization].temporary;
                 demand_member(item.helper_transfer);

@@ -42,6 +42,9 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
                 << ",\"rtti_expressions\":" << sem.rtti_expressions.size()-1
                 << ",\"rtti_records\":" << lower.rtti_work
                 << ",\"rtti_cache_hits\":" << lower.rtti_hits
+                << ",\"list_plans\":" << sem.list_plans.size()-1
+                << ",\"list_objects\":" << sem.list_objects.size()-1
+                << ",\"initializer_list_types\":" << sem.initializer_list_types.size()-1
                 << ",\"lower_deleting_entries\":" << lower.deleting_entry_count();
             std::cerr << ",\"lower_local_statics\":" << lower.local_static_count()
                 << ",\"lower_constant_data_records\":" << lower.constant_data_count()
