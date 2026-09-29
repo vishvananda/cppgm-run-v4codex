@@ -1,86 +1,73 @@
-# PA21 implementation plan
+# PA21 compact plan — checkpoint audit 105
 
 Stage base commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Last reviewed commit: `ac988ea33d4997b44e82baaca5a86623fff3127a`.
-Target: PA21 full-stage. Phase: implementation handoff (loop 104).
-Entry: clean `fa079cdeffb19a1a69e92ff56f8bc154c4047c36`, 49/116 pass,
-67 fail. Now: **71/116 pass, 45 fail**; 22 original failures resolved, no new
-failures or coverage reduction. Earlier PAs: **3596/3596**. Independent
-whole-stage audit and the unfinished implementation below remain required.
+Last reviewed commit: `f65eae8d7d434735a0ce981173a347eb8f8a1e59`.
+Target: **PA21 full-stage**. Phase: **checkpointAudit complete; implementation remains**.
+Entry: clean `3b87e462`, **71/116 pass, 45 fail**. Current: the same **71/116**
+and exact **45 failures**, with no coverage reduction. Earlier PAs: **3596/3596**.
+PA21 completion and advancement to PA22 still require the unfinished work.
 
-## Design/spec alignment
+## Reviewed design and findings
 
-RTTI/casts (loop 102): typed formation/evaluation facts feed cached RTTI/ABI
-identities; lowering emits once per identity. [Ownership and bounds](rtti102.md).
+[Audit](audit.md) covers every commit from stage base through the reviewed code
+tip: all three accepted handoffs, their interactions and the repair. Typed RTTI,
+capture and list facts feed direct LowIR; canonical identities and TU/function
+owners bound lookup, demand, storage and cleanup. The independent trace follows
+a polymorphic declaration and two demanded templates through class-element lists,
+captured ranges and RTTI to execution through the supplied PA8 backend.
 
-Closures (loop 103): indexed capture edges retain source type, mode, forwarding
-field and checked conversion/destructor dependencies. Construction and generated
-copies record completed subobjects for reverse unwind cleanup. Template/query cv
-facts do not create storage demand. [Ownership and bounds](captures103.md).
-
-Lists (loop 104): initialization owns canonical library type/field identities,
-immutable element conversion plans and backing storage. Selection/deduction,
-constexpr evaluation and range lowering consume those facts. Local/reference,
-nested and static retention reuse the lifetime owner; class elements construct
-in their final slots. Mandatory inline body checking is separate from emission
-demand. [Data flow, complexity, validation and boundary](lists104.md).
+Audit fixes: retain fixed RTTI recipes instead of rechecking them per
+specialization; preserve a destructible copied subobject's identity when bulk
+prefix grouping would otherwise hide its unwind cleanup. Five new host-unwind
+reducers fail at entry and pass now. Missing RTTI facts are invariant errors.
+Historical details remain in [RTTI](rtti102.md), [captures](captures103.md)
+and [lists](lists104.md); this audit supersedes their pending-review wording.
 
 ## Remaining implementation groups
 
-| Owner | Required data flow and bounds | Remaining validation |
-|---|---|---|
-| EH regions and list-lifetime integration | Construction states feed full-expression/lexical regions; region exits and continuation keys must carry complete handler context. Reuse completed element addresses and bound prefix work. | Two list fixtures still differ in required LowIR shape despite native lifetime controls passing. |
-| Source EH, lifetime control flow and generated special members | Typed throw/exception object/catch binding facts feed matching, rethrow and handler exit. Share only identical complete cleanup contexts. Work follows actual control/dependency edges. | 43 inherited failures: source handlers (including two lambda compositions), subobject failure, conditional temporaries, destructor termination, argument/return ownership and local-class/recursive-template cleanup. |
+| Owner | Required next work and validation |
+|---|---|
+| Source EH semantics | Typed exception-object initialization, throw/rethrow, catch binding/matching and handler exits, including lambda/template bodies. Demand cleanup dependencies after concrete type completion. |
+| Lifetime and control-flow integration | Complete construction/destruction, conditional/full-expression and argument/return ownership; context-complete cleanup continuation keys; list backing regions; local-class/recursive-template identity. Preserve reverse partial cleanup and bounded array/prefix work. Resolve every remaining required LowIR comparison. |
 
-Handoff boundary: list formation, two-phase selection, deduction, scalar storage,
-ranges and class-element constructor selection are complete. Work extended through
-constexpr/nested backing storage, template recipes, static finalization, partial
-construction and checking/emission separation. The two remaining list fixtures
-need the shared EH region/continuation owner, also required by the 43 other
-failures. Source `try` checking still lacks handler/exception-object facts.
-Further list ranking/storage changes cannot supply those states; fixture-specific
-cleanup shaping would duplicate that owner. These are **unfinished requirements**,
-not independent-review questions, and native success does not waive comparison.
+The two list fixtures still differ in required EH-region/address/suffix shape;
+they join the other 43 failures. Native controls do not waive those comparisons.
+Keep the next handoff broad enough to finish shared ownership paths and their
+compositions. Separate cleanup/demand follow-ups in 103–104 were avoidable
+fragmentation; do not turn each fixture repair into another handoff.
 
-Independent review questions: list/query key completeness, dependent recipe reuse,
-nested storage ownership, constructor checking/emission separation, and the
-inherited RTTI/capture facts. Review is still owed; no requirement is waived.
+## Validation and performance
 
-## Performance evidence
+[Validation](../student.tests/pa21/audit105-validation.json): prior-through
+**3596/3596**, file audit **pass** with the same three advisories, PA21
+**71/116** (exit 2), exact failure-set preservation and **116 unchanged inputs**.
+The 15048-path contract inventory permits only the independently verified,
+historical [RTTI reference correction](reference-corrections102.md).
+New composition **16/16** and prefix-unwind **5/5** controls pass alongside
+inherited capture/list/native/host controls. One known supplied freestanding RTTI
+runtime discrepancy remains recorded and passes with the host runtime.
 
-[Protocol/results](performance104.md) and [raw observations](../student.tests/pa21/performance104.json).
-Frozen A/A + ABBA: all six equivalent inherited workloads have identical LowIR
-and native executables. Compiler text +20,800 B (0.97%); heavy-template RSS
-+168 KiB. No speedup claimed. 800→3200 list specializations yield exactly 4×
-plans/objects, one library representation, 36,805→147,205 instructions,
-125→499 ms compilation and 25,288→82,656 KiB RSS. Explicit class-list growth
-is seven instructions per element; array cleanup uses the inherited eight-element
-expansion cap then a loop. Checked live list, calls, memory, floating-point and
-capture loops include separate runtime/payload measurements.
-PA21/O0 uses spec §9 bounds, with no optional optimization or extra numerical
-exit gate. Native size is explicitly a sectionless-ELF payload proxy. Historical
-self-selected ratios remain diagnostics; all earlier measurements are preserved
-in [loop 102](performance102.md) and [loop 103](performance103.md). Own native
-optimization/self-hosting retain their later-stage owners.
+[Performance](performance105.md) records frozen stage-base/entry/final binaries,
+A/A noise and ABBA pairs, compiler latency/RSS, separate checked runtime/payload,
+and work counters. Fixed RTTI recipe counts stay three as specializations grow;
+the affected template workloads compile 10–12% faster with identical executables.
+Required cleanup adds 152 payload bytes and a measured normal-path runtime cost;
+no benefit is claimed against an incorrectly unwinding baseline. All 102–104
+measurements remain. PA21/O0 uses spec §9 bounds and the existing eight-element
+expansion cap; inherited +15%, +16 MiB and 5.5× diagnostic targets add no exit
+gates. Own native optimization/ELF and self-hosting retain their later owners.
 
-## Handoff ledger
+## Handoff and audit ledger
 
-Loop 102: `30fe6353` proves/corrects one oracle substitution digit; `9f2181f9`
-implements RTTI/casts; `f4224e0b` records 37/116 and prior-through 3596/3596.
-[Validation](../student.tests/pa21/validation102.json).
+102: `30fe6353`, `9f2181f9`, `f4224e0b` — RTTI/casts and oracle proof,
+37/116; [validation](../student.tests/pa21/validation102.json).
+103: `e835d6dc`, `1c541f84`, `fa079cde` — captures/generated copies,
+49/116; [validation](../student.tests/pa21/validation103.json).
+104: `e2af8963`, `f03b9371`, `511fe9b9`, `3b87e462` — lists/demand,
+71/116; [validation](../student.tests/pa21/validation104.json).
 
-Loop 103: `e835d6dc` implements captures and construction lifetimes;
-`1c541f84` completes generated-copy unwind cleanup; `fa079cde` records 49/116,
-prior-through 3596/3596 and unchanged coverage.
-[Validation](../student.tests/pa21/validation103.json).
+| Audit | Range, findings and disposition |
+|---|---|
+| 105 | `ac988ea3..f65eae8d`: full accumulated range reviewed, RTTI reuse and copied-subobject cleanup repaired, proof/trace/performance verified, prior/file/progress gates pass; 45 failures remain in the two broad groups above. |
 
-Loop 104: `e2af8963` implements list selection, storage, deduction and lifetimes;
-`f03b9371` removes backing-helper dependencies and adds measurements;
-`511fe9b9` separates checking from inline emission demand.
-[Validation](../student.tests/pa21/validation104.json): `make test-pa21` 71/116
-(exit 2); prior-through 3596/3596 (exit 0); through-PA21 3667/3712 (exit 2);
-file audit passes with three inherited header advisories. Personal controls:
-51/51 semantic/rejection/native controls and 25/25 host-unwind/static controls.
-All 116 required inputs, references and comparison rules are unchanged.
-Review markers remain unchanged. This completes the implementation handoff;
-PA21 completion and its independent whole-stage audit are still outstanding.
+Audit records follow the committed code tip without further implementation edits.

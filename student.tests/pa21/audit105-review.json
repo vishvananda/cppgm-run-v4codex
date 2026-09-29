@@ -1,0 +1,724 @@
+{
+  "stage_base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+  "audit_entry": "3b87e462701e268eeaaaa9c9ddeb4594ec74439b",
+  "last_reviewed_commit": "f65eae8d7d434735a0ce981173a347eb8f8a1e59",
+  "reviewed_commits": [
+    "79204189b34cd8c54263481c3e70a79143628b95 Record PA21 base, semantic groups and validation plan",
+    "30fe63535155c809487fce60d59d63b56c14f857 Correct PA21 RTTI template substitution oracle with ABI proof",
+    "9f2181f90f53f6196332cad37420b4041db24a43 Implement typed RTTI queries and single-inheritance dynamic casts",
+    "f4224e0b73f6eca5e6c607fe119026f76e03e6f5 Record PA21 RTTI performance and validated implementation handoff",
+    "e835d6dcc297c7328bd18c2e1bf50df054da2e01 Implement typed value captures and closure construction lifetimes",
+    "1c541f8481f73fff5c0f148ff5db6d7cc95fc3f0 Clean up completed subobjects when generated closure copies unwind",
+    "fa079cdeffb19a1a69e92ff56f8bc154c4047c36 Record PA21 capture handoff, unchanged coverage and performance evidence",
+    "e2af89634fa9d272e75e6050f313c989e48b1071 Implement typed initializer-list storage, selection, deduction and lifetimes",
+    "f03b9371d8a76eda02d3150fc969743f9c8fc787 Bound list backing dependencies and add stage performance instrumentation",
+    "511fe9b95fa31e9051e18354b32e806efce83388 Separate required inline constructor checking from emission demand",
+    "3b87e462701e268eeaaaa9c9ddeb4594ec74439b Record PA21 list handoff, unchanged coverage and performance evidence",
+    "f65eae8d7d434735a0ce981173a347eb8f8a1e59 Retain RTTI recipes and preserve copied subobject unwind ownership"
+  ],
+  "reviewed_implementation_files": {
+    "dev/frontend_source_sets.mk": "34478107dcb4c958b321bb9ee21df3937361bd40470b0cc9bedcfc6188e939b4",
+    "dev/src/abi/itanium/encoder.cpp": "4a69f631da67b10a4b5d7a61c4b13f08275b4bf5f3d31bdaca3e086320b6861b",
+    "dev/src/abi/itanium/expression_encoder.cpp": "c1f86e5a2727ad8ef9f025763408506156e5c47163c9bb4e10cbf9a3f91040a9",
+    "dev/src/abi/itanium/graph.h": "c2e2b2a3ec5fbbe605a5755ce49c65a0ebd1788877c6db866bcae49c72239a4a",
+    "dev/src/abi/itanium/graph_validation.cpp": "af3d7eb8bc85eb0bc898a005e5e62a246718ed7d4d90907b01fab66c86466a0e",
+    "dev/src/lowering/branch_lifetimes.cpp": "43238669b6623ba303de9d05e05b049d8b7541c41a5117c9593618b823b58527",
+    "dev/src/lowering/class_values.cpp": "d2be88ba08ec5d683834c0ccf8f6d6d40926a54c73b676c3eb1be59e22b7b5e4",
+    "dev/src/lowering/construction.cpp": "5d85df49655cfe87234787062a385c7c15a288ba428b758c7c3cdc2c02703973",
+    "dev/src/lowering/driver.cpp": "d5bfa9b3ae597e979db8ceb669e0cfe71480d99c0c299f98f7cbf722948ddb38",
+    "dev/src/lowering/expression.cpp": "5d51103c627287f752d2ad661b829ec903fbccb95b06384a4f70adcb0c0b7eb7",
+    "dev/src/lowering/full_expression.cpp": "1e3bc8cce112b047105ddb2c1a228bf8d718b684bd4d874bb616997fafb8d5b0",
+    "dev/src/lowering/lambda.cpp": "f0c6b1fd02fec20488309e028aacc422bbb963e1bdc3d098a986fdf092b38197",
+    "dev/src/lowering/list_initialization.cpp": "a3f3fd7c8ad79a98df835d8f495bd09fc58753488b846c313a4a3cc740a4b4f4",
+    "dev/src/lowering/local_static.cpp": "edcc58c2e47a8bb93d5ad1a4e3e35e7469aeb6563843248a24e29c13c8746712",
+    "dev/src/lowering/placement_new.cpp": "3c8bab10cfad1853a6d2caa7a00567d41b545bf80e64bca37b849bd00e8568fa",
+    "dev/src/lowering/procedural.h": "32521db86758417355ea75bd6c7e58cdbaad48d41b50ff0b28147484821a4590",
+    "dev/src/lowering/query_abi.cpp": "628124355ed822f4dbcbbeb8cdefd4cabf5ee21720799069986ac8461a26440c",
+    "dev/src/lowering/range_statement.cpp": "b2278c691b42c49c8e4159d997c889768cfded1b27787ee6e03a7259c76504fb",
+    "dev/src/lowering/rtti.cpp": "3714c4e84a2d9e030ce67104d09ec4452a9d0a98526c4851af5540f9c4d74175",
+    "dev/src/lowering/symbols.cpp": "7ad928af1a296978e488ac5250ccbf7c3bd73f1c0c6e21454cfe2d1fdbf8a656",
+    "dev/src/lowering/transfers.cpp": "c048c154bee49d8f1245f374692b2a4748ef053a7590ee6356b1f9853d62da43",
+    "dev/src/lowering/virtuals.cpp": "7029ed7eaf9faf1a145498b370489866f7533141717443c4d3db76f0ecd7ddba",
+    "dev/src/semantic/analyzer.h": "5e3197e8de69bd226372367bd724e31126d85013c353f6ce34419713cfbe718e",
+    "dev/src/semantic/callable.cpp": "0895c16d0266dc62536a5c6e46aca426ab4151c0360d7200367b0a6085bc3e00",
+    "dev/src/semantic/closure_capture.cpp": "1216458479c33baaab92bfb0ce394f6d8f8c02cde1241ff6bcdc10e993d871cf",
+    "dev/src/semantic/constant.cpp": "9de775a1982c2015ff0d1a0c315ec276b9cc6dc605372b457bc99c7ea0121db3",
+    "dev/src/semantic/constant_execution.cpp": "9e55f591bbf68a758dc8344500cbcb7cd6ea27defc61e2320f35fabe9d0c1684",
+    "dev/src/semantic/construction.cpp": "8ae694ad3523eb02edfdaf2b2b138fe6d6280d4eee2edae77def6b273c44498e",
+    "dev/src/semantic/conversion_functions.cpp": "6e1b393b3c065b3fd3c97acd82409db9425584db3336249bf688a6b9a49ae9f2",
+    "dev/src/semantic/declaration.cpp": "595d3511f5cd84ff95bdfcbfc7974080cf93f8c8ccc98a876cd8503271fe3dbe",
+    "dev/src/semantic/destruction.cpp": "e58614eafcb5dea0912a229090d50a0df1d777ecdf1ccb8f6acd1908e5da56e5",
+    "dev/src/semantic/exception_expression.cpp": "187f4a7ba8e37671962a910662a40e703e0acbb897f930a5eb25d230cb2c7fcf",
+    "dev/src/semantic/expression.cpp": "8e7af775ca6890f23c0e93819d456a42cf598aa777c51003886c8df24559b629",
+    "dev/src/semantic/initializer_list.cpp": "9270a8e66ca64c002bdc161dd285469478235435b967413007d198be09cec3c0",
+    "dev/src/semantic/lambda.cpp": "3d1141dcf1ac1c78f639b7bce7766242cc58592826ac0b7bfa3d0f81659d87e2",
+    "dev/src/semantic/list_initialization.cpp": "0dc8a5cb95577ff9eb971690da8e643d8ca1a547abd7b26111e5c0086cb8b789",
+    "dev/src/semantic/member.cpp": "8e877a3338c0e4f085deb5168cb762d0dd99df66345f6fa18c7983fd855b4db0",
+    "dev/src/semantic/model.cpp": "fe3268363ccfe706745bb7c107b552e7cbe71718ac20dad620ca215972362d25",
+    "dev/src/semantic/model.h": "f6fc6fc1e5bb49782e329a8a6189203f34682d767e5d08127ec62432310076ca",
+    "dev/src/semantic/operator_call.cpp": "b96be233e9240691c98349ee59a3106c0680c336dd191923aab877af98ea77c6",
+    "dev/src/semantic/overload.cpp": "53ed14371ba92c28189c45a2c20647419e403649835d530535bfa8c04830117e",
+    "dev/src/semantic/placeholder.cpp": "efa012928c7e9cca27cd7660a4af9e2bfa542037b3f2c3623b80cf10122d0b83",
+    "dev/src/semantic/placement_new.cpp": "21970496011aafe95c9b0f8d08f80a863a6525d8be63d68fe3df21fff124b100",
+    "dev/src/semantic/query_list.cpp": "536cdf3e991b01c7cdba520afcf78d4a70c8235c08a804e134a955532faa6045",
+    "dev/src/semantic/range_operations.cpp": "91efcc02976e2bc9917dde95e5a7024fe51017b8ebe5198cc9ae740df583a067",
+    "dev/src/semantic/range_statement.cpp": "6db2337efe44589ef3cd39a1c8c2ec7b39d8c3b793638eea9797fca418a02d99",
+    "dev/src/semantic/reference_storage.cpp": "04451fb2ef01ddc073ce1ce8627d782a28b601ef0db71b4f869c0e464ae8cff5",
+    "dev/src/semantic/rtti.cpp": "05fa285d27bffaa6b94bc1f80f6862244b22a28c4ec9e5b710231db2c3b7225d",
+    "dev/src/semantic/special_members.cpp": "b617d6c823ae81613bfd323a5c53b6a13e9d14fe8ad9f5ead89557788e9ba07b",
+    "dev/src/semantic/template_binding.cpp": "215f999f12d4bc417e63fb63f472f0b1bb920d7df2760d609fc27fde04fc9396",
+    "dev/src/semantic/template_call.cpp": "70f25cbadf5018dcf9ab220ddfac9abcdedf43f431b8a9cbb8d1425d94810585",
+    "dev/src/semantic/template_call_facts.cpp": "5fa79b6a9cd596fe0eea5eea0082451f5176a03526a8205099feba5b38a22e40",
+    "dev/src/semantic/template_class.cpp": "764e44254a512f31776cd1d75e659147c140a4cb184ffb7e37caaca122977b7f",
+    "dev/src/semantic/template_expression.cpp": "e1c79b204f00a0b7356e0463a8e57ca5441cb153a8bcd59f9fcb0da623fc7830",
+    "dev/src/semantic/template_initializers.cpp": "58402166508a013859ab791662b7a763bc688590f29f656cc78e7a284b9c0d79",
+    "dev/src/semantic/template_operator_facts.cpp": "dab122dcc8b75eb1e61f6aa41fcded2af43803b4b32d37d36e4ce76f7f4e9e09",
+    "dev/src/semantic/template_value_facts.cpp": "d2331c44286131929c8243b87102495197ba941a297d871387468025696abc35",
+    "dev/src/semantic/transfer_actions.cpp": "c0d72c0f8b8d4ae45a41c95336c86c50bf25d8c2c36236640a4fd317ccc540d4",
+    "dev/src/semantic/type_query.cpp": "55fa559defae607d82decda4d97ab984aa1aafd9731e8cd491695751c0f0cee4",
+    "dev/src/semantic/type_query.h": "dd401c3226b997871b68c983657c110264adb8f9f9aa56ea639aba87b552e818",
+    "dev/src/syntax/declarator.cpp": "562f23450f1b50552506e1b7706f88897367b7851e3100f03fe7a18156a78d02",
+    "dev/src/syntax/expression.cpp": "d5a97002a6666aaaa214edb8c1e410b7d18b3567e2da2d4c967add111cfe08e9",
+    "dev/src/syntax/parser.h": "af00434b105ebec918bc2a87c2eee75f444b4befd15c4f89635afa7339d00110",
+    "dev/src/syntax/prediction.cpp": "0d10597050a9b9a7a8ca58000d85635c045dc5c4ad79e206ac2963be4af53b90"
+  },
+  "compiler_sha256": "e0fd82ba6417eb9b6e5659e386a1450c48e396d7046592753e89de6e2a154b3c",
+  "inherited_performance_frozen_hashes_verified": {
+    "102": {
+      "binaries": [
+        {
+          "path": "/tmp/pa21-102/cppgm-base",
+          "sha256": "a8a4702950de9694b4e9e269dc6f84c834d9acfded8232a0a10bebdbf1619faf",
+          "text_bytes": 2090694
+        },
+        {
+          "path": "/tmp/pa21-102/cppgm-final",
+          "sha256": "5b9f28835bb9146c40a064b662e9507fedd5598c6d51e4e79dc1172f88d505ee",
+          "text_bytes": 2109318
+        }
+      ]
+    },
+    "103": {
+      "binaries": [
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/compiler-A",
+          "sha256": "5b9f28835bb9146c40a064b662e9507fedd5598c6d51e4e79dc1172f88d505ee",
+          "text_bytes": 2109318
+        },
+        {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/pa21-loop103/compiler-final",
+          "sha256": "31dcf1518f4d31d34bcfadb6a4800d4a2295e5ba8edd193ff958143a4a179d8b",
+          "text_bytes": 2134150
+        }
+      ]
+    },
+    "104": {
+      "binaries": [
+        {
+          "path": "/tmp/pa21-loop104/base-cppgm++",
+          "sha256": "31dcf1518f4d31d34bcfadb6a4800d4a2295e5ba8edd193ff958143a4a179d8b",
+          "text_bytes": 2134150
+        },
+        {
+          "path": "/tmp/pa21-loop104/final-cppgm++",
+          "sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3",
+          "text_bytes": 2154950
+        }
+      ]
+    }
+  },
+  "entry_controls": {
+    "composition": [
+      {
+        "name": "fixed_static_type",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>bool f(){return typeid(B)==typeid(B);}int main(){return !f<0>()||!f<1>();}",
+        "source_sha256": "c78290260a8d347700afe4aad697498d8f90b7175cf5e30679e2f8d3b57ca688",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_static_operand",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}int calls;int value(){++calls;return 1;}template<int N>bool f(){return typeid(value())==typeid(int);}int main(){return !f<0>()||!f<1>()||calls;}",
+        "source_sha256": "0930c868eae51561e89e1d68fa07b11483aa51944b0f3f69e2e5bb5ccea3976e",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_dynamic_operand",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>bool f(B&b){return typeid(b)==typeid(D);}int main(){B b;D d;return f<0>(b)||!f<1>(d);}",
+        "source_sha256": "5599d1ba20189d8a1e61915a6716aa327633f1e091f5a8d9b16a466854ce3f8f",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_dynamic_call",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};int calls;B&get(B&b){++calls;return b;}template<int N>bool f(B&b){return typeid(get(b))==typeid(D);}int main(){B b;D d;return f<0>(b)||!f<1>(d)||calls!=2;}",
+        "source_sha256": "e87ac8d936b524cbaf59c485d8f74234bc2447b3f54f6390742a56e836322f84",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_dynamic_cast",
+        "source": "struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>D*f(B*p){return dynamic_cast<D*>(p);}int main(){B b;D d;return f<0>(&b)!=0||f<1>(&d)!=&d||f<2>(0)!=0;}",
+        "source_sha256": "1a205a0c707ecbec7a947250f2f3cb74d1aaa998d6ced6fd4651f14d2a9030c1",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_upcast",
+        "source": "struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>B*f(D*p){return dynamic_cast<B*>(p);}int main(){D d;return f<0>(&d)!=&d||f<1>(0)!=0;}",
+        "source_sha256": "a3baff6f48c6c3f9dbfbd800e47a9b778d5a561101cdf6d65bc330a2a8e1706a",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "dependent_local_identity",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<int N>const std::type_info&f(){struct Local{};return typeid(Local);}int main(){return f<0>()==f<1>()||f<0>()!=f<0>();}",
+        "source_sha256": "20b7e8e3f874bae71e4944c28821049069a92b9a925be76799627389bf7b9738",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_capture_typeid",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}template<int N>int f(int x){auto g=[x](){return typeid(x)==typeid(int);};return !g();}int main(){return f<0>(1)||f<1>(2);}",
+        "source_sha256": "060176c1faaac762496099c972b9306413c087c9f8688f6ec9f4cb4810d38dd0",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_capture_cast",
+        "source": "struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>bool f(B*p){auto g=[p](){return dynamic_cast<D*>(p);};return g()!=0;}int main(){B b;D d;return f<0>(&b)||!f<1>(&d);}",
+        "source_sha256": "a4594af7989e562308b4da0b7ff102e0e84f358e144e78f5a1cf2d3103f89ff2",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_list_typeid",
+        "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;bool operator!=(const type_info&)const;};}namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}template<int N>bool f(){std::initializer_list<int>x{1,2};return typeid(x)==typeid(std::initializer_list<int>);}int main(){return !f<0>()||!f<1>();}",
+        "source_sha256": "25d8faef653fccff52923216650e2ea0d9211f617118df556309bab43aee06b1",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "nested_list_capture",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}int main(){std::initializer_list<std::initializer_list<int>>x{{1,2},{3,4}};auto f=[x](){int n=0;for(auto row:x)for(auto v:row)n+=v;return n;};return f()!=10;}",
+        "source_sha256": "10f735832286ad0d5db0c90a47cf634bbe61b4df598cbe8275963d2a70e1c091",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "list_template_ctor",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct S{int n;template<class T>S(std::initializer_list<T>x):n(x.size()){}};int main(){S s{1,2,3};return s.n!=3;}",
+        "source_sha256": "ff7a31e07d655b936225d54912411d0204b567cd46f54071432e7fcf7c424bdd",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "list_default_argument",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct S{int n;S(std::initializer_list<int>x,int extra=7):n(x.size()+extra){}};int main(){S s{1,2,3};return s.n!=10;}",
+        "source_sha256": "ba3a2cb6f18e72d77bfc24058ffe0b05c577fbd145b87256a0d588b0bea240c9",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "list_query_default",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct S{S(std::initializer_list<int>,int=7);};template<class T>decltype(S{1,2}) make(T);int main(){}",
+        "source_sha256": "1774725c1b442970996e6f0ea1b0fdd930a23d9e575b26d5590f507b963a696a",
+        "expected": "native",
+        "compiler_exit": 0,
+        "diagnostic": "",
+        "passed": true,
+        "backend_exit": 0,
+        "backend_diagnostic": "",
+        "native_exit": 0
+      },
+      {
+        "name": "fixed_cast_cv",
+        "source": "struct B{virtual int f(){return 1;}};struct D:B{int f(){return 2;}};template<int N>D*f(const B*p){return dynamic_cast<D*>(p);}int main(){return f<0>(0)!=0;}",
+        "source_sha256": "ee290c21c25a11af8e44f5e6bfdbb52c9d37558bec57574f43c0a4871d1545db",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid type-query expression\n",
+        "passed": true
+      },
+      {
+        "name": "list_deleted_copy",
+        "source": "namespace std{template<class T>class initializer_list{const T*p;unsigned long n;public:constexpr initializer_list():p(0),n(0){}constexpr const T*begin()const{return p;}constexpr const T*end()const{return p+n;}constexpr unsigned long size()const{return n;}};}struct S{S(){}S(const S&)=delete;};int main(){S s;std::initializer_list<S>x{s};}",
+        "source_sha256": "f168635d400d5f04681bfaf3a1a4cff3d0fdcc689b0d82b35d73b091cc2b2ee7",
+        "expected": "reject",
+        "compiler_exit": 1,
+        "diagnostic": "ERROR: invalid fixed call argument\n",
+        "passed": true
+      }
+    ],
+    "prefix_unwind": {
+      "compiler_sha256": "4db5c7ffb5c9f28390dde0c2dff4f233e3587a4e512d6c2d0d7ad562e9430dd3",
+      "rows": [
+        {
+          "name": "closure_prefix",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);struct E{int n;E(int x=50):n(x){}~E(){destroyed(n);}};struct S{int n;S(int x):n(x){}S(const S&s):n(s.n+100){copied(n);}~S(){destroyed(n);}};extern \"C\" void run(){E e;S s(1);auto f=[e,s](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[200],used;extern \"C\" void copied(int n){if(n==201)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==201;}int expected[]={50,101,50,1,50};if(!caught||used!=5)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            101,
+            50,
+            1,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/closure_prefix"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": false,
+          "lowir_sha256": "abb4a08e1fbcbc05b2eda5a702481be9925079bc8545bb155df3ef30e1447f4f"
+        },
+        {
+          "name": "ordinary_prefix",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);struct E{int n;E(int x=50):n(x){}~E(){destroyed(n);}};struct S{int n;S(int x):n(x){}S(const S&s):n(s.n+100){copied(n);}~S(){destroyed(n);}};struct Box{E e;S s;Box():s(1){}};extern \"C\" void run(){Box a;Box b=a;}",
+          "harness": "extern \"C\" void run();int seq[200],used;extern \"C\" void copied(int n){if(n==101)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==101;}int expected[]={50,1,50};if(!caught||used!=3)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            1,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/ordinary_prefix"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": false,
+          "lowir_sha256": "abb75b4606b06f2854fcd751c0121ef8af93d06beebe0fb83b4d0e7395ac354c"
+        },
+        {
+          "name": "base_prefix",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);struct E{int n;E(int x=50):n(x){}~E(){destroyed(n);}};struct S{int n;S(int x):n(x){}S(const S&s):n(s.n+100){copied(n);}~S(){destroyed(n);}};struct Box:E{S s;Box():s(1){}};extern \"C\" void run(){Box a;Box b=a;}",
+          "harness": "extern \"C\" void run();int seq[200],used;extern \"C\" void copied(int n){if(n==101)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==101;}int expected[]={50,1,50};if(!caught||used!=3)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            1,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/base_prefix"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": false,
+          "lowir_sha256": "fb51f86b71b584786b5fb4915e09231692121a176ec7ae2a51afe08cc0ec8c1d"
+        },
+        {
+          "name": "array_prefix_3",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);struct E{int n;E(int x=50):n(x){}~E(){destroyed(n);}};struct S{int n;S(int x):n(x){}S(const S&s):n(s.n+100){copied(n);}~S(){destroyed(n);}};extern \"C\" void run(){E e[3];S s(1);auto f=[e,s](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[200],used;extern \"C\" void copied(int n){if(n==201)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==201;}int expected[]={50,50,50,101,50,50,50,1,50,50,50};if(!caught||used!=11)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            50,
+            50,
+            101,
+            50,
+            50,
+            50,
+            1,
+            50,
+            50,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_3"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": false,
+          "lowir_sha256": "b2ce6c2fc727d9ab93eead99f9b2cc325b19597cbb6a15fd3ca9ec64291c475d"
+        },
+        {
+          "name": "array_prefix_16",
+          "source": "extern \"C\" void copied(int);extern \"C\" void destroyed(int);struct E{int n;E(int x=50):n(x){}~E(){destroyed(n);}};struct S{int n;S(int x):n(x){}S(const S&s):n(s.n+100){copied(n);}~S(){destroyed(n);}};extern \"C\" void run(){E e[16];S s(1);auto f=[e,s](){};auto g=f;}",
+          "harness": "extern \"C\" void run();int seq[200],used;extern \"C\" void copied(int n){if(n==201)throw n;}extern \"C\" void destroyed(int n){seq[used++]=n;}int main(){bool caught=false;try{run();}catch(int n){caught=n==201;}int expected[]={50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,101,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,1,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50};if(!caught||used!=50)return 1;for(int i=0;i<used;++i)if(seq[i]!=expected[i])return 2;return 0;}",
+          "expected_destructions": [
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            101,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            1,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50
+          ],
+          "commands": [
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/entry-cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "--validate-lowir",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16.lowir",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16.o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "g++",
+                "-no-pie",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16-host.cpp",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16.o",
+                "-o",
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "argv": [
+                "/home/vishvananda/work/private/v4codex/artifacts/audit105/eh-entry/array_prefix_16"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "passed": false,
+          "lowir_sha256": "c520092b60d2c62c5b41edc85c55b95a3802fb1727e03c2dfa7030854378e3bd"
+        }
+      ]
+    }
+  },
+  "baseline_log_sha256": "6218b0a054fc3a700ed857ec35416f5d513554b650d23729f600b8f14b8c8409",
+  "reference": {
+    "revision": "pa21-rtti-name-102",
+    "base": "ac988ea33d4997b44e82baaca5a86623fff3127a",
+    "path": "pa21/tests/general/100-typeid-template-template-argument-typeinfo-name.ref",
+    "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+    "original_sha256": "46f55a13480d6a006ae9bc913b8d4dd6c5d26bdb9eb4fb528da033a4c0eb4a65",
+    "revised_sha256": "b2624ad7f25a8985532777074ace8feba0904f6dcefaaf729b81f6adf77cbec4",
+    "original_name": "12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS5_IhJEEEvEEE",
+    "revised_name": "12json_encoderIN8nlohmann16json_abi_v3_11_310basic_jsonINS1_11ordered_mapENS1_6vectorEcbxydNS1_9allocatorENS1_14adl_serializerENS4_IhJEEEvEEE",
+    "changed_bytes": [
+      {
+        "offset": 129,
+        "old": 53,
+        "new": 52
+      }
+    ]
+  },
+  "completion_checks": {
+    "reviewed_tip": "f65eae8d7d434735a0ce981173a347eb8f8a1e59",
+    "reviewed_source_hashes_match": true,
+    "record_markers_match": true,
+    "coverage_hashes_match": true,
+    "exact_45_failure_set_preserved": true,
+    "earlier_3596_pass": true,
+    "file_audit_pass": true,
+    "all_16_performance_workloads_complete": true,
+    "aa_abba_observations_per_phase": 20,
+    "trace_and_performance_binary_match": true,
+    "no_implementation_edits_after_code_commit": true,
+    "record_links_resolve": true
+  }
+}
