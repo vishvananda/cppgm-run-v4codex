@@ -1,0 +1,20 @@
+{
+  "entry": "e75e0d6ce1e26a2d50bc0857cd620974c6ee451d",
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "local_revision": "pa20-closure-conversions-98",
+  "proof": "pa20/reference-corrections98.md",
+  "revisions": [
+    {
+      "path": "pa20/tests/general/200-captureless-lambda-wrapper-conversion.ref.exit_status",
+      "before_sha256": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+      "after_sha256": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9",
+      "source_sha256": "01d9523cc421bf70073cfaffc9ed69a622213e780b1daf710df919bfc3f23caa"
+    },
+    {
+      "path": "pa20/tests/general/200-lambda-constructor-template-preferred.ref",
+      "before_sha256": "abc1432b8466d7c0e8cab8f832289ba68f0e86dc561cbe6948763ee0c1872e3c",
+      "after_sha256": "dc993c7d4e9388ef72411943dc93b18966ed46017d384698d9cd74d314b03e67",
+      "source_sha256": "497d2143912ee25601413c0451e878157eeba070b287eeb6a89179b18367c379"
+    }
+  ]
+}
