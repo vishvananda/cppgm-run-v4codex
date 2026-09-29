@@ -53,7 +53,8 @@ Value Procedural::list_conversion(const semantic::Conversion& c, Value destinati
         emit(Opcode::Store,IRType::I64,{Operand::integer(call.argument_count),size.operand});
     } else if (plan.aggregate) {
         Value at = destination; at.address = true; at.type = t;
-        if (!call_aggregate_helper(object.initializer,at)) initialize_plan(object.initializer,at);
+        if (plan.zero && sem.class_value(t) && !sem.empty_class(t)) zero_object(t,destination);
+        else if (!call_aggregate_helper(object.initializer,at)) initialize_plan(object.initializer,at);
     } else if (plan.constructor) {
         if (plan.zero) {
             zero_object(t,destination);

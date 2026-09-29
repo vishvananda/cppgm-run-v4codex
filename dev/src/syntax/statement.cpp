@@ -199,6 +199,13 @@ bool Parser::declaration_ahead()
     // value; they cannot declare an unnamed function in a statement.
     if (!identifier(prefix+1) && !in.is("*",prefix+1) && !in.is("&",prefix+1) &&
         !in.is("&&",prefix+1) && !in.is("(",prefix+1) && !in.is("::",prefix+1)) return false;
+    // Pointer operators are shared with unary expressions. Their presence
+    // alone does not establish a declarator: T(*this)() constructs and calls
+    // an object. Inspect the terminal prefix without replaying either grammar.
+    auto terminal = prefix+1;
+    while (in.is("(",terminal) || in.is("*",terminal) || in.is("&",terminal) ||
+        in.is("&&",terminal) || in.is("const",terminal) || in.is("volatile",terminal)) ++terminal;
+    if (!identifier(terminal) && !in.is("::",terminal)) return false;
     // Only this shared type/parenthesis prefix requires declaration preference.
     // Scan its balanced suffix without constructing or abandoning any AST.
     unsigned depth = 0;

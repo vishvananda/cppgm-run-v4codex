@@ -42,6 +42,7 @@ struct Linkage {
     bool merge;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
     SymbolId exception_functions[6];
+    SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
     void finish_lifecycle(lowir_model::Program& program);
@@ -97,6 +98,8 @@ class Procedural {
     TypeId returned = 0;
     Value return_destination;
     IRType result_type() const;
+    void finish_exception_boundary();
+    void emit_terminate_adapter();
     void construct_value(NodeId n, const semantic::Conversion& conversion, Value destination, bool terminal = false, bool base = false, bool entry = false);
     Value list_conversion(const semantic::Conversion& conversion, Value destination = Value());
     Value class_temporary(EntityId object, TypeId type);
@@ -110,6 +113,10 @@ class Procedural {
     bool ended = false;
     std::uint32_t live = 0;
     bool emitting_cleanup = false, resume_emitted = false;
+    EntityId returning_object = 0;
+    semantic::Index return_unwind_states;
+    std::uint32_t return_unwind_state();
+    bool deallocation_boundary = false;
     std::size_t cleanup_cursor = 0;
     semantic::Index slot_names;
     SlotId cleanup_return;

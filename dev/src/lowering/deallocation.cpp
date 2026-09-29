@@ -18,6 +18,7 @@ void Procedural::emit_allocation_adapters()
 }
 Value Procedural::delete_expression(NodeId n)
 {
+    deallocation_boundary = true;
     auto use = sem.delete_fact(n);
     Value pointer = converted(use.operand,use.conversion);
     BlockId end;

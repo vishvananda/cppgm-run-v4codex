@@ -26,6 +26,7 @@ Conversion Analyzer::list_element(NodeId& cursor, TypeId to, ScopeId s)
 std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
 {
     ListPlan plan; plan.source = cursor; plan.target = to; plan.scope = s; plan.aggregate = true;
+    plan.zero = !cursor;
     std::vector<NodeId> args;
     std::vector<Conversion> selected;
     std::vector<ListField> fields;
@@ -33,6 +34,12 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
         NodeId source = cursor;
         Conversion c = list_element(cursor,t,s);
         if (!c.valid()) return false;
+        if (source || c.kind != Conversion::Kind::ListPlan) plan.zero = false;
+        else {
+            auto nested = list_plans[c.materialization];
+            plan.zero &= !nested.constructor && !nested.backing_element &&
+                (nested.aggregate ? nested.zero : !nested.call.argument_count) && zero_value(t);
+        }
         args.push_back(source); selected.push_back(c);
         ListField item; item.field = field; item.type = t; item.index = index; item.count = count;
         fields.push_back(item); return true;

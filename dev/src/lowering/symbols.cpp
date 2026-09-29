@@ -374,6 +374,7 @@ void Procedural::run()
         if (definitions.size() != before) function_body(e);
     }
     order_lifecycle_entries();
+    emit_terminate_adapter();
 }
 void Procedural::function_body(EntityId e, bool base)
 {
@@ -439,12 +440,12 @@ void Procedural::function_body(EntityId e, bool base)
         finish_constructor_handlers();
         if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
         else if (sem.class_value(returned)) {
-            if (exception_contexts.size() > 1) exception_fallback();
-            else emit(Opcode::Unreachable,IRType(),{});
+            exception_fallback();
         }
         else emit(Opcode::Return, result_type(), {result_type().floating() ? Operand::floating(0) : Operand::integer(0)});
     }
     emit_cleanups();
+    finish_exception_boundary();
     builder.reset();
 }
 } }

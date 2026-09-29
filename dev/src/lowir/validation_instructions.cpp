@@ -78,7 +78,17 @@ void Validator::instruction(const Instruction& i) const
             Type t = value_type(arg(0));
             require(t == Type::Ptr || (t.kind() == Type::Object && t.bytes() == i.bytes && t.alignment() == i.alignment), "invalid object copy source");
             pointer(arg(1));
-        } else pointer(arg(0));
+        } else {
+            // An object slot denotes its addressable storage in a bulk write,
+            // just as in load/store. Check its span rather than requiring the
+            // producer to invent an otherwise unused pointer temporary.
+            pointer(arg(0),arg(0).kind == Operand::Slot);
+            if (arg(0).kind == Operand::Slot) {
+                auto t = value_type(arg(0));
+                if (t.kind() == Type::Object)
+                    require(i.bytes <= t.bytes() && i.alignment <= t.alignment(), "invalid object zero span");
+            }
+        }
         break;
     case Opcode::EhTry: count(1); label(0); break;
     case Opcode::EhCleanup: require(i.operands.count <= 1, "invalid cleanup"); if (i.operands.count) label(0); break;

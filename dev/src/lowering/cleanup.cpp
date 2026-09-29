@@ -16,6 +16,7 @@ void Procedural::reset_lifetime(EntityId e)
     exception_selectors = semantic::Index(); exception_selector_count = 0;
     unwind_continuations.clear(); unwind_cursor = 0;
     unwind_terminals = semantic::Index(); unwind_dispatches = semantic::Index();
+    returning_object = 0; return_unwind_states = semantic::Index(); deallocation_boundary = false;
 }
 semantic::LifetimeState Procedural::lifetime_state(std::uint32_t state) const
 {
@@ -131,13 +132,15 @@ void Procedural::return_statement(NodeId n)
     }
     else if (ast[n].first) expression(ast[n].first);
     finish_full_expression(life.entry);
+    auto saved_returning = returning_object;
+    returning_object = sem.return_object(active_function);
     if (destructor_handler) {
         clean_inline(life.entry, 0);
         emit(Opcode::EhEnd, IRType(), {});
         if (!destructor_epilogue) destructor_epilogue = block();
         jump(destructor_epilogue); return;
     }
-    if (!exception_context && life.entry && sem.return_count(life.entry, life.context) > 1) {
+    if (!returning_object && !exception_context && life.entry && sem.return_count(life.entry, life.context) > 1) {
         if (has_value) {
             if (!cleanup_return) cleanup_return = builder->add_slot(0, result_type());
             if (type(returned).kind() == IRType::Object) {
@@ -155,6 +158,7 @@ void Procedural::return_statement(NodeId n)
     finish_constructor_handlers();
     if (has_value) emit(Opcode::Return, result_type(), {value.operand});
     else emit(Opcode::Return, IRType(), {});
+    returning_object = saved_returning;
 }
 void Procedural::flush_cleanups()
 {
